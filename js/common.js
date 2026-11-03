@@ -113,3 +113,63 @@ export function dataBR(ts) {
   return d ? d.toLocaleString("pt-BR") : "—";
 }
 export function letra(i) { return "ABCDEFGH"[i] || String(i + 1); }
+// iniciais para o avatar do cabeçalho ("Maria da Silva" -> "MS")
+export function iniciais(nome) {
+  const p = String(nome || "?").replace(/@.*/, "").split(/[\s._-]+/).filter(Boolean);
+  return ((p[0]?.[0] || "?") + (p.length > 1 ? p[p.length - 1][0] : "")).toUpperCase();
+}
+
+// ---------------- erros em português ----------------
+const ERROS = {
+  "auth/popup-blocked": "O navegador bloqueou a janela de login. Libere pop-ups para este site (ícone na barra de endereço) e clique em Entrar de novo.",
+  "auth/popup-closed-by-user": "A janela de login foi fechada antes de terminar. Clique em Entrar de novo.",
+  "auth/cancelled-popup-request": "A janela de login foi fechada antes de terminar. Clique em Entrar de novo.",
+  "auth/unauthorized-domain": "Este endereço do site não está autorizado no Firebase. Avise o professor (Authentication → Settings → Authorized domains).",
+  "auth/network-request-failed": "Sem conexão com a internet. Verifique a rede e tente de novo.",
+  "permission-denied": "Sem permissão para esta ação. Confira se entrou com a conta certa e se a prova está liberada; se continuar, avise o professor.",
+  "unavailable": "Sem conexão com o servidor. Verifique a internet e tente de novo.",
+  "deadline-exceeded": "O servidor demorou demais para responder. Verifique a internet e tente de novo.",
+  "failed-precondition": "O banco de dados recusou a operação neste momento. Recarregue a página e tente de novo; se continuar, avise o professor.",
+  "not-found": "O registro não foi encontrado. Recarregue a página."
+};
+export function traduzirErro(e) {
+  const c = String(e?.code || "").replace(/^firestore\//, "");
+  return ERROS[c] || e?.message || String(e);
+}
+
+// ---------------- modal (substitui confirm/alert nativos) ----------------
+const modaisAbertos = new Set();
+// Devolve uma Promise<boolean>: true = OK/confirmar, false = cancelar/Esc/clique fora
+export function modal({ titulo = "", mensagem = "", ok = "OK", cancelar = null, perigo = false } = {}) {
+  return new Promise(resolve => {
+    const fundo = document.createElement("div");
+    fundo.className = "modal-fundo";
+    fundo.innerHTML = `<div class="modal" role="dialog" aria-modal="true" ${titulo ? 'aria-labelledby="modalTitulo"' : ""}>
+      ${titulo ? `<h2 id="modalTitulo">${esc(titulo)}</h2>` : ""}<p class="modal-msg">${esc(mensagem)}</p>
+      <div class="modal-acoes">${cancelar ? `<button type="button" class="leve" data-r="0">${esc(cancelar)}</button>` : ""}
+        <button type="button" class="${perigo ? "perigo-cheio" : ""}" data-r="1">${esc(ok)}</button></div></div>`;
+    const anterior = document.activeElement;
+    const tecla = e => {
+      if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); fechar(!cancelar); }
+      if (e.key === "Tab") {   // mantém o foco dentro do modal
+        const bs = [...fundo.querySelectorAll("button")], i = bs.indexOf(document.activeElement);
+        e.preventDefault(); bs[(i + (e.shiftKey ? -1 : 1) + bs.length) % bs.length].focus();
+      }
+    };
+    const fechar = r => {
+      if (!modaisAbertos.has(fechar)) return;
+      modaisAbertos.delete(fechar); fundo.remove(); document.removeEventListener("keydown", tecla, true);
+      anterior?.focus?.(); resolve(r);
+    };
+    modaisAbertos.add(fechar);
+    fundo.addEventListener("mousedown", e => { if (e.target === fundo && cancelar) fechar(false); });
+    fundo.querySelectorAll("[data-r]").forEach(b => b.onclick = () => fechar(b.dataset.r === "1"));
+    document.addEventListener("keydown", tecla, true);
+    document.body.appendChild(fundo);
+    fundo.querySelector("[data-r='1']").focus();
+  });
+}
+export const confirmar = (mensagem, opc = {}) => modal({ titulo: "Confirmar", mensagem, ok: "Confirmar", cancelar: "Cancelar", ...opc });
+export const avisar = (mensagem, opc = {}) => modal({ titulo: "Aviso", mensagem, ...opc });
+// fecha todos os modais abertos como "cancelar" (ex.: tempo da prova acabou)
+export function fecharModais() { [...modaisAbertos].forEach(f => f(false)); }
