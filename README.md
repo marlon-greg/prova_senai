@@ -37,7 +37,7 @@ Sistema de prova prática: o aluno entra com a conta Google do SENAI, recebe **1
 1. Abra `admin.html` e entre com `marlon.frodrigues@docente.senai.br`. O sistema cria a configuração inicial sozinho (domínios `edu.senai.br` e `aluno.senai.br`).
 2. Aba **Equipe**: cadastre outros professores (`professor`), coordenação (`admin`) ou apoio (`auxiliar`, só vê resultados — ex.: acompanhante de aluno com TEA).
 3. Aba **Bancos de questões**: cole o conteúdo de `modelo_banco.json` → **Validar** → **Importar**.
-4. Aba **Provas**: crie a prova (título, turma, banco, 10 questões, tipo de feedback) → ela nasce **fechada**.
+4. Aba **Provas**: crie a prova (título, turma, banco, **temas**, 10 questões, tipo de feedback) → ela nasce **fechada**.
 
 ---
 
@@ -71,7 +71,14 @@ Regras que o sistema aplica sozinho:
 ---
 
 ## Várias matérias e várias provas
-Cada **banco** tem um campo `materia`. Importe um banco por tema (DML, Normalização, Front-End, IoT…) e crie quantas provas quiser apontando para o banco certo. Um banco pode servir a várias provas (1A e 1B, por exemplo) — o sorteio é diferente para cada aluno.
+Cada **banco** tem um campo `materia`, e cada questão pode ter um `tema`. Dá para ter um banco por matéria (DML, Normalização, Front-End, IoT…) ou um banco grande dividido em temas, e criar quantas provas quiser apontando para o banco certo. Um banco pode servir a várias provas (1A e 1B, por exemplo) — o sorteio é diferente para cada aluno.
+
+### Filtrar a prova por tema
+- Ao importar, a aba **Bancos** mostra os temas de cada banco com a contagem por tipo (ex.: *DCL - permissoes: 10 alternativa, 7 dissertativa*).
+- Em **Nova prova**, ao escolher o banco aparecem os temas com caixas de seleção (todos marcados) e a quantidade de questões de cada um. Desmarque os temas que ainda não foram dados. O resumo embaixo mostra, ao vivo, quantas questões ficam disponíveis.
+- O sistema **não deixa criar** a prova se os temas marcados não tiverem questões suficientes: (questões por aluno − dissertativas) precisa caber nas alternativas disponíveis, e as dissertativas nas dissertativas disponíveis. Com "dissertativas = 0" (sorteio livre), o total precisa caber na soma das duas.
+- O sorteio de cada aluno usa só as questões dos temas marcados, mantendo a cota de dissertativas. A tabela de provas mostra os temas de cada prova ("todos" quando nenhum foi desmarcado).
+- O **Gabarito p/ Classroom** sai agrupado por tema, com caixas para gerar só dos temas que a prova usou.
 
 ## Formato do banco de questões (JSON)
 
@@ -80,9 +87,9 @@ Cada **banco** tem um campo `materia`. Importe um banco por tema (DML, Normaliza
   "nome": "MS5 — DML",
   "materia": "Banco de Dados",
   "questoes": [
-    { "tipo": "alternativa", "enunciado": "Pergunta...", "alternativas": ["a", "b", "c", "d"],
+    { "tipo": "alternativa", "tema": "DML - UPDATE", "enunciado": "Pergunta...", "alternativas": ["a", "b", "c", "d"],
       "correta": 1, "explicacao": "Por que a b é a certa", "peso": 1 },
-    { "tipo": "dissertativa", "enunciado": "Escreva o comando...",
+    { "tipo": "dissertativa", "tema": "DML - SELECT", "enunciado": "Escreva o comando...",
       "respostasAceitas": ["SELECT COUNT(*) FROM personagem;"],
       "palavrasChave": ["select count(*)", "from personagem"],
       "explicacao": "...", "peso": 2 },
@@ -99,6 +106,7 @@ Cada **banco** tem um campo `materia`. Importe um banco por tema (DML, Normaliza
 | `palavrasChave` | se a resposta não bater com nenhuma aceita, o sistema confere se **todas** as palavras-chave aparecem (mesma normalização). É mais tolerante; use trechos bem específicos. |
 | `correcaoManual: true` | sem correção automática: vai direto para **revisar**. Use em perguntas de "explique". |
 | `peso` | pontos da questão (padrão 1). A nota final é convertida para 0–100. |
+| `tema` | **opcional**. Texto livre que agrupa as questões (ex.: `"DCL - permissoes"`). Sem tema (ou vazio), a questão entra como **Geral**. Escreva sempre igual: `"DML"` e `"dml"` viram dois temas diferentes. Bancos antigos, sem tema, continuam funcionando. |
 | enunciado | aceita quebras de linha. Trecho entre crases vira código na linha: `` `SELECT * FROM x;` ``. Entre três crases (```` ``` ````) vira bloco de código. |
 
 Dica: peça ao Claude/ChatGPT "gere um banco de questões no formato do modelo_banco.json sobre o tema X" e cole o resultado em **Validar**.
