@@ -1,6 +1,6 @@
 // Página do aluno: login, lista de provas, prova (uma questão por vez), resultado.
 import { db, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar, sortearAleatorio, esc, $, toast, dataBR, letra,
-         idTentativaTeste, apagarTentativaTeste }
+         idTentativaTeste, apagarTentativaTeste, confirmar, traduzirErro }
   from "./common.js";
 import { collection, doc, getDoc, getDocs, setDoc, updateDoc, query, where, writeBatch, serverTimestamp, increment }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
@@ -28,7 +28,7 @@ $("#btnFonte").onclick = () => { document.body.classList.toggle("grande"); local
 // ---------- login ----------
 $("#btnEntrar").onclick = async () => {
   $("#msgLogin").textContent = "";
-  try { await entrar(); } catch (e) { $("#msgLogin").textContent = "Não foi possível entrar: " + (e.code || e.message); }
+  try { await entrar(); } catch (e) { $("#msgLogin").textContent = "Não foi possível entrar. " + traduzirErro(e); }
 };
 $("#btnSair").onclick = () => sair();
 
@@ -130,7 +130,7 @@ $("#btnComecar").onclick = async () => {
     const t = await getDoc(doc(db, "tentativas", tid));
     tentativa = { id: tid, ...t.data() };
     await carregarTentativa();
-  } catch (e) { toast("Não foi possível começar: " + (e.code || e.message), "erro"); console.error(e); }
+  } catch (e) { toast("Não foi possível começar. " + traduzirErro(e), "erro"); console.error(e); }
   $("#btnComecar").disabled = false;
 };
 
@@ -201,7 +201,7 @@ $("#btnEnviar").onclick = async () => {
     resposta = ($("#txtResposta").value || "").trim();
     if (!resposta) return toast("Escreva a resposta antes de enviar.", "erro");
   }
-  if (!confirm("Enviar esta resposta? Depois não dá para alterar.")) return;
+  if (!(await confirmar("Enviar esta resposta? Depois não dá para alterar.", { titulo: "Enviar resposta", ok: "Enviar" }))) return;
   $("#btnEnviar").disabled = true;
   try {
     const lote = writeBatch(db);
@@ -213,7 +213,7 @@ $("#btnEnviar").onclick = async () => {
     await mostrarFeedback(qid, q, resposta);
   } catch (e) {
     $("#btnEnviar").disabled = false;
-    toast("Não foi possível enviar. Verifique a internet e tente de novo. (" + (e.code || e.message) + ")", "erro"); console.error(e);
+    toast("Não foi possível enviar. " + traduzirErro(e), "erro"); console.error(e);
   }
 };
 
@@ -266,7 +266,7 @@ async function finalizar() {
     await lote.commit();
     tentativa.finalizadaEm = new Date(); tentativa.notaPrevia = notaPrevia; tentativa.aguardandoCorrecao = pend;
     mostrarFim();
-  } catch (e) { toast("Não foi possível finalizar: " + (e.code || e.message), "erro"); console.error(e); }
+  } catch (e) { toast("Não foi possível finalizar. " + traduzirErro(e), "erro"); console.error(e); }
 }
 
 function mostrarFim() {
@@ -283,14 +283,14 @@ function mostrarFim() {
 $("#btnVerResultadoTeste").onclick = () => verResultado();
 
 $("#btnReiniciarTeste").onclick = async () => {
-  if (!modoTeste || !confirm("Apagar a sua tentativa de teste e recomeçar do zero?")) return;
+  if (!modoTeste || !(await confirmar("Apagar a sua tentativa de teste e recomeçar do zero?", { titulo: "Reiniciar teste", ok: "Reiniciar", perigo: true }))) return;
   $("#btnReiniciarTeste").disabled = true;
   try {
     await apagarTentativaTeste(eu.uid, provaTeste);
     tentativa = null;
     await abrirProva(provaTeste, "inicio");
     toast("Teste reiniciado.", "ok");
-  } catch (e) { toast("Não foi possível reiniciar o teste: " + (e.code || e.message), "erro"); console.error(e); }
+  } catch (e) { toast("Não foi possível reiniciar o teste. " + traduzirErro(e), "erro"); console.error(e); }
   $("#btnReiniciarTeste").disabled = false;
 };
 

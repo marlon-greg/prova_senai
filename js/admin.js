@@ -1,5 +1,6 @@
 // Painel do professor: provas, bancos (import JSON), resultados/correção, equipe, configuração.
-import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, apagarTentativaTeste } from "./common.js";
+import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, apagarTentativaTeste,
+         confirmar, traduzirErro } from "./common.js";
 import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -8,7 +9,7 @@ const podeEditar = () => ["admin", "professor"].includes(eu?.papel);
 const ehAdmin = () => eu?.papel === "admin";
 
 // ---------- login ----------
-$("#btnEntrar").onclick = async () => { try { await entrar(); } catch (e) { $("#msgLogin").textContent = "Não foi possível entrar: " + (e.code || e.message); } };
+$("#btnEntrar").onclick = async () => { try { await entrar(); } catch (e) { $("#msgLogin").textContent = "Não foi possível entrar. " + traduzirErro(e); } };
 $("#btnSair").onclick = () => sair();
 aoMudarLogin(async user => {
   if (!user) { eu = null; $("#btnSair").classList.add("oculto"); $("#quem").textContent = ""; trocar("telaLogin"); return; }
@@ -71,14 +72,14 @@ async function carregarProvas() {
   });
   box.querySelectorAll("[data-testar]").forEach(b => b.onclick = () => window.open(`index.html?teste=${encodeURIComponent(b.dataset.testar)}`, "_blank"));
   box.querySelectorAll("[data-apagarteste]").forEach(b => b.onclick = async () => {
-    if (!confirm("Apagar a sua tentativa de teste desta prova? Você poderá testar de novo, com novo sorteio.")) return;
+    if (!(await confirmar("Apagar a sua tentativa de teste desta prova? Você poderá testar de novo, com novo sorteio.", { titulo: "Apagar meu teste", ok: "Apagar", perigo: true }))) return;
     try {
       const apagou = await apagarTentativaTeste(auth.currentUser.uid, b.dataset.apagarteste);
       toast(apagou ? "Tentativa de teste apagada." : "Você não tem tentativa de teste nesta prova.", apagou ? "ok" : "info");
-    } catch (e) { toast("Não foi possível apagar o teste: " + (e.code || e.message), "erro"); console.error(e); }
+    } catch (e) { toast("Não foi possível apagar o teste. " + traduzirErro(e), "erro"); console.error(e); }
   });
   box.querySelectorAll("[data-del]").forEach(b => b.onclick = async () => {
-    if (!confirm("Apagar a prova? As tentativas dos alunos continuam no banco de dados, mas ficam órfãs.")) return;
+    if (!(await confirmar("Apagar a prova? As tentativas dos alunos continuam no banco de dados, mas ficam órfãs.", { titulo: "Apagar prova", ok: "Apagar", perigo: true }))) return;
     await deleteDoc(doc(db, "provas", b.dataset.del)); carregarProvas();
   });
 }
@@ -99,8 +100,18 @@ $("#btnCriarProva").onclick = async () => {
 
 // ============================================================ BANCOS
 $("#arqBanco").onchange = e => { const f = e.target.files[0]; if (f) f.text().then(t => $("#txtBanco").value = t); };
+// Erro de sintaxe do JSON com linha, coluna e o trecho (Chrome/Edge dão "position N"; Firefox dá "line L column C")
+function erroSintaxeJSON(txt, e) {
+  let linha = null, coluna = null;
+  const pos = /position (\d+)/.exec(e.message), lc = /line (\d+) column (\d+)/.exec(e.message);
+  if (lc) { linha = Number(lc[1]); coluna = Number(lc[2]); }
+  else if (pos) { const antes = txt.slice(0, Number(pos[1])).split("\n"); linha = antes.length; coluna = antes[antes.length - 1].length + 1; }
+  if (!linha) return `JSON com erro de sintaxe: ${e.message}. Confira vírgulas, aspas e chaves.`;
+  const trecho = (txt.split("\n")[linha - 1] || "").trim().slice(0, 80);
+  return `JSON com erro de sintaxe na linha ${linha}, coluna ${coluna}${trecho ? ` (perto de: ${trecho})` : ""}. Confira vírgulas, aspas e chaves nesse ponto ou logo antes.`;
+}
 function validarBanco(txt) {
-  let b; try { b = JSON.parse(txt); } catch (e) { throw new Error("JSON inválido: " + e.message); }
+  let b; try { b = JSON.parse(txt); } catch (e) { throw new Error(erroSintaxeJSON(txt, e)); }
   if (!b.nome) throw new Error("Falta o campo nome.");
   if (!Array.isArray(b.questoes) || !b.questoes.length) throw new Error("Falta a lista questoes.");
   b.questoes.forEach((q, i) => {
@@ -147,7 +158,7 @@ async function carregarBancos() {
      <td style="white-space:nowrap"><button class="leve" data-gab="${b.id}">Gabarito p/ Classroom</button> ${ehAdmin() ? `<button class="leve" data-delb="${b.id}">🗑</button>` : ""}</td></tr>`).join("") + "</table>";
   box.querySelectorAll("[data-gab]").forEach(x => x.onclick = () => gerarGabarito(x.dataset.gab));
   box.querySelectorAll("[data-delb]").forEach(x => x.onclick = async () => {
-    if (!confirm("Apagar o banco e todas as suas questões?")) return;
+    if (!(await confirmar("Apagar o banco e todas as suas questões?", { titulo: "Apagar banco", ok: "Apagar", perigo: true }))) return;
     const id = x.dataset.delb, lote = writeBatch(db);
     (await getDocs(collection(db, "bancos", id, "questoes"))).forEach(d => lote.delete(d.ref));
     (await getDocs(collection(db, "bancos", id, "gabaritos"))).forEach(d => lote.delete(d.ref));
@@ -226,7 +237,7 @@ function desenharResultados() {
   document.querySelectorAll("[data-ver]").forEach(b => b.onclick = () => verAluno(Number(b.dataset.ver)));
   document.querySelectorAll("[data-reset]").forEach(b => b.onclick = async () => {
     const l = linhas[Number(b.dataset.reset)];
-    if (!confirm(`Apagar a tentativa de ${l.t.nome || l.t.email}? Ele poderá fazer a prova de novo (com novo sorteio).`)) return;
+    if (!(await confirmar(`Apagar a tentativa de ${l.t.nome || l.t.email}? A pessoa poderá fazer a prova de novo (com novo sorteio).`, { titulo: "Apagar tentativa", ok: "Apagar", perigo: true }))) return;
     const lote = writeBatch(db);
     (await getDocs(collection(db, "tentativas", l.t.id, "respostas"))).forEach(d => lote.delete(d.ref));
     (await getDocs(collection(db, "tentativas", l.t.id, "correcoes"))).forEach(d => lote.delete(d.ref));
@@ -256,7 +267,7 @@ $("#btnFecharNotas").onclick = async () => {
   if (!resDados) return toast("Carregue uma prova primeiro.", "erro");
   if (!podeEditar()) return toast("Seu papel não permite fechar notas.", "erro");
   const pend = resDados.linhas.reduce((s, l) => s + l.revisar, 0);
-  if (pend && !confirm(`Ainda há ${pend} resposta(s) marcada(s) como "revisar" (valem 0 até você corrigir). Fechar mesmo assim?`)) return;
+  if (pend && !(await confirmar(`Ainda há ${pend} resposta(s) marcada(s) como "revisar" (valem 0 até você corrigir). Fechar mesmo assim?`, { titulo: "Fechar notas", ok: "Fechar mesmo assim" }))) return;
   const lote = writeBatch(db);
   resDados.linhas.forEach(l => lote.update(doc(db, "tentativas", l.t.id), { nota: l.nota, notaMaxima: 100, corrigidaEm: serverTimestamp(), corrigidaPor: eu.email }));
   await lote.commit(); toast("Notas gravadas. Agora você pode liberar os resultados na aba Provas.", "ok"); carregarResultados();
@@ -278,7 +289,7 @@ async function carregarEquipe() {
   $("#listaEquipe").innerHTML = `<table><tr><th>E-mail</th><th>Nome</th><th>Papel</th><th></th></tr>
     <tr><td>${esc(SUPER_ADMIN)}</td><td>—</td><td><span class="tag on">admin principal</span></td><td class="pequeno">fixo nas regras</td></tr>` +
     lista.map(m => `<tr><td>${esc(m.id)}</td><td>${esc(m.nome || "")}</td><td><span class="tag">${esc(m.papel)}</span></td><td>${ehAdmin() ? `<button class="leve" data-rm="${m.id}">Remover</button>` : ""}</td></tr>`).join("") + "</table>";
-  document.querySelectorAll("[data-rm]").forEach(b => b.onclick = async () => { if (confirm("Remover " + b.dataset.rm + "?")) { await deleteDoc(doc(db, "equipe", b.dataset.rm)); carregarEquipe(); } });
+  document.querySelectorAll("[data-rm]").forEach(b => b.onclick = async () => { if (await confirmar("Remover " + b.dataset.rm + " da equipe?", { titulo: "Remover membro", ok: "Remover", perigo: true })) { await deleteDoc(doc(db, "equipe", b.dataset.rm)); carregarEquipe(); } });
 }
 $("#btnAddEquipe").onclick = async () => {
   if (!ehAdmin()) return toast("Só admin cadastra equipe.", "erro");
