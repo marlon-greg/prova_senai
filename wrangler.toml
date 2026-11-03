@@ -1,0 +1,16 @@
+# Configuração do Cloudflare Worker "prova-senai" (servidor de correção automática).
+# A Cloudflare lê este arquivo a cada push na main e publica servidor/corretor-worker.js.
+# NÃO coloque segredos aqui (o repositório é público). Os 2 segredos ficam só no painel da Cloudflare:
+#   Settings → Variables and Secrets → ANTHROPIC_API_KEY e FIREBASE_SA (tipo Secret).
+name = "prova-senai"
+main = "servidor/corretor-worker.js"
+compatibility_date = "2026-11-01"
+keep_vars = true          # não apaga variáveis criadas no painel a cada publicação
+
+[vars]
+PROJECT_ID = "prova-senai-3e983"
+ORIGENS = "https://marlon-greg.github.io"
+MODELO = "claude-haiku-5-5"
+
+[observability]
+enabled = true            # logs em Observability (para ver erros)
