@@ -113,6 +113,9 @@ export function dataBR(ts) {
   return d ? d.toLocaleString("pt-BR") : "—";
 }
 export function letra(i) { return "ABCDEFGH"[i] || String(i + 1); }
+// tema da questão; vazio ou ausente (bancos antigos) = "Geral"
+export function temaDe(q) { return String(q?.tema ?? "").trim() || "Geral"; }
+export function ordenarTemas(lista) { return [...new Set(lista)].sort((a, b) => a.localeCompare(b, "pt-BR")); }
 // iniciais para o avatar do cabeçalho ("Maria da Silva" -> "MS")
 export function iniciais(nome) {
   const p = String(nome || "?").replace(/@.*/, "").split(/[\s._-]+/).filter(Boolean);

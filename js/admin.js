@@ -1,6 +1,6 @@
 // Painel do professor: provas, bancos (import JSON), resultados/correção, equipe, configuração.
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, apagarTentativaTeste,
-         confirmar, traduzirErro, iniciais } from "./common.js";
+         confirmar, traduzirErro, iniciais, temaDe, ordenarTemas } from "./common.js";
 import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -39,6 +39,33 @@ async function garantirConfig() {
   if (!c.exists() && ehAdmin()) await setDoc(doc(db, "config", "geral"), { dominiosAlunos: ["edu.senai.br", "aluno.senai.br"], criadoEm: serverTimestamp() });
 }
 
+// ============================================================ TEMAS
+const questoesCache = {};   // bancoId -> [questões públicas]
+async function questoesDoBanco(bancoId, recarregar = false) {
+  if (!questoesCache[bancoId] || recarregar) {
+    const s = await getDocs(collection(db, "bancos", bancoId, "questoes"));
+    questoesCache[bancoId] = s.docs.map(d => ({ id: d.id, ...d.data() }));
+  }
+  return questoesCache[bancoId];
+}
+// { tema: { alternativa: n, dissertativa: n } }, temas em ordem alfabética
+function contarPorTema(questoes) {
+  const c = {};
+  for (const tema of ordenarTemas(questoes.map(temaDe))) c[tema] = { alternativa: 0, dissertativa: 0 };
+  questoes.forEach(q => { const k = q.tipo === "dissertativa" ? "dissertativa" : "alternativa"; c[temaDe(q)][k]++; });
+  return c;
+}
+const textoContagem = n => `${n.alternativa} alternativa, ${n.dissertativa} dissertativa`;
+// checkboxes de tema (todos marcados); onMudar é chamado a cada alteração
+function desenharChecksTemas(box, contagem, onMudar) {
+  const temas = Object.keys(contagem);
+  box.innerHTML = (temas.length > 1 ? `<div class="acoes-temas"><button type="button" class="leve mini" data-todos="1">Marcar todos</button><button type="button" class="leve mini" data-todos="0">Desmarcar todos</button></div>` : "") +
+    temas.map(t => `<label class="check"><input type="checkbox" value="${esc(t)}" checked><span><b>${esc(t)}</b> <span class="pequeno">— ${textoContagem(contagem[t])}</span></span></label>`).join("");
+  box.querySelectorAll("input[type=checkbox]").forEach(c => c.onchange = onMudar);
+  box.querySelectorAll("[data-todos]").forEach(b => b.onclick = () => { box.querySelectorAll("input[type=checkbox]").forEach(c => c.checked = b.dataset.todos === "1"); onMudar(); });
+}
+const temasMarcados = box => [...box.querySelectorAll("input[type=checkbox]:checked")].map(c => c.value);
+
 // ============================================================ PROVAS
 let bancosCache = [];
 async function listarBancos() {
@@ -49,15 +76,20 @@ async function listarBancos() {
 }
 async function carregarProvas() {
   await listarBancos();
+  const bancoAntes = $("#pBanco").value;
   $("#pBanco").innerHTML = bancosCache.map(b => `<option value="${b.id}">${esc(b.nome)} (${b.nQuestoes} questões)</option>`).join("") || "<option value=''>— importe um banco primeiro —</option>";
+  if (bancoAntes && bancosCache.some(b => b.id === bancoAntes)) $("#pBanco").value = bancoAntes;
+  // só redesenha os temas se o banco mudou (mantém as marcações do professor e não "pula" a tela)
+  if ($("#pBanco").value !== temasDoBanco) carregarTemasProva();
   const s = await getDocs(collection(db, "provas"));
   const provas = []; s.forEach(d => provas.push({ id: d.id, ...d.data() }));
   provas.sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
   const box = $("#listaProvas");
   if (!provas.length) { box.innerHTML = `<div class="vazio"><div class="icone">📝</div><p>Nenhuma prova ainda. Crie a primeira no formulário acima.</p></div>`; return; }
-  box.innerHTML = `<div class="tabela"><table><tr><th>Prova</th><th>Banco</th><th>Questões</th><th>Status</th><th>Resultados</th><th></th></tr>` + provas.map(p => {
+  box.innerHTML = `<div class="tabela"><table><tr><th>Prova</th><th>Banco</th><th>Questões</th><th>Temas</th><th>Status</th><th>Resultados</th><th></th></tr>` + provas.map(p => {
     const b = bancosCache.find(x => x.id === p.bancoId);
     return `<tr><td><b>${esc(p.titulo)}</b><br><span class="pequeno">${esc(p.turma || "")}</span></td><td>${esc(b?.nome || p.bancoId)}<br><span class="pequeno">${esc(b?.materia || "")}</span></td><td>${p.nQuestoes}${p.nDissertativas ? `<br><span class="pequeno">${p.nDissertativas} dissert.</span>` : ""}${p.tempoMinutos > 0 ? `<br><span class="pequeno">⏱ ${p.tempoMinutos} min</span>` : ""}</td>
+      <td class="pequeno">${temasDaProvaTexto(p, b)}</td>
       <td><span class="tag ${p.liberada ? "on" : "off"}">${p.liberada ? "● liberada" : "○ fechada"}</span></td>
       <td><span class="tag ${p.resultadosLiberados ? "on" : "off"}">${p.resultadosLiberados ? "● liberados" : "○ ocultos"}</span></td>
       <td class="td-acoes">${podeEditar() ? `<button class="mini ${p.liberada ? "leve" : "ok"}" data-tg="liberada" data-id="${p.id}">${p.liberada ? "Encerrar" : "Liberar prova"}</button>
@@ -84,17 +116,65 @@ async function carregarProvas() {
     await deleteDoc(doc(db, "provas", b.dataset.del)); carregarProvas();
   });
 }
+// "todos" quando a prova não filtra ou marcou todos os temas do banco
+function temasDaProvaTexto(p, b) {
+  if (!Array.isArray(p.temas) || !p.temas.length) return "todos";
+  if (Array.isArray(b?.temas) && b.temas.length && b.temas.every(t => p.temas.includes(t))) return "todos";
+  return p.temas.map(esc).join("<br>");
+}
+let contagemProva = {};   // contagem por tema do banco escolhido no formulário
+let temasDoBanco = null;  // banco cujos temas estão desenhados
+async function carregarTemasProva() {
+  const bancoId = $("#pBanco").value, box = $("#pTemas");
+  contagemProva = {}; temasDoBanco = bancoId;
+  if (!bancoId) { box.innerHTML = `<p class="pequeno">Escolha um banco para ver os temas.</p>`; atualizarResumoTemas(); return; }
+  box.innerHTML = `<p class="pequeno">Carregando temas…</p>`;
+  try {
+    const qs = await questoesDoBanco(bancoId);
+    if ($("#pBanco").value !== bancoId) return;   // trocou de banco enquanto carregava
+    contagemProva = contarPorTema(qs);
+    desenharChecksTemas(box, contagemProva, atualizarResumoTemas);
+  } catch (e) { box.innerHTML = `<p class="pequeno">Não foi possível carregar os temas. ${esc(traduzirErro(e))}</p>`; }
+  atualizarResumoTemas();
+}
+// soma do que está disponível nos temas marcados
+function disponiveisMarcados() {
+  return temasMarcados($("#pTemas")).reduce((s, t) => ({ alternativa: s.alternativa + (contagemProva[t]?.alternativa || 0), dissertativa: s.dissertativa + (contagemProva[t]?.dissertativa || 0) }), { alternativa: 0, dissertativa: 0 });
+}
+// devolve a mensagem de erro (ou "") para o pedido atual do formulário
+function problemaTemas() {
+  const n = Number($("#pN").value || 0), nDiss = Number($("#pNDiss").value || 0), d = disponiveisMarcados();
+  if (!Object.keys(contagemProva).length) return "";
+  if (!temasMarcados($("#pTemas")).length) return "Marque pelo menos um tema.";
+  if (nDiss > 0) {
+    if (n - nDiss > d.alternativa) return `Faltam questões de alternativa: a prova pede ${n - nDiss} (${n} − ${nDiss} dissertativas), mas os temas marcados só têm ${d.alternativa}. Marque mais temas ou diminua o número de questões.`;
+    if (nDiss > d.dissertativa) return `Faltam dissertativas: a prova pede ${nDiss}, mas os temas marcados só têm ${d.dissertativa}. Marque mais temas ou diminua o número de dissertativas.`;
+  } else if (n > d.alternativa + d.dissertativa) {
+    return `Faltam questões: a prova pede ${n}, mas os temas marcados só têm ${d.alternativa + d.dissertativa}. Marque mais temas ou diminua o número de questões.`;
+  }
+  return "";
+}
+function atualizarResumoTemas() {
+  const el = $("#pTemasResumo");
+  if (!Object.keys(contagemProva).length) { el.textContent = ""; el.classList.remove("erro"); return; }
+  const d = disponiveisMarcados(), prob = problemaTemas();
+  el.textContent = `Disponíveis com os temas marcados: ${textoContagem(d)}.` + (prob ? " ⚠ " + prob : "");
+  el.classList.toggle("erro", !!prob);
+}
+$("#pBanco").onchange = carregarTemasProva;
+$("#pN").oninput = $("#pNDiss").oninput = atualizarResumoTemas;
+
 $("#btnCriarProva").onclick = async () => {
   if (!podeEditar()) return toast("Seu papel não permite criar provas.", "erro");
   const titulo = $("#pTitulo").value.trim(), bancoId = $("#pBanco").value, n = Number($("#pN").value), nDiss = Number($("#pNDiss").value || 0);
   if (nDiss > n) return toast("O número de dissertativas não pode passar do total de questões.", "erro");
   if (!titulo || !bancoId || !n) return toast("Preencha título, banco e número de questões.", "erro");
   const tempoMinutos = Math.max(0, Math.round(Number($("#pTempo").value || 0)));
-  const b = bancosCache.find(x => x.id === bancoId);
-  if (b && n > b.nQuestoes) return toast(`O banco só tem ${b.nQuestoes} questões.`, "erro");
-  if (nDiss) { const qs = await getDocs(collection(db, "bancos", bancoId, "questoes")); let d = 0, a = 0; qs.forEach(x => x.data().tipo === "dissertativa" ? d++ : a++);
-    if (nDiss > d) return toast(`O banco só tem ${d} dissertativa(s).`, "erro"); if (n - nDiss > a) return toast(`O banco só tem ${a} de alternativa.`, "erro"); }
-  await addDoc(collection(db, "provas"), { titulo, turma: $("#pTurma").value.trim(), bancoId, nQuestoes: n, nDissertativas: nDiss,
+  if (!Object.keys(contagemProva).length) await carregarTemasProva();   // garante a contagem do banco escolhido
+  const prob = problemaTemas();
+  if (prob) { atualizarResumoTemas(); return toast(prob, "erro"); }
+  const temas = temasMarcados($("#pTemas"));   // se todos estiverem marcados, grava a lista completa
+  await addDoc(collection(db, "provas"), { titulo, turma: $("#pTurma").value.trim(), bancoId, nQuestoes: n, nDissertativas: nDiss, temas,
     feedbackImediato: $("#pFeedback").value, embaralharAlternativas: $("#pEmbaralhar").checked, tempoMinutos,
     liberada: false, resultadosLiberados: false, criadoEm: serverTimestamp(), criadoPor: eu.email });
   $("#pTitulo").value = ""; toast("Prova criada (ainda fechada). Libere quando for aplicar.", "ok"); carregarProvas();
@@ -120,6 +200,7 @@ function validarBanco(txt) {
     const n = i + 1;
     if (!["alternativa", "dissertativa"].includes(q.tipo)) throw new Error(`Questão ${n}: tipo deve ser alternativa ou dissertativa.`);
     if (!q.enunciado) throw new Error(`Questão ${n}: falta o enunciado.`);
+    if (q.tema !== undefined && q.tema !== null && typeof q.tema !== "string") throw new Error(`Questão ${n}: "tema" deve ser um texto (ex.: "DML - UPDATE").`);
     if (q.tipo === "alternativa") {
       if (!Array.isArray(q.alternativas) || q.alternativas.length < 2) throw new Error(`Questão ${n}: precisa de pelo menos 2 alternativas.`);
       if (!Number.isInteger(q.correta) || q.correta < 0 || q.correta >= q.alternativas.length) throw new Error(`Questão ${n}: "correta" deve ser o índice da alternativa certa (0 = primeira).`);
@@ -130,17 +211,22 @@ function validarBanco(txt) {
   return b;
 }
 $("#btnValidarBanco").onclick = () => {
-  try { const b = validarBanco($("#txtBanco").value); $("#msgBanco").innerHTML = `✅ OK: <b>${esc(b.nome)}</b>, ${b.questoes.length} questões (${b.questoes.filter(q => q.tipo === "alternativa").length} de alternativa, ${b.questoes.filter(q => q.tipo === "dissertativa").length} dissertativas).`; }
+  try {
+    const b = validarBanco($("#txtBanco").value), c = contarPorTema(b.questoes);
+    $("#msgBanco").innerHTML = `✅ OK: <b>${esc(b.nome)}</b>, ${b.questoes.length} questões (${b.questoes.filter(q => q.tipo === "alternativa").length} de alternativa, ${b.questoes.filter(q => q.tipo === "dissertativa").length} dissertativas).` +
+      `<ul class="temas-banco">${Object.entries(c).map(([t, n]) => `<li><b>${esc(t)}</b>: ${textoContagem(n)}</li>`).join("")}</ul>`;
+  }
   catch (e) { $("#msgBanco").innerHTML = `❌ ${esc(e.message)}`; }
 };
 $("#btnImportarBanco").onclick = async () => {
   if (!podeEditar()) return toast("Seu papel não permite importar.", "erro");
   let b; try { b = validarBanco($("#txtBanco").value); } catch (e) { return $("#msgBanco").innerHTML = `❌ ${esc(e.message)}`; }
-  const ref = await addDoc(collection(db, "bancos"), { nome: b.nome, materia: b.materia || "", nQuestoes: b.questoes.length, criadoEm: serverTimestamp(), criadoPor: eu.email });
+  const temas = ordenarTemas(b.questoes.map(temaDe));
+  const ref = await addDoc(collection(db, "bancos"), { nome: b.nome, materia: b.materia || "", nQuestoes: b.questoes.length, temas, criadoEm: serverTimestamp(), criadoPor: eu.email });
   const lote = writeBatch(db);
   b.questoes.forEach((q, i) => {
     const qid = `${ref.id}_q${String(i + 1).padStart(3, "0")}`;
-    const pub = { ordem: i + 1, tipo: q.tipo, enunciado: q.enunciado, peso: Number(q.peso || 1) };
+    const pub = { ordem: i + 1, tipo: q.tipo, enunciado: q.enunciado, peso: Number(q.peso || 1), tema: temaDe(q) };
     if (q.tipo === "alternativa") pub.alternativas = q.alternativas;
     lote.set(doc(db, "bancos", ref.id, "questoes", qid), pub);
     const gab = { explicacao: q.explicacao || "" };
@@ -148,15 +234,17 @@ $("#btnImportarBanco").onclick = async () => {
     lote.set(doc(db, "bancos", ref.id, "gabaritos", qid), gab);
   });
   await lote.commit();
-  $("#msgBanco").innerHTML = `✅ Banco <b>${esc(b.nome)}</b> importado com ${b.questoes.length} questões.`; $("#txtBanco").value = "";
+  $("#msgBanco").innerHTML = `✅ Banco <b>${esc(b.nome)}</b> importado com ${b.questoes.length} questões em ${temas.length} tema(s): ${temas.map(esc).join(", ")}.`; $("#txtBanco").value = "";
   carregarBancos();
 };
 async function carregarBancos() {
   await listarBancos();
   const box = $("#listaBancos");
   if (!bancosCache.length) { box.innerHTML = `<div class="vazio"><div class="icone">📚</div><p>Nenhum banco ainda. Importe o <b>modelo_banco.json</b> acima para começar.</p></div>`; return; }
-  box.innerHTML = `<div class="tabela"><table><tr><th>Banco</th><th>Matéria</th><th>Questões</th><th></th></tr>` + bancosCache.map(b =>
+  const contagens = await Promise.all(bancosCache.map(b => questoesDoBanco(b.id).then(contarPorTema).catch(() => null)));
+  box.innerHTML = `<div class="tabela"><table><tr><th>Banco</th><th>Matéria</th><th>Questões</th><th>Temas</th><th></th></tr>` + bancosCache.map((b, i) =>
     `<tr><td><b>${esc(b.nome)}</b><br><span class="pequeno">${b.id}</span></td><td>${esc(b.materia || "")}</td><td>${b.nQuestoes}</td>
+     <td>${contagens[i] ? `<ul class="temas-banco">${Object.entries(contagens[i]).map(([t, n]) => `<li><b>${esc(t)}</b>: ${textoContagem(n)}</li>`).join("")}</ul>` : "—"}</td>
      <td class="td-acoes"><button class="leve mini" data-gab="${b.id}">Gabarito p/ Classroom</button> ${ehAdmin() ? `<button class="perigo mini" data-delb="${b.id}" aria-label="Apagar banco">🗑 Apagar</button>` : ""}</td></tr>`).join("") + "</table></div>";
   box.querySelectorAll("[data-gab]").forEach(x => x.onclick = () => gerarGabarito(x.dataset.gab));
   box.querySelectorAll("[data-delb]").forEach(x => x.onclick = async () => {
@@ -164,7 +252,7 @@ async function carregarBancos() {
     const id = x.dataset.delb, lote = writeBatch(db);
     (await getDocs(collection(db, "bancos", id, "questoes"))).forEach(d => lote.delete(d.ref));
     (await getDocs(collection(db, "bancos", id, "gabaritos"))).forEach(d => lote.delete(d.ref));
-    lote.delete(doc(db, "bancos", id)); await lote.commit(); carregarBancos();
+    lote.delete(doc(db, "bancos", id)); await lote.commit(); delete questoesCache[id]; carregarBancos();
   });
 }
 async function lerBanco(bancoId) {
@@ -176,16 +264,29 @@ async function lerBanco(bancoId) {
 async function gerarGabarito(bancoId) {
   const b = bancosCache.find(x => x.id === bancoId), { questoes, gabaritos } = await lerBanco(bancoId);
   const lista = Object.values(questoes).sort((a, c) => a.ordem - c.ordem);
-  let t = `GABARITO — ${b.nome}\n${"=".repeat(60)}\nCada aluno recebeu um sorteio de questões deste banco: confira as suas pelo enunciado.\n\n`;
-  lista.forEach(q => {
-    const g = gabaritos[q.id] || {};
-    t += `${q.ordem}) ${q.enunciado}\n`;
-    if (q.tipo === "alternativa") { q.alternativas.forEach((a, i) => t += `   ${letra(i)}) ${a}\n`); t += `   ✔ Resposta: ${letra(g.correta)}) ${q.alternativas[g.correta]}\n`; }
-    else t += `   ✔ Resposta esperada: ${(g.respostasAceitas || [])[0] || "(ver palavras-chave: " + (g.palavrasChave || []).join(", ") + ")"}\n`;
-    if (g.explicacao) t += `   💡 ${g.explicacao}\n`;
-    t += "\n";
-  });
-  $("#txtGabarito").textContent = t; $("#cardGabarito").classList.remove("oculto"); $("#cardGabarito").scrollIntoView({ behavior: "smooth" });
+  let t = "";
+  // monta o texto só com os temas marcados, uma seção por tema
+  const montar = () => {
+    const marcados = temasMarcados($("#gabTemas"));
+    t = `GABARITO — ${b.nome}\n${"=".repeat(60)}\nCada aluno recebeu um sorteio de questões deste banco: confira as suas pelo enunciado.\n`;
+    if (!marcados.length) t += "\n(nenhum tema marcado)\n";
+    for (const tema of marcados) {
+      const doTema = lista.filter(q => temaDe(q) === tema);
+      t += `\n\n${"─".repeat(60)}\nTEMA: ${tema.toUpperCase()}  (${doTema.length} questões)\n${"─".repeat(60)}\n\n`;
+      doTema.forEach(q => {
+        const g = gabaritos[q.id] || {};
+        t += `${q.ordem}) ${q.enunciado}\n`;
+        if (q.tipo === "alternativa") { q.alternativas.forEach((a, i) => t += `   ${letra(i)}) ${a}\n`); t += `   ✔ Resposta: ${letra(g.correta)}) ${q.alternativas[g.correta]}\n`; }
+        else t += `   ✔ Resposta esperada: ${(g.respostasAceitas || [])[0] || "(ver palavras-chave: " + (g.palavrasChave || []).join(", ") + ")"}\n`;
+        if (g.explicacao) t += `   💡 ${g.explicacao}\n`;
+        t += "\n";
+      });
+    }
+    $("#txtGabarito").textContent = t;
+  };
+  desenharChecksTemas($("#gabTemas"), contarPorTema(lista), montar);
+  montar();
+  $("#cardGabarito").classList.remove("oculto"); $("#cardGabarito").scrollIntoView({ behavior: "smooth" });
   $("#btnCopiarGab").onclick = () => navigator.clipboard.writeText(t).then(() => toast("Copiado", "ok"));
   $("#btnBaixarGab").onclick = () => baixar(`gabarito_${b.nome.replace(/\W+/g, "_")}.txt`, t);
 }

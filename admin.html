@@ -47,6 +47,11 @@
           <div><label for="pTurma">Turma (texto livre)</label><input type="text" id="pTurma" placeholder="DETS-1A"></div>
           <div><label for="pBanco">Banco de questões</label><select id="pBanco"></select></div>
         </div>
+        <fieldset id="pTemasBox" class="temas-box">
+          <legend>Temas que entram no sorteio</legend>
+          <div id="pTemas" class="lista-temas"><p class="pequeno">Escolha um banco para ver os temas.</p></div>
+          <p id="pTemasResumo" class="pequeno" role="status" aria-live="polite"></p>
+        </fieldset>
         <div class="grade">
           <div><label for="pN">Questões por aluno</label><input type="number" id="pN" value="10" min="1"></div>
           <div><label for="pNDiss">Das quais dissertativas (0 = sorteio livre)</label><input type="number" id="pNDiss" value="3" min="0"></div>
@@ -74,7 +79,8 @@
       </div>
       <div class="card"><h2>Bancos cadastrados</h2><div id="listaBancos"></div></div>
       <div class="card oculto" id="cardGabarito"><h2>Gabarito para o Classroom</h2>
-        <p class="pequeno">Todas as questões do banco com a resposta e a explicação. Copie ou baixe e poste no Classroom depois da prova.</p>
+        <p class="pequeno">Questões do banco agrupadas por tema, com a resposta e a explicação. Desmarque os temas que a prova não usou. Copie ou baixe e poste no Classroom depois da prova.</p>
+        <fieldset class="temas-box"><legend>Temas no gabarito</legend><div id="gabTemas" class="lista-temas"></div></fieldset>
         <div class="linha acoes"><button id="btnCopiarGab" class="leve">Copiar</button><button id="btnBaixarGab" class="leve">Baixar .txt</button></div>
         <pre class="bloco" id="txtGabarito"></pre></div>
     </div>

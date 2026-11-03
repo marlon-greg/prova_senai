@@ -59,6 +59,17 @@ label.check { display:flex; align-items:center; gap:8px; font-weight:500; margin
 .linha > * { flex:1; min-width:140px; }
 .linha.acoes > * { flex:0 0 auto; min-width:0; }
 
+/* ---------- temas (nova prova / gabarito) ---------- */
+.temas-box { border:1px solid var(--borda); border-radius:var(--raio-p); padding:12px 16px 8px; margin:0 0 16px; }
+.temas-box legend { font-weight:600; font-size:.9em; padding:0 4px; }
+.lista-temas { display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:4px 16px; }
+.lista-temas label.check { margin:4px 0; align-items:flex-start; }
+.lista-temas label.check input { margin-top:4px; }
+.lista-temas .acoes-temas { grid-column:1 / -1; display:flex; gap:8px; flex-wrap:wrap; margin-bottom:4px; }
+#pTemasResumo.erro { color:var(--erro); font-weight:600; }
+.temas-banco { margin:0; padding-left:16px; font-size:.88em; }
+.temas-banco li { margin:2px 0; }
+
 /* ---------- badges de status ---------- */
 .tag { display:inline-flex; align-items:center; gap:4px; font-size:.8em; font-weight:600; padding:3px 10px; border-radius:999px; background:#eef0f3; color:#424a55; margin:2px 4px 2px 0; white-space:nowrap; }
 .tag.ok, .tag.on { background:var(--ok-claro); color:var(--ok); }
