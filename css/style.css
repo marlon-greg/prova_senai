@@ -149,12 +149,19 @@ body.com-consulta main.estreito { max-width:1500px; }
 }
 @media print { .painel-consulta, .btn-consulta { display:none !important; } }
 
+/* ---------- ao vivo / testes / limite de saídas ---------- */
+.ao-vivo { font-family:var(--fonte-texto); font-size:.6em; font-weight:600; color:var(--ok); background:var(--ok-claro); border-radius:999px; padding:2px 10px; vertical-align:middle; animation:piscar 1.6s ease-in-out infinite; }
+@keyframes piscar { 50% { opacity:.55; } }
+.secao-testes { border-style:dashed; }
+.aviso-box.erro { background:var(--erro-claro); border-color:#f1c2c4; color:var(--erro); }
+.sobre-placar { color:var(--erro); font-weight:600; margin:-12px 0 24px; }
+
 /* ---------- feedback ---------- */
 .feedback { display:flex; gap:12px; align-items:flex-start; border:1px solid var(--borda); border-left-width:5px; padding:12px 16px; border-radius:var(--raio-p); margin-top:16px; background:#f7f8fa; }
 .feedback.bloco { display:block; }
 .feedback .icone { font-size:1.3em; line-height:1.2; }
 .feedback.certa { border-color:#b7dfc7; border-left-color:var(--ok); background:var(--ok-claro); }
-.feedback.errada, .feedback.em_branco { border-color:#f1c2c4; border-left-color:var(--erro); background:var(--erro-claro); }
+.feedback.errada, .feedback.em_branco, .feedback.perdida { border-color:#f1c2c4; border-left-color:var(--erro); background:var(--erro-claro); }
 .feedback.revisar, .feedback.parcial { border-color:#f2d9a6; border-left-color:var(--aviso); background:var(--aviso-claro); }
 
 /* ---------- tabelas (painel) ---------- */

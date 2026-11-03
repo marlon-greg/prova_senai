@@ -1,7 +1,7 @@
 // Painel do professor: provas, bancos (import JSON), resultados/correção, equipe, configuração.
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, apagarTentativaTeste,
          confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas } from "./common.js";
-import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp }
+import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp, onSnapshot }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 let eu = null;   // { email, nome, papel }
@@ -28,6 +28,7 @@ aoMudarLogin(async user => {
 });
 function trocar(id) { ["telaLogin", "telaPainel", "telaAviso"].forEach(t => $("#" + t).classList.toggle("oculto", t !== id)); }
 function abrirAba(a) {
+  if (a !== "resultados" && $("#rAoVivo").checked) { $("#rAoVivo").checked = false; pararAoVivo(); }   // sair da aba desliga o ao vivo
   document.querySelectorAll("[data-aba]").forEach(b => b.classList.toggle("ativa", b.dataset.aba === a));
   ["provas", "bancos", "resultados", "equipe", "config"].forEach(x => $("#aba-" + x).classList.toggle("oculto", x !== a));
   ({ provas: carregarProvas, bancos: carregarBancos, resultados: prepararResultados, equipe: carregarEquipe, config: carregarConfig })[a]();
@@ -108,6 +109,12 @@ function formProvaHTML(f) {
     <label class="check"><input type="checkbox" id="${f}Embaralhar" checked> Embaralhar a ordem das alternativas para cada aluno</label>
     <label class="check"><input type="checkbox" id="${f}PermitirTrocaAba"> <span>Permitir trocar de aba/janela <span class="pequeno">— sem tela cheia e sem aviso; as trocas continuam contadas, marcadas como "permitido"</span></span></label>
     <label class="check"><input type="checkbox" id="${f}PermitirColar"> <span>Permitir colar nos campos de resposta <span class="pequeno">— colar e arrastar liberados, sem registro</span></span></label>
+    <div class="grade" style="margin:12px 0 0">
+      <div><label for="${f}MaxTrocas">Limite de saídas da prova (0 = sem limite)</label><input type="number" id="${f}MaxTrocas" value="0" min="0" step="1"></div>
+      <div><label for="${f}AcaoExceder">Ao atingir o limite</label>
+        <select id="${f}AcaoExceder"><option value="encerrar">Encerrar a prova</option><option value="perderQuestao">Perder a questão atual (só em "uma por vez")</option></select></div>
+    </div>
+    <p class="pequeno" id="${f}LimiteDica">Conta como saída trocar de aba/janela ou sair da tela cheia.</p>
   </fieldset>
   <fieldset class="temas-box">
     <legend>Material de consulta (opcional)</legend>
@@ -182,11 +189,23 @@ function controleProva(f) {
     if (!/^https:\/\//.test(conv)) { el.innerHTML = `⚠ Use um link que comece com <b>https://</b>.`; return; }
     el.innerHTML = conv !== url ? `Será salvo no formato para exibir na prova: <span class="mono">${esc(conv)}</span>` : `Link salvo como está.`;
   }
+  // limite de saídas: só sem troca de aba permitida; "perder questão" só em "uma por vez"
+  function atualizarLimite() {
+    const troca = $f("PermitirTrocaAba").checked, todas = $f("Modo").value === "todas";
+    $f("MaxTrocas").disabled = troca; $f("AcaoExceder").disabled = troca;
+    $f("AcaoExceder").querySelector("option[value=perderQuestao]").disabled = todas;
+    if (todas && $f("AcaoExceder").value === "perderQuestao") $f("AcaoExceder").value = "encerrar";
+    $f("LimiteDica").textContent = troca ? "Com troca de aba permitida não há limite nem punição (as trocas só são contadas)."
+      : todas ? "Conta como saída trocar de aba/janela ou sair da tela cheia. Com todas as questões na página, ao atingir o limite a prova é encerrada."
+      : "Conta como saída trocar de aba/janela ou sair da tela cheia.";
+  }
   // liga os eventos (chamar depois que o HTML estiver na página)
   function ligar() {
     $f("Banco").onchange = () => carregarTemas();
     $f("N").oninput = $f("NDiss").oninput = atualizar;
     $f("MatUrl").oninput = previaMaterial;
+    $f("PermitirTrocaAba").onchange = $f("Modo").onchange = atualizarLimite;
+    atualizarLimite();
   }
   // trava banco, número de questões, dissertativas e temas (prova que já tem tentativas de alunos)
   function travar(motivo) {
@@ -204,7 +223,8 @@ function controleProva(f) {
     $f("Embaralhar").checked = p.embaralharAlternativas !== false;
     $f("PermitirTrocaAba").checked = p.permitirTrocaAba === true; $f("PermitirColar").checked = p.permitirColar === true;
     $f("MatTitulo").value = p.materialConsultaTitulo || ""; $f("MatUrl").value = p.materialConsultaUrl || "";
-    previaMaterial();
+    $f("MaxTrocas").value = p.maxTrocasDeAba || 0; $f("AcaoExceder").value = p.acaoAoExceder === "perderQuestao" ? "perderQuestao" : "encerrar";
+    previaMaterial(); atualizarLimite();
   }
   // lê e valida; devolve { erro } ou { dados }
   async function ler() {
@@ -223,6 +243,8 @@ function controleProva(f) {
       tempoMinutos: Math.max(0, Math.round(Number($f("Tempo").value || 0))),
       modoExibicao: $f("Modo").value === "todas" ? "todas" : "uma",
       permitirTrocaAba: $f("PermitirTrocaAba").checked, permitirColar: $f("PermitirColar").checked,
+      maxTrocasDeAba: $f("PermitirTrocaAba").checked ? 0 : Math.max(0, Math.round(Number($f("MaxTrocas").value || 0))),
+      acaoAoExceder: $f("Modo").value !== "todas" && $f("AcaoExceder").value === "perderQuestao" ? "perderQuestao" : "encerrar",
       materialConsultaUrl: url, materialConsultaTitulo: url ? ($f("MatTitulo").value.trim() || "Material de consulta") : ""
     };
     // campos do sorteio: só entram se não estiverem travados
@@ -242,6 +264,7 @@ function opcoesDaProvaHTML(p) {
   t.push(p.modoExibicao === "todas" ? `<span class="tag">▤ todas na página</span>` : `<span class="tag">▭ uma por vez</span>`);
   if (p.permitirTrocaAba) t.push(`<span class="tag aviso" title="Sem tela cheia e sem aviso; as trocas continuam contadas">🔀 troca de aba permitida</span>`);
   if (p.permitirColar) t.push(`<span class="tag aviso">📋 colar permitido</span>`);
+  if (!p.permitirTrocaAba && Number(p.maxTrocasDeAba) > 0) t.push(`<span class="tag erro" title="Saídas da prova permitidas antes da punição">🚪 máx. ${Number(p.maxTrocasDeAba)} saída(s) · ${p.acaoAoExceder === "perderQuestao" && p.modoExibicao !== "todas" ? "perde a questão" : "encerra"}</span>`);
   if (p.materialConsultaUrl) t.push(`<span class="tag nota" title="${esc(p.materialConsultaUrl)}">📖 ${esc(p.materialConsultaTitulo || "consulta")}</span>`);
   return t.join(" ");
 }
@@ -466,7 +489,8 @@ function tempoTotal(t) {
 const RAPIDO = 5;   // resposta enviada em menos de 5 s: destacar
 // sinais de cola; com troca de aba permitida na prova, as trocas aparecem em cinza ("permitido") e não destacam a linha
 function sinaisDe(t, prova) {
-  const s = { abas: t.trocasDeAba || 0, telaCheia: t.saidasTelaCheia || 0, colar: t.tentativasColar || 0, abasPermitido: prova?.permitirTrocaAba === true };
+  const atual = t.trocasDeAba || 0, acumulado = t.trocasDeAbaTotal || 0;   // "perder questão" zera trocasDeAba e acumula em trocasDeAbaTotal
+  const s = { abas: atual + acumulado, abasAtual: atual, abasAcumulado: acumulado, telaCheia: t.saidasTelaCheia || 0, colar: t.tentativasColar || 0, abasPermitido: prova?.permitirTrocaAba === true };
   s.total = (s.abasPermitido ? 0 : s.abas) + s.telaCheia + s.colar;
   return s;
 }
@@ -478,44 +502,110 @@ function sinaisHTML(s) {
 const abasTexto = s => `${s.abas}${s.abasPermitido ? " (permitido)" : ""}`;
 function sinaisTexto(s) { return `abas ${abasTexto(s)} · tela cheia ${s.telaCheia} · colar ${s.colar}`; }
 
-let resDados = null;   // { prova, questoes, gabaritos, linhas: [...] }
+// rótulos de correção usados no detalhe
+const ROTULOS = { certa: ["ok", "✅ certa"], errada: ["erro", "❌ errada"], parcial: ["aviso", "🟡 parcial"], revisar: ["aviso", "🟡 revisar"], em_branco: ["erro", "⬜ em branco"], perdida: ["erro", "⛔ perdida (saiu da prova)"] };
+// limite de saídas efetivo da prova (0 = sem limite; com troca de aba permitida não há limite)
+const limiteSaidas = p => p?.permitirTrocaAba ? 0 : Math.max(0, Number(p?.maxTrocasDeAba || 0));
+
+let resDados = null;          // { prova, questoes, gabaritos, linhas: [...alunos], testes: [...equipe] }
+const cacheTent = new Map();  // tentativaId -> { t, resp, corr }  (base da tabela; o "ao vivo" só atualiza o que mudou)
+let ouvintes = [];            // unsubscribe do "ao vivo" (tentativas da prova)
+let ouvinteDetalhe = null;    // unsubscribe das respostas da tentativa aberta em "Ver"
+let detalheId = null;         // tentativa aberta em "Ver"
+
 async function prepararResultados() {
   const s = await getDocs(collection(db, "provas"));
   const provas = []; s.forEach(d => provas.push({ id: d.id, ...d.data() }));
+  const antes = $("#rProva").value;
   $("#rProva").innerHTML = provas.map(p => `<option value="${p.id}">${esc(p.titulo)} · ${esc(p.turma || "")}</option>`).join("");
+  if (antes && provas.some(p => p.id === antes)) $("#rProva").value = antes;
 }
 $("#btnCarregarRes").onclick = carregarResultados;
+$("#rProva").onchange = () => { pararAoVivo(); resDados = null; $("#resResumo").innerHTML = ""; $("#resTabela").innerHTML = ""; if ($("#rAoVivo").checked) carregarResultados(); };
+$("#rTestes").onchange = () => { if (resDados) desenharResultados(); };
+$("#rAoVivo").onchange = () => { if ($("#rAoVivo").checked) carregarResultados(); else pararAoVivo(); };
+
+// cancela todos os listeners do "ao vivo"
+function pararAoVivo() {
+  ouvintes.forEach(u => u()); ouvintes = [];
+  if (ouvinteDetalhe) { ouvinteDetalhe(); ouvinteDetalhe = null; }
+  $("#aoVivo").classList.add("oculto");
+}
+
 async function carregarResultados() {
+  pararAoVivo();
   const provaId = $("#rProva").value; if (!provaId) return;
   $("#resTabela").innerHTML = "<p class='pequeno'>Carregando…</p>";
   const prova = { id: provaId, ...(await getDoc(doc(db, "provas", provaId))).data() };
   const { questoes, gabaritos } = await lerBanco(prova.bancoId);
-  const ts = await getDocs(query(collection(db, "tentativas"), where("provaId", "==", provaId)));
-  const linhas = [];
-  for (const d of ts.docs) {
-    const t = { id: d.id, ...d.data() };
-    if (t.teste === true) continue;   // tentativas do modo teste (equipe) não entram em tabela, média, CSV, PDFs nem "Fechar notas"
-    const [rs, cs] = await Promise.all([getDocs(collection(db, "tentativas", t.id, "respostas")), getDocs(collection(db, "tentativas", t.id, "correcoes"))]);
-    const resp = {}; rs.forEach(x => resp[x.id] = x.data()); const corr = {}; cs.forEach(x => corr[x.id] = x.data());
-    const itens = t.questoesIds.map((qid, i) => {
-      const q = questoes[qid] || { tipo: "?", enunciado: "(questão removida)", peso: 1 }, g = gabaritos[qid] || {};
-      const r = resp[qid]?.resposta, peso = Number(q.peso || 1);
-      let c = corrigir(q, g, r);
-      if (corr[qid]?.pontos !== undefined) c = { pontos: Number(corr[qid].pontos), status: Number(corr[qid].pontos) >= peso ? "certa" : Number(corr[qid].pontos) > 0 ? "parcial" : "errada", manual: true };
-      return { n: i + 1, qid, q, g, r, peso, ...c, comentario: corr[qid]?.comentario || "", segundos: resp[qid]?.segundos };
-    });
-    const max = itens.reduce((s, x) => s + x.peso, 0), pts = itens.reduce((s, x) => s + x.pontos, 0);
-    const sinais = sinaisDe(t, prova);
-    linhas.push({ t, itens, max, pts, nota: max ? Math.round(pts / max * 1000) / 10 : 0, revisar: itens.filter(x => x.status === "revisar").length,
-                  tempo: tempoTotal(t), sinais, temSinal: sinais.total > 0,
-                  rapidas: itens.filter(x => x.r !== undefined && typeof x.segundos === "number" && x.segundos < RAPIDO).length });
+  resDados = { prova, questoes, gabaritos, linhas: [], testes: [] };
+  cacheTent.clear(); detalheId = null;
+  const q = query(collection(db, "tentativas"), where("provaId", "==", provaId));
+  if (!$("#rAoVivo").checked) {
+    const ts = await getDocs(q);
+    await Promise.all(ts.docs.map(atualizarCache));
+    montarResultados();
+    return;
   }
-  linhas.sort((a, b) => (a.t.nome || a.t.email).localeCompare(b.t.nome || b.t.email));
-  resDados = { prova, questoes, gabaritos, linhas };
+  // ao vivo: a primeira leitura e cada mudança chegam pelo onSnapshot
+  $("#aoVivo").classList.remove("oculto");
+  ouvintes.push(onSnapshot(q, async snap => {
+    if (resDados?.prova.id !== provaId) return;
+    await Promise.all(snap.docChanges().map(ch => ch.type === "removed" ? cacheTent.delete(ch.doc.id) : atualizarCache(ch.doc)));
+    montarResultados();
+  }, e => { toast("O acompanhamento ao vivo parou. " + traduzirErro(e), "erro"); $("#rAoVivo").checked = false; pararAoVivo(); }));
+}
+// lê respostas e correções de uma tentativa e guarda no cache
+async function atualizarCache(d) {
+  const t = { id: d.id, ...d.data() };
+  const [rs, cs] = await Promise.all([getDocs(collection(db, "tentativas", t.id, "respostas")), getDocs(collection(db, "tentativas", t.id, "correcoes"))]);
+  const resp = {}; rs.forEach(x => resp[x.id] = x.data()); const corr = {}; cs.forEach(x => corr[x.id] = x.data());
+  cacheTent.set(t.id, { t, resp, corr });
+}
+// calcula a linha da tabela (correção, sinais, tempo) de uma tentativa
+function linhaDe({ t, resp, corr }) {
+  const { prova, questoes, gabaritos } = resDados;
+  const itens = t.questoesIds.map((qid, i) => {
+    const q = questoes[qid] || { tipo: "?", enunciado: "(questão removida)", peso: 1 }, g = gabaritos[qid] || {};
+    const r = resp[qid]?.resposta ?? undefined, perdida = resp[qid]?.perdida === true, peso = Number(q.peso || 1);
+    let c = corrigir(q, g, r, perdida);
+    if (!perdida && corr[qid]?.pontos !== undefined) c = { pontos: Number(corr[qid].pontos), status: Number(corr[qid].pontos) >= peso ? "certa" : Number(corr[qid].pontos) > 0 ? "parcial" : "errada", manual: true };
+    return { n: i + 1, qid, q, g, r, perdida, peso, ...c, comentario: corr[qid]?.comentario || "", segundos: resp[qid]?.segundos };
+  });
+  const max = itens.reduce((s, x) => s + x.peso, 0), pts = itens.reduce((s, x) => s + x.pontos, 0);
+  const sinais = sinaisDe(t, prova);
+  return { t, itens, max, pts, nota: max ? Math.round(pts / max * 1000) / 10 : 0, revisar: itens.filter(x => x.status === "revisar").length,
+           perdidas: itens.filter(x => x.perdida).length, tempo: tempoTotal(t), sinais, temSinal: sinais.total > 0,
+           rapidas: itens.filter(x => x.r !== undefined && !x.perdida && typeof x.segundos === "number" && x.segundos < RAPIDO).length };
+}
+function montarResultados() {
+  const todas = [...cacheTent.values()].map(linhaDe).sort((a, b) => (a.t.nome || a.t.email).localeCompare(b.t.nome || b.t.email));
+  // tentativas do modo teste (equipe) ficam à parte: nunca entram em média, CSV, PDFs nem "Fechar notas"
+  resDados.linhas = todas.filter(l => l.t.teste !== true);
+  resDados.testes = todas.filter(l => l.t.teste === true);
   desenharResultados();
 }
+
+// "3/3" com o limite, total acumulado e motivo do encerramento
+function saidasHTML(l) {
+  const lim = limiteSaidas(resDados.prova);
+  return lim ? `<br><span class="tag ${l.sinais.abasAtual >= lim ? "erro" : ""}" title="Saídas da prova / limite">🚪 ${l.sinais.abasAtual}/${lim}</span>` : "";
+}
+function situacaoHTML(l) {
+  const t = l.t;
+  let h = t.finalizadaEm ? `<span class="pequeno">${dataBR(t.finalizadaEm)}</span>` : "<span class='tag aviso'>em andamento</span>";
+  if (t.encerradaPor === "trocasDeAba") h += `<br><span class="tag erro">⛔ encerrada: limite de saídas</span>`;
+  if (l.perdidas) h += `<br><span class="tag erro">⛔ ${l.perdidas} perdida(s)</span>`;
+  return h;
+}
+function tabelaHTML(lista, prefixo) {
+  return `<div class="tabela"><table><tr><th>Aluno</th><th>Início</th><th>Fim</th><th>Tempo</th><th>Sinais</th><th>Nota</th><th>Revisar</th><th></th></tr>` +
+    lista.map(l => `<tr class="${l.temSinal ? "com-sinal" : ""}"><td><b>${esc(l.t.nome || "")}</b><br><span class="pequeno">${esc(l.t.email)}</span></td><td class="pequeno">${dataBR(l.t.iniciadaEm)}</td><td>${situacaoHTML(l)}</td>
+      <td>${fmtTempo(l.tempo)}${l.rapidas ? `<br><span class="tag erro" title="Respostas enviadas em menos de ${RAPIDO} segundos">⚡ ${l.rapidas} rápida(s)</span>` : ""}</td><td>${sinaisHTML(l.sinais)}${saidasHTML(l)}</td><td><b>${l.nota}</b>${l.t.nota !== undefined ? ` <span class="pequeno">(fechada: ${l.t.nota})</span>` : l.t.notaPrevia !== null && l.t.notaPrevia !== undefined ? ` <span class="pequeno">(prévia: ${l.t.notaPrevia})</span>` : ""}</td><td>${l.revisar ? `<span class="tag aviso">${l.revisar}</span>` : "—"}</td>
+      <td class="td-acoes"><button class="leve mini" data-ver="${l.t.id}">Ver</button> ${ehAdmin() && prefixo === "aluno" ? `<button class="perigo mini" data-reset="${l.t.id}" title="Apagar a tentativa (o aluno pode refazer)">↺ Apagar</button>` : ""}</td></tr>`).join("") + `</table></div>`;
+}
 function desenharResultados() {
-  const { prova, linhas } = resDados;
+  const { linhas, testes } = resDados;
   const fin = linhas.filter(l => l.t.finalizadaEm), comSinal = linhas.filter(l => l.temSinal).length, media = fin.length ? (fin.reduce((s, l) => s + l.nota, 0) / fin.length).toFixed(1) : "—";
   const revisar = linhas.reduce((s, l) => s + l.revisar, 0);
   $("#resResumo").innerHTML = `<div class="numeros">
@@ -524,41 +614,64 @@ function desenharResultados() {
       <div class="numero"><b>${media}</b><span>média (0–100)</span></div>
       <div class="numero ${revisar ? "aviso" : ""}"><b>${revisar}</b><span>respostas a revisar</span></div>
       <div class="numero ${comSinal ? "aviso" : ""}"><b>${comSinal}</b><span>com sinais (aba, tela cheia, colar)</span></div></div>`;
-  if (!linhas.length) { $("#resTabela").innerHTML = `<div class="card vazio"><div class="icone">⏳</div><p>Ninguém fez esta prova ainda.</p></div>`; return; }
-  $("#resTabela").innerHTML = `<div class="card"><div class="tabela"><table><tr><th>Aluno</th><th>Início</th><th>Fim</th><th>Tempo</th><th>Sinais</th><th>Nota</th><th>Revisar</th><th></th></tr>` +
-    linhas.map((l, i) => `<tr class="${l.temSinal ? "com-sinal" : ""}"><td><b>${esc(l.t.nome || "")}</b><br><span class="pequeno">${esc(l.t.email)}</span></td><td class="pequeno">${dataBR(l.t.iniciadaEm)}</td><td class="pequeno">${l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "<span class='tag aviso'>em andamento</span>"}</td>
-      <td>${fmtTempo(l.tempo)}${l.rapidas ? `<br><span class="tag erro" title="Respostas enviadas em menos de ${RAPIDO} segundos">⚡ ${l.rapidas} rápida(s)</span>` : ""}</td><td>${sinaisHTML(l.sinais)}</td><td><b>${l.nota}</b>${l.t.nota !== undefined ? ` <span class="pequeno">(fechada: ${l.t.nota})</span>` : l.t.notaPrevia !== null && l.t.notaPrevia !== undefined ? ` <span class="pequeno">(prévia: ${l.t.notaPrevia})</span>` : ""}</td><td>${l.revisar ? `<span class="tag aviso">${l.revisar}</span>` : "—"}</td>
-      <td class="td-acoes"><button class="leve mini" data-ver="${i}">Ver</button> ${ehAdmin() ? `<button class="perigo mini" data-reset="${i}" title="Apagar a tentativa (o aluno pode refazer)">↺ Apagar</button>` : ""}</td></tr>`).join("") + `</table></div></div><div id="resDetalhe"></div>`;
-  document.querySelectorAll("[data-ver]").forEach(b => b.onclick = () => verAluno(Number(b.dataset.ver)));
+  const mostrarTestes = $("#rTestes").checked;
+  let html = linhas.length ? `<div class="card">${tabelaHTML(linhas, "aluno")}</div>` : `<div class="card vazio"><div class="icone">⏳</div><p>Nenhum aluno fez esta prova ainda.</p></div>`;
+  if (mostrarTestes) html += `<div class="card secao-testes"><h2>Testes da equipe <span class="pequeno">(não entram na média, no CSV, nos PDFs nem em "Fechar notas")</span></h2>${testes.length ? tabelaHTML(testes, "teste") : `<p class="pequeno">Nenhuma tentativa de teste nesta prova. Abra <b>Testar como aluno</b> na aba Provas.</p>`}</div>`;
+  // preserva o detalhe aberto (e o que o professor estiver digitando nele)
+  const box = $("#resDetalhe");
+  const digitando = box && box.contains(document.activeElement) && /INPUT|TEXTAREA/.test(document.activeElement.tagName);
+  const detalheAntigo = box ? box.innerHTML : "";
+  $("#resTabela").innerHTML = html + `<div id="resDetalhe"></div>`;
+  if (detalheId && [...linhas, ...testes].some(l => l.t.id === detalheId)) {
+    if (digitando) $("#resDetalhe").innerHTML = detalheAntigo;   // não apaga a correção em andamento
+    else verAluno(detalheId, false);
+  }
+  document.querySelectorAll("[data-ver]").forEach(b => b.onclick = () => verAluno(b.dataset.ver));
   document.querySelectorAll("[data-reset]").forEach(b => b.onclick = async () => {
-    const l = linhas[Number(b.dataset.reset)];
+    const l = linhas.find(x => x.t.id === b.dataset.reset);
     if (!(await confirmar(`Apagar a tentativa de ${l.t.nome || l.t.email}? A pessoa poderá fazer a prova de novo (com novo sorteio).`, { titulo: "Apagar tentativa", ok: "Apagar", perigo: true }))) return;
     const lote = writeBatch(db);
     (await getDocs(collection(db, "tentativas", l.t.id, "respostas"))).forEach(d => lote.delete(d.ref));
     (await getDocs(collection(db, "tentativas", l.t.id, "correcoes"))).forEach(d => lote.delete(d.ref));
     for (const qid of l.t.questoesIds) lote.delete(doc(db, "marcadores", `${l.t.uid}_${qid}`));
-    lote.delete(doc(db, "tentativas", l.t.id)); await lote.commit(); toast("Tentativa apagada", "ok"); carregarResultados();
+    lote.delete(doc(db, "tentativas", l.t.id)); await lote.commit(); toast("Tentativa apagada", "ok");
+    if (!$("#rAoVivo").checked) carregarResultados();
   });
 }
-function verAluno(i) {
-  const l = resDados.linhas[i], box = $("#resDetalhe");
-  const rot = { certa: ["ok", "✅ certa"], errada: ["erro", "❌ errada"], parcial: ["aviso", "🟡 parcial"], revisar: ["aviso", "🟡 revisar"], em_branco: ["erro", "⬜ em branco"] };
-  box.innerHTML = `<div class="card"><div class="linha"><h2 style="flex:3">${esc(l.t.nome || l.t.email)} — ${l.nota}/100 (${l.pts} de ${l.max} pontos)</h2><button class="leve mini" id="btnPDFAluno" style="flex:0 0 auto">PDF deste aluno</button></div>
-    <p class="pequeno">Tempo total: <b>${fmtTempo(l.tempo)}</b> · ${sinaisHTML(l.sinais)}</p>` + l.itens.map(x => {
-    const rapida = x.r !== undefined && typeof x.segundos === "number" && x.segundos < RAPIDO;
+function verAluno(id, rolar = true) {
+  const l = [...resDados.linhas, ...resDados.testes].find(x => x.t.id === id), box = $("#resDetalhe");
+  if (!l || !box) return;
+  // ao vivo: acompanha as respostas da tentativa aberta
+  if (detalheId !== id || (!ouvinteDetalhe && $("#rAoVivo").checked)) {
+    if (ouvinteDetalhe) { ouvinteDetalhe(); ouvinteDetalhe = null; }
+    detalheId = id;
+    if ($("#rAoVivo").checked) ouvinteDetalhe = onSnapshot(collection(db, "tentativas", id, "respostas"), snap => {
+      const c = cacheTent.get(id); if (!c) return;
+      c.resp = {}; snap.forEach(x => c.resp[x.id] = x.data());
+      montarResultados();
+    }, e => console.warn("detalhe ao vivo parou", e));
+  }
+  const lim = limiteSaidas(resDados.prova);
+  box.innerHTML = `<div class="card"><div class="linha"><h2 style="flex:3">${l.t.teste ? "🧪 " : ""}${esc(l.t.nome || l.t.email)} — ${l.nota}/100 (${l.pts} de ${l.max} pontos)</h2><button class="leve mini" id="btnPDFAluno" style="flex:0 0 auto">PDF deste aluno</button></div>
+    <p class="pequeno">Tempo total: <b>${fmtTempo(l.tempo)}</b> · ${sinaisHTML(l.sinais)}${lim ? ` · saídas da prova <b>${l.sinais.abasAtual}/${lim}</b>${l.sinais.abasAcumulado ? ` (total ${l.sinais.abas})` : ""}` : ""}
+      ${l.t.encerradaPor === "trocasDeAba" ? ` · <span class="tag erro">⛔ encerrada: limite de saídas atingido</span>` : ""}${l.perdidas ? ` · <span class="tag erro">⛔ ${l.perdidas} questão(ões) perdida(s)</span>` : ""}</p>` + l.itens.map(x => {
+    const rapida = x.r !== undefined && !x.perdida && typeof x.segundos === "number" && x.segundos < RAPIDO;
     const tempo = typeof x.segundos === "number" ? `<span class="tag ${rapida ? "erro" : ""}" title="Tempo entre a questão aparecer e a resposta ser enviada">⏱ ${fmtTempo(x.segundos)}${rapida ? ` · menos de ${RAPIDO} s` : ""}</span>` : "";
-    const sua = x.r === undefined ? "<i>não respondida</i>" : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
+    const sua = x.perdida ? "<i>perdida por sair da prova</i>" : x.r === undefined ? "<i>não respondida</i>" : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
     const certa = x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.g.correta] ?? "—") : esc((x.g.respostasAceitas || [])[0] || (x.g.palavrasChave || []).join(" + "));
-    const manual = podeEditar() && x.q.tipo === "dissertativa" ? `<div class="linha" style="margin-top:6px"><div style="flex:0 0 120px"><label>Pontos (0–${x.peso})</label><input type="number" min="0" max="${x.peso}" step="0.5" value="${x.pontos}" id="pt_${x.qid}"></div><div><label>Comentário para o aluno</label><input type="text" id="cm_${x.qid}" value="${esc(x.comentario)}"></div><div style="flex:0 0 120px;align-self:flex-end"><button class="mini" data-corr="${x.qid}" data-i="${i}">Salvar</button></div></div>` : "";
-    return `<div class="feedback bloco ${x.status === "certa" ? "certa" : x.status === "errada" ? "errada" : "revisar"}"><div class="linha acoes"><b>Q${x.n}</b> <span class="tag ${rot[x.status][0]}">${rot[x.status][1]} · ${x.pontos}/${x.peso}${x.manual ? " · manual" : ""}</span>${tempo}</div>
+    const manual = podeEditar() && x.q.tipo === "dissertativa" && !x.perdida ? `<div class="linha" style="margin-top:6px"><div style="flex:0 0 120px"><label>Pontos (0–${x.peso})</label><input type="number" min="0" max="${x.peso}" step="0.5" value="${x.pontos}" id="pt_${x.qid}"></div><div><label>Comentário para o aluno</label><input type="text" id="cm_${x.qid}" value="${esc(x.comentario)}"></div><div style="flex:0 0 120px;align-self:flex-end"><button class="mini" data-corr="${x.qid}">Salvar</button></div></div>` : "";
+    const rot = ROTULOS[x.status] || ROTULOS.revisar;
+    return `<div class="feedback bloco ${x.status === "certa" ? "certa" : ["errada", "perdida", "em_branco"].includes(x.status) ? "errada" : "revisar"}"><div class="linha acoes"><b>Q${x.n}</b> <span class="tag ${rot[0]}">${rot[1]} · ${x.pontos}/${x.peso}${x.manual ? " · manual" : ""}</span>${tempo}</div>
       <div class="enunciado pequeno">${esc(x.q.enunciado)}</div><p><b>Resposta do aluno:</b> ${sua}<br><b>Esperada:</b> ${certa}</p>${manual}</div>`;
   }).join("") + "</div>";
-  box.scrollIntoView({ behavior: "smooth" });
+  if (rolar) box.scrollIntoView({ behavior: "smooth" });
   $("#btnPDFAluno").onclick = () => abrirImpressao(`Boletim — ${resDados.prova.titulo}`, boletimHTML(l));
   box.querySelectorAll("[data-corr]").forEach(b => b.onclick = async () => {
     const qid = b.dataset.corr, pontos = Number($("#pt_" + qid).value), comentario = $("#cm_" + qid).value.trim();
     await setDoc(doc(db, "tentativas", l.t.id, "correcoes", qid), { pontos, comentario, corrigidoPor: eu.email, corrigidoEm: serverTimestamp() });
-    toast("Correção salva", "ok"); await carregarResultados(); verAluno(i);
+    toast("Correção salva", "ok");
+    document.activeElement?.blur?.();
+    const d = await getDoc(doc(db, "tentativas", l.t.id)); await atualizarCache(d); montarResultados(); verAluno(id, false);
   });
 }
 $("#btnFecharNotas").onclick = async () => {
@@ -573,10 +686,10 @@ $("#btnFecharNotas").onclick = async () => {
 $("#btnCSV").onclick = () => {
   if (!resDados) return toast("Carregue uma prova primeiro.", "erro");
   const n = resDados.prova.nQuestoes;
-  const cab = ["Nome", "E-mail", "Início", "Fim", "Tempo", "Tempo (segundos)", "Trocas de aba", "Saídas da tela cheia", "Tentativas de colar", `Respostas < ${RAPIDO}s`, "Nota",
+  const cab = ["Nome", "E-mail", "Início", "Fim", "Tempo", "Tempo (segundos)", "Trocas de aba", "Saídas da tela cheia", "Tentativas de colar", `Respostas < ${RAPIDO}s`, "Encerrada por", "Questões perdidas", "Nota",
                ...Array.from({ length: n }, (_, i) => `Q${i + 1}`)];
   const rows = resDados.linhas.map(l => [l.t.nome || "", l.t.email, dataBR(l.t.iniciadaEm), l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "em andamento",
-    fmtTempo(l.tempo), l.tempo ?? "", abasTexto(l.sinais), l.sinais.telaCheia, l.sinais.colar, l.rapidas, String(l.nota).replace(".", ","),
+    fmtTempo(l.tempo), l.tempo ?? "", abasTexto(l.sinais), l.sinais.telaCheia, l.sinais.colar, l.rapidas, l.t.encerradaPor === "trocasDeAba" ? "limite de saídas" : "", l.perdidas, String(l.nota).replace(".", ","),
     ...l.itens.map(x => `${x.pontos}/${x.peso} ${x.status}${typeof x.segundos === "number" ? ` (${x.segundos}s)` : ""}`)]);
   const csv = [cab, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(";")).join("\n");
   baixar(`resultados_${resDados.prova.titulo.replace(/\W+/g, "_")}.csv`, "﻿" + csv);
@@ -625,14 +738,15 @@ function abrirImpressao(titulo, corpo) {
 function cab(titulo, sub) { return `<h1>${esc(titulo)}</h1><div class="sub">${esc(sub)}</div>`; }
 function boletimHTML(l, quebra = false) {
   const p = resDados.prova;
-  const rot = { certa: "✔ certa", errada: "✘ errada", parcial: "◐ parcial", revisar: "◌ em correção", em_branco: "□ em branco" };
+  const rot = { certa: "✔ certa", errada: "✘ errada", parcial: "◐ parcial", revisar: "◌ em correção", em_branco: "□ em branco", perdida: "⛔ perdida (saiu da prova)" };
   let h = cab(`Boletim — ${p.titulo}`, `${l.t.nome || ""} · ${l.t.email} · ${p.turma || ""} · finalizada em ${l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "—"}`);
   h += `<h2>Nota: ${l.nota} / 100 <span class="peq">(${l.pts} de ${l.max} pontos)</span></h2>`;
+  if (l.t.encerradaPor === "trocasDeAba") h += `<div class="rapida">⛔ Prova encerrada: limite de saídas da prova atingido.</div>`;
   h += `<div class="peq">Tempo total: ${fmtTempo(l.tempo)} · Trocas de aba: ${abasTexto(l.sinais)} · Saídas da tela cheia: ${l.sinais.telaCheia} · Tentativas de colar: ${l.sinais.colar}</div>`;
   h += l.itens.map(x => {
-    const sua = x.r === undefined ? "<i>não respondida</i>" : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
+    const sua = x.perdida ? "<i>perdida por sair da prova</i>" : x.r === undefined ? "<i>não respondida</i>" : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
     const certa = x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.g.correta] ?? "—") : esc((x.g.respostasAceitas || [])[0] || "—");
-    const cls = x.status === "certa" ? "certa" : x.status === "errada" || x.status === "em_branco" ? "errada" : "outra";
+    const cls = x.status === "certa" ? "certa" : ["errada", "em_branco", "perdida"].includes(x.status) ? "errada" : "outra";
     const rapida = x.r !== undefined && typeof x.segundos === "number" && x.segundos < RAPIDO;
     const tempo = typeof x.segundos === "number" ? ` · <span class="${rapida ? "rapida" : ""}">⏱ ${fmtTempo(x.segundos)}${rapida ? ` (menos de ${RAPIDO} s)` : ""}</span>` : "";
     return `<div class="q ${cls}"><b>Questão ${x.n}</b> — ${rot[x.status]} · ${x.pontos}/${x.peso}${tempo}<div style="white-space:pre-wrap;margin:4px 0">${esc(x.q.enunciado)}</div>
@@ -647,7 +761,7 @@ $("#btnPDFNotas").onclick = () => {
   const media = fin.length ? (fin.reduce((s, l) => s + l.nota, 0) / fin.length).toFixed(1) : "—";
   const corpo = cab(`Notas — ${p.titulo}`, `${p.turma || ""} · ${resDados.linhas.length} aluno(s) · média ${media} · gerado em ${new Date().toLocaleString("pt-BR")}`) +
     `<table><tr><th>#</th><th>Aluno</th><th>E-mail</th><th>Finalizada</th><th>Tempo</th><th>Sinais</th><th>Nota</th></tr>` +
-    resDados.linhas.map((l, i) => `<tr class="${l.temSinal ? "sinal" : ""}"><td>${i + 1}</td><td>${esc(l.t.nome || "")}</td><td>${esc(l.t.email)}</td><td>${l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "em andamento"}</td><td>${fmtTempo(l.tempo)}${l.rapidas ? `<br><span class="rapida">${l.rapidas} resp. &lt; ${RAPIDO} s</span>` : ""}</td><td>${sinaisTexto(l.sinais)}</td><td><b>${l.nota}</b></td></tr>`).join("") + "</table>" +
+    resDados.linhas.map((l, i) => `<tr class="${l.temSinal ? "sinal" : ""}"><td>${i + 1}</td><td>${esc(l.t.nome || "")}</td><td>${esc(l.t.email)}</td><td>${l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "em andamento"}</td><td>${fmtTempo(l.tempo)}${l.rapidas ? `<br><span class="rapida">${l.rapidas} resp. &lt; ${RAPIDO} s</span>` : ""}</td><td>${sinaisTexto(l.sinais)}${l.t.encerradaPor === "trocasDeAba" ? `<br><span class="rapida">encerrada: limite de saídas</span>` : ""}${l.perdidas ? `<br><span class="rapida">${l.perdidas} perdida(s)</span>` : ""}</td><td><b>${l.nota}</b></td></tr>`).join("") + "</table>" +
     `<p class="peq">Sinais = trocas de aba/janela · saídas da tela cheia · tentativas de colar. Linhas destacadas têm pelo menos um sinal. São indícios para conferir, não prova de cola.</p>`;
   abrirImpressao(`Notas — ${p.titulo}`, corpo);
 };
