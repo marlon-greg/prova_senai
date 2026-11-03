@@ -287,7 +287,7 @@ function verAluno(i) {
     const sua = x.r === undefined ? "<i>não respondida</i>" : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
     const certa = x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.g.correta] ?? "—") : esc((x.g.respostasAceitas || [])[0] || (x.g.palavrasChave || []).join(" + "));
     const manual = podeEditar() && x.q.tipo === "dissertativa" ? `<div class="linha" style="margin-top:6px"><div style="flex:0 0 120px"><label>Pontos (0–${x.peso})</label><input type="number" min="0" max="${x.peso}" step="0.5" value="${x.pontos}" id="pt_${x.qid}"></div><div><label>Comentário para o aluno</label><input type="text" id="cm_${x.qid}" value="${esc(x.comentario)}"></div><div style="flex:0 0 120px;align-self:flex-end"><button class="mini" data-corr="${x.qid}" data-i="${i}">Salvar</button></div></div>` : "";
-    return `<div class="feedback ${x.status === "certa" ? "certa" : x.status === "errada" ? "errada" : "revisar"}"><div class="linha"><b>Q${x.n}</b> <span class="tag ${rot[x.status][0]}">${rot[x.status][1]} · ${x.pontos}/${x.peso}${x.manual ? " · manual" : ""}</span>${tempo}</div>
+    return `<div class="feedback bloco ${x.status === "certa" ? "certa" : x.status === "errada" ? "errada" : "revisar"}"><div class="linha acoes"><b>Q${x.n}</b> <span class="tag ${rot[x.status][0]}">${rot[x.status][1]} · ${x.pontos}/${x.peso}${x.manual ? " · manual" : ""}</span>${tempo}</div>
       <div class="enunciado pequeno">${esc(x.q.enunciado)}</div><p><b>Resposta do aluno:</b> ${sua}<br><b>Esperada:</b> ${certa}</p>${manual}</div>`;
   }).join("") + "</div>";
   box.scrollIntoView({ behavior: "smooth" });
