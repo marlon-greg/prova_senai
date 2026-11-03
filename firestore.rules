@@ -95,6 +95,17 @@ service cloud.firestore {
                         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['nota', 'notaMaxima', 'corrigidaEm', 'corrigidaPor']));
       allow delete: if admin();
 
+      // MODO TESTE: a equipe faz a prova como aluno (id = teste_uid_provaId, campo teste == true),
+      // mesmo com a prova fechada. O aluno não consegue: o create dele limita as chaves com hasOnly (sem 'teste').
+      allow create: if equipe()
+        && t == 'teste_' + uid() + '_' + request.resource.data.provaId
+        && request.resource.data.uid == uid()
+        && request.resource.data.teste == true;
+      allow update: if equipe()
+        && resource.data.teste == true && resource.data.uid == uid()
+        && request.resource.data.teste == true && request.resource.data.uid == uid();
+      allow delete: if equipe() && resource.data.teste == true && resource.data.uid == uid();
+
       // respostas: o aluno grava uma vez, nunca altera
       match /respostas/{q} {
         allow read: if equipe() || (logado() && tentativa(t).uid == uid());
@@ -107,6 +118,15 @@ service cloud.firestore {
           && request.resource.data.enviadaEm == request.time;
         allow update: if false;
         allow delete: if admin();
+
+        // MODO TESTE: a equipe responde e apaga na própria tentativa de teste (sem exigir prova liberada)
+        allow create: if equipe()
+          && tentativa(t).teste == true
+          && tentativa(t).uid == uid()
+          && tentativa(t).finalizadaEm == null
+          && q in tentativa(t).questoesIds
+          && request.resource.data.keys().hasOnly(['resposta', 'enviadaEm']);
+        allow delete: if equipe() && tentativa(t).teste == true && tentativa(t).uid == uid();
       }
 
       // correção manual (dissertativas) feita pelo professor; o aluno vê quando os resultados forem liberados
@@ -114,6 +134,8 @@ service cloud.firestore {
         allow read: if equipe()
                     || (logado() && tentativa(t).uid == uid() && prova(tentativa(t).provaId).resultadosLiberados == true);
         allow write: if professor();
+        // MODO TESTE: qualquer membro da equipe (inclusive auxiliar) limpa a própria tentativa de teste
+        allow delete: if equipe() && tentativa(t).teste == true && tentativa(t).uid == uid();
       }
     }
   }
