@@ -78,7 +78,7 @@ service cloud.firestore {
         && request.resource.data.uid == uid()
         && request.resource.data.email == email()
         && request.resource.data.keys().hasOnly(['uid', 'email', 'nome', 'provaId', 'bancoId', 'questoesIds',
-                                                 'iniciadaEm', 'finalizadaEm', 'indiceAtual', 'trocasDeAba'])
+                                                 'iniciadaEm', 'finalizadaEm', 'indiceAtual', 'trocasDeAba', 'notaPrevia', 'aguardandoCorrecao'])
         && prova(request.resource.data.provaId).liberada == true
         && request.resource.data.bancoId == prova(request.resource.data.provaId).bancoId
         && request.resource.data.questoesIds.size() == prova(request.resource.data.provaId).nQuestoes
@@ -89,7 +89,7 @@ service cloud.firestore {
       allow update: if (logado() && resource.data.uid == uid()
                         && resource.data.finalizadaEm == null
                         && prova(resource.data.provaId).liberada == true
-                        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['finalizadaEm', 'indiceAtual', 'trocasDeAba']))
+                        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['finalizadaEm', 'indiceAtual', 'trocasDeAba', 'notaPrevia', 'aguardandoCorrecao']))
                     // professor fecha a nota
                     || (professor()
                         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['nota', 'notaMaxima', 'corrigidaEm', 'corrigidaPor']));

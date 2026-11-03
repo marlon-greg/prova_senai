@@ -57,16 +57,21 @@ Regras que o sistema aplica sozinho:
 - **Trocas de aba** durante a prova são contadas e aparecem para o professor.
 - Se a aba fechar, o aluno entra de novo e **continua de onde parou**.
 - O aluno só consegue ler a resposta certa de uma questão **depois** de responder (regra do Firestore, não só da tela).
+- **Ao finalizar, o aluno já vê a nota prévia** (0–100), sem ver respostas nem explicações. Dissertativas não reconhecidas entram como "aguardando correção" e a nota pode subir depois.
 
 ## Depois da prova — corrigir e divulgar
 
 1. Aba **Resultados** → escolha a prova → **Carregar**.
 2. Alternativas são corrigidas sozinhas. Dissertativas que o sistema reconheceu também. As que ele não reconheceu ficam como **revisar**: clique em **Ver** no aluno, dê os pontos e um comentário → **Salvar**.
-3. **Fechar notas** grava a nota final (0–100) em cada tentativa. **Baixar CSV** exporta para a planilha.
+3. **Fechar notas** grava a nota final (0–100) em cada tentativa; ela substitui a nota prévia na tela do aluno.
+   Exportações: **CSV** (planilha) · **PDF — notas da turma** (lista) · **PDF — boletim de todos** (um boletim por aluno, com resposta, correta e explicação, pronto para subir no Drive) · **PDF deste aluno** (dentro do Ver). Os PDFs abrem a janela de impressão do navegador: escolha *Salvar como PDF*.
 4. Aba **Bancos → Gabarito p/ Classroom**: gera o texto com todas as questões, respostas e explicações → copie e poste no Classroom.
 5. Aba **Provas → Liberar resultados**: o aluno passa a ver, questão por questão, o que respondeu, o que era o certo, **por quê**, e o comentário do professor.
 
 ---
+
+## Várias matérias e várias provas
+Cada **banco** tem um campo `materia`. Importe um banco por tema (DML, Normalização, Front-End, IoT…) e crie quantas provas quiser apontando para o banco certo. Um banco pode servir a várias provas (1A e 1B, por exemplo) — o sorteio é diferente para cada aluno.
 
 ## Formato do banco de questões (JSON)
 

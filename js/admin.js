@@ -55,7 +55,7 @@ async function carregarProvas() {
   if (!provas.length) { box.innerHTML = "<p class='pequeno'>Nenhuma prova ainda.</p>"; return; }
   box.innerHTML = `<table><tr><th>Prova</th><th>Banco</th><th>Questões</th><th>Status</th><th>Resultados</th><th></th></tr>` + provas.map(p => {
     const b = bancosCache.find(x => x.id === p.bancoId);
-    return `<tr><td><b>${esc(p.titulo)}</b><br><span class="pequeno">${esc(p.turma || "")}</span></td><td>${esc(b?.nome || p.bancoId)}</td><td>${p.nQuestoes}</td>
+    return `<tr><td><b>${esc(p.titulo)}</b><br><span class="pequeno">${esc(p.turma || "")}</span></td><td>${esc(b?.nome || p.bancoId)}<br><span class="pequeno">${esc(b?.materia || "")}</span></td><td>${p.nQuestoes}</td>
       <td><span class="tag ${p.liberada ? "on" : "off"}">${p.liberada ? "LIBERADA" : "fechada"}</span></td>
       <td><span class="tag ${p.resultadosLiberados ? "on" : "off"}">${p.resultadosLiberados ? "liberados" : "ocultos"}</span></td>
       <td style="white-space:nowrap">${podeEditar() ? `<button class="leve" data-tg="liberada" data-id="${p.id}">${p.liberada ? "Encerrar" : "Liberar prova"}</button>
@@ -207,7 +207,7 @@ function desenharResultados() {
   if (!linhas.length) { $("#resTabela").innerHTML = "<p class='pequeno'>Ninguém fez esta prova ainda.</p>"; return; }
   $("#resTabela").innerHTML = `<div class="card"><table><tr><th>Aluno</th><th>Início</th><th>Fim</th><th>Abas</th><th>Nota</th><th>Revisar</th><th></th></tr>` +
     linhas.map((l, i) => `<tr><td><b>${esc(l.t.nome || "")}</b><br><span class="pequeno">${esc(l.t.email)}</span></td><td class="pequeno">${dataBR(l.t.iniciadaEm)}</td><td class="pequeno">${l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "<span class='tag aviso'>em andamento</span>"}</td>
-      <td>${l.t.trocasDeAba || 0}</td><td><b>${l.nota}</b>${l.t.nota !== undefined ? ` <span class="pequeno">(fechada: ${l.t.nota})</span>` : ""}</td><td>${l.revisar ? `<span class="tag aviso">${l.revisar}</span>` : "—"}</td>
+      <td>${l.t.trocasDeAba || 0}</td><td><b>${l.nota}</b>${l.t.nota !== undefined ? ` <span class="pequeno">(fechada: ${l.t.nota})</span>` : l.t.notaPrevia !== null && l.t.notaPrevia !== undefined ? ` <span class="pequeno">(prévia: ${l.t.notaPrevia})</span>` : ""}</td><td>${l.revisar ? `<span class="tag aviso">${l.revisar}</span>` : "—"}</td>
       <td style="white-space:nowrap"><button class="leve" data-ver="${i}">Ver</button> ${ehAdmin() ? `<button class="leve" data-reset="${i}" title="Apagar a tentativa (o aluno pode refazer)">↺</button>` : ""}</td></tr>`).join("") + `</table></div><div id="resDetalhe"></div>`;
   document.querySelectorAll("[data-ver]").forEach(b => b.onclick = () => verAluno(Number(b.dataset.ver)));
   document.querySelectorAll("[data-reset]").forEach(b => b.onclick = async () => {
@@ -223,7 +223,7 @@ function desenharResultados() {
 function verAluno(i) {
   const l = resDados.linhas[i], box = $("#resDetalhe");
   const rot = { certa: ["ok", "✅ certa"], errada: ["erro", "❌ errada"], parcial: ["aviso", "🟡 parcial"], revisar: ["aviso", "🟡 revisar"], em_branco: ["erro", "⬜ em branco"] };
-  box.innerHTML = `<div class="card"><h2>${esc(l.t.nome || l.t.email)} — ${l.nota}/100 (${l.pts} de ${l.max} pontos)</h2>` + l.itens.map(x => {
+  box.innerHTML = `<div class="card"><div class="linha"><h2 style="flex:3">${esc(l.t.nome || l.t.email)} — ${l.nota}/100 (${l.pts} de ${l.max} pontos)</h2><button class="leve" id="btnPDFAluno">PDF deste aluno</button></div>` + l.itens.map(x => {
     const sua = x.r === undefined ? "<i>não respondida</i>" : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
     const certa = x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.g.correta] ?? "—") : esc((x.g.respostasAceitas || [])[0] || (x.g.palavrasChave || []).join(" + "));
     const manual = podeEditar() && x.q.tipo === "dissertativa" ? `<div class="linha" style="margin-top:6px"><div style="flex:0 0 120px"><label>Pontos (0–${x.peso})</label><input type="number" min="0" max="${x.peso}" step="0.5" value="${x.pontos}" id="pt_${x.qid}"></div><div><label>Comentário para o aluno</label><input type="text" id="cm_${x.qid}" value="${esc(x.comentario)}"></div><div style="flex:0 0 120px;align-self:flex-end"><button class="leve" data-corr="${x.qid}" data-i="${i}">Salvar</button></div></div>` : "";
@@ -231,6 +231,7 @@ function verAluno(i) {
       <div class="enunciado pequeno">${esc(x.q.enunciado)}</div><p><b>Resposta do aluno:</b> ${sua}<br><b>Esperada:</b> ${certa}</p>${manual}</div>`;
   }).join("") + "</div>";
   box.scrollIntoView({ behavior: "smooth" });
+  $("#btnPDFAluno").onclick = () => abrirImpressao(`Boletim — ${resDados.prova.titulo}`, boletimHTML(l));
   box.querySelectorAll("[data-corr]").forEach(b => b.onclick = async () => {
     const qid = b.dataset.corr, pontos = Number($("#pt_" + qid).value), comentario = $("#cm_" + qid).value.trim();
     await setDoc(doc(db, "tentativas", l.t.id, "correcoes", qid), { pontos, comentario, corrigidoPor: eu.email, corrigidoEm: serverTimestamp() });
@@ -282,4 +283,48 @@ $("#btnSalvarConfig").onclick = async () => {
   const dominios = $("#cDominios").value.split(",").map(s => s.trim().toLowerCase()).filter(Boolean);
   await setDoc(doc(db, "config", "geral"), { dominiosAlunos: dominios }, { merge: true });
   $("#msgConfig").textContent = "Salvo: " + dominios.join(", ");
+};
+
+// ============================================================ PDF (janela de impressão → "Salvar como PDF")
+function abrirImpressao(titulo, corpo) {
+  const w = window.open("", "_blank");
+  if (!w) return toast("O navegador bloqueou a janela. Libere pop-ups para este site.", "erro");
+  w.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>${esc(titulo)}</title>
+  <style>body{font-family:Arial,sans-serif;font-size:11pt;color:#111;margin:18mm 16mm}h1{font-size:16pt;border-left:5px solid #c1272d;padding-left:8px;margin:0 0 4px}h2{font-size:13pt;margin:14px 0 6px}
+  .sub{color:#555;font-size:9.5pt;margin-bottom:12px}table{width:100%;border-collapse:collapse;font-size:10pt}th{background:#c1272d;color:#fff;text-align:left;padding:5px}td{border-bottom:1px solid #ddd;padding:5px;vertical-align:top}
+  .q{border:1px solid #ddd;border-radius:6px;padding:8px 10px;margin:8px 0;page-break-inside:avoid}.q.certa{border-left:5px solid #2e8b57}.q.errada{border-left:5px solid #c1272d}.q.outra{border-left:5px solid #b26a00}
+  .mono{font-family:Consolas,monospace;background:#f2f2f2;padding:1px 4px}.exp{background:#f7f7f7;padding:6px 8px;border-radius:4px;margin-top:6px;font-size:10pt}.quebra{page-break-after:always}.peq{font-size:9.5pt;color:#555}</style></head>
+  <body>${corpo}<script>window.onload=()=>setTimeout(()=>window.print(),300)</script></body></html>`);
+  w.document.close();
+}
+function cab(titulo, sub) { return `<h1>${esc(titulo)}</h1><div class="sub">${esc(sub)}</div>`; }
+function boletimHTML(l, quebra = false) {
+  const p = resDados.prova;
+  const rot = { certa: "✔ certa", errada: "✘ errada", parcial: "◐ parcial", revisar: "◌ em correção", em_branco: "□ em branco" };
+  let h = cab(`Boletim — ${p.titulo}`, `${l.t.nome || ""} · ${l.t.email} · ${p.turma || ""} · finalizada em ${l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "—"}`);
+  h += `<h2>Nota: ${l.nota} / 100 <span class="peq">(${l.pts} de ${l.max} pontos)</span></h2>`;
+  h += l.itens.map(x => {
+    const sua = x.r === undefined ? "<i>não respondida</i>" : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
+    const certa = x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.g.correta] ?? "—") : esc((x.g.respostasAceitas || [])[0] || "—");
+    const cls = x.status === "certa" ? "certa" : x.status === "errada" || x.status === "em_branco" ? "errada" : "outra";
+    return `<div class="q ${cls}"><b>Questão ${x.n}</b> — ${rot[x.status]} · ${x.pontos}/${x.peso}<div style="white-space:pre-wrap;margin:4px 0">${esc(x.q.enunciado)}</div>
+      <div><b>Resposta do aluno:</b> ${sua}</div>${x.status !== "certa" && certa !== "—" ? `<div><b>Resposta correta:</b> ${certa}</div>` : ""}
+      ${x.g.explicacao ? `<div class="exp"><b>Por quê:</b> ${esc(x.g.explicacao)}</div>` : ""}${x.comentario ? `<div class="peq"><b>Comentário do professor:</b> ${esc(x.comentario)}</div>` : ""}</div>`;
+  }).join("");
+  return h + (quebra ? `<div class="quebra"></div>` : "");
+}
+$("#btnPDFNotas").onclick = () => {
+  if (!resDados) return toast("Carregue uma prova primeiro.", "erro");
+  const p = resDados.prova, fin = resDados.linhas.filter(l => l.t.finalizadaEm);
+  const media = fin.length ? (fin.reduce((s, l) => s + l.nota, 0) / fin.length).toFixed(1) : "—";
+  const corpo = cab(`Notas — ${p.titulo}`, `${p.turma || ""} · ${resDados.linhas.length} aluno(s) · média ${media} · gerado em ${new Date().toLocaleString("pt-BR")}`) +
+    `<table><tr><th>#</th><th>Aluno</th><th>E-mail</th><th>Finalizada</th><th>Abas</th><th>Nota</th></tr>` +
+    resDados.linhas.map((l, i) => `<tr><td>${i + 1}</td><td>${esc(l.t.nome || "")}</td><td>${esc(l.t.email)}</td><td>${l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "em andamento"}</td><td>${l.t.trocasDeAba || 0}</td><td><b>${l.nota}</b></td></tr>`).join("") + "</table>";
+  abrirImpressao(`Notas — ${p.titulo}`, corpo);
+};
+$("#btnPDFBoletins").onclick = () => {
+  if (!resDados) return toast("Carregue uma prova primeiro.", "erro");
+  const ls = resDados.linhas.filter(l => l.t.finalizadaEm);
+  if (!ls.length) return toast("Ninguém finalizou ainda.", "erro");
+  abrirImpressao(`Boletins — ${resDados.prova.titulo}`, ls.map((l, i) => boletimHTML(l, i < ls.length - 1)).join(""));
 };

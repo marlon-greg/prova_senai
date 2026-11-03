@@ -61,12 +61,13 @@ async function listarProvas() {
     let status, acao;
     if (!td)                    { status = `<span class="tag">não iniciada</span>`; acao = p.liberada ? `<button data-acao="inicio" data-id="${p.id}">Fazer a prova</button>` : `<span class="pequeno">prova encerrada</span>`; }
     else if (!td.finalizadaEm)  { status = `<span class="tag aviso">em andamento (questão ${(td.indiceAtual || 0) + 1} de ${p.nQuestoes})</span>`; acao = p.liberada ? `<button data-acao="continuar" data-id="${p.id}">Continuar</button>` : `<span class="pequeno">prova encerrada</span>`; }
-    else                        { status = `<span class="tag ok">finalizada em ${dataBR(td.finalizadaEm)}</span>`; acao = p.resultadosLiberados ? `<button class="sec" data-acao="resultado" data-id="${p.id}">Ver resultado</button>` : `<span class="pequeno">resultado ainda não liberado</span>`; }
+    else                        { status = `<span class="tag ok">finalizada em ${dataBR(td.finalizadaEm)}</span>` + (td.nota !== undefined ? ` <span class="tag ok">nota final: <b>${td.nota}</b></span>` : td.notaPrevia !== null && td.notaPrevia !== undefined ? ` <span class="tag">nota prévia: <b>${td.notaPrevia}</b>${td.aguardandoCorrecao ? " (aguardando correção)" : ""}</span>` : ""); acao = p.resultadosLiberados ? `<button class="sec" data-acao="resultado" data-id="${p.id}">Ver resultado</button>` : `<span class="pequeno">resultado ainda não liberado</span>`; }
     box.insertAdjacentHTML("beforeend", `<div class="card" style="margin:8px 0"><div class="linha"><div style="flex:3"><b>${esc(p.titulo)}</b><br><span class="pequeno">${esc(p.turma || "")} · ${p.nQuestoes} questões</span><br>${status}</div><div style="flex:1;text-align:right">${acao}</div></div></div>`);
   }
   box.querySelectorAll("button[data-acao]").forEach(btn => btn.onclick = () => abrirProva(btn.dataset.id, btn.dataset.acao));
 }
 $("#btnVoltar1").onclick = $("#btnVoltar2").onclick = $("#btnVoltar3").onclick = listarProvas;
+$("#btnImprimir").onclick = () => window.print();
 
 // ---------- abrir prova ----------
 async function abrirProva(id, acao) {
@@ -95,7 +96,7 @@ $("#btnComecar").onclick = async () => {
     const tid = `${eu.uid}_${provaAtual.id}`;
     await setDoc(doc(db, "tentativas", tid), {
       uid: eu.uid, email: eu.email, nome: eu.nome, provaId: provaAtual.id, bancoId: provaAtual.bancoId,
-      questoesIds: sorteadas, iniciadaEm: serverTimestamp(), finalizadaEm: null, indiceAtual: 0, trocasDeAba: 0
+      questoesIds: sorteadas, iniciadaEm: serverTimestamp(), finalizadaEm: null, indiceAtual: 0, trocasDeAba: 0, notaPrevia: null, aguardandoCorrecao: 0
     });
     const t = await getDoc(doc(db, "tentativas", tid));
     tentativa = { id: tid, ...t.data() };
@@ -110,7 +111,7 @@ async function carregarTentativa() {
   docsQ.forEach(d => { if (d.exists()) questoes[d.id] = { id: d.id, ...d.data() }; });
   const rs = await getDocs(collection(db, "tentativas", tentativa.id, "respostas"));
   rs.forEach(d => respostas[d.id] = d.data());
-  if (tentativa.finalizadaEm) { mostrar("telaFim"); return; }
+  if (tentativa.finalizadaEm) { mostrarFim(); return; }
   // retoma na primeira questão sem resposta (o índice salvo pode ter ficado para trás)
   let i = tentativa.indiceAtual || 0;
   while (i < tentativa.questoesIds.length && respostas[tentativa.questoesIds[i]]) i++;
@@ -216,15 +217,35 @@ $("#btnFinalizar").onclick = finalizar;
 
 async function finalizar() {
   try {
+    // nota prévia: corrige na hora o que dá para corrigir (alternativas e dissertativas reconhecidas)
+    let pts = 0, max = 0, pend = 0;
+    for (const qid of tentativa.questoesIds) {
+      const q = questoes[qid]; if (!q) continue;
+      const peso = Number(q.peso || 1); max += peso;
+      let g = {};
+      try { g = (await getDoc(doc(db, "bancos", tentativa.bancoId, "gabaritos", qid))).data() || {}; } catch (e) { /* sem acesso: conta como pendente */ }
+      const c = corrigir(q, g, respostas[qid]?.resposta);
+      pts += c.pontos; if (c.status === "revisar") pend++;
+    }
+    const notaPrevia = max ? Math.round(pts / max * 1000) / 10 : 0;
     const lote = writeBatch(db);
-    lote.update(doc(db, "tentativas", tentativa.id), { finalizadaEm: serverTimestamp(), indiceAtual: tentativa.questoesIds.length });
+    lote.update(doc(db, "tentativas", tentativa.id), { finalizadaEm: serverTimestamp(), indiceAtual: tentativa.questoesIds.length, notaPrevia, aguardandoCorrecao: pend });
     // garante o marcador de todas as questões (libera a leitura do gabarito no resultado)
     for (const qid of tentativa.questoesIds)
       if (!respostas[qid]) lote.set(doc(db, "marcadores", `${eu.uid}_${qid}`), { uid: eu.uid, qid, provaId: provaAtual.id, criadoEm: serverTimestamp() });
     await lote.commit();
-    tentativa.finalizadaEm = new Date();
-    mostrar("telaFim");
+    tentativa.finalizadaEm = new Date(); tentativa.notaPrevia = notaPrevia; tentativa.aguardandoCorrecao = pend;
+    mostrarFim();
   } catch (e) { toast("Não foi possível finalizar: " + (e.code || e.message), "erro"); console.error(e); }
+}
+
+function mostrarFim() {
+  const n = tentativa.notaPrevia, pend = tentativa.aguardandoCorrecao || 0;
+  $("#fimNota").innerHTML = n === null || n === undefined ? "" :
+    `<p style="font-size:1.6em;margin:6px 0"><b>Sua nota: ${n} / 100</b></p>` +
+    (pend ? `<p class="pequeno">⚠ ${pend} resposta(s) escrita(s) ainda vão passar pela correção do professor: a nota pode subir.</p>` : "") +
+    `<p class="pequeno">As respostas certas e as explicações aparecem quando o professor liberar o resultado.</p>`;
+  mostrar("telaFim");
 }
 
 // troca de aba / janela durante a prova: registra
