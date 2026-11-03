@@ -68,8 +68,10 @@ export function normalizar(s) {
     .trim();
 }
 
-// Devolve { pontos, status: 'certa' | 'errada' | 'revisar' | 'em_branco' }
-export function corrigir(questao, gabarito, resposta) {
+// Devolve { pontos, status: 'certa' | 'errada' | 'revisar' | 'em_branco' | 'perdida' }
+// perdida = true: questão perdida por sair da prova (limite de saídas) -> 0 pontos
+export function corrigir(questao, gabarito, resposta, perdida = false) {
+  if (perdida) return { pontos: 0, status: "perdida" };
   const peso = Number(questao.peso || 1);
   if (resposta === undefined || resposta === null || resposta === "") return { pontos: 0, status: "em_branco" };
   if (questao.tipo === "alternativa") {
