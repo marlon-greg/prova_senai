@@ -8,7 +8,7 @@ import { collection, doc, getDoc, getDocs, setDoc, deleteDoc, writeBatch, query,
 
 const PARTE = 900 * 1024;     // cada documento do Firestore aceita até 1 MiB
 export const MAX_MB = 20;
-const LOTE_PARTES = 20, LOTE_BYTES = 8 * 1024 * 1024;   // writeBatch: até 20 pedaços e ~8 MB por envio (o limite do pedido é 10 MiB)
+const LOTE_PARTES = 20, LOTE_BYTES = 4 * 1024 * 1024;   // writeBatch: até 20 pedaços e ~4 MB por envio (o SDK manda em base64, +33%; o limite do pedido é 10 MiB)
 
 const idParte = i => String(i).padStart(3, "0");
 

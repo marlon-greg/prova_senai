@@ -119,7 +119,9 @@ service cloud.firestore {
 
     // ---------- tentativas ----------
     match /tentativas/{t} {
-      allow read: if equipe() || (logado() && resource.data.uid == uid());
+      // aluno: a própria. "resource == null" = ainda não começou (a lista de provas confere se já existe);
+      // só vale para o id dele (uid_prova), para não descobrir quem começou
+      allow read: if equipe() || (logado() && (resource == null ? t.matches(uid() + '_.+') : resource.data.uid == uid()));
 
       // ALUNO: cria a própria, uma vez, com a prova liberada
       allow create: if (aluno()

@@ -1,6 +1,6 @@
 // Painel do professor: provas, bancos (import JSON), resultados/correção, equipe, configuração.
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, apagarTentativaTeste,
-         confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar } from "./common.js";
+         confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar, idsConsulta } from "./common.js";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
@@ -213,8 +213,11 @@ async function carregarMateriais() {
   box.querySelectorAll("[data-vermat]").forEach(b => b.onclick = () => abrirMaterialEmAba(b.dataset.vermat, traduzirErro).catch(e => toast(e.message, "erro")));
   box.querySelectorAll("[data-delmat]").forEach(b => b.onclick = async () => {
     const m = materiaisCache.find(x => x.id === b.dataset.delmat);
-    const usadas = (await getDocs(query(collection(db, "provas"), where("materialConsultaArquivoId", "==", m.id)))).size;
-    if (!(await confirmar(`Apagar o PDF "${m.titulo}"?` + (usadas ? `\n\n${usadas} prova(s) usam este material: os alunos vão ver "Não foi possível carregar o material". Troque o material nessas provas antes.` : ""), { titulo: "Apagar material", ok: "Apagar", perigo: true }))) return;
+    const [a, b2] = await Promise.all([   // provas novas (lista de PDFs) e antigas (um PDF só)
+      getDocs(query(collection(db, "provas"), where("materiaisConsultaIds", "array-contains", m.id))),
+      getDocs(query(collection(db, "provas"), where("materialConsultaArquivoId", "==", m.id)))]);
+    const usadas = new Set([...a.docs, ...b2.docs].map(d => d.id)).size;
+    if (!(await confirmar(`Apagar o PDF "${m.titulo}"?` + (usadas ? `\n\n${usadas} prova(s) usam este material: os alunos vão ver "Não foi possível carregar o material" neste PDF. Desmarque-o nessas provas antes.` : ""), { titulo: "Apagar material", ok: "Apagar", perigo: true }))) return;
     try { await apagarMaterial(m.id); toast("Material apagado.", "ok"); } catch (e) { toast("Não foi possível apagar. " + erroMaterial(e, traduzirErro), "erro"); }
     carregarMateriais();
   });
@@ -238,6 +241,7 @@ const opcoesBancos = () => bancosCache.map(b => `<option value="${b.id}">${esc(b
 
 // ---------- formulário da prova (o mesmo para "Nova prova" e para o modal "Editar") ----------
 // f = prefixo dos ids: "p" (nova prova) ou "e" (editar)
+const ordemNatural = (a, b) => String(a).localeCompare(String(b), "pt-BR", { numeric: true, sensitivity: "base" });
 const AJUDA_MATERIAL = "Google Drive: Compartilhar → Qualquer pessoa com o link → copiar link. Google Slides: Arquivo → Compartilhar → Publicar na web. Cole o link aqui.";
 function formProvaHTML(f) {
   return `
@@ -283,11 +287,10 @@ function formProvaHTML(f) {
   <fieldset class="temas-box">
     <legend>Material de consulta (opcional)</legend>
     <div class="grade">
-      <div><label for="${f}MatTitulo">Título do material</label><input type="text" id="${f}MatTitulo" placeholder="Slides da aula 8"></div>
-      <div class="col-2"><label for="${f}MatArquivo">Slides em PDF (abre num leitor dentro da prova)</label>
-        <div class="linha" style="flex-wrap:nowrap"><select id="${f}MatArquivo"></select>
-          <button type="button" class="leve mini" id="${f}MatVer" style="flex:0 0 auto;min-width:0" title="Ver o PDF como o aluno vai ver">👁 Ver</button>
-          <label class="botao-arquivo leve mini" style="flex:0 0 auto">⬆ Enviar PDF<input type="file" id="${f}MatUpload" accept="application/pdf,.pdf" hidden></label></div>
+      <div><label for="${f}MatTitulo">Título do material (topo do painel)</label><input type="text" id="${f}MatTitulo" placeholder="Slides das aulas 6 a 8"></div>
+      <div class="col-2"><span class="rotulo">Slides em PDF — marque um ou vários (o aluno troca entre eles por abas, dentro da prova)</span>
+        <div id="${f}MatLista" class="lista-materiais" role="group" aria-label="PDFs de consulta"></div>
+        <div class="linha" style="margin-top:6px"><label class="botao-arquivo leve mini" style="flex:0 0 auto">⬆ Enviar PDF(s)<input type="file" id="${f}MatUpload" accept="application/pdf,.pdf" multiple hidden></label></div>
         <p class="pequeno" id="${f}MatEnvio" aria-live="polite" style="margin:4px 0 0"></p></div>
     </div>
     <div class="grade">
@@ -324,7 +327,7 @@ function gerarCodigo() {
 // Controla um formulário de prova: temas do banco, resumo ao vivo, validação, leitura e preenchimento.
 function controleProva(f) {
   const $f = s => $("#" + f + s);
-  let contagem = {}, bancoDesenhado = null, travado = false, turmaLegada = "";
+  let contagem = {}, bancoDesenhado = null, travado = false, turmaLegada = "", matMarcados = [];
   const disponiveis = () => temasMarcados($f("Temas")).reduce((s, t) => ({ alternativa: s.alternativa + (contagem[t]?.alternativa || 0), dissertativa: s.dissertativa + (contagem[t]?.dissertativa || 0) }), { alternativa: 0, dissertativa: 0 });
   // devolve a mensagem de erro (ou "") para o pedido atual
   function problema() {
@@ -360,20 +363,36 @@ function controleProva(f) {
     } catch (e) { box.innerHTML = `<p class="pequeno">Não foi possível carregar os temas. ${esc(traduzirErro(e))}</p>`; }
     atualizar();
   }
-  // select com os PDFs enviados
-  async function opcoesMaterial(selecionado = null) {
-    const atual = selecionado ?? $f("MatArquivo").value;
+  // lista de PDFs enviados, com caixa de marcar (vários por prova). selecionados = null mantém as marcações
+  async function opcoesMaterial(selecionados = null) {
+    if (selecionados) matMarcados = [...selecionados];
     try { await listarMateriaisCache(); } catch (e) { /* sem materiais */ }
-    $f("MatArquivo").innerHTML = `<option value="">— nenhum PDF —</option>` + materiaisCache.map(m => `<option value="${m.id}">${esc(m.titulo)} (${tamanhoTexto(m.tamanho)})</option>`).join("") +
-      (atual && !materiaisCache.some(m => m.id === atual) ? `<option value="${esc(atual)}">⚠ PDF apagado</option>` : "");
-    $f("MatArquivo").value = atual || "";
+    desenharMateriais();
+  }
+  function desenharMateriais() {
+    const box = $f("MatLista"), lista = [...materiaisCache].sort((a, b) => ordemNatural(a.titulo, b.titulo));
+    const apagados = matMarcados.filter(id => !materiaisCache.some(m => m.id === id));
+    box.innerHTML = !lista.length && !apagados.length ? `<p class="pequeno" style="margin:0">Nenhum PDF enviado ainda. Use <b>⬆ Enviar PDF(s)</b>.</p>` :
+      lista.map(m => `<div class="item-material"><label class="check"><input type="checkbox" value="${m.id}"${matMarcados.includes(m.id) ? " checked" : ""}> <span>${esc(m.titulo)} <span class="pequeno">(${tamanhoTexto(m.tamanho)})</span></span></label>
+        <button type="button" class="leve mini" data-vermat="${m.id}" title="Ver como o aluno vai ver" aria-label="Ver ${esc(m.titulo)}">👁</button></div>`).join("") +
+      apagados.map(id => `<div class="item-material"><label class="check"><input type="checkbox" value="${esc(id)}" checked> <span class="erro-texto">⚠ PDF apagado — desmarque</span></label></div>`).join("");
+    box.querySelectorAll("input[type=checkbox]").forEach(c => c.onchange = () => {
+      matMarcados = c.checked ? [...matMarcados.filter(x => x !== c.value), c.value] : matMarcados.filter(x => x !== c.value);
+      if (!c.checked && apagados.includes(c.value)) desenharMateriais(); else previaMaterial();
+    });
+    box.querySelectorAll("[data-vermat]").forEach(b => b.onclick = () => verMaterial(b.dataset.vermat));
     previaMaterial();
   }
+  // ids marcados, na ordem em que o aluno vê as abas (título em ordem natural: "Aula 2" antes de "Aula 10")
+  function idsMarcados() {
+    const tit = id => materiaisCache.find(m => m.id === id)?.titulo ?? "\uffff";
+    return [...matMarcados].sort((a, b) => ordemNatural(tit(a), tit(b)));
+  }
   function previaMaterial() {
-    const arq = $f("MatArquivo").value;
-    $f("MatUrl").disabled = !!arq; $f("MatVer").disabled = !arq;
-    const url = arq ? "" : $f("MatUrl").value.trim(), conv = converterLinkMaterial(url), el = $f("MatPrevia");
-    if (arq) { el.innerHTML = `📄 O aluno vai ver o PDF num leitor dentro da prova (◀ ▶ para passar os slides, zoom).` + ($f("MatUrl").value.trim() ? " O link externo é ignorado." : ""); return; }
+    const n = matMarcados.length;
+    $f("MatUrl").disabled = n > 0;
+    const url = n ? "" : $f("MatUrl").value.trim(), conv = converterLinkMaterial(url), el = $f("MatPrevia");
+    if (n) { el.innerHTML = `📄 ${n === 1 ? "1 PDF" : `${n} PDFs`}: o aluno lê num leitor dentro da prova (◀ ▶ para passar os slides, zoom)${n > 1 ? " e troca de PDF pelas abas no topo do painel" : ""}.` + ($f("MatUrl").value.trim() ? " O link externo é ignorado." : ""); return; }
     if (!url) { el.textContent = ""; return; }
     if (!/^https:\/\//.test(conv)) { el.innerHTML = `⚠ Use um link que comece com <b>https://</b>.`; return; }
     el.innerHTML = conv !== url ? `Será salvo no formato para exibir na prova: <span class="mono">${esc(conv)}</span>` : `Link salvo como está.`;
@@ -393,16 +412,16 @@ function controleProva(f) {
     $f("Banco").onchange = () => carregarTemas();
     $f("NAlt").oninput = $f("NDiss").oninput = atualizar;
     $f("MatUrl").oninput = previaMaterial;
-    $f("MatArquivo").onchange = previaMaterial;
-    $f("MatVer").onclick = () => verMaterial($f("MatArquivo").value);
+    // vários de uma vez: cada PDF recebe o nome do arquivo como título e já entra marcado
     $f("MatUpload").onchange = async () => {
-      const file = $f("MatUpload").files[0]; $f("MatUpload").value = "";
-      if (!file) return;
-      const r = await enviarPdf(file, $f("MatTitulo").value, $f("MatEnvio"));
-      if (!r) return;
-      await opcoesMaterial(r.id);
-      if (!$f("MatTitulo").value.trim()) $f("MatTitulo").value = r.titulo;
-      previaMaterial();
+      const files = [...$f("MatUpload").files]; $f("MatUpload").value = "";
+      let ok = 0;
+      for (const file of files) {
+        const r = await enviarPdf(file, "", $f("MatEnvio"));
+        if (r) { ok++; matMarcados = [...matMarcados.filter(x => x !== r.id), r.id]; }
+      }
+      if (files.length > 1) $f("MatEnvio").textContent = `✅ ${ok} de ${files.length} PDFs enviados.`;
+      await opcoesMaterial();
     };
     $f("PermitirTrocaAba").onchange = $f("Modo").onchange = $f("Voltar").onchange = atualizarLimite;
     atualizarLimite();
@@ -435,7 +454,7 @@ function controleProva(f) {
     $f("Voltar").checked = p.permitirVoltar === true;
     $f("PermitirTrocaAba").checked = p.permitirTrocaAba === true; $f("PermitirColar").checked = p.permitirColar === true;
     $f("MatTitulo").value = p.materialConsultaTitulo || ""; $f("MatUrl").value = p.materialConsultaUrl || "";
-    opcoesMaterial(p.materialConsultaArquivoId || "");
+    opcoesMaterial(idsConsulta(p));
     $f("MaxTrocas").value = p.maxTrocasDeAba || 0; $f("AcaoExceder").value = p.acaoAoExceder === "perderQuestao" ? "perderQuestao" : "encerrar";
     previaMaterial(); atualizarLimite();
   }
@@ -449,8 +468,8 @@ function controleProva(f) {
     if (!travado && (bancoDesenhado !== bancoId || !Object.keys(contagem).length)) await carregarTemas();   // garante a contagem do banco escolhido
     const prob = problema();
     if (prob) { atualizar(); return { erro: prob }; }
-    const arquivoId = $f("MatArquivo").value;
-    const urlBruta = arquivoId ? "" : $f("MatUrl").value.trim(), url = converterLinkMaterial(urlBruta);
+    const arquivos = idsMarcados();
+    const urlBruta = arquivos.length ? "" : $f("MatUrl").value.trim(), url = converterLinkMaterial(urlBruta);
     if (url && !/^https:\/\//.test(url)) return { erro: "O link do material de consulta precisa começar com https://." };
     const dados = {
       titulo, ...turmaEscolhida(), codigoAcesso: normalizarCodigo($f("Codigo").value),
@@ -460,8 +479,9 @@ function controleProva(f) {
       permitirTrocaAba: $f("PermitirTrocaAba").checked, permitirColar: $f("PermitirColar").checked,
       maxTrocasDeAba: $f("PermitirTrocaAba").checked ? 0 : Math.max(0, Math.round(Number($f("MaxTrocas").value || 0))),
       acaoAoExceder: $f("Modo").value !== "todas" && !$f("Voltar").checked && $f("AcaoExceder").value === "perderQuestao" ? "perderQuestao" : "encerrar",
-      materialConsultaUrl: url, materialConsultaArquivoId: arquivoId || null,
-      materialConsultaTitulo: url || arquivoId ? ($f("MatTitulo").value.trim() || materiaisCache.find(m => m.id === arquivoId)?.titulo || "Material de consulta") : ""
+      // vários PDFs em materiaisConsultaIds; materialConsultaArquivoId (um PDF só) fica para provas antigas
+      materialConsultaUrl: url, materiaisConsultaIds: arquivos, materialConsultaArquivoId: null,
+      materialConsultaTitulo: url || arquivos.length ? ($f("MatTitulo").value.trim() || (arquivos.length === 1 ? materiaisCache.find(m => m.id === arquivos[0])?.titulo : "") || "Material de consulta") : ""
     };
     // campos do sorteio: só entram se não estiverem travados
     if (!travado) Object.assign(dados, { bancoId, nQuestoes: n, nAlternativas: nAlt, nDissertativas: nDiss, temas: temasMarcados($f("Temas")) });   // todos marcados = lista completa
@@ -490,7 +510,8 @@ function opcoesDaProvaHTML(p) {
   if (p.codigoAcesso) t.push(`<span class="tag nota" title="Código de acesso (informe na sala)">🔑 ${esc(p.codigoAcesso)}</span>`);
   if (p.permitirColar) t.push(`<span class="tag aviso">📋 colar permitido</span>`);
   if (!p.permitirTrocaAba && Number(p.maxTrocasDeAba) > 0) t.push(`<span class="tag erro" title="Saídas da prova permitidas antes da punição">🚪 máx. ${Number(p.maxTrocasDeAba)} saída(s) · ${p.acaoAoExceder === "perderQuestao" && p.modoExibicao !== "todas" && !p.permitirVoltar ? "perde a questão" : "encerra"}</span>`);
-  if (p.materialConsultaArquivoId) t.push(`<span class="tag nota" title="PDF enviado ao sistema">📄 ${esc(p.materialConsultaTitulo || "consulta")}</span>`);
+  const pdfs = idsConsulta(p);
+  if (pdfs.length) t.push(`<span class="tag nota" title="${esc(pdfs.map(id => materiaisCache.find(m => m.id === id)?.titulo || "PDF").join(" · "))}">📄 ${esc(p.materialConsultaTitulo || "consulta")}${pdfs.length > 1 ? ` (${pdfs.length} PDFs)` : ""}</span>`);
   else if (p.materialConsultaUrl) t.push(`<span class="tag nota" title="${esc(p.materialConsultaUrl)}">📖 ${esc(p.materialConsultaTitulo || "consulta")}</span>`);
   return t.join(" ");
 }
@@ -785,10 +806,18 @@ async function carregarResultados() {
   $("#aoVivo").classList.remove("oculto");
   ouvintes.push(onSnapshot(q, async snap => {
     if (resDados?.prova.id !== provaId) return;
-    await Promise.all(snap.docChanges().map(ch => ch.type === "removed" ? cacheTent.delete(ch.doc.id) : atualizarCache(ch.doc)));
+    await Promise.all(snap.docChanges().map(ch => {
+      if (ch.type === "removed") return cacheTent.delete(ch.doc.id);
+      // mudou só o placar (gravado por este painel): não precisa reler respostas e correções
+      const c = cacheTent.get(ch.doc.id), novo = ch.doc.data();
+      if (ch.type === "modified" && c && [...new Set([...Object.keys(c.t), ...Object.keys(novo)])].filter(k => k !== "id")
+            .every(k => SO_PLACAR.has(k) || JSON.stringify(c.t[k]) === JSON.stringify(novo[k]))) { c.t = { id: ch.doc.id, ...novo }; return; }
+      return atualizarCache(ch.doc);
+    }));
     montarResultados();
   }, e => { toast("O acompanhamento ao vivo parou. " + traduzirErro(e), "erro"); $("#rAoVivo").checked = false; pararAoVivo(); }));
 }
+const SO_PLACAR = new Set(["acertos", "totalQuestoes", "notaPrevia", "aguardandoCorrecao", "nota", "notaMaxima", "corrigidaEm", "corrigidaPor"]);
 // lê respostas e correções de uma tentativa e guarda no cache
 async function atualizarCache(d) {
   const t = { id: d.id, ...d.data() };
@@ -828,8 +857,12 @@ function montarResultados() {
 // Só grava o que mudou; a tela final do aluno escuta a tentativa e atualiza sozinha.
 async function gravarPlacares(linhas) {
   if (!podeEditar()) return;
-  const mudar = linhas.filter(l => l.t.finalizadaEm).map(l => ({ l, p: placar(l.itens) }))
-    .filter(({ l, p }) => Object.keys(p).some(k => l.t[k] !== p[k]));
+  const mudar = linhas.filter(l => l.t.finalizadaEm).map(l => {
+    const p = placar(l.itens);
+    // nota já fechada e corrigida depois (IA ou manual): a nota fechada acompanha a correção
+    if (l.t.nota !== undefined && l.t.nota !== p.notaPrevia) p.nota = p.notaPrevia;
+    return { l, p };
+  }).filter(({ l, p }) => Object.keys(p).some(k => l.t[k] !== p[k]));
   if (!mudar.length) return;
   try {
     for (let i = 0; i < mudar.length; i += 400) {
@@ -1137,9 +1170,10 @@ async function processarFilaIA() {
       } catch (e) {
         console.warn("IA", e);
         iaErros++; errosIA.set(k, e.ia ? e.message : traduzirErro(e));
-        if (e.fatal) {   // chave/crédito/modelo: não adianta continuar
+        if (e.fatal) {   // chave/crédito/modelo: não adianta continuar; desliga o automático
           toast("Correção por IA parada: " + e.message, "erro");
           filaIA.splice(1).forEach(x => emFilaIA.delete(x.tid + "/" + x.qid));
+          $("#iaAuto").checked = false; tentadasAutoIA.clear();
         }
       }
       filaIA.shift(); emFilaIA.delete(k);

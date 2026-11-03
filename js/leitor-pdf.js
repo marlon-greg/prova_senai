@@ -1,5 +1,5 @@
 // Leitor de slides/PDF dentro da página (PDF.js): uma página por vez, ◀ ▶, número da página e zoom.
-// Uso: const leitor = await abrirLeitorPdf(elemento, bytes); ... leitor.destruir();
+// Uso: const leitor = await abrirLeitorPdf(elemento, bytes, { pagina: 1 }); ... leitor.pagina; leitor.destruir();
 const VERSAO = "4.10.38";
 const BASE = `https://cdn.jsdelivr.net/npm/pdfjs-dist@${VERSAO}/build`;
 let pdfjs = null;
@@ -11,7 +11,7 @@ async function carregarPdfjs() {
   return pdfjs;
 }
 
-export async function abrirLeitorPdf(el, bytes) {
+export async function abrirLeitorPdf(el, bytes, { pagina: paginaInicial = 1 } = {}) {
   const lib = await carregarPdfjs();
   // PDF.js transfere o buffer para o worker: passa uma cópia para o cache continuar usável
   const pdf = await lib.getDocument({ data: bytes.slice(), isEvalSupported: false }).promise;
@@ -26,12 +26,13 @@ export async function abrirLeitorPdf(el, bytes) {
         <span class="leitor-zoom">100%</span>
         <button type="button" class="leve mini" data-l="mais" aria-label="Aumentar zoom">+</button>
         <button type="button" class="leve mini" data-l="ajustar" title="Ajustar à largura">⤢</button>
+        <button type="button" class="leve mini leitor-roda" data-l="roda" aria-pressed="false" title="Zoom com a roda do mouse: liga/desliga (Ctrl + roda sempre dá zoom)">🖱 Zoom na roda</button>
       </div>
       <div class="leitor-area"><canvas></canvas></div>
     </div>`;
   const raiz = el.querySelector(".leitor"), area = el.querySelector(".leitor-area"), canvas = el.querySelector("canvas");
   const campo = el.querySelector(".leitor-pag input"), rotZoom = el.querySelector(".leitor-zoom");
-  let pagina = 1, zoom = 1, tarefa = null, vivo = true, ocupado = false, pendente = false;
+  let pagina = Math.min(pdf.numPages, Math.max(1, Math.round(Number(paginaInicial) || 1))), zoom = 1, tarefa = null, vivo = true, ocupado = false, pendente = false;
 
   // um desenho por vez no mesmo canvas; pedido no meio de outro cancela o atual e redesenha no fim
   async function desenhar() {
@@ -64,6 +65,21 @@ export async function abrirLeitorPdf(el, bytes) {
   el.querySelector("[data-l=menos]").onclick = () => mudarZoom(zoom - 0.25);
   el.querySelector("[data-l=mais]").onclick = () => mudarZoom(zoom + 0.25);
   el.querySelector("[data-l=ajustar]").onclick = () => mudarZoom(1);
+  // zoom com a roda do mouse: ligado = a roda aumenta/diminui; desligado = a roda rola o slide.
+  // Ctrl + roda (e o gesto de pinça do touchpad) sempre dá zoom no slide, nunca na página inteira.
+  const btnRoda = el.querySelector("[data-l=roda]");
+  let roda = localStorage.getItem("leitorZoomRoda") === "1", esperaRoda = null;
+  const mostrarRoda = () => { btnRoda.setAttribute("aria-pressed", roda ? "true" : "false"); btnRoda.classList.toggle("ativo", roda); };
+  btnRoda.onclick = () => { roda = !roda; localStorage.setItem("leitorZoomRoda", roda ? "1" : "0"); mostrarRoda(); };
+  mostrarRoda();
+  area.addEventListener("wheel", e => {
+    if (!roda && !e.ctrlKey) return;   // rolagem normal
+    e.preventDefault();
+    const passo = Math.min(0.25, Math.max(0.05, Math.abs(e.deltaY) / 400));
+    zoom = Math.min(4, Math.max(0.4, zoom + (e.deltaY < 0 ? passo : -passo)));
+    rotZoom.textContent = Math.round(zoom * 100) + "%";
+    clearTimeout(esperaRoda); esperaRoda = setTimeout(desenhar, 80);   // junta vários giros num desenho só
+  }, { passive: false });
   campo.onchange = () => irPara(campo.value);
   raiz.addEventListener("keydown", e => {
     if (e.target === campo) return;
@@ -82,6 +98,7 @@ export async function abrirLeitorPdf(el, bytes) {
   await desenhar();
   return {
     destruir() { vivo = false; obs.disconnect(); tarefa?.cancel(); pdf.destroy(); el.innerHTML = ""; },
-    get paginas() { return pdf.numPages; }
+    get paginas() { return pdf.numPages; },
+    get pagina() { return pagina; }
   };
 }

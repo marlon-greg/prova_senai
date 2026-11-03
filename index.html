@@ -85,13 +85,21 @@
           <button id="btnFinalizar" class="grande direita oculto">Finalizar prova ✔</button>
         </div>
       </div>
+      <!-- divisor arrastável: mais espaço para os slides ou para as questões (só no computador) -->
+      <div id="divisorConsulta" class="divisor-consulta" role="separator" aria-orientation="vertical" tabindex="0"
+           aria-label="Espaço dos slides: arraste ou use as setas ← → para aumentar ou diminuir" title="Arraste para mudar o espaço dos slides"></div>
       <!-- material de consulta: coluna à direita no computador, gaveta no celular -->
       <aside id="painelConsulta" class="painel-consulta oculto" aria-label="Material de consulta">
         <div class="consulta-interno">
           <div class="consulta-topo">
             <span>📖 <b>Consulta permitida:</b> <span id="consultaTitulo"></span></span>
+            <span class="consulta-espaco">
+              <button id="btnConsultaMais" class="leve mini" type="button" title="Mais espaço para os slides (menos para as questões)" aria-label="Mais espaço para os slides">◀ Ampliar</button>
+              <button id="btnConsultaMenos" class="leve mini" type="button" title="Menos espaço para os slides (mais para as questões)" aria-label="Menos espaço para os slides">Reduzir ▶</button>
+            </span>
             <button id="btnFecharConsulta" class="discreto mini fechar-consulta" aria-label="Fechar o material de consulta">✕ Fechar</button>
           </div>
+          <div id="consultaAbas" class="consulta-abas oculto" role="tablist" aria-label="Escolha o material"></div>
           <div class="consulta-corpo">
             <div id="consultaLeitor" class="consulta-leitor oculto"></div>
             <iframe id="consultaFrame" title="Material de consulta" sandbox="allow-scripts allow-same-origin allow-popups" referrerpolicy="strict-origin-when-cross-origin"></iframe>

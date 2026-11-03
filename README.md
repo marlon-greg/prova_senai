@@ -1,6 +1,6 @@
 # Prova Online — SENAI (Firebase + GitHub Pages)
 
-Sistema de prova prática: o aluno entra com a conta Google do SENAI, recebe **10 questões sorteadas** de um banco maior, responde **uma por vez** (sem voltar, sem colar), e o professor corrige, fecha as notas, gera o gabarito para o Classroom e libera o resultado com a explicação de cada erro.
+Sistema de prova prática: o aluno entra com a conta Google do SENAI, recebe **10 questões sorteadas** de um banco maior, responde (uma por vez ou todas na página, com ou sem **ir e voltar**, sem colar), vê no fim só **quantas acertou e a nota**, e o professor corrige as dissertativas (à mão ou pela **IA**), fecha as notas, gera o gabarito para o Classroom e libera o gabarito com a explicação de cada erro.
 
 | Arquivo | O que é |
 |---|---|
@@ -93,7 +93,15 @@ A correção usa a API da Anthropic (Claude) e roda **no navegador do administra
 - No detalhe do aluno, as notas dadas pela IA têm a tag **🤖 IA**, com a justificativa no comentário. **A IA pode errar: confira.**
 - Erros (chave inválida, sem crédito, limite, sobrecarga) aparecem em português; limite e sobrecarga são tentados de novo sozinhos até 3 vezes.
 
-**Custo aproximado** (Claude Haiku 5.5, padrão: US$ 0,10 por milhão de tokens de entrada e US$ 0,50 de saída): cada resposta usa ~1.000–2.000 tokens, ou seja, **menos de US$ 0,01 por turma**. O Claude Sonnet 5.5 (opção em Configuração) é ~20× mais caro e um pouco mais criterioso.
+**Modelo e custo aproximado** (escolha em Configuração → Correção por IA → Modelo; cada resposta usa ~1.000–2.000 tokens):
+
+| Modelo | Preço (milhão de tokens, entrada / saída) | Por resposta | Turma de 30 alunos × 3 dissertativas |
+|---|---|---|---|
+| Claude Sonnet 5.5 (mais criterioso) | US$ 2 / US$ 10 | ≈ US$ 0,01 | ≈ US$ 1 |
+| Claude Opus 5.5 (o mais criterioso) | US$ 4 / US$ 20 | ≈ US$ 0,02 | ≈ US$ 2 |
+| **Claude Haiku 5.5** (padrão, o mais barato) | US$ 0,10 / US$ 0,50 | ≈ US$ 0,001 | menos de US$ 0,10 |
+
+Com Sonnet e Opus, se o filtro de segurança da API recusar uma resposta, ela é refeita sozinha em outro modelo.
 
 **Trocar ou revogar a chave:** **Apagar chave** no painel e, para invalidar de vez, apague-a também em console.anthropic.com → API Keys.
 
@@ -158,7 +166,7 @@ Definidas em **Nova prova** e alteráveis depois pelo botão **✎ Editar** na t
 | **Permitir ir e voltar** (`permitirVoltar`) | não | **Não**: a resposta enviada fica travada (uma por vez: só então aparece a próxima). **Sim**: botões **← Anterior / Próxima →** e os números das questões no topo (verde = respondida); o botão vira **Salvar resposta** e pode ser usado várias vezes (ao trocar de questão, salva sozinho); só **Finalizar prova** trava tudo. Ao recarregar, volta na questão em que estava. Com ir e voltar, "perder a questão" não existe: ao atingir o limite de saídas a prova é encerrada. |
 | **Permitir trocar de aba/janela** (`permitirTrocaAba`) | não | Não pede tela cheia e não mostra o aviso ao trocar de aba. As trocas continuam contadas e aparecem em **cinza, "permitido"**, em Resultados (a linha não fica amarela). |
 | **Permitir colar** (`permitirColar`) | não | Libera colar e arrastar nos campos de resposta e não registra tentativas de colar. Copiar o enunciado continua bloqueado. |
-| **Material de consulta** (`materialConsultaTitulo`, `materialConsultaArquivoId` ou `materialConsultaUrl`) | nenhum | Um **PDF enviado ao sistema** (recomendado) ou um link. Mostra o material **dentro da tela da prova**: no computador, numa coluna à direita (arraste o canto inferior esquerdo para alargar); no celular, pelo botão **📖 Consulta**, numa gaveta por cima da questão. Clicar no material não conta como troca de aba. |
+| **Material de consulta** (`materialConsultaTitulo`, `materiaisConsultaIds` ou `materialConsultaUrl`) | nenhum | Um ou **vários PDFs enviados ao sistema** (recomendado) ou um link. Mostra o material **dentro da tela da prova**: no computador, numa coluna à direita; o aluno muda o espaço dos slides × questões **arrastando a barra entre os dois** (ou pelos botões **◀ Ampliar / Reduzir ▶** e as setas do teclado com a barra selecionada), e a largura fica guardada no navegador dele; no celular, pelo botão **📖 Consulta**, numa gaveta por cima da questão. Clicar no material não conta como troca de aba. |
 
 ### Limite de saídas da prova
 Em **Regras da prova**, só quando a troca de aba **não** é permitida:
@@ -175,9 +183,9 @@ Em **Resultados** aparecem as saídas com o limite (ex.: 🚪 3/3), o motivo do 
 ### Slides em PDF (recomendado)
 Use **PDF**, não PPT/PPTX: o navegador não abre arquivo do PowerPoint sozinho, e o PDF mantém o visual de cada slide igual em qualquer computador ou celular. Para gerar: **PowerPoint → Arquivo → Exportar → Criar PDF** (ou *Salvar como → PDF*); **Google Slides → Arquivo → Fazer download → PDF**. Animações e vídeos não vão para o PDF.
 
-1. Aba **Bancos → Slides e material de consulta (PDF)**: título + arquivo → **Enviar PDF** (ou, no formulário da prova, o botão **⬆ Enviar PDF** ao lado do campo).
-2. Na prova, em **Material de consulta**, escolha o PDF na lista. **👁 Ver** abre o PDF exatamente como o aluno vai ver.
-3. Na prova, o aluno vê os slides num **leitor dentro da própria tela** (coluna à direita; no celular, botão **📖 Consulta**): ◀ ▶ para passar, número da página, zoom − / + e ⤢ para ajustar à largura; com o leitor selecionado, as setas do teclado também passam os slides. Como não sai da página, mexer no leitor não conta como troca de aba.
+1. Aba **Bancos → Slides e material de consulta (PDF)**: título + arquivo → **Enviar PDF** (ou, no formulário da prova, **⬆ Enviar PDF(s)**, que aceita **vários arquivos de uma vez**; cada um recebe o nome do arquivo como título e já entra marcado).
+2. Na prova, em **Material de consulta**, **marque um ou vários PDFs** (ex.: as 3 aulas do tema). **👁** abre cada PDF exatamente como o aluno vai ver. As abas aparecem em ordem pelo título ("Aula 2" antes de "Aula 10"), então dê títulos com número.
+3. Na prova, o aluno vê os slides num **leitor dentro da própria tela** (coluna à direita; no celular, botão **📖 Consulta**): com mais de um PDF, ele troca pelas **abas no topo do painel**, e cada PDF volta na página em que ele parou. ◀ ▶ para passar, número da página, zoom − / + e ⤢ para ajustar à largura, e **🖱 Zoom na roda** (liga/desliga: com ele ligado, a roda do mouse aumenta e diminui o slide; desligado, a roda rola o slide; Ctrl + roda sempre dá zoom no slide); com o leitor selecionado, as setas do teclado também passam os slides. Só o PDF aberto é baixado (os outros, quando ele clicar). Como não sai da página, mexer no leitor não conta como troca de aba.
 
 Limite de **20 MB** por arquivo (acima disso o envio é recusado com aviso; o envio mostra a barra de progresso). O PDF fica guardado no próprio Firestore, em pedaços de ~900 KB (funciona no plano gratuito do Firebase, que não inclui o Storage). Cada aluno baixa o arquivo uma vez por prova; para economizar, prefira PDFs menores (PowerPoint: *Exportar → PDF → Tamanho mínimo*). PDFs que nenhuma prova usa podem ser apagados na mesma aba (🗑).
 
@@ -240,7 +248,8 @@ Dica: peça ao Claude/ChatGPT "gere um banco de questões no formato do modelo_b
 | Auxiliar mexer em prova/banco | só `admin` e `professor` escrevem; `auxiliar` só lê |
 
 Limites conhecidos (sem Cloud Functions, para ficar no plano gratuito):
-- O **sorteio** das 10 questões é feito no navegador do aluno. Um aluno com conhecimento técnico poderia escolher quais 10 vai receber, mas **nunca** consegue ler a resposta antes de enviar a sua.
+- O **sorteio** das 10 questões é feito no navegador do aluno. Um aluno com conhecimento técnico poderia escolher quais 10 vai receber, mas **nunca** consegue ler a resposta antes de finalizar a prova.
+- O marcador que libera o gabarito é por **aluno + questão** (não por prova). Se o mesmo banco for usado em duas provas (ex.: prova e recuperação), quem já finalizou a primeira consegue, com conhecimento técnico, ler o gabarito das questões repetidas durante a segunda. Para recuperação, prefira um banco (ou temas) diferente.
 - A correção automática também roda no navegador; o placar e a nota "fechada" são gravados **pelo professor**, nunca pelo aluno. A correção por IA só acontece com o painel do administrador principal aberto.
 - O cronômetro (campo **Tempo limite**) usa o relógio do computador do aluno. Para um limite rígido, encerre também a prova pelo painel na hora combinada.
 
@@ -251,7 +260,7 @@ Durante a prova (tela das questões) o sistema **impede** algumas coisas e **reg
 **O que o sistema impede**
 | O quê | Como |
 |---|---|
-| Ler a resposta certa antes de responder | regra do Firestore (`gabaritos/` só abre depois do marcador da resposta) |
+| Ler a resposta certa durante a prova | regra do Firestore (`gabaritos/` só abre depois do marcador, criado só com a prova finalizada) |
 | Alterar uma resposta enviada / fazer a prova duas vezes | regras do Firestore |
 | Colar ou arrastar texto no campo de resposta | Ctrl+V, Shift+Insert, botão direito e arrastar são bloqueados |
 | Copiar e selecionar o enunciado | seleção, botão direito, arrastar e Ctrl+C/Ctrl+A bloqueados na área da questão |

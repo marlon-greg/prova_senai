@@ -1,6 +1,6 @@
 // Página do aluno: login, lista de provas, prova (uma questão por vez ou todas na página), resultado.
 import { db, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar, sortearAleatorio, esc, $, toast, dataBR, letra,
-         idTentativaTeste, apagarTentativaTeste, confirmar, traduzirErro, iniciais, fecharModais, temaDe, chaveNome, placar }
+         idTentativaTeste, apagarTentativaTeste, confirmar, traduzirErro, iniciais, fecharModais, temaDe, chaveNome, placar, idsConsulta }
   from "./common.js";
 import { baixarMaterial } from "./material.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
@@ -19,7 +19,7 @@ const modoTodas = () => provaAtual?.modoExibicao === "todas";          // todas 
 const trocaAbaPermitida = () => provaAtual?.permitirTrocaAba === true; // sem tela cheia e sem aviso (só conta)
 const colarPermitido = () => provaAtual?.permitirColar === true;
 const podeVoltar = () => provaAtual?.permitirVoltar === true;          // ir e voltar, alterando as respostas até finalizar
-const temConsulta = () => !!(provaAtual?.materialConsultaArquivoId || provaAtual?.materialConsultaUrl);
+const temConsulta = () => !!(idsConsulta(provaAtual).length || provaAtual?.materialConsultaUrl);
 // código de acesso (o modo teste da equipe não pede)
 const pedeCodigo = () => !modoTeste && !!String(provaAtual?.codigoAcesso || "").trim();
 const normalizarCodigo = c => String(c || "").toUpperCase().replace(/\s+/g, "");
@@ -181,7 +181,8 @@ function regrasDaProva(p) {
   r.push("Copiar e selecionar o enunciado, imprimir e atalhos como Ctrl+C e Ctrl+P ficam desativados durante a prova.");
   if (Number(p.tempoMinutos) > 0) r.push(`<b>Tempo limite: ${Number(p.tempoMinutos)} min.</b> O cronômetro começa ao clicar em Começar; quando zerar, a prova é finalizada com as respostas já enviadas.`);
   if (String(p.codigoAcesso || "").trim() && !modoTeste) r.push("Esta prova pede um <b>código de acesso</b>, informado pelo professor na sala.");
-  if (p.materialConsultaArquivoId || p.materialConsultaUrl) r.push(`Consulta permitida: <b>${esc(p.materialConsultaTitulo || "material de consulta")}</b>, aberto ao lado das questões (no celular, pelo botão <b>📖 Consulta</b>).`);
+  const nPdfs = idsConsulta(p).length;
+  if (nPdfs || p.materialConsultaUrl) r.push(`Consulta permitida: <b>${esc(p.materialConsultaTitulo || "material de consulta")}</b>${nPdfs > 1 ? ` (${nPdfs} PDFs: troque pelas abas no topo do painel)` : ""}, aberto ao lado das questões (no celular, pelo botão <b>📖 Consulta</b>).`);
   r.push(`Se a página fechar sem querer, entre de novo: você continua de onde parou${p.modoExibicao === "todas" ? ", com as respostas já enviadas" : ""}.`);
   return r;
 }
@@ -269,7 +270,7 @@ $("#btnComecar").onclick = async () => {
 };
 
 async function carregarTentativa() {
-  questoes = {}; respostas = {}; tentouEnviar.clear(); erroEnvio = false;
+  questoes = {}; respostas = {}; tentouEnviar.clear(); rascunhos.clear(); erroEnvio = false;
   const docsQ = await Promise.all(tentativa.questoesIds.map(q => getDoc(doc(db, "bancos", tentativa.bancoId, "questoes", q))));
   docsQ.forEach(d => { if (d.exists()) questoes[d.id] = { id: d.id, ...d.data() }; });
   const rs = await getDocs(collection(db, "tentativas", tentativa.id, "respostas"));
@@ -302,7 +303,7 @@ function criarCartaoQuestao(qid, i, unica) {
   const q = questoes[qid], card = document.createElement("div");
   card.className = "card questao"; card.dataset.qid = qid;
   if (!unica) card.id = "q_" + qid;
-  if (!q) { card.innerHTML = `<p class="pequeno">Questão ${i + 1} indisponível. Avise o professor.</p>`; return card; }
+  if (!q) { card.innerHTML = `<p class="pequeno">Questão ${i + 1} indisponível. Avise o professor.</p><div class="acoes-questao"></div>`; return card; }
   const tipo = q.tipo === "alternativa" ? "múltipla escolha" : "resposta escrita", colar = colarPermitido(), voltar = podeVoltar();
   card.innerHTML = `${unica ? "" : `<div class="q-topo"><span class="q-numero q-numero-p">Questão ${i + 1}</span><span class="tag">${tipo}</span><span class="tag ok q-enviada oculto">✓ ${voltar ? "salva" : "enviada"}</span></div>`}
     <div class="enunciado">${formatarEnunciado(q.enunciado)}</div>
@@ -337,6 +338,10 @@ function criarCartaoQuestao(qid, i, unica) {
     if (voltar && !respostas[qid].perdida) marcarSalva(card);
     else travarCartao(card);
   }
+  if (voltar && rascunhos.has(qid)) {   // alterada e não salva (ex.: sem internet ao trocar de questão)
+    preencherCartao(card, qid, rascunhos.get(qid));
+    const el = card.querySelector(".q-salva"); el.textContent = "⚠ Alteração ainda não salva."; el.classList.remove("oculto"); el.classList.add("erro-texto");
+  }
   if (respostas[qid]?.perdida) { const fb = card.querySelector(".q-feedback"); fb.className = "q-feedback feedback perdida"; fb.innerHTML = `<span class="icone" aria-hidden="true">⛔</span><div><b>Questão perdida</b> por sair da prova.</div>`; }
   return card;
 }
@@ -363,7 +368,8 @@ function marcarSalva(card) {
 function marcarAlterada(card, qid) {
   if (!podeVoltar() || !respostas[qid]) return;
   const el = card.querySelector(".q-salva");
-  if (mudou(card, qid)) { el.textContent = "Alteração ainda não salva."; el.classList.add("erro-texto"); }
+  if (valorDoCartao(card, qid) === null) { el.textContent = "⚠ Em branco não é salvo: continua valendo a resposta salva antes."; el.classList.add("erro-texto"); }
+  else if (mudou(card, qid)) { el.textContent = "Alteração ainda não salva."; el.classList.add("erro-texto"); }
   else marcarSalva(card);
 }
 // valor que está no cartão (null = nada escolhido/escrito)
@@ -392,7 +398,7 @@ function mostrarQuestao() {
   $("#btnFinalizar").classList.toggle("oculto", !voltar);
   const card = criarCartaoQuestao(qid, i, true);
   $("#qLista").replaceChildren(card);
-  card.querySelector(".acoes-questao").append($("#btnAnterior"), $("#btnProxima"), $("#btnFinalizar"));
+  card.querySelector(".acoes-questao")?.append($("#btnAnterior"), $("#btnProxima"), $("#btnFinalizar"));
   // sem voltar: questão já enviada (ex.: o tempo de mostrar o botão passou) mostra o próximo passo
   if (!voltar && respostas[qid]) (i >= total - 1 ? $("#btnFinalizar") : $("#btnProxima")).classList.remove("oculto");
   desenharFaixa();
@@ -423,8 +429,8 @@ function desenharFaixa() {
   if (!podeVoltar()) { box.innerHTML = ""; return; }
   const atual = modoTodas() ? -1 : tentativa.indiceAtual;
   box.innerHTML = tentativa.questoesIds.map((qid, i) =>
-    `<button type="button" class="mini ${respostas[qid] ? "respondida" : "pendente"}${i === atual ? " atual" : ""}" data-ir="${i}"
-       aria-label="Questão ${i + 1}: ${respostas[qid] ? "respondida" : "sem resposta"}"${i === atual ? ' aria-current="step"' : ""}>${i + 1}</button>`).join("");
+    `<button type="button" class="mini ${rascunhos.has(qid) ? "rascunho" : respostas[qid] ? "respondida" : "pendente"}${i === atual ? " atual" : ""}" data-ir="${i}"
+       aria-label="Questão ${i + 1}: ${rascunhos.has(qid) ? "alteração não salva" : respostas[qid] ? "respondida" : "sem resposta"}"${i === atual ? ' aria-current="step"' : ""}>${i + 1}</button>`).join("");
   box.querySelectorAll("[data-ir]").forEach(b => b.onclick = () => {
     const i = Number(b.dataset.ir);
     if (modoTodas()) $("#q_" + tentativa.questoesIds[i])?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -486,6 +492,7 @@ async function enviarResposta(qid, card, { silencioso = false } = {}) {
     const gravada = await gravarResposta(qid, resposta, segundos);
     const final = gravada ? gravada.resposta : resposta;   // sem voltar: se uma tentativa anterior já tinha chegado ao servidor, vale ela
     respostas[qid] = { resposta: final, segundos: gravada ? gravada.segundos : segundos };
+    rascunhos.delete(qid);
     marcoTempo = Date.now();
     erroEnvio = false; atualizarBanner();
     preencherCartao(card, qid, final);
@@ -519,6 +526,7 @@ async function enviarResposta(qid, card, { silencioso = false } = {}) {
 // mesmo assim: confere no servidor antes de gravar de novo (resposta não pode ser sobrescrita).
 // Ir e voltar: a 1ª gravação cria (enviadaEm); as seguintes atualizam resposta, segundos e atualizadaEm.
 const tentouEnviar = new Set();
+const rascunhos = new Map();   // ir e voltar: qid -> valor alterado que ainda não foi salvo
 async function gravarResposta(qid, resposta, segundos) {
   if (!navigator.onLine) throw Object.assign(new Error("Sem conexão com a internet."), { code: "unavailable" });
   const ref = doc(db, "tentativas", tentativa.id, "respostas", qid);
@@ -543,8 +551,14 @@ function comLimiteDeTempo(promessa, ms) {
 async function irPara(i) {
   const total = tentativa.questoesIds.length;
   if (i < 0 || i >= total || i === tentativa.indiceAtual) return;
-  const card = $("#qLista .questao");
-  if (card && !(await enviarResposta(tentativa.questoesIds[tentativa.indiceAtual], card, { silencioso: true }))) return;   // não salvou: fica
+  const card = $("#qLista .questao"), qidAtual = tentativa.questoesIds[tentativa.indiceAtual];
+  if (card && !(await enviarResposta(qidAtual, card, { silencioso: true }))) {
+    // não salvou (sem internet?): guarda o que estava na tela e deixa trocar; salva depois
+    if (tentativa.finalizadaEm) return;
+    const v = valorDoCartao(card, qidAtual);
+    if (v !== null) rascunhos.set(qidAtual, v);
+  }
+  if (tentativa.finalizadaEm) return;
   tentativa.indiceAtual = i;
   updateDoc(doc(db, "tentativas", tentativa.id), { indiceAtual: i }).catch(() => {});
   mostrarQuestao();
@@ -558,12 +572,29 @@ $("#btnProxima").onclick = async () => {
 };
 // "2, 5 e 7"
 const listaHumana = ns => ns.length > 1 ? ns.slice(0, -1).join(", ") + " e " + ns[ns.length - 1] : String(ns[0]);
-$("#btnFinalizar").onclick = async () => {
-  if (podeVoltar()) {
-    // salva o que estiver alterado na tela antes de conferir as pendentes
-    for (const card of document.querySelectorAll("#qLista .questao"))
-      if (!(await enviarResposta(card.dataset.qid, card, { silencioso: true }))) return;
+// ir e voltar: salva o que estiver alterado (na tela e os rascunhos). Devolve false se algo não foi salvo.
+async function salvarTudo() {
+  let ok = true;
+  for (const card of document.querySelectorAll("#qLista .questao"))
+    if (!(await enviarResposta(card.dataset.qid, card, { silencioso: true }))) ok = false;
+  for (const [qid, v] of [...rascunhos]) {
+    if (tentativa.finalizadaEm) break;
+    if (document.querySelector(`#qLista .questao[data-qid="${qid}"]`)) continue;   // já tentou pelo cartão
+    try {
+      const segundos = respostas[qid]?.segundos || 0;
+      await gravarResposta(qid, v, segundos);
+      respostas[qid] = { resposta: v, segundos }; rascunhos.delete(qid);
+    } catch (e) { ok = false; }
   }
+  desenharFaixa();
+  return ok;
+}
+$("#btnFinalizar").onclick = async () => {
+  if (podeVoltar() && !(await salvarTudo())) {
+    if (tentativa.finalizadaEm) return;
+    toast("Algumas respostas alteradas NÃO foram salvas (sem internet?). Tente Finalizar de novo quando a conexão voltar.", "erro"); return;
+  }
+  if (tentativa.finalizadaEm) return;   // o tempo pode ter acabado enquanto salvava
   if (modoTodas() || podeVoltar()) {
     const faltam = tentativa.questoesIds.map((q, i) => respostas[q] ? null : i + 1).filter(Boolean);
     const verbo = podeVoltar() ? ["foi salva", "foram salvas", "salva"] : ["foi enviada", "foram enviadas", "enviada"];
@@ -571,6 +602,7 @@ $("#btnFinalizar").onclick = async () => {
       ? await confirmar(`${faltam.length === 1 ? "A questão" : "As questões"} ${listaHumana(faltam)} ainda não ${faltam.length === 1 ? verbo[0] : verbo[1]}. Resposta não ${verbo[2]} não conta.\n\nFinalizar mesmo assim? As que faltam ficam em branco.`,
           { titulo: "Questões sem resposta", ok: "Finalizar mesmo assim", cancelar: "Voltar para a prova", perigo: true })
       : !podeVoltar() || await confirmar("Finalizar a prova? Depois disso as respostas não podem mais ser alteradas.", { titulo: "Finalizar prova", ok: "Finalizar", cancelar: "Voltar para a prova" });
+    if (tentativa.finalizadaEm) return;
     if (!ok) {
       if (faltam.length) { if (modoTodas()) $("#q_" + tentativa.questoesIds[faltam[0] - 1])?.scrollIntoView({ behavior: "smooth", block: "start" }); else irPara(faltam[0] - 1); }
       return;
@@ -587,7 +619,12 @@ async function finalizar(opc = {}) {
     const fim = { finalizadaEm: serverTimestamp(), indiceAtual: tentativa.questoesIds.length };
     if (opc.encerradaPor) fim.encerradaPor = opc.encerradaPor;   // ex.: "trocasDeAba" (limite de saídas)
     if (tentativa.iniciadaEm?.toMillis) fim.tempoTotalSegundos = Math.max(0, Math.round((Date.now() - tentativa.iniciadaEm.toMillis()) / 1000));
-    await comLimiteDeTempo(updateDoc(doc(db, "tentativas", tentativa.id), fim), 20000);
+    try { await comLimiteDeTempo(updateDoc(doc(db, "tentativas", tentativa.id), fim), 20000); }
+    catch (e) {
+      // pode ter chegado ao servidor mesmo com erro/tempo esgotado: confere antes de mostrar erro
+      const ja = await getDocFromServer(doc(db, "tentativas", tentativa.id)).catch(() => null);
+      if (!ja?.data()?.finalizadaEm) throw e;
+    }
     tentativa.finalizadaEm = new Date();
     tentativa.tempoTotalSegundos = fim.tempoTotalSegundos; tentativa.tempoEsgotado = !!opc.tempoEsgotado;
     if (opc.encerradaPor) tentativa.encerradaPor = opc.encerradaPor;
@@ -604,6 +641,16 @@ async function finalizar(opc = {}) {
 async function gravarMarcadores() {
   if (modoTeste || !tentativa) return;   // a equipe já lê os gabaritos
   await Promise.allSettled(tentativa.questoesIds.map(qid =>
+    setDoc(doc(db, "marcadores", `${eu.uid}_${qid}`), { uid: eu.uid, qid, provaId: tentativa.provaId, criadoEm: serverTimestamp() })));
+}
+
+// garante os marcadores (se a finalização foi interrompida antes de gravá-los) — uma vez por tentativa nesta página
+const marcadoresConferidos = new Set();
+async function marcadoresAntes() {
+  if (modoTeste || !tentativa?.finalizadaEm || marcadoresConferidos.has(tentativa.id)) return;
+  marcadoresConferidos.add(tentativa.id);
+  const faltam = (await Promise.all(tentativa.questoesIds.map(qid => getDoc(doc(db, "marcadores", `${eu.uid}_${qid}`)).then(d => d.exists() ? null : qid).catch(() => qid)))).filter(Boolean);
+  if (faltam.length) await Promise.allSettled(faltam.map(qid =>
     setDoc(doc(db, "marcadores", `${eu.uid}_${qid}`), { uid: eu.uid, qid, provaId: tentativa.provaId, criadoEm: serverTimestamp() })));
 }
 
@@ -631,13 +678,16 @@ function textoPlacarCurto(r) {
   return `acertou <b>${r.acertos}</b> de ${r.totalQuestoes} · nota <b>${r.nota}</b>${r.pendentes ? ` <span class="pequeno">(${r.pendentes} em correção)</span>` : ""}`;
 }
 
-let ouvinteFim = null, desenhoFim = 0;
-function pararOuvinteFim() { if (ouvinteFim) { ouvinteFim(); ouvinteFim = null; } }
+let ouvinteFim = null, ouvinteProvaFim = null, desenhoFim = 0;
+function pararOuvinteFim() {
+  if (ouvinteFim) { ouvinteFim(); ouvinteFim = null; }
+  if (ouvinteProvaFim) { ouvinteProvaFim(); ouvinteProvaFim = null; }
+}
 function mostrarFim() {
   pararCronometro();
   mostrar("telaFim");
   $("#fimNota").innerHTML = "";
-  desenharFim();
+  marcadoresAntes().then(desenharFim);
   // o painel do professor grava o placar na tentativa quando corrige: a tela troca os números sozinha
   pararOuvinteFim();
   const id = tentativa.id;
@@ -646,6 +696,12 @@ function mostrarFim() {
     const novo = d.data();
     if (["acertos", "notaPrevia", "aguardandoCorrecao", "nota"].some(k => novo[k] !== tentativa[k])) { Object.assign(tentativa, novo); desenharFim(); }
   }, e => console.warn("placar ao vivo parou", e));
+  // o professor pode liberar o gabarito com esta tela aberta (prova encerrada e sem gabarito: sem permissão, ignora)
+  if (!modoTeste) ouvinteProvaFim = onSnapshot(doc(db, "provas", tentativa.provaId), d => {
+    if (!d.exists() || provaAtual?.id !== d.id) return;
+    const lib = d.data().resultadosLiberados === true;
+    if (lib !== (provaAtual.resultadosLiberados === true)) { provaAtual.resultadosLiberados = lib; desenharFim(); }
+  }, () => {});
 }
 async function desenharFim() {
   const n = ++desenhoFim;
@@ -660,7 +716,7 @@ async function desenharFim() {
   $("#fimNota").innerHTML = avisos + (r ? `
     <p class="placar">Você acertou <b>${r.acertos}</b> de <b>${r.totalQuestoes}</b></p>
     <p class="placar-nota">Nota: <b>${r.nota}</b> / 100</p>
-    ${r.pendentes ? `<p class="aviso-box">✍ ${r.pendentes === 1 ? "1 resposta escrita ainda vai ser corrigida" : `${r.pendentes} respostas escritas ainda vão ser corrigidas`}; o total pode mudar. Esta tela atualiza sozinha.</p>` : ""}` : `<p class="pequeno">Não foi possível calcular o resultado agora. Volte para a lista de provas e abra de novo.</p>`) +
+    ${r.pendentes ? `<p class="aviso-box">✍ ${r.pendentes === 1 ? "1 resposta ainda vai ser corrigida" : `${r.pendentes} respostas ainda vão ser corrigidas`}; o total pode mudar. Esta tela atualiza sozinha.</p>` : ""}` : `<p class="pequeno">Não foi possível calcular o resultado agora. Volte para a lista de provas e abra de novo.</p>`) +
     (liberado ? "" : `<p class="pequeno">Quais você acertou e o gabarito aparecem quando o professor liberar.</p>`);
   $("#btnVerResultadoTeste").classList.toggle("oculto", !liberado);
 }
@@ -683,31 +739,58 @@ $("#btnReiniciarTeste").onclick = async () => {
 // =====================================================================
 // MATERIAL DE CONSULTA (coluna à direita no computador, gaveta no celular)
 // =====================================================================
-// Dois tipos: PDF enviado ao sistema (leitor próprio, dentro da página) ou link externo (iframe).
+// Dois tipos: PDFs enviados ao sistema (leitor próprio, dentro da página; vários, com abas) ou link externo (iframe).
 let consultaUrlAtual = null, consultaTimer = null, leitorAtual = null, leitorArquivoId = null;
+let consultaIds = [], consultaAtiva = null;
+const titulosMaterial = {}, paginaMaterial = {};   // id -> título / página em que o aluno parou
 function prepararConsulta() {
   const tem = temConsulta(), fr = $("#consultaFrame");
   $("#provaLayout").classList.toggle("com-consulta", tem);
   $("#painelConsulta").classList.toggle("oculto", !tem); $("#btnConsulta").classList.toggle("oculto", !tem);
-  const arquivo = tem ? provaAtual.materialConsultaArquivoId || "" : "";
-  if (!arquivo && leitorAtual) { leitorAtual.destruir(); leitorAtual = null; leitorArquivoId = null; }
-  if (!tem || arquivo) { if (consultaUrlAtual) { fr.removeAttribute("src"); consultaUrlAtual = null; } }
+  const ids = tem ? idsConsulta(provaAtual) : [];
+  if (!ids.length && leitorAtual) fecharLeitor();
+  if (!tem || ids.length) { if (consultaUrlAtual) { fr.removeAttribute("src"); consultaUrlAtual = null; } }
+  if (!ids.length) { consultaIds = []; consultaAtiva = null; $("#consultaAbas").classList.add("oculto"); }
   if (!tem) return;
   $("#consultaTitulo").textContent = provaAtual.materialConsultaTitulo || "material de consulta";
-  fr.classList.toggle("oculto", !!arquivo); $("#consultaLeitor").classList.toggle("oculto", !arquivo);
-  if (arquivo) { if (leitorArquivoId !== arquivo) carregarArquivoConsulta(arquivo); return; }   // não recarrega a cada questão
+  fr.classList.toggle("oculto", ids.length > 0); $("#consultaLeitor").classList.toggle("oculto", !ids.length);
+  if (ids.length) {
+    if (consultaIds.join() !== ids.join()) { consultaIds = ids; desenharAbasConsulta(); }
+    $("#consultaAbas").classList.toggle("oculto", ids.length < 2);
+    const alvo = ids.includes(consultaAtiva) ? consultaAtiva : ids[0];
+    if (leitorArquivoId !== alvo) carregarArquivoConsulta(alvo);   // não recarrega a cada questão
+    return;
+  }
   if (consultaUrlAtual !== provaAtual.materialConsultaUrl) carregarConsulta(provaAtual.materialConsultaUrl);
 }
+// abas com o título de cada PDF (só o PDF aberto é baixado; os outros só quando o aluno clicar)
+async function desenharAbasConsulta() {
+  const box = $("#consultaAbas"), ids = consultaIds;
+  box.innerHTML = ids.map((id, i) => `<button type="button" role="tab" class="mini" data-mat="${esc(id)}">${esc(titulosMaterial[id] || `PDF ${i + 1}`)}</button>`).join("");
+  box.querySelectorAll("[data-mat]").forEach(b => b.onclick = () => { if (b.dataset.mat !== leitorArquivoId) carregarArquivoConsulta(b.dataset.mat); });
+  marcarAbaAtiva();
+  await Promise.all(ids.filter(id => !(id in titulosMaterial)).map(id => getDoc(doc(db, "materiais", id))
+    .then(d => { titulosMaterial[id] = d.exists() ? d.data().titulo || "PDF" : "PDF apagado"; }).catch(() => {})));
+  if (consultaIds !== ids) return;
+  box.querySelectorAll("[data-mat]").forEach(b => { if (titulosMaterial[b.dataset.mat]) { b.textContent = titulosMaterial[b.dataset.mat]; b.title = b.textContent; } });
+}
+function marcarAbaAtiva() {
+  $("#consultaAbas").querySelectorAll("[data-mat]").forEach(b => { const on = b.dataset.mat === consultaAtiva; b.classList.toggle("ativa", on); b.setAttribute("aria-selected", on ? "true" : "false"); });
+}
+function fecharLeitor() {
+  if (leitorAtual && leitorArquivoId) paginaMaterial[leitorArquivoId] = leitorAtual.pagina;   // volta na mesma página depois
+  leitorAtual?.destruir(); leitorAtual = null; leitorArquivoId = null;
+}
 async function carregarArquivoConsulta(id) {
-  leitorArquivoId = id;
+  if (leitorAtual) fecharLeitor();
+  leitorArquivoId = id; consultaAtiva = id; marcarAbaAtiva();
   const box = $("#consultaLeitor"), erro = $("#consultaErro");
   erro.classList.add("oculto");
-  if (leitorAtual) { leitorAtual.destruir(); leitorAtual = null; }
   box.innerHTML = `<p class="pequeno leitor-carregando">Carregando o material…</p>`;
   try {
-    const { bytes } = await baixarMaterial(id);
-    if (leitorArquivoId !== id) return;   // trocou de prova enquanto carregava
-    const leitor = await abrirLeitorPdf(box, bytes);
+    const { bytes } = await baixarMaterial(id);   // fica em memória: trocar de aba ou de questão não baixa de novo
+    if (leitorArquivoId !== id) return;   // trocou de PDF/prova enquanto carregava
+    const leitor = await abrirLeitorPdf(box, bytes, { pagina: paginaMaterial[id] || 1 });
     if (leitorArquivoId !== id) { leitor.destruir(); return; }
     leitorAtual = leitor;
   } catch (e) {
@@ -730,7 +813,38 @@ function carregarConsulta(url) {
   consultaTimer = setTimeout(() => { if (!carregou) erro.classList.remove("oculto"); }, 15000);
   fr.src = url;
 }
-$("#btnRecarregarConsulta").onclick = () => provaAtual.materialConsultaArquivoId ? carregarArquivoConsulta(provaAtual.materialConsultaArquivoId) : carregarConsulta(provaAtual.materialConsultaUrl);
+$("#btnRecarregarConsulta").onclick = () => consultaIds.length ? carregarArquivoConsulta(consultaAtiva || consultaIds[0]) : carregarConsulta(provaAtual.materialConsultaUrl);
+// ---------- espaço dos slides x espaço das questões (computador) ----------
+// a largura escolhida fica guardada neste navegador e vale para as próximas provas
+const LARGURA_MIN = 280, largMax = () => Math.round(window.innerWidth * 0.75);
+function aplicarLarguraConsulta(px, salvar = true) {
+  const w = Math.min(largMax(), Math.max(LARGURA_MIN, Math.round(px)));
+  $("#painelConsulta").style.setProperty("--largura-consulta", w + "px");
+  const div = $("#divisorConsulta");
+  div.setAttribute("aria-valuemin", LARGURA_MIN); div.setAttribute("aria-valuemax", largMax()); div.setAttribute("aria-valuenow", w);
+  if (salvar) localStorage.setItem("larguraConsulta", String(w));
+}
+const larguraAtual = () => $("#painelConsulta").getBoundingClientRect().width;
+if (Number(localStorage.getItem("larguraConsulta")) > 0) aplicarLarguraConsulta(Number(localStorage.getItem("larguraConsulta")), false);
+$("#btnConsultaMais").onclick = () => aplicarLarguraConsulta(larguraAtual() + window.innerWidth * 0.1);
+$("#btnConsultaMenos").onclick = () => aplicarLarguraConsulta(larguraAtual() - window.innerWidth * 0.1);
+(() => {
+  const div = $("#divisorConsulta");
+  div.addEventListener("pointerdown", e => {
+    e.preventDefault(); div.setPointerCapture(e.pointerId); document.body.classList.add("arrastando");
+    const mover = ev => aplicarLarguraConsulta($("#painelConsulta").getBoundingClientRect().right - ev.clientX, false);
+    const soltar = () => {
+      div.removeEventListener("pointermove", mover); div.removeEventListener("pointerup", soltar); div.removeEventListener("pointercancel", soltar);
+      document.body.classList.remove("arrastando"); aplicarLarguraConsulta(larguraAtual());
+    };
+    div.addEventListener("pointermove", mover); div.addEventListener("pointerup", soltar); div.addEventListener("pointercancel", soltar);
+  });
+  div.addEventListener("keydown", e => {   // ← mais espaço para os slides, → menos
+    if (e.key === "ArrowLeft") { e.preventDefault(); aplicarLarguraConsulta(larguraAtual() + 40); }
+    if (e.key === "ArrowRight") { e.preventDefault(); aplicarLarguraConsulta(larguraAtual() - 40); }
+  });
+  window.addEventListener("resize", () => { const w = Number(localStorage.getItem("larguraConsulta")); if (w > 0) aplicarLarguraConsulta(w, false); });
+})();
 $("#btnConsulta").onclick = () => $("#painelConsulta").classList.toggle("aberto");
 $("#btnFecharConsulta").onclick = () => $("#painelConsulta").classList.remove("aberto");
 
@@ -783,6 +897,7 @@ async function aplicarPunicao() {
     fecharModais();
     while (enviando > 0) await esperarMs(200);   // deixa terminar uma resposta que já estava sendo enviada
     if (tentativa.finalizadaEm) return;
+    if (podeVoltar()) await comLimiteDeTempo(salvarTudo(), 15000).catch(() => {});   // ir e voltar: salva o que estava alterado
     if (acaoAoExceder() === "encerrar") await finalizar({ encerradaPor: "trocasDeAba" });
     else await perderQuestao();
   } finally { punindo = false; }
@@ -912,6 +1027,7 @@ async function tempoEsgotado() {
   if (!tentativa || tentativa.finalizadaEm) return;
   fecharModais();
   while (enviando > 0) await new Promise(r => setTimeout(r, 200));   // deixa terminar respostas que já estavam sendo enviadas
+  if (podeVoltar() && !tentativa.finalizadaEm) await comLimiteDeTempo(salvarTudo(), 15000).catch(() => {});   // ir e voltar: salva o que estava alterado
   await finalizar({ tempoEsgotado: true });
 }
 
@@ -921,8 +1037,9 @@ function atualizarBanner() {
   const b = $("#bannerConexao");
   const naProva = tentativa && !tentativa.finalizadaEm && !$("#telaQuestao").classList.contains("oculto");
   let msg = "";
-  if (naProva && erroEnvio) msg = navigator.onLine ? "Sua resposta NÃO foi enviada. A conexão voltou: clique em Enviar resposta de novo."
-                                                   : "Sem conexão: sua resposta NÃO foi enviada, tente de novo.";
+  const acao = podeVoltar() ? ["salva", "Salvar resposta"] : ["enviada", "Enviar resposta"];
+  if (naProva && erroEnvio) msg = navigator.onLine ? `Sua resposta NÃO foi ${acao[0]}. A conexão voltou: clique em ${acao[1]} de novo.`
+                                                   : `Sem conexão: sua resposta NÃO foi ${acao[0]}, tente de novo.`;
   else if (naProva && !navigator.onLine) msg = "Sem conexão com a internet. Não feche nem recarregue a página: quando a conexão voltar, continue normalmente.";
   b.textContent = msg; b.classList.toggle("oculto", !msg);
 }

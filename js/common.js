@@ -95,6 +95,12 @@ export function placar(itens) {
            notaPrevia: max ? Math.round(pts / max * 1000) / 10 : 0, aguardandoCorrecao: itens.filter(x => x.status === "revisar").length };
 }
 
+// PDFs de consulta da prova (vários). Provas antigas têm um só, em materialConsultaArquivoId.
+export function idsConsulta(p) {
+  const a = Array.isArray(p?.materiaisConsultaIds) ? p.materiaisConsultaIds.filter(Boolean) : [];
+  return a.length ? a : (p?.materialConsultaArquivoId ? [p.materialConsultaArquivoId] : []);
+}
+
 // ---------------- utilidades ----------------
 // embaralha com semente (mesma semente = mesma ordem; usado para alternativas por aluno: semente = uid + qid)
 export function embaralhar(lista, semente) {
