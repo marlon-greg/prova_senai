@@ -464,12 +464,19 @@ function tempoTotal(t) {
   return i && f ? Math.round((f - i) / 1000) : null;
 }
 const RAPIDO = 5;   // resposta enviada em menos de 5 s: destacar
-function sinaisDe(t) { return { abas: t.trocasDeAba || 0, telaCheia: t.saidasTelaCheia || 0, colar: t.tentativasColar || 0 }; }
+// sinais de cola; com troca de aba permitida na prova, as trocas aparecem em cinza ("permitido") e não destacam a linha
+function sinaisDe(t, prova) {
+  const s = { abas: t.trocasDeAba || 0, telaCheia: t.saidasTelaCheia || 0, colar: t.tentativasColar || 0, abasPermitido: prova?.permitirTrocaAba === true };
+  s.total = (s.abasPermitido ? 0 : s.abas) + s.telaCheia + s.colar;
+  return s;
+}
 function sinaisHTML(s) {
   const item = (ic, n, tit) => `<span class="${n ? "" : "zero"}" title="${tit}">${ic} ${n}</span>`;
-  return `<span class="sinais">${item("🔀", s.abas, "Trocas de aba/janela")}${item("⛶", s.telaCheia, "Saídas da tela cheia")}${item("📋", s.colar, "Tentativas de colar")}</span>`;
+  const abas = s.abasPermitido ? `<span class="permitido" title="Troca de aba permitida nesta prova">🔀 ${s.abas} permitido</span>` : item("🔀", s.abas, "Trocas de aba/janela");
+  return `<span class="sinais">${abas}${item("⛶", s.telaCheia, "Saídas da tela cheia")}${item("📋", s.colar, "Tentativas de colar")}</span>`;
 }
-function sinaisTexto(s) { return `abas ${s.abas} · tela cheia ${s.telaCheia} · colar ${s.colar}`; }
+const abasTexto = s => `${s.abas}${s.abasPermitido ? " (permitido)" : ""}`;
+function sinaisTexto(s) { return `abas ${abasTexto(s)} · tela cheia ${s.telaCheia} · colar ${s.colar}`; }
 
 let resDados = null;   // { prova, questoes, gabaritos, linhas: [...] }
 async function prepararResultados() {
@@ -498,9 +505,9 @@ async function carregarResultados() {
       return { n: i + 1, qid, q, g, r, peso, ...c, comentario: corr[qid]?.comentario || "", segundos: resp[qid]?.segundos };
     });
     const max = itens.reduce((s, x) => s + x.peso, 0), pts = itens.reduce((s, x) => s + x.pontos, 0);
-    const sinais = sinaisDe(t);
+    const sinais = sinaisDe(t, prova);
     linhas.push({ t, itens, max, pts, nota: max ? Math.round(pts / max * 1000) / 10 : 0, revisar: itens.filter(x => x.status === "revisar").length,
-                  tempo: tempoTotal(t), sinais, temSinal: sinais.abas + sinais.telaCheia + sinais.colar > 0,
+                  tempo: tempoTotal(t), sinais, temSinal: sinais.total > 0,
                   rapidas: itens.filter(x => x.r !== undefined && typeof x.segundos === "number" && x.segundos < RAPIDO).length });
   }
   linhas.sort((a, b) => (a.t.nome || a.t.email).localeCompare(b.t.nome || b.t.email));
@@ -569,7 +576,7 @@ $("#btnCSV").onclick = () => {
   const cab = ["Nome", "E-mail", "Início", "Fim", "Tempo", "Tempo (segundos)", "Trocas de aba", "Saídas da tela cheia", "Tentativas de colar", `Respostas < ${RAPIDO}s`, "Nota",
                ...Array.from({ length: n }, (_, i) => `Q${i + 1}`)];
   const rows = resDados.linhas.map(l => [l.t.nome || "", l.t.email, dataBR(l.t.iniciadaEm), l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "em andamento",
-    fmtTempo(l.tempo), l.tempo ?? "", l.sinais.abas, l.sinais.telaCheia, l.sinais.colar, l.rapidas, String(l.nota).replace(".", ","),
+    fmtTempo(l.tempo), l.tempo ?? "", abasTexto(l.sinais), l.sinais.telaCheia, l.sinais.colar, l.rapidas, String(l.nota).replace(".", ","),
     ...l.itens.map(x => `${x.pontos}/${x.peso} ${x.status}${typeof x.segundos === "number" ? ` (${x.segundos}s)` : ""}`)]);
   const csv = [cab, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(";")).join("\n");
   baixar(`resultados_${resDados.prova.titulo.replace(/\W+/g, "_")}.csv`, "﻿" + csv);
@@ -621,7 +628,7 @@ function boletimHTML(l, quebra = false) {
   const rot = { certa: "✔ certa", errada: "✘ errada", parcial: "◐ parcial", revisar: "◌ em correção", em_branco: "□ em branco" };
   let h = cab(`Boletim — ${p.titulo}`, `${l.t.nome || ""} · ${l.t.email} · ${p.turma || ""} · finalizada em ${l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "—"}`);
   h += `<h2>Nota: ${l.nota} / 100 <span class="peq">(${l.pts} de ${l.max} pontos)</span></h2>`;
-  h += `<div class="peq">Tempo total: ${fmtTempo(l.tempo)} · Trocas de aba: ${l.sinais.abas} · Saídas da tela cheia: ${l.sinais.telaCheia} · Tentativas de colar: ${l.sinais.colar}</div>`;
+  h += `<div class="peq">Tempo total: ${fmtTempo(l.tempo)} · Trocas de aba: ${abasTexto(l.sinais)} · Saídas da tela cheia: ${l.sinais.telaCheia} · Tentativas de colar: ${l.sinais.colar}</div>`;
   h += l.itens.map(x => {
     const sua = x.r === undefined ? "<i>não respondida</i>" : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
     const certa = x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.g.correta] ?? "—") : esc((x.g.respostasAceitas || [])[0] || "—");
