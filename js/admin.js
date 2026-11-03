@@ -57,7 +57,7 @@ async function carregarProvas() {
   if (!provas.length) { box.innerHTML = `<div class="vazio"><div class="icone">📝</div><p>Nenhuma prova ainda. Crie a primeira no formulário acima.</p></div>`; return; }
   box.innerHTML = `<div class="tabela"><table><tr><th>Prova</th><th>Banco</th><th>Questões</th><th>Status</th><th>Resultados</th><th></th></tr>` + provas.map(p => {
     const b = bancosCache.find(x => x.id === p.bancoId);
-    return `<tr><td><b>${esc(p.titulo)}</b><br><span class="pequeno">${esc(p.turma || "")}</span></td><td>${esc(b?.nome || p.bancoId)}<br><span class="pequeno">${esc(b?.materia || "")}</span></td><td>${p.nQuestoes}${p.nDissertativas ? `<br><span class="pequeno">${p.nDissertativas} dissert.</span>` : ""}</td>
+    return `<tr><td><b>${esc(p.titulo)}</b><br><span class="pequeno">${esc(p.turma || "")}</span></td><td>${esc(b?.nome || p.bancoId)}<br><span class="pequeno">${esc(b?.materia || "")}</span></td><td>${p.nQuestoes}${p.nDissertativas ? `<br><span class="pequeno">${p.nDissertativas} dissert.</span>` : ""}${p.tempoMinutos > 0 ? `<br><span class="pequeno">⏱ ${p.tempoMinutos} min</span>` : ""}</td>
       <td><span class="tag ${p.liberada ? "on" : "off"}">${p.liberada ? "● liberada" : "○ fechada"}</span></td>
       <td><span class="tag ${p.resultadosLiberados ? "on" : "off"}">${p.resultadosLiberados ? "● liberados" : "○ ocultos"}</span></td>
       <td class="td-acoes">${podeEditar() ? `<button class="mini ${p.liberada ? "leve" : "ok"}" data-tg="liberada" data-id="${p.id}">${p.liberada ? "Encerrar" : "Liberar prova"}</button>
@@ -89,12 +89,13 @@ $("#btnCriarProva").onclick = async () => {
   const titulo = $("#pTitulo").value.trim(), bancoId = $("#pBanco").value, n = Number($("#pN").value), nDiss = Number($("#pNDiss").value || 0);
   if (nDiss > n) return toast("O número de dissertativas não pode passar do total de questões.", "erro");
   if (!titulo || !bancoId || !n) return toast("Preencha título, banco e número de questões.", "erro");
+  const tempoMinutos = Math.max(0, Math.round(Number($("#pTempo").value || 0)));
   const b = bancosCache.find(x => x.id === bancoId);
   if (b && n > b.nQuestoes) return toast(`O banco só tem ${b.nQuestoes} questões.`, "erro");
   if (nDiss) { const qs = await getDocs(collection(db, "bancos", bancoId, "questoes")); let d = 0, a = 0; qs.forEach(x => x.data().tipo === "dissertativa" ? d++ : a++);
     if (nDiss > d) return toast(`O banco só tem ${d} dissertativa(s).`, "erro"); if (n - nDiss > a) return toast(`O banco só tem ${a} de alternativa.`, "erro"); }
   await addDoc(collection(db, "provas"), { titulo, turma: $("#pTurma").value.trim(), bancoId, nQuestoes: n, nDissertativas: nDiss,
-    feedbackImediato: $("#pFeedback").value, embaralharAlternativas: $("#pEmbaralhar").checked,
+    feedbackImediato: $("#pFeedback").value, embaralharAlternativas: $("#pEmbaralhar").checked, tempoMinutos,
     liberada: false, resultadosLiberados: false, criadoEm: serverTimestamp(), criadoPor: eu.email });
   $("#pTitulo").value = ""; toast("Prova criada (ainda fechada). Libere quando for aplicar.", "ok"); carregarProvas();
 };
@@ -193,6 +194,27 @@ function baixar(nome, conteudo) {
 }
 
 // ============================================================ RESULTADOS
+// tempo legível: 75 -> "1min 15s"
+function fmtTempo(seg) {
+  if (seg === null || seg === undefined || isNaN(seg)) return "—";
+  seg = Math.round(seg);
+  const h = Math.floor(seg / 3600), m = Math.floor(seg % 3600 / 60), s = seg % 60;
+  return h ? `${h}h ${String(m).padStart(2, "0")}min` : m ? `${m}min ${String(s).padStart(2, "0")}s` : `${s}s`;
+}
+// tempo total da tentativa (campo gravado ao finalizar; para tentativas antigas, fim − início)
+function tempoTotal(t) {
+  if (typeof t.tempoTotalSegundos === "number") return t.tempoTotalSegundos;
+  const i = t.iniciadaEm?.toMillis?.(), f = t.finalizadaEm?.toMillis?.();
+  return i && f ? Math.round((f - i) / 1000) : null;
+}
+const RAPIDO = 5;   // resposta enviada em menos de 5 s: destacar
+function sinaisDe(t) { return { abas: t.trocasDeAba || 0, telaCheia: t.saidasTelaCheia || 0, colar: t.tentativasColar || 0 }; }
+function sinaisHTML(s) {
+  const item = (ic, n, tit) => `<span class="${n ? "" : "zero"}" title="${tit}">${ic} ${n}</span>`;
+  return `<span class="sinais">${item("🔀", s.abas, "Trocas de aba/janela")}${item("⛶", s.telaCheia, "Saídas da tela cheia")}${item("📋", s.colar, "Tentativas de colar")}</span>`;
+}
+function sinaisTexto(s) { return `abas ${s.abas} · tela cheia ${s.telaCheia} · colar ${s.colar}`; }
+
 let resDados = null;   // { prova, questoes, gabaritos, linhas: [...] }
 async function prepararResultados() {
   const s = await getDocs(collection(db, "provas"));
@@ -217,10 +239,13 @@ async function carregarResultados() {
       const r = resp[qid]?.resposta, peso = Number(q.peso || 1);
       let c = corrigir(q, g, r);
       if (corr[qid]?.pontos !== undefined) c = { pontos: Number(corr[qid].pontos), status: Number(corr[qid].pontos) >= peso ? "certa" : Number(corr[qid].pontos) > 0 ? "parcial" : "errada", manual: true };
-      return { n: i + 1, qid, q, g, r, peso, ...c, comentario: corr[qid]?.comentario || "" };
+      return { n: i + 1, qid, q, g, r, peso, ...c, comentario: corr[qid]?.comentario || "", segundos: resp[qid]?.segundos };
     });
     const max = itens.reduce((s, x) => s + x.peso, 0), pts = itens.reduce((s, x) => s + x.pontos, 0);
-    linhas.push({ t, itens, max, pts, nota: max ? Math.round(pts / max * 1000) / 10 : 0, revisar: itens.filter(x => x.status === "revisar").length });
+    const sinais = sinaisDe(t);
+    linhas.push({ t, itens, max, pts, nota: max ? Math.round(pts / max * 1000) / 10 : 0, revisar: itens.filter(x => x.status === "revisar").length,
+                  tempo: tempoTotal(t), sinais, temSinal: sinais.abas + sinais.telaCheia + sinais.colar > 0,
+                  rapidas: itens.filter(x => x.r !== undefined && typeof x.segundos === "number" && x.segundos < RAPIDO).length });
   }
   linhas.sort((a, b) => (a.t.nome || a.t.email).localeCompare(b.t.nome || b.t.email));
   resDados = { prova, questoes, gabaritos, linhas };
@@ -228,17 +253,18 @@ async function carregarResultados() {
 }
 function desenharResultados() {
   const { prova, linhas } = resDados;
-  const fin = linhas.filter(l => l.t.finalizadaEm), media = fin.length ? (fin.reduce((s, l) => s + l.nota, 0) / fin.length).toFixed(1) : "—";
+  const fin = linhas.filter(l => l.t.finalizadaEm), comSinal = linhas.filter(l => l.temSinal).length, media = fin.length ? (fin.reduce((s, l) => s + l.nota, 0) / fin.length).toFixed(1) : "—";
   const revisar = linhas.reduce((s, l) => s + l.revisar, 0);
   $("#resResumo").innerHTML = `<div class="numeros">
       <div class="numero"><b>${linhas.length}</b><span>alunos iniciaram</span></div>
       <div class="numero"><b>${fin.length}</b><span>finalizaram</span></div>
       <div class="numero"><b>${media}</b><span>média (0–100)</span></div>
-      <div class="numero ${revisar ? "aviso" : ""}"><b>${revisar}</b><span>respostas a revisar</span></div></div>`;
+      <div class="numero ${revisar ? "aviso" : ""}"><b>${revisar}</b><span>respostas a revisar</span></div>
+      <div class="numero ${comSinal ? "aviso" : ""}"><b>${comSinal}</b><span>com sinais (aba, tela cheia, colar)</span></div></div>`;
   if (!linhas.length) { $("#resTabela").innerHTML = `<div class="card vazio"><div class="icone">⏳</div><p>Ninguém fez esta prova ainda.</p></div>`; return; }
-  $("#resTabela").innerHTML = `<div class="card"><div class="tabela"><table><tr><th>Aluno</th><th>Início</th><th>Fim</th><th>Abas</th><th>Nota</th><th>Revisar</th><th></th></tr>` +
-    linhas.map((l, i) => `<tr><td><b>${esc(l.t.nome || "")}</b><br><span class="pequeno">${esc(l.t.email)}</span></td><td class="pequeno">${dataBR(l.t.iniciadaEm)}</td><td class="pequeno">${l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "<span class='tag aviso'>em andamento</span>"}</td>
-      <td>${l.t.trocasDeAba || 0}</td><td><b>${l.nota}</b>${l.t.nota !== undefined ? ` <span class="pequeno">(fechada: ${l.t.nota})</span>` : l.t.notaPrevia !== null && l.t.notaPrevia !== undefined ? ` <span class="pequeno">(prévia: ${l.t.notaPrevia})</span>` : ""}</td><td>${l.revisar ? `<span class="tag aviso">${l.revisar}</span>` : "—"}</td>
+  $("#resTabela").innerHTML = `<div class="card"><div class="tabela"><table><tr><th>Aluno</th><th>Início</th><th>Fim</th><th>Tempo</th><th>Sinais</th><th>Nota</th><th>Revisar</th><th></th></tr>` +
+    linhas.map((l, i) => `<tr class="${l.temSinal ? "com-sinal" : ""}"><td><b>${esc(l.t.nome || "")}</b><br><span class="pequeno">${esc(l.t.email)}</span></td><td class="pequeno">${dataBR(l.t.iniciadaEm)}</td><td class="pequeno">${l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "<span class='tag aviso'>em andamento</span>"}</td>
+      <td>${fmtTempo(l.tempo)}${l.rapidas ? `<br><span class="tag erro" title="Respostas enviadas em menos de ${RAPIDO} segundos">⚡ ${l.rapidas} rápida(s)</span>` : ""}</td><td>${sinaisHTML(l.sinais)}</td><td><b>${l.nota}</b>${l.t.nota !== undefined ? ` <span class="pequeno">(fechada: ${l.t.nota})</span>` : l.t.notaPrevia !== null && l.t.notaPrevia !== undefined ? ` <span class="pequeno">(prévia: ${l.t.notaPrevia})</span>` : ""}</td><td>${l.revisar ? `<span class="tag aviso">${l.revisar}</span>` : "—"}</td>
       <td class="td-acoes"><button class="leve mini" data-ver="${i}">Ver</button> ${ehAdmin() ? `<button class="perigo mini" data-reset="${i}" title="Apagar a tentativa (o aluno pode refazer)">↺ Apagar</button>` : ""}</td></tr>`).join("") + `</table></div></div><div id="resDetalhe"></div>`;
   document.querySelectorAll("[data-ver]").forEach(b => b.onclick = () => verAluno(Number(b.dataset.ver)));
   document.querySelectorAll("[data-reset]").forEach(b => b.onclick = async () => {
@@ -254,11 +280,14 @@ function desenharResultados() {
 function verAluno(i) {
   const l = resDados.linhas[i], box = $("#resDetalhe");
   const rot = { certa: ["ok", "✅ certa"], errada: ["erro", "❌ errada"], parcial: ["aviso", "🟡 parcial"], revisar: ["aviso", "🟡 revisar"], em_branco: ["erro", "⬜ em branco"] };
-  box.innerHTML = `<div class="card"><div class="linha"><h2 style="flex:3">${esc(l.t.nome || l.t.email)} — ${l.nota}/100 (${l.pts} de ${l.max} pontos)</h2><button class="leve mini" id="btnPDFAluno" style="flex:0 0 auto">PDF deste aluno</button></div>` + l.itens.map(x => {
+  box.innerHTML = `<div class="card"><div class="linha"><h2 style="flex:3">${esc(l.t.nome || l.t.email)} — ${l.nota}/100 (${l.pts} de ${l.max} pontos)</h2><button class="leve mini" id="btnPDFAluno" style="flex:0 0 auto">PDF deste aluno</button></div>
+    <p class="pequeno">Tempo total: <b>${fmtTempo(l.tempo)}</b> · ${sinaisHTML(l.sinais)}</p>` + l.itens.map(x => {
+    const rapida = x.r !== undefined && typeof x.segundos === "number" && x.segundos < RAPIDO;
+    const tempo = typeof x.segundos === "number" ? `<span class="tag ${rapida ? "erro" : ""}" title="Tempo entre a questão aparecer e a resposta ser enviada">⏱ ${fmtTempo(x.segundos)}${rapida ? ` · menos de ${RAPIDO} s` : ""}</span>` : "";
     const sua = x.r === undefined ? "<i>não respondida</i>" : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
     const certa = x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.g.correta] ?? "—") : esc((x.g.respostasAceitas || [])[0] || (x.g.palavrasChave || []).join(" + "));
     const manual = podeEditar() && x.q.tipo === "dissertativa" ? `<div class="linha" style="margin-top:6px"><div style="flex:0 0 120px"><label>Pontos (0–${x.peso})</label><input type="number" min="0" max="${x.peso}" step="0.5" value="${x.pontos}" id="pt_${x.qid}"></div><div><label>Comentário para o aluno</label><input type="text" id="cm_${x.qid}" value="${esc(x.comentario)}"></div><div style="flex:0 0 120px;align-self:flex-end"><button class="mini" data-corr="${x.qid}" data-i="${i}">Salvar</button></div></div>` : "";
-    return `<div class="feedback ${x.status === "certa" ? "certa" : x.status === "errada" ? "errada" : "revisar"}"><div class="linha"><b>Q${x.n}</b> <span class="tag ${rot[x.status][0]}">${rot[x.status][1]} · ${x.pontos}/${x.peso}${x.manual ? " · manual" : ""}</span></div>
+    return `<div class="feedback ${x.status === "certa" ? "certa" : x.status === "errada" ? "errada" : "revisar"}"><div class="linha"><b>Q${x.n}</b> <span class="tag ${rot[x.status][0]}">${rot[x.status][1]} · ${x.pontos}/${x.peso}${x.manual ? " · manual" : ""}</span>${tempo}</div>
       <div class="enunciado pequeno">${esc(x.q.enunciado)}</div><p><b>Resposta do aluno:</b> ${sua}<br><b>Esperada:</b> ${certa}</p>${manual}</div>`;
   }).join("") + "</div>";
   box.scrollIntoView({ behavior: "smooth" });
@@ -281,9 +310,11 @@ $("#btnFecharNotas").onclick = async () => {
 $("#btnCSV").onclick = () => {
   if (!resDados) return toast("Carregue uma prova primeiro.", "erro");
   const n = resDados.prova.nQuestoes;
-  const cab = ["Nome", "E-mail", "Início", "Fim", "Trocas de aba", "Nota", ...Array.from({ length: n }, (_, i) => `Q${i + 1}`)];
-  const rows = resDados.linhas.map(l => [l.t.nome || "", l.t.email, dataBR(l.t.iniciadaEm), l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "em andamento", l.t.trocasDeAba || 0, String(l.nota).replace(".", ","),
-    ...l.itens.map(x => `${x.pontos}/${x.peso} ${x.status}`)]);
+  const cab = ["Nome", "E-mail", "Início", "Fim", "Tempo", "Tempo (segundos)", "Trocas de aba", "Saídas da tela cheia", "Tentativas de colar", `Respostas < ${RAPIDO}s`, "Nota",
+               ...Array.from({ length: n }, (_, i) => `Q${i + 1}`)];
+  const rows = resDados.linhas.map(l => [l.t.nome || "", l.t.email, dataBR(l.t.iniciadaEm), l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "em andamento",
+    fmtTempo(l.tempo), l.tempo ?? "", l.sinais.abas, l.sinais.telaCheia, l.sinais.colar, l.rapidas, String(l.nota).replace(".", ","),
+    ...l.itens.map(x => `${x.pontos}/${x.peso} ${x.status}${typeof x.segundos === "number" ? ` (${x.segundos}s)` : ""}`)]);
   const csv = [cab, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(";")).join("\n");
   baixar(`resultados_${resDados.prova.titulo.replace(/\W+/g, "_")}.csv`, "﻿" + csv);
 };
@@ -324,7 +355,7 @@ function abrirImpressao(titulo, corpo) {
   <style>body{font-family:Arial,sans-serif;font-size:11pt;color:#111;margin:18mm 16mm}h1{font-size:16pt;border-left:5px solid #c1272d;padding-left:8px;margin:0 0 4px}h2{font-size:13pt;margin:14px 0 6px}
   .sub{color:#555;font-size:9.5pt;margin-bottom:12px}table{width:100%;border-collapse:collapse;font-size:10pt}th{background:#c1272d;color:#fff;text-align:left;padding:5px}td{border-bottom:1px solid #ddd;padding:5px;vertical-align:top}
   .q{border:1px solid #ddd;border-radius:6px;padding:8px 10px;margin:8px 0;page-break-inside:avoid}.q.certa{border-left:5px solid #2e8b57}.q.errada{border-left:5px solid #c1272d}.q.outra{border-left:5px solid #b26a00}
-  .mono{font-family:Consolas,monospace;background:#f2f2f2;padding:1px 4px}.exp{background:#f7f7f7;padding:6px 8px;border-radius:4px;margin-top:6px;font-size:10pt}.quebra{page-break-after:always}.peq{font-size:9.5pt;color:#555}</style></head>
+  .mono{font-family:Consolas,monospace;background:#f2f2f2;padding:1px 4px}.exp{background:#f7f7f7;padding:6px 8px;border-radius:4px;margin-top:6px;font-size:10pt}.quebra{page-break-after:always}.peq{font-size:9.5pt;color:#555}tr.sinal td{background:#fff4c2}.rapida{color:#c1272d;font-weight:bold}</style></head>
   <body>${corpo}<script>window.onload=()=>setTimeout(()=>window.print(),300)</script></body></html>`);
   w.document.close();
 }
@@ -334,11 +365,14 @@ function boletimHTML(l, quebra = false) {
   const rot = { certa: "✔ certa", errada: "✘ errada", parcial: "◐ parcial", revisar: "◌ em correção", em_branco: "□ em branco" };
   let h = cab(`Boletim — ${p.titulo}`, `${l.t.nome || ""} · ${l.t.email} · ${p.turma || ""} · finalizada em ${l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "—"}`);
   h += `<h2>Nota: ${l.nota} / 100 <span class="peq">(${l.pts} de ${l.max} pontos)</span></h2>`;
+  h += `<div class="peq">Tempo total: ${fmtTempo(l.tempo)} · Trocas de aba: ${l.sinais.abas} · Saídas da tela cheia: ${l.sinais.telaCheia} · Tentativas de colar: ${l.sinais.colar}</div>`;
   h += l.itens.map(x => {
     const sua = x.r === undefined ? "<i>não respondida</i>" : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
     const certa = x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.g.correta] ?? "—") : esc((x.g.respostasAceitas || [])[0] || "—");
     const cls = x.status === "certa" ? "certa" : x.status === "errada" || x.status === "em_branco" ? "errada" : "outra";
-    return `<div class="q ${cls}"><b>Questão ${x.n}</b> — ${rot[x.status]} · ${x.pontos}/${x.peso}<div style="white-space:pre-wrap;margin:4px 0">${esc(x.q.enunciado)}</div>
+    const rapida = x.r !== undefined && typeof x.segundos === "number" && x.segundos < RAPIDO;
+    const tempo = typeof x.segundos === "number" ? ` · <span class="${rapida ? "rapida" : ""}">⏱ ${fmtTempo(x.segundos)}${rapida ? ` (menos de ${RAPIDO} s)` : ""}</span>` : "";
+    return `<div class="q ${cls}"><b>Questão ${x.n}</b> — ${rot[x.status]} · ${x.pontos}/${x.peso}${tempo}<div style="white-space:pre-wrap;margin:4px 0">${esc(x.q.enunciado)}</div>
       <div><b>Resposta do aluno:</b> ${sua}</div>${x.status !== "certa" && certa !== "—" ? `<div><b>Resposta correta:</b> ${certa}</div>` : ""}
       ${x.g.explicacao ? `<div class="exp"><b>Por quê:</b> ${esc(x.g.explicacao)}</div>` : ""}${x.comentario ? `<div class="peq"><b>Comentário do professor:</b> ${esc(x.comentario)}</div>` : ""}</div>`;
   }).join("");
@@ -349,8 +383,9 @@ $("#btnPDFNotas").onclick = () => {
   const p = resDados.prova, fin = resDados.linhas.filter(l => l.t.finalizadaEm);
   const media = fin.length ? (fin.reduce((s, l) => s + l.nota, 0) / fin.length).toFixed(1) : "—";
   const corpo = cab(`Notas — ${p.titulo}`, `${p.turma || ""} · ${resDados.linhas.length} aluno(s) · média ${media} · gerado em ${new Date().toLocaleString("pt-BR")}`) +
-    `<table><tr><th>#</th><th>Aluno</th><th>E-mail</th><th>Finalizada</th><th>Abas</th><th>Nota</th></tr>` +
-    resDados.linhas.map((l, i) => `<tr><td>${i + 1}</td><td>${esc(l.t.nome || "")}</td><td>${esc(l.t.email)}</td><td>${l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "em andamento"}</td><td>${l.t.trocasDeAba || 0}</td><td><b>${l.nota}</b></td></tr>`).join("") + "</table>";
+    `<table><tr><th>#</th><th>Aluno</th><th>E-mail</th><th>Finalizada</th><th>Tempo</th><th>Sinais</th><th>Nota</th></tr>` +
+    resDados.linhas.map((l, i) => `<tr class="${l.temSinal ? "sinal" : ""}"><td>${i + 1}</td><td>${esc(l.t.nome || "")}</td><td>${esc(l.t.email)}</td><td>${l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "em andamento"}</td><td>${fmtTempo(l.tempo)}${l.rapidas ? `<br><span class="rapida">${l.rapidas} resp. &lt; ${RAPIDO} s</span>` : ""}</td><td>${sinaisTexto(l.sinais)}</td><td><b>${l.nota}</b></td></tr>`).join("") + "</table>" +
+    `<p class="peq">Sinais = trocas de aba/janela · saídas da tela cheia · tentativas de colar. Linhas destacadas têm pelo menos um sinal. São indícios para conferir, não prova de cola.</p>`;
   abrirImpressao(`Notas — ${p.titulo}`, corpo);
 };
 $("#btnPDFBoletins").onclick = () => {
