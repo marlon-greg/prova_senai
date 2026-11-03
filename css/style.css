@@ -118,6 +118,37 @@ pre.codigo { font-family:var(--fonte-mono); background:#1f2430; color:#e6e9ef; b
 .acoes-questao { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:24px; }
 .acoes-questao .direita { margin-left:auto; }
 
+/* ---------- prova: cabeçalho, modo "todas", material de consulta ---------- */
+.q-cabecalho { position:sticky; top:8px; z-index:20; padding:12px 24px; margin-bottom:12px; }
+.q-cabecalho .progresso { margin:8px 0 0; }
+.q-numero-p { font-size:1.1em; }
+.questao.enviada { border-color:#b7dfc7; }
+.questao .q-topo { margin-bottom:4px; }
+#qNav:empty { display:none; }
+.prova-layout.com-consulta { display:grid; grid-template-columns:minmax(0, 1fr) auto; gap:16px; align-items:start; }
+body.com-consulta main.estreito { max-width:1500px; }
+.painel-consulta { position:sticky; top:8px; height:calc(100vh - 16px); width:42vw; min-width:300px; max-width:70vw;
+  resize:horizontal; overflow:hidden; direction:rtl;   /* rtl: a alça de redimensionar fica no canto esquerdo */
+  background:#fff; border:1px solid var(--borda); border-radius:var(--raio); box-shadow:var(--sombra); }
+.consulta-interno { direction:ltr; display:flex; flex-direction:column; height:100%; }
+.consulta-topo { display:flex; align-items:center; gap:8px; padding:8px 12px; border-bottom:1px solid var(--borda); font-size:.9em; }
+.consulta-topo > span { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.consulta-corpo { position:relative; flex:1; min-height:0; }
+.consulta-corpo iframe { width:100%; height:100%; border:0; display:block; background:#f6f7f9; }
+.consulta-erro { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; text-align:center; padding:24px; background:#fff; color:var(--erro); font-weight:600; }
+.fechar-consulta, .btn-consulta { display:none; }
+.btn-consulta { position:fixed; right:16px; bottom:72px; z-index:340; border-radius:999px; box-shadow:0 6px 18px rgba(0,0,0,.2); }
+@media (max-width:900px) {
+  .prova-layout.com-consulta { display:block; }
+  body.com-consulta main.estreito { max-width:760px; }
+  .painel-consulta { position:fixed; top:0; right:0; bottom:0; height:auto; width:min(94vw, 560px); max-width:none; min-width:0; resize:none; z-index:345;
+    border-radius:var(--raio) 0 0 var(--raio); transform:translateX(105%); transition:transform .25s ease; }
+  .painel-consulta.aberto { transform:none; }
+  .fechar-consulta { display:inline-flex; }
+  .btn-consulta:not(.oculto) { display:inline-flex; }
+}
+@media print { .painel-consulta, .btn-consulta { display:none !important; } }
+
 /* ---------- feedback ---------- */
 .feedback { display:flex; gap:12px; align-items:flex-start; border:1px solid var(--borda); border-left-width:5px; padding:12px 16px; border-radius:var(--raio-p); margin-top:16px; background:#f7f8fa; }
 .feedback.bloco { display:block; }
@@ -138,6 +169,7 @@ tr.com-sinal td, tr.com-sinal:hover td { background:#fff6cc; }
 .sinais { white-space:nowrap; font-variant-numeric:tabular-nums; }
 .sinais span { margin-right:8px; }
 .sinais .zero { opacity:.4; }
+.sinais .permitido { color:#8a919c; }
 .td-acoes { white-space:nowrap; }
 .td-acoes button { margin:2px 0; }
 

@@ -50,14 +50,7 @@
     <div id="inicioInfo"></div>
     <div class="aviso-box">
       <b>Leia antes de começar:</b>
-      <ul>
-        <li>A prova só pode ser feita <b>uma vez</b>. Depois de clicar em Começar, não dá para reiniciar.</li>
-        <li>As questões aparecem <b>uma por vez</b>. Depois de enviar uma resposta, não é possível voltar.</li>
-        <li><b>Colar texto está desativado</b> nos campos de resposta. Digite.</li>
-        <li>A prova abre em <b>tela cheia</b>. Sair da tela cheia, trocar de aba/janela e tentar colar <b>ficam registrados</b> para o professor.</li>
-        <li>Copiar, selecionar o enunciado, botão direito e atalhos (Ctrl+C, Ctrl+P…) ficam desativados durante a prova.</li>
-        <li>Se a página fechar sem querer, entre de novo: você continua de onde parou.</li>
-      </ul>
+      <ul id="inicioRegras"></ul>   <!-- montada a partir das opções da prova (js/aluno.js) -->
     </div>
     <div class="linha acoes">
       <button id="btnComecar" class="ok grande">Começar a prova</button>
@@ -65,26 +58,43 @@
     </div>
   </section>
 
-  <!-- QUESTÃO -->
+  <!-- QUESTÃO (modo "uma": um cartão por vez · modo "todas": todos os cartões em sequência) -->
   <section id="telaQuestao" class="oculto">
-    <div class="card">
-      <div class="q-topo">
-        <span id="qContador" class="q-numero"></span>
-        <span id="qTipo" class="tag"></span>
-        <span id="qTitulo" class="pequeno titulo-prova"></span>
-        <span id="qTimer" class="timer oculto" title="Tempo restante"></span>
+    <div id="provaLayout" class="prova-layout">
+      <div class="prova-coluna">
+        <div class="card q-cabecalho">
+          <div class="q-topo">
+            <span id="qContador" class="q-numero"></span>
+            <span id="qTipo" class="tag"></span>
+            <span id="qTitulo" class="pequeno titulo-prova"></span>
+            <span id="qTimer" class="timer oculto" title="Tempo restante"></span>
+          </div>
+          <div class="progresso" role="progressbar" aria-label="Progresso da prova"><div id="qBarra" style="width:0%"></div></div>
+        </div>
+        <div id="qLista"></div>
+        <div id="qNav" class="acoes-questao">
+          <button id="btnProxima" class="grande direita oculto">Próxima questão →</button>
+          <button id="btnFinalizar" class="grande direita oculto">Finalizar prova ✔</button>
+        </div>
       </div>
-      <div class="progresso" role="progressbar" aria-label="Progresso da prova"><div id="qBarra" style="width:0%"></div></div>
-      <div id="qEnunciado" class="enunciado"></div>
-      <div id="qArea"></div>
-      <div id="qFeedback" class="oculto" role="status"></div>
-      <div class="acoes-questao">
-        <button id="btnEnviar" class="ok grande">Enviar resposta</button>
-        <button id="btnProxima" class="grande direita oculto">Próxima questão →</button>
-        <button id="btnFinalizar" class="grande direita oculto">Finalizar prova ✔</button>
-      </div>
-      <p class="pequeno" id="qDica">Confira antes de enviar: depois de enviada, a resposta não pode ser alterada.</p>
+      <!-- material de consulta: coluna à direita no computador, gaveta no celular -->
+      <aside id="painelConsulta" class="painel-consulta oculto" aria-label="Material de consulta">
+        <div class="consulta-interno">
+          <div class="consulta-topo">
+            <span>📖 <b>Consulta permitida:</b> <span id="consultaTitulo"></span></span>
+            <button id="btnFecharConsulta" class="discreto mini fechar-consulta" aria-label="Fechar o material de consulta">✕ Fechar</button>
+          </div>
+          <div class="consulta-corpo">
+            <iframe id="consultaFrame" title="Material de consulta" sandbox="allow-scripts allow-same-origin allow-popups" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            <div id="consultaErro" class="consulta-erro oculto" role="alert">
+              <p>Não foi possível carregar o material; avise o professor.</p>
+              <button id="btnRecarregarConsulta" class="leve mini">Tentar de novo</button>
+            </div>
+          </div>
+        </div>
+      </aside>
     </div>
+    <button id="btnConsulta" class="btn-consulta oculto" aria-controls="painelConsulta">📖 Consulta</button>
   </section>
 
   <!-- FIM -->
