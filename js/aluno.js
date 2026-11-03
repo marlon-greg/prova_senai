@@ -1,6 +1,6 @@
 // Página do aluno: login, lista de provas, prova (uma questão por vez), resultado.
 import { db, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar, sortearAleatorio, esc, $, toast, dataBR, letra,
-         idTentativaTeste, apagarTentativaTeste, confirmar, traduzirErro, iniciais, fecharModais }
+         idTentativaTeste, apagarTentativaTeste, confirmar, traduzirErro, iniciais, fecharModais, temaDe }
   from "./common.js";
 import { collection, doc, getDoc, getDocFromServer, getDocs, setDoc, updateDoc, query, where, writeBatch, serverTimestamp, increment }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
@@ -127,10 +127,15 @@ $("#btnComecar").onclick = async () => {
   $("#btnComecar").disabled = true;
   try {
     // sorteia nQuestoes do banco (ids) — cada aluno recebe um conjunto diferente
+    // só entram questões dos temas da prova (sem prova.temas = todas; questão sem tema = "Geral")
+    const temas = Array.isArray(provaAtual.temas) && provaAtual.temas.length ? new Set(provaAtual.temas) : null;
     const qs = await getDocs(collection(db, "bancos", provaAtual.bancoId, "questoes"));
     const ids = [], diss = [], alt = [];
-    qs.forEach(d => { ids.push(d.id); (d.data().tipo === "dissertativa" ? diss : alt).push(d.id); });
-    if (ids.length < provaAtual.nQuestoes) throw new Error("O banco tem menos questões do que a prova pede. Avise o professor.");
+    qs.forEach(d => {
+      if (temas && !temas.has(temaDe(d.data()))) return;
+      ids.push(d.id); (d.data().tipo === "dissertativa" ? diss : alt).push(d.id);
+    });
+    if (ids.length < provaAtual.nQuestoes) throw new Error("O banco não tem questões suficientes nos temas escolhidos. Avise o professor.");
     let sorteadas;
     const nD = Number(provaAtual.nDissertativas || 0);
     if (nD > 0 && diss.length >= nD && alt.length >= provaAtual.nQuestoes - nD)
