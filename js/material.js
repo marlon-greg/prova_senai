@@ -1,13 +1,14 @@
 // Material de consulta enviado como arquivo (PDF): guardado no próprio Firestore, em pedaços,
 // para funcionar no plano gratuito do Firebase (o Storage exige plano pago).
-// materiais/{id}            -> { titulo, arquivo, tamanho, nPartes, tipo: "pdf", criadoEm, criadoPor }
-// materiais/{id}/partes/{n} -> { i, dados: Bytes }   (n = "000", "001", ...)
+// materiais/{id}            -> { titulo, arquivo, tamanho, nPartes, tipo: "pdf", criadoEm, criadoPor }  (até 20 MB)
+// materiais/{id}/partes/{n} -> { i, dados: Bytes }   (n = "000", "001", ...; 900 KB cada, gravados com writeBatch)
 import { db } from "./common.js";
 import { collection, doc, getDoc, getDocs, setDoc, deleteDoc, writeBatch, query, orderBy, Bytes, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 const PARTE = 900 * 1024;     // cada documento do Firestore aceita até 1 MiB
-export const MAX_MB = 25;
+export const MAX_MB = 20;
+const LOTE_PARTES = 20, LOTE_BYTES = 8 * 1024 * 1024;   // writeBatch: até 20 pedaços e ~8 MB por envio (o limite do pedido é 10 MiB)
 
 const idParte = i => String(i).padStart(3, "0");
 
@@ -27,9 +28,23 @@ export async function enviarMaterial(file, titulo, email, progresso = () => {}) 
   const bytes = new Uint8Array(await file.arrayBuffer());
   const ref = doc(collection(db, "materiais"));
   const n = Math.ceil(bytes.length / PARTE);
-  for (let i = 0; i < n; i++) {
-    await setDoc(doc(db, "materiais", ref.id, "partes", idParte(i)), { i, dados: Bytes.fromUint8Array(bytes.subarray(i * PARTE, (i + 1) * PARTE)) });
-    progresso(i + 1, n);
+  progresso(0, n);
+  try {
+    let lote = writeBatch(db), noLote = 0, bytesLote = 0;
+    for (let i = 0; i < n; i++) {
+      const pedaco = bytes.subarray(i * PARTE, (i + 1) * PARTE);
+      if (noLote && (noLote >= LOTE_PARTES || bytesLote + pedaco.length > LOTE_BYTES)) {
+        await lote.commit(); progresso(i, n);
+        lote = writeBatch(db); noLote = 0; bytesLote = 0;
+      }
+      lote.set(doc(db, "materiais", ref.id, "partes", idParte(i)), { i, dados: Bytes.fromUint8Array(pedaco) });
+      noLote++; bytesLote += pedaco.length;
+    }
+    await lote.commit(); progresso(n, n);
+  } catch (e) {
+    // envio interrompido: tenta apagar os pedaços já gravados (sem o documento principal ele não aparece na lista)
+    getDocs(collection(db, "materiais", ref.id, "partes")).then(s => Promise.all(s.docs.map(d => deleteDoc(d.ref)))).catch(() => {});
+    throw e;
   }
   // o documento principal só é gravado no fim: envio interrompido não aparece na lista
   const dados = { titulo: String(titulo || "").trim() || file.name.replace(/\.pdf$/i, ""), arquivo: file.name, tamanho: bytes.length, nPartes: n, tipo: "pdf",
@@ -76,3 +91,22 @@ export async function apagarMaterial(id) {
 }
 
 export const tamanhoTexto = b => b >= 1048576 ? `${(b / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(b / 1024))} KB`;
+
+// mensagem específica quando as regras publicadas não cobrem a coleção materiais
+export function erroMaterial(e, traduzir) {
+  return String(e?.code || "").endsWith("permission-denied")
+    ? "As regras do Firestore não permitem gravar materiais. Publique a versão atual do firestore.rules no Firebase Console."
+    : traduzir(e);
+}
+// abre o PDF numa aba nova (a aba é aberta já no clique, para o navegador não bloquear)
+export async function abrirMaterialEmAba(id, traduzir) {
+  const w = window.open("", "_blank");
+  if (!w) throw new Error("O navegador bloqueou a janela. Libere pop-ups para este site.");
+  w.document.write("<p style='font-family:sans-serif'>Carregando o PDF…</p>");
+  try {
+    const { bytes } = await baixarMaterial(id);
+    const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
+    w.location.href = url;
+    setTimeout(() => URL.revokeObjectURL(url), 120000);
+  } catch (e) { w.document.body.innerHTML = `<p style='font-family:sans-serif'>Não foi possível abrir o PDF. ${String(traduzir(e)).replace(/</g, "&lt;")}</p>`; }
+}

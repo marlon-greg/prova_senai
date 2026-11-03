@@ -87,8 +87,16 @@ export function corrigir(questao, gabarito, resposta, perdida = false) {
   return { pontos: 0, status: "revisar" };   // o professor confirma/ajusta na correção manual
 }
 
+// Placar que o aluno vê: acertos (pontos cheios) de total, nota 0–100 e dissertativas ainda sem correção.
+// itens = [{ pontos, peso, status }] (status de corrigir() ou da correção manual/IA)
+export function placar(itens) {
+  const max = itens.reduce((s, x) => s + x.peso, 0), pts = itens.reduce((s, x) => s + x.pontos, 0);
+  return { acertos: itens.filter(x => x.status === "certa").length, totalQuestoes: itens.length,
+           notaPrevia: max ? Math.round(pts / max * 1000) / 10 : 0, aguardandoCorrecao: itens.filter(x => x.status === "revisar").length };
+}
+
 // ---------------- utilidades ----------------
-// embaralha com semente (mesma semente = mesma ordem; usado para alternativas por aluno)
+// embaralha com semente (mesma semente = mesma ordem; usado para alternativas por aluno: semente = uid + qid)
 export function embaralhar(lista, semente) {
   let h = 2166136261;
   for (const c of String(semente)) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; }

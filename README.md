@@ -37,7 +37,7 @@ Sistema de prova prática: o aluno entra com a conta Google do SENAI, recebe **1
 1. Abra `admin.html` e entre com `marlon.frodrigues@docente.senai.br`. O sistema cria a configuração inicial sozinho (domínios `edu.senai.br` e `aluno.senai.br`).
 2. Aba **Equipe**: cadastre outros professores (`professor`), coordenação (`admin`) ou apoio (`auxiliar`, só vê resultados — ex.: acompanhante de aluno com TEA).
 3. Aba **Bancos de questões**: cole o conteúdo de `modelo_banco.json` → **Validar** → **Importar**.
-4. Aba **Provas**: crie a prova (título, turma, banco, **temas**, quantas **alternativas** e quantas **dissertativas**, tipo de feedback) → ela nasce **fechada**.
+4. Aba **Provas**: crie a prova (título, turma, banco, **temas**, quantas **alternativas** e quantas **dissertativas**, se pode **ir e voltar**) → ela nasce **fechada**.
 
 ---
 
@@ -51,22 +51,51 @@ Sistema de prova prática: o aluno entra com a conta Google do SENAI, recebe **1
 
 Regras que o sistema aplica sozinho:
 - **Uma tentativa por aluno** (ID da tentativa = aluno + prova). Para deixar alguém refazer, o admin apaga a tentativa em Resultados (botão ↺) e o aluno recebe um sorteio novo.
-- **Questões sorteadas e alternativas embaralhadas** por aluno.
-- **Uma questão por vez**: a resposta é gravada ao clicar em Enviar e não pode ser alterada; só então aparece a próxima.
+- **Questões sorteadas, com a ordem das questões e das alternativas embaralhada** para cada aluno (sempre ligado; a ordem não muda se ele recarregar a página).
+- **Sem ir e voltar** (padrão): a resposta é gravada ao clicar em Enviar e não pode ser alterada. **Com ir e voltar** (opção da prova): o aluno navega entre as questões e altera as respostas até clicar em **Finalizar prova**.
+- **Nenhum feedback durante a prova**: o aluno não sabe se acertou cada questão.
 - **Colar desativado** nos campos de texto (Ctrl+V, botão direito, arrastar).
 - **Tela cheia, trocas de aba e tentativas de colar** são registradas e aparecem para o professor (veja [Antifraude](#antifraude)).
 - Se a aba fechar, o aluno entra de novo e **continua de onde parou**.
-- O aluno só consegue ler a resposta certa de uma questão **depois** de responder (regra do Firestore, não só da tela).
-- **Ao finalizar, o aluno já vê a nota prévia** (0–100), sem ver respostas nem explicações. Dissertativas não reconhecidas entram como "aguardando correção" e a nota pode subir depois.
+- O aluno só consegue ler a resposta certa **depois de finalizar a prova** (regra do Firestore, não só da tela).
+- **Ao finalizar, o aluno vê só "Você acertou X de N" e a nota (0–100)**, sem saber quais acertou. Dissertativas ainda sem correção aparecem como "N respostas escritas ainda vão ser corrigidas; o total pode mudar", e a tela **atualiza sozinha** quando você corrige (pela IA ou à mão). A lista de provas mostra o mesmo placar.
 
 ## Depois da prova — corrigir e divulgar
 
 1. Aba **Resultados** → escolha a prova → **Carregar**.
-2. Alternativas são corrigidas sozinhas. Dissertativas que o sistema reconheceu também. As que ele não reconheceu ficam como **revisar**: clique em **Ver** no aluno, dê os pontos e um comentário → **Salvar**.
+2. Alternativas são corrigidas sozinhas. Dissertativas que o sistema reconheceu (respostas aceitas / palavras-chave) também. As que ele não reconheceu ficam como **revisar**: clique em **🤖 Corrigir dissertativas com IA** (veja [Correção por IA](#correção-das-dissertativas-por-ia)) ou clique em **Ver** no aluno, dê os pontos e um comentário → **Salvar**. A cada correção o painel atualiza o placar que o aluno vê.
 3. **Fechar notas** grava a nota final (0–100) em cada tentativa; ela substitui a nota prévia na tela do aluno.
    Exportações: **CSV** (planilha) · **PDF — notas da turma** (lista) · **PDF — boletim de todos** (um boletim por aluno, com resposta, correta e explicação, pronto para subir no Drive) · **PDF deste aluno** (dentro do Ver). Os PDFs abrem a janela de impressão do navegador: escolha *Salvar como PDF*.
 4. Aba **Bancos → Gabarito p/ Classroom**: gera o texto com todas as questões, respostas e explicações → copie e poste no Classroom.
-5. Aba **Provas → Liberar resultados**: o aluno passa a ver, questão por questão, o que respondeu, o que era o certo, **por quê**, e o comentário do professor.
+5. Aba **Provas → Liberar gabarito/resultado**: o aluno passa a ver, questão por questão, o que respondeu, o que era o certo, **por quê**, o comentário do professor, e ganha o botão **Baixar PDF da minha prova**. Sem liberar, ele vê só quantas acertou e a nota. **Ocultar gabarito** volta atrás.
+
+---
+
+## Correção das dissertativas por IA
+
+A correção usa a API da Anthropic (Claude) e roda **no navegador do administrador principal**, no painel aberto. Não precisa de servidor nem do plano pago do Firebase.
+
+**A chave nunca vaza:**
+- fica no documento `config/ia` do Firestore, que as regras deixam ler e gravar **só** com a conta do administrador principal (o e-mail fixo nas regras). Outros admins, professores e alunos recebem "sem permissão";
+- não está no repositório, nem no `js/firebase-config.js`, nem na página do aluno;
+- a seção **Correção por IA** e os botões só aparecem para o administrador principal; depois de salva, a tela mostra só os 8 últimos caracteres;
+- do seu navegador ela só vai para `api.anthropic.com`.
+
+**Configurar (uma vez):**
+1. Entre em <https://console.anthropic.com> com a sua conta (crie se precisar) → **Billing**: adicione crédito (US$ 5 rende muitas provas).
+2. **Settings → Limits**: defina um **limite de gasto mensal** baixo (ex.: US$ 5). Se a chave vazar, o prejuízo fica limitado.
+3. **API Keys → Create Key**: dê um nome (ex.: `prova-senai`) e copie a chave (`sk-ant-…`). Ela só aparece uma vez.
+4. No painel: **Configuração → Correção por IA** → cole a chave → **Testar chave** → **Salvar**.
+5. Publique o `firestore.rules` atual no Firebase Console (a regra de `config/ia` está nele).
+
+**Usar:** aba **Resultados** → carregue a prova → **🤖 Corrigir dissertativas com IA** (barra de progresso; pula as já corrigidas; marque *Refazer as que a IA já corrigiu* para corrigir de novo). Ou marque **Corrigir automaticamente ao vivo**: cada prova finalizada é corrigida assim que chega, uma chamada por vez, enquanto o painel estiver aberto.
+- A correção manual nunca é sobrescrita pela IA; a sua correção manual depois substitui a da IA.
+- No detalhe do aluno, as notas dadas pela IA têm a tag **🤖 IA**, com a justificativa no comentário. **A IA pode errar: confira.**
+- Erros (chave inválida, sem crédito, limite, sobrecarga) aparecem em português; limite e sobrecarga são tentados de novo sozinhos até 3 vezes.
+
+**Custo aproximado** (Claude Haiku 5.5, padrão: US$ 0,10 por milhão de tokens de entrada e US$ 0,50 de saída): cada resposta usa ~1.000–2.000 tokens, ou seja, **menos de US$ 0,01 por turma**. O Claude Sonnet 5.5 (opção em Configuração) é ~20× mais caro e um pouco mais criterioso.
+
+**Trocar ou revogar a chave:** **Apagar chave** no painel e, para invalidar de vez, apague-a também em console.anthropic.com → API Keys.
 
 ---
 
@@ -125,7 +154,8 @@ Definidas em **Nova prova** e alteráveis depois pelo botão **✎ Editar** na t
 
 | Opção | Padrão | O que faz |
 |---|---|---|
-| **Exibição das questões** (`modoExibicao`) | uma por vez | **Uma por vez**: sem voltar, como sempre. **Todas na mesma página**: as questões aparecem em sequência, cada uma com seu botão *Enviar resposta*; a enviada fica travada; o topo mostra "Enviadas: X de 10"; *Finalizar prova* avisa quais faltam e pergunta se quer finalizar com elas em branco. Ao recarregar a página, as enviadas voltam travadas. O feedback imediato vale igual nos dois modos. |
+| **Exibição das questões** (`modoExibicao`) | uma por vez | **Uma por vez** ou **Todas na mesma página** (em sequência, cada uma com seu botão; o topo mostra "Enviadas: X de 10"; *Finalizar prova* avisa quais faltam). |
+| **Permitir ir e voltar** (`permitirVoltar`) | não | **Não**: a resposta enviada fica travada (uma por vez: só então aparece a próxima). **Sim**: botões **← Anterior / Próxima →** e os números das questões no topo (verde = respondida); o botão vira **Salvar resposta** e pode ser usado várias vezes (ao trocar de questão, salva sozinho); só **Finalizar prova** trava tudo. Ao recarregar, volta na questão em que estava. Com ir e voltar, "perder a questão" não existe: ao atingir o limite de saídas a prova é encerrada. |
 | **Permitir trocar de aba/janela** (`permitirTrocaAba`) | não | Não pede tela cheia e não mostra o aviso ao trocar de aba. As trocas continuam contadas e aparecem em **cinza, "permitido"**, em Resultados (a linha não fica amarela). |
 | **Permitir colar** (`permitirColar`) | não | Libera colar e arrastar nos campos de resposta e não registra tentativas de colar. Copiar o enunciado continua bloqueado. |
 | **Material de consulta** (`materialConsultaTitulo`, `materialConsultaArquivoId` ou `materialConsultaUrl`) | nenhum | Um **PDF enviado ao sistema** (recomendado) ou um link. Mostra o material **dentro da tela da prova**: no computador, numa coluna à direita (arraste o canto inferior esquerdo para alargar); no celular, pelo botão **📖 Consulta**, numa gaveta por cima da questão. Clicar no material não conta como troca de aba. |
@@ -140,7 +170,7 @@ Em **Regras da prova**, só quando a troca de aba **não** é permitida:
 
 Em **Resultados** aparecem as saídas com o limite (ex.: 🚪 3/3), o motivo do encerramento e as questões perdidas (também no detalhe, no CSV e nos PDFs).
 
-**Editar uma prova:** depois que algum aluno começou (tentativas de teste não contam), **banco, número de questões, dissertativas e temas ficam travados**, porque mudariam o sorteio de quem já começou e a correção. Título, turma, feedback, tempo e as opções acima podem mudar a qualquer momento.
+**Editar uma prova:** depois que algum aluno começou (tentativas de teste não contam), **banco, número de questões, dissertativas e temas ficam travados**, porque mudariam o sorteio de quem já começou e a correção. Título, turma, tempo e as opções acima podem mudar a qualquer momento.
 
 ### Slides em PDF (recomendado)
 Use **PDF**, não PPT/PPTX: o navegador não abre arquivo do PowerPoint sozinho, e o PDF mantém o visual de cada slide igual em qualquer computador ou celular. Para gerar: **PowerPoint → Arquivo → Exportar → Criar PDF** (ou *Salvar como → PDF*); **Google Slides → Arquivo → Fazer download → PDF**. Animações e vídeos não vão para o PDF.
@@ -149,7 +179,7 @@ Use **PDF**, não PPT/PPTX: o navegador não abre arquivo do PowerPoint sozinho,
 2. Na prova, em **Material de consulta**, escolha o PDF na lista. **👁 Ver** abre o PDF exatamente como o aluno vai ver.
 3. Na prova, o aluno vê os slides num **leitor dentro da própria tela** (coluna à direita; no celular, botão **📖 Consulta**): ◀ ▶ para passar, número da página, zoom − / + e ⤢ para ajustar à largura; com o leitor selecionado, as setas do teclado também passam os slides. Como não sai da página, mexer no leitor não conta como troca de aba.
 
-Limite de **25 MB** por arquivo. O PDF fica guardado no próprio Firestore, em pedaços de ~900 KB (funciona no plano gratuito do Firebase, que não inclui o Storage). Cada aluno baixa o arquivo uma vez por prova; para economizar, prefira PDFs menores (PowerPoint: *Exportar → PDF → Tamanho mínimo*). PDFs que nenhuma prova usa podem ser apagados na mesma aba (🗑).
+Limite de **20 MB** por arquivo (acima disso o envio é recusado com aviso; o envio mostra a barra de progresso). O PDF fica guardado no próprio Firestore, em pedaços de ~900 KB (funciona no plano gratuito do Firebase, que não inclui o Storage). Cada aluno baixa o arquivo uma vez por prova; para economizar, prefira PDFs menores (PowerPoint: *Exportar → PDF → Tamanho mínimo*). PDFs que nenhuma prova usa podem ser apagados na mesma aba (🗑).
 
 > Faça a atualização das **regras do Firestore** (copie de novo o `firestore.rules` e publique): elas liberam a leitura dos PDFs para alunos e o vínculo da turma pelo nome.
 
@@ -197,8 +227,10 @@ Dica: peça ao Claude/ChatGPT "gere um banco de questões no formato do modelo_b
 
 | Risco | Como está tratado |
 |---|---|
-| Aluno ler o gabarito antes de responder | `gabaritos/` só pode ser lido pelo aluno depois que existe o marcador da resposta dele (`marcadores/uid_questao`), criado no mesmo lote que grava a resposta |
-| Aluno mudar uma resposta enviada | `respostas/` é só criação; update é negado para todos (admin pode apagar) |
+| Aluno ler o gabarito durante a prova | `gabaritos/` só pode ser lido pelo aluno depois que existe o marcador dele (`marcadores/uid_questao`), e o marcador só pode ser criado com a tentativa **finalizada** |
+| Aluno mudar uma resposta enviada | sem ir e voltar, `respostas/` é só criação; com `permitirVoltar`, o aluno só altera `resposta`, `segundos` e `atualizadaEm`, e só antes de finalizar |
+| Aluno inventar o próprio placar | `acertos`, `notaPrevia`, `aguardandoCorrecao` e `nota` só são gravados pelo professor (painel) |
+| Alguém ler a chave da IA | `config/ia` só pode ser lido/gravado pelo administrador principal |
 | Aluno fazer a prova duas vezes | o ID da tentativa é fixo (`uid_prova`); só admin apaga |
 | Aluno trocar as questões sorteadas | `questoesIds` não pode ser alterado depois de criado |
 | Aluno de fora (gmail etc.) | só domínios de `config/geral.dominiosAlunos` passam nas regras |
@@ -209,7 +241,7 @@ Dica: peça ao Claude/ChatGPT "gere um banco de questões no formato do modelo_b
 
 Limites conhecidos (sem Cloud Functions, para ficar no plano gratuito):
 - O **sorteio** das 10 questões é feito no navegador do aluno. Um aluno com conhecimento técnico poderia escolher quais 10 vai receber, mas **nunca** consegue ler a resposta antes de enviar a sua.
-- A correção automática também roda no navegador; a nota "fechada" é gravada **pelo professor**, nunca pelo aluno.
+- A correção automática também roda no navegador; o placar e a nota "fechada" são gravados **pelo professor**, nunca pelo aluno. A correção por IA só acontece com o painel do administrador principal aberto.
 - O cronômetro (campo **Tempo limite**) usa o relógio do computador do aluno. Para um limite rígido, encerre também a prova pelo painel na hora combinada.
 
 ## Antifraude
@@ -243,10 +275,10 @@ Para criar uma prova com tempo, preencha **Tempo limite (min)** no formulário d
 > Depois de atualizar o sistema, **publique de novo o `firestore.rules`** no Firebase Console (Firestore → Regras → Publicar): os campos novos (`saidasTelaCheia`, `tentativasColar`, `tempoTotalSegundos`, `segundos`) são recusados pelas regras antigas.
 
 ## Testar como aluno
-Na aba **Provas** do painel, cada prova tem o botão **Testar como aluno**: ele abre `index.html?teste=<id da prova>` em nova aba e você faz a prova exatamente como o aluno (uma questão por vez, sem voltar, colar bloqueado, mesmo feedback), **mesmo com a prova ainda fechada**.
+Na aba **Provas** do painel, cada prova tem o botão **Testar como aluno**: ele abre `index.html?teste=<id da prova>` em nova aba e você faz a prova exatamente como o aluno (mesmas opções da prova: ir e voltar ou não, colar bloqueado, sem feedback por questão), **mesmo com a prova ainda fechada**.
 - Uma faixa amarela **MODO TESTE** fica no topo; o botão **Reiniciar teste** apaga a tentativa e recomeça.
 - A tentativa de teste (`teste_<seu uid>_<prova>`, campo `teste: true`) **não aparece** em Resultados, média, CSV, PDFs nem em "Fechar notas".
-- Ao finalizar, aparece a nota prévia e o botão **Ver resultado** (sempre, no teste), para conferir a tela que o aluno verá.
+- Ao finalizar, aparece o placar ("acertou X de N" e a nota) e o botão **Ver gabarito e resultado** (sempre, no teste), para conferir a tela que o aluno verá.
 - **Apagar meu teste** (na aba Provas) apaga a sua tentativa de teste daquela prova, para testar de novo.
 
 > ⚠ Depois de alterar `firestore.rules`, cole as regras de novo no **Firebase Console → Firestore → Regras → Publicar**. O GitHub Pages publica só o site, não as regras.

@@ -111,7 +111,18 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
           <label class="check" style="margin:0"><input type="checkbox" id="rAoVivo"> Atualizar ao vivo</label>
         </div>
         <div class="linha acoes"><button id="btnCSV" class="leve">CSV (planilha)</button><button id="btnPDFNotas" class="leve">PDF — notas da turma</button><button id="btnPDFBoletins" class="leve">PDF — boletim de todos (p/ Drive)</button></div>
-        <p class="pequeno">Dissertativas que o sistema não reconheceu ficam como <b>revisar</b>: abra o aluno e dê a nota. <b>Fechar notas</b> grava a nota final (o aluno já vê a nota prévia ao terminar; a final substitui). Os PDFs abrem a janela de impressão: escolha <b>Salvar como PDF</b>.</p>
+        <fieldset id="iaControles" class="temas-box oculto">
+          <legend>🤖 Correção das dissertativas por IA</legend>
+          <div class="linha acoes" style="align-items:center">
+            <button id="btnCorrigirIA" disabled>Corrigir dissertativas com IA</button>
+            <label class="check" style="margin:0"><input type="checkbox" id="iaRefazer" disabled> Refazer as que a IA já corrigiu</label>
+            <label class="check" style="margin:0"><input type="checkbox" id="iaAuto" disabled> Corrigir automaticamente ao vivo</label>
+          </div>
+          <p class="pequeno" id="iaAviso">Configure a chave em Configuração.</p>
+          <p class="pequeno" id="iaProgresso" role="status" aria-live="polite"></p>
+          <p class="pequeno">Só corrige provas <b>finalizadas</b>, e só enquanto este painel estiver aberto. Correção manual nunca é sobrescrita pela IA, e a correção manual feita depois substitui a da IA.</p>
+        </fieldset>
+        <p class="pequeno">Dissertativas que o sistema não reconheceu ficam como <b>revisar</b>: use a IA ou abra o aluno e dê a nota. O aluno vê no fim só <b>quantas acertou e a nota</b>; a tela dele atualiza sozinha quando você corrige. Quais acertou, o gabarito e o PDF da prova aparecem para ele quando você clicar em <b>Liberar gabarito/resultado</b> na aba Provas. <b>Fechar notas</b> grava a nota final. Os PDFs abrem a janela de impressão: escolha <b>Salvar como PDF</b>.</p>
         <div id="resResumo"></div>
       </div>
       <div id="resTabela"></div>
@@ -140,6 +151,17 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
         <input type="text" id="cDominios" placeholder="edu.senai.br, aluno.senai.br">
         <button id="btnSalvarConfig" style="margin-top:16px">Salvar</button>
         <p class="pequeno" id="msgConfig"></p>
+      </div>
+      <div class="card oculto" id="cardIA">
+        <h2>Correção por IA <span class="pequeno">(só você vê esta seção)</span></h2>
+        <p class="pequeno">A chave fica num documento do Firestore que as regras deixam ler <b>somente</b> com a sua conta de administrador principal. Ela não vai para o GitHub, nem para a página do aluno, nem para os outros membros da equipe. Crie a chave em <b>console.anthropic.com → API Keys</b> e defina um limite de gasto mensal em <b>Settings → Limits</b>.</p>
+        <div class="grade">
+          <div><label for="iaChave">Chave da API Anthropic</label><input type="password" id="iaChave" autocomplete="off" spellcheck="false" placeholder="sk-ant-… (deixe vazio para manter a salva)"></div>
+          <div><label for="iaModelo">Modelo</label><select id="iaModelo"></select></div>
+        </div>
+        <p class="pequeno" id="iaChaveAtual"></p>
+        <div class="linha acoes"><button id="btnTestarIA" class="leve">Testar chave</button><button id="btnSalvarIA">Salvar</button><button id="btnApagarIA" class="perigo">Apagar chave</button></div>
+        <p class="pequeno" id="msgIA" role="status" aria-live="polite"></p>
       </div>
     </div>
   </section>

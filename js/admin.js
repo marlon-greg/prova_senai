@@ -1,7 +1,8 @@
 // Painel do professor: provas, bancos (import JSON), resultados/correção, equipe, configuração.
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, apagarTentativaTeste,
-         confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome } from "./common.js";
-import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB } from "./material.js";
+         confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar } from "./common.js";
+import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
+import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
 import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp, onSnapshot }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
@@ -9,6 +10,8 @@ import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc,
 let eu = null;   // { email, nome, papel }
 const podeEditar = () => ["admin", "professor"].includes(eu?.papel);
 const ehAdmin = () => eu?.papel === "admin";
+// administrador principal: o único que vê e usa a chave da IA (as regras também só deixam ele ler config/ia)
+const souDono = () => !!eu && eu.email === SUPER_ADMIN.toLowerCase();
 
 // ---------- login ----------
 $("#btnEntrar").onclick = async () => { try { await entrar(); } catch (e) { $("#msgLogin").textContent = "Não foi possível entrar. " + traduzirErro(e); } };
@@ -24,6 +27,7 @@ aoMudarLogin(async user => {
   }
   eu = id;
   await garantirConfig();
+  await carregarIA();
   trocar("telaPainel");
   document.querySelectorAll("[data-aba]").forEach(b => b.onclick = () => abrirAba(b.dataset.aba));
   abrirAba("provas");
@@ -174,11 +178,14 @@ async function enviarPdf(file, titulo, el) {
   if (!podeEditar()) { toast("Seu papel não permite enviar material.", "erro"); return null; }
   el.textContent = "Preparando o envio…";
   try {
-    const m = await enviarMaterial(file, titulo, eu.email, (i, n) => { el.textContent = `Enviando ${file.name}: ${Math.round(i / n * 100)}%`; });
+    const m = await enviarMaterial(file, titulo, eu.email, (i, n) => {
+      const pct = n ? Math.round(i / n * 100) : 0;
+      el.innerHTML = `<progress class="barra" max="100" value="${pct}"></progress> Enviando ${esc(file.name)}: ${pct}% (${i} de ${n} partes)`;
+    });
     el.textContent = `✅ ${m.titulo} enviado (${tamanhoTexto(m.tamanho)}).`;
     await listarMateriaisCache();
     return m;
-  } catch (e) { el.textContent = "⚠ " + traduzirErro(e); toast(traduzirErro(e), "erro"); return null; }
+  } catch (e) { const msg = erroMaterial(e, traduzirErro); el.textContent = "⚠ " + msg; toast(msg, "erro"); return null; }
 }
 // abre o PDF no mesmo leitor que o aluno usa
 async function verMaterial(id) {
@@ -202,13 +209,13 @@ async function carregarMateriais() {
   if (!materiaisCache.length) { box.innerHTML = `<p class="pequeno">Nenhum PDF enviado ainda.</p>`; return; }
   box.innerHTML = `<div class="tabela"><table><tr><th>Material</th><th>Tamanho</th><th>Enviado</th><th></th></tr>` + materiaisCache.map(m =>
     `<tr><td><b>${esc(m.titulo)}</b><br><span class="pequeno">${esc(m.arquivo || "")}</span></td><td>${tamanhoTexto(m.tamanho)}</td><td class="pequeno">${dataBR(m.criadoEm)}<br>${esc(m.criadoPor || "")}</td>
-     <td class="td-acoes"><button class="leve mini" data-vermat="${m.id}">👁 Ver</button> ${podeEditar() ? `<button class="perigo mini" data-delmat="${m.id}">🗑 Apagar</button>` : ""}</td></tr>`).join("") + "</table></div>";
-  box.querySelectorAll("[data-vermat]").forEach(b => b.onclick = () => verMaterial(b.dataset.vermat));
+     <td class="td-acoes"><button class="leve mini" data-vermat="${m.id}" title="Abre o PDF numa aba nova">👁 Ver</button> ${podeEditar() ? `<button class="perigo mini" data-delmat="${m.id}">🗑 Apagar</button>` : ""}</td></tr>`).join("") + "</table></div>";
+  box.querySelectorAll("[data-vermat]").forEach(b => b.onclick = () => abrirMaterialEmAba(b.dataset.vermat, traduzirErro).catch(e => toast(e.message, "erro")));
   box.querySelectorAll("[data-delmat]").forEach(b => b.onclick = async () => {
     const m = materiaisCache.find(x => x.id === b.dataset.delmat);
     const usadas = (await getDocs(query(collection(db, "provas"), where("materialConsultaArquivoId", "==", m.id)))).size;
     if (!(await confirmar(`Apagar o PDF "${m.titulo}"?` + (usadas ? `\n\n${usadas} prova(s) usam este material: os alunos vão ver "Não foi possível carregar o material". Troque o material nessas provas antes.` : ""), { titulo: "Apagar material", ok: "Apagar", perigo: true }))) return;
-    try { await apagarMaterial(m.id); toast("Material apagado.", "ok"); } catch (e) { toast("Não foi possível apagar. " + traduzirErro(e), "erro"); }
+    try { await apagarMaterial(m.id); toast("Material apagado.", "ok"); } catch (e) { toast("Não foi possível apagar. " + erroMaterial(e, traduzirErro), "erro"); }
     carregarMateriais();
   });
 }
@@ -249,8 +256,6 @@ function formProvaHTML(f) {
     <div><label for="${f}NAlt">Alternativas por aluno</label><input type="number" id="${f}NAlt" value="7" min="0"></div>
     <div><label for="${f}NDiss">Dissertativas por aluno</label><input type="number" id="${f}NDiss" value="3" min="0">
       <p class="pequeno" id="${f}NTotal" style="margin:4px 0 0" aria-live="polite"></p></div>
-    <div><label for="${f}Feedback">Feedback ao enviar cada resposta</label>
-      <select id="${f}Feedback"><option value="acerto">Só diz se acertou ou errou</option><option value="completo">Mostra a resposta certa e a explicação</option><option value="nenhum">Nenhum (só no resultado final)</option></select></div>
   </div>
   <div class="grade">
     <div><label for="${f}Codigo">Código de acesso (opcional)</label>
@@ -260,17 +265,18 @@ function formProvaHTML(f) {
   <div class="grade">
     <div><label for="${f}Tempo">Tempo limite (min, 0 = sem limite)</label><input type="number" id="${f}Tempo" value="0" min="0" step="5"></div>
     <div><label for="${f}Modo">Exibição das questões</label>
-      <select id="${f}Modo"><option value="uma">Uma por vez, sem voltar</option><option value="todas">Todas na mesma página (cada uma com seu botão Enviar)</option></select></div>
+      <select id="${f}Modo"><option value="uma">Uma por vez</option><option value="todas">Todas na mesma página (cada uma com seu botão Enviar)</option></select></div>
   </div>
   <fieldset class="temas-box">
     <legend>Regras da prova</legend>
-    <label class="check"><input type="checkbox" id="${f}Embaralhar" checked> Embaralhar a ordem das alternativas para cada aluno</label>
+    <p class="pequeno" style="margin-top:0">A ordem das questões e das alternativas é sempre embaralhada para cada aluno. Durante a prova o aluno não vê se acertou; no fim vê só quantas acertou e a nota.</p>
+    <label class="check"><input type="checkbox" id="${f}Voltar"> <span>Permitir ir e voltar entre as questões <span class="pequeno">— o aluno pode alterar as respostas até clicar em Finalizar; sem isso, cada resposta enviada fica travada</span></span></label>
     <label class="check"><input type="checkbox" id="${f}PermitirTrocaAba"> <span>Permitir trocar de aba/janela <span class="pequeno">— sem tela cheia e sem aviso; as trocas continuam contadas, marcadas como "permitido"</span></span></label>
     <label class="check"><input type="checkbox" id="${f}PermitirColar"> <span>Permitir colar nos campos de resposta <span class="pequeno">— colar e arrastar liberados, sem registro</span></span></label>
     <div class="grade" style="margin:12px 0 0">
       <div><label for="${f}MaxTrocas">Limite de saídas da prova (0 = sem limite)</label><input type="number" id="${f}MaxTrocas" value="0" min="0" step="1"></div>
       <div><label for="${f}AcaoExceder">Ao atingir o limite</label>
-        <select id="${f}AcaoExceder"><option value="encerrar">Encerrar a prova</option><option value="perderQuestao">Perder a questão atual (só em "uma por vez")</option></select></div>
+        <select id="${f}AcaoExceder"><option value="encerrar">Encerrar a prova</option><option value="perderQuestao">Perder a questão atual (só em "uma por vez" sem ir e voltar)</option></select></div>
     </div>
     <p class="pequeno" id="${f}LimiteDica">Conta como saída trocar de aba/janela ou sair da tela cheia.</p>
   </fieldset>
@@ -374,12 +380,12 @@ function controleProva(f) {
   }
   // limite de saídas: só sem troca de aba permitida; "perder questão" só em "uma por vez"
   function atualizarLimite() {
-    const troca = $f("PermitirTrocaAba").checked, todas = $f("Modo").value === "todas";
+    const troca = $f("PermitirTrocaAba").checked, todas = $f("Modo").value === "todas", semPerder = todas || $f("Voltar").checked;
     $f("MaxTrocas").disabled = troca; $f("AcaoExceder").disabled = troca;
-    $f("AcaoExceder").querySelector("option[value=perderQuestao]").disabled = todas;
-    if (todas && $f("AcaoExceder").value === "perderQuestao") $f("AcaoExceder").value = "encerrar";
+    $f("AcaoExceder").querySelector("option[value=perderQuestao]").disabled = semPerder;
+    if (semPerder && $f("AcaoExceder").value === "perderQuestao") $f("AcaoExceder").value = "encerrar";
     $f("LimiteDica").textContent = troca ? "Com troca de aba permitida não há limite nem punição (as trocas só são contadas)."
-      : todas ? "Conta como saída trocar de aba/janela ou sair da tela cheia. Com todas as questões na página, ao atingir o limite a prova é encerrada."
+      : semPerder ? "Conta como saída trocar de aba/janela ou sair da tela cheia. Com todas as questões na página ou com ir e voltar, ao atingir o limite a prova é encerrada."
       : "Conta como saída trocar de aba/janela ou sair da tela cheia.";
   }
   // liga os eventos (chamar depois que o HTML estiver na página)
@@ -398,7 +404,7 @@ function controleProva(f) {
       if (!$f("MatTitulo").value.trim()) $f("MatTitulo").value = r.titulo;
       previaMaterial();
     };
-    $f("PermitirTrocaAba").onchange = $f("Modo").onchange = atualizarLimite;
+    $f("PermitirTrocaAba").onchange = $f("Modo").onchange = $f("Voltar").onchange = atualizarLimite;
     atualizarLimite();
     $f("GerarCodigo").onclick = () => { $f("Codigo").value = gerarCodigo(); };
     $f("Codigo").onblur = () => { $f("Codigo").value = normalizarCodigo($f("Codigo").value); };
@@ -424,9 +430,9 @@ function controleProva(f) {
     $f("Banco").value = p.bancoId || "";
     // provas antigas só têm o total (nQuestoes) e as dissertativas
     $f("NDiss").value = p.nDissertativas ?? 0; $f("NAlt").value = p.nAlternativas ?? Math.max(0, (p.nQuestoes ?? 10) - (p.nDissertativas ?? 0));
-    $f("Feedback").value = p.feedbackImediato || "acerto"; $f("Tempo").value = p.tempoMinutos || 0;
+    $f("Tempo").value = p.tempoMinutos || 0;
     $f("Modo").value = p.modoExibicao === "todas" ? "todas" : "uma";
-    $f("Embaralhar").checked = p.embaralharAlternativas !== false;
+    $f("Voltar").checked = p.permitirVoltar === true;
     $f("PermitirTrocaAba").checked = p.permitirTrocaAba === true; $f("PermitirColar").checked = p.permitirColar === true;
     $f("MatTitulo").value = p.materialConsultaTitulo || ""; $f("MatUrl").value = p.materialConsultaUrl || "";
     opcoesMaterial(p.materialConsultaArquivoId || "");
@@ -448,12 +454,12 @@ function controleProva(f) {
     if (url && !/^https:\/\//.test(url)) return { erro: "O link do material de consulta precisa começar com https://." };
     const dados = {
       titulo, ...turmaEscolhida(), codigoAcesso: normalizarCodigo($f("Codigo").value),
-      feedbackImediato: $f("Feedback").value, embaralharAlternativas: $f("Embaralhar").checked,
+      permitirVoltar: $f("Voltar").checked,
       tempoMinutos: Math.max(0, Math.round(Number($f("Tempo").value || 0))),
       modoExibicao: $f("Modo").value === "todas" ? "todas" : "uma",
       permitirTrocaAba: $f("PermitirTrocaAba").checked, permitirColar: $f("PermitirColar").checked,
       maxTrocasDeAba: $f("PermitirTrocaAba").checked ? 0 : Math.max(0, Math.round(Number($f("MaxTrocas").value || 0))),
-      acaoAoExceder: $f("Modo").value !== "todas" && $f("AcaoExceder").value === "perderQuestao" ? "perderQuestao" : "encerrar",
+      acaoAoExceder: $f("Modo").value !== "todas" && !$f("Voltar").checked && $f("AcaoExceder").value === "perderQuestao" ? "perderQuestao" : "encerrar",
       materialConsultaUrl: url, materialConsultaArquivoId: arquivoId || null,
       materialConsultaTitulo: url || arquivoId ? ($f("MatTitulo").value.trim() || materiaisCache.find(m => m.id === arquivoId)?.titulo || "Material de consulta") : ""
     };
@@ -479,10 +485,11 @@ formNova.ligar();
 function opcoesDaProvaHTML(p) {
   const t = [];
   t.push(p.modoExibicao === "todas" ? `<span class="tag">▤ todas na página</span>` : `<span class="tag">▭ uma por vez</span>`);
+  t.push(p.permitirVoltar ? `<span class="tag nota" title="O aluno pode alterar as respostas até finalizar">↔ ir e voltar</span>` : `<span class="tag" title="Cada resposta enviada fica travada">→ sem voltar</span>`);
   if (p.permitirTrocaAba) t.push(`<span class="tag aviso" title="Sem tela cheia e sem aviso; as trocas continuam contadas">🔀 troca de aba permitida</span>`);
   if (p.codigoAcesso) t.push(`<span class="tag nota" title="Código de acesso (informe na sala)">🔑 ${esc(p.codigoAcesso)}</span>`);
   if (p.permitirColar) t.push(`<span class="tag aviso">📋 colar permitido</span>`);
-  if (!p.permitirTrocaAba && Number(p.maxTrocasDeAba) > 0) t.push(`<span class="tag erro" title="Saídas da prova permitidas antes da punição">🚪 máx. ${Number(p.maxTrocasDeAba)} saída(s) · ${p.acaoAoExceder === "perderQuestao" && p.modoExibicao !== "todas" ? "perde a questão" : "encerra"}</span>`);
+  if (!p.permitirTrocaAba && Number(p.maxTrocasDeAba) > 0) t.push(`<span class="tag erro" title="Saídas da prova permitidas antes da punição">🚪 máx. ${Number(p.maxTrocasDeAba)} saída(s) · ${p.acaoAoExceder === "perderQuestao" && p.modoExibicao !== "todas" && !p.permitirVoltar ? "perde a questão" : "encerra"}</span>`);
   if (p.materialConsultaArquivoId) t.push(`<span class="tag nota" title="PDF enviado ao sistema">📄 ${esc(p.materialConsultaTitulo || "consulta")}</span>`);
   else if (p.materialConsultaUrl) t.push(`<span class="tag nota" title="${esc(p.materialConsultaUrl)}">📖 ${esc(p.materialConsultaTitulo || "consulta")}</span>`);
   return t.join(" ");
@@ -510,9 +517,9 @@ async function carregarProvas() {
       <td class="pequeno">${temasDaProvaTexto(p, b)}</td>
       <td class="td-opcoes">${opcoesDaProvaHTML(p)}</td>
       <td><span class="tag ${p.liberada ? "on" : "off"}">${p.liberada ? "● liberada" : "○ fechada"}</span></td>
-      <td><span class="tag ${p.resultadosLiberados ? "on" : "off"}">${p.resultadosLiberados ? "● liberados" : "○ ocultos"}</span></td>
+      <td><span class="tag ${p.resultadosLiberados ? "on" : "off"}">${p.resultadosLiberados ? "● gabarito liberado" : "○ só o placar"}</span></td>
       <td class="td-acoes">${podeEditar() ? `<button class="mini ${p.liberada ? "leve" : "ok"}" data-tg="liberada" data-id="${p.id}">${p.liberada ? "Encerrar" : "Liberar prova"}</button>
-        <button class="leve mini" data-tg="resultadosLiberados" data-id="${p.id}">${p.resultadosLiberados ? "Ocultar resultados" : "Liberar resultados"}</button>
+        <button class="leve mini" data-tg="resultadosLiberados" data-id="${p.id}" title="O aluno vê quais acertou, o gabarito e baixa o PDF da prova">${p.resultadosLiberados ? "Ocultar gabarito" : "Liberar gabarito/resultado"}</button>
         <button class="leve mini" data-editar="${p.id}">✎ Editar</button><br>` : ""}
         <button class="leve mini" data-testar="${p.id}" title="Abre a prova em nova aba, como o aluno vê (não vale nota)">Testar como aluno</button>
         <button class="perigo mini" data-apagarteste="${p.id}" title="Apaga a sua tentativa de teste desta prova">Apagar meu teste</button>
@@ -796,8 +803,10 @@ function linhaDe({ t, resp, corr }) {
     const q = questoes[qid] || { tipo: "?", enunciado: "(questão removida)", peso: 1 }, g = gabaritos[qid] || {};
     const r = resp[qid]?.resposta ?? undefined, perdida = resp[qid]?.perdida === true, peso = Number(q.peso || 1);
     let c = corrigir(q, g, r, perdida);
-    if (!perdida && corr[qid]?.pontos !== undefined) c = { pontos: Number(corr[qid].pontos), status: Number(corr[qid].pontos) >= peso ? "certa" : Number(corr[qid].pontos) > 0 ? "parcial" : "errada", manual: true };
-    return { n: i + 1, qid, q, g, r, perdida, peso, ...c, comentario: corr[qid]?.comentario || "", segundos: resp[qid]?.segundos };
+    const porIA = String(corr[qid]?.corrigidoPor || "").startsWith("ia:");
+    if (!perdida && corr[qid]?.pontos !== undefined) c = { pontos: Number(corr[qid].pontos), status: Number(corr[qid].pontos) >= peso ? "certa" : Number(corr[qid].pontos) > 0 ? "parcial" : "errada", manual: !porIA, ia: porIA };
+    return { n: i + 1, qid, q, g, r, perdida, peso, ...c, comentario: corr[qid]?.comentario || "", segundos: resp[qid]?.segundos,
+             temCorrecao: corr[qid]?.pontos !== undefined };
   });
   const max = itens.reduce((s, x) => s + x.peso, 0), pts = itens.reduce((s, x) => s + x.pontos, 0);
   const sinais = sinaisDe(t, prova);
@@ -811,6 +820,25 @@ function montarResultados() {
   resDados.linhas = todas.filter(l => l.t.teste !== true);
   resDados.testes = todas.filter(l => l.t.teste === true);
   desenharResultados();
+  gravarPlacares(todas);
+  if ($("#iaAuto").checked && $("#rAoVivo").checked) corrigirPendentesIA({ auto: true });
+}
+
+// Grava na tentativa o placar que o aluno vê (acertos, nota, pendentes), com as correções manuais e da IA.
+// Só grava o que mudou; a tela final do aluno escuta a tentativa e atualiza sozinha.
+async function gravarPlacares(linhas) {
+  if (!podeEditar()) return;
+  const mudar = linhas.filter(l => l.t.finalizadaEm).map(l => ({ l, p: placar(l.itens) }))
+    .filter(({ l, p }) => Object.keys(p).some(k => l.t[k] !== p[k]));
+  if (!mudar.length) return;
+  try {
+    for (let i = 0; i < mudar.length; i += 400) {
+      const lote = writeBatch(db);
+      mudar.slice(i, i + 400).forEach(({ l, p }) => lote.update(doc(db, "tentativas", l.t.id), p));
+      await lote.commit();
+    }
+    mudar.forEach(({ l, p }) => { Object.assign(l.t, p); const c = cacheTent.get(l.t.id); if (c) Object.assign(c.t, p); });
+  } catch (e) { console.warn("não gravou o placar dos alunos", e); }
 }
 
 // "3/3" com o limite, total acumulado e motivo do encerramento
@@ -894,7 +922,7 @@ function verAluno(id, rolar = true) {
     const certa = x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.g.correta] ?? "—") : esc((x.g.respostasAceitas || [])[0] || (x.g.palavrasChave || []).join(" + "));
     const manual = podeEditar() && x.q.tipo === "dissertativa" && !x.perdida ? `<div class="linha" style="margin-top:6px"><div style="flex:0 0 120px"><label>Pontos (0–${x.peso})</label><input type="number" min="0" max="${x.peso}" step="0.5" value="${x.pontos}" id="pt_${x.qid}"></div><div><label>Comentário para o aluno</label><input type="text" id="cm_${x.qid}" value="${esc(x.comentario)}"></div><div style="flex:0 0 120px;align-self:flex-end"><button class="mini" data-corr="${x.qid}">Salvar</button></div></div>` : "";
     const rot = ROTULOS[x.status] || ROTULOS.revisar;
-    return `<div class="feedback bloco ${x.status === "certa" ? "certa" : ["errada", "perdida", "em_branco"].includes(x.status) ? "errada" : "revisar"}"><div class="linha acoes"><b>Q${x.n}</b> <span class="tag ${rot[0]}">${rot[1]} · ${x.pontos}/${x.peso}${x.manual ? " · manual" : ""}</span>${tempo}</div>
+    return `<div class="feedback bloco ${x.status === "certa" ? "certa" : ["errada", "perdida", "em_branco"].includes(x.status) ? "errada" : "revisar"}"><div class="linha acoes"><b>Q${x.n}</b> <span class="tag ${rot[0]}">${rot[1]} · ${x.pontos}/${x.peso}${x.manual ? " · manual" : ""}</span>${x.ia ? `<span class="tag nota" title="Corrigida pela IA — confira e ajuste se precisar">🤖 IA</span>` : ""}${errosIA.has(l.t.id + "/" + x.qid) ? `<span class="tag erro ia-erro">⚠ IA: ${esc(errosIA.get(l.t.id + "/" + x.qid))}</span>` : ""}${tempo}</div>
       <div class="enunciado pequeno">${esc(x.q.enunciado)}</div><p><b>Resposta do aluno:</b> ${sua}<br><b>Esperada:</b> ${certa}</p>${manual}</div>`;
   }).join("") + "</div>";
   if (rolar) box.scrollIntoView({ behavior: "smooth" });
@@ -914,7 +942,7 @@ $("#btnFecharNotas").onclick = async () => {
   if (pend && !(await confirmar(`Ainda há ${pend} resposta(s) marcada(s) como "revisar" (valem 0 até você corrigir). Fechar mesmo assim?`, { titulo: "Fechar notas", ok: "Fechar mesmo assim" }))) return;
   const lote = writeBatch(db);
   resDados.linhas.forEach(l => lote.update(doc(db, "tentativas", l.t.id), { nota: l.nota, notaMaxima: 100, corrigidaEm: serverTimestamp(), corrigidaPor: eu.email }));
-  await lote.commit(); toast("Notas gravadas. Agora você pode liberar os resultados na aba Provas.", "ok"); carregarResultados();
+  await lote.commit(); toast("Notas gravadas. Para o aluno ver o gabarito, clique em “Liberar gabarito/resultado” na aba Provas.", "ok"); carregarResultados();
 };
 $("#btnCSV").onclick = () => {
   if (!resDados) return toast("Carregue uma prova primeiro.", "erro");
@@ -1003,4 +1031,131 @@ $("#btnPDFBoletins").onclick = () => {
   const ls = resDados.linhas.filter(l => l.t.finalizadaEm);
   if (!ls.length) return toast("Ninguém finalizou ainda.", "erro");
   abrirImpressao(`Boletins — ${resDados.prova.titulo}`, ls.map((l, i) => boletimHTML(l, i < ls.length - 1)).join(""));
+};
+
+// ============================================================ CORREÇÃO POR IA (só o administrador principal)
+// A chave fica em config/ia (regra: só o superadmin lê/grava) e só sai deste navegador para api.anthropic.com.
+let iaCfg = null;                 // { chave, modelo } — só em memória, nunca na tela
+const filaIA = [], emFilaIA = new Set(), tentadasAutoIA = new Set(), errosIA = new Map();
+let rodandoIA = false, iaFeitas = 0, iaErros = 0;
+
+async function carregarIA() {
+  $("#cardIA").classList.toggle("oculto", !souDono());
+  $("#iaControles").classList.toggle("oculto", !souDono());
+  if (!souDono()) { iaCfg = null; return; }
+  try { iaCfg = await lerConfigIA(); } catch (e) { iaCfg = null; console.warn("config/ia", e); }
+  $("#iaModelo").innerHTML = MODELOS_IA.map(m => `<option value="${m.id}">${esc(m.nome)}</option>`).join("");
+  $("#iaModelo").value = iaCfg?.modelo || MODELO_PADRAO;
+  $("#iaChave").value = "";
+  $("#iaChaveAtual").innerHTML = iaCfg ? `Chave salva: <span class="mono">${esc(finalChave(iaCfg.chave))}</span> · atualizada em ${dataBR(iaCfg.atualizadoEm)}` : "Nenhuma chave salva.";
+  atualizarControlesIA();
+}
+function atualizarControlesIA() {
+  const ok = souDono() && !!iaCfg;
+  $("#btnCorrigirIA").disabled = !ok || rodandoIA; $("#iaAuto").disabled = !ok; $("#iaRefazer").disabled = !ok;
+  if (!ok) $("#iaAuto").checked = false;
+  $("#iaAviso").textContent = ok ? `Modelo: ${iaCfg.modelo}. A IA pode errar: confira as marcadas com 🤖 IA.` : "Configure a chave em Configuração.";
+}
+// chave digitada agora, ou a salva
+const chaveDigitada = () => $("#iaChave").value.trim();
+$("#btnTestarIA").onclick = async () => {
+  const chave = chaveDigitada() || iaCfg?.chave, modelo = $("#iaModelo").value;
+  if (!chave) return toast("Cole a chave da API primeiro.", "erro");
+  $("#msgIA").textContent = "Testando…"; $("#btnTestarIA").disabled = true;
+  try { await testarChave(chave, modelo); $("#msgIA").textContent = `✅ Chave OK com ${modelo}.`; }
+  catch (e) { $("#msgIA").textContent = "⚠ " + (e.ia ? e.message : traduzirErro(e)); }
+  $("#btnTestarIA").disabled = false;
+};
+$("#btnSalvarIA").onclick = async () => {
+  if (!souDono()) return toast("Só o administrador principal configura a IA.", "erro");
+  const chave = chaveDigitada() || iaCfg?.chave, modelo = $("#iaModelo").value;
+  if (!chave) return toast("Cole a chave da API.", "erro");
+  if (!/^sk-ant-/.test(chave)) return toast("A chave da Anthropic começa com sk-ant-. Confira se copiou inteira.", "erro");
+  try { await salvarConfigIA(chave, modelo, eu.email); toast("Configuração da IA salva.", "ok"); $("#msgIA").textContent = ""; await carregarIA(); }
+  catch (e) { toast("Não foi possível salvar. " + traduzirErro(e), "erro"); }
+};
+$("#btnApagarIA").onclick = async () => {
+  if (!souDono() || !iaCfg) return;
+  if (!(await confirmar("Apagar a chave da API salva? A correção por IA para de funcionar até você salvar outra. (Para invalidar a chave de vez, apague-a também no console da Anthropic.)", { titulo: "Apagar chave", ok: "Apagar", perigo: true }))) return;
+  try { await apagarConfigIA(); toast("Chave apagada.", "ok"); await carregarIA(); } catch (e) { toast("Não foi possível apagar. " + traduzirErro(e), "erro"); }
+};
+
+// dissertativas de tentativas FINALIZADAS que ainda precisam de correção
+function pendentesIA({ refazer = false } = {}) {
+  if (!resDados) return [];
+  const lista = [];
+  for (const l of [...resDados.linhas, ...resDados.testes]) {
+    if (!l.t.finalizadaEm) continue;
+    for (const x of l.itens) {
+      if (x.q.tipo !== "dissertativa" || x.perdida || x.r === undefined || x.r === null || String(x.r).trim() === "") continue;
+      if (x.manual) continue;   // correção manual do professor: a IA nunca mexe
+      if (x.status === "revisar" || (refazer && x.ia)) lista.push({ tid: l.t.id, qid: x.qid, q: x.q, g: x.g, resposta: x.r, nome: l.t.nome || l.t.email, n: x.n, refazer });
+    }
+  }
+  return lista;
+}
+function corrigirPendentesIA({ auto = false } = {}) {
+  if (!souDono() || !iaCfg) return;
+  let itens = pendentesIA({ refazer: !auto && $("#iaRefazer").checked });
+  if (auto) itens = itens.filter(it => !tentadasAutoIA.has(it.tid + "/" + it.qid));   // ao vivo: nunca repete (nem as que deram erro)
+  let novos = 0;
+  for (const it of itens) {
+    const k = it.tid + "/" + it.qid;
+    if (emFilaIA.has(k)) continue;
+    emFilaIA.add(k); if (auto) tentadasAutoIA.add(k); filaIA.push(it); novos++;
+  }
+  if (!auto && !novos && !rodandoIA) { toast("Nenhuma dissertativa pendente nesta prova.", "info"); return; }
+  processarFilaIA();
+}
+function mostrarProgressoIA(atual) {
+  const total = iaFeitas + iaErros + filaIA.length + (atual ? 1 : 0);
+  const el = $("#iaProgresso");
+  if (!total) { el.innerHTML = ""; return; }
+  const feitos = iaFeitas + iaErros;
+  el.innerHTML = `<progress class="barra" max="${total}" value="${feitos}"></progress> ` +
+    (atual ? `Corrigindo ${feitos + 1} de ${total} — ${esc(atual.nome)}, Q${atual.n}` : `Concluído: ${iaFeitas} corrigida(s)`) + (iaErros ? ` · <span class="erro-texto">${iaErros} com erro</span>` : "");
+}
+// uma chamada por vez
+async function processarFilaIA() {
+  if (rodandoIA) return;
+  rodandoIA = true; iaFeitas = 0; iaErros = 0; atualizarControlesIA();
+  const provaId = resDados?.prova.id;
+  try {
+    while (filaIA.length) {
+      const it = filaIA[0];
+      mostrarProgressoIA(it);
+      const k = it.tid + "/" + it.qid, ref = doc(db, "tentativas", it.tid, "correcoes", it.qid);
+      try {
+        // confere de novo no servidor: o professor pode ter corrigido à mão enquanto a fila andava
+        const atual = await getDoc(ref);
+        const porIA = String(atual.data()?.corrigidoPor || "").startsWith("ia:");
+        if (atual.exists() && (!porIA || !it.refazer)) { filaIA.shift(); emFilaIA.delete(k); continue; }
+        const r = await corrigirDissertativa({ chave: iaCfg.chave, modelo: iaCfg.modelo, q: it.q, g: it.g, resposta: it.resposta });
+        await setDoc(ref, { pontos: r.pontos, comentario: r.justificativa, corrigidoPor: "ia:" + iaCfg.modelo, corrigidoEm: serverTimestamp() });
+        errosIA.delete(k); iaFeitas++;
+        if (resDados?.prova.id === provaId) { await atualizarCache(await getDoc(doc(db, "tentativas", it.tid))); montarResultados(); }
+      } catch (e) {
+        console.warn("IA", e);
+        iaErros++; errosIA.set(k, e.ia ? e.message : traduzirErro(e));
+        if (e.fatal) {   // chave/crédito/modelo: não adianta continuar
+          toast("Correção por IA parada: " + e.message, "erro");
+          filaIA.splice(1).forEach(x => emFilaIA.delete(x.tid + "/" + x.qid));
+        }
+      }
+      filaIA.shift(); emFilaIA.delete(k);
+    }
+    if (iaErros && resDados?.prova.id === provaId) montarResultados();   // mostra os erros no detalhe
+  } finally {
+    rodandoIA = false; atualizarControlesIA(); mostrarProgressoIA(null);
+    if (iaFeitas || iaErros) toast(`IA: ${iaFeitas} corrigida(s)${iaErros ? `, ${iaErros} com erro (veja no detalhe do aluno)` : ""}.`, iaErros ? "erro" : "ok");
+  }
+}
+$("#btnCorrigirIA").onclick = () => {
+  if (!resDados) return toast("Carregue uma prova primeiro.", "erro");
+  corrigirPendentesIA();
+};
+$("#iaAuto").onchange = () => {
+  if (!$("#iaAuto").checked) return;
+  if (!$("#rAoVivo").checked) { $("#rAoVivo").checked = true; carregarResultados(); }   // a correção automática precisa do ao vivo
+  else corrigirPendentesIA({ auto: true });
 };

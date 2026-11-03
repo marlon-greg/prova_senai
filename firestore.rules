@@ -28,12 +28,16 @@ service cloud.firestore {
     function meuNome()     { return 'name' in request.auth.token && request.auth.token.name is string
                                     ? chaveNome(request.auth.token.name) : ''; }
     // tentativa de teste da própria pessoa da equipe
-    function meuTeste(id)  { return equipe() && tentativa(id).teste == true && tentativa(id).uid == uid(); }
+    function meuTeste(id)  { return equipe() && tentativa(id).get('teste', false) == true && tentativa(id).uid == uid(); }
 
     // ---------- configuração ----------
     match /config/geral {
       allow read: if logado();
       allow write: if admin();
+    }
+    // chave da API da IA: SÓ o administrador principal (nem outros admins, nem professores, nem alunos)
+    match /config/ia {
+      allow read, write: if superAdmin();
     }
 
     // ---------- equipe ----------
@@ -50,7 +54,7 @@ service cloud.firestore {
         allow read: if equipe() || aluno();
         allow write: if professor();
       }
-      // gabarito: o aluno SÓ lê depois de responder (marcador) ou de finalizar
+      // gabarito: o aluno SÓ lê depois de finalizar a prova (marcador)
       match /gabaritos/{q} {
         allow read: if equipe()
                     || (aluno() && exists(/databases/$(db)/documents/marcadores/$(uid() + '_' + q)));
@@ -58,7 +62,8 @@ service cloud.firestore {
       }
     }
 
-    // marcador "já respondi / já finalizei"
+    // marcador "já finalizei": libera o gabarito da questão. Só depois de FINALIZAR a prova
+    // (ninguém lê gabarito durante a prova, nem com "ir e voltar")
     match /marcadores/{m} {
       allow read: if equipe() || (logado() && resource.data.uid == uid());
       allow create: if aluno()
@@ -66,8 +71,7 @@ service cloud.firestore {
         && request.resource.data.uid == uid()
         && request.resource.data.keys().hasOnly(['uid', 'qid', 'provaId', 'criadoEm'])
         && request.resource.data.qid in getAfter(/databases/$(db)/documents/tentativas/$(uid() + '_' + request.resource.data.provaId)).data.questoesIds
-        && ( existsAfter(/databases/$(db)/documents/tentativas/$(uid() + '_' + request.resource.data.provaId)/respostas/$(request.resource.data.qid))
-             || getAfter(/databases/$(db)/documents/tentativas/$(uid() + '_' + request.resource.data.provaId)).data.finalizadaEm != null );
+        && getAfter(/databases/$(db)/documents/tentativas/$(uid() + '_' + request.resource.data.provaId)).data.finalizadaEm != null;
       allow update, delete: if admin();
     }
 
@@ -96,7 +100,7 @@ service cloud.firestore {
         && request.resource.data.emails.toSet() == resource.data.emails.toSet().union([email().lower()].toSet());
     }
 
-    // ---------- materiais de consulta (PDF enviado pelo professor, em pedaços de ~900 KB) ----------
+    // ---------- materiais de consulta (PDF enviado pelo professor, em pedaços de ~900 KB, até 20 MB) ----------
     match /materiais/{m} {
       allow read: if equipe() || aluno();
       allow write: if professor();
@@ -143,26 +147,28 @@ service cloud.firestore {
       || (equipe()
         && t == 'teste_' + uid() + '_' + request.resource.data.provaId
         && request.resource.data.uid == uid()
-        && request.resource.data.teste == true);
+        && request.resource.data.get('teste', false) == true);
 
       allow update: if
-           // aluno: só avança, conta sinais e finaliza — nunca mexe nas questões sorteadas
-           (logado() && resource.data.uid == uid() && resource.data.teste != true
+           // aluno: só avança, conta sinais e finaliza — nunca mexe nas questões sorteadas nem no placar
+           (logado() && resource.data.uid == uid() && resource.data.get('teste', false) != true
             && resource.data.finalizadaEm == null
             && prova(resource.data.provaId).liberada == true
             && request.resource.data.diff(resource.data).affectedKeys().hasOnly(
-                 ['finalizadaEm', 'indiceAtual', 'trocasDeAba', 'notaPrevia', 'aguardandoCorrecao',
+                 ['finalizadaEm', 'indiceAtual', 'trocasDeAba',
                   'saidasTelaCheia', 'tentativasColar', 'tempoTotalSegundos',
                   'encerradaPor', 'trocasDeAbaTotal']))
-           // professor fecha a nota
+           // professor: fecha a nota e grava o placar que o aluno vê (acertos, nota prévia, pendentes)
         || (professor()
-            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['nota', 'notaMaxima', 'corrigidaEm', 'corrigidaPor']))
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(
+                 ['nota', 'notaMaxima', 'corrigidaEm', 'corrigidaPor',
+                  'acertos', 'totalQuestoes', 'notaPrevia', 'aguardandoCorrecao']))
            // equipe: a própria tentativa de teste
-        || (equipe() && resource.data.teste == true && resource.data.uid == uid());
+        || (equipe() && resource.data.get('teste', false) == true && resource.data.uid == uid());
 
-      allow delete: if admin() || (equipe() && resource.data.teste == true && resource.data.uid == uid());
+      allow delete: if admin() || (equipe() && resource.data.get('teste', false) == true && resource.data.uid == uid());
 
-      // respostas: o aluno grava uma vez, nunca altera
+      // respostas: o aluno grava uma vez; com "ir e voltar" (prova.permitirVoltar) pode alterar até finalizar
       match /respostas/{q} {
         allow read: if equipe() || (logado() && tentativa(t).uid == uid());
         allow create: if (aluno()
@@ -173,7 +179,15 @@ service cloud.firestore {
           && request.resource.data.keys().hasOnly(['resposta', 'enviadaEm', 'segundos', 'perdida'])
           && request.resource.data.enviadaEm == request.time)
           || meuTeste(t);
-        allow update: if false;
+        allow update: if (aluno()
+          && tentativa(t).uid == uid()
+          && tentativa(t).finalizadaEm == null
+          && prova(tentativa(t).provaId).liberada == true
+          && prova(tentativa(t).provaId).get('permitirVoltar', false) == true
+          && resource.data.get('perdida', false) != true
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['resposta', 'segundos', 'atualizadaEm'])
+          && request.resource.data.atualizadaEm == request.time)
+          || meuTeste(t);
         allow delete: if admin() || meuTeste(t);
       }
 
