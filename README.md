@@ -103,6 +103,16 @@ A correção usa a API da Anthropic (Claude) e roda **no navegador do administra
 
 Com Sonnet e Opus, se o filtro de segurança da API recusar uma resposta, ela é refeita sozinha em outro modelo.
 
+### Servidor de correção (automático, mesmo com o painel fechado)
+
+Opcional. Um **Cloudflare Worker** gratuito (código em `servidor/corretor-worker.js`, sem nenhum segredo) corrige as dissertativas assim que o aluno finaliza. A página do aluno chama o servidor mandando só o "crachá" do login (ID token do Firebase); o servidor confere que a tentativa é **dele** e está **finalizada**, corrige com a IA e grava as correções e o placar. A tela do aluno atualiza sozinha. Chamar de novo não gasta: o que já foi corrigido não volta para a IA.
+
+Os segredos ficam só no Cloudflare: a chave da Anthropic (crie uma chave separada, ex.: `corretor-servidor`) e a conta de serviço do Firebase (Firebase Console → ⚙ Configurações do projeto → Contas de serviço → Gerar nova chave privada). **A conta de serviço dá acesso total ao banco: nunca coloque esse arquivo no GitHub, e-mail ou chat.**
+
+Configurar: Cloudflare → **Workers & Pages → Create → Worker** (nome `corretor-prova`) → **Edit code**: cole `servidor/corretor-worker.js` → **Deploy**. Em **Settings → Variables and Secrets**: `ANTHROPIC_API_KEY` (Secret), `FIREBASE_SA` (Secret, o JSON inteiro), `PROJECT_ID` (Text, `prova-senai-3e983`), `ORIGENS` (Text, `https://marlon-greg.github.io`), `MODELO` (Text, opcional, padrão `claude-haiku-5-5`). No painel: **Configuração → Servidor de correção automática** → cole o endereço `https://corretor-prova.<sua-conta>.workers.dev` → **Testar servidor** → **Salvar**. Vazio = desligado (volta a corrigir só pelo painel).
+
+O plano gratuito do Cloudflare aceita 100 mil chamadas por dia, muito mais do que uma escola usa.
+
 **Trocar ou revogar a chave:** **Apagar chave** no painel e, para invalidar de vez, apague-a também em console.anthropic.com → API Keys.
 
 ---

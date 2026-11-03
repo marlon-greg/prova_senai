@@ -149,7 +149,10 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
         <h2>Configuração</h2>
         <label for="cDominios">Domínios de e-mail aceitos para alunos (separados por vírgula)</label>
         <input type="text" id="cDominios" placeholder="edu.senai.br, aluno.senai.br">
-        <button id="btnSalvarConfig" style="margin-top:16px">Salvar</button>
+        <label for="cCorretor" style="margin-top:16px">Servidor de correção automática (opcional)</label>
+        <input type="url" id="cCorretor" placeholder="https://corretor-prova.SEU-NOME.workers.dev" spellcheck="false">
+        <p class="pequeno" style="margin:4px 0 0">Endereço do Cloudflare Worker (veja o README, "Servidor de correção"). Com ele, as dissertativas são corrigidas assim que o aluno finaliza, mesmo com o painel fechado. O endereço não é segredo; a chave fica só no Cloudflare. Vazio = desligado.</p>
+        <div class="linha acoes" style="margin-top:12px"><button id="btnSalvarConfig">Salvar</button><button id="btnTestarCorretor" class="leve">Testar servidor</button></div>
         <p class="pequeno" id="msgConfig"></p>
       </div>
       <div class="card oculto" id="cardIA">

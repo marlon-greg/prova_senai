@@ -1,5 +1,5 @@
 // Página do aluno: login, lista de provas, prova (uma questão por vez ou todas na página), resultado.
-import { db, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar, sortearAleatorio, esc, $, toast, dataBR, letra,
+import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar, sortearAleatorio, esc, $, toast, dataBR, letra,
          idTentativaTeste, apagarTentativaTeste, confirmar, traduzirErro, iniciais, fecharModais, temaDe, chaveNome, placar, idsConsulta }
   from "./common.js";
 import { baixarMaterial } from "./material.js";
@@ -703,6 +703,27 @@ function mostrarFim() {
     if (lib !== (provaAtual.resultadosLiberados === true)) { provaAtual.resultadosLiberados = lib; desenharFim(); }
   }, () => {});
 }
+// ---------- servidor de correção automática (Cloudflare Worker, opcional: config/geral.urlCorretor) ----------
+// Ao finalizar, pede ao servidor para corrigir as dissertativas desta tentativa. A chave da IA fica no servidor;
+// daqui só vai o "crachá" do login. A resposta não importa: a tela atualiza pela tentativa (onSnapshot).
+let urlCorretor;   // undefined = ainda não leu
+const chamouCorretor = new Set();
+async function pedirCorrecao() {
+  if (!tentativa?.finalizadaEm || chamouCorretor.has(tentativa.id)) return;
+  chamouCorretor.add(tentativa.id);
+  try {
+    if (urlCorretor === undefined) {
+      const c = await getDoc(doc(db, "config", "geral")).catch(() => null);
+      urlCorretor = String(c?.data()?.urlCorretor || "").trim();
+    }
+    if (!urlCorretor) return;
+    const token = await auth.currentUser.getIdToken();
+    const r = await fetch(urlCorretor, { method: "POST", headers: { authorization: "Bearer " + token, "content-type": "application/json" },
+                                         body: JSON.stringify({ tentativaId: tentativa.id }) });
+    if (!r.ok) console.warn("servidor de correção", r.status, await r.text().catch(() => ""));
+  } catch (e) { console.warn("servidor de correção", e); }
+}
+
 async function desenharFim() {
   const n = ++desenhoFim;
   const avisos = (tentativa.encerradaPor === "trocasDeAba" ? `<div class="aviso-box erro">⛔ <b>Prova encerrada: limite de saídas da prova atingido.</b> As questões não enviadas valem zero.</div>` : "") +
@@ -713,6 +734,7 @@ async function desenharFim() {
   let r;
   try { r = await placarDaTentativa(tentativa); } catch (e) { console.warn("placar", e); r = null; }
   if (n !== desenhoFim) return;   // outro desenho começou depois deste
+  if (r?.pendentes) pedirCorrecao();   // dissertativas sem correção: chama o servidor (uma vez por tentativa nesta página)
   $("#fimNota").innerHTML = avisos + (r ? `
     <p class="placar">Você acertou <b>${r.acertos}</b> de <b>${r.totalQuestoes}</b></p>
     <p class="placar-nota">Nota: <b>${r.nota}</b> / 100</p>

@@ -1009,12 +1009,25 @@ $("#btnAddEquipe").onclick = async () => {
 async function carregarConfig() {
   const c = await getDoc(doc(db, "config", "geral"));
   $("#cDominios").value = (c.exists() ? c.data().dominiosAlunos || [] : []).join(", ");
+  $("#cCorretor").value = c.exists() ? c.data().urlCorretor || "" : "";
 }
+const urlCorretorDigitada = () => $("#cCorretor").value.trim().replace(/\/+$/, "");
+$("#btnTestarCorretor").onclick = async () => {
+  const url = urlCorretorDigitada();
+  if (!/^https:\/\//.test(url)) return toast("Cole o endereço do servidor (começa com https://).", "erro");
+  $("#msgConfig").textContent = "Testando o servidor…";
+  try {
+    const d = await (await fetch(url)).json();
+    $("#msgConfig").textContent = d.ok && d.configurado ? "✅ Servidor no ar e configurado."
+      : d.ok ? "⚠ Servidor no ar, mas faltam variáveis no Cloudflare: " + (d.faltando || []).join(", ") : "⚠ Resposta inesperada do servidor.";
+  } catch (e) { $("#msgConfig").textContent = "⚠ Não consegui falar com o servidor. Confira o endereço e se o Worker foi publicado (Deploy)."; }
+};
 $("#btnSalvarConfig").onclick = async () => {
   if (!ehAdmin()) return toast("Só admin altera a configuração.", "erro");
-  const dominios = $("#cDominios").value.split(",").map(s => s.trim().toLowerCase()).filter(Boolean);
-  await setDoc(doc(db, "config", "geral"), { dominiosAlunos: dominios }, { merge: true });
-  $("#msgConfig").textContent = "Salvo: " + dominios.join(", ");
+  const dominios = $("#cDominios").value.split(",").map(s => s.trim().toLowerCase()).filter(Boolean), url = urlCorretorDigitada();
+  if (url && !/^https:\/\/[\w.-]+(\/.*)?$/.test(url)) return toast("O endereço do servidor precisa começar com https://.", "erro");
+  await setDoc(doc(db, "config", "geral"), { dominiosAlunos: dominios, urlCorretor: url }, { merge: true });
+  $("#msgConfig").textContent = "Salvo: " + dominios.join(", ") + (url ? ` · servidor de correção: ${url}` : " · sem servidor de correção");
 };
 
 // ============================================================ PDF (janela de impressão → "Salvar como PDF")
