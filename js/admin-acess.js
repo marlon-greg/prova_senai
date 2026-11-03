@@ -88,7 +88,7 @@ async function abrirAluno(email, rolar = true) {
   </div>
   <div class="acess-grade">
     <div class="card">
-      <h2>👁 Visual</h2>
+      <h2>Visual</h2>
       <div class="grade">
         ${faixa("acEscala", "Tamanho da letra", 80, 250, 10, v.escala, "%")}
         ${faixa("acLetras", "Espaço entre letras", 0, 0.4, 0.02, v.letras, "em")}
@@ -103,14 +103,14 @@ async function abrirAluno(email, rolar = true) {
       <label class="check"><input type="checkbox" id="acSemAnim" ${v.semAnimacao ? "checked" : ""}> Sem animações (confete, mascote parado)</label>
     </div>
     <div class="card">
-      <h2>🔍 Pré-visualização</h2>
+      <h2>Pré-visualização</h2>
       <div id="acPrevia" class="previa-acess">
         <div class="card questao"><div class="enunciado">Escreva o comando que mostra <b>todos os clientes</b> da tabela <code>cliente</code> que moram em <b>Curitiba</b>.</div>
           <div class="apoio"><span aria-hidden="true">💡</span><div><b>Apoio:</b> primeiro ache a tabela; depois pense na condição (onde moram).</div></div>
           <label class="alt"><span class="alt-letra">A</span><span class="alt-texto">SELECT * FROM cliente WHERE cidade = 'Curitiba';</span></label>
           <label class="alt"><span class="alt-letra">B</span><span class="alt-texto">DELETE FROM cliente WHERE cidade = 'Curitiba';</span></label></div>
       </div>
-      <h2 style="margin-top:16px">🎮 Na prova</h2>
+      <h2 style="margin-top:16px">Na prova</h2>
       <div class="grade">
         <div><label for="acTempo">Tempo extra (min)</label><input type="number" id="acTempo" min="0" step="5" value="${pr.tempoExtraMin}"></div>
         <div><label for="acVidas">Vidas extras ❤️</label><input type="number" id="acVidas" min="0" max="10" step="1" value="${pr.vidasExtras}"></div>
@@ -121,23 +121,23 @@ async function abrirAluno(email, rolar = true) {
       <label class="check"><input type="checkbox" id="acDica" ${pr.mostrarDica !== false ? "checked" : ""}> Mostrar o 💡 apoio das questões adaptadas</label>
     </div>
   </div>
-  <div class="linha acoes barra-salvar"><button id="acSalvar" class="ok">💾 Salvar adaptações</button>
+  <div class="linha acoes barra-salvar"><button id="acSalvar" class="ok">Salvar adaptações</button>
     <span class="pequeno">Ver como o aluno vê:</span><select id="acProvaTeste" style="width:auto;flex:0 1 320px">${provas.map(x => `<option value="${x.id}">${esc(x.titulo)}</option>`).join("")}</select>
     <button id="acVerComo" class="leve">👁 Abrir a prova como o aluno</button></div>
 
   <div class="acess-grade">
     <div class="card">
-      <h2>📝 Sobre o aluno <span class="pequeno">(não aparece para o aluno)</span></h2>
+      <h2>Sobre o aluno <span class="pequeno">(não aparece para o aluno)</span></h2>
       <label for="acDescricao">Descrição das necessidades e do que funciona (a IA usa isto para adaptar as questões)</label>
       <textarea id="acDescricao" style="font-family:inherit;min-height:140px" placeholder="Ex.: aluna com TEA nível 1 e TDAH. Entende melhor frases curtas e uma instrução por vez. Perde o foco com textos longos. Ajuda: negrito no que é pedido, exemplos concretos.">${esc(descricao)}</textarea>
       <div class="linha acoes" style="margin-top:8px"><button id="acSalvarDesc" class="leve">Salvar descrição</button></div>
-      <h2 style="margin-top:16px">📄 Laudos e documentos (PDF)</h2>
+      <h2 style="margin-top:16px">Laudos e documentos (PDF)</h2>
       <p class="pequeno">Ficam guardados só para a equipe que cuida deste aluno. A IA lê até 3 PDFs ao adaptar.</p>
       <div class="linha acoes"><label class="botao-arquivo">⬆ Enviar PDF(s)<input type="file" id="acLaudoArq" accept="application/pdf,.pdf" multiple hidden></label><span id="acLaudoMsg" class="pequeno" aria-live="polite"></span></div>
       <div id="acLaudos" class="lista-materiais" style="margin-top:8px"></div>
     </div>
     <div class="card">
-      <h2>💬 Sugestões da equipe</h2>
+      <h2>Sugestões da equipe</h2>
       <p class="pequeno">A auxiliar de inclusão e os professores registram aqui o que observaram e o que sugerem mudar.</p>
       <textarea id="acSugTexto" style="font-family:inherit;min-height:80px" placeholder="Ex.: na última prova ela travou nas questões com dois comandos juntos; sugiro dividir em duas partes."></textarea>
       <div class="linha acoes" style="margin-top:8px"><button id="acSugEnviar" class="leve">Enviar sugestão</button></div>
@@ -146,7 +146,7 @@ async function abrirAluno(email, rolar = true) {
   </div>
 
   <div class="card">
-    <h2>✍ Questões adaptadas</h2>
+    <h2>Questões adaptadas</h2>
     <p class="pequeno">Escolha a prova: aparecem as questões que podem ser sorteadas para ela. Adapte uma a uma ou todas com a IA e revise. A resposta certa continua a mesma: as alternativas ficam na mesma ordem e quantidade.</p>
     <div class="linha acoes"><select id="acProvaQ" style="width:auto;flex:1 1 280px">${provas.map(x => `<option value="${x.id}">${esc(x.titulo)}</option>`).join("")}</select>
       <button id="acCarregarQ" class="leve">Carregar questões</button></div>

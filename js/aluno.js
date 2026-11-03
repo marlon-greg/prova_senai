@@ -208,7 +208,7 @@ async function listarProvas() {
     const andamento = p.modoExibicao === "todas" ? `${td?.indiceAtual || 0} de ${p.nQuestoes} enviadas` : `questão ${(td?.indiceAtual || 0) + 1} de ${p.nQuestoes}`;
     let status, acao;
     if (!td)                    { status = `<span class="tag">○ não iniciada</span>`; acao = podeFazer ? `<button data-acao="inicio" data-id="${p.id}">Fazer a prova</button>` : `<span class="pequeno">prova encerrada</span>`; }
-    else if (!td.finalizadaEm)  { status = `<span class="tag aviso">◐ em andamento (${andamento})</span>`; acao = podeFazer ? `<button data-acao="continuar" data-id="${p.id}">Continuar</button>` : `<span class="pequeno">prova encerrada</span>`; }
+    else if (!td.finalizadaEm)  { status = `<span class="tag aviso">em andamento (${andamento})</span>`; acao = podeFazer ? `<button data-acao="continuar" data-id="${p.id}">Continuar</button>` : `<span class="pequeno">prova encerrada</span>`; }
     else                        { status = `<span class="tag ok">✓ finalizada em ${dataBR(td.finalizadaEm)}</span> <span class="tag nota" data-placar="${p.id}">…</span>`; acao = podeVerResultado ? `<button class="sec" data-acao="resultado" data-id="${p.id}">Ver gabarito e resultado</button>` : `<span class="pequeno">gabarito ainda não liberado</span>`; }
     box.insertAdjacentHTML("beforeend", `<div class="prova-item"><div class="info"><b>${esc(p.titulo)}</b><br><span class="pequeno">${esc(p.turma || "")} · ${p.nQuestoes} questões</span><div style="margin-top:4px">${status}</div></div><div class="acao">${acao}</div></div>`);
     if (td?.finalizadaEm) {   // placar sem esperar: a lista não fica travada lendo gabaritos
@@ -465,14 +465,20 @@ function criarCartaoQuestao(qid, i, unica) {
   if (!unica) card.id = "q_" + qid;
   if (!q) { card.innerHTML = `<p class="pequeno">Questão ${i + 1} indisponível. Avise o professor.</p><div class="acoes-questao"></div>`; return card; }
   const tipo = q.tipo === "alternativa" ? "múltipla escolha" : "resposta escrita", colar = colarPermitido(), voltar = podeVoltar();
-  card.innerHTML = `${unica ? "" : `<div class="q-topo"><span class="q-numero q-numero-p">Questão ${i + 1}</span><span class="tag">${tipo}</span><span class="tag ok q-enviada oculto">✓ ${voltar ? "salva" : "enviada"}</span></div>`}
-    ${acess && ap().lerEmVoz !== false && "speechSynthesis" in window ? `<div class="linha acoes q-ferramentas"><button type="button" class="leve mini b-ouvir">🔊 Ouvir</button>${q.adaptada ? `<span class="tag nota">♿ questão adaptada</span>` : ""}</div>` : ""}
-    <div class="enunciado">${formatarEnunciado(q.enunciado)}</div>
-    ${q.dica && ap().mostrarDica !== false ? `<div class="apoio"><span aria-hidden="true">💡</span><div><b>Apoio:</b> ${esc(q.dica)}</div></div>` : ""}
-    <div class="q-area"></div>
-    <div class="acoes-questao"><button class="ok grande b-enviar"${unica ? ' id="btnEnviar"' : ""}>${voltar ? "Salvar resposta" : "Enviar resposta"}</button></div>
-    <p class="pequeno q-dica">${voltar ? "Você pode alterar e salvar de novo até clicar em Finalizar prova." : "Confira antes de enviar: depois de enviada, a resposta não pode ser alterada."}</p>
-    <p class="pequeno q-salva oculto" role="status"></p>
+  // cartão em três partes: cabeçalho (número e tipo) · corpo (enunciado e resposta) · rodapé (enviar)
+  card.innerHTML = `<div class="q-cab"><span class="q-num">Questão ${i + 1}<small> de ${tentativa.questoesIds.length}</small></span><span class="tag">${tipo}</span>${q.adaptada ? `<span class="tag nota">♿ adaptada</span>` : ""}<span class="tag ok q-enviada oculto">✓ ${voltar ? "salva" : "enviada"}</span>
+      ${acess && ap().lerEmVoz !== false && "speechSynthesis" in window ? `<button type="button" class="leve mini b-ouvir">🔊 Ouvir</button>` : ""}</div>
+    <div class="q-corpo">
+      <div class="enunciado">${formatarEnunciado(q.enunciado)}</div>
+      ${q.dica && ap().mostrarDica !== false ? `<div class="apoio"><span aria-hidden="true">💡</span><div><b>Apoio:</b> ${esc(q.dica)}</div></div>` : ""}
+      <div class="q-rotulo">${q.tipo === "alternativa" ? "Escolha uma alternativa" : "Sua resposta"}</div>
+      <div class="q-area"></div>
+      <p class="pequeno q-salva oculto" role="status"></p>
+    </div>
+    <div class="q-rodape">
+      <p class="pequeno q-dica">${voltar ? "Você pode alterar e salvar de novo até clicar em Finalizar prova." : "Confira antes de enviar: depois de enviada, a resposta não pode ser alterada."}</p>
+      <div class="acoes-questao"><button class="ok grande b-enviar"${unica ? ' id="btnEnviar"' : ""}>${voltar ? "Salvar resposta" : "Enviar resposta"} →</button></div>
+    </div>
     <div class="q-feedback oculto" role="status"></div>`;
   const area = card.querySelector(".q-area");
   card.querySelector(".b-ouvir")?.addEventListener("click", e => lerQuestao(qid, e.currentTarget));
@@ -488,7 +494,7 @@ function criarCartaoQuestao(qid, i, unica) {
     }));
   } else {
     const idTxt = unica ? "txtResposta" : "txt_" + qid;
-    area.innerHTML = `<label for="${idTxt}" class="pequeno">Sua resposta</label>
+    area.innerHTML = `<label for="${idTxt}" class="sr-only">Sua resposta</label>
       <textarea id="${idTxt}" placeholder="Digite sua resposta aqui.${colar ? "" : " Colar está desativado."}" spellcheck="false"></textarea>
       <div class="contador"><span class="q-chars"${unica ? ' id="qChars"' : ""}>0</span> caracteres${colar ? "" : " · Ctrl+V, botão direito e arrastar texto não funcionam neste campo."}</div>`;
     const txt = area.querySelector("textarea");
@@ -552,7 +558,7 @@ function mostrarQuestao() {
   const i = tentativa.indiceAtual, total = tentativa.questoesIds.length, qid = tentativa.questoesIds[i], q = questoes[qid], voltar = podeVoltar();
   $("#qTitulo").textContent = provaAtual.titulo;
   $("#qContador").textContent = `Questão ${i + 1} de ${total}`;
-  $("#qTipo").textContent = q?.tipo === "alternativa" ? "múltipla escolha" : "resposta escrita"; $("#qTipo").classList.remove("oculto");
+  $("#qTipo").classList.add("oculto");   // o tipo aparece no cabeçalho do cartão
   $("#qBarra").style.width = `${((voltar ? enviadas() : i) / total) * 100}%`;
   // os botões de navegação ficam dentro do cartão: tira do cartão anterior antes de trocar
   $("#qNav").append($("#btnAnterior"), $("#btnProxima"), $("#btnFinalizar"));
@@ -578,18 +584,31 @@ function desenharVidas(perdeu = false) {
   el.title = `${restam} de ${lim} vidas`;
   el.setAttribute("aria-label", `Vidas: ${restam} de ${lim}`);
   el.classList.toggle("ultima", restam === 1);
-  if (perdeu) { el.classList.remove("tremendo"); void el.offsetWidth; el.classList.add("tremendo"); reagirMascote("triste"); }
+  if (perdeu) {
+    el.classList.remove("tremendo"); void el.offsetWidth; el.classList.add("tremendo"); reagirMascote("triste");
+    falarHud(restam ? `Opa! Você perdeu 1 vida. ${restam === 1 ? "Resta só 1" : `Restam ${restam}`}: fique nesta tela, tá? ❤️` : "Suas vidas acabaram. 💔", 6000);
+  }
 }
 function atualizarXp() {
   if (!tentativa) return;
   const total = tentativa.questoesIds.length, n = enviadas();
-  $("#hudXp").innerHTML = `⭐ <b>${n}</b>/${total}`;
+  $("#hudXp").innerHTML = `<b>${n}</b><small>/${total}</small>`;
 }
 let humorHud = "feliz", timerHumor = null;
 function desenharHudMascote() {
   const el = $("#hudMascote");
   el.innerHTML = mascoteLigado() ? htmlMascote(humorHud, { classe: "hud-m", animado: false }) : "";
 }
+// balão do mascote na barra da prova: dicas curtas (nunca diz se acertou)
+let timerFala = null;
+function falarHud(texto, ms = 5000) {
+  const el = $("#hudFala");
+  if (!mascoteLigado() || !texto) { el.classList.add("oculto"); return; }
+  el.innerHTML = `<b>${esc(dadosMascote().nome)}:</b> ${texto}`;
+  el.classList.remove("oculto", "entrando"); void el.offsetWidth; el.classList.add("entrando");
+  clearTimeout(timerFala); timerFala = setTimeout(() => el.classList.add("oculto"), ms);
+}
+const FRASES_ENVIO = ["Resposta enviada! Bora pra próxima. 💪", "Boa! Uma a menos.", "Enviada! Continue no seu ritmo.", "Feito! Respira e segue."];
 function reagirMascote(humor) {
   humorHud = humor; desenharHudMascote();
   clearTimeout(timerHumor);
@@ -635,9 +654,15 @@ function desenharFaixa() {
   });
 }
 
+let falouInicio = null;
 function entrarNaTelaDaProva() {
   mostrar("telaQuestao");
   desenharVidas(); atualizarXp(); desenharHudMascote();
+  if (falouInicio !== tentativa.id) {   // uma vez por prova: o mascote dá a dica de abertura
+    falouInicio = tentativa.id;
+    const lim = limiteSaidas();
+    falarHud(`Leia cada questão com calma.${lim ? ` Você tem ${lim === 1 ? "1 vida" : `${lim} vidas`}: não saia desta tela!` : ""} Boa prova! 🍀`, 7000);
+  }
   prepararConsulta();
   marcoTempo = Date.now();
   // entrou na prova sem tela cheia (recarregou a página, modo teste...): pede para entrar, sem registrar como saída
@@ -705,6 +730,7 @@ async function enviarResposta(qid, card, { silencioso = false } = {}) {
     preencherCartao(card, qid, final);
     if (voltar) marcarSalva(card); else travarCartao(card);
     atualizarXp(); reagirMascote("comemorando");   // comemora o ENVIO (nunca diz se acertou)
+    if (!voltar) falarHud(enviadas() >= tentativa.questoesIds.length ? "Última enviada! Agora é só finalizar. 🎉" : FRASES_ENVIO[enviadas() % FRASES_ENVIO.length], 3500);
     if (modoTodas()) {
       atualizarResumoTodas();
       tentativa.indiceAtual = enviadas();   // na lista de provas aparece "X de N enviadas"
@@ -725,7 +751,7 @@ async function enviarResposta(qid, card, { silencioso = false } = {}) {
     toast(`Sua resposta${silencioso ? ` da questão ${i + 1}` : ""} NÃO foi ${voltar ? "salva" : "enviada"}. ` + traduzirErro(e), "erro");
     return false;
   } finally {
-    enviandoQ.delete(qid); enviando--; btn.disabled = false; btn.textContent = voltar ? "Salvar resposta" : "Enviar resposta";
+    enviandoQ.delete(qid); enviando--; btn.disabled = false; btn.textContent = voltar ? "Salvar resposta →" : "Enviar resposta →";
   }
 }
 

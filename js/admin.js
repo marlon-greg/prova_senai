@@ -1147,7 +1147,7 @@ function cartoesHTML(lista) {
   const total = resDados.prova.nQuestoes || 0;
   return `<div class="cartoes-alunos">` + lista.map(l => {
     const v = vidasDe(l.t), feitas = l.itens.filter(x => x.r !== undefined || x.perdida).length, fin = !!l.t.finalizadaEm;
-    const estado = l.t.encerradaPor === "trocasDeAba" ? ["erro", "⛔ sem vidas"] : fin ? ["ok", "✓ finalizou"] : ["aviso", "◐ fazendo"];
+    const estado = l.t.encerradaPor === "trocasDeAba" ? ["erro", "⛔ sem vidas"] : fin ? ["ok", "✓ finalizou"] : ["aviso", "fazendo"];
     const alerta = (v && !fin && v.restam <= 1) || l.t.encerradaPor === "trocasDeAba";
     const tempo = l.tempo ?? (l.t.iniciadaEm?.toMillis ? (Date.now() - l.t.iniciadaEm.toMillis()) / 1000 : null);
     return `<div class="cartao-aluno${alerta ? " alerta" : ""}${fin ? " fim" : ""}">
@@ -1189,7 +1189,7 @@ function desenharResultados() {
       <div class="numero ${comSinal ? "aviso" : ""}"><b>${comSinal}</b><span>com sinais (aba, tela cheia, colar)</span></div></div>`;
   const mostrarTestes = $("#rTestes").checked;
   const emCartoes = (localStorage.getItem("visaoResultados") || "cartoes") === "cartoes";
-  let html = linhas.length ? `<div class="card"><div class="linha acoes visao-res" role="group" aria-label="Visão"><b style="flex:1">👥 Alunos (${linhas.length})</b>
+  let html = linhas.length ? `<div class="card"><div class="linha acoes visao-res" role="group" aria-label="Visão"><b style="flex:1">Alunos (${linhas.length})</b>
       <button class="mini ${emCartoes ? "" : "leve"}" data-visao="cartoes" aria-pressed="${emCartoes}">▦ Cartões</button><button class="mini ${emCartoes ? "leve" : ""}" data-visao="tabela" aria-pressed="${!emCartoes}">☰ Tabela</button></div>
       ${emCartoes ? cartoesHTML(linhas) : tabelaHTML(linhas, "aluno")}</div>` : `<div class="card vazio"><div class="icone">⏳</div><p>Nenhum aluno fez esta prova ainda.</p></div>`;
   if (resDados.turma) {
@@ -1337,7 +1337,7 @@ function abrirImpressao(titulo, corpo) {
 function cab(titulo, sub) { return `<h1>${esc(titulo)}</h1><div class="sub">${esc(sub)}</div>`; }
 function boletimHTML(l, quebra = false) {
   const p = resDados.prova;
-  const rot = { certa: "✔ certa", errada: "✘ errada", parcial: "◐ parcial", revisar: "◌ em correção", em_branco: "□ em branco", perdida: "⛔ perdida (saiu da prova)" };
+  const rot = { certa: "✔ certa", errada: "✘ errada", parcial: "parcial", revisar: "◌ em correção", em_branco: "□ em branco", perdida: "⛔ perdida (saiu da prova)" };
   let h = cab(`Boletim — ${p.titulo}`, `${l.t.nome || ""} · ${l.t.email} · ${p.turma || ""} · finalizada em ${l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "—"}`);
   h += `<h2>Nota: ${l.nota} / 100 <span class="peq">(${l.pts} de ${l.max} pontos)</span></h2>`;
   if (l.t.encerradaPor === "trocasDeAba") h += `<div class="rapida">⛔ Prova encerrada: limite de saídas da prova atingido.</div>`;

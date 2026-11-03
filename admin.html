@@ -31,24 +31,24 @@
 
   <section id="telaPainel" class="painel-layout oculto">
     <nav class="abas menu-lateral" aria-label="Seções do painel">
-      <button data-aba="provas" class="ativa"><span aria-hidden="true">📝</span> Provas</button>
-      <button data-aba="resultados"><span aria-hidden="true">🏆</span> Resultados</button>
-      <button data-aba="acessibilidade"><span aria-hidden="true">♿</span> Acessibilidade</button>
-      <button data-aba="bancos"><span aria-hidden="true">📚</span> Bancos de questões</button>
-      <button data-aba="turmas"><span aria-hidden="true">👥</span> Turmas</button>
-      <button data-aba="equipe"><span aria-hidden="true">🧑‍🏫</span> Equipe</button>
-      <button data-aba="config"><span aria-hidden="true">⚙️</span> Configuração</button>
+      <button data-aba="provas" class="ativa">Provas</button>
+      <button data-aba="resultados">Resultados</button>
+      <button data-aba="acessibilidade">Acessibilidade</button>
+      <button data-aba="bancos">Bancos de questões</button>
+      <button data-aba="turmas">Turmas</button>
+      <button data-aba="equipe">Equipe</button>
+      <button data-aba="config">Configuração</button>
     </nav>
     <div class="painel-conteudo">
 
     <!-- PROVAS -->
     <div id="aba-provas">
       <details class="card nova-prova" id="cardNovaProva">
-        <summary><h2>➕ Nova prova</h2><span class="pequeno">clique para abrir o formulário</span></summary>
+        <summary><h2>Nova prova</h2><span class="btn-fake">+ Criar nova prova</span></summary>
         <div id="formNovaProva"></div>   <!-- montado por formProvaHTML("p") em js/admin.js -->
         <button id="btnCriarProva" style="margin-top:16px">Criar prova</button>
       </details>
-      <div class="secao-titulo"><h2>📝 Provas criadas</h2></div>
+      <div class="secao-titulo"><h2>Provas criadas</h2><span class="pequeno">Libere a prova na hora de aplicar · 👥 Alunos acompanha ao vivo</span></div>
       <div id="listaProvas"></div>
     </div>
 
@@ -65,7 +65,7 @@
       <div class="card"><h2>Bancos cadastrados</h2><div id="listaBancos"></div></div>
       <div class="card">
         <h2>Slides e material de consulta (PDF)</h2>
-        <p class="pequeno">Envie os slides em <b>PDF</b> (PowerPoint: Arquivo → Exportar → PDF · Google Slides: Arquivo → Fazer download → PDF). Na prova, escolha o PDF em <b>Material de consulta</b>: o aluno lê os slides num leitor dentro da própria tela da prova. Também dá para enviar direto pelo formulário da prova.</p>
+        <details class="ajuda"><summary>Como funciona</summary><p>Envie os slides em <b>PDF</b> (PowerPoint: Arquivo → Exportar → PDF · Google Slides: Arquivo → Fazer download → PDF). Na prova, escolha o PDF em <b>Material de consulta</b>: o aluno lê os slides num leitor dentro da própria tela da prova. Também dá para enviar direto pelo formulário da prova.</p></details>
         <div class="grade">
           <div><label for="matTitulo">Título</label><input type="text" id="matTitulo" placeholder="Slides da aula 8 — DML"></div>
           <div><label for="matArquivo">Arquivo PDF</label><input type="file" id="matArquivo" accept="application/pdf,.pdf"></div>
@@ -94,7 +94,7 @@ João Pedro Lima <joao.lima@edu.senai.br>
 ana.costa@edu.senai.br
 
 Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá para colar direto da planilha."></textarea>
-        <p class="pequeno">Quem estiver <b>só com o nome</b> é vinculado sozinho no primeiro login: o sistema compara o nome da conta Google com a lista (sem diferenciar maiúsculas e acentos) e grava o e-mail. Se o nome da conta for diferente (abreviado, por exemplo), o aluno não vê a prova e a tela mostra o nome e o e-mail da conta: escreva o e-mail na linha dele.</p>
+        <details class="ajuda"><summary>Como funciona</summary><p>Quem estiver <b>só com o nome</b> é vinculado sozinho no primeiro login: o sistema compara o nome da conta Google com a lista (sem diferenciar maiúsculas e acentos) e grava o e-mail. Se o nome da conta for diferente (abreviado, por exemplo), o aluno não vê a prova e a tela mostra o nome e o e-mail da conta: escreva o e-mail na linha dele.</p></details>
         <p id="tPrevia" class="pequeno" role="status" aria-live="polite"></p>
         <div class="linha acoes"><button id="btnSalvarTurma">Salvar turma</button><button id="btnCancelarTurma" class="leve oculto">Cancelar edição</button></div>
       </div>
@@ -104,28 +104,32 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
     <!-- RESULTADOS -->
     <div id="aba-resultados" class="oculto">
       <div class="card">
-        <h2>Resultados <span id="aoVivo" class="ao-vivo oculto" title="Atualizando sozinho">● ao vivo</span></h2>
-        <div class="grade" style="align-items:end">
-          <div><label for="rProva">Prova</label><select id="rProva"></select></div>
-          <div class="linha acoes"><button id="btnCarregarRes">Carregar</button><button id="btnFecharNotas" class="ok">Fechar notas</button></div>
+        <div class="card-cab"><h2>Resultados <span id="aoVivo" class="ao-vivo oculto" title="Atualizando sozinho">● ao vivo</span></h2></div>
+        <div class="barra-res">
+          <div class="campo-prova"><label for="rProva">Prova</label><select id="rProva"></select></div>
+          <button id="btnCarregarRes">Carregar</button>
+          <label class="check interruptor"><input type="checkbox" id="rAoVivo"> Ao vivo</label>
+          <label class="check interruptor"><input type="checkbox" id="rTestes"> Testes da equipe</label>
         </div>
-        <div class="linha acoes" style="margin-bottom:8px">
-          <label class="check" style="margin:0"><input type="checkbox" id="rTestes"> Mostrar tentativas de teste</label>
-          <label class="check" style="margin:0"><input type="checkbox" id="rAoVivo"> Atualizar ao vivo</label>
+        <div class="grupos-acoes">
+          <div class="grupo"><span class="grupo-rotulo">Exportar</span><button id="btnCSV" class="leve mini">CSV</button><button id="btnPDFNotas" class="leve mini">PDF notas</button><button id="btnPDFBoletins" class="leve mini">PDF boletins</button></div>
+          <div class="grupo"><span class="grupo-rotulo">Notas</span><button id="btnFecharNotas" class="ok mini">Fechar notas</button></div>
         </div>
-        <div class="linha acoes"><button id="btnCSV" class="leve">CSV (planilha)</button><button id="btnPDFNotas" class="leve">PDF — notas da turma</button><button id="btnPDFBoletins" class="leve">PDF — boletim de todos (p/ Drive)</button></div>
         <fieldset id="iaControles" class="temas-box oculto">
-          <legend>🤖 Correção das dissertativas por IA</legend>
+          <legend>Correção das dissertativas por IA</legend>
           <div class="linha acoes" style="align-items:center">
-            <button id="btnCorrigirIA" disabled>Corrigir dissertativas com IA</button>
+            <button id="btnCorrigirIA" class="mini" disabled>Corrigir com IA</button>
             <label class="check" style="margin:0"><input type="checkbox" id="iaRefazer" disabled> Refazer as que a IA já corrigiu</label>
-            <label class="check" style="margin:0"><input type="checkbox" id="iaAuto" disabled> Corrigir automaticamente ao vivo</label>
+            <label class="check" style="margin:0"><input type="checkbox" id="iaAuto" disabled> Automático ao vivo</label>
           </div>
           <p class="pequeno" id="iaAviso">Configure a chave em Configuração.</p>
           <p class="pequeno" id="iaProgresso" role="status" aria-live="polite"></p>
-          <p class="pequeno">Só corrige provas <b>finalizadas</b>, e só enquanto este painel estiver aberto. Correção manual nunca é sobrescrita pela IA, e a correção manual feita depois substitui a da IA.</p>
         </fieldset>
-        <p class="pequeno">Dissertativas que o sistema não reconheceu ficam como <b>revisar</b>: use a IA ou abra o aluno e dê a nota. O aluno vê no fim só <b>quantas acertou e a nota</b>; a tela dele atualiza sozinha quando você corrige. Quais acertou, o gabarito e o PDF da prova aparecem para ele quando você clicar em <b>Liberar gabarito/resultado</b> na aba Provas. <b>Fechar notas</b> grava a nota final. Os PDFs abrem a janela de impressão: escolha <b>Salvar como PDF</b>.</p>
+        <details class="ajuda"><summary>Como funciona</summary>
+          <p>Dissertativas que o sistema não reconheceu ficam como <b>revisar</b>: use a IA ou abra o aluno e dê a nota. A IA só corrige provas finalizadas, enquanto o painel estiver aberto; correção manual nunca é sobrescrita.</p>
+          <p>O aluno vê no fim só <b>quantas acertou e a nota</b>, e a tela dele atualiza sozinha. Gabarito e PDF aparecem quando você <b>liberar o gabarito</b> na aba Provas. <b>Fechar notas</b> grava a nota final. Os PDFs abrem a janela de impressão: escolha <b>Salvar como PDF</b>.</p>
+          <p><b>Vidas:</b> no cartão do aluno, <b>Restaurar vidas</b>, <b>+1</b> e <b>Reabrir prova</b> (ex.: aluno com TEA que saiu sem querer).</p>
+        </details>
         <div id="resResumo"></div>
       </div>
       <div id="resTabela"></div>
@@ -134,8 +138,8 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
     <!-- ACESSIBILIDADE (js/admin-acess.js) -->
     <div id="aba-acessibilidade" class="oculto">
       <div class="card">
-        <h2>♿ Acessibilidade</h2>
-        <p class="pequeno">Alunos marcados aqui fazem a prova com as adaptações de cada um: letra, espaçamento, cores, tempo e vidas extras, leitura em voz alta e <b>questões reescritas</b> (à mão ou pela IA, a partir da sua descrição e dos laudos). A auxiliar de inclusão vinculada vê e edita só os alunos dela.</p>
+        <h2>Acessibilidade</h2>
+        <details class="ajuda"><summary>Como funciona</summary><p>Alunos marcados aqui fazem a prova com as adaptações de cada um: letra, espaçamento, cores, tempo e vidas extras, leitura em voz alta e <b>questões reescritas</b> (à mão ou pela IA, a partir da sua descrição e dos laudos). A auxiliar de inclusão vinculada vê e edita só os alunos dela.</p></details>
         <div id="acessNovo" class="grade" style="align-items:end;margin:0">
           <div><label for="acessAlunoSel">Aluno das turmas</label><select id="acessAlunoSel"></select></div>
           <div><label for="acessEmail">E-mail</label><input type="email" id="acessEmail" placeholder="aluna@edu.senai.br"></div>
@@ -151,7 +155,7 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
     <div id="aba-equipe" class="oculto">
       <div class="card">
         <h2>Equipe</h2>
-        <p class="pequeno"><b>admin</b> = tudo · <b>professor</b> = bancos, provas, correção e resultados · <b>auxiliar</b> = só vê resultados · <b>auxiliar de inclusão</b> = só os alunos vinculados a ela na aba Acessibilidade: vê os resultados deles, edita as adaptações da prova, sobe documentos, deixa sugestões e devolve vidas.</p>
+        <details class="ajuda"><summary>Como funciona</summary><p><b>admin</b> = tudo · <b>professor</b> = bancos, provas, correção e resultados · <b>auxiliar</b> = só vê resultados · <b>auxiliar de inclusão</b> = só os alunos vinculados a ela na aba Acessibilidade: vê os resultados deles, edita as adaptações da prova, sobe documentos, deixa sugestões e devolve vidas.</p></details>
         <div class="grade" style="align-items:end">
           <div><label for="eEmail">E-mail (conta Google)</label><input type="email" id="eEmail" placeholder="nome@docente.senai.br"></div>
           <div><label for="eNome">Nome</label><input type="text" id="eNome"></div>
@@ -176,7 +180,7 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
       </div>
       <div class="card oculto" id="cardIA">
         <h2>Correção por IA <span class="pequeno">(só você vê esta seção)</span></h2>
-        <p class="pequeno">A chave fica num documento do Firestore que as regras deixam ler <b>somente</b> com a sua conta de administrador principal. Ela não vai para o GitHub, nem para a página do aluno, nem para os outros membros da equipe. Crie a chave em <b>console.anthropic.com → API Keys</b> e defina um limite de gasto mensal em <b>Settings → Limits</b>.</p>
+        <details class="ajuda"><summary>Como funciona</summary><p>A chave fica num documento do Firestore que as regras deixam ler <b>somente</b> com a sua conta de administrador principal. Ela não vai para o GitHub, nem para a página do aluno, nem para os outros membros da equipe. Crie a chave em <b>console.anthropic.com → API Keys</b> e defina um limite de gasto mensal em <b>Settings → Limits</b>.</p></details>
         <div class="grade">
           <div><label for="iaChave">Chave da API Anthropic</label><input type="password" id="iaChave" autocomplete="off" spellcheck="false" placeholder="sk-ant-… (deixe vazio para manter a salva)"></div>
           <div><label for="iaModelo">Modelo</label><select id="iaModelo"></select></div>

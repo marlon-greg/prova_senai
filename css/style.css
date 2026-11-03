@@ -551,3 +551,152 @@ body.em-prova header { position:static; }
 .hud-vidas { flex:0 0 auto; align-items:center; line-height:1; white-space:nowrap; }
 .centro h2, .fim h2 { justify-content:center; }
 .fim-mascote + h2 { margin-top:4px; }
+
+/* =====================================================================
+   IDENTIDADE 3.0 — paleta: azul-marinho (estrutura) · vermelho SENAI (ação) · âmbar (jogo)
+   ===================================================================== */
+:root {
+  --marinho:#14213d; --marinho-2:#1f3160; --marinho-claro:#e9eef8;
+  --vermelho:#c8102e; --vermelho-escuro:#a00d25; --vermelho-claro:#fdecef;
+  --ambar:#f5a524; --ambar-claro:#fff4dc; --ambar-escuro:#9a6200;
+  --fundo:#f3f5f9; --cartao:#fff; --texto:#1a2233; --suave:#5d6b82; --borda:#e2e7ef; --borda-forte:#c8d0dc;
+  --ok:#12805c; --ok-claro:#e3f5ed; --info:#2459c7; --info-claro:#e8effd;
+  --raio:14px; --sombra:0 1px 2px rgba(20,33,61,.06), 0 4px 16px rgba(20,33,61,.06);
+  --foco:0 0 0 3px rgba(200,16,46,.3);
+}
+body { background:var(--fundo); }
+.sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+
+/* cabeçalho escuro */
+header { background:var(--marinho); border:0; box-shadow:inset 0 -3px 0 var(--vermelho); color:#fff; backdrop-filter:none; }
+header h1 { color:#fff; font-weight:600; }
+header .quem { color:#c9d3e6; }
+header .quem button.leve { background:rgba(255,255,255,.08); color:#fff; border-color:rgba(255,255,255,.22); }
+header .quem button.leve:hover { background:rgba(255,255,255,.16); }
+header .quem button.discreto { color:#c9d3e6; } header .quem button.discreto:hover { background:rgba(255,255,255,.1); color:#fff; }
+.avatar { background:var(--ambar); color:var(--marinho); }
+/* os <header> dos cartões de prova não herdam o visual do cabeçalho */
+.cp-topo { color:var(--texto); }
+
+/* botões: vermelho = ação principal · marinho = secundária */
+button.sec { background:var(--marinho-2); } button.sec:hover { background:var(--marinho); }
+button.leve { border-color:var(--borda-forte); }
+button.ok { background:var(--ok); } button.ok:hover { background:#0d6648; }
+
+/* cartões com cabeçalho e divisória */
+.card { border-radius:var(--raio); border-color:var(--borda); box-shadow:var(--sombra); }
+.card > h2:first-child, .card-cab { padding-bottom:12px; margin:0 0 16px; border-bottom:1px solid var(--borda); }
+.card-cab h2 { margin:0; border:0; padding:0; }
+.card h2 { font-size:1.15em; color:var(--marinho); }
+.secao-titulo { gap:12px; flex-wrap:wrap; }
+.secao-titulo h2 { color:var(--marinho); }
+details.ajuda { margin:12px 0 0; font-size:.9em; color:var(--suave); }
+details.ajuda > summary { display:inline-flex; align-items:center; gap:6px; font-weight:600; color:var(--info); list-style:none; }
+details.ajuda > summary::before { content:"i"; display:inline-flex; width:18px; height:18px; border-radius:50%; background:var(--info-claro); color:var(--info); font-size:.75em; font-weight:700; align-items:center; justify-content:center; font-style:italic; }
+details.ajuda > summary::-webkit-details-marker { display:none; }
+details.ajuda[open] { background:#f8fafd; border:1px solid var(--borda); border-radius:10px; padding:10px 14px; }
+details.ajuda p { margin:8px 0 0; }
+
+/* ---------- painel: menu lateral escuro, sem emojis ---------- */
+.menu-lateral { background:var(--marinho); border:0; padding:10px; gap:2px; top:76px; }
+.menu-lateral button { color:#c9d3e6; font-weight:500; padding:11px 14px; border-left:3px solid transparent; border-radius:8px; }
+.menu-lateral button:hover { background:rgba(255,255,255,.07); color:#fff; }
+.menu-lateral button.ativa { background:rgba(255,255,255,.1); color:#fff; box-shadow:none; border-left-color:var(--vermelho); font-weight:600; }
+@media (max-width:900px) { .menu-lateral { border-radius:12px; } }
+
+/* nova prova */
+details.nova-prova > summary { justify-content:space-between; }
+details.nova-prova > summary .btn-fake { background:var(--vermelho); color:#fff; font-weight:600; padding:8px 16px; border-radius:var(--raio-p); font-size:.95em; }
+details.nova-prova[open] > summary .btn-fake { background:#fff; color:var(--texto); border:1px solid var(--borda-forte); }
+details.nova-prova[open] > summary .btn-fake::after { content:" (fechar)"; font-weight:400; }
+details.nova-prova[open] > summary { border-bottom:1px solid var(--borda); padding-bottom:12px; }
+/* seções do formulário (fieldsets) como blocos com título */
+fieldset.temas-box { background:#f8fafd; border:1px solid var(--borda); border-radius:12px; padding:16px 18px 12px; margin:20px 0; }
+fieldset.temas-box > legend { font-family:var(--fonte-titulo); font-size:.95em; font-weight:600; color:#fff; background:var(--marinho-2); padding:4px 12px; border-radius:999px; }
+.grade { gap:16px 20px; }
+label { color:#2b3548; }
+
+/* cartões de prova */
+.cartao-prova { border-top:0; border-left:5px solid #c8d0dc; }
+.cartao-prova.aberta { border-left-color:var(--ok); }
+.cp-numeros > div { background:var(--marinho-claro); }
+.cp-numeros b { color:var(--marinho); }
+
+/* resultados: barra de ferramentas */
+.barra-res { display:flex; align-items:flex-end; gap:12px; flex-wrap:wrap; }
+.barra-res .campo-prova { flex:1 1 320px; }
+.barra-res .interruptor { margin:0 0 10px; }
+.grupos-acoes { display:flex; gap:12px; flex-wrap:wrap; margin-top:16px; }
+.grupo { display:flex; align-items:center; gap:6px; padding:6px 8px 6px 12px; border:1px solid var(--borda); border-radius:12px; background:#f8fafd; }
+.grupo-rotulo { font-size:.75em; font-weight:700; text-transform:uppercase; letter-spacing:.6px; color:var(--suave); margin-right:4px; }
+.numeros { grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); }
+.numero { border:0; background:var(--marinho-claro); border-radius:12px; position:relative; overflow:hidden; }
+.numero b { color:var(--marinho); }
+.numero.aviso { background:var(--ambar-claro); } .numero.aviso b { color:var(--ambar-escuro); }
+.cartao-aluno { border-left-color:var(--ambar); box-shadow:var(--sombra); }
+.cartao-aluno .progresso div { background:var(--ambar); }
+.ca-sinais { font-size:.9em; color:var(--suave); }
+
+/* ---------- aluno: lista e início ---------- */
+.prova-item { border-left:5px solid var(--marinho-2); }
+.inicio-cab { background:linear-gradient(135deg, var(--marinho) 0%, var(--marinho-2) 100%); color:#fff; border:0; }
+.inicio-cab h2 { color:#fff; }
+.inicio-cab .chip { background:rgba(255,255,255,.12); border-color:rgba(255,255,255,.2); color:#fff; }
+.balao-nome { color:var(--marinho-2); }
+.guia-pontos i.on { background:var(--ambar); }
+.guia-pontos i.lido { background:#f7cf86; }
+
+/* ---------- PROVA: barra de status (HUD) em blocos ---------- */
+.hud { padding:14px 20px; border-top:4px solid var(--marinho); }
+.hud-linha { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+.hud-bloco { display:flex; align-items:center; gap:12px; min-width:0; flex:1 1 260px; }
+.hud-qtexto { display:flex; flex-direction:column; min-width:0; }
+.hud-qtexto .q-numero { margin:0; font-size:1.3em; color:var(--marinho); }
+.hud-rotulo { font-size:.7em; font-weight:700; text-transform:uppercase; letter-spacing:.7px; color:var(--suave); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.hud-qtexto .titulo-prova { margin:0; text-align:left; max-width:40ch; }
+.hud-stats { display:flex; align-items:stretch; flex:0 0 auto; border:1px solid var(--borda); border-radius:12px; overflow:hidden; }
+.hud-stat { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; padding:6px 16px; min-width:92px; }
+.hud-stat + .hud-stat { border-left:1px solid var(--borda); }
+.hud-stat:has(> .oculto) { display:none; }
+.hud-stat:has(> .oculto) + .hud-stat { border-left:0; }
+.hud-vidas, .hud-xp, .hud-stat .timer { background:none; padding:0; font-size:1.1em; }
+.hud-xp b { font-family:var(--fonte-titulo); font-size:1.1em; color:var(--ambar-escuro); } .hud-xp small { color:var(--suave); }
+.hud-stat .timer { font-weight:700; color:var(--marinho); }
+.hud-stat .timer.alerta { color:var(--erro); background:none; }
+.hud-mascote { width:56px; height:56px; flex:0 0 56px; background:var(--marinho-claro); border:2px solid #fff; box-shadow:0 0 0 2px var(--marinho-claro); }
+.hud-mascote .mascote { width:56px; }
+.hud .progresso { height:8px; margin:12px 0 0; background:var(--marinho-claro); }
+.hud .progresso div { background:linear-gradient(90deg, var(--ambar), #f7c35c); }
+.hud-fala { position:relative; margin-top:12px; background:var(--ambar-claro); border:1px solid #f3d58f; color:#4a3500; border-radius:12px; padding:8px 14px; font-size:.95em; }
+.hud-fala::before { content:""; position:absolute; left:22px; top:-7px; width:12px; height:12px; background:inherit; border-left:1px solid #f3d58f; border-top:1px solid #f3d58f; transform:rotate(45deg); }
+.hud-fala.entrando { animation:surgir .25s ease-out; }
+body.sem-mascote .hud-fala { display:none; }
+
+/* PROVA: cartão da questão em três partes */
+.questao { padding:0; overflow:hidden; }
+.q-cab { display:flex; align-items:center; gap:8px; flex-wrap:wrap; padding:14px 24px; background:#f8fafd; border-bottom:1px solid var(--borda); }
+.q-num { font-family:var(--fonte-titulo); font-weight:700; font-size:1.05em; color:var(--marinho); margin-right:4px; }
+.q-num small { font-weight:500; color:var(--suave); font-size:.85em; }
+.q-cab .b-ouvir { margin-left:auto; }
+.q-corpo { padding:20px 24px 8px; }
+.q-corpo .enunciado { font-size:1.12em; margin:0 0 20px; }
+.q-rotulo { font-size:.75em; font-weight:700; text-transform:uppercase; letter-spacing:.7px; color:var(--suave); margin:0 0 8px; }
+.alt { border-width:1.5px; border-radius:12px; padding:12px 16px; }
+.alt:hover { border-color:var(--marinho-2); background:var(--marinho-claro); }
+.alt.sel { border-color:var(--marinho-2); background:var(--marinho-claro); box-shadow:inset 4px 0 0 var(--marinho-2); }
+.alt.sel .alt-letra { background:var(--marinho-2); border-color:var(--marinho-2); }
+.q-rodape { display:flex; align-items:center; justify-content:space-between; gap:12px 24px; flex-wrap:wrap; padding:14px 24px; border-top:1px solid var(--borda); background:#fbfcfe; margin-top:12px; }
+.q-rodape .q-dica { margin:0; flex:1 1 260px; }
+.q-rodape .acoes-questao { margin:0; flex:0 0 auto; }
+.questao .q-feedback:not(.oculto) { margin:0 24px 16px; }
+.questao.enviada .q-cab { background:var(--ok-claro); }
+@media (max-width:600px) {
+  .hud-stats { width:100%; } .hud-stat { flex:1; min-width:0; padding:6px 8px; }
+  .q-cab, .q-corpo, .q-rodape { padding-left:16px; padding-right:16px; }
+  .q-rodape .acoes-questao { width:100%; }
+}
+
+/* tema escuro/contraste da acessibilidade sobre o novo visual */
+:is(.tema-creme, .tema-azul, .tema-contraste, .tema-escuro) :is(.q-cab, .q-rodape, .hud-stats, .hud-mascote) { background:var(--cartao); border-color:var(--borda); }
+:is(.tema-contraste, .tema-escuro) :is(.q-num, .hud-qtexto .q-numero, .card h2, .hud-stat .timer) { color:var(--texto); }
+.regras-box { margin-top:0; }

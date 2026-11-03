@@ -41,7 +41,7 @@
   <section id="telaProvas" class="oculto">
     <div id="provasSaudacao" class="card saudacao"></div>   <!-- mascote + "Oi, Fulano!" + escolha do mascote (js/aluno.js) -->
     <div class="card">
-      <h2>🎯 Suas provas</h2>
+      <h2>Suas provas</h2>
       <div id="listaProvas"><p class="pequeno">Carregando…</p></div>
     </div>
   </section>
@@ -76,18 +76,25 @@
   <section id="telaQuestao" class="oculto">
     <div id="provaLayout" class="prova-layout">
       <div class="prova-coluna">
-        <div class="card q-cabecalho">
-          <div class="q-topo">
-            <span id="hudMascote" class="hud-mascote" aria-hidden="true"></span>
-            <span id="qContador" class="q-numero"></span>
-            <span id="qTipo" class="tag"></span>
-            <span id="qTitulo" class="pequeno titulo-prova"></span>
-            <span id="hudXp" class="hud-xp" title="Questões respondidas"></span>
-            <span id="hudVidas" class="hud-vidas oculto" role="status" aria-live="polite"></span>
-            <span id="qTimer" class="timer oculto" title="Tempo restante"></span>
+        <div class="card q-cabecalho hud">
+          <div class="hud-linha">
+            <div class="hud-bloco hud-questao">
+              <span id="hudMascote" class="hud-mascote" aria-hidden="true"></span>
+              <div class="hud-qtexto">
+                <span id="qTitulo" class="hud-rotulo titulo-prova"></span>
+                <span id="qContador" class="q-numero"></span>
+              </div>
+              <span id="qTipo" class="tag oculto"></span>
+            </div>
+            <div class="hud-stats">
+              <div class="hud-stat" id="hudVidasBox"><span class="hud-rotulo">Vidas</span><span id="hudVidas" class="hud-vidas oculto" role="status" aria-live="polite"></span></div>
+              <div class="hud-stat"><span class="hud-rotulo">Respondidas</span><span id="hudXp" class="hud-xp"></span></div>
+              <div class="hud-stat" id="hudTempoBox"><span class="hud-rotulo">Tempo</span><span id="qTimer" class="timer oculto" title="Tempo restante"></span></div>
+            </div>
           </div>
           <div class="progresso" role="progressbar" aria-label="Progresso da prova"><div id="qBarra" style="width:0%"></div></div>
           <div id="qFaixa" class="q-faixa oculto" role="navigation" aria-label="Ir para a questão"></div>
+          <div id="hudFala" class="hud-fala oculto" role="status" aria-live="polite"></div>
         </div>
         <div id="qLista"></div>
         <div id="qNav" class="acoes-questao">
