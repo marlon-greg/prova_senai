@@ -17,6 +17,9 @@ const modoTodas = () => provaAtual?.modoExibicao === "todas";          // todas 
 const trocaAbaPermitida = () => provaAtual?.permitirTrocaAba === true; // sem tela cheia e sem aviso (só conta)
 const colarPermitido = () => provaAtual?.permitirColar === true;
 const temConsulta = () => !!provaAtual?.materialConsultaUrl;
+// código de acesso (o modo teste da equipe não pede)
+const pedeCodigo = () => !modoTeste && !!String(provaAtual?.codigoAcesso || "").trim();
+const normalizarCodigo = c => String(c || "").toUpperCase().replace(/\s+/g, "");
 // limite de saídas (aba/janela ou tela cheia); com troca de aba permitida não há limite
 const limiteSaidas = () => trocaAbaPermitida() ? 0 : Math.max(0, Math.round(Number(provaAtual?.maxTrocasDeAba || 0)));
 // "perder a questão" só existe no modo uma por vez; no modo "todas" a prova é encerrada
@@ -104,9 +107,12 @@ async function listarProvas() {
   provasDaLista = Object.fromEntries(lista.map(p => [p.id, p]));
   if (!lista.length) { box.innerHTML = `<div class="vazio"><div class="icone">📭</div><p><b>Nenhuma prova liberada no momento.</b></p><p class="pequeno">Quando o professor liberar, ela aparece aqui. Se a prova já começou na sala, recarregue a página.</p></div>`; return; }
   box.innerHTML = "";
+  let mostradas = 0;
   for (const p of lista) {
     const t = await getDoc(doc(db, "tentativas", idTentativa(p.id)));
     const td = t.exists() ? t.data() : null;
+    if (!td && !(await alunoNaTurma(p))) continue;   // prova de outra turma: não aparece
+    mostradas++;
     const podeFazer = modoTeste || p.liberada, podeVerResultado = modoTeste || p.resultadosLiberados;
     const andamento = p.modoExibicao === "todas" ? `${td?.indiceAtual || 0} de ${p.nQuestoes} enviadas` : `questão ${(td?.indiceAtual || 0) + 1} de ${p.nQuestoes}`;
     let status, acao;
@@ -115,6 +121,18 @@ async function listarProvas() {
     else                        { status = `<span class="tag ok">✓ finalizada em ${dataBR(td.finalizadaEm)}</span>` + (td.nota !== undefined ? ` <span class="tag nota">nota final: <b>${td.nota}</b></span>` : td.notaPrevia !== null && td.notaPrevia !== undefined ? ` <span class="tag nota">nota prévia: <b>${td.notaPrevia}</b>${td.aguardandoCorrecao ? " (aguardando correção)" : ""}</span>` : ""); acao = podeVerResultado ? `<button class="sec" data-acao="resultado" data-id="${p.id}">Ver resultado</button>` : `<span class="pequeno">resultado ainda não liberado</span>`; }
     box.insertAdjacentHTML("beforeend", `<div class="prova-item"><div class="info"><b>${esc(p.titulo)}</b><br><span class="pequeno">${esc(p.turma || "")} · ${p.nQuestoes} questões</span><div style="margin-top:4px">${status}</div></div><div class="acao">${acao}</div></div>`);
   }
+  if (!mostradas) box.innerHTML = `<div class="vazio"><div class="icone">📭</div><p><b>Nenhuma prova liberada para você no momento.</b></p><p class="pequeno">Quando o professor liberar uma prova da sua turma, ela aparece aqui. Se a prova já começou na sala, recarregue a página; se continuar sem aparecer, confira com o professor se o seu e-mail está na lista da turma.</p></div>`;
+}
+// turma da prova: sem turma = qualquer aluno; com turma = o e-mail precisa estar na lista
+// (o aluno só consegue ler a turma em que está; a proteção de verdade é a regra do create da tentativa)
+const turmasLidas = {};
+async function alunoNaTurma(p) {
+  if (modoTeste || !p.turmaId) return true;
+  if (!(p.turmaId in turmasLidas)) {
+    try { const d = await getDoc(doc(db, "turmas", p.turmaId)); turmasLidas[p.turmaId] = d.exists() ? (d.data().emails || []) : []; }
+    catch (e) { turmasLidas[p.turmaId] = []; }   // sem permissão = não está na turma
+  }
+  return turmasLidas[p.turmaId].includes(String(eu.email || "").toLowerCase());
 }
 $("#btnVoltar1").onclick = $("#btnVoltar2").onclick = $("#btnVoltar3").onclick = listarProvas;
 $("#btnImprimir").onclick = () => window.print();
@@ -131,6 +149,7 @@ function regrasDaProva(p) {
   if (!p.permitirTrocaAba && Number(p.maxTrocasDeAba) > 0) r.push(`<b>Limite de saídas da prova: ${Number(p.maxTrocasDeAba)}.</b> Trocar de aba/janela ou sair da tela cheia conta como saída. Ao chegar a ${Number(p.maxTrocasDeAba)}, ${textoPena(p)}.`);
   r.push("Copiar e selecionar o enunciado, imprimir e atalhos como Ctrl+C e Ctrl+P ficam desativados durante a prova.");
   if (Number(p.tempoMinutos) > 0) r.push(`<b>Tempo limite: ${Number(p.tempoMinutos)} min.</b> O cronômetro começa ao clicar em Começar; quando zerar, a prova é finalizada com as respostas já enviadas.`);
+  if (String(p.codigoAcesso || "").trim() && !modoTeste) r.push("Esta prova pede um <b>código de acesso</b>, informado pelo professor na sala.");
   if (p.materialConsultaUrl) r.push(`Consulta permitida: <b>${esc(p.materialConsultaTitulo || "material de consulta")}</b>, aberto ao lado das questões (no celular, pelo botão <b>📖 Consulta</b>).`);
   r.push(`Se a página fechar sem querer, entre de novo: você continua de onde parou${p.modoExibicao === "todas" ? ", com as respostas já enviadas" : ""}.`);
   return r;
@@ -149,12 +168,28 @@ async function abrirProva(id, acao) {
       (min > 0 ? `<p><span class="tag aviso">⏱ Tempo limite: ${min} min</span></p>` : "") +
       (temConsulta() ? `<p class="pequeno">📖 Esta prova permite consultar: <b>${esc(provaAtual.materialConsultaTitulo || "material de consulta")}</b>, dentro da própria tela.</p>` : "");
     $("#inicioRegras").innerHTML = regrasDaProva(provaAtual).map(x => `<li>${x}</li>`).join("");
+    $("#inicioCodigoBox").classList.toggle("oculto", !pedeCodigo());
+    $("#inicioCodigo").value = ""; $("#inicioCodigoErro").textContent = "";
+    $("#btnComecar").disabled = pedeCodigo();   // só habilita depois de digitar o código
     mostrar("telaInicio"); return;
   }
   await carregarTentativa();
 }
 
+$("#inicioCodigo").oninput = () => {
+  const el = $("#inicioCodigo"), v = normalizarCodigo(el.value);
+  if (el.value !== v) el.value = v;
+  $("#inicioCodigoErro").textContent = "";
+  $("#btnComecar").disabled = pedeCodigo() && !v;
+};
+$("#inicioCodigo").onkeydown = e => { if (e.key === "Enter" && !$("#btnComecar").disabled) $("#btnComecar").click(); };
 $("#btnComecar").onclick = async () => {
+  const codigo = pedeCodigo() ? normalizarCodigo($("#inicioCodigo").value) : null;
+  if (pedeCodigo() && !codigo) return;
+  // confere já no navegador para responder na hora; as regras do Firestore conferem de novo ao criar a tentativa
+  if (codigo && codigo !== normalizarCodigo(provaAtual.codigoAcesso)) {
+    $("#inicioCodigoErro").textContent = "Código incorreto. Confira com o professor e digite de novo."; $("#inicioCodigo").select(); return;
+  }
   pedirTelaCheia();   // precisa ser chamado direto no clique, antes de qualquer await
   $("#btnComecar").disabled = true;
   try {
@@ -180,12 +215,21 @@ $("#btnComecar").onclick = async () => {
       saidasTelaCheia: 0, tentativasColar: 0
     };
     if (modoTeste) dados.teste = true;
-    await setDoc(doc(db, "tentativas", tid), dados);
+    if (codigo) dados.codigoInformado = codigo;   // as regras conferem com o código da prova
+    try { await setDoc(doc(db, "tentativas", tid), dados); }
+    catch (e) {
+      if (codigo && e?.code === "permission-denied") throw Object.assign(new Error("Código incorreto. Confira com o professor e digite de novo."), { codigoErrado: true });
+      throw e;
+    }
     const t = await getDoc(doc(db, "tentativas", tid));
     tentativa = { id: tid, ...t.data() };
     await carregarTentativa();
-  } catch (e) { sairTelaCheia(); toast("Não foi possível começar. " + traduzirErro(e), "erro"); console.error(e); }
-  $("#btnComecar").disabled = false;
+  } catch (e) {
+    sairTelaCheia();
+    if (e.codigoErrado) { $("#inicioCodigoErro").textContent = e.message; $("#inicioCodigo").select(); }
+    else { toast("Não foi possível começar. " + traduzirErro(e), "erro"); console.error(e); }
+  }
+  $("#btnComecar").disabled = pedeCodigo() && !normalizarCodigo($("#inicioCodigo").value);
 };
 
 async function carregarTentativa() {
