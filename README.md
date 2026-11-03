@@ -80,6 +80,26 @@ Cada **banco** tem um campo `materia`, e cada questão pode ter um `tema`. Dá p
 - O sorteio de cada aluno usa só as questões dos temas marcados, mantendo a cota de dissertativas. A tabela de provas mostra os temas de cada prova ("todos" quando nenhum foi desmarcado).
 - O **Gabarito p/ Classroom** sai agrupado por tema, com caixas para gerar só dos temas que a prova usou.
 
+## Opções de cada prova
+
+Definidas em **Nova prova** e alteráveis depois pelo botão **✎ Editar** na tabela "Provas criadas". A tela de instruções do aluno lista só as regras que valem para aquela prova.
+
+| Opção | Padrão | O que faz |
+|---|---|---|
+| **Exibição das questões** (`modoExibicao`) | uma por vez | **Uma por vez**: sem voltar, como sempre. **Todas na mesma página**: as questões aparecem em sequência, cada uma com seu botão *Enviar resposta*; a enviada fica travada; o topo mostra "Enviadas: X de 10"; *Finalizar prova* avisa quais faltam e pergunta se quer finalizar com elas em branco. Ao recarregar a página, as enviadas voltam travadas. O feedback imediato vale igual nos dois modos. |
+| **Permitir trocar de aba/janela** (`permitirTrocaAba`) | não | Não pede tela cheia e não mostra o aviso ao trocar de aba. As trocas continuam contadas e aparecem em **cinza, "permitido"**, em Resultados (a linha não fica amarela). |
+| **Permitir colar** (`permitirColar`) | não | Libera colar e arrastar nos campos de resposta e não registra tentativas de colar. Copiar o enunciado continua bloqueado. |
+| **Material de consulta** (`materialConsultaTitulo`, `materialConsultaUrl`) | nenhum | Mostra o material **dentro da tela da prova**: no computador, numa coluna à direita (arraste o canto inferior esquerdo para alargar); no celular, pelo botão **📖 Consulta**, numa gaveta por cima da questão. Clicar no material não conta como troca de aba. |
+
+**Editar uma prova:** depois que algum aluno começou (tentativas de teste não contam), **banco, número de questões, dissertativas e temas ficam travados**, porque mudariam o sorteio de quem já começou e a correção. Título, turma, feedback, tempo e as opções acima podem mudar a qualquer momento.
+
+### Como obter o link do material de consulta
+- **PDF ou arquivo no Google Drive:** botão direito no arquivo → **Compartilhar** → em "Acesso geral" escolha **Qualquer pessoa com o link** → **Copiar link**.
+- **Google Slides:** **Arquivo → Compartilhar → Publicar na web** → **Publicar** → copie o link. (Um link de edição também funciona, desde que o acesso seja "Qualquer pessoa com o link".)
+- **Google Docs:** Compartilhar → Qualquer pessoa com o link → Copiar link.
+
+Cole o link no campo. O sistema converte sozinho para o formato que abre dentro da prova (Drive → `/preview`, Slides → `/embed`, Docs → `/preview`) e mostra a prévia antes de salvar. Outros sites ficam como estão, mas muitos **não deixam ser abertos dentro de outra página**; nesse caso o aluno vê "Não foi possível carregar o material; avise o professor". Use sempre um link `https://` e teste com **Testar como aluno** antes da prova.
+
 ## Formato do banco de questões (JSON)
 
 ```json
