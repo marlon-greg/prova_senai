@@ -122,6 +122,15 @@ Limites conhecidos (sem Cloud Functions, para ficar no plano gratuito):
 - A correção automática também roda no navegador; a nota "fechada" é gravada **pelo professor**, nunca pelo aluno.
 - Não há cronômetro. Se quiser limite de tempo, encerre a prova pelo painel na hora combinada.
 
+## Testar como aluno
+Na aba **Provas** do painel, cada prova tem o botão **Testar como aluno**: ele abre `index.html?teste=<id da prova>` em nova aba e você faz a prova exatamente como o aluno (uma questão por vez, sem voltar, colar bloqueado, mesmo feedback), **mesmo com a prova ainda fechada**.
+- Uma faixa amarela **MODO TESTE** fica no topo; o botão **Reiniciar teste** apaga a tentativa e recomeça.
+- A tentativa de teste (`teste_<seu uid>_<prova>`, campo `teste: true`) **não aparece** em Resultados, média, CSV, PDFs nem em "Fechar notas".
+- Ao finalizar, aparece a nota prévia e o botão **Ver resultado** (sempre, no teste), para conferir a tela que o aluno verá.
+- **Apagar meu teste** (na aba Provas) apaga a sua tentativa de teste daquela prova, para testar de novo.
+
+> ⚠ Depois de alterar `firestore.rules`, cole as regras de novo no **Firebase Console → Firestore → Regras → Publicar**. O GitHub Pages publica só o site, não as regras.
+
 ## Testar antes do dia (recomendado)
 1. Entre em `admin.html` com a sua conta, importe o modelo, crie uma prova de teste e libere.
 2. Entre em `index.html` com uma conta `@edu.senai.br` (peça a um aluno ou use uma conta de teste) e faça a prova.
