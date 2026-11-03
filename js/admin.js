@@ -1,6 +1,6 @@
 // Painel do professor: provas, bancos (import JSON), resultados/correção, equipe, configuração.
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, apagarTentativaTeste,
-         confirmar, traduzirErro, iniciais, temaDe, ordenarTemas } from "./common.js";
+         confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas } from "./common.js";
 import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -74,26 +74,200 @@ async function listarBancos() {
   bancosCache.sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
   return bancosCache;
 }
+const opcoesBancos = () => bancosCache.map(b => `<option value="${b.id}">${esc(b.nome)} (${b.nQuestoes} questões)</option>`).join("") || "<option value=''>— importe um banco primeiro —</option>";
+
+// ---------- formulário da prova (o mesmo para "Nova prova" e para o modal "Editar") ----------
+// f = prefixo dos ids: "p" (nova prova) ou "e" (editar)
+const AJUDA_MATERIAL = "Google Drive: Compartilhar → Qualquer pessoa com o link → copiar link. Google Slides: Arquivo → Compartilhar → Publicar na web. Cole o link aqui.";
+function formProvaHTML(f) {
+  return `
+  <div class="grade">
+    <div><label for="${f}Titulo">Título</label><input type="text" id="${f}Titulo" placeholder="MS5 — DML"></div>
+    <div><label for="${f}Turma">Turma (texto livre)</label><input type="text" id="${f}Turma" placeholder="DETS-1A"></div>
+    <div><label for="${f}Banco">Banco de questões</label><select id="${f}Banco"></select></div>
+  </div>
+  <p id="${f}Trava" class="aviso-box oculto" role="note"></p>
+  <fieldset class="temas-box">
+    <legend>Temas que entram no sorteio</legend>
+    <div id="${f}Temas" class="lista-temas"><p class="pequeno">Escolha um banco para ver os temas.</p></div>
+    <p id="${f}TemasResumo" class="pequeno temas-resumo" role="status" aria-live="polite"></p>
+  </fieldset>
+  <div class="grade">
+    <div><label for="${f}N">Questões por aluno</label><input type="number" id="${f}N" value="10" min="1"></div>
+    <div><label for="${f}NDiss">Das quais dissertativas (0 = sorteio livre)</label><input type="number" id="${f}NDiss" value="3" min="0"></div>
+    <div><label for="${f}Feedback">Feedback ao enviar cada resposta</label>
+      <select id="${f}Feedback"><option value="acerto">Só diz se acertou ou errou</option><option value="completo">Mostra a resposta certa e a explicação</option><option value="nenhum">Nenhum (só no resultado final)</option></select></div>
+  </div>
+  <div class="grade">
+    <div><label for="${f}Tempo">Tempo limite (min, 0 = sem limite)</label><input type="number" id="${f}Tempo" value="0" min="0" step="5"></div>
+    <div><label for="${f}Modo">Exibição das questões</label>
+      <select id="${f}Modo"><option value="uma">Uma por vez, sem voltar</option><option value="todas">Todas na mesma página (cada uma com seu botão Enviar)</option></select></div>
+  </div>
+  <fieldset class="temas-box">
+    <legend>Regras da prova</legend>
+    <label class="check"><input type="checkbox" id="${f}Embaralhar" checked> Embaralhar a ordem das alternativas para cada aluno</label>
+    <label class="check"><input type="checkbox" id="${f}PermitirTrocaAba"> <span>Permitir trocar de aba/janela <span class="pequeno">— sem tela cheia e sem aviso; as trocas continuam contadas, marcadas como "permitido"</span></span></label>
+    <label class="check"><input type="checkbox" id="${f}PermitirColar"> <span>Permitir colar nos campos de resposta <span class="pequeno">— colar e arrastar liberados, sem registro</span></span></label>
+  </fieldset>
+  <fieldset class="temas-box">
+    <legend>Material de consulta (opcional)</legend>
+    <div class="grade">
+      <div><label for="${f}MatTitulo">Título do material</label><input type="text" id="${f}MatTitulo" placeholder="Slides da aula 8"></div>
+      <div class="col-2"><label for="${f}MatUrl">Link do material</label><input type="url" id="${f}MatUrl" placeholder="https://drive.google.com/file/d/…/view"></div>
+    </div>
+    <p class="pequeno">${AJUDA_MATERIAL}</p>
+    <p class="pequeno" id="${f}MatPrevia" aria-live="polite"></p>
+  </fieldset>`;
+}
+
+// Converte links do Google para a versão que abre dentro de um iframe; outros links ficam como estão.
+function converterLinkMaterial(url) {
+  const u = String(url || "").trim();
+  if (!u) return "";
+  let m;
+  if ((m = /^https?:\/\/drive\.google\.com\/file\/d\/([\w-]+)/.exec(u))) return `https://drive.google.com/file/d/${m[1]}/preview`;
+  if ((m = /^https?:\/\/drive\.google\.com\/open\?(?:.*&)?id=([\w-]+)/.exec(u))) return `https://drive.google.com/file/d/${m[1]}/preview`;
+  // "Publicar na web" gera /d/e/<id>/pub — tratar antes do /d/<id>/ comum
+  if ((m = /^https?:\/\/docs\.google\.com\/presentation\/d\/e\/([\w-]+)/.exec(u))) return `https://docs.google.com/presentation/d/e/${m[1]}/embed?start=false&loop=false`;
+  if ((m = /^https?:\/\/docs\.google\.com\/presentation\/d\/([\w-]+)/.exec(u))) return `https://docs.google.com/presentation/d/${m[1]}/embed?start=false&loop=false`;
+  if ((m = /^https?:\/\/docs\.google\.com\/document\/d\/e\/([\w-]+)/.exec(u))) return `https://docs.google.com/document/d/e/${m[1]}/pub?embedded=true`;
+  if ((m = /^https?:\/\/docs\.google\.com\/document\/d\/([\w-]+)/.exec(u))) return `https://docs.google.com/document/d/${m[1]}/preview`;
+  return u;
+}
+
+// Controla um formulário de prova: temas do banco, resumo ao vivo, validação, leitura e preenchimento.
+function controleProva(f) {
+  const $f = s => $("#" + f + s);
+  let contagem = {}, bancoDesenhado = null, travado = false;
+  const disponiveis = () => temasMarcados($f("Temas")).reduce((s, t) => ({ alternativa: s.alternativa + (contagem[t]?.alternativa || 0), dissertativa: s.dissertativa + (contagem[t]?.dissertativa || 0) }), { alternativa: 0, dissertativa: 0 });
+  // devolve a mensagem de erro (ou "") para o pedido atual
+  function problema() {
+    const n = Number($f("N").value || 0), nDiss = Number($f("NDiss").value || 0), d = disponiveis();
+    if (travado || !Object.keys(contagem).length) return "";
+    if (!temasMarcados($f("Temas")).length) return "Marque pelo menos um tema.";
+    if (nDiss > 0) {
+      if (n - nDiss > d.alternativa) return `Faltam questões de alternativa: a prova pede ${n - nDiss} (${n} − ${nDiss} dissertativas), mas os temas marcados só têm ${d.alternativa}. Marque mais temas ou diminua o número de questões.`;
+      if (nDiss > d.dissertativa) return `Faltam dissertativas: a prova pede ${nDiss}, mas os temas marcados só têm ${d.dissertativa}. Marque mais temas ou diminua o número de dissertativas.`;
+    } else if (n > d.alternativa + d.dissertativa) {
+      return `Faltam questões: a prova pede ${n}, mas os temas marcados só têm ${d.alternativa + d.dissertativa}. Marque mais temas ou diminua o número de questões.`;
+    }
+    return "";
+  }
+  function atualizar() {
+    const el = $f("TemasResumo");
+    if (!Object.keys(contagem).length) { el.textContent = ""; el.classList.remove("erro"); return; }
+    const prob = problema();
+    el.textContent = `Disponíveis com os temas marcados: ${textoContagem(disponiveis())}.` + (prob ? " ⚠ " + prob : "");
+    el.classList.toggle("erro", !!prob);
+  }
+  // desenha os temas do banco escolhido; marcados = null -> todos marcados
+  async function carregarTemas(marcados = null) {
+    const bancoId = $f("Banco").value, box = $f("Temas");
+    contagem = {}; bancoDesenhado = bancoId;
+    if (!bancoId) { box.innerHTML = `<p class="pequeno">Escolha um banco para ver os temas.</p>`; atualizar(); return; }
+    box.innerHTML = `<p class="pequeno">Carregando temas…</p>`;
+    try {
+      const qs = await questoesDoBanco(bancoId);
+      if ($f("Banco").value !== bancoId) return;   // trocou de banco enquanto carregava
+      contagem = contarPorTema(qs);
+      desenharChecksTemas(box, contagem, atualizar);
+      if (Array.isArray(marcados) && marcados.length) box.querySelectorAll("input[type=checkbox]").forEach(c => c.checked = marcados.includes(c.value));
+      if (travado) box.querySelectorAll("input, button").forEach(x => x.disabled = true);
+    } catch (e) { box.innerHTML = `<p class="pequeno">Não foi possível carregar os temas. ${esc(traduzirErro(e))}</p>`; }
+    atualizar();
+  }
+  function previaMaterial() {
+    const url = $f("MatUrl").value.trim(), conv = converterLinkMaterial(url), el = $f("MatPrevia");
+    if (!url) { el.textContent = ""; return; }
+    if (!/^https:\/\//.test(conv)) { el.innerHTML = `⚠ Use um link que comece com <b>https://</b>.`; return; }
+    el.innerHTML = conv !== url ? `Será salvo no formato para exibir na prova: <span class="mono">${esc(conv)}</span>` : `Link salvo como está.`;
+  }
+  // liga os eventos (chamar depois que o HTML estiver na página)
+  function ligar() {
+    $f("Banco").onchange = () => carregarTemas();
+    $f("N").oninput = $f("NDiss").oninput = atualizar;
+    $f("MatUrl").oninput = previaMaterial;
+  }
+  // trava banco, número de questões, dissertativas e temas (prova que já tem tentativas de alunos)
+  function travar(motivo) {
+    travado = true;
+    ["Banco", "N", "NDiss"].forEach(s => $f(s).disabled = true);
+    $f("Temas").querySelectorAll("input, button").forEach(x => x.disabled = true);
+    $f("Trava").innerHTML = motivo; $f("Trava").classList.remove("oculto");
+    atualizar();
+  }
+  function preencher(p) {
+    $f("Titulo").value = p.titulo || ""; $f("Turma").value = p.turma || "";
+    $f("Banco").value = p.bancoId || ""; $f("N").value = p.nQuestoes ?? 10; $f("NDiss").value = p.nDissertativas ?? 0;
+    $f("Feedback").value = p.feedbackImediato || "acerto"; $f("Tempo").value = p.tempoMinutos || 0;
+    $f("Modo").value = p.modoExibicao === "todas" ? "todas" : "uma";
+    $f("Embaralhar").checked = p.embaralharAlternativas !== false;
+    $f("PermitirTrocaAba").checked = p.permitirTrocaAba === true; $f("PermitirColar").checked = p.permitirColar === true;
+    $f("MatTitulo").value = p.materialConsultaTitulo || ""; $f("MatUrl").value = p.materialConsultaUrl || "";
+    previaMaterial();
+  }
+  // lê e valida; devolve { erro } ou { dados }
+  async function ler() {
+    const titulo = $f("Titulo").value.trim(), bancoId = $f("Banco").value, n = Number($f("N").value), nDiss = Number($f("NDiss").value || 0);
+    if (!titulo) return { erro: "Preencha o título." };
+    if (!travado && (!bancoId || !n)) return { erro: "Preencha banco e número de questões." };
+    if (nDiss > n) return { erro: "O número de dissertativas não pode passar do total de questões." };
+    if (!travado && (bancoDesenhado !== bancoId || !Object.keys(contagem).length)) await carregarTemas();   // garante a contagem do banco escolhido
+    const prob = problema();
+    if (prob) { atualizar(); return { erro: prob }; }
+    const urlBruta = $f("MatUrl").value.trim(), url = converterLinkMaterial(urlBruta);
+    if (url && !/^https:\/\//.test(url)) return { erro: "O link do material de consulta precisa começar com https://." };
+    const dados = {
+      titulo, turma: $f("Turma").value.trim(),
+      feedbackImediato: $f("Feedback").value, embaralharAlternativas: $f("Embaralhar").checked,
+      tempoMinutos: Math.max(0, Math.round(Number($f("Tempo").value || 0))),
+      modoExibicao: $f("Modo").value === "todas" ? "todas" : "uma",
+      permitirTrocaAba: $f("PermitirTrocaAba").checked, permitirColar: $f("PermitirColar").checked,
+      materialConsultaUrl: url, materialConsultaTitulo: url ? ($f("MatTitulo").value.trim() || "Material de consulta") : ""
+    };
+    // campos do sorteio: só entram se não estiverem travados
+    if (!travado) Object.assign(dados, { bancoId, nQuestoes: n, nDissertativas: nDiss, temas: temasMarcados($f("Temas")) });   // todos marcados = lista completa
+    return { dados };
+  }
+  return { carregarTemas, atualizar, ligar, travar, preencher, ler, get bancoDesenhado() { return bancoDesenhado; } };
+}
+
+$("#formNovaProva").innerHTML = formProvaHTML("p");
+const formNova = controleProva("p");
+formNova.ligar();
+
+// resumo das opções de uma prova (tabela "Provas criadas")
+function opcoesDaProvaHTML(p) {
+  const t = [];
+  t.push(p.modoExibicao === "todas" ? `<span class="tag">▤ todas na página</span>` : `<span class="tag">▭ uma por vez</span>`);
+  if (p.permitirTrocaAba) t.push(`<span class="tag aviso" title="Sem tela cheia e sem aviso; as trocas continuam contadas">🔀 troca de aba permitida</span>`);
+  if (p.permitirColar) t.push(`<span class="tag aviso">📋 colar permitido</span>`);
+  if (p.materialConsultaUrl) t.push(`<span class="tag nota" title="${esc(p.materialConsultaUrl)}">📖 ${esc(p.materialConsultaTitulo || "consulta")}</span>`);
+  return t.join(" ");
+}
+
 async function carregarProvas() {
   await listarBancos();
   const bancoAntes = $("#pBanco").value;
-  $("#pBanco").innerHTML = bancosCache.map(b => `<option value="${b.id}">${esc(b.nome)} (${b.nQuestoes} questões)</option>`).join("") || "<option value=''>— importe um banco primeiro —</option>";
+  $("#pBanco").innerHTML = opcoesBancos();
   if (bancoAntes && bancosCache.some(b => b.id === bancoAntes)) $("#pBanco").value = bancoAntes;
   // só redesenha os temas se o banco mudou (mantém as marcações do professor e não "pula" a tela)
-  if ($("#pBanco").value !== temasDoBanco) carregarTemasProva();
+  if ($("#pBanco").value !== formNova.bancoDesenhado) formNova.carregarTemas();
   const s = await getDocs(collection(db, "provas"));
   const provas = []; s.forEach(d => provas.push({ id: d.id, ...d.data() }));
   provas.sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
   const box = $("#listaProvas");
   if (!provas.length) { box.innerHTML = `<div class="vazio"><div class="icone">📝</div><p>Nenhuma prova ainda. Crie a primeira no formulário acima.</p></div>`; return; }
-  box.innerHTML = `<div class="tabela"><table><tr><th>Prova</th><th>Banco</th><th>Questões</th><th>Temas</th><th>Status</th><th>Resultados</th><th></th></tr>` + provas.map(p => {
+  box.innerHTML = `<div class="tabela"><table><tr><th>Prova</th><th>Banco</th><th>Questões</th><th>Temas</th><th>Opções</th><th>Status</th><th>Resultados</th><th></th></tr>` + provas.map(p => {
     const b = bancosCache.find(x => x.id === p.bancoId);
     return `<tr><td><b>${esc(p.titulo)}</b><br><span class="pequeno">${esc(p.turma || "")}</span></td><td>${esc(b?.nome || p.bancoId)}<br><span class="pequeno">${esc(b?.materia || "")}</span></td><td>${p.nQuestoes}${p.nDissertativas ? `<br><span class="pequeno">${p.nDissertativas} dissert.</span>` : ""}${p.tempoMinutos > 0 ? `<br><span class="pequeno">⏱ ${p.tempoMinutos} min</span>` : ""}</td>
       <td class="pequeno">${temasDaProvaTexto(p, b)}</td>
+      <td class="td-opcoes">${opcoesDaProvaHTML(p)}</td>
       <td><span class="tag ${p.liberada ? "on" : "off"}">${p.liberada ? "● liberada" : "○ fechada"}</span></td>
       <td><span class="tag ${p.resultadosLiberados ? "on" : "off"}">${p.resultadosLiberados ? "● liberados" : "○ ocultos"}</span></td>
       <td class="td-acoes">${podeEditar() ? `<button class="mini ${p.liberada ? "leve" : "ok"}" data-tg="liberada" data-id="${p.id}">${p.liberada ? "Encerrar" : "Liberar prova"}</button>
-        <button class="leve mini" data-tg="resultadosLiberados" data-id="${p.id}">${p.resultadosLiberados ? "Ocultar resultados" : "Liberar resultados"}</button><br>` : ""}
+        <button class="leve mini" data-tg="resultadosLiberados" data-id="${p.id}">${p.resultadosLiberados ? "Ocultar resultados" : "Liberar resultados"}</button>
+        <button class="leve mini" data-editar="${p.id}">✎ Editar</button><br>` : ""}
         <button class="leve mini" data-testar="${p.id}" title="Abre a prova em nova aba, como o aluno vê (não vale nota)">Testar como aluno</button>
         <button class="perigo mini" data-apagarteste="${p.id}" title="Apaga a sua tentativa de teste desta prova">Apagar meu teste</button>
         ${podeEditar() && ehAdmin() ? `<button class="perigo mini" data-del="${p.id}" title="Apagar prova" aria-label="Apagar prova">🗑 Apagar</button>` : ""}</td></tr>`;
@@ -103,6 +277,7 @@ async function carregarProvas() {
     await updateDoc(doc(db, "provas", p.id), { [b.dataset.tg]: !p[b.dataset.tg] });
     toast("Prova atualizada", "ok"); carregarProvas();
   });
+  box.querySelectorAll("[data-editar]").forEach(b => b.onclick = () => editarProva(provas.find(x => x.id === b.dataset.editar)));
   box.querySelectorAll("[data-testar]").forEach(b => b.onclick = () => window.open(`index.html?teste=${encodeURIComponent(b.dataset.testar)}`, "_blank"));
   box.querySelectorAll("[data-apagarteste]").forEach(b => b.onclick = async () => {
     if (!(await confirmar("Apagar a sua tentativa de teste desta prova? Você poderá testar de novo, com novo sorteio.", { titulo: "Apagar meu teste", ok: "Apagar", perigo: true }))) return;
@@ -122,63 +297,43 @@ function temasDaProvaTexto(p, b) {
   if (Array.isArray(b?.temas) && b.temas.length && b.temas.every(t => p.temas.includes(t))) return "todos";
   return p.temas.map(esc).join("<br>");
 }
-let contagemProva = {};   // contagem por tema do banco escolhido no formulário
-let temasDoBanco = null;  // banco cujos temas estão desenhados
-async function carregarTemasProva() {
-  const bancoId = $("#pBanco").value, box = $("#pTemas");
-  contagemProva = {}; temasDoBanco = bancoId;
-  if (!bancoId) { box.innerHTML = `<p class="pequeno">Escolha um banco para ver os temas.</p>`; atualizarResumoTemas(); return; }
-  box.innerHTML = `<p class="pequeno">Carregando temas…</p>`;
-  try {
-    const qs = await questoesDoBanco(bancoId);
-    if ($("#pBanco").value !== bancoId) return;   // trocou de banco enquanto carregava
-    contagemProva = contarPorTema(qs);
-    desenharChecksTemas(box, contagemProva, atualizarResumoTemas);
-  } catch (e) { box.innerHTML = `<p class="pequeno">Não foi possível carregar os temas. ${esc(traduzirErro(e))}</p>`; }
-  atualizarResumoTemas();
-}
-// soma do que está disponível nos temas marcados
-function disponiveisMarcados() {
-  return temasMarcados($("#pTemas")).reduce((s, t) => ({ alternativa: s.alternativa + (contagemProva[t]?.alternativa || 0), dissertativa: s.dissertativa + (contagemProva[t]?.dissertativa || 0) }), { alternativa: 0, dissertativa: 0 });
-}
-// devolve a mensagem de erro (ou "") para o pedido atual do formulário
-function problemaTemas() {
-  const n = Number($("#pN").value || 0), nDiss = Number($("#pNDiss").value || 0), d = disponiveisMarcados();
-  if (!Object.keys(contagemProva).length) return "";
-  if (!temasMarcados($("#pTemas")).length) return "Marque pelo menos um tema.";
-  if (nDiss > 0) {
-    if (n - nDiss > d.alternativa) return `Faltam questões de alternativa: a prova pede ${n - nDiss} (${n} − ${nDiss} dissertativas), mas os temas marcados só têm ${d.alternativa}. Marque mais temas ou diminua o número de questões.`;
-    if (nDiss > d.dissertativa) return `Faltam dissertativas: a prova pede ${nDiss}, mas os temas marcados só têm ${d.dissertativa}. Marque mais temas ou diminua o número de dissertativas.`;
-  } else if (n > d.alternativa + d.dissertativa) {
-    return `Faltam questões: a prova pede ${n}, mas os temas marcados só têm ${d.alternativa + d.dissertativa}. Marque mais temas ou diminua o número de questões.`;
-  }
-  return "";
-}
-function atualizarResumoTemas() {
-  const el = $("#pTemasResumo");
-  if (!Object.keys(contagemProva).length) { el.textContent = ""; el.classList.remove("erro"); return; }
-  const d = disponiveisMarcados(), prob = problemaTemas();
-  el.textContent = `Disponíveis com os temas marcados: ${textoContagem(d)}.` + (prob ? " ⚠ " + prob : "");
-  el.classList.toggle("erro", !!prob);
-}
-$("#pBanco").onchange = carregarTemasProva;
-$("#pN").oninput = $("#pNDiss").oninput = atualizarResumoTemas;
 
 $("#btnCriarProva").onclick = async () => {
   if (!podeEditar()) return toast("Seu papel não permite criar provas.", "erro");
-  const titulo = $("#pTitulo").value.trim(), bancoId = $("#pBanco").value, n = Number($("#pN").value), nDiss = Number($("#pNDiss").value || 0);
-  if (nDiss > n) return toast("O número de dissertativas não pode passar do total de questões.", "erro");
-  if (!titulo || !bancoId || !n) return toast("Preencha título, banco e número de questões.", "erro");
-  const tempoMinutos = Math.max(0, Math.round(Number($("#pTempo").value || 0)));
-  if (!Object.keys(contagemProva).length) await carregarTemasProva();   // garante a contagem do banco escolhido
-  const prob = problemaTemas();
-  if (prob) { atualizarResumoTemas(); return toast(prob, "erro"); }
-  const temas = temasMarcados($("#pTemas"));   // se todos estiverem marcados, grava a lista completa
-  await addDoc(collection(db, "provas"), { titulo, turma: $("#pTurma").value.trim(), bancoId, nQuestoes: n, nDissertativas: nDiss, temas,
-    feedbackImediato: $("#pFeedback").value, embaralharAlternativas: $("#pEmbaralhar").checked, tempoMinutos,
-    liberada: false, resultadosLiberados: false, criadoEm: serverTimestamp(), criadoPor: eu.email });
+  const r = await formNova.ler();
+  if (r.erro) return toast(r.erro, "erro");
+  await addDoc(collection(db, "provas"), { ...r.dados, liberada: false, resultadosLiberados: false, criadoEm: serverTimestamp(), criadoPor: eu.email });
   $("#pTitulo").value = ""; toast("Prova criada (ainda fechada). Libere quando for aplicar.", "ok"); carregarProvas();
 };
+
+// ---------- editar prova ----------
+async function editarProva(p) {
+  if (!podeEditar()) return toast("Seu papel não permite editar provas.", "erro");
+  // tentativas de alunos (as de teste não contam) travam os campos do sorteio
+  let nTentativas = 0;
+  try {
+    const ts = await getDocs(query(collection(db, "tentativas"), where("provaId", "==", p.id)));
+    nTentativas = ts.docs.filter(d => d.data().teste !== true).length;
+  } catch (e) { return toast("Não foi possível conferir as tentativas da prova. " + traduzirErro(e), "erro"); }
+  const ctl = controleProva("e");
+  const salvou = await modal({
+    titulo: "Editar prova", conteudo: formProvaHTML("e"), ok: "Salvar alterações", cancelar: "Cancelar", largo: true,
+    aoAbrir: () => {
+      $("#eBanco").innerHTML = opcoesBancos();
+      ctl.ligar(); ctl.preencher(p);
+      if (nTentativas) ctl.travar(`🔒 <b>${nTentativas} aluno(s) já começaram esta prova.</b> Banco, número de questões, dissertativas e temas não podem mudar: isso mudaria o sorteio de quem já começou e a correção. As outras opções podem ser alteradas.`);
+      ctl.carregarTemas(Array.isArray(p.temas) ? p.temas : null);
+    },
+    antesDeConfirmar: async () => {
+      const r = await ctl.ler();
+      if (r.erro) { toast(r.erro, "erro"); return false; }
+      try { await updateDoc(doc(db, "provas", p.id), r.dados); }
+      catch (e) { toast("Não foi possível salvar. " + traduzirErro(e), "erro"); return false; }
+      return true;
+    }
+  });
+  if (salvou) { toast("Prova atualizada.", "ok"); carregarProvas(); }
+}
 
 // ============================================================ BANCOS
 $("#arqBanco").onchange = e => { const f = e.target.files[0]; if (f) f.text().then(t => $("#txtBanco").value = t); };
