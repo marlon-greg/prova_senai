@@ -55,8 +55,10 @@ async function corrigirTentativa(env, usuario, tid) {
   if (t.uid !== usuario.uid) throw falha("Esta tentativa não é sua.", 403);
   if (!t.finalizadaEm) throw falha("A prova ainda não foi finalizada.", 409);
   const ids = t.questoesIds || [];
+  // a prova pode sortear de vários bancos: o id da questão leva o banco ("<bancoId>_q001")
+  const bancoDe = qid => { const i = String(qid).lastIndexOf("_q"); return i > 0 ? String(qid).slice(0, i) : t.bancoId; };
   const [docs, resp, corr] = await Promise.all([
-    fs.lerVarios(ids.flatMap(q => [`bancos/${t.bancoId}/questoes/${q}`, `bancos/${t.bancoId}/gabaritos/${q}`])),
+    fs.lerVarios(ids.flatMap(q => [`bancos/${bancoDe(q)}/questoes/${q}`, `bancos/${bancoDe(q)}/gabaritos/${q}`])),
     fs.listar(`tentativas/${tid}/respostas`),
     fs.listar(`tentativas/${tid}/correcoes`)
   ]);
@@ -64,7 +66,7 @@ async function corrigirTentativa(env, usuario, tid) {
   let corrigidas = 0, erros = 0;
   // dissertativas que a correção por palavras-chave não resolveu e ainda não têm correção
   for (const qid of ids) {
-    const q = docs[`bancos/${t.bancoId}/questoes/${qid}`], g = docs[`bancos/${t.bancoId}/gabaritos/${qid}`] || {};
+    const q = docs[`bancos/${bancoDe(qid)}/questoes/${qid}`], g = docs[`bancos/${bancoDe(qid)}/gabaritos/${qid}`] || {};
     const r = resp[qid];
     if (!q || q.tipo !== "dissertativa" || !r || r.perdida || r.resposta === null || r.resposta === undefined || String(r.resposta).trim() === "") continue;
     if (corr[qid] || corrigirLocal(q, g, r.resposta).status !== "revisar") continue;
@@ -78,7 +80,7 @@ async function corrigirTentativa(env, usuario, tid) {
   // placar que o aluno vê (mesma conta do painel: js/common.js placar())
   const atuais = await fs.listar(`tentativas/${tid}/correcoes`);
   const itens = ids.map(qid => {
-    const q = docs[`bancos/${t.bancoId}/questoes/${qid}`] || { peso: 1 }, g = docs[`bancos/${t.bancoId}/gabaritos/${qid}`] || {};
+    const q = docs[`bancos/${bancoDe(qid)}/questoes/${qid}`] || { peso: 1 }, g = docs[`bancos/${bancoDe(qid)}/gabaritos/${qid}`] || {};
     const peso = Number(q.peso || 1), r = resp[qid];
     let c = corrigirLocal(q, g, r?.resposta, r?.perdida === true);
     const m = atuais[qid];

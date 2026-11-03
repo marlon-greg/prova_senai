@@ -1,6 +1,6 @@
 // Painel do professor: provas, bancos (import JSON), resultados/correção, equipe, configuração.
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, apagarTentativaTeste,
-         confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar, idsConsulta } from "./common.js";
+         confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco } from "./common.js";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
@@ -237,7 +237,6 @@ async function listarBancos() {
   bancosCache.sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
   return bancosCache;
 }
-const opcoesBancos = () => bancosCache.map(b => `<option value="${b.id}">${esc(b.nome)} (${b.nQuestoes} questões)</option>`).join("") || "<option value=''>— importe um banco primeiro —</option>";
 
 // ---------- formulário da prova (o mesmo para "Nova prova" e para o modal "Editar") ----------
 // f = prefixo dos ids: "p" (nova prova) ou "e" (editar)
@@ -248,12 +247,18 @@ function formProvaHTML(f) {
   <div class="grade">
     <div><label for="${f}Titulo">Título</label><input type="text" id="${f}Titulo" placeholder="MS5 — DML"></div>
     <div><label for="${f}Turma">Turma</label><select id="${f}Turma"></select></div>
-    <div><label for="${f}Banco">Banco de questões</label><select id="${f}Banco"></select></div>
   </div>
   <p id="${f}Trava" class="aviso-box oculto" role="note"></p>
   <fieldset class="temas-box">
-    <legend>Temas que entram no sorteio</legend>
-    <div id="${f}Temas" class="lista-temas"><p class="pequeno">Escolha um banco para ver os temas.</p></div>
+    <legend>Bancos e temas que entram no sorteio</legend>
+    <p class="pequeno" style="margin-top:0">Marque um ou vários bancos; o sorteio junta as questões de todos. Dentro de cada banco, desmarque os temas que não entram.</p>
+    <div class="filtro-temas">
+      <input type="search" id="${f}TemasBusca" placeholder="🔎 Filtrar bancos e temas…" aria-label="Filtrar bancos e temas">
+      <select id="${f}TemasVisao" aria-label="Como mostrar os temas"><option value="banco">Agrupar por banco</option><option value="juntos">Todos os temas juntos</option></select>
+      <label class="check"><input type="checkbox" id="${f}TemasSoMarcados"> <span>Só os marcados</span></label>
+      <span class="filtro-acoes"><button type="button" class="leve mini" id="${f}TemasMarcar">Marcar visíveis</button><button type="button" class="leve mini" id="${f}TemasDesmarcar">Desmarcar visíveis</button></span>
+    </div>
+    <div id="${f}Temas" class="lista-bancos" role="group" aria-label="Bancos e temas"><p class="pequeno">Carregando bancos…</p></div>
     <p id="${f}TemasResumo" class="pequeno temas-resumo" role="status" aria-live="polite"></p>
   </fieldset>
   <div class="grade">
@@ -327,41 +332,136 @@ function gerarCodigo() {
 // Controla um formulário de prova: temas do banco, resumo ao vivo, validação, leitura e preenchimento.
 function controleProva(f) {
   const $f = s => $("#" + f + s);
-  let contagem = {}, bancoDesenhado = null, travado = false, turmaLegada = "", matMarcados = [];
-  const disponiveis = () => temasMarcados($f("Temas")).reduce((s, t) => ({ alternativa: s.alternativa + (contagem[t]?.alternativa || 0), dissertativa: s.dissertativa + (contagem[t]?.dissertativa || 0) }), { alternativa: 0, dissertativa: 0 });
+  let travado = false, turmaLegada = "", matMarcados = [];
+  // sel: bancoId -> Set de temas marcados (null = "todos", resolvido quando os temas do banco carregam)
+  // contagens: bancoId -> { tema: {alternativa, dissertativa} } ou "erro"; abertos: bancos expandidos na visão por banco
+  let sel = new Map(), contagens = {}, abertos = new Set(), carregando = null;
+  const temasDe = b => contagens[b] && contagens[b] !== "erro" ? Object.keys(contagens[b]) : [];
+  const bancosMarcados = () => bancosCache.map(b => b.id).filter(b => sel.get(b)?.size && temasDe(b).length);
+  const disponiveis = () => {
+    const d = { alternativa: 0, dissertativa: 0 };
+    for (const b of bancosMarcados()) for (const t of sel.get(b)) { const c = contagens[b][t]; if (c) { d.alternativa += c.alternativa; d.dissertativa += c.dissertativa; } }
+    return d;
+  };
+  const carregado = () => bancosCache.some(b => contagens[b.id]);
   // devolve a mensagem de erro (ou "") para o pedido atual
   function problema() {
     const nAlt = Number($f("NAlt").value || 0), nDiss = Number($f("NDiss").value || 0), d = disponiveis();
-    if (travado || !Object.keys(contagem).length) return "";
-    if (!temasMarcados($f("Temas")).length) return "Marque pelo menos um tema.";
-    if (nAlt > d.alternativa) return `Faltam questões de alternativa: a prova pede ${nAlt}, mas os temas marcados só têm ${d.alternativa}. Marque mais temas ou diminua as alternativas.`;
-    if (nDiss > d.dissertativa) return `Faltam dissertativas: a prova pede ${nDiss}, mas os temas marcados só têm ${d.dissertativa}. Marque mais temas ou diminua as dissertativas.`;
+    if (travado || !carregado()) return "";
+    if (!bancosMarcados().length) return "Marque pelo menos um banco (ou um tema de algum banco).";
+    if (nAlt > d.alternativa) return `Faltam questões de alternativa: a prova pede ${nAlt}, mas os bancos/temas marcados só têm ${d.alternativa}. Marque mais temas ou diminua as alternativas.`;
+    if (nDiss > d.dissertativa) return `Faltam dissertativas: a prova pede ${nDiss}, mas os bancos/temas marcados só têm ${d.dissertativa}. Marque mais temas ou diminua as dissertativas.`;
     return "";
   }
   function atualizar() {
     const nAlt = Number($f("NAlt").value || 0), nDiss = Number($f("NDiss").value || 0);
     $f("NTotal").textContent = `Total: ${nAlt + nDiss} questões por aluno.`;
     const el = $f("TemasResumo");
-    if (!Object.keys(contagem).length) { el.textContent = ""; el.classList.remove("erro"); return; }
-    const prob = problema();
-    el.textContent = `Disponíveis com os temas marcados: ${textoContagem(disponiveis())}.` + (prob ? " ⚠ " + prob : "");
+    if (!carregado()) { el.textContent = ""; el.classList.remove("erro"); return; }
+    const prob = problema(), bs = bancosMarcados();
+    const nomes = bs.map(b => bancosCache.find(x => x.id === b)?.nome || b);
+    el.textContent = (bs.length ? `${bs.length === 1 ? "1 banco" : `${bs.length} bancos`} (${nomes.join(" + ")}) · disponíveis: ${textoContagem(disponiveis())}.` : "Nenhum banco marcado.") + (prob ? " ⚠ " + prob : "");
     el.classList.toggle("erro", !!prob);
   }
-  // desenha os temas do banco escolhido; marcados = null -> todos marcados
-  async function carregarTemas(marcados = null) {
-    const bancoId = $f("Banco").value, box = $f("Temas");
-    contagem = {}; bancoDesenhado = bancoId;
-    if (!bancoId) { box.innerHTML = `<p class="pequeno">Escolha um banco para ver os temas.</p>`; atualizar(); return; }
-    box.innerHTML = `<p class="pequeno">Carregando temas…</p>`;
-    try {
-      const qs = await questoesDoBanco(bancoId);
-      if ($f("Banco").value !== bancoId) return;   // trocou de banco enquanto carregava
-      contagem = contarPorTema(qs);
-      desenharChecksTemas(box, contagem, atualizar);
-      if (Array.isArray(marcados) && marcados.length) box.querySelectorAll("input[type=checkbox]").forEach(c => c.checked = marcados.includes(c.value));
-      if (travado) box.querySelectorAll("input, button").forEach(x => x.disabled = true);
-    } catch (e) { box.innerHTML = `<p class="pequeno">Não foi possível carregar os temas. ${esc(traduzirErro(e))}</p>`; }
+  // carrega os temas de todos os bancos e desenha a lista. selecao (Map bancoId -> Set|null) substitui as marcações;
+  // sem selecao mantém as do professor (bancos apagados saem)
+  function carregarTemas(selecao = null) {
+    if (selecao) { sel = selecao; abertos = new Set(sel.keys()); }
+    for (const b of [...sel.keys()]) if (!bancosCache.some(x => x.id === b)) sel.delete(b);
+    if (!bancosCache.length) { $f("Temas").innerHTML = `<p class="pequeno">Nenhum banco ainda. Importe um na aba <b>Bancos de questões</b>.</p>`; atualizar(); return Promise.resolve(); }
+    desenharTemas();
+    carregando = Promise.all(bancosCache.map(b => questoesDoBanco(b.id)
+      .then(qs => { contagens[b.id] = contarPorTema(qs); })
+      .catch(() => { contagens[b.id] = "erro"; })))
+      .then(() => {
+        // "todos" (null) vira a lista completa de temas do banco
+        for (const [b, s] of sel) if (s === null) sel.set(b, new Set(temasDe(b)));
+        desenharTemas();
+      });
+    return carregando;
+  }
+  const marcadoTema = (b, t) => !!sel.get(b)?.has?.(t);
+  const casa = (txt, busca) => !busca || txt.toLocaleLowerCase("pt-BR").includes(busca);
+  // temas visíveis com os filtros atuais: [{ b, t }]
+  function temasVisiveis() {
+    const busca = $f("TemasBusca").value.trim().toLocaleLowerCase("pt-BR"), so = $f("TemasSoMarcados").checked, r = [];
+    for (const banco of bancosCache) {
+      const nomeCasa = casa(banco.nome || "", busca);
+      for (const t of temasDe(banco.id)) if ((nomeCasa || casa(t, busca)) && (!so || marcadoTema(banco.id, t))) r.push({ b: banco.id, t });
+    }
+    return r;
+  }
+  const checkTema = (b, t, extra = "") => `<label class="check"><input type="checkbox" data-b="${b}" value="${esc(t)}"${marcadoTema(b, t) ? " checked" : ""}${travado ? " disabled" : ""}><span><b>${esc(t)}</b>${extra} <span class="pequeno">— ${textoContagem(contagens[b][t])}</span></span></label>`;
+  function desenharTemas() {
+    const box = $f("Temas"), topo = box.scrollTop;
+    const busca = $f("TemasBusca").value.trim(), so = $f("TemasSoMarcados").checked, vis = temasVisiveis();
+    const nomeBanco = b => bancosCache.find(x => x.id === b)?.nome || b;
+    let h = "";
+    if ($f("TemasVisao").value === "juntos") {
+      vis.sort((x, y) => ordemNatural(x.t, y.t) || ordemNatural(nomeBanco(x.b), nomeBanco(y.b)));
+      h = vis.length ? `<div class="lista-temas">${vis.map(({ b, t }) => checkTema(b, t, ` <span class="tag banco-tag">${esc(nomeBanco(b))}</span>`)).join("")}</div>` : "";
+    } else {
+      for (const banco of bancosCache) {
+        const b = banco.id, c = contagens[b], dele = vis.filter(v => v.b === b);
+        // com filtro, só aparecem bancos com algum tema visível (ou que ainda carregam)
+        if ((busca || so) && c && !dele.length) continue;
+        if (so && !c && !sel.get(b)?.size && sel.get(b) !== null) continue;
+        const todos = temasDe(b), n = sel.get(b)?.size || 0, aberto = abertos.has(b) || !!busca;
+        const tot = c && c !== "erro" ? Object.values(c).reduce((s, x) => ({ alternativa: s.alternativa + x.alternativa, dissertativa: s.dissertativa + x.dissertativa }), { alternativa: 0, dissertativa: 0 }) : null;
+        h += `<div class="grupo-banco${n ? " marcado" : ""}" data-grupo="${b}">
+          <div class="banco-cab">
+            <label class="check"><input type="checkbox" data-banco="${b}"${todos.length && n === todos.length ? " checked" : ""}${!todos.length || travado ? " disabled" : ""}>
+              <span><b>${esc(banco.nome)}</b> <span class="pequeno">${esc(banco.materia || "")}</span></span></label>
+            <span class="pequeno banco-info">${!c ? "carregando…" : c === "erro" ? "⚠ não carregou" : `${n}/${todos.length} temas · ${textoContagem(tot)}`}</span>
+            ${todos.length ? `<button type="button" class="leve mini" data-abrir="${b}" aria-expanded="${aberto}" aria-label="${aberto ? "Recolher" : "Mostrar"} temas de ${esc(banco.nome)}">${aberto ? "▾ temas" : "▸ temas"}</button>` : ""}
+          </div>
+          ${aberto && dele.length ? `<div class="lista-temas">${dele.map(({ t }) => checkTema(b, t)).join("")}</div>` : ""}
+        </div>`;
+      }
+    }
+    box.innerHTML = h || `<p class="pequeno">Nada encontrado com esse filtro.</p>`;
+    box.scrollTop = topo;
+    box.querySelectorAll("input[data-banco]").forEach(x => {
+      const n = sel.get(x.dataset.banco)?.size || 0;
+      x.indeterminate = n > 0 && n < temasDe(x.dataset.banco).length;
+      x.onchange = () => {
+        const b = x.dataset.banco;
+        sel.set(b, x.checked ? new Set(temasDe(b)) : new Set());
+        if (x.checked) abertos.add(b);
+        desenharTemas();
+      };
+    });
+    box.querySelectorAll("input[data-b]").forEach(x => x.onchange = () => {
+      const b = x.dataset.b, s = sel.get(b) instanceof Set ? sel.get(b) : new Set();
+      x.checked ? s.add(x.value) : s.delete(x.value); sel.set(b, s);
+      sincronizarBanco(b);
+    });
+    box.querySelectorAll("[data-abrir]").forEach(x => x.onclick = () => {
+      const b = x.dataset.abrir; abertos.has(b) ? abertos.delete(b) : abertos.add(b);
+      desenharTemas(); box.querySelector(`[data-abrir="${b}"]`)?.focus();
+    });
     atualizar();
+  }
+  // depois de marcar um tema: atualiza só o cabeçalho do banco (sem redesenhar, para não perder o foco)
+  function sincronizarBanco(b) {
+    const box = $f("Temas"), n = sel.get(b)?.size || 0, todos = temasDe(b);
+    const cb = box.querySelector(`input[data-banco="${b}"]`);
+    if (cb) { cb.checked = todos.length > 0 && n === todos.length; cb.indeterminate = n > 0 && n < todos.length; }
+    const g = box.querySelector(`[data-grupo="${b}"]`);
+    if (g) {
+      g.classList.toggle("marcado", n > 0);
+      const info = g.querySelector(".banco-info"); if (info) info.textContent = info.textContent.replace(/^\d+\/\d+ temas/, `${n}/${todos.length} temas`);
+    }
+    atualizar();
+  }
+  // marca/desmarca todos os temas visíveis com o filtro atual
+  function marcarVisiveis(marcar) {
+    for (const { b, t } of temasVisiveis()) {
+      const s = sel.get(b) instanceof Set ? sel.get(b) : new Set();
+      marcar ? s.add(t) : s.delete(t); sel.set(b, s);
+      if (marcar) abertos.add(b);
+    }
+    desenharTemas();
   }
   // lista de PDFs enviados, com caixa de marcar (vários por prova). selecionados = null mantém as marcações
   async function opcoesMaterial(selecionados = null) {
@@ -409,7 +509,9 @@ function controleProva(f) {
   }
   // liga os eventos (chamar depois que o HTML estiver na página)
   function ligar() {
-    $f("Banco").onchange = () => carregarTemas();
+    $f("TemasBusca").oninput = $f("TemasVisao").onchange = $f("TemasSoMarcados").onchange = desenharTemas;
+    $f("TemasMarcar").onclick = () => marcarVisiveis(true);
+    $f("TemasDesmarcar").onclick = () => marcarVisiveis(false);
     $f("NAlt").oninput = $f("NDiss").oninput = atualizar;
     $f("MatUrl").oninput = previaMaterial;
     // vários de uma vez: cada PDF recebe o nome do arquivo como título e já entra marcado
@@ -436,17 +538,16 @@ function controleProva(f) {
     $f("Turma").value = p.turmaId && turmasCache.some(t => t.id === p.turmaId) ? p.turmaId : (!p.turmaId && p.turma ? LEGADO : "");
     turmaLegada = p.turma || "";
   }
-  // trava banco, número de questões, dissertativas e temas (prova que já tem tentativas de alunos)
+  // trava bancos, número de questões, dissertativas e temas (prova que já tem tentativas de alunos)
   function travar(motivo) {
     travado = true;
-    ["Banco", "NAlt", "NDiss"].forEach(s => $f(s).disabled = true);
-    $f("Temas").querySelectorAll("input, button").forEach(x => x.disabled = true);
+    ["NAlt", "NDiss", "TemasMarcar", "TemasDesmarcar"].forEach(s => $f(s).disabled = true);
+    $f("Temas").querySelectorAll("input").forEach(x => x.disabled = true);
     $f("Trava").innerHTML = motivo; $f("Trava").classList.remove("oculto");
     atualizar();
   }
   function preencher(p) {
     $f("Titulo").value = p.titulo || ""; opcoesTurma(p); $f("Codigo").value = p.codigoAcesso || "";
-    $f("Banco").value = p.bancoId || "";
     // provas antigas só têm o total (nQuestoes) e as dissertativas
     $f("NDiss").value = p.nDissertativas ?? 0; $f("NAlt").value = p.nAlternativas ?? Math.max(0, (p.nQuestoes ?? 10) - (p.nDissertativas ?? 0));
     $f("Tempo").value = p.tempoMinutos || 0;
@@ -460,12 +561,13 @@ function controleProva(f) {
   }
   // lê e valida; devolve { erro } ou { dados }
   async function ler() {
-    const titulo = $f("Titulo").value.trim(), bancoId = $f("Banco").value;
+    const titulo = $f("Titulo").value.trim();
     const nAlt = Math.max(0, Math.round(Number($f("NAlt").value || 0))), nDiss = Math.max(0, Math.round(Number($f("NDiss").value || 0))), n = nAlt + nDiss;
     if (!titulo) return { erro: "Preencha o título." };
-    if (!travado && !bancoId) return { erro: "Escolha o banco de questões." };
     if (!travado && !n) return { erro: "A prova precisa de pelo menos uma questão (alternativas + dissertativas)." };
-    if (!travado && (bancoDesenhado !== bancoId || !Object.keys(contagem).length)) await carregarTemas();   // garante a contagem do banco escolhido
+    if (!travado) { if (!carregando) await carregarTemas(); else await carregando; }   // garante a contagem dos bancos
+    const bancoIds = bancosMarcados();
+    if (!travado && !bancoIds.length) return { erro: "Marque pelo menos um banco de questões." };
     const prob = problema();
     if (prob) { atualizar(); return { erro: prob }; }
     const arquivos = idsMarcados();
@@ -484,7 +586,11 @@ function controleProva(f) {
       materialConsultaTitulo: url || arquivos.length ? ($f("MatTitulo").value.trim() || (arquivos.length === 1 ? materiaisCache.find(m => m.id === arquivos[0])?.titulo : "") || "Material de consulta") : ""
     };
     // campos do sorteio: só entram se não estiverem travados
-    if (!travado) Object.assign(dados, { bancoId, nQuestoes: n, nAlternativas: nAlt, nDissertativas: nDiss, temas: temasMarcados($f("Temas")) });   // todos marcados = lista completa
+    // bancoId = o primeiro (as regras do Firestore e as tentativas antigas usam); temas = os do primeiro banco (compatibilidade)
+    if (!travado) {
+      const temasPorBanco = Object.fromEntries(bancoIds.map(b => [b, ordenarTemas([...sel.get(b)])]));   // todos marcados = lista completa
+      Object.assign(dados, { bancoId: bancoIds[0], bancoIds, temasPorBanco, temas: temasPorBanco[bancoIds[0]], nQuestoes: n, nAlternativas: nAlt, nDissertativas: nDiss });
+    }
     return { dados };
   }
   // turmaId + nome (o campo "turma" continua existindo para quem já usa p.turma)
@@ -494,7 +600,9 @@ function controleProva(f) {
     const t = turmasCache.find(x => x.id === v);
     return t ? { turmaId: t.id, turma: t.nome } : { turmaId: null, turma: "" };
   }
-  return { carregarTemas, atualizar, ligar, travar, preencher, ler, opcoesTurma, opcoesMaterial, get bancoDesenhado() { return bancoDesenhado; } };
+  // marcações da prova salva: Map bancoId -> Set de temas (null = todos)
+  const selecaoDaProva = p => new Map(bancosDaProva(p).map(b => [b, temasDoBanco(p, b)]));
+  return { carregarTemas, selecaoDaProva, atualizar, ligar, travar, preencher, ler, opcoesTurma, opcoesMaterial };
 }
 
 $("#formNovaProva").innerHTML = formProvaHTML("p");
@@ -521,21 +629,18 @@ async function carregarProvas() {
   const turmaAntes = $("#pTurma").value;
   formNova.opcoesTurma();
   if (turmaAntes && [...$("#pTurma").options].some(o => o.value === turmaAntes)) $("#pTurma").value = turmaAntes;
-  const bancoAntes = $("#pBanco").value;
-  $("#pBanco").innerHTML = opcoesBancos();
-  if (bancoAntes && bancosCache.some(b => b.id === bancoAntes)) $("#pBanco").value = bancoAntes;
-  // só redesenha os temas se o banco mudou (mantém as marcações do professor e não "pula" a tela)
-  if ($("#pBanco").value !== formNova.bancoDesenhado) formNova.carregarTemas();
+  // redesenha bancos/temas mantendo as marcações do professor (a lista tem rolagem própria, não "pula" a tela)
+  formNova.carregarTemas();
   formNova.opcoesMaterial();
   const s = await getDocs(collection(db, "provas"));
   const provas = []; s.forEach(d => provas.push({ id: d.id, ...d.data() }));
   provas.sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
   const box = $("#listaProvas");
   if (!provas.length) { box.innerHTML = `<div class="vazio"><div class="icone">📝</div><p>Nenhuma prova ainda. Crie a primeira no formulário acima.</p></div>`; return; }
-  box.innerHTML = `<div class="tabela"><table><tr><th>Prova</th><th>Banco</th><th>Questões</th><th>Temas</th><th>Opções</th><th>Status</th><th>Resultados</th><th></th></tr>` + provas.map(p => {
-    const b = bancosCache.find(x => x.id === p.bancoId);
-    return `<tr><td><b>${esc(p.titulo)}</b><br><span class="pequeno">${p.turmaId ? "👥 " : ""}${esc(p.turma || "")}</span></td><td>${esc(b?.nome || p.bancoId)}<br><span class="pequeno">${esc(b?.materia || "")}</span></td><td>${p.nQuestoes}${p.nAlternativas !== undefined && p.nAlternativas !== null ? `<br><span class="pequeno">${p.nAlternativas} alt. + ${p.nDissertativas || 0} dissert.</span>` : p.nDissertativas ? `<br><span class="pequeno">${p.nDissertativas} dissert.</span>` : ""}${p.tempoMinutos > 0 ? `<br><span class="pequeno">⏱ ${p.tempoMinutos} min</span>` : ""}</td>
-      <td class="pequeno">${temasDaProvaTexto(p, b)}</td>
+  box.innerHTML = `<div class="tabela"><table><tr><th>Prova</th><th>Banco(s)</th><th>Questões</th><th>Temas</th><th>Opções</th><th>Status</th><th>Resultados</th><th></th></tr>` + provas.map(p => {
+    const bs = bancosDaProva(p).map(id => bancosCache.find(x => x.id === id) || { id, nome: id });
+    return `<tr><td><b>${esc(p.titulo)}</b><br><span class="pequeno">${p.turmaId ? "👥 " : ""}${esc(p.turma || "")}</span></td><td>${bs.map(b => `${esc(b.nome)}${b.materia ? `<br><span class="pequeno">${esc(b.materia)}</span>` : ""}`).join("<hr class='sep-banco'>")}</td><td>${p.nQuestoes}${p.nAlternativas !== undefined && p.nAlternativas !== null ? `<br><span class="pequeno">${p.nAlternativas} alt. + ${p.nDissertativas || 0} dissert.</span>` : p.nDissertativas ? `<br><span class="pequeno">${p.nDissertativas} dissert.</span>` : ""}${p.tempoMinutos > 0 ? `<br><span class="pequeno">⏱ ${p.tempoMinutos} min</span>` : ""}</td>
+      <td class="pequeno">${temasDaProvaTexto(p, bs)}</td>
       <td class="td-opcoes">${opcoesDaProvaHTML(p)}</td>
       <td><span class="tag ${p.liberada ? "on" : "off"}">${p.liberada ? "● liberada" : "○ fechada"}</span></td>
       <td><span class="tag ${p.resultadosLiberados ? "on" : "off"}">${p.resultadosLiberados ? "● gabarito liberado" : "○ só o placar"}</span></td>
@@ -565,11 +670,15 @@ async function carregarProvas() {
     await deleteDoc(doc(db, "provas", b.dataset.del)); carregarProvas();
   });
 }
-// "todos" quando a prova não filtra ou marcou todos os temas do banco
-function temasDaProvaTexto(p, b) {
-  if (!Array.isArray(p.temas) || !p.temas.length) return "todos";
-  if (Array.isArray(b?.temas) && b.temas.length && b.temas.every(t => p.temas.includes(t))) return "todos";
-  return p.temas.map(esc).join("<br>");
+// por banco: "todos" quando a prova não filtra ou marcou todos os temas do banco
+function temasDaProvaTexto(p, bancos) {
+  const txt = b => {
+    const s = temasDoBanco(p, b.id);
+    if (!s || (Array.isArray(b.temas) && b.temas.length && b.temas.every(t => s.has(t)))) return "todos";
+    return [...s].map(esc).join("<br>");
+  };
+  if (bancos.length === 1) return txt(bancos[0]);
+  return bancos.map(b => `<b>${esc(b.nome)}:</b><br>${txt(b)}`).join("<hr class='sep-banco'>");
 }
 
 $("#btnCriarProva").onclick = async () => {
@@ -594,10 +703,9 @@ async function editarProva(p) {
   const salvou = await modal({
     titulo: "Editar prova", conteudo: formProvaHTML("e"), ok: "Salvar alterações", cancelar: "Cancelar", largo: true,
     aoAbrir: () => {
-      $("#eBanco").innerHTML = opcoesBancos();
       ctl.ligar(); ctl.preencher(p);
-      if (nTentativas) ctl.travar(`🔒 <b>${nTentativas} aluno(s) já começaram esta prova.</b> Banco, número de questões, dissertativas e temas não podem mudar: isso mudaria o sorteio de quem já começou e a correção. As outras opções podem ser alteradas.`);
-      ctl.carregarTemas(Array.isArray(p.temas) ? p.temas : null);
+      if (nTentativas) ctl.travar(`🔒 <b>${nTentativas} aluno(s) já começaram esta prova.</b> Bancos, número de questões, dissertativas e temas não podem mudar: isso mudaria o sorteio de quem já começou e a correção. As outras opções podem ser alteradas.`);
+      ctl.carregarTemas(ctl.selecaoDaProva(p));
     },
     antesDeConfirmar: async () => {
       const r = await ctl.ler();
@@ -690,6 +798,11 @@ async function lerBanco(bancoId) {
   const questoes = {}, gabaritos = {};
   qs.forEach(d => questoes[d.id] = { id: d.id, ...d.data() }); gs.forEach(d => gabaritos[d.id] = d.data());
   return { questoes, gabaritos };
+}
+// vários bancos juntos (os ids das questões já são únicos: "<bancoId>_q001")
+async function lerBancos(ids) {
+  const todos = await Promise.all(ids.map(lerBanco));
+  return { questoes: Object.assign({}, ...todos.map(x => x.questoes)), gabaritos: Object.assign({}, ...todos.map(x => x.gabaritos)) };
 }
 async function gerarGabarito(bancoId) {
   const b = bancosCache.find(x => x.id === bancoId), { questoes, gabaritos } = await lerBanco(bancoId);
@@ -789,7 +902,7 @@ async function carregarResultados() {
   const provaId = $("#rProva").value; if (!provaId) return;
   $("#resTabela").innerHTML = "<p class='pequeno'>Carregando…</p>";
   const prova = { id: provaId, ...(await getDoc(doc(db, "provas", provaId))).data() };
-  const { questoes, gabaritos } = await lerBanco(prova.bancoId);
+  const { questoes, gabaritos } = await lerBancos(bancosDaProva(prova));
   // turma da prova: lista de e-mails para a seção "Não fizeram"
   let turma = null;
   if (prova.turmaId) { const td = await getDoc(doc(db, "turmas", prova.turmaId)).catch(() => null); if (td?.exists()) turma = { id: td.id, ...td.data() }; }

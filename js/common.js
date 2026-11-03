@@ -131,6 +131,21 @@ export function dataBR(ts) {
 export function letra(i) { return "ABCDEFGH"[i] || String(i + 1); }
 // tema da questão; vazio ou ausente (bancos antigos) = "Geral"
 export function temaDe(q) { return String(q?.tema ?? "").trim() || "Geral"; }
+// ---------- vários bancos por prova ----------
+// bancos da prova: bancoIds (novo) ou só bancoId (provas antigas)
+export function bancosDaProva(p) {
+  return Array.isArray(p?.bancoIds) && p.bancoIds.length ? p.bancoIds : (p?.bancoId ? [p.bancoId] : []);
+}
+// temas marcados de um banco na prova (Set) ou null = todos os temas
+export function temasDoBanco(p, bancoId) {
+  const l = p?.temasPorBanco?.[bancoId] ?? (bancoId === p?.bancoId ? p?.temas : null);
+  return Array.isArray(l) && l.length ? new Set(l) : null;
+}
+// o id da questão já leva o banco: "<bancoId>_q001". Ids antigos/fora do padrão usam o banco da tentativa
+export function bancoDaQuestao(qid, padrao) {
+  const i = String(qid).lastIndexOf("_q");
+  return i > 0 ? String(qid).slice(0, i) : padrao;
+}
 export function ordenarTemas(lista) { return [...new Set(lista)].sort((a, b) => a.localeCompare(b, "pt-BR")); }
 // chave do nome completo para vincular aluno cadastrado só pelo nome (IGUAL à chaveNome do firestore.rules):
 // minúsculas, sem acento, só letras, palavras separadas por "_"  ("José  da Silva" -> "jose_da_silva")

@@ -1,6 +1,6 @@
 // Página do aluno: login, lista de provas, prova (uma questão por vez ou todas na página), resultado.
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar, sortearAleatorio, esc, $, toast, dataBR, letra,
-         idTentativaTeste, apagarTentativaTeste, confirmar, traduzirErro, iniciais, fecharModais, temaDe, chaveNome, placar, idsConsulta }
+         idTentativaTeste, apagarTentativaTeste, confirmar, traduzirErro, iniciais, fecharModais, temaDe, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco, bancoDaQuestao }
   from "./common.js";
 import { baixarMaterial } from "./material.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
@@ -225,14 +225,17 @@ $("#btnComecar").onclick = async () => {
   pedirTelaCheia();   // precisa ser chamado direto no clique, antes de qualquer await
   $("#btnComecar").disabled = true;
   try {
-    // sorteia nQuestoes do banco (ids) — cada aluno recebe um conjunto diferente
-    // só entram questões dos temas da prova (sem prova.temas = todas; questão sem tema = "Geral")
-    const temas = Array.isArray(provaAtual.temas) && provaAtual.temas.length ? new Set(provaAtual.temas) : null;
-    const qs = await getDocs(collection(db, "bancos", provaAtual.bancoId, "questoes"));
+    // sorteia nQuestoes dos bancos da prova (ids) — cada aluno recebe um conjunto diferente
+    // só entram questões dos temas marcados em cada banco (sem temas = todas; questão sem tema = "Geral")
+    const bancos = bancosDaProva(provaAtual);
+    const lotes = await Promise.all(bancos.map(b => getDocs(collection(db, "bancos", b, "questoes"))));
     const ids = [], diss = [], alt = [];
-    qs.forEach(d => {
-      if (temas && !temas.has(temaDe(d.data()))) return;
-      ids.push(d.id); (d.data().tipo === "dissertativa" ? diss : alt).push(d.id);
+    lotes.forEach((qs, i) => {
+      const temas = temasDoBanco(provaAtual, bancos[i]);
+      qs.forEach(d => {
+        if (temas && !temas.has(temaDe(d.data()))) return;
+        ids.push(d.id); (d.data().tipo === "dissertativa" ? diss : alt).push(d.id);
+      });
     });
     if (ids.length < provaAtual.nQuestoes) throw new Error("O banco não tem questões suficientes nos temas escolhidos. Avise o professor.");
     let sorteadas;
@@ -271,7 +274,7 @@ $("#btnComecar").onclick = async () => {
 
 async function carregarTentativa() {
   questoes = {}; respostas = {}; tentouEnviar.clear(); rascunhos.clear(); erroEnvio = false;
-  const docsQ = await Promise.all(tentativa.questoesIds.map(q => getDoc(doc(db, "bancos", tentativa.bancoId, "questoes", q))));
+  const docsQ = await Promise.all(tentativa.questoesIds.map(q => getDoc(doc(db, "bancos", bancoDaQuestao(q, tentativa.bancoId), "questoes", q))));
   docsQ.forEach(d => { if (d.exists()) questoes[d.id] = { id: d.id, ...d.data() }; });
   const rs = await getDocs(collection(db, "tentativas", tentativa.id, "respostas"));
   rs.forEach(d => respostas[d.id] = d.data());
@@ -661,8 +664,8 @@ async function placarDaTentativa(t) {
   if (typeof t.acertos === "number") return { acertos: t.acertos, totalQuestoes: t.totalQuestoes, nota: t.nota ?? t.notaPrevia, pendentes: t.aguardandoCorrecao || 0 };
   const ids = t.questoesIds, banco = t.bancoId;
   const [qs, gs, rs] = await Promise.all([
-    Promise.all(ids.map(q => questoes[q] && tentativa?.id === t.id ? { data: () => questoes[q] } : getDoc(doc(db, "bancos", banco, "questoes", q)))),
-    Promise.all(ids.map(q => getDoc(doc(db, "bancos", banco, "gabaritos", q)).catch(() => null))),
+    Promise.all(ids.map(q => questoes[q] && tentativa?.id === t.id ? { data: () => questoes[q] } : getDoc(doc(db, "bancos", bancoDaQuestao(q, banco), "questoes", q)))),
+    Promise.all(ids.map(q => getDoc(doc(db, "bancos", bancoDaQuestao(q, banco), "gabaritos", q)).catch(() => null))),
     getDocs(collection(db, "tentativas", t.id, "respostas"))
   ]);
   const resp = {}; rs.forEach(d => resp[d.id] = d.data());
@@ -1080,8 +1083,8 @@ async function verResultado() {
   $("#resResumo").innerHTML = "<p class='pequeno'>Carregando…</p>"; $("#resLista").innerHTML = "";
   const ids = tentativa.questoesIds;
   const [qs, gs, rs, cs] = await Promise.all([
-    Promise.all(ids.map(q => getDoc(doc(db, "bancos", tentativa.bancoId, "questoes", q)))),
-    Promise.all(ids.map(q => getDoc(doc(db, "bancos", tentativa.bancoId, "gabaritos", q)).catch(() => null))),
+    Promise.all(ids.map(q => getDoc(doc(db, "bancos", bancoDaQuestao(q, tentativa.bancoId), "questoes", q)))),
+    Promise.all(ids.map(q => getDoc(doc(db, "bancos", bancoDaQuestao(q, tentativa.bancoId), "gabaritos", q)).catch(() => null))),
     getDocs(collection(db, "tentativas", tentativa.id, "respostas")),
     getDocs(collection(db, "tentativas", tentativa.id, "correcoes")).catch(() => ({ forEach() {} }))
   ]);
