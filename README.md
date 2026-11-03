@@ -54,7 +54,7 @@ Regras que o sistema aplica sozinho:
 - **Questões sorteadas e alternativas embaralhadas** por aluno.
 - **Uma questão por vez**: a resposta é gravada ao clicar em Enviar e não pode ser alterada; só então aparece a próxima.
 - **Colar desativado** nos campos de texto (Ctrl+V, botão direito, arrastar).
-- **Trocas de aba** durante a prova são contadas e aparecem para o professor.
+- **Tela cheia, trocas de aba e tentativas de colar** são registradas e aparecem para o professor (veja [Antifraude](#antifraude)).
 - Se a aba fechar, o aluno entra de novo e **continua de onde parou**.
 - O aluno só consegue ler a resposta certa de uma questão **depois** de responder (regra do Firestore, não só da tela).
 - **Ao finalizar, o aluno já vê a nota prévia** (0–100), sem ver respostas nem explicações. Dissertativas não reconhecidas entram como "aguardando correção" e a nota pode subir depois.
@@ -99,7 +99,7 @@ Cada **banco** tem um campo `materia`. Importe um banco por tema (DML, Normaliza
 | `palavrasChave` | se a resposta não bater com nenhuma aceita, o sistema confere se **todas** as palavras-chave aparecem (mesma normalização). É mais tolerante; use trechos bem específicos. |
 | `correcaoManual: true` | sem correção automática: vai direto para **revisar**. Use em perguntas de "explique". |
 | `peso` | pontos da questão (padrão 1). A nota final é convertida para 0–100. |
-| enunciado | aceita quebras de linha e trechos entre crases para aparecer como código: `` `SELECT * FROM x;` `` |
+| enunciado | aceita quebras de linha. Trecho entre crases vira código na linha: `` `SELECT * FROM x;` ``. Entre três crases (```` ``` ````) vira bloco de código. |
 
 Dica: peça ao Claude/ChatGPT "gere um banco de questões no formato do modelo_banco.json sobre o tema X" e cole o resultado em **Validar**.
 
@@ -120,7 +120,37 @@ Dica: peça ao Claude/ChatGPT "gere um banco de questões no formato do modelo_b
 Limites conhecidos (sem Cloud Functions, para ficar no plano gratuito):
 - O **sorteio** das 10 questões é feito no navegador do aluno. Um aluno com conhecimento técnico poderia escolher quais 10 vai receber, mas **nunca** consegue ler a resposta antes de enviar a sua.
 - A correção automática também roda no navegador; a nota "fechada" é gravada **pelo professor**, nunca pelo aluno.
-- Não há cronômetro. Se quiser limite de tempo, encerre a prova pelo painel na hora combinada.
+- O cronômetro (campo **Tempo limite**) usa o relógio do computador do aluno. Para um limite rígido, encerre também a prova pelo painel na hora combinada.
+
+## Antifraude
+
+Durante a prova (tela das questões) o sistema **impede** algumas coisas e **registra** outras. Tudo o que é registrado aparece em **Resultados** (colunas *Tempo* e *Sinais*, detalhe do aluno, CSV e PDFs).
+
+**O que o sistema impede**
+| O quê | Como |
+|---|---|
+| Ler a resposta certa antes de responder | regra do Firestore (`gabaritos/` só abre depois do marcador da resposta) |
+| Alterar uma resposta enviada / fazer a prova duas vezes | regras do Firestore |
+| Colar ou arrastar texto no campo de resposta | Ctrl+V, Shift+Insert, botão direito e arrastar são bloqueados |
+| Copiar e selecionar o enunciado | seleção, botão direito, arrastar e Ctrl+C/Ctrl+A bloqueados na área da questão |
+| Atalhos de imprimir, salvar, ver código e DevTools | Ctrl+P, Ctrl+S, Ctrl+U, F12, Ctrl+Shift+I/J/C bloqueados (e a impressão da prova em andamento sai em branco) |
+| Enviar a mesma resposta duas vezes | o botão trava enquanto grava |
+| Perder a resposta por queda de internet | a resposta fica na tela, aparece o banner vermelho "Sem conexão" e dá para reenviar; fechar/recarregar a aba pede confirmação |
+| Passar do tempo (se a prova tiver tempo limite) | cronômetro regressivo; ao zerar, a prova é finalizada com as respostas já enviadas |
+
+**O que o sistema só registra** (não dá para impedir num navegador comum)
+| Sinal | Campo na tentativa |
+|---|---|
+| Sair da tela cheia (Esc, F11…) | `saidasTelaCheia`; aparece um aviso para voltar |
+| Trocar de aba ou de janela, ou clicar fora do navegador | `trocasDeAba`; aparece o mesmo aviso ao voltar |
+| Tentar colar/arrastar no campo de resposta | `tentativasColar` |
+| Tempo total e tempo de cada resposta | `tempoTotalSegundos` e `segundos` em cada resposta; respostas em menos de 5 s ficam em vermelho |
+
+Para criar uma prova com tempo, preencha **Tempo limite (min)** no formulário de nova prova (0 = sem limite).
+
+> ⚠ **Nada disso substitui a fiscalização em sala.** Celular, segundo computador, colega do lado, ou um aluno que sabe desligar o JavaScript ficam fora do alcance de uma página web. Os sinais são **indícios para você conferir**, não prova de cola: uma troca de aba pode ser uma notificação do sistema, e uma resposta rápida pode ser só um aluno que sabia. O cronômetro e os contadores rodam no navegador do aluno; o que é garantido de verdade é o que está nas regras do Firestore.
+>
+> Depois de atualizar o sistema, **publique de novo o `firestore.rules`** no Firebase Console (Firestore → Regras → Publicar): os campos novos (`saidasTelaCheia`, `tentativasColar`, `tempoTotalSegundos`, `segundos`) são recusados pelas regras antigas.
 
 ## Testar como aluno
 Na aba **Provas** do painel, cada prova tem o botão **Testar como aluno**: ele abre `index.html?teste=<id da prova>` em nova aba e você faz a prova exatamente como o aluno (uma questão por vez, sem voltar, colar bloqueado, mesmo feedback), **mesmo com a prova ainda fechada**.
