@@ -91,6 +91,16 @@ Definidas em **Nova prova** e alteráveis depois pelo botão **✎ Editar** na t
 | **Permitir colar** (`permitirColar`) | não | Libera colar e arrastar nos campos de resposta e não registra tentativas de colar. Copiar o enunciado continua bloqueado. |
 | **Material de consulta** (`materialConsultaTitulo`, `materialConsultaUrl`) | nenhum | Mostra o material **dentro da tela da prova**: no computador, numa coluna à direita (arraste o canto inferior esquerdo para alargar); no celular, pelo botão **📖 Consulta**, numa gaveta por cima da questão. Clicar no material não conta como troca de aba. |
 
+### Limite de saídas da prova
+Em **Regras da prova**, só quando a troca de aba **não** é permitida:
+
+| Campo | Padrão | O que faz |
+|---|---|---|
+| **Limite de saídas** (`maxTrocasDeAba`) | 0 (sem limite) | Quantas vezes o aluno pode sair da prova. Conta como saída **trocar de aba/janela ou sair da tela cheia** (um único contador; dois avisos do mesmo movimento, em menos de 1 s, contam uma vez). A cada saída, o aviso mostra o placar: *"Saídas da prova: 2 de 3. Na próxima, …"*. |
+| **Ao atingir o limite** (`acaoAoExceder`) | encerrar | **Encerrar a prova**: finaliza na hora (`encerradaPor: "trocasDeAba"`); as questões não enviadas valem zero e o aluno vê *"Prova encerrada: limite de saídas da prova atingido"*. **Perder a questão atual** (só em "uma por vez"): a questão vira **⛔ perdida (saiu da prova)**, vale zero, o contador volta a zero (o total fica em `trocasDeAbaTotal`) e a prova avança; se a questão atual já tinha sido enviada, perde a próxima; na última questão, a prova é finalizada. Com "todas na página", a opção é sempre encerrar. |
+
+Em **Resultados** aparecem as saídas com o limite (ex.: 🚪 3/3), o motivo do encerramento e as questões perdidas (também no detalhe, no CSV e nos PDFs).
+
 **Editar uma prova:** depois que algum aluno começou (tentativas de teste não contam), **banco, número de questões, dissertativas e temas ficam travados**, porque mudariam o sorteio de quem já começou e a correção. Título, turma, feedback, tempo e as opções acima podem mudar a qualquer momento.
 
 ### Como obter o link do material de consulta
@@ -188,6 +198,13 @@ Na aba **Provas** do painel, cada prova tem o botão **Testar como aluno**: ele 
 - **Apagar meu teste** (na aba Provas) apaga a sua tentativa de teste daquela prova, para testar de novo.
 
 > ⚠ Depois de alterar `firestore.rules`, cole as regras de novo no **Firebase Console → Firestore → Regras → Publicar**. O GitHub Pages publica só o site, não as regras.
+
+### Acompanhar um teste ao vivo
+1. Aba **Provas** → **Testar como aluno**: a prova abre numa aba nova, em modo teste.
+2. Na aba do painel, vá em **Resultados**, escolha a prova e marque **Mostrar tentativas de teste** e **Atualizar ao vivo** (aparece o pontinho verde *● ao vivo*).
+3. Faça a prova na outra aba: a tentativa aparece na seção **Testes da equipe** e se atualiza sozinha (questões, saídas, encerramento, questões perdidas). Clique em **Ver** para acompanhar as respostas.
+
+As tentativas de teste nunca entram na média, no CSV, nos PDFs nem em "Fechar notas". O ao vivo também serve no dia da prova, com os alunos; ele é desligado ao trocar de prova ou sair da aba Resultados.
 
 ## Testar antes do dia (recomendado)
 1. Entre em `admin.html` com a sua conta, importe o modelo, crie uma prova de teste e libere.
