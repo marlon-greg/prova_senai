@@ -1,8 +1,10 @@
 // Página do aluno: login, lista de provas, prova (uma questão por vez ou todas na página), resultado.
 import { db, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar, sortearAleatorio, esc, $, toast, dataBR, letra,
-         idTentativaTeste, apagarTentativaTeste, confirmar, traduzirErro, iniciais, fecharModais, temaDe }
+         idTentativaTeste, apagarTentativaTeste, confirmar, traduzirErro, iniciais, fecharModais, temaDe, chaveNome }
   from "./common.js";
-import { collection, doc, getDoc, getDocFromServer, getDocs, setDoc, updateDoc, query, where, writeBatch, serverTimestamp, increment }
+import { baixarMaterial } from "./material.js";
+import { abrirLeitorPdf } from "./leitor-pdf.js";
+import { collection, doc, getDoc, getDocFromServer, getDocs, setDoc, updateDoc, query, where, writeBatch, serverTimestamp, increment, arrayUnion }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 let eu = null;            // { uid, email, nome }
@@ -16,7 +18,7 @@ let ordemAlternativas = {}; // qid -> índices embaralhados
 const modoTodas = () => provaAtual?.modoExibicao === "todas";          // todas as questões na mesma página
 const trocaAbaPermitida = () => provaAtual?.permitirTrocaAba === true; // sem tela cheia e sem aviso (só conta)
 const colarPermitido = () => provaAtual?.permitirColar === true;
-const temConsulta = () => !!provaAtual?.materialConsultaUrl;
+const temConsulta = () => !!(provaAtual?.materialConsultaArquivoId || provaAtual?.materialConsultaUrl);
 // código de acesso (o modo teste da equipe não pede)
 const pedeCodigo = () => !modoTeste && !!String(provaAtual?.codigoAcesso || "").trim();
 const normalizarCodigo = c => String(c || "").toUpperCase().replace(/\s+/g, "");
@@ -73,7 +75,9 @@ aoMudarLogin(async user => {
     $("#avisoTexto").innerHTML = `<h2>Olá, ${esc(id.nome)}</h2><p>Esta é a página do aluno. O seu painel é o <a href="admin.html"><b>admin.html</b></a>.</p>`;
     mostrar("telaAviso"); return;
   }
-  eu = { uid: user.uid, email: id.email, nome: id.nome };
+  // chave do nome da conta Google (vem do token, o mesmo que as regras usam) para o vínculo com a turma
+  const tok = await user.getIdTokenResult().catch(() => null);
+  eu = { uid: user.uid, email: id.email, nome: id.nome, nomeConta: tok?.claims?.name || "", chave: chaveNome(tok?.claims?.name || "") };
   await listarProvas();
 });
 
@@ -121,18 +125,33 @@ async function listarProvas() {
     else                        { status = `<span class="tag ok">✓ finalizada em ${dataBR(td.finalizadaEm)}</span>` + (td.nota !== undefined ? ` <span class="tag nota">nota final: <b>${td.nota}</b></span>` : td.notaPrevia !== null && td.notaPrevia !== undefined ? ` <span class="tag nota">nota prévia: <b>${td.notaPrevia}</b>${td.aguardandoCorrecao ? " (aguardando correção)" : ""}</span>` : ""); acao = podeVerResultado ? `<button class="sec" data-acao="resultado" data-id="${p.id}">Ver resultado</button>` : `<span class="pequeno">resultado ainda não liberado</span>`; }
     box.insertAdjacentHTML("beforeend", `<div class="prova-item"><div class="info"><b>${esc(p.titulo)}</b><br><span class="pequeno">${esc(p.turma || "")} · ${p.nQuestoes} questões</span><div style="margin-top:4px">${status}</div></div><div class="acao">${acao}</div></div>`);
   }
-  if (!mostradas) box.innerHTML = `<div class="vazio"><div class="icone">📭</div><p><b>Nenhuma prova liberada para você no momento.</b></p><p class="pequeno">Quando o professor liberar uma prova da sua turma, ela aparece aqui. Se a prova já começou na sala, recarregue a página; se continuar sem aparecer, confira com o professor se o seu e-mail está na lista da turma.</p></div>`;
+  if (!mostradas) box.innerHTML = `<div class="vazio"><div class="icone">📭</div><p><b>Nenhuma prova liberada para você no momento.</b></p><p class="pequeno">Quando o professor liberar uma prova da sua turma, ela aparece aqui. Se a prova já começou na sala, recarregue a página; se continuar sem aparecer, mostre ao professor o nome e o e-mail da sua conta: <b>${esc(eu.nomeConta || "(conta sem nome)")}</b> · <b>${esc(eu.email)}</b>. O nome cadastrado na turma precisa ser igual ao da conta.</p>${avisoVinculo ? `<p class="pequeno erro-texto">${esc(avisoVinculo)}</p>` : ""}</div>`;
 }
 // turma da prova: sem turma = qualquer aluno; com turma = o e-mail precisa estar na lista
 // (o aluno só consegue ler a turma em que está; a proteção de verdade é a regra do create da tentativa)
+// Turma cadastrada pelo NOME: se o nome da conta Google bater com um nome ainda sem e-mail,
+// o próprio aluno grava o vínculo (nome -> e-mail) e entra na lista. As regras só permitem o próprio nome/e-mail.
 const turmasLidas = {};
+let avisoVinculo = "";
 async function alunoNaTurma(p) {
   if (modoTeste || !p.turmaId) return true;
-  if (!(p.turmaId in turmasLidas)) {
-    try { const d = await getDoc(doc(db, "turmas", p.turmaId)); turmasLidas[p.turmaId] = d.exists() ? (d.data().emails || []) : []; }
-    catch (e) { turmasLidas[p.turmaId] = []; }   // sem permissão = não está na turma
-  }
-  return turmasLidas[p.turmaId].includes(String(eu.email || "").toLowerCase());
+  if (!(p.turmaId in turmasLidas)) turmasLidas[p.turmaId] = await verificarTurma(p.turmaId);
+  return turmasLidas[p.turmaId];
+}
+async function verificarTurma(turmaId) {
+  const meu = String(eu.email || "").toLowerCase();
+  let d;
+  try { d = await getDoc(doc(db, "turmas", turmaId)); } catch (e) { return false; }   // sem permissão = não está na turma
+  if (!d.exists()) return false;
+  const t = d.data();
+  if ((t.emails || []).includes(meu)) return true;
+  if (!eu.chave || !(t.nomesChave || []).includes(eu.chave)) return false;
+  const ja = (t.vinculos || {})[eu.chave];
+  if (ja && ja !== meu) { avisoVinculo = `O nome "${eu.nomeConta}" da turma ${t.nome || ""} já foi vinculado a outra conta (${ja}). Avise o professor.`; return false; }
+  try {
+    await updateDoc(d.ref, { [`vinculos.${eu.chave}`]: meu, emails: arrayUnion(meu) });
+    return true;
+  } catch (e) { console.warn("vínculo com a turma", e); avisoVinculo = "Não foi possível vincular sua conta à turma. " + traduzirErro(e); return false; }
 }
 $("#btnVoltar1").onclick = $("#btnVoltar2").onclick = $("#btnVoltar3").onclick = listarProvas;
 $("#btnImprimir").onclick = () => window.print();
@@ -150,7 +169,7 @@ function regrasDaProva(p) {
   r.push("Copiar e selecionar o enunciado, imprimir e atalhos como Ctrl+C e Ctrl+P ficam desativados durante a prova.");
   if (Number(p.tempoMinutos) > 0) r.push(`<b>Tempo limite: ${Number(p.tempoMinutos)} min.</b> O cronômetro começa ao clicar em Começar; quando zerar, a prova é finalizada com as respostas já enviadas.`);
   if (String(p.codigoAcesso || "").trim() && !modoTeste) r.push("Esta prova pede um <b>código de acesso</b>, informado pelo professor na sala.");
-  if (p.materialConsultaUrl) r.push(`Consulta permitida: <b>${esc(p.materialConsultaTitulo || "material de consulta")}</b>, aberto ao lado das questões (no celular, pelo botão <b>📖 Consulta</b>).`);
+  if (p.materialConsultaArquivoId || p.materialConsultaUrl) r.push(`Consulta permitida: <b>${esc(p.materialConsultaTitulo || "material de consulta")}</b>, aberto ao lado das questões (no celular, pelo botão <b>📖 Consulta</b>).`);
   r.push(`Se a página fechar sem querer, entre de novo: você continua de onde parou${p.modoExibicao === "todas" ? ", com as respostas já enviadas" : ""}.`);
   return r;
 }
@@ -205,7 +224,12 @@ $("#btnComecar").onclick = async () => {
     if (ids.length < provaAtual.nQuestoes) throw new Error("O banco não tem questões suficientes nos temas escolhidos. Avise o professor.");
     let sorteadas;
     const nD = Number(provaAtual.nDissertativas || 0);
-    if (nD > 0 && diss.length >= nD && alt.length >= provaAtual.nQuestoes - nD)
+    if (provaAtual.nAlternativas !== undefined && provaAtual.nAlternativas !== null) {
+      // cota fixa: exatamente nAlternativas alternativas + nDissertativas dissertativas
+      const nA = Number(provaAtual.nAlternativas || 0);
+      if (diss.length < nD || alt.length < nA) throw new Error("O banco não tem questões suficientes de cada tipo nos temas escolhidos. Avise o professor.");
+      sorteadas = sortearAleatorio([...sortearAleatorio(diss, nD), ...sortearAleatorio(alt, nA)], nA + nD);
+    } else if (nD > 0 && diss.length >= nD && alt.length >= provaAtual.nQuestoes - nD)
       sorteadas = sortearAleatorio([...sortearAleatorio(diss, nD), ...sortearAleatorio(alt, provaAtual.nQuestoes - nD)], provaAtual.nQuestoes);
     else sorteadas = sortearAleatorio(ids, provaAtual.nQuestoes);
     const tid = idTentativa(provaAtual.id);
@@ -543,18 +567,45 @@ $("#btnReiniciarTeste").onclick = async () => {
 // =====================================================================
 // MATERIAL DE CONSULTA (coluna à direita no computador, gaveta no celular)
 // =====================================================================
-let consultaUrlAtual = null, consultaTimer = null;
+// Dois tipos: PDF enviado ao sistema (leitor próprio, dentro da página) ou link externo (iframe).
+let consultaUrlAtual = null, consultaTimer = null, leitorAtual = null, leitorArquivoId = null;
 function prepararConsulta() {
   const tem = temConsulta(), fr = $("#consultaFrame");
   $("#provaLayout").classList.toggle("com-consulta", tem);
   $("#painelConsulta").classList.toggle("oculto", !tem); $("#btnConsulta").classList.toggle("oculto", !tem);
-  if (!tem) { if (consultaUrlAtual) { fr.removeAttribute("src"); consultaUrlAtual = null; } return; }
+  const arquivo = tem ? provaAtual.materialConsultaArquivoId || "" : "";
+  if (!arquivo && leitorAtual) { leitorAtual.destruir(); leitorAtual = null; leitorArquivoId = null; }
+  if (!tem || arquivo) { if (consultaUrlAtual) { fr.removeAttribute("src"); consultaUrlAtual = null; } }
+  if (!tem) return;
   $("#consultaTitulo").textContent = provaAtual.materialConsultaTitulo || "material de consulta";
-  if (consultaUrlAtual !== provaAtual.materialConsultaUrl) carregarConsulta(provaAtual.materialConsultaUrl);   // não recarrega a cada questão
+  fr.classList.toggle("oculto", !!arquivo); $("#consultaLeitor").classList.toggle("oculto", !arquivo);
+  if (arquivo) { if (leitorArquivoId !== arquivo) carregarArquivoConsulta(arquivo); return; }   // não recarrega a cada questão
+  if (consultaUrlAtual !== provaAtual.materialConsultaUrl) carregarConsulta(provaAtual.materialConsultaUrl);
+}
+async function carregarArquivoConsulta(id) {
+  leitorArquivoId = id;
+  const box = $("#consultaLeitor"), erro = $("#consultaErro");
+  erro.classList.add("oculto");
+  if (leitorAtual) { leitorAtual.destruir(); leitorAtual = null; }
+  box.innerHTML = `<p class="pequeno leitor-carregando">Carregando o material…</p>`;
+  try {
+    const { bytes } = await baixarMaterial(id);
+    if (leitorArquivoId !== id) return;   // trocou de prova enquanto carregava
+    const leitor = await abrirLeitorPdf(box, bytes);
+    if (leitorArquivoId !== id) { leitor.destruir(); return; }
+    leitorAtual = leitor;
+  } catch (e) {
+    console.warn("material de consulta", e);
+    if (leitorArquivoId !== id) return;
+    leitorArquivoId = null; box.innerHTML = "";
+    $("#consultaErroMsg").textContent = "Não foi possível carregar o material; avise o professor. " + traduzirErro(e);
+    erro.classList.remove("oculto");
+  }
 }
 function carregarConsulta(url) {
   consultaUrlAtual = url; clearTimeout(consultaTimer);
   const fr = $("#consultaFrame"), erro = $("#consultaErro");
+  $("#consultaErroMsg").textContent = "Não foi possível carregar o material; avise o professor.";
   erro.classList.add("oculto");
   if (!/^https:\/\//.test(url)) { fr.removeAttribute("src"); erro.classList.remove("oculto"); return; }
   let carregou = false;
@@ -563,7 +614,7 @@ function carregarConsulta(url) {
   consultaTimer = setTimeout(() => { if (!carregou) erro.classList.remove("oculto"); }, 15000);
   fr.src = url;
 }
-$("#btnRecarregarConsulta").onclick = () => carregarConsulta(provaAtual.materialConsultaUrl);
+$("#btnRecarregarConsulta").onclick = () => provaAtual.materialConsultaArquivoId ? carregarArquivoConsulta(provaAtual.materialConsultaArquivoId) : carregarConsulta(provaAtual.materialConsultaUrl);
 $("#btnConsulta").onclick = () => $("#painelConsulta").classList.toggle("aberto");
 $("#btnFecharConsulta").onclick = () => $("#painelConsulta").classList.remove("aberto");
 

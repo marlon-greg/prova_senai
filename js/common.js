@@ -118,6 +118,14 @@ export function letra(i) { return "ABCDEFGH"[i] || String(i + 1); }
 // tema da questão; vazio ou ausente (bancos antigos) = "Geral"
 export function temaDe(q) { return String(q?.tema ?? "").trim() || "Geral"; }
 export function ordenarTemas(lista) { return [...new Set(lista)].sort((a, b) => a.localeCompare(b, "pt-BR")); }
+// chave do nome completo para vincular aluno cadastrado só pelo nome (IGUAL à chaveNome do firestore.rules):
+// minúsculas, sem acento, só letras, palavras separadas por "_"  ("José  da Silva" -> "jose_da_silva")
+export function chaveNome(nome) {
+  return String(nome || "").toLowerCase().replace(/\p{M}+/gu, "")
+    .replace(/[áàâãäÁÀÂÃÄ]/g, "a").replace(/[éèêëÉÈÊË]/g, "e").replace(/[íìîïÍÌÎÏ]/g, "i")
+    .replace(/[óòôõöÓÒÔÕÖ]/g, "o").replace(/[úùûüÚÙÛÜ]/g, "u").replace(/[çÇ]/g, "c").replace(/[ñÑ]/g, "n")
+    .replace(/[^a-z]+/g, " ").trim().replace(/ /g, "_");
+}
 // iniciais para o avatar do cabeçalho ("Maria da Silva" -> "MS")
 export function iniciais(nome) {
   const p = String(nome || "?").replace(/@.*/, "").split(/[\s._-]+/).filter(Boolean);

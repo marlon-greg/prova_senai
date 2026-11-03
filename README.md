@@ -37,7 +37,7 @@ Sistema de prova prática: o aluno entra com a conta Google do SENAI, recebe **1
 1. Abra `admin.html` e entre com `marlon.frodrigues@docente.senai.br`. O sistema cria a configuração inicial sozinho (domínios `edu.senai.br` e `aluno.senai.br`).
 2. Aba **Equipe**: cadastre outros professores (`professor`), coordenação (`admin`) ou apoio (`auxiliar`, só vê resultados — ex.: acompanhante de aluno com TEA).
 3. Aba **Bancos de questões**: cole o conteúdo de `modelo_banco.json` → **Validar** → **Importar**.
-4. Aba **Provas**: crie a prova (título, turma, banco, **temas**, 10 questões, tipo de feedback) → ela nasce **fechada**.
+4. Aba **Provas**: crie a prova (título, turma, banco, **temas**, quantas **alternativas** e quantas **dissertativas**, tipo de feedback) → ela nasce **fechada**.
 
 ---
 
@@ -76,8 +76,9 @@ Cada **banco** tem um campo `materia`, e cada questão pode ter um `tema`. Dá p
 ### Filtrar a prova por tema
 - Ao importar, a aba **Bancos** mostra os temas de cada banco com a contagem por tipo (ex.: *DCL - permissoes: 10 alternativa, 7 dissertativa*).
 - Em **Nova prova**, ao escolher o banco aparecem os temas com caixas de seleção (todos marcados) e a quantidade de questões de cada um. Desmarque os temas que ainda não foram dados. O resumo embaixo mostra, ao vivo, quantas questões ficam disponíveis.
-- O sistema **não deixa criar** a prova se os temas marcados não tiverem questões suficientes: (questões por aluno − dissertativas) precisa caber nas alternativas disponíveis, e as dissertativas nas dissertativas disponíveis. Com "dissertativas = 0" (sorteio livre), o total precisa caber na soma das duas.
-- O sorteio de cada aluno usa só as questões dos temas marcados, mantendo a cota de dissertativas. A tabela de provas mostra os temas de cada prova ("todos" quando nenhum foi desmarcado).
+- **Alternativas por aluno** e **Dissertativas por aluno** são dois campos separados; o total aparece embaixo (ex.: 7 + 3 = 10 questões). Com 0 dissertativas, a prova sai só com alternativas (e vice-versa).
+- O sistema **não deixa criar** a prova se os temas marcados não tiverem questões suficientes de cada tipo.
+- O sorteio de cada aluno usa só as questões dos temas marcados, com exatamente a quantidade escolhida de cada tipo. Provas antigas (criadas com "questões por aluno" + "dissertativas", em que 0 dissertativas era sorteio livre) continuam sorteando como antes. A tabela de provas mostra os temas de cada prova ("todos" quando nenhum foi desmarcado).
 - O **Gabarito p/ Classroom** sai agrupado por tema, com caixas para gerar só dos temas que a prova usou.
 
 ## Quem pode fazer cada prova: turmas e código de acesso
@@ -85,12 +86,29 @@ Cada **banco** tem um campo `materia`, e cada questão pode ter um `tema`. Dá p
 Os dois jeitos podem ser usados juntos.
 
 ### Turmas
-Aba **Turmas** → dê um nome (ex.: `DETS-1A-26CT-S`) e **cole os e-mails dos alunos** do jeito que vierem: um por linha, separados por vírgula, ponto e vírgula ou espaço, ou até com os nomes junto (copiado da planilha ou do Classroom). O sistema pega só o que é e-mail, passa para minúsculas e tira os repetidos; a prévia mostra quantos foram reconhecidos. **✎ Editar** reabre a lista para incluir ou tirar alunos; **🗑 Apagar** (só admin).
+Aba **Turmas** → dê um nome (ex.: `DETS-1A-26CT-S`) e cole os alunos, **um por linha**, de qualquer destes jeitos:
+
+```
+Maria Eduarda da Silva Souza                      ← só o nome completo
+João Pedro Lima <joao.lima@edu.senai.br>          ← nome + e-mail
+ana.costa@edu.senai.br                            ← só o e-mail
+```
+
+Dá para colar direto da planilha (coluna de nome e coluna de e-mail). Numeração no começo da linha ("12.") é ignorada. Uma linha com vários e-mails (lista antiga separada por vírgula) vira um aluno por e-mail.
+
+**Aluno cadastrado só pelo nome:** no primeiro login, o sistema compara o **nome da conta Google** com a lista — sem diferenciar maiúsculas, acentos, hífens e espaços extras ("JOSÉ  da Silva" = "Jose da silva") — e, se bater, grava o e-mail dele na turma sozinho. A partir daí vale como se você tivesse digitado o e-mail.
+- O nome precisa ser **completo e igual** ao da conta (nome abreviado ou faltando um sobrenome não bate). Quando não bate, o aluno não vê a prova e a tela mostra o nome e o e-mail da conta dele: escreva o e-mail na linha do aluno (**✎ Editar**) e salve.
+- Dois alunos com **o mesmo nome**: o sistema não deixa salvar sem o e-mail de cada um.
+- Cada nome só pode ser vinculado **uma vez**. Se outra conta com o mesmo nome entrou antes, o aluno vê o aviso "já foi vinculado a outra conta"; corrija em **✎ Editar** (o vínculo aparece como `Nome <e-mail>` e pode ser trocado).
+- As regras do Firestore garantem que o aluno só vincula **o próprio nome ao próprio e-mail**, sem conseguir mexer no resto da turma.
+- Na lista de turmas, **ver alunos** mostra ✅ quem já tem e-mail (e "vinculado no login") e ⏳ quem ainda não entrou.
+
+**✎ Editar** reabre a lista para incluir ou tirar alunos; **🗑 Apagar** (só admin).
 
 Na prova, escolha a turma no campo **Turma** (ou *— sem turma (qualquer aluno) —*). Com turma:
 - o aluno **só vê a prova na lista** se o e-mail dele estiver na turma;
 - as **regras do Firestore** recusam a tentativa de quem não está na lista, mesmo que tente pelo console do navegador;
-- em **Resultados** aparece a seção **Não fizeram**, com quem está na turma e não começou a prova.
+- em **Resultados** aparece a seção **Não fizeram**, com quem está na turma e não começou a prova (incluindo quem ainda nem entrou no sistema).
 
 Provas antigas, com a turma escrita como texto, continuam funcionando como "qualquer aluno" e mantêm o nome.
 
@@ -110,7 +128,7 @@ Definidas em **Nova prova** e alteráveis depois pelo botão **✎ Editar** na t
 | **Exibição das questões** (`modoExibicao`) | uma por vez | **Uma por vez**: sem voltar, como sempre. **Todas na mesma página**: as questões aparecem em sequência, cada uma com seu botão *Enviar resposta*; a enviada fica travada; o topo mostra "Enviadas: X de 10"; *Finalizar prova* avisa quais faltam e pergunta se quer finalizar com elas em branco. Ao recarregar a página, as enviadas voltam travadas. O feedback imediato vale igual nos dois modos. |
 | **Permitir trocar de aba/janela** (`permitirTrocaAba`) | não | Não pede tela cheia e não mostra o aviso ao trocar de aba. As trocas continuam contadas e aparecem em **cinza, "permitido"**, em Resultados (a linha não fica amarela). |
 | **Permitir colar** (`permitirColar`) | não | Libera colar e arrastar nos campos de resposta e não registra tentativas de colar. Copiar o enunciado continua bloqueado. |
-| **Material de consulta** (`materialConsultaTitulo`, `materialConsultaUrl`) | nenhum | Mostra o material **dentro da tela da prova**: no computador, numa coluna à direita (arraste o canto inferior esquerdo para alargar); no celular, pelo botão **📖 Consulta**, numa gaveta por cima da questão. Clicar no material não conta como troca de aba. |
+| **Material de consulta** (`materialConsultaTitulo`, `materialConsultaArquivoId` ou `materialConsultaUrl`) | nenhum | Um **PDF enviado ao sistema** (recomendado) ou um link. Mostra o material **dentro da tela da prova**: no computador, numa coluna à direita (arraste o canto inferior esquerdo para alargar); no celular, pelo botão **📖 Consulta**, numa gaveta por cima da questão. Clicar no material não conta como troca de aba. |
 
 ### Limite de saídas da prova
 Em **Regras da prova**, só quando a troca de aba **não** é permitida:
@@ -123,6 +141,17 @@ Em **Regras da prova**, só quando a troca de aba **não** é permitida:
 Em **Resultados** aparecem as saídas com o limite (ex.: 🚪 3/3), o motivo do encerramento e as questões perdidas (também no detalhe, no CSV e nos PDFs).
 
 **Editar uma prova:** depois que algum aluno começou (tentativas de teste não contam), **banco, número de questões, dissertativas e temas ficam travados**, porque mudariam o sorteio de quem já começou e a correção. Título, turma, feedback, tempo e as opções acima podem mudar a qualquer momento.
+
+### Slides em PDF (recomendado)
+Use **PDF**, não PPT/PPTX: o navegador não abre arquivo do PowerPoint sozinho, e o PDF mantém o visual de cada slide igual em qualquer computador ou celular. Para gerar: **PowerPoint → Arquivo → Exportar → Criar PDF** (ou *Salvar como → PDF*); **Google Slides → Arquivo → Fazer download → PDF**. Animações e vídeos não vão para o PDF.
+
+1. Aba **Bancos → Slides e material de consulta (PDF)**: título + arquivo → **Enviar PDF** (ou, no formulário da prova, o botão **⬆ Enviar PDF** ao lado do campo).
+2. Na prova, em **Material de consulta**, escolha o PDF na lista. **👁 Ver** abre o PDF exatamente como o aluno vai ver.
+3. Na prova, o aluno vê os slides num **leitor dentro da própria tela** (coluna à direita; no celular, botão **📖 Consulta**): ◀ ▶ para passar, número da página, zoom − / + e ⤢ para ajustar à largura; com o leitor selecionado, as setas do teclado também passam os slides. Como não sai da página, mexer no leitor não conta como troca de aba.
+
+Limite de **25 MB** por arquivo. O PDF fica guardado no próprio Firestore, em pedaços de ~900 KB (funciona no plano gratuito do Firebase, que não inclui o Storage). Cada aluno baixa o arquivo uma vez por prova; para economizar, prefira PDFs menores (PowerPoint: *Exportar → PDF → Tamanho mínimo*). PDFs que nenhuma prova usa podem ser apagados na mesma aba (🗑).
+
+> Faça a atualização das **regras do Firestore** (copie de novo o `firestore.rules` e publique): elas liberam a leitura dos PDFs para alunos e o vínculo da turma pelo nome.
 
 ### Como obter o link do material de consulta
 - **PDF ou arquivo no Google Drive:** botão direito no arquivo → **Compartilhar** → em "Acesso geral" escolha **Qualquer pessoa com o link** → **Copiar link**.

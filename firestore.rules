@@ -17,6 +17,16 @@ service cloud.firestore {
                                && dominio() in get(/databases/$(db)/documents/config/geral).data.dominiosAlunos; }
     function prova(id)     { return get(/databases/$(db)/documents/provas/$(id)).data; }
     function tentativa(id) { return get(/databases/$(db)/documents/tentativas/$(id)).data; }
+    // chave do nome completo (IGUAL à função chaveNome de js/common.js):
+    // minúsculas, sem acento, só letras, palavras separadas por "_"  ("José  da Silva" -> "jose_da_silva")
+    function chaveNome(n) {
+      return n.lower().replace('\\p{M}+', '')
+              .replace('[áàâãäÁÀÂÃÄ]', 'a').replace('[éèêëÉÈÊË]', 'e').replace('[íìîïÍÌÎÏ]', 'i')
+              .replace('[óòôõöÓÒÔÕÖ]', 'o').replace('[úùûüÚÙÛÜ]', 'u').replace('[çÇ]', 'c').replace('[ñÑ]', 'n')
+              .replace('[^a-z]+', ' ').trim().replace(' ', '_');
+    }
+    function meuNome()     { return 'name' in request.auth.token && request.auth.token.name is string
+                                    ? chaveNome(request.auth.token.name) : ''; }
     // tentativa de teste da própria pessoa da equipe
     function meuTeste(id)  { return equipe() && tentativa(id).teste == true && tentativa(id).uid == uid(); }
 
@@ -61,10 +71,39 @@ service cloud.firestore {
       allow update, delete: if admin();
     }
 
-    // ---------- turmas (lista de e-mails dos alunos) ----------
+    // ---------- turmas ----------
+    // emails     = alunos que podem fazer as provas da turma (o que vale para as regras)
+    // nomesChave = nomes completos ainda sem e-mail (cadastrados só pelo nome)
+    // vinculos   = { chaveDoNome: email } — o aluno se vincula sozinho no 1º login, se o nome da conta Google bater
     match /turmas/{id} {
-      allow read: if equipe() || (logado() && email().lower() in resource.data.emails);
+      allow read: if equipe()
+                  || (logado() && email().lower() in resource.data.emails)
+                  || (aluno() && meuNome() != '' && meuNome() in resource.data.get('nomesChave', []));
+      allow create, delete: if professor();
+      allow update: if professor() || (aluno() && vinculoPeloNome());
+    }
+    // o aluno só pode: acrescentar o PRÓPRIO e-mail e o vínculo do PRÓPRIO nome (uma vez; nome já vinculado não muda)
+    function vinculoPeloNome() {
+      let chave = meuNome();
+      let antes = resource.data.get('vinculos', {});
+      let depois = request.resource.data.get('vinculos', {});
+      return chave != ''
+        && chave in resource.data.get('nomesChave', [])
+        && !(chave in antes)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['emails', 'vinculos'])
+        && depois.diff(antes).affectedKeys().hasOnly([chave])
+        && depois[chave] == email().lower()
+        && request.resource.data.emails.toSet() == resource.data.emails.toSet().union([email().lower()].toSet());
+    }
+
+    // ---------- materiais de consulta (PDF enviado pelo professor, em pedaços de ~900 KB) ----------
+    match /materiais/{m} {
+      allow read: if equipe() || aluno();
       allow write: if professor();
+      match /partes/{p} {
+        allow read: if equipe() || aluno();
+        allow write: if professor();
+      }
     }
 
     // ---------- provas ----------

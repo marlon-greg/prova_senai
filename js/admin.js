@@ -1,6 +1,8 @@
 // Painel do professor: provas, bancos (import JSON), resultados/correção, equipe, configuração.
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, apagarTentativaTeste,
-         confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas } from "./common.js";
+         confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome } from "./common.js";
+import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB } from "./material.js";
+import { abrirLeitorPdf } from "./leitor-pdf.js";
 import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp, onSnapshot }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -31,7 +33,7 @@ function abrirAba(a) {
   if (a !== "resultados" && $("#rAoVivo").checked) { $("#rAoVivo").checked = false; pararAoVivo(); }   // sair da aba desliga o ao vivo
   document.querySelectorAll("[data-aba]").forEach(b => b.classList.toggle("ativa", b.dataset.aba === a));
   ["provas", "bancos", "turmas", "resultados", "equipe", "config"].forEach(x => $("#aba-" + x).classList.toggle("oculto", x !== a));
-  ({ provas: carregarProvas, bancos: carregarBancos, turmas: carregarTurmas, resultados: prepararResultados, equipe: carregarEquipe, config: carregarConfig })[a]();
+  ({ provas: carregarProvas, bancos: () => { carregarBancos(); carregarMateriais(); }, turmas: carregarTurmas, resultados: prepararResultados, equipe: carregarEquipe, config: carregarConfig })[a]();
 }
 
 // primeiro acesso do superadmin: cria config/geral (sem ele a regra dos alunos não funciona)
@@ -74,16 +76,45 @@ async function listarTurmas() {
   turmasCache = s.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (a.nome || "").localeCompare(b.nome || "", "pt-BR"));
   return turmasCache;
 }
-// extrai e-mails de qualquer texto colado (planilha, Classroom, lista com nomes...): minúsculas, sem repetidos
-function extrairEmails(txt) {
-  const achados = String(txt || "").match(/[a-z0-9._%+-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}/gi) || [];
-  return [...new Set(achados.map(e => e.toLowerCase()))].sort();
+const RE_EMAIL = /[a-z0-9._%+-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}/gi;
+// Lê a lista colada: uma pessoa por linha, com o nome completo e/ou o e-mail
+// ("Maria da Silva", "Maria da Silva <maria@edu.senai.br>", "maria@edu.senai.br", "Maria da Silva;maria@...").
+// Linha com vários e-mails (lista antiga separada por vírgula) = vários alunos só com e-mail.
+// Devolve { alunos: [{ nome, email }], repetidos: [nomes iguais sem e-mail] }
+function extrairAlunos(txt) {
+  const alunos = [], porEmail = new Set(), porNome = new Map(), repetidos = new Set();
+  const add = (nome, email) => {
+    if (email) { if (porEmail.has(email)) return; porEmail.add(email); alunos.push({ nome, email }); return; }
+    const k = chaveNome(nome);
+    if (!k) return;
+    if (porNome.has(k)) { repetidos.add(nome); return; }
+    porNome.set(k, true); alunos.push({ nome, email: null });
+  };
+  for (const linha of String(txt || "").normalize("NFC").split(/\r?\n/)) {
+    const emails = (linha.match(RE_EMAIL) || []).map(e => e.toLowerCase());
+    if (emails.length > 1) { emails.forEach(e => add("", e)); continue; }
+    const nome = linha.replace(RE_EMAIL, " ").replace(/^\s*\d+\s*[.)\-–]?\s+/, "")   // tira "12." / "3 -" do começo (numeração da planilha)
+      .replace(/[<>()[\]"'|;,\t]+/g, " ").replace(/\s+/g, " ").trim();
+    add(/[a-zà-ÿ]/i.test(nome) ? nome : "", emails[0] || null);
+  }
+  // o mesmo aluno com e-mail numa linha e só com o nome em outra: fica a linha com e-mail
+  const comEmail = new Set(alunos.filter(a => a.email && a.nome).map(a => chaveNome(a.nome)));
+  return { alunos: alunos.filter(a => a.email || !comEmail.has(chaveNome(a.nome))), repetidos: [...repetidos] };
 }
+// alunos de uma turma salva; turmas antigas só têm "emails"; nomes vinculados no 1º login ganham o e-mail
+function alunosDaTurma(t) {
+  const vinc = t.vinculos || {};
+  if (!Array.isArray(t.alunos)) return (t.emails || []).map(e => ({ nome: "", email: e }));
+  return t.alunos.map(a => a.email ? a : { nome: a.nome, email: vinc[chaveNome(a.nome)] || null, auto: !!vinc[chaveNome(a.nome)] });
+}
+const linhaAluno = a => a.email ? (a.nome ? `${a.nome} <${a.email}>` : a.email) : a.nome;
 let turmaEditando = null;   // id da turma em edição (null = nova)
 function previaTurma() {
-  const txt = $("#tEmails").value, emails = extrairEmails(txt);
-  const pedacos = txt.split(/[\s,;]+/).filter(Boolean).length;
-  $("#tPrevia").textContent = txt.trim() ? `${emails.length} e-mail(s) válido(s)${pedacos > emails.length ? ` · o resto foi ignorado (nomes, repetidos ou texto que não é e-mail)` : ""}.` : "";
+  const txt = $("#tEmails").value, { alunos, repetidos } = extrairAlunos(txt);
+  if (!txt.trim()) { $("#tPrevia").textContent = ""; return; }
+  const comEmail = alunos.filter(a => a.email).length, soNome = alunos.length - comEmail;
+  $("#tPrevia").innerHTML = `${alunos.length} aluno(s): ${comEmail} com e-mail` + (soNome ? `, <b>${soNome} só com o nome</b> (vinculam sozinhos no 1º login, se o nome da conta Google for igual)` : "") + "." +
+    (repetidos.length ? `<br><span class="erro-texto">⚠ Nome repetido: ${repetidos.map(esc).join(", ")}. Dois alunos com o mesmo nome precisam do e-mail (escreva o e-mail na linha de cada um).</span>` : "");
 }
 $("#tEmails").oninput = previaTurma;
 function limparFormTurma() {
@@ -93,26 +124,37 @@ function limparFormTurma() {
 $("#btnCancelarTurma").onclick = limparFormTurma;
 $("#btnSalvarTurma").onclick = async () => {
   if (!podeEditar()) return toast("Seu papel não permite cadastrar turmas.", "erro");
-  const nome = $("#tNome").value.trim(), emails = extrairEmails($("#tEmails").value);
+  const nome = $("#tNome").value.trim(), { alunos, repetidos } = extrairAlunos($("#tEmails").value);
   if (!nome) return toast("Dê um nome para a turma.", "erro");
-  if (!emails.length) return toast("Cole pelo menos um e-mail de aluno.", "erro");
+  if (!alunos.length) return toast("Cole pelo menos um aluno (nome completo ou e-mail).", "erro");
+  if (repetidos.length) return toast(`Nome repetido: ${repetidos.join(", ")}. Coloque o e-mail desses alunos.`, "erro");
+  const emails = [...new Set(alunos.filter(a => a.email).map(a => a.email))].sort();
+  const nomesChave = alunos.filter(a => !a.email).map(a => chaveNome(a.nome));
+  // vínculos já feitos foram incorporados ao texto (nome <e-mail>) ao abrir a edição: recomeça do zero
+  const dados = { nome, alunos: alunos.map(a => ({ nome: a.nome || "", email: a.email || null })), emails, nomesChave, vinculos: {} };
   try {
-    if (turmaEditando) await updateDoc(doc(db, "turmas", turmaEditando), { nome, emails, atualizadoEm: serverTimestamp(), atualizadoPor: eu.email });
-    else await addDoc(collection(db, "turmas"), { nome, emails, criadoEm: serverTimestamp(), criadoPor: eu.email });
+    if (turmaEditando) await updateDoc(doc(db, "turmas", turmaEditando), { ...dados, atualizadoEm: serverTimestamp(), atualizadoPor: eu.email });
+    else await addDoc(collection(db, "turmas"), { ...dados, criadoEm: serverTimestamp(), criadoPor: eu.email });
   } catch (e) { return toast("Não foi possível salvar a turma. " + traduzirErro(e), "erro"); }
-  toast(`Turma ${nome} salva com ${emails.length} aluno(s).`, "ok");
+  toast(`Turma ${nome} salva com ${alunos.length} aluno(s)` + (nomesChave.length ? ` (${nomesChave.length} aguardando o 1º login).` : "."), "ok");
   limparFormTurma(); carregarTurmas();
 };
 async function carregarTurmas() {
   await listarTurmas();
   const box = $("#listaTurmas");
-  if (!turmasCache.length) { box.innerHTML = `<div class="vazio"><div class="icone">👥</div><p>Nenhuma turma ainda. Cadastre a primeira acima colando os e-mails dos alunos.</p></div>`; return; }
-  box.innerHTML = `<div class="tabela"><table><tr><th>Turma</th><th>Alunos</th><th>Atualizada</th><th></th></tr>` + turmasCache.map(t =>
-    `<tr><td><b>${esc(t.nome)}</b><br><span class="pequeno">${t.id}</span></td><td>${(t.emails || []).length}</td><td class="pequeno">${dataBR(t.atualizadoEm || t.criadoEm)}</td>
-     <td class="td-acoes">${podeEditar() ? `<button class="leve mini" data-edt="${t.id}">✎ Editar</button>` : ""} ${ehAdmin() ? `<button class="perigo mini" data-delt="${t.id}">🗑 Apagar</button>` : ""}</td></tr>`).join("") + "</table></div>";
+  if (!turmasCache.length) { box.innerHTML = `<div class="vazio"><div class="icone">👥</div><p>Nenhuma turma ainda. Cadastre a primeira acima colando os nomes completos (ou e-mails) dos alunos.</p></div>`; return; }
+  box.innerHTML = `<div class="tabela"><table><tr><th>Turma</th><th>Alunos</th><th>Atualizada</th><th></th></tr>` + turmasCache.map(t => {
+    const al = alunosDaTurma(t), pend = al.filter(a => !a.email), auto = al.filter(a => a.auto);
+    const lista = al.map(a => `<li>${a.email ? "✅" : "⏳"} ${esc(a.nome || a.email)}${a.nome && a.email ? ` <span class="pequeno">${esc(a.email)}${a.auto ? " · vinculado no login" : ""}</span>` : ""}${!a.email ? ` <span class="pequeno">— aguardando o 1º login</span>` : ""}</li>`).join("");
+    return `<tr><td><b>${esc(t.nome)}</b><br><span class="pequeno">${t.id}</span></td>
+     <td>${al.length}${pend.length ? `<br><span class="tag aviso">⏳ ${pend.length} sem login ainda</span>` : ""}${auto.length ? `<br><span class="pequeno">${auto.length} vinculado(s) pelo nome</span>` : ""}
+       <details class="lista-alunos"><summary class="pequeno">ver alunos</summary><ul>${lista}</ul></details></td>
+     <td class="pequeno">${dataBR(t.atualizadoEm || t.criadoEm)}</td>
+     <td class="td-acoes">${podeEditar() ? `<button class="leve mini" data-edt="${t.id}">✎ Editar</button>` : ""} ${ehAdmin() ? `<button class="perigo mini" data-delt="${t.id}">🗑 Apagar</button>` : ""}</td></tr>`;
+  }).join("") + "</table></div>";
   box.querySelectorAll("[data-edt]").forEach(b => b.onclick = () => {
     const t = turmasCache.find(x => x.id === b.dataset.edt);
-    turmaEditando = t.id; $("#tNome").value = t.nome || ""; $("#tEmails").value = (t.emails || []).join("\n"); previaTurma();
+    turmaEditando = t.id; $("#tNome").value = t.nome || ""; $("#tEmails").value = alunosDaTurma(t).map(linhaAluno).join("\n"); previaTurma();
     $("#tFormTitulo").textContent = `Editar turma ${t.nome}`; $("#btnCancelarTurma").classList.remove("oculto");
     $("#tNome").scrollIntoView({ behavior: "smooth", block: "center" }); $("#tNome").focus();
   });
@@ -123,6 +165,59 @@ async function carregarTurmas() {
     await deleteDoc(doc(db, "turmas", t.id)); if (turmaEditando === t.id) limparFormTurma(); carregarTurmas();
   });
 }
+
+// ============================================================ MATERIAIS DE CONSULTA (PDF)
+let materiaisCache = [];
+async function listarMateriaisCache() { materiaisCache = await listarMateriais(); return materiaisCache; }
+// envia o PDF mostrando o andamento em `el`; devolve o material ou null
+async function enviarPdf(file, titulo, el) {
+  if (!podeEditar()) { toast("Seu papel não permite enviar material.", "erro"); return null; }
+  el.textContent = "Preparando o envio…";
+  try {
+    const m = await enviarMaterial(file, titulo, eu.email, (i, n) => { el.textContent = `Enviando ${file.name}: ${Math.round(i / n * 100)}%`; });
+    el.textContent = `✅ ${m.titulo} enviado (${tamanhoTexto(m.tamanho)}).`;
+    await listarMateriaisCache();
+    return m;
+  } catch (e) { el.textContent = "⚠ " + traduzirErro(e); toast(traduzirErro(e), "erro"); return null; }
+}
+// abre o PDF no mesmo leitor que o aluno usa
+async function verMaterial(id) {
+  if (!id) return;
+  let leitor = null;
+  const m = materiaisCache.find(x => x.id === id);
+  await modal({
+    titulo: m?.titulo || "Material de consulta", largo: true, ok: "Fechar",
+    conteudo: `<div class="leitor-modal"><p class="pequeno">Carregando…</p></div>`,
+    aoAbrir: async caixa => {
+      const box = caixa.querySelector(".leitor-modal");
+      try { const { bytes } = await baixarMaterial(id); leitor = await abrirLeitorPdf(box, bytes); }
+      catch (e) { box.innerHTML = `<p class="erro-texto">Não foi possível abrir o PDF. ${esc(traduzirErro(e))}</p>`; }
+    }
+  });
+  leitor?.destruir();
+}
+async function carregarMateriais() {
+  const box = $("#listaMateriais");
+  try { await listarMateriaisCache(); } catch (e) { box.innerHTML = `<p class="pequeno">Não foi possível listar. ${esc(traduzirErro(e))}</p>`; return; }
+  if (!materiaisCache.length) { box.innerHTML = `<p class="pequeno">Nenhum PDF enviado ainda.</p>`; return; }
+  box.innerHTML = `<div class="tabela"><table><tr><th>Material</th><th>Tamanho</th><th>Enviado</th><th></th></tr>` + materiaisCache.map(m =>
+    `<tr><td><b>${esc(m.titulo)}</b><br><span class="pequeno">${esc(m.arquivo || "")}</span></td><td>${tamanhoTexto(m.tamanho)}</td><td class="pequeno">${dataBR(m.criadoEm)}<br>${esc(m.criadoPor || "")}</td>
+     <td class="td-acoes"><button class="leve mini" data-vermat="${m.id}">👁 Ver</button> ${podeEditar() ? `<button class="perigo mini" data-delmat="${m.id}">🗑 Apagar</button>` : ""}</td></tr>`).join("") + "</table></div>";
+  box.querySelectorAll("[data-vermat]").forEach(b => b.onclick = () => verMaterial(b.dataset.vermat));
+  box.querySelectorAll("[data-delmat]").forEach(b => b.onclick = async () => {
+    const m = materiaisCache.find(x => x.id === b.dataset.delmat);
+    const usadas = (await getDocs(query(collection(db, "provas"), where("materialConsultaArquivoId", "==", m.id)))).size;
+    if (!(await confirmar(`Apagar o PDF "${m.titulo}"?` + (usadas ? `\n\n${usadas} prova(s) usam este material: os alunos vão ver "Não foi possível carregar o material". Troque o material nessas provas antes.` : ""), { titulo: "Apagar material", ok: "Apagar", perigo: true }))) return;
+    try { await apagarMaterial(m.id); toast("Material apagado.", "ok"); } catch (e) { toast("Não foi possível apagar. " + traduzirErro(e), "erro"); }
+    carregarMateriais();
+  });
+}
+$("#btnEnviarMaterial").onclick = async () => {
+  const file = $("#matArquivo").files[0];
+  if (!file) return toast("Escolha o arquivo PDF.", "erro");
+  const m = await enviarPdf(file, $("#matTitulo").value, $("#msgMaterial"));
+  if (m) { $("#matArquivo").value = ""; $("#matTitulo").value = ""; carregarMateriais(); }
+};
 
 // ============================================================ PROVAS
 let bancosCache = [];
@@ -151,8 +246,9 @@ function formProvaHTML(f) {
     <p id="${f}TemasResumo" class="pequeno temas-resumo" role="status" aria-live="polite"></p>
   </fieldset>
   <div class="grade">
-    <div><label for="${f}N">Questões por aluno</label><input type="number" id="${f}N" value="10" min="1"></div>
-    <div><label for="${f}NDiss">Das quais dissertativas (0 = sorteio livre)</label><input type="number" id="${f}NDiss" value="3" min="0"></div>
+    <div><label for="${f}NAlt">Alternativas por aluno</label><input type="number" id="${f}NAlt" value="7" min="0"></div>
+    <div><label for="${f}NDiss">Dissertativas por aluno</label><input type="number" id="${f}NDiss" value="3" min="0">
+      <p class="pequeno" id="${f}NTotal" style="margin:4px 0 0" aria-live="polite"></p></div>
     <div><label for="${f}Feedback">Feedback ao enviar cada resposta</label>
       <select id="${f}Feedback"><option value="acerto">Só diz se acertou ou errou</option><option value="completo">Mostra a resposta certa e a explicação</option><option value="nenhum">Nenhum (só no resultado final)</option></select></div>
   </div>
@@ -182,9 +278,16 @@ function formProvaHTML(f) {
     <legend>Material de consulta (opcional)</legend>
     <div class="grade">
       <div><label for="${f}MatTitulo">Título do material</label><input type="text" id="${f}MatTitulo" placeholder="Slides da aula 8"></div>
-      <div class="col-2"><label for="${f}MatUrl">Link do material</label><input type="url" id="${f}MatUrl" placeholder="https://drive.google.com/file/d/…/view"></div>
+      <div class="col-2"><label for="${f}MatArquivo">Slides em PDF (abre num leitor dentro da prova)</label>
+        <div class="linha" style="flex-wrap:nowrap"><select id="${f}MatArquivo"></select>
+          <button type="button" class="leve mini" id="${f}MatVer" style="flex:0 0 auto;min-width:0" title="Ver o PDF como o aluno vai ver">👁 Ver</button>
+          <label class="botao-arquivo leve mini" style="flex:0 0 auto">⬆ Enviar PDF<input type="file" id="${f}MatUpload" accept="application/pdf,.pdf" hidden></label></div>
+        <p class="pequeno" id="${f}MatEnvio" aria-live="polite" style="margin:4px 0 0"></p></div>
     </div>
-    <p class="pequeno">${AJUDA_MATERIAL}</p>
+    <div class="grade">
+      <div class="col-2"><label for="${f}MatUrl">… ou link externo (Google Drive/Slides/Docs)</label><input type="url" id="${f}MatUrl" placeholder="https://drive.google.com/file/d/…/view"></div>
+    </div>
+    <p class="pequeno">PDF: exporte os slides em PDF (PowerPoint: Arquivo → Exportar → PDF · Google Slides: Arquivo → Fazer download → PDF), até ${MAX_MB} MB. Link: ${AJUDA_MATERIAL}</p>
     <p class="pequeno" id="${f}MatPrevia" aria-live="polite"></p>
   </fieldset>`;
 }
@@ -219,18 +322,16 @@ function controleProva(f) {
   const disponiveis = () => temasMarcados($f("Temas")).reduce((s, t) => ({ alternativa: s.alternativa + (contagem[t]?.alternativa || 0), dissertativa: s.dissertativa + (contagem[t]?.dissertativa || 0) }), { alternativa: 0, dissertativa: 0 });
   // devolve a mensagem de erro (ou "") para o pedido atual
   function problema() {
-    const n = Number($f("N").value || 0), nDiss = Number($f("NDiss").value || 0), d = disponiveis();
+    const nAlt = Number($f("NAlt").value || 0), nDiss = Number($f("NDiss").value || 0), d = disponiveis();
     if (travado || !Object.keys(contagem).length) return "";
     if (!temasMarcados($f("Temas")).length) return "Marque pelo menos um tema.";
-    if (nDiss > 0) {
-      if (n - nDiss > d.alternativa) return `Faltam questões de alternativa: a prova pede ${n - nDiss} (${n} − ${nDiss} dissertativas), mas os temas marcados só têm ${d.alternativa}. Marque mais temas ou diminua o número de questões.`;
-      if (nDiss > d.dissertativa) return `Faltam dissertativas: a prova pede ${nDiss}, mas os temas marcados só têm ${d.dissertativa}. Marque mais temas ou diminua o número de dissertativas.`;
-    } else if (n > d.alternativa + d.dissertativa) {
-      return `Faltam questões: a prova pede ${n}, mas os temas marcados só têm ${d.alternativa + d.dissertativa}. Marque mais temas ou diminua o número de questões.`;
-    }
+    if (nAlt > d.alternativa) return `Faltam questões de alternativa: a prova pede ${nAlt}, mas os temas marcados só têm ${d.alternativa}. Marque mais temas ou diminua as alternativas.`;
+    if (nDiss > d.dissertativa) return `Faltam dissertativas: a prova pede ${nDiss}, mas os temas marcados só têm ${d.dissertativa}. Marque mais temas ou diminua as dissertativas.`;
     return "";
   }
   function atualizar() {
+    const nAlt = Number($f("NAlt").value || 0), nDiss = Number($f("NDiss").value || 0);
+    $f("NTotal").textContent = `Total: ${nAlt + nDiss} questões por aluno.`;
     const el = $f("TemasResumo");
     if (!Object.keys(contagem).length) { el.textContent = ""; el.classList.remove("erro"); return; }
     const prob = problema();
@@ -253,8 +354,20 @@ function controleProva(f) {
     } catch (e) { box.innerHTML = `<p class="pequeno">Não foi possível carregar os temas. ${esc(traduzirErro(e))}</p>`; }
     atualizar();
   }
+  // select com os PDFs enviados
+  async function opcoesMaterial(selecionado = null) {
+    const atual = selecionado ?? $f("MatArquivo").value;
+    try { await listarMateriaisCache(); } catch (e) { /* sem materiais */ }
+    $f("MatArquivo").innerHTML = `<option value="">— nenhum PDF —</option>` + materiaisCache.map(m => `<option value="${m.id}">${esc(m.titulo)} (${tamanhoTexto(m.tamanho)})</option>`).join("") +
+      (atual && !materiaisCache.some(m => m.id === atual) ? `<option value="${esc(atual)}">⚠ PDF apagado</option>` : "");
+    $f("MatArquivo").value = atual || "";
+    previaMaterial();
+  }
   function previaMaterial() {
-    const url = $f("MatUrl").value.trim(), conv = converterLinkMaterial(url), el = $f("MatPrevia");
+    const arq = $f("MatArquivo").value;
+    $f("MatUrl").disabled = !!arq; $f("MatVer").disabled = !arq;
+    const url = arq ? "" : $f("MatUrl").value.trim(), conv = converterLinkMaterial(url), el = $f("MatPrevia");
+    if (arq) { el.innerHTML = `📄 O aluno vai ver o PDF num leitor dentro da prova (◀ ▶ para passar os slides, zoom).` + ($f("MatUrl").value.trim() ? " O link externo é ignorado." : ""); return; }
     if (!url) { el.textContent = ""; return; }
     if (!/^https:\/\//.test(conv)) { el.innerHTML = `⚠ Use um link que comece com <b>https://</b>.`; return; }
     el.innerHTML = conv !== url ? `Será salvo no formato para exibir na prova: <span class="mono">${esc(conv)}</span>` : `Link salvo como está.`;
@@ -272,8 +385,19 @@ function controleProva(f) {
   // liga os eventos (chamar depois que o HTML estiver na página)
   function ligar() {
     $f("Banco").onchange = () => carregarTemas();
-    $f("N").oninput = $f("NDiss").oninput = atualizar;
+    $f("NAlt").oninput = $f("NDiss").oninput = atualizar;
     $f("MatUrl").oninput = previaMaterial;
+    $f("MatArquivo").onchange = previaMaterial;
+    $f("MatVer").onclick = () => verMaterial($f("MatArquivo").value);
+    $f("MatUpload").onchange = async () => {
+      const file = $f("MatUpload").files[0]; $f("MatUpload").value = "";
+      if (!file) return;
+      const r = await enviarPdf(file, $f("MatTitulo").value, $f("MatEnvio"));
+      if (!r) return;
+      await opcoesMaterial(r.id);
+      if (!$f("MatTitulo").value.trim()) $f("MatTitulo").value = r.titulo;
+      previaMaterial();
+    };
     $f("PermitirTrocaAba").onchange = $f("Modo").onchange = atualizarLimite;
     atualizarLimite();
     $f("GerarCodigo").onclick = () => { $f("Codigo").value = gerarCodigo(); };
@@ -281,7 +405,7 @@ function controleProva(f) {
   }
   // select de turmas; prova antiga com turma em texto livre ganha uma opção própria para não perder o nome
   function opcoesTurma(p = {}) {
-    let h = `<option value="">— sem turma (qualquer aluno) —</option>` + turmasCache.map(t => `<option value="${t.id}">${esc(t.nome)} (${(t.emails || []).length} alunos)</option>`).join("");
+    let h = `<option value="">— sem turma (qualquer aluno) —</option>` + turmasCache.map(t => `<option value="${t.id}">${esc(t.nome)} (${alunosDaTurma(t).length} alunos)</option>`).join("");
     if (!p.turmaId && p.turma) h += `<option value="${LEGADO}">${esc(p.turma)} — texto antigo, sem lista (qualquer aluno)</option>`;
     $f("Turma").innerHTML = h;
     $f("Turma").value = p.turmaId && turmasCache.some(t => t.id === p.turmaId) ? p.turmaId : (!p.turmaId && p.turma ? LEGADO : "");
@@ -290,32 +414,37 @@ function controleProva(f) {
   // trava banco, número de questões, dissertativas e temas (prova que já tem tentativas de alunos)
   function travar(motivo) {
     travado = true;
-    ["Banco", "N", "NDiss"].forEach(s => $f(s).disabled = true);
+    ["Banco", "NAlt", "NDiss"].forEach(s => $f(s).disabled = true);
     $f("Temas").querySelectorAll("input, button").forEach(x => x.disabled = true);
     $f("Trava").innerHTML = motivo; $f("Trava").classList.remove("oculto");
     atualizar();
   }
   function preencher(p) {
     $f("Titulo").value = p.titulo || ""; opcoesTurma(p); $f("Codigo").value = p.codigoAcesso || "";
-    $f("Banco").value = p.bancoId || ""; $f("N").value = p.nQuestoes ?? 10; $f("NDiss").value = p.nDissertativas ?? 0;
+    $f("Banco").value = p.bancoId || "";
+    // provas antigas só têm o total (nQuestoes) e as dissertativas
+    $f("NDiss").value = p.nDissertativas ?? 0; $f("NAlt").value = p.nAlternativas ?? Math.max(0, (p.nQuestoes ?? 10) - (p.nDissertativas ?? 0));
     $f("Feedback").value = p.feedbackImediato || "acerto"; $f("Tempo").value = p.tempoMinutos || 0;
     $f("Modo").value = p.modoExibicao === "todas" ? "todas" : "uma";
     $f("Embaralhar").checked = p.embaralharAlternativas !== false;
     $f("PermitirTrocaAba").checked = p.permitirTrocaAba === true; $f("PermitirColar").checked = p.permitirColar === true;
     $f("MatTitulo").value = p.materialConsultaTitulo || ""; $f("MatUrl").value = p.materialConsultaUrl || "";
+    opcoesMaterial(p.materialConsultaArquivoId || "");
     $f("MaxTrocas").value = p.maxTrocasDeAba || 0; $f("AcaoExceder").value = p.acaoAoExceder === "perderQuestao" ? "perderQuestao" : "encerrar";
     previaMaterial(); atualizarLimite();
   }
   // lê e valida; devolve { erro } ou { dados }
   async function ler() {
-    const titulo = $f("Titulo").value.trim(), bancoId = $f("Banco").value, n = Number($f("N").value), nDiss = Number($f("NDiss").value || 0);
+    const titulo = $f("Titulo").value.trim(), bancoId = $f("Banco").value;
+    const nAlt = Math.max(0, Math.round(Number($f("NAlt").value || 0))), nDiss = Math.max(0, Math.round(Number($f("NDiss").value || 0))), n = nAlt + nDiss;
     if (!titulo) return { erro: "Preencha o título." };
-    if (!travado && (!bancoId || !n)) return { erro: "Preencha banco e número de questões." };
-    if (nDiss > n) return { erro: "O número de dissertativas não pode passar do total de questões." };
+    if (!travado && !bancoId) return { erro: "Escolha o banco de questões." };
+    if (!travado && !n) return { erro: "A prova precisa de pelo menos uma questão (alternativas + dissertativas)." };
     if (!travado && (bancoDesenhado !== bancoId || !Object.keys(contagem).length)) await carregarTemas();   // garante a contagem do banco escolhido
     const prob = problema();
     if (prob) { atualizar(); return { erro: prob }; }
-    const urlBruta = $f("MatUrl").value.trim(), url = converterLinkMaterial(urlBruta);
+    const arquivoId = $f("MatArquivo").value;
+    const urlBruta = arquivoId ? "" : $f("MatUrl").value.trim(), url = converterLinkMaterial(urlBruta);
     if (url && !/^https:\/\//.test(url)) return { erro: "O link do material de consulta precisa começar com https://." };
     const dados = {
       titulo, ...turmaEscolhida(), codigoAcesso: normalizarCodigo($f("Codigo").value),
@@ -325,10 +454,11 @@ function controleProva(f) {
       permitirTrocaAba: $f("PermitirTrocaAba").checked, permitirColar: $f("PermitirColar").checked,
       maxTrocasDeAba: $f("PermitirTrocaAba").checked ? 0 : Math.max(0, Math.round(Number($f("MaxTrocas").value || 0))),
       acaoAoExceder: $f("Modo").value !== "todas" && $f("AcaoExceder").value === "perderQuestao" ? "perderQuestao" : "encerrar",
-      materialConsultaUrl: url, materialConsultaTitulo: url ? ($f("MatTitulo").value.trim() || "Material de consulta") : ""
+      materialConsultaUrl: url, materialConsultaArquivoId: arquivoId || null,
+      materialConsultaTitulo: url || arquivoId ? ($f("MatTitulo").value.trim() || materiaisCache.find(m => m.id === arquivoId)?.titulo || "Material de consulta") : ""
     };
     // campos do sorteio: só entram se não estiverem travados
-    if (!travado) Object.assign(dados, { bancoId, nQuestoes: n, nDissertativas: nDiss, temas: temasMarcados($f("Temas")) });   // todos marcados = lista completa
+    if (!travado) Object.assign(dados, { bancoId, nQuestoes: n, nAlternativas: nAlt, nDissertativas: nDiss, temas: temasMarcados($f("Temas")) });   // todos marcados = lista completa
     return { dados };
   }
   // turmaId + nome (o campo "turma" continua existindo para quem já usa p.turma)
@@ -338,7 +468,7 @@ function controleProva(f) {
     const t = turmasCache.find(x => x.id === v);
     return t ? { turmaId: t.id, turma: t.nome } : { turmaId: null, turma: "" };
   }
-  return { carregarTemas, atualizar, ligar, travar, preencher, ler, opcoesTurma, get bancoDesenhado() { return bancoDesenhado; } };
+  return { carregarTemas, atualizar, ligar, travar, preencher, ler, opcoesTurma, opcoesMaterial, get bancoDesenhado() { return bancoDesenhado; } };
 }
 
 $("#formNovaProva").innerHTML = formProvaHTML("p");
@@ -353,7 +483,8 @@ function opcoesDaProvaHTML(p) {
   if (p.codigoAcesso) t.push(`<span class="tag nota" title="Código de acesso (informe na sala)">🔑 ${esc(p.codigoAcesso)}</span>`);
   if (p.permitirColar) t.push(`<span class="tag aviso">📋 colar permitido</span>`);
   if (!p.permitirTrocaAba && Number(p.maxTrocasDeAba) > 0) t.push(`<span class="tag erro" title="Saídas da prova permitidas antes da punição">🚪 máx. ${Number(p.maxTrocasDeAba)} saída(s) · ${p.acaoAoExceder === "perderQuestao" && p.modoExibicao !== "todas" ? "perde a questão" : "encerra"}</span>`);
-  if (p.materialConsultaUrl) t.push(`<span class="tag nota" title="${esc(p.materialConsultaUrl)}">📖 ${esc(p.materialConsultaTitulo || "consulta")}</span>`);
+  if (p.materialConsultaArquivoId) t.push(`<span class="tag nota" title="PDF enviado ao sistema">📄 ${esc(p.materialConsultaTitulo || "consulta")}</span>`);
+  else if (p.materialConsultaUrl) t.push(`<span class="tag nota" title="${esc(p.materialConsultaUrl)}">📖 ${esc(p.materialConsultaTitulo || "consulta")}</span>`);
   return t.join(" ");
 }
 
@@ -367,6 +498,7 @@ async function carregarProvas() {
   if (bancoAntes && bancosCache.some(b => b.id === bancoAntes)) $("#pBanco").value = bancoAntes;
   // só redesenha os temas se o banco mudou (mantém as marcações do professor e não "pula" a tela)
   if ($("#pBanco").value !== formNova.bancoDesenhado) formNova.carregarTemas();
+  formNova.opcoesMaterial();
   const s = await getDocs(collection(db, "provas"));
   const provas = []; s.forEach(d => provas.push({ id: d.id, ...d.data() }));
   provas.sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
@@ -374,7 +506,7 @@ async function carregarProvas() {
   if (!provas.length) { box.innerHTML = `<div class="vazio"><div class="icone">📝</div><p>Nenhuma prova ainda. Crie a primeira no formulário acima.</p></div>`; return; }
   box.innerHTML = `<div class="tabela"><table><tr><th>Prova</th><th>Banco</th><th>Questões</th><th>Temas</th><th>Opções</th><th>Status</th><th>Resultados</th><th></th></tr>` + provas.map(p => {
     const b = bancosCache.find(x => x.id === p.bancoId);
-    return `<tr><td><b>${esc(p.titulo)}</b><br><span class="pequeno">${p.turmaId ? "👥 " : ""}${esc(p.turma || "")}</span></td><td>${esc(b?.nome || p.bancoId)}<br><span class="pequeno">${esc(b?.materia || "")}</span></td><td>${p.nQuestoes}${p.nDissertativas ? `<br><span class="pequeno">${p.nDissertativas} dissert.</span>` : ""}${p.tempoMinutos > 0 ? `<br><span class="pequeno">⏱ ${p.tempoMinutos} min</span>` : ""}</td>
+    return `<tr><td><b>${esc(p.titulo)}</b><br><span class="pequeno">${p.turmaId ? "👥 " : ""}${esc(p.turma || "")}</span></td><td>${esc(b?.nome || p.bancoId)}<br><span class="pequeno">${esc(b?.materia || "")}</span></td><td>${p.nQuestoes}${p.nAlternativas !== undefined && p.nAlternativas !== null ? `<br><span class="pequeno">${p.nAlternativas} alt. + ${p.nDissertativas || 0} dissert.</span>` : p.nDissertativas ? `<br><span class="pequeno">${p.nDissertativas} dissert.</span>` : ""}${p.tempoMinutos > 0 ? `<br><span class="pequeno">⏱ ${p.tempoMinutos} min</span>` : ""}</td>
       <td class="pequeno">${temasDaProvaTexto(p, b)}</td>
       <td class="td-opcoes">${opcoesDaProvaHTML(p)}</td>
       <td><span class="tag ${p.liberada ? "on" : "off"}">${p.liberada ? "● liberada" : "○ fechada"}</span></td>
@@ -713,9 +845,9 @@ function desenharResultados() {
   let html = linhas.length ? `<div class="card">${tabelaHTML(linhas, "aluno")}</div>` : `<div class="card vazio"><div class="icone">⏳</div><p>Nenhum aluno fez esta prova ainda.</p></div>`;
   if (resDados.turma) {
     const fizeram = new Set(linhas.map(l => String(l.t.email || "").toLowerCase()));
-    const faltam = (resDados.turma.emails || []).filter(e => !fizeram.has(e));
-    html += `<div class="card secao-faltam"><h2>Não fizeram <span class="pequeno">(${faltam.length} de ${(resDados.turma.emails || []).length} da turma ${esc(resDados.turma.nome)})</span></h2>` +
-      (faltam.length ? `<ul class="lista-faltam">${faltam.map(e => `<li>${esc(e)}</li>`).join("")}</ul>` : `<p class="pequeno">Todos os alunos da turma começaram a prova. ✅</p>`) + `</div>`;
+    const todos = alunosDaTurma(resDados.turma), faltam = todos.filter(a => !a.email || !fizeram.has(a.email));
+    html += `<div class="card secao-faltam"><h2>Não fizeram <span class="pequeno">(${faltam.length} de ${todos.length} da turma ${esc(resDados.turma.nome)})</span></h2>` +
+      (faltam.length ? `<ul class="lista-faltam">${faltam.map(a => `<li>${esc(a.nome || a.email)}${a.nome && a.email ? ` <span class="pequeno">${esc(a.email)}</span>` : ""}${!a.email ? ` <span class="pequeno">— ainda não entrou no sistema</span>` : ""}</li>`).join("")}</ul>` : `<p class="pequeno">Todos os alunos da turma começaram a prova. ✅</p>`) + `</div>`;
   } else if (resDados.prova.turmaId) html += `<div class="card"><p class="pequeno">A turma desta prova não foi encontrada (apagada?). Escolha outra em Provas → Editar.</p></div>`;
   if (mostrarTestes) html += `<div class="card secao-testes"><h2>Testes da equipe <span class="pequeno">(não entram na média, no CSV, nos PDFs nem em "Fechar notas")</span></h2>${testes.length ? tabelaHTML(testes, "teste") : `<p class="pequeno">Nenhuma tentativa de teste nesta prova. Abra <b>Testar como aluno</b> na aba Provas.</p>`}</div>`;
   // preserva o detalhe aberto (e o que o professor estiver digitando nele)

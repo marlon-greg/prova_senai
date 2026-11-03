@@ -60,6 +60,17 @@
         <div id="msgBanco" class="pequeno" role="status" style="margin-top:8px"></div>
       </div>
       <div class="card"><h2>Bancos cadastrados</h2><div id="listaBancos"></div></div>
+      <div class="card">
+        <h2>Slides e material de consulta (PDF)</h2>
+        <p class="pequeno">Envie os slides em <b>PDF</b> (PowerPoint: Arquivo → Exportar → PDF · Google Slides: Arquivo → Fazer download → PDF). Na prova, escolha o PDF em <b>Material de consulta</b>: o aluno lê os slides num leitor dentro da própria tela da prova. Também dá para enviar direto pelo formulário da prova.</p>
+        <div class="grade">
+          <div><label for="matTitulo">Título</label><input type="text" id="matTitulo" placeholder="Slides da aula 8 — DML"></div>
+          <div><label for="matArquivo">Arquivo PDF</label><input type="file" id="matArquivo" accept="application/pdf,.pdf"></div>
+        </div>
+        <div class="linha acoes"><button id="btnEnviarMaterial">Enviar PDF</button></div>
+        <p id="msgMaterial" class="pequeno" role="status" aria-live="polite"></p>
+        <div id="listaMateriais"></div>
+      </div>
       <div class="card oculto" id="cardGabarito"><h2>Gabarito para o Classroom</h2>
         <p class="pequeno">Questões do banco agrupadas por tema, com a resposta e a explicação. Desmarque os temas que a prova não usou. Copie ou baixe e poste no Classroom depois da prova.</p>
         <fieldset class="temas-box"><legend>Temas no gabarito</legend><div id="gabTemas" class="lista-temas"></div></fieldset>
@@ -74,8 +85,13 @@
         <div class="grade">
           <div><label for="tNome">Nome da turma</label><input type="text" id="tNome" placeholder="DETS-1A-26CT-S"></div>
         </div>
-        <label for="tEmails">E-mails dos alunos</label>
-        <textarea id="tEmails" style="min-height:160px" placeholder="Cole aqui: um por linha, ou separados por vírgula, ponto e vírgula ou espaço. Dá para colar direto da planilha ou do Classroom."></textarea>
+        <label for="tEmails">Alunos — nome completo (um por linha)</label>
+        <textarea id="tEmails" style="min-height:160px" placeholder="Maria Eduarda da Silva Souza
+João Pedro Lima <joao.lima@edu.senai.br>
+ana.costa@edu.senai.br
+
+Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá para colar direto da planilha."></textarea>
+        <p class="pequeno">Quem estiver <b>só com o nome</b> é vinculado sozinho no primeiro login: o sistema compara o nome da conta Google com a lista (sem diferenciar maiúsculas e acentos) e grava o e-mail. Se o nome da conta for diferente (abreviado, por exemplo), o aluno não vê a prova e a tela mostra o nome e o e-mail da conta: escreva o e-mail na linha dele.</p>
         <p id="tPrevia" class="pequeno" role="status" aria-live="polite"></p>
         <div class="linha acoes"><button id="btnSalvarTurma">Salvar turma</button><button id="btnCancelarTurma" class="leve oculto">Cancelar edição</button></div>
       </div>
