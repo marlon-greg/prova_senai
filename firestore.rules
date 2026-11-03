@@ -80,7 +80,8 @@ service cloud.firestore {
         && request.resource.data.keys().hasOnly(['uid', 'email', 'nome', 'provaId', 'bancoId', 'questoesIds',
                                                  'iniciadaEm', 'finalizadaEm', 'indiceAtual', 'trocasDeAba',
                                                  'notaPrevia', 'aguardandoCorrecao',
-                                                 'saidasTelaCheia', 'tentativasColar', 'tempoTotalSegundos'])
+                                                 'saidasTelaCheia', 'tentativasColar', 'tempoTotalSegundos',
+                                                 'encerradaPor', 'trocasDeAbaTotal'])
         && prova(request.resource.data.provaId).liberada == true
         && request.resource.data.bancoId == prova(request.resource.data.provaId).bancoId
         && request.resource.data.questoesIds.size() == prova(request.resource.data.provaId).nQuestoes
@@ -99,7 +100,8 @@ service cloud.firestore {
             && prova(resource.data.provaId).liberada == true
             && request.resource.data.diff(resource.data).affectedKeys().hasOnly(
                  ['finalizadaEm', 'indiceAtual', 'trocasDeAba', 'notaPrevia', 'aguardandoCorrecao',
-                  'saidasTelaCheia', 'tentativasColar', 'tempoTotalSegundos']))
+                  'saidasTelaCheia', 'tentativasColar', 'tempoTotalSegundos',
+                  'encerradaPor', 'trocasDeAbaTotal']))
            // professor fecha a nota
         || (professor()
             && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['nota', 'notaMaxima', 'corrigidaEm', 'corrigidaPor']))
@@ -116,7 +118,7 @@ service cloud.firestore {
           && tentativa(t).finalizadaEm == null
           && prova(tentativa(t).provaId).liberada == true
           && q in tentativa(t).questoesIds
-          && request.resource.data.keys().hasOnly(['resposta', 'enviadaEm', 'segundos'])
+          && request.resource.data.keys().hasOnly(['resposta', 'enviadaEm', 'segundos', 'perdida'])
           && request.resource.data.enviadaEm == request.time)
           || meuTeste(t);
         allow update: if false;
