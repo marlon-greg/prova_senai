@@ -41,12 +41,29 @@ export async function carregarAcessibilidade() {
 }
 
 // marcar aluno: escolhe de uma turma ou digita o e-mail
+// marcar aluno: 1º escolhe a turma, 2º o aluno daquela turma (ou digita o e-mail direto)
 export async function prepararNovo() {
-  const sel = $("#acessAlunoSel");
+  const selT = $("#acessTurmaSel"), selA = $("#acessAlunoSel");
   const alunos = await ctx.alunosDasTurmas();   // [{ nome, email, turma }]
-  sel.innerHTML = `<option value="">— escolha um aluno das turmas —</option>` +
-    alunos.filter(a => a.email).map(a => `<option value="${esc(a.email)}" data-nome="${esc(a.nome || "")}">${esc(a.nome || a.email)} · ${esc(a.turma)}</option>`).join("");
-  sel.onchange = () => { const o = sel.selectedOptions[0]; $("#acessEmail").value = sel.value; $("#acessNome").value = o?.dataset.nome || ""; };
+  const porTurma = new Map();
+  alunos.forEach(a => { if (!porTurma.has(a.turma)) porTurma.set(a.turma, []); porTurma.get(a.turma).push(a); });
+  const turmas = [...porTurma.keys()].sort((x, y) => String(x).localeCompare(String(y), "pt-BR", { numeric: true }));
+  const antes = selT.value;
+  selT.innerHTML = `<option value="">— escolha a turma —</option>` +
+    turmas.map(t => `<option value="${esc(t)}">${esc(t)} (${porTurma.get(t).length} alunos)</option>`).join("");
+  if (turmas.includes(antes)) selT.value = antes;
+  const desenharAlunos = () => {
+    const daTurma = (porTurma.get(selT.value) || []).slice().sort((x, y) => (x.nome || x.email).localeCompare(y.nome || y.email, "pt-BR"));
+    selA.disabled = !selT.value;
+    if (!selT.value) { selA.innerHTML = `<option value="">— escolha a turma primeiro —</option>`; return; }
+    const ja = new Set(lista.map(a => a.email));
+    selA.innerHTML = `<option value="">— escolha o aluno —</option>` + daTurma.map(a => !a.email
+      ? `<option value="" disabled>${esc(a.nome)} — ainda não entrou no sistema (sem e-mail)</option>`
+      : `<option value="${esc(a.email)}" data-nome="${esc(a.nome || "")}">${ja.has(a.email) ? "♿ " : ""}${esc(a.nome || a.email)}${a.nome ? ` · ${esc(a.email)}` : ""}${ja.has(a.email) ? " (já marcado)" : ""}</option>`).join("");
+  };
+  selT.onchange = () => { desenharAlunos(); $("#acessEmail").value = ""; $("#acessNome").value = ""; if (selT.value) selA.focus(); };
+  selA.onchange = () => { const o = selA.selectedOptions[0]; $("#acessEmail").value = selA.value; $("#acessNome").value = o?.dataset.nome || ""; };
+  desenharAlunos();
 }
 $("#btnAcessAdicionar").onclick = async () => {
   const email = $("#acessEmail").value.trim().toLowerCase(), nome = $("#acessNome").value.trim();
@@ -56,7 +73,7 @@ $("#btnAcessAdicionar").onclick = async () => {
     await setDoc(doc(db, "acessibilidade", email), { email, nome, ativo: true, auxiliares: [], visual: { ...VISUAL_PADRAO }, prova: { ...PROVA_PADRAO },
       criadoEm: serverTimestamp(), criadoPor: ctx.eu.email });
     await setDoc(doc(db, "acessibilidadePrivado", email), { descricao: "", criadoEm: serverTimestamp() });
-    $("#acessEmail").value = ""; $("#acessNome").value = ""; $("#acessAlunoSel").value = "";
+    $("#acessEmail").value = ""; $("#acessNome").value = ""; $("#acessAlunoSel").value = ""; prepararNovo();
     aberto = email; toast("Aluno marcado com acessibilidade ♿", "ok"); carregarAcessibilidade();
   } catch (e) { toast("Não foi possível salvar. " + traduzirErro(e), "erro"); }
 };
