@@ -17,6 +17,11 @@ const modoTodas = () => provaAtual?.modoExibicao === "todas";          // todas 
 const trocaAbaPermitida = () => provaAtual?.permitirTrocaAba === true; // sem tela cheia e sem aviso (só conta)
 const colarPermitido = () => provaAtual?.permitirColar === true;
 const temConsulta = () => !!provaAtual?.materialConsultaUrl;
+// limite de saídas (aba/janela ou tela cheia); com troca de aba permitida não há limite
+const limiteSaidas = () => trocaAbaPermitida() ? 0 : Math.max(0, Math.round(Number(provaAtual?.maxTrocasDeAba || 0)));
+// "perder a questão" só existe no modo uma por vez; no modo "todas" a prova é encerrada
+const acaoAoExceder = () => !modoTodas() && provaAtual?.acaoAoExceder === "perderQuestao" ? "perderQuestao" : "encerrar";
+const textoPena = p => (p.modoExibicao !== "todas" && p.acaoAoExceder === "perderQuestao") ? "você perde a questão atual" : "a prova é encerrada";
 
 // ---------- modo teste (equipe vê a prova como o aluno: index.html?teste=<provaId>) ----------
 const provaTeste = new URLSearchParams(location.search).get("teste");
@@ -123,6 +128,7 @@ function regrasDaProva(p) {
     : "As questões aparecem <b>uma por vez</b>. Depois de enviar uma resposta, não é possível voltar.");
   if (!p.permitirColar) r.push("<b>Colar texto está desativado</b> nos campos de resposta: digite. As tentativas de colar ficam registradas.");
   if (!p.permitirTrocaAba) r.push("A prova abre em <b>tela cheia</b>. Sair da tela cheia e trocar de aba ou de janela <b>ficam registrados</b> para o professor.");
+  if (!p.permitirTrocaAba && Number(p.maxTrocasDeAba) > 0) r.push(`<b>Limite de saídas da prova: ${Number(p.maxTrocasDeAba)}.</b> Trocar de aba/janela ou sair da tela cheia conta como saída. Ao chegar a ${Number(p.maxTrocasDeAba)}, ${textoPena(p)}.`);
   r.push("Copiar e selecionar o enunciado, imprimir e atalhos como Ctrl+C e Ctrl+P ficam desativados durante a prova.");
   if (Number(p.tempoMinutos) > 0) r.push(`<b>Tempo limite: ${Number(p.tempoMinutos)} min.</b> O cronômetro começa ao clicar em Começar; quando zerar, a prova é finalizada com as respostas já enviadas.`);
   if (p.materialConsultaUrl) r.push(`Consulta permitida: <b>${esc(p.materialConsultaTitulo || "material de consulta")}</b>, aberto ao lado das questões (no celular, pelo botão <b>📖 Consulta</b>).`);
@@ -241,6 +247,7 @@ function criarCartaoQuestao(qid, i, unica) {
   }
   card.querySelector(".b-enviar").onclick = () => enviarResposta(qid, card);
   if (respostas[qid]) travarCartao(card, qid, respostas[qid].resposta);   // já enviada (ex.: página recarregada)
+  if (respostas[qid]?.perdida) { const fb = card.querySelector(".q-feedback"); fb.className = "q-feedback feedback perdida"; fb.innerHTML = `<span class="icone" aria-hidden="true">⛔</span><div><b>Questão perdida</b> por sair da prova.</div>`; }
   return card;
 }
 
@@ -278,7 +285,7 @@ function mostrarTodas() {
   $("#btnProxima").classList.add("oculto"); $("#btnFinalizar").classList.remove("oculto");
   const cards = tentativa.questoesIds.map((qid, i) => criarCartaoQuestao(qid, i, false));
   $("#qLista").replaceChildren(...cards);
-  tentativa.questoesIds.forEach((qid, i) => { if (respostas[qid]) mostrarFeedback(qid, respostas[qid].resposta, cards[i]); });
+  tentativa.questoesIds.forEach((qid, i) => { if (respostas[qid] && !respostas[qid].perdida) mostrarFeedback(qid, respostas[qid].resposta, cards[i]); });
   atualizarResumoTodas();
   entrarNaTelaDaProva();
 }
@@ -435,11 +442,12 @@ async function finalizar(opc = {}) {
       const peso = Number(q.peso || 1); max += peso;
       let g = {};
       try { g = (await getDoc(doc(db, "bancos", tentativa.bancoId, "gabaritos", qid))).data() || {}; } catch (e) { /* sem acesso: conta como pendente */ }
-      const c = corrigir(q, g, respostas[qid]?.resposta);
+      const c = corrigir(q, g, respostas[qid]?.resposta ?? undefined, respostas[qid]?.perdida === true);
       pts += c.pontos; if (c.status === "revisar") pend++;
     }
     const notaPrevia = max ? Math.round(pts / max * 1000) / 10 : 0;
     const fim = { finalizadaEm: serverTimestamp(), indiceAtual: tentativa.questoesIds.length, notaPrevia, aguardandoCorrecao: pend };
+    if (opc.encerradaPor) fim.encerradaPor = opc.encerradaPor;   // ex.: "trocasDeAba" (limite de saídas)
     if (tentativa.iniciadaEm?.toMillis) fim.tempoTotalSegundos = Math.max(0, Math.round((Date.now() - tentativa.iniciadaEm.toMillis()) / 1000));
     const lote = writeBatch(db);
     lote.update(doc(db, "tentativas", tentativa.id), fim);
@@ -449,6 +457,8 @@ async function finalizar(opc = {}) {
     await comLimiteDeTempo(lote.commit(), 20000);
     tentativa.finalizadaEm = new Date(); tentativa.notaPrevia = notaPrevia; tentativa.aguardandoCorrecao = pend;
     tentativa.tempoTotalSegundos = fim.tempoTotalSegundos; tentativa.tempoEsgotado = !!opc.tempoEsgotado;
+    if (opc.encerradaPor) tentativa.encerradaPor = opc.encerradaPor;
+    tentativa.avisoPerda = opc.avisoPerda || null;
     pararCronometro();
     mostrarFim();
     sairTelaCheia();
@@ -459,7 +469,9 @@ async function finalizar(opc = {}) {
 function mostrarFim() {
   pararCronometro();
   const n = tentativa.notaPrevia, pend = tentativa.aguardandoCorrecao || 0;
-  $("#fimNota").innerHTML = (tentativa.tempoEsgotado ? `<div class="aviso-box">⏰ <b>O tempo acabou.</b> A prova foi finalizada com as respostas já enviadas.</div>` : "") +
+  $("#fimNota").innerHTML = (tentativa.encerradaPor === "trocasDeAba" ? `<div class="aviso-box erro">⛔ <b>Prova encerrada: limite de saídas da prova atingido.</b> As questões não enviadas valem zero.</div>` : "") +
+    (tentativa.avisoPerda ? `<div class="aviso-box erro">⛔ ${esc(tentativa.avisoPerda)}</div>` : "") +
+    (tentativa.tempoEsgotado ? `<div class="aviso-box">⏰ <b>O tempo acabou.</b> A prova foi finalizada com as respostas já enviadas.</div>` : "") +
     (n === null || n === undefined ? "" :
     `<p style="font-family:var(--fonte-titulo);font-size:1.8em;font-weight:600;margin:8px 0">Sua nota: ${n} / 100</p>` +
     (pend ? `<p class="pequeno">⚠ ${pend} resposta(s) escrita(s) ainda vão passar pela correção do professor: a nota pode subir.</p>` : "") +
@@ -531,9 +543,62 @@ function pedirTelaCheia(permitida = trocaAbaPermitida()) {
 }
 function sairTelaCheia() { if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); }
 document.addEventListener("fullscreenchange", () => {
-  if (document.fullscreenElement) { esconderSobreposicao(); return; }
-  if (emProvaAtiva() && !trocaAbaPermitida()) { registrar("saidasTelaCheia"); mostrarSobreposicao("telaCheia"); }
+  if (document.fullscreenElement) { if (!sobreposicaoFixa) esconderSobreposicao(); return; }
+  if (!emProvaAtiva() || trocaAbaPermitida()) return;
+  registrar("saidasTelaCheia");                   // só registro
+  const punido = registrarSaida();                // conta para o limite
+  if (!punido && emProvaAtiva()) mostrarSobreposicao("telaCheia");
 });
+
+// ---------- limite de saídas da prova (maxTrocasDeAba) ----------
+// uma "saída" = trocar de aba/janela ou sair da tela cheia; um único contador (trocasDeAba) para a punição
+let ultimaSaida = 0;
+function registrarSaida() {
+  if (!emProvaAtiva()) return false;
+  const agora = Date.now();
+  if (agora - ultimaSaida < 1000) return false;   // o mesmo movimento dispara mais de um evento (ex.: trocar de aba em tela cheia)
+  ultimaSaida = agora;
+  registrar("trocasDeAba");
+  const lim = limiteSaidas();
+  if (lim > 0 && (tentativa.trocasDeAba || 0) >= lim) { aplicarPunicao(); return true; }
+  return false;
+}
+const esperarMs = ms => new Promise(res => setTimeout(res, ms));
+let punindo = false, avisoPendente = null;
+async function aplicarPunicao() {
+  if (punindo || !tentativa || tentativa.finalizadaEm) return;
+  punindo = true;
+  try {
+    fecharModais();
+    while (enviando > 0) await esperarMs(200);   // deixa terminar uma resposta que já estava sendo enviada
+    if (tentativa.finalizadaEm) return;
+    if (acaoAoExceder() === "encerrar") await finalizar({ encerradaPor: "trocasDeAba" });
+    else await perderQuestao();
+  } finally { punindo = false; }
+}
+// perde a questão atual (ou a próxima, se a atual já foi enviada), zera o contador e avança
+async function perderQuestao() {
+  const ids = tentativa.questoesIds, total = ids.length, ref = doc(db, "tentativas", tentativa.id);
+  let i = tentativa.indiceAtual || 0;
+  while (i < total && respostas[ids[i]]) i++;
+  const n = tentativa.trocasDeAba || 0;
+  tentativa.trocasDeAba = 0; tentativa.trocasDeAbaTotal = (tentativa.trocasDeAbaTotal || 0) + n;
+  updateDoc(ref, { trocasDeAba: 0, trocasDeAbaTotal: increment(n) }).catch(e => console.warn("não zerou o contador", e));
+  if (i >= total) { await finalizar(); return; }
+  const qid = ids[i], segundos = Math.max(0, Math.round((Date.now() - marcoTempo) / 1000));
+  respostas[qid] = { resposta: null, perdida: true, segundos }; tentouEnviar.add(qid);
+  const lote = writeBatch(db);
+  lote.set(doc(db, "tentativas", tentativa.id, "respostas", qid), { resposta: null, perdida: true, enviadaEm: serverTimestamp(), segundos });
+  if (!modoTeste) lote.set(doc(db, "marcadores", `${eu.uid}_${qid}`), { uid: eu.uid, qid, provaId: provaAtual.id, criadoEm: serverTimestamp() });
+  lote.commit().catch(e => console.warn("não gravou a questão perdida", e));   // sem esperar: sem internet, o SDK grava quando ela voltar
+  const aviso = `Você perdeu a questão ${i + 1} por sair da prova.`;
+  if (i >= total - 1) { await finalizar({ avisoPerda: aviso }); return; }   // era a última: finaliza
+  tentativa.indiceAtual = i + 1;
+  updateDoc(ref, { indiceAtual: tentativa.indiceAtual }).catch(() => {});
+  mostrarQuestao();
+  if (foraDaProva || document.hidden) avisoPendente = aviso;   // mostra quando o aluno voltar
+  else mostrarSobreposicao("perdeu", aviso);
+}
 
 // ---------- sobreposição de aviso ----------
 const AVISOS = {
@@ -541,19 +606,30 @@ const AVISOS = {
   telaCheia: ["Você saiu da tela cheia", "Isso fica registrado para o professor. Clique para voltar.", "Voltar para a prova"],
   aba:       ["Você saiu da página da prova", "A troca de aba ou de janela fica registrada para o professor. Clique para voltar.", "Voltar para a prova"]
 };
-function mostrarSobreposicao(tipo) {
-  const [titulo, texto, botao] = AVISOS[tipo];
-  $("#sobreTitulo").textContent = titulo; $("#sobreTexto").textContent = texto; $("#btnVoltarProva").textContent = botao;
+// "Saídas da prova: 2 de 3. Na próxima, a prova é encerrada."
+function textoPlacar() {
+  const lim = limiteSaidas();
+  if (!lim || !tentativa) return "";
+  const n = Math.min(tentativa.trocasDeAba || 0, lim), pena = acaoAoExceder() === "encerrar" ? "a prova é encerrada" : "você perde a questão atual";
+  return `Saídas da prova: ${n} de ${lim}. ${n >= lim - 1 ? "Na próxima" : `Ao chegar a ${lim}`}, ${pena}.`;
+}
+let sobreposicaoFixa = false;   // aviso de questão perdida: só fecha com o clique do aluno
+function mostrarSobreposicao(tipo, texto = null) {
+  const [titulo, txt, botao] = tipo === "perdeu" ? ["⛔ Questão perdida", texto, "Continuar na próxima questão"] : AVISOS[tipo];
+  sobreposicaoFixa = tipo === "perdeu";
+  $("#sobreTitulo").textContent = titulo; $("#sobreTexto").textContent = txt; $("#btnVoltarProva").textContent = botao;
+  const placar = textoPlacar();
+  $("#sobrePlacar").textContent = placar; $("#sobrePlacar").classList.toggle("oculto", !placar);
   $("#sobreposicao").classList.remove("oculto");
   $("#btnVoltarProva").focus();
 }
-function esconderSobreposicao() { $("#sobreposicao").classList.add("oculto"); }
+function esconderSobreposicao() { $("#sobreposicao").classList.add("oculto"); sobreposicaoFixa = false; }
 $("#btnVoltarProva").onclick = () => { pedirTelaCheia(); esconderSobreposicao(); };
 
 // ---------- troca de aba / janela (contada uma vez por saída; com troca permitida, só conta) ----------
 let foraDaProva = false;
 const focoNoMaterial = () => document.activeElement === $("#consultaFrame");
-function contarSaida() { if (!emProvaAtiva() || foraDaProva) return; foraDaProva = true; registrar("trocasDeAba"); }
+function contarSaida() { if (!emProvaAtiva() || foraDaProva) return; foraDaProva = true; registrarSaida(); }
 function saiuDaProva(e) {
   if (!emProvaAtiva() || foraDaProva) return;
   // clicar dentro do material de consulta tira o foco da página, mas não é troca de aba
@@ -570,7 +646,9 @@ function saiuDaProva(e) {
 function voltouParaProva() {
   if (!foraDaProva) return;
   foraDaProva = false;
-  if (emProvaAtiva() && !trocaAbaPermitida()) mostrarSobreposicao("aba");
+  if (!emProvaAtiva() || trocaAbaPermitida()) return;
+  if (avisoPendente) { mostrarSobreposicao("perdeu", avisoPendente); avisoPendente = null; }   // perdeu a questão enquanto estava fora
+  else if (!punindo) mostrarSobreposicao("aba");
 }
 document.addEventListener("visibilitychange", () => document.hidden ? saiuDaProva() : voltouParaProva());
 window.addEventListener("blur", saiuDaProva);
@@ -663,13 +741,13 @@ async function verResultado() {
   let total = 0, max = 0, html = "";
   ids.forEach((qid, i) => {
     const q = { id: qid, ...(qs[i].data() || {}) }, g = (gs[i] && gs[i].exists()) ? gs[i].data() : {};
-    const r = resp[qid]?.resposta, peso = Number(q.peso || 1); max += peso;
-    let c = corrigir(q, g, r);
+    const r = resp[qid]?.resposta ?? undefined, perdida = resp[qid]?.perdida === true, peso = Number(q.peso || 1); max += peso;
+    let c = corrigir(q, g, r, perdida);
     let obs = "";
-    if (corr[qid] && corr[qid].pontos !== undefined) { c = { pontos: Number(corr[qid].pontos), status: Number(corr[qid].pontos) >= peso ? "certa" : Number(corr[qid].pontos) > 0 ? "parcial" : "errada" }; obs = corr[qid].comentario || ""; }
+    if (!perdida && corr[qid] && corr[qid].pontos !== undefined) { c = { pontos: Number(corr[qid].pontos), status: Number(corr[qid].pontos) >= peso ? "certa" : Number(corr[qid].pontos) > 0 ? "parcial" : "errada" }; obs = corr[qid].comentario || ""; }
     total += c.pontos;
-    const rot = { certa: ["ok", "✅ Certa"], errada: ["erro", "❌ Errada"], parcial: ["aviso", "🟡 Parcial"], revisar: ["aviso", "🟡 Em correção"], em_branco: ["erro", "⬜ Em branco"] }[c.status];
-    let sua = r === undefined ? "<i>não respondida</i>" : q.tipo === "alternativa" ? esc(q.alternativas[r]) : `<span class="mono">${esc(r)}</span>`;
+    const rot = { certa: ["ok", "✅ Certa"], errada: ["erro", "❌ Errada"], parcial: ["aviso", "🟡 Parcial"], revisar: ["aviso", "🟡 Em correção"], em_branco: ["erro", "⬜ Em branco"], perdida: ["erro", "⛔ Perdida (saiu da prova)"] }[c.status];
+    let sua = perdida ? "<i>perdida por sair da prova</i>" : r === undefined ? "<i>não respondida</i>" : q.tipo === "alternativa" ? esc(q.alternativas[r]) : `<span class="mono">${esc(r)}</span>`;
     let certa = q.tipo === "alternativa" ? esc(q.alternativas?.[g.correta] ?? "—") : (g.respostasAceitas?.length ? `<span class="mono">${esc(g.respostasAceitas[0])}</span>` : "—");
     html += `<div class="card"><div class="q-topo"><span class="q-numero" style="font-size:1.1em">Questão ${i + 1}</span><span class="tag ${rot[0]}">${rot[1]} · ${c.pontos}/${peso}</span></div>
       <div class="enunciado">${formatarEnunciado(q.enunciado)}</div>
