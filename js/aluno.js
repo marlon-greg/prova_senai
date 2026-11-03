@@ -90,9 +90,14 @@ $("#btnComecar").onclick = async () => {
   try {
     // sorteia nQuestoes do banco (ids) — cada aluno recebe um conjunto diferente
     const qs = await getDocs(collection(db, "bancos", provaAtual.bancoId, "questoes"));
-    const ids = []; qs.forEach(d => ids.push(d.id));
+    const ids = [], diss = [], alt = [];
+    qs.forEach(d => { ids.push(d.id); (d.data().tipo === "dissertativa" ? diss : alt).push(d.id); });
     if (ids.length < provaAtual.nQuestoes) throw new Error("O banco tem menos questões do que a prova pede. Avise o professor.");
-    const sorteadas = sortearAleatorio(ids, provaAtual.nQuestoes);
+    let sorteadas;
+    const nD = Number(provaAtual.nDissertativas || 0);
+    if (nD > 0 && diss.length >= nD && alt.length >= provaAtual.nQuestoes - nD)
+      sorteadas = sortearAleatorio([...sortearAleatorio(diss, nD), ...sortearAleatorio(alt, provaAtual.nQuestoes - nD)], provaAtual.nQuestoes);
+    else sorteadas = sortearAleatorio(ids, provaAtual.nQuestoes);
     const tid = `${eu.uid}_${provaAtual.id}`;
     await setDoc(doc(db, "tentativas", tid), {
       uid: eu.uid, email: eu.email, nome: eu.nome, provaId: provaAtual.id, bancoId: provaAtual.bancoId,

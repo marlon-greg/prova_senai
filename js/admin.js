@@ -55,7 +55,7 @@ async function carregarProvas() {
   if (!provas.length) { box.innerHTML = "<p class='pequeno'>Nenhuma prova ainda.</p>"; return; }
   box.innerHTML = `<table><tr><th>Prova</th><th>Banco</th><th>Questões</th><th>Status</th><th>Resultados</th><th></th></tr>` + provas.map(p => {
     const b = bancosCache.find(x => x.id === p.bancoId);
-    return `<tr><td><b>${esc(p.titulo)}</b><br><span class="pequeno">${esc(p.turma || "")}</span></td><td>${esc(b?.nome || p.bancoId)}<br><span class="pequeno">${esc(b?.materia || "")}</span></td><td>${p.nQuestoes}</td>
+    return `<tr><td><b>${esc(p.titulo)}</b><br><span class="pequeno">${esc(p.turma || "")}</span></td><td>${esc(b?.nome || p.bancoId)}<br><span class="pequeno">${esc(b?.materia || "")}</span></td><td>${p.nQuestoes}${p.nDissertativas ? `<br><span class="pequeno">${p.nDissertativas} dissert.</span>` : ""}</td>
       <td><span class="tag ${p.liberada ? "on" : "off"}">${p.liberada ? "LIBERADA" : "fechada"}</span></td>
       <td><span class="tag ${p.resultadosLiberados ? "on" : "off"}">${p.resultadosLiberados ? "liberados" : "ocultos"}</span></td>
       <td style="white-space:nowrap">${podeEditar() ? `<button class="leve" data-tg="liberada" data-id="${p.id}">${p.liberada ? "Encerrar" : "Liberar prova"}</button>
@@ -74,11 +74,14 @@ async function carregarProvas() {
 }
 $("#btnCriarProva").onclick = async () => {
   if (!podeEditar()) return toast("Seu papel não permite criar provas.", "erro");
-  const titulo = $("#pTitulo").value.trim(), bancoId = $("#pBanco").value, n = Number($("#pN").value);
+  const titulo = $("#pTitulo").value.trim(), bancoId = $("#pBanco").value, n = Number($("#pN").value), nDiss = Number($("#pNDiss").value || 0);
+  if (nDiss > n) return toast("O número de dissertativas não pode passar do total de questões.", "erro");
   if (!titulo || !bancoId || !n) return toast("Preencha título, banco e número de questões.", "erro");
   const b = bancosCache.find(x => x.id === bancoId);
   if (b && n > b.nQuestoes) return toast(`O banco só tem ${b.nQuestoes} questões.`, "erro");
-  await addDoc(collection(db, "provas"), { titulo, turma: $("#pTurma").value.trim(), bancoId, nQuestoes: n,
+  if (nDiss) { const qs = await getDocs(collection(db, "bancos", bancoId, "questoes")); let d = 0, a = 0; qs.forEach(x => x.data().tipo === "dissertativa" ? d++ : a++);
+    if (nDiss > d) return toast(`O banco só tem ${d} dissertativa(s).`, "erro"); if (n - nDiss > a) return toast(`O banco só tem ${a} de alternativa.`, "erro"); }
+  await addDoc(collection(db, "provas"), { titulo, turma: $("#pTurma").value.trim(), bancoId, nQuestoes: n, nDissertativas: nDiss,
     feedbackImediato: $("#pFeedback").value, embaralharAlternativas: $("#pEmbaralhar").checked,
     liberada: false, resultadosLiberados: false, criadoEm: serverTimestamp(), criadoPor: eu.email });
   $("#pTitulo").value = ""; toast("Prova criada (ainda fechada). Libere quando for aplicar.", "ok"); carregarProvas();
