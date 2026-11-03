@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prova — SENAI</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header>
+  <span class="senai">SENAI</span>
+  <h1>Prova online · Desenvolvimento de Sistemas</h1>
+  <div class="quem">
+    <button id="btnFonte" class="leve" title="Aumentar a letra">A+</button>
+    <span id="quem"></span>
+    <button id="btnSair" class="sec oculto">Sair</button>
+  </div>
+</header>
+
+<main>
+  <!-- LOGIN -->
+  <section id="telaLogin" class="card centro">
+    <h2>Entre com a sua conta do SENAI</h2>
+    <p class="pequeno">Use o e-mail <b>@edu.senai.br</b> ou <b>@aluno.senai.br</b>. Outras contas não têm acesso.</p>
+    <button id="btnEntrar">Entrar com Google</button>
+    <p id="msgLogin" class="pequeno"></p>
+  </section>
+
+  <!-- LISTA DE PROVAS -->
+  <section id="telaProvas" class="oculto">
+    <div class="card">
+      <h2>Suas provas</h2>
+      <div id="listaProvas"><p class="pequeno">Carregando…</p></div>
+    </div>
+  </section>
+
+  <!-- INSTRUÇÕES / INÍCIO -->
+  <section id="telaInicio" class="card oculto">
+    <h2 id="inicioTitulo"></h2>
+    <div id="inicioInfo"></div>
+    <div class="aviso-box">
+      <b>Leia antes de começar:</b>
+      <ul>
+        <li>A prova só pode ser feita <b>uma vez</b>. Depois de clicar em Começar, não dá para reiniciar.</li>
+        <li>As questões aparecem <b>uma por vez</b>. Depois de enviar uma resposta, não é possível voltar.</li>
+        <li><b>Colar texto está desativado</b> nos campos de resposta. Digite.</li>
+        <li>Trocas de aba/janela são registradas.</li>
+        <li>Se a página fechar sem querer, entre de novo: você continua de onde parou.</li>
+      </ul>
+    </div>
+    <div class="linha">
+      <button id="btnComecar" class="ok">Começar a prova</button>
+      <button id="btnVoltar1" class="sec">Voltar</button>
+    </div>
+  </section>
+
+  <!-- QUESTÃO -->
+  <section id="telaQuestao" class="oculto">
+    <div class="card">
+      <div class="linha"><span id="qContador" class="tag"></span><span id="qTipo" class="tag"></span><span id="qTitulo" class="pequeno" style="text-align:right"></span></div>
+      <div class="progresso"><div id="qBarra" style="width:0%"></div></div>
+      <div id="qEnunciado" class="enunciado"></div>
+      <div id="qArea"></div>
+      <div id="qFeedback" class="oculto"></div>
+      <div class="linha" style="margin-top:14px">
+        <button id="btnEnviar" class="ok">Enviar resposta</button>
+        <button id="btnProxima" class="oculto">Próxima questão →</button>
+        <button id="btnFinalizar" class="oculto">Finalizar prova ✔</button>
+      </div>
+      <p class="pequeno" id="qDica">Confira antes de enviar: depois de enviada, a resposta não pode ser alterada.</p>
+    </div>
+  </section>
+
+  <!-- FIM -->
+  <section id="telaFim" class="card centro oculto">
+    <h2>Prova finalizada ✅</h2>
+    <p>Suas respostas foram registradas. Quando o professor liberar, o resultado aparece na lista de provas.</p>
+    <button id="btnVoltar2" class="sec">Voltar para as provas</button>
+  </section>
+
+  <!-- RESULTADO -->
+  <section id="telaResultado" class="oculto">
+    <div class="card">
+      <h2 id="resTitulo"></h2>
+      <div id="resResumo"></div>
+      <button id="btnVoltar3" class="sec" style="margin-top:10px">Voltar</button>
+    </div>
+    <div id="resLista"></div>
+  </section>
+
+  <!-- BLOQUEADO / EQUIPE -->
+  <section id="telaAviso" class="card centro oculto"><div id="avisoTexto"></div></section>
+</main>
+<script type="module" src="js/aluno.js"></script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+// Painel do professor: provas, bancos (import JSON), resultados/correção, equipe, configuração.
+import { db, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN } from "./common.js";
+import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+let eu = null;   // { email, nome, papel }
+const podeEditar = () => ["admin", "professor"].includes(eu?.papel);
+const ehAdmin = () => eu?.papel === "admin";
+
+// ---------- login ----------
+$("#btnEntrar").onclick = async () => { try { await entrar(); } catch (e) { $("#msgLogin").textContent = "Não foi possível entrar: " + (e.code || e.message); } };
+$("#btnSair").onclick = () => sair();
+aoMudarLogin(async user => {
+  if (!user) { eu = null; $("#btnSair").classList.add("oculto"); $("#quem").textContent = ""; trocar("telaLogin"); return; }
+  const id = await identificar(user);
+  $("#quem").textContent = `${id.email}${id.papel ? " · " + id.papel : ""}`; $("#btnSair").classList.remove("oculto");
+  if (id.tipo !== "equipe") {
+    $("#avisoTexto").innerHTML = `<h2>Sem acesso ao painel</h2><p>A conta <b>${esc(id.email)}</b> não está na equipe. Peça ao administrador para cadastrar.</p><p><a href="index.html">Ir para a página do aluno</a></p>`;
+    trocar("telaAviso"); return;
+  }
+  eu = id;
+  await garantirConfig();
+  trocar("telaPainel");
+  document.querySelectorAll("[data-aba]").forEach(b => b.onclick = () => abrirAba(b.dataset.aba));
+  abrirAba("provas");
+});
+function trocar(id) { ["telaLogin", "telaPainel", "telaAviso"].forEach(t => $("#" + t).classList.toggle("oculto", t !== id)); }
+function abrirAba(a) {
+  document.querySelectorAll("[data-aba]").forEach(b => b.classList.toggle("ativa", b.dataset.aba === a));
+  ["provas", "bancos", "resultados", "equipe", "config"].forEach(x => $("#aba-" + x).classList.toggle("oculto", x !== a));
+  ({ provas: carregarProvas, bancos: carregarBancos, resultados: prepararResultados, equipe: carregarEquipe, config: carregarConfig })[a]();
+}
+
+// primeiro acesso do superadmin: cria config/geral (sem ele a regra dos alunos não funciona)
+async function garantirConfig() {
+  const c = await getDoc(doc(db, "config", "geral"));
+  if (!c.exists() && ehAdmin()) await setDoc(doc(db, "config", "geral"), { dominiosAlunos: ["edu.senai.br", "aluno.senai.br"], criadoEm: serverTimestamp() });
+}
+
+// ============================================================ PROVAS
+let bancosCache = [];
+async function listarBancos() {
+  const s = await getDocs(collection(db, "bancos"));
+  bancosCache = []; s.forEach(d => bancosCache.push({ id: d.id, ...d.data() }));
+  bancosCache.sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
+  return bancosCache;
+}
+async function carregarProvas() {
+  await listarBancos();
+  $("#pBanco").innerHTML = bancosCache.map(b => `<option value="${b.id}">${esc(b.nome)} (${b.nQuestoes} questões)</option>`).join("") || "<option value=''>— importe um banco primeiro —</option>";
+  const s = await getDocs(collection(db, "provas"));
+  const provas = []; s.forEach(d => provas.push({ id: d.id, ...d.data() }));
+  provas.sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
+  const box = $("#listaProvas");
+  if (!provas.length) { box.innerHTML = "<p class='pequeno'>Nenhuma prova ainda.</p>"; return; }
+  box.innerHTML = `<table><tr><th>Prova</th><th>Banco</th><th>Questões</th><th>Status</th><th>Resultados</th><th></th></tr>` + provas.map(p => {
+    const b = bancosCache.find(x => x.id === p.bancoId);
+    return `<tr><td><b>${esc(p.titulo)}</b><br><span class="pequeno">${esc(p.turma || "")}</span></td><td>${esc(b?.nome || p.bancoId)}</td><td>${p.nQuestoes}</td>
+      <td><span class="tag ${p.liberada ? "on" : "off"}">${p.liberada ? "LIBERADA" : "fechada"}</span></td>
+      <td><span class="tag ${p.resultadosLiberados ? "on" : "off"}">${p.resultadosLiberados ? "liberados" : "ocultos"}</span></td>
+      <td style="white-space:nowrap">${podeEditar() ? `<button class="leve" data-tg="liberada" data-id="${p.id}">${p.liberada ? "Encerrar" : "Liberar prova"}</button>
+        <button class="leve" data-tg="resultadosLiberados" data-id="${p.id}">${p.resultadosLiberados ? "Ocultar resultados" : "Liberar resultados"}</button>
+        ${ehAdmin() ? `<button class="leve" data-del="${p.id}" title="Apagar prova">🗑</button>` : ""}` : ""}</td></tr>`;
+  }).join("") + "</table>";
+  box.querySelectorAll("[data-tg]").forEach(b => b.onclick = async () => {
+    const p = provas.find(x => x.id === b.dataset.id);
+    await updateDoc(doc(db, "provas", p.id), { [b.dataset.tg]: !p[b.dataset.tg] });
+    toast("Prova atualizada", "ok"); carregarProvas();
+  });
+  box.querySelectorAll("[data-del]").forEach(b => b.onclick = async () => {
+    if (!confirm("Apagar a prova? As tentativas dos alunos continuam no banco de dados, mas ficam órfãs.")) return;
+    await deleteDoc(doc(db, "provas", b.dataset.del)); carregarProvas();
+  });
+}
+$("#btnCriarProva").onclick = async () => {
+  if (!podeEditar()) return toast("Seu papel não permite criar provas.", "erro");
+  const titulo = $("#pTitulo").value.trim(), bancoId = $("#pBanco").value, n = Number($("#pN").value);
+  if (!titulo || !bancoId || !n) return toast("Preencha título, banco e número de questões.", "erro");
+  const b = bancosCache.find(x => x.id === bancoId);
+  if (b && n > b.nQuestoes) return toast(`O banco só tem ${b.nQuestoes} questões.`, "erro");
+  await addDoc(collection(db, "provas"), { titulo, turma: $("#pTurma").value.trim(), bancoId, nQuestoes: n,
+    feedbackImediato: $("#pFeedback").value, embaralharAlternativas: $("#pEmbaralhar").checked,
+    liberada: false, resultadosLiberados: false, criadoEm: serverTimestamp(), criadoPor: eu.email });
+  $("#pTitulo").value = ""; toast("Prova criada (ainda fechada). Libere quando for aplicar.", "ok"); carregarProvas();
+};
+
+// ============================================================ BANCOS
+$("#arqBanco").onchange = e => { const f = e.target.files[0]; if (f) f.text().then(t => $("#txtBanco").value = t); };
+function validarBanco(txt) {
+  let b; try { b = JSON.parse(txt); } catch (e) { throw new Error("JSON inválido: " + e.message); }
+  if (!b.nome) throw new Error("Falta o campo nome.");
+  if (!Array.isArray(b.questoes) || !b.questoes.length) throw new Error("Falta a lista questoes.");
+  b.questoes.forEach((q, i) => {
+    const n = i + 1;
+    if (!["alternativa", "dissertativa"].includes(q.tipo)) throw new Error(`Questão ${n}: tipo deve ser alternativa ou dissertativa.`);
+    if (!q.enunciado) throw new Error(`Questão ${n}: falta o enunciado.`);
+    if (q.tipo === "alternativa") {
+      if (!Array.isArray(q.alternativas) || q.alternativas.length < 2) throw new Error(`Questão ${n}: precisa de pelo menos 2 alternativas.`);
+      if (!Number.isInteger(q.correta) || q.correta < 0 || q.correta >= q.alternativas.length) throw new Error(`Questão ${n}: "correta" deve ser o índice da alternativa certa (0 = primeira).`);
+    } else {
+      if (!(q.respostasAceitas?.length) && !(q.palavrasChave?.length) && q.correcaoManual !== true) throw new Error(`Questão ${n}: dissertativa precisa de respostasAceitas ou palavrasChave (ou "correcaoManual": true).`);
+    }
+  });
+  return b;
+}
+$("#btnValidarBanco").onclick = () => {
+  try { const b = validarBanco($("#txtBanco").value); $("#msgBanco").innerHTML = `✅ OK: <b>${esc(b.nome)}</b>, ${b.questoes.length} questões (${b.questoes.filter(q => q.tipo === "alternativa").length} de alternativa, ${b.questoes.filter(q => q.tipo === "dissertativa").length} dissertativas).`; }
+  catch (e) { $("#msgBanco").innerHTML = `❌ ${esc(e.message)}`; }
+};
+$("#btnImportarBanco").onclick = async () => {
+  if (!podeEditar()) return toast("Seu papel não permite importar.", "erro");
+  let b; try { b = validarBanco($("#txtBanco").value); } catch (e) { return $("#msgBanco").innerHTML = `❌ ${esc(e.message)}`; }
+  const ref = await addDoc(collection(db, "bancos"), { nome: b.nome, materia: b.materia || "", nQuestoes: b.questoes.length, criadoEm: serverTimestamp(), criadoPor: eu.email });
+  const lote = writeBatch(db);
+  b.questoes.forEach((q, i) => {
+    const qid = `${ref.id}_q${String(i + 1).padStart(3, "0")}`;
+    const pub = { ordem: i + 1, tipo: q.tipo, enunciado: q.enunciado, peso: Number(q.peso || 1) };
+    if (q.tipo === "alternativa") pub.alternativas = q.alternativas;
+    lote.set(doc(db, "bancos", ref.id, "questoes", qid), pub);
+    const gab = { explicacao: q.explicacao || "" };
+    if (q.tipo === "alternativa") gab.correta = q.correta; else { gab.respostasAceitas = q.respostasAceitas || []; gab.palavrasChave = q.palavrasChave || []; }
+    lote.set(doc(db, "bancos", ref.id, "gabaritos", qid), gab);
+  });
+  await lote.commit();
+  $("#msgBanco").innerHTML = `✅ Banco <b>${esc(b.nome)}</b> importado com ${b.questoes.length} questões.`; $("#txtBanco").value = "";
+  carregarBancos();
+};
+async function carregarBancos() {
+  await listarBancos();
+  const box = $("#listaBancos");
+  if (!bancosCache.length) { box.innerHTML = "<p class='pequeno'>Nenhum banco ainda.</p>"; return; }
+  box.innerHTML = `<table><tr><th>Banco</th><th>Matéria</th><th>Questões</th><th></th></tr>` + bancosCache.map(b =>
+    `<tr><td><b>${esc(b.nome)}</b><br><span class="pequeno">${b.id}</span></td><td>${esc(b.materia || "")}</td><td>${b.nQuestoes}</td>
+     <td style="white-space:nowrap"><button class="leve" data-gab="${b.id}">Gabarito p/ Classroom</button> ${ehAdmin() ? `<button class="leve" data-delb="${b.id}">🗑</button>` : ""}</td></tr>`).join("") + "</table>";
+  box.querySelectorAll("[data-gab]").forEach(x => x.onclick = () => gerarGabarito(x.dataset.gab));
+  box.querySelectorAll("[data-delb]").forEach(x => x.onclick = async () => {
+    if (!confirm("Apagar o banco e todas as suas questões?")) return;
+    const id = x.dataset.delb, lote = writeBatch(db);
+    (await getDocs(collection(db, "bancos", id, "questoes"))).forEach(d => lote.delete(d.ref));
+    (await getDocs(collection(db, "bancos", id, "gabaritos"))).forEach(d => lote.delete(d.ref));
+    lote.delete(doc(db, "bancos", id)); await lote.commit(); carregarBancos();
+  });
+}
+async function lerBanco(bancoId) {
+  const [qs, gs] = await Promise.all([getDocs(collection(db, "bancos", bancoId, "questoes")), getDocs(collection(db, "bancos", bancoId, "gabaritos"))]);
+  const questoes = {}, gabaritos = {};
+  qs.forEach(d => questoes[d.id] = { id: d.id, ...d.data() }); gs.forEach(d => gabaritos[d.id] = d.data());
+  return { questoes, gabaritos };
+}
+async function gerarGabarito(bancoId) {
+  const b = bancosCache.find(x => x.id === bancoId), { questoes, gabaritos } = await lerBanco(bancoId);
+  const lista = Object.values(questoes).sort((a, c) => a.ordem - c.ordem);
+  let t = `GABARITO — ${b.nome}\n${"=".repeat(60)}\nCada aluno recebeu um sorteio de questões deste banco: confira as suas pelo enunciado.\n\n`;
+  lista.forEach(q => {
+    const g = gabaritos[q.id] || {};
+    t += `${q.ordem}) ${q.enunciado}\n`;
+    if (q.tipo === "alternativa") { q.alternativas.forEach((a, i) => t += `   ${letra(i)}) ${a}\n`); t += `   ✔ Resposta: ${letra(g.correta)}) ${q.alternativas[g.correta]}\n`; }
+    else t += `   ✔ Resposta esperada: ${(g.respostasAceitas || [])[0] || "(ver palavras-chave: " + (g.palavrasChave || []).join(", ") + ")"}\n`;
+    if (g.explicacao) t += `   💡 ${g.explicacao}\n`;
+    t += "\n";
+  });
+  $("#txtGabarito").textContent = t; $("#cardGabarito").classList.remove("oculto"); $("#cardGabarito").scrollIntoView({ behavior: "smooth" });
+  $("#btnCopiarGab").onclick = () => navigator.clipboard.writeText(t).then(() => toast("Copiado", "ok"));
+  $("#btnBaixarGab").onclick = () => baixar(`gabarito_${b.nome.replace(/\W+/g, "_")}.txt`, t);
+}
+function baixar(nome, conteudo) {
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([conteudo], { type: "text/plain;charset=utf-8" })); a.download = nome; a.click();
+}
+
+// ============================================================ RESULTADOS
+let resDados = null;   // { prova, questoes, gabaritos, linhas: [...] }
+async function prepararResultados() {
+  const s = await getDocs(collection(db, "provas"));
+  const provas = []; s.forEach(d => provas.push({ id: d.id, ...d.data() }));
+  $("#rProva").innerHTML = provas.map(p => `<option value="${p.id}">${esc(p.titulo)} · ${esc(p.turma || "")}</option>`).join("");
+}
+$("#btnCarregarRes").onclick = carregarResultados;
+async function carregarResultados() {
+  const provaId = $("#rProva").value; if (!provaId) return;
+  $("#resTabela").innerHTML = "<p class='pequeno'>Carregando…</p>";
+  const prova = { id: provaId, ...(await getDoc(doc(db, "provas", provaId))).data() };
+  const { questoes, gabaritos } = await lerBanco(prova.bancoId);
+  const ts = await getDocs(query(collection(db, "tentativas"), where("provaId", "==", provaId)));
+  const linhas = [];
+  for (const d of ts.docs) {
+    const t = { id: d.id, ...d.data() };
+    const [rs, cs] = await Promise.all([getDocs(collection(db, "tentativas", t.id, "respostas")), getDocs(collection(db, "tentativas", t.id, "correcoes"))]);
+    const resp = {}; rs.forEach(x => resp[x.id] = x.data()); const corr = {}; cs.forEach(x => corr[x.id] = x.data());
+    const itens = t.questoesIds.map((qid, i) => {
+      const q = questoes[qid] || { tipo: "?", enunciado: "(questão removida)", peso: 1 }, g = gabaritos[qid] || {};
+      const r = resp[qid]?.resposta, peso = Number(q.peso || 1);
+      let c = corrigir(q, g, r);
+      if (corr[qid]?.pontos !== undefined) c = { pontos: Number(corr[qid].pontos), status: Number(corr[qid].pontos) >= peso ? "certa" : Number(corr[qid].pontos) > 0 ? "parcial" : "errada", manual: true };
+      return { n: i + 1, qid, q, g, r, peso, ...c, comentario: corr[qid]?.comentario || "" };
+    });
+    const max = itens.reduce((s, x) => s + x.peso, 0), pts = itens.reduce((s, x) => s + x.pontos, 0);
+    linhas.push({ t, itens, max, pts, nota: max ? Math.round(pts / max * 1000) / 10 : 0, revisar: itens.filter(x => x.status === "revisar").length });
+  }
+  linhas.sort((a, b) => (a.t.nome || a.t.email).localeCompare(b.t.nome || b.t.email));
+  resDados = { prova, questoes, gabaritos, linhas };
+  desenharResultados();
+}
+function desenharResultados() {
+  const { prova, linhas } = resDados;
+  const fin = linhas.filter(l => l.t.finalizadaEm), media = fin.length ? (fin.reduce((s, l) => s + l.nota, 0) / fin.length).toFixed(1) : "—";
+  $("#resResumo").innerHTML = `<p><b>${esc(prova.titulo)}</b> · ${linhas.length} aluno(s) iniciaram · ${fin.length} finalizaram · média ${media} · ${linhas.reduce((s, l) => s + l.revisar, 0)} resposta(s) para revisar</p>`;
+  if (!linhas.length) { $("#resTabela").innerHTML = "<p class='pequeno'>Ninguém fez esta prova ainda.</p>"; return; }
+  $("#resTabela").innerHTML = `<div class="card"><table><tr><th>Aluno</th><th>Início</th><th>Fim</th><th>Abas</th><th>Nota</th><th>Revisar</th><th></th></tr>` +
+    linhas.map((l, i) => `<tr><td><b>${esc(l.t.nome || "")}</b><br><span class="pequeno">${esc(l.t.email)}</span></td><td class="pequeno">${dataBR(l.t.iniciadaEm)}</td><td class="pequeno">${l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "<span class='tag aviso'>em andamento</span>"}</td>
+      <td>${l.t.trocasDeAba || 0}</td><td><b>${l.nota}</b>${l.t.nota !== undefined ? ` <span class="pequeno">(fechada: ${l.t.nota})</span>` : ""}</td><td>${l.revisar ? `<span class="tag aviso">${l.revisar}</span>` : "—"}</td>
+      <td style="white-space:nowrap"><button class="leve" data-ver="${i}">Ver</button> ${ehAdmin() ? `<button class="leve" data-reset="${i}" title="Apagar a tentativa (o aluno pode refazer)">↺</button>` : ""}</td></tr>`).join("") + `</table></div><div id="resDetalhe"></div>`;
+  document.querySelectorAll("[data-ver]").forEach(b => b.onclick = () => verAluno(Number(b.dataset.ver)));
+  document.querySelectorAll("[data-reset]").forEach(b => b.onclick = async () => {
+    const l = linhas[Number(b.dataset.reset)];
+    if (!confirm(`Apagar a tentativa de ${l.t.nome || l.t.email}? Ele poderá fazer a prova de novo (com novo sorteio).`)) return;
+    const lote = writeBatch(db);
+    (await getDocs(collection(db, "tentativas", l.t.id, "respostas"))).forEach(d => lote.delete(d.ref));
+    (await getDocs(collection(db, "tentativas", l.t.id, "correcoes"))).forEach(d => lote.delete(d.ref));
+    for (const qid of l.t.questoesIds) lote.delete(doc(db, "marcadores", `${l.t.uid}_${qid}`));
+    lote.delete(doc(db, "tentativas", l.t.id)); await lote.commit(); toast("Tentativa apagada", "ok"); carregarResultados();
+  });
+}
+function verAluno(i) {
+  const l = resDados.linhas[i], box = $("#resDetalhe");
+  const rot = { certa: ["ok", "✅ certa"], errada: ["erro", "❌ errada"], parcial: ["aviso", "🟡 parcial"], revisar: ["aviso", "🟡 revisar"], em_branco: ["erro", "⬜ em branco"] };
+  box.innerHTML = `<div class="card"><h2>${esc(l.t.nome || l.t.email)} — ${l.nota}/100 (${l.pts} de ${l.max} pontos)</h2>` + l.itens.map(x => {
+    const sua = x.r === undefined ? "<i>não respondida</i>" : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
+    const certa = x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.g.correta] ?? "—") : esc((x.g.respostasAceitas || [])[0] || (x.g.palavrasChave || []).join(" + "));
+    const manual = podeEditar() && x.q.tipo === "dissertativa" ? `<div class="linha" style="margin-top:6px"><div style="flex:0 0 120px"><label>Pontos (0–${x.peso})</label><input type="number" min="0" max="${x.peso}" step="0.5" value="${x.pontos}" id="pt_${x.qid}"></div><div><label>Comentário para o aluno</label><input type="text" id="cm_${x.qid}" value="${esc(x.comentario)}"></div><div style="flex:0 0 120px;align-self:flex-end"><button class="leve" data-corr="${x.qid}" data-i="${i}">Salvar</button></div></div>` : "";
+    return `<div class="feedback ${x.status === "certa" ? "certa" : x.status === "errada" ? "errada" : "revisar"}"><div class="linha"><b>Q${x.n}</b> <span class="tag ${rot[x.status][0]}">${rot[x.status][1]} · ${x.pontos}/${x.peso}${x.manual ? " · manual" : ""}</span></div>
+      <div class="enunciado pequeno">${esc(x.q.enunciado)}</div><p><b>Resposta do aluno:</b> ${sua}<br><b>Esperada:</b> ${certa}</p>${manual}</div>`;
+  }).join("") + "</div>";
+  box.scrollIntoView({ behavior: "smooth" });
+  box.querySelectorAll("[data-corr]").forEach(b => b.onclick = async () => {
+    const qid = b.dataset.corr, pontos = Number($("#pt_" + qid).value), comentario = $("#cm_" + qid).value.trim();
+    await setDoc(doc(db, "tentativas", l.t.id, "correcoes", qid), { pontos, comentario, corrigidoPor: eu.email, corrigidoEm: serverTimestamp() });
+    toast("Correção salva", "ok"); await carregarResultados(); verAluno(i);
+  });
+}
+$("#btnFecharNotas").onclick = async () => {
+  if (!resDados) return toast("Carregue uma prova primeiro.", "erro");
+  if (!podeEditar()) return toast("Seu papel não permite fechar notas.", "erro");
+  const pend = resDados.linhas.reduce((s, l) => s + l.revisar, 0);
+  if (pend && !confirm(`Ainda há ${pend} resposta(s) marcada(s) como "revisar" (valem 0 até você corrigir). Fechar mesmo assim?`)) return;
+  const lote = writeBatch(db);
+  resDados.linhas.forEach(l => lote.update(doc(db, "tentativas", l.t.id), { nota: l.nota, notaMaxima: 100, corrigidaEm: serverTimestamp(), corrigidaPor: eu.email }));
+  await lote.commit(); toast("Notas gravadas. Agora você pode liberar os resultados na aba Provas.", "ok"); carregarResultados();
+};
+$("#btnCSV").onclick = () => {
+  if (!resDados) return toast("Carregue uma prova primeiro.", "erro");
+  const n = resDados.prova.nQuestoes;
+  const cab = ["Nome", "E-mail", "Início", "Fim", "Trocas de aba", "Nota", ...Array.from({ length: n }, (_, i) => `Q${i + 1}`)];
+  const rows = resDados.linhas.map(l => [l.t.nome || "", l.t.email, dataBR(l.t.iniciadaEm), l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "em andamento", l.t.trocasDeAba || 0, String(l.nota).replace(".", ","),
+    ...l.itens.map(x => `${x.pontos}/${x.peso} ${x.status}`)]);
+  const csv = [cab, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(";")).join("\n");
+  baixar(`resultados_${resDados.prova.titulo.replace(/\W+/g, "_")}.csv`, "﻿" + csv);
+};
+
+// ============================================================ EQUIPE
+async function carregarEquipe() {
+  const s = await getDocs(collection(db, "equipe"));
+  const lista = []; s.forEach(d => lista.push({ id: d.id, ...d.data() }));
+  $("#listaEquipe").innerHTML = `<table><tr><th>E-mail</th><th>Nome</th><th>Papel</th><th></th></tr>
+    <tr><td>${esc(SUPER_ADMIN)}</td><td>—</td><td><span class="tag on">admin principal</span></td><td class="pequeno">fixo nas regras</td></tr>` +
+    lista.map(m => `<tr><td>${esc(m.id)}</td><td>${esc(m.nome || "")}</td><td><span class="tag">${esc(m.papel)}</span></td><td>${ehAdmin() ? `<button class="leve" data-rm="${m.id}">Remover</button>` : ""}</td></tr>`).join("") + "</table>";
+  document.querySelectorAll("[data-rm]").forEach(b => b.onclick = async () => { if (confirm("Remover " + b.dataset.rm + "?")) { await deleteDoc(doc(db, "equipe", b.dataset.rm)); carregarEquipe(); } });
+}
+$("#btnAddEquipe").onclick = async () => {
+  if (!ehAdmin()) return toast("Só admin cadastra equipe.", "erro");
+  const email = $("#eEmail").value.trim().toLowerCase(); if (!email.includes("@")) return toast("E-mail inválido.", "erro");
+  await setDoc(doc(db, "equipe", email), { email, nome: $("#eNome").value.trim(), papel: $("#ePapel").value, criadoEm: serverTimestamp(), criadoPor: eu.email });
+  $("#eEmail").value = ""; $("#eNome").value = ""; toast("Cadastrado", "ok"); carregarEquipe();
+};
+
+// ============================================================ CONFIG
+async function carregarConfig() {
+  const c = await getDoc(doc(db, "config", "geral"));
+  $("#cDominios").value = (c.exists() ? c.data().dominiosAlunos || [] : []).join(", ");
+}
+$("#btnSalvarConfig").onclick = async () => {
+  if (!ehAdmin()) return toast("Só admin altera a configuração.", "erro");
+  const dominios = $("#cDominios").value.split(",").map(s => s.trim().toLowerCase()).filter(Boolean);
+  await setDoc(doc(db, "config", "geral"), { dominiosAlunos: dominios }, { merge: true });
+  $("#msgConfig").textContent = "Salvo: " + dominios.join(", ");
+};

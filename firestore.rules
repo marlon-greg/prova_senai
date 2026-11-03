@@ -1,0 +1,120 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{db}/documents {
+
+    // ---------- quem é quem ----------
+    function logado()      { return request.auth != null && request.auth.token.email_verified == true; }
+    function email()       { return request.auth.token.email; }
+    function uid()         { return request.auth.uid; }
+    function superAdmin()  { return email() == 'marlon.frodrigues@docente.senai.br'; }
+    function membro()      { return exists(/databases/$(db)/documents/equipe/$(email())); }
+    function papel()       { return get(/databases/$(db)/documents/equipe/$(email())).data.papel; }
+    function equipe()      { return logado() && (superAdmin() || membro()); }          // admin, professor ou auxiliar
+    function professor()   { return logado() && (superAdmin() || (membro() && papel() in ['admin', 'professor'])); }
+    function admin()       { return logado() && (superAdmin() || (membro() && papel() == 'admin')); }
+    function dominio()     { return email().split('@')[1]; }
+    function aluno()       { return logado() && !equipe()
+                               && dominio() in get(/databases/$(db)/documents/config/geral).data.dominiosAlunos; }
+    function prova(id)     { return get(/databases/$(db)/documents/provas/$(id)).data; }
+    function tentativa(id) { return get(/databases/$(db)/documents/tentativas/$(id)).data; }
+
+    // ---------- configuração ----------
+    match /config/geral {
+      allow read: if logado();
+      allow write: if admin();
+    }
+
+    // ---------- equipe (professores, auxiliares) ----------
+    match /equipe/{em} {
+      allow read: if equipe() || (logado() && em == email());
+      allow write: if admin();
+    }
+
+    // ---------- bancos de questões ----------
+    match /bancos/{b} {
+      allow read: if equipe() || aluno();
+      allow write: if professor();
+
+      // enunciado + alternativas: o aluno pode ler (precisa, para responder)
+      match /questoes/{q} {
+        allow read: if equipe() || aluno();
+        allow write: if professor();
+      }
+      // resposta certa + explicação: o aluno SÓ lê depois de responder (ou de finalizar a prova)
+      match /gabaritos/{q} {
+        allow read: if equipe()
+                    || (aluno() && exists(/databases/$(db)/documents/marcadores/$(uid() + '_' + q)));
+        allow write: if professor();
+      }
+    }
+
+    // marcador "já respondi / já finalizei" — é o que libera a leitura do gabarito
+    match /marcadores/{m} {
+      allow read: if equipe() || (logado() && resource.data.uid == uid());
+      allow create: if aluno()
+        && m == uid() + '_' + request.resource.data.qid
+        && request.resource.data.uid == uid()
+        && request.resource.data.keys().hasOnly(['uid', 'qid', 'provaId', 'criadoEm'])
+        && request.resource.data.qid in getAfter(/databases/$(db)/documents/tentativas/$(uid() + '_' + request.resource.data.provaId)).data.questoesIds
+        && ( existsAfter(/databases/$(db)/documents/tentativas/$(uid() + '_' + request.resource.data.provaId)/respostas/$(request.resource.data.qid))
+             || getAfter(/databases/$(db)/documents/tentativas/$(uid() + '_' + request.resource.data.provaId)).data.finalizadaEm != null );
+      allow update, delete: if admin();
+    }
+
+    // ---------- provas ----------
+    match /provas/{p} {
+      allow read: if equipe()
+                  || (aluno() && (resource.data.liberada == true || resource.data.resultadosLiberados == true));
+      allow write: if professor();
+    }
+
+    // ---------- tentativas (uma por aluno por prova: id = uid_provaId) ----------
+    match /tentativas/{t} {
+      allow read: if equipe() || (logado() && resource.data.uid == uid());
+
+      // o aluno cria a própria tentativa, uma vez, só com a prova liberada
+      allow create: if aluno()
+        && t == uid() + '_' + request.resource.data.provaId
+        && request.resource.data.uid == uid()
+        && request.resource.data.email == email()
+        && request.resource.data.keys().hasOnly(['uid', 'email', 'nome', 'provaId', 'bancoId', 'questoesIds',
+                                                 'iniciadaEm', 'finalizadaEm', 'indiceAtual', 'trocasDeAba'])
+        && prova(request.resource.data.provaId).liberada == true
+        && request.resource.data.bancoId == prova(request.resource.data.provaId).bancoId
+        && request.resource.data.questoesIds.size() == prova(request.resource.data.provaId).nQuestoes
+        && request.resource.data.finalizadaEm == null
+        && request.resource.data.iniciadaEm == request.time;
+
+      // o aluno só avança o índice, conta troca de aba e finaliza — nunca mexe nas questões sorteadas
+      allow update: if (logado() && resource.data.uid == uid()
+                        && resource.data.finalizadaEm == null
+                        && prova(resource.data.provaId).liberada == true
+                        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['finalizadaEm', 'indiceAtual', 'trocasDeAba']))
+                    // professor fecha a nota
+                    || (professor()
+                        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['nota', 'notaMaxima', 'corrigidaEm', 'corrigidaPor']));
+      allow delete: if admin();
+
+      // respostas: o aluno grava uma vez, nunca altera
+      match /respostas/{q} {
+        allow read: if equipe() || (logado() && tentativa(t).uid == uid());
+        allow create: if aluno()
+          && tentativa(t).uid == uid()
+          && tentativa(t).finalizadaEm == null
+          && prova(tentativa(t).provaId).liberada == true
+          && q in tentativa(t).questoesIds
+          && request.resource.data.keys().hasOnly(['resposta', 'enviadaEm'])
+          && request.resource.data.enviadaEm == request.time;
+        allow update: if false;
+        allow delete: if admin();
+      }
+
+      // correção manual (dissertativas) feita pelo professor; o aluno vê quando os resultados forem liberados
+      match /correcoes/{q} {
+        allow read: if equipe()
+                    || (logado() && tentativa(t).uid == uid() && prova(tentativa(t).provaId).resultadosLiberados == true);
+        allow write: if professor();
+      }
+    }
+  }
+}

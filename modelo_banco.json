@@ -1,0 +1,211 @@
+{
+  "nome": "MS5 — DML (INSERT, UPDATE, DELETE, SELECT)",
+  "materia": "Banco de Dados",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "enunciado": "Qual comando coloca uma linha nova na tabela jogador?",
+      "alternativas": [
+        "UPDATE jogador SET nome = 'Ana';",
+        "INSERT INTO jogador (nome, email) VALUES ('Ana', 'ana@pf.com');",
+        "SELECT * FROM jogador WHERE nome = 'Ana';",
+        "ALTER TABLE jogador ADD nome VARCHAR(80);"
+      ],
+      "correta": 1,
+      "explicacao": "INSERT INTO tabela (colunas) VALUES (valores) é o comando que cria dados. UPDATE altera, SELECT lê e ALTER muda a estrutura (DDL).",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "enunciado": "No INSERT abaixo, por que o id_jogador não foi informado?\n\n`INSERT INTO jogador (nome, email) VALUES ('Rafael', 'rafael@pf.com');`",
+      "alternativas": [
+        "Porque id_jogador é opcional",
+        "Porque id_jogador é AUTO_INCREMENT e o MySQL preenche sozinho",
+        "Porque o INSERT nunca aceita a chave primária",
+        "Porque o id será informado depois com UPDATE"
+      ],
+      "correta": 1,
+      "explicacao": "Colunas AUTO_INCREMENT recebem o próximo número automaticamente; por isso não entram no INSERT.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "enunciado": "Você rodou `INSERT INTO jogador (nome) VALUES ('Sem Email');` e recebeu o erro 1364. O que aconteceu?",
+      "alternativas": [
+        "O e-mail já existia (UNIQUE)",
+        "A coluna email é NOT NULL e não foi informada",
+        "A tabela jogador não existe",
+        "Faltou o ponto e vírgula"
+      ],
+      "correta": 1,
+      "explicacao": "Erro 1364 (Field doesn't have a default value): uma coluna NOT NULL sem DEFAULT ficou de fora do INSERT.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "enunciado": "O erro 1452 (Cannot add or update a child row: a foreign key constraint fails) aparece quando:",
+      "alternativas": [
+        "Você tenta apagar um pai que tem filha",
+        "Você insere uma linha filha apontando para um pai que não existe",
+        "Você repete um valor UNIQUE",
+        "Você esquece o WHERE no UPDATE"
+      ],
+      "correta": 1,
+      "explicacao": "1452 é o erro da FK no INSERT/UPDATE da filha: o id_jogador informado não existe na tabela jogador. (1451 é o erro no DELETE do pai.)",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "enunciado": "Qual consulta traz os personagens que NÃO estão em nenhuma guilda?",
+      "alternativas": [
+        "SELECT * FROM personagem WHERE id_guilda = NULL;",
+        "SELECT * FROM personagem WHERE id_guilda = 0;",
+        "SELECT * FROM personagem WHERE id_guilda IS NULL;",
+        "SELECT * FROM personagem WHERE id_guilda <> NULL;"
+      ],
+      "correta": 2,
+      "explicacao": "NULL é ausência de valor e não se compara com = ou <>. Só IS NULL (ou IS NOT NULL) funciona; `= NULL` não dá erro, mas devolve zero linhas.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "enunciado": "Qual comando mostra os 3 personagens de maior level?",
+      "alternativas": [
+        "SELECT nome, level FROM personagem ORDER BY level LIMIT 3;",
+        "SELECT nome, level FROM personagem ORDER BY level DESC LIMIT 3;",
+        "SELECT TOP 3 nome, level FROM personagem;",
+        "SELECT nome, level FROM personagem WHERE level > 3;"
+      ],
+      "correta": 1,
+      "explicacao": "ORDER BY level DESC coloca o maior primeiro e LIMIT 3 corta no terceiro. Sem DESC viria o menor level primeiro.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "enunciado": "O que acontece ao executar `UPDATE personagem SET level = 1;` com o Safe Updates do Workbench DESLIGADO?",
+      "alternativas": [
+        "Só o primeiro personagem muda",
+        "O MySQL pede confirmação",
+        "Todos os personagens da tabela ficam com level 1",
+        "Dá o erro 1175"
+      ],
+      "correta": 2,
+      "explicacao": "Sem WHERE o UPDATE vale para a tabela inteira. O erro 1175 só aparece com o Safe Updates ligado — por isso ele é o cinto de segurança.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "enunciado": "Você quer apagar o jogador de id 1, mas ele tem personagens cadastrados. Qual é a ordem correta?",
+      "alternativas": [
+        "DELETE no jogador e depois nos personagens",
+        "DELETE nos personagens (e nas subclasses) e depois no jogador",
+        "DROP TABLE personagem e depois DELETE no jogador",
+        "Basta um DELETE no jogador: as filhas somem junto"
+      ],
+      "correta": 1,
+      "explicacao": "A FK protege o pai (erro 1451). Apaga-se primeiro a filha (guerreiro/mago/arqueiro → personagem) e só depois o jogador.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "enunciado": "Qual é a diferença entre DELETE FROM jogador e TRUNCATE TABLE jogador?",
+      "alternativas": [
+        "Nenhuma, são sinônimos",
+        "DELETE apaga as linhas filtradas pelo WHERE; TRUNCATE esvazia a tabela inteira e zera o AUTO_INCREMENT",
+        "TRUNCATE apaga a tabela e a estrutura",
+        "DELETE é DDL e TRUNCATE é DML"
+      ],
+      "correta": 1,
+      "explicacao": "DELETE é DML e respeita o WHERE; TRUNCATE (DDL) remove todas as linhas de uma vez e reinicia o contador. DROP é o que apaga a estrutura.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "enunciado": "Você abriu START TRANSACTION, rodou um UPDATE errado e percebeu antes de confirmar. Qual comando desfaz?",
+      "alternativas": [
+        "COMMIT;",
+        "ROLLBACK;",
+        "UNDO;",
+        "DELETE;"
+      ],
+      "correta": 1,
+      "explicacao": "ROLLBACK desfaz tudo desde o START TRANSACTION. COMMIT faria o contrário: gravaria de vez.",
+      "peso": 1
+    },
+    {
+      "tipo": "dissertativa",
+      "enunciado": "Escreva o comando que insere na tabela item o registro com nome 'Poção de mana' e tipo 'consumível'.",
+      "respostasAceitas": [
+        "INSERT INTO item (nome, tipo) VALUES ('Poção de mana', 'consumível');",
+        "INSERT INTO item (tipo, nome) VALUES ('consumível', 'Poção de mana');"
+      ],
+      "palavrasChave": [
+        "insert into item(",
+        "values(",
+        "'poção de mana'",
+        "'consumível'"
+      ],
+      "explicacao": "INSERT INTO item (nome, tipo) VALUES ('Poção de mana', 'consumível'); — o id_item é AUTO_INCREMENT e não entra.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "enunciado": "Escreva a consulta que lista nome e level dos personagens com level maior que 30.",
+      "respostasAceitas": [
+        "SELECT nome, level FROM personagem WHERE level > 30;"
+      ],
+      "palavrasChave": [
+        "select nome,level from personagem where level>30"
+      ],
+      "explicacao": "SELECT nome, level FROM personagem WHERE level > 30; — só as duas colunas pedidas e o filtro com >.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "enunciado": "A personagem Lyria subiu 10 níveis. Escreva o UPDATE que soma 10 ao level atual dela (sem digitar o valor final na mão).",
+      "respostasAceitas": [
+        "UPDATE personagem SET level = level + 10 WHERE nome = 'Lyria';"
+      ],
+      "palavrasChave": [
+        "update personagem set level=level+10 where nome='lyria'"
+      ],
+      "explicacao": "UPDATE personagem SET level = level + 10 WHERE nome = 'Lyria'; — o WHERE garante que só a Lyria muda; `level + 10` usa o valor atual.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "enunciado": "Escreva o comando que apaga o jogador cujo nome é 'Bruno Lima'.",
+      "respostasAceitas": [
+        "DELETE FROM jogador WHERE nome = 'Bruno Lima';"
+      ],
+      "palavrasChave": [
+        "delete from jogador where nome='bruno lima'"
+      ],
+      "explicacao": "DELETE FROM jogador WHERE nome = 'Bruno Lima'; — sem WHERE apagaria todos. Se ele tiver personagem, a FK barra com o erro 1451.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "enunciado": "Escreva a consulta que conta quantos personagens existem na tabela personagem.",
+      "respostasAceitas": [
+        "SELECT COUNT(*) FROM personagem;",
+        "SELECT COUNT(*) AS total FROM personagem;"
+      ],
+      "palavrasChave": [
+        "select count(*)",
+        "from personagem"
+      ],
+      "explicacao": "SELECT COUNT(*) FROM personagem; — COUNT(*) conta as linhas.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "enunciado": "Explique, em uma ou duas linhas, por que todo UPDATE e todo DELETE deveriam começar com um SELECT usando o mesmo WHERE.",
+      "respostasAceitas": [],
+      "palavrasChave": [],
+      "explicacao": "Porque as linhas que o SELECT mostra são exatamente as que o UPDATE/DELETE vai atingir: é a conferência antes de alterar ou apagar. (Correção manual: aceite qualquer resposta que fale em conferir/ver as linhas afetadas antes.)",
+      "peso": 2,
+      "correcaoManual": true
+    }
+  ]
+}

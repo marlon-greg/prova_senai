@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel do Professor — Prova SENAI</title>
+<link rel="stylesheet" href="css/style.css">
+<style>main{max-width:1100px}</style>
+</head>
+<body>
+<header>
+  <span class="senai">SENAI</span>
+  <h1>Painel do Professor</h1>
+  <div class="quem"><span id="quem"></span><button id="btnSair" class="sec oculto">Sair</button></div>
+</header>
+<main>
+  <section id="telaLogin" class="card centro">
+    <h2>Acesso da equipe</h2>
+    <p class="pequeno">Entre com a conta Google cadastrada como professor, administrador ou auxiliar.</p>
+    <button id="btnEntrar">Entrar com Google</button>
+    <p id="msgLogin" class="pequeno"></p>
+  </section>
+
+  <section id="telaPainel" class="oculto">
+    <div class="abas">
+      <button data-aba="provas" class="ativa">Provas</button>
+      <button data-aba="bancos">Bancos de questões</button>
+      <button data-aba="resultados">Resultados</button>
+      <button data-aba="equipe">Equipe</button>
+      <button data-aba="config">Configuração</button>
+    </div>
+
+    <!-- PROVAS -->
+    <div id="aba-provas">
+      <div class="card">
+        <h2>Nova prova</h2>
+        <div class="linha">
+          <div><label>Título</label><input type="text" id="pTitulo" placeholder="MS5 — DML"></div>
+          <div><label>Turma (texto livre)</label><input type="text" id="pTurma" placeholder="DETS-1A"></div>
+        </div>
+        <div class="linha">
+          <div><label>Banco de questões</label><select id="pBanco"></select></div>
+          <div><label>Questões por aluno</label><input type="number" id="pN" value="10" min="1"></div>
+          <div><label>Feedback ao enviar cada resposta</label>
+            <select id="pFeedback"><option value="acerto">Só diz se acertou ou errou</option><option value="completo">Mostra a resposta certa e a explicação</option><option value="nenhum">Nenhum (só no resultado final)</option></select></div>
+        </div>
+        <label><input type="checkbox" id="pEmbaralhar" checked> Embaralhar a ordem das alternativas para cada aluno</label>
+        <button id="btnCriarProva" style="margin-top:10px">Criar prova</button>
+      </div>
+      <div class="card"><h2>Provas criadas</h2><div id="listaProvas"></div></div>
+    </div>
+
+    <!-- BANCOS -->
+    <div id="aba-bancos" class="oculto">
+      <div class="card">
+        <h2>Importar banco de questões (JSON)</h2>
+        <p class="pequeno">Use o arquivo <b>modelo_banco.json</b> como modelo. Cole o conteúdo aqui ou escolha o arquivo.</p>
+        <input type="file" id="arqBanco" accept=".json,application/json">
+        <textarea id="txtBanco" placeholder='{"nome": "...", "materia": "...", "questoes": [ ... ]}' style="min-height:160px"></textarea>
+        <div class="linha" style="margin-top:8px"><button id="btnValidarBanco" class="sec">Validar</button><button id="btnImportarBanco">Importar</button></div>
+        <div id="msgBanco" class="pequeno"></div>
+      </div>
+      <div class="card"><h2>Bancos cadastrados</h2><div id="listaBancos"></div></div>
+      <div class="card oculto" id="cardGabarito"><h2>Gabarito para o Classroom</h2>
+        <p class="pequeno">Todas as questões do banco com a resposta e a explicação. Copie ou baixe e poste no Classroom depois da prova.</p>
+        <div class="linha"><button id="btnCopiarGab" class="sec">Copiar</button><button id="btnBaixarGab" class="sec">Baixar .txt</button></div>
+        <pre class="bloco" id="txtGabarito"></pre></div>
+    </div>
+
+    <!-- RESULTADOS -->
+    <div id="aba-resultados" class="oculto">
+      <div class="card">
+        <h2>Resultados</h2>
+        <div class="linha"><div><label>Prova</label><select id="rProva"></select></div>
+          <div style="align-self:flex-end"><button id="btnCarregarRes">Carregar</button> <button id="btnCSV" class="sec">Baixar CSV</button> <button id="btnFecharNotas" class="ok">Fechar notas</button></div></div>
+        <p class="pequeno">Dissertativas que o sistema não conseguiu validar ficam como <b>revisar</b>: abra o aluno e dê a nota. "Fechar notas" grava a nota final de cada aluno.</p>
+        <div id="resResumo"></div>
+      </div>
+      <div id="resTabela"></div>
+    </div>
+
+    <!-- EQUIPE -->
+    <div id="aba-equipe" class="oculto">
+      <div class="card">
+        <h2>Equipe</h2>
+        <p class="pequeno"><b>admin</b> = tudo · <b>professor</b> = bancos, provas, correção e resultados · <b>auxiliar</b> = só vê resultados (ex.: apoio a alunos com TEA).</p>
+        <div class="linha">
+          <div><label>E-mail (conta Google)</label><input type="email" id="eEmail" placeholder="nome@docente.senai.br"></div>
+          <div><label>Nome</label><input type="text" id="eNome"></div>
+          <div><label>Papel</label><select id="ePapel"><option value="professor">professor</option><option value="admin">admin</option><option value="auxiliar">auxiliar</option></select></div>
+          <div style="align-self:flex-end"><button id="btnAddEquipe">Adicionar</button></div>
+        </div>
+        <div id="listaEquipe" style="margin-top:12px"></div>
+      </div>
+    </div>
+
+    <!-- CONFIG -->
+    <div id="aba-config" class="oculto">
+      <div class="card">
+        <h2>Configuração</h2>
+        <label>Domínios de e-mail aceitos para alunos (separados por vírgula)</label>
+        <input type="text" id="cDominios" placeholder="edu.senai.br, aluno.senai.br">
+        <button id="btnSalvarConfig" style="margin-top:10px">Salvar</button>
+        <p class="pequeno" id="msgConfig"></p>
+      </div>
+    </div>
+  </section>
+  <section id="telaAviso" class="card centro oculto"><div id="avisoTexto"></div></section>
+</main>
+<script type="module" src="js/admin.js"></script>
+</body>
+</html>
