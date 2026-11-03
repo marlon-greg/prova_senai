@@ -9,7 +9,7 @@ service cloud.firestore {
     function superAdmin()  { return email() == 'marlon.frodrigues@docente.senai.br'; }
     function membro()      { return exists(/databases/$(db)/documents/equipe/$(email())); }
     function papel()       { return get(/databases/$(db)/documents/equipe/$(email())).data.papel; }
-    function equipe()      { return logado() && (superAdmin() || membro()); }          // admin, professor ou auxiliar
+    function equipe()      { return logado() && (superAdmin() || membro()); }
     function professor()   { return logado() && (superAdmin() || (membro() && papel() in ['admin', 'professor'])); }
     function admin()       { return logado() && (superAdmin() || (membro() && papel() == 'admin')); }
     function dominio()     { return email().split('@')[1]; }
@@ -17,6 +17,8 @@ service cloud.firestore {
                                && dominio() in get(/databases/$(db)/documents/config/geral).data.dominiosAlunos; }
     function prova(id)     { return get(/databases/$(db)/documents/provas/$(id)).data; }
     function tentativa(id) { return get(/databases/$(db)/documents/tentativas/$(id)).data; }
+    // tentativa de teste da própria pessoa da equipe
+    function meuTeste(id)  { return equipe() && tentativa(id).teste == true && tentativa(id).uid == uid(); }
 
     // ---------- configuração ----------
     match /config/geral {
@@ -24,7 +26,7 @@ service cloud.firestore {
       allow write: if admin();
     }
 
-    // ---------- equipe (professores, auxiliares) ----------
+    // ---------- equipe ----------
     match /equipe/{em} {
       allow read: if equipe() || (logado() && em == email());
       allow write: if admin();
@@ -34,13 +36,11 @@ service cloud.firestore {
     match /bancos/{b} {
       allow read: if equipe() || aluno();
       allow write: if professor();
-
-      // enunciado + alternativas: o aluno pode ler (precisa, para responder)
       match /questoes/{q} {
         allow read: if equipe() || aluno();
         allow write: if professor();
       }
-      // resposta certa + explicação: o aluno SÓ lê depois de responder (ou de finalizar a prova)
+      // gabarito: o aluno SÓ lê depois de responder (marcador) ou de finalizar
       match /gabaritos/{q} {
         allow read: if equipe()
                     || (aluno() && exists(/databases/$(db)/documents/marcadores/$(uid() + '_' + q)));
@@ -48,7 +48,7 @@ service cloud.firestore {
       }
     }
 
-    // marcador "já respondi / já finalizei" — é o que libera a leitura do gabarito
+    // marcador "já respondi / já finalizei"
     match /marcadores/{m} {
       allow read: if equipe() || (logado() && resource.data.uid == uid());
       allow create: if aluno()
@@ -68,76 +68,66 @@ service cloud.firestore {
       allow write: if professor();
     }
 
-    // ---------- tentativas (uma por aluno por prova: id = uid_provaId) ----------
+    // ---------- tentativas ----------
     match /tentativas/{t} {
       allow read: if equipe() || (logado() && resource.data.uid == uid());
 
-      // o aluno cria a própria tentativa, uma vez, só com a prova liberada
-      allow create: if aluno()
+      // ALUNO: cria a própria, uma vez, com a prova liberada
+      allow create: if (aluno()
         && t == uid() + '_' + request.resource.data.provaId
         && request.resource.data.uid == uid()
         && request.resource.data.email == email()
         && request.resource.data.keys().hasOnly(['uid', 'email', 'nome', 'provaId', 'bancoId', 'questoesIds',
-                                                 'iniciadaEm', 'finalizadaEm', 'indiceAtual', 'trocasDeAba', 'notaPrevia', 'aguardandoCorrecao',
+                                                 'iniciadaEm', 'finalizadaEm', 'indiceAtual', 'trocasDeAba',
+                                                 'notaPrevia', 'aguardandoCorrecao',
                                                  'saidasTelaCheia', 'tentativasColar', 'tempoTotalSegundos'])
         && prova(request.resource.data.provaId).liberada == true
         && request.resource.data.bancoId == prova(request.resource.data.provaId).bancoId
         && request.resource.data.questoesIds.size() == prova(request.resource.data.provaId).nQuestoes
         && request.resource.data.finalizadaEm == null
-        && request.resource.data.iniciadaEm == request.time;
-
-      // o aluno só avança o índice, conta troca de aba e finaliza — nunca mexe nas questões sorteadas
-      allow update: if (logado() && resource.data.uid == uid()
-                        && resource.data.finalizadaEm == null
-                        && prova(resource.data.provaId).liberada == true
-                        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['finalizadaEm', 'indiceAtual', 'trocasDeAba', 'notaPrevia', 'aguardandoCorrecao',
-                                                                                             'saidasTelaCheia', 'tentativasColar', 'tempoTotalSegundos']))
-                    // professor fecha a nota
-                    || (professor()
-                        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['nota', 'notaMaxima', 'corrigidaEm', 'corrigidaPor']));
-      allow delete: if admin();
-
-      // MODO TESTE: a equipe faz a prova como aluno (id = teste_uid_provaId, campo teste == true),
-      // mesmo com a prova fechada. O aluno não consegue: o create dele limita as chaves com hasOnly (sem 'teste').
-      allow create: if equipe()
+        && request.resource.data.iniciadaEm == request.time)
+      // EQUIPE: tentativa de teste (não exige prova liberada)
+      || (equipe()
         && t == 'teste_' + uid() + '_' + request.resource.data.provaId
         && request.resource.data.uid == uid()
-        && request.resource.data.teste == true;
-      allow update: if equipe()
-        && resource.data.teste == true && resource.data.uid == uid()
-        && request.resource.data.teste == true && request.resource.data.uid == uid();
-      allow delete: if equipe() && resource.data.teste == true && resource.data.uid == uid();
+        && request.resource.data.teste == true);
+
+      allow update: if
+           // aluno: só avança, conta sinais e finaliza — nunca mexe nas questões sorteadas
+           (logado() && resource.data.uid == uid() && resource.data.teste != true
+            && resource.data.finalizadaEm == null
+            && prova(resource.data.provaId).liberada == true
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(
+                 ['finalizadaEm', 'indiceAtual', 'trocasDeAba', 'notaPrevia', 'aguardandoCorrecao',
+                  'saidasTelaCheia', 'tentativasColar', 'tempoTotalSegundos']))
+           // professor fecha a nota
+        || (professor()
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['nota', 'notaMaxima', 'corrigidaEm', 'corrigidaPor']))
+           // equipe: a própria tentativa de teste
+        || (equipe() && resource.data.teste == true && resource.data.uid == uid());
+
+      allow delete: if admin() || (equipe() && resource.data.teste == true && resource.data.uid == uid());
 
       // respostas: o aluno grava uma vez, nunca altera
       match /respostas/{q} {
         allow read: if equipe() || (logado() && tentativa(t).uid == uid());
-        allow create: if aluno()
+        allow create: if (aluno()
           && tentativa(t).uid == uid()
           && tentativa(t).finalizadaEm == null
           && prova(tentativa(t).provaId).liberada == true
           && q in tentativa(t).questoesIds
           && request.resource.data.keys().hasOnly(['resposta', 'enviadaEm', 'segundos'])
-          && request.resource.data.enviadaEm == request.time;
+          && request.resource.data.enviadaEm == request.time)
+          || meuTeste(t);
         allow update: if false;
-        allow delete: if admin();
-
-        // MODO TESTE: a equipe responde e apaga na própria tentativa de teste (sem exigir prova liberada)
-        allow create: if equipe()
-          && tentativa(t).teste == true
-          && tentativa(t).uid == uid()
-          && tentativa(t).finalizadaEm == null
-          && q in tentativa(t).questoesIds
-          && request.resource.data.keys().hasOnly(['resposta', 'enviadaEm', 'segundos']);
-        allow delete: if equipe() && tentativa(t).teste == true && tentativa(t).uid == uid();
+        allow delete: if admin() || meuTeste(t);
       }
 
-      // correção manual (dissertativas) feita pelo professor; o aluno vê quando os resultados forem liberados
+      // correção manual (dissertativas)
       match /correcoes/{q} {
         allow read: if equipe()
                     || (logado() && tentativa(t).uid == uid() && prova(tentativa(t).provaId).resultadosLiberados == true);
-        allow write: if professor();
-        // MODO TESTE: qualquer membro da equipe (inclusive auxiliar) limpa a própria tentativa de teste
-        allow delete: if equipe() && tentativa(t).teste == true && tentativa(t).uid == uid();
+        allow write: if professor() || (meuTeste(t) && request.method == 'delete');
       }
     }
   }
