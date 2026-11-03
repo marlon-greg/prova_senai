@@ -61,6 +61,12 @@ service cloud.firestore {
       allow update, delete: if admin();
     }
 
+    // ---------- turmas (lista de e-mails dos alunos) ----------
+    match /turmas/{id} {
+      allow read: if equipe() || (logado() && email().lower() in resource.data.emails);
+      allow write: if professor();
+    }
+
     // ---------- provas ----------
     match /provas/{p} {
       allow read: if equipe()
@@ -81,12 +87,19 @@ service cloud.firestore {
                                                  'iniciadaEm', 'finalizadaEm', 'indiceAtual', 'trocasDeAba',
                                                  'notaPrevia', 'aguardandoCorrecao',
                                                  'saidasTelaCheia', 'tentativasColar', 'tempoTotalSegundos',
-                                                 'encerradaPor', 'trocasDeAbaTotal'])
+                                                 'encerradaPor', 'trocasDeAbaTotal', 'codigoInformado'])
         && prova(request.resource.data.provaId).liberada == true
         && request.resource.data.bancoId == prova(request.resource.data.provaId).bancoId
         && request.resource.data.questoesIds.size() == prova(request.resource.data.provaId).nQuestoes
         && request.resource.data.finalizadaEm == null
-        && request.resource.data.iniciadaEm == request.time)
+        && request.resource.data.iniciadaEm == request.time
+        // turma: sem turma = qualquer aluno; com turma = o e-mail precisa estar na lista
+        // (.get com padrão: provas antigas não têm turmaId/codigoAcesso, e campo ausente dá erro nas regras)
+        && (prova(request.resource.data.provaId).get('turmaId', null) == null
+            || email().lower() in get(/databases/$(db)/documents/turmas/$(prova(request.resource.data.provaId).turmaId)).data.emails)
+        // código de acesso: se a prova tiver, o aluno precisa informar igual
+        && (prova(request.resource.data.provaId).get('codigoAcesso', '') in [null, '']
+            || request.resource.data.get('codigoInformado', '') == prova(request.resource.data.provaId).codigoAcesso))
       // EQUIPE: tentativa de teste (não exige prova liberada)
       || (equipe()
         && t == 'teste_' + uid() + '_' + request.resource.data.provaId
