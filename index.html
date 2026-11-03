@@ -19,6 +19,7 @@
   <span class="senai">SENAI</span>
   <h1>Prova online · Desenvolvimento de Sistemas</h1>
   <div class="quem">
+    <button id="btnMascote" class="leve mini" type="button" aria-pressed="true" title="Ligar ou desligar o mascote guia">🧑‍🏫 Mascote</button>
     <button id="btnFonte" class="leve mini" title="Aumentar/diminuir a letra" aria-label="Aumentar ou diminuir a letra">A+</button>
     <span id="avatar" class="avatar oculto" aria-hidden="true"></span>
     <span id="quem"></span>
@@ -38,20 +39,26 @@
 
   <!-- LISTA DE PROVAS -->
   <section id="telaProvas" class="oculto">
+    <div id="provasSaudacao" class="card saudacao"></div>   <!-- mascote + "Oi, Fulano!" + escolha do mascote (js/aluno.js) -->
     <div class="card">
-      <h2>Suas provas</h2>
+      <h2>🎯 Suas provas</h2>
       <div id="listaProvas"><p class="pequeno">Carregando…</p></div>
     </div>
   </section>
 
   <!-- INSTRUÇÕES / INÍCIO -->
-  <section id="telaInicio" class="card oculto">
-    <h2 id="inicioTitulo"></h2>
-    <div id="inicioInfo"></div>
-    <div class="aviso-box">
-      <b>Leia antes de começar:</b>
-      <ul id="inicioRegras"></ul>   <!-- montada a partir das opções da prova (js/aluno.js) -->
+  <section id="telaInicio" class="oculto">
+    <div class="card inicio-cab">
+      <h2 id="inicioTitulo"></h2>
+      <div id="inicioInfo" class="chips"></div>
     </div>
+    <!-- mascote guia: explica as regras fixas da prova, uma fala por vez (js/guia.js) -->
+    <div id="inicioGuia" class="card guia" tabindex="-1"></div>
+    <div class="card">
+    <details id="inicioRegrasBox" class="aviso-box regras-box" open>
+      <summary>📜 <span id="inicioRegrasTitulo">Leia antes de começar</span></summary>
+      <ul id="inicioRegras"></ul>   <!-- montada a partir das opções da prova (js/aluno.js) -->
+    </details>
     <div id="inicioCodigoBox" class="codigo-box oculto">
       <label for="inicioCodigo">Código de acesso</label>
       <input type="text" id="inicioCodigo" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Ex.: AET-7K3Q">
@@ -59,8 +66,9 @@
       <p id="inicioCodigoErro" class="pequeno erro-texto" role="alert"></p>
     </div>
     <div class="linha acoes">
-      <button id="btnComecar" class="ok grande">Começar a prova</button>
+      <button id="btnComecar" class="ok grande">▶ Começar a prova</button>
       <button id="btnVoltar1" class="leve">Voltar</button>
+    </div>
     </div>
   </section>
 
@@ -70,9 +78,12 @@
       <div class="prova-coluna">
         <div class="card q-cabecalho">
           <div class="q-topo">
+            <span id="hudMascote" class="hud-mascote" aria-hidden="true"></span>
             <span id="qContador" class="q-numero"></span>
             <span id="qTipo" class="tag"></span>
             <span id="qTitulo" class="pequeno titulo-prova"></span>
+            <span id="hudXp" class="hud-xp" title="Questões respondidas"></span>
+            <span id="hudVidas" class="hud-vidas oculto" role="status" aria-live="polite"></span>
             <span id="qTimer" class="timer oculto" title="Tempo restante"></span>
           </div>
           <div class="progresso" role="progressbar" aria-label="Progresso da prova"><div id="qBarra" style="width:0%"></div></div>
@@ -115,8 +126,11 @@
   </section>
 
   <!-- FIM -->
-  <section id="telaFim" class="card centro oculto">
-    <h2>Prova finalizada ✅</h2>
+  <section id="telaFim" class="card centro fim oculto">
+    <div id="fimConfete" class="confete" aria-hidden="true"></div>
+    <div id="fimMascote" class="fim-mascote"></div>
+    <h2 id="fimTitulo">Prova finalizada ✅</h2>
+    <div id="fimEstrelas" class="estrelas" aria-hidden="true"></div>
     <div id="fimNota"></div>
     <p>Suas respostas foram registradas.</p>
     <div class="linha acoes" style="justify-content:center">
@@ -141,7 +155,8 @@
 <!-- aviso durante a prova: saiu da tela cheia / trocou de aba -->
 <div id="sobreposicao" class="sobreposicao oculto" role="alertdialog" aria-modal="true" aria-labelledby="sobreTitulo" aria-describedby="sobreTexto">
   <div class="sobre-caixa">
-    <div class="icone" aria-hidden="true">⚠️</div>
+    <div id="sobreMascote" class="sobre-mascote" aria-hidden="true"></div>
+    <div id="sobreIcone" class="icone" aria-hidden="true">⚠️</div>
     <h2 id="sobreTitulo"></h2>
     <p id="sobreTexto"></p>
     <p id="sobrePlacar" class="sobre-placar oculto"></p>

@@ -18,15 +18,17 @@ async function ehPdf(file) {
   return String.fromCharCode(...ini) === "%PDF-";
 }
 
+// base = caminho da coleção (padrão "materiais"; laudos: "acessibilidadePrivado/<email>/laudos")
+const col = base => base.split("/");
 // Envia o arquivo. progresso(enviadas, total) é chamado a cada pedaço. Devolve { id, ...dados }.
-export async function enviarMaterial(file, titulo, email, progresso = () => {}) {
+export async function enviarMaterial(file, titulo, email, progresso = () => {}, base = "materiais") {
   if (!file) throw new Error("Escolha um arquivo.");
   if (!(await ehPdf(file)))
     throw new Error("O arquivo não é PDF. No PowerPoint: Arquivo → Exportar → PDF. No Google Slides: Arquivo → Fazer download → PDF.");
   if (file.size > MAX_MB * 1024 * 1024)
     throw new Error(`O PDF tem ${(file.size / 1048576).toFixed(1)} MB; o limite é ${MAX_MB} MB. Exporte com qualidade menor (PowerPoint: Arquivo → Exportar → PDF → "Tamanho mínimo") ou divida o arquivo.`);
   const bytes = new Uint8Array(await file.arrayBuffer());
-  const ref = doc(collection(db, "materiais"));
+  const ref = doc(collection(db, ...col(base)));
   const n = Math.ceil(bytes.length / PARTE);
   progresso(0, n);
   try {
@@ -37,13 +39,13 @@ export async function enviarMaterial(file, titulo, email, progresso = () => {}) 
         await lote.commit(); progresso(i, n);
         lote = writeBatch(db); noLote = 0; bytesLote = 0;
       }
-      lote.set(doc(db, "materiais", ref.id, "partes", idParte(i)), { i, dados: Bytes.fromUint8Array(pedaco) });
+      lote.set(doc(db, ...col(base), ref.id, "partes", idParte(i)), { i, dados: Bytes.fromUint8Array(pedaco) });
       noLote++; bytesLote += pedaco.length;
     }
     await lote.commit(); progresso(n, n);
   } catch (e) {
     // envio interrompido: tenta apagar os pedaços já gravados (sem o documento principal ele não aparece na lista)
-    getDocs(collection(db, "materiais", ref.id, "partes")).then(s => Promise.all(s.docs.map(d => deleteDoc(d.ref)))).catch(() => {});
+    getDocs(collection(db, ...col(base), ref.id, "partes")).then(s => Promise.all(s.docs.map(d => deleteDoc(d.ref)))).catch(() => {});
     throw e;
   }
   // o documento principal só é gravado no fim: envio interrompido não aparece na lista
@@ -55,39 +57,40 @@ export async function enviarMaterial(file, titulo, email, progresso = () => {}) 
 
 // Baixa e remonta o arquivo. Devolve { meta, bytes: Uint8Array }.
 const cache = new Map();
-export async function baixarMaterial(id) {
-  if (cache.has(id)) return cache.get(id);
+export async function baixarMaterial(id, base = "materiais") {
+  const chave = base + "/" + id;
+  if (cache.has(chave)) return cache.get(chave);
   const p = (async () => {
-    const m = await getDoc(doc(db, "materiais", id));
+    const m = await getDoc(doc(db, ...col(base), id));
     if (!m.exists()) throw new Error("O material foi apagado. Avise o professor.");
     const meta = m.data();
-    const partes = await getDocs(query(collection(db, "materiais", id, "partes"), orderBy("i")));
+    const partes = await getDocs(query(collection(db, ...col(base), id, "partes"), orderBy("i")));
     if (partes.size !== meta.nPartes) throw new Error("O material está incompleto. Avise o professor para enviar de novo.");
     const bytes = new Uint8Array(meta.tamanho);
     let pos = 0;
     partes.forEach(d => { const b = d.data().dados.toUint8Array(); bytes.set(b, pos); pos += b.length; });
     return { meta, bytes };
   })();
-  cache.set(id, p);
-  p.catch(() => cache.delete(id));   // erro: tenta de novo na próxima
+  cache.set(chave, p);
+  p.catch(() => cache.delete(chave));   // erro: tenta de novo na próxima
   return p;
 }
 
-export async function listarMateriais() {
-  const s = await getDocs(collection(db, "materiais"));
+export async function listarMateriais(base = "materiais") {
+  const s = await getDocs(collection(db, ...col(base)));
   return s.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
 }
 
-export async function apagarMaterial(id) {
-  const partes = await getDocs(collection(db, "materiais", id, "partes"));
+export async function apagarMaterial(id, base = "materiais") {
+  const partes = await getDocs(collection(db, ...col(base), id, "partes"));
   let lote = writeBatch(db), n = 0;
   for (const d of partes.docs) {   // lotes pequenos: cada pedaço pesa ~900 KB
     lote.delete(d.ref);
     if (++n % 50 === 0) { await lote.commit(); lote = writeBatch(db); }
   }
   await lote.commit();
-  await deleteDoc(doc(db, "materiais", id));
-  cache.delete(id);
+  await deleteDoc(doc(db, ...col(base), id));
+  cache.delete(base + "/" + id);
 }
 
 export const tamanhoTexto = b => b >= 1048576 ? `${(b / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(b / 1024))} KB`;
@@ -99,12 +102,12 @@ export function erroMaterial(e, traduzir) {
     : traduzir(e);
 }
 // abre o PDF numa aba nova (a aba é aberta já no clique, para o navegador não bloquear)
-export async function abrirMaterialEmAba(id, traduzir) {
+export async function abrirMaterialEmAba(id, traduzir, base = "materiais") {
   const w = window.open("", "_blank");
   if (!w) throw new Error("O navegador bloqueou a janela. Libere pop-ups para este site.");
   w.document.write("<p style='font-family:sans-serif'>Carregando o PDF…</p>");
   try {
-    const { bytes } = await baixarMaterial(id);
+    const { bytes } = await baixarMaterial(id, base);
     const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
     w.location.href = url;
     setTimeout(() => URL.revokeObjectURL(url), 120000);

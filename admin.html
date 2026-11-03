@@ -8,9 +8,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
-<style>main{max-width:1140px}</style>
+
 </head>
-<body>
+<body class="painel">
 <header>
   <span class="senai">SENAI</span>
   <h1>Painel do Professor</h1>
@@ -29,24 +29,27 @@
     <p id="msgLogin" class="pequeno" role="alert"></p>
   </section>
 
-  <section id="telaPainel" class="oculto">
-    <nav class="abas" aria-label="Seções do painel">
-      <button data-aba="provas" class="ativa">Provas</button>
-      <button data-aba="bancos">Bancos de questões</button>
-      <button data-aba="turmas">Turmas</button>
-      <button data-aba="resultados">Resultados</button>
-      <button data-aba="equipe">Equipe</button>
-      <button data-aba="config">Configuração</button>
+  <section id="telaPainel" class="painel-layout oculto">
+    <nav class="abas menu-lateral" aria-label="Seções do painel">
+      <button data-aba="provas" class="ativa"><span aria-hidden="true">📝</span> Provas</button>
+      <button data-aba="resultados"><span aria-hidden="true">🏆</span> Resultados</button>
+      <button data-aba="acessibilidade"><span aria-hidden="true">♿</span> Acessibilidade</button>
+      <button data-aba="bancos"><span aria-hidden="true">📚</span> Bancos de questões</button>
+      <button data-aba="turmas"><span aria-hidden="true">👥</span> Turmas</button>
+      <button data-aba="equipe"><span aria-hidden="true">🧑‍🏫</span> Equipe</button>
+      <button data-aba="config"><span aria-hidden="true">⚙️</span> Configuração</button>
     </nav>
+    <div class="painel-conteudo">
 
     <!-- PROVAS -->
     <div id="aba-provas">
-      <div class="card">
-        <h2>Nova prova</h2>
+      <details class="card nova-prova" id="cardNovaProva">
+        <summary><h2>➕ Nova prova</h2><span class="pequeno">clique para abrir o formulário</span></summary>
         <div id="formNovaProva"></div>   <!-- montado por formProvaHTML("p") em js/admin.js -->
         <button id="btnCriarProva" style="margin-top:16px">Criar prova</button>
-      </div>
-      <div class="card"><h2>Provas criadas</h2><div id="listaProvas"></div></div>
+      </details>
+      <div class="secao-titulo"><h2>📝 Provas criadas</h2></div>
+      <div id="listaProvas"></div>
     </div>
 
     <!-- BANCOS -->
@@ -128,15 +131,31 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
       <div id="resTabela"></div>
     </div>
 
+    <!-- ACESSIBILIDADE (js/admin-acess.js) -->
+    <div id="aba-acessibilidade" class="oculto">
+      <div class="card">
+        <h2>♿ Acessibilidade</h2>
+        <p class="pequeno">Alunos marcados aqui fazem a prova com as adaptações de cada um: letra, espaçamento, cores, tempo e vidas extras, leitura em voz alta e <b>questões reescritas</b> (à mão ou pela IA, a partir da sua descrição e dos laudos). A auxiliar de inclusão vinculada vê e edita só os alunos dela.</p>
+        <div id="acessNovo" class="grade" style="align-items:end;margin:0">
+          <div><label for="acessAlunoSel">Aluno das turmas</label><select id="acessAlunoSel"></select></div>
+          <div><label for="acessEmail">E-mail</label><input type="email" id="acessEmail" placeholder="aluna@edu.senai.br"></div>
+          <div><label for="acessNome">Nome</label><input type="text" id="acessNome"></div>
+          <div><button id="btnAcessAdicionar">♿ Marcar acessibilidade</button></div>
+        </div>
+      </div>
+      <div id="acessLista"></div>
+      <div id="acessDetalhe"></div>
+    </div>
+
     <!-- EQUIPE -->
     <div id="aba-equipe" class="oculto">
       <div class="card">
         <h2>Equipe</h2>
-        <p class="pequeno"><b>admin</b> = tudo · <b>professor</b> = bancos, provas, correção e resultados · <b>auxiliar</b> = só vê resultados (ex.: apoio a alunos com TEA).</p>
+        <p class="pequeno"><b>admin</b> = tudo · <b>professor</b> = bancos, provas, correção e resultados · <b>auxiliar</b> = só vê resultados · <b>auxiliar de inclusão</b> = só os alunos vinculados a ela na aba Acessibilidade: vê os resultados deles, edita as adaptações da prova, sobe documentos, deixa sugestões e devolve vidas.</p>
         <div class="grade" style="align-items:end">
           <div><label for="eEmail">E-mail (conta Google)</label><input type="email" id="eEmail" placeholder="nome@docente.senai.br"></div>
           <div><label for="eNome">Nome</label><input type="text" id="eNome"></div>
-          <div><label for="ePapel">Papel</label><select id="ePapel"><option value="professor">professor</option><option value="admin">admin</option><option value="auxiliar">auxiliar</option></select></div>
+          <div><label for="ePapel">Papel</label><select id="ePapel"><option value="professor">professor</option><option value="admin">admin</option><option value="auxiliar">auxiliar</option><option value="inclusao">auxiliar de inclusão</option></select></div>
           <div><button id="btnAddEquipe">Adicionar</button></div>
         </div>
         <div id="listaEquipe"></div>
@@ -166,6 +185,7 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
         <div class="linha acoes"><button id="btnTestarIA" class="leve">Testar chave</button><button id="btnSalvarIA">Salvar</button><button id="btnApagarIA" class="perigo">Apagar chave</button></div>
         <p class="pequeno" id="msgIA" role="status" aria-live="polite"></p>
       </div>
+    </div>
     </div>
   </section>
   <section id="telaAviso" class="card centro oculto"><div id="avisoTexto"></div></section>

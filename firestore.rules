@@ -27,6 +27,15 @@ service cloud.firestore {
     }
     function meuNome()     { return 'name' in request.auth.token && request.auth.token.name is string
                                     ? chaveNome(request.auth.token.name) : ''; }
+    // ---------- acessibilidade / auxiliar de inclusão ----------
+    // papel 'inclusao' = auxiliar de inclusão: só vê e cuida dos alunos vinculados a ela
+    // (acessibilidade/{emailAluno}.auxiliares). Os outros papéis da equipe veem tudo, como antes.
+    function inclusao()    { return logado() && !superAdmin() && membro() && papel() == 'inclusao'; }
+    function equipeGeral() { return logado() && (superAdmin() || (membro() && papel() != 'inclusao')); }
+    function minhaAluna(e) { return inclusao() && exists(/databases/$(db)/documents/acessibilidade/$(e))
+                               && email().lower() in get(/databases/$(db)/documents/acessibilidade/$(e)).data.get('auxiliares', []); }
+    function cuidaDe(e)    { return professor() || minhaAluna(e); }
+    function eu(e)         { return logado() && email().lower() == e; }
     // tentativa de teste da própria pessoa da equipe
     function meuTeste(id)  { return equipe() && tentativa(id).get('teste', false) == true && tentativa(id).uid == uid(); }
 
@@ -72,7 +81,8 @@ service cloud.firestore {
         && request.resource.data.keys().hasOnly(['uid', 'qid', 'provaId', 'criadoEm'])
         && request.resource.data.qid in getAfter(/databases/$(db)/documents/tentativas/$(uid() + '_' + request.resource.data.provaId)).data.questoesIds
         && getAfter(/databases/$(db)/documents/tentativas/$(uid() + '_' + request.resource.data.provaId)).data.finalizadaEm != null;
-      allow update, delete: if admin();
+      allow update: if admin();
+      allow delete: if professor() || inclusao();   // reabrir a prova do aluno apaga os marcadores (o gabarito volta a ficar fechado)
     }
 
     // ---------- turmas ----------
@@ -110,6 +120,36 @@ service cloud.firestore {
       }
     }
 
+    // ---------- acessibilidade (adaptações da prova por aluno) ----------
+    // acessibilidade/{email}: o que o PRÓPRIO aluno lê (visual, tempo/vidas extras) + questões reescritas para ele.
+    // A auxiliar de inclusão edita, mas não muda quem está vinculado (só professor).
+    match /acessibilidade/{e} {
+      allow read: if equipeGeral() || minhaAluna(e) || eu(e)
+                  || (inclusao() && email().lower() in resource.data.auxiliares);   // lista "meus alunos" (array-contains)
+      allow create, delete: if professor();
+      allow update: if professor()
+        || (minhaAluna(e) && request.resource.data.get('auxiliares', []) == resource.data.get('auxiliares', []))
+        // o próprio aluno grava só o uid dele (assim a auxiliar acha as tentativas: tentativas/{uid}_{prova})
+        || (eu(e) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['uid']) && request.resource.data.uid == uid());
+      match /questoes/{q} {
+        allow read: if equipeGeral() || minhaAluna(e) || eu(e);
+        allow write: if cuidaDe(e);
+      }
+    }
+    // acessibilidadePrivado/{email}: descrição do professor, laudos (PDF em pedaços) e sugestões — o aluno NÃO lê
+    match /acessibilidadePrivado/{e} {
+      allow read, write: if cuidaDe(e);
+      match /laudos/{l} {
+        allow read, write: if cuidaDe(e);
+        match /partes/{p} { allow read, write: if cuidaDe(e); }
+      }
+      match /sugestoes/{s} {
+        allow read: if cuidaDe(e);
+        allow create: if cuidaDe(e) && request.resource.data.autor == email().lower();
+        allow update, delete: if professor() || (cuidaDe(e) && resource.data.autor == email().lower());
+      }
+    }
+
     // ---------- provas ----------
     match /provas/{p} {
       allow read: if equipe()
@@ -121,7 +161,9 @@ service cloud.firestore {
     match /tentativas/{t} {
       // aluno: a própria. "resource == null" = ainda não começou (a lista de provas confere se já existe);
       // só vale para o id dele (uid_prova), para não descobrir quem começou
-      allow read: if equipe() || (logado() && (resource == null ? t.matches(uid() + '_.+') : resource.data.uid == uid()));
+      allow read: if equipeGeral()
+                  || (resource != null && minhaAluna(resource.data.email.lower()))
+                  || (logado() && (resource == null ? t.matches(uid() + '_.+') : resource.data.uid == uid()));
 
       // ALUNO: cria a própria, uma vez, com a prova liberada
       allow create: if (aluno()
@@ -159,12 +201,25 @@ service cloud.firestore {
             && request.resource.data.diff(resource.data).affectedKeys().hasOnly(
                  ['finalizadaEm', 'indiceAtual', 'trocasDeAba',
                   'saidasTelaCheia', 'tentativasColar', 'tempoTotalSegundos',
-                  'encerradaPor', 'trocasDeAbaTotal']))
+                  'encerradaPor', 'trocasDeAbaTotal'])
+            // vidas: o aluno não "recupera" vidas sozinho (perder a questão zera trocasDeAba, mas soma em trocasDeAbaTotal)
+            && request.resource.data.get('trocasDeAba', 0) + request.resource.data.get('trocasDeAbaTotal', 0)
+                 >= resource.data.get('trocasDeAba', 0) + resource.data.get('trocasDeAbaTotal', 0))
            // professor: fecha a nota e grava o placar que o aluno vê (acertos, nota prévia, pendentes)
+           // e cuida das VIDAS do aluno: restaurar, dar vida extra, reabrir a prova (ex.: aluno com TEA)
         || (professor()
             && request.resource.data.diff(resource.data).affectedKeys().hasOnly(
                  ['nota', 'notaMaxima', 'corrigidaEm', 'corrigidaPor',
-                  'acertos', 'totalQuestoes', 'notaPrevia', 'aguardandoCorrecao']))
+                  'acertos', 'totalQuestoes', 'notaPrevia', 'aguardandoCorrecao',
+                  'trocasDeAba', 'trocasDeAbaTotal', 'vidasExtras', 'vidasRestauradas', 'vidasRestauradasEm',
+                  'vidasRestauradasPor', 'finalizadaEm', 'encerradaPor', 'indiceAtual', 'tempoTotalSegundos',
+                  'minutosExtras', 'reabertaEm', 'reabertaPor']))
+           // auxiliar de inclusão: vidas e reabrir a prova dos alunos vinculados a ela
+        || (minhaAluna(resource.data.email.lower())
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(
+                 ['trocasDeAba', 'trocasDeAbaTotal', 'vidasExtras', 'vidasRestauradas', 'vidasRestauradasEm',
+                  'vidasRestauradasPor', 'finalizadaEm', 'encerradaPor', 'indiceAtual', 'tempoTotalSegundos',
+                  'minutosExtras', 'reabertaEm', 'reabertaPor', 'acertos', 'totalQuestoes', 'nota', 'notaPrevia', 'aguardandoCorrecao']))
            // equipe: a própria tentativa de teste
         || (equipe() && resource.data.get('teste', false) == true && resource.data.uid == uid());
 
@@ -172,7 +227,7 @@ service cloud.firestore {
 
       // respostas: o aluno grava uma vez; com "ir e voltar" (prova.permitirVoltar) pode alterar até finalizar
       match /respostas/{q} {
-        allow read: if equipe() || (logado() && tentativa(t).uid == uid());
+        allow read: if equipeGeral() || minhaAluna(tentativa(t).email.lower()) || (logado() && tentativa(t).uid == uid());
         allow create: if (aluno()
           && tentativa(t).uid == uid()
           && tentativa(t).finalizadaEm == null
@@ -190,12 +245,13 @@ service cloud.firestore {
           && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['resposta', 'segundos', 'atualizadaEm'])
           && request.resource.data.atualizadaEm == request.time)
           || meuTeste(t);
-        allow delete: if admin() || meuTeste(t);
+        allow delete: if admin() || meuTeste(t)
+          || (cuidaDe(tentativa(t).email.lower()) && resource.data.get('perdida', false) == true);   // devolver questão perdida por sair da prova
       }
 
       // correção manual (dissertativas)
       match /correcoes/{q} {
-        allow read: if equipe()
+        allow read: if equipeGeral() || minhaAluna(tentativa(t).email.lower())
                     || (logado() && tentativa(t).uid == uid() && prova(tentativa(t).provaId).resultadosLiberados == true);
         allow write: if professor() || (meuTeste(t) && request.method == 'delete');
       }

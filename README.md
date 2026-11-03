@@ -178,7 +178,7 @@ Definidas em **Nova prova** e alteráveis depois pelo botão **✎ Editar** na t
 | **Permitir colar** (`permitirColar`) | não | Libera colar e arrastar nos campos de resposta e não registra tentativas de colar. Copiar o enunciado continua bloqueado. |
 | **Material de consulta** (`materialConsultaTitulo`, `materiaisConsultaIds` ou `materialConsultaUrl`) | nenhum | Um ou **vários PDFs enviados ao sistema** (recomendado) ou um link. Mostra o material **dentro da tela da prova**: no computador, numa coluna à direita; o aluno muda o espaço dos slides × questões **arrastando a barra entre os dois** (ou pelos botões **◀ Ampliar / Reduzir ▶** e as setas do teclado com a barra selecionada), e a largura fica guardada no navegador dele; no celular, pelo botão **📖 Consulta**, numa gaveta por cima da questão. Clicar no material não conta como troca de aba. |
 
-### Limite de saídas da prova
+### Limite de saídas da prova (vidas ❤️)
 Em **Regras da prova**, só quando a troca de aba **não** é permitida:
 
 | Campo | Padrão | O que faz |
@@ -207,6 +207,37 @@ Limite de **20 MB** por arquivo (acima disso o envio é recusado com aviso; o en
 - **Google Docs:** Compartilhar → Qualquer pessoa com o link → Copiar link.
 
 Cole o link no campo. O sistema converte sozinho para o formato que abre dentro da prova (Drive → `/preview`, Slides → `/embed`, Docs → `/preview`) e mostra a prévia antes de salvar. Outros sites ficam como estão, mas muitos **não deixam ser abertos dentro de outra página**; nesse caso o aluno vê "Não foi possível carregar o material; avise o professor". Use sempre um link `https://` e teste com **Testar como aluno** antes da prova.
+
+## Vidas ❤️, mascote guia e acessibilidade ♿
+
+### Vidas (limite de saídas)
+Na prova, **Vidas do aluno** (0 = sem vidas) substitui o antigo "limite de saídas". O aluno perde 1 vida ao **trocar de aba/janela (Alt+Tab)**, **sair da tela cheia** e, se a opção *Tentar colar também custa 1 vida* estiver marcada (padrão), ao **tentar colar (Ctrl+V)**. Os corações aparecem no topo da prova. Quando acabam, a prova é encerrada (ou o aluno perde a questão, conforme a opção).
+
+**Aluno perdeu vidas sem querer (ex.: TEA)?** Em **Resultados**, cada aluno tem um cartão (ou linha) com:
+- **❤️ Restaurar vidas**: zera as vidas perdidas e devolve as questões perdidas. A tela do aluno atualiza na hora.
+- **+1 ❤️**: dá uma vida a mais só para aquele aluno.
+- **↩ Reabrir prova**: para quem já finalizou ou foi encerrado sem vidas. O aluno continua de onde parou. Se a prova tem tempo, você escolhe quantos minutos ele ainda tem.
+
+Na aba **Provas**, o botão **👥 Alunos** abre essa visão da prova direto, ao vivo.
+
+### Mascote guia
+Antes da prova, um mascote explica as regras, uma fala por vez. Tem o botão 🔊 para ouvir. São 4 mascotes, os professores em versão cartoon: **Marlin** (Marlon), **DaniBoy** (Daniel), **Feh** (Felipe) e **Xelxo** (Celso). O aluno escolhe o guia e pode ligar ou desligar no botão **🧑‍🏫 Mascote** do topo; a escolha fica no navegador. Desligado, as regras aparecem em lista. No fim, o mascote comemora e o aluno vê de 0 a 3 estrelas pela nota. Os desenhos estão em `js/mascotes.js`.
+
+### Acessibilidade (aba ♿ no painel)
+1. **Marque o aluno**: escolha das turmas ou digite o e-mail.
+2. **Visual**: tamanho da letra, espaçamento entre letras, palavras e linhas, fonte (Atkinson Hyperlegible, Lexend, Comic Neue…), cores (creme, azul, alto contraste, escuro), CAIXA ALTA, linhas curtas, régua de leitura e sem animações. A pré-visualização mostra o resultado na hora.
+3. **Na prova**: tempo extra, vidas extras, *sem perder vidas* (só registra), esconder o cronômetro, botão 🔊 Ouvir em cada questão e apoio 💡.
+4. **Sobre o aluno**: a sua descrição e os laudos em PDF. O aluno nunca vê essa parte.
+5. **Questões adaptadas**: escolha a prova, e as questões que podem ser sorteadas aparecem. Adapte à mão ou com **🤖 Adaptar com IA**, que usa a descrição, os laudos e a orientação extra. A resposta certa não muda: as alternativas ficam na mesma ordem e quantidade. **Revise antes da prova.**
+6. **👁 Abrir a prova como o aluno**: o modo teste com as adaptações daquele aluno.
+7. **Sugestões**: a equipe registra observações; o professor marca como resolvida.
+
+A IA roda no seu navegador (administrador principal, com a chave salva) ou no servidor de correção (Cloudflare Worker, ação `adaptar`) para os professores e a auxiliar de inclusão. No Worker, a variável opcional `MODELO_ADAPTACAO` define o modelo (padrão `claude-sonnet-5-5`).
+
+### Auxiliar de inclusão
+Cadastre em **Equipe** com o papel **auxiliar de inclusão** e vincule no cadastro do aluno, em *Auxiliar(es) de inclusão*. Ela vê só as abas **Acessibilidade** e **Resultados**, e só os alunos vinculados a ela. Pode editar as adaptações e as questões, subir documentos, deixar sugestões e restaurar vidas ou reabrir a prova desses alunos. Ela não vê os outros alunos, não muda quem está vinculado e não fecha notas. O aluno precisa ter entrado no sistema pelo menos uma vez para os resultados dele aparecerem para a auxiliar.
+
+> **Depois de atualizar o sistema, publique de novo o `firestore.rules`** (Firebase Console → Firestore → Regras). As vidas, a acessibilidade e a auxiliar de inclusão dependem das regras novas.
 
 ## Formato do banco de questões (JSON)
 

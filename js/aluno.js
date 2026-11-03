@@ -4,6 +4,8 @@ import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar
   from "./common.js";
 import { baixarMaterial } from "./material.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
+import { completar, aplicarVisual, mesclarQuestao } from "./acessibilidade.js";
+import { mascoteLigado, ligarMascote, dadosMascote, htmlMascote, htmlEscolha, ligarEscolha, montarGuia, pararFala } from "./guia.js";
 import { collection, doc, getDoc, getDocFromServer, getDocs, setDoc, updateDoc, query, where, serverTimestamp, increment, arrayUnion, onSnapshot }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -13,6 +15,9 @@ let tentativa = null;     // { id, ...dados }
 let questoes = {};        // qid -> questão (enunciado, alternativas...)
 let respostas = {};       // qid -> { resposta, segundos }
 let ordemAlternativas = {}; // qid -> índices embaralhados
+// acessibilidade do aluno (acessibilidade/{email}, marcada pelo professor): visual, tempo/vidas extras, questões adaptadas
+let acess = null;           // { visual, prova, email } ou null
+const ap = () => acess?.prova || {};
 
 // ---------- opções da prova ----------
 const modoTodas = () => provaAtual?.modoExibicao === "todas";          // todas as questões na mesma página
@@ -23,8 +28,13 @@ const temConsulta = () => !!(idsConsulta(provaAtual).length || provaAtual?.mater
 // código de acesso (o modo teste da equipe não pede)
 const pedeCodigo = () => !modoTeste && !!String(provaAtual?.codigoAcesso || "").trim();
 const normalizarCodigo = c => String(c || "").toUpperCase().replace(/\s+/g, "");
-// limite de saídas (aba/janela ou tela cheia); com troca de aba permitida não há limite
-const limiteSaidas = () => trocaAbaPermitida() ? 0 : Math.max(0, Math.round(Number(provaAtual?.maxTrocasDeAba || 0)));
+// VIDAS = limite de saídas da prova (aba/janela, tela cheia e, se a prova quiser, colar); com troca de aba permitida não há vidas.
+// O professor pode dar vidas extras ao aluno (tentativa.vidasExtras) e restaurar as vidas (zera trocasDeAba).
+const vidasBase = () => trocaAbaPermitida() ? 0 : Math.max(0, Math.round(Number(provaAtual?.maxTrocasDeAba || 0)));
+const limiteSaidas = () => vidasBase() && !ap().semPunicao
+  ? vidasBase() + Math.max(0, Number(tentativa?.vidasExtras || 0)) + Math.max(0, Number(ap().vidasExtras || 0)) : 0;
+// tentar colar também tira vida (padrão das provas com vidas; o professor pode desligar)
+const colarTiraVida = () => !colarPermitido() && provaAtual?.colarTiraVida !== false;
 // "perder a questão" só existe no modo uma por vez sem voltar; nos outros a prova é encerrada
 const acaoAoExceder = () => !modoTodas() && !podeVoltar() && provaAtual?.acaoAoExceder === "perderQuestao" ? "perderQuestao" : "encerrar";
 const textoPena = p => (p.modoExibicao !== "todas" && p.permitirVoltar !== true && p.acaoAoExceder === "perderQuestao") ? "você perde a questão atual" : "a prova é encerrada";
@@ -42,6 +52,8 @@ function mostrar(id) {
   document.body.classList.toggle("com-consulta", id === "telaQuestao" && temConsulta());
   if (id !== "telaQuestao") { esconderSobreposicao(); $("#painelConsulta").classList.remove("aberto"); }
   if (id !== "telaFim") pararOuvinteFim();
+  if (id !== "telaQuestao") pararOuvinteProva();
+  if (id !== "telaInicio") pararFala();
   atualizarBanner();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
@@ -49,6 +61,25 @@ function mostrar(id) {
 // ---------- fonte maior (acessibilidade) ----------
 if (localStorage.getItem("fonteGrande") === "1") document.body.classList.add("grande");
 $("#btnFonte").onclick = () => { document.body.classList.toggle("grande"); localStorage.setItem("fonteGrande", document.body.classList.contains("grande") ? "1" : "0"); };
+
+// ---------- mascote guia (liga/desliga no cabeçalho; fica guardado no navegador) ----------
+function marcarBotaoMascote() {
+  const on = mascoteLigado(), b = $("#btnMascote");
+  b.setAttribute("aria-pressed", on); b.textContent = on ? "🧑‍🏫 Mascote: ligado" : "🧑‍🏫 Mascote: desligado";
+}
+marcarBotaoMascote();
+$("#btnMascote").onclick = () => {
+  ligarMascote(!mascoteLigado()); marcarBotaoMascote();
+  toast(mascoteLigado() ? `${dadosMascote().nome} voltou para te ajudar! 👋` : "Mascote desligado. As regras aparecem em lista.", "ok");
+  redesenharMascotes();
+};
+// redesenha o que mostra o mascote na tela atual (depois de ligar/desligar ou trocar de mascote)
+function redesenharMascotes() {
+  if (!$("#telaProvas").classList.contains("oculto")) desenharSaudacao();
+  if (!$("#telaInicio").classList.contains("oculto") && provaAtual) desenharGuia(provaAtual);
+  if (!$("#telaFim").classList.contains("oculto")) desenharFim();
+  humorHud = "feliz"; desenharHudMascote();
+}
 
 // ---------- login ----------
 $("#btnEntrar").onclick = async () => {
@@ -70,6 +101,12 @@ aoMudarLogin(async user => {
     modoTeste = true;
     eu = { uid: user.uid, email: id.email, nome: id.nome };
     $("#faixaTeste").classList.remove("oculto");
+    // ?como=<email do aluno>: a equipe vê a prova com as adaptações de acessibilidade daquele aluno
+    const como = new URLSearchParams(location.search).get("como");
+    if (como) {
+      await carregarAcessibilidade(como.toLowerCase(), false);
+      $("#faixaTeste span").innerHTML = `<b>MODO TESTE</b> — vendo como <b>${esc(como)}</b>${acess ? " (♿ com adaptações)" : " (sem adaptações ativas)"}; não vale nota`;
+    }
     await abrirProva(provaTeste, "inicio");
     return;
   }
@@ -80,13 +117,61 @@ aoMudarLogin(async user => {
   // chave do nome da conta Google (vem do token, o mesmo que as regras usam) para o vínculo com a turma
   const tok = await user.getIdTokenResult().catch(() => null);
   eu = { uid: user.uid, email: id.email, nome: id.nome, nomeConta: tok?.claims?.name || "", chave: chaveNome(tok?.claims?.name || "") };
+  await carregarAcessibilidade(id.email, true);
   await listarProvas();
 });
 
+// ---------- acessibilidade ----------
+async function carregarAcessibilidade(email, gravarUid) {
+  acess = null;
+  try {
+    const d = await getDoc(doc(db, "acessibilidade", email));
+    if (d.exists() && d.data().ativo !== false) {
+      acess = { email, ...completar(d.data()) };
+      // grava o uid do aluno no cadastro: assim a auxiliar de inclusão encontra as tentativas dele
+      if (gravarUid && d.data().uid !== eu.uid) updateDoc(d.ref, { uid: eu.uid }).catch(e => console.warn("uid na acessibilidade", e));
+    }
+  } catch (e) { console.warn("acessibilidade", e); }
+  aplicarVisual(document.body, acess?.visual || null);
+}
+// troca as questões pelas versões adaptadas (mesmo gabarito: alternativas na mesma ordem e quantidade)
+async function aplicarQuestoesAdaptadas() {
+  if (!acess) return;
+  const ads = await Promise.all(Object.keys(questoes).map(q => getDoc(doc(db, "acessibilidade", acess.email, "questoes", q)).catch(() => null)));
+  ads.forEach(a => { if (a?.exists() && questoes[a.id]) questoes[a.id] = mesclarQuestao(questoes[a.id], a.data()); });
+}
+// 🔊 lê a questão em voz alta (enunciado + alternativas)
+function lerQuestao(qid, botao) {
+  if (!("speechSynthesis" in window)) return;
+  if (speechSynthesis.speaking && botao.classList.contains("ativo")) { speechSynthesis.cancel(); return; }
+  const q = questoes[qid];
+  const alts = q.tipo === "alternativa" ? (ordemAlternativas[qid] || []).map((k, pos) => `Alternativa ${letra(pos)}: ${q.alternativas[k]}.`).join(" ") : "";
+  const u = new SpeechSynthesisUtterance(`${q.enunciado}. ${q.dica && ap().mostrarDica !== false ? "Dica: " + q.dica + ". " : ""}${alts}`.replace(/`/g, ""));
+  u.lang = "pt-BR"; u.rate = 0.95;
+  const voz = speechSynthesis.getVoices().find(v => /^pt(-|_)BR/i.test(v.lang)); if (voz) u.voice = voz;
+  document.querySelectorAll(".b-ouvir.ativo").forEach(b => { b.classList.remove("ativo"); b.textContent = "🔊 Ouvir"; });
+  u.onend = u.onerror = () => { botao.classList.remove("ativo"); botao.textContent = "🔊 Ouvir"; };
+  speechSynthesis.cancel(); speechSynthesis.speak(u);
+  botao.classList.add("ativo"); botao.textContent = "⏹ Parar";
+}
+
 // ---------- lista de provas ----------
 let provasDaLista = {};   // id -> prova (para saber, no clique, se a prova pede tela cheia)
+function desenharSaudacao() {
+  const box = $("#provasSaudacao"), on = mascoteLigado(), m = dadosMascote();
+  const nome = String(eu?.nome || "").split(/\s+/)[0];
+  box.classList.toggle("sem", !on);
+  box.innerHTML = on
+    ? `<div class="saudacao-linha">${htmlMascote("feliz", { classe: "saudacao-mascote" })}
+         <div class="balao"><div class="balao-nome">${esc(m.nome)} <span>prof. ${esc(m.professor)}</span></div>
+           <div class="balao-texto">Oi${nome ? `, <b>${esc(nome)}</b>` : ""}! ${esc(m.bordao)}<br>Escolha uma prova aqui embaixo que eu te explico tudo antes de começar.</div></div></div>
+       <div class="saudacao-escolha"><span class="pequeno">Escolha o seu guia:</span>${htmlEscolha(m.id)}</div>`
+    : `<p class="pequeno" style="margin:0">Mascote guia desligado. Para ligar, use o botão <b>🧑‍🏫 Mascote</b> no topo da página.</p>`;
+  ligarEscolha(box, () => { desenharSaudacao(); humorHud = "feliz"; });
+}
 async function listarProvas() {
   mostrar("telaProvas");
+  desenharSaudacao();
   const box = $("#listaProvas"); box.innerHTML = "<p class='pequeno'>Carregando…</p>";
   // delegação: os botões funcionam assim que aparecem, mesmo com o resto da lista ainda carregando
   box.onclick = e => {
@@ -175,11 +260,13 @@ function regrasDaProva(p) {
     : "As questões aparecem <b>uma por vez</b>. Depois de enviar uma resposta, não é possível voltar.");
   r.push("A ordem das questões e das alternativas é diferente para cada aluno.");
   r.push("No final você vê <b>quantas acertou e a nota</b>. Quais acertou e o gabarito aparecem só quando o professor liberar.");
-  if (!p.permitirColar) r.push("<b>Colar texto está desativado</b> nos campos de resposta: digite. As tentativas de colar ficam registradas.");
+  const base = !p.permitirTrocaAba && !ap().semPunicao ? Math.max(0, Number(p.maxTrocasDeAba || 0)) : 0;
+  const vidas = base ? base + Math.max(0, Number(ap().vidasExtras || 0)) : 0, colarCusta = vidas > 0 && !p.permitirColar && p.colarTiraVida !== false;
+  if (!p.permitirColar) r.push(`<b>Colar texto está desativado</b> nos campos de resposta: digite. As tentativas de colar ficam registradas${colarCusta ? " e <b>custam 1 vida</b>" : ""}.`);
   if (!p.permitirTrocaAba) r.push("A prova abre em <b>tela cheia</b>. Sair da tela cheia e trocar de aba ou de janela <b>ficam registrados</b> para o professor.");
-  if (!p.permitirTrocaAba && Number(p.maxTrocasDeAba) > 0) r.push(`<b>Limite de saídas da prova: ${Number(p.maxTrocasDeAba)}.</b> Trocar de aba/janela ou sair da tela cheia conta como saída. Ao chegar a ${Number(p.maxTrocasDeAba)}, ${textoPena(p)}.`);
+  if (vidas) r.push(`<b>Você tem ${vidas === 1 ? "1 vida" : `${vidas} vidas`}: ${"❤️".repeat(Math.min(vidas, 10))}</b><br>Perde 1 vida ao trocar de aba ou de janela (Alt+Tab), sair da tela cheia${colarCusta ? " ou tentar colar (Ctrl+V)" : ""}. Se as vidas acabarem, ${textoPena(p)}.<br>Saiu sem querer? Calma: chame o professor, ele pode devolver suas vidas.`);
   r.push("Copiar e selecionar o enunciado, imprimir e atalhos como Ctrl+C e Ctrl+P ficam desativados durante a prova.");
-  if (Number(p.tempoMinutos) > 0) r.push(`<b>Tempo limite: ${Number(p.tempoMinutos)} min.</b> O cronômetro começa ao clicar em Começar; quando zerar, a prova é finalizada com as respostas já enviadas.`);
+  if (Number(p.tempoMinutos) > 0) r.push(`<b>Tempo limite: ${Number(p.tempoMinutos) + Math.max(0, Number(ap().tempoExtraMin || 0))} min${ap().tempoExtraMin > 0 ? ` (com ${ap().tempoExtraMin} min a mais para você)` : ""}.</b>${ap().ocultarCronometro ? " O relógio fica escondido para você ficar tranquilo; avisamos quando faltar 1 minuto." : ""} O cronômetro começa ao clicar em Começar; quando zerar, a prova é finalizada com as respostas já enviadas.`);
   if (String(p.codigoAcesso || "").trim() && !modoTeste) r.push("Esta prova pede um <b>código de acesso</b>, informado pelo professor na sala.");
   const nPdfs = idsConsulta(p).length;
   if (nPdfs || p.materialConsultaUrl) r.push(`Consulta permitida: <b>${esc(p.materialConsultaTitulo || "material de consulta")}</b>${nPdfs > 1 ? ` (${nPdfs} PDFs: troque pelas abas no topo do painel)` : ""}, aberto ao lado das questões (no celular, pelo botão <b>📖 Consulta</b>).`);
@@ -194,18 +281,43 @@ async function abrirProva(id, acao) {
   tentativa = t.exists() ? { id: t.id, ...t.data() } : null;
   if (acao === "resultado") return verResultado();
   if (!tentativa) {
-    const min = Number(provaAtual.tempoMinutos || 0);
+    const min = Number(provaAtual.tempoMinutos || 0) + (Number(provaAtual.tempoMinutos || 0) > 0 ? Math.max(0, Number(ap().tempoExtraMin || 0)) : 0);
     $("#inicioTitulo").textContent = provaAtual.titulo;
-    $("#inicioInfo").innerHTML = `<p>${provaAtual.nQuestoes} questões sorteadas do banco · ${esc(provaAtual.turma || "")}</p>` +
-      (min > 0 ? `<p><span class="tag aviso">⏱ Tempo limite: ${min} min</span></p>` : "") +
-      (temConsulta() ? `<p class="pequeno">📖 Esta prova permite consultar: <b>${esc(provaAtual.materialConsultaTitulo || "material de consulta")}</b>, dentro da própria tela.</p>` : "");
+    const vidas = limiteSaidas();
+    $("#inicioInfo").innerHTML = `<span class="chip">📝 ${provaAtual.nQuestoes} questões</span>` +
+      (provaAtual.turma ? `<span class="chip">👥 ${esc(provaAtual.turma)}</span>` : "") +
+      (min > 0 ? `<span class="chip aviso">⏱ ${min} min</span>` : `<span class="chip">⏱ sem limite de tempo</span>`) +
+      (vidas ? `<span class="chip vidas" title="Vidas">${"❤️".repeat(Math.min(vidas, 10))} ${vidas} ${vidas === 1 ? "vida" : "vidas"}</span>` : "") +
+      (podeVoltar() ? `<span class="chip">↔ pode ir e voltar</span>` : "") +
+      (temConsulta() ? `<span class="chip info">📖 consulta: ${esc(provaAtual.materialConsultaTitulo || "material")}</span>` : "");
     $("#inicioRegras").innerHTML = regrasDaProva(provaAtual).map(x => `<li>${x}</li>`).join("");
+    desenharGuia(provaAtual);
     $("#inicioCodigoBox").classList.toggle("oculto", !pedeCodigo());
     $("#inicioCodigo").value = ""; $("#inicioCodigoErro").textContent = "";
     $("#btnComecar").disabled = pedeCodigo();   // só habilita depois de digitar o código
     mostrar("telaInicio"); return;
   }
   await carregarTentativa();
+}
+
+function aoFimGuia() { $("#btnComecar").scrollIntoView({ behavior: "smooth", block: "center" }); (pedeCodigo() ? $("#inicioCodigo") : $("#btnComecar")).focus({ preventScroll: true }); }
+// Guia do mascote: as regras da prova, uma fala por vez. Com o mascote desligado, só a lista.
+function desenharGuia(p) {
+  const on = mascoteLigado(), box = $("#inicioGuia"), m = dadosMascote();
+  box.classList.toggle("oculto", !on);
+  $("#inicioRegrasBox").open = !on;
+  $("#inicioRegrasTitulo").textContent = on ? "Ver todas as regras de uma vez" : "Leia antes de começar";
+  if (!on) { box.innerHTML = ""; pararFala(); return; }
+  const nome = String(eu?.nome || "").split(/\s+/)[0], regras = regrasDaProva(p);
+  const passos = [
+    { humor: "feliz", texto: `Oi${nome ? `, <b>${esc(nome)}</b>` : ""}! Eu sou o <b>${esc(m.nome)}</b> e vou te explicar como funciona a prova <b>${esc(p.titulo)}</b>.<br>São ${regras.length} dicas rápidas. Use <b>Próximo ▶</b> (ou a seta →) para passar.` },
+    ...regras.map(t => ({ humor: /vida/.test(t) ? "surpreso" : "falando", texto: t })),
+    { humor: "comemorando", texto: `Pronto, é isso! Leia cada questão com calma. Quando quiser, clique em <b>▶ Começar a prova</b>, aqui embaixo.<br>Boa prova! 🍀` }
+  ];
+  montarGuia(box, passos);
+  box.removeEventListener("guia-fim", aoFimGuia); box.addEventListener("guia-fim", aoFimGuia);
+  box.insertAdjacentHTML("beforeend", `<div class="guia-rodape"><span class="pequeno">Trocar de guia:</span>${htmlEscolha(m.id)}</div>`);
+  ligarEscolha(box.querySelector(".guia-rodape"), () => desenharGuia(p));
 }
 
 $("#inicioCodigo").oninput = () => {
@@ -276,10 +388,12 @@ async function carregarTentativa() {
   questoes = {}; respostas = {}; tentouEnviar.clear(); rascunhos.clear(); erroEnvio = false;
   const docsQ = await Promise.all(tentativa.questoesIds.map(q => getDoc(doc(db, "bancos", bancoDaQuestao(q, tentativa.bancoId), "questoes", q))));
   docsQ.forEach(d => { if (d.exists()) questoes[d.id] = { id: d.id, ...d.data() }; });
+  await aplicarQuestoesAdaptadas();
   const rs = await getDocs(collection(db, "tentativas", tentativa.id, "respostas"));
   rs.forEach(d => respostas[d.id] = d.data());
   if (tentativa.finalizadaEm) { mostrarFim(); return; }
   if (tempoAcabou()) return finalizar({ tempoEsgotado: true });
+  ouvirTentativa();
   if (modoTodas()) { iniciarCronometro(); mostrarTodas(); return; }
   const total = tentativa.questoesIds.length;
   let i = tentativa.indiceAtual || 0;
@@ -292,6 +406,49 @@ async function carregarTentativa() {
   tentativa.indiceAtual = i;
   iniciarCronometro();
   mostrarQuestao();
+}
+
+// ---------- tentativa ao vivo durante a prova ----------
+// O professor pode, pelo painel: restaurar as vidas (zera trocasDeAba e devolve questões perdidas),
+// dar vida extra (vidasExtras) e tempo extra (minutosExtras). A tela do aluno acompanha sem recarregar.
+let ouvinteProva = null;
+function pararOuvinteProva() { if (ouvinteProva) { ouvinteProva(); ouvinteProva = null; } }
+function ouvirTentativa() {
+  pararOuvinteProva();
+  if (!tentativa || tentativa.finalizadaEm) return;
+  const id = tentativa.id;
+  ouvinteProva = onSnapshot(doc(db, "tentativas", id), d => {
+    if (!d.exists() || tentativa?.id !== id || tentativa.finalizadaEm) return;
+    const novo = d.data();
+    const vidasAntes = limiteSaidas() - (tentativa.trocasDeAba || 0), minAntes = Number(tentativa.minutosExtras || 0);
+    const restAntes = tentativa.vidasRestauradasEm?.toMillis?.() || 0, restDepois = novo.vidasRestauradasEm?.toMillis?.() || 0;
+    ["trocasDeAba", "trocasDeAbaTotal", "vidasExtras", "minutosExtras", "vidasRestauradasEm"].forEach(k => { tentativa[k] = novo[k]; });
+    const vidasDepois = limiteSaidas() - (tentativa.trocasDeAba || 0);
+    desenharVidas();
+    if (Number(novo.minutosExtras || 0) !== minAntes) {
+      iniciarCronometro();
+      if (Number(novo.minutosExtras || 0) > minAntes) toast(`⏱ O professor deu mais ${Number(novo.minutosExtras) - minAntes} min para você.`, "ok");
+    }
+    if (vidasDepois > vidasAntes) {
+      reagirMascote("comemorando");
+      toast(`❤️ O professor restaurou suas vidas! Agora você tem ${vidasDepois === 1 ? "1 vida" : `${vidasDepois} vidas`}.`, "ok");
+    }
+    // restaurou e havia questão perdida: o painel apagou a "perdida"; recarrega para voltar nela
+    if (restDepois && restDepois !== restAntes && Object.values(respostas).some(r => r?.perdida)) {
+      carregarTentativa().then(() => toast("❤️ O professor devolveu a questão que você tinha perdido.", "ok")).catch(e => console.warn(e));
+    }
+  }, e => console.warn("acompanhamento da tentativa parou", e));
+}
+// O professor reabriu a prova (ex.: aluno com TEA encerrado pelo limite de vidas): volta para as questões.
+async function provaReaberta(novo) {
+  pararOuvinteFim();
+  tentativa = { id: tentativa.id, ...novo };
+  chamouCorretor.delete(tentativa.id); marcadoresConferidos.delete(tentativa.id);
+  if (provaAtual?.liberada === false && !modoTeste) { toast("O professor reabriu sua prova, mas ela está encerrada. Avise o professor.", "erro"); return; }
+  try {
+    await carregarTentativa();
+    if (!tentativa.finalizadaEm && !$("#telaQuestao").classList.contains("oculto")) mostrarSobreposicao("reaberta");
+  } catch (e) { toast("Não foi possível voltar para a prova. " + traduzirErro(e), "erro"); console.error(e); }
 }
 
 // =====================================================================
@@ -309,13 +466,16 @@ function criarCartaoQuestao(qid, i, unica) {
   if (!q) { card.innerHTML = `<p class="pequeno">Questão ${i + 1} indisponível. Avise o professor.</p><div class="acoes-questao"></div>`; return card; }
   const tipo = q.tipo === "alternativa" ? "múltipla escolha" : "resposta escrita", colar = colarPermitido(), voltar = podeVoltar();
   card.innerHTML = `${unica ? "" : `<div class="q-topo"><span class="q-numero q-numero-p">Questão ${i + 1}</span><span class="tag">${tipo}</span><span class="tag ok q-enviada oculto">✓ ${voltar ? "salva" : "enviada"}</span></div>`}
+    ${acess && ap().lerEmVoz !== false && "speechSynthesis" in window ? `<div class="linha acoes q-ferramentas"><button type="button" class="leve mini b-ouvir">🔊 Ouvir</button>${q.adaptada ? `<span class="tag nota">♿ questão adaptada</span>` : ""}</div>` : ""}
     <div class="enunciado">${formatarEnunciado(q.enunciado)}</div>
+    ${q.dica && ap().mostrarDica !== false ? `<div class="apoio"><span aria-hidden="true">💡</span><div><b>Apoio:</b> ${esc(q.dica)}</div></div>` : ""}
     <div class="q-area"></div>
     <div class="acoes-questao"><button class="ok grande b-enviar"${unica ? ' id="btnEnviar"' : ""}>${voltar ? "Salvar resposta" : "Enviar resposta"}</button></div>
     <p class="pequeno q-dica">${voltar ? "Você pode alterar e salvar de novo até clicar em Finalizar prova." : "Confira antes de enviar: depois de enviada, a resposta não pode ser alterada."}</p>
     <p class="pequeno q-salva oculto" role="status"></p>
     <div class="q-feedback oculto" role="status"></div>`;
   const area = card.querySelector(".q-area");
+  card.querySelector(".b-ouvir")?.addEventListener("click", e => lerQuestao(qid, e.currentTarget));
   if (q.tipo === "alternativa") {
     // sempre embaralhadas, estável para o aluno (semente uid + qid); o valor gravado é o índice ORIGINAL
     const ordem = embaralhar(q.alternativas.map((_, k) => k), eu.uid + qid);
@@ -408,6 +568,40 @@ function mostrarQuestao() {
   entrarNaTelaDaProva();
 }
 
+// ---------- HUD da prova: vidas (corações), questões respondidas e o mascote reagindo ----------
+function desenharVidas(perdeu = false) {
+  const el = $("#hudVidas"), lim = limiteSaidas();
+  el.classList.toggle("oculto", !lim || !tentativa);
+  if (!lim || !tentativa) return;
+  const restam = Math.max(0, lim - (tentativa.trocasDeAba || 0));
+  el.innerHTML = Array.from({ length: lim }, (_, k) => `<span class="coracao${k < restam ? "" : " apagado"}${perdeu && k === restam ? " quebrando" : ""}">${k < restam ? "❤️" : "🖤"}</span>`).join("");
+  el.title = `${restam} de ${lim} vidas`;
+  el.setAttribute("aria-label", `Vidas: ${restam} de ${lim}`);
+  el.classList.toggle("ultima", restam === 1);
+  if (perdeu) { el.classList.remove("tremendo"); void el.offsetWidth; el.classList.add("tremendo"); reagirMascote("triste"); }
+}
+function atualizarXp() {
+  if (!tentativa) return;
+  const total = tentativa.questoesIds.length, n = enviadas();
+  $("#hudXp").innerHTML = `⭐ <b>${n}</b>/${total}`;
+}
+let humorHud = "feliz", timerHumor = null;
+function desenharHudMascote() {
+  const el = $("#hudMascote");
+  el.innerHTML = mascoteLigado() ? htmlMascote(humorHud, { classe: "hud-m", animado: false }) : "";
+}
+function reagirMascote(humor) {
+  humorHud = humor; desenharHudMascote();
+  clearTimeout(timerHumor);
+  timerHumor = setTimeout(() => { humorHud = "feliz"; desenharHudMascote(); }, 2500);
+}
+// mascote na sobreposição de aviso (saiu da tela cheia, trocou de aba, perdeu a questão)
+function mostrarMascoteAviso(box, icone, humor) {
+  const on = mascoteLigado();
+  box.innerHTML = on ? htmlMascote(humor, { classe: "aviso-m" }) : "";
+  icone.classList.toggle("oculto", on);
+}
+
 // modo "todas": todos os cartões em sequência
 function mostrarTodas() {
   $("#qTitulo").textContent = provaAtual.titulo; $("#qTipo").classList.add("oculto");
@@ -443,6 +637,7 @@ function desenharFaixa() {
 
 function entrarNaTelaDaProva() {
   mostrar("telaQuestao");
+  desenharVidas(); atualizarXp(); desenharHudMascote();
   prepararConsulta();
   marcoTempo = Date.now();
   // entrou na prova sem tela cheia (recarregou a página, modo teste...): pede para entrar, sem registrar como saída
@@ -456,9 +651,18 @@ function formatarEnunciado(t) {
     .replace(/`([^`]+)`/g, (_, c) => c.includes("\n") ? `<pre class="codigo">${c}</pre>` : `<code>${c}</code>`);
 }
 
-// campo de resposta: colar/arrastar bloqueado, e cada tentativa fica registrada
+// campo de resposta: colar/arrastar bloqueado, e cada tentativa fica registrada (e tira uma vida, se a prova tiver vidas)
+let ultimoColar = 0;
 function bloquearColar(el) {
-  const tentouColar = e => { e.preventDefault(); registrar("tentativasColar"); toast("Colar está desativado nesta prova. A tentativa fica registrada.", "erro"); };
+  const tentouColar = e => {
+    e.preventDefault();
+    const agora = Date.now();
+    if (agora - ultimoColar < 800) return;   // o mesmo gesto dispara mais de um evento
+    ultimoColar = agora;
+    registrar("tentativasColar");
+    if (limiteSaidas() && colarTiraVida()) { perderVida("colar"); return; }
+    toast("Colar está desativado nesta prova. A tentativa fica registrada.", "erro");
+  };
   el.addEventListener("paste", tentouColar);
   el.addEventListener("drop", tentouColar);
   el.addEventListener("keydown", e => {
@@ -500,6 +704,7 @@ async function enviarResposta(qid, card, { silencioso = false } = {}) {
     erroEnvio = false; atualizarBanner();
     preencherCartao(card, qid, final);
     if (voltar) marcarSalva(card); else travarCartao(card);
+    atualizarXp(); reagirMascote("comemorando");   // comemora o ENVIO (nunca diz se acertou)
     if (modoTodas()) {
       atualizarResumoTodas();
       tentativa.indiceAtual = enviadas();   // na lista de provas aparece "X de N enviadas"
@@ -697,6 +902,7 @@ function mostrarFim() {
   ouvinteFim = onSnapshot(doc(db, "tentativas", id), d => {
     if (!d.exists() || tentativa?.id !== id) return;
     const novo = d.data();
+    if (!novo.finalizadaEm && tentativa.finalizadaEm) { provaReaberta(novo); return; }   // o professor reabriu a prova
     if (["acertos", "notaPrevia", "aguardandoCorrecao", "nota"].some(k => novo[k] !== tentativa[k])) { Object.assign(tentativa, novo); desenharFim(); }
   }, e => console.warn("placar ao vivo parou", e));
   // o professor pode liberar o gabarito com esta tela aberta (prova encerrada e sem gabarito: sem permissão, ignora)
@@ -738,6 +944,7 @@ async function desenharFim() {
   try { r = await placarDaTentativa(tentativa); } catch (e) { console.warn("placar", e); r = null; }
   if (n !== desenhoFim) return;   // outro desenho começou depois deste
   if (r?.pendentes) pedirCorrecao();   // dissertativas sem correção: chama o servidor (uma vez por tentativa nesta página)
+  desenharCelebracao(r);
   $("#fimNota").innerHTML = avisos + (r ? `
     <p class="placar">Você acertou <b>${r.acertos}</b> de <b>${r.totalQuestoes}</b></p>
     <p class="placar-nota">Nota: <b>${r.nota}</b> / 100</p>
@@ -747,6 +954,31 @@ async function desenharFim() {
 }
 
 $("#btnVerResultadoTeste").onclick = () => verResultado();
+
+// Tela final gamificada: estrelas pela nota, mascote comemorando (ou dando força) e confete.
+// Com respostas ainda em correção, as estrelas esperam a nota.
+function estrelasDa(nota) { return nota >= 90 ? 3 : nota >= 70 ? 2 : nota >= 50 ? 1 : 0; }
+function desenharCelebracao(r) {
+  const on = mascoteLigado(), m = dadosMascote();
+  const nota = Number(r?.nota ?? 0), pend = !!r?.pendentes, n = r ? estrelasDa(nota) : 0;
+  const humor = !r || pend ? "feliz" : n >= 2 ? "comemorando" : n === 1 ? "feliz" : "triste";
+  const frase = !r ? "Terminou! Suas respostas foram registradas."
+    : pend ? "Mandou bem em terminar! Algumas respostas escritas ainda vão ser corrigidas, então as estrelas podem mudar."
+    : n === 3 ? "UAU! Que prova! Você arrasou! 🏆"
+    : n === 2 ? "Muito bem! Mandou bem demais! 🎉"
+    : n === 1 ? "Boa! Você passou desta fase. Dá pra subir mais na próxima! 💪"
+    : "Essa foi difícil, né? Revise o conteúdo com calma que na próxima vai melhor. 💪";
+  $("#fimMascote").innerHTML = on ? `<div class="saudacao-linha centro-m">${htmlMascote(humor, { classe: "fim-m" })}
+      <div class="balao"><div class="balao-nome">${esc(m.nome)}</div><div class="balao-texto">${frase}</div></div></div>` : "";
+  $("#fimTitulo").textContent = tentativa?.encerradaPor === "trocasDeAba" ? "Prova encerrada" : "Prova finalizada ✅";
+  $("#fimEstrelas").innerHTML = r && !pend ? [0, 1, 2].map(k => `<span class="estrela${k < n ? " on" : ""}" style="animation-delay:${0.25 + k * 0.3}s">★</span>`).join("") : "";
+  const conf = $("#fimConfete");
+  conf.innerHTML = "";
+  if (r && !pend && n >= 2 && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const cores = ["#c1272d", "#f4b400", "#1f7a4d", "#1d5fa8", "#9b59b6"];
+    conf.innerHTML = Array.from({ length: 40 }, (_, k) => `<i style="left:${Math.random() * 100}%;background:${cores[k % cores.length]};animation-delay:${Math.random() * 0.8}s;animation-duration:${2.2 + Math.random() * 1.6}s;transform:rotate(${Math.random() * 360}deg)"></i>`).join("");
+  }
+}
 
 $("#btnReiniciarTeste").onclick = async () => {
   if (!modoTeste || !(await confirmar("Apagar a sua tentativa de teste e recomeçar do zero?", { titulo: "Reiniciar teste", ok: "Reiniciar", perigo: true }))) return;
@@ -896,21 +1128,28 @@ document.addEventListener("fullscreenchange", () => {
   if (document.fullscreenElement) { if (!sobreposicaoFixa) esconderSobreposicao(); return; }
   if (!emProvaAtiva() || trocaAbaPermitida()) return;
   registrar("saidasTelaCheia");                   // só registro
-  const punido = registrarSaida();                // conta para o limite
+  const punido = perderVida("saida");             // conta para o limite (vidas)
   if (!punido && emProvaAtiva()) mostrarSobreposicao("telaCheia");
 });
 
-// ---------- limite de saídas da prova (maxTrocasDeAba) ----------
-// uma "saída" = trocar de aba/janela ou sair da tela cheia; um único contador (trocasDeAba) para a punição
+// ---------- VIDAS (limite de saídas da prova: maxTrocasDeAba + vidas extras do professor) ----------
+// perde uma vida: trocar de aba/janela, sair da tela cheia ou (se a prova quiser) tentar colar.
+// Um único contador (trocasDeAba) para a punição; o professor pode zerar ("restaurar vidas") pelo painel.
 let ultimaSaida = 0;
-function registrarSaida() {
+function perderVida(motivo = "saida") {
   if (!emProvaAtiva()) return false;
   const agora = Date.now();
   if (agora - ultimaSaida < 1000) return false;   // o mesmo movimento dispara mais de um evento (ex.: trocar de aba em tela cheia)
   ultimaSaida = agora;
   registrar("trocasDeAba");
+  desenharVidas(true);
   const lim = limiteSaidas();
   if (lim > 0 && (tentativa.trocasDeAba || 0) >= lim) { aplicarPunicao(); return true; }
+  if (lim > 0 && motivo === "colar") {
+    const restam = lim - (tentativa.trocasDeAba || 0);
+    reagirMascote("triste");
+    toast(`💔 Colar está desativado e custou 1 vida. ${restam === 1 ? "Resta 1 vida" : `Restam ${restam} vidas`}.`, "erro");
+  }
   return false;
 }
 const esperarMs = ms => new Promise(res => setTimeout(res, ms));
@@ -953,15 +1192,17 @@ async function perderQuestao() {
 const AVISOS = {
   entrar:    ["Prova em tela cheia", "Esta prova é feita em tela cheia. Sair da tela cheia, trocar de aba ou de janela e tentar colar fica registrado para o professor.", "Entrar em tela cheia"],
   telaCheia: ["Você saiu da tela cheia", "Isso fica registrado para o professor. Clique para voltar.", "Voltar para a prova"],
-  aba:       ["Você saiu da página da prova", "A troca de aba ou de janela fica registrada para o professor. Clique para voltar.", "Voltar para a prova"]
+  aba:       ["Você saiu da página da prova", "A troca de aba ou de janela fica registrada para o professor. Clique para voltar.", "Voltar para a prova"],
+  reaberta:  ["O professor liberou você de novo", "Suas vidas foram restauradas. Respire fundo e continue com calma. 💪", "Continuar a prova"]
 };
-// "Saídas da prova: 2 de 3. Na próxima, a prova é encerrada."
+// "💔 Você perdeu 1 vida. Resta 1 de 3: na próxima, a prova é encerrada."
 function textoPlacar() {
   const lim = limiteSaidas();
   if (!lim || !tentativa) return "";
-  const n = Math.min(tentativa.trocasDeAba || 0, lim), pena = acaoAoExceder() === "encerrar" ? "a prova é encerrada" : "você perde a questão atual";
-  return `Saídas da prova: ${n} de ${lim}. ${n >= lim - 1 ? "Na próxima" : `Ao chegar a ${lim}`}, ${pena}.`;
+  const restam = Math.max(0, lim - (tentativa.trocasDeAba || 0)), pena = acaoAoExceder() === "encerrar" ? "a prova é encerrada" : "você perde a questão atual";
+  return `${coracoes(restam, lim)}  ${restam === 1 ? "Resta 1 vida" : `Restam ${restam} vidas`} de ${lim}. ${restam <= 1 ? "Se perder mais uma" : "Se acabarem"}, ${pena}.`;
 }
+const coracoes = (restam, lim) => "❤️".repeat(Math.max(0, restam)) + "🖤".repeat(Math.max(0, lim - restam));
 let sobreposicaoFixa = false;   // aviso de questão perdida: só fecha com o clique do aluno
 function mostrarSobreposicao(tipo, texto = null) {
   const [titulo, txt, botao] = tipo === "perdeu" ? ["⛔ Questão perdida", texto, "Continuar na próxima questão"] : AVISOS[tipo];
@@ -969,6 +1210,7 @@ function mostrarSobreposicao(tipo, texto = null) {
   $("#sobreTitulo").textContent = titulo; $("#sobreTexto").textContent = txt; $("#btnVoltarProva").textContent = botao;
   const placar = textoPlacar();
   $("#sobrePlacar").textContent = placar; $("#sobrePlacar").classList.toggle("oculto", !placar);
+  mostrarMascoteAviso($("#sobreMascote"), $("#sobreIcone"), tipo === "perdeu" ? "triste" : tipo === "entrar" || tipo === "reaberta" ? "falando" : "surpreso");
   $("#sobreposicao").classList.remove("oculto");
   $("#btnVoltarProva").focus();
 }
@@ -978,7 +1220,7 @@ $("#btnVoltarProva").onclick = () => { pedirTelaCheia(); esconderSobreposicao();
 // ---------- troca de aba / janela (contada uma vez por saída; com troca permitida, só conta) ----------
 let foraDaProva = false;
 const focoNoMaterial = () => document.activeElement === $("#consultaFrame");
-function contarSaida() { if (!emProvaAtiva() || foraDaProva) return; foraDaProva = true; registrarSaida(); }
+function contarSaida() { if (!emProvaAtiva() || foraDaProva) return; foraDaProva = true; perderVida("saida"); }
 function saiuDaProva(e) {
   if (!emProvaAtiva() || foraDaProva) return;
   // clicar dentro do material de consulta tira o foco da página, mas não é troca de aba
@@ -1029,14 +1271,16 @@ document.addEventListener("keydown", e => {
 let relogio = null;
 function fimDoTempo() {
   const min = Number(provaAtual?.tempoMinutos || 0), ini = tentativa?.iniciadaEm;
-  return min > 0 && ini?.toMillis ? ini.toMillis() + min * 60000 : null;
+  const extra = Math.max(0, Number(tentativa?.minutosExtras || 0))     // tempo a mais dado pelo professor (ex.: ao reabrir a prova)
+              + Math.max(0, Number(ap().tempoExtraMin || 0));            // acessibilidade: tempo extra do aluno
+  return min > 0 && ini?.toMillis ? ini.toMillis() + (min + extra) * 60000 : null;
 }
 function tempoAcabou() { const f = fimDoTempo(); return f !== null && Date.now() >= f; }
 function iniciarCronometro() {
   pararCronometro();
   const fim = fimDoTempo(), el = $("#qTimer");
   if (fim === null) { el.classList.add("oculto"); return; }
-  el.classList.remove("oculto");
+  el.classList.toggle("oculto", !!ap().ocultarCronometro);   // acessibilidade: o tempo vale, mas não aparece
   let avisou = fim - Date.now() <= 60000;   // não avisa "falta 1 minuto" se já entrou com menos que isso
   const tic = () => {
     const resta = Math.max(0, Math.ceil((fim - Date.now()) / 1000));
