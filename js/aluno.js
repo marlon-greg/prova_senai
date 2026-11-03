@@ -1,8 +1,8 @@
 // Página do aluno: login, lista de provas, prova (uma questão por vez), resultado.
 import { db, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar, sortearAleatorio, esc, $, toast, dataBR, letra,
-         idTentativaTeste, apagarTentativaTeste, confirmar, traduzirErro, iniciais }
+         idTentativaTeste, apagarTentativaTeste, confirmar, traduzirErro, iniciais, fecharModais }
   from "./common.js";
-import { collection, doc, getDoc, getDocs, setDoc, updateDoc, query, where, writeBatch, serverTimestamp, increment }
+import { collection, doc, getDoc, getDocFromServer, getDocs, setDoc, updateDoc, query, where, writeBatch, serverTimestamp, increment }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 let eu = null;            // { uid, email, nome }
@@ -19,7 +19,13 @@ let modoTeste = false;
 function idTentativa(provaId) { return modoTeste ? idTentativaTeste(eu.uid, provaId) : `${eu.uid}_${provaId}`; }
 
 const telas = ["telaLogin", "telaProvas", "telaInicio", "telaQuestao", "telaFim", "telaResultado", "telaAviso"];
-function mostrar(id) { telas.forEach(t => $("#" + t).classList.toggle("oculto", t !== id)); window.scrollTo({ top: 0, behavior: "smooth" }); }
+function mostrar(id) {
+  telas.forEach(t => $("#" + t).classList.toggle("oculto", t !== id));
+  document.body.classList.toggle("em-prova", id === "telaQuestao");   // ativa os bloqueios e avisos da prova
+  if (id !== "telaQuestao") esconderSobreposicao();
+  atualizarBanner();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
 
 // ---------- fonte maior (acessibilidade) ----------
 if (localStorage.getItem("fonteGrande") === "1") document.body.classList.add("grande");
@@ -87,7 +93,10 @@ async function listarProvas() {
     else                        { status = `<span class="tag ok">✓ finalizada em ${dataBR(td.finalizadaEm)}</span>` + (td.nota !== undefined ? ` <span class="tag nota">nota final: <b>${td.nota}</b></span>` : td.notaPrevia !== null && td.notaPrevia !== undefined ? ` <span class="tag nota">nota prévia: <b>${td.notaPrevia}</b>${td.aguardandoCorrecao ? " (aguardando correção)" : ""}</span>` : ""); acao = podeVerResultado ? `<button class="sec" data-acao="resultado" data-id="${p.id}">Ver resultado</button>` : `<span class="pequeno">resultado ainda não liberado</span>`; }
     box.insertAdjacentHTML("beforeend", `<div class="prova-item"><div class="info"><b>${esc(p.titulo)}</b><br><span class="pequeno">${esc(p.turma || "")} · ${p.nQuestoes} questões</span><div style="margin-top:4px">${status}</div></div><div class="acao">${acao}</div></div>`);
   }
-  box.querySelectorAll("button[data-acao]").forEach(btn => btn.onclick = () => abrirProva(btn.dataset.id, btn.dataset.acao));
+  box.querySelectorAll("button[data-acao]").forEach(btn => btn.onclick = () => {
+    if (btn.dataset.acao === "continuar") pedirTelaCheia();   // direto no clique (exigência do navegador)
+    abrirProva(btn.dataset.id, btn.dataset.acao);
+  });
 }
 $("#btnVoltar1").onclick = $("#btnVoltar2").onclick = $("#btnVoltar3").onclick = listarProvas;
 $("#btnImprimir").onclick = () => window.print();
@@ -101,14 +110,17 @@ async function abrirProva(id, acao) {
   tentativa = t.exists() ? { id: t.id, ...t.data() } : null;
   if (acao === "resultado") return verResultado();
   if (!tentativa) {
+    const min = Number(provaAtual.tempoMinutos || 0);
     $("#inicioTitulo").textContent = provaAtual.titulo;
-    $("#inicioInfo").innerHTML = `<p>${provaAtual.nQuestoes} questões sorteadas do banco · ${esc(provaAtual.turma || "")}</p>`;
+    $("#inicioInfo").innerHTML = `<p>${provaAtual.nQuestoes} questões sorteadas do banco · ${esc(provaAtual.turma || "")}</p>` +
+      (min > 0 ? `<p><span class="tag aviso">⏱ Tempo limite: ${min} min</span> O cronômetro começa ao clicar em Começar. Quando zerar, a prova é finalizada com as respostas já enviadas.</p>` : "");
     mostrar("telaInicio"); return;
   }
   await carregarTentativa();
 }
 
 $("#btnComecar").onclick = async () => {
+  pedirTelaCheia();   // precisa ser chamado direto no clique, antes de qualquer await
   $("#btnComecar").disabled = true;
   try {
     // sorteia nQuestoes do banco (ids) — cada aluno recebe um conjunto diferente
@@ -124,36 +136,41 @@ $("#btnComecar").onclick = async () => {
     const tid = idTentativa(provaAtual.id);
     const dados = {
       uid: eu.uid, email: eu.email, nome: eu.nome, provaId: provaAtual.id, bancoId: provaAtual.bancoId,
-      questoesIds: sorteadas, iniciadaEm: serverTimestamp(), finalizadaEm: null, indiceAtual: 0, trocasDeAba: 0, notaPrevia: null, aguardandoCorrecao: 0
+      questoesIds: sorteadas, iniciadaEm: serverTimestamp(), finalizadaEm: null, indiceAtual: 0, trocasDeAba: 0, notaPrevia: null, aguardandoCorrecao: 0,
+      saidasTelaCheia: 0, tentativasColar: 0
     };
     if (modoTeste) dados.teste = true;
     await setDoc(doc(db, "tentativas", tid), dados);
     const t = await getDoc(doc(db, "tentativas", tid));
     tentativa = { id: tid, ...t.data() };
     await carregarTentativa();
-  } catch (e) { toast("Não foi possível começar. " + traduzirErro(e), "erro"); console.error(e); }
+  } catch (e) { sairTelaCheia(); toast("Não foi possível começar. " + traduzirErro(e), "erro"); console.error(e); }
   $("#btnComecar").disabled = false;
 };
 
 async function carregarTentativa() {
-  questoes = {}; respostas = {};
+  questoes = {}; respostas = {}; tentouEnviar.clear(); erroEnvio = false;
   const docsQ = await Promise.all(tentativa.questoesIds.map(q => getDoc(doc(db, "bancos", tentativa.bancoId, "questoes", q))));
   docsQ.forEach(d => { if (d.exists()) questoes[d.id] = { id: d.id, ...d.data() }; });
   const rs = await getDocs(collection(db, "tentativas", tentativa.id, "respostas"));
   rs.forEach(d => respostas[d.id] = d.data());
   if (tentativa.finalizadaEm) { mostrarFim(); return; }
+  if (tempoAcabou()) return finalizar({ tempoEsgotado: true });
   // retoma na primeira questão sem resposta (o índice salvo pode ter ficado para trás)
   let i = tentativa.indiceAtual || 0;
   while (i < tentativa.questoesIds.length && respostas[tentativa.questoesIds[i]]) i++;
   if (i >= tentativa.questoesIds.length) return finalizar();
   tentativa.indiceAtual = i;
+  iniciarCronometro();
   mostrarQuestao();
 }
 
 // ---------- questão ----------
-let enviada = false;
+let enviada = false;          // a resposta desta questão já foi gravada
+let enviando = false;         // gravação em andamento (evita duplo envio)
+let questaoMostradaEm = 0;    // Date.now() de quando a questão apareceu (para os segundos por resposta)
 function mostrarQuestao() {
-  enviada = false;
+  enviada = false; enviando = false;
   const i = tentativa.indiceAtual, total = tentativa.questoesIds.length, qid = tentativa.questoesIds[i], q = questoes[qid];
   $("#qTitulo").textContent = provaAtual.titulo;
   $("#qContador").textContent = `Questão ${i + 1} de ${total}`;
@@ -161,7 +178,7 @@ function mostrarQuestao() {
   $("#qBarra").style.width = `${(i / total) * 100}%`;
   $("#qEnunciado").innerHTML = formatarEnunciado(q.enunciado);
   $("#qFeedback").classList.add("oculto"); $("#qFeedback").innerHTML = "";
-  $("#btnEnviar").classList.remove("oculto"); $("#btnEnviar").disabled = false;
+  $("#btnEnviar").classList.remove("oculto"); $("#btnEnviar").disabled = false; $("#btnEnviar").textContent = "Enviar resposta";
   $("#btnProxima").classList.add("oculto"); $("#btnFinalizar").classList.add("oculto");
   $("#qDica").classList.remove("oculto");
   const area = $("#qArea"); area.innerHTML = "";
@@ -185,6 +202,9 @@ function mostrarQuestao() {
     bloquearColar(txt);
   }
   mostrar("telaQuestao");
+  questaoMostradaEm = Date.now();
+  // entrou na prova sem tela cheia (recarregou a página, modo teste...): pede para entrar, sem registrar como saída
+  if (suportaTelaCheia() && !document.fullscreenElement) mostrarSobreposicao("entrar");
 }
 
 // enunciado: quebra de linha preservada; ```bloco``` (ou `trecho com quebra de linha`) vira bloco de código; `trecho` vira código na linha
@@ -194,14 +214,19 @@ function formatarEnunciado(t) {
     .replace(/`([^`]+)`/g, (_, c) => c.includes("\n") ? `<pre class="codigo">${c}</pre>` : `<code>${c}</code>`);
 }
 
+// campo de resposta: colar/arrastar bloqueado, e cada tentativa fica registrada
 function bloquearColar(el) {
-  ["paste", "drop", "contextmenu"].forEach(ev => el.addEventListener(ev, e => { e.preventDefault(); toast("Colar está desativado nesta prova.", "erro"); }));
-  el.addEventListener("keydown", e => { if ((e.ctrlKey || e.metaKey) && ["v", "V"].includes(e.key)) { e.preventDefault(); toast("Colar está desativado nesta prova.", "erro"); } });
+  const tentouColar = e => { e.preventDefault(); registrar("tentativasColar"); toast("Colar está desativado nesta prova. A tentativa fica registrada.", "erro"); };
+  el.addEventListener("paste", tentouColar);
+  el.addEventListener("drop", tentouColar);
+  el.addEventListener("keydown", e => {
+    if (((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "v") || (e.shiftKey && e.key === "Insert")) tentouColar(e);
+  });
   el.addEventListener("beforeinput", e => { if (e.inputType === "insertFromPaste" || e.inputType === "insertFromDrop") e.preventDefault(); });
 }
 
 $("#btnEnviar").onclick = async () => {
-  if (enviada) return;
+  if (enviada || enviando) return;
   const qid = tentativa.questoesIds[tentativa.indiceAtual], q = questoes[qid];
   let resposta;
   if (q.tipo === "alternativa") {
@@ -213,20 +238,50 @@ $("#btnEnviar").onclick = async () => {
     if (!resposta) return toast("Escreva a resposta antes de enviar.", "erro");
   }
   if (!(await confirmar("Enviar esta resposta? Depois não dá para alterar.", { titulo: "Enviar resposta", ok: "Enviar" }))) return;
-  $("#btnEnviar").disabled = true;
+  if (enviada || enviando || tentativa.finalizadaEm) return;   // o tempo pode ter acabado com o modal aberto
+  const segundos = Math.max(0, Math.round((Date.now() - questaoMostradaEm) / 1000));
+  const btn = $("#btnEnviar"), campos = [...$("#qArea").querySelectorAll("input, textarea")];
+  enviando = true; btn.disabled = true; btn.textContent = "Enviando…"; campos.forEach(c => c.disabled = true);
   try {
-    const lote = writeBatch(db);
-    lote.set(doc(db, "tentativas", tentativa.id, "respostas", qid), { resposta, enviadaEm: serverTimestamp() });
-    // o marcador libera o gabarito para o aluno; a equipe já lê os gabaritos, então o modo teste não grava
-    if (!modoTeste) lote.set(doc(db, "marcadores", `${eu.uid}_${qid}`), { uid: eu.uid, qid, provaId: provaAtual.id, criadoEm: serverTimestamp() });
-    await lote.commit();
-    enviada = true; respostas[qid] = { resposta };
-    await mostrarFeedback(qid, q, resposta);
+    const gravada = await gravarResposta(qid, resposta, segundos);
+    const final = gravada ? gravada.resposta : resposta;   // se uma tentativa anterior já tinha chegado ao servidor, vale ela
+    enviada = true; respostas[qid] = { resposta: final, segundos: gravada ? gravada.segundos : segundos };
+    erroEnvio = false; atualizarBanner();
+    await mostrarFeedback(qid, q, final);
   } catch (e) {
-    $("#btnEnviar").disabled = false;
-    toast("Não foi possível enviar. " + traduzirErro(e), "erro"); console.error(e);
+    console.error(e);
+    // a resposta digitada continua na tela; o aluno tenta de novo
+    erroEnvio = true; atualizarBanner();
+    btn.disabled = false; campos.forEach(c => c.disabled = false);
+    toast("Sua resposta NÃO foi enviada. " + traduzirErro(e), "erro");
+  } finally {
+    enviando = false; btn.textContent = "Enviar resposta";
   }
 };
+
+// Grava a resposta (+ marcador). Se uma tentativa anterior desta questão deu erro/tempo esgotado, ela pode ter
+// chegado ao servidor mesmo assim: confere no servidor antes de gravar de novo (resposta não pode ser sobrescrita).
+const tentouEnviar = new Set();
+async function gravarResposta(qid, resposta, segundos) {
+  if (!navigator.onLine) throw Object.assign(new Error("Sem conexão com a internet."), { code: "unavailable" });
+  const ref = doc(db, "tentativas", tentativa.id, "respostas", qid);
+  if (tentouEnviar.has(qid)) {
+    const ja = await getDocFromServer(ref).catch(() => null);
+    if (ja && ja.exists()) return ja.data();
+  }
+  tentouEnviar.add(qid);
+  const lote = writeBatch(db);
+  lote.set(ref, { resposta, enviadaEm: serverTimestamp(), segundos });
+  // o marcador libera o gabarito para o aluno; a equipe já lê os gabaritos, então o modo teste não grava
+  if (!modoTeste) lote.set(doc(db, "marcadores", `${eu.uid}_${qid}`), { uid: eu.uid, qid, provaId: provaAtual.id, criadoEm: serverTimestamp() });
+  await comLimiteDeTempo(lote.commit(), 15000);   // sem internet o SDK espera para sempre: limita a 15 s
+  return null;
+}
+function comLimiteDeTempo(promessa, ms) {
+  let h;
+  const limite = new Promise((_, rej) => { h = setTimeout(() => rej(Object.assign(new Error("O servidor não respondeu."), { code: "deadline-exceeded" })), ms); });
+  return Promise.race([promessa, limite]).finally(() => clearTimeout(h));
+}
 
 async function mostrarFeedback(qid, q, resposta) {
   const modo = provaAtual.feedbackImediato || "acerto";   // nenhum | acerto | completo
@@ -255,9 +310,12 @@ $("#btnProxima").onclick = async () => {
   updateDoc(doc(db, "tentativas", tentativa.id), { indiceAtual: tentativa.indiceAtual }).catch(() => {});
   mostrarQuestao();
 };
-$("#btnFinalizar").onclick = finalizar;
+$("#btnFinalizar").onclick = () => finalizar();
 
-async function finalizar() {
+let finalizando = false;
+async function finalizar(opc = {}) {
+  if (finalizando || !tentativa || tentativa.finalizadaEm) return;
+  finalizando = true;
   try {
     // nota prévia: corrige na hora o que dá para corrigir (alternativas e dissertativas reconhecidas)
     let pts = 0, max = 0, pend = 0;
@@ -270,23 +328,31 @@ async function finalizar() {
       pts += c.pontos; if (c.status === "revisar") pend++;
     }
     const notaPrevia = max ? Math.round(pts / max * 1000) / 10 : 0;
+    const fim = { finalizadaEm: serverTimestamp(), indiceAtual: tentativa.questoesIds.length, notaPrevia, aguardandoCorrecao: pend };
+    if (tentativa.iniciadaEm?.toMillis) fim.tempoTotalSegundos = Math.max(0, Math.round((Date.now() - tentativa.iniciadaEm.toMillis()) / 1000));
     const lote = writeBatch(db);
-    lote.update(doc(db, "tentativas", tentativa.id), { finalizadaEm: serverTimestamp(), indiceAtual: tentativa.questoesIds.length, notaPrevia, aguardandoCorrecao: pend });
+    lote.update(doc(db, "tentativas", tentativa.id), fim);
     // garante o marcador de todas as questões (libera a leitura do gabarito no resultado)
     if (!modoTeste) for (const qid of tentativa.questoesIds)
       if (!respostas[qid]) lote.set(doc(db, "marcadores", `${eu.uid}_${qid}`), { uid: eu.uid, qid, provaId: provaAtual.id, criadoEm: serverTimestamp() });
-    await lote.commit();
+    await comLimiteDeTempo(lote.commit(), 20000);
     tentativa.finalizadaEm = new Date(); tentativa.notaPrevia = notaPrevia; tentativa.aguardandoCorrecao = pend;
+    tentativa.tempoTotalSegundos = fim.tempoTotalSegundos; tentativa.tempoEsgotado = !!opc.tempoEsgotado;
+    pararCronometro();
     mostrarFim();
+    sairTelaCheia();
   } catch (e) { toast("Não foi possível finalizar. " + traduzirErro(e), "erro"); console.error(e); }
+  finally { finalizando = false; }
 }
 
 function mostrarFim() {
+  pararCronometro();
   const n = tentativa.notaPrevia, pend = tentativa.aguardandoCorrecao || 0;
-  $("#fimNota").innerHTML = n === null || n === undefined ? "" :
+  $("#fimNota").innerHTML = (tentativa.tempoEsgotado ? `<div class="aviso-box">⏰ <b>O tempo acabou.</b> A prova foi finalizada com as respostas já enviadas.</div>` : "") +
+    (n === null || n === undefined ? "" :
     `<p style="font-family:var(--fonte-titulo);font-size:1.8em;font-weight:600;margin:8px 0">Sua nota: ${n} / 100</p>` +
     (pend ? `<p class="pequeno">⚠ ${pend} resposta(s) escrita(s) ainda vão passar pela correção do professor: a nota pode subir.</p>` : "") +
-    `<p class="pequeno">As respostas certas e as explicações aparecem quando o professor liberar o resultado.</p>`;
+    `<p class="pequeno">As respostas certas e as explicações aparecem quando o professor liberar o resultado.</p>`);
   // modo teste: a equipe pode abrir a tela de resultado mesmo com os resultados ainda ocultos
   $("#btnVerResultadoTeste").classList.toggle("oculto", !modoTeste);
   mostrar("telaFim");
@@ -298,19 +364,123 @@ $("#btnReiniciarTeste").onclick = async () => {
   if (!modoTeste || !(await confirmar("Apagar a sua tentativa de teste e recomeçar do zero?", { titulo: "Reiniciar teste", ok: "Reiniciar", perigo: true }))) return;
   $("#btnReiniciarTeste").disabled = true;
   try {
+    pararCronometro(); sairTelaCheia();
+    tentativa = null;   // antes de apagar: assim a saída da tela cheia não é registrada
     await apagarTentativaTeste(eu.uid, provaTeste);
-    tentativa = null;
     await abrirProva(provaTeste, "inicio");
     toast("Teste reiniciado.", "ok");
   } catch (e) { toast("Não foi possível reiniciar o teste. " + traduzirErro(e), "erro"); console.error(e); }
   $("#btnReiniciarTeste").disabled = false;
 };
 
-// troca de aba / janela durante a prova: registra
-document.addEventListener("visibilitychange", () => {
-  if (document.hidden && tentativa && !tentativa.finalizadaEm && !$("#telaQuestao").classList.contains("oculto"))
-    updateDoc(doc(db, "tentativas", tentativa.id), { trocasDeAba: increment(1) }).catch(() => {});
+// =====================================================================
+// ANTIFRAUDE (só durante a prova, na telaQuestao) — tudo fica registrado na tentativa
+// =====================================================================
+function emProvaAtiva() { return !!(tentativa && !tentativa.finalizadaEm && document.body.classList.contains("em-prova")); }
+
+// incrementa um contador da tentativa (trocasDeAba, saidasTelaCheia, tentativasColar)
+function registrar(campo) {
+  if (!tentativa || tentativa.finalizadaEm) return;
+  tentativa[campo] = (tentativa[campo] || 0) + 1;
+  updateDoc(doc(db, "tentativas", tentativa.id), { [campo]: increment(1) }).catch(e => console.warn("não registrou " + campo, e));
+}
+
+// ---------- tela cheia ----------
+function suportaTelaCheia() { return !!(document.documentElement.requestFullscreen && document.fullscreenEnabled); }
+function pedirTelaCheia() {
+  if (suportaTelaCheia() && !document.fullscreenElement)
+    document.documentElement.requestFullscreen({ navigationUI: "hide" }).catch(() => {});
+}
+function sairTelaCheia() { if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); }
+document.addEventListener("fullscreenchange", () => {
+  if (document.fullscreenElement) { esconderSobreposicao(); return; }
+  if (emProvaAtiva()) { registrar("saidasTelaCheia"); mostrarSobreposicao("telaCheia"); }
 });
+
+// ---------- sobreposição de aviso ----------
+const AVISOS = {
+  entrar:    ["Prova em tela cheia", "Esta prova é feita em tela cheia. Sair da tela cheia, trocar de aba ou de janela e tentar colar fica registrado para o professor.", "Entrar em tela cheia"],
+  telaCheia: ["Você saiu da tela cheia", "Isso fica registrado para o professor. Clique para voltar.", "Voltar para a prova"],
+  aba:       ["Você saiu da página da prova", "A troca de aba ou de janela fica registrada para o professor. Clique para voltar.", "Voltar para a prova"]
+};
+function mostrarSobreposicao(tipo) {
+  const [titulo, texto, botao] = AVISOS[tipo];
+  $("#sobreTitulo").textContent = titulo; $("#sobreTexto").textContent = texto; $("#btnVoltarProva").textContent = botao;
+  $("#sobreposicao").classList.remove("oculto");
+  $("#btnVoltarProva").focus();
+}
+function esconderSobreposicao() { $("#sobreposicao").classList.add("oculto"); }
+$("#btnVoltarProva").onclick = () => { pedirTelaCheia(); esconderSobreposicao(); };
+
+// ---------- troca de aba / janela (visibilitychange + blur, contados uma vez por saída) ----------
+let foraDaProva = false;
+function saiuDaProva() { if (!emProvaAtiva() || foraDaProva) return; foraDaProva = true; registrar("trocasDeAba"); }
+function voltouParaProva() { if (!foraDaProva) return; foraDaProva = false; if (emProvaAtiva()) mostrarSobreposicao("aba"); }
+document.addEventListener("visibilitychange", () => document.hidden ? saiuDaProva() : voltouParaProva());
+window.addEventListener("blur", saiuDaProva);
+window.addEventListener("focus", voltouParaProva);
+
+// ---------- bloqueios na área da questão ----------
+["copy", "cut", "contextmenu", "dragstart", "selectstart"].forEach(ev => $("#telaQuestao").addEventListener(ev, e => {
+  const el = e.target.nodeType === 1 ? e.target : e.target.parentElement;
+  if (ev === "selectstart" && el?.closest("textarea")) return;   // no campo de resposta o aluno pode selecionar o próprio texto
+  e.preventDefault();
+}));
+document.addEventListener("keydown", e => {
+  if (!emProvaAtiva()) return;
+  const k = (e.key || "").toLowerCase(), ctrl = e.ctrlKey || e.metaKey;
+  if (e.key === "F12" || (ctrl && ["c", "a", "p", "s", "u"].includes(k)) || (ctrl && e.shiftKey && ["i", "j", "c"].includes(k))) {
+    e.preventDefault(); e.stopPropagation();
+    toast("Este atalho está desativado durante a prova.", "erro");
+  }
+}, true);
+
+// ---------- cronômetro (prova com tempoMinutos > 0) ----------
+let relogio = null;
+function fimDoTempo() {
+  const min = Number(provaAtual?.tempoMinutos || 0), ini = tentativa?.iniciadaEm;
+  return min > 0 && ini?.toMillis ? ini.toMillis() + min * 60000 : null;
+}
+function tempoAcabou() { const f = fimDoTempo(); return f !== null && Date.now() >= f; }
+function iniciarCronometro() {
+  pararCronometro();
+  const fim = fimDoTempo(), el = $("#qTimer");
+  if (fim === null) { el.classList.add("oculto"); return; }
+  el.classList.remove("oculto");
+  let avisou = fim - Date.now() <= 60000;   // não avisa "falta 1 minuto" se já entrou com menos que isso
+  const tic = () => {
+    const resta = Math.max(0, Math.ceil((fim - Date.now()) / 1000));
+    el.textContent = `⏱ ${String(Math.floor(resta / 60)).padStart(2, "0")}:${String(resta % 60).padStart(2, "0")}`;
+    el.classList.toggle("alerta", resta <= 60);
+    if (resta <= 60 && !avisou) { avisou = true; toast("Falta 1 minuto para o fim da prova.", "erro"); }
+    if (resta <= 0) { pararCronometro(); tempoEsgotado(); }
+  };
+  tic(); relogio = setInterval(tic, 1000);
+}
+function pararCronometro() { clearInterval(relogio); relogio = null; $("#qTimer").classList.add("oculto"); }
+async function tempoEsgotado() {
+  if (!tentativa || tentativa.finalizadaEm) return;
+  fecharModais();
+  while (enviando) await new Promise(r => setTimeout(r, 200));   // deixa terminar uma resposta que já estava sendo enviada
+  await finalizar({ tempoEsgotado: true });
+}
+
+// ---------- conexão ----------
+let erroEnvio = false;   // a última tentativa de enviar falhou
+function atualizarBanner() {
+  const b = $("#bannerConexao");
+  const naProva = tentativa && !tentativa.finalizadaEm && !$("#telaQuestao").classList.contains("oculto");
+  let msg = "";
+  if (naProva && erroEnvio) msg = navigator.onLine ? "Sua resposta NÃO foi enviada. A conexão voltou: clique em Enviar resposta de novo."
+                                                   : "Sem conexão: sua resposta NÃO foi enviada, tente de novo.";
+  else if (naProva && !navigator.onLine) msg = "Sem conexão com a internet. Não feche nem recarregue a página: quando a conexão voltar, continue normalmente.";
+  b.textContent = msg; b.classList.toggle("oculto", !msg);
+}
+window.addEventListener("offline", atualizarBanner);
+window.addEventListener("online", atualizarBanner);
+
+// avisa antes de fechar/recarregar a aba no meio da prova
+window.addEventListener("beforeunload", e => { if (emProvaAtiva()) { e.preventDefault(); e.returnValue = ""; } });
 
 // ---------- resultado ----------
 async function verResultado() {

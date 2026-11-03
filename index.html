@@ -54,7 +54,8 @@
         <li>A prova só pode ser feita <b>uma vez</b>. Depois de clicar em Começar, não dá para reiniciar.</li>
         <li>As questões aparecem <b>uma por vez</b>. Depois de enviar uma resposta, não é possível voltar.</li>
         <li><b>Colar texto está desativado</b> nos campos de resposta. Digite.</li>
-        <li>Trocas de aba/janela são registradas.</li>
+        <li>A prova abre em <b>tela cheia</b>. Sair da tela cheia, trocar de aba/janela e tentar colar <b>ficam registrados</b> para o professor.</li>
+        <li>Copiar, selecionar o enunciado, botão direito e atalhos (Ctrl+C, Ctrl+P…) ficam desativados durante a prova.</li>
         <li>Se a página fechar sem querer, entre de novo: você continua de onde parou.</li>
       </ul>
     </div>
@@ -71,6 +72,7 @@
         <span id="qContador" class="q-numero"></span>
         <span id="qTipo" class="tag"></span>
         <span id="qTitulo" class="pequeno titulo-prova"></span>
+        <span id="qTimer" class="timer oculto" title="Tempo restante"></span>
       </div>
       <div class="progresso" role="progressbar" aria-label="Progresso da prova"><div id="qBarra" style="width:0%"></div></div>
       <div id="qEnunciado" class="enunciado"></div>
@@ -109,6 +111,17 @@
   <!-- BLOQUEADO / EQUIPE -->
   <section id="telaAviso" class="card centro oculto"><div id="avisoTexto"></div></section>
 </main>
+<!-- aviso durante a prova: saiu da tela cheia / trocou de aba -->
+<div id="sobreposicao" class="sobreposicao oculto" role="alertdialog" aria-modal="true" aria-labelledby="sobreTitulo" aria-describedby="sobreTexto">
+  <div class="sobre-caixa">
+    <div class="icone" aria-hidden="true">⚠️</div>
+    <h2 id="sobreTitulo"></h2>
+    <p id="sobreTexto"></p>
+    <button id="btnVoltarProva" class="grande">Voltar para a prova</button>
+  </div>
+</div>
+<!-- sem conexão / resposta não enviada -->
+<div id="bannerConexao" class="banner-conexao oculto" role="alert"></div>
 <script type="module" src="js/aluno.js"></script>
 </body>
 </html>
