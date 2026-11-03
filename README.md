@@ -80,6 +80,27 @@ Cada **banco** tem um campo `materia`, e cada questão pode ter um `tema`. Dá p
 - O sorteio de cada aluno usa só as questões dos temas marcados, mantendo a cota de dissertativas. A tabela de provas mostra os temas de cada prova ("todos" quando nenhum foi desmarcado).
 - O **Gabarito p/ Classroom** sai agrupado por tema, com caixas para gerar só dos temas que a prova usou.
 
+## Quem pode fazer cada prova: turmas e código de acesso
+
+Os dois jeitos podem ser usados juntos.
+
+### Turmas
+Aba **Turmas** → dê um nome (ex.: `DETS-1A-26CT-S`) e **cole os e-mails dos alunos** do jeito que vierem: um por linha, separados por vírgula, ponto e vírgula ou espaço, ou até com os nomes junto (copiado da planilha ou do Classroom). O sistema pega só o que é e-mail, passa para minúsculas e tira os repetidos; a prévia mostra quantos foram reconhecidos. **✎ Editar** reabre a lista para incluir ou tirar alunos; **🗑 Apagar** (só admin).
+
+Na prova, escolha a turma no campo **Turma** (ou *— sem turma (qualquer aluno) —*). Com turma:
+- o aluno **só vê a prova na lista** se o e-mail dele estiver na turma;
+- as **regras do Firestore** recusam a tentativa de quem não está na lista, mesmo que tente pelo console do navegador;
+- em **Resultados** aparece a seção **Não fizeram**, com quem está na turma e não começou a prova.
+
+Provas antigas, com a turma escrita como texto, continuam funcionando como "qualquer aluno" e mantêm o nome.
+
+### Código de acesso
+Campo **Código de acesso** na prova (botão **Gerar** cria algo como `AET-7K3Q`; o código aparece na tabela de provas). O aluno precisa digitar o código na tela de instruções antes de **Começar a prova** (maiúsculas e espaços são ajustados sozinhos); código errado mostra *"Código incorreto"*. Serve para garantir que quem começa está na sala: **informe o código só na hora**.
+
+> O código fica no documento da prova, que o aluno consegue ler. Um aluno com conhecimento técnico pode descobri-lo pelo navegador. A barreira forte é a **turma**; o código é uma camada a mais.
+
+O **modo teste** da equipe ignora turma e código. Turma e código podem ser trocados a qualquer momento em **✎ Editar**.
+
 ## Opções de cada prova
 
 Definidas em **Nova prova** e alteráveis depois pelo botão **✎ Editar** na tabela "Provas criadas". A tela de instruções do aluno lista só as regras que valem para aquela prova.
@@ -152,6 +173,8 @@ Dica: peça ao Claude/ChatGPT "gere um banco de questões no formato do modelo_b
 | Aluno fazer a prova duas vezes | o ID da tentativa é fixo (`uid_prova`); só admin apaga |
 | Aluno trocar as questões sorteadas | `questoesIds` não pode ser alterado depois de criado |
 | Aluno de fora (gmail etc.) | só domínios de `config/geral.dominiosAlunos` passam nas regras |
+| Aluno de outra turma | se a prova tem turma, o create da tentativa exige o e-mail na lista `turmas/{id}.emails`; o aluno só lê a turma em que está |
+| Começar sem o código de acesso | o create da tentativa exige `codigoInformado` igual ao código da prova |
 | Aluno ver tentativa de outro | leitura restrita ao dono e à equipe |
 | Auxiliar mexer em prova/banco | só `admin` e `professor` escrevem; `auxiliar` só lê |
 
