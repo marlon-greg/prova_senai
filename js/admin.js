@@ -30,8 +30,8 @@ function trocar(id) { ["telaLogin", "telaPainel", "telaAviso"].forEach(t => $("#
 function abrirAba(a) {
   if (a !== "resultados" && $("#rAoVivo").checked) { $("#rAoVivo").checked = false; pararAoVivo(); }   // sair da aba desliga o ao vivo
   document.querySelectorAll("[data-aba]").forEach(b => b.classList.toggle("ativa", b.dataset.aba === a));
-  ["provas", "bancos", "resultados", "equipe", "config"].forEach(x => $("#aba-" + x).classList.toggle("oculto", x !== a));
-  ({ provas: carregarProvas, bancos: carregarBancos, resultados: prepararResultados, equipe: carregarEquipe, config: carregarConfig })[a]();
+  ["provas", "bancos", "turmas", "resultados", "equipe", "config"].forEach(x => $("#aba-" + x).classList.toggle("oculto", x !== a));
+  ({ provas: carregarProvas, bancos: carregarBancos, turmas: carregarTurmas, resultados: prepararResultados, equipe: carregarEquipe, config: carregarConfig })[a]();
 }
 
 // primeiro acesso do superadmin: cria config/geral (sem ele a regra dos alunos não funciona)
@@ -67,6 +67,63 @@ function desenharChecksTemas(box, contagem, onMudar) {
 }
 const temasMarcados = box => [...box.querySelectorAll("input[type=checkbox]:checked")].map(c => c.value);
 
+// ============================================================ TURMAS
+let turmasCache = [];
+async function listarTurmas() {
+  const s = await getDocs(collection(db, "turmas"));
+  turmasCache = s.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (a.nome || "").localeCompare(b.nome || "", "pt-BR"));
+  return turmasCache;
+}
+// extrai e-mails de qualquer texto colado (planilha, Classroom, lista com nomes...): minúsculas, sem repetidos
+function extrairEmails(txt) {
+  const achados = String(txt || "").match(/[a-z0-9._%+-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}/gi) || [];
+  return [...new Set(achados.map(e => e.toLowerCase()))].sort();
+}
+let turmaEditando = null;   // id da turma em edição (null = nova)
+function previaTurma() {
+  const txt = $("#tEmails").value, emails = extrairEmails(txt);
+  const pedacos = txt.split(/[\s,;]+/).filter(Boolean).length;
+  $("#tPrevia").textContent = txt.trim() ? `${emails.length} e-mail(s) válido(s)${pedacos > emails.length ? ` · o resto foi ignorado (nomes, repetidos ou texto que não é e-mail)` : ""}.` : "";
+}
+$("#tEmails").oninput = previaTurma;
+function limparFormTurma() {
+  turmaEditando = null; $("#tNome").value = ""; $("#tEmails").value = ""; previaTurma();
+  $("#tFormTitulo").textContent = "Nova turma"; $("#btnCancelarTurma").classList.add("oculto");
+}
+$("#btnCancelarTurma").onclick = limparFormTurma;
+$("#btnSalvarTurma").onclick = async () => {
+  if (!podeEditar()) return toast("Seu papel não permite cadastrar turmas.", "erro");
+  const nome = $("#tNome").value.trim(), emails = extrairEmails($("#tEmails").value);
+  if (!nome) return toast("Dê um nome para a turma.", "erro");
+  if (!emails.length) return toast("Cole pelo menos um e-mail de aluno.", "erro");
+  try {
+    if (turmaEditando) await updateDoc(doc(db, "turmas", turmaEditando), { nome, emails, atualizadoEm: serverTimestamp(), atualizadoPor: eu.email });
+    else await addDoc(collection(db, "turmas"), { nome, emails, criadoEm: serverTimestamp(), criadoPor: eu.email });
+  } catch (e) { return toast("Não foi possível salvar a turma. " + traduzirErro(e), "erro"); }
+  toast(`Turma ${nome} salva com ${emails.length} aluno(s).`, "ok");
+  limparFormTurma(); carregarTurmas();
+};
+async function carregarTurmas() {
+  await listarTurmas();
+  const box = $("#listaTurmas");
+  if (!turmasCache.length) { box.innerHTML = `<div class="vazio"><div class="icone">👥</div><p>Nenhuma turma ainda. Cadastre a primeira acima colando os e-mails dos alunos.</p></div>`; return; }
+  box.innerHTML = `<div class="tabela"><table><tr><th>Turma</th><th>Alunos</th><th>Atualizada</th><th></th></tr>` + turmasCache.map(t =>
+    `<tr><td><b>${esc(t.nome)}</b><br><span class="pequeno">${t.id}</span></td><td>${(t.emails || []).length}</td><td class="pequeno">${dataBR(t.atualizadoEm || t.criadoEm)}</td>
+     <td class="td-acoes">${podeEditar() ? `<button class="leve mini" data-edt="${t.id}">✎ Editar</button>` : ""} ${ehAdmin() ? `<button class="perigo mini" data-delt="${t.id}">🗑 Apagar</button>` : ""}</td></tr>`).join("") + "</table></div>";
+  box.querySelectorAll("[data-edt]").forEach(b => b.onclick = () => {
+    const t = turmasCache.find(x => x.id === b.dataset.edt);
+    turmaEditando = t.id; $("#tNome").value = t.nome || ""; $("#tEmails").value = (t.emails || []).join("\n"); previaTurma();
+    $("#tFormTitulo").textContent = `Editar turma ${t.nome}`; $("#btnCancelarTurma").classList.remove("oculto");
+    $("#tNome").scrollIntoView({ behavior: "smooth", block: "center" }); $("#tNome").focus();
+  });
+  box.querySelectorAll("[data-delt]").forEach(b => b.onclick = async () => {
+    const t = turmasCache.find(x => x.id === b.dataset.delt);
+    const usadas = (await getDocs(query(collection(db, "provas"), where("turmaId", "==", t.id)))).size;
+    if (!(await confirmar(`Apagar a turma ${t.nome}?` + (usadas ? `\n\n${usadas} prova(s) usam esta turma: elas deixam de aceitar qualquer aluno até você escolher outra turma.` : ""), { titulo: "Apagar turma", ok: "Apagar", perigo: true }))) return;
+    await deleteDoc(doc(db, "turmas", t.id)); if (turmaEditando === t.id) limparFormTurma(); carregarTurmas();
+  });
+}
+
 // ============================================================ PROVAS
 let bancosCache = [];
 async function listarBancos() {
@@ -84,7 +141,7 @@ function formProvaHTML(f) {
   return `
   <div class="grade">
     <div><label for="${f}Titulo">Título</label><input type="text" id="${f}Titulo" placeholder="MS5 — DML"></div>
-    <div><label for="${f}Turma">Turma (texto livre)</label><input type="text" id="${f}Turma" placeholder="DETS-1A"></div>
+    <div><label for="${f}Turma">Turma</label><select id="${f}Turma"></select></div>
     <div><label for="${f}Banco">Banco de questões</label><select id="${f}Banco"></select></div>
   </div>
   <p id="${f}Trava" class="aviso-box oculto" role="note"></p>
@@ -98,6 +155,11 @@ function formProvaHTML(f) {
     <div><label for="${f}NDiss">Das quais dissertativas (0 = sorteio livre)</label><input type="number" id="${f}NDiss" value="3" min="0"></div>
     <div><label for="${f}Feedback">Feedback ao enviar cada resposta</label>
       <select id="${f}Feedback"><option value="acerto">Só diz se acertou ou errou</option><option value="completo">Mostra a resposta certa e a explicação</option><option value="nenhum">Nenhum (só no resultado final)</option></select></div>
+  </div>
+  <div class="grade">
+    <div><label for="${f}Codigo">Código de acesso (opcional)</label>
+      <div class="linha" style="flex-wrap:nowrap"><input type="text" id="${f}Codigo" placeholder="sem código" autocomplete="off" spellcheck="false" style="text-transform:uppercase"><button type="button" class="leve mini" id="${f}GerarCodigo" style="flex:0 0 auto;min-width:0">Gerar</button></div>
+      <p class="pequeno" style="margin:4px 0 0">O aluno digita o código antes de começar. Informe na sala.</p></div>
   </div>
   <div class="grade">
     <div><label for="${f}Tempo">Tempo limite (min, 0 = sem limite)</label><input type="number" id="${f}Tempo" value="0" min="0" step="5"></div>
@@ -142,10 +204,18 @@ function converterLinkMaterial(url) {
   return u;
 }
 
+const LEGADO = "__texto_antigo__";
+// código de acesso: maiúsculas, sem espaços (ex.: AET-7K3Q)
+const normalizarCodigo = c => String(c || "").toUpperCase().replace(/\s+/g, "");
+function gerarCodigo() {
+  const letras = "ABCDEFGHJKLMNPQRSTUVWXYZ", mistos = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";   // sem 0/O e 1/I, que confundem
+  const sorteia = (base, n) => Array.from(crypto.getRandomValues(new Uint32Array(n)), x => base[x % base.length]).join("");
+  return `${sorteia(letras, 3)}-${sorteia(mistos, 4)}`;
+}
 // Controla um formulário de prova: temas do banco, resumo ao vivo, validação, leitura e preenchimento.
 function controleProva(f) {
   const $f = s => $("#" + f + s);
-  let contagem = {}, bancoDesenhado = null, travado = false;
+  let contagem = {}, bancoDesenhado = null, travado = false, turmaLegada = "";
   const disponiveis = () => temasMarcados($f("Temas")).reduce((s, t) => ({ alternativa: s.alternativa + (contagem[t]?.alternativa || 0), dissertativa: s.dissertativa + (contagem[t]?.dissertativa || 0) }), { alternativa: 0, dissertativa: 0 });
   // devolve a mensagem de erro (ou "") para o pedido atual
   function problema() {
@@ -206,6 +276,16 @@ function controleProva(f) {
     $f("MatUrl").oninput = previaMaterial;
     $f("PermitirTrocaAba").onchange = $f("Modo").onchange = atualizarLimite;
     atualizarLimite();
+    $f("GerarCodigo").onclick = () => { $f("Codigo").value = gerarCodigo(); };
+    $f("Codigo").onblur = () => { $f("Codigo").value = normalizarCodigo($f("Codigo").value); };
+  }
+  // select de turmas; prova antiga com turma em texto livre ganha uma opção própria para não perder o nome
+  function opcoesTurma(p = {}) {
+    let h = `<option value="">— sem turma (qualquer aluno) —</option>` + turmasCache.map(t => `<option value="${t.id}">${esc(t.nome)} (${(t.emails || []).length} alunos)</option>`).join("");
+    if (!p.turmaId && p.turma) h += `<option value="${LEGADO}">${esc(p.turma)} — texto antigo, sem lista (qualquer aluno)</option>`;
+    $f("Turma").innerHTML = h;
+    $f("Turma").value = p.turmaId && turmasCache.some(t => t.id === p.turmaId) ? p.turmaId : (!p.turmaId && p.turma ? LEGADO : "");
+    turmaLegada = p.turma || "";
   }
   // trava banco, número de questões, dissertativas e temas (prova que já tem tentativas de alunos)
   function travar(motivo) {
@@ -216,7 +296,7 @@ function controleProva(f) {
     atualizar();
   }
   function preencher(p) {
-    $f("Titulo").value = p.titulo || ""; $f("Turma").value = p.turma || "";
+    $f("Titulo").value = p.titulo || ""; opcoesTurma(p); $f("Codigo").value = p.codigoAcesso || "";
     $f("Banco").value = p.bancoId || ""; $f("N").value = p.nQuestoes ?? 10; $f("NDiss").value = p.nDissertativas ?? 0;
     $f("Feedback").value = p.feedbackImediato || "acerto"; $f("Tempo").value = p.tempoMinutos || 0;
     $f("Modo").value = p.modoExibicao === "todas" ? "todas" : "uma";
@@ -238,7 +318,7 @@ function controleProva(f) {
     const urlBruta = $f("MatUrl").value.trim(), url = converterLinkMaterial(urlBruta);
     if (url && !/^https:\/\//.test(url)) return { erro: "O link do material de consulta precisa começar com https://." };
     const dados = {
-      titulo, turma: $f("Turma").value.trim(),
+      titulo, ...turmaEscolhida(), codigoAcesso: normalizarCodigo($f("Codigo").value),
       feedbackImediato: $f("Feedback").value, embaralharAlternativas: $f("Embaralhar").checked,
       tempoMinutos: Math.max(0, Math.round(Number($f("Tempo").value || 0))),
       modoExibicao: $f("Modo").value === "todas" ? "todas" : "uma",
@@ -251,7 +331,14 @@ function controleProva(f) {
     if (!travado) Object.assign(dados, { bancoId, nQuestoes: n, nDissertativas: nDiss, temas: temasMarcados($f("Temas")) });   // todos marcados = lista completa
     return { dados };
   }
-  return { carregarTemas, atualizar, ligar, travar, preencher, ler, get bancoDesenhado() { return bancoDesenhado; } };
+  // turmaId + nome (o campo "turma" continua existindo para quem já usa p.turma)
+  function turmaEscolhida() {
+    const v = $f("Turma").value;
+    if (v === LEGADO) return { turmaId: null, turma: turmaLegada };
+    const t = turmasCache.find(x => x.id === v);
+    return t ? { turmaId: t.id, turma: t.nome } : { turmaId: null, turma: "" };
+  }
+  return { carregarTemas, atualizar, ligar, travar, preencher, ler, opcoesTurma, get bancoDesenhado() { return bancoDesenhado; } };
 }
 
 $("#formNovaProva").innerHTML = formProvaHTML("p");
@@ -263,6 +350,7 @@ function opcoesDaProvaHTML(p) {
   const t = [];
   t.push(p.modoExibicao === "todas" ? `<span class="tag">▤ todas na página</span>` : `<span class="tag">▭ uma por vez</span>`);
   if (p.permitirTrocaAba) t.push(`<span class="tag aviso" title="Sem tela cheia e sem aviso; as trocas continuam contadas">🔀 troca de aba permitida</span>`);
+  if (p.codigoAcesso) t.push(`<span class="tag nota" title="Código de acesso (informe na sala)">🔑 ${esc(p.codigoAcesso)}</span>`);
   if (p.permitirColar) t.push(`<span class="tag aviso">📋 colar permitido</span>`);
   if (!p.permitirTrocaAba && Number(p.maxTrocasDeAba) > 0) t.push(`<span class="tag erro" title="Saídas da prova permitidas antes da punição">🚪 máx. ${Number(p.maxTrocasDeAba)} saída(s) · ${p.acaoAoExceder === "perderQuestao" && p.modoExibicao !== "todas" ? "perde a questão" : "encerra"}</span>`);
   if (p.materialConsultaUrl) t.push(`<span class="tag nota" title="${esc(p.materialConsultaUrl)}">📖 ${esc(p.materialConsultaTitulo || "consulta")}</span>`);
@@ -270,7 +358,10 @@ function opcoesDaProvaHTML(p) {
 }
 
 async function carregarProvas() {
-  await listarBancos();
+  await Promise.all([listarBancos(), listarTurmas()]);
+  const turmaAntes = $("#pTurma").value;
+  formNova.opcoesTurma();
+  if (turmaAntes && [...$("#pTurma").options].some(o => o.value === turmaAntes)) $("#pTurma").value = turmaAntes;
   const bancoAntes = $("#pBanco").value;
   $("#pBanco").innerHTML = opcoesBancos();
   if (bancoAntes && bancosCache.some(b => b.id === bancoAntes)) $("#pBanco").value = bancoAntes;
@@ -283,7 +374,7 @@ async function carregarProvas() {
   if (!provas.length) { box.innerHTML = `<div class="vazio"><div class="icone">📝</div><p>Nenhuma prova ainda. Crie a primeira no formulário acima.</p></div>`; return; }
   box.innerHTML = `<div class="tabela"><table><tr><th>Prova</th><th>Banco</th><th>Questões</th><th>Temas</th><th>Opções</th><th>Status</th><th>Resultados</th><th></th></tr>` + provas.map(p => {
     const b = bancosCache.find(x => x.id === p.bancoId);
-    return `<tr><td><b>${esc(p.titulo)}</b><br><span class="pequeno">${esc(p.turma || "")}</span></td><td>${esc(b?.nome || p.bancoId)}<br><span class="pequeno">${esc(b?.materia || "")}</span></td><td>${p.nQuestoes}${p.nDissertativas ? `<br><span class="pequeno">${p.nDissertativas} dissert.</span>` : ""}${p.tempoMinutos > 0 ? `<br><span class="pequeno">⏱ ${p.tempoMinutos} min</span>` : ""}</td>
+    return `<tr><td><b>${esc(p.titulo)}</b><br><span class="pequeno">${p.turmaId ? "👥 " : ""}${esc(p.turma || "")}</span></td><td>${esc(b?.nome || p.bancoId)}<br><span class="pequeno">${esc(b?.materia || "")}</span></td><td>${p.nQuestoes}${p.nDissertativas ? `<br><span class="pequeno">${p.nDissertativas} dissert.</span>` : ""}${p.tempoMinutos > 0 ? `<br><span class="pequeno">⏱ ${p.tempoMinutos} min</span>` : ""}</td>
       <td class="pequeno">${temasDaProvaTexto(p, b)}</td>
       <td class="td-opcoes">${opcoesDaProvaHTML(p)}</td>
       <td><span class="tag ${p.liberada ? "on" : "off"}">${p.liberada ? "● liberada" : "○ fechada"}</span></td>
@@ -326,7 +417,7 @@ $("#btnCriarProva").onclick = async () => {
   const r = await formNova.ler();
   if (r.erro) return toast(r.erro, "erro");
   await addDoc(collection(db, "provas"), { ...r.dados, liberada: false, resultadosLiberados: false, criadoEm: serverTimestamp(), criadoPor: eu.email });
-  $("#pTitulo").value = ""; toast("Prova criada (ainda fechada). Libere quando for aplicar.", "ok"); carregarProvas();
+  $("#pTitulo").value = ""; $("#pCodigo").value = ""; toast("Prova criada (ainda fechada). Libere quando for aplicar.", "ok"); carregarProvas();
 };
 
 // ---------- editar prova ----------
@@ -338,6 +429,7 @@ async function editarProva(p) {
     const ts = await getDocs(query(collection(db, "tentativas"), where("provaId", "==", p.id)));
     nTentativas = ts.docs.filter(d => d.data().teste !== true).length;
   } catch (e) { return toast("Não foi possível conferir as tentativas da prova. " + traduzirErro(e), "erro"); }
+  await listarTurmas();
   const ctl = controleProva("e");
   const salvou = await modal({
     titulo: "Editar prova", conteudo: formProvaHTML("e"), ok: "Salvar alterações", cancelar: "Cancelar", largo: true,
@@ -538,7 +630,10 @@ async function carregarResultados() {
   $("#resTabela").innerHTML = "<p class='pequeno'>Carregando…</p>";
   const prova = { id: provaId, ...(await getDoc(doc(db, "provas", provaId))).data() };
   const { questoes, gabaritos } = await lerBanco(prova.bancoId);
-  resDados = { prova, questoes, gabaritos, linhas: [], testes: [] };
+  // turma da prova: lista de e-mails para a seção "Não fizeram"
+  let turma = null;
+  if (prova.turmaId) { const td = await getDoc(doc(db, "turmas", prova.turmaId)).catch(() => null); if (td?.exists()) turma = { id: td.id, ...td.data() }; }
+  resDados = { prova, questoes, gabaritos, turma, linhas: [], testes: [] };
   cacheTent.clear(); detalheId = null;
   const q = query(collection(db, "tentativas"), where("provaId", "==", provaId));
   if (!$("#rAoVivo").checked) {
@@ -616,6 +711,12 @@ function desenharResultados() {
       <div class="numero ${comSinal ? "aviso" : ""}"><b>${comSinal}</b><span>com sinais (aba, tela cheia, colar)</span></div></div>`;
   const mostrarTestes = $("#rTestes").checked;
   let html = linhas.length ? `<div class="card">${tabelaHTML(linhas, "aluno")}</div>` : `<div class="card vazio"><div class="icone">⏳</div><p>Nenhum aluno fez esta prova ainda.</p></div>`;
+  if (resDados.turma) {
+    const fizeram = new Set(linhas.map(l => String(l.t.email || "").toLowerCase()));
+    const faltam = (resDados.turma.emails || []).filter(e => !fizeram.has(e));
+    html += `<div class="card secao-faltam"><h2>Não fizeram <span class="pequeno">(${faltam.length} de ${(resDados.turma.emails || []).length} da turma ${esc(resDados.turma.nome)})</span></h2>` +
+      (faltam.length ? `<ul class="lista-faltam">${faltam.map(e => `<li>${esc(e)}</li>`).join("")}</ul>` : `<p class="pequeno">Todos os alunos da turma começaram a prova. ✅</p>`) + `</div>`;
+  } else if (resDados.prova.turmaId) html += `<div class="card"><p class="pequeno">A turma desta prova não foi encontrada (apagada?). Escolha outra em Provas → Editar.</p></div>`;
   if (mostrarTestes) html += `<div class="card secao-testes"><h2>Testes da equipe <span class="pequeno">(não entram na média, no CSV, nos PDFs nem em "Fechar notas")</span></h2>${testes.length ? tabelaHTML(testes, "teste") : `<p class="pequeno">Nenhuma tentativa de teste nesta prova. Abra <b>Testar como aluno</b> na aba Provas.</p>`}</div>`;
   // preserva o detalhe aberto (e o que o professor estiver digitando nele)
   const box = $("#resDetalhe");

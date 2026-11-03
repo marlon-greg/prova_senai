@@ -33,6 +33,7 @@
     <nav class="abas" aria-label="Seções do painel">
       <button data-aba="provas" class="ativa">Provas</button>
       <button data-aba="bancos">Bancos de questões</button>
+      <button data-aba="turmas">Turmas</button>
       <button data-aba="resultados">Resultados</button>
       <button data-aba="equipe">Equipe</button>
       <button data-aba="config">Configuração</button>
@@ -64,6 +65,21 @@
         <fieldset class="temas-box"><legend>Temas no gabarito</legend><div id="gabTemas" class="lista-temas"></div></fieldset>
         <div class="linha acoes"><button id="btnCopiarGab" class="leve">Copiar</button><button id="btnBaixarGab" class="leve">Baixar .txt</button></div>
         <pre class="bloco" id="txtGabarito"></pre></div>
+    </div>
+
+    <!-- TURMAS -->
+    <div id="aba-turmas" class="oculto">
+      <div class="card">
+        <h2 id="tFormTitulo">Nova turma</h2>
+        <div class="grade">
+          <div><label for="tNome">Nome da turma</label><input type="text" id="tNome" placeholder="DETS-1A-26CT-S"></div>
+        </div>
+        <label for="tEmails">E-mails dos alunos</label>
+        <textarea id="tEmails" style="min-height:160px" placeholder="Cole aqui: um por linha, ou separados por vírgula, ponto e vírgula ou espaço. Dá para colar direto da planilha ou do Classroom."></textarea>
+        <p id="tPrevia" class="pequeno" role="status" aria-live="polite"></p>
+        <div class="linha acoes"><button id="btnSalvarTurma">Salvar turma</button><button id="btnCancelarTurma" class="leve oculto">Cancelar edição</button></div>
+      </div>
+      <div class="card"><h2>Turmas cadastradas</h2><div id="listaTurmas"></div></div>
     </div>
 
     <!-- RESULTADOS -->
