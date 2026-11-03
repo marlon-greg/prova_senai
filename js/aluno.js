@@ -66,6 +66,13 @@ aoMudarLogin(async user => {
 async function listarProvas() {
   mostrar("telaProvas");
   const box = $("#listaProvas"); box.innerHTML = "<p class='pequeno'>Carregando…</p>";
+  // delegação: os botões funcionam assim que aparecem, mesmo com o resto da lista ainda carregando
+  box.onclick = e => {
+    const btn = e.target.closest("button[data-acao]");
+    if (!btn) return;
+    if (btn.dataset.acao === "continuar") pedirTelaCheia();   // direto no clique (exigência do navegador)
+    abrirProva(btn.dataset.id, btn.dataset.acao);
+  };
   let lista;
   if (modoTeste) {
     // modo teste: só a prova em teste, mesmo que ainda não esteja liberada
@@ -93,10 +100,6 @@ async function listarProvas() {
     else                        { status = `<span class="tag ok">✓ finalizada em ${dataBR(td.finalizadaEm)}</span>` + (td.nota !== undefined ? ` <span class="tag nota">nota final: <b>${td.nota}</b></span>` : td.notaPrevia !== null && td.notaPrevia !== undefined ? ` <span class="tag nota">nota prévia: <b>${td.notaPrevia}</b>${td.aguardandoCorrecao ? " (aguardando correção)" : ""}</span>` : ""); acao = podeVerResultado ? `<button class="sec" data-acao="resultado" data-id="${p.id}">Ver resultado</button>` : `<span class="pequeno">resultado ainda não liberado</span>`; }
     box.insertAdjacentHTML("beforeend", `<div class="prova-item"><div class="info"><b>${esc(p.titulo)}</b><br><span class="pequeno">${esc(p.turma || "")} · ${p.nQuestoes} questões</span><div style="margin-top:4px">${status}</div></div><div class="acao">${acao}</div></div>`);
   }
-  box.querySelectorAll("button[data-acao]").forEach(btn => btn.onclick = () => {
-    if (btn.dataset.acao === "continuar") pedirTelaCheia();   // direto no clique (exigência do navegador)
-    abrirProva(btn.dataset.id, btn.dataset.acao);
-  });
 }
 $("#btnVoltar1").onclick = $("#btnVoltar2").onclick = $("#btnVoltar3").onclick = listarProvas;
 $("#btnImprimir").onclick = () => window.print();
