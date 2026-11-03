@@ -1,5 +1,6 @@
 // Página do aluno: login, lista de provas, prova (uma questão por vez), resultado.
-import { db, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar, sortearAleatorio, esc, $, toast, dataBR, letra }
+import { db, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar, sortearAleatorio, esc, $, toast, dataBR, letra,
+         idTentativaTeste, apagarTentativaTeste }
   from "./common.js";
 import { collection, doc, getDoc, getDocs, setDoc, updateDoc, query, where, writeBatch, serverTimestamp, increment }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
@@ -10,6 +11,12 @@ let tentativa = null;     // { id, ...dados }
 let questoes = {};        // qid -> questão (enunciado, alternativas...)
 let respostas = {};       // qid -> { resposta }
 let ordemAlternativas = {}; // qid -> índices embaralhados
+
+// ---------- modo teste (equipe vê a prova como o aluno: index.html?teste=<provaId>) ----------
+const provaTeste = new URLSearchParams(location.search).get("teste");
+let modoTeste = false;
+// id da tentativa: real = uid_prova · teste = teste_uid_prova
+function idTentativa(provaId) { return modoTeste ? idTentativaTeste(eu.uid, provaId) : `${eu.uid}_${provaId}`; }
 
 const telas = ["telaLogin", "telaProvas", "telaInicio", "telaQuestao", "telaFim", "telaResultado", "telaAviso"];
 function mostrar(id) { telas.forEach(t => $("#" + t).classList.toggle("oculto", t !== id)); window.scrollTo({ top: 0, behavior: "smooth" }); }
@@ -26,12 +33,19 @@ $("#btnEntrar").onclick = async () => {
 $("#btnSair").onclick = () => sair();
 
 aoMudarLogin(async user => {
-  if (!user) { eu = null; $("#quem").textContent = ""; $("#btnSair").classList.add("oculto"); mostrar("telaLogin"); return; }
+  if (!user) { eu = null; modoTeste = false; $("#faixaTeste").classList.add("oculto"); $("#quem").textContent = ""; $("#btnSair").classList.add("oculto"); mostrar("telaLogin"); return; }
   const id = await identificar(user);
   $("#quem").textContent = id.email; $("#btnSair").classList.remove("oculto");
   if (id.tipo === "bloqueado") {
     $("#avisoTexto").innerHTML = `<h2>Conta não autorizada</h2><p>A conta <b>${esc(id.email)}</b> não é de aluno do SENAI.<br>Entre com o e-mail <b>@${esc(id.dominios.join("</b> ou <b>@"))}</b>.</p>`;
     mostrar("telaAviso"); return;
+  }
+  if (id.tipo === "equipe" && provaTeste) {
+    modoTeste = true;
+    eu = { uid: user.uid, email: id.email, nome: id.nome };
+    $("#faixaTeste").classList.remove("oculto");
+    await abrirProva(provaTeste, "inicio");
+    return;
   }
   if (id.tipo === "equipe") {
     $("#avisoTexto").innerHTML = `<h2>Olá, ${esc(id.nome)}</h2><p>Esta é a página do aluno. O seu painel é o <a href="admin.html"><b>admin.html</b></a>.</p>`;
@@ -45,23 +59,31 @@ aoMudarLogin(async user => {
 async function listarProvas() {
   mostrar("telaProvas");
   const box = $("#listaProvas"); box.innerHTML = "<p class='pequeno'>Carregando…</p>";
-  const [a, b] = await Promise.all([
-    getDocs(query(collection(db, "provas"), where("liberada", "==", true))),
-    getDocs(query(collection(db, "provas"), where("resultadosLiberados", "==", true)))
-  ]);
-  const provas = {};
-  a.forEach(d => provas[d.id] = { id: d.id, ...d.data() });
-  b.forEach(d => provas[d.id] = { id: d.id, ...d.data() });
-  const lista = Object.values(provas).sort((x, y) => (y.criadoEm?.seconds || 0) - (x.criadoEm?.seconds || 0));
+  let lista;
+  if (modoTeste) {
+    // modo teste: só a prova em teste, mesmo que ainda não esteja liberada
+    const p = await getDoc(doc(db, "provas", provaTeste));
+    lista = p.exists() ? [{ id: p.id, ...p.data() }] : [];
+  } else {
+    const [a, b] = await Promise.all([
+      getDocs(query(collection(db, "provas"), where("liberada", "==", true))),
+      getDocs(query(collection(db, "provas"), where("resultadosLiberados", "==", true)))
+    ]);
+    const provas = {};
+    a.forEach(d => provas[d.id] = { id: d.id, ...d.data() });
+    b.forEach(d => provas[d.id] = { id: d.id, ...d.data() });
+    lista = Object.values(provas).sort((x, y) => (y.criadoEm?.seconds || 0) - (x.criadoEm?.seconds || 0));
+  }
   if (!lista.length) { box.innerHTML = "<p>Nenhuma prova liberada para você agora.</p>"; return; }
   box.innerHTML = "";
   for (const p of lista) {
-    const t = await getDoc(doc(db, "tentativas", `${eu.uid}_${p.id}`));
+    const t = await getDoc(doc(db, "tentativas", idTentativa(p.id)));
     const td = t.exists() ? t.data() : null;
+    const podeFazer = modoTeste || p.liberada, podeVerResultado = modoTeste || p.resultadosLiberados;
     let status, acao;
-    if (!td)                    { status = `<span class="tag">não iniciada</span>`; acao = p.liberada ? `<button data-acao="inicio" data-id="${p.id}">Fazer a prova</button>` : `<span class="pequeno">prova encerrada</span>`; }
-    else if (!td.finalizadaEm)  { status = `<span class="tag aviso">em andamento (questão ${(td.indiceAtual || 0) + 1} de ${p.nQuestoes})</span>`; acao = p.liberada ? `<button data-acao="continuar" data-id="${p.id}">Continuar</button>` : `<span class="pequeno">prova encerrada</span>`; }
-    else                        { status = `<span class="tag ok">finalizada em ${dataBR(td.finalizadaEm)}</span>` + (td.nota !== undefined ? ` <span class="tag ok">nota final: <b>${td.nota}</b></span>` : td.notaPrevia !== null && td.notaPrevia !== undefined ? ` <span class="tag">nota prévia: <b>${td.notaPrevia}</b>${td.aguardandoCorrecao ? " (aguardando correção)" : ""}</span>` : ""); acao = p.resultadosLiberados ? `<button class="sec" data-acao="resultado" data-id="${p.id}">Ver resultado</button>` : `<span class="pequeno">resultado ainda não liberado</span>`; }
+    if (!td)                    { status = `<span class="tag">não iniciada</span>`; acao = podeFazer ? `<button data-acao="inicio" data-id="${p.id}">Fazer a prova</button>` : `<span class="pequeno">prova encerrada</span>`; }
+    else if (!td.finalizadaEm)  { status = `<span class="tag aviso">em andamento (questão ${(td.indiceAtual || 0) + 1} de ${p.nQuestoes})</span>`; acao = podeFazer ? `<button data-acao="continuar" data-id="${p.id}">Continuar</button>` : `<span class="pequeno">prova encerrada</span>`; }
+    else                        { status = `<span class="tag ok">finalizada em ${dataBR(td.finalizadaEm)}</span>` + (td.nota !== undefined ? ` <span class="tag ok">nota final: <b>${td.nota}</b></span>` : td.notaPrevia !== null && td.notaPrevia !== undefined ? ` <span class="tag">nota prévia: <b>${td.notaPrevia}</b>${td.aguardandoCorrecao ? " (aguardando correção)" : ""}</span>` : ""); acao = podeVerResultado ? `<button class="sec" data-acao="resultado" data-id="${p.id}">Ver resultado</button>` : `<span class="pequeno">resultado ainda não liberado</span>`; }
     box.insertAdjacentHTML("beforeend", `<div class="card" style="margin:8px 0"><div class="linha"><div style="flex:3"><b>${esc(p.titulo)}</b><br><span class="pequeno">${esc(p.turma || "")} · ${p.nQuestoes} questões</span><br>${status}</div><div style="flex:1;text-align:right">${acao}</div></div></div>`);
   }
   box.querySelectorAll("button[data-acao]").forEach(btn => btn.onclick = () => abrirProva(btn.dataset.id, btn.dataset.acao));
@@ -74,7 +96,7 @@ async function abrirProva(id, acao) {
   const p = await getDoc(doc(db, "provas", id));
   if (!p.exists()) return toast("Prova não encontrada", "erro");
   provaAtual = { id, ...p.data() };
-  const t = await getDoc(doc(db, "tentativas", `${eu.uid}_${id}`));
+  const t = await getDoc(doc(db, "tentativas", idTentativa(id)));
   tentativa = t.exists() ? { id: t.id, ...t.data() } : null;
   if (acao === "resultado") return verResultado();
   if (!tentativa) {
@@ -98,11 +120,13 @@ $("#btnComecar").onclick = async () => {
     if (nD > 0 && diss.length >= nD && alt.length >= provaAtual.nQuestoes - nD)
       sorteadas = sortearAleatorio([...sortearAleatorio(diss, nD), ...sortearAleatorio(alt, provaAtual.nQuestoes - nD)], provaAtual.nQuestoes);
     else sorteadas = sortearAleatorio(ids, provaAtual.nQuestoes);
-    const tid = `${eu.uid}_${provaAtual.id}`;
-    await setDoc(doc(db, "tentativas", tid), {
+    const tid = idTentativa(provaAtual.id);
+    const dados = {
       uid: eu.uid, email: eu.email, nome: eu.nome, provaId: provaAtual.id, bancoId: provaAtual.bancoId,
       questoesIds: sorteadas, iniciadaEm: serverTimestamp(), finalizadaEm: null, indiceAtual: 0, trocasDeAba: 0, notaPrevia: null, aguardandoCorrecao: 0
-    });
+    };
+    if (modoTeste) dados.teste = true;
+    await setDoc(doc(db, "tentativas", tid), dados);
     const t = await getDoc(doc(db, "tentativas", tid));
     tentativa = { id: tid, ...t.data() };
     await carregarTentativa();
@@ -182,7 +206,8 @@ $("#btnEnviar").onclick = async () => {
   try {
     const lote = writeBatch(db);
     lote.set(doc(db, "tentativas", tentativa.id, "respostas", qid), { resposta, enviadaEm: serverTimestamp() });
-    lote.set(doc(db, "marcadores", `${eu.uid}_${qid}`), { uid: eu.uid, qid, provaId: provaAtual.id, criadoEm: serverTimestamp() });
+    // o marcador libera o gabarito para o aluno; a equipe já lê os gabaritos, então o modo teste não grava
+    if (!modoTeste) lote.set(doc(db, "marcadores", `${eu.uid}_${qid}`), { uid: eu.uid, qid, provaId: provaAtual.id, criadoEm: serverTimestamp() });
     await lote.commit();
     enviada = true; respostas[qid] = { resposta };
     await mostrarFeedback(qid, q, resposta);
@@ -236,7 +261,7 @@ async function finalizar() {
     const lote = writeBatch(db);
     lote.update(doc(db, "tentativas", tentativa.id), { finalizadaEm: serverTimestamp(), indiceAtual: tentativa.questoesIds.length, notaPrevia, aguardandoCorrecao: pend });
     // garante o marcador de todas as questões (libera a leitura do gabarito no resultado)
-    for (const qid of tentativa.questoesIds)
+    if (!modoTeste) for (const qid of tentativa.questoesIds)
       if (!respostas[qid]) lote.set(doc(db, "marcadores", `${eu.uid}_${qid}`), { uid: eu.uid, qid, provaId: provaAtual.id, criadoEm: serverTimestamp() });
     await lote.commit();
     tentativa.finalizadaEm = new Date(); tentativa.notaPrevia = notaPrevia; tentativa.aguardandoCorrecao = pend;
@@ -250,8 +275,24 @@ function mostrarFim() {
     `<p style="font-size:1.6em;margin:6px 0"><b>Sua nota: ${n} / 100</b></p>` +
     (pend ? `<p class="pequeno">⚠ ${pend} resposta(s) escrita(s) ainda vão passar pela correção do professor: a nota pode subir.</p>` : "") +
     `<p class="pequeno">As respostas certas e as explicações aparecem quando o professor liberar o resultado.</p>`;
+  // modo teste: a equipe pode abrir a tela de resultado mesmo com os resultados ainda ocultos
+  $("#btnVerResultadoTeste").classList.toggle("oculto", !modoTeste);
   mostrar("telaFim");
 }
+
+$("#btnVerResultadoTeste").onclick = () => verResultado();
+
+$("#btnReiniciarTeste").onclick = async () => {
+  if (!modoTeste || !confirm("Apagar a sua tentativa de teste e recomeçar do zero?")) return;
+  $("#btnReiniciarTeste").disabled = true;
+  try {
+    await apagarTentativaTeste(eu.uid, provaTeste);
+    tentativa = null;
+    await abrirProva(provaTeste, "inicio");
+    toast("Teste reiniciado.", "ok");
+  } catch (e) { toast("Não foi possível reiniciar o teste: " + (e.code || e.message), "erro"); console.error(e); }
+  $("#btnReiniciarTeste").disabled = false;
+};
 
 // troca de aba / janela durante a prova: registra
 document.addEventListener("visibilitychange", () => {

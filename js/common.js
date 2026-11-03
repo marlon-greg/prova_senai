@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, connectAuthEmulator }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { getFirestore, connectFirestoreEmulator, doc, getDoc }
+import { getFirestore, connectFirestoreEmulator, doc, getDoc, getDocs, collection, writeBatch, deleteDoc }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { firebaseConfig, SUPER_ADMIN, DOMINIOS_ALUNOS_PADRAO, USAR_EMULADOR } from "./firebase-config.js";
 
@@ -36,6 +36,24 @@ export async function identificar(user) {
   const dom = email.split("@")[1] || "";
   if (dominios.includes(dom)) return { tipo: "aluno", email, nome: user.displayName || email };
   return { tipo: "bloqueado", email, dominios };
+}
+
+// ---------------- modo teste (equipe) ----------------
+// id da tentativa de teste de um membro da equipe para uma prova
+export function idTentativaTeste(uid, provaId) { return `teste_${uid}_${provaId}`; }
+
+// Apaga a tentativa de teste (respostas + correções + documento). Devolve false se não existia.
+export async function apagarTentativaTeste(uid, provaId) {
+  const tid = idTentativaTeste(uid, provaId), ref = doc(db, "tentativas", tid);
+  const t = await getDoc(ref);
+  if (!t.exists()) return false;
+  // subcoleções primeiro (as regras consultam a tentativa para autorizar), depois o documento
+  const lote = writeBatch(db);
+  for (const sub of ["respostas", "correcoes"])
+    (await getDocs(collection(db, "tentativas", tid, sub))).forEach(d => lote.delete(d.ref));
+  await lote.commit();
+  await deleteDoc(ref);
+  return true;
 }
 
 // ---------------- correção automática ----------------
