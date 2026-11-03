@@ -4,31 +4,36 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Prova — SENAI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <!-- MODO TESTE (equipe): só aparece com index.html?teste=<provaId> -->
 <div id="faixaTeste" class="faixa-teste oculto">
   <span><b>MODO TESTE</b> — esta tentativa não vale e não aparece nos resultados</span>
-  <button id="btnReiniciarTeste" class="leve">Reiniciar teste</button>
+  <button id="btnReiniciarTeste" class="leve mini">Reiniciar teste</button>
 </div>
 <header>
   <span class="senai">SENAI</span>
   <h1>Prova online · Desenvolvimento de Sistemas</h1>
   <div class="quem">
-    <button id="btnFonte" class="leve" title="Aumentar a letra">A+</button>
+    <button id="btnFonte" class="leve mini" title="Aumentar/diminuir a letra" aria-label="Aumentar ou diminuir a letra">A+</button>
+    <span id="avatar" class="avatar oculto" aria-hidden="true"></span>
     <span id="quem"></span>
-    <button id="btnSair" class="sec oculto">Sair</button>
+    <button id="btnSair" class="discreto oculto">Sair</button>
   </div>
 </header>
 
-<main>
+<main class="estreito">
   <!-- LOGIN -->
-  <section id="telaLogin" class="card centro">
-    <h2>Entre com a sua conta do SENAI</h2>
-    <p class="pequeno">Use o e-mail <b>@edu.senai.br</b> ou <b>@aluno.senai.br</b>. Outras contas não têm acesso.</p>
+  <section id="telaLogin" class="card login">
+    <div class="marca">SENAI</div>
+    <h2>Entre para fazer a prova</h2>
+    <p class="pequeno">Use a sua conta Google do SENAI: e-mail terminado em <b>@edu.senai.br</b> ou <b>@aluno.senai.br</b>. Contas pessoais (Gmail, Hotmail…) não têm acesso.</p>
     <button id="btnEntrar">Entrar com Google</button>
-    <p id="msgLogin" class="pequeno"></p>
+    <p id="msgLogin" class="pequeno" role="alert"></p>
   </section>
 
   <!-- LISTA DE PROVAS -->
@@ -53,24 +58,28 @@
         <li>Se a página fechar sem querer, entre de novo: você continua de onde parou.</li>
       </ul>
     </div>
-    <div class="linha">
-      <button id="btnComecar" class="ok">Começar a prova</button>
-      <button id="btnVoltar1" class="sec">Voltar</button>
+    <div class="linha acoes">
+      <button id="btnComecar" class="ok grande">Começar a prova</button>
+      <button id="btnVoltar1" class="leve">Voltar</button>
     </div>
   </section>
 
   <!-- QUESTÃO -->
   <section id="telaQuestao" class="oculto">
     <div class="card">
-      <div class="linha"><span id="qContador" class="tag"></span><span id="qTipo" class="tag"></span><span id="qTitulo" class="pequeno" style="text-align:right"></span></div>
-      <div class="progresso"><div id="qBarra" style="width:0%"></div></div>
+      <div class="q-topo">
+        <span id="qContador" class="q-numero"></span>
+        <span id="qTipo" class="tag"></span>
+        <span id="qTitulo" class="pequeno titulo-prova"></span>
+      </div>
+      <div class="progresso" role="progressbar" aria-label="Progresso da prova"><div id="qBarra" style="width:0%"></div></div>
       <div id="qEnunciado" class="enunciado"></div>
       <div id="qArea"></div>
-      <div id="qFeedback" class="oculto"></div>
-      <div class="linha" style="margin-top:14px">
-        <button id="btnEnviar" class="ok">Enviar resposta</button>
-        <button id="btnProxima" class="oculto">Próxima questão →</button>
-        <button id="btnFinalizar" class="oculto">Finalizar prova ✔</button>
+      <div id="qFeedback" class="oculto" role="status"></div>
+      <div class="acoes-questao">
+        <button id="btnEnviar" class="ok grande">Enviar resposta</button>
+        <button id="btnProxima" class="grande direita oculto">Próxima questão →</button>
+        <button id="btnFinalizar" class="grande direita oculto">Finalizar prova ✔</button>
       </div>
       <p class="pequeno" id="qDica">Confira antes de enviar: depois de enviada, a resposta não pode ser alterada.</p>
     </div>
@@ -81,8 +90,10 @@
     <h2>Prova finalizada ✅</h2>
     <div id="fimNota"></div>
     <p>Suas respostas foram registradas.</p>
-    <button id="btnVerResultadoTeste" class="oculto">Ver resultado</button>
-    <button id="btnVoltar2" class="sec">Voltar para as provas</button>
+    <div class="linha acoes" style="justify-content:center">
+      <button id="btnVerResultadoTeste" class="oculto">Ver resultado</button>
+      <button id="btnVoltar2" class="leve">Voltar para as provas</button>
+    </div>
   </section>
 
   <!-- RESULTADO -->
@@ -90,7 +101,7 @@
     <div class="card">
       <h2 id="resTitulo"></h2>
       <div id="resResumo"></div>
-      <div class="linha" style="margin-top:10px"><button id="btnVoltar3" class="sec">Voltar</button><button id="btnImprimir" class="leve">Salvar em PDF</button></div>
+      <div class="linha acoes" style="margin-top:8px"><button id="btnVoltar3" class="leve">Voltar</button><button id="btnImprimir" class="leve">Salvar em PDF</button></div>
     </div>
     <div id="resLista"></div>
   </section>

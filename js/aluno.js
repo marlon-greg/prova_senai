@@ -1,6 +1,6 @@
 // Página do aluno: login, lista de provas, prova (uma questão por vez), resultado.
 import { db, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar, sortearAleatorio, esc, $, toast, dataBR, letra,
-         idTentativaTeste, apagarTentativaTeste, confirmar, traduzirErro }
+         idTentativaTeste, apagarTentativaTeste, confirmar, traduzirErro, iniciais }
   from "./common.js";
 import { collection, doc, getDoc, getDocs, setDoc, updateDoc, query, where, writeBatch, serverTimestamp, increment }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
@@ -33,9 +33,10 @@ $("#btnEntrar").onclick = async () => {
 $("#btnSair").onclick = () => sair();
 
 aoMudarLogin(async user => {
-  if (!user) { eu = null; modoTeste = false; $("#faixaTeste").classList.add("oculto"); $("#quem").textContent = ""; $("#btnSair").classList.add("oculto"); mostrar("telaLogin"); return; }
+  if (!user) { eu = null; modoTeste = false; $("#faixaTeste").classList.add("oculto"); $("#quem").textContent = ""; $("#avatar").classList.add("oculto"); $("#btnSair").classList.add("oculto"); mostrar("telaLogin"); return; }
   const id = await identificar(user);
   $("#quem").textContent = id.email; $("#btnSair").classList.remove("oculto");
+  $("#avatar").textContent = iniciais(user.displayName || id.email); $("#avatar").title = user.displayName || id.email; $("#avatar").classList.remove("oculto");
   if (id.tipo === "bloqueado") {
     $("#avisoTexto").innerHTML = `<h2>Conta não autorizada</h2><p>A conta <b>${esc(id.email)}</b> não é de aluno do SENAI.<br>Entre com o e-mail <b>@${esc(id.dominios.join("</b> ou <b>@"))}</b>.</p>`;
     mostrar("telaAviso"); return;
@@ -74,17 +75,17 @@ async function listarProvas() {
     b.forEach(d => provas[d.id] = { id: d.id, ...d.data() });
     lista = Object.values(provas).sort((x, y) => (y.criadoEm?.seconds || 0) - (x.criadoEm?.seconds || 0));
   }
-  if (!lista.length) { box.innerHTML = "<p>Nenhuma prova liberada para você agora.</p>"; return; }
+  if (!lista.length) { box.innerHTML = `<div class="vazio"><div class="icone">📭</div><p><b>Nenhuma prova liberada no momento.</b></p><p class="pequeno">Quando o professor liberar, ela aparece aqui. Se a prova já começou na sala, recarregue a página.</p></div>`; return; }
   box.innerHTML = "";
   for (const p of lista) {
     const t = await getDoc(doc(db, "tentativas", idTentativa(p.id)));
     const td = t.exists() ? t.data() : null;
     const podeFazer = modoTeste || p.liberada, podeVerResultado = modoTeste || p.resultadosLiberados;
     let status, acao;
-    if (!td)                    { status = `<span class="tag">não iniciada</span>`; acao = podeFazer ? `<button data-acao="inicio" data-id="${p.id}">Fazer a prova</button>` : `<span class="pequeno">prova encerrada</span>`; }
-    else if (!td.finalizadaEm)  { status = `<span class="tag aviso">em andamento (questão ${(td.indiceAtual || 0) + 1} de ${p.nQuestoes})</span>`; acao = podeFazer ? `<button data-acao="continuar" data-id="${p.id}">Continuar</button>` : `<span class="pequeno">prova encerrada</span>`; }
-    else                        { status = `<span class="tag ok">finalizada em ${dataBR(td.finalizadaEm)}</span>` + (td.nota !== undefined ? ` <span class="tag ok">nota final: <b>${td.nota}</b></span>` : td.notaPrevia !== null && td.notaPrevia !== undefined ? ` <span class="tag">nota prévia: <b>${td.notaPrevia}</b>${td.aguardandoCorrecao ? " (aguardando correção)" : ""}</span>` : ""); acao = podeVerResultado ? `<button class="sec" data-acao="resultado" data-id="${p.id}">Ver resultado</button>` : `<span class="pequeno">resultado ainda não liberado</span>`; }
-    box.insertAdjacentHTML("beforeend", `<div class="card" style="margin:8px 0"><div class="linha"><div style="flex:3"><b>${esc(p.titulo)}</b><br><span class="pequeno">${esc(p.turma || "")} · ${p.nQuestoes} questões</span><br>${status}</div><div style="flex:1;text-align:right">${acao}</div></div></div>`);
+    if (!td)                    { status = `<span class="tag">○ não iniciada</span>`; acao = podeFazer ? `<button data-acao="inicio" data-id="${p.id}">Fazer a prova</button>` : `<span class="pequeno">prova encerrada</span>`; }
+    else if (!td.finalizadaEm)  { status = `<span class="tag aviso">◐ em andamento (questão ${(td.indiceAtual || 0) + 1} de ${p.nQuestoes})</span>`; acao = podeFazer ? `<button data-acao="continuar" data-id="${p.id}">Continuar</button>` : `<span class="pequeno">prova encerrada</span>`; }
+    else                        { status = `<span class="tag ok">✓ finalizada em ${dataBR(td.finalizadaEm)}</span>` + (td.nota !== undefined ? ` <span class="tag nota">nota final: <b>${td.nota}</b></span>` : td.notaPrevia !== null && td.notaPrevia !== undefined ? ` <span class="tag nota">nota prévia: <b>${td.notaPrevia}</b>${td.aguardandoCorrecao ? " (aguardando correção)" : ""}</span>` : ""); acao = podeVerResultado ? `<button class="sec" data-acao="resultado" data-id="${p.id}">Ver resultado</button>` : `<span class="pequeno">resultado ainda não liberado</span>`; }
+    box.insertAdjacentHTML("beforeend", `<div class="prova-item"><div class="info"><b>${esc(p.titulo)}</b><br><span class="pequeno">${esc(p.turma || "")} · ${p.nQuestoes} questões</span><div style="margin-top:4px">${status}</div></div><div class="acao">${acao}</div></div>`);
   }
   box.querySelectorAll("button[data-acao]").forEach(btn => btn.onclick = () => abrirProva(btn.dataset.id, btn.dataset.acao));
 }
@@ -169,19 +170,29 @@ function mostrarQuestao() {
     if (provaAtual.embaralharAlternativas !== false) ordem = embaralhar(ordem, eu.uid + qid);
     ordemAlternativas[qid] = ordem;
     ordem.forEach((k, pos) => {
-      area.insertAdjacentHTML("beforeend", `<label class="alt"><input type="radio" name="alt" value="${k}"> <b>${letra(pos)})</b> ${esc(q.alternativas[k])}</label>`);
+      area.insertAdjacentHTML("beforeend", `<label class="alt"><input type="radio" name="alt" value="${k}"><span class="alt-letra">${letra(pos)}</span><span class="alt-texto">${esc(q.alternativas[k])}</span></label>`);
     });
-    area.querySelectorAll(".alt").forEach(l => l.onclick = () => { area.querySelectorAll(".alt").forEach(x => x.classList.remove("sel")); l.classList.add("sel"); });
+    // "change" cobre clique e teclado (setas) na escolha da alternativa
+    area.querySelectorAll(".alt input").forEach(inp => inp.addEventListener("change", () => {
+      area.querySelectorAll(".alt").forEach(x => x.classList.toggle("sel", x.contains(inp)));
+    }));
   } else {
-    area.innerHTML = `<textarea id="txtResposta" placeholder="Digite sua resposta aqui. Colar está desativado." spellcheck="false"></textarea>
-                      <p class="pequeno">Ctrl+V, botão direito e arrastar texto não funcionam neste campo.</p>`;
-    bloquearColar($("#txtResposta"));
+    area.innerHTML = `<label for="txtResposta" class="pequeno">Sua resposta</label>
+                      <textarea id="txtResposta" placeholder="Digite sua resposta aqui. Colar está desativado." spellcheck="false"></textarea>
+                      <div class="contador"><span id="qChars">0</span> caracteres · Ctrl+V, botão direito e arrastar texto não funcionam neste campo.</div>`;
+    const txt = $("#txtResposta");
+    txt.addEventListener("input", () => $("#qChars").textContent = txt.value.length);
+    bloquearColar(txt);
   }
   mostrar("telaQuestao");
 }
 
-// enunciado: quebra de linha preservada; trechos entre crases viram código
-function formatarEnunciado(t) { return esc(t).replace(/`([^`]+)`/g, "<code>$1</code>"); }
+// enunciado: quebra de linha preservada; ```bloco``` (ou `trecho com quebra de linha`) vira bloco de código; `trecho` vira código na linha
+function formatarEnunciado(t) {
+  return esc(t)
+    .replace(/```\w*\n?([\s\S]+?)\n?```/g, '<pre class="codigo">$1</pre>')
+    .replace(/`([^`]+)`/g, (_, c) => c.includes("\n") ? `<pre class="codigo">${c}</pre>` : `<code>${c}</code>`);
+}
 
 function bloquearColar(el) {
   ["paste", "drop", "contextmenu"].forEach(ev => el.addEventListener(ev, e => { e.preventDefault(); toast("Colar está desativado nesta prova.", "erro"); }));
@@ -224,13 +235,14 @@ async function mostrarFeedback(qid, q, resposta) {
     try {
       const g = (await getDoc(doc(db, "bancos", tentativa.bancoId, "gabaritos", qid))).data() || {};
       const r = corrigir(q, g, resposta);
-      let html = r.status === "certa" ? "✅ <b>Resposta correta.</b>" : r.status === "errada" ? "❌ <b>Resposta incorreta.</b>" : "🟡 <b>Resposta registrada.</b> Vai para a correção do professor.";
+      let html = r.status === "certa" ? "<b>Resposta correta.</b>" : r.status === "errada" ? "<b>Resposta incorreta.</b>" : "<b>Resposta registrada.</b> Vai para a correção do professor.";
       if (modo === "completo") {
         if (q.tipo === "alternativa") html += `<br>Correta: <b>${esc(q.alternativas[g.correta])}</b>`;
         else if (g.respostasAceitas?.length) html += `<br>Resposta esperada: <span class="mono">${esc(g.respostasAceitas[0])}</span>`;
         if (g.explicacao) html += `<br><span class="pequeno">${esc(g.explicacao)}</span>`;
       }
-      fb.className = "feedback " + r.status; fb.innerHTML = html; fb.classList.remove("oculto");
+      const icone = { certa: "✅", errada: "❌" }[r.status] || "🟡";
+      fb.className = "feedback " + r.status; fb.innerHTML = `<span class="icone" aria-hidden="true">${icone}</span><div>${html}</div>`; fb.classList.remove("oculto");
     } catch (e) { console.warn("sem feedback", e); }
   }
   $("#btnEnviar").classList.add("oculto"); $("#qDica").classList.add("oculto");
@@ -272,7 +284,7 @@ async function finalizar() {
 function mostrarFim() {
   const n = tentativa.notaPrevia, pend = tentativa.aguardandoCorrecao || 0;
   $("#fimNota").innerHTML = n === null || n === undefined ? "" :
-    `<p style="font-size:1.6em;margin:6px 0"><b>Sua nota: ${n} / 100</b></p>` +
+    `<p style="font-family:var(--fonte-titulo);font-size:1.8em;font-weight:600;margin:8px 0">Sua nota: ${n} / 100</p>` +
     (pend ? `<p class="pequeno">⚠ ${pend} resposta(s) escrita(s) ainda vão passar pela correção do professor: a nota pode subir.</p>` : "") +
     `<p class="pequeno">As respostas certas e as explicações aparecem quando o professor liberar o resultado.</p>`;
   // modo teste: a equipe pode abrir a tela de resultado mesmo com os resultados ainda ocultos
@@ -326,14 +338,14 @@ async function verResultado() {
     const rot = { certa: ["ok", "✅ Certa"], errada: ["erro", "❌ Errada"], parcial: ["aviso", "🟡 Parcial"], revisar: ["aviso", "🟡 Em correção"], em_branco: ["erro", "⬜ Em branco"] }[c.status];
     let sua = r === undefined ? "<i>não respondida</i>" : q.tipo === "alternativa" ? esc(q.alternativas[r]) : `<span class="mono">${esc(r)}</span>`;
     let certa = q.tipo === "alternativa" ? esc(q.alternativas?.[g.correta] ?? "—") : (g.respostasAceitas?.length ? `<span class="mono">${esc(g.respostasAceitas[0])}</span>` : "—");
-    html += `<div class="card"><div class="linha"><b>Questão ${i + 1}</b><span class="tag ${rot[0]}">${rot[1]} · ${c.pontos}/${peso}</span></div>
+    html += `<div class="card"><div class="q-topo"><span class="q-numero" style="font-size:1.1em">Questão ${i + 1}</span><span class="tag ${rot[0]}">${rot[1]} · ${c.pontos}/${peso}</span></div>
       <div class="enunciado">${formatarEnunciado(q.enunciado)}</div>
       <p><b>Sua resposta:</b> ${sua}</p>
       ${c.status !== "certa" && certa !== "—" ? `<p><b>Resposta correta:</b> ${certa}</p>` : ""}
-      ${g.explicacao ? `<div class="feedback ${c.status === "certa" ? "certa" : "errada"}"><b>Por quê:</b> ${esc(g.explicacao)}</div>` : ""}
+      ${g.explicacao ? `<div class="feedback ${c.status === "certa" ? "certa" : "errada"}"><span class="icone" aria-hidden="true">💡</span><div><b>Por quê:</b> ${esc(g.explicacao)}</div></div>` : ""}
       ${obs ? `<p class="pequeno"><b>Comentário do professor:</b> ${esc(obs)}</p>` : ""}</div>`;
   });
   const nota = max ? Math.round((total / max) * 1000) / 10 : 0;
-  $("#resResumo").innerHTML = `<p style="font-size:1.3em"><b>Nota: ${nota} / 100</b> <span class="pequeno">(${total} de ${max} pontos)</span></p>`;
+  $("#resResumo").innerHTML = `<p style="font-family:var(--fonte-titulo);font-size:1.4em;font-weight:600;margin:8px 0">Nota: ${nota} / 100 <span class="pequeno">(${total} de ${max} pontos)</span></p>`;
   $("#resLista").innerHTML = html;
 }

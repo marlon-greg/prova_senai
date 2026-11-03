@@ -1,6 +1,6 @@
 // Painel do professor: provas, bancos (import JSON), resultados/correção, equipe, configuração.
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, apagarTentativaTeste,
-         confirmar, traduzirErro } from "./common.js";
+         confirmar, traduzirErro, iniciais } from "./common.js";
 import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -12,9 +12,10 @@ const ehAdmin = () => eu?.papel === "admin";
 $("#btnEntrar").onclick = async () => { try { await entrar(); } catch (e) { $("#msgLogin").textContent = "Não foi possível entrar. " + traduzirErro(e); } };
 $("#btnSair").onclick = () => sair();
 aoMudarLogin(async user => {
-  if (!user) { eu = null; $("#btnSair").classList.add("oculto"); $("#quem").textContent = ""; trocar("telaLogin"); return; }
+  if (!user) { eu = null; $("#btnSair").classList.add("oculto"); $("#avatar").classList.add("oculto"); $("#quem").textContent = ""; trocar("telaLogin"); return; }
   const id = await identificar(user);
   $("#quem").textContent = `${id.email}${id.papel ? " · " + id.papel : ""}`; $("#btnSair").classList.remove("oculto");
+  $("#avatar").textContent = iniciais(user.displayName || id.email); $("#avatar").title = user.displayName || id.email; $("#avatar").classList.remove("oculto");
   if (id.tipo !== "equipe") {
     $("#avisoTexto").innerHTML = `<h2>Sem acesso ao painel</h2><p>A conta <b>${esc(id.email)}</b> não está na equipe. Peça ao administrador para cadastrar.</p><p><a href="index.html">Ir para a página do aluno</a></p>`;
     trocar("telaAviso"); return;
@@ -53,18 +54,18 @@ async function carregarProvas() {
   const provas = []; s.forEach(d => provas.push({ id: d.id, ...d.data() }));
   provas.sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
   const box = $("#listaProvas");
-  if (!provas.length) { box.innerHTML = "<p class='pequeno'>Nenhuma prova ainda.</p>"; return; }
-  box.innerHTML = `<table><tr><th>Prova</th><th>Banco</th><th>Questões</th><th>Status</th><th>Resultados</th><th></th></tr>` + provas.map(p => {
+  if (!provas.length) { box.innerHTML = `<div class="vazio"><div class="icone">📝</div><p>Nenhuma prova ainda. Crie a primeira no formulário acima.</p></div>`; return; }
+  box.innerHTML = `<div class="tabela"><table><tr><th>Prova</th><th>Banco</th><th>Questões</th><th>Status</th><th>Resultados</th><th></th></tr>` + provas.map(p => {
     const b = bancosCache.find(x => x.id === p.bancoId);
     return `<tr><td><b>${esc(p.titulo)}</b><br><span class="pequeno">${esc(p.turma || "")}</span></td><td>${esc(b?.nome || p.bancoId)}<br><span class="pequeno">${esc(b?.materia || "")}</span></td><td>${p.nQuestoes}${p.nDissertativas ? `<br><span class="pequeno">${p.nDissertativas} dissert.</span>` : ""}</td>
-      <td><span class="tag ${p.liberada ? "on" : "off"}">${p.liberada ? "LIBERADA" : "fechada"}</span></td>
-      <td><span class="tag ${p.resultadosLiberados ? "on" : "off"}">${p.resultadosLiberados ? "liberados" : "ocultos"}</span></td>
-      <td style="white-space:nowrap"><button class="leve" data-testar="${p.id}" title="Abre a prova em nova aba, como o aluno vê (não vale nota)">Testar como aluno</button>
-        <button class="leve" data-apagarteste="${p.id}" title="Apaga a sua tentativa de teste desta prova">Apagar meu teste</button>
-        ${podeEditar() ? `<button class="leve" data-tg="liberada" data-id="${p.id}">${p.liberada ? "Encerrar" : "Liberar prova"}</button>
-        <button class="leve" data-tg="resultadosLiberados" data-id="${p.id}">${p.resultadosLiberados ? "Ocultar resultados" : "Liberar resultados"}</button>
-        ${ehAdmin() ? `<button class="leve" data-del="${p.id}" title="Apagar prova">🗑</button>` : ""}` : ""}</td></tr>`;
-  }).join("") + "</table>";
+      <td><span class="tag ${p.liberada ? "on" : "off"}">${p.liberada ? "● liberada" : "○ fechada"}</span></td>
+      <td><span class="tag ${p.resultadosLiberados ? "on" : "off"}">${p.resultadosLiberados ? "● liberados" : "○ ocultos"}</span></td>
+      <td class="td-acoes">${podeEditar() ? `<button class="mini ${p.liberada ? "leve" : "ok"}" data-tg="liberada" data-id="${p.id}">${p.liberada ? "Encerrar" : "Liberar prova"}</button>
+        <button class="leve mini" data-tg="resultadosLiberados" data-id="${p.id}">${p.resultadosLiberados ? "Ocultar resultados" : "Liberar resultados"}</button><br>` : ""}
+        <button class="leve mini" data-testar="${p.id}" title="Abre a prova em nova aba, como o aluno vê (não vale nota)">Testar como aluno</button>
+        <button class="perigo mini" data-apagarteste="${p.id}" title="Apaga a sua tentativa de teste desta prova">Apagar meu teste</button>
+        ${podeEditar() && ehAdmin() ? `<button class="perigo mini" data-del="${p.id}" title="Apagar prova" aria-label="Apagar prova">🗑 Apagar</button>` : ""}</td></tr>`;
+  }).join("") + "</table></div>";
   box.querySelectorAll("[data-tg]").forEach(b => b.onclick = async () => {
     const p = provas.find(x => x.id === b.dataset.id);
     await updateDoc(doc(db, "provas", p.id), { [b.dataset.tg]: !p[b.dataset.tg] });
@@ -152,10 +153,10 @@ $("#btnImportarBanco").onclick = async () => {
 async function carregarBancos() {
   await listarBancos();
   const box = $("#listaBancos");
-  if (!bancosCache.length) { box.innerHTML = "<p class='pequeno'>Nenhum banco ainda.</p>"; return; }
-  box.innerHTML = `<table><tr><th>Banco</th><th>Matéria</th><th>Questões</th><th></th></tr>` + bancosCache.map(b =>
+  if (!bancosCache.length) { box.innerHTML = `<div class="vazio"><div class="icone">📚</div><p>Nenhum banco ainda. Importe o <b>modelo_banco.json</b> acima para começar.</p></div>`; return; }
+  box.innerHTML = `<div class="tabela"><table><tr><th>Banco</th><th>Matéria</th><th>Questões</th><th></th></tr>` + bancosCache.map(b =>
     `<tr><td><b>${esc(b.nome)}</b><br><span class="pequeno">${b.id}</span></td><td>${esc(b.materia || "")}</td><td>${b.nQuestoes}</td>
-     <td style="white-space:nowrap"><button class="leve" data-gab="${b.id}">Gabarito p/ Classroom</button> ${ehAdmin() ? `<button class="leve" data-delb="${b.id}">🗑</button>` : ""}</td></tr>`).join("") + "</table>";
+     <td class="td-acoes"><button class="leve mini" data-gab="${b.id}">Gabarito p/ Classroom</button> ${ehAdmin() ? `<button class="perigo mini" data-delb="${b.id}" aria-label="Apagar banco">🗑 Apagar</button>` : ""}</td></tr>`).join("") + "</table></div>";
   box.querySelectorAll("[data-gab]").forEach(x => x.onclick = () => gerarGabarito(x.dataset.gab));
   box.querySelectorAll("[data-delb]").forEach(x => x.onclick = async () => {
     if (!(await confirmar("Apagar o banco e todas as suas questões?", { titulo: "Apagar banco", ok: "Apagar", perigo: true }))) return;
@@ -228,12 +229,17 @@ async function carregarResultados() {
 function desenharResultados() {
   const { prova, linhas } = resDados;
   const fin = linhas.filter(l => l.t.finalizadaEm), media = fin.length ? (fin.reduce((s, l) => s + l.nota, 0) / fin.length).toFixed(1) : "—";
-  $("#resResumo").innerHTML = `<p><b>${esc(prova.titulo)}</b> · ${linhas.length} aluno(s) iniciaram · ${fin.length} finalizaram · média ${media} · ${linhas.reduce((s, l) => s + l.revisar, 0)} resposta(s) para revisar</p>`;
-  if (!linhas.length) { $("#resTabela").innerHTML = "<p class='pequeno'>Ninguém fez esta prova ainda.</p>"; return; }
-  $("#resTabela").innerHTML = `<div class="card"><table><tr><th>Aluno</th><th>Início</th><th>Fim</th><th>Abas</th><th>Nota</th><th>Revisar</th><th></th></tr>` +
+  const revisar = linhas.reduce((s, l) => s + l.revisar, 0);
+  $("#resResumo").innerHTML = `<div class="numeros">
+      <div class="numero"><b>${linhas.length}</b><span>alunos iniciaram</span></div>
+      <div class="numero"><b>${fin.length}</b><span>finalizaram</span></div>
+      <div class="numero"><b>${media}</b><span>média (0–100)</span></div>
+      <div class="numero ${revisar ? "aviso" : ""}"><b>${revisar}</b><span>respostas a revisar</span></div></div>`;
+  if (!linhas.length) { $("#resTabela").innerHTML = `<div class="card vazio"><div class="icone">⏳</div><p>Ninguém fez esta prova ainda.</p></div>`; return; }
+  $("#resTabela").innerHTML = `<div class="card"><div class="tabela"><table><tr><th>Aluno</th><th>Início</th><th>Fim</th><th>Abas</th><th>Nota</th><th>Revisar</th><th></th></tr>` +
     linhas.map((l, i) => `<tr><td><b>${esc(l.t.nome || "")}</b><br><span class="pequeno">${esc(l.t.email)}</span></td><td class="pequeno">${dataBR(l.t.iniciadaEm)}</td><td class="pequeno">${l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "<span class='tag aviso'>em andamento</span>"}</td>
       <td>${l.t.trocasDeAba || 0}</td><td><b>${l.nota}</b>${l.t.nota !== undefined ? ` <span class="pequeno">(fechada: ${l.t.nota})</span>` : l.t.notaPrevia !== null && l.t.notaPrevia !== undefined ? ` <span class="pequeno">(prévia: ${l.t.notaPrevia})</span>` : ""}</td><td>${l.revisar ? `<span class="tag aviso">${l.revisar}</span>` : "—"}</td>
-      <td style="white-space:nowrap"><button class="leve" data-ver="${i}">Ver</button> ${ehAdmin() ? `<button class="leve" data-reset="${i}" title="Apagar a tentativa (o aluno pode refazer)">↺</button>` : ""}</td></tr>`).join("") + `</table></div><div id="resDetalhe"></div>`;
+      <td class="td-acoes"><button class="leve mini" data-ver="${i}">Ver</button> ${ehAdmin() ? `<button class="perigo mini" data-reset="${i}" title="Apagar a tentativa (o aluno pode refazer)">↺ Apagar</button>` : ""}</td></tr>`).join("") + `</table></div></div><div id="resDetalhe"></div>`;
   document.querySelectorAll("[data-ver]").forEach(b => b.onclick = () => verAluno(Number(b.dataset.ver)));
   document.querySelectorAll("[data-reset]").forEach(b => b.onclick = async () => {
     const l = linhas[Number(b.dataset.reset)];
@@ -248,10 +254,10 @@ function desenharResultados() {
 function verAluno(i) {
   const l = resDados.linhas[i], box = $("#resDetalhe");
   const rot = { certa: ["ok", "✅ certa"], errada: ["erro", "❌ errada"], parcial: ["aviso", "🟡 parcial"], revisar: ["aviso", "🟡 revisar"], em_branco: ["erro", "⬜ em branco"] };
-  box.innerHTML = `<div class="card"><div class="linha"><h2 style="flex:3">${esc(l.t.nome || l.t.email)} — ${l.nota}/100 (${l.pts} de ${l.max} pontos)</h2><button class="leve" id="btnPDFAluno">PDF deste aluno</button></div>` + l.itens.map(x => {
+  box.innerHTML = `<div class="card"><div class="linha"><h2 style="flex:3">${esc(l.t.nome || l.t.email)} — ${l.nota}/100 (${l.pts} de ${l.max} pontos)</h2><button class="leve mini" id="btnPDFAluno" style="flex:0 0 auto">PDF deste aluno</button></div>` + l.itens.map(x => {
     const sua = x.r === undefined ? "<i>não respondida</i>" : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
     const certa = x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.g.correta] ?? "—") : esc((x.g.respostasAceitas || [])[0] || (x.g.palavrasChave || []).join(" + "));
-    const manual = podeEditar() && x.q.tipo === "dissertativa" ? `<div class="linha" style="margin-top:6px"><div style="flex:0 0 120px"><label>Pontos (0–${x.peso})</label><input type="number" min="0" max="${x.peso}" step="0.5" value="${x.pontos}" id="pt_${x.qid}"></div><div><label>Comentário para o aluno</label><input type="text" id="cm_${x.qid}" value="${esc(x.comentario)}"></div><div style="flex:0 0 120px;align-self:flex-end"><button class="leve" data-corr="${x.qid}" data-i="${i}">Salvar</button></div></div>` : "";
+    const manual = podeEditar() && x.q.tipo === "dissertativa" ? `<div class="linha" style="margin-top:6px"><div style="flex:0 0 120px"><label>Pontos (0–${x.peso})</label><input type="number" min="0" max="${x.peso}" step="0.5" value="${x.pontos}" id="pt_${x.qid}"></div><div><label>Comentário para o aluno</label><input type="text" id="cm_${x.qid}" value="${esc(x.comentario)}"></div><div style="flex:0 0 120px;align-self:flex-end"><button class="mini" data-corr="${x.qid}" data-i="${i}">Salvar</button></div></div>` : "";
     return `<div class="feedback ${x.status === "certa" ? "certa" : x.status === "errada" ? "errada" : "revisar"}"><div class="linha"><b>Q${x.n}</b> <span class="tag ${rot[x.status][0]}">${rot[x.status][1]} · ${x.pontos}/${x.peso}${x.manual ? " · manual" : ""}</span></div>
       <div class="enunciado pequeno">${esc(x.q.enunciado)}</div><p><b>Resposta do aluno:</b> ${sua}<br><b>Esperada:</b> ${certa}</p>${manual}</div>`;
   }).join("") + "</div>";
@@ -286,9 +292,9 @@ $("#btnCSV").onclick = () => {
 async function carregarEquipe() {
   const s = await getDocs(collection(db, "equipe"));
   const lista = []; s.forEach(d => lista.push({ id: d.id, ...d.data() }));
-  $("#listaEquipe").innerHTML = `<table><tr><th>E-mail</th><th>Nome</th><th>Papel</th><th></th></tr>
+  $("#listaEquipe").innerHTML = `<div class="tabela"><table><tr><th>E-mail</th><th>Nome</th><th>Papel</th><th></th></tr>
     <tr><td>${esc(SUPER_ADMIN)}</td><td>—</td><td><span class="tag on">admin principal</span></td><td class="pequeno">fixo nas regras</td></tr>` +
-    lista.map(m => `<tr><td>${esc(m.id)}</td><td>${esc(m.nome || "")}</td><td><span class="tag">${esc(m.papel)}</span></td><td>${ehAdmin() ? `<button class="leve" data-rm="${m.id}">Remover</button>` : ""}</td></tr>`).join("") + "</table>";
+    lista.map(m => `<tr><td>${esc(m.id)}</td><td>${esc(m.nome || "")}</td><td><span class="tag">${esc(m.papel)}</span></td><td>${ehAdmin() ? `<button class="perigo mini" data-rm="${m.id}">Remover</button>` : ""}</td></tr>`).join("") + "</table></div>";
   document.querySelectorAll("[data-rm]").forEach(b => b.onclick = async () => { if (await confirmar("Remover " + b.dataset.rm + " da equipe?", { titulo: "Remover membro", ok: "Remover", perigo: true })) { await deleteDoc(doc(db, "equipe", b.dataset.rm)); carregarEquipe(); } });
 }
 $("#btnAddEquipe").onclick = async () => {
