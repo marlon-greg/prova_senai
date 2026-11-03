@@ -1,5 +1,5 @@
 // Painel do professor: provas, bancos (import JSON), resultados/correção, equipe, configuração.
-import { db, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN } from "./common.js";
+import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, apagarTentativaTeste } from "./common.js";
 import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -58,7 +58,9 @@ async function carregarProvas() {
     return `<tr><td><b>${esc(p.titulo)}</b><br><span class="pequeno">${esc(p.turma || "")}</span></td><td>${esc(b?.nome || p.bancoId)}<br><span class="pequeno">${esc(b?.materia || "")}</span></td><td>${p.nQuestoes}${p.nDissertativas ? `<br><span class="pequeno">${p.nDissertativas} dissert.</span>` : ""}</td>
       <td><span class="tag ${p.liberada ? "on" : "off"}">${p.liberada ? "LIBERADA" : "fechada"}</span></td>
       <td><span class="tag ${p.resultadosLiberados ? "on" : "off"}">${p.resultadosLiberados ? "liberados" : "ocultos"}</span></td>
-      <td style="white-space:nowrap">${podeEditar() ? `<button class="leve" data-tg="liberada" data-id="${p.id}">${p.liberada ? "Encerrar" : "Liberar prova"}</button>
+      <td style="white-space:nowrap"><button class="leve" data-testar="${p.id}" title="Abre a prova em nova aba, como o aluno vê (não vale nota)">Testar como aluno</button>
+        <button class="leve" data-apagarteste="${p.id}" title="Apaga a sua tentativa de teste desta prova">Apagar meu teste</button>
+        ${podeEditar() ? `<button class="leve" data-tg="liberada" data-id="${p.id}">${p.liberada ? "Encerrar" : "Liberar prova"}</button>
         <button class="leve" data-tg="resultadosLiberados" data-id="${p.id}">${p.resultadosLiberados ? "Ocultar resultados" : "Liberar resultados"}</button>
         ${ehAdmin() ? `<button class="leve" data-del="${p.id}" title="Apagar prova">🗑</button>` : ""}` : ""}</td></tr>`;
   }).join("") + "</table>";
@@ -66,6 +68,14 @@ async function carregarProvas() {
     const p = provas.find(x => x.id === b.dataset.id);
     await updateDoc(doc(db, "provas", p.id), { [b.dataset.tg]: !p[b.dataset.tg] });
     toast("Prova atualizada", "ok"); carregarProvas();
+  });
+  box.querySelectorAll("[data-testar]").forEach(b => b.onclick = () => window.open(`index.html?teste=${encodeURIComponent(b.dataset.testar)}`, "_blank"));
+  box.querySelectorAll("[data-apagarteste]").forEach(b => b.onclick = async () => {
+    if (!confirm("Apagar a sua tentativa de teste desta prova? Você poderá testar de novo, com novo sorteio.")) return;
+    try {
+      const apagou = await apagarTentativaTeste(auth.currentUser.uid, b.dataset.apagarteste);
+      toast(apagou ? "Tentativa de teste apagada." : "Você não tem tentativa de teste nesta prova.", apagou ? "ok" : "info");
+    } catch (e) { toast("Não foi possível apagar o teste: " + (e.code || e.message), "erro"); console.error(e); }
   });
   box.querySelectorAll("[data-del]").forEach(b => b.onclick = async () => {
     if (!confirm("Apagar a prova? As tentativas dos alunos continuam no banco de dados, mas ficam órfãs.")) return;
@@ -187,6 +197,7 @@ async function carregarResultados() {
   const linhas = [];
   for (const d of ts.docs) {
     const t = { id: d.id, ...d.data() };
+    if (t.teste === true) continue;   // tentativas do modo teste (equipe) não entram em tabela, média, CSV, PDFs nem "Fechar notas"
     const [rs, cs] = await Promise.all([getDocs(collection(db, "tentativas", t.id, "respostas")), getDocs(collection(db, "tentativas", t.id, "correcoes"))]);
     const resp = {}; rs.forEach(x => resp[x.id] = x.data()); const corr = {}; cs.forEach(x => corr[x.id] = x.data());
     const itens = t.questoesIds.map((qid, i) => {
