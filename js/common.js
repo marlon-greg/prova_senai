@@ -142,21 +142,28 @@ export function traduzirErro(e) {
 
 // ---------------- modal (substitui confirm/alert nativos) ----------------
 const modaisAbertos = new Set();
-// Devolve uma Promise<boolean>: true = OK/confirmar, false = cancelar/Esc/clique fora
-export function modal({ titulo = "", mensagem = "", ok = "OK", cancelar = null, perigo = false } = {}) {
+// Devolve uma Promise<boolean>: true = OK/confirmar, false = cancelar/Esc/clique fora.
+// Formulário: passe `conteudo` (HTML confiável, montado pelo próprio sistema) no lugar de `mensagem`;
+// `aoAbrir(caixa)` liga os campos e `antesDeConfirmar(caixa)` valida (devolva false para manter aberto).
+export function modal({ titulo = "", mensagem = "", conteudo = null, ok = "OK", cancelar = null, perigo = false, largo = false,
+                        aoAbrir = null, antesDeConfirmar = null } = {}) {
   return new Promise(resolve => {
     const fundo = document.createElement("div");
     fundo.className = "modal-fundo";
-    fundo.innerHTML = `<div class="modal" role="dialog" aria-modal="true" ${titulo ? 'aria-labelledby="modalTitulo"' : ""}>
-      ${titulo ? `<h2 id="modalTitulo">${esc(titulo)}</h2>` : ""}<p class="modal-msg">${esc(mensagem)}</p>
+    fundo.innerHTML = `<div class="modal${largo ? " largo" : ""}" role="dialog" aria-modal="true" ${titulo ? 'aria-labelledby="modalTitulo"' : ""}>
+      ${titulo ? `<h2 id="modalTitulo">${esc(titulo)}</h2>` : ""}
+      ${conteudo !== null ? `<div class="modal-corpo">${conteudo}</div>` : `<p class="modal-msg">${esc(mensagem)}</p>`}
       <div class="modal-acoes">${cancelar ? `<button type="button" class="leve" data-r="0">${esc(cancelar)}</button>` : ""}
         <button type="button" class="${perigo ? "perigo-cheio" : ""}" data-r="1">${esc(ok)}</button></div></div>`;
-    const anterior = document.activeElement;
+    const caixa = fundo.querySelector(".modal"), anterior = document.activeElement;
+    const focaveis = () => [...fundo.querySelectorAll("button, input, select, textarea, a[href]")].filter(el => !el.disabled && el.offsetParent !== null);
+    const noTopo = () => [...document.querySelectorAll(".modal-fundo")].pop() === fundo;   // modal sobre modal: só o de cima responde
     const tecla = e => {
+      if (!noTopo()) return;
       if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); fechar(!cancelar); }
       if (e.key === "Tab") {   // mantém o foco dentro do modal
-        const bs = [...fundo.querySelectorAll("button")], i = bs.indexOf(document.activeElement);
-        e.preventDefault(); bs[(i + (e.shiftKey ? -1 : 1) + bs.length) % bs.length].focus();
+        const fs = focaveis(), i = fs.indexOf(document.activeElement);
+        e.preventDefault(); fs[(i + (e.shiftKey ? -1 : 1) + fs.length) % fs.length]?.focus();
       }
     };
     const fechar = r => {
@@ -165,11 +172,22 @@ export function modal({ titulo = "", mensagem = "", ok = "OK", cancelar = null, 
       anterior?.focus?.(); resolve(r);
     };
     modaisAbertos.add(fechar);
-    fundo.addEventListener("mousedown", e => { if (e.target === fundo && cancelar) fechar(false); });
-    fundo.querySelectorAll("[data-r]").forEach(b => b.onclick = () => fechar(b.dataset.r === "1"));
+    // clique fora fecha só os avisos simples (num formulário perderia o que foi digitado)
+    fundo.addEventListener("mousedown", e => { if (e.target === fundo && cancelar && conteudo === null) fechar(false); });
+    fundo.querySelector("[data-r='0']")?.addEventListener("click", () => fechar(false));
+    const btnOk = fundo.querySelector("[data-r='1']");
+    btnOk.onclick = async () => {
+      if (antesDeConfirmar) {
+        btnOk.disabled = true;
+        try { if ((await antesDeConfirmar(caixa)) === false) return; }
+        finally { btnOk.disabled = false; }
+      }
+      fechar(true);
+    };
     document.addEventListener("keydown", tecla, true);
     document.body.appendChild(fundo);
-    fundo.querySelector("[data-r='1']").focus();
+    if (aoAbrir) aoAbrir(caixa);
+    (conteudo !== null ? focaveis()[0] : btnOk)?.focus();
   });
 }
 export const confirmar = (mensagem, opc = {}) => modal({ titulo: "Confirmar", mensagem, ok: "Confirmar", cancelar: "Cancelar", ...opc });
