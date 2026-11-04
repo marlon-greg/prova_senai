@@ -1,6 +1,8 @@
 // Painel → aba "Relatórios": notas por aluno, matéria e turma, alerta de reprovação (média < 50, peso igual por prova)
 // e desempenho por tópico (o "tema" das questões). desempenhoPorTopico() é a conta que a autoavaliação vai usar (docs/INTEGRACOES.md).
 import { db, esc, $, toast, traduzirErro, corrigir, bancosDaProva, temaDe, semestreDaProva, materiaDaProva, rotuloSemestre, chaveTexto } from "./common.js";
+import { graficoLinhas, ligarGraficos } from "./graficos.js";
+import { imprimir } from "./admin-relatorio-aluno.js";
 import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 export const MEDIA_MINIMA = 50;
@@ -10,6 +12,11 @@ export function iniciarRelatorios(c) {
   ["#rlTurma", "#rlSemestre", "#rlMateria", "#rlBusca"].forEach(id => $(id).addEventListener(id === "#rlBusca" ? "input" : "change", desenhar));
   $("#rlTopicos").onclick = calcularTopicos;
   $("#rlCSV").onclick = csv;
+  $("#rlPDF").onclick = () => {
+    const filtros = [["#rlTurma", "turma"], ["#rlSemestre", "semestre"], ["#rlMateria", "matéria"]].map(([id, r]) => $(id).value ? `${r}: ${$(id).selectedOptions[0].textContent}` : "").filter(Boolean).join(" · ") || "todas as turmas, semestres e matérias";
+    imprimir("Relatório de notas", `<header class="cab"><div class="marca">SENAI</div><div><h1>Relatório de notas</h1><div class="sub">${esc(filtros)} · emitido em ${new Date().toLocaleDateString("pt-BR")} · média mínima ${MEDIA_MINIMA}</div></div></header>${$("#rlConteudo").innerHTML}
+      <div style="display:flex;justify-content:space-around;margin-top:40px;text-align:center"><div style="border-top:1px solid #000;width:40%;padding-top:4px">Professor(a)</div><div style="border-top:1px solid #000;width:40%;padding-top:4px">Coordenação</div></div>`);
+  };
 }
 const nota = t => Number.isFinite(Number(t.nota)) && t.nota !== null ? Number(t.nota) : (Number.isFinite(Number(t.notaPrevia)) && t.notaPrevia !== null ? Number(t.notaPrevia) : null);
 const cor = n => n === null ? "" : n < MEDIA_MINIMA ? "rl-ruim" : n < 70 ? "rl-medio" : "rl-bom";
@@ -72,11 +79,23 @@ function desenhar() {
       return `<tr><td><b>${esc(a.nome)}</b><br><span class="pequeno">${esc(nomeTurma(a.turmaId))}</span></td>${materias.map(m => { const l = a.materias.get(m); const md = l ? media(l.map(x => x.nota)) : null;
         return `<td class="${cor(md)}" title="${l ? esc(l.map(x => `${x.p.titulo}: ${fmt(x.nota)}`).join(" · ")) : ""}">${fmt(md)}${l ? `<span class="pequeno"> (${l.length})</span>` : ""}</td>`; }).join("")}<td class="${cor(media(todas))}"><b>${fmt(media(todas))}</b></td></tr>`; }).join("")}</table></div>`
       : `<div class="vazio"><div class="icone">📊</div><p>Nenhuma prova finalizada com esses filtros.</p></div>`}</section>
+  <section class="card">${evolucaoHTML(ls)}</section>
   <section class="card"><h3 class="diario-h3">👥 Por turma e matéria</h3>
     ${[...porTurma].map(([t, ms]) => `<div class="rl-turma"><b>${esc(nomeTurma(t))}</b> ${[...ms].map(([m, l]) => `<span class="tag ${media(l) < MEDIA_MINIMA ? "erro" : media(l) < 70 ? "aviso" : "ok"}">${esc(m)}: ${fmt(media(l))} <span class="pequeno">(${l.length} notas)</span></span>`).join("")}</div>`).join("") || `<p class="pequeno">—</p>`}</section>
   <section class="card" id="rlTopicosBox"><h3 class="diario-h3">🧩 Desempenho por tópico</h3>${base.topicos ? topicosHTML() : `<p class="pequeno">Clique em <b>📊 Calcular por tópico</b> (lê as respostas das provas filtradas; pode levar alguns segundos).</p>`}</section>`;
+  ligarGraficos($("#rlConteudo"));
 }
 
+// média da turma em cada prova, em ordem de data (uma série por matéria, até 4; mais que isso: filtre a matéria)
+function evolucaoHTML(ls) {
+  const provas = new Map(); ls.forEach(l => { if (!provas.has(l.p.id)) provas.set(l.p.id, { p: l.p, materia: l.materia, notas: [], data: l.t.finalizadaEm?.seconds || 0 }); const x = provas.get(l.p.id); x.notas.push(l.nota); x.data = Math.max(x.data, l.t.finalizadaEm?.seconds || 0); });
+  const lista = [...provas.values()].sort((a, b) => a.data - b.data);
+  if (lista.length < 2) return `<h3 class="diario-h3">📈 Evolução</h3><p class="pequeno">Com 2 provas ou mais no filtro aparece o gráfico de evolução.</p>`;
+  const materias = [...new Set(lista.map(x => x.materia))];
+  if (materias.length > 4) return `<h3 class="diario-h3">📈 Evolução</h3><p class="pequeno">São ${materias.length} matérias: escolha uma matéria (ou turma) no filtro para ver o gráfico de evolução.</p>`;
+  return graficoLinhas({ titulo: "📈 Média da turma em cada prova (0 a 100)", rotulos: lista.map(x => x.p.titulo.slice(0, 14)),
+    series: materias.map(m => ({ nome: m, valores: lista.map(x => x.materia === m ? media(x.notas) : null) })), y: { min: 0, max: 100, passo: 25 }, ref: { valor: MEDIA_MINIMA, rotulo: `mínimo ${MEDIA_MINIMA}` } });
+}
 // ---------- desempenho por tópico (reaproveitável: docs/INTEGRACOES.md) ----------
 // tentativas = [{ t, p }] -> Map(email -> Map(tópico -> { pts, max, n, materia }))
 export async function desempenhoPorTopico(itens, progresso = () => {}) {

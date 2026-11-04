@@ -122,7 +122,7 @@ aoMudarLogin(async user => {
     simulacao = true;
     eu = { uid: "sim-" + user.uid, email: id.email, nome: user.displayName || id.nome };
     $("#faixaTeste").classList.remove("oculto"); $("#btnReiniciarTeste")?.classList.add("oculto");
-    $("#faixaTeste span").innerHTML = `<b>🧪 SIMULAÇÃO</b> — você está vendo a página do aluno com a sua conta. Nada é gravado e nenhum aluno vê.`;
+    $("#faixaTeste span").innerHTML = `<b>🧪 SIMULAÇÃO</b> — você está vendo a página do aluno com a sua conta. Nada é gravado e nenhum aluno vê. <a href="#simPainel">⚙ Ir para o painel da simulação</a>`;
     gami = await lerGamificacao();
     return desenharSimulacao();
   }

@@ -6,6 +6,7 @@
 // (o aluno nunca lê acessibilidadePrivado)
 import { db, esc, $, toast, confirmar, modal, traduzirErro, iniciais, dataBR, semestreDe, chaveTexto, dataCurta, diaDeAula, rotuloDias, textoHorario } from "./common.js";
 import { resumoDiario, medalhasDiario } from "./conquistas.js";
+import { relatorioAluno } from "./admin-relatorio-aluno.js";
 import { HUMOR, humorEmoji, SECOES_AUX, ITENS_AUX, ITENS_PROF, visivel, respondido, completude } from "./diario-perguntas.js";
 import { listarPlanos, listarCursos } from "./admin-org.js";
 import { collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, query, where, orderBy, serverTimestamp, increment }
@@ -116,6 +117,7 @@ function desenharPainel() {
       <div class="outro-dia" role="group" aria-label="Registrar outro dia"><span class="pequeno">Outro dia:</span>
         ${atalhosDias().map(([iso, rot]) => `<button type="button" class="chip-dia" data-rapido="${iso}" title="${dataLonga(iso)}">${rot}</button>`).join("")}
         <label class="chip-dia botao-data">📆 Escolher data<input type="date" id="dOutroDia" max="${hojeISO()}" aria-label="Escolher a data do registro"></label></div>` : `<p class="pequeno" style="margin:0">Você lê os registros e deixa o seu comentário em cada dia. Quem escreve o diário é a auxiliar de inclusão.</p>`}
+      <button id="dCompleto" class="leve" type="button" title="Notas, tópicos e diário juntos, com gráficos de evolução">📈 Relatório completo</button>
       <button id="dRelatorio" class="leve" type="button" title="Relatório formal do período, para enviar à coordenação, direção ou sede">📄 Relatório formal (PDF)</button></div>
   </section>
   <details class="card prev-conquistas">
@@ -135,6 +137,7 @@ function desenharPainel() {
   }
   document.querySelectorAll("[data-rapido]").forEach(b => b.onclick = () => iniciarRegistro(b.dataset.rapido));
   $("#dRelatorio").onclick = () => relatorioFormal();
+  $("#dCompleto").onclick = () => relatorioAluno($("#diarioPainel"), { aluno: atual, turmas: turmasAluno, registros, horario: ctx.horario?.(), voltar: desenharPainel });
   ligarCalendario();
   if (aberto) mostrarDia(aberto);
   else ligarUltimos();

@@ -173,7 +173,9 @@ Professor e admin. Filtros de turma, semestre, matéria e aluno. Usa a nota fech
 - **⚠ Risco de reprovação**: aluno com **média abaixo de 50** numa matéria (média simples, cada prova vale o mesmo), as notas e **quanto precisa tirar na próxima prova** para chegar a 50.
 - **Médias por aluno e matéria** (vermelho abaixo de 50, amarelo abaixo de 70) e **por turma e matéria**.
 - **📊 Calcular por tópico**: acerto em cada tópico (o `tema` das questões, com pontos parciais e correções), da turma e de cada aluno, para direcionar o **reforço**. A conta fica em `desempenhoPorTopico()` (`js/admin-relatorios.js`), a mesma que a integração com a autoavaliação vai usar.
-- **⬇ CSV** das notas filtradas.
+- **📈 Evolução**: gráfico com a média da turma em cada prova (uma linha por matéria, com a linha do mínimo 50).
+- **⬇ CSV** das notas filtradas e **📄 PDF do relatório** (para coordenação/direção, com espaço para assinaturas).
+- **Relatório completo do aluno com acessibilidade** (Diário → 📈 Relatório completo): notas das provas ao longo do tempo, médias por matéria, o diário agrupado por dia, semana ou mês (compreensão, autonomia, foco, humor), e a tabela **tópicos: aulas trabalhadas × acerto nas provas** com a leitura (🔴 reforço, 🟡 atenção, 🟢 bem). Período: semana, mês, semestre, tudo ou datas. Tem PDF. Os gráficos seguem as regras de visualização (um eixo, rótulo direto, dica ao passar o mouse e a tabela com os números).
 
 ## Pesquisa e filtros em todas as telas
 
