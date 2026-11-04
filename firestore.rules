@@ -203,7 +203,9 @@ service cloud.firestore {
     // ---------- provas ----------
     match /provas/{p} {
       allow read: if equipe()
-                  || (aluno() && (resource.data.liberada == true || resource.data.resultadosLiberados == true));
+                  || (aluno() && (resource.data.liberada == true || resource.data.resultadosLiberados == true))
+                  // a prova que o aluno já fez (título e matéria para as conquistas dele)
+                  || (aluno() && exists(/databases/$(db)/documents/tentativas/$(uid() + '_' + p)));
       allow write: if professor();
     }
 

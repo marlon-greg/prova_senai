@@ -3,6 +3,7 @@ import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar
          idTentativaTeste, apagarTentativaTeste, confirmar, traduzirErro, iniciais, fecharModais, temaDe, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco, bancoDaQuestao, sortearQuestoes }
   from "./common.js";
 import { baixarMaterial } from "./material.js";
+import { desenharConquistas } from "./aluno-conquistas.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
 import { completar, aplicarVisual, mesclarQuestao } from "./acessibilidade.js";
 import { mascoteLigado, ligarMascote, dadosMascote, htmlMascote, htmlEscolha, ligarEscolha, montarGuia, pararFala } from "./guia.js";
@@ -197,6 +198,8 @@ async function listarProvas() {
     b.forEach(d => provas[d.id] = { id: d.id, ...d.data() });
     lista = Object.values(provas).sort((x, y) => (y.criadoEm?.seconds || 0) - (x.criadoEm?.seconds || 0));
   }
+  if (!modoTeste) desenharConquistas($("#conquistas"), eu, acess?.diarioResumo || null).catch(e => console.warn("conquistas", e));
+  else $("#conquistas").classList.add("oculto");
   provasDaLista = Object.fromEntries(lista.map(p => [p.id, p]));
   if (!lista.length) { box.innerHTML = `<div class="vazio"><div class="icone">📭</div><p><b>Nenhuma prova liberada no momento.</b></p><p class="pequeno">Quando o professor liberar, ela aparece aqui. Se a prova já começou na sala, recarregue a página.</p></div>`; return; }
   box.innerHTML = "";

@@ -146,6 +146,14 @@ A IA da organização roda no navegador do administrador principal (com a chave)
 
 O botão azul **?** (canto de baixo, à direita) explica a tela aberta, passo a passo. Os **?** pequenos ao lado de cada envio (banco JSON, slides, laudos, plano de ensino, plano de curso, lista de alunos) dizem como preparar o arquivo: só PDF, slides em paisagem, até 20 MB, como exportar do PowerPoint/Google Slides, que não precisa ser o documento inteiro etc. Os textos ficam em `js/ajuda.js`.
 
+## Conquistas dos alunos (página do aluno)
+
+Todo aluno vê **🏅 Minhas conquistas** embaixo das provas, com **nível** (cada 3 conquistas sobem 1). Clicar na medalha mostra o que falta ou como ele conquistou (ex.: as 3 notas, com a matéria de cada uma). Medalha nova desde a última visita aparece com comemoração.
+- **Gerais** (todas as matérias): primeira prova · **Trinca de ouro** (3 notas seguidas acima de 80) · Constância (5 seguidas de 60 para cima) · Gabaritou (100) · Em evolução (melhorou 3 vezes) · Coração intacto (5 provas sem perder vida) · Veterano (10 provas).
+- **Por matéria**: média da matéria e as conquistas Mandou bem (80+), Mestre (média 80+ com 2 provas) e Decolando (melhorou 2 vezes).
+- **Na sala de aula** (só alunos com acessibilidade): as medalhas do diário, só positivas.
+- Usa a nota fechada (ou a prévia) das provas finalizadas. As regras deixam o aluno ler a prova que ele já fez (título e matéria). As regras das conquistas ficam em `js/conquistas.js`.
+
 ## Pesquisa e filtros em todas as telas
 
 | Tela | Pesquisa | Filtros |

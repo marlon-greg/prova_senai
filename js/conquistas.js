@@ -46,7 +46,7 @@ export function medalhasDiario(r = {}) {
     { e: "📚", t: "Exploradora", d: "Trabalhe 8 tópicos diferentes", v: v("topicos"), meta: 8 },
     { e: "🏆", t: "Colecionadora de vitórias", d: "10 vitórias do dia", v: v("vitorias"), meta: 10 },
     { e: "📒", t: "Diário de ouro", d: "30 aulas registradas", v: v("aulas"), meta: 30 }
-  ].map(m => ({ ...m, ok: m.v >= m.meta }));
+  ].map(m => ({ ...m, ok: m.v >= m.meta, prog: [Math.min(m.v, m.meta), m.meta] }));
 }
 
 // ---------- notas: todos os alunos ----------
