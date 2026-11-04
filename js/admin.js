@@ -9,6 +9,7 @@ import { abrirLeitorPdf } from "./leitor-pdf.js";
 import { iniciarOrganizacao, carregarOrganizacao, listarPlanos, listarCursos, materiasSugeridas, editarTopicosBanco, topicosDaMateria } from "./admin-org.js";
 import { iniciarDiario, carregarDiario } from "./admin-diario.js";
 import { ligarAjuda } from "./ajuda.js";
+import { iniciarRelatorios, carregarRelatorios } from "./admin-relatorios.js";
 import { iniciarGamificacao, carregarGamificacao, carregarRetorno } from "./admin-gamificacao.js";
 import { mesclarQuestao } from "./acessibilidade.js";
 import { temFormato, textoResposta, textoChave, FORMATOS } from "./formatos-ui.js";
@@ -52,6 +53,7 @@ aoMudarLogin(async user => {
     alunosDasTurmas: async () => { await listarTurmas().catch(() => {}); return turmasCache.flatMap(t => alunosDaTurma(t).map(a => ({ ...a, turma: t.nome, turmaId: t.id, diasAula: t.diasAula || [] }))); } });
   iniciarHistorico({ eu, abrirAluno: email => { abrirDepois(email); abrirAba("acessibilidade"); },
     alunosDasTurmas: async () => { await listarTurmas().catch(() => {}); return turmasCache.flatMap(t => alunosDaTurma(t).map(a => ({ ...a, turma: t.nome, turmaId: t.id }))); } });
+  iniciarRelatorios({ listarTurmas, listarBancos });
   iniciarGamificacao({ eu, ehAdmin, podeEditar, auth, iaCfg: () => iaCfg, urlCorretor: () => urlCorretorCfg });
   iniciarOrganizacao({ eu, podeEditar, ehAdmin, auth, iaCfg: () => iaCfg, urlCorretor: () => urlCorretorCfg,
     listarTurmas, alunosDaTurma, listarBancos, questoesDoBanco, questoesDoBancoCache: id => questoesCache[id],
@@ -60,7 +62,7 @@ aoMudarLogin(async user => {
   trocar("telaPainel");
   document.querySelectorAll("[data-aba]").forEach(b => {
     b.onclick = () => abrirAba(b.dataset.aba);
-    b.classList.toggle("oculto", (ehInclusao() && !ABAS_INCLUSAO.includes(b.dataset.aba)) || (["diario", "historico"].includes(b.dataset.aba) && !podeCuidar()) || (b.dataset.aba === "gamificacao" && !ehAdmin()) || (b.dataset.aba === "retorno" && !podeEditar()));
+    b.classList.toggle("oculto", (ehInclusao() && !ABAS_INCLUSAO.includes(b.dataset.aba)) || (["diario", "historico"].includes(b.dataset.aba) && !podeCuidar()) || (b.dataset.aba === "gamificacao" && !ehAdmin()) || (["retorno", "relatorios"].includes(b.dataset.aba) && !podeEditar()));
   });
   document.body.classList.toggle("papel-inclusao", ehInclusao());
   abrirAba(ehInclusao() ? "diario" : "provas");
@@ -71,8 +73,8 @@ function abrirAba(a) {
   abaAtual = a; ligarAjuda(() => abaAtual);
   if (a !== "resultados" && $("#rAoVivo").checked) { $("#rAoVivo").checked = false; pararAoVivo(); }   // sair da aba desliga o ao vivo
   document.querySelectorAll("[data-aba]").forEach(b => b.classList.toggle("ativa", b.dataset.aba === a));
-  ["organizacao", "diario", "historico", "retorno", "gamificacao", "provas", "bancos", "turmas", "resultados", "acessibilidade", "equipe", "config"].forEach(x => $("#aba-" + x).classList.toggle("oculto", x !== a));
-  return ({ organizacao: carregarOrganizacao, diario: carregarDiario, historico: carregarHistorico, retorno: carregarRetorno, gamificacao: carregarGamificacao, provas: carregarProvas, bancos: () => { carregarBancos(); carregarMateriais(); }, turmas: carregarTurmas, resultados: prepararResultados,
+  ["organizacao", "diario", "historico", "retorno", "relatorios", "gamificacao", "provas", "bancos", "turmas", "resultados", "acessibilidade", "equipe", "config"].forEach(x => $("#aba-" + x).classList.toggle("oculto", x !== a));
+  return ({ organizacao: carregarOrganizacao, diario: carregarDiario, historico: carregarHistorico, retorno: carregarRetorno, relatorios: carregarRelatorios, gamificacao: carregarGamificacao, provas: carregarProvas, bancos: () => { carregarBancos(); carregarMateriais(); }, turmas: carregarTurmas, resultados: prepararResultados,
      acessibilidade: () => { carregarAcessibilidade(); if (podeEditar()) prepararNovoAcess(); }, equipe: carregarEquipe, config: carregarConfig })[a]();
 }
 

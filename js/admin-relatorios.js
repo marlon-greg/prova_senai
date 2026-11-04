@@ -1,0 +1,133 @@
+// Painel → aba "Relatórios": notas por aluno, matéria e turma, alerta de reprovação (média < 50, peso igual por prova)
+// e desempenho por tópico (o "tema" das questões). desempenhoPorTopico() é a conta que a autoavaliação vai usar (docs/INTEGRACOES.md).
+import { db, esc, $, toast, traduzirErro, corrigir, bancosDaProva, temaDe, semestreDaProva, materiaDaProva, rotuloSemestre, chaveTexto } from "./common.js";
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+export const MEDIA_MINIMA = 50;
+let ctx = null, base = null;
+export function iniciarRelatorios(c) {
+  ctx = c;
+  ["#rlTurma", "#rlSemestre", "#rlMateria", "#rlBusca"].forEach(id => $(id).addEventListener(id === "#rlBusca" ? "input" : "change", desenhar));
+  $("#rlTopicos").onclick = calcularTopicos;
+  $("#rlCSV").onclick = csv;
+}
+const nota = t => Number.isFinite(Number(t.nota)) && t.nota !== null ? Number(t.nota) : (Number.isFinite(Number(t.notaPrevia)) && t.notaPrevia !== null ? Number(t.notaPrevia) : null);
+const cor = n => n === null ? "" : n < MEDIA_MINIMA ? "rl-ruim" : n < 70 ? "rl-medio" : "rl-bom";
+const fmt = n => n === null || n === undefined ? "—" : (Math.round(n * 10) / 10).toLocaleString("pt-BR");
+const media = l => l.length ? l.reduce((s, x) => s + x, 0) / l.length : null;
+
+export async function carregarRelatorios() {
+  $("#rlConteudo").innerHTML = `<p class="pequeno">Carregando notas…</p>`;
+  try {
+    const [ps, ts, tn, bs] = await Promise.all([getDocs(collection(db, "provas")), ctx.listarTurmas(), getDocs(collection(db, "tentativas")), ctx.listarBancos()]);
+    const provas = Object.fromEntries(ps.docs.map(d => [d.id, { id: d.id, ...d.data() }]));
+    const linhas = tn.docs.map(d => ({ id: d.id, ...d.data() })).filter(t => t.teste !== true && t.finalizadaEm && provas[t.provaId] && nota(t) !== null).map(t => {
+      const p = provas[t.provaId];
+      return { t, p, email: String(t.email || "").toLowerCase(), nome: t.nome || t.email, nota: nota(t), turmaId: p.turmaId || "", semestre: semestreDaProva(p), materia: materiaDaProva(p, bs) || "Sem matéria" };
+    });
+    base = { provas, turmas: ts, linhas, topicos: null };
+  } catch (e) { $("#rlConteudo").innerHTML = `<p class="erro-texto">${esc(traduzirErro(e))}</p>`; return; }
+  const sel = (el, primeira, vals) => { const a = el.value; el.innerHTML = `<option value="">${primeira}</option>` + vals.map(([v, r]) => `<option value="${esc(v)}">${esc(r)}</option>`).join(""); el.value = vals.some(([v]) => v === a) ? a : ""; };
+  sel($("#rlTurma"), "👥 Todas as turmas", base.turmas.filter(t => base.linhas.some(l => l.turmaId === t.id)).map(t => [t.id, t.nome]));
+  sel($("#rlSemestre"), "📅 Todos os semestres", [...new Set(base.linhas.map(l => l.semestre))].sort().reverse().map(s => [s, rotuloSemestre(s)]));
+  sel($("#rlMateria"), "📚 Todas as matérias", [...new Set(base.linhas.map(l => l.materia))].sort((a, b) => a.localeCompare(b, "pt-BR")).map(m => [m, m]));
+  desenhar();
+}
+function filtradas() {
+  const fT = $("#rlTurma").value, fS = $("#rlSemestre").value, fM = $("#rlMateria").value, b = chaveTexto($("#rlBusca").value);
+  return base.linhas.filter(l => (!fT || l.turmaId === fT) && (!fS || l.semestre === fS) && (!fM || l.materia === fM) && (!b || chaveTexto(`${l.nome} ${l.email}`).includes(b)));
+}
+// aluno -> matéria -> [notas]
+function agrupar(ls) {
+  const al = new Map();
+  for (const l of ls) {
+    if (!al.has(l.email)) al.set(l.email, { email: l.email, nome: l.nome, turmaId: l.turmaId, materias: new Map() });
+    const a = al.get(l.email); if (!a.materias.has(l.materia)) a.materias.set(l.materia, []); a.materias.get(l.materia).push(l);
+  }
+  return [...al.values()].sort((a, b) => String(a.nome).localeCompare(String(b.nome), "pt-BR"));
+}
+function desenhar() {
+  if (!base) return;
+  const ls = filtradas(), alunos = agrupar(ls), materias = [...new Set(ls.map(l => l.materia))].sort((a, b) => a.localeCompare(b, "pt-BR"));
+  const nomeTurma = id => base.turmas.find(t => t.id === id)?.nome || "—";
+  const risco = alunos.flatMap(a => [...a.materias].map(([m, l]) => ({ a, m, l, med: media(l.map(x => x.nota)) })).filter(x => x.med < MEDIA_MINIMA)).sort((x, y) => x.med - y.med);
+  const geral = media(ls.map(l => l.nota));
+  // por turma e matéria
+  const porTurma = new Map(); ls.forEach(l => { const k = l.turmaId; if (!porTurma.has(k)) porTurma.set(k, new Map()); const m = porTurma.get(k); if (!m.has(l.materia)) m.set(l.materia, []); m.get(l.materia).push(l.nota); });
+  $("#rlConteudo").innerHTML = `
+  <div class="numeros">
+    <div class="numero"><b>${alunos.length}</b><span>alunos com nota</span></div>
+    <div class="numero"><b>${new Set(ls.map(l => l.p.id)).size}</b><span>provas</span></div>
+    <div class="numero"><b>${fmt(geral)}</b><span>média geral</span></div>
+    <div class="numero ${risco.length ? "aviso" : ""}"><b>${new Set(risco.map(r => r.a.email)).size}</b><span>aluno(s) em risco (média &lt; ${MEDIA_MINIMA} em alguma matéria)</span></div></div>
+  <section class="card"><h3 class="diario-h3">⚠ Risco de reprovação <span class="pequeno">— média das provas da matéria abaixo de ${MEDIA_MINIMA} (cada prova vale o mesmo)</span></h3>
+    ${risco.length ? `<div class="tabela"><table><tr><th>Aluno</th><th>Turma</th><th>Matéria</th><th>Média</th><th>Notas</th><th>Precisa na próxima*</th></tr>${risco.map(r => {
+      const n = r.l.length, prec = MEDIA_MINIMA * (n + 1) - r.l.reduce((s, x) => s + x.nota, 0);
+      return `<tr><td><b>${esc(r.a.nome)}</b><br><span class="pequeno">${esc(r.a.email)}</span></td><td>${esc(nomeTurma(r.a.turmaId))}</td><td>${esc(r.m)}</td><td class="${cor(r.med)}"><b>${fmt(r.med)}</b></td>
+        <td class="pequeno">${r.l.map(x => `${esc(x.p.titulo)}: <b>${fmt(x.nota)}</b>`).join("<br>")}</td><td>${prec > 100 ? `<span class="tag erro">mais de 100 (só com recuperação)</span>` : `<b>${fmt(Math.max(0, prec))}</b>`}</td></tr>`; }).join("")}</table></div>
+      <p class="pequeno">* Nota que o aluno precisa tirar numa próxima prova da matéria para a média chegar a ${MEDIA_MINIMA}.</p>` : `<p class="pequeno">Ninguém abaixo de ${MEDIA_MINIMA} com esses filtros. 🎉</p>`}</section>
+  <section class="card"><h3 class="diario-h3">👤 Médias por aluno e matéria</h3>
+    ${alunos.length ? `<div class="tabela"><table class="rl-tab"><tr><th>Aluno</th>${materias.map(m => `<th>${esc(m)}</th>`).join("")}<th>Geral</th></tr>${alunos.map(a => {
+      const todas = [...a.materias.values()].flat().map(x => x.nota);
+      return `<tr><td><b>${esc(a.nome)}</b><br><span class="pequeno">${esc(nomeTurma(a.turmaId))}</span></td>${materias.map(m => { const l = a.materias.get(m); const md = l ? media(l.map(x => x.nota)) : null;
+        return `<td class="${cor(md)}" title="${l ? esc(l.map(x => `${x.p.titulo}: ${fmt(x.nota)}`).join(" · ")) : ""}">${fmt(md)}${l ? `<span class="pequeno"> (${l.length})</span>` : ""}</td>`; }).join("")}<td class="${cor(media(todas))}"><b>${fmt(media(todas))}</b></td></tr>`; }).join("")}</table></div>`
+      : `<div class="vazio"><div class="icone">📊</div><p>Nenhuma prova finalizada com esses filtros.</p></div>`}</section>
+  <section class="card"><h3 class="diario-h3">👥 Por turma e matéria</h3>
+    ${[...porTurma].map(([t, ms]) => `<div class="rl-turma"><b>${esc(nomeTurma(t))}</b> ${[...ms].map(([m, l]) => `<span class="tag ${media(l) < MEDIA_MINIMA ? "erro" : media(l) < 70 ? "aviso" : "ok"}">${esc(m)}: ${fmt(media(l))} <span class="pequeno">(${l.length} notas)</span></span>`).join("")}</div>`).join("") || `<p class="pequeno">—</p>`}</section>
+  <section class="card" id="rlTopicosBox"><h3 class="diario-h3">🧩 Desempenho por tópico</h3>${base.topicos ? topicosHTML() : `<p class="pequeno">Clique em <b>📊 Calcular por tópico</b> (lê as respostas das provas filtradas; pode levar alguns segundos).</p>`}</section>`;
+}
+
+// ---------- desempenho por tópico (reaproveitável: docs/INTEGRACOES.md) ----------
+// tentativas = [{ t, p }] -> Map(email -> Map(tópico -> { pts, max, n, materia }))
+export async function desempenhoPorTopico(itens, progresso = () => {}) {
+  const bancos = {}, out = new Map();
+  const lerBanco = async b => bancos[b] ??= await (async () => {
+    const [qs, gs] = await Promise.all([getDocs(collection(db, "bancos", b, "questoes")), getDocs(collection(db, "bancos", b, "gabaritos"))]);
+    return { q: Object.fromEntries(qs.docs.map(d => [d.id, { id: d.id, ...d.data() }])), g: Object.fromEntries(gs.docs.map(d => [d.id, d.data()])) };
+  })();
+  let k = 0;
+  for (const { t, p, materia } of itens) {
+    progresso(++k, itens.length);
+    const [rs, cs] = await Promise.all([getDocs(collection(db, "tentativas", t.id, "respostas")), getDocs(collection(db, "tentativas", t.id, "correcoes"))]);
+    const resp = Object.fromEntries(rs.docs.map(d => [d.id, d.data()])), corr = Object.fromEntries(cs.docs.map(d => [d.id, d.data()]));
+    for (const qid of t.questoesIds || []) {
+      const bId = qid.lastIndexOf("_q") > 0 ? qid.slice(0, qid.lastIndexOf("_q")) : (t.bancoId || bancosDaProva(p)[0]);
+      const b = await lerBanco(bId).catch(() => null), q = b?.q[qid]; if (!q) continue;
+      const peso = Number(q.peso || 1), r = resp[qid];
+      let pts = corr[qid]?.pontos !== undefined ? Number(corr[qid].pontos) : corrigir(q, b.g[qid] || {}, r?.resposta, r?.perdida === true).pontos;
+      const email = String(t.email || "").toLowerCase(), tema = temaDe(q);
+      if (!out.has(email)) out.set(email, new Map());
+      const m = out.get(email); if (!m.has(tema)) m.set(tema, { pts: 0, max: 0, n: 0, materia });
+      const x = m.get(tema); x.pts += pts; x.max += peso; x.n++;
+    }
+  }
+  return out;
+}
+async function calcularTopicos() {
+  if (!base) return;
+  const ls = filtradas();
+  if (!ls.length) return toast("Nenhuma prova com esses filtros.", "erro");
+  const box = $("#rlTopicosBox");
+  try {
+    base.topicos = { porAluno: await desempenhoPorTopico(ls.map(l => ({ t: l.t, p: l.p, materia: l.materia })), (i, n) => { if (box) box.innerHTML = `<h3 class="diario-h3">🧩 Desempenho por tópico</h3><p class="pequeno">Lendo as respostas… ${i} de ${n} provas</p>`; }), nomes: Object.fromEntries(ls.map(l => [l.email, l.nome])) };
+  } catch (e) { toast(traduzirErro(e), "erro"); }
+  desenhar();
+}
+function topicosHTML() {
+  const { porAluno, nomes } = base.topicos, turma = new Map();
+  for (const [, m] of porAluno) for (const [tema, x] of m) { if (!turma.has(tema)) turma.set(tema, { pts: 0, max: 0, n: 0, materia: x.materia, alunos: 0 }); const y = turma.get(tema); y.pts += x.pts; y.max += x.max; y.n += x.n; y.alunos++; }
+  const pct = x => x.max ? x.pts / x.max * 100 : null;
+  const tops = [...turma].sort((a, b) => pct(a[1]) - pct(b[1]));
+  return `<p class="pequeno">Acerto nas questões de cada tópico (inclui pontos parciais e correções). Os tópicos com menor acerto são os candidatos a <b>reforço</b>.</p>
+    <div class="rl-topicos">${tops.map(([t, x]) => `<div class="rl-top"><div class="rl-top-cab"><b>${esc(t)}</b> <span class="pequeno">${esc(x.materia)} · ${x.n} respostas de ${x.alunos} aluno(s)</span><b class="${cor(pct(x))}">${fmt(pct(x))}%</b></div>
+      <div class="rl-barra"><i class="${cor(pct(x))}" style="width:${Math.round(pct(x) || 0)}%"></i></div></div>`).join("")}</div>
+    <details style="margin-top:12px"><summary><b>Por aluno</b> (os 3 tópicos com menor acerto de cada um)</summary><ul>${[...porAluno].map(([e, m]) => `<li><b>${esc(nomes[e] || e)}</b>: ${[...m].sort((a, b) => pct(a[1]) - pct(b[1])).slice(0, 3).map(([t, x]) => `${esc(t)} <span class="${cor(pct(x))}">${fmt(pct(x))}%</span>`).join(" · ")}</li>`).join("")}</ul></details>`;
+}
+function csv() {
+  if (!base) return;
+  const ls = filtradas(), nomeTurma = id => base.turmas.find(t => t.id === id)?.nome || "";
+  const linhas = [["aluno", "email", "turma", "semestre", "materia", "prova", "nota"], ...ls.map(l => [l.nome, l.email, nomeTurma(l.turmaId), l.semestre, l.materia, l.p.titulo, String(l.nota).replace(".", ",")])];
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob(["﻿" + linhas.map(r => r.map(x => `"${String(x ?? "").replace(/"/g, '""')}"`).join(";")).join("\n")], { type: "text/csv;charset=utf-8" }));
+  a.download = "relatorio_notas.csv"; a.click();
+}

@@ -167,6 +167,14 @@ Aba **Gamificação** (só admin) liga e desliga cada parte: conquistas, persona
 - **🏅 Editor de conquistas** (Gamificação → Conquistas, admin): cada conquista é uma **regra** com números (fez N provas, uma nota ≥ mínimo, N notas seguidas ≥ mínimo, melhorou N vezes, N provas sem perder vida, nota ≥ mínimo em N matérias, por matéria, ou contadores do diário). Edite emoji, título, descrição e regra; ligue/desligue; crie novas; **🤖 Sugerir novas com IA** (chegam desligadas para você revisar). Fica em `config/conquistas`; sem ele vale o padrão de `js/conquistas.js`. As skins ligadas a uma conquista usam o id dela (aparece "🎨 libera: …").
 - **🧪 Ver como aluno** (Gamificação → Abrir a simulação, ou `index.html?simular=1`): a equipe vê a página do aluno com a própria conta, inventa notas, se dá conquistas e monta o personagem. Nada é gravado no sistema (fica só no navegador). Professor e admin que entram em `index.html` sem `?simular` vão direto para o painel.
 
+## Relatórios (aba Relatórios)
+
+Professor e admin. Filtros de turma, semestre, matéria e aluno. Usa a nota fechada de cada prova finalizada (sem ela, a prévia).
+- **⚠ Risco de reprovação**: aluno com **média abaixo de 50** numa matéria (média simples, cada prova vale o mesmo), as notas e **quanto precisa tirar na próxima prova** para chegar a 50.
+- **Médias por aluno e matéria** (vermelho abaixo de 50, amarelo abaixo de 70) e **por turma e matéria**.
+- **📊 Calcular por tópico**: acerto em cada tópico (o `tema` das questões, com pontos parciais e correções), da turma e de cada aluno, para direcionar o **reforço**. A conta fica em `desempenhoPorTopico()` (`js/admin-relatorios.js`), a mesma que a integração com a autoavaliação vai usar.
+- **⬇ CSV** das notas filtradas.
+
 ## Pesquisa e filtros em todas as telas
 
 | Tela | Pesquisa | Filtros |
