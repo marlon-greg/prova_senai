@@ -244,14 +244,15 @@ service cloud.firestore {
     match /perfis/{u} {
       allow read: if logado() && (u == uid() || equipe());
       allow write: if logado() && u == uid()
-                   && request.resource.data.keys().hasOnly(['avatar', 'apelido', 'atualizadoEm']);
+                   && request.resource.data.keys().hasOnly(['avatar', 'apelido', 'status', 'atualizadoEm'])
+                   && (!('status' in request.resource.data) || (request.resource.data.status is string && request.resource.data.status.size() <= 40));
     }
     function socialLigado() { return get(/databases/$(db)/documents/config/gamificacao).data.get('social', false) == true; }
     // vitrine: só o que o próprio aluno marcou para mostrar (nunca nota sem ele querer)
     match /vitrine/{u} {
       allow read: if logado() && (u == uid() || equipe() || socialLigado());
       allow write: if logado() && u == uid()
-                   && request.resource.data.keys().hasOnly(['nome', 'apelido', 'avatar', 'turmaId', 'conquistas', 'notas', 'nivel', 'atualizadoEm']);
+                   && request.resource.data.keys().hasOnly(['nome', 'apelido', 'avatar', 'status', 'turmaId', 'conquistas', 'notas', 'nivel', 'atualizadoEm']);
       // curtidas e parabéns (sem comentários): uma por pessoa, só com a parte social ligada
       match /reacoes/{de} {
         allow read: if logado() && (u == uid() || de == uid() || equipe() || socialLigado());

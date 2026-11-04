@@ -31,7 +31,7 @@ async function escolherVitrine({ eu, cq, gami, perfil, simulacao }) {
     antesDeConfirmar: async c => {
       const conquistas = (cq?.ganhas || []).filter(m => c.querySelector(`[data-c="${CSS.escape(m.t)}"]`)?.checked).map(m => ({ e: m.e, t: m.t }));
       const notas = gami.socialNotas ? provas.filter(p => c.querySelector(`[data-n="${CSS.escape(p.id)}"]`)?.checked).map(p => ({ id: p.id, titulo: p.titulo, materia: p.materia || "", nota: Math.round(p.nota) })) : [];
-      const dados = { nome: String(eu.nome || "").split(/\s+/)[0], apelido: perfil?.apelido || "", avatar: perfil?.avatar || null, turmaId: simulacao ? "sim" : await minhaTurma(eu),
+      const dados = { nome: String(eu.nome || "").split(/\s+/)[0], apelido: perfil?.apelido || "", avatar: perfil?.avatar || null, status: perfil?.status || "", turmaId: simulacao ? "sim" : await minhaTurma(eu),
         conquistas, notas, nivel: cq?.nivel || 1, atualizadoEm: serverTimestamp() };
       try {
         if (simulacao) localStorage.setItem("sim:vitrine", JSON.stringify({ ...dados, atualizadoEm: null }));
@@ -55,7 +55,7 @@ async function abrirMural({ eu, simulacao }) {
   const desenhar = c => {
     $("#muralLista", c).innerHTML = itens.length ? itens.map(v => {
       const minha = v.reacoes.find(r => r.de === eu.uid), cur = v.reacoes.filter(r => r.tipo === "curtida").length, par = v.reacoes.filter(r => r.tipo === "parabens").length, eu_ = v.uid === eu.uid;
-      return `<article class="mural-item"><div class="mi-av">${svgAvatar(v.avatar, 84)}</div><div class="mi-info"><b>${esc(v.apelido || v.nome)}</b>${eu_ ? ` <span class="tag">você</span>` : ""} <span class="pequeno">nível ${v.nivel || 1}</span>
+      return `<article class="mural-item"><div class="mi-av">${svgAvatar(v.avatar, 84)}</div><div class="mi-info"><b>${esc(v.apelido || v.nome)}</b>${eu_ ? ` <span class="tag">você</span>` : ""} <span class="pequeno">nível ${v.nivel || 1}</span>${v.status ? ` <span class="tag">${esc(v.status)}</span>` : ""}
         <div class="mi-conq">${(v.conquistas || []).map(m => `<span class="tag" title="${esc(m.t)}">${m.e} ${esc(m.t)}</span>`).join("")}</div>
         ${(v.notas || []).length ? `<div class="mi-conq">${v.notas.map(n => `<span class="tag nota">📊 ${esc(n.titulo)}${n.materia ? ` (${esc(n.materia)})` : ""}: ${n.nota}</span>`).join("")}</div>` : ""}
         <div class="mi-reacoes">${eu_ ? `<span class="pequeno">❤️ ${cur} · 👏 ${par}</span>` : `<button type="button" class="leve mini${minha?.tipo === "curtida" ? " sel" : ""}" data-r="curtida" data-u="${v.uid}">❤️ ${cur}</button><button type="button" class="leve mini${minha?.tipo === "parabens" ? " sel" : ""}" data-r="parabens" data-u="${v.uid}">👏 Parabéns · ${par}</button>`}</div></div></article>`;
