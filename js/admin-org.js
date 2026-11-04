@@ -380,6 +380,8 @@ export async function editarTopicosBanco(bancoId, aoSalvar = () => {}) {
   const topicosPlano = m => { const out = [], v = new Set(); for (const p of planos.filter(p => chaveTexto(p.materia) === chaveTexto(m))) for (const t of p.topicos || []) if (!v.has(chaveTexto(t.nome))) { v.add(chaveTexto(t.nome)); out.push(t.nome); } return out; };
   const html = `
     <div class="grade">
+      <div><label for="tbSemestre">Semestre do banco</label><select id="tbSemestre">${[...new Set([-2, -1, 0, 1, 2].map(d => semestreVizinho(semestreDe(), d)).concat(banco?.semestre || semestreDe(banco?.criadoEm || new Date())))].sort().reverse()
+        .map(x => `<option value="${x}"${x === (banco?.semestre || semestreDe(banco?.criadoEm || new Date())) ? " selected" : ""}>${rotuloSemestre(x)}</option>`).join("")}</select></div>
       <div><label for="tbMateria">Matéria do banco</label><input type="text" id="tbMateria" list="tbMaterias" value="${esc(banco?.materia || "")}">
         <datalist id="tbMaterias">${materiasSugeridas().map(m => `<option value="${esc(m)}">`).join("")}</datalist></div>
       <div><label for="tbAplicar">Tópico para as marcadas</label>
@@ -438,18 +440,18 @@ export async function editarTopicosBanco(bancoId, aoSalvar = () => {}) {
     antesDeConfirmar: async caixa => {
       const novo = Object.fromEntries([...caixa.querySelectorAll("[data-tema]")].map(i => [i.dataset.tema, i.value.trim().slice(0, 120)]));
       const materia = $("#tbMateria", caixa).value.trim();
-      try { await salvarTopicos(bancoId, qs, novo, materia); }
+      try { await salvarTopicos(bancoId, qs, novo, { materia, semestre: $("#tbSemestre", caixa).value }); }
       catch (e) { toast(regrasErro(e), "erro"); return false; }
       return true;
     } });
   if (salvou) { toast("Tópicos salvos.", "ok"); ctx.invalidarBanco(bancoId); aoSalvar(); }
 }
 // grava os temas mudados, a matéria e a lista de temas do banco, e corrige o filtro de temas das provas que usam o banco
-async function salvarTopicos(bancoId, qs, novo, materia) {
+async function salvarTopicos(bancoId, qs, novo, extra) {
   const mudadas = qs.filter(q => (novo[q.id] ?? "") !== String(q.tema || "").trim());
   const depois = qs.map(q => ({ ...q, tema: novo[q.id] ?? q.tema }));
   const ops = mudadas.map(q => [doc(db, "bancos", bancoId, "questoes", q.id), { tema: novo[q.id] }]);
-  ops.push([doc(db, "bancos", bancoId), { materia, temas: ordenarTemas(depois.map(temaDe)) }]);
+  ops.push([doc(db, "bancos", bancoId), { ...extra, temas: ordenarTemas(depois.map(temaDe)) }]);
   if (mudadas.length) {
     const antesTema = Object.fromEntries(qs.map(q => [q.id, temaDe(q)])), depoisTema = Object.fromEntries(depois.map(q => [q.id, temaDe(q)]));
     const ps = (await getDocs(collection(db, "provas"))).docs.map(d => ({ id: d.id, ...d.data() })).filter(p => bancosDaProva(p).includes(bancoId));

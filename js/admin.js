@@ -943,7 +943,8 @@ $("#btnImportarBanco").onclick = async () => {
   if (!podeEditar()) return toast("Seu papel não permite importar.", "erro");
   let b; try { b = validarBanco($("#txtBanco").value); } catch (e) { return $("#msgBanco").innerHTML = `❌ ${esc(e.message)}`; }
   const temas = ordenarTemas(b.questoes.map(temaDe));
-  const ref = await addDoc(collection(db, "bancos"), { nome: b.nome, materia: b.materia || "", nQuestoes: b.questoes.length, temas, criadoEm: serverTimestamp(), criadoPor: eu.email });
+  const ref = await addDoc(collection(db, "bancos"), { nome: b.nome, materia: $("#bMateria").value.trim() || b.materia || "", semestre: $("#bSemestre").value || semestreDe(),
+    nQuestoes: b.questoes.length, temas, criadoEm: serverTimestamp(), criadoPor: eu.email });
   const lote = writeBatch(db);
   b.questoes.forEach((q, i) => {
     const qid = `${ref.id}_q${String(i + 1).padStart(3, "0")}`;
@@ -958,15 +959,78 @@ $("#btnImportarBanco").onclick = async () => {
   $("#msgBanco").innerHTML = `✅ Banco <b>${esc(b.nome)}</b> importado com ${b.questoes.length} questões em ${temas.length} tema(s): ${temas.map(esc).join(", ")}.`; $("#txtBanco").value = "";
   carregarBancos();
 };
+// semestre do banco: o gravado; senão o da criação
+const semestreDoBanco = b => b.semestre || semestreDe(b.criadoEm || new Date());
+let bancosContagem = {};   // bancoId -> { tema: { alternativa, dissertativa } }
+const bancosFechados = new Set();
 async function carregarBancos() {
-  await listarBancos();
+  await Promise.all([listarBancos(), listarPlanos().catch(() => [])]);
+  // formulário de importação: semestre e matérias sugeridas
+  const sAntes = $("#bSemestre").value, base = semestreDe();
+  $("#bSemestre").innerHTML = [-2, -1, 0, 1, 2].map(d => semestreVizinho(base, d)).reverse().map(x => `<option value="${x}">${rotuloSemestre(x)}${x === base ? " (atual)" : ""}</option>`).join("");
+  $("#bSemestre").value = sAntes || base;
+  $("#bMaterias").innerHTML = materiasSugeridas().map(m => `<option value="${esc(m)}">`).join("");
   const box = $("#listaBancos");
-  if (!bancosCache.length) { box.innerHTML = `<div class="vazio"><div class="icone">📚</div><p>Nenhum banco ainda. Importe o <b>modelo_banco.json</b> acima para começar.</p></div>`; return; }
-  const contagens = await Promise.all(bancosCache.map(b => questoesDoBanco(b.id).then(contarPorTema).catch(() => null)));
-  box.innerHTML = `<div class="tabela"><table><tr><th>Banco</th><th>Matéria</th><th>Questões</th><th>Temas</th><th></th></tr>` + bancosCache.map((b, i) =>
-    `<tr><td><b>${esc(b.nome)}</b><br><span class="pequeno">${b.id}</span></td><td>${esc(b.materia || "")}</td><td>${b.nQuestoes}</td>
-     <td>${contagens[i] ? `<ul class="temas-banco">${Object.entries(contagens[i]).map(([t, n]) => `<li><b>${esc(t)}</b>: ${textoContagem(n)}</li>`).join("")}</ul>` : "—"}</td>
-     <td class="td-acoes">${podeEditar() ? `<button class="leve mini" data-topicos="${b.id}" title="Ver e mudar o tópico de cada questão (com sugestão da IA)">🏷 Tópicos</button> ` : ""}<button class="leve mini" data-gab="${b.id}">Gabarito p/ Classroom</button> ${ehAdmin() ? `<button class="perigo mini" data-delb="${b.id}" aria-label="Apagar banco">🗑 Apagar</button>` : ""}</td></tr>`).join("") + "</table></div>";
+  if (!bancosCache.length) { $("#fbContagem").textContent = ""; box.innerHTML = `<div class="vazio"><div class="icone">📚</div><p>Nenhum banco ainda. Importe o <b>modelo_banco.json</b> acima para começar.</p></div>`; return; }
+  box.innerHTML = `<p class="pequeno">Carregando…</p>`;
+  const cs = await Promise.all(bancosCache.map(b => questoesDoBanco(b.id).then(contarPorTema).catch(() => null)));
+  bancosContagem = Object.fromEntries(bancosCache.map((b, i) => [b.id, cs[i]]));
+  if (!provasCache.length) provasCache = (await getDocs(collection(db, "provas")).catch(() => null))?.docs.map(d => ({ id: d.id, ...d.data() })) || [];
+  const sel = (el, primeira, vals, rot = v => v) => { const a = el.value; el.innerHTML = `<option value="">${primeira}</option>` + vals.map(v => `<option value="${esc(v)}">${esc(rot(v))}</option>`).join(""); el.value = vals.includes(a) ? a : ""; };
+  sel($("#fbSemestre"), "📅 Todos os semestres", [...new Set(bancosCache.map(semestreDoBanco))].sort().reverse(), rotuloSemestre);
+  const mats = new Map(); bancosCache.forEach(b => mats.set(chaveTexto(b.materia) || "~", String(b.materia || "").trim() || "Sem matéria"));
+  sel($("#fbMateria"), "📚 Todas as matérias", [...mats.values()].sort((a, b) => a.localeCompare(b, "pt-BR")));
+  desenharBancos();
+}
+function desenharBancos() {
+  const box = $("#listaBancos");
+  const busca = semAcento($("#fbBusca").value.trim()), fS = $("#fbSemestre").value, fM = chaveTexto($("#fbMateria").value);
+  const matDe = b => String(b.materia || "").trim() || "Sem matéria";
+  // busca também no enunciado das questões: mostra quantas bateram
+  const achados = {};
+  const lista = bancosCache.filter(b => {
+    if (fS && semestreDoBanco(b) !== fS) return false;
+    if (fM && chaveTexto(matDe(b)) !== fM) return false;
+    if (!busca) return true;
+    if (semAcento([b.nome, matDe(b), ...Object.keys(bancosContagem[b.id] || {})].join(" ")).includes(busca)) return true;
+    const n = (questoesCache[b.id] || []).filter(q => semAcento(q.enunciado).includes(busca)).length;
+    if (n) achados[b.id] = n;
+    return n > 0;
+  });
+  $("#fbContagem").textContent = `${lista.length} de ${bancosCache.length} banco(s) · ${lista.reduce((n, b) => n + Number(b.nQuestoes || 0), 0)} questões`;
+  if (!lista.length) { box.innerHTML = `<div class="vazio"><div class="icone">🔎</div><p>Nenhum banco com esses filtros.</p></div>`; return; }
+  const arv = new Map();
+  for (const b of lista) {
+    const s = semestreDoBanco(b), m = matDe(b);
+    if (!arv.has(s)) arv.set(s, new Map());
+    const mm = arv.get(s), k = chaveTexto(m); if (!mm.has(k)) mm.set(k, { m, bs: [] }); mm.get(k).bs.push(b);
+  }
+  const filtrando = busca || fS || fM, atual = semestreDe();
+  const usos = id => provasCache.filter(p => bancosDaProva(p).includes(id));
+  box.innerHTML = [...arv.keys()].sort().reverse().map(s => {
+    const mats = [...arv.get(s).values()].sort((a, b) => a.m.localeCompare(b.m, "pt-BR")), ids = `bs:${s}`;
+    const nB = mats.reduce((n, x) => n + x.bs.length, 0);
+    return `<details class="grupo-turma" data-gb="${ids}" ${filtrando || !bancosFechados.has(ids) ? "open" : ""}>
+      <summary><span class="gt-nome">📅 ${rotuloSemestre(s)}</span>${s === atual ? `<span class="tag on">atual</span>` : ""}<span class="tag">${mats.length} matéria(s)</span><span class="tag">${nB} banco(s)</span></summary>
+      <div class="gt-corpo">${mats.map(({ m, bs }) => {
+        const idm = `bm:${s}:${chaveTexto(m)}`;
+        return `<details class="grupo-semestre" data-gb="${idm}" ${filtrando || !bancosFechados.has(idm) ? "open" : ""}>
+          <summary><span class="gs-nome">📚 ${esc(m)}</span><span class="tag">${bs.length} banco(s)</span><span class="tag">${bs.reduce((n, b) => n + Number(b.nQuestoes || 0), 0)} questões</span></summary>
+          <div class="cartoes-materias">${bs.map(b => {
+            const c = bancosContagem[b.id], tot = c ? Object.values(c).reduce((x, y) => ({ alternativa: x.alternativa + y.alternativa, dissertativa: x.dissertativa + y.dissertativa }), { alternativa: 0, dissertativa: 0 }) : null;
+            const u = usos(b.id), geral = c?.Geral ? (c.Geral.alternativa + c.Geral.dissertativa) : 0;
+            return `<article class="cartao-materia cartao-banco">
+              <div class="cm-topo"><div><h3>🗂 ${esc(b.nome)}</h3><span class="pequeno">${b.nQuestoes} questões${tot ? ` · ${textoContagem(tot)}` : ""}${achados[b.id] ? ` · <b>${achados[b.id]} questão(ões) com “${esc($("#fbBusca").value.trim())}”</b>` : ""}</span></div>
+                ${u.length ? `<span class="tag nota" title="${esc(u.map(p => p.titulo).join(" · "))}">🧪 em ${u.length} prova(s)</span>` : `<span class="tag off">sem prova</span>`}</div>
+              ${c ? `<ul class="lista-topicos lista-topicos-banco">${Object.entries(c).map(([t, n]) => `<li class="topico${t === "Geral" ? " e-geral" : ""}"><span class="tp-nome">${esc(t)}</span><span class="tag">🔘 ${n.alternativa}</span><span class="tag">✍ ${n.dissertativa}</span></li>`).join("")}</ul>` : `<p class="pequeno">⚠ não foi possível ler as questões.</p>`}
+              ${geral ? `<p class="pequeno aviso-texto">⚠ ${geral} questão(ões) sem tópico ("Geral"): use 🏷 Tópicos.</p>` : ""}
+              <div class="cm-acoes">${podeEditar() ? `<button class="leve mini" data-topicos="${b.id}" title="Tópico de cada questão, matéria e semestre do banco (com sugestão da IA)">🏷 Tópicos</button>` : ""}
+                <button class="leve mini" data-gab="${b.id}">Gabarito p/ Classroom</button>
+                ${ehAdmin() ? `<button class="discreto mini perigo-txt" data-delb="${b.id}" aria-label="Apagar banco ${esc(b.nome)}">🗑</button>` : ""}</div></article>`;
+          }).join("")}</div></details>`;
+      }).join("")}</div></details>`;
+  }).join("");
+  box.querySelectorAll("[data-gb]").forEach(d => d.ontoggle = () => { if (filtrando) return; d.open ? bancosFechados.delete(d.dataset.gb) : bancosFechados.add(d.dataset.gb); });
   box.querySelectorAll("[data-gab]").forEach(x => x.onclick = () => gerarGabarito(x.dataset.gab));
   box.querySelectorAll("[data-topicos]").forEach(x => x.onclick = () => editarTopicosBanco(x.dataset.topicos, carregarBancos));
   box.querySelectorAll("[data-delb]").forEach(x => x.onclick = async () => {
@@ -977,6 +1041,8 @@ async function carregarBancos() {
     lote.delete(doc(db, "bancos", id)); await lote.commit(); delete questoesCache[id]; carregarBancos();
   });
 }
+["#fbBusca", "#fbSemestre", "#fbMateria"].forEach(id => $(id).addEventListener(id === "#fbBusca" ? "input" : "change", desenharBancos));
+$("#fbLimpar").onclick = () => { $("#fbBusca").value = ""; $("#fbSemestre").value = ""; $("#fbMateria").value = ""; desenharBancos(); };
 async function lerBanco(bancoId) {
   const [qs, gs] = await Promise.all([getDocs(collection(db, "bancos", bancoId, "questoes")), getDocs(collection(db, "bancos", bancoId, "gabaritos"))]);
   const questoes = {}, gabaritos = {};

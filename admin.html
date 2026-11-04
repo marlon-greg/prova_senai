@@ -101,12 +101,25 @@
       <div class="card">
         <h2>Importar banco de questões (JSON)</h2>
         <p class="pequeno">Use o arquivo <b>modelo_banco.json</b> como modelo. Cole o conteúdo aqui ou escolha o arquivo.</p>
+        <div class="grade">
+          <div><label for="bSemestre">Semestre</label><select id="bSemestre"></select></div>
+          <div><label for="bMateria">Matéria</label><input type="text" id="bMateria" list="bMaterias" placeholder="vazio = a do JSON"><datalist id="bMaterias"></datalist></div>
+        </div>
         <input type="file" id="arqBanco" accept=".json,application/json">
         <textarea id="txtBanco" placeholder='{"nome": "...", "materia": "...", "questoes": [ ... ]}' style="min-height:160px;margin-top:8px"></textarea>
         <div class="linha acoes" style="margin-top:8px"><button id="btnValidarBanco" class="leve">Validar</button><button id="btnImportarBanco">Importar</button></div>
         <div id="msgBanco" class="pequeno" role="status" style="margin-top:8px"></div>
       </div>
-      <div class="card"><h2>Bancos cadastrados</h2><div id="listaBancos"></div></div>
+      <div class="card"><h2>Bancos cadastrados</h2>
+        <p class="pequeno" style="margin-top:0">Organizados em <b>Semestre → Matéria → Banco → Tópicos</b>. O semestre e a matéria de cada banco mudam em <b>🏷 Tópicos</b>.</p>
+        <div class="barra-filtros" role="search">
+          <input type="search" id="fbBusca" placeholder="🔎 Pesquisar banco, matéria, tópico ou questão…" aria-label="Pesquisar bancos">
+          <select id="fbSemestre" aria-label="Filtrar por semestre"><option value="">📅 Todos os semestres</option></select>
+          <select id="fbMateria" aria-label="Filtrar por matéria"><option value="">📚 Todas as matérias</option></select>
+          <button id="fbLimpar" class="leve mini" type="button">Limpar filtros</button>
+        </div>
+        <p id="fbContagem" class="pequeno" aria-live="polite"></p>
+        <div id="listaBancos"></div></div>
       <div class="card">
         <h2>Slides e material de consulta (PDF)</h2>
         <details class="ajuda"><summary>Como funciona</summary><p>Envie os slides em <b>PDF</b> (PowerPoint: Arquivo → Exportar → PDF · Google Slides: Arquivo → Fazer download → PDF). Na prova, escolha o PDF em <b>Material de consulta</b>: o aluno lê os slides num leitor dentro da própria tela da prova. Também dá para enviar direto pelo formulário da prova.</p></details>

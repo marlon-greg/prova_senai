@@ -130,6 +130,8 @@ Aba **Organização** (a primeira do menu). Mostra cada **turma**, dentro dela o
 
 **Na prova** (Nova prova / ✎ Editar) entram **Semestre**, **Matéria** e **Data da prova**. A prova aparece na matéria pela combinação turma + semestre + matéria. Provas antigas, sem esses campos, usam a data de criação e a matéria do 1º banco. A aba **Provas** agrupa por turma → semestre · matéria e tem filtros de semestre e matéria.
 
+**Aba Bancos** organizada em **Semestre → Matéria → Banco → Tópicos**, com pesquisa (banco, matéria, tópico e até o texto das questões) e filtros de semestre e matéria. Cada banco mostra os tópicos com quantas alternativas e dissertativas tem, em quantas provas está e um aviso das questões ainda sem tópico. Na importação você escolhe o semestre (e pode trocar a matéria do JSON); depois, semestre e matéria mudam em **🏷 Tópicos**. Bancos antigos usam o semestre da data de importação.
+
 **Tópico das questões = o campo `tema`** (o mesmo que filtra o sorteio). Aba **Bancos → 🏷 Tópicos**: a tabela com todas as questões do banco, para trocar o tópico de cada uma, aplicar um tópico às marcadas (os tópicos do plano aparecem para clicar) e **🤖 Sugerir tópicos com IA** (usa os tópicos do plano da matéria; sem plano, a IA cria nomes curtos). Ao salvar, as provas que filtravam temas desse banco têm o filtro ajustado sozinho, para sortear as mesmas questões de antes. Também dá para mudar a matéria do banco ali.
 
 A IA da organização roda no navegador do administrador principal (com a chave) ou no servidor (ação `organizar` do Worker, para professores). O Worker importa `servidor/organizar.js` e é publicado pela Cloudflare a cada push (colar o arquivo à mão no editor da Cloudflare não funciona mais).
@@ -149,7 +151,7 @@ Para os alunos marcados na aba Acessibilidade. A **auxiliar de inclusão** vê s
 O arquivo `.github/workflows/regras-firestore.yml` publica o `firestore.rules` no Firebase a cada push na `main` que mude as regras (e pelo botão **Actions → Publicar regras do Firestore → Run workflow**). Configurar uma vez:
 1. GitHub → repositório → **Settings → Secrets and variables → Actions → New repository secret**.
 2. Nome: `FIREBASE_SERVICE_ACCOUNT`. Valor: o JSON inteiro da conta de serviço (o mesmo arquivo do `FIREBASE_SA` da Cloudflare).
-3. Se a publicação falhar com "permission denied": Google Cloud Console → IAM → na conta `firebase-adminsdk-…` adicione o papel **Firebase Rules Admin**.
+3. A ação usa direto a API do Firebase Rules (`.github/scripts/publicar-regras.mjs`). Se falhar com "permission denied": Google Cloud Console → IAM → na conta `firebase-adminsdk-…` adicione o papel **Firebase Rules Admin**.
 
 Sem o segredo, a ação só falha (aparece um ❌ em Actions) e nada muda: aí publique à mão, como antes.
 
