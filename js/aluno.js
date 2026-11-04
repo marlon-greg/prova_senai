@@ -5,6 +5,8 @@ import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar
 import { baixarMaterial } from "./material.js";
 import { desenharConquistas } from "./aluno-conquistas.js";
 import { apontar, desenharFaleConosco } from "./aluno-retorno.js";
+import { desenharPerfil, painelSimulacao, lerSimulacao, provasSimuladas, RESUMO_SIMULADO } from "./aluno-perfil.js";
+let simulacao = false;   // equipe vendo a página como aluno (?simular=1): nada é gravado
 import { lerGamificacao, GAMI_PADRAO } from "./common.js";
 let gami = { ...GAMI_PADRAO };   // o que está ligado na gamificação (config/gamificacao)
 import { montarFormato, temFormato, FORMATOS, rotuloFormato, textoParaFalar, textoResposta, textoChave } from "./formatos-ui.js";
@@ -116,7 +118,15 @@ aoMudarLogin(async user => {
     await abrirProva(provaTeste, "inicio");
     return;
   }
-  if (id.tipo === "equipe" && !new URLSearchParams(location.search).has("simular")) {
+  if (id.tipo === "equipe" && new URLSearchParams(location.search).has("simular")) {
+    simulacao = true;
+    eu = { uid: "sim-" + user.uid, email: id.email, nome: user.displayName || id.nome };
+    $("#faixaTeste").classList.remove("oculto"); $("#btnReiniciarTeste")?.classList.add("oculto");
+    $("#faixaTeste span").innerHTML = `<b>🧪 SIMULAÇÃO</b> — você está vendo a página do aluno com a sua conta. Nada é gravado e nenhum aluno vê.`;
+    gami = await lerGamificacao();
+    return desenharSimulacao();
+  }
+  if (id.tipo === "equipe") {
     // professor, admin e auxiliares vão direto para o painel (o login vale nas duas páginas)
     $("#avisoTexto").innerHTML = `<h2>Olá, ${esc(id.nome)}</h2><p>Abrindo o seu painel…</p>`;
     mostrar("telaAviso"); location.replace("admin.html"); return;
@@ -165,6 +175,17 @@ function lerQuestao(qid, botao) {
   botao.classList.add("ativo"); botao.textContent = "⏹ Parar";
 }
 
+// ---------- simulação da equipe: perfil, personagem e conquistas com dados de mentira ----------
+async function desenharSimulacao() {
+  mostrar("telaProvas"); desenharSaudacao();
+  $("#listaProvas").innerHTML = `<p class="pequeno">🧪 Na simulação a lista de provas fica vazia. Use o <b>Painel da simulação</b> para inventar notas e ganhar conquistas.</p>`;
+  const cfg = lerSimulacao(), forcar = new Set(cfg.dados || []);
+  const cq = await desenharConquistas(gami.conquistas ? $("#conquistas") : null, eu, cfg.acess ? RESUMO_SIMULADO : null, { provas: provasSimuladas(cfg), forcar, simulacao: true });
+  if (!gami.conquistas) $("#conquistas").classList.add("oculto");
+  await desenharPerfil($("#perfilAluno"), { eu, cq, gami, simulacao: true });
+  painelSimulacao($("#simPainel"), cq?.todas || [], desenharSimulacao);
+  desenharFaleConosco($("#faleConosco"), eu, gami, true);
+}
 // ---------- lista de provas ----------
 let provasDaLista = {};   // id -> prova (para saber, no clique, se a prova pede tela cheia)
 function desenharSaudacao() {
@@ -205,8 +226,9 @@ async function listarProvas() {
     b.forEach(d => provas[d.id] = { id: d.id, ...d.data() });
     lista = Object.values(provas).sort((x, y) => (y.criadoEm?.seconds || 0) - (x.criadoEm?.seconds || 0));
   }
-  if (!modoTeste && gami.conquistas) desenharConquistas($("#conquistas"), eu, acess?.diarioResumo || null).catch(e => console.warn("conquistas", e));
-  else $("#conquistas").classList.add("oculto");
+  if (!modoTeste) desenharConquistas(gami.conquistas ? $("#conquistas") : null, eu, acess?.diarioResumo || null)
+    .then(cq => desenharPerfil($("#perfilAluno"), { eu, cq, gami })).catch(e => console.warn("conquistas", e));
+  if (modoTeste || !gami.conquistas) $("#conquistas").classList.add("oculto");
   if (!modoTeste) desenharFaleConosco($("#faleConosco"), eu, gami).catch(e => console.warn("fale conosco", e));
   provasDaLista = Object.fromEntries(lista.map(p => [p.id, p]));
   if (!lista.length) { box.innerHTML = `<div class="vazio"><div class="icone">📭</div><p><b>Nenhuma prova liberada no momento.</b></p><p class="pequeno">Quando o professor liberar, ela aparece aqui. Se a prova já começou na sala, recarregue a página.</p></div>`; return; }

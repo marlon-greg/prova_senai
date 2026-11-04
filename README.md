@@ -156,6 +156,15 @@ Todo aluno vê **🏅 Minhas conquistas** embaixo das provas, com **nível** (ca
 - **Na sala de aula** (só alunos com acessibilidade): as medalhas do diário, só positivas.
 - Usa a nota fechada (ou a prévia) das provas finalizadas. As regras deixam o aluno ler a prova que ele já fez (título e matéria). As regras das conquistas ficam em `js/conquistas.js`.
 
+## Gamificação: personagem, skins, cartão, apontamentos e simulação
+
+Aba **Gamificação** (só admin) liga e desliga cada parte: conquistas, personagem e skins, download do cartão, apontamentos, sugestões e a parte social (2ª parte, desligada).
+
+- **🎨 Personagem do aluno** (`perfis/{uid}`): pele, rosto, cabelo (10 estilos, 10 cores), olhos, boca, roupa, acessório, fundo e moldura. Itens com 🔒 são **skins**, liberadas por número de conquistas ou por uma medalha específica (ex.: Jaleco SENAI com “Primeira prova”, óculos escuros e fundo dourado com “Trinca de ouro”, coroa com 12 conquistas). Catálogo em `js/avatar.js`.
+- **⬇ Baixar meu cartão**: PNG ou JPG (1080×1350, bom para redes sociais) com o personagem, o nome, o nível e as medalhas (nenhuma nota), e **PDF** da página com todas as conquistas e as próximas.
+- **🚩 Apontamentos**: na prova e no gabarito, o aluno avisa sobre uma questão (duas respostas certas, nenhuma certa, erro de texto, enunciado confuso, gabarito errado). **💬 Fale com a equipe**: sugestões para o sistema. A equipe responde na aba **Retorno dos alunos**; o aluno vê a resposta na página dele.
+- **🧪 Ver como aluno** (Gamificação → Abrir a simulação, ou `index.html?simular=1`): a equipe vê a página do aluno com a própria conta, inventa notas, se dá conquistas e monta o personagem. Nada é gravado no sistema (fica só no navegador). Professor e admin que entram em `index.html` sem `?simular` vão direto para o painel.
+
 ## Pesquisa e filtros em todas as telas
 
 | Tela | Pesquisa | Filtros |

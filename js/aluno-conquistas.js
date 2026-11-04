@@ -7,10 +7,13 @@ import { collection, doc, getDoc, getDocs, query, where } from "https://www.gsta
 const nota = t => Number.isFinite(Number(t.nota)) && t.nota !== null ? Number(t.nota) : (t.notaPrevia !== null && t.notaPrevia !== undefined && Number.isFinite(Number(t.notaPrevia)) ? Number(t.notaPrevia) : null);
 
 // eu = { uid, email, nome }; resumoDiario = acessibilidade.diarioResumo (ou null)
-export async function desenharConquistas(box, eu, resumoDiario = null) {
-  if (!box) return;
-  let provas = [];
-  try {
+// opc = { provas (lista pronta, simulação), forcar (Set de títulos dados na simulação), simulacao }
+// devolve { ganhas, todas, nivel, provas } para o cartão do perfil
+export async function desenharConquistas(box, eu, resumoDiario = null, opc = {}) {
+  const visivel = !!box;
+  box = box || document.createElement("div");   // conquistas desligadas: calcula (para as skins) sem mostrar
+  let provas = opc.provas || [];
+  if (!opc.provas) try {
     const ts = (await getDocs(query(collection(db, "tentativas"), where("uid", "==", eu.uid)))).docs.map(d => ({ id: d.id, ...d.data() }))
       .filter(t => t.teste !== true && t.finalizadaEm && nota(t) !== null);
     const bancos = {}, cacheProva = {};
@@ -24,10 +27,11 @@ export async function desenharConquistas(box, eu, resumoDiario = null) {
   } catch (e) { console.warn("conquistas", e); }
   const c = conquistasNotas(provas);
   const diario = resumoDiario ? medalhasDiario(resumoDiario) : [];
+  if (opc.forcar?.size) [...c.gerais, ...c.materias.flatMap(m => m.conquistas), ...diario].forEach(m => { if (opc.forcar.has(m.t)) m.ok = true; });
   const todas = [...c.gerais, ...c.materias.flatMap(m => m.conquistas), ...diario];
   const ganhas = todas.filter(m => m.ok);
   // medalha nova desde a última visita: comemora
-  const chave = `conquistas:${eu.uid}`, vistas = new Set(JSON.parse(localStorage.getItem(chave) || "[]"));
+  const chave = `conquistas:${opc.simulacao ? "sim:" : ""}${eu.uid}`, vistas = new Set(JSON.parse(localStorage.getItem(chave) || "[]"));
   const novas = ganhas.filter(m => !vistas.has(m.t));
   localStorage.setItem(chave, JSON.stringify(ganhas.map(m => m.t)));
   const nivel = Math.floor(ganhas.length / 3) + 1, prox = 3 - (ganhas.length % 3);
@@ -51,7 +55,8 @@ export async function desenharConquistas(box, eu, resumoDiario = null) {
       ${m.ok ? `<p class="tag ok">✓ Conquistada!</p>` : m.prog ? `<p>Progresso: <b>${m.prog[0]} de ${m.prog[1]}</b></p><div class="m-barra" style="width:100%;height:10px"><i style="width:${Math.round(m.prog[0] / m.prog[1] * 100)}%"></i></div>` : ""}
       ${m.detalhe?.length ? `<p class="pequeno" style="margin-bottom:4px">${m.ok ? "Como você conquistou:" : "Até agora:"}</p><ul>${m.detalhe.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}`, ok: "Legal!" });
   });
-  if (novas.length && vistas.size) festejar(novas);   // na 1ª visita não comemora tudo de uma vez
+  if (visivel && novas.length && vistas.size) festejar(novas);   // na 1ª visita não comemora tudo de uma vez
+  return { ganhas, todas, nivel, provas, materias: c.materias };
 }
 
 function festejar(novas) {
