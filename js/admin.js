@@ -145,7 +145,7 @@ function previaTurma() {
     (repetidos.length ? `<br><span class="erro-texto">⚠ Nome repetido: ${repetidos.map(esc).join(", ")}. Dois alunos com o mesmo nome precisam do e-mail (escreva o e-mail na linha de cada um).</span>` : "");
 }
 $("#tEmails").oninput = previaTurma;
-$("#ftBusca").oninput = () => desenharTurmas();
+$("#ftBusca").oninput = $("#ftSemestre").onchange = $("#ftMateria").onchange = () => desenharTurmas();
 function limparFormTurma() {
   turmaEditando = null; $("#tNome").value = ""; $("#tEmails").value = ""; previaTurma();
   $("#tFormTitulo").textContent = "Nova turma"; $("#btnCancelarTurma").classList.add("oculto");
@@ -168,26 +168,36 @@ $("#btnSalvarTurma").onclick = async () => {
   toast(`Turma ${nome} salva com ${alunos.length} aluno(s)` + (nomesChave.length ? ` (${nomesChave.length} aguardando o 1º login).` : "."), "ok");
   limparFormTurma(); carregarTurmas();
 };
-let provasPorTurma = {};   // turmaId -> [{ id, titulo, liberada }]
+let provasPorTurma = {}, turmaSemMat = {};   // turmaId -> [{ id, titulo, liberada }]
 async function carregarTurmas() {
-  const [, ps] = await Promise.all([listarTurmas(), getDocs(collection(db, "provas")).catch(() => null)]);
+  const [, ps, pls] = await Promise.all([listarTurmas(), getDocs(collection(db, "provas")).catch(() => null), listarPlanos().catch(() => []), listarBancos().catch(() => [])]);
   provasPorTurma = {};
-  ps?.forEach(d => { const p = d.data(); if (p.turmaId) (provasPorTurma[p.turmaId] ||= []).push({ id: d.id, titulo: p.titulo, liberada: p.liberada }); });
+  ps?.forEach(d => { const p = d.data(); if (p.turmaId) (provasPorTurma[p.turmaId] ||= []).push({ id: d.id, ...p }); });
+  // semestre/matéria de cada turma: pelos planos de ensino e pelas provas
+  turmaSemMat = {};
+  const marca = (t, sem, mat) => { if (t) (turmaSemMat[t] ||= []).push({ sem, mat: chaveTexto(mat), nome: mat }); };
+  pls.forEach(p => marca(p.turmaId, p.semestre, p.materia));
+  Object.entries(provasPorTurma).forEach(([t, l]) => l.forEach(p => marca(t, semestreDaProva(p), materiaDaProva(p, bancosCache))));
+  const todas = Object.values(turmaSemMat).flat();
+  const preencher = (el, primeira, vals, rot = v => v) => { const a = el.value; el.innerHTML = `<option value="">${primeira}</option>` + vals.map(v => `<option value="${esc(v)}">${esc(rot(v))}</option>`).join(""); el.value = vals.includes(a) ? a : ""; };
+  preencher($("#ftSemestre"), "📅 Todos os semestres", [...new Set(todas.map(x => x.sem))].sort().reverse(), rotuloSemestre);
+  const mats = new Map(); todas.forEach(x => x.mat && mats.set(x.mat, x.nome));
+  preencher($("#ftMateria"), "📚 Todas as matérias", [...mats.values()].sort((a, b) => a.localeCompare(b, "pt-BR")));
   desenharTurmas();
 }
 function desenharTurmas() {
   const box = $("#listaTurmas");
   if (!turmasCache.length) { $("#ftContagem").textContent = ""; box.innerHTML = `<div class="vazio"><div class="icone">👥</div><p>Nenhuma turma ainda. Cadastre a primeira acima colando os nomes completos (ou e-mails) dos alunos.</p></div>`; return; }
-  const busca = semAcento($("#ftBusca").value.trim());
+  const busca = semAcento($("#ftBusca").value.trim()), fS = $("#ftSemestre").value, fM = chaveTexto($("#ftMateria").value);
   // pesquisa no nome da turma ou nos alunos (nome/e-mail); achou aluno = abre a lista com só quem bateu
-  const linhas = turmasCache.map(t => {
+  const linhas = turmasCache.filter(t => (!fS && !fM) || (turmaSemMat[t.id] || []).some(x => (!fS || x.sem === fS) && (!fM || x.mat === fM))).map(t => {
     const al = alunosDaTurma(t);
     if (!busca || semAcento(t.nome).includes(busca)) return { t, al, achados: null };
     const achados = al.filter(a => semAcento(`${a.nome} ${a.email || ""}`).includes(busca));
     return achados.length ? { t, al, achados } : null;
   }).filter(Boolean);
-  $("#ftContagem").textContent = busca ? `${linhas.length} de ${turmasCache.length} turma(s)` + (linhas.some(l => l.achados) ? ` · ${linhas.reduce((n, l) => n + (l.achados?.length || 0), 0)} aluno(s) encontrado(s)` : "") : `${turmasCache.length} turma(s)`;
-  if (!linhas.length) { box.innerHTML = `<div class="vazio"><div class="icone">🔎</div><p>Nenhuma turma ou aluno com “${esc($("#ftBusca").value)}”.</p></div>`; return; }
+  $("#ftContagem").textContent = busca || fS || fM ? `${linhas.length} de ${turmasCache.length} turma(s)` + (linhas.some(l => l.achados) ? ` · ${linhas.reduce((n, l) => n + (l.achados?.length || 0), 0)} aluno(s) encontrado(s)` : "") : `${turmasCache.length} turma(s)`;
+  if (!linhas.length) { box.innerHTML = `<div class="vazio"><div class="icone">🔎</div><p>Nenhuma turma ou aluno com esses filtros.</p></div>`; return; }
   box.innerHTML = `<div class="tabela"><table><tr><th>Turma</th><th>Alunos</th><th>Provas</th><th>Atualizada</th><th></th></tr>` + linhas.map(({ t, al, achados }) => {
     const pend = al.filter(a => !a.email), auto = al.filter(a => a.auto), mostrar = achados || al;
     const lista = mostrar.map(a => `<li>${a.email ? "✅" : "⏳"} ${esc(a.nome || a.email)}${a.nome && a.email ? ` <span class="pequeno">${esc(a.email)}${a.auto ? " · vinculado no login" : ""}</span>` : ""}${!a.email ? ` <span class="pequeno">— aguardando o 1º login</span>` : ""}</li>`).join("");
@@ -1130,8 +1140,12 @@ let detalheId = null;         // tentativa aberta em "Ver"
 
 let provasRes = [];
 async function prepararResultados() {
-  const [s] = await Promise.all([getDocs(collection(db, "provas")), ehInclusao() ? null : listarTurmas().catch(() => null)]);
+  const [s] = await Promise.all([getDocs(collection(db, "provas")), ehInclusao() ? null : listarTurmas().catch(() => null), listarBancos().catch(() => null)]);
   provasRes = s.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
+  const preencher = (el, primeira, vals, rot = v => v) => { const a = el.value; el.innerHTML = `<option value="">${primeira}</option>` + vals.map(v => `<option value="${esc(v)}">${esc(rot(v))}</option>`).join(""); el.value = vals.includes(a) ? a : ""; };
+  preencher($("#rSemestre"), "Todos", [...new Set(provasRes.map(semestreDaProva))].sort().reverse(), rotuloSemestre);
+  const mats = new Map(); provasRes.forEach(p => { const m = materiaDaProva(p, bancosCache); if (m) mats.set(chaveTexto(m), m); });
+  preencher($("#rMateria"), "Todas", [...mats.values()].sort((a, b) => a.localeCompare(b, "pt-BR")));
   const selT = $("#rTurma"), tAntes = selT.value;
   const turmas = [...new Map(provasRes.map(p => [p.turmaId || "__sem", p.turmaId ? (turmasCache.find(t => t.id === p.turmaId)?.nome || p.turma || "turma") : "⚠ Sem turma"])).entries()]
     .sort((a, b) => a[0] === "__sem" ? 1 : b[0] === "__sem" ? -1 : a[1].localeCompare(b[1], "pt-BR", { numeric: true }));
@@ -1141,15 +1155,29 @@ async function prepararResultados() {
 }
 // provas do select de Resultados: filtradas pela turma e agrupadas (optgroup) por turma
 function opcoesProvaRes() {
-  const turma = $("#rTurma").value, antes = $("#rProva").value;
-  const lista = provasRes.filter(p => !turma || (p.turmaId || "__sem") === turma);
+  const turma = $("#rTurma").value, antes = $("#rProva").value, fS = $("#rSemestre").value, fM = chaveTexto($("#rMateria").value);
+  const lista = provasRes.filter(p => (!turma || (p.turmaId || "__sem") === turma) && (!fS || semestreDaProva(p) === fS) && (!fM || chaveTexto(materiaDaProva(p, bancosCache)) === fM));
   const grupos = new Map();
   lista.forEach(p => { const k = p.turmaId ? (turmasCache.find(t => t.id === p.turmaId)?.nome || p.turma || "turma") : "⚠ Sem turma"; if (!grupos.has(k)) grupos.set(k, []); grupos.get(k).push(p); });
   $("#rProva").innerHTML = [...grupos.entries()].sort((a, b) => a[0].localeCompare(b[0], "pt-BR", { numeric: true }))
-    .map(([k, ps]) => `<optgroup label="${esc(k)}">${ps.map(p => `<option value="${p.id}">${esc(p.titulo)}${p.liberada ? " ●" : ""}</option>`).join("")}</optgroup>`).join("");
+    .map(([k, ps]) => `<optgroup label="${esc(k)}">${ps.map(p => `<option value="${p.id}">${esc(p.titulo)} · ${esc(materiaDaProva(p, bancosCache) || "—")} · ${rotuloSemestre(semestreDaProva(p))}${p.liberada ? " ●" : ""}</option>`).join("")}</optgroup>`).join("") || `<option value="">Nenhuma prova com esses filtros</option>`;
   if (antes && lista.some(p => p.id === antes)) $("#rProva").value = antes;
 }
-$("#rTurma").onchange = () => { opcoesProvaRes(); $("#rProva").dispatchEvent(new Event("change")); };
+$("#rTurma").onchange = $("#rSemestre").onchange = $("#rMateria").onchange = () => { opcoesProvaRes(); $("#rProva").dispatchEvent(new Event("change")); };
+$("#rAluno").oninput = $("#rSituacao").onchange = () => { if (resDados) desenharResultados(); };
+// filtro da lista de alunos (a média e os números de cima continuam sendo da prova inteira)
+function filtrarLinhas(linhas) {
+  const b = semAcento($("#rAluno").value.trim()), sit = $("#rSituacao").value;
+  return linhas.filter(l => {
+    if (b && !semAcento(`${l.t.nome || ""} ${l.t.email || ""}`).includes(b)) return false;
+    if (sit === "andamento" && l.t.finalizadaEm) return false;
+    if (sit === "finalizou" && !l.t.finalizadaEm) return false;
+    if (sit === "revisar" && !l.revisar) return false;
+    if (sit === "sinais" && !l.temSinal) return false;
+    if (sit === "abaixo" && !(l.t.finalizadaEm && Number(l.nota) < 50)) return false;
+    return true;
+  });
+}
 $("#btnCarregarRes").onclick = carregarResultados;
 $("#rProva").onchange = () => { pararAoVivo(); resDados = null; $("#resResumo").innerHTML = ""; $("#resTabela").innerHTML = ""; if ($("#rAoVivo").checked) carregarResultados(); };
 $("#rTestes").onchange = () => { if (resDados) desenharResultados(); };
@@ -1416,9 +1444,10 @@ function desenharResultados() {
       <div class="numero ${comSinal ? "aviso" : ""}"><b>${comSinal}</b><span>com sinais (aba, tela cheia, colar)</span></div></div>`;
   const mostrarTestes = $("#rTestes").checked;
   const emCartoes = (localStorage.getItem("visaoResultados") || "cartoes") === "cartoes";
-  let html = linhas.length ? `<div class="card"><div class="linha acoes visao-res" role="group" aria-label="Visão"><b style="flex:1">Alunos (${linhas.length})</b>
+  const vis = filtrarLinhas(linhas), filtrado = vis.length !== linhas.length;
+  let html = linhas.length ? `<div class="card"><div class="linha acoes visao-res" role="group" aria-label="Visão"><b style="flex:1">Alunos (${filtrado ? `${vis.length} de ${linhas.length}` : linhas.length})</b>
       <button class="mini ${emCartoes ? "" : "leve"}" data-visao="cartoes" aria-pressed="${emCartoes}">▦ Cartões</button><button class="mini ${emCartoes ? "leve" : ""}" data-visao="tabela" aria-pressed="${!emCartoes}">☰ Tabela</button></div>
-      ${emCartoes ? cartoesHTML(linhas) : tabelaHTML(linhas, "aluno")}</div>` : `<div class="card vazio"><div class="icone">⏳</div><p>Nenhum aluno fez esta prova ainda.</p></div>`;
+      ${!vis.length ? `<p class="pequeno">Nenhum aluno com esse filtro.</p>` : emCartoes ? cartoesHTML(vis) : tabelaHTML(vis, "aluno")}</div>` : `<div class="card vazio"><div class="icone">⏳</div><p>Nenhum aluno fez esta prova ainda.</p></div>`;
   if (resDados.turma) {
     const fizeram = new Set(linhas.map(l => String(l.t.email || "").toLowerCase()));
     const todos = alunosDaTurma(resDados.turma), faltam = todos.filter(a => !a.email || !fizeram.has(a.email));
@@ -1509,14 +1538,23 @@ $("#btnCSV").onclick = () => {
 };
 
 // ============================================================ EQUIPE
+let equipeCache = [];
+const ROT_PAPEL = { admin: "admin", professor: "professor", auxiliar: "auxiliar", inclusao: "auxiliar de inclusão" };
 async function carregarEquipe() {
   const s = await getDocs(collection(db, "equipe"));
-  const lista = []; s.forEach(d => lista.push({ id: d.id, ...d.data() }));
+  equipeCache = s.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (a.nome || a.id).localeCompare(b.nome || b.id, "pt-BR"));
+  desenharEquipe();
+}
+function desenharEquipe() {
+  const b = semAcento($("#feBusca").value.trim()), fp = $("#fePapel").value;
+  const lista = equipeCache.filter(m => (!b || semAcento(`${m.id} ${m.nome || ""}`).includes(b)) && (!fp || m.papel === fp));
+  $("#feContagem").textContent = `${lista.length} de ${equipeCache.length} pessoa(s)`;
   $("#listaEquipe").innerHTML = `<div class="tabela"><table><tr><th>E-mail</th><th>Nome</th><th>Papel</th><th></th></tr>
-    <tr><td>${esc(SUPER_ADMIN)}</td><td>—</td><td><span class="tag on">admin principal</span></td><td class="pequeno">fixo nas regras</td></tr>` +
-    lista.map(m => `<tr><td>${esc(m.id)}</td><td>${esc(m.nome || "")}</td><td><span class="tag">${esc(m.papel)}</span></td><td>${ehAdmin() ? `<button class="perigo mini" data-rm="${m.id}">Remover</button>` : ""}</td></tr>`).join("") + "</table></div>";
+    ${!b && !fp ? `<tr><td>${esc(SUPER_ADMIN)}</td><td>—</td><td><span class="tag on">admin principal</span></td><td class="pequeno">fixo nas regras</td></tr>` : ""}` +
+    lista.map(m => `<tr><td>${esc(m.id)}</td><td>${esc(m.nome || "")}</td><td><span class="tag">${esc(ROT_PAPEL[m.papel] || m.papel)}</span></td><td>${ehAdmin() ? `<button class="perigo mini" data-rm="${m.id}">Remover</button>` : ""}</td></tr>`).join("") + "</table></div>";
   document.querySelectorAll("[data-rm]").forEach(b => b.onclick = async () => { if (await confirmar("Remover " + b.dataset.rm + " da equipe?", { titulo: "Remover membro", ok: "Remover", perigo: true })) { await deleteDoc(doc(db, "equipe", b.dataset.rm)); carregarEquipe(); } });
 }
+$("#feBusca").oninput = $("#fePapel").onchange = () => desenharEquipe();
 $("#btnAddEquipe").onclick = async () => {
   if (!ehAdmin()) return toast("Só admin cadastra equipe.", "erro");
   const email = $("#eEmail").value.trim().toLowerCase(); if (!email.includes("@")) return toast("E-mail inválido.", "erro");

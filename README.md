@@ -136,6 +136,19 @@ Aba **Organização** (a primeira do menu). Mostra cada **turma**, dentro dela o
 
 A IA da organização roda no navegador do administrador principal (com a chave) ou no servidor (ação `organizar` do Worker, para professores). O Worker importa `servidor/organizar.js` e é publicado pela Cloudflare a cada push (colar o arquivo à mão no editor da Cloudflare não funciona mais).
 
+## Pesquisa e filtros em todas as telas
+
+| Tela | Pesquisa | Filtros |
+|---|---|---|
+| Organização | matéria, tópico ou prova | turma, semestre |
+| Provas | prova, turma, matéria ou banco | turma, semestre, matéria, situação, ordem |
+| Bancos | banco, matéria, tópico ou texto da questão | semestre, matéria |
+| Turmas | turma, nome ou e-mail do aluno | semestre, matéria (pelos planos e provas da turma) |
+| Resultados | aluno (nome ou e-mail) | turma, semestre e matéria da prova; situação do aluno (em andamento, finalizou, a revisar, com sinais, nota abaixo de 50) |
+| Acessibilidade | aluno, e-mail ou auxiliar | turma, ativa/desligada |
+| Diário | aluno | turma |
+| Equipe | nome ou e-mail | papel |
+
 ## Diário do aluno (aba Diário)
 
 Para os alunos marcados na aba Acessibilidade. A **auxiliar de inclusão** vê só os alunos dela (o painel dela já abre no Diário); **professores e admin** veem todos.

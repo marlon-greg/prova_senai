@@ -12,7 +12,10 @@ import { collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc,
 let ctx = null;          // { eu, podeEditar(), souDono(), iaCfg(), urlCorretor(), auth, alunosDasTurmas() }
 let lista = [];          // [{ email, ...acessibilidade }]
 let aberto = null;       // email em edição
-export function iniciarAcessibilidade(c) { ctx = c; }
+export function iniciarAcessibilidade(c) {
+  ctx = c;
+  $("#acFiltroBusca").oninput = $("#acFiltroTurma").onchange = $("#acFiltroSit").onchange = () => desenharLista();
+}
 const ehInclusao = () => ctx.eu.papel === "inclusao";
 const priv = e => `acessibilidadePrivado/${e}`;
 
@@ -26,18 +29,36 @@ export async function carregarAcessibilidade() {
     const s = await getDocs(q);
     lista = s.docs.map(d => ({ email: d.id, ...d.data() })).sort((a, b) => (a.nome || a.email).localeCompare(b.nome || b.email, "pt-BR"));
   } catch (e) { box.innerHTML = `<p class="erro-texto">Não foi possível ler a lista. ${esc(traduzirErro(e))} (Publique o firestore.rules atualizado.)</p>`; return; }
+  // turma(s) de cada aluno, para o filtro
+  const al = await ctx.alunosDasTurmas().catch(() => []);
+  turmasDe = new Map(); al.forEach(x => { if (x.email) (turmasDe.get(x.email) || turmasDe.set(x.email, []).get(x.email)).push({ id: x.turmaId, nome: x.turma }); });
+  const selT = $("#acFiltroTurma"), tAntes = selT.value, ts = new Map(); lista.forEach(a => (turmasDe.get(a.email) || []).forEach(t => ts.set(t.id, t.nome)));
+  selT.innerHTML = `<option value="">👥 Todas as turmas</option>` + [...ts].sort((a, b) => String(a[1]).localeCompare(String(b[1]), "pt-BR", { numeric: true })).map(([id, n]) => `<option value="${esc(id)}">${esc(n)}</option>`).join("");
+  selT.value = ts.has(tAntes) ? tAntes : "";
+  $("#acFiltros").classList.toggle("oculto", lista.length < 2);
+  desenharLista();
+  if (aberto && lista.some(a => a.email === aberto)) abrirAluno(aberto, false);
+}
+let turmasDe = new Map();
+function desenharLista() {
+  const box = $("#acessLista");
+  const b = String($("#acFiltroBusca").value || "").normalize("NFD").replace(/\p{M}+/gu, "").toLowerCase().trim(), fT = $("#acFiltroTurma").value, fA = $("#acFiltroSit").value;
+  const vis = lista.filter(a => (!b || `${a.nome || ""} ${a.email} ${(a.auxiliares || []).join(" ")}`.normalize("NFD").replace(/\p{M}+/gu, "").toLowerCase().includes(b))
+    && (!fT || (turmasDe.get(a.email) || []).some(t => t.id === fT)) && (!fA || (fA === "ativa" ? a.ativo !== false : a.ativo === false)));
+  $("#acFiltroContagem").textContent = lista.length > 1 ? `${vis.length} de ${lista.length} aluno(s)` : "";
+  if (lista.length && !vis.length) { box.innerHTML = `<div class="vazio"><div class="icone">🔎</div><p>Nenhum aluno com esses filtros.</p></div>`; return; }
   if (!lista.length) {
     box.innerHTML = `<div class="vazio"><div class="icone">♿</div><p><b>${ehInclusao() ? "Nenhum aluno vinculado a você ainda." : "Nenhum aluno com acessibilidade."}</b></p>
       <p class="pequeno">${ehInclusao() ? "Peça ao professor para vincular você ao aluno." : "Use o formulário acima para marcar um aluno."}</p></div>`;
-  } else box.innerHTML = `<div class="cartoes-alunos">` + lista.map(a => `
+  } else box.innerHTML = `<div class="cartoes-alunos">` + vis.map(a => `
     <button type="button" class="cartao-aluno cartao-acess${a.ativo === false ? " inativo" : ""}${a.email === aberto ? " selecionado" : ""}" data-acess="${esc(a.email)}">
       <div class="ca-topo"><span class="avatar">${esc(iniciais(a.nome || a.email))}</span>
         <div class="ca-nome"><b>${esc(a.nome || a.email)}</b><span class="pequeno">${esc(a.email)}</span></div>
         <span class="tag ${a.ativo === false ? "off" : "ok"}">${a.ativo === false ? "○ desligada" : "♿ ativa"}</span></div>
+      ${(turmasDe.get(a.email) || []).length ? `<div class="pequeno">👥 ${turmasDe.get(a.email).map(t => esc(t.nome)).join(", ")}</div>` : ""}
       <div class="pequeno">${(a.auxiliares || []).length ? `🤝 ${a.auxiliares.map(esc).join(", ")}` : "sem auxiliar vinculada"}${a.uid ? "" : " · ainda não entrou no sistema"}</div>
     </button>`).join("") + `</div>`;
   box.querySelectorAll("[data-acess]").forEach(b => b.onclick = () => abrirAluno(b.dataset.acess));
-  if (aberto && lista.some(a => a.email === aberto)) abrirAluno(aberto, false);
 }
 
 // marcar aluno: escolhe de uma turma ou digita o e-mail

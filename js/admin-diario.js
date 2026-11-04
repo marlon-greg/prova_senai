@@ -38,9 +38,21 @@ export async function carregarDiario() {
       <p class="pequeno">O diário é dos alunos marcados na aba Acessibilidade${ehInclusao() ? "; peça ao professor para vincular você." : "."}</p></div>`;
     $("#diarioPainel").innerHTML = ""; return;
   }
-  box.innerHTML = `<div class="diario-alunos">` + alunos.map(a => `<button type="button" class="diario-aluno${a.email === atual?.email ? " ativo" : ""}" data-al="${esc(a.email)}">
-      <span class="avatar">${esc(iniciais(a.nome || a.email))}</span><span><b>${esc(a.nome || a.email)}</b><span class="pequeno">${esc(a.email)}</span></span></button>`).join("") + `</div>`;
+  const tds = await ctx.alunosDasTurmas().catch(() => []);
+  const turmaDe = e => tds.filter(x => x.email === e);
+  const ts = new Map(); alunos.forEach(a => turmaDe(a.email).forEach(t => ts.set(t.turmaId, t.turma)));
+  box.innerHTML = (alunos.length > 1 ? `<div class="barra-filtros" role="search" style="margin-top:8px">
+      <input type="search" id="dBusca" placeholder="🔎 Pesquisar aluno…" aria-label="Pesquisar aluno">
+      ${ts.size > 1 ? `<select id="dTurma" aria-label="Filtrar por turma"><option value="">👥 Todas as turmas</option>${[...ts].map(([id, n]) => `<option value="${esc(id)}">${esc(n)}</option>`).join("")}</select>` : ""}</div>` : "") +
+    `<div class="diario-alunos">` + alunos.map(a => `<button type="button" class="diario-aluno${a.email === atual?.email ? " ativo" : ""}" data-al="${esc(a.email)}"
+      data-busca="${esc(chaveTexto(`${a.nome || ""} ${a.email}`))}" data-turmas="${esc(turmaDe(a.email).map(t => t.turmaId).join(" "))}">
+      <span class="avatar">${esc(iniciais(a.nome || a.email))}</span><span><b>${esc(a.nome || a.email)}</b><span class="pequeno">${esc(turmaDe(a.email).map(t => t.turma).join(", ") || a.email)}</span></span></button>`).join("") + `</div>`;
   box.querySelectorAll("[data-al]").forEach(b => b.onclick = () => abrirAluno(b.dataset.al));
+  const filtrar = () => {
+    const q = chaveTexto($("#dBusca")?.value), t = $("#dTurma")?.value || "";
+    box.querySelectorAll("[data-al]").forEach(b => b.classList.toggle("oculto", !!(q && !b.dataset.busca.includes(q)) || !!(t && !b.dataset.turmas.split(" ").includes(t))));
+  };
+  $("#dBusca")?.addEventListener("input", filtrar); $("#dTurma")?.addEventListener("change", filtrar);
   abrirAluno(atual && alunos.some(a => a.email === atual.email) ? atual.email : alunos[0].email);
 }
 

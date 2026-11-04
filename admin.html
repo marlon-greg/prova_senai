@@ -156,7 +156,9 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
         <div class="linha acoes"><button id="btnSalvarTurma">Salvar turma</button><button id="btnCancelarTurma" class="leve oculto">Cancelar edição</button></div>
       </div>
       <div class="card"><h2>Turmas cadastradas</h2>
-        <div class="barra-filtros" role="search"><input type="search" id="ftBusca" placeholder="🔎 Pesquisar turma, aluno ou e-mail…" aria-label="Pesquisar turmas e alunos"></div>
+        <div class="barra-filtros" role="search"><input type="search" id="ftBusca" placeholder="🔎 Pesquisar turma, aluno ou e-mail…" aria-label="Pesquisar turmas e alunos">
+          <select id="ftSemestre" aria-label="Filtrar turmas por semestre"><option value="">📅 Todos os semestres</option></select>
+          <select id="ftMateria" aria-label="Filtrar turmas por matéria"><option value="">📚 Todas as matérias</option></select></div>
         <p id="ftContagem" class="pequeno" aria-live="polite"></p>
         <div id="listaTurmas"></div></div>
     </div>
@@ -166,11 +168,17 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
       <div class="card">
         <div class="card-cab"><h2>Resultados <span id="aoVivo" class="ao-vivo oculto" title="Atualizando sozinho">● ao vivo</span></h2></div>
         <div class="barra-res">
-          <div class="campo-prova" style="flex:0 1 220px"><label for="rTurma">Turma</label><select id="rTurma"><option value="">Todas as turmas</option></select></div>
+          <div class="campo-prova" style="flex:0 1 200px"><label for="rTurma">Turma</label><select id="rTurma"><option value="">Todas as turmas</option></select></div>
+          <div class="campo-prova" style="flex:0 1 160px"><label for="rSemestre">Semestre</label><select id="rSemestre"><option value="">Todos</option></select></div>
+          <div class="campo-prova" style="flex:0 1 200px"><label for="rMateria">Matéria</label><select id="rMateria"><option value="">Todas</option></select></div>
           <div class="campo-prova"><label for="rProva">Prova</label><select id="rProva"></select></div>
           <button id="btnCarregarRes">Carregar</button>
           <label class="check interruptor"><input type="checkbox" id="rAoVivo"> Ao vivo</label>
           <label class="check interruptor"><input type="checkbox" id="rTestes"> Testes da equipe</label>
+        </div>
+        <div class="barra-filtros" role="search" style="margin-top:8px">
+          <input type="search" id="rAluno" placeholder="🔎 Pesquisar aluno (nome ou e-mail)…" aria-label="Pesquisar aluno nos resultados">
+          <select id="rSituacao" aria-label="Filtrar alunos por situação"><option value="">Todas as situações</option><option value="andamento">⏳ Em andamento</option><option value="finalizou">✅ Finalizou</option><option value="revisar">🟡 Com respostas a revisar</option><option value="sinais">⚠ Com sinais (aba, tela cheia, colar)</option><option value="abaixo">🔻 Nota abaixo de 50</option></select>
         </div>
         <div class="grupos-acoes">
           <div class="grupo"><span class="grupo-rotulo">Exportar</span><button id="btnCSV" class="leve mini">CSV</button><button id="btnPDFNotas" class="leve mini">PDF notas</button><button id="btnPDFBoletins" class="leve mini">PDF boletins</button></div>
@@ -209,6 +217,12 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
           <div><button id="btnAcessAdicionar">♿ Marcar acessibilidade</button></div>
         </div>
       </div>
+      <div class="barra-filtros" id="acFiltros" role="search">
+        <input type="search" id="acFiltroBusca" placeholder="🔎 Pesquisar aluno, e-mail ou auxiliar…" aria-label="Pesquisar alunos com acessibilidade">
+        <select id="acFiltroTurma" aria-label="Filtrar por turma"><option value="">👥 Todas as turmas</option></select>
+        <select id="acFiltroSit" aria-label="Filtrar por situação"><option value="">Todas</option><option value="ativa">♿ Acessibilidade ativa</option><option value="desligada">○ Desligada</option></select>
+        <span id="acFiltroContagem" class="pequeno" aria-live="polite"></span>
+      </div>
       <div id="acessLista"></div>
       <div id="acessDetalhe"></div>
     </div>
@@ -223,6 +237,11 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
           <div><label for="eNome">Nome</label><input type="text" id="eNome"></div>
           <div><label for="ePapel">Papel</label><select id="ePapel"><option value="professor">professor</option><option value="admin">admin</option><option value="auxiliar">auxiliar</option><option value="inclusao">auxiliar de inclusão</option></select></div>
           <div><button id="btnAddEquipe">Adicionar</button></div>
+        </div>
+        <div class="barra-filtros" role="search" style="margin-top:16px">
+          <input type="search" id="feBusca" placeholder="🔎 Pesquisar nome ou e-mail…" aria-label="Pesquisar na equipe">
+          <select id="fePapel" aria-label="Filtrar por papel"><option value="">Todos os papéis</option><option value="admin">admin</option><option value="professor">professor</option><option value="auxiliar">auxiliar</option><option value="inclusao">auxiliar de inclusão</option></select>
+          <span id="feContagem" class="pequeno" aria-live="polite"></span>
         </div>
         <div id="listaEquipe"></div>
       </div>
