@@ -344,6 +344,9 @@ Antes da prova, um mascote explica as regras, uma fala por vez. Tem o botão �
 
 A IA roda no seu navegador (administrador principal, com a chave salva) ou no servidor de correção (Cloudflare Worker, ação `adaptar`) para os professores e a auxiliar de inclusão. No Worker, a variável opcional `MODELO_ADAPTACAO` define o modelo (padrão `claude-sonnet-5-5`).
 
+### 🧠 Perfil do aluno para a IA (o perfil que aprende)
+Em **Sobre o aluno** (aba Acessibilidade), abaixo da descrição: **🤖 Atualizar com o diário e as provas** monta um perfil pedagógico (resumo, pontos fortes, dificuldades, o que funciona, o que evitar, recomendações para as provas) a partir da descrição, do diário, dos comentários dos professores e dos formatos já usados. Você revisa, edita e **salva**. A IA usa esse perfil ao **sugerir formatos** e ao **adaptar** as questões. Quando entram registros novos no diário depois da última atualização, aparece o aviso "⚠ N registro(s) novo(s): vale atualizar". Fica em `acessibilidadePrivado/{aluno}.perfilIA` (o aluno não vê).
+
 ### 🎨 Formatos de questão adaptada
 Além de reescrever o texto, a questão pode mudar de **formato** para o aluno, cobrando o mesmo conteúdo:
 

@@ -3,7 +3,7 @@
 // apenas para api.anthropic.com. Nunca entra no repositório nem chega à página do aluno.
 import { db } from "./common.js";
 import { pedidoFormatos, lerRespostaFormatos } from "../servidor/formatos.js";
-import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS, pedidoCurso, lerRespostaCurso, pedidoConquistas, lerRespostaConquistas } from "../servidor/organizar.js";
+import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS, pedidoCurso, lerRespostaCurso, pedidoConquistas, lerRespostaConquistas, pedidoPerfil, lerRespostaPerfil } from "../servidor/organizar.js";
 import { doc, getDoc, setDoc, deleteDoc, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -218,9 +218,13 @@ export async function lerCursoIA({ chave, modelo, pdf, titulo, nome }) {
 
 // ---------- formatos de questão adaptada: várias opções, da mais indicada para a menos (servidor/formatos.js) ----------
 // laudos = [{ titulo, bytes }]. Devolve a lista de opções (já validadas e em ordem de indicação)
-export async function formatosIA({ chave, modelo, q, g, descricao, orientacao, diario, laudos = [] }) {
+export async function perfilIA({ chave, modelo, ...dados }) {
+  try { return lerRespostaPerfil(await chamarAPI(chave, { model: modeloOrganizar(modelo), ...pedidoPerfil(dados) })); }
+  catch (e) { throw e.ia ? e : erroIA(e.message); }
+}
+export async function formatosIA({ chave, modelo, q, g, descricao, orientacao, diario, perfil, laudos = [] }) {
   try {
-    const r = await chamarAPI(chave, { model: modeloOrganizar(modelo), ...pedidoFormatos({ q, g, descricao, orientacao, diario, laudos: laudos.slice(0, 3).map(l => ({ titulo: l.titulo, data: base64(l.bytes) })) }) });
+    const r = await chamarAPI(chave, { model: modeloOrganizar(modelo), ...pedidoFormatos({ q, g, descricao, orientacao, diario, perfil, laudos: laudos.slice(0, 3).map(l => ({ titulo: l.titulo, data: base64(l.bytes) })) }) });
     return lerRespostaFormatos(r, q);
   } catch (e) { throw e.ia ? e : erroIA(e.message); }
 }

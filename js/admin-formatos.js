@@ -53,7 +53,7 @@ export async function gerarOpcoes({ ctx, email, prova, x, orientacao = "", laudo
     const rs = regs?.docs.map(d => ({ id: d.id, ...d.data() })) || [];
     const coms = (await Promise.all(rs.filter(r => r.nComentarios > 0).slice(0, 6).map(r => getDocs(collection(db, ...priv(email).split("/"), "diario", r.id, "comentarios")).catch(() => null))))
       .flatMap(s => s?.docs.map(d => d.data()) || []);
-    const opcoes = await formatosIA({ chave: cfg.chave, modelo: cfg.modelo, q: x.q, g: x.g, descricao: p?.data()?.descricao || "", orientacao, diario: contextoDiario(rs, coms), laudos: await laudos() });
+    const opcoes = await formatosIA({ chave: cfg.chave, modelo: cfg.modelo, q: x.q, g: x.g, descricao: p?.data()?.descricao || "", perfil: p?.data()?.perfilIA?.texto || "", orientacao, diario: contextoDiario(rs, coms), laudos: await laudos() });
     await setDoc(doc(db, ...priv(email).split("/"), "opcoes", x.qid), { opcoes: JSON.stringify(opcoes), provaId: prova.id, geradoPor: ctx.eu.email, geradoEm: serverTimestamp() });
     return opcoes;
   }

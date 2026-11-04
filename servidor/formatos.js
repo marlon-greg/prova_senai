@@ -213,10 +213,11 @@ export function contextoDiario(registros = [], comentarios = []) {
     comentarios.length && `Comentários dos professores:\n${comentarios.slice(0, 10).map(c => `- ${limpo([c.respostas?.comentario, c.respostas?.sugestao].filter(Boolean).join(" Sugestão: "), 300)}`).join("\n")}`
   ].filter(Boolean).join("\n");
 }
-export function pedidoFormatos({ q, g = {}, descricao, orientacao, diario, laudos = [] }) {
+export function pedidoFormatos({ q, g = {}, descricao, orientacao, diario, perfil, laudos = [] }) {
   const alt = q.tipo === "alternativa" && Array.isArray(q.alternativas);
   const texto = `<descricao_da_equipe>\n${descricao || "(sem descrição)"}\n</descricao_da_equipe>\n` +
     (orientacao ? `<orientacao>\n${orientacao}\n</orientacao>\n` : "") +
+    (perfil ? `<perfil_do_aluno revisado_pela_equipe="sim">\n${perfil}\n</perfil_do_aluno>\n` : "") +
     (diario ? `<diario_e_comentarios>\n${diario}\n</diario_e_comentarios>\n` : "") +
     `<questao tipo="${alt ? "múltipla escolha" : "resposta escrita"}" tema="${limpo(q.tema, 80)}">\n<enunciado>\n${q.enunciado || ""}\n</enunciado>\n` +
     (alt ? `<alternativas>\n${q.alternativas.map((a, i) => `${i}. ${a}`).join("\n")}\n</alternativas>\n<correta>${g.correta ?? "?"}</correta>\n`

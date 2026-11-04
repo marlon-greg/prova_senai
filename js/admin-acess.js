@@ -7,6 +7,8 @@ import { VISUAL_PADRAO, PROVA_PADRAO, FONTES, TEMAS, completar, aplicarVisual, a
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, abrirMaterialEmAba, tamanhoTexto, erroMaterial } from "./material.js";
 import { adaptarQuestao } from "./ia.js";
 import { abrirOpcoes, editarFormato, previaAplicada, gerarOpcoes, lerOpcoes } from "./admin-formatos.js";
+import { perfilIA } from "./ia.js";
+import { contextoDiario } from "../servidor/formatos.js";
 import { FORMATOS, temFormato, textoChave } from "./formatos-ui.js";
 // como a questão aparece impressa para o aluno (sem resposta)
 function textoVazio(q) {
@@ -188,6 +190,11 @@ async function abrirAluno(email, rolar = true) {
       <label for="acDescricao">Descrição das necessidades e do que funciona (a IA usa isto para adaptar as questões)</label>
       <textarea id="acDescricao" style="font-family:inherit;min-height:140px" placeholder="Ex.: aluna com TEA nível 1 e TDAH. Entende melhor frases curtas e uma instrução por vez. Perde o foco com textos longos. Ajuda: negrito no que é pedido, exemplos concretos.">${esc(descricao)}</textarea>
       <div class="linha acoes" style="margin-top:8px"><button id="acSalvarDesc" class="leve">Salvar descrição</button></div>
+      <h2 style="margin-top:16px">🧠 Perfil para a IA <span class="pequeno">— aprende com o diário, os comentários dos professores e as adaptações</span></h2>
+      <p class="pequeno" id="acPerfilInfo">${p?.data()?.perfilIA?.atualizadoEm ? `Atualizado em ${dataBR(p.data().perfilIA.atualizadoEm)} por ${esc(p.data().perfilIA.por || "")}.` : "Ainda não montado. Clique em 🤖 para a IA montar a partir do que já existe; depois revise."}</p>
+      <textarea id="acPerfil" style="font-family:inherit;min-height:180px" placeholder="Resumo, pontos fortes, dificuldades, o que funciona, o que evitar e recomendações para as provas.">${esc(p?.data()?.perfilIA?.texto || "")}</textarea>
+      <div class="linha acoes" style="margin-top:8px"><button id="acPerfilIA" type="button">🤖 Atualizar com o diário e as provas</button><button id="acPerfilSalvar" type="button" class="leve">Salvar perfil</button></div>
+      <p class="pequeno">A IA usa este perfil (junto com a descrição) ao sugerir formatos e adaptar as questões. Revise: é você quem decide o que fica.</p>
       <h2 style="margin-top:16px">Laudos e documentos (PDF) <button data-ajuda-item="laudo"></button></h2>
       <p class="pequeno">Ficam guardados só para a equipe que cuida deste aluno. A IA lê até 3 PDFs ao adaptar.</p>
       <div class="linha acoes"><label class="botao-arquivo">⬆ Enviar PDF(s)<input type="file" id="acLaudoArq" accept="application/pdf,.pdf" multiple hidden></label><span id="acLaudoMsg" class="pequeno" aria-live="polite"></span></div>
@@ -250,6 +257,39 @@ async function abrirAluno(email, rolar = true) {
     try { await setDoc(doc(db, "acessibilidadePrivado", email), { descricao: $("#acDescricao").value.trim(), atualizadoEm: serverTimestamp(), atualizadoPor: ctx.eu.email, infoAtualizadaEm: serverTimestamp() }, { merge: true });
       toast("Descrição salva. Adaptações feitas antes desta mudança aparecem como ⚠ desatualizadas.", "ok"); recarregarSeAberta(email); }
     catch (e) { toast("Não foi possível salvar. " + traduzirErro(e), "erro"); }
+  };
+  // 🧠 perfil para a IA: avisa quando há registros novos no diário desde a última atualização
+  const perfilEm = p?.data()?.perfilIA?.atualizadoEm?.toMillis?.() || 0;
+  getDocs(collection(db, "acessibilidadePrivado", email, "diario")).then(s => {
+    const novos = s.docs.filter(d => (d.data().atualizadoEm?.toMillis?.() || 0) > perfilEm).length;
+    if (novos && perfilEm) $("#acPerfilInfo").insertAdjacentHTML("beforeend", ` <span class="tag aviso">⚠ ${novos} registro(s) novo(s) no diário desde então: vale atualizar</span>`);
+  }).catch(() => {});
+  $("#acPerfilSalvar").onclick = async () => {
+    try { await setDoc(doc(db, "acessibilidadePrivado", email), { perfilIA: { texto: $("#acPerfil").value.trim().slice(0, 6000), atualizadoEm: serverTimestamp(), por: ctx.eu.email }, infoAtualizadaEm: serverTimestamp() }, { merge: true });
+      $("#acPerfilInfo").textContent = `Atualizado agora por ${ctx.eu.email}.`; toast("Perfil salvo. As próximas adaptações já usam este perfil.", "ok"); recarregarSeAberta(email); }
+    catch (e) { toast(traduzirErro(e), "erro"); }
+  };
+  $("#acPerfilIA").onclick = async e => {
+    const b = e.currentTarget; b.disabled = true; b.textContent = "🤖 Montando o perfil…";
+    try {
+      const qs = await getDocs(collection(db, "acessibilidade", email, "questoes")).catch(() => null);
+      const fmts = {}; (qs?.docs || []).forEach(d => { const f = d.data().formato || "texto"; fmts[f] = (fmts[f] || 0) + 1; });
+      const formatos = Object.entries(fmts).map(([f, n]) => `${f}: ${n} questão(ões)`).join("; ") + "\n" + (qs?.docs || []).slice(0, 10).map(d => `- ${d.data().formato || "texto"}: ${String(d.data().motivo || "").slice(0, 200)}`).join("\n");
+      let texto;
+      const cfg = ctx.iaCfg();
+      if (cfg) {
+        const regs = (await getDocs(collection(db, "acessibilidadePrivado", email, "diario")).catch(() => null))?.docs.map(d => ({ id: d.id, ...d.data() })) || [];
+        const coms = (await Promise.all(regs.filter(r => r.nComentarios > 0).slice(0, 6).map(r => getDocs(collection(db, "acessibilidadePrivado", email, "diario", r.id, "comentarios")).catch(() => null)))).flatMap(s => s?.docs.map(d => d.data()) || []);
+        texto = await perfilIA({ chave: cfg.chave, modelo: cfg.modelo, descricao: $("#acDescricao").value.trim(), diario: contextoDiario(regs, coms), formatos, desempenho: "" });
+      } else {
+        if (!ctx.urlCorretor()) throw new Error("A IA não está configurada (Configuração).");
+        const token = await ctx.auth.currentUser.getIdToken();
+        const r = await fetch(ctx.urlCorretor(), { method: "POST", headers: { authorization: "Bearer " + token, "content-type": "application/json" }, body: JSON.stringify({ acao: "perfil", email, formatos }) });
+        const d = await r.json().catch(() => ({})); if (!r.ok) throw new Error(d.erro || `Erro ${r.status}`); texto = d.texto;
+      }
+      $("#acPerfil").value = texto; toast("🤖 Perfil montado. Revise e clique em Salvar perfil.", "ok");
+    } catch (err) { toast("🤖 " + (err.message || traduzirErro(err)), "erro"); }
+    b.disabled = false; b.textContent = "🤖 Atualizar com o diário e as provas";
   };
   desenharLaudos(email);
   $("#acLaudoArq").onchange = async e => {
@@ -538,7 +578,8 @@ async function adaptarComIA(itens) {
   const email = qAtual.email, orientacao = $("#acOrientacao").value.trim(), cfg = ctx.iaCfg();
   const res = { adaptadas: 0, erros: [] };
   if (cfg) {   // navegador
-    const descricao = (await getDoc(doc(db, "acessibilidadePrivado", email)).catch(() => null))?.data()?.descricao || "";
+    const pv = (await getDoc(doc(db, "acessibilidadePrivado", email)).catch(() => null))?.data() || {};
+    const descricao = [pv.descricao, pv.perfilIA?.texto ? `PERFIL REVISADO PELA EQUIPE:\n${pv.perfilIA.texto}` : ""].filter(Boolean).join("\n\n");
     const laudos = await laudosDoAluno(email);
     for (const [n, x] of itens.entries()) {
       $("#acIAMsg").textContent = `🤖 Adaptando ${n + 1} de ${itens.length}…`;

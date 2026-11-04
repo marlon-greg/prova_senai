@@ -25,7 +25,7 @@
 // (FIRESTORE_EMULADOR e ANTHROPIC_URL existem só para testar no computador; não crie no Cloudflare.)
 
 import { temFormato, corrigirFormato, pedidoFormatos, lerRespostaFormatos, contextoDiario } from "./formatos.js";
-import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS, pedidoCurso, lerRespostaCurso, pedidoConquistas, lerRespostaConquistas } from "./organizar.js";
+import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS, pedidoCurso, lerRespostaCurso, pedidoConquistas, lerRespostaConquistas, pedidoPerfil, lerRespostaPerfil } from "./organizar.js";
 
 export default {
   async fetch(req, env) {
@@ -51,6 +51,7 @@ export default {
       if (corpo.acao === "adaptar") return resposta(await adaptarQuestoes(env, usuario, corpo));
       if (corpo.acao === "organizar") return resposta(await organizar(env, usuario, corpo));
       if (corpo.acao === "formatos") return resposta(await sugerirFormatos(env, usuario, corpo));
+      if (corpo.acao === "perfil") return resposta(await montarPerfil(env, usuario, corpo));
       const { tentativaId } = corpo;
       if (!tentativaId || !/^[\w-]+$/.test(tentativaId)) throw falha("tentativaId inválido.", 400);
       return resposta(await corrigirTentativa(env, usuario, tentativaId));
@@ -242,7 +243,7 @@ async function adaptarQuestoes(env, usuario, corpo) {
       if (!q) throw new Error("questão não encontrada");
       const atual = docs[`acessibilidade/${email}/questoes/${qid}`];
       if (!corpo.refazer && atual?.origem === "manual") { puladas++; continue; }
-      const a = await adaptarComIA(env.ANTHROPIC_API_KEY, modelo, { q, g, descricao: privado.descricao, orientacao: corpo.orientacao, laudos }, env.ANTHROPIC_URL);
+      const a = await adaptarComIA(env.ANTHROPIC_API_KEY, modelo, { q, g, descricao: [privado.descricao, privado.perfilIA?.texto ? `PERFIL REVISADO PELA EQUIPE:\n${privado.perfilIA.texto}` : ""].filter(Boolean).join("\n\n"), orientacao: corpo.orientacao, laudos }, env.ANTHROPIC_URL);
       const dados = { enunciado: a.enunciado, alternativas: a.alternativas, apoios: a.apoios, motivo: a.motivo, dica: a.apoios[0] || "", origem: "ia", modelo, adaptadoPor: quem };
       if (provaId) dados.provaId = provaId;
       await fs.gravar(`acessibilidade/${email}/questoes/${qid}`, dados, "atualizadoEm");
@@ -361,10 +362,26 @@ async function sugerirFormatos(env, usuario, corpo) {
   const comComent = Object.entries(diario || {}).filter(([, r]) => r.nComentarios > 0).sort((a, b) => String(b[1].data).localeCompare(String(a[1].data))).slice(0, 6);
   const comentarios = (await Promise.all(comComent.map(([id]) => fs.listar(`acessibilidadePrivado/${email}/diario/${id}/comentarios`).catch(() => ({}))))).flatMap(o => Object.values(o));
   const r = await chamarClaude(env, { model: env.MODELO_ADAPTACAO || "claude-sonnet-5-5",
-    ...pedidoFormatos({ q, g: g || {}, descricao: privado?.descricao, orientacao: String(corpo.orientacao || "").slice(0, 1000), diario: contextoDiario(regs, comentarios), laudos }) });
+    ...pedidoFormatos({ q, g: g || {}, descricao: privado?.descricao, perfil: privado?.perfilIA?.texto || "", orientacao: String(corpo.orientacao || "").slice(0, 1000), diario: contextoDiario(regs, comentarios), laudos }) });
   const opcoes = lerRespostaFormatos(r, q);
   await fs.gravar(`acessibilidadePrivado/${email}/opcoes/${qid}`, { opcoes: JSON.stringify(opcoes), provaId: corpo.provaId || "", geradoPor: quem }, "geradoEm");
   return { ok: true, opcoes };
+}
+
+// perfil do aluno para a IA: POST { acao: "perfil", email, formatos?, desempenho? } -> { texto } (não grava: a equipe revisa)
+async function montarPerfil(env, usuario, corpo) {
+  const quem = String(usuario.email || "").toLowerCase(), email = String(corpo.email || "").trim().toLowerCase();
+  if (!/^[^\s@/]+@[^\s@/]+$/.test(email)) throw falha("email inválido.", 400);
+  const fs = await firestore(env), acess = await fs.ler(`acessibilidade/${email}`);
+  let ok = quem === SUPER_ADMIN;
+  if (!ok) { const papel = (await fs.ler(`equipe/${quem}`))?.papel; ok = papel === "admin" || papel === "professor" || (papel === "inclusao" && (acess?.auxiliares || []).map(x => String(x).toLowerCase()).includes(quem)); }
+  if (!ok) throw falha("Sem permissão para este aluno.", 403);
+  const [privado, diario] = await Promise.all([fs.ler(`acessibilidadePrivado/${email}`), fs.listar(`acessibilidadePrivado/${email}/diario`)]);
+  const comComent = Object.entries(diario || {}).filter(([, r]) => r.nComentarios > 0).slice(0, 6);
+  const comentarios = (await Promise.all(comComent.map(([id]) => fs.listar(`acessibilidadePrivado/${email}/diario/${id}/comentarios`).catch(() => ({}))))).flatMap(o => Object.values(o));
+  const r = await chamarClaude(env, { model: env.MODELO_ADAPTACAO || "claude-sonnet-5-5", ...pedidoPerfil({ descricao: privado?.descricao, diario: contextoDiario(Object.values(diario || {}), comentarios),
+    formatos: String(corpo.formatos || "").slice(0, 3000), desempenho: String(corpo.desempenho || "").slice(0, 3000) }) });
+  return { ok: true, texto: lerRespostaPerfil(r) };
 }
 
 // =====================================================================
