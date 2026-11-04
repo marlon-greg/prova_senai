@@ -49,6 +49,11 @@ service cloud.firestore {
       allow read: if logado();
       allow write: if admin();
     }
+    // gamificação: o que está ligado (conquistas, skins, apontamentos, sugestões, social). Todos leem; só admin muda.
+    match /config/gamificacao {
+      allow read: if logado();
+      allow write: if admin();
+    }
     // chave da API da IA: SÓ o administrador principal (nem outros admins, nem professores, nem alunos)
     match /config/ia {
       allow read, write: if superAdmin();
@@ -206,6 +211,48 @@ service cloud.firestore {
         allow read: if cuidaDe(e);
         allow create: if cuidaDe(e) && request.resource.data.autor == email().lower();
         allow update, delete: if professor() || (cuidaDe(e) && resource.data.autor == email().lower());
+      }
+    }
+
+    // ---------- retorno dos alunos ----------
+    // apontamento numa questão (duplicidade de respostas, erro…): o aluno cria o dele; a equipe lê e responde
+    match /apontamentos/{id} {
+      allow read: if equipe() || (logado() && resource.data.uid == uid());
+      allow create: if logado() && request.resource.data.uid == uid() && request.resource.data.email == email().lower()
+                    && request.resource.data.status == 'aberto'
+                    && request.resource.data.keys().hasOnly(['uid', 'email', 'nome', 'provaId', 'provaTitulo', 'qid', 'enunciado', 'tipo', 'texto', 'status', 'criadoEm'])
+                    && request.resource.data.texto is string && request.resource.data.texto.size() <= 2000;
+      allow update: if professor() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'resposta', 'respondidoPor', 'respondidoEm']);
+      allow delete: if admin();
+    }
+    // sugestão para o sistema
+    match /sugestoesSistema/{id} {
+      allow read: if equipe() || (logado() && resource.data.uid == uid());
+      allow create: if logado() && request.resource.data.uid == uid() && request.resource.data.status == 'aberta'
+                    && request.resource.data.keys().hasOnly(['uid', 'email', 'nome', 'categoria', 'texto', 'status', 'criadoEm'])
+                    && request.resource.data.texto is string && request.resource.data.texto.size() <= 2000;
+      allow update: if professor() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'resposta', 'respondidoPor', 'respondidoEm']);
+      allow delete: if admin();
+    }
+    // perfil do aluno: personagem (avatar), apelido e o que ele escolheu compartilhar.
+    // Só o dono lê e grava; os outros só leem a VITRINE (perfisPublicos), e só se a parte social estiver ligada.
+    match /perfis/{u} {
+      allow read: if logado() && (u == uid() || equipe());
+      allow write: if logado() && u == uid()
+                   && request.resource.data.keys().hasOnly(['avatar', 'apelido', 'atualizadoEm']);
+    }
+    function socialLigado() { return get(/databases/$(db)/documents/config/gamificacao).data.get('social', false) == true; }
+    // vitrine: só o que o próprio aluno marcou para mostrar (nunca nota sem ele querer)
+    match /vitrine/{u} {
+      allow read: if logado() && (u == uid() || equipe() || socialLigado());
+      allow write: if logado() && u == uid()
+                   && request.resource.data.keys().hasOnly(['nome', 'apelido', 'avatar', 'turmaId', 'conquistas', 'notas', 'nivel', 'atualizadoEm']);
+      // curtidas e parabéns (sem comentários): uma por pessoa, só com a parte social ligada
+      match /reacoes/{de} {
+        allow read: if logado() && (u == uid() || de == uid() || equipe() || socialLigado());
+        allow create, update: if logado() && de == uid() && de != u && socialLigado()
+                              && request.resource.data.keys().hasOnly(['tipo', 'item', 'em']) && request.resource.data.tipo in ['curtida', 'parabens'];
+        allow delete: if logado() && (de == uid() || admin());
       }
     }
 

@@ -356,3 +356,11 @@ export function diaDeAula(turmas, iso) {
 export const HORARIO_PADRAO = { inicio: "07:00", fim: "16:00", intervalos: [
   { nome: "Café da manhã", inicio: "09:10", fim: "09:25" }, { nome: "Almoço", inicio: "11:00", fim: "12:00" }, { nome: "Café da tarde", inicio: "14:50", fim: "15:05" }] };
 export const textoHorario = h => { const x = h?.inicio ? h : HORARIO_PADRAO; return `${x.inicio}–${x.fim}` + (x.intervalos || []).map(i => ` · ${i.nome} ${i.inicio}–${i.fim}`).join(""); };
+
+// ---------- gamificação: o que está ligado (config/gamificacao; só admin muda) ----------
+export const GAMI_PADRAO = { conquistas: true, personagem: true, apontamentos: true, sugestoes: true, download: true,
+  social: false, socialNotas: false };
+export async function lerGamificacao() {
+  const d = await getDoc(doc(db, "config", "gamificacao")).catch(() => null);
+  return { ...GAMI_PADRAO, ...(d?.exists() ? d.data() : {}) };
+}

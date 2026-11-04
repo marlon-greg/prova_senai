@@ -4,6 +4,9 @@ import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar
   from "./common.js";
 import { baixarMaterial } from "./material.js";
 import { desenharConquistas } from "./aluno-conquistas.js";
+import { apontar, desenharFaleConosco } from "./aluno-retorno.js";
+import { lerGamificacao, GAMI_PADRAO } from "./common.js";
+let gami = { ...GAMI_PADRAO };   // o que está ligado na gamificação (config/gamificacao)
 import { montarFormato, temFormato, FORMATOS, rotuloFormato, textoParaFalar, textoResposta, textoChave } from "./formatos-ui.js";
 const controles = {};   // qid -> controle do formato adaptado (valor, preencher, travar)
 import { abrirLeitorPdf } from "./leitor-pdf.js";
@@ -122,6 +125,7 @@ aoMudarLogin(async user => {
   const tok = await user.getIdTokenResult().catch(() => null);
   eu = { uid: user.uid, email: id.email, nome: id.nome, nomeConta: tok?.claims?.name || "", chave: chaveNome(tok?.claims?.name || "") };
   await carregarAcessibilidade(id.email, true);
+  gami = await lerGamificacao();
   await listarProvas();
 });
 
@@ -201,8 +205,9 @@ async function listarProvas() {
     b.forEach(d => provas[d.id] = { id: d.id, ...d.data() });
     lista = Object.values(provas).sort((x, y) => (y.criadoEm?.seconds || 0) - (x.criadoEm?.seconds || 0));
   }
-  if (!modoTeste) desenharConquistas($("#conquistas"), eu, acess?.diarioResumo || null).catch(e => console.warn("conquistas", e));
+  if (!modoTeste && gami.conquistas) desenharConquistas($("#conquistas"), eu, acess?.diarioResumo || null).catch(e => console.warn("conquistas", e));
   else $("#conquistas").classList.add("oculto");
+  if (!modoTeste) desenharFaleConosco($("#faleConosco"), eu, gami).catch(e => console.warn("fale conosco", e));
   provasDaLista = Object.fromEntries(lista.map(p => [p.id, p]));
   if (!lista.length) { box.innerHTML = `<div class="vazio"><div class="icone">📭</div><p><b>Nenhuma prova liberada no momento.</b></p><p class="pequeno">Quando o professor liberar, ela aparece aqui. Se a prova já começou na sala, recarregue a página.</p></div>`; return; }
   box.innerHTML = "";
@@ -468,7 +473,7 @@ function criarCartaoQuestao(qid, i, unica) {
     </div>
     <div class="q-rodape">
       <p class="pequeno q-dica">${voltar ? "Você pode alterar e salvar de novo até clicar em Finalizar prova." : "Confira antes de enviar: depois de enviada, a resposta não pode ser alterada."}</p>
-      <div class="acoes-questao"><button class="ok grande b-enviar"${unica ? ' id="btnEnviar"' : ""}>${voltar ? "Salvar resposta" : "Enviar resposta"} →</button></div>
+      <div class="acoes-questao">${gami.apontamentos && !modoTeste ? `<button type="button" class="discreto mini b-apontar" title="Avisar o professor sobre um problema nesta questão">🚩 Algo errado nesta questão?</button>` : ""}<button class="ok grande b-enviar"${unica ? ' id="btnEnviar"' : ""}>${voltar ? "Salvar resposta" : "Enviar resposta"} →</button></div>
     </div>
     <div class="q-feedback oculto" role="status"></div>`;
   const area = card.querySelector(".q-area");
@@ -496,6 +501,7 @@ function criarCartaoQuestao(qid, i, unica) {
     if (!colar) bloquearColar(txt);
   }
   card.querySelector(".b-enviar").onclick = () => enviarResposta(qid, card);
+  card.querySelector(".b-apontar")?.addEventListener("click", () => apontar(eu, { provaId: provaAtual.id, provaTitulo: provaAtual.titulo, qid, enunciado: q.enunciado }));
   if (respostas[qid]) {   // já gravada (ex.: página recarregada)
     preencherCartao(card, qid, respostas[qid].resposta);
     if (voltar && !respostas[qid].perdida) marcarSalva(card);
@@ -1409,9 +1415,11 @@ async function verResultado() {
       <p><b>Sua resposta:</b> ${sua}</p>
       ${c.status !== "certa" && certa !== "—" ? `<p><b>Resposta correta:</b> ${certa}</p>` : ""}
       ${g.explicacao ? `<div class="feedback ${c.status === "certa" ? "certa" : "errada"}"><span class="icone" aria-hidden="true">💡</span><div><b>Por quê:</b> ${esc(g.explicacao)}</div></div>` : ""}
-      ${obs ? `<p class="pequeno"><b>Comentário do professor:</b> ${esc(obs)}</p>` : ""}</div>`;
+      ${obs ? `<p class="pequeno"><b>Comentário do professor:</b> ${esc(obs)}</p>` : ""}
+      ${gami.apontamentos && !modoTeste ? `<button type="button" class="discreto mini b-apontar-res" data-qid="${esc(qid)}">🚩 Algo errado nesta questão?</button>` : ""}</div>`;
   });
   const nota = max ? Math.round((total / max) * 1000) / 10 : 0;
   $("#resResumo").innerHTML = `<p style="font-family:var(--fonte-titulo);font-size:1.4em;font-weight:600;margin:8px 0">Você acertou ${certas} de ${ids.length} · Nota: ${tentativa.nota ?? nota} / 100 <span class="pequeno">(${total} de ${max} pontos)</span></p>`;
   $("#resLista").innerHTML = html;
+  $("#resLista").querySelectorAll(".b-apontar-res").forEach(b => b.onclick = () => { const qid = b.dataset.qid; apontar(eu, { provaId: provaAtual.id, provaTitulo: provaAtual.titulo, qid, enunciado: qgs[ids.indexOf(qid)]?.q?.enunciado || "" }); });
 }

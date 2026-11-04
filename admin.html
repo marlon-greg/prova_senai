@@ -39,6 +39,8 @@
       <button data-aba="historico">Provas adaptadas</button>
       <button data-aba="bancos">Bancos de questões</button>
       <button data-aba="turmas">Turmas</button>
+      <button data-aba="retorno">Retorno dos alunos</button>
+      <button data-aba="gamificacao">Gamificação</button>
       <button data-aba="equipe">Equipe</button>
       <button data-aba="config">Configuração</button>
     </nav>
@@ -248,6 +250,35 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
         <p id="hContagem" class="pequeno" aria-live="polite"></p>
       </div>
       <div id="hLista"></div>
+    </div>
+
+    <!-- RETORNO DOS ALUNOS (js/admin-gamificacao.js) -->
+    <div id="aba-retorno" class="oculto">
+      <div class="card">
+        <h2>Retorno dos alunos</h2>
+        <p class="pequeno" style="margin-top:0">🚩 Apontamentos que os alunos fizeram nas questões (na prova ou no gabarito) e 💡 sugestões para o sistema. Marque como procede/não procede e escreva uma resposta: o aluno vê na página dele.</p>
+        <div class="barra-filtros" role="search">
+          <input type="search" id="retBusca" placeholder="🔎 Pesquisar aluno, prova ou texto…" aria-label="Pesquisar retorno dos alunos">
+          <select id="retTipo" aria-label="Tipo"><option value="">Apontamentos e sugestões</option><option value="ap">🚩 Só apontamentos</option><option value="sg">💡 Só sugestões</option></select>
+          <select id="retStatus" aria-label="Situação"><option value="aberto">Abertos</option><option value="">Todos</option><option value="fechado">Respondidos</option></select>
+        </div>
+        <p id="retContagem" class="pequeno" aria-live="polite"></p>
+      </div>
+      <div id="retLista"></div>
+    </div>
+
+    <!-- GAMIFICAÇÃO (js/admin-gamificacao.js) -->
+    <div id="aba-gamificacao" class="oculto">
+      <div class="card">
+        <h2>Gamificação</h2>
+        <p class="pequeno" style="margin-top:0">Ligue e desligue cada parte. A parte social começa desligada: quando ligar, os alunos só mostram o que eles mesmos escolherem.</p>
+        <div id="gamiOpcoes"></div>
+      </div>
+      <div class="card">
+        <h2>🧪 Ver como aluno (simulação)</h2>
+        <p class="pequeno">Abre a página do aluno com a <b>sua conta</b>, em modo simulação: você vê o perfil, o personagem e as conquistas, e pode <b>se dar conquistas</b> e notas de mentira para ver como aparece. Nada é gravado de verdade e nenhum aluno vê.</p>
+        <a class="btn" href="index.html?simular=1" target="_blank" rel="noopener">🧪 Abrir a simulação</a>
+      </div>
     </div>
 
     <!-- EQUIPE -->
