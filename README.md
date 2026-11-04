@@ -119,6 +119,12 @@ O plano gratuito do Cloudflare aceita 100 mil chamadas por dia, muito mais do qu
 
 ## Organização: Turma → Semestre → Matéria → Tópicos
 
+**📘 Plano de curso** (no topo da aba Organização): o documento com **todas as matérias** do curso e os tópicos de cada uma. Crie com o nome do curso, marque as turmas desse curso, envie o PDF (pode ser só a parte das matérias) e clique em **🤖 Ler plano de curso com IA** — a IA lista matéria, módulo, carga horária e tópicos, e você revisa. Também dá para escrever: `# Matéria | módulo | carga horária` e os tópicos um por linha embaixo. Com o plano de curso:
+- cada turma mostra as matérias do curso que ainda não têm cartão no semestre (**+ Matéria** cria o cartão já com os tópicos);
+- o cartão da matéria usa os tópicos do plano de curso quando o plano de ensino não tem tópicos;
+- o plano de ensino passa a ser **opcional** e focado nas **datas das provas** (botão **📘 Puxar tópicos do plano de curso** se quiser datas por tópico);
+- 🏷 Tópicos (Bancos) e o diário também oferecem os tópicos do plano de curso.
+
 Aba **Organização** (a primeira do menu). Mostra cada **turma**, dentro dela os **semestres** (o atual aberto) e, em cada semestre, um cartão por **matéria**.
 
 - **Plano de ensino** (`planos/{id}`): uma matéria de uma turma num semestre. Tem os **tópicos** na ordem em que serão dados (com início e fim previstos), as **provas previstas** (título, data e tópicos) e o(s) professor(es). O plano é vivo: **✎ Editar** a qualquer momento.

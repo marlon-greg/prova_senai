@@ -2,7 +2,7 @@
 // A chave fica em config/ia (as regras só deixam o administrador principal ler/gravar) e vai
 // apenas para api.anthropic.com. Nunca entra no repositório nem chega à página do aluno.
 import { db } from "./common.js";
-import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS } from "../servidor/organizar.js";
+import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS, pedidoCurso, lerRespostaCurso } from "../servidor/organizar.js";
 import { doc, getDoc, setDoc, deleteDoc, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -208,4 +208,9 @@ export async function classificarTopicosIA({ chave, modelo, materia, topicos, qu
   }
   progresso(questoes.length, questoes.length);
   return out;
+}
+// pdf = Uint8Array. Devolve { curso, materias: [{ nome, modulo, cargaHoraria, topicos }] }
+export async function lerCursoIA({ chave, modelo, pdf, titulo, nome }) {
+  try { return lerRespostaCurso(await chamarAPI(chave, { model: modeloOrganizar(modelo), ...pedidoCurso({ pdf64: base64(pdf), titulo, nome }) })); }
+  catch (e) { throw e.ia ? e : erroIA(e.message); }
 }

@@ -7,11 +7,12 @@
 import { db, esc, $, toast, confirmar, modal, traduzirErro, iniciais, dataBR, semestreDe, chaveTexto, dataCurta, diaDeAula, rotuloDias, textoHorario } from "./common.js";
 import { resumoDiario, medalhasDiario } from "./conquistas.js";
 import { HUMOR, humorEmoji, SECOES_AUX, ITENS_AUX, ITENS_PROF, visivel, respondido, completude } from "./diario-perguntas.js";
-import { listarPlanos } from "./admin-org.js";
+import { listarPlanos, listarCursos } from "./admin-org.js";
 import { collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, query, where, orderBy, serverTimestamp, increment }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 let ctx = null;   // { eu, podeEditar, souDono, alunosDasTurmas }
+let materiasCurso = [];   // matérias do plano de curso da turma do aluno
 let alunos = [], atual = null, registros = [], planos = [], turmasAluno = [], mes = null, aberto = null;
 const ehInclusao = () => ctx.eu.papel === "inclusao";
 const podeRegistrar = () => ehInclusao() || ctx.souDono();
@@ -62,9 +63,12 @@ async function abrirAluno(email) {
   document.querySelectorAll("[data-al]").forEach(b => b.classList.toggle("ativo", b.dataset.al === email));
   $("#diarioPainel").innerHTML = `<div class="card"><p class="pequeno">Carregando o diário…</p></div>`;
   try {
-    const [rs, ps, al] = await Promise.all([getDocs(colDiario(email)), listarPlanos().catch(() => []), ctx.alunosDasTurmas().catch(() => [])]);
+    const [rs, ps, al, cs, ts] = await Promise.all([getDocs(colDiario(email)), listarPlanos().catch(() => []), ctx.alunosDasTurmas().catch(() => []), listarCursos().catch(() => []),
+      getDocs(collection(db, "turmas")).then(x => x.docs.map(d => ({ id: d.id, ...d.data() }))).catch(() => [])]);
     registros = rs.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => b.data.localeCompare(a.data) || String(a.autor).localeCompare(String(b.autor)));
     planos = ps; turmasAluno = al.filter(x => x.email === email);
+    const cursoIds = new Set(ts.filter(t => turmasAluno.some(x => x.turmaId === t.id)).map(t => t.cursoId).filter(Boolean));
+    materiasCurso = cs.filter(c => cursoIds.has(c.id)).flatMap(c => c.materias || []);
   } catch (e) { $("#diarioPainel").innerHTML = `<div class="card"><p class="erro-texto">${esc(traduzirErro(e))} (Publique o firestore.rules atual.)</p></div>`; return; }
   mes = mes || hojeISO().slice(0, 7);
   desenharPainel();
@@ -253,7 +257,11 @@ async function carregarComentarios(r) {
 // ---------- campos (formulário do diário e do comentário) ----------
 function materiasDoAluno(iso) {
   const sem = semestreDe(iso), ids = new Set(turmasAluno.map(t => t.turmaId));
-  return planos.filter(p => ids.has(p.turmaId) && p.semestre === sem).sort((a, b) => a.materia.localeCompare(b.materia, "pt-BR"));
+  const doSem = planos.filter(p => ids.has(p.turmaId) && p.semestre === sem);
+  // plano de ensino sem tópicos usa os do plano de curso; sem plano de ensino no semestre, entram as matérias do curso
+  const comTop = p => ({ ...p, topicos: p.topicos?.length ? p.topicos : (materiasCurso.find(m => chaveTexto(m.nome) === chaveTexto(p.materia))?.topicos || []).map(nome => ({ nome })) });
+  const lista = doSem.length ? doSem.map(comTop) : materiasCurso.map(m => ({ materia: m.nome, topicos: (m.topicos || []).map(nome => ({ nome })) }));
+  return lista.sort((a, b) => a.materia.localeCompare(b.materia, "pt-BR"));
 }
 function campoHTML(it, r, pre = "", iso = hojeISO()) {
   const v = r[it.id], id = `${pre}_${it.id}`;

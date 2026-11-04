@@ -24,7 +24,7 @@
 //   Nada é gravado: o painel mostra o resultado para o professor revisar e salvar.
 // (FIRESTORE_EMULADOR e ANTHROPIC_URL existem só para testar no computador; não crie no Cloudflare.)
 
-import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS } from "./organizar.js";
+import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS, pedidoCurso, lerRespostaCurso } from "./organizar.js";
 
 export default {
   async fetch(req, env) {
@@ -333,6 +333,24 @@ async function organizar(env, usuario, corpo) {
   if (quem !== SUPER_ADMIN && !["admin", "professor"].includes((await fs.ler(`equipe/${quem}`))?.papel)) throw falha("Só professor ou admin.", 403);
   const modelo = env.MODELO_ADAPTACAO || "claude-sonnet-5-5";
   const id = x => /^[\w-]+$/.test(String(x || "")) ? String(x) : null;
+  // PDF guardado em pedaços (base/arquivos/{id}/partes) -> base64
+  const lerPdf = async (base, arqId) => {
+    const partes = Object.entries(await fs.listar(`${base}/arquivos/${arqId}/partes`)).sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([, p]) => p.dados?.bytes64 ? bytesDe64(p.dados.bytes64) : new Uint8Array(0));
+    const n = partes.reduce((s, p) => s + p.length, 0);
+    if (!n || n > MAX_BYTES_LAUDOS) throw falha("PDF vazio ou grande demais (máx. 25 MB).", 400);
+    const tudo = new Uint8Array(n); let pos = 0;
+    for (const p of partes) { tudo.set(p, pos); pos += p.length; }
+    return para64(tudo);
+  };
+  if (corpo.tipo === "curso") {
+    const cursoId = id(corpo.cursoId), arqId = id(corpo.arquivoId);
+    if (!cursoId || !arqId) throw falha("cursoId/arquivoId inválido.", 400);
+    const curso = await fs.ler(`cursos/${cursoId}`), meta = await fs.ler(`cursos/${cursoId}/arquivos/${arqId}`);
+    if (!curso || !meta) throw falha("Curso ou arquivo não encontrado.", 404);
+    const r = await chamarClaude(env, { model: modelo, ...pedidoCurso({ pdf64: await lerPdf(`cursos/${cursoId}`, arqId), titulo: meta.titulo, nome: curso.nome }) });
+    return { ok: true, ...lerRespostaCurso(r) };
+  }
   if (corpo.tipo === "plano") {
     const planoId = id(corpo.planoId), arqId = id(corpo.arquivoId);
     if (!planoId || !arqId) throw falha("planoId/arquivoId inválido.", 400);

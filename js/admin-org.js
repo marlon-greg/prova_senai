@@ -8,14 +8,16 @@
 import { db, esc, $, toast, modal, confirmar, traduzirErro, temaDe, ordenarTemas, bancosDaProva, temasDoBanco,
          semestreDe, rotuloSemestre, semestreVizinho, chaveTexto, semestreDaProva, materiaDaProva, dataCurta, nomeTurma } from "./common.js";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, abrirMaterialEmAba, tamanhoTexto, erroMaterial } from "./material.js";
-import { lerPlanoIA, classificarTopicosIA } from "./ia.js";
+import { lerPlanoIA, classificarTopicosIA, lerCursoIA } from "./ia.js";
 import { collection, doc, getDocs, addDoc, updateDoc, deleteDoc, writeBatch, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 let ctx = null;
 // ctx = { eu, podeEditar, ehAdmin, auth, iaCfg, urlCorretor, listarTurmas, alunosDaTurma, listarBancos, questoesDoBanco,
 //         invalidarBanco, novaProva({ turmaId, semestre, materia, data, titulo }), abrirResultados(provaId) }
-let planos = [], provas = [], bancos = [], turmas = [], equipe = [];
+let planos = [], provas = [], bancos = [], turmas = [], equipe = [], cursos = [];
+const arquivosCurso = new Map();   // cursoId -> [arquivos]
+const baseCurso = id => `cursos/${id}/arquivos`;
 const arquivosPlano = new Map();   // planoId -> [arquivos]
 const abertos = new Set(), fechados = new Set();   // grupos que o professor abriu/fechou
 const hoje = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };
@@ -35,11 +37,30 @@ export async function listarPlanos() {
   return planos;
 }
 export const planosCache = () => planos;
+export async function listarCursos() {
+  cursos = (await getDocs(collection(db, "cursos"))).docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => ordemNatural(a.nome, b.nome));
+  return cursos;
+}
+// matéria do plano de curso da turma (ou de qualquer curso, sem turma)
+export function materiaDoCurso(materia, turmaId = null) {
+  const t = turmas.find(x => x.id === turmaId), k = chaveTexto(materia);
+  const lista = t?.cursoId ? cursos.filter(c => c.id === t.cursoId) : cursos;
+  for (const c of lista) { const m = (c.materias || []).find(m => chaveTexto(m.nome) === k); if (m) return { ...m, curso: c }; }
+  return null;
+}
+// tópicos de uma matéria: os do plano de ensino; senão os do plano de curso
+export function topicosDaMateria(materia, turmaId = null, semestre = null) {
+  const out = [], v = new Set(), add = n => { const k = chaveTexto(n); if (k && !v.has(k)) { v.add(k); out.push(n); } };
+  planos.filter(p => chaveTexto(p.materia) === chaveTexto(materia) && (!turmaId || p.turmaId === turmaId) && (!semestre || p.semestre === semestre)).forEach(p => (p.topicos || []).forEach(t => add(t.nome)));
+  (materiaDoCurso(materia, turmaId)?.topicos || []).forEach(add);
+  return out;
+}
 // matérias sugeridas para uma turma/semestre (planos primeiro, depois as dos bancos)
 export function materiasSugeridas(turmaId, semestre) {
   const dos = planos.filter(p => (!turmaId || p.turmaId === turmaId) && (!semestre || p.semestre === semestre)).map(p => p.materia);
   const out = [], vistos = new Set();
-  for (const m of [...dos, ...planos.map(p => p.materia), ...bancos.map(b => b.materia)]) {
+  const doCurso = cursos.filter(c => !turmaId || turmas.find(t => t.id === turmaId)?.cursoId === c.id).flatMap(c => (c.materias || []).map(m => m.nome));
+  for (const m of [...dos, ...doCurso, ...planos.map(p => p.materia), ...cursos.flatMap(c => (c.materias || []).map(m => m.nome)), ...bancos.map(b => b.materia)]) {
     const k = chaveTexto(m); if (k && !vistos.has(k)) { vistos.add(k); out.push(String(m).trim()); }
   }
   return out;
@@ -48,12 +69,13 @@ export function materiasSugeridas(turmaId, semestre) {
 export async function carregarOrganizacao() {
   $("#orgArvore").innerHTML = `<p class="pequeno">Carregando…</p>`;
   try {
-    const [ts, bs, , ps, eq] = await Promise.all([ctx.listarTurmas(), ctx.listarBancos(), listarPlanos(),
+    const [ts, bs, , ps, eq] = await Promise.all([ctx.listarTurmas(), ctx.listarBancos(), listarPlanos().then(() => listarCursos().catch(() => [])),
       getDocs(collection(db, "provas")), getDocs(collection(db, "equipe")).catch(() => null)]);
     turmas = ts; bancos = bs; provas = ps.docs.map(d => ({ id: d.id, ...d.data() }));
     equipe = eq ? eq.docs.map(d => ({ email: d.id, ...d.data() })) : [];
     await Promise.all(bancos.map(b => ctx.questoesDoBanco(b.id).catch(() => [])));
     await Promise.all(planos.map(p => listarMateriais(basePlano(p.id)).then(l => arquivosPlano.set(p.id, l)).catch(() => arquivosPlano.set(p.id, []))));
+    await Promise.all(cursos.map(c => listarMateriais(baseCurso(c.id)).then(l => arquivosCurso.set(c.id, l)).catch(() => arquivosCurso.set(c.id, []))));
   } catch (e) { $("#orgArvore").innerHTML = `<p class="pequeno erro-texto">${esc(traduzirErro(e))}</p>`; return; }
   // filtros
   const selT = $("#orgTurma"), antesT = selT.value;
@@ -99,6 +121,7 @@ function montar() {
 }
 
 function desenhar() {
+  desenharCursos();
   const box = $("#orgArvore");
   if (!turmas.length) { box.innerHTML = `<div class="vazio"><div class="icone">🏫</div><p>Cadastre as turmas na aba <b>Turmas</b> primeiro.</p></div>`; $("#orgContagem").textContent = ""; return; }
   const fT = $("#orgTurma").value, fS = $("#orgSemestre").value, busca = chaveTexto($("#orgBusca").value);
@@ -124,7 +147,7 @@ function desenhar() {
     return `<details class="grupo-turma" data-g="${id}" ${aberto ? "open" : ""}>
       <summary><span class="gt-nome">👥 ${esc(nomeTurma(t))}</span><span class="pequeno">${ctx.alunosDaTurma(t).length} alunos</span>
         ${ctx.podeEditar() ? `<button class="leve mini" data-novo-t="${t.id}" type="button">+ Matéria</button>` : ""}</summary>
-      <div class="gt-corpo">${blocos || `<p class="pequeno" style="margin:0 16px 14px">Nenhuma matéria ${fS ? `em ${rotuloSemestre(fS)}` : "ainda"}. Use <b>+ Matéria</b> para cadastrar o plano de ensino.</p>`}</div></details>`;
+      <div class="gt-corpo">${cursoDaTurmaHTML(t, sm)}${blocos || `<p class="pequeno" style="margin:0 16px 14px">Nenhuma matéria ${fS ? `em ${rotuloSemestre(fS)}` : "ainda"}. Use <b>+ Matéria</b> (ou as matérias do plano de curso, acima).</p>`}</div></details>`;
   }).join("");
   $("#orgContagem").textContent = `${nMat} matéria(s) · ${nTop} tópico(s) nos planos`;
   box.innerHTML = html || `<div class="vazio"><div class="icone">🔎</div><p>Nada encontrado com esses filtros.</p></div>`;
@@ -147,7 +170,9 @@ function cartaoMateria(t, s, n) {
   const bIds = new Set([...bancos.filter(b => chaveM && chaveTexto(b.materia) === chaveM).map(b => b.id), ...n.provas.flatMap(bancosDaProva)]);
   const cont = {}; for (const b of bIds) for (const [k, v] of Object.entries(contagemTopicos(b))) cont[k] = (cont[k] || 0) + v;
   const emProva = {}; for (const pr of n.provas) for (const k of topicosDaProva(pr)) (emProva[k] ||= []).push(pr.titulo);
-  const topicos = p?.topicos || [];
+  const doCurso = materiaDoCurso(n.materia, t.id);
+  const topicos = p?.topicos?.length ? p.topicos : (doCurso?.topicos || []).map(nome => ({ nome, inicio: "", fim: "" }));
+  const origemCurso = !p?.topicos?.length && topicos.length;
   const doPlano = new Set(topicos.map(x => chaveTexto(x.nome)));
   const soBanco = Object.keys(cont).filter(k => !doPlano.has(k));
   const nomeDe = k => { for (const b of bIds) { const q = (ctx.questoesDoBancoCache(b) || []).find(q => chaveTexto(temaDe(q)) === k); if (q) return temaDe(q); } return k; };
@@ -163,10 +188,11 @@ function cartaoMateria(t, s, n) {
   return `<article class="cartao-materia${p ? "" : " sem-plano"}">
     <div class="cm-topo">
       <div><h3>📚 ${esc(n.materia || "Sem matéria")}</h3>
-        <span class="pequeno">${profs.length ? `👤 ${profs.map(esc).join(", ")}` : p ? "sem professor definido" : "⚠ sem plano de ensino cadastrado"}</span></div>
-      ${topicos.length ? `<div class="cm-progresso" title="Tópicos já dados, pelas datas do plano"><b>${dados}/${topicos.length}</b><span>tópicos dados</span>
+        <span class="pequeno">${profs.length ? `👤 ${profs.map(esc).join(", ")}` : p ? "sem professor definido" : doCurso ? "📘 do plano de curso · sem plano de ensino (opcional)" : "⚠ sem plano de ensino cadastrado"}</span></div>
+      ${topicos.length && !origemCurso ? `<div class="cm-progresso" title="Tópicos já dados, pelas datas do plano"><b>${dados}/${topicos.length}</b><span>tópicos dados</span>
         <div class="barra"><i style="width:${Math.round(dados / topicos.length * 100)}%"></i></div></div>` : ""}
     </div>
+    ${origemCurso ? `<p class="pequeno" style="margin:0">📘 Tópicos do plano de curso (${esc(doCurso.curso.nome)}), sem datas. As datas e as provas ficam no plano de ensino, se quiser.</p>` : ""}
     ${topicos.length ? `<ol class="lista-topicos">${topicos.map(x => {
       const k = chaveTexto(x.nome), e = estadoTopico(x), nq = cont[k] || 0, ep = emProva[k] || [];
       return `<li class="topico${e ? " e-" + e : ""}"><span class="tp-nome">${esc(x.nome)}</span>
@@ -189,7 +215,7 @@ function cartaoMateria(t, s, n) {
         ${arqs.length ? `<button class="leve mini" type="button" data-ler="${p.id}" title="A IA lê o PDF e preenche os tópicos e as provas previstas (você revisa antes de salvar)">🤖 Ler plano com IA</button>` : ""}
         <button class="leve mini" type="button" data-criar="${p.id}">+ Nova prova</button>
         ${ctx.ehAdmin() ? `<button class="discreto mini perigo-txt" type="button" data-delplano="${p.id}" aria-label="Apagar o plano">🗑</button>` : ""}` : ""}
-      ${pode && !p ? `<button class="mini" type="button" data-cadastrar="${t.id}|${s}|${esc(n.materia)}">+ Cadastrar plano desta matéria</button>` : ""}
+      ${pode && !p ? `<button class="mini${doCurso ? " leve" : ""}" type="button" data-cadastrar="${t.id}|${s}|${esc(n.materia)}">${doCurso ? "🗓 Datas das provas (plano de ensino)" : "+ Cadastrar plano desta matéria"}</button>` : ""}
     </div></article>`;
 }
 
@@ -200,6 +226,7 @@ function ligarArvore(box) {
   });
   const plano = id => planos.find(p => p.id === id);
   box.querySelectorAll("[data-novo-t]").forEach(b => b.onclick = e => { e.preventDefault(); editarPlano(null, { turmaId: b.dataset.novoT, semestre: $("#orgSemestre").value || semestreDe() }); });
+  box.querySelectorAll("[data-matcurso]").forEach(b => b.onclick = () => { const [turmaId, semestre, materia] = b.dataset.matcurso.split("|"); editarPlano(null, { turmaId, semestre, materia }); });
   box.querySelectorAll("[data-cadastrar]").forEach(b => b.onclick = () => { const [turmaId, semestre, materia] = b.dataset.cadastrar.split("|"); editarPlano(null, { turmaId, semestre, materia }); });
   box.querySelectorAll("[data-editar]").forEach(b => b.onclick = () => editarPlano(plano(b.dataset.editar)));
   box.querySelectorAll("[data-res]").forEach(b => b.onclick = () => ctx.abrirResultados(b.dataset.res));
@@ -291,17 +318,28 @@ async function editarPlano(p, pre = {}) {
         <p class="pequeno" style="margin:4px 0 0">Use o mesmo nome do campo "matéria" do banco de questões: é assim que o sistema junta bancos, provas e tópicos.</p></div>
     </div>
     <fieldset class="temas-box"><legend>Professor(es) da matéria</legend><div class="lista-temas">${profs.map(e => `<label class="check"><input type="checkbox" value="${esc(e.email)}"${(v.professores || []).includes(e.email) ? " checked" : ""}> <span>${esc(e.nome || e.email)} <span class="pequeno">${esc(e.email)}</span></span></label>`).join("")}</div></fieldset>
-    <label for="plTopicos">Tópicos, na ordem do plano — um por linha: <span class="mono">Tópico | início | fim</span> (datas opcionais)</label>
+    <label for="plProvas">Provas previstas — uma por linha: <span class="mono">Título | data | tópicos separados por ;</span></label>
+    <textarea id="plProvas" style="min-height:80px" placeholder="Avaliação 1 — DDL | 29/08 | DDL - CREATE TABLE e tipos de dados; Chave primária e estrangeira">${esc(textoProvas(v.provas))}</textarea>
+    <p class="pequeno" style="margin:4px 0 12px">O plano de ensino é <b>opcional</b> e não precisa estar completo: o principal aqui são as datas das provas.</p>
+    <div class="linha" style="justify-content:space-between;align-items:end"><label for="plTopicos" style="margin:0">Tópicos com datas (opcional) — <span class="mono">Tópico | início | fim</span></label>
+      <button type="button" class="leve mini" id="plPuxar">📘 Puxar tópicos do plano de curso</button></div>
     <textarea id="plTopicos" style="min-height:180px" placeholder="DDL - CREATE DATABASE e USE | 04/08 | 08/08
 DDL - CREATE TABLE e tipos de dados | 11/08 | 22/08
 Chave primária e estrangeira | 25/08 | 29/08
 DCL - GRANT e REVOKE | 01/09">${esc(textoTopicos(v.topicos))}</textarea>
-    <p class="pequeno" style="margin:4px 0 12px">Os nomes dos tópicos viram os <b>tópicos das questões</b> (aba Bancos → 🏷 Tópicos) e o filtro do sorteio da prova. Dica: envie o PDF do plano no cartão da matéria e peça para a IA preencher.</p>
-    <label for="plProvas">Provas previstas — uma por linha: <span class="mono">Título | data | tópicos separados por ;</span></label>
-    <textarea id="plProvas" style="min-height:80px" placeholder="Avaliação 1 — DDL | 29/08 | DDL - CREATE TABLE e tipos de dados; Chave primária e estrangeira">${esc(textoProvas(v.provas))}</textarea>
+    <p class="pequeno" style="margin:4px 0 12px">Sem tópicos aqui, a matéria usa os do <b>plano de curso</b>. Os nomes dos tópicos viram os <b>tópicos das questões</b> (aba Bancos → 🏷 Tópicos) e o filtro do sorteio da prova. Dica: envie o PDF do plano no cartão da matéria e peça para a IA preencher.</p>
     <label for="plObs" style="margin-top:12px">Observações (opcional)</label>
     <textarea id="plObs" style="min-height:60px" placeholder="Ex.: o plano pode mudar; recuperação em dezembro.">${esc(v.observacoes || "")}</textarea>`;
   const salvou = await modal({ titulo: p ? `Editar plano — ${p.materia}` : "Nova matéria / plano de ensino", conteudo: html, ok: "Salvar", cancelar: "Cancelar", largo: true,
+    aoAbrir: caixa => {
+      $("#plPuxar", caixa).onclick = () => {
+        const m = materiaDoCurso($("#plMateria", caixa).value, $("#plTurma", caixa).value) || materiaDoCurso($("#plMateria", caixa).value);
+        if (!m?.topicos?.length) return toast("Esta matéria não está em nenhum plano de curso (confira o nome).", "erro");
+        const atuais = lerTopicos($("#plTopicos", caixa).value, $("#plSemestre", caixa).value).topicos, ja = new Set(atuais.map(x => chaveTexto(x.nome)));
+        $("#plTopicos", caixa).value = textoTopicos([...atuais, ...m.topicos.filter(t => !ja.has(chaveTexto(t))).map(nome => ({ nome, inicio: "", fim: "" }))]);
+        toast(`📘 ${m.topicos.length} tópico(s) de ${m.curso.nome}.`, "ok");
+      };
+    },
     antesDeConfirmar: async caixa => {
       const turmaId = $("#plTurma", caixa).value, semestre = $("#plSemestre", caixa).value, materia = $("#plMateria", caixa).value.trim();
       if (!turmaId) { toast("Escolha a turma.", "erro"); return false; }
@@ -377,7 +415,8 @@ export async function editarTopicosBanco(bancoId, aoSalvar = () => {}) {
   if (!bancos.length) bancos = await ctx.listarBancos();
   const banco = bancos.find(b => b.id === bancoId);
   const qs = [...await ctx.questoesDoBanco(bancoId, true)].sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
-  const topicosPlano = m => { const out = [], v = new Set(); for (const p of planos.filter(p => chaveTexto(p.materia) === chaveTexto(m))) for (const t of p.topicos || []) if (!v.has(chaveTexto(t.nome))) { v.add(chaveTexto(t.nome)); out.push(t.nome); } return out; };
+  await listarCursos().catch(() => {});
+  const topicosPlano = m => topicosDaMateria(m);
   const html = `
     <div class="grade">
       <div><label for="tbSemestre">Semestre do banco</label><select id="tbSemestre">${[...new Set([-2, -1, 0, 1, 2].map(d => semestreVizinho(semestreDe(), d)).concat(banco?.semestre || semestreDe(banco?.criadoEm || new Date())))].sort().reverse()
@@ -404,8 +443,8 @@ export async function editarTopicosBanco(bancoId, aoSalvar = () => {}) {
         const doPlano = topicosPlano($("#tbMateria", caixa).value);
         const usados = [...caixa.querySelectorAll("[data-tema]")].map(i => i.value.trim()).filter(Boolean);
         $("#tbLista", caixa).innerHTML = ordenarTemas([...doPlano, ...usados]).map(t => `<option value="${esc(t)}">`).join("");
-        $("#tbChips", caixa).innerHTML = doPlano.length ? `<span class="pequeno">Tópicos do plano de ensino (clique para usar):</span>` + doPlano.map(t => `<button type="button" class="tag tag-botao" data-chip="${esc(t)}">${esc(t)}</button>`).join("")
-          : `<span class="pequeno">Nenhum plano de ensino com esta matéria (aba Organização). A IA cria os tópicos a partir das questões.</span>`;
+        $("#tbChips", caixa).innerHTML = doPlano.length ? `<span class="pequeno">Tópicos do plano de ensino / de curso (clique para usar):</span>` + doPlano.map(t => `<button type="button" class="tag tag-botao" data-chip="${esc(t)}">${esc(t)}</button>`).join("")
+          : `<span class="pequeno">Nenhum plano de curso ou de ensino com esta matéria (aba Organização). A IA cria os tópicos a partir das questões.</span>`;
         caixa.querySelectorAll("[data-chip]").forEach(b => b.onclick = () => { $("#tbAplicar", caixa).value = b.dataset.chip; });
       };
       atualizarLista();
@@ -470,4 +509,144 @@ async function salvarTopicos(bancoId, qs, novo, extra) {
     ops.slice(i, i + 400).forEach(([ref, d]) => lote.update(ref, d));
     await lote.commit();
   }
+}
+
+// ---------- plano de curso (todas as matérias do curso) ----------
+// cursos/{id} = { nome, materias: [{ nome, modulo, cargaHoraria, topicos: [nome] }], ... }; turmas/{id}.cursoId liga a turma
+const textoCurso = ms => (ms || []).map(m => `# ${[m.nome, m.modulo || "", m.cargaHoraria ? m.cargaHoraria + "h" : ""].join(" | ").replace(/( \| )+$/, "")}\n${(m.topicos || []).join("\n")}`).join("\n\n");
+function lerTextoCurso(txt) {
+  const ms = [], erros = []; let atual = null;
+  for (const l of String(txt || "").split("\n").map(x => x.trim()).filter(Boolean)) {
+    if (l.startsWith("#")) {
+      const [nome, modulo, ch] = l.replace(/^#+\s*/, "").split("|").map(x => x.trim());
+      if (!nome) continue;
+      if (ms.some(m => chaveTexto(m.nome) === chaveTexto(nome))) erros.push(`Matéria repetida: ${nome}.`);
+      atual = { nome: nome.slice(0, 120), modulo: (modulo || "").slice(0, 60), cargaHoraria: Math.max(0, parseInt(ch) || 0), topicos: [] }; ms.push(atual);
+    } else if (!atual) erros.push(`"${l}": comece a matéria com # (ex.: # Banco de Dados | 2º semestre | 80h).`);
+    else if (!atual.topicos.some(t => chaveTexto(t) === chaveTexto(l))) atual.topicos.push(l.replace(/^[-•*]\s*/, "").slice(0, 120));
+  }
+  return { materias: ms, erros };
+}
+function desenharCursos() {
+  const box = $("#orgCursos"); if (!box) return;
+  const pode = ctx.podeEditar();
+  box.innerHTML = `<div class="card-cab"><h3 class="diario-h3" style="margin:0">📘 Planos de curso</h3>${pode ? `<button class="leve mini" id="cursoNovo" type="button">+ Plano de curso</button>` : ""}</div>
+    <p class="pequeno" style="margin:4px 0 10px">O plano de curso traz <b>todas as matérias</b> com os tópicos. Com ele, cada matéria já nasce com os tópicos; o plano de ensino (opcional) fica para as <b>datas das provas</b>.</p>` +
+    (cursos.length ? cursos.map(c => {
+      const ts = turmas.filter(t => t.cursoId === c.id), arqs = arquivosCurso.get(c.id) || [];
+      return `<details class="grupo-semestre curso-item"><summary><span class="gs-nome">📘 ${esc(c.nome)}</span><span class="tag">${(c.materias || []).length} matéria(s)</span>
+          <span class="tag">${(c.materias || []).reduce((n, m) => n + (m.topicos || []).length, 0)} tópicos</span>${ts.length ? `<span class="pequeno">👥 ${ts.map(t => esc(t.nome)).join(", ")}</span>` : `<span class="tag aviso">nenhuma turma ligada</span>`}</summary>
+        <div class="gt-corpo"><div class="cursos-materias">${(c.materias || []).map(m => `<div class="curso-mat"><b>${esc(m.nome)}</b> <span class="pequeno">${[m.modulo, m.cargaHoraria ? m.cargaHoraria + "h" : ""].filter(Boolean).map(esc).join(" · ")}</span>
+            <div>${(m.topicos || []).map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div></div>`).join("") || `<p class="pequeno">Nenhuma matéria ainda. Envie o PDF e peça para a IA ler, ou use ✎ Editar.</p>`}</div>
+          <div class="cm-acoes">${arqs.map(a => `<span class="item-arq"><button class="leve mini" type="button" data-vercurso="${c.id}" data-arq="${a.id}">📄 ${esc(a.titulo)}</button>${pode ? `<button class="discreto mini perigo-txt" type="button" data-delarqcurso="${c.id}" data-arq="${a.id}" aria-label="Apagar o PDF">✕</button>` : ""}</span>`).join("")}
+            ${pode ? `<button class="leve mini" type="button" data-editcurso="${c.id}">✎ Editar</button>
+            <label class="botao-arquivo leve mini">⬆ PDF do plano de curso<input type="file" accept="application/pdf,.pdf" hidden data-enviarcurso="${c.id}"></label>
+            ${arqs.length ? `<button class="leve mini" type="button" data-lercurso="${c.id}">🤖 Ler plano de curso com IA</button>` : ""}
+            ${ctx.ehAdmin() ? `<button class="discreto mini perigo-txt" type="button" data-delcurso="${c.id}" aria-label="Apagar o plano de curso">🗑</button>` : ""}` : ""}</div></div></details>`;
+    }).join("") : `<p class="pequeno">Nenhum plano de curso ainda.${pode ? " Clique em <b>+ Plano de curso</b>, dê o nome do curso e envie o PDF (pode ser só a parte das matérias)." : ""}</p>`);
+  const curso = id => cursos.find(c => c.id === id);
+  $("#cursoNovo")?.addEventListener("click", () => editarCurso(null));
+  box.querySelectorAll("[data-editcurso]").forEach(b => b.onclick = () => editarCurso(curso(b.dataset.editcurso)));
+  box.querySelectorAll("[data-vercurso]").forEach(b => b.onclick = () => abrirMaterialEmAba(b.dataset.arq, traduzirErro, baseCurso(b.dataset.vercurso)).catch(e => toast(e.message, "erro")));
+  box.querySelectorAll("[data-delarqcurso]").forEach(b => b.onclick = async () => {
+    if (!(await confirmar("Apagar este PDF do plano de curso?", { titulo: "Apagar PDF", ok: "Apagar", perigo: true }))) return;
+    try { await apagarMaterial(b.dataset.arq, baseCurso(b.dataset.delarqcurso)); arquivosCurso.set(b.dataset.delarqcurso, (arquivosCurso.get(b.dataset.delarqcurso) || []).filter(a => a.id !== b.dataset.arq)); desenhar(); }
+    catch (e) { toast(traduzirErro(e), "erro"); }
+  });
+  box.querySelectorAll("[data-enviarcurso]").forEach(inp => inp.onchange = async () => {
+    const f = inp.files[0], id = inp.dataset.enviarcurso; inp.value = ""; if (!f) return;
+    try {
+      toast(`Enviando ${f.name}…`);
+      const a = await enviarMaterial(f, f.name.replace(/\.pdf$/i, ""), ctx.eu.email, () => {}, baseCurso(id));
+      arquivosCurso.set(id, [a, ...(arquivosCurso.get(id) || [])]); desenhar();
+      if (temIA() && await confirmar("PDF enviado. Quer que a IA leia agora e liste as matérias com os tópicos? Você revisa antes de salvar.", { titulo: "🤖 Ler plano de curso", ok: "Ler com IA", cancelar: "Agora não" })) lerCurso(curso(id), a.id);
+    } catch (e) { toast(erroMaterial(e, traduzirErro), "erro"); }
+  });
+  box.querySelectorAll("[data-lercurso]").forEach(b => b.onclick = () => lerCurso(curso(b.dataset.lercurso)));
+  box.querySelectorAll("[data-delcurso]").forEach(b => b.onclick = async () => {
+    const c = curso(b.dataset.delcurso);
+    if (!(await confirmar(`Apagar o plano de curso ${c.nome}? Planos de ensino, provas e bancos não mudam.`, { titulo: "Apagar plano de curso", ok: "Apagar", perigo: true }))) return;
+    try {
+      for (const a of arquivosCurso.get(c.id) || []) await apagarMaterial(a.id, baseCurso(c.id));
+      for (const t of turmas.filter(t => t.cursoId === c.id)) await updateDoc(doc(db, "turmas", t.id), { cursoId: null });
+      await deleteDoc(doc(db, "cursos", c.id)); toast("Plano de curso apagado.", "ok"); carregarOrganizacao();
+    } catch (e) { toast(regrasErro(e), "erro"); }
+  });
+}
+async function editarCurso(c) {
+  const html = `<div class="grade"><div class="col-2"><label for="cuNome">Nome do curso</label><input type="text" id="cuNome" value="${esc(c?.nome || "")}" placeholder="Técnico em Desenvolvimento de Sistemas"></div></div>
+    <fieldset class="temas-box"><legend>Turmas deste curso</legend><div class="lista-temas">${turmas.map(t => `<label class="check"><input type="checkbox" value="${t.id}"${t.cursoId && t.cursoId === c?.id ? " checked" : ""}> <span>${esc(nomeTurma(t))}${t.cursoId && t.cursoId !== c?.id ? ` <span class="pequeno">(hoje em ${esc(cursos.find(x => x.id === t.cursoId)?.nome || "outro curso")})</span>` : ""}</span></label>`).join("") || `<p class="pequeno">Nenhuma turma.</p>`}</div></fieldset>
+    <label for="cuMaterias">Matérias e tópicos — a matéria começa com <span class="mono">#</span>: <span class="mono"># Matéria | módulo | carga horária</span>, e os tópicos vêm um por linha embaixo</label>
+    <textarea id="cuMaterias" style="min-height:260px" placeholder="# Banco de Dados | 2º semestre | 80h
+Modelo conceitual (DER)
+DDL - CREATE TABLE
+Chave estrangeira
+
+# Front-End | 1º semestre | 60h
+HTML semântico
+CSS - Flexbox">${esc(textoCurso(c?.materias))}</textarea>
+    <p class="pequeno">Mais fácil: salve só o nome e as turmas, envie o PDF do plano de curso no cartão e clique em 🤖 Ler plano de curso com IA.</p>`;
+  const ok = await modal({ titulo: c ? `Editar plano de curso — ${c.nome}` : "Novo plano de curso", conteudo: html, ok: "Salvar", cancelar: "Cancelar", largo: true,
+    antesDeConfirmar: async caixa => {
+      const nome = $("#cuNome", caixa).value.trim(), { materias, erros } = lerTextoCurso($("#cuMaterias", caixa).value);
+      if (!nome) { toast("Dê o nome do curso.", "erro"); return false; }
+      if (erros.length) { toast(erros[0], "erro"); return false; }
+      const marcadas = new Set([...caixa.querySelectorAll("fieldset input:checked")].map(x => x.value));
+      try {
+        let id = c?.id;
+        const dados = { nome, materias, atualizadoEm: serverTimestamp(), atualizadoPor: ctx.eu.email };
+        if (id) await updateDoc(doc(db, "cursos", id), dados);
+        else id = (await addDoc(collection(db, "cursos"), { ...dados, criadoEm: serverTimestamp(), criadoPor: ctx.eu.email })).id;
+        for (const t of turmas) {
+          const quer = marcadas.has(t.id);
+          if (quer && t.cursoId !== id) await updateDoc(doc(db, "turmas", t.id), { cursoId: id });
+          if (!quer && t.cursoId === id) await updateDoc(doc(db, "turmas", t.id), { cursoId: null });
+        }
+      } catch (e) { toast(regrasErro(e), "erro"); return false; }
+      return true;
+    } });
+  if (ok) { toast("Plano de curso salvo.", "ok"); carregarOrganizacao(); }
+}
+async function lerCurso(c, arqId = null) {
+  const arqs = arquivosCurso.get(c.id) || [], a = arqs.find(x => x.id === arqId) || arqs[0];
+  if (!a) return toast("Envie o PDF do plano de curso primeiro.", "erro");
+  if (!temIA()) return toast("A IA não está configurada (Configuração).", "erro");
+  toast(`🤖 Lendo ${a.titulo}… plano de curso grande pode levar 1 a 2 minutos.`);
+  let r;
+  try {
+    r = await pedirIA({ tipo: "curso", cursoId: c.id, arquivoId: a.id },
+      async cfg => lerCursoIA({ chave: cfg.chave, modelo: cfg.modelo, pdf: (await baixarMaterial(a.id, baseCurso(c.id))).bytes, titulo: a.titulo, nome: c.nome }));
+  } catch (e) { return toast("🤖 " + (e.message || traduzirErro(e)), "erro"); }
+  const tem = (c.materias || []).length > 0;
+  const html = `<p class="pequeno" style="margin-top:0">A IA achou <b>${r.materias.length} matéria(s)</b> em <b>${esc(a.titulo)}</b>. <b>Revise</b> antes de salvar: corrija nomes de matéria para ficarem iguais aos dos bancos de questões.</p>
+    <textarea id="iaCurso" style="min-height:340px">${esc(textoCurso(r.materias))}</textarea>
+    ${tem ? `<label class="check" style="margin-top:12px"><input type="checkbox" id="iaCursoSubst"> <span>Substituir as ${c.materias.length} matérias atuais <span class="pequeno">— desmarcado: junta (matéria que já existe ganha os tópicos novos)</span></span></label>` : ""}`;
+  const ok = await modal({ titulo: `🤖 Plano de curso — ${c.nome}`, conteudo: html, ok: "Salvar no plano de curso", cancelar: "Descartar", largo: true,
+    antesDeConfirmar: async caixa => {
+      const { materias, erros } = lerTextoCurso($("#iaCurso", caixa).value);
+      if (erros.length) { toast(erros[0], "erro"); return false; }
+      let final = materias;
+      if (tem && !$("#iaCursoSubst", caixa).checked) {
+        final = (c.materias || []).map(m => ({ ...m, topicos: [...m.topicos] }));
+        for (const m of materias) {
+          const x = final.find(y => chaveTexto(y.nome) === chaveTexto(m.nome));
+          if (!x) final.push(m); else m.topicos.forEach(t => { if (!x.topicos.some(y => chaveTexto(y) === chaveTexto(t))) x.topicos.push(t); });
+        }
+      }
+      try { await updateDoc(doc(db, "cursos", c.id), { materias: final, lidoPorIAEm: serverTimestamp(), atualizadoEm: serverTimestamp(), atualizadoPor: ctx.eu.email }); }
+      catch (e) { toast(regrasErro(e), "erro"); return false; }
+      return true;
+    } });
+  if (ok) { toast("Plano de curso atualizado.", "ok"); carregarOrganizacao(); }
+}
+// dentro da turma: o curso dela e as matérias do curso que ainda não têm cartão no semestre
+function cursoDaTurmaHTML(t, sm) {
+  const c = cursos.find(x => x.id === t.cursoId);
+  if (!c) return ctx.podeEditar() && cursos.length ? `<p class="pequeno" style="margin:0 4px 10px">📘 Turma sem plano de curso: ligue em <b>📘 Planos de curso → ✎ Editar</b>.</p>` : "";
+  const sem = $("#orgSemestre").value || semestreDe();
+  const usadas = new Set([...(sm.get(sem)?.keys() || [])]);
+  const livres = (c.materias || []).filter(m => !usadas.has(chaveTexto(m.nome)));
+  return `<details class="curso-turma"><summary>📘 <b>${esc(c.nome)}</b> <span class="pequeno">· ${(c.materias || []).length} matérias no plano de curso${livres.length ? ` · ${livres.length} sem cartão em ${rotuloSemestre(sem)}` : ""}</span></summary>
+    <div class="op-pilulas" style="margin:8px 0">${livres.map(m => `<button type="button" data-matcurso="${t.id}|${sem}|${esc(m.nome)}" title="${esc((m.topicos || []).join(" · "))}">+ ${esc(m.nome)}${m.modulo ? ` <span class="pequeno">(${esc(m.modulo)})</span>` : ""}</button>`).join("") || `<span class="pequeno">Todas as matérias do curso já têm cartão neste semestre.</span>`}</div>
+    <p class="pequeno">Clique na matéria para criar o cartão dela em ${rotuloSemestre(sem)} (já com os tópicos do plano de curso; as datas das provas você coloca depois).</p></details>`;
 }

@@ -140,6 +140,20 @@ service cloud.firestore {
       }
     }
 
+    // plano de curso: todas as matérias do curso com os tópicos (turmas/{id}.cursoId aponta para cá)
+    match /cursos/{id} {
+      allow read: if equipe();
+      allow write: if professor();
+      match /arquivos/{a} {
+        allow read: if equipe();
+        allow write: if professor();
+        match /partes/{x} {
+          allow read: if equipe();
+          allow write: if professor();
+        }
+      }
+    }
+
     // ---------- acessibilidade (adaptações da prova por aluno) ----------
     // acessibilidade/{email}: o que o PRÓPRIO aluno lê (visual, tempo/vidas extras) + questões reescritas para ele.
     // A auxiliar de inclusão edita, mas não muda quem está vinculado (só professor).
