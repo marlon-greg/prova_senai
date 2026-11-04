@@ -144,6 +144,10 @@
         <h2 id="tFormTitulo">Nova turma</h2>
         <div class="grade">
           <div><label for="tNome">Nome da turma</label><input type="text" id="tNome" placeholder="DETS-1A-26CT-S"></div>
+          <div><span class="rotulo">Dias de aula</span><div id="tDias" class="dias-aula" role="group" aria-label="Dias de aula da turma">
+            <label><input type="checkbox" value="1"> seg</label><label><input type="checkbox" value="2"> ter</label><label><input type="checkbox" value="3"> qua</label>
+            <label><input type="checkbox" value="4"> qui</label><label><input type="checkbox" value="5"> sex</label><label><input type="checkbox" value="6"> sáb</label></div>
+            <p class="pequeno" style="margin:4px 0 0">O diário e a sequência 🔥 contam só os dias de aula. Horário: <span id="tHorario"></span> (igual para todas as turmas; muda em Configuração).</p></div>
         </div>
         <label for="tEmails">Alunos — nome completo (um por linha)</label>
         <textarea id="tEmails" style="min-height:160px" placeholder="Maria Eduarda da Silva Souza
@@ -157,6 +161,7 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
       </div>
       <div class="card"><h2>Turmas cadastradas</h2>
         <div class="barra-filtros" role="search"><input type="search" id="ftBusca" placeholder="🔎 Pesquisar turma, aluno ou e-mail…" aria-label="Pesquisar turmas e alunos">
+          <select id="ftDia" aria-label="Filtrar por dia de aula"><option value="">📆 Qualquer dia de aula</option><option value="1">segunda</option><option value="2">terça</option><option value="3">quarta</option><option value="4">quinta</option><option value="5">sexta</option><option value="6">sábado</option></select>
           <select id="ftSemestre" aria-label="Filtrar turmas por semestre"><option value="">📅 Todos os semestres</option></select>
           <select id="ftMateria" aria-label="Filtrar turmas por matéria"><option value="">📚 Todas as matérias</option></select></div>
         <p id="ftContagem" class="pequeno" aria-live="polite"></p>
@@ -256,6 +261,12 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
         <label for="cCorretor" style="margin-top:16px">Servidor de correção automática (opcional)</label>
         <input type="url" id="cCorretor" placeholder="https://corretor-prova.SEU-NOME.workers.dev" spellcheck="false">
         <p class="pequeno" style="margin:4px 0 0">Endereço do Cloudflare Worker (veja o README, "Servidor de correção"). Com ele, as dissertativas são corrigidas assim que o aluno finaliza, mesmo com o painel fechado. O endereço não é segredo; a chave fica só no Cloudflare. Vazio = desligado.</p>
+        <fieldset class="temas-box" style="margin-top:16px"><legend>Horário das turmas (vale para todas)</legend>
+          <div class="grade"><div><label for="cHIni">Entrada</label><input type="time" id="cHIni"></div><div><label for="cHFim">Saída</label><input type="time" id="cHFim"></div></div>
+          <label for="cHInt">Intervalos — um por linha: <span class="mono">Nome | início | fim</span></label>
+          <textarea id="cHInt" style="min-height:80px" placeholder="Café da manhã | 09:10 | 09:25"></textarea>
+          <p class="pequeno" style="margin:4px 0 0">Aparece nas turmas, no diário e no relatório do aluno. Os dias de aula ficam em cada turma (aba Turmas).</p>
+        </fieldset>
         <div class="linha acoes" style="margin-top:12px"><button id="btnSalvarConfig">Salvar</button><button id="btnTestarCorretor" class="leve">Testar servidor</button></div>
         <p class="pequeno" id="msgConfig"></p>
       </div>

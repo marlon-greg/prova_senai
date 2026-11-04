@@ -1,6 +1,7 @@
 // Painel do professor: provas, bancos (import JSON), resultados/correção, equipe, configuração.
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, apagarTentativaTeste,
          confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco,
+         rotuloDias, nomeTurma, HORARIO_PADRAO, textoHorario, DIAS_SEMANA_LONGO,
          semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, chaveTexto, dataCurta } from "./common.js";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
@@ -18,7 +19,7 @@ const ehAdmin = () => eu?.papel === "admin";
 const ehInclusao = () => eu?.papel === "inclusao";
 // pode mexer nas vidas / reabrir: professor, admin e a auxiliar de inclusão (nos alunos dela; as regras conferem)
 const podeCuidar = () => podeEditar() || ehInclusao();
-let urlCorretorCfg = "";   // servidor de correção/adaptação (config/geral.urlCorretor)
+let urlCorretorCfg = "", horarioCfg = HORARIO_PADRAO;   // servidor de correção/adaptação (config/geral.urlCorretor)
 const ABAS_INCLUSAO = ["diario", "acessibilidade", "resultados"];
 // administrador principal: o único que vê e usa a chave da IA (as regras também só deixam ele ler config/ia)
 const souDono = () => !!eu && eu.email === SUPER_ADMIN.toLowerCase();
@@ -38,11 +39,11 @@ aoMudarLogin(async user => {
   eu = id;
   await garantirConfig();
   await carregarIA();
-  getDoc(doc(db, "config", "geral")).then(c => { urlCorretorCfg = String(c.data()?.urlCorretor || "").trim(); }).catch(() => {});
+  getDoc(doc(db, "config", "geral")).then(c => { urlCorretorCfg = String(c.data()?.urlCorretor || "").trim(); if (c.data()?.horario?.inicio) horarioCfg = c.data().horario; $("#tHorario").textContent = textoHorario(horarioCfg); }).catch(() => {});
   iniciarAcessibilidade({ eu, podeEditar, souDono, auth, iaCfg: () => iaCfg, urlCorretor: () => urlCorretorCfg,
-    alunosDasTurmas: async () => { await listarTurmas().catch(() => {}); return turmasCache.flatMap(t => alunosDaTurma(t).map(a => ({ ...a, turma: t.nome, turmaId: t.id }))); } });
-  iniciarDiario({ eu, podeEditar, souDono,
-    alunosDasTurmas: async () => { await listarTurmas().catch(() => {}); return turmasCache.flatMap(t => alunosDaTurma(t).map(a => ({ ...a, turma: t.nome, turmaId: t.id }))); } });
+    alunosDasTurmas: async () => { await listarTurmas().catch(() => {}); return turmasCache.flatMap(t => alunosDaTurma(t).map(a => ({ ...a, turma: t.nome, turmaId: t.id, diasAula: t.diasAula || [] }))); } });
+  iniciarDiario({ eu, podeEditar, souDono, horario: () => horarioCfg,
+    alunosDasTurmas: async () => { await listarTurmas().catch(() => {}); return turmasCache.flatMap(t => alunosDaTurma(t).map(a => ({ ...a, turma: t.nome, turmaId: t.id, diasAula: t.diasAula || [] }))); } });
   iniciarOrganizacao({ eu, podeEditar, ehAdmin, auth, iaCfg: () => iaCfg, urlCorretor: () => urlCorretorCfg,
     listarTurmas, alunosDaTurma, listarBancos, questoesDoBanco, questoesDoBancoCache: id => questoesCache[id],
     invalidarBanco: id => { delete questoesCache[id]; }, novaProva: abrirNovaProva,
@@ -145,9 +146,11 @@ function previaTurma() {
     (repetidos.length ? `<br><span class="erro-texto">⚠ Nome repetido: ${repetidos.map(esc).join(", ")}. Dois alunos com o mesmo nome precisam do e-mail (escreva o e-mail na linha de cada um).</span>` : "");
 }
 $("#tEmails").oninput = previaTurma;
-$("#ftBusca").oninput = $("#ftSemestre").onchange = $("#ftMateria").onchange = () => desenharTurmas();
+$("#ftBusca").oninput = $("#ftSemestre").onchange = $("#ftMateria").onchange = $("#ftDia").onchange = () => desenharTurmas();
+const marcarDias = l => document.querySelectorAll("#tDias input").forEach(c => c.checked = (l || []).map(Number).includes(Number(c.value)));
+const diasMarcados = () => [...document.querySelectorAll("#tDias input:checked")].map(c => Number(c.value));
 function limparFormTurma() {
-  turmaEditando = null; $("#tNome").value = ""; $("#tEmails").value = ""; previaTurma();
+  turmaEditando = null; $("#tNome").value = ""; $("#tEmails").value = ""; previaTurma(); marcarDias([]);
   $("#tFormTitulo").textContent = "Nova turma"; $("#btnCancelarTurma").classList.add("oculto");
 }
 $("#btnCancelarTurma").onclick = limparFormTurma;
@@ -160,7 +163,8 @@ $("#btnSalvarTurma").onclick = async () => {
   const emails = [...new Set(alunos.filter(a => a.email).map(a => a.email))].sort();
   const nomesChave = alunos.filter(a => !a.email).map(a => chaveNome(a.nome));
   // vínculos já feitos foram incorporados ao texto (nome <e-mail>) ao abrir a edição: recomeça do zero
-  const dados = { nome, alunos: alunos.map(a => ({ nome: a.nome || "", email: a.email || null })), emails, nomesChave, vinculos: {} };
+  const dados = { nome, diasAula: diasMarcados(), alunos: alunos.map(a => ({ nome: a.nome || "", email: a.email || null })), emails, nomesChave, vinculos: {} };
+  if (!dados.diasAula.length && !(await confirmar("Nenhum dia de aula marcado. Sem os dias, o diário considera segunda a sexta. Salvar assim?", { titulo: "Dias de aula", ok: "Salvar assim", cancelar: "Voltar e marcar" }))) return;
   try {
     if (turmaEditando) await updateDoc(doc(db, "turmas", turmaEditando), { ...dados, atualizadoEm: serverTimestamp(), atualizadoPor: eu.email });
     else await addDoc(collection(db, "turmas"), { ...dados, criadoEm: serverTimestamp(), criadoPor: eu.email });
@@ -188,21 +192,21 @@ async function carregarTurmas() {
 function desenharTurmas() {
   const box = $("#listaTurmas");
   if (!turmasCache.length) { $("#ftContagem").textContent = ""; box.innerHTML = `<div class="vazio"><div class="icone">👥</div><p>Nenhuma turma ainda. Cadastre a primeira acima colando os nomes completos (ou e-mails) dos alunos.</p></div>`; return; }
-  const busca = semAcento($("#ftBusca").value.trim()), fS = $("#ftSemestre").value, fM = chaveTexto($("#ftMateria").value);
+  const busca = semAcento($("#ftBusca").value.trim()), fS = $("#ftSemestre").value, fM = chaveTexto($("#ftMateria").value), fD = $("#ftDia").value;
   // pesquisa no nome da turma ou nos alunos (nome/e-mail); achou aluno = abre a lista com só quem bateu
-  const linhas = turmasCache.filter(t => (!fS && !fM) || (turmaSemMat[t.id] || []).some(x => (!fS || x.sem === fS) && (!fM || x.mat === fM))).map(t => {
+  const linhas = turmasCache.filter(t => !fD || (t.diasAula || []).map(String).includes(fD)).filter(t => (!fS && !fM) || (turmaSemMat[t.id] || []).some(x => (!fS || x.sem === fS) && (!fM || x.mat === fM))).map(t => {
     const al = alunosDaTurma(t);
-    if (!busca || semAcento(t.nome).includes(busca)) return { t, al, achados: null };
+    if (!busca || semAcento(`${t.nome} ${(t.diasAula || []).map(d => DIAS_SEMANA_LONGO[d]).join(" ")} ${rotuloDias(t.diasAula)}`).includes(busca)) return { t, al, achados: null };
     const achados = al.filter(a => semAcento(`${a.nome} ${a.email || ""}`).includes(busca));
     return achados.length ? { t, al, achados } : null;
   }).filter(Boolean);
-  $("#ftContagem").textContent = busca || fS || fM ? `${linhas.length} de ${turmasCache.length} turma(s)` + (linhas.some(l => l.achados) ? ` · ${linhas.reduce((n, l) => n + (l.achados?.length || 0), 0)} aluno(s) encontrado(s)` : "") : `${turmasCache.length} turma(s)`;
+  $("#ftContagem").textContent = busca || fS || fM || fD ? `${linhas.length} de ${turmasCache.length} turma(s)` + (linhas.some(l => l.achados) ? ` · ${linhas.reduce((n, l) => n + (l.achados?.length || 0), 0)} aluno(s) encontrado(s)` : "") : `${turmasCache.length} turma(s)`;
   if (!linhas.length) { box.innerHTML = `<div class="vazio"><div class="icone">🔎</div><p>Nenhuma turma ou aluno com esses filtros.</p></div>`; return; }
   box.innerHTML = `<div class="tabela"><table><tr><th>Turma</th><th>Alunos</th><th>Provas</th><th>Atualizada</th><th></th></tr>` + linhas.map(({ t, al, achados }) => {
     const pend = al.filter(a => !a.email), auto = al.filter(a => a.auto), mostrar = achados || al;
     const lista = mostrar.map(a => `<li>${a.email ? "✅" : "⏳"} ${esc(a.nome || a.email)}${a.nome && a.email ? ` <span class="pequeno">${esc(a.email)}${a.auto ? " · vinculado no login" : ""}</span>` : ""}${!a.email ? ` <span class="pequeno">— aguardando o 1º login</span>` : ""}</li>`).join("");
     const pv = provasPorTurma[t.id] || [];
-    return `<tr><td><b>${esc(t.nome)}</b><br><span class="pequeno">${t.id}</span></td>
+    return `<tr><td><b>${esc(t.nome)}</b><br>${rotuloDias(t.diasAula) ? `<span class="tag nota" title="Dias de aula">📆 ${rotuloDias(t.diasAula)}</span>` : `<span class="tag aviso" title="Edite a turma e marque os dias de aula">📆 sem dias</span>`}<br><span class="pequeno">${t.id}</span></td>
      <td>${al.length}${pend.length ? `<br><span class="tag aviso">⏳ ${pend.length} sem login ainda</span>` : ""}${auto.length ? `<br><span class="pequeno">${auto.length} vinculado(s) pelo nome</span>` : ""}
        <details class="lista-alunos" ${achados ? "open" : ""}><summary class="pequeno">${achados ? `${achados.length} encontrado(s)` : "ver alunos"}</summary><ul>${lista}</ul></details></td>
      <td>${pv.length ? `<button class="leve mini" data-vprovas="${t.id}" title="${esc(pv.map(p => p.titulo).join(" · "))}">📝 ${pv.length} prova(s)</button>${pv.some(p => p.liberada) ? `<br><span class="tag on">● ${pv.filter(p => p.liberada).length} liberada(s)</span>` : ""}` : `<span class="pequeno">nenhuma</span>`}</td>
@@ -212,7 +216,7 @@ function desenharTurmas() {
   box.querySelectorAll("[data-vprovas]").forEach(b => b.onclick = () => { filtroTurmaPendente = b.dataset.vprovas; $("#fpBusca").value = ""; $("#fpStatus").value = ""; abrirAba("provas"); });
   box.querySelectorAll("[data-edt]").forEach(b => b.onclick = () => {
     const t = turmasCache.find(x => x.id === b.dataset.edt);
-    turmaEditando = t.id; $("#tNome").value = t.nome || ""; $("#tEmails").value = alunosDaTurma(t).map(linhaAluno).join("\n"); previaTurma();
+    turmaEditando = t.id; $("#tNome").value = t.nome || ""; $("#tEmails").value = alunosDaTurma(t).map(linhaAluno).join("\n"); previaTurma(); marcarDias(t.diasAula);
     $("#tFormTitulo").textContent = `Editar turma ${t.nome}`; $("#btnCancelarTurma").classList.remove("oculto");
     $("#tNome").scrollIntoView({ behavior: "smooth", block: "center" }); $("#tNome").focus();
   });
@@ -613,7 +617,7 @@ function controleProva(f) {
   }
   // select de turmas; prova antiga com turma em texto livre ganha uma opção própria para não perder o nome
   function opcoesTurma(p = {}) {
-    let h = `<option value="">— escolha a turma —</option>` + turmasCache.map(t => `<option value="${t.id}">${esc(t.nome)} (${alunosDaTurma(t).length} alunos)</option>`).join("");
+    let h = `<option value="">— escolha a turma —</option>` + turmasCache.map(t => `<option value="${t.id}">${esc(nomeTurma(t))} (${alunosDaTurma(t).length} alunos)</option>`).join("");
     if (!p.turmaId && p.turma) h += `<option value="${LEGADO}">${esc(p.turma)} — texto antigo, sem lista (nenhum aluno vê: escolha a turma)</option>`;
     $f("Turma").innerHTML = h;
     $f("Turma").value = p.turmaId && turmasCache.some(t => t.id === p.turmaId) ? p.turmaId : (!p.turmaId && p.turma ? LEGADO : "");
@@ -757,7 +761,7 @@ async function carregarProvas() {
   // filtro de turma: turmas cadastradas + "sem turma"
   const sel = $("#fpTurma"), antes = filtroTurmaPendente ?? sel.value;
   filtroTurmaPendente = null;
-  sel.innerHTML = `<option value="">👥 Todas as turmas</option>` + turmasCache.map(t => `<option value="${t.id}">${esc(t.nome)}</option>`).join("") +
+  sel.innerHTML = `<option value="">👥 Todas as turmas</option>` + turmasCache.map(t => `<option value="${t.id}">${esc(nomeTurma(t))}</option>`).join("") +
     (provasCache.some(p => !p.turmaId) ? `<option value="__sem">⚠ Sem turma</option>` : "");
   sel.value = [...sel.options].some(o => o.value === antes) ? antes : "";
   desenharProvas();
@@ -795,7 +799,7 @@ function desenharProvas() {
     ps.forEach(p => { const sm = semestreDaProva(p), m = materiaDaProva(p, bancosCache) || "Sem matéria", ch = `${sm}|${chaveTexto(m)}`; if (!sub.has(ch)) sub.set(ch, { sm, m, ps: [] }); sub.get(ch).ps.push(p); });
     const subs = [...sub.values()].sort((a, b) => b.sm.localeCompare(a.sm) || a.m.localeCompare(b.m, "pt-BR"));
     return `<details class="grupo-turma${k === "__sem" ? " sem-turma" : ""}" data-grupo="${k}" ${aberto ? "open" : ""}>
-      <summary><span class="gt-nome">${k === "__sem" ? "⚠ Sem turma" : `👥 ${esc(t.nome)}`}</span>
+      <summary><span class="gt-nome">${k === "__sem" ? "⚠ Sem turma" : `👥 ${esc(nomeTurma(t))}`}</span>
         <span class="tag">${ps.length} prova(s)</span>${lib ? `<span class="tag on">● ${lib} liberada(s)</span>` : ""}
         ${t ? `<span class="pequeno">${alunosDaTurma(t).length} alunos</span>` : `<span class="pequeno">nenhum aluno vê estas provas: use ✎ Editar e escolha a turma</span>`}</summary>
       ${subs.map(g => `<div class="sub-grupo"><h4 class="sg-titulo">📅 ${rotuloSemestre(g.sm)} <span aria-hidden="true">·</span> 📚 ${esc(g.m)} <span class="tag">${g.ps.length}</span></h4>
@@ -1147,7 +1151,7 @@ async function prepararResultados() {
   const mats = new Map(); provasRes.forEach(p => { const m = materiaDaProva(p, bancosCache); if (m) mats.set(chaveTexto(m), m); });
   preencher($("#rMateria"), "Todas", [...mats.values()].sort((a, b) => a.localeCompare(b, "pt-BR")));
   const selT = $("#rTurma"), tAntes = selT.value;
-  const turmas = [...new Map(provasRes.map(p => [p.turmaId || "__sem", p.turmaId ? (turmasCache.find(t => t.id === p.turmaId)?.nome || p.turma || "turma") : "⚠ Sem turma"])).entries()]
+  const turmas = [...new Map(provasRes.map(p => [p.turmaId || "__sem", p.turmaId ? (nomeTurma(turmasCache.find(t => t.id === p.turmaId)) || p.turma || "turma") : "⚠ Sem turma"])).entries()]
     .sort((a, b) => a[0] === "__sem" ? 1 : b[0] === "__sem" ? -1 : a[1].localeCompare(b[1], "pt-BR", { numeric: true }));
   selT.innerHTML = `<option value="">Todas as turmas</option>` + turmas.map(([id, nome]) => `<option value="${id}">${esc(nome)}</option>`).join("");
   selT.value = turmas.some(([id]) => id === tAntes) ? tAntes : "";
@@ -1567,6 +1571,8 @@ async function carregarConfig() {
   const c = await getDoc(doc(db, "config", "geral"));
   $("#cDominios").value = (c.exists() ? c.data().dominiosAlunos || [] : []).join(", ");
   $("#cCorretor").value = c.exists() ? c.data().urlCorretor || "" : "";
+  const h = c.data()?.horario?.inicio ? c.data().horario : HORARIO_PADRAO;
+  $("#cHIni").value = h.inicio; $("#cHFim").value = h.fim; $("#cHInt").value = (h.intervalos || []).map(i => `${i.nome} | ${i.inicio} | ${i.fim}`).join("\n");
 }
 const urlCorretorDigitada = () => $("#cCorretor").value.trim().replace(/\/+$/, "");
 $("#btnTestarCorretor").onclick = async () => {
@@ -1583,7 +1589,12 @@ $("#btnSalvarConfig").onclick = async () => {
   if (!ehAdmin()) return toast("Só admin altera a configuração.", "erro");
   const dominios = $("#cDominios").value.split(",").map(s => s.trim().toLowerCase()).filter(Boolean), url = urlCorretorDigitada();
   if (url && !/^https:\/\/[\w.-]+(\/.*)?$/.test(url)) return toast("O endereço do servidor precisa começar com https://.", "erro");
-  await setDoc(doc(db, "config", "geral"), { dominiosAlunos: dominios, urlCorretor: url }, { merge: true });
+  const hora = x => /^\d{2}:\d{2}$/.test(x) ? x : null;
+  const intervalos = $("#cHInt").value.split("\n").map(l => l.split("|").map(x => x.trim())).filter(x => x[0]).map(([nome, ini, fim]) => ({ nome, inicio: hora(ini), fim: hora(fim) }));
+  if (!hora($("#cHIni").value) || !hora($("#cHFim").value) || intervalos.some(i => !i.inicio || !i.fim)) return toast("Horário inválido: use HH:MM (ex.: Almoço | 11:00 | 12:00).", "erro");
+  const horario = { inicio: $("#cHIni").value, fim: $("#cHFim").value, intervalos };
+  await setDoc(doc(db, "config", "geral"), { dominiosAlunos: dominios, urlCorretor: url, horario }, { merge: true });
+  horarioCfg = horario;
   $("#msgConfig").textContent = "Salvo: " + dominios.join(", ") + (url ? ` · servidor de correção: ${url}` : " · sem servidor de correção");
 };
 

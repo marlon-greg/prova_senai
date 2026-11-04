@@ -335,3 +335,21 @@ export function materiaDaProva(p, bancos = []) {
 }
 // "AAAA-MM-DD" -> "dd/mm/aaaa"
 export const dataCurta = s => /^\d{4}-\d{2}-\d{2}$/.test(String(s || "")) ? `${s.slice(8, 10)}/${s.slice(5, 7)}/${s.slice(0, 4)}` : "";
+
+// ---------- dias de aula e horário das turmas ----------
+export const DIAS_SEMANA = ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"];
+export const DIAS_SEMANA_LONGO = ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"];
+// [1, 3] -> "seg/qua"
+export const rotuloDias = l => Array.isArray(l) && l.length ? [...l].map(Number).sort().map(d => DIAS_SEMANA[d]).join("/") : "";
+// "DETS-1A · seg/qua"
+export const nomeTurma = t => t ? `${t.nome || ""}${rotuloDias(t.diasAula) ? ` · ${rotuloDias(t.diasAula)}` : ""}` : "";
+// o dia (AAAA-MM-DD) é dia de aula de alguma das turmas? Turma sem dias cadastrados = segunda a sexta
+export function diaDeAula(turmas, iso) {
+  const dw = new Date(iso + "T12:00:00").getDay();
+  const dias = turmas.flatMap(t => Array.isArray(t.diasAula) && t.diasAula.length ? t.diasAula.map(Number) : [1, 2, 3, 4, 5]);
+  return (dias.length ? dias : [1, 2, 3, 4, 5]).includes(dw);
+}
+// horário padrão de todas as turmas (config/geral.horario muda)
+export const HORARIO_PADRAO = { inicio: "07:00", fim: "16:00", intervalos: [
+  { nome: "Café da manhã", inicio: "09:10", fim: "09:25" }, { nome: "Almoço", inicio: "11:00", fim: "12:00" }, { nome: "Café da tarde", inicio: "14:50", fim: "15:05" }] };
+export const textoHorario = h => { const x = h?.inicio ? h : HORARIO_PADRAO; return `${x.inicio}–${x.fim}` + (x.intervalos || []).map(i => ` · ${i.nome} ${i.inicio}–${i.fim}`).join(""); };

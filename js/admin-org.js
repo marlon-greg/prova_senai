@@ -6,7 +6,7 @@
 // A prova liga na matéria por turma + semestre + matéria (prova.semestre / prova.materia; provas antigas: data de criação e matéria do banco).
 // O tópico de uma questão é o campo "tema" dela (o mesmo que filtra o sorteio da prova).
 import { db, esc, $, toast, modal, confirmar, traduzirErro, temaDe, ordenarTemas, bancosDaProva, temasDoBanco,
-         semestreDe, rotuloSemestre, semestreVizinho, chaveTexto, semestreDaProva, materiaDaProva, dataCurta } from "./common.js";
+         semestreDe, rotuloSemestre, semestreVizinho, chaveTexto, semestreDaProva, materiaDaProva, dataCurta, nomeTurma } from "./common.js";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, abrirMaterialEmAba, tamanhoTexto, erroMaterial } from "./material.js";
 import { lerPlanoIA, classificarTopicosIA } from "./ia.js";
 import { collection, doc, getDocs, addDoc, updateDoc, deleteDoc, writeBatch, serverTimestamp }
@@ -57,7 +57,7 @@ export async function carregarOrganizacao() {
   } catch (e) { $("#orgArvore").innerHTML = `<p class="pequeno erro-texto">${esc(traduzirErro(e))}</p>`; return; }
   // filtros
   const selT = $("#orgTurma"), antesT = selT.value;
-  selT.innerHTML = `<option value="">👥 Todas as turmas</option>` + turmas.map(t => `<option value="${t.id}">${esc(t.nome)}</option>`).join("");
+  selT.innerHTML = `<option value="">👥 Todas as turmas</option>` + turmas.map(t => `<option value="${t.id}">${esc(nomeTurma(t))}</option>`).join("");
   selT.value = turmas.some(t => t.id === antesT) ? antesT : "";
   const sems = new Set([semestreDe(), ...planos.map(p => p.semestre), ...provas.filter(p => p.turmaId).map(semestreDaProva)]);
   const selS = $("#orgSemestre"), antesS = selS.value;
@@ -122,7 +122,7 @@ function desenhar() {
     if ((fS || busca) && !blocos) return "";
     const id = `t:${t.id}`, aberto = busca || fT || !fechados.has(id);
     return `<details class="grupo-turma" data-g="${id}" ${aberto ? "open" : ""}>
-      <summary><span class="gt-nome">👥 ${esc(t.nome)}</span><span class="pequeno">${ctx.alunosDaTurma(t).length} alunos</span>
+      <summary><span class="gt-nome">👥 ${esc(nomeTurma(t))}</span><span class="pequeno">${ctx.alunosDaTurma(t).length} alunos</span>
         ${ctx.podeEditar() ? `<button class="leve mini" data-novo-t="${t.id}" type="button">+ Matéria</button>` : ""}</summary>
       <div class="gt-corpo">${blocos || `<p class="pequeno" style="margin:0 16px 14px">Nenhuma matéria ${fS ? `em ${rotuloSemestre(fS)}` : "ainda"}. Use <b>+ Matéria</b> para cadastrar o plano de ensino.</p>`}</div></details>`;
   }).join("");
@@ -284,7 +284,7 @@ async function editarPlano(p, pre = {}) {
   if (!profs.some(e => e.email === ctx.eu.email)) profs.unshift({ email: ctx.eu.email, nome: ctx.eu.nome || ctx.eu.email });
   const html = `
     <div class="grade">
-      <div><label for="plTurma">Turma</label><select id="plTurma"><option value="">— escolha —</option>${turmas.map(t => `<option value="${t.id}"${t.id === v.turmaId ? " selected" : ""}>${esc(t.nome)}</option>`).join("")}</select></div>
+      <div><label for="plTurma">Turma</label><select id="plTurma"><option value="">— escolha —</option>${turmas.map(t => `<option value="${t.id}"${t.id === v.turmaId ? " selected" : ""}>${esc(nomeTurma(t))}</option>`).join("")}</select></div>
       <div><label for="plSemestre">Semestre</label><select id="plSemestre">${sems.map(s => `<option value="${s}"${s === v.semestre ? " selected" : ""}>${rotuloSemestre(s)}${s === semestreDe() ? " (atual)" : ""}</option>`).join("")}</select></div>
       <div class="col-2"><label for="plMateria">Matéria (unidade curricular)</label><input type="text" id="plMateria" list="plMaterias" value="${esc(v.materia)}" placeholder="Banco de Dados">
         <datalist id="plMaterias">${materiasSugeridas().map(m => `<option value="${esc(m)}">`).join("")}</datalist>
