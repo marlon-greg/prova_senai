@@ -2,11 +2,11 @@
 // Professor/admin: marca o aluno, vincula a auxiliar de inclusão, ajusta o visual e as regras da prova, descreve
 // as necessidades, sobe laudos e adapta as questões (manual ou pela IA). Auxiliar de inclusão: só os alunos
 // vinculados a ela — edita as adaptações, sobe laudos e deixa sugestões.
-import { db, esc, $, toast, confirmar, modal, traduzirErro, dataBR, iniciais, bancosDaProva, temasDoBanco, temaDe, letra } from "./common.js";
+import { db, esc, $, toast, confirmar, modal, traduzirErro, dataBR, iniciais, temaDe, letra, sortearQuestoes, bancoDaQuestao } from "./common.js";
 import { VISUAL_PADRAO, PROVA_PADRAO, FONTES, TEMAS, completar, aplicarVisual } from "./acessibilidade.js";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, abrirMaterialEmAba, tamanhoTexto, erroMaterial } from "./material.js";
 import { adaptarQuestao } from "./ia.js";
-import { collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, query, where, serverTimestamp, orderBy }
+import { collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, query, where, serverTimestamp, orderBy, FieldPath }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 let ctx = null;          // { eu, podeEditar(), souDono(), iaCfg(), urlCorretor(), auth, alunosDasTurmas() }
@@ -163,13 +163,16 @@ async function abrirAluno(email, rolar = true) {
   </div>
 
   <div class="card">
-    <h2>Questões adaptadas</h2>
-    <p class="pequeno">Escolha a prova: aparecem as questões que podem ser sorteadas para ela. Adapte uma a uma ou todas com a IA e revise. A resposta certa continua a mesma: as alternativas ficam na mesma ordem e quantidade.</p>
-    <div class="linha acoes"><select id="acProvaQ" style="width:auto;flex:1 1 280px">${provas.map(x => `<option value="${x.id}">${esc(x.titulo)}</option>`).join("")}</select>
-      <button id="acCarregarQ" class="leve">Carregar questões</button></div>
+    <h2>Prova adaptada</h2>
+    <p class="pequeno"><b>1.</b> Escolha a prova. <b>2.</b> 🎲 Sorteie as questões deste aluno (sorteio igual ao dos outros alunos).
+      <b>3.</b> 🤖 Gere a prova adaptada: a IA adapta <b>só as questões sorteadas</b>. Na hora da prova o aluno recebe exatamente essas questões.
+      A resposta certa continua a mesma: as alternativas ficam na mesma ordem e quantidade.</p>
+    <div class="linha acoes"><select id="acProvaQ" style="width:auto;flex:1 1 280px">${provas.map(x => `<option value="${x.id}">${esc(x.titulo)} · ${x.nQuestoes || "?"} questões</option>`).join("")}</select>
+      <button id="acSortear" class="leve" disabled>🎲 Sortear questões</button></div>
+    <div id="acSorteioInfo" class="pequeno" style="margin-top:8px" aria-live="polite"></div>
     <label for="acOrientacao" style="margin-top:12px">Orientação extra para a IA (opcional)</label>
     <input type="text" id="acOrientacao" placeholder="Ex.: use exemplos com lojas e clientes; destaque em negrito a ação pedida">
-    <div class="linha acoes" style="margin-top:8px"><button id="acAdaptarTodas" disabled>🤖 Adaptar todas com IA</button><label class="check" style="margin:0"><input type="checkbox" id="acRefazer"> refazer as já adaptadas</label><span id="acIAMsg" class="pequeno" aria-live="polite"></span></div>
+    <div class="linha acoes" style="margin-top:8px"><button id="acAdaptarTodas" disabled>🤖 Gerar prova adaptada</button><label class="check" style="margin:0"><input type="checkbox" id="acRefazer"> refazer as já adaptadas</label><span id="acIAMsg" class="pequeno" aria-live="polite"></span></div>
     <div id="acQuestoes"></div>
   </div>`;
   if (rolar) box.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -221,8 +224,11 @@ async function abrirAluno(email, rolar = true) {
       $("#acSugTexto").value = ""; toast("Sugestão registrada.", "ok"); desenharSugestoes(email); }
     catch (e) { toast("Não foi possível enviar. " + traduzirErro(e), "erro"); }
   };
-  $("#acCarregarQ").onclick = () => carregarQuestoes(email, provas.find(x => x.id === $("#acProvaQ").value));
+  const provaSel = () => provas.find(x => x.id === $("#acProvaQ").value);
+  $("#acProvaQ").onchange = () => carregarQuestoes(email, provaSel());
+  $("#acSortear").onclick = () => sortearParaAluno(email, provaSel());
   $("#acAdaptarTodas").onclick = () => adaptarVarias(email);
+  carregarQuestoes(email, provaSel());
 }
 
 async function desenharLaudos(email) {
@@ -250,32 +256,60 @@ async function desenharSugestoes(email) {
   });
 }
 
-// ---------- questões adaptadas ----------
-let qAtual = null;   // { email, prova, itens: [{ qid, q, g, ad }] }
+// ---------- prova adaptada: só as questões sorteadas para o aluno ----------
+let qAtual = null;   // { email, prova, itens: [{ qid, q, g, ad }], travada }
+// questões do aluno nesta prova: a tentativa (se já começou) ou o sorteio guardado em acessibilidade/{email}.sorteios
+async function questoesDoAluno(email, prova) {
+  const a = (await getDoc(doc(db, "acessibilidade", email))).data() || {};
+  if (a.uid) {
+    const t = await getDoc(doc(db, "tentativas", `${a.uid}_${prova.id}`)).catch(() => null);
+    if (t?.exists()) return { ids: t.data().questoesIds || [], travada: true };
+  }
+  const s = a.sorteios?.[prova.id];
+  return { ids: Array.isArray(s?.ids) ? s.ids : [], travada: false, sorteio: s };
+}
 async function carregarQuestoes(email, prova) {
-  const box = $("#acQuestoes");
-  if (!prova) return;
-  box.innerHTML = "<p class='pequeno'>Carregando questões…</p>";
+  const box = $("#acQuestoes"), info = $("#acSorteioInfo");
+  qAtual = null; $("#acAdaptarTodas").disabled = true; $("#acSortear").disabled = true;
+  if (!prova) { box.innerHTML = ""; info.textContent = "Nenhuma prova criada."; return; }
+  box.innerHTML = "<p class='pequeno'>Carregando…</p>"; info.textContent = "";
   try {
-    const bancos = bancosDaProva(prova), itens = [];
-    for (const b of bancos) {
-      const temas = temasDoBanco(prova, b);
-      const [qs, gs] = await Promise.all([getDocs(collection(db, "bancos", b, "questoes")), getDocs(collection(db, "bancos", b, "gabaritos")).catch(() => ({ docs: [] }))]);
-      const gab = Object.fromEntries(gs.docs.map(d => [d.id, d.data()]));
-      qs.docs.forEach(d => { if (!temas || temas.has(temaDe(d.data()))) itens.push({ qid: d.id, q: d.data(), g: gab[d.id] || {} }); });
-    }
-    const ads = await Promise.all(itens.map(x => getDoc(doc(db, "acessibilidade", email, "questoes", x.qid)).catch(() => null)));
-    ads.forEach((d, i) => { itens[i].ad = d?.exists() ? d.data() : null; });
-    qAtual = { email, prova, itens };
+    const { ids, travada, sorteio } = await questoesDoAluno(email, prova);
+    $("#acSortear").disabled = travada;
+    $("#acSortear").textContent = ids.length ? "🎲 Sortear de novo" : "🎲 Sortear questões";
+    info.innerHTML = travada ? "🔒 O aluno <b>já começou esta prova</b>: estas são as questões dele (não dá para sortear de novo)."
+      : ids.length ? `🎲 ${ids.length} questões sorteadas${sorteio?.sorteadoEm ? ` em ${dataBR(sorteio.sorteadoEm)}` : ""}. É com elas que o aluno vai fazer a prova.`
+      : "Ainda não há questões sorteadas para este aluno nesta prova. Clique em <b>🎲 Sortear questões</b>.";
+    if (!ids.length) { box.innerHTML = ""; return; }
+    const banco = q => bancoDaQuestao(q, prova.bancoId);
+    const [qs, gs, ads] = await Promise.all([
+      Promise.all(ids.map(q => getDoc(doc(db, "bancos", banco(q), "questoes", q)))),
+      Promise.all(ids.map(q => getDoc(doc(db, "bancos", banco(q), "gabaritos", q)).catch(() => null))),
+      Promise.all(ids.map(q => getDoc(doc(db, "acessibilidade", email, "questoes", q)).catch(() => null)))
+    ]);
+    const itens = ids.map((qid, i) => qs[i].exists() ? { qid, q: qs[i].data(), g: gs[i]?.data() || {}, ad: ads[i]?.exists() ? ads[i].data() : null } : null).filter(Boolean);
+    qAtual = { email, prova, itens, travada };
     $("#acAdaptarTodas").disabled = !podeIA();
     $("#acIAMsg").textContent = podeIA() ? "" : "A IA precisa da chave (administrador principal) ou do servidor de correção configurado.";
     desenharQuestoes();
   } catch (e) { box.innerHTML = `<p class="erro-texto">${esc(traduzirErro(e))}</p>`; }
 }
+async function sortearParaAluno(email, prova) {
+  if (!prova) return;
+  if (qAtual?.prova.id === prova.id && qAtual.itens.length &&
+      !(await confirmar("Sortear de novo? O aluno vai receber as NOVAS questões. Adaptações das questões que saírem do sorteio ficam guardadas, mas não serão usadas.", { titulo: "🎲 Sortear de novo", ok: "Sortear" }))) return;
+  $("#acSortear").disabled = true;
+  try {
+    const ids = await sortearQuestoes(prova);
+    await updateDoc(doc(db, "acessibilidade", email), new FieldPath("sorteios", prova.id), { ids, sorteadoEm: serverTimestamp(), sorteadoPor: ctx.eu.email });
+    toast(`🎲 ${ids.length} questões sorteadas. Agora gere a prova adaptada.`, "ok");
+  } catch (e) { toast("Não foi possível sortear. " + traduzirErro(e), "erro"); }
+  carregarQuestoes(email, prova);
+}
 function desenharQuestoes() {
   const { itens } = qAtual, box = $("#acQuestoes");
   const feitas = itens.filter(x => x.ad).length;
-  box.innerHTML = `<p class="pequeno"><b>${feitas}</b> de ${itens.length} questões adaptadas.</p>` + itens.map((x, i) => {
+  box.innerHTML = `<p class="pequeno"><b>${feitas}</b> de ${itens.length} questões sorteadas já adaptadas.</p>` + itens.map((x, i) => {
     const alt = x.q.tipo === "alternativa", ad = x.ad || {};
     return `<details class="q-adapt${x.ad ? " feita" : ""}" data-i="${i}"><summary><span class="tag ${x.ad ? "ok" : ""}">${x.ad ? (ad.origem === "ia" ? "🤖 IA" : "✍ manual") : "○ original"}</span>
         <span class="pequeno">${esc(temaDe(x.q))}</span> ${esc(String(x.q.enunciado || "").slice(0, 110))}${String(x.q.enunciado || "").length > 110 ? "…" : ""}</summary>
@@ -361,9 +395,10 @@ async function adaptarUma(x, el) {
 }
 async function adaptarVarias() {
   const refazer = $("#acRefazer").checked;
+  if (!qAtual?.itens.length) return toast("Primeiro sorteie as questões do aluno (🎲).", "info");
   const alvo = qAtual.itens.filter(x => refazer ? x.ad?.origem !== "manual" : !x.ad);
   if (!alvo.length) return toast(refazer ? "Nada a refazer (as adaptadas à mão não são substituídas)." : "Todas já estão adaptadas. Marque “refazer” para gerar de novo.", "info");
-  if (!(await confirmar(`Adaptar ${alvo.length} questão(ões) com a IA? Leva alguns segundos por questão. Adaptações feitas à mão não são substituídas.`, { titulo: "🤖 Adaptar com IA", ok: "Adaptar" }))) return;
+  if (!(await confirmar(`Gerar a prova adaptada? A IA vai adaptar ${alvo.length} questão(ões) sorteada(s) para este aluno. Leva alguns segundos por questão. Adaptações feitas à mão não são substituídas.`, { titulo: "🤖 Gerar prova adaptada", ok: "Gerar" }))) return;
   $("#acAdaptarTodas").disabled = true;
   try {
     const r = await adaptarComIA(alvo);

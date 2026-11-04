@@ -1,6 +1,6 @@
 // Página do aluno: login, lista de provas, prova (uma questão por vez ou todas na página), resultado.
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar, sortearAleatorio, esc, $, toast, dataBR, letra,
-         idTentativaTeste, apagarTentativaTeste, confirmar, traduzirErro, iniciais, fecharModais, temaDe, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco, bancoDaQuestao }
+         idTentativaTeste, apagarTentativaTeste, confirmar, traduzirErro, iniciais, fecharModais, temaDe, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco, bancoDaQuestao, sortearQuestoes }
   from "./common.js";
 import { baixarMaterial } from "./material.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
@@ -337,29 +337,10 @@ $("#btnComecar").onclick = async () => {
   pedirTelaCheia();   // precisa ser chamado direto no clique, antes de qualquer await
   $("#btnComecar").disabled = true;
   try {
-    // sorteia nQuestoes dos bancos da prova (ids) — cada aluno recebe um conjunto diferente
-    // só entram questões dos temas marcados em cada banco (sem temas = todas; questão sem tema = "Geral")
-    const bancos = bancosDaProva(provaAtual);
-    const lotes = await Promise.all(bancos.map(b => getDocs(collection(db, "bancos", b, "questoes"))));
-    const ids = [], diss = [], alt = [];
-    lotes.forEach((qs, i) => {
-      const temas = temasDoBanco(provaAtual, bancos[i]);
-      qs.forEach(d => {
-        if (temas && !temas.has(temaDe(d.data()))) return;
-        ids.push(d.id); (d.data().tipo === "dissertativa" ? diss : alt).push(d.id);
-      });
-    });
-    if (ids.length < provaAtual.nQuestoes) throw new Error("O banco não tem questões suficientes nos temas escolhidos. Avise o professor.");
-    let sorteadas;
-    const nD = Number(provaAtual.nDissertativas || 0);
-    if (provaAtual.nAlternativas !== undefined && provaAtual.nAlternativas !== null) {
-      // cota fixa: exatamente nAlternativas alternativas + nDissertativas dissertativas
-      const nA = Number(provaAtual.nAlternativas || 0);
-      if (diss.length < nD || alt.length < nA) throw new Error("O banco não tem questões suficientes de cada tipo nos temas escolhidos. Avise o professor.");
-      sorteadas = sortearAleatorio([...sortearAleatorio(diss, nD), ...sortearAleatorio(alt, nA)], nA + nD);
-    } else if (nD > 0 && diss.length >= nD && alt.length >= provaAtual.nQuestoes - nD)
-      sorteadas = sortearAleatorio([...sortearAleatorio(diss, nD), ...sortearAleatorio(alt, provaAtual.nQuestoes - nD)], provaAtual.nQuestoes);
-    else sorteadas = sortearAleatorio(ids, provaAtual.nQuestoes);
+    // sorteia nQuestoes dos bancos da prova (ids) — cada aluno recebe um conjunto diferente.
+    // Acessibilidade: se o professor já sorteou as questões deste aluno no painel (para adaptar só essas), usa as mesmas.
+    const pre = acess?.sorteios?.[provaAtual.id]?.ids;
+    const sorteadas = Array.isArray(pre) && pre.length === Number(provaAtual.nQuestoes) ? pre.slice() : await sortearQuestoes(provaAtual);
     const tid = idTentativa(provaAtual.id);
     const dados = {
       uid: eu.uid, email: eu.email, nome: eu.nome, provaId: provaAtual.id, bancoId: provaAtual.bancoId,

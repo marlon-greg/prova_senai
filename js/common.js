@@ -180,6 +180,31 @@ export function bancoDaQuestao(qid, padrao) {
   const i = String(qid).lastIndexOf("_q");
   return i > 0 ? String(qid).slice(0, i) : padrao;
 }
+// sorteia as questões da prova (ids), igual para todo aluno: só temas marcados, respeitando a cota de tipos.
+// Usado na hora do aluno começar e no painel de acessibilidade (sorteio antecipado para adaptar só essas).
+export async function sortearQuestoes(prova) {
+  const bancos = bancosDaProva(prova);
+  const lotes = await Promise.all(bancos.map(b => getDocs(collection(db, "bancos", b, "questoes"))));
+  const ids = [], diss = [], alt = [];
+  lotes.forEach((qs, i) => {
+    const temas = temasDoBanco(prova, bancos[i]);
+    qs.forEach(d => {
+      if (temas && !temas.has(temaDe(d.data()))) return;
+      ids.push(d.id); (d.data().tipo === "dissertativa" ? diss : alt).push(d.id);
+    });
+  });
+  if (ids.length < prova.nQuestoes) throw new Error("O banco não tem questões suficientes nos temas escolhidos. Avise o professor.");
+  const nD = Number(prova.nDissertativas || 0);
+  if (prova.nAlternativas !== undefined && prova.nAlternativas !== null) {
+    // cota fixa: exatamente nAlternativas alternativas + nDissertativas dissertativas
+    const nA = Number(prova.nAlternativas || 0);
+    if (diss.length < nD || alt.length < nA) throw new Error("O banco não tem questões suficientes de cada tipo nos temas escolhidos. Avise o professor.");
+    return sortearAleatorio([...sortearAleatorio(diss, nD), ...sortearAleatorio(alt, nA)], nA + nD);
+  }
+  if (nD > 0 && diss.length >= nD && alt.length >= prova.nQuestoes - nD)
+    return sortearAleatorio([...sortearAleatorio(diss, nD), ...sortearAleatorio(alt, prova.nQuestoes - nD)], prova.nQuestoes);
+  return sortearAleatorio(ids, prova.nQuestoes);
+}
 export function ordenarTemas(lista) { return [...new Set(lista)].sort((a, b) => a.localeCompare(b, "pt-BR")); }
 // chave do nome completo para vincular aluno cadastrado só pelo nome (IGUAL à chaveNome do firestore.rules):
 // minúsculas, sem acento, só letras, palavras separadas por "_"  ("José  da Silva" -> "jose_da_silva")
