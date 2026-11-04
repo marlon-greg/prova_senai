@@ -1,10 +1,10 @@
 // Código comum (aluno + admin): Firebase, login, correção automática, utilidades.
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, connectAuthEmulator }
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithCredential, signOut, onAuthStateChanged, connectAuthEmulator }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { getFirestore, connectFirestoreEmulator, doc, getDoc, getDocs, collection, writeBatch, deleteDoc }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { firebaseConfig, SUPER_ADMIN, DOMINIOS_ALUNOS_PADRAO, USAR_EMULADOR } from "./firebase-config.js";
+import { firebaseConfig, SUPER_ADMIN, DOMINIOS_ALUNOS_PADRAO, USAR_EMULADOR, GOOGLE_CLIENT_ID } from "./firebase-config.js";
 
 export const app  = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
@@ -20,7 +20,41 @@ if (USAR_EMULADOR) {
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: "select_account" });
 
-export function entrar() { return signInWithPopup(auth, provider); }
+// Login pelo Google Identity Services (accounts.google.com + googleapis.com).
+// Evita a janela do Firebase em *.firebaseapp.com, que o firewall do SENAI bloqueia.
+let gisPronto = null;
+function carregarGIS() {
+  if (window.google?.accounts?.oauth2) return Promise.resolve();
+  if (!gisPronto) gisPronto = new Promise((ok, falha) => {
+    const s = document.createElement("script");
+    s.src = "https://accounts.google.com/gsi/client"; s.async = true;
+    s.onload = () => ok(); s.onerror = () => { gisPronto = null; falha(new Error("gis-indisponivel")); };
+    document.head.appendChild(s);
+  });
+  return gisPronto;
+}
+if (GOOGLE_CLIENT_ID && !USAR_EMULADOR) carregarGIS().catch(() => {});   // já deixa pronto para o clique abrir a janela na hora
+
+function tokenGoogle() {
+  return new Promise((ok, falha) => {
+    const cliente = google.accounts.oauth2.initTokenClient({
+      client_id: GOOGLE_CLIENT_ID,
+      scope: "openid email profile",
+      prompt: "select_account",
+      callback: r => r.error ? falha(Object.assign(new Error(r.error), { code: "gis/" + r.error })) : ok(r.access_token),
+      error_callback: e => falha(Object.assign(new Error(e.type), { code: e.type === "popup_failed_to_open" ? "auth/popup-blocked" : "auth/popup-closed-by-user" })),
+    });
+    cliente.requestAccessToken();
+  });
+}
+
+export async function entrar() {
+  if (!GOOGLE_CLIENT_ID || USAR_EMULADOR) return signInWithPopup(auth, provider);
+  try { await carregarGIS(); }
+  catch { return signInWithPopup(auth, provider); }   // script do Google não carregou: tenta o jeito antigo
+  const token = await tokenGoogle();
+  return signInWithCredential(auth, GoogleAuthProvider.credential(null, token));
+}
 export function sair()   { return signOut(auth); }
 export function aoMudarLogin(cb) { return onAuthStateChanged(auth, cb); }
 
@@ -167,7 +201,7 @@ const ERROS = {
   "auth/popup-closed-by-user": "A janela de login foi fechada antes de terminar. Clique em Entrar de novo.",
   "auth/cancelled-popup-request": "A janela de login foi fechada antes de terminar. Clique em Entrar de novo.",
   "auth/unauthorized-domain": "Este endereço do site não está autorizado no Firebase. Avise o professor (Authentication → Settings → Authorized domains).",
-  "auth/network-request-failed": "Sem conexão com a internet. Verifique a rede e tente de novo.",
+  "auth/network-request-failed": "Sem conexão com o servidor de login. Verifique a rede e tente de novo (se a rede da escola bloquear, avise o professor).",
   "permission-denied": "Sem permissão para esta ação. Confira se entrou com a conta certa e se a prova está liberada; se continuar, avise o professor.",
   "unavailable": "Sem conexão com o servidor. Verifique a internet e tente de novo.",
   "deadline-exceeded": "O servidor demorou demais para responder. Verifique a internet e tente de novo.",

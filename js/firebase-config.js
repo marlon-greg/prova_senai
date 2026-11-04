@@ -8,6 +8,12 @@ export const firebaseConfig = {
   appId: "1:256758244039:web:0f52ed191c174cda2814e2"
 };
 
+// ID do cliente OAuth "Web client (auto created by Google Service)" do projeto.
+// Com ele o login abre direto em accounts.google.com e NÃO passa por *.firebaseapp.com
+// (domínio bloqueado no Wi-Fi do SENAI). Vazio = usa a janela antiga do Firebase.
+// Onde achar: Firebase Console → Authentication → Sign-in method → Google → "Configuração do SDK da Web" → ID do cliente da Web.
+export const GOOGLE_CLIENT_ID = "256758244039-9r3e4i1la1sv3m2nh95cplo4mk7qcvac.apps.googleusercontent.com";
+
 // E-mail do administrador principal (tem que ser o MESMO que está em firestore.rules)
 export const SUPER_ADMIN = "marlon.frodrigues@docente.senai.br";
 
