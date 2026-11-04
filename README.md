@@ -134,6 +134,16 @@ Aba **Organização** (a primeira do menu). Mostra cada **turma**, dentro dela o
 
 A IA da organização roda no navegador do administrador principal (com a chave) ou no servidor (ação `organizar` do Worker, para professores). O Worker importa `servidor/organizar.js` e é publicado pela Cloudflare a cada push (colar o arquivo à mão no editor da Cloudflare não funciona mais).
 
+## Diário do aluno (aba Diário)
+
+Para os alunos marcados na aba Acessibilidade. A **auxiliar de inclusão** vê só os alunos dela (o painel dela já abre no Diário); **professores e admin** veem todos.
+
+- **Registrar o dia** em 5 etapas, com barra de progresso: 😊 humor na chegada e na saída (carinhas) e energia · 📚 matérias e **tópicos do plano de ensino** trabalhados, o que foi feito, compreensão, autonomia e foco (escalas de 1 a 5) · 🤝 interação, comunicação, sinais de sobrecarga e possíveis causas · 🧩 estratégias que ajudaram, o que funcionou e o que foi difícil · 🏆 estrelas do dia, vitória do dia, dica para as próximas provas e algo fora da rotina. Os campos com * são os principais; o rascunho fica salvo no computador enquanto ela preenche. Dá para registrar um dia que passou (escolha a data) e editar depois.
+- **Gamificação**: 🔥 dias úteis seguidos com registro, total de registros, estrelas e humor médio do mês, a fileira de carinhas dos últimos dias e **medalhas** (primeiro registro, semana completa, 10 dias seguidos, registros completos, vitórias do dia, registros comentados, 30 registros). Ao salvar aparece uma comemoração.
+- **Calendário do mês**: cada dia com a carinha do humor na saída e 💬 com o número de comentários; clique para ler.
+- **Professor**: lê o registro e deixa um **comentário** com o modelo próprio (sua matéria, como ela estava na aula, participação, comentário, sugestão), nada obrigatório. Ele **não muda** o registro da auxiliar. A auxiliar pode responder.
+- Fica em `acessibilidadePrivado/{aluno}/diario/{data_autor}` (+ `comentarios`), que o aluno nunca lê. As perguntas estão em `js/diario-perguntas.js`, como dados: os relatórios e a IA usam o mesmo modelo.
+
 ## Regras publicadas sozinhas (GitHub Actions)
 
 O arquivo `.github/workflows/regras-firestore.yml` publica o `firestore.rules` no Firebase a cada push na `main` que mude as regras (e pelo botão **Actions → Publicar regras do Firestore → Run workflow**). Configurar uma vez:
@@ -277,7 +287,7 @@ Antes da prova, um mascote explica as regras, uma fala por vez. Tem o botão �
 A IA roda no seu navegador (administrador principal, com a chave salva) ou no servidor de correção (Cloudflare Worker, ação `adaptar`) para os professores e a auxiliar de inclusão. No Worker, a variável opcional `MODELO_ADAPTACAO` define o modelo (padrão `claude-sonnet-5-5`).
 
 ### Auxiliar de inclusão
-Cadastre em **Equipe** com o papel **auxiliar de inclusão** e vincule no cadastro do aluno, em *Auxiliar(es) de inclusão*. Ela vê só as abas **Acessibilidade** e **Resultados**, e só os alunos vinculados a ela. Pode editar as adaptações e as questões, subir documentos, deixar sugestões e restaurar vidas ou reabrir a prova desses alunos. Ela não vê os outros alunos, não muda quem está vinculado e não fecha notas. O aluno precisa ter entrado no sistema pelo menos uma vez para os resultados dele aparecerem para a auxiliar.
+Cadastre em **Equipe** com o papel **auxiliar de inclusão** e vincule no cadastro do aluno, em *Auxiliar(es) de inclusão*. Ela vê só as abas **Diário**, **Acessibilidade** e **Resultados**, e só os alunos vinculados a ela. Pode editar as adaptações e as questões, subir documentos, deixar sugestões e restaurar vidas ou reabrir a prova desses alunos. Ela não vê os outros alunos, não muda quem está vinculado e não fecha notas. O aluno precisa ter entrado no sistema pelo menos uma vez para os resultados dele aparecerem para a auxiliar.
 
 > **Depois de atualizar o sistema, publique de novo o `firestore.rules`** (Firebase Console → Firestore → Regras). As vidas, a acessibilidade e a auxiliar de inclusão dependem das regras novas.
 

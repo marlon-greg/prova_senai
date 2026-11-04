@@ -6,6 +6,7 @@ import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanh
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
 import { iniciarOrganizacao, carregarOrganizacao, listarPlanos, materiasSugeridas, editarTopicosBanco } from "./admin-org.js";
+import { iniciarDiario, carregarDiario } from "./admin-diario.js";
 import { iniciarAcessibilidade, carregarAcessibilidade, prepararNovo as prepararNovoAcess } from "./admin-acess.js";
 import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp, onSnapshot, increment, deleteField }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
@@ -18,7 +19,7 @@ const ehInclusao = () => eu?.papel === "inclusao";
 // pode mexer nas vidas / reabrir: professor, admin e a auxiliar de inclusão (nos alunos dela; as regras conferem)
 const podeCuidar = () => podeEditar() || ehInclusao();
 let urlCorretorCfg = "";   // servidor de correção/adaptação (config/geral.urlCorretor)
-const ABAS_INCLUSAO = ["acessibilidade", "resultados"];
+const ABAS_INCLUSAO = ["diario", "acessibilidade", "resultados"];
 // administrador principal: o único que vê e usa a chave da IA (as regras também só deixam ele ler config/ia)
 const souDono = () => !!eu && eu.email === SUPER_ADMIN.toLowerCase();
 
@@ -40,6 +41,8 @@ aoMudarLogin(async user => {
   getDoc(doc(db, "config", "geral")).then(c => { urlCorretorCfg = String(c.data()?.urlCorretor || "").trim(); }).catch(() => {});
   iniciarAcessibilidade({ eu, podeEditar, souDono, auth, iaCfg: () => iaCfg, urlCorretor: () => urlCorretorCfg,
     alunosDasTurmas: async () => { await listarTurmas().catch(() => {}); return turmasCache.flatMap(t => alunosDaTurma(t).map(a => ({ ...a, turma: t.nome, turmaId: t.id }))); } });
+  iniciarDiario({ eu, podeEditar, souDono,
+    alunosDasTurmas: async () => { await listarTurmas().catch(() => {}); return turmasCache.flatMap(t => alunosDaTurma(t).map(a => ({ ...a, turma: t.nome, turmaId: t.id }))); } });
   iniciarOrganizacao({ eu, podeEditar, ehAdmin, auth, iaCfg: () => iaCfg, urlCorretor: () => urlCorretorCfg,
     listarTurmas, alunosDaTurma, listarBancos, questoesDoBanco, questoesDoBancoCache: id => questoesCache[id],
     invalidarBanco: id => { delete questoesCache[id]; }, novaProva: abrirNovaProva,
@@ -47,17 +50,17 @@ aoMudarLogin(async user => {
   trocar("telaPainel");
   document.querySelectorAll("[data-aba]").forEach(b => {
     b.onclick = () => abrirAba(b.dataset.aba);
-    b.classList.toggle("oculto", ehInclusao() && !ABAS_INCLUSAO.includes(b.dataset.aba));
+    b.classList.toggle("oculto", (ehInclusao() && !ABAS_INCLUSAO.includes(b.dataset.aba)) || (b.dataset.aba === "diario" && !podeCuidar()));
   });
   document.body.classList.toggle("papel-inclusao", ehInclusao());
-  abrirAba(ehInclusao() ? "acessibilidade" : "provas");
+  abrirAba(ehInclusao() ? "diario" : "provas");
 });
 function trocar(id) { ["telaLogin", "telaPainel", "telaAviso"].forEach(t => $("#" + t).classList.toggle("oculto", t !== id)); }
 function abrirAba(a) {
   if (a !== "resultados" && $("#rAoVivo").checked) { $("#rAoVivo").checked = false; pararAoVivo(); }   // sair da aba desliga o ao vivo
   document.querySelectorAll("[data-aba]").forEach(b => b.classList.toggle("ativa", b.dataset.aba === a));
-  ["organizacao", "provas", "bancos", "turmas", "resultados", "acessibilidade", "equipe", "config"].forEach(x => $("#aba-" + x).classList.toggle("oculto", x !== a));
-  return ({ organizacao: carregarOrganizacao, provas: carregarProvas, bancos: () => { carregarBancos(); carregarMateriais(); }, turmas: carregarTurmas, resultados: prepararResultados,
+  ["organizacao", "diario", "provas", "bancos", "turmas", "resultados", "acessibilidade", "equipe", "config"].forEach(x => $("#aba-" + x).classList.toggle("oculto", x !== a));
+  return ({ organizacao: carregarOrganizacao, diario: carregarDiario, provas: carregarProvas, bancos: () => { carregarBancos(); carregarMateriais(); }, turmas: carregarTurmas, resultados: prepararResultados,
      acessibilidade: () => { carregarAcessibilidade(); if (podeEditar()) prepararNovoAcess(); }, equipe: carregarEquipe, config: carregarConfig })[a]();
 }
 

@@ -163,6 +163,22 @@ service cloud.firestore {
         allow read, write: if cuidaDe(e);
         match /partes/{p} { allow read, write: if cuidaDe(e); }
       }
+      // diário do aluno: a auxiliar de inclusão vinculada escreve (id = data_autor); professores e admin leem e comentam
+      match /diario/{d} {
+        allow read: if cuidaDe(e);
+        allow create: if (minhaAluna(e) || superAdmin()) && request.resource.data.autor == email().lower()
+                      && d == request.resource.data.data + '_' + email().lower();
+        allow update: if ((minhaAluna(e) || superAdmin()) && resource.data.autor == email().lower()
+                          && request.resource.data.autor == resource.data.autor && request.resource.data.data == resource.data.data)
+                      // quem comenta só soma o contador de comentários
+                      || (cuidaDe(e) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['nComentarios', 'ultimoComentarioEm']));
+        allow delete: if (minhaAluna(e) || superAdmin()) && resource.data.autor == email().lower() || admin();
+        match /comentarios/{c} {
+          allow read: if cuidaDe(e);
+          allow create: if cuidaDe(e) && request.resource.data.autor == email().lower();
+          allow delete: if (cuidaDe(e) && resource.data.autor == email().lower()) || admin();
+        }
+      }
       match /sugestoes/{s} {
         allow read: if cuidaDe(e);
         allow create: if cuidaDe(e) && request.resource.data.autor == email().lower();

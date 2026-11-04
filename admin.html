@@ -33,6 +33,7 @@
     <nav class="abas menu-lateral" aria-label="Seções do painel">
       <button data-aba="organizacao">Organização</button>
       <button data-aba="provas" class="ativa">Provas</button>
+      <button data-aba="diario">Diário</button>
       <button data-aba="resultados">Resultados</button>
       <button data-aba="acessibilidade">Acessibilidade</button>
       <button data-aba="bancos">Bancos de questões</button>
@@ -59,6 +60,19 @@
         <p id="orgContagem" class="pequeno" aria-live="polite"></p>
       </div>
       <div id="orgArvore"></div>
+    </div>
+
+    <!-- DIÁRIO (js/admin-diario.js) -->
+    <div id="aba-diario" class="oculto">
+      <div class="card">
+        <h2>Diário</h2>
+        <details class="ajuda"><summary>Como funciona</summary>
+          <p>A <b>auxiliar de inclusão</b> registra cada dia do aluno em 5 etapas rápidas: humor e energia, atividades (com as matérias e os tópicos do plano de ensino), comportamento, o que funcionou e o fechamento do dia. Leva uns 3 minutos e o rascunho fica salvo enquanto ela preenche.</p>
+          <p>Os <b>professores</b> leem e deixam o seu comentário em cada dia (como ela estava na aula, participação, sugestões). Eles não mudam o registro da auxiliar.</p>
+          <p>O diário alimenta os relatórios do aluno e as adaptações das provas. O aluno nunca vê o diário.</p></details>
+        <div id="diarioAlunos"></div>
+      </div>
+      <div id="diarioPainel"></div>
     </div>
 
     <!-- PROVAS -->
