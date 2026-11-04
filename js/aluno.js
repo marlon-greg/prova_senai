@@ -227,7 +227,8 @@ async function listarProvas() {
 const turmasLidas = {};
 let avisoVinculo = "";
 async function alunoNaTurma(p) {
-  if (modoTeste || !p.turmaId) return true;
+  if (modoTeste) return true;
+  if (!p.turmaId) return false;   // prova sem turma não aparece para aluno nenhum: cada prova é de UMA turma
   if (!(p.turmaId in turmasLidas)) turmasLidas[p.turmaId] = await verificarTurma(p.turmaId);
   return turmasLidas[p.turmaId];
 }

@@ -188,10 +188,10 @@ service cloud.firestore {
                 && request.resource.data.questoesIds == sorteioAcess(request.resource.data.provaId)))
         && request.resource.data.finalizadaEm == null
         && request.resource.data.iniciadaEm == request.time
-        // turma: sem turma = qualquer aluno; com turma = o e-mail precisa estar na lista
+        // turma: a prova PRECISA ter turma e o e-mail do aluno precisa estar na lista dela (prova sem turma = ninguém faz)
         // (.get com padrão: provas antigas não têm turmaId/codigoAcesso, e campo ausente dá erro nas regras)
-        && (prova(request.resource.data.provaId).get('turmaId', null) == null
-            || email().lower() in get(/databases/$(db)/documents/turmas/$(prova(request.resource.data.provaId).turmaId)).data.emails)
+        && prova(request.resource.data.provaId).get('turmaId', null) != null
+        && email().lower() in get(/databases/$(db)/documents/turmas/$(prova(request.resource.data.provaId).turmaId)).data.emails
         // código de acesso: se a prova tiver, o aluno precisa informar igual
         && (prova(request.resource.data.provaId).get('codigoAcesso', '') in [null, '']
             || request.resource.data.get('codigoInformado', '') == prova(request.resource.data.provaId).codigoAcesso))

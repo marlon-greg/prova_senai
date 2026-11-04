@@ -84,11 +84,15 @@ async function abrirAluno(email, rolar = true) {
   document.querySelectorAll("[data-acess]").forEach(b => b.classList.toggle("selecionado", b.dataset.acess === email));
   const box = $("#acessDetalhe");
   box.innerHTML = "<div class='card'><p class='pequeno'>Carregando…</p></div>";
-  const [d, p, equipe, provas] = await Promise.all([
+  const [d, p, equipe, todasProvas, alunosT] = await Promise.all([
     getDoc(doc(db, "acessibilidade", email)), getDoc(doc(db, "acessibilidadePrivado", email)).catch(() => null),
     ctx.podeEditar() ? getDocs(collection(db, "equipe")).then(s => s.docs.map(x => ({ email: x.id, ...x.data() }))).catch(() => []) : [],
-    getDocs(collection(db, "provas")).then(s => s.docs.map(x => ({ id: x.id, ...x.data() }))).catch(() => [])
+    getDocs(collection(db, "provas")).then(s => s.docs.map(x => ({ id: x.id, ...x.data() }))).catch(() => []),
+    ctx.alunosDasTurmas().catch(() => [])
   ]);
+  // só as provas da(s) turma(s) deste aluno: prova de outra turma não aparece aqui (nem para o aluno)
+  const turmasDele = alunosT.filter(x => x.email === email);
+  const provas = todasProvas.filter(x => x.turmaId && turmasDele.some(t => t.turmaId === x.turmaId));
   if (!d.exists()) { box.innerHTML = ""; return; }
   const a = completar(d.data()), v = a.visual, pr = a.prova, descricao = p?.data()?.descricao || "";
   const inclusoes = equipe.filter(x => x.papel === "inclusao");
@@ -168,7 +172,8 @@ async function abrirAluno(email, rolar = true) {
       <b>3.</b> 🤖 Adapte com a IA: ela adapta <b>só as questões sorteadas</b>. Na hora da prova o aluno recebe exatamente essas questões.
       Se a descrição ou os laudos mudarem, as adaptações antigas ficam marcadas como <b>⚠ desatualizadas</b> e dá para refazer.
       A resposta certa não muda: as alternativas ficam na mesma ordem e quantidade.</p>
-    <div class="linha acoes"><select id="acProvaQ" aria-label="Prova" style="width:auto;flex:1 1 280px">${provas.map(x => `<option value="${x.id}">${esc(x.titulo)}</option>`).join("")}</select></div>
+    <p class="pequeno">👥 Turma: <b>${turmasDele.length ? turmasDele.map(t => esc(t.turma)).join(", ") : "nenhuma"}</b> — aparecem só as provas ${turmasDele.length > 1 ? "dessas turmas" : "desta turma"}.</p>
+    <div class="linha acoes"><select id="acProvaQ" aria-label="Prova" style="width:auto;flex:1 1 280px">${provas.map(x => `<option value="${x.id}">${esc(x.titulo)}${turmasDele.length > 1 ? ` · ${esc(x.turma || "")}` : ""}</option>`).join("")}</select></div>
     <div id="acSorteioBox" style="margin-top:10px"></div>
     <label for="acOrientacao" style="margin-top:12px">Orientação extra para a IA (opcional)</label>
     <input type="text" id="acOrientacao" placeholder="Ex.: use exemplos com lojas e clientes; destaque em negrito a ação pedida">
@@ -284,7 +289,7 @@ async function questoesDoAluno(email, prova) {
 async function carregarQuestoes(email, prova) {
   const box = $("#acQuestoes"), sbox = $("#acSorteioBox");
   qAtual = null; $("#acResumo").innerHTML = "";
-  if (!prova) { box.innerHTML = ""; sbox.innerHTML = "<p class='pequeno'>Nenhuma prova criada.</p>"; return; }
+  if (!prova) { box.innerHTML = ""; sbox.innerHTML = "<p class='pequeno'>Nenhuma prova para a turma deste aluno. Crie a prova em <b>Provas</b> escolhendo a turma dele(a) (ou cadastre o aluno na turma em <b>Turmas</b>).</p>"; return; }
   box.innerHTML = "<p class='pequeno'>Carregando…</p>"; sbox.innerHTML = "";
   try {
     const [{ ids, travada, sorteio }, disp, pv] = await Promise.all([questoesDoAluno(email, prova), questoesDisponiveis(prova),

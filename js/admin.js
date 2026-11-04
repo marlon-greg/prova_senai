@@ -37,7 +37,7 @@ aoMudarLogin(async user => {
   await carregarIA();
   getDoc(doc(db, "config", "geral")).then(c => { urlCorretorCfg = String(c.data()?.urlCorretor || "").trim(); }).catch(() => {});
   iniciarAcessibilidade({ eu, podeEditar, souDono, auth, iaCfg: () => iaCfg, urlCorretor: () => urlCorretorCfg,
-    alunosDasTurmas: async () => { await listarTurmas().catch(() => {}); return turmasCache.flatMap(t => alunosDaTurma(t).map(a => ({ ...a, turma: t.nome }))); } });
+    alunosDasTurmas: async () => { await listarTurmas().catch(() => {}); return turmasCache.flatMap(t => alunosDaTurma(t).map(a => ({ ...a, turma: t.nome, turmaId: t.id }))); } });
   trocar("telaPainel");
   document.querySelectorAll("[data-aba]").forEach(b => {
     b.onclick = () => abrirAba(b.dataset.aba);
@@ -136,6 +136,7 @@ function previaTurma() {
     (repetidos.length ? `<br><span class="erro-texto">⚠ Nome repetido: ${repetidos.map(esc).join(", ")}. Dois alunos com o mesmo nome precisam do e-mail (escreva o e-mail na linha de cada um).</span>` : "");
 }
 $("#tEmails").oninput = previaTurma;
+$("#ftBusca").oninput = () => desenharTurmas();
 function limparFormTurma() {
   turmaEditando = null; $("#tNome").value = ""; $("#tEmails").value = ""; previaTurma();
   $("#tFormTitulo").textContent = "Nova turma"; $("#btnCancelarTurma").classList.add("oculto");
@@ -158,19 +159,38 @@ $("#btnSalvarTurma").onclick = async () => {
   toast(`Turma ${nome} salva com ${alunos.length} aluno(s)` + (nomesChave.length ? ` (${nomesChave.length} aguardando o 1º login).` : "."), "ok");
   limparFormTurma(); carregarTurmas();
 };
+let provasPorTurma = {};   // turmaId -> [{ id, titulo, liberada }]
 async function carregarTurmas() {
-  await listarTurmas();
+  const [, ps] = await Promise.all([listarTurmas(), getDocs(collection(db, "provas")).catch(() => null)]);
+  provasPorTurma = {};
+  ps?.forEach(d => { const p = d.data(); if (p.turmaId) (provasPorTurma[p.turmaId] ||= []).push({ id: d.id, titulo: p.titulo, liberada: p.liberada }); });
+  desenharTurmas();
+}
+function desenharTurmas() {
   const box = $("#listaTurmas");
-  if (!turmasCache.length) { box.innerHTML = `<div class="vazio"><div class="icone">👥</div><p>Nenhuma turma ainda. Cadastre a primeira acima colando os nomes completos (ou e-mails) dos alunos.</p></div>`; return; }
-  box.innerHTML = `<div class="tabela"><table><tr><th>Turma</th><th>Alunos</th><th>Atualizada</th><th></th></tr>` + turmasCache.map(t => {
-    const al = alunosDaTurma(t), pend = al.filter(a => !a.email), auto = al.filter(a => a.auto);
-    const lista = al.map(a => `<li>${a.email ? "✅" : "⏳"} ${esc(a.nome || a.email)}${a.nome && a.email ? ` <span class="pequeno">${esc(a.email)}${a.auto ? " · vinculado no login" : ""}</span>` : ""}${!a.email ? ` <span class="pequeno">— aguardando o 1º login</span>` : ""}</li>`).join("");
+  if (!turmasCache.length) { $("#ftContagem").textContent = ""; box.innerHTML = `<div class="vazio"><div class="icone">👥</div><p>Nenhuma turma ainda. Cadastre a primeira acima colando os nomes completos (ou e-mails) dos alunos.</p></div>`; return; }
+  const busca = semAcento($("#ftBusca").value.trim());
+  // pesquisa no nome da turma ou nos alunos (nome/e-mail); achou aluno = abre a lista com só quem bateu
+  const linhas = turmasCache.map(t => {
+    const al = alunosDaTurma(t);
+    if (!busca || semAcento(t.nome).includes(busca)) return { t, al, achados: null };
+    const achados = al.filter(a => semAcento(`${a.nome} ${a.email || ""}`).includes(busca));
+    return achados.length ? { t, al, achados } : null;
+  }).filter(Boolean);
+  $("#ftContagem").textContent = busca ? `${linhas.length} de ${turmasCache.length} turma(s)` + (linhas.some(l => l.achados) ? ` · ${linhas.reduce((n, l) => n + (l.achados?.length || 0), 0)} aluno(s) encontrado(s)` : "") : `${turmasCache.length} turma(s)`;
+  if (!linhas.length) { box.innerHTML = `<div class="vazio"><div class="icone">🔎</div><p>Nenhuma turma ou aluno com “${esc($("#ftBusca").value)}”.</p></div>`; return; }
+  box.innerHTML = `<div class="tabela"><table><tr><th>Turma</th><th>Alunos</th><th>Provas</th><th>Atualizada</th><th></th></tr>` + linhas.map(({ t, al, achados }) => {
+    const pend = al.filter(a => !a.email), auto = al.filter(a => a.auto), mostrar = achados || al;
+    const lista = mostrar.map(a => `<li>${a.email ? "✅" : "⏳"} ${esc(a.nome || a.email)}${a.nome && a.email ? ` <span class="pequeno">${esc(a.email)}${a.auto ? " · vinculado no login" : ""}</span>` : ""}${!a.email ? ` <span class="pequeno">— aguardando o 1º login</span>` : ""}</li>`).join("");
+    const pv = provasPorTurma[t.id] || [];
     return `<tr><td><b>${esc(t.nome)}</b><br><span class="pequeno">${t.id}</span></td>
      <td>${al.length}${pend.length ? `<br><span class="tag aviso">⏳ ${pend.length} sem login ainda</span>` : ""}${auto.length ? `<br><span class="pequeno">${auto.length} vinculado(s) pelo nome</span>` : ""}
-       <details class="lista-alunos"><summary class="pequeno">ver alunos</summary><ul>${lista}</ul></details></td>
+       <details class="lista-alunos" ${achados ? "open" : ""}><summary class="pequeno">${achados ? `${achados.length} encontrado(s)` : "ver alunos"}</summary><ul>${lista}</ul></details></td>
+     <td>${pv.length ? `<button class="leve mini" data-vprovas="${t.id}" title="${esc(pv.map(p => p.titulo).join(" · "))}">📝 ${pv.length} prova(s)</button>${pv.some(p => p.liberada) ? `<br><span class="tag on">● ${pv.filter(p => p.liberada).length} liberada(s)</span>` : ""}` : `<span class="pequeno">nenhuma</span>`}</td>
      <td class="pequeno">${dataBR(t.atualizadoEm || t.criadoEm)}</td>
      <td class="td-acoes">${podeEditar() ? `<button class="leve mini" data-edt="${t.id}">✎ Editar</button>` : ""} ${ehAdmin() ? `<button class="perigo mini" data-delt="${t.id}">🗑 Apagar</button>` : ""}</td></tr>`;
   }).join("") + "</table></div>";
+  box.querySelectorAll("[data-vprovas]").forEach(b => b.onclick = () => { filtroTurmaPendente = b.dataset.vprovas; $("#fpBusca").value = ""; $("#fpStatus").value = ""; abrirAba("provas"); });
   box.querySelectorAll("[data-edt]").forEach(b => b.onclick = () => {
     const t = turmasCache.find(x => x.id === b.dataset.edt);
     turmaEditando = t.id; $("#tNome").value = t.nome || ""; $("#tEmails").value = alunosDaTurma(t).map(linhaAluno).join("\n"); previaTurma();
@@ -550,8 +570,8 @@ function controleProva(f) {
   }
   // select de turmas; prova antiga com turma em texto livre ganha uma opção própria para não perder o nome
   function opcoesTurma(p = {}) {
-    let h = `<option value="">— sem turma (qualquer aluno) —</option>` + turmasCache.map(t => `<option value="${t.id}">${esc(t.nome)} (${alunosDaTurma(t).length} alunos)</option>`).join("");
-    if (!p.turmaId && p.turma) h += `<option value="${LEGADO}">${esc(p.turma)} — texto antigo, sem lista (qualquer aluno)</option>`;
+    let h = `<option value="">— escolha a turma —</option>` + turmasCache.map(t => `<option value="${t.id}">${esc(t.nome)} (${alunosDaTurma(t).length} alunos)</option>`).join("");
+    if (!p.turmaId && p.turma) h += `<option value="${LEGADO}">${esc(p.turma)} — texto antigo, sem lista (nenhum aluno vê: escolha a turma)</option>`;
     $f("Turma").innerHTML = h;
     $f("Turma").value = p.turmaId && turmasCache.some(t => t.id === p.turmaId) ? p.turmaId : (!p.turmaId && p.turma ? LEGADO : "");
     turmaLegada = p.turma || "";
@@ -583,6 +603,7 @@ function controleProva(f) {
     const titulo = $f("Titulo").value.trim();
     const nAlt = Math.max(0, Math.round(Number($f("NAlt").value || 0))), nDiss = Math.max(0, Math.round(Number($f("NDiss").value || 0))), n = nAlt + nDiss;
     if (!titulo) return { erro: "Preencha o título." };
+    if (!turmaEscolhida().turmaId) return { erro: "Escolha a turma da prova. Só os alunos dessa turma veem a prova." };
     if (!travado && !n) return { erro: "A prova precisa de pelo menos uma questão (alternativas + dissertativas)." };
     if (!travado) { if (!carregando) await carregarTemas(); else await carregando; }   // garante a contagem dos bancos
     const bancoIds = bancosMarcados();
@@ -644,6 +665,9 @@ function opcoesDaProvaHTML(p) {
   return t.join(" ");
 }
 
+// ---------- lista de provas: pesquisa, filtros e agrupada por turma ----------
+let provasCache = [], filtroTurmaPendente = null;
+const gruposFechados = new Set();   // turmas recolhidas pelo professor (fica enquanto a página estiver aberta)
 async function carregarProvas() {
   await Promise.all([listarBancos(), listarTurmas()]);
   const turmaAntes = $("#pTurma").value;
@@ -653,11 +677,71 @@ async function carregarProvas() {
   formNova.carregarTemas();
   formNova.opcoesMaterial();
   const s = await getDocs(collection(db, "provas"));
-  const provas = []; s.forEach(d => provas.push({ id: d.id, ...d.data() }));
-  provas.sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
+  provasCache = s.docs.map(d => ({ id: d.id, ...d.data() }));
+  // filtro de turma: turmas cadastradas + "sem turma"
+  const sel = $("#fpTurma"), antes = filtroTurmaPendente ?? sel.value;
+  filtroTurmaPendente = null;
+  sel.innerHTML = `<option value="">👥 Todas as turmas</option>` + turmasCache.map(t => `<option value="${t.id}">${esc(t.nome)}</option>`).join("") +
+    (provasCache.some(p => !p.turmaId) ? `<option value="__sem">⚠ Sem turma</option>` : "");
+  sel.value = [...sel.options].some(o => o.value === antes) ? antes : "";
+  desenharProvas();
+}
+function desenharProvas() {
   const box = $("#listaProvas");
-  if (!provas.length) { box.innerHTML = `<div class="vazio"><div class="icone">📝</div><p>Nenhuma prova ainda. Crie a primeira em ➕ Nova prova, acima.</p></div>`; return; }
-  box.innerHTML = `<div class="cartoes-provas">` + provas.map(p => {
+  if (!provasCache.length) { $("#fpContagem").textContent = ""; box.innerHTML = `<div class="vazio"><div class="icone">📝</div><p>Nenhuma prova ainda. Crie a primeira em ➕ Nova prova, acima.</p></div>`; return; }
+  const busca = semAcento($("#fpBusca").value.trim()), turma = $("#fpTurma").value, status = $("#fpStatus").value, ordem = $("#fpOrdem").value;
+  const nomeBanco = id => bancosCache.find(x => x.id === id)?.nome || id;
+  let lista = provasCache.filter(p => {
+    if (turma === "__sem" ? p.turmaId : turma && p.turmaId !== turma) return false;
+    if (status === "liberada" && !p.liberada) return false;
+    if (status === "fechada" && p.liberada) return false;
+    if (status === "gabarito" && !p.resultadosLiberados) return false;
+    if (busca && !semAcento([p.titulo, p.turma, ...bancosDaProva(p).map(nomeBanco)].join(" ")).includes(busca)) return false;
+    return true;
+  });
+  const seg = p => p.criadoEm?.seconds || 0;
+  lista.sort(ordem === "titulo" ? (a, b) => (a.titulo || "").localeCompare(b.titulo || "", "pt-BR", { numeric: true })
+           : ordem === "antigas" ? (a, b) => seg(a) - seg(b) : (a, b) => seg(b) - seg(a));
+  $("#fpContagem").textContent = `${lista.length} de ${provasCache.length} prova(s)` + (lista.length ? ` · ${lista.filter(p => p.liberada).length} liberada(s)` : "");
+  if (!lista.length) { box.innerHTML = `<div class="vazio"><div class="icone">🔎</div><p>Nenhuma prova com esses filtros.</p></div>`; return; }
+  // agrupa por turma (na ordem das turmas cadastradas; "sem turma" por último)
+  const grupos = new Map();
+  lista.forEach(p => { const k = p.turmaId && turmasCache.some(t => t.id === p.turmaId) ? p.turmaId : "__sem"; if (!grupos.has(k)) grupos.set(k, []); grupos.get(k).push(p); });
+  const chaves = [...turmasCache.map(t => t.id).filter(id => grupos.has(id)), ...(grupos.has("__sem") ? ["__sem"] : [])];
+  box.innerHTML = chaves.map(k => {
+    const ps = grupos.get(k), t = turmasCache.find(x => x.id === k), lib = ps.filter(p => p.liberada).length;
+    const aberto = busca || turma || !gruposFechados.has(k);
+    return `<details class="grupo-turma${k === "__sem" ? " sem-turma" : ""}" data-grupo="${k}" ${aberto ? "open" : ""}>
+      <summary><span class="gt-nome">${k === "__sem" ? "⚠ Sem turma" : `👥 ${esc(t.nome)}`}</span>
+        <span class="tag">${ps.length} prova(s)</span>${lib ? `<span class="tag on">● ${lib} liberada(s)</span>` : ""}
+        ${t ? `<span class="pequeno">${alunosDaTurma(t).length} alunos</span>` : `<span class="pequeno">nenhum aluno vê estas provas: use ✎ Editar e escolha a turma</span>`}</summary>
+      <div class="cartoes-provas">${ps.map(cartaoProvaHTML).join("")}</div></details>`;
+  }).join("");
+  box.querySelectorAll("[data-grupo]").forEach(d => d.ontoggle = () => { if (busca || turma) return; d.open ? gruposFechados.delete(d.dataset.grupo) : gruposFechados.add(d.dataset.grupo); });
+  box.querySelectorAll("[data-alunos]").forEach(b => b.onclick = async () => {
+    abrirAba("resultados"); $("#rTurma").value = ""; await prepararResultados();
+    $("#rProva").value = b.dataset.alunos; $("#rAoVivo").checked = true; carregarResultados();
+  });
+  box.querySelectorAll("[data-tg]").forEach(b => b.onclick = async () => {
+    const p = provasCache.find(x => x.id === b.dataset.id);
+    await updateDoc(doc(db, "provas", p.id), { [b.dataset.tg]: !p[b.dataset.tg] });
+    toast("Prova atualizada", "ok"); carregarProvas();
+  });
+  box.querySelectorAll("[data-editar]").forEach(b => b.onclick = () => editarProva(provasCache.find(x => x.id === b.dataset.editar)));
+  box.querySelectorAll("[data-testar]").forEach(b => b.onclick = () => window.open(`index.html?teste=${encodeURIComponent(b.dataset.testar)}`, "_blank"));
+  box.querySelectorAll("[data-apagarteste]").forEach(b => b.onclick = async () => {
+    if (!(await confirmar("Apagar a sua tentativa de teste desta prova? Você poderá testar de novo, com novo sorteio.", { titulo: "Apagar meu teste", ok: "Apagar", perigo: true }))) return;
+    try {
+      const apagou = await apagarTentativaTeste(auth.currentUser.uid, b.dataset.apagarteste);
+      toast(apagou ? "Tentativa de teste apagada." : "Você não tem tentativa de teste nesta prova.", apagou ? "ok" : "info");
+    } catch (e) { toast("Não foi possível apagar o teste. " + traduzirErro(e), "erro"); console.error(e); }
+  });
+  box.querySelectorAll("[data-del]").forEach(b => b.onclick = async () => {
+    if (!(await confirmar("Apagar a prova? As tentativas dos alunos continuam no banco de dados, mas ficam órfãs.", { titulo: "Apagar prova", ok: "Apagar", perigo: true }))) return;
+    await deleteDoc(doc(db, "provas", b.dataset.del)); carregarProvas();
+  });
+}
+function cartaoProvaHTML(p) {
     const bs = bancosDaProva(p).map(id => bancosCache.find(x => x.id === id) || { id, nome: id });
     const qtd = p.nAlternativas !== undefined && p.nAlternativas !== null ? `${p.nAlternativas} alt. + ${p.nDissertativas || 0} dissert.` : p.nDissertativas ? `${p.nDissertativas} dissert.` : "";
     return `<article class="cartao-prova${p.liberada ? " aberta" : ""}">
@@ -684,30 +768,10 @@ async function carregarProvas() {
         <button class="discreto mini" data-apagarteste="${p.id}" title="Apaga a sua tentativa de teste desta prova">Apagar meu teste</button>
         ${podeEditar() && ehAdmin() ? `<button class="discreto mini perigo-txt" data-del="${p.id}" title="Apagar prova" aria-label="Apagar prova">🗑</button>` : ""}
       </footer></article>`;
-  }).join("") + "</div>";
-  box.querySelectorAll("[data-alunos]").forEach(b => b.onclick = async () => {
-    abrirAba("resultados"); await prepararResultados();
-    $("#rProva").value = b.dataset.alunos; $("#rAoVivo").checked = true; carregarResultados();
-  });
-  box.querySelectorAll("[data-tg]").forEach(b => b.onclick = async () => {
-    const p = provas.find(x => x.id === b.dataset.id);
-    await updateDoc(doc(db, "provas", p.id), { [b.dataset.tg]: !p[b.dataset.tg] });
-    toast("Prova atualizada", "ok"); carregarProvas();
-  });
-  box.querySelectorAll("[data-editar]").forEach(b => b.onclick = () => editarProva(provas.find(x => x.id === b.dataset.editar)));
-  box.querySelectorAll("[data-testar]").forEach(b => b.onclick = () => window.open(`index.html?teste=${encodeURIComponent(b.dataset.testar)}`, "_blank"));
-  box.querySelectorAll("[data-apagarteste]").forEach(b => b.onclick = async () => {
-    if (!(await confirmar("Apagar a sua tentativa de teste desta prova? Você poderá testar de novo, com novo sorteio.", { titulo: "Apagar meu teste", ok: "Apagar", perigo: true }))) return;
-    try {
-      const apagou = await apagarTentativaTeste(auth.currentUser.uid, b.dataset.apagarteste);
-      toast(apagou ? "Tentativa de teste apagada." : "Você não tem tentativa de teste nesta prova.", apagou ? "ok" : "info");
-    } catch (e) { toast("Não foi possível apagar o teste. " + traduzirErro(e), "erro"); console.error(e); }
-  });
-  box.querySelectorAll("[data-del]").forEach(b => b.onclick = async () => {
-    if (!(await confirmar("Apagar a prova? As tentativas dos alunos continuam no banco de dados, mas ficam órfãs.", { titulo: "Apagar prova", ok: "Apagar", perigo: true }))) return;
-    await deleteDoc(doc(db, "provas", b.dataset.del)); carregarProvas();
-  });
 }
+const semAcento = t => String(t || "").normalize("NFD").replace(/\p{M}+/gu, "").toLowerCase();
+["#fpBusca", "#fpTurma", "#fpStatus", "#fpOrdem"].forEach(id => $(id).addEventListener(id === "#fpBusca" ? "input" : "change", desenharProvas));
+$("#fpLimpar").onclick = () => { $("#fpBusca").value = ""; $("#fpTurma").value = ""; $("#fpStatus").value = ""; $("#fpOrdem").value = "recentes"; desenharProvas(); };
 // por banco: "todos" quando a prova não filtra ou marcou todos os temas do banco
 function temasDaProvaTexto(p, bancos) {
   const txt = b => {
@@ -916,13 +980,28 @@ let ouvintes = [];            // unsubscribe do "ao vivo" (tentativas da prova)
 let ouvinteDetalhe = null;    // unsubscribe das respostas da tentativa aberta em "Ver"
 let detalheId = null;         // tentativa aberta em "Ver"
 
+let provasRes = [];
 async function prepararResultados() {
-  const s = await getDocs(collection(db, "provas"));
-  const provas = []; s.forEach(d => provas.push({ id: d.id, ...d.data() }));
-  const antes = $("#rProva").value;
-  $("#rProva").innerHTML = provas.map(p => `<option value="${p.id}">${esc(p.titulo)} · ${esc(p.turma || "")}</option>`).join("");
-  if (antes && provas.some(p => p.id === antes)) $("#rProva").value = antes;
+  const [s] = await Promise.all([getDocs(collection(db, "provas")), ehInclusao() ? null : listarTurmas().catch(() => null)]);
+  provasRes = s.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
+  const selT = $("#rTurma"), tAntes = selT.value;
+  const turmas = [...new Map(provasRes.map(p => [p.turmaId || "__sem", p.turmaId ? (turmasCache.find(t => t.id === p.turmaId)?.nome || p.turma || "turma") : "⚠ Sem turma"])).entries()]
+    .sort((a, b) => a[0] === "__sem" ? 1 : b[0] === "__sem" ? -1 : a[1].localeCompare(b[1], "pt-BR", { numeric: true }));
+  selT.innerHTML = `<option value="">Todas as turmas</option>` + turmas.map(([id, nome]) => `<option value="${id}">${esc(nome)}</option>`).join("");
+  selT.value = turmas.some(([id]) => id === tAntes) ? tAntes : "";
+  opcoesProvaRes();
 }
+// provas do select de Resultados: filtradas pela turma e agrupadas (optgroup) por turma
+function opcoesProvaRes() {
+  const turma = $("#rTurma").value, antes = $("#rProva").value;
+  const lista = provasRes.filter(p => !turma || (p.turmaId || "__sem") === turma);
+  const grupos = new Map();
+  lista.forEach(p => { const k = p.turmaId ? (turmasCache.find(t => t.id === p.turmaId)?.nome || p.turma || "turma") : "⚠ Sem turma"; if (!grupos.has(k)) grupos.set(k, []); grupos.get(k).push(p); });
+  $("#rProva").innerHTML = [...grupos.entries()].sort((a, b) => a[0].localeCompare(b[0], "pt-BR", { numeric: true }))
+    .map(([k, ps]) => `<optgroup label="${esc(k)}">${ps.map(p => `<option value="${p.id}">${esc(p.titulo)}${p.liberada ? " ●" : ""}</option>`).join("")}</optgroup>`).join("");
+  if (antes && lista.some(p => p.id === antes)) $("#rProva").value = antes;
+}
+$("#rTurma").onchange = () => { opcoesProvaRes(); $("#rProva").dispatchEvent(new Event("change")); };
 $("#btnCarregarRes").onclick = carregarResultados;
 $("#rProva").onchange = () => { pararAoVivo(); resDados = null; $("#resResumo").innerHTML = ""; $("#resTabela").innerHTML = ""; if ($("#rAoVivo").checked) carregarResultados(); };
 $("#rTestes").onchange = () => { if (resDados) desenharResultados(); };

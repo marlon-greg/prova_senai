@@ -152,12 +152,18 @@ Dá para colar direto da planilha (coluna de nome e coluna de e-mail). Numeraç�
 
 **✎ Editar** reabre a lista para incluir ou tirar alunos; **🗑 Apagar** (só admin).
 
-Na prova, escolha a turma no campo **Turma** (ou *— sem turma (qualquer aluno) —*). Com turma:
+Na prova, escolha a turma no campo **Turma** (obrigatório: **cada prova é de uma turma só**). Com turma:
 - o aluno **só vê a prova na lista** se o e-mail dele estiver na turma;
 - as **regras do Firestore** recusam a tentativa de quem não está na lista, mesmo que tente pelo console do navegador;
 - em **Resultados** aparece a seção **Não fizeram**, com quem está na turma e não começou a prova (incluindo quem ainda nem entrou no sistema).
 
-Provas antigas, com a turma escrita como texto, continuam funcionando como "qualquer aluno" e mantêm o nome.
+Prova **sem turma** (inclusive as antigas, com a turma escrita como texto) **não aparece para nenhum aluno** e ninguém consegue começar (as regras do Firestore bloqueiam). Ela fica no grupo **⚠ Sem turma** da aba Provas: use **✎ Editar** e escolha a turma.
+
+**Organização no painel:**
+- **Provas**: barra de pesquisa (título, turma ou banco), filtros por turma e situação (liberada, fechada, gabarito liberado) e ordenação; as provas aparecem **agrupadas por turma** (cada grupo abre e fecha).
+- **Turmas**: pesquisa por turma, nome do aluno ou e-mail; a coluna **📝 Provas** mostra quantas provas a turma tem e leva para a aba Provas já filtrada.
+- **Resultados**: escolha a turma e depois a prova (as provas ficam agrupadas por turma).
+- **♿ Acessibilidade**: aparecem só as provas da turma do aluno.
 
 ### Código de acesso
 Campo **Código de acesso** na prova (botão **Gerar** cria algo como `AET-7K3Q`; o código aparece na tabela de provas). O aluno precisa digitar o código na tela de instruções antes de **Começar a prova** (maiúsculas e espaços são ajustados sozinhos); código errado mostra *"Código incorreto"*. Serve para garantir que quem começa está na sala: **informe o código só na hora**.

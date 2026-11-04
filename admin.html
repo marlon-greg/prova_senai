@@ -49,6 +49,14 @@
         <button id="btnCriarProva" style="margin-top:16px">Criar prova</button>
       </details>
       <div class="secao-titulo"><h2>Provas criadas</h2><span class="pequeno">Libere a prova na hora de aplicar · 👥 Alunos acompanha ao vivo</span></div>
+      <div class="barra-filtros" role="search">
+        <input type="search" id="fpBusca" placeholder="🔎 Pesquisar prova, turma ou banco…" aria-label="Pesquisar provas">
+        <select id="fpTurma" aria-label="Filtrar por turma"><option value="">👥 Todas as turmas</option></select>
+        <select id="fpStatus" aria-label="Filtrar por situação"><option value="">Todas as situações</option><option value="liberada">● Liberadas</option><option value="fechada">○ Fechadas</option><option value="gabarito">Gabarito liberado</option></select>
+        <select id="fpOrdem" aria-label="Ordenar"><option value="recentes">Mais recentes</option><option value="antigas">Mais antigas</option><option value="titulo">Título A–Z</option></select>
+        <button id="fpLimpar" class="leve mini" type="button">Limpar filtros</button>
+      </div>
+      <p id="fpContagem" class="pequeno" aria-live="polite"></p>
       <div id="listaProvas"></div>
     </div>
 
@@ -98,7 +106,10 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
         <p id="tPrevia" class="pequeno" role="status" aria-live="polite"></p>
         <div class="linha acoes"><button id="btnSalvarTurma">Salvar turma</button><button id="btnCancelarTurma" class="leve oculto">Cancelar edição</button></div>
       </div>
-      <div class="card"><h2>Turmas cadastradas</h2><div id="listaTurmas"></div></div>
+      <div class="card"><h2>Turmas cadastradas</h2>
+        <div class="barra-filtros" role="search"><input type="search" id="ftBusca" placeholder="🔎 Pesquisar turma, aluno ou e-mail…" aria-label="Pesquisar turmas e alunos"></div>
+        <p id="ftContagem" class="pequeno" aria-live="polite"></p>
+        <div id="listaTurmas"></div></div>
     </div>
 
     <!-- RESULTADOS -->
@@ -106,6 +117,7 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
       <div class="card">
         <div class="card-cab"><h2>Resultados <span id="aoVivo" class="ao-vivo oculto" title="Atualizando sozinho">● ao vivo</span></h2></div>
         <div class="barra-res">
+          <div class="campo-prova" style="flex:0 1 220px"><label for="rTurma">Turma</label><select id="rTurma"><option value="">Todas as turmas</option></select></div>
           <div class="campo-prova"><label for="rProva">Prova</label><select id="rProva"></select></div>
           <button id="btnCarregarRes">Carregar</button>
           <label class="check interruptor"><input type="checkbox" id="rAoVivo"> Ao vivo</label>
