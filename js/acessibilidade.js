@@ -97,5 +97,10 @@ export function mesclarQuestao(original, adaptada) {
   const alt = Array.isArray(adaptada.alternativas) && Array.isArray(original.alternativas) && adaptada.alternativas.length === original.alternativas.length
     ? adaptada.alternativas : original.alternativas;
   return { ...original, enunciado: String(adaptada.enunciado || "").trim() || original.enunciado, alternativas: alt,
-           dica: String(adaptada.dica || "").trim(), adaptada: true };
+           apoios: apoiosDe(adaptada), adaptada: true };
+}
+// apoios (dicas) da questão adaptada: lista nova (apoios) ou a dica única das adaptações antigas
+export function apoiosDe(ad) {
+  const l = Array.isArray(ad?.apoios) ? ad.apoios : (ad?.dica ? [ad.dica] : []);
+  return l.map(x => String(x || "").trim()).filter(Boolean);
 }

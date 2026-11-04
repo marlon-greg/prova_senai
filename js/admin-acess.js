@@ -3,7 +3,7 @@
 // as necessidades, sobe laudos e adapta as questões (manual ou pela IA). Auxiliar de inclusão: só os alunos
 // vinculados a ela — edita as adaptações, sobe laudos e deixa sugestões.
 import { db, esc, $, toast, confirmar, modal, traduzirErro, dataBR, iniciais, temaDe, letra, sortearQuestoes, bancoDaQuestao, questoesDisponiveis, cotaDaProva } from "./common.js";
-import { VISUAL_PADRAO, PROVA_PADRAO, FONTES, TEMAS, completar, aplicarVisual } from "./acessibilidade.js";
+import { VISUAL_PADRAO, PROVA_PADRAO, FONTES, TEMAS, completar, aplicarVisual, apoiosDe } from "./acessibilidade.js";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, abrirMaterialEmAba, tamanhoTexto, erroMaterial } from "./material.js";
 import { adaptarQuestao } from "./ia.js";
 import { collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, query, where, serverTimestamp, orderBy, FieldPath }
@@ -315,8 +315,11 @@ function desenharSorteio() {
       : `Ainda não há questões sorteadas para este aluno. Padrão da prova: ${cotaDaProva(prova).nA} alternativas + ${cotaDaProva(prova).nD} dissertativas (pode mudar acima).`}</p>`;
   $("#acSortear").onclick = () => sortearParaAluno();
 }
-async function gravarSorteio(ids, cota) {
-  await updateDoc(doc(db, "acessibilidade", qAtual.email), new FieldPath("sorteios", qAtual.prova.id), { ids, cota, sorteadoEm: serverTimestamp(), sorteadoPor: ctx.eu.email });
+// extra = { removidas } (trocar/tirar/adicionar mantêm o histórico; sortear de novo começa do zero)
+async function gravarSorteio(ids, cota, extra = null) {
+  const removidas = extra?.removidas ?? (extra === null && qAtual.sorteio?.removidas) ?? [];
+  await updateDoc(doc(db, "acessibilidade", qAtual.email), new FieldPath("sorteios", qAtual.prova.id),
+    { ids, cota, removidas: removidas || [], sorteadoEm: serverTimestamp(), sorteadoPor: ctx.eu.email });
 }
 async function sortearParaAluno() {
   const { email, prova, ids } = qAtual;
@@ -324,7 +327,7 @@ async function sortearParaAluno() {
   if (ids.length && !(await confirmar(`Sortear de novo (${cota.nA} alternativas + ${cota.nD} dissertativas)? O aluno vai receber as NOVAS questões. As adaptações das questões que saírem ficam guardadas, mas não serão usadas.`, { titulo: "🎲 Sortear de novo", ok: "Sortear" }))) return;
   try {
     const novos = await sortearQuestoes(prova, cota);
-    await gravarSorteio(novos, cota);
+    await gravarSorteio(novos, cota, { removidas: [] });
     toast(`🎲 ${novos.length} questões sorteadas. Agora adapte com a IA.`, "ok");
   } catch (e) { return toast("Não foi possível sortear. " + traduzirErro(e), "erro"); }
   carregarQuestoes(email, prova);
@@ -337,15 +340,37 @@ async function trocarQuestao(x) {
   if (!(await confirmar(`Trocar a questão ${ids.indexOf(x.qid) + 1} por outra ${tipo} sorteada?`, { titulo: "🔁 Trocar questão", ok: "Trocar" }))) return;
   const nova = livres[Math.floor(Math.random() * livres.length)];
   const novos = ids.map(q => (q === x.qid ? nova : q));
-  const cota = sorteio?.cota || { nA: novos.filter(q => disp.tipo[q] !== "dissertativa").length, nD: novos.filter(q => disp.tipo[q] === "dissertativa").length };
-  try { await gravarSorteio(novos, cota); toast("🔁 Questão trocada. A nova ainda não está adaptada.", "ok"); }
+  try { await gravarSorteio(novos, cotaDe(novos)); toast("🔁 Questão trocada. A nova ainda não está adaptada.", "ok"); }
   catch (e) { return toast("Não foi possível trocar. " + traduzirErro(e), "erro"); }
   carregarQuestoes(email, prova);
 }
 
+// tira UMA questão só da prova deste aluno (o banco não muda). Fica registrado para o relatório.
+async function removerQuestao(x) {
+  const { email, prova, ids, sorteio } = qAtual, n = ids.indexOf(x.qid) + 1;
+  if (ids.length <= 1) return toast("A prova precisa ter pelo menos 1 questão.", "info");
+  if (!(await confirmar(`Tirar a questão ${n} da prova deste aluno? Ela continua no banco; só não cai para ele(a). A prova fica com ${ids.length - 1} questões. Depois você pode adicionar outra (➕) se quiser.`, { titulo: "✕ Tirar questão", ok: "Tirar", perigo: true }))) return;
+  const novos = ids.filter(q => q !== x.qid);
+  const removidas = [...(sorteio?.removidas || []), { qid: x.qid, enunciado: String(x.q.enunciado || "").slice(0, 200), por: ctx.eu.email, em: new Date().toISOString() }];
+  try { await gravarSorteio(novos, cotaDe(novos), { removidas }); toast("Questão tirada da prova deste aluno.", "ok"); }
+  catch (e) { return toast("Não foi possível tirar. " + traduzirErro(e), "erro"); }
+  carregarQuestoes(email, prova);
+}
+// acrescenta UMA questão sorteada do tipo escolhido (dos temas da prova), que ainda não esteja na prova dele
+async function adicionarQuestao(tipo) {
+  const { email, prova, ids, disp } = qAtual;
+  const livres = (tipo === "dissertativa" ? disp.diss : disp.alt).filter(q => !ids.includes(q));
+  if (!livres.length) return toast(`Não há outra questão ${tipo} disponível nos temas da prova.`, "info");
+  const novos = [...ids, livres[Math.floor(Math.random() * livres.length)]];
+  try { await gravarSorteio(novos, cotaDe(novos)); toast(`➕ Questão ${tipo} adicionada. Ela ainda não está adaptada.`, "ok"); }
+  catch (e) { return toast("Não foi possível adicionar. " + traduzirErro(e), "erro"); }
+  carregarQuestoes(email, prova);
+}
+const cotaDe = ids => ({ nA: ids.filter(q => qAtual.disp.tipo[q] !== "dissertativa").length, nD: ids.filter(q => qAtual.disp.tipo[q] === "dissertativa").length });
+
 function desenharQuestoes() {
   const { itens, travada } = qAtual, box = $("#acQuestoes"), resumo = $("#acResumo");
-  if (!itens.length) { box.innerHTML = ""; resumo.innerHTML = ""; return; }
+  if (!itens.length) { box.innerHTML = ""; resumo.innerHTML = ""; return; }   // (sem sorteio: só o quadro de sortear)
   const ia = podeIA();
   const nFaltam = itens.filter(x => !x.ad).length, nVelhas = itens.filter(desatualizada).length,
         nFeitas = itens.length - nFaltam, nManuais = itens.filter(x => x.ad?.origem === "manual").length;
@@ -359,9 +384,14 @@ function desenharQuestoes() {
       ${nVelhas ? `<button data-lote="velhas" class="leve" ${!ia || ocupado ? "disabled" : ""}>🔄 Refazer as desatualizadas (${nVelhas})</button>` : ""}
       <button data-lote="todas" class="leve" ${!ia || ocupado ? "disabled" : ""}>🔄 Refazer todas com IA</button>
       <button data-lote="apagar" class="perigo" ${!nFeitas || ocupado ? "disabled" : ""}>🗑 Apagar adaptações desta prova</button></div>
+    <div class="linha acoes" style="margin-top:8px">
+      ${travada ? "" : `<button class="leve" data-add="alternativa" ${ocupado ? "disabled" : ""}>➕ Adicionar alternativa</button><button class="leve" data-add="dissertativa" ${ocupado ? "disabled" : ""}>➕ Adicionar dissertativa</button>`}
+      <button class="ok" data-pdf ${ocupado ? "disabled" : ""}>📄 Baixar PDF da prova adaptada</button></div>
     ${ia ? "" : `<p class="pequeno">A IA precisa da chave (administrador principal) ou do servidor de correção configurado.</p>`}
     ${nManuais ? `<p class="pequeno">✍ ${nManuais} adaptada(s) à mão: “Refazer” pergunta antes de substituir.</p>` : ""}`;
   resumo.querySelectorAll("[data-lote]").forEach(b => b.onclick = () => acaoEmLote(b.dataset.lote));
+  resumo.querySelectorAll("[data-add]").forEach(b => b.onclick = () => adicionarQuestao(b.dataset.add));
+  resumo.querySelector("[data-pdf]").onclick = () => baixarPdf();
 
   box.innerHTML = itens.map((x, i) => {
     const alt = x.q.tipo === "alternativa", ad = x.ad || {}, velha = desatualizada(x);
@@ -374,11 +404,15 @@ function desenharQuestoes() {
           ${alt ? `<ol type="A" class="pequeno">${x.q.alternativas.map((a, k) => `<li>${esc(a)}${k === x.g.correta ? " <b>✓</b>" : ""}</li>`).join("")}</ol>` : ""}</div>
         <div class="q-nova"><label>Enunciado adaptado</label><textarea data-campo="enunciado" style="font-family:inherit">${esc(ad.enunciado || "")}</textarea>
           ${alt ? x.q.alternativas.map((a, k) => `<label>Alternativa ${letra(k)}${k === x.g.correta ? " ✓" : ""}</label><input type="text" data-alt="${k}" value="${esc(ad.alternativas?.[k] ?? "")}" placeholder="${esc(a)}">`).join("") : ""}
-          <label>💡 Apoio (não pode entregar a resposta)</label><input type="text" data-campo="dica" value="${esc(ad.dica || "")}">
+          <label>💡 Apoios que o mascote fala na prova <span class="pequeno">(um por vez; nunca podem entregar a resposta)</span></label>
+          <div data-apoios>${apoiosDe(ad).map(a => linhaApoio(a)).join("")}</div>
+          <button type="button" class="leve mini" data-maisapoio>+ Adicionar apoio</button>
+          <label style="margin-top:8px">📋 O que foi adaptado e por quê <span class="pequeno">(vai no PDF para a coordenação; o aluno não vê)</span></label>
+          <textarea data-campo="motivo" style="font-family:inherit;min-height:70px">${esc(ad.motivo || "")}</textarea>
           <div class="linha acoes" style="margin-top:8px"><button class="ok mini" data-salvarq>Salvar</button>
             ${ia ? `<button class="mini" data-iaq ${ocupado ? "disabled" : ""}>🤖 ${x.ad ? "Refazer" : "Adaptar"} com IA</button>` : ""}
             ${x.ad ? `<button class="perigo mini" data-apagarq>Voltar ao original</button>` : ""}
-            ${travada ? "" : `<button class="leve mini" data-trocarq ${ocupado ? "disabled" : ""}>🔁 Trocar questão</button>`}<span class="pequeno" data-msg></span></div></div>
+            ${travada ? "" : `<button class="leve mini" data-trocarq ${ocupado ? "disabled" : ""}>🔁 Trocar questão</button><button class="perigo mini" data-removerq ${ocupado ? "disabled" : ""}>✕ Tirar da prova dele(a)</button>`}<span class="pequeno" data-msg></span></div></div>
       </div></details>`;
   }).join("");
   box.querySelectorAll(".q-adapt").forEach(el => {
@@ -386,17 +420,30 @@ function desenharQuestoes() {
     el.querySelector("[data-salvarq]").onclick = () => salvarQuestao(x, el);
     el.querySelector("[data-iaq]")?.addEventListener("click", () => adaptarUma(x, el));
     el.querySelector("[data-trocarq]")?.addEventListener("click", () => trocarQuestao(x));
+    el.querySelector("[data-removerq]")?.addEventListener("click", () => removerQuestao(x));
+    const lista = el.querySelector("[data-apoios]");
+    const ligarApoios = () => lista.querySelectorAll("[data-tiraapoio]").forEach(b => b.onclick = () => b.closest(".linha-apoio").remove());
+    el.querySelector("[data-maisapoio]").onclick = () => { lista.insertAdjacentHTML("beforeend", linhaApoio("")); ligarApoios(); lista.lastElementChild.querySelector("input").focus(); };
+    ligarApoios();
     el.querySelector("[data-apagarq]")?.addEventListener("click", async () => {
       try { await deleteDoc(doc(db, "acessibilidade", qAtual.email, "questoes", x.qid)); x.ad = null; desenharQuestoes(); } catch (e) { toast(traduzirErro(e), "erro"); }
     });
   });
 }
+const linhaApoio = t => `<div class="linha-apoio linha" style="gap:6px;margin:4px 0"><input type="text" data-apoio value="${esc(t)}" placeholder="Ex.: Primeiro ache o nome da tabela." style="flex:1">
+  <button type="button" class="perigo mini" data-tiraapoio title="Remover este apoio" style="flex:0 0 auto">✕</button></div>`;
 async function salvarQuestao(x, el) {
   const enunciado = el.querySelector("[data-campo=enunciado]").value.trim();
-  if (!enunciado) return toast("Escreva o enunciado adaptado (ou use Voltar ao original).", "erro");
+  const apoios = [...el.querySelectorAll("[data-apoio]")].map(i => i.value.trim()).filter(Boolean);
+  const motivo = el.querySelector("[data-campo=motivo]").value.trim();
+  if (!enunciado && !apoios.length) return toast("Escreva o enunciado adaptado ou pelo menos um apoio (ou use Voltar ao original).", "erro");
   const alts = x.q.tipo === "alternativa" ? [...el.querySelectorAll("[data-alt]")].map((inp, k) => inp.value.trim() || x.q.alternativas[k]) : null;
-  const dados = { enunciado, alternativas: alts, dica: el.querySelector("[data-campo=dica]").value.trim(), origem: "manual", provaId: qAtual.prova.id,
-                  adaptadoPor: ctx.eu.email, atualizadoEm: serverTimestamp() };
+  // quem só mexe nos apoios/motivo de uma adaptação da IA não a transforma em "manual"
+  const mexeuNoTexto = !x.ad || enunciado !== (x.ad.enunciado || "") || JSON.stringify(alts) !== JSON.stringify(x.ad.alternativas ?? null);
+  const dados = { enunciado, alternativas: alts, apoios, dica: apoios[0] || "", motivo, origem: mexeuNoTexto ? "manual" : (x.ad.origem || "manual"),
+                  provaId: qAtual.prova.id, adaptadoPor: mexeuNoTexto ? ctx.eu.email : (x.ad.adaptadoPor || ctx.eu.email),
+                  editadoPor: ctx.eu.email, atualizadoEm: serverTimestamp() };
+  if (!mexeuNoTexto && x.ad.modelo) dados.modelo = x.ad.modelo;
   try { await setDoc(doc(db, "acessibilidade", qAtual.email, "questoes", x.qid), dados); x.ad = { ...dados, atualizadoEm: null }; toast("Questão adaptada salva ✅", "ok"); desenharQuestoes(); }
   catch (e) { toast("Não foi possível salvar. " + traduzirErro(e), "erro"); }
 }
@@ -423,7 +470,7 @@ async function adaptarComIA(itens) {
       $("#acIAMsg").textContent = `🤖 Adaptando ${n + 1} de ${itens.length}…`;
       try {
         const r = await adaptarQuestao({ chave: cfg.chave, modelo: cfg.modelo.includes("haiku") ? "claude-sonnet-5-5" : cfg.modelo, q: x.q, g: x.g, descricao, orientacao, laudos });
-        const dados = { ...r, origem: "ia", modelo: cfg.modelo, provaId: qAtual.prova.id, adaptadoPor: ctx.eu.email, atualizadoEm: serverTimestamp() };
+        const dados = { ...r, dica: r.apoios[0] || "", origem: "ia", modelo: cfg.modelo, provaId: qAtual.prova.id, adaptadoPor: ctx.eu.email, atualizadoEm: serverTimestamp() };
         await setDoc(doc(db, "acessibilidade", email, "questoes", x.qid), dados); res.adaptadas++;
       } catch (e) { res.erros.push({ qid: x.qid, erro: e.message }); if (e.fatal) break; }
     }
@@ -472,4 +519,118 @@ async function acaoEmLote(tipo) {
     alvo = alvo.filter(x => x.ad?.origem !== "manual");
   if (!alvo.length) return toast("Nada para adaptar.", "info");
   await rodarIA(alvo);
+}
+
+// ---------- 📄 PDF da prova adaptada (para professor, auxiliar e coordenação) ----------
+// Abre um relatório pronto para imprimir: o navegador salva como PDF ("Salvar como PDF" no destino da impressão).
+const fmtTexto = t => esc(String(t || ""))
+  .replace(/```(?:\w+)?\n?([\s\S]*?)```/g, (_, c) => `<pre>${c}</pre>`)
+  .replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>").replace(/\n/g, "<br>");
+const MOTIVOS_PROVA = {
+  tempoExtraMin: v => v > 0 && [`Tempo extra de ${v} minutos`, "mais tempo para ler, organizar o raciocínio e revisar, sem a pressão do relógio."],
+  vidasExtras: v => v > 0 && [`${v} vida(s) extra(s)`, "tolera saídas acidentais da tela da prova sem encerrar a avaliação."],
+  semPunicao: v => v && ["Sem perder vidas", "sair da tela ou tentar colar fica apenas registrado, para que comportamentos involuntários não encerrem a prova."],
+  ocultarCronometro: v => v && ["Cronômetro escondido", "o tempo continua valendo, mas não aparece na tela, para reduzir a ansiedade."],
+  lerEmVoz: v => v !== false && ["Botão 🔊 Ouvir", "leitura em voz alta do enunciado, das alternativas e dos apoios."],
+  mostrarDica: v => v !== false && ["Apoios do mascote", "dicas curtas de leitura e organização faladas pelo mascote da prova, uma por vez (nunca revelam a resposta)."]
+};
+function ajustesVisuais(v) {
+  const P = VISUAL_PADRAO, l = [];
+  if (v.escala !== P.escala) l.push(`letra em ${v.escala}%`);
+  if (v.fonte !== P.fonte) l.push(`fonte ${FONTES[v.fonte]?.nome || v.fonte}`);
+  if (v.letras !== P.letras) l.push(`espaço entre letras ${v.letras}em`);
+  if (v.palavras !== P.palavras) l.push(`espaço entre palavras ${v.palavras}em`);
+  if (v.linhas !== P.linhas) l.push(`altura da linha ${v.linhas}`);
+  if (v.tema !== P.tema) l.push(`cores: ${TEMAS[v.tema]?.nome || v.tema}`);
+  if (v.maiusculas) l.push("texto em caixa alta");
+  if (v.linhaCurta) l.push("linhas curtas");
+  if (v.regua) l.push("régua de leitura");
+  if (v.semAnimacao) l.push("sem animações");
+  return l;
+}
+async function baixarPdf() {
+  const w = window.open("", "_blank");   // abre já no clique (senão o navegador bloqueia)
+  if (!w) return toast("O navegador bloqueou a janela. Libere pop-ups para este site.", "erro");
+  w.document.write("<p style='font-family:sans-serif'>Montando o relatório…</p>");
+  try {
+    const { email, prova, itens, sorteio, travada } = qAtual;
+    const [d, pv, laudos, alunos] = await Promise.all([
+      getDoc(doc(db, "acessibilidade", email)), getDoc(doc(db, "acessibilidadePrivado", email)).catch(() => null),
+      listarMateriais(`${priv(email)}/laudos`).catch(() => []), ctx.alunosDasTurmas().catch(() => [])]);
+    const a = completar(d.data() || {}), descricao = pv?.data()?.descricao || "";
+    const turma = alunos.find(x => x.email === email)?.turma || prova.turma || "";
+    const nome = a.nome || email;
+    const geral = Object.entries(MOTIVOS_PROVA).map(([k, f]) => f(a.prova[k])).filter(Boolean);
+    const vis = ajustesVisuais(a.visual);
+    if (vis.length) geral.push(["Ajustes visuais (" + vis.join(", ") + ")", "facilitam a leitura e reduzem o cansaço visual, conforme a necessidade do aluno."]);
+    const nIA = itens.filter(x => x.ad?.origem === "ia").length, nMan = itens.filter(x => x.ad && x.ad.origem !== "ia").length;
+    const nAlt = itens.filter(x => x.q.tipo === "alternativa").length;
+    const removidas = sorteio?.removidas || [];
+    const quest = itens.map((x, i) => {
+      const ad = x.ad, alt = x.q.tipo === "alternativa", apoios = apoiosDe(ad);
+      const enun = ad?.enunciado || x.q.enunciado, alts = alt ? (ad?.alternativas?.length === x.q.alternativas.length ? ad.alternativas : x.q.alternativas) : null;
+      const origem = !ad ? "versão original (sem adaptação)" : ad.origem === "ia" ? `adaptada pela IA${ad.editadoPor ? `, revisada por ${esc(ad.editadoPor)}` : ""}` : `adaptada por ${esc(ad.adaptadoPor || ad.editadoPor || "equipe")}`;
+      return `<section class="q">
+        <h3>Questão ${i + 1} <span>${alt ? "múltipla escolha" : "resposta escrita"} · ${esc(temaDe(x.q))} · ${origem}</span></h3>
+        <div class="bloco aplicada"><div class="rot">Versão aplicada ao aluno</div><div>${fmtTexto(enun)}</div>
+          ${alts ? `<ol type="A">${alts.map(t => `<li>${fmtTexto(t)}</li>`).join("")}</ol>` : `<div class="linhas"></div>`}</div>
+        ${ad ? `<div class="bloco original"><div class="rot">Versão original do banco</div><div>${fmtTexto(x.q.enunciado)}</div>
+          ${alt ? `<ol type="A">${x.q.alternativas.map(t => `<li>${fmtTexto(t)}</li>`).join("")}</ol>` : ""}</div>` : ""}
+        ${apoios.length && a.prova.mostrarDica !== false ? `<div class="bloco apoio"><div class="rot">💡 Apoios falados pelo mascote</div><ul>${apoios.map(t => `<li>${esc(t)}</li>`).join("")}</ul></div>` : ""}
+        ${ad ? `<div class="bloco motivo"><div class="rot">📋 O que foi adaptado e por quê</div>${ad.motivo ? fmtTexto(ad.motivo) : "<i>Justificativa não registrada. Escreva no campo “O que foi adaptado e por quê” da questão no painel.</i>"}</div>` : ""}
+      </section>`;
+    }).join("");
+    const html = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><title>Prova adaptada - ${esc(nome)} - ${esc(prova.titulo)}</title>
+<style>
+  @page { size:A4; margin:16mm 14mm; }
+  body { font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif; color:#1d2433; font-size:11.5pt; line-height:1.45; margin:0 auto; max-width:820px; padding:16px; }
+  .barra { position:sticky; top:0; background:#fff7e6; border:1px solid #f3d58f; border-radius:10px; padding:10px 14px; margin-bottom:16px; display:flex; gap:12px; align-items:center; }
+  .barra button { background:#c1272d; color:#fff; border:0; border-radius:8px; padding:8px 16px; font-weight:700; cursor:pointer; }
+  header { border-bottom:3px solid #c1272d; padding-bottom:8px; margin-bottom:14px; }
+  header .marca { display:inline-block; background:#c1272d; color:#fff; font-weight:800; letter-spacing:2px; padding:2px 10px; border-radius:4px; }
+  h1 { font-size:18pt; margin:8px 0 2px; } h2 { font-size:13pt; color:#14213d; border-bottom:1px solid #d9dde5; padding-bottom:3px; margin:20px 0 8px; }
+  h3 { font-size:12pt; margin:0 0 6px; } h3 span { font-weight:400; color:#5b6474; font-size:9.5pt; }
+  table.dados td { padding:2px 12px 2px 0; vertical-align:top; } table.dados td:first-child { color:#5b6474; white-space:nowrap; }
+  .caixa { border:1px solid #d9dde5; border-radius:8px; padding:8px 12px; background:#fafbfc; white-space:pre-wrap; }
+  ul.geral li { margin:3px 0; }
+  .q { border:1px solid #d9dde5; border-radius:10px; padding:10px 14px; margin:12px 0; break-inside:avoid-page; }
+  .bloco { margin:8px 0; } .rot { font-size:9pt; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:#5b6474; margin-bottom:2px; }
+  .original { color:#5b6474; font-size:10pt; border-left:3px solid #d9dde5; padding-left:10px; }
+  .apoio { background:#eef6ff; border-left:4px solid #2f6db5; padding:6px 10px; border-radius:6px; }
+  .motivo { background:#fff7e6; border-left:4px solid #e0a100; padding:6px 10px; border-radius:6px; }
+  .apoio ul { margin:2px 0; padding-left:18px; } ol { margin:4px 0; }
+  pre { background:#f3f4f6; padding:6px 8px; border-radius:6px; white-space:pre-wrap; font-size:10pt; } code { background:#f3f4f6; padding:0 3px; border-radius:3px; }
+  .linhas { height:60px; border-bottom:1px dashed #c9ced8; }
+  .assin { display:grid; grid-template-columns:1fr 1fr 1fr; gap:24px; margin-top:48px; text-align:center; font-size:10pt; }
+  .assin div { border-top:1px solid #1d2433; padding-top:4px; }
+  .rodape { margin-top:18px; font-size:9pt; color:#5b6474; }
+  @media print { .barra { display:none; } body { padding:0; } }
+</style></head><body>
+<div class="barra"><button onclick="print()">📄 Salvar como PDF</button><span>Na janela de impressão, escolha <b>Salvar como PDF</b> no destino.</span></div>
+<header><span class="marca">SENAI</span><h1>Prova adaptada — relatório de acessibilidade</h1>
+<table class="dados"><tr><td>Aluno(a)</td><td><b>${esc(nome)}</b> · ${esc(email)}</td></tr>
+${turma ? `<tr><td>Turma</td><td>${esc(turma)}</td></tr>` : ""}
+<tr><td>Prova</td><td><b>${esc(prova.titulo)}</b></td></tr>
+<tr><td>Questões</td><td>${itens.length} (${nAlt} de múltipla escolha, ${itens.length - nAlt} de resposta escrita) · ${nIA} adaptada(s) pela IA, ${nMan} pela equipe, ${itens.length - nIA - nMan} na versão original${travada ? " · <b>prova já iniciada pelo aluno</b>" : ""}</td></tr>
+<tr><td>Auxiliar(es)</td><td>${(a.auxiliares || []).map(esc).join(", ") || "—"}</td></tr>
+<tr><td>Gerado em</td><td>${new Date().toLocaleString("pt-BR")} por ${esc(ctx.eu.email)}</td></tr></table></header>
+
+<h2>1. Sobre o aluno (base das adaptações)</h2>
+<div class="caixa">${descricao ? esc(descricao) : "<i>Sem descrição registrada.</i>"}</div>
+<p><b>Laudos e documentos considerados:</b> ${laudos.length ? laudos.map(l => esc(l.titulo)).join("; ") : "nenhum enviado"}${laudos.length > 3 ? " (a IA lê os 3 primeiros)" : ""}.</p>
+
+<h2>2. Adaptações gerais da prova</h2>
+${geral.length ? `<ul class="geral">${geral.map(([o, p]) => `<li><b>${esc(o)}:</b> ${esc(p)}</li>`).join("")}</ul>` : "<p>Nenhuma adaptação geral marcada.</p>"}
+<p>As questões foram sorteadas dos mesmos temas da prova da turma. O conteúdo avaliado e a resposta correta de cada questão não mudam: a adaptação muda a forma de apresentar. Na prova, a ordem das alternativas é embaralhada.</p>
+${removidas.length ? `<p><b>Questões tiradas da prova deste aluno:</b></p><ul>${removidas.map(r => `<li>${esc(r.enunciado || r.qid)}… <span style="color:#5b6474">(${esc(r.por || "")}, ${r.em ? new Date(r.em).toLocaleDateString("pt-BR") : ""})</span></li>`).join("")}</ul>` : ""}
+
+<h2>3. Questões</h2>
+${quest}
+
+<div class="assin"><div>Professor(a)</div><div>Auxiliar de inclusão</div><div>Coordenação</div></div>
+<p class="rodape">As justificativas marcadas como “adaptada pela IA” foram escritas pela inteligência artificial a partir da descrição e dos laudos acima e devem ser revisadas pela equipe. Documento interno: contém informações do aluno; não entregue ao aluno.</p>
+</body></html>`;
+    w.document.open(); w.document.write(html); w.document.close();
+    setTimeout(() => { try { w.focus(); w.print(); } catch (e) {} }, 500);
+  } catch (e) { w.close(); toast("Não foi possível montar o PDF. " + traduzirErro(e), "erro"); }
 }

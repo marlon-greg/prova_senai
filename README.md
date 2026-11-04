@@ -232,7 +232,10 @@ Antes da prova, um mascote explica as regras, uma fala por vez. Tem o botão �
    - Um resumo mostra quantas estão **✓ em dia**, **⚠ desatualizadas** (adaptadas antes da última mudança na descrição ou nos laudos) e **○ sem adaptação**.
    - **🔄 Refazer as desatualizadas** / **🔄 Refazer todas com IA**: geram de novo com as informações atuais. As adaptadas à mão só são substituídas se você confirmar.
    - **🗑 Apagar adaptações desta prova**: volta todas as sorteadas ao original.
-   - Em cada questão: editar à mão, **🤖 Refazer com IA**, **Voltar ao original** ou **🔁 Trocar questão** (troca por outra do mesmo tipo, dos temas da prova).
+   - Em cada questão: editar à mão, **🤖 Refazer com IA**, **Voltar ao original**, **🔁 Trocar questão** (troca por outra do mesmo tipo, dos temas da prova) ou **✕ Tirar da prova dele(a)** (só da prova desse aluno; o banco não muda). **➕ Adicionar alternativa/dissertativa** sorteia mais uma.
+   - **💡 Apoios**: a IA escreve de 1 a 3 apoios por questão. Na prova, quem mostra é o **mascote**: ele fala o 1º apoio quando a questão aparece, e o aluno pede os outros no botão **💡 Pedir ajuda**. Com o mascote desligado, os apoios aparecem num quadro na questão. Professor e auxiliar podem editar, remover ou adicionar apoios.
+   - **📋 O que foi adaptado e por quê**: a IA escreve a justificativa de cada questão com base na descrição e nos laudos. Dá para editar.
+   - **📄 Baixar PDF da prova adaptada**: relatório para a coordenação com os dados do aluno, a descrição, os laudos considerados, as adaptações gerais (tempo, vidas, visual…) e, por questão, a versão aplicada, a original, os apoios e a justificativa, com espaço para assinaturas. Abre pronto para imprimir: escolha **Salvar como PDF**.
    - Se o aluno já começou a prova, aparecem as questões da tentativa dele e não dá mais para sortear nem trocar.
    - A resposta certa não muda: as alternativas ficam na mesma ordem e quantidade. **Revise antes da prova.**
    - ⚠ Quantidade diferente da prova exige o `firestore.rules` atualizado publicado no Firebase.

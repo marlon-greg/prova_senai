@@ -148,7 +148,7 @@ function lerQuestao(qid, botao) {
   if (speechSynthesis.speaking && botao.classList.contains("ativo")) { speechSynthesis.cancel(); return; }
   const q = questoes[qid];
   const alts = q.tipo === "alternativa" ? (ordemAlternativas[qid] || []).map((k, pos) => `Alternativa ${letra(pos)}: ${q.alternativas[k]}.`).join(" ") : "";
-  const u = new SpeechSynthesisUtterance(`${q.enunciado}. ${q.dica && ap().mostrarDica !== false ? "Dica: " + q.dica + ". " : ""}${alts}`.replace(/`/g, ""));
+  const u = new SpeechSynthesisUtterance(`${q.enunciado}. ${temApoio(q) ? "Apoio: " + q.apoios.join(". ") + ". " : ""}${alts}`.replace(/`/g, ""));
   u.lang = "pt-BR"; u.rate = 0.95;
   const voz = speechSynthesis.getVoices().find(v => /^pt(-|_)BR/i.test(v.lang)); if (voz) u.voice = voz;
   document.querySelectorAll(".b-ouvir.ativo").forEach(b => { b.classList.remove("ativo"); b.textContent = "🔊 Ouvir"; });
@@ -453,7 +453,7 @@ function criarCartaoQuestao(qid, i, unica) {
       ${acess && ap().lerEmVoz !== false && "speechSynthesis" in window ? `<button type="button" class="leve mini b-ouvir">🔊 Ouvir</button>` : ""}</div>
     <div class="q-corpo">
       <div class="enunciado">${formatarEnunciado(q.enunciado)}</div>
-      ${q.dica && ap().mostrarDica !== false ? `<div class="apoio"><span aria-hidden="true">💡</span><div><b>Apoio:</b> ${esc(q.dica)}</div></div>` : ""}
+      ${htmlApoios(q)}
       <div class="q-rotulo">${q.tipo === "alternativa" ? "Escolha uma alternativa" : "Sua resposta"}</div>
       <div class="q-area"></div>
       <p class="pequeno q-salva oculto" role="status"></p>
@@ -465,6 +465,7 @@ function criarCartaoQuestao(qid, i, unica) {
     <div class="q-feedback oculto" role="status"></div>`;
   const area = card.querySelector(".q-area");
   card.querySelector(".b-ouvir")?.addEventListener("click", e => lerQuestao(qid, e.currentTarget));
+  card.querySelector(".b-apoio")?.addEventListener("click", e => { falarApoio(qid); e.currentTarget.textContent = rotuloApoio(qid); });
   if (q.tipo === "alternativa") {
     // sempre embaralhadas, estável para o aluno (semente uid + qid); o valor gravado é o índice ORIGINAL
     const ordem = embaralhar(q.alternativas.map((_, k) => k), eu.uid + qid);
@@ -548,6 +549,7 @@ function mostrarQuestao() {
   $("#btnAnterior").classList.toggle("oculto", !voltar || i === 0);
   $("#btnProxima").classList.toggle("oculto", !voltar || i >= total - 1);
   $("#btnFinalizar").classList.toggle("oculto", !voltar);
+  clearTimeout(timerApoio);
   const card = criarCartaoQuestao(qid, i, true);
   $("#qLista").replaceChildren(card);
   card.querySelector(".acoes-questao")?.append($("#btnAnterior"), $("#btnProxima"), $("#btnFinalizar"));
@@ -555,6 +557,12 @@ function mostrarQuestao() {
   if (!voltar && respostas[qid]) (i >= total - 1 ? $("#btnFinalizar") : $("#btnProxima")).classList.remove("oculto");
   desenharFaixa();
   entrarNaTelaDaProva();
+  // acessibilidade: o mascote já fala o 1º apoio da questão (depois da fala de abertura, se ela acabou de aparecer)
+  if (temApoio(questoes[qid]) && mascoteLigado() && !respostas[qid]) {
+    apoioVez[qid] = 0;
+    timerApoio = setTimeout(() => { if (tentativa?.questoesIds[tentativa.indiceAtual] === qid) { falarApoio(qid); const b = $("#qLista .b-apoio"); if (b) b.textContent = rotuloApoio(qid); } },
+                            Math.max(500, fimFalaInicio - Date.now()));
+  }
 }
 
 // ---------- HUD da prova: vidas (corações), questões respondidas e o mascote reagindo ----------
@@ -590,6 +598,29 @@ function falarHud(texto, ms = 5000) {
   el.innerHTML = `<b>${esc(dadosMascote().nome)}:</b> ${texto}`;
   el.classList.remove("oculto", "entrando"); void el.offsetWidth; el.classList.add("entrando");
   clearTimeout(timerFala); timerFala = setTimeout(() => el.classList.add("oculto"), ms);
+}
+// ---------- apoios das questões adaptadas: quem mostra é o MASCOTE (balão da barra da prova) ----------
+// Com o mascote desligado, os apoios aparecem num quadro dentro da questão.
+let timerApoio = null;
+const apoioVez = {};   // qid -> índice do próximo apoio a falar
+function temApoio(q) { return !!q && Array.isArray(q.apoios) && q.apoios.length > 0 && ap().mostrarDica !== false; }
+function htmlApoios(q) {
+  if (!temApoio(q)) return "";
+  if (mascoteLigado()) return `<div class="apoio-mascote">${htmlMascote("feliz", { classe: "apoio-m", animado: false })}
+      <button type="button" class="leve b-apoio">💡 Pedir ajuda ao ${esc(dadosMascote().nome)}</button></div>`;
+  return `<div class="apoio"><span aria-hidden="true">💡</span><div><b>Apoio:</b> ${q.apoios.length > 1 ? `<ul>${q.apoios.map(a => `<li>${esc(a)}</li>`).join("")}</ul>` : esc(q.apoios[0])}</div></div>`;
+}
+function rotuloApoio(qid) {
+  const n = questoes[qid]?.apoios?.length || 0;
+  return n > 1 ? `💡 Outra ajuda (${(apoioVez[qid] || 0) % n + 1} de ${n})` : `💡 Ouvir a ajuda de novo`;
+}
+function falarApoio(qid) {
+  const l = questoes[qid]?.apoios || []; if (!l.length) return;
+  const k = (apoioVez[qid] || 0) % l.length;
+  apoioVez[qid] = k + 1;
+  reagirMascote("feliz");
+  falarHud(`💡 ${esc(l[k])}${l.length > 1 ? ` <small>(${k + 1} de ${l.length})</small>` : ""}`, Math.max(9000, l[k].length * 90));
+  $("#hudFala")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 const FRASES_ENVIO = ["Resposta enviada! Bora pra próxima. 💪", "Boa! Uma a menos.", "Enviada! Continue no seu ritmo.", "Feito! Respira e segue."];
 function reagirMascote(humor) {
@@ -637,7 +668,7 @@ function desenharFaixa() {
   });
 }
 
-let falouInicio = null;
+let falouInicio = null, fimFalaInicio = 0;
 function entrarNaTelaDaProva() {
   mostrar("telaQuestao");
   desenharVidas(); atualizarXp(); desenharHudMascote();
@@ -645,6 +676,7 @@ function entrarNaTelaDaProva() {
     falouInicio = tentativa.id;
     const lim = limiteSaidas();
     falarHud(`Leia cada questão com calma.${lim ? ` Você tem ${lim === 1 ? "1 vida" : `${lim} vidas`}: não saia desta tela!` : ""} Boa prova! 🍀`, 7000);
+    fimFalaInicio = Date.now() + 7000;
   }
   prepararConsulta();
   marcoTempo = Date.now();
