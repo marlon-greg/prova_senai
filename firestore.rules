@@ -177,6 +177,15 @@ service cloud.firestore {
         allow read, write: if cuidaDe(e);
         match /partes/{p} { allow read, write: if cuidaDe(e); }
       }
+      // gabarito das questões adaptadas em outro formato (V/F, ligar, lacunas…): a equipe grava;
+      // o aluno só lê depois de FINALIZAR a prova (marcador), igual ao gabarito do banco
+      match /gabaritos/{q} {
+        allow read: if cuidaDe(e) || (eu(e) && exists(/databases/$(db)/documents/marcadores/$(uid() + '_' + q)));
+        allow write: if cuidaDe(e);
+      }
+      // opções de formato sugeridas pela IA e o histórico das escolhas (a equipe vê; o aluno não)
+      match /opcoes/{q} { allow read, write: if cuidaDe(e); }
+      match /historico/{h} { allow read, create: if cuidaDe(e); allow delete: if admin(); }
       // diário do aluno: a auxiliar de inclusão vinculada escreve (id = data_autor); professores e admin leem e comentam
       match /diario/{d} {
         allow read: if cuidaDe(e);

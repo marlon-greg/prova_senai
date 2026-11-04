@@ -9,6 +9,8 @@ import { abrirLeitorPdf } from "./leitor-pdf.js";
 import { iniciarOrganizacao, carregarOrganizacao, listarPlanos, materiasSugeridas, editarTopicosBanco } from "./admin-org.js";
 import { iniciarDiario, carregarDiario } from "./admin-diario.js";
 import { ligarAjuda } from "./ajuda.js";
+import { mesclarQuestao } from "./acessibilidade.js";
+import { temFormato, textoResposta, textoChave, FORMATOS } from "./formatos-ui.js";
 import { iniciarAcessibilidade, carregarAcessibilidade, prepararNovo as prepararNovoAcess } from "./admin-acess.js";
 import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp, onSnapshot, increment, deleteField }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
@@ -1206,7 +1208,9 @@ async function carregarResultados() {
   // turma da prova: lista de e-mails para a seção "Não fizeram"
   let turma = null;
   if (prova.turmaId && !ehInclusao()) { const td = await getDoc(doc(db, "turmas", prova.turmaId)).catch(() => null); if (td?.exists()) turma = { id: td.id, ...td.data() }; }
-  resDados = { prova, questoes, gabaritos, turma, linhas: [], testes: [] };
+  // alunos com acessibilidade: as questões deles podem estar em outro formato (gabarito privado)
+  const acessEmails = new Set((await getDocs(ehInclusao() ? query(collection(db, "acessibilidade"), where("auxiliares", "array-contains", eu.email)) : collection(db, "acessibilidade")).catch(() => null))?.docs.map(d => d.id) || []);
+  resDados = { prova, questoes, gabaritos, turma, acessEmails, linhas: [], testes: [] };
   cacheTent.clear(); detalheId = null;
   // auxiliar de inclusão: só as tentativas dos alunos vinculados a ela (lidas pelo id: <uid do aluno>_<prova>)
   if (ehInclusao()) {
@@ -1254,13 +1258,24 @@ async function atualizarCache(d) {
   const t = { id: d.id, ...d.data() };
   const [rs, cs] = await Promise.all([getDocs(collection(db, "tentativas", t.id, "respostas")), getDocs(collection(db, "tentativas", t.id, "correcoes"))]);
   const resp = {}; rs.forEach(x => resp[x.id] = x.data()); const corr = {}; cs.forEach(x => corr[x.id] = x.data());
-  cacheTent.set(t.id, { t, resp, corr });
+  // questões adaptadas em outro formato: a versão do aluno e o gabarito privado
+  const ad = {}, email = String(t.email || "").toLowerCase();
+  if (resDados?.acessEmails?.has(email)) await Promise.all((t.questoesIds || []).map(async qid => {
+    const a = await getDoc(doc(db, "acessibilidade", email, "questoes", qid)).catch(() => null);
+    const base = resDados.questoes[qid];
+    if (!a?.exists() || !base) return;
+    const q = { ...mesclarQuestao(base, a.data()), id: qid };
+    if (!temFormato(q)) return;
+    const g = (await getDoc(doc(db, "acessibilidadePrivado", email, "gabaritos", qid)).catch(() => null))?.data() || {};
+    ad[qid] = { q, g: { ...g, explicacao: resDados.gabaritos[qid]?.explicacao || "" } };
+  }));
+  cacheTent.set(t.id, { t, resp, corr, ad });
 }
 // calcula a linha da tabela (correção, sinais, tempo) de uma tentativa
-function linhaDe({ t, resp, corr }) {
+function linhaDe({ t, resp, corr, ad = {} }) {
   const { prova, questoes, gabaritos } = resDados;
   const itens = t.questoesIds.map((qid, i) => {
-    const q = questoes[qid] || { tipo: "?", enunciado: "(questão removida)", peso: 1 }, g = gabaritos[qid] || {};
+    const q = ad[qid]?.q || questoes[qid] || { tipo: "?", enunciado: "(questão removida)", peso: 1 }, g = ad[qid]?.g || gabaritos[qid] || {};
     const r = resp[qid]?.resposta ?? undefined, perdida = resp[qid]?.perdida === true, peso = Number(q.peso || 1);
     let c = corrigir(q, g, r, perdida);
     const porIA = String(corr[qid]?.corrigidoPor || "").startsWith("ia:");
@@ -1505,8 +1520,9 @@ function verAluno(id, rolar = true) {
       ${l.t.encerradaPor === "trocasDeAba" ? ` · <span class="tag erro">⛔ encerrada: limite de saídas atingido</span>` : ""}${l.perdidas ? ` · <span class="tag erro">⛔ ${l.perdidas} questão(ões) perdida(s)</span>` : ""}</p>` + l.itens.map(x => {
     const rapida = x.r !== undefined && !x.perdida && typeof x.segundos === "number" && x.segundos < RAPIDO;
     const tempo = typeof x.segundos === "number" ? `<span class="tag ${rapida ? "erro" : ""}" title="Tempo entre a questão aparecer e a resposta ser enviada">⏱ ${fmtTempo(x.segundos)}${rapida ? ` · menos de ${RAPIDO} s` : ""}</span>` : "";
-    const sua = x.perdida ? "<i>perdida por sair da prova</i>" : x.r === undefined ? "<i>não respondida</i>" : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
-    const certa = x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.g.correta] ?? "—") : esc((x.g.respostasAceitas || [])[0] || (x.g.palavrasChave || []).join(" + "));
+    const fmt = temFormato(x.q), bloco = t => `<span class="resp-formato">${esc(t).replace(/\n/g, "<br>")}</span>`;
+    const sua = x.perdida ? "<i>perdida por sair da prova</i>" : x.r === undefined ? "<i>não respondida</i>" : fmt ? bloco(textoResposta(x.q, x.r)) : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
+    const certa = fmt ? (x.g.chave ? bloco(textoChave(x.q, x.g)) + ` <span class="tag nota">${FORMATOS[x.q.formato].icone} ${esc(FORMATOS[x.q.formato].nome)}</span>` : "—") : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.g.correta] ?? "—") : esc((x.g.respostasAceitas || [])[0] || (x.g.palavrasChave || []).join(" + "));
     const manual = podeEditar() && x.q.tipo === "dissertativa" && !x.perdida ? `<div class="linha" style="margin-top:6px"><div style="flex:0 0 120px"><label>Pontos (0–${x.peso})</label><input type="number" min="0" max="${x.peso}" step="0.5" value="${x.pontos}" id="pt_${x.qid}"></div><div><label>Comentário para o aluno</label><input type="text" id="cm_${x.qid}" value="${esc(x.comentario)}"></div><div style="flex:0 0 120px;align-self:flex-end"><button class="mini" data-corr="${x.qid}">Salvar</button></div></div>` : "";
     const rot = ROTULOS[x.status] || ROTULOS.revisar;
     return `<div class="feedback bloco ${x.status === "certa" ? "certa" : ["errada", "perdida", "em_branco"].includes(x.status) ? "errada" : "revisar"}"><div class="linha acoes"><b>Q${x.n}</b> <span class="tag ${rot[0]}">${rot[1]} · ${x.pontos}/${x.peso}${x.manual ? " · manual" : ""}</span>${x.ia ? `<span class="tag nota" title="Corrigida pela IA — confira e ajuste se precisar">🤖 IA</span>` : ""}${errosIA.has(l.t.id + "/" + x.qid) ? `<span class="tag erro ia-erro">⚠ IA: ${esc(errosIA.get(l.t.id + "/" + x.qid))}</span>` : ""}${tempo}</div>
@@ -1622,8 +1638,9 @@ function boletimHTML(l, quebra = false) {
   if (l.t.encerradaPor === "trocasDeAba") h += `<div class="rapida">⛔ Prova encerrada: limite de saídas da prova atingido.</div>`;
   h += `<div class="peq">Tempo total: ${fmtTempo(l.tempo)} · Trocas de aba: ${abasTexto(l.sinais)} · Saídas da tela cheia: ${l.sinais.telaCheia} · Tentativas de colar: ${l.sinais.colar}</div>`;
   h += l.itens.map(x => {
-    const sua = x.perdida ? "<i>perdida por sair da prova</i>" : x.r === undefined ? "<i>não respondida</i>" : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
-    const certa = x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.g.correta] ?? "—") : esc((x.g.respostasAceitas || [])[0] || "—");
+    const fmt = temFormato(x.q), bloco = t => esc(t).replace(/\n/g, "<br>");
+    const sua = x.perdida ? "<i>perdida por sair da prova</i>" : x.r === undefined ? "<i>não respondida</i>" : fmt ? bloco(textoResposta(x.q, x.r)) : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
+    const certa = fmt ? bloco(textoChave(x.q, x.g) || "—") : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.g.correta] ?? "—") : esc((x.g.respostasAceitas || [])[0] || "—");
     const cls = x.status === "certa" ? "certa" : ["errada", "em_branco", "perdida"].includes(x.status) ? "errada" : "outra";
     const rapida = x.r !== undefined && typeof x.segundos === "number" && x.segundos < RAPIDO;
     const tempo = typeof x.segundos === "number" ? ` · <span class="${rapida ? "rapida" : ""}">⏱ ${fmtTempo(x.segundos)}${rapida ? ` (menos de ${RAPIDO} s)` : ""}</span>` : "";
@@ -1704,7 +1721,7 @@ function pendentesIA({ refazer = false } = {}) {
   for (const l of [...resDados.linhas, ...resDados.testes]) {
     if (!l.t.finalizadaEm) continue;
     for (const x of l.itens) {
-      if (x.q.tipo !== "dissertativa" || x.perdida || x.r === undefined || x.r === null || String(x.r).trim() === "") continue;
+      if (x.q.tipo !== "dissertativa" || temFormato(x.q) || x.perdida || x.r === undefined || x.r === null || String(x.r).trim() === "") continue;
       if (x.manual) continue;   // correção manual do professor: a IA nunca mexe
       if (x.status === "revisar" || (refazer && x.ia)) lista.push({ tid: l.t.id, qid: x.qid, q: x.q, g: x.g, resposta: x.r, nome: l.t.nome || l.t.email, n: x.n, refazer });
     }

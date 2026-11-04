@@ -4,6 +4,7 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithCredential, sig
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { getFirestore, connectFirestoreEmulator, doc, getDoc, getDocs, collection, writeBatch, deleteDoc }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { temFormato, corrigirFormato } from "../servidor/formatos.js";
 import { firebaseConfig, SUPER_ADMIN, DOMINIOS_ALUNOS_PADRAO, USAR_EMULADOR, GOOGLE_CLIENT_ID } from "./firebase-config.js";
 
 export const app  = initializeApp(firebaseConfig);
@@ -107,6 +108,8 @@ export function normalizar(s) {
 export function corrigir(questao, gabarito, resposta, perdida = false) {
   if (perdida) return { pontos: 0, status: "perdida" };
   const peso = Number(questao.peso || 1);
+  // questão adaptada em outro formato (V/F, ligar, lacunas…): gabarito privado da acessibilidade, com pontos parciais
+  if (temFormato(questao)) return corrigirFormato(questao, gabarito, resposta, peso);
   if (resposta === undefined || resposta === null || resposta === "") return { pontos: 0, status: "em_branco" };
   if (questao.tipo === "alternativa") {
     const ok = Number(resposta) === Number(gabarito.correta);

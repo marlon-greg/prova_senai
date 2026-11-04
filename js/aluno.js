@@ -4,6 +4,8 @@ import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar
   from "./common.js";
 import { baixarMaterial } from "./material.js";
 import { desenharConquistas } from "./aluno-conquistas.js";
+import { montarFormato, temFormato, FORMATOS, rotuloFormato, textoParaFalar, textoResposta, textoChave } from "./formatos-ui.js";
+const controles = {};   // qid -> controle do formato adaptado (valor, preencher, travar)
 import { abrirLeitorPdf } from "./leitor-pdf.js";
 import { completar, aplicarVisual, mesclarQuestao } from "./acessibilidade.js";
 import { mascoteLigado, ligarMascote, dadosMascote, htmlMascote, htmlEscolha, ligarEscolha, montarGuia, pararFala } from "./guia.js";
@@ -148,7 +150,7 @@ function lerQuestao(qid, botao) {
   if (!("speechSynthesis" in window)) return;
   if (speechSynthesis.speaking && botao.classList.contains("ativo")) { speechSynthesis.cancel(); return; }
   const q = questoes[qid];
-  const alts = q.tipo === "alternativa" ? (ordemAlternativas[qid] || []).map((k, pos) => `Alternativa ${letra(pos)}: ${q.alternativas[k]}.`).join(" ") : "";
+  const alts = temFormato(q) ? textoParaFalar(q) : q.tipo === "alternativa" ? (ordemAlternativas[qid] || []).map((k, pos) => `Alternativa ${letra(pos)}: ${q.alternativas[k]}.`).join(" ") : "";
   const u = new SpeechSynthesisUtterance(`${q.enunciado}. ${temApoio(q) ? "Apoio: " + q.apoios.join(". ") + ". " : ""}${alts}`.replace(/`/g, ""));
   u.lang = "pt-BR"; u.rate = 0.95;
   const voz = speechSynthesis.getVoices().find(v => /^pt(-|_)BR/i.test(v.lang)); if (voz) u.voice = voz;
@@ -451,14 +453,15 @@ function criarCartaoQuestao(qid, i, unica) {
   card.className = "card questao"; card.dataset.qid = qid;
   if (!unica) card.id = "q_" + qid;
   if (!q) { card.innerHTML = `<p class="pequeno">Questão ${i + 1} indisponível. Avise o professor.</p><div class="acoes-questao"></div>`; return card; }
-  const tipo = q.tipo === "alternativa" ? "múltipla escolha" : "resposta escrita", colar = colarPermitido(), voltar = podeVoltar();
+  const tipo = temFormato(q) ? FORMATOS[q.formato].nome.toLowerCase() : q.tipo === "alternativa" ? "múltipla escolha" : "resposta escrita", colar = colarPermitido(), voltar = podeVoltar();
   // cartão em três partes: cabeçalho (número e tipo) · corpo (enunciado e resposta) · rodapé (enviar)
   card.innerHTML = `<div class="q-cab"><span class="q-num">Questão ${i + 1}<small> de ${tentativa.questoesIds.length}</small></span><span class="tag">${tipo}</span>${q.adaptada ? `<span class="tag nota">♿ adaptada</span>` : ""}<span class="tag ok q-enviada oculto">✓ ${voltar ? "salva" : "enviada"}</span>
       ${acess && ap().lerEmVoz !== false && "speechSynthesis" in window ? `<button type="button" class="leve mini b-ouvir">🔊 Ouvir</button>` : ""}</div>
     <div class="q-corpo">
       <div class="enunciado">${formatarEnunciado(q.enunciado)}</div>
       ${htmlApoios(q)}
-      <div class="q-rotulo">${q.tipo === "alternativa" ? "Escolha uma alternativa" : "Sua resposta"}</div>
+      ${q.formato === "escritaApoio" && q.dados ? `<div class="escrita-apoio">${q.dados.comecoResposta ? `<p><b>✏ Comece assim:</b> ${esc(q.dados.comecoResposta)}…</p>` : ""}${q.dados.checklist?.length ? `<p><b>✅ Não esqueça:</b></p><ul>${q.dados.checklist.map(c => `<li>${esc(c)}</li>`).join("")}</ul>` : ""}</div>` : ""}
+      <div class="q-rotulo">${temFormato(q) ? rotuloFormato(q) : q.tipo === "alternativa" ? "Escolha uma alternativa" : "Sua resposta"}</div>
       <div class="q-area"></div>
       <p class="pequeno q-salva oculto" role="status"></p>
     </div>
@@ -470,7 +473,9 @@ function criarCartaoQuestao(qid, i, unica) {
   const area = card.querySelector(".q-area");
   card.querySelector(".b-ouvir")?.addEventListener("click", e => lerQuestao(qid, e.currentTarget));
   card.querySelector(".b-apoio")?.addEventListener("click", e => { falarApoio(qid); e.currentTarget.textContent = rotuloApoio(qid); });
-  if (q.tipo === "alternativa") {
+  if (temFormato(q)) {
+    controles[qid] = montarFormato(area, q, { aoMudar: () => marcarAlterada(card, qid), nome: "f_" + qid });
+  } else if (q.tipo === "alternativa") {
     // sempre embaralhadas, estável para o aluno (semente uid + qid); o valor gravado é o índice ORIGINAL
     const ordem = embaralhar(q.alternativas.map((_, k) => k), eu.uid + qid);
     ordemAlternativas[qid] = ordem;
@@ -505,13 +510,15 @@ function criarCartaoQuestao(qid, i, unica) {
 
 // coloca a resposta gravada no cartão
 function preencherCartao(card, qid, resposta) {
+  if (controles[qid] && temFormato(questoes[qid])) return controles[qid].preencher(resposta);
   if (questoes[qid]?.tipo === "alternativa")
     card.querySelectorAll(".alt input").forEach(inp => { inp.checked = resposta !== null && Number(inp.value) === Number(resposta); inp.closest(".alt").classList.toggle("sel", inp.checked); });
   else { const t = card.querySelector("textarea"); if (t) { t.value = resposta ?? ""; card.querySelector(".q-chars").textContent = t.value.length; } }
 }
 // sem voltar: trava o cartão depois de enviado
 function travarCartao(card) {
-  card.querySelectorAll(".q-area input, .q-area textarea").forEach(c => c.disabled = true);
+  controles[card.dataset.qid]?.travar?.();
+  card.querySelectorAll(".q-area input, .q-area textarea, .q-area select, .q-area button").forEach(c => c.disabled = true);
   card.querySelector(".b-enviar")?.classList.add("oculto"); card.querySelector(".q-dica")?.classList.add("oculto");
   card.querySelector(".q-enviada")?.classList.remove("oculto");
   card.classList.add("enviada");
@@ -531,6 +538,7 @@ function marcarAlterada(card, qid) {
 }
 // valor que está no cartão (null = nada escolhido/escrito)
 function valorDoCartao(card, qid) {
+  if (controles[qid] && temFormato(questoes[qid])) return controles[qid].valor();
   if (questoes[qid]?.tipo === "alternativa") { const m = card.querySelector(".alt input:checked"); return m ? Number(m.value) : null; }
   const v = (card.querySelector("textarea")?.value || "").trim();
   return v || null;
@@ -538,7 +546,7 @@ function valorDoCartao(card, qid) {
 // o cartão tem algo diferente do que está gravado?
 function mudou(card, qid) {
   const v = valorDoCartao(card, qid);
-  return v !== null && v !== (respostas[qid]?.resposta ?? null);
+  return v !== null && JSON.stringify(v) !== JSON.stringify(respostas[qid]?.resposta ?? null);
 }
 
 // modo "uma": um cartão por vez
@@ -727,7 +735,7 @@ async function enviarResposta(qid, card, { silencioso = false } = {}) {
   const resposta = valorDoCartao(card, qid);
   if (resposta === null) {
     if (silencioso) return true;
-    toast(q.tipo === "alternativa" ? "Escolha uma alternativa." : "Escreva a resposta antes de enviar.", "erro"); return false;
+    toast(temFormato(q) ? "Responda a questão antes de enviar." : q.tipo === "alternativa" ? "Escolha uma alternativa." : "Escreva a resposta antes de enviar.", "erro"); return false;
   }
   if (voltar && !mudou(card, qid)) { if (!silencioso) toast("Esta resposta já está salva.", "ok"); return true; }
   if (!voltar) {
@@ -910,19 +918,24 @@ async function marcadoresAntes() {
 // ---------- placar (o aluno vê só quantas acertou e a nota) ----------
 // O painel do professor grava o placar oficial na tentativa (com as correções da IA/manuais);
 // enquanto isso não acontece, calcula aqui com o gabarito (liberado pelos marcadores depois de finalizar).
+// questão (com a adaptação do aluno, se houver) e gabarito: o do banco, ou o privado do formato adaptado
+// (os dois só abrem depois de finalizar a prova, pelos marcadores)
+async function questaoEGabarito(qid, bancoId, usarCache = false) {
+  let q = usarCache && questoes[qid] ? questoes[qid] : (await getDoc(doc(db, "bancos", bancoDaQuestao(qid, bancoId), "questoes", qid)).catch(() => null))?.data() || null;
+  if (q && acess && !usarCache) { const ad = await getDoc(doc(db, "acessibilidade", acess.email, "questoes", qid)).catch(() => null); if (ad?.exists()) q = mesclarQuestao(q, ad.data()); }
+  const gd = q && temFormato(q) && acess ? await getDoc(doc(db, "acessibilidadePrivado", acess.email, "gabaritos", qid)).catch(() => null)
+                                         : await getDoc(doc(db, "bancos", bancoDaQuestao(qid, bancoId), "gabaritos", qid)).catch(() => null);
+  return { q, g: gd?.exists?.() ? gd.data() : null };
+}
 async function placarDaTentativa(t) {
   if (typeof t.acertos === "number") return { acertos: t.acertos, totalQuestoes: t.totalQuestoes, nota: t.nota ?? t.notaPrevia, pendentes: t.aguardandoCorrecao || 0 };
   const ids = t.questoesIds, banco = t.bancoId;
-  const [qs, gs, rs] = await Promise.all([
-    Promise.all(ids.map(q => questoes[q] && tentativa?.id === t.id ? { data: () => questoes[q] } : getDoc(doc(db, "bancos", bancoDaQuestao(q, banco), "questoes", q)))),
-    Promise.all(ids.map(q => getDoc(doc(db, "bancos", bancoDaQuestao(q, banco), "gabaritos", q)).catch(() => null))),
-    getDocs(collection(db, "tentativas", t.id, "respostas"))
-  ]);
+  const [qgs, rs] = await Promise.all([Promise.all(ids.map(q => questaoEGabarito(q, banco, tentativa?.id === t.id))), getDocs(collection(db, "tentativas", t.id, "respostas"))]);
   const resp = {}; rs.forEach(d => resp[d.id] = d.data());
   const itens = ids.map((qid, i) => {
-    const q = qs[i]?.data?.() || { peso: 1 }, peso = Number(q.peso || 1);
-    if (!gs[i]?.exists?.()) return { pontos: 0, peso, status: resp[qid] ? "revisar" : "em_branco" };   // sem gabarito legível: conta como em correção
-    return { peso, ...corrigir(q, gs[i].data(), resp[qid]?.resposta ?? undefined, resp[qid]?.perdida === true) };
+    const q = qgs[i].q || { peso: 1 }, peso = Number(q.peso || 1);
+    if (!qgs[i].g) return { pontos: 0, peso, status: resp[qid] ? "revisar" : "em_branco" };   // sem gabarito legível: conta como em correção
+    return { peso, ...corrigir(q, qgs[i].g, resp[qid]?.resposta ?? undefined, resp[qid]?.perdida === true) };
   });
   const p = placar(itens);
   return { acertos: p.acertos, totalQuestoes: p.totalQuestoes, nota: t.nota ?? p.notaPrevia, pendentes: p.aguardandoCorrecao };
@@ -1371,9 +1384,8 @@ async function verResultado() {
   $("#resTitulo").textContent = provaAtual.titulo;
   $("#resResumo").innerHTML = "<p class='pequeno'>Carregando…</p>"; $("#resLista").innerHTML = "";
   const ids = tentativa.questoesIds;
-  const [qs, gs, rs, cs] = await Promise.all([
-    Promise.all(ids.map(q => getDoc(doc(db, "bancos", bancoDaQuestao(q, tentativa.bancoId), "questoes", q)))),
-    Promise.all(ids.map(q => getDoc(doc(db, "bancos", bancoDaQuestao(q, tentativa.bancoId), "gabaritos", q)).catch(() => null))),
+  const [qgs, rs, cs] = await Promise.all([
+    Promise.all(ids.map(q => questaoEGabarito(q, tentativa.bancoId))),
     getDocs(collection(db, "tentativas", tentativa.id, "respostas")),
     getDocs(collection(db, "tentativas", tentativa.id, "correcoes")).catch(() => ({ forEach() {} }))
   ]);
@@ -1381,15 +1393,16 @@ async function verResultado() {
   const corr = {}; cs.forEach(d => corr[d.id] = d.data());
   let total = 0, max = 0, certas = 0, html = "";
   ids.forEach((qid, i) => {
-    const q = { id: qid, ...(qs[i].data() || {}) }, g = (gs[i] && gs[i].exists()) ? gs[i].data() : {};
+    const q = { id: qid, ...(qgs[i].q || {}) }, g = qgs[i].g || {};
     const r = resp[qid]?.resposta ?? undefined, perdida = resp[qid]?.perdida === true, peso = Number(q.peso || 1); max += peso;
     let c = corrigir(q, g, r, perdida);
     let obs = "";
     if (!perdida && corr[qid] && corr[qid].pontos !== undefined) { c = { pontos: Number(corr[qid].pontos), status: Number(corr[qid].pontos) >= peso ? "certa" : Number(corr[qid].pontos) > 0 ? "parcial" : "errada" }; obs = corr[qid].comentario || ""; }
     total += c.pontos; if (c.status === "certa") certas++;
     const rot = { certa: ["ok", "✅ Certa"], errada: ["erro", "❌ Errada"], parcial: ["aviso", "🟡 Parcial"], revisar: ["aviso", "🟡 Em correção"], em_branco: ["erro", "⬜ Em branco"], perdida: ["erro", "⛔ Perdida (saiu da prova)"] }[c.status];
-    let sua = perdida ? "<i>perdida por sair da prova</i>" : r === undefined ? "<i>não respondida</i>" : q.tipo === "alternativa" ? esc(q.alternativas[r]) : `<span class="mono">${esc(r)}</span>`;
-    let certa = q.tipo === "alternativa" ? esc(q.alternativas?.[g.correta] ?? "—") : (g.respostasAceitas?.length ? `<span class="mono">${esc(g.respostasAceitas[0])}</span>` : "—");
+    const fmt = temFormato(q), bloco = t => `<span class="resp-formato">${esc(t).replace(/\n/g, "<br>")}</span>`;
+    let sua = perdida ? "<i>perdida por sair da prova</i>" : r === undefined ? "<i>não respondida</i>" : fmt ? bloco(textoResposta(q, r)) : q.tipo === "alternativa" ? esc(q.alternativas[r]) : `<span class="mono">${esc(r)}</span>`;
+    let certa = fmt ? (g.chave ? bloco(textoChave(q, g)) : "—") : q.tipo === "alternativa" ? esc(q.alternativas?.[g.correta] ?? "—") : (g.respostasAceitas?.length ? `<span class="mono">${esc(g.respostasAceitas[0])}</span>` : "—");
     html += `<div class="card"><div class="q-topo"><span class="q-numero" style="font-size:1.1em">Questão ${i + 1}</span><span class="tag ${rot[0]}">${rot[1]} · ${c.pontos}/${peso}</span></div>
       <div class="enunciado">${formatarEnunciado(q.enunciado)}</div>
       <p><b>Sua resposta:</b> ${sua}</p>

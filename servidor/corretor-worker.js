@@ -24,6 +24,7 @@
 //   Nada é gravado: o painel mostra o resultado para o professor revisar e salvar.
 // (FIRESTORE_EMULADOR e ANTHROPIC_URL existem só para testar no computador; não crie no Cloudflare.)
 
+import { temFormato, corrigirFormato } from "./formatos.js";
 import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS, pedidoCurso, lerRespostaCurso } from "./organizar.js";
 
 export default {
@@ -78,13 +79,25 @@ async function corrigirTentativa(env, usuario, tid) {
     fs.listar(`tentativas/${tid}/respostas`),
     fs.listar(`tentativas/${tid}/correcoes`)
   ]);
+  // aluno com acessibilidade: questões adaptadas em outro formato (V/F, ligar…) usam o gabarito privado, com pontos parciais
+  const email = String(t.email || "").toLowerCase();
+  if (email && await fs.ler(`acessibilidade/${email}`)) {
+    const ads = await fs.lerVarios(ids.flatMap(q => [`acessibilidade/${email}/questoes/${q}`, `acessibilidadePrivado/${email}/gabaritos/${q}`]));
+    for (const qid of ids) {
+      const a = ads[`acessibilidade/${email}/questoes/${qid}`], k = `bancos/${bancoDe(qid)}/questoes/${qid}`;
+      if (a && docs[k] && temFormato(a) && a.dados) {
+        docs[k] = { ...docs[k], formato: a.formato, dados: a.dados };
+        docs[`bancos/${bancoDe(qid)}/gabaritos/${qid}`] = ads[`acessibilidadePrivado/${email}/gabaritos/${qid}`] || {};
+      }
+    }
+  }
   const modelo = env.MODELO || "claude-haiku-5-5";
   let corrigidas = 0, erros = 0;
   // dissertativas que a correção por palavras-chave não resolveu e ainda não têm correção
   for (const qid of ids) {
     const q = docs[`bancos/${bancoDe(qid)}/questoes/${qid}`], g = docs[`bancos/${bancoDe(qid)}/gabaritos/${qid}`] || {};
     const r = resp[qid];
-    if (!q || q.tipo !== "dissertativa" || !r || r.perdida || r.resposta === null || r.resposta === undefined || String(r.resposta).trim() === "") continue;
+    if (!q || q.tipo !== "dissertativa" || temFormato(q) || !r || r.perdida || r.resposta === null || r.resposta === undefined || String(r.resposta).trim() === "") continue;
     if (corr[qid] || corrigirLocal(q, g, r.resposta).status !== "revisar") continue;
     try {
       const c = await corrigirComIA(env.ANTHROPIC_API_KEY, modelo, q, g, r.resposta, env.ANTHROPIC_URL);
@@ -98,7 +111,7 @@ async function corrigirTentativa(env, usuario, tid) {
   const itens = ids.map(qid => {
     const q = docs[`bancos/${bancoDe(qid)}/questoes/${qid}`] || { peso: 1 }, g = docs[`bancos/${bancoDe(qid)}/gabaritos/${qid}`] || {};
     const peso = Number(q.peso || 1), r = resp[qid];
-    let c = corrigirLocal(q, g, r?.resposta, r?.perdida === true);
+    let c = r?.perdida === true ? { pontos: 0, status: "perdida" } : temFormato(q) ? corrigirFormato(q, g, r?.resposta, peso) : corrigirLocal(q, g, r?.resposta, r?.perdida === true);
     const m = atuais[qid];
     if (!r?.perdida && m && m.pontos !== undefined) {
       const p = Number(m.pontos);
