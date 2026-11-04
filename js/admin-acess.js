@@ -7,13 +7,26 @@ import { VISUAL_PADRAO, PROVA_PADRAO, FONTES, TEMAS, completar, aplicarVisual, a
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, abrirMaterialEmAba, tamanhoTexto, erroMaterial } from "./material.js";
 import { adaptarQuestao } from "./ia.js";
 import { abrirOpcoes, editarFormato, previaAplicada, gerarOpcoes, lerOpcoes } from "./admin-formatos.js";
-import { FORMATOS, temFormato } from "./formatos-ui.js";
+import { FORMATOS, temFormato, textoChave } from "./formatos-ui.js";
+// como a questão aparece impressa para o aluno (sem resposta)
+function textoVazio(q) {
+  const d = q.dados || {}, L = "ABCDEFGH";
+  if (q.formato === "menosAlt") return d.alternativas.map((a, i) => `( ) ${L[i]}) ${a}`).join("\n");
+  if (q.formato === "vf") return d.afirmacoes.map(a => `(  ) ${a}`).join("\n");
+  if (q.formato === "ligar") return d.esquerda.map((e, i) => `${i + 1}. ${e}${" ".repeat(4)}(   ) ${L[i]}. ${d.direita[i] || ""}`).join("\n") + d.direita.slice(d.esquerda.length).map((x, k) => `\n(   ) ${L[d.esquerda.length + k]}. ${x}`).join("");
+  if (q.formato === "lacunas") return `Palavras: ${d.banco.join(" · ")}\n\n${String(d.texto).replace(/\[\[\d+\]\]/g, "__________")}`;
+  if (q.formato === "ordenar") return d.passos.map(p => `(   ) ${p}`).join("\n");
+  if (q.formato === "etapas") return d.etapas.map((e, i) => `Etapa ${i + 1}: ${e.pergunta}\n${e.alternativas.map((a, k) => `   ( ) ${L[k]}) ${a}`).join("\n")}`).join("\n");
+  return "";
+}
 import { collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, query, where, serverTimestamp, orderBy, FieldPath }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 let ctx = null;          // { eu, podeEditar(), souDono(), iaCfg(), urlCorretor(), auth, alunosDasTurmas() }
 let lista = [];          // [{ email, ...acessibilidade }]
 let aberto = null;       // email em edição
+// abrir um aluno direto (ex.: vindo da aba Provas adaptadas): a próxima carga da lista abre o cadastro dele
+export function abrirDepois(email) { aberto = email; }
 export function iniciarAcessibilidade(c) {
   ctx = c;
   $("#acFiltroBusca").oninput = $("#acFiltroTurma").onchange = $("#acFiltroSit").onchange = () => desenharLista();
@@ -610,6 +623,11 @@ function ajustesVisuais(v) {
   return l;
 }
 async function baixarPdf() {
+  // gabaritos privados das questões em outro formato (V/F, ligar…), para o PDF mostrar a resposta esperada
+  const gabFmt = {};
+  await Promise.all((qAtual?.itens || []).filter(x => temFormato(x.ad || {})).map(async x => {
+    gabFmt[x.qid] = (await getDoc(doc(db, "acessibilidadePrivado", qAtual.email, "gabaritos", x.qid)).catch(() => null))?.data() || null;
+  }));
   const w = window.open("", "_blank");   // abre já no clique (senão o navegador bloqueia)
   if (!w) return toast("O navegador bloqueou a janela. Libere pop-ups para este site.", "erro");
   w.document.write("<p style='font-family:sans-serif'>Montando o relatório…</p>");
@@ -632,9 +650,11 @@ async function baixarPdf() {
       const enun = ad?.enunciado || x.q.enunciado, alts = alt ? (ad?.alternativas?.length === x.q.alternativas.length ? ad.alternativas : x.q.alternativas) : null;
       const origem = !ad ? "versão original (sem adaptação)" : ad.origem === "ia" ? `adaptada pela IA${ad.editadoPor ? `, revisada por ${esc(ad.editadoPor)}` : ""}` : `adaptada por ${esc(ad.adaptadoPor || ad.editadoPor || "equipe")}`;
       return `<section class="q">
-        <h3>Questão ${i + 1} <span>${alt ? "múltipla escolha" : "resposta escrita"} · ${esc(temaDe(x.q))} · ${origem}</span></h3>
+        <h3>Questão ${i + 1} <span>${ad?.formato && FORMATOS[ad.formato] ? esc(FORMATOS[ad.formato].nome) : alt ? "múltipla escolha" : "resposta escrita"} · ${esc(temaDe(x.q))} · ${origem}</span></h3>
         <div class="bloco aplicada"><div class="rot">Versão aplicada ao aluno</div><div>${fmtTexto(enun)}</div>
-          ${alts ? `<ol type="A">${alts.map(t => `<li>${fmtTexto(t)}</li>`).join("")}</ol>` : `<div class="linhas"></div>`}</div>
+          ${temFormato(ad || {}) ? `<div class="rot">${FORMATOS[ad.formato].icone} ${esc(FORMATOS[ad.formato].nome)}</div><div>${esc(textoVazio(ad)).replace(/\n/g, "<br>")}</div>${gabFmt[x.qid] ? `<div class="rot" style="margin-top:6px">Resposta esperada</div><div>${esc(textoChave(ad, gabFmt[x.qid])).replace(/\n/g, "<br>")}</div>` : ""}`
+            : ad?.formato === "escritaApoio" && ad.dados ? `${ad.dados.comecoResposta ? `<p><b>Comece assim:</b> ${esc(ad.dados.comecoResposta)}…</p>` : ""}${ad.dados.checklist?.length ? `<p><b>Não esqueça:</b> ${ad.dados.checklist.map(esc).join(" · ")}</p>` : ""}<div class="linhas"></div>`
+            : alts ? `<ol type="A">${alts.map(t => `<li>${fmtTexto(t)}</li>`).join("")}</ol>` : `<div class="linhas"></div>`}</div>
         ${ad ? `<div class="bloco original"><div class="rot">Versão original do banco</div><div>${fmtTexto(x.q.enunciado)}</div>
           ${alt ? `<ol type="A">${x.q.alternativas.map(t => `<li>${fmtTexto(t)}</li>`).join("")}</ol>` : ""}</div>` : ""}
         ${apoios.length && a.prova.mostrarDica !== false ? `<div class="bloco apoio"><div class="rot">💡 Apoios falados pelo mascote</div><ul>${apoios.map(t => `<li>${esc(t)}</li>`).join("")}</ul></div>` : ""}

@@ -321,6 +321,29 @@ Antes da prova, um mascote explica as regras, uma fala por vez. Tem o botão �
 
 A IA roda no seu navegador (administrador principal, com a chave salva) ou no servidor de correção (Cloudflare Worker, ação `adaptar`) para os professores e a auxiliar de inclusão. No Worker, a variável opcional `MODELO_ADAPTACAO` define o modelo (padrão `claude-sonnet-5-5`).
 
+### 🎨 Formatos de questão adaptada
+Além de reescrever o texto, a questão pode mudar de **formato** para o aluno, cobrando o mesmo conteúdo:
+
+| Formato | Como o aluno responde | Correção |
+|---|---|---|
+| 📝 Texto simplificado | igual à original, com linguagem simples | gabarito do banco |
+| 🔘 Menos alternativas | 2 ou 3 alternativas | automática |
+| ✅ Verdadeiro ou falso | V ou F em cada frase | automática, parcial |
+| 🔗 Ligar colunas | toca no item da esquerda e no par da direita (cores) | automática, parcial |
+| 🧩 Completar lacunas | escolhe a palavra de cada espaço num banco de palavras | automática, parcial |
+| 🔢 Ordenar passos | ↑ ↓ até a ordem certa | automática, parcial |
+| 🪜 Questão em etapas | perguntas pequenas, uma por vez | automática, parcial |
+| ✍ Escrita com apoio | resposta escrita com começo de frase e lista do que não pode faltar | como dissertativa |
+
+- Na questão sorteada (aba Acessibilidade): **🎨 Opções de formato (IA)**. A IA usa a descrição, os laudos, o **diário** e os comentários dos professores e propõe de 4 a 6 opções, **da mais indicada para a menos** (estrelas), cada uma com o **porquê** e a **base técnica** (DUA/UDL, LBI 13.146/2015, PNEEPEI/AEE, ensino estruturado, linguagem simples…). Cada opção tem a **prévia de como o aluno vê**, com o gabarito. **✅ Usar este** aplica; **✎ Ajustar e usar** abre o editor (formato + texto + prévia ao vivo).
+- **✎ Escolher / editar formato**: monta o formato à mão (ex.: `V | frase`, `item = par`, `O comando [[CREATE TABLE]] cria…`).
+- **🎨 Sugerir formatos para todas**: prepara as opções de todas as sorteadas; depois você escolhe em cada uma.
+- Segurança: a questão adaptada que o aluno lê **não tem a resposta**. O gabarito do formato fica em `acessibilidadePrivado/{aluno}/gabaritos`, que o aluno só abre depois de finalizar (marcador). A correção (painel, página do aluno e servidor) dá **pontos parciais**.
+- O PDF da prova adaptada mostra o formato e a resposta esperada.
+
+### 🗂 Provas adaptadas (histórico)
+Aba com tudo o que foi adaptado, por aluno e por prova: o formato de cada questão, o porquê, quem fez e quando, e **🕘 Histórico de escolhas** (qual opção foi escolhida entre as da IA, se foi ajustada à mão). Pesquisa e filtros por turma, formato e origem (IA/manual). Auxiliar de inclusão vê só os alunos dela; professores e admin veem todos.
+
 ### Auxiliar de inclusão
 Cadastre em **Equipe** com o papel **auxiliar de inclusão** e vincule no cadastro do aluno, em *Auxiliar(es) de inclusão*. Ela vê só as abas **Diário**, **Acessibilidade** e **Resultados**, e só os alunos vinculados a ela. Pode editar as adaptações e as questões, subir documentos, deixar sugestões e restaurar vidas ou reabrir a prova desses alunos. Ela não vê os outros alunos, não muda quem está vinculado e não fecha notas. O aluno precisa ter entrado no sistema pelo menos uma vez para os resultados dele aparecerem para a auxiliar.
 

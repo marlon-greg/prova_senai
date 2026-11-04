@@ -11,7 +11,8 @@ import { iniciarDiario, carregarDiario } from "./admin-diario.js";
 import { ligarAjuda } from "./ajuda.js";
 import { mesclarQuestao } from "./acessibilidade.js";
 import { temFormato, textoResposta, textoChave, FORMATOS } from "./formatos-ui.js";
-import { iniciarAcessibilidade, carregarAcessibilidade, prepararNovo as prepararNovoAcess } from "./admin-acess.js";
+import { iniciarAcessibilidade, carregarAcessibilidade, prepararNovo as prepararNovoAcess, abrirDepois } from "./admin-acess.js";
+import { iniciarHistorico, carregarHistorico } from "./admin-historico.js";
 import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp, onSnapshot, increment, deleteField }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -23,7 +24,7 @@ const ehInclusao = () => eu?.papel === "inclusao";
 // pode mexer nas vidas / reabrir: professor, admin e a auxiliar de inclusão (nos alunos dela; as regras conferem)
 const podeCuidar = () => podeEditar() || ehInclusao();
 let urlCorretorCfg = "", horarioCfg = HORARIO_PADRAO;   // servidor de correção/adaptação (config/geral.urlCorretor)
-const ABAS_INCLUSAO = ["diario", "acessibilidade", "resultados"];
+const ABAS_INCLUSAO = ["diario", "acessibilidade", "historico", "resultados"];
 // administrador principal: o único que vê e usa a chave da IA (as regras também só deixam ele ler config/ia)
 const souDono = () => !!eu && eu.email === SUPER_ADMIN.toLowerCase();
 
@@ -47,6 +48,8 @@ aoMudarLogin(async user => {
     alunosDasTurmas: async () => { await listarTurmas().catch(() => {}); return turmasCache.flatMap(t => alunosDaTurma(t).map(a => ({ ...a, turma: t.nome, turmaId: t.id, diasAula: t.diasAula || [] }))); } });
   iniciarDiario({ eu, podeEditar, souDono, horario: () => horarioCfg,
     alunosDasTurmas: async () => { await listarTurmas().catch(() => {}); return turmasCache.flatMap(t => alunosDaTurma(t).map(a => ({ ...a, turma: t.nome, turmaId: t.id, diasAula: t.diasAula || [] }))); } });
+  iniciarHistorico({ eu, abrirAluno: email => { abrirDepois(email); abrirAba("acessibilidade"); },
+    alunosDasTurmas: async () => { await listarTurmas().catch(() => {}); return turmasCache.flatMap(t => alunosDaTurma(t).map(a => ({ ...a, turma: t.nome, turmaId: t.id }))); } });
   iniciarOrganizacao({ eu, podeEditar, ehAdmin, auth, iaCfg: () => iaCfg, urlCorretor: () => urlCorretorCfg,
     listarTurmas, alunosDaTurma, listarBancos, questoesDoBanco, questoesDoBancoCache: id => questoesCache[id],
     invalidarBanco: id => { delete questoesCache[id]; }, novaProva: abrirNovaProva,
@@ -54,7 +57,7 @@ aoMudarLogin(async user => {
   trocar("telaPainel");
   document.querySelectorAll("[data-aba]").forEach(b => {
     b.onclick = () => abrirAba(b.dataset.aba);
-    b.classList.toggle("oculto", (ehInclusao() && !ABAS_INCLUSAO.includes(b.dataset.aba)) || (b.dataset.aba === "diario" && !podeCuidar()));
+    b.classList.toggle("oculto", (ehInclusao() && !ABAS_INCLUSAO.includes(b.dataset.aba)) || (["diario", "historico"].includes(b.dataset.aba) && !podeCuidar()));
   });
   document.body.classList.toggle("papel-inclusao", ehInclusao());
   abrirAba(ehInclusao() ? "diario" : "provas");
@@ -65,8 +68,8 @@ function abrirAba(a) {
   abaAtual = a; ligarAjuda(() => abaAtual);
   if (a !== "resultados" && $("#rAoVivo").checked) { $("#rAoVivo").checked = false; pararAoVivo(); }   // sair da aba desliga o ao vivo
   document.querySelectorAll("[data-aba]").forEach(b => b.classList.toggle("ativa", b.dataset.aba === a));
-  ["organizacao", "diario", "provas", "bancos", "turmas", "resultados", "acessibilidade", "equipe", "config"].forEach(x => $("#aba-" + x).classList.toggle("oculto", x !== a));
-  return ({ organizacao: carregarOrganizacao, diario: carregarDiario, provas: carregarProvas, bancos: () => { carregarBancos(); carregarMateriais(); }, turmas: carregarTurmas, resultados: prepararResultados,
+  ["organizacao", "diario", "historico", "provas", "bancos", "turmas", "resultados", "acessibilidade", "equipe", "config"].forEach(x => $("#aba-" + x).classList.toggle("oculto", x !== a));
+  return ({ organizacao: carregarOrganizacao, diario: carregarDiario, historico: carregarHistorico, provas: carregarProvas, bancos: () => { carregarBancos(); carregarMateriais(); }, turmas: carregarTurmas, resultados: prepararResultados,
      acessibilidade: () => { carregarAcessibilidade(); if (podeEditar()) prepararNovoAcess(); }, equipe: carregarEquipe, config: carregarConfig })[a]();
 }
 

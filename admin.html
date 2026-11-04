@@ -36,6 +36,7 @@
       <button data-aba="diario">Diário</button>
       <button data-aba="resultados">Resultados</button>
       <button data-aba="acessibilidade">Acessibilidade</button>
+      <button data-aba="historico">Provas adaptadas</button>
       <button data-aba="bancos">Bancos de questões</button>
       <button data-aba="turmas">Turmas</button>
       <button data-aba="equipe">Equipe</button>
@@ -231,6 +232,22 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
       </div>
       <div id="acessLista"></div>
       <div id="acessDetalhe"></div>
+    </div>
+
+    <!-- PROVAS ADAPTADAS (js/admin-historico.js) -->
+    <div id="aba-historico" class="oculto">
+      <div class="card">
+        <h2>Provas adaptadas</h2>
+        <p class="pequeno" style="margin-top:0">Histórico de todas as adaptações: por aluno e por prova, o formato de cada questão, o porquê, quem fez e quando, e as escolhas feitas entre as opções da IA.</p>
+        <div class="barra-filtros" role="search">
+          <input type="search" id="hBusca" placeholder="🔎 Pesquisar aluno, prova ou questão…" aria-label="Pesquisar provas adaptadas">
+          <select id="hTurma" aria-label="Filtrar por turma"><option value="">👥 Todas as turmas</option></select>
+          <select id="hFormato" aria-label="Filtrar por formato"></select>
+          <select id="hOrigem" aria-label="Filtrar por origem"><option value="">🤖 IA e manual</option><option value="ia">🤖 Feitas pela IA</option><option value="manual">✍ Feitas à mão</option></select>
+        </div>
+        <p id="hContagem" class="pequeno" aria-live="polite"></p>
+      </div>
+      <div id="hLista"></div>
     </div>
 
     <!-- EQUIPE -->

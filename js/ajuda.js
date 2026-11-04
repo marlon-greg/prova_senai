@@ -42,6 +42,8 @@ export const AJUDA_ABAS = {
     <li>Professores leem e comentam cada dia; eles não mudam o registro.</li>
     <li><b>📄 Relatório formal</b>: PDF do período para coordenação, direção ou sede.</li></ol>
     <p>As medalhas são da <b>aluna</b>: ela vê na página dela só coisas positivas (contagens), nunca os textos do diário.</p>` },
+  historico: { t: "Provas adaptadas", h: `<p>O histórico de tudo o que foi adaptado: para cada aluno e cada prova, o <b>formato</b> de cada questão (texto simplificado, V/F, ligar colunas, lacunas…), o <b>porquê</b>, quem adaptou e quando.</p>
+    <p>Em <b>🕘 Histórico de escolhas</b> aparece cada escolha feita entre as opções da IA (e se foi ajustada à mão). A auxiliar vê só os alunos dela; professores e admin veem todos.</p><p>Para mudar uma adaptação, clique em <b>♿ Abrir na Acessibilidade</b>.</p>` },
   resultados: { t: "Resultados", h: `<ol><li>Escolha turma, semestre, matéria e a prova; clique em <b>Carregar</b> (ou ligue <b>Ao vivo</b> durante a prova).</li>
     <li>Pesquise o aluno ou filtre por situação (a revisar, com sinais, nota abaixo de 50…).</li>
     <li>Corrija as dissertativas (IA ou à mão), depois <b>Fechar notas</b>. Exporte CSV ou PDF.</li>
