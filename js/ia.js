@@ -3,7 +3,7 @@
 // apenas para api.anthropic.com. Nunca entra no repositório nem chega à página do aluno.
 import { db } from "./common.js";
 import { pedidoFormatos, lerRespostaFormatos } from "../servidor/formatos.js";
-import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS, pedidoCurso, lerRespostaCurso } from "../servidor/organizar.js";
+import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS, pedidoCurso, lerRespostaCurso, pedidoConquistas, lerRespostaConquistas } from "../servidor/organizar.js";
 import { doc, getDoc, setDoc, deleteDoc, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -223,4 +223,9 @@ export async function formatosIA({ chave, modelo, q, g, descricao, orientacao, d
     const r = await chamarAPI(chave, { model: modeloOrganizar(modelo), ...pedidoFormatos({ q, g, descricao, orientacao, diario, laudos: laudos.slice(0, 3).map(l => ({ titulo: l.titulo, data: base64(l.bytes) })) }) });
     return lerRespostaFormatos(r, q);
   } catch (e) { throw e.ia ? e : erroIA(e.message); }
+}
+// sugestões de conquistas novas
+export async function sugerirConquistasIA({ chave, modelo, existentes, pedido }) {
+  try { return lerRespostaConquistas(await chamarAPI(chave, { model: modeloOrganizar(modelo), ...pedidoConquistas({ existentes, pedido }) })); }
+  catch (e) { throw e.ia ? e : erroIA(e.message); }
 }

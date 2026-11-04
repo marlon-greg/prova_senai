@@ -12,6 +12,7 @@ import { collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc,
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 let ctx = null;   // { eu, podeEditar, souDono, alunosDasTurmas }
+let listaConq = null;   // conquistas configuradas pelo admin (config/conquistas)
 let materiasCurso = [];   // matérias do plano de curso da turma do aluno
 let alunos = [], atual = null, registros = [], planos = [], turmasAluno = [], mes = null, aberto = null;
 const ehInclusao = () => ctx.eu.papel === "inclusao";
@@ -70,6 +71,7 @@ async function abrirAluno(email) {
     const cursoIds = new Set(ts.filter(t => turmasAluno.some(x => x.turmaId === t.id)).map(t => t.cursoId).filter(Boolean));
     materiasCurso = cs.filter(c => cursoIds.has(c.id)).flatMap(c => c.materias || []);
   } catch (e) { $("#diarioPainel").innerHTML = `<div class="card"><p class="erro-texto">${esc(traduzirErro(e))} (Publique o firestore.rules atual.)</p></div>`; return; }
+  listaConq = (await getDoc(doc(db, "config", "conquistas")).catch(() => null))?.data()?.lista || null;
   mes = mes || hojeISO().slice(0, 7);
   desenharPainel();
 }
@@ -90,7 +92,7 @@ const media = l => l.length ? l.reduce((s, x) => s + x, 0) / l.length : null;
 
 // ---------- painel do aluno ----------
 function desenharPainel() {
-  const a = atual, meds = medalhasDiario(resumo());
+  const a = atual, meds = medalhasDiario(resumo(), listaConq);
   const doMes = completos().filter(r => r.data.startsWith(mes));
   const faltasMes = registros.filter(r => r.data.startsWith(mes) && r.tipo === "justificativa" && r.motivo === "faltou").length;
   const est = media(doMes.map(r => Number(r.respostas?.estrelas)).filter(Boolean));
@@ -434,7 +436,7 @@ function abrirEditor(iso, outroDia = null) {
       passo = SECOES_AUX.findIndex(s => s.itens.includes(falta[0])); desenhar();
       return toast(`Falta: ${falta.map(f => f.rot).join(" · ")}`, "erro");
     }
-    const antes = medalhasDiario(resumo()).filter(m => m.ok).map(m => m.t);
+    const antes = medalhasDiario(resumo(), listaConq).filter(m => m.ok).map(m => m.t);
     const respostas = limpar(r, ITENS_AUX), dados = { data: iso, tipo: "diario", autor: ctx.eu.email, autorNome: ctx.eu.nome || ctx.eu.email, papel: ctx.eu.papel,
       respostas, completo: completude(respostas), outroDia: outroDia || null, atualizadoEm: serverTimestamp() };
     $("#edSalvar").disabled = true;
@@ -445,7 +447,7 @@ function abrirEditor(iso, outroDia = null) {
     localStorage.removeItem(chaveRascunho(iso));
     const novo = { id, ...dados, nComentarios: existente?.nComentarios || 0, atualizadoEm: { toDate: () => new Date() } };
     registros = [novo, ...registros.filter(x => x.id !== id)].sort((a, b) => b.data.localeCompare(a.data));
-    const ganhou = medalhasDiario(resumo()).filter(m => m.ok && !antes.includes(m.t));
+    const ganhou = medalhasDiario(resumo(), listaConq).filter(m => m.ok && !antes.includes(m.t));
     festa(respostas, ganhou);
     aberto = iso; mes = iso.slice(0, 7); desenharPainel(); atualizarResumo();
   };

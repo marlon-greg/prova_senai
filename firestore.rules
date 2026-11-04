@@ -50,6 +50,11 @@ service cloud.firestore {
       allow write: if admin();
     }
     // gamificação: o que está ligado (conquistas, skins, apontamentos, sugestões, social). Todos leem; só admin muda.
+    // conquistas configuradas pelo admin (regras, títulos, emojis); sem o documento vale o padrão do código
+    match /config/conquistas {
+      allow read: if logado();
+      allow write: if admin();
+    }
     match /config/gamificacao {
       allow read: if logado();
       allow write: if admin();

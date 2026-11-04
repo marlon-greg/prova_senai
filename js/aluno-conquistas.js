@@ -2,6 +2,7 @@
 // acessibilidade, as do diário da sala (resumo positivo gravado pela auxiliar). Regras em js/conquistas.js.
 import { db, esc, $, modal } from "./common.js";
 import { conquistasNotas, medalhasDiario } from "./conquistas.js";
+export async function lerListaConquistas() { return (await getDoc(doc(db, "config", "conquistas")).catch(() => null))?.data()?.lista || null; }
 import { collection, doc, getDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 const nota = t => Number.isFinite(Number(t.nota)) && t.nota !== null ? Number(t.nota) : (t.notaPrevia !== null && t.notaPrevia !== undefined && Number.isFinite(Number(t.notaPrevia)) ? Number(t.notaPrevia) : null);
@@ -25,8 +26,9 @@ export async function desenharConquistas(box, eu, resumoDiario = null, opc = {})
         data: (t.finalizadaEm?.seconds || 0) * 1000, vidasPerdidas: Number(t.trocasDeAba || 0) + Number(t.trocasDeAbaTotal || 0) };
     }));
   } catch (e) { console.warn("conquistas", e); }
-  const c = conquistasNotas(provas);
-  const diario = resumoDiario ? medalhasDiario(resumoDiario) : [];
+  const cfgLista = opc.lista !== undefined ? opc.lista : await lerListaConquistas();
+  const c = conquistasNotas(provas, cfgLista);
+  const diario = resumoDiario ? medalhasDiario(resumoDiario, cfgLista) : [];
   if (opc.forcar?.size) [...c.gerais, ...c.materias.flatMap(m => m.conquistas), ...diario].forEach(m => { if (opc.forcar.has(m.t)) m.ok = true; });
   const todas = [...c.gerais, ...c.materias.flatMap(m => m.conquistas), ...diario];
   const ganhas = todas.filter(m => m.ok);

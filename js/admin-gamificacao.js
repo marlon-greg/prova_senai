@@ -1,7 +1,10 @@
 // Painel → aba "Gamificação" (admin): liga e desliga cada parte, e abre a simulação "ver como aluno".
 // Painel → aba "Retorno dos alunos" (professor/admin): apontamentos nas questões e sugestões para o sistema.
 import { db, esc, $, toast, traduzirErro, dataBR, GAMI_PADRAO, lerGamificacao } from "./common.js";
-import { collection, doc, getDocs, setDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { CONQUISTAS_PADRAO, REGRAS, CAMPOS_DIARIO } from "./conquistas.js";
+import { CATALOGO } from "./avatar.js";
+import { sugerirConquistasIA } from "./ia.js";
+import { collection, doc, getDoc, getDocs, setDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 let ctx = null;
 export function iniciarGamificacao(c) { ctx = c; }
@@ -17,6 +20,7 @@ const OPCOES = [
 ];
 
 export async function carregarGamificacao() {
+  carregarConquistasAdmin();
   const box = $("#gamiOpcoes"), cfg = await lerGamificacao(), admin = ctx.ehAdmin();
   box.innerHTML = OPCOES.map(o => `<label class="gami-op${o.beta ? " beta" : ""}"><span class="interruptor-g"><input type="checkbox" data-k="${o.k}"${cfg[o.k] ? " checked" : ""}${admin ? "" : " disabled"}><i></i></span>
       <span><b>${o.t}</b>${o.beta ? ` <span class="tag aviso">2ª parte · começa desligado</span>` : ""}<br><span class="pequeno">${esc(o.d)}</span></span></label>`).join("") +
@@ -70,5 +74,66 @@ function desenharRetorno() {
       const x = [...itensRet.ap, ...itensRet.sg].find(y => y.id === bt.dataset.id); Object.assign(x, { status: bt.dataset.st, resposta: resp, respondidoPor: ctx.eu.nome || ctx.eu.email });
       toast("Atualizado.", "ok"); desenharRetorno();
     } catch (e) { toast(traduzirErro(e), "erro"); }
+  });
+}
+
+// ---------- 🏅 editor das conquistas (config/conquistas.lista) ----------
+let conqLista = [];
+const skinsDe = id => Object.values(CATALOGO).flat().filter(i => i.trava?.medalha === id).map(i => i.nome);
+export async function carregarConquistasAdmin() {
+  const d = await getDoc(doc(db, "config", "conquistas")).catch(() => null);
+  conqLista = structuredClone(d?.data()?.lista?.length ? d.data().lista : CONQUISTAS_PADRAO).map(c => ({ ativa: true, ...c }));
+  desenharConq();
+}
+function desenharConq() {
+  const box = $("#conqEditor"), admin = ctx.ehAdmin(), ia = !!(ctx.iaCfg?.() || ctx.urlCorretor?.());
+  const grupos = [["geral", "🌟 Gerais (todas as matérias)"], ["materia", "📚 Por matéria (valem em cada matéria; use {materia} no título)"], ["diario", "📔 Da sala de aula (diário, alunos com acessibilidade)"]];
+  const campo = (c, i, k) => k === "campo" ? `<select data-i="${i}" data-k="campo" ${admin ? "" : "disabled"}>${Object.entries(CAMPOS_DIARIO).map(([v, r]) => `<option value="${v}"${c.campo === v ? " selected" : ""}>${esc(r)}</option>`).join("")}</select>`
+    : `<label class="cq-num">${k === "n" ? "N" : "mín."}<input type="number" min="0" max="${k === "min" ? 100 : 500}" data-i="${i}" data-k="${k}" value="${c[k] ?? ""}" ${admin ? "" : "disabled"}></label>`;
+  box.innerHTML = grupos.map(([g, rot]) => `<h3 class="conq-h3">${rot}</h3>` + conqLista.map((c, i) => [c, i]).filter(([c]) => (REGRAS[c.regra]?.grupo || c.grupo) === g).map(([c, i]) => `
+    <div class="cq-linha${c.ativa === false ? " desligada" : ""}">
+      <span class="interruptor-g" title="Ligada"><input type="checkbox" data-i="${i}" data-k="ativa"${c.ativa !== false ? " checked" : ""} ${admin ? "" : "disabled"} aria-label="Conquista ligada"><i></i></span>
+      <input type="text" class="cq-emoji" data-i="${i}" data-k="e" value="${esc(c.e)}" maxlength="4" aria-label="Emoji" ${admin ? "" : "disabled"}>
+      <div class="cq-textos"><input type="text" data-i="${i}" data-k="t" value="${esc(c.t)}" maxlength="60" aria-label="Título" ${admin ? "" : "disabled"}>
+        <input type="text" data-i="${i}" data-k="d" value="${esc(c.d || "")}" maxlength="160" aria-label="Descrição" class="pequeno" ${admin ? "" : "disabled"}>
+        ${skinsDe(c.id).length ? `<span class="pequeno">🎨 libera: ${skinsDe(c.id).map(esc).join(", ")}</span>` : ""}</div>
+      <div class="cq-regra"><select data-i="${i}" data-k="regra" ${admin ? "" : "disabled"}>${Object.entries(REGRAS).map(([k, r]) => `<option value="${k}"${c.regra === k ? " selected" : ""}>${esc(r.nome)}</option>`).join("")}</select>
+        <div class="linha" style="gap:6px">${(REGRAS[c.regra]?.campos || []).map(k => campo(c, i, k)).join("")}</div></div>
+      ${admin ? `<button type="button" class="discreto mini perigo-txt" data-del="${i}" aria-label="Apagar a conquista ${esc(c.t)}">🗑</button>` : ""}
+    </div>`).join("")).join("") +
+    (admin ? `<div class="linha acoes" style="margin-top:14px"><button type="button" id="cqSalvar">Salvar conquistas</button><button type="button" class="leve" id="cqNova">+ Nova conquista</button>
+      ${ia ? `<button type="button" class="leve" id="cqIA">🤖 Sugerir novas com IA</button>` : ""}<button type="button" class="leve" id="cqPadrao">↺ Restaurar o padrão</button></div>
+      <p class="pequeno">As mudanças valem para todos os alunos ao recarregar a página. Conquistas com 🎨 liberam skins do personagem: se apagar, a skin fica sem jeito de liberar.</p>` : "");
+  box.querySelectorAll("[data-k]").forEach(el => el.onchange = () => {
+    const c = conqLista[+el.dataset.i], k = el.dataset.k;
+    c[k] = k === "ativa" ? el.checked : ["n", "min"].includes(k) ? (el.value === "" ? null : Number(el.value)) : el.value;
+    if (k === "regra") { c.grupo = REGRAS[c.regra].grupo; if (c.regra === "diario" && !c.campo) c.campo = "aulas"; desenharConq(); }
+    if (k === "ativa") el.closest(".cq-linha").classList.toggle("desligada", !el.checked);
+  });
+  box.querySelectorAll("[data-del]").forEach(b => b.onclick = () => { conqLista.splice(+b.dataset.del, 1); desenharConq(); });
+  $("#cqNova")?.addEventListener("click", () => { conqLista.push({ id: "c-" + Date.now().toString(36), e: "🏅", t: "Nova conquista", d: "", grupo: "geral", regra: "provas", n: 1, ativa: true }); desenharConq(); });
+  $("#cqPadrao")?.addEventListener("click", () => { conqLista = structuredClone(CONQUISTAS_PADRAO).map(c => ({ ativa: true, ...c })); desenharConq(); toast("Padrão carregado. Clique em Salvar para valer.", "info"); });
+  $("#cqSalvar")?.addEventListener("click", async () => {
+    const ruim = conqLista.find(c => !String(c.t || "").trim() || (REGRAS[c.regra]?.campos || []).some(k => k !== "campo" && !(Number(c[k]) >= 0 && c[k] !== null && c[k] !== "")));
+    if (ruim) return toast(`Confira “${ruim.t || "sem título"}”: falta título ou número.`, "erro");
+    try { await setDoc(doc(db, "config", "conquistas"), { lista: conqLista.map(c => ({ ...c, t: c.t.trim(), d: String(c.d || "").trim() })), atualizadoEm: serverTimestamp(), atualizadoPor: ctx.eu.email }); toast("Conquistas salvas 🏅", "ok"); }
+    catch (e) { toast(traduzirErro(e), "erro"); }
+  });
+  $("#cqIA")?.addEventListener("click", async () => {
+    const pedido = prompt("O que você quer de conquistas novas? (ex.: conquistas para quem melhora em Banco de Dados; algo para a semana de provas)", "") ?? null;
+    if (pedido === null) return;
+    toast("🤖 Pensando em conquistas novas…");
+    try {
+      const existentes = conqLista.map(c => ({ t: c.t, regra: c.regra })), cfg = ctx.iaCfg?.();
+      let novas;
+      if (cfg) novas = await sugerirConquistasIA({ chave: cfg.chave, modelo: cfg.modelo, existentes, pedido });
+      else {
+        const token = await ctx.auth.currentUser.getIdToken();
+        const r = await fetch(ctx.urlCorretor(), { method: "POST", headers: { authorization: "Bearer " + token, "content-type": "application/json" }, body: JSON.stringify({ acao: "organizar", tipo: "conquistas", existentes, pedido }) });
+        const d = await r.json().catch(() => ({})); if (!r.ok) throw new Error(d.erro || `Erro ${r.status}`); novas = d.conquistas;
+      }
+      conqLista.push(...novas.map(c => ({ ...c, ativa: false })));
+      desenharConq(); toast(`🤖 ${novas.length} sugestão(ões) no fim de cada grupo, desligadas: revise, ligue as que gostar e salve.`, "ok");
+    } catch (e) { toast("🤖 " + (e.message || traduzirErro(e)), "erro"); }
   });
 }

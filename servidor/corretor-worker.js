@@ -25,7 +25,7 @@
 // (FIRESTORE_EMULADOR e ANTHROPIC_URL existem só para testar no computador; não crie no Cloudflare.)
 
 import { temFormato, corrigirFormato, pedidoFormatos, lerRespostaFormatos, contextoDiario } from "./formatos.js";
-import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS, pedidoCurso, lerRespostaCurso } from "./organizar.js";
+import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS, pedidoCurso, lerRespostaCurso, pedidoConquistas, lerRespostaConquistas } from "./organizar.js";
 
 export default {
   async fetch(req, env) {
@@ -385,6 +385,10 @@ async function organizar(env, usuario, corpo) {
     for (const p of partes) { tudo.set(p, pos); pos += p.length; }
     return para64(tudo);
   };
+  if (corpo.tipo === "conquistas") {
+    const existentes = (Array.isArray(corpo.existentes) ? corpo.existentes : []).slice(0, 60).map(c => ({ t: String(c.t || "").slice(0, 60), regra: String(c.regra || "") }));
+    return { ok: true, conquistas: lerRespostaConquistas(await chamarClaude(env, { model: modelo, ...pedidoConquistas({ existentes, pedido: String(corpo.pedido || "").slice(0, 500) }) })) };
+  }
   if (corpo.tipo === "curso") {
     const cursoId = id(corpo.cursoId), arqId = id(corpo.arquivoId);
     if (!cursoId || !arqId) throw falha("cursoId/arquivoId inválido.", 400);

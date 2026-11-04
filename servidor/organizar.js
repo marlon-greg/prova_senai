@@ -124,3 +124,26 @@ export function lerRespostaCurso(r) {
   if (!materias.length) throw new Error("A IA não achou matérias no PDF. Confira se é o plano de curso.");
   return { curso: String(d.curso || "").trim().slice(0, 120), materias };
 }
+
+// ---------- 4) sugestões de conquistas novas (gamificação) ----------
+const SISTEMA_CONQUISTAS = `Você cria conquistas (medalhas) para alunos de curso técnico do SENAI, para motivar sem constranger.
+Regras: só conquistas POSITIVAS (nada que exponha nota baixa, falta ou dificuldade); metas alcançáveis; títulos curtos e divertidos em português; um emoji por conquista.
+Cada conquista usa UMA destas regras (com os números): provas{n} = fez n provas · nota{min} = uma nota ≥ min · notasSeguidas{n,min} = n notas seguidas ≥ min · evolucao{n} = melhorou a nota n vezes ·
+semVidas{n} = n provas sem perder vida · materiasMin{n,min} = nota ≥ min em n matérias diferentes · materiaNota{min} / materiaMedia{n,min} / materiaEvolucao{n} = valem dentro de cada matéria (use {materia} no título) ·
+diario{campo,n} = diário da sala (alunos com acessibilidade), campo = aulas | sequencia | estrelas | autonomia | foco | compreensao | vitorias | topicos.
+Não repita as conquistas que já existem. Campos que a regra não usa: null.`;
+const ESQUEMA_CONQUISTAS = { type: "object", additionalProperties: false, required: ["conquistas"], properties: { conquistas: { type: "array", items: { type: "object", additionalProperties: false,
+  required: ["e", "t", "d", "regra", "n", "min", "campo"], properties: { e: { type: "string" }, t: { type: "string" }, d: { type: "string" },
+    regra: { type: "string", enum: ["provas", "nota", "notasSeguidas", "evolucao", "semVidas", "materiasMin", "materiaNota", "materiaMedia", "materiaEvolucao", "diario"] },
+    n: { anyOf: [{ type: "integer" }, { type: "null" }] }, min: { anyOf: [{ type: "integer" }, { type: "null" }] },
+    campo: { anyOf: [{ type: "string", enum: ["aulas", "sequencia", "estrelas", "autonomia", "foco", "compreensao", "vitorias", "topicos"] }, { type: "null" }] } } } } } };
+export function pedidoConquistas({ existentes = [], pedido = "" }) {
+  return { max_tokens: 6000, system: SISTEMA_CONQUISTAS, output_config: { effort: "low", format: { type: "json_schema", schema: ESQUEMA_CONQUISTAS } },
+    messages: [{ role: "user", content: `Conquistas que já existem:\n${existentes.map(c => `- ${c.t} (${c.regra})`).join("\n") || "(nenhuma)"}\n\nPedido do professor: ${pedido || "sugira 6 conquistas novas e variadas"}` }] };
+}
+export function lerRespostaConquistas(r) {
+  const d = lerJSON(r);
+  const grupo = { materiaNota: "materia", materiaMedia: "materia", materiaEvolucao: "materia", diario: "diario" };
+  return (Array.isArray(d.conquistas) ? d.conquistas : []).slice(0, 12).map((c, i) => ({ id: `nova-${Date.now().toString(36)}-${i}`, e: String(c.e || "🏅").slice(0, 4), t: String(c.t || "").slice(0, 60), d: String(c.d || "").slice(0, 160),
+    grupo: grupo[c.regra] || "geral", regra: c.regra, n: c.n ?? null, min: c.min ?? null, campo: c.campo ?? null, ativa: true })).filter(c => c.t);
+}

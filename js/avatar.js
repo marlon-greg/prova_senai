@@ -5,36 +5,38 @@ export const PELES = ["#f9d7c0", "#f1c27d", "#e0ac69", "#c68642", "#8d5524", "#5
 export const CORES_CABELO = ["#1f1a17", "#4a2c1a", "#8b5a2b", "#d9a441", "#e8d5a3", "#b5482f", "#6b7280", "#2563eb", "#db2777", "#7c3aed"];
 export const CORES_ROUPA = ["#c1272d", "#1d4ed8", "#059669", "#111827", "#f59e0b", "#7c3aed", "#db2777", "#0e7490", "#f3f4f6"];
 
-// catálogo: cada item pode ter { trava: { n } (nº de conquistas) ou { medalha: "título" } }
+// catálogo: cada item pode ter { trava: { n } (nº de conquistas) ou { medalha: "id da conquista" } }
 export const CATALOGO = {
   rosto: [{ id: "redondo", nome: "Redondo" }, { id: "oval", nome: "Oval" }, { id: "quadrado", nome: "Quadrado" }],
   cabelo: [{ id: "curto", nome: "Curto" }, { id: "longo", nome: "Longo" }, { id: "cacheado", nome: "Cacheado" }, { id: "black", nome: "Black power" },
     { id: "rabo", nome: "Rabo de cavalo" }, { id: "coque", nome: "Coque" }, { id: "raspado", nome: "Raspado" }, { id: "moicano", nome: "Moicano", trava: { n: 3 } },
     { id: "trancas", nome: "Tranças", trava: { n: 5 } }, { id: "careca", nome: "Careca" }],
-  olhos: [{ id: "normal", nome: "Normal" }, { id: "feliz", nome: "Feliz" }, { id: "piscando", nome: "Piscando", trava: { n: 2 } }, { id: "estrela", nome: "Olhos de estrela", trava: { medalha: "Gabaritou!" } }],
+  olhos: [{ id: "normal", nome: "Normal" }, { id: "feliz", nome: "Feliz" }, { id: "piscando", nome: "Piscando", trava: { n: 2 } }, { id: "estrela", nome: "Olhos de estrela", trava: { medalha: "gabaritou" } }],
   boca: [{ id: "sorriso", nome: "Sorriso" }, { id: "grande", nome: "Sorrisão" }, { id: "neutra", nome: "Tranquila" }, { id: "lingua", nome: "Língua", trava: { n: 4 } }],
   roupa: [{ id: "camiseta", nome: "Camiseta" }, { id: "moletom", nome: "Moletom" }, { id: "gola", nome: "Camisa polo" },
-    { id: "jaleco", nome: "Jaleco SENAI", trava: { medalha: "Primeira prova" } }, { id: "capa", nome: "Capa de herói", trava: { medalha: "Fiz sozinha!" } },
-    { id: "terno", nome: "Terno de formatura", trava: { medalha: "Veterano" } }],
+    { id: "jaleco", nome: "Jaleco SENAI", trava: { medalha: "primeira-prova" } }, { id: "capa", nome: "Capa de herói", trava: { medalha: "fiz-sozinha" } },
+    { id: "terno", nome: "Terno de formatura", trava: { medalha: "veterano" } }],
   acessorio: [{ id: "nenhum", nome: "Nenhum" }, { id: "oculos", nome: "Óculos" }, { id: "bone", nome: "Boné", trava: { n: 1 } },
-    { id: "fone", nome: "Fone de ouvido", trava: { n: 3 } }, { id: "escuros", nome: "Óculos escuros", trava: { medalha: "Trinca de ouro" } },
-    { id: "headset", nome: "Headset gamer", trava: { n: 8 } }, { id: "coroa", nome: "Coroa", trava: { n: 12 } }, { id: "aureola", nome: "Auréola de estrelas", trava: { medalha: "Chuva de estrelas" } }],
+    { id: "fone", nome: "Fone de ouvido", trava: { n: 3 } }, { id: "escuros", nome: "Óculos escuros", trava: { medalha: "trinca-de-ouro" } },
+    { id: "headset", nome: "Headset gamer", trava: { n: 8 } }, { id: "coroa", nome: "Coroa", trava: { n: 12 } }, { id: "aureola", nome: "Auréola de estrelas", trava: { medalha: "chuva-de-estrelas" } }],
   fundo: [{ id: "azul", nome: "Céu", cor: "#dbeafe" }, { id: "verde", nome: "Menta", cor: "#d1fae5" }, { id: "rosa", nome: "Rosa", cor: "#fce7f3" }, { id: "cinza", nome: "Neutro", cor: "#f1f5f9" },
     { id: "senai", nome: "SENAI", cor: "#c1272d", trava: { n: 2 } }, { id: "por-do-sol", nome: "Pôr do sol", grad: ["#f97316", "#db2777"], trava: { n: 4 } },
-    { id: "galaxia", nome: "Galáxia", grad: ["#1e1b4b", "#7c3aed"], trava: { n: 7 } }, { id: "ouro", nome: "Dourado", grad: ["#fde68a", "#f59e0b"], trava: { medalha: "Trinca de ouro" } },
+    { id: "galaxia", nome: "Galáxia", grad: ["#1e1b4b", "#7c3aed"], trava: { n: 7 } }, { id: "ouro", nome: "Dourado", grad: ["#fde68a", "#f59e0b"], trava: { medalha: "trinca-de-ouro" } },
     { id: "arco-iris", nome: "Arco-íris", grad: ["#ef4444", "#f59e0b", "#22c55e", "#3b82f6", "#a855f7"], trava: { n: 10 } }],
   moldura: [{ id: "nenhuma", nome: "Nenhuma" }, { id: "bronze", nome: "Bronze", cor: "#b45309", trava: { n: 1 } }, { id: "prata", nome: "Prata", cor: "#94a3b8", trava: { n: 5 } },
-    { id: "ouro", nome: "Ouro", cor: "#f59e0b", trava: { n: 9 } }, { id: "diamante", nome: "Diamante", cor: "#22d3ee", trava: { n: 15 } }, { id: "fogo", nome: "Fogo", cor: "#ef4444", trava: { medalha: "Em chamas" } }]
+    { id: "ouro", nome: "Ouro", cor: "#f59e0b", trava: { n: 9 } }, { id: "diamante", nome: "Diamante", cor: "#22d3ee", trava: { n: 15 } }, { id: "fogo", nome: "Fogo", cor: "#ef4444", trava: { medalha: "em-chamas" } }]
 };
 export const AVATAR_PADRAO = { pele: 1, rosto: "redondo", cabelo: "curto", corCabelo: 1, olhos: "normal", boca: "sorriso", roupa: "camiseta", corRoupa: 0, acessorio: "nenhum", fundo: "azul", moldura: "nenhuma" };
 
-// item liberado? ganhas = títulos das conquistas ganhas
+import { CONQUISTAS_PADRAO } from "./conquistas.js";
+// item liberado? ganhas = conquistas ganhas [{ id, t }] (a trava por medalha usa o id da conquista)
 export function liberado(item, ganhas) {
   if (!item?.trava) return true;
   if (item.trava.n) return ganhas.length >= item.trava.n;
-  return ganhas.includes(item.trava.medalha);
+  return ganhas.some(g => g.id === item.trava.medalha || String(g.id || "").startsWith(item.trava.medalha + ":"));
 }
-export const textoTrava = t => !t ? "" : t.n ? `🔒 ${t.n} conquista(s)` : `🔒 medalha “${t.medalha}”`;
+const nomeMedalha = id => CONQUISTAS_PADRAO.find(c => c.id === id)?.t || id;
+export const textoTrava = t => !t ? "" : t.n ? `🔒 ${t.n} conquista(s)` : `🔒 medalha “${nomeMedalha(t.medalha)}”`;
 // troca o que estiver travado pelo padrão (ex.: perdeu a medalha ou o perfil veio de outro lugar)
 export function avatarValido(a, ganhas) {
   const v = { ...AVATAR_PADRAO, ...(a || {}) };

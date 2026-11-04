@@ -52,7 +52,7 @@ aoMudarLogin(async user => {
     alunosDasTurmas: async () => { await listarTurmas().catch(() => {}); return turmasCache.flatMap(t => alunosDaTurma(t).map(a => ({ ...a, turma: t.nome, turmaId: t.id, diasAula: t.diasAula || [] }))); } });
   iniciarHistorico({ eu, abrirAluno: email => { abrirDepois(email); abrirAba("acessibilidade"); },
     alunosDasTurmas: async () => { await listarTurmas().catch(() => {}); return turmasCache.flatMap(t => alunosDaTurma(t).map(a => ({ ...a, turma: t.nome, turmaId: t.id }))); } });
-  iniciarGamificacao({ eu, ehAdmin, podeEditar });
+  iniciarGamificacao({ eu, ehAdmin, podeEditar, auth, iaCfg: () => iaCfg, urlCorretor: () => urlCorretorCfg });
   iniciarOrganizacao({ eu, podeEditar, ehAdmin, auth, iaCfg: () => iaCfg, urlCorretor: () => urlCorretorCfg,
     listarTurmas, alunosDaTurma, listarBancos, questoesDoBanco, questoesDoBancoCache: id => questoesCache[id],
     invalidarBanco: id => { delete questoesCache[id]; }, novaProva: abrirNovaProva,

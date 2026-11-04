@@ -22,7 +22,7 @@ async function gravarPerfil(eu, sim, dados) {
 export async function desenharPerfil(box, { eu, cq, gami, simulacao = false }) {
   if (!box) return;
   if (!gami.personagem) { box.classList.add("oculto"); return; }
-  const perfil = await lerPerfil(eu, simulacao), titulos = (cq?.ganhas || []).map(m => m.t);
+  const perfil = await lerPerfil(eu, simulacao), titulos = cq?.ganhas || [];
   const av = avatarValido(perfil.avatar, titulos), nome = perfil.apelido || String(eu.nome || "").split(/\s+/)[0] || "Aluno";
   const liberadas = Object.values(CATALOGO).flat().filter(i => i.trava && liberado(i, titulos)).length, travadas = Object.values(CATALOGO).flat().filter(i => i.trava).length;
   box.classList.remove("oculto"); box.className = "card perfil-aluno";
