@@ -2,6 +2,7 @@
 // liberadas pelas conquistas, download do cartão (PNG, JPG, PDF) e o painel da simulação (equipe, ?simular=1).
 import { db, esc, $, toast, modal } from "./common.js";
 import { CATALOGO, PELES, CORES_CABELO, CORES_ROUPA, AVATAR_PADRAO, svgAvatar, liberado, textoTrava, avatarValido } from "./avatar.js";
+import { botoesSocial } from "./aluno-social.js";
 import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 const PARTES = [["rosto", "🙂 Rosto"], ["cabelo", "💇 Cabelo"], ["olhos", "👀 Olhos"], ["boca", "👄 Boca"], ["roupa", "👕 Roupa"], ["acessorio", "🕶 Acessório"], ["fundo", "🖼 Fundo"], ["moldura", "💠 Moldura"]];
@@ -33,6 +34,7 @@ export async function desenharPerfil(box, { eu, cq, gami, simulacao = false }) {
         ${gami.download ? `<button type="button" class="leve" id="paBaixar">⬇ Baixar meu cartão</button>` : ""}</div></div>`;
   $("#paEditar", box).onclick = () => editarPersonagem({ eu, perfil, titulos, simulacao, aoSalvar: () => desenharPerfil(box, { eu, cq, gami, simulacao }) });
   $("#paBaixar", box)?.addEventListener("click", () => baixarCartao({ eu, av, nome, cq }));
+  botoesSocial(box, { eu, cq, gami, perfil: { ...perfil, avatar: av }, simulacao });
 }
 
 function editarPersonagem({ eu, perfil, titulos, simulacao, aoSalvar }) {
