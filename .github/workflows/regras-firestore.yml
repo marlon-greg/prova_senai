@@ -5,7 +5,7 @@ name: Publicar regras do Firestore
 on:
   push:
     branches: [main]
-    paths: [firestore.rules]
+    paths: [firestore.rules, .github/workflows/regras-firestore.yml, .github/scripts/publicar-regras.mjs]
   workflow_dispatch:
 jobs:
   publicar:
@@ -21,4 +21,4 @@ jobs:
       - name: Publicar firestore.rules
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/sa.json
-        run: npx -y firebase-tools@14 deploy --only firestore:rules --project prova-senai-3e983 --non-interactive
+        run: node .github/scripts/publicar-regras.mjs prova-senai-3e983
