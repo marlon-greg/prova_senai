@@ -2,6 +2,8 @@
 
 Sistema de prova prática: o aluno entra com a conta Google do SENAI, recebe **10 questões sorteadas** de um banco maior, responde (uma por vez ou todas na página, com ou sem **ir e voltar**, sem colar), vê no fim só **quantas acertou e a nota**, e o professor corrige as dissertativas (à mão ou pela **IA**), fecha as notas, gera o gabarito para o Classroom e libera o gabarito com a explicação de cada erro.
 
+> 🔗 **Integrações futuras:** este sistema vai ser ligado a um sistema de **aulas interativas** e a um de **autoavaliação** (cruzando o que o aluno acha que sabe com o que ele acerta nas provas), e deve ganhar um **domínio próprio**. O plano e as regras para o código de hoje estão em [`docs/INTEGRACOES.md`](docs/INTEGRACOES.md).
+
 | Arquivo | O que é |
 |---|---|
 | `index.html` + `js/aluno.js` | página do aluno |
