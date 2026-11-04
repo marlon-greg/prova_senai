@@ -1155,7 +1155,7 @@ function cartoesHTML(lista) {
         <div class="ca-nome"><b>${esc(l.t.nome || l.t.email)}</b><span class="pequeno">${esc(l.t.email)}</span></div>
         <span class="tag ${estado[0]}">${estado[1]}</span></div>
       <div class="ca-meio">
-        <div class="ca-prog"><div class="progresso"><div style="width:${total ? feitas / total * 100 : 0}%"></div></div><span class="pequeno">⭐ ${feitas}/${total} questões · ⏱ ${fmtTempo(tempo)}</span></div>
+        <div class="ca-prog"><div class="progresso"><div style="width:${(l.itens.length || total) ? feitas / (l.itens.length || total) * 100 : 0}%"></div></div><span class="pequeno">⭐ ${feitas}/${l.itens.length || total} questões · ⏱ ${fmtTempo(tempo)}</span></div>
         <div class="ca-vidas">${v ? coracoesHTML(v) : `<span class="pequeno">sem vidas</span>`}</div>
       </div>
       <div class="ca-sinais">${sinaisHTML(l.sinais)}${l.perdidas ? ` <span class="tag erro">⛔ ${l.perdidas} perdida(s)</span>` : ""}${l.rapidas ? ` <span class="tag erro" title="Respostas em menos de ${RAPIDO} s">⚡ ${l.rapidas}</span>` : ""}</div>
@@ -1271,7 +1271,7 @@ $("#btnFecharNotas").onclick = async () => {
 };
 $("#btnCSV").onclick = () => {
   if (!resDados) return toast("Carregue uma prova primeiro.", "erro");
-  const n = resDados.prova.nQuestoes;
+  const n = Math.max(resDados.prova.nQuestoes || 0, ...resDados.linhas.map(l => l.itens.length));
   const cab = ["Nome", "E-mail", "Início", "Fim", "Tempo", "Tempo (segundos)", "Trocas de aba", "Saídas da tela cheia", "Tentativas de colar", `Respostas < ${RAPIDO}s`, "Encerrada por", "Questões perdidas", "Nota",
                ...Array.from({ length: n }, (_, i) => `Q${i + 1}`)];
   const rows = resDados.linhas.map(l => [l.t.nome || "", l.t.email, dataBR(l.t.iniciadaEm), l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "em andamento",

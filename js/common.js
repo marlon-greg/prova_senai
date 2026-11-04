@@ -180,19 +180,35 @@ export function bancoDaQuestao(qid, padrao) {
   const i = String(qid).lastIndexOf("_q");
   return i > 0 ? String(qid).slice(0, i) : padrao;
 }
-// sorteia as questões da prova (ids), igual para todo aluno: só temas marcados, respeitando a cota de tipos.
-// Usado na hora do aluno começar e no painel de acessibilidade (sorteio antecipado para adaptar só essas).
-export async function sortearQuestoes(prova) {
+// questões que podem cair na prova (só temas marcados de cada banco): todas, alternativas e dissertativas
+export async function questoesDisponiveis(prova) {
   const bancos = bancosDaProva(prova);
   const lotes = await Promise.all(bancos.map(b => getDocs(collection(db, "bancos", b, "questoes"))));
-  const ids = [], diss = [], alt = [];
+  const ids = [], diss = [], alt = [], tipo = {};
   lotes.forEach((qs, i) => {
     const temas = temasDoBanco(prova, bancos[i]);
     qs.forEach(d => {
       if (temas && !temas.has(temaDe(d.data()))) return;
-      ids.push(d.id); (d.data().tipo === "dissertativa" ? diss : alt).push(d.id);
+      const t = d.data().tipo === "dissertativa" ? "dissertativa" : "alternativa";
+      ids.push(d.id); (t === "dissertativa" ? diss : alt).push(d.id); tipo[d.id] = t;
     });
   });
+  return { ids, alt, diss, tipo };
+}
+// cota padrão da prova: quantas alternativas e dissertativas cada aluno recebe
+export function cotaDaProva(p) {
+  const nD = Number(p.nDissertativas || 0);
+  return { nA: p.nAlternativas !== undefined && p.nAlternativas !== null ? Number(p.nAlternativas || 0) : Math.max(0, Number(p.nQuestoes || 0) - nD), nD };
+}
+// sorteia as questões da prova (ids), igual para todo aluno: só temas marcados, respeitando a cota de tipos.
+// cota = { nA, nD } opcional (acessibilidade: o professor escolhe quantas de cada tipo).
+export async function sortearQuestoes(prova, cota = null) {
+  const { ids, alt, diss } = await questoesDisponiveis(prova);
+  if (cota) {
+    if (cota.nA + cota.nD < 1) throw new Error("Escolha pelo menos 1 questão.");
+    if (diss.length < cota.nD || alt.length < cota.nA) throw new Error(`Não há questões suficientes: ${alt.length} alternativas e ${diss.length} dissertativas disponíveis nos temas da prova.`);
+    return sortearAleatorio([...sortearAleatorio(diss, cota.nD), ...sortearAleatorio(alt, cota.nA)], cota.nA + cota.nD);
+  }
   if (ids.length < prova.nQuestoes) throw new Error("O banco não tem questões suficientes nos temas escolhidos. Avise o professor.");
   const nD = Number(prova.nDissertativas || 0);
   if (prova.nAlternativas !== undefined && prova.nAlternativas !== null) {

@@ -122,6 +122,8 @@ aoMudarLogin(async user => {
 });
 
 // ---------- acessibilidade ----------
+// nº de questões do aluno: a tentativa, o sorteio feito pelo professor na acessibilidade ou o padrão da prova
+function nQ(p, t = null) { return t?.questoesIds?.length || acess?.sorteios?.[p.id]?.ids?.length || p.nQuestoes; }
 async function carregarAcessibilidade(email, gravarUid) {
   acess = null;
   try {
@@ -205,12 +207,12 @@ async function listarProvas() {
     if (!td && !(await alunoNaTurma(p))) continue;   // prova de outra turma: não aparece
     mostradas++;
     const podeFazer = modoTeste || p.liberada, podeVerResultado = modoTeste || p.resultadosLiberados;
-    const andamento = p.modoExibicao === "todas" ? `${td?.indiceAtual || 0} de ${p.nQuestoes} enviadas` : `questão ${(td?.indiceAtual || 0) + 1} de ${p.nQuestoes}`;
+    const andamento = p.modoExibicao === "todas" ? `${td?.indiceAtual || 0} de ${nQ(p, td)} enviadas` : `questão ${(td?.indiceAtual || 0) + 1} de ${nQ(p, td)}`;
     let status, acao;
     if (!td)                    { status = `<span class="tag">○ não iniciada</span>`; acao = podeFazer ? `<button data-acao="inicio" data-id="${p.id}">Fazer a prova</button>` : `<span class="pequeno">prova encerrada</span>`; }
     else if (!td.finalizadaEm)  { status = `<span class="tag aviso">em andamento (${andamento})</span>`; acao = podeFazer ? `<button data-acao="continuar" data-id="${p.id}">Continuar</button>` : `<span class="pequeno">prova encerrada</span>`; }
     else                        { status = `<span class="tag ok">✓ finalizada em ${dataBR(td.finalizadaEm)}</span> <span class="tag nota" data-placar="${p.id}">…</span>`; acao = podeVerResultado ? `<button class="sec" data-acao="resultado" data-id="${p.id}">Ver gabarito e resultado</button>` : `<span class="pequeno">gabarito ainda não liberado</span>`; }
-    box.insertAdjacentHTML("beforeend", `<div class="prova-item"><div class="info"><b>${esc(p.titulo)}</b><br><span class="pequeno">${esc(p.turma || "")} · ${p.nQuestoes} questões</span><div style="margin-top:4px">${status}</div></div><div class="acao">${acao}</div></div>`);
+    box.insertAdjacentHTML("beforeend", `<div class="prova-item"><div class="info"><b>${esc(p.titulo)}</b><br><span class="pequeno">${esc(p.turma || "")} · ${nQ(p, td)} questões</span><div style="margin-top:4px">${status}</div></div><div class="acao">${acao}</div></div>`);
     if (td?.finalizadaEm) {   // placar sem esperar: a lista não fica travada lendo gabaritos
       const el = box.querySelector(`[data-placar="${p.id}"]`);
       placarDaTentativa({ id: t.id, ...td }).then(r => { el.innerHTML = textoPlacarCurto(r); }).catch(() => { el.textContent = "placar indisponível"; });
@@ -284,7 +286,7 @@ async function abrirProva(id, acao) {
     const min = Number(provaAtual.tempoMinutos || 0) + (Number(provaAtual.tempoMinutos || 0) > 0 ? Math.max(0, Number(ap().tempoExtraMin || 0)) : 0);
     $("#inicioTitulo").textContent = provaAtual.titulo;
     const vidas = limiteSaidas();
-    $("#inicioInfo").innerHTML = `<span class="chip">📝 ${provaAtual.nQuestoes} questões</span>` +
+    $("#inicioInfo").innerHTML = `<span class="chip">📝 ${nQ(provaAtual)} questões</span>` +
       (provaAtual.turma ? `<span class="chip">👥 ${esc(provaAtual.turma)}</span>` : "") +
       (min > 0 ? `<span class="chip aviso">⏱ ${min} min</span>` : `<span class="chip">⏱ sem limite de tempo</span>`) +
       (vidas ? `<span class="chip vidas" title="Vidas">${"❤️".repeat(Math.min(vidas, 10))} ${vidas} ${vidas === 1 ? "vida" : "vidas"}</span>` : "") +
@@ -340,7 +342,7 @@ $("#btnComecar").onclick = async () => {
     // sorteia nQuestoes dos bancos da prova (ids) — cada aluno recebe um conjunto diferente.
     // Acessibilidade: se o professor já sorteou as questões deste aluno no painel (para adaptar só essas), usa as mesmas.
     const pre = acess?.sorteios?.[provaAtual.id]?.ids;
-    const sorteadas = Array.isArray(pre) && pre.length === Number(provaAtual.nQuestoes) ? pre.slice() : await sortearQuestoes(provaAtual);
+    const sorteadas = Array.isArray(pre) && pre.length ? pre.slice() : await sortearQuestoes(provaAtual);
     const tid = idTentativa(provaAtual.id);
     const dados = {
       uid: eu.uid, email: eu.email, nome: eu.nome, provaId: provaAtual.id, bancoId: provaAtual.bancoId,

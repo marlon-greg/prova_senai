@@ -37,6 +37,11 @@ service cloud.firestore {
     function cuidaDe(e)    { return professor() || minhaAluna(e); }
     function eu(e)         { return logado() && email().lower() == e; }
     // tentativa de teste da própria pessoa da equipe
+    // sorteio feito pelo professor para o aluno com acessibilidade (acessibilidade/{email}.sorteios.{prova}.ids)
+    function sorteioAcess(p) {
+      let caminho = /databases/$(db)/documents/acessibilidade/$(email().lower());
+      return exists(caminho) ? get(caminho).data.get('sorteios', {}).get(p, {}).get('ids', []) : [];
+    }
     function meuTeste(id)  { return equipe() && tentativa(id).get('teste', false) == true && tentativa(id).uid == uid(); }
 
     // ---------- configuração ----------
@@ -177,7 +182,10 @@ service cloud.firestore {
                                                  'encerradaPor', 'trocasDeAbaTotal', 'codigoInformado'])
         && prova(request.resource.data.provaId).liberada == true
         && request.resource.data.bancoId == prova(request.resource.data.provaId).bancoId
-        && request.resource.data.questoesIds.size() == prova(request.resource.data.provaId).nQuestoes
+        // nº de questões da prova, ou exatamente as questões sorteadas pelo professor na acessibilidade (quantidade livre)
+        && (request.resource.data.questoesIds.size() == prova(request.resource.data.provaId).nQuestoes
+            || (request.resource.data.questoesIds.size() > 0
+                && request.resource.data.questoesIds == sorteioAcess(request.resource.data.provaId)))
         && request.resource.data.finalizadaEm == null
         && request.resource.data.iniciadaEm == request.time
         // turma: sem turma = qualquer aluno; com turma = o e-mail precisa estar na lista

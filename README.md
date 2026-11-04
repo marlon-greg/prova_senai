@@ -228,7 +228,14 @@ Antes da prova, um mascote explica as regras, uma fala por vez. Tem o botão �
 2. **Visual**: tamanho da letra, espaçamento entre letras, palavras e linhas, fonte (Atkinson Hyperlegible, Lexend, Comic Neue…), cores (creme, azul, alto contraste, escuro), CAIXA ALTA, linhas curtas, régua de leitura e sem animações. A pré-visualização mostra o resultado na hora.
 3. **Na prova**: tempo extra, vidas extras, *sem perder vidas* (só registra), esconder o cronômetro, botão 🔊 Ouvir em cada questão e apoio 💡.
 4. **Sobre o aluno**: a sua descrição e os laudos em PDF. O aluno nunca vê essa parte.
-5. **Prova adaptada**: escolha a prova e clique em **🎲 Sortear questões**. O sorteio é igual ao dos outros alunos (mesmos temas e cota de tipos) e fica guardado: na hora da prova o aluno recebe exatamente essas questões. Depois clique em **🤖 Gerar prova adaptada**: a IA adapta **só as questões sorteadas** (economiza tokens), usando a descrição, os laudos e a orientação extra. Também dá para adaptar à mão, uma a uma. A resposta certa não muda: as alternativas ficam na mesma ordem e quantidade. Se o aluno já começou a prova, aparecem as questões da tentativa dele e não dá para sortear de novo. **Revise antes da prova.**
+5. **Prova adaptada**: escolha a prova, defina **quantas alternativas e quantas dissertativas** (o padrão é o da prova; pode ser só um tipo ou outra quantidade) e clique em **🎲 Sortear questões**. O sorteio fica guardado: na hora da prova o aluno recebe exatamente essas questões. Depois use **🤖 Adaptar as que faltam**: a IA adapta **só as questões sorteadas**, usando a descrição, os laudos e a orientação extra.
+   - Um resumo mostra quantas estão **✓ em dia**, **⚠ desatualizadas** (adaptadas antes da última mudança na descrição ou nos laudos) e **○ sem adaptação**.
+   - **🔄 Refazer as desatualizadas** / **🔄 Refazer todas com IA**: geram de novo com as informações atuais. As adaptadas à mão só são substituídas se você confirmar.
+   - **🗑 Apagar adaptações desta prova**: volta todas as sorteadas ao original.
+   - Em cada questão: editar à mão, **🤖 Refazer com IA**, **Voltar ao original** ou **🔁 Trocar questão** (troca por outra do mesmo tipo, dos temas da prova).
+   - Se o aluno já começou a prova, aparecem as questões da tentativa dele e não dá mais para sortear nem trocar.
+   - A resposta certa não muda: as alternativas ficam na mesma ordem e quantidade. **Revise antes da prova.**
+   - ⚠ Quantidade diferente da prova exige o `firestore.rules` atualizado publicado no Firebase.
 6. **👁 Abrir a prova como o aluno**: o modo teste com as adaptações daquele aluno.
 7. **Sugestões**: a equipe registra observações; o professor marca como resolvida.
 
