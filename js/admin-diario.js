@@ -4,7 +4,8 @@
 // acessibilidadePrivado/{email}/diario/{AAAA-MM-DD_autor} = { data, autor, autorNome, papel, respostas, completo, nComentarios, ... }
 // acessibilidadePrivado/{email}/diario/{id}/comentarios/{c} = { autor, autorNome, papel, respostas, criadoEm }
 // (o aluno nunca lê acessibilidadePrivado)
-import { db, esc, $, toast, confirmar, traduzirErro, iniciais, dataBR, semestreDe, chaveTexto, dataCurta } from "./common.js";
+import { db, esc, $, toast, confirmar, modal, traduzirErro, iniciais, dataBR, semestreDe, chaveTexto, dataCurta, diaDeAula, rotuloDias, textoHorario } from "./common.js";
+import { resumoDiario, medalhasDiario } from "./conquistas.js";
 import { HUMOR, humorEmoji, SECOES_AUX, ITENS_AUX, ITENS_PROF, visivel, respondido, completude } from "./diario-perguntas.js";
 import { listarPlanos } from "./admin-org.js";
 import { collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, query, where, orderBy, serverTimestamp, increment }
@@ -69,73 +70,65 @@ async function abrirAluno(email) {
   desenharPainel();
 }
 
-// ---------- gamificação ----------
-// dias úteis seguidos com registro, contando de hoje (ou do último dia útil, se hoje ainda não tem)
-function sequencia() {
-  const tem = new Set(registros.map(r => r.data));
-  const d = new Date(); let n = 0, primeiro = true;
-  for (let i = 0; i < 400; i++) {
-    const dw = d.getDay();
-    if (dw !== 0 && dw !== 6) {
-      if (tem.has(isoDe(d))) n++;
-      else if (!primeiro) break;
-      primeiro = false;
-    }
-    d.setDate(d.getDate() - 1);
-  }
-  return n;
+// ---------- dias de aula e conquistas da aluna ----------
+const diasAulaAluno = () => [...new Set(turmasAluno.flatMap(t => t.diasAula || []))];
+const ehDiaDeAula = iso => diaDeAula(turmasAluno.length ? turmasAluno : [{}], iso);
+const completos = () => registros.filter(r => r.tipo !== "justificativa");
+const resumo = () => resumoDiario(registros, diasAulaAluno());
+// o resumo positivo vai para acessibilidade/{email} (a aluna lê esse documento e vê as medalhas)
+async function atualizarResumo() {
+  try { await updateDoc(doc(db, "acessibilidade", atual.email), { diarioResumo: resumo(), diarioResumoEm: serverTimestamp() }); }
+  catch (e) { console.warn("resumo do diário", e); }
 }
-function medalhas() {
-  const n = registros.length, seq = sequencia();
-  const completos = registros.filter(r => (r.completo || 0) >= 100).length;
-  const vitorias = registros.filter(r => String(r.respostas?.conquista || "").trim()).length;
-  const comentados = registros.filter(r => (r.nComentarios || 0) > 0).length;
-  return [
-    { e: "🌱", t: "Primeiro registro", v: n, meta: 1 },
-    { e: "📅", t: "Semana completa", d: "5 dias úteis seguidos", v: seq, meta: 5 },
-    { e: "🔥", t: "Em chamas", d: "10 dias úteis seguidos", v: seq, meta: 10 },
-    { e: "🔎", t: "Olhar atento", d: "10 registros 100% completos", v: completos, meta: 10 },
-    { e: "🏆", t: "Colecionadora de vitórias", d: "10 vitórias do dia", v: vitorias, meta: 10 },
-    { e: "🤝", t: "Trabalho em equipe", d: "5 registros comentados por professores", v: comentados, meta: 5 },
-    { e: "📚", t: "Memória viva", d: "30 registros", v: n, meta: 30 }
-  ].map(m => ({ ...m, ok: m.v >= m.meta }));
-}
+export const MOTIVOS = { atrasado: ["📝", "Registro atrasado (teve aula e ela estava)"], faltou: ["🚫", "Ela faltou"], semAula: ["📭", "Não teve aula (feriado, evento, aula cancelada)"],
+  extra: ["➕", "Aula extra / reposição"], outro: ["💬", "Outro motivo"] };
 const media = l => l.length ? l.reduce((s, x) => s + x, 0) / l.length : null;
 
 // ---------- painel do aluno ----------
 function desenharPainel() {
-  const a = atual, seq = sequencia(), meds = medalhas();
-  const doMes = registros.filter(r => r.data.startsWith(mes));
+  const a = atual, meds = medalhasDiario(resumo());
+  const doMes = completos().filter(r => r.data.startsWith(mes));
+  const faltasMes = registros.filter(r => r.data.startsWith(mes) && r.tipo === "justificativa" && r.motivo === "faltou").length;
   const est = media(doMes.map(r => Number(r.respostas?.estrelas)).filter(Boolean));
   const hum = media(doMes.flatMap(r => [r.respostas?.humorChegada, r.respostas?.humorSaida].map(Number).filter(Boolean)));
-  const ultimos = [...new Set(registros.map(r => r.data))].slice(0, 10).reverse();
-  const turma = turmasAluno.map(t => t.turma).join(", ");
+  const ultimos = [...new Set(completos().map(r => r.data))].slice(0, 10).reverse();
+  const turma = turmasAluno.map(t => `${t.turma}${rotuloDias(t.diasAula) ? ` (${rotuloDias(t.diasAula)})` : ""}`).join(", ");
   const meuHoje = registros.find(r => r.data === hojeISO() && r.autor === ctx.eu.email);
   $("#diarioPainel").innerHTML = `
   <section class="card diario-hero">
     <div class="dh-aluno"><span class="avatar grande">${esc(iniciais(a.nome || a.email))}</span>
       <div><h2>${esc(a.nome || a.email)}</h2><span class="pequeno">${turma ? `👥 ${esc(turma)} · ` : ""}${esc(a.email)}</span>
+        <span class="pequeno" style="display:block">🕖 ${esc(textoHorario(ctx.horario?.()))}</span>
         <div class="dh-humores" title="Humor na saída, últimos registros">${ultimos.map(d => { const r = registros.find(x => x.data === d); return `<span title="${dataCurta(d)}">${humorEmoji(r?.respostas?.humorSaida || r?.respostas?.humorChegada) || "·"}</span>`; }).join("") || `<span class="pequeno">ainda sem registros</span>`}</div></div></div>
     <div class="dh-numeros">
-      <div class="dh-num fogo${seq ? " aceso" : ""}"><b>🔥 ${seq}</b><span>dia(s) seguidos</span></div>
-      <div class="dh-num"><b>📒 ${registros.length}</b><span>registros</span></div>
+      <div class="dh-num"><b>📒 ${doMes.length}</b><span>aulas registradas no mês</span></div>
+      <div class="dh-num"><b>🚫 ${faltasMes}</b><span>faltas no mês</span></div>
       <div class="dh-num"><b>${est ? "⭐ " + est.toFixed(1) : "—"}</b><span>estrelas no mês</span></div>
       <div class="dh-num"><b>${hum ? humorEmoji(Math.round(hum)) + " " + hum.toFixed(1) : "—"}</b><span>humor no mês</span></div>
     </div>
-    ${podeRegistrar() ? `<div class="dh-acao"><button id="dNovo" class="grande-btn">${meuHoje ? "✎ Continuar o registro de hoje" : "✍ Registrar o dia de hoje"}</button>
-      <label class="pequeno">ou outro dia: <input type="date" id="dOutroDia" max="${hojeISO()}"></label></div>` : `<p class="pequeno dh-acao">Você lê os registros e deixa o seu comentário em cada dia. Quem escreve o diário é a auxiliar de inclusão.</p>`}
+    <div class="dh-acao">${podeRegistrar() ? `<button id="dNovo" class="grande-btn">${meuHoje ? "✎ Continuar o registro de hoje" : ehDiaDeAula(hojeISO()) ? "✍ Registrar a aula de hoje" : "✍ Registrar hoje (não é dia de aula)"}</button>
+      <div class="outro-dia" role="group" aria-label="Registrar outro dia"><span class="pequeno">Outro dia:</span>
+        ${atalhosDias().map(([iso, rot]) => `<button type="button" class="chip-dia" data-rapido="${iso}" title="${dataLonga(iso)}">${rot}</button>`).join("")}
+        <label class="chip-dia botao-data">📆 Escolher data<input type="date" id="dOutroDia" max="${hojeISO()}" aria-label="Escolher a data do registro"></label></div>` : `<p class="pequeno" style="margin:0">Você lê os registros e deixa o seu comentário em cada dia. Quem escreve o diário é a auxiliar de inclusão.</p>`}
+      <button id="dRelatorio" class="leve" type="button" title="Relatório formal do período, para enviar à coordenação, direção ou sede">📄 Relatório formal (PDF)</button></div>
   </section>
-  <section class="card">
-    <h3 class="diario-h3">🏅 Medalhas</h3>
+  <details class="card prev-conquistas">
+    <summary><h3 class="diario-h3" style="display:inline">🏅 Conquistas que a aluna vê</h3> <span class="pequeno">— ${meds.filter(m => m.ok).length} de ${meds.length} · ela vê isto na página dela (só coisas positivas, nada dos textos do diário)</span></summary>
     <div class="medalhas">${meds.map(m => `<div class="medalha${m.ok ? " ganha" : ""}" title="${esc(m.d || m.t)}"><span class="m-emoji">${m.e}</span><b>${esc(m.t)}</b>
       <span class="pequeno">${m.ok ? "conquistada!" : `${Math.min(m.v, m.meta)}/${m.meta}`}</span>${m.ok ? "" : `<i class="m-barra"><i style="width:${Math.round(Math.min(m.v, m.meta) / m.meta * 100)}%"></i></i>`}</div>`).join("")}</div>
-  </section>
+  </details>
   <div class="diario-grade">
     <section class="card diario-cal">${calendarioHTML()}</section>
     <section class="card" id="dDetalhe">${aberto ? "" : ultimosHTML()}</section>
   </div>`;
-  $("#dNovo")?.addEventListener("click", () => abrirEditor(hojeISO()));
-  const od = $("#dOutroDia"); if (od) od.onchange = () => { if (od.value) abrirEditor(od.value); };
+  $("#dNovo")?.addEventListener("click", () => iniciarRegistro(hojeISO()));
+  const od = $("#dOutroDia");
+  if (od) {
+    od.onchange = () => { if (od.value) iniciarRegistro(od.value); };
+    od.closest("label").onclick = e => { if (e.target !== od) { e.preventDefault(); try { od.showPicker(); } catch (x) { od.focus(); } } };
+  }
+  document.querySelectorAll("[data-rapido]").forEach(b => b.onclick = () => iniciarRegistro(b.dataset.rapido));
+  $("#dRelatorio").onclick = () => relatorioFormal();
   ligarCalendario();
   if (aberto) mostrarDia(aberto);
   else ligarUltimos();
@@ -146,15 +139,15 @@ function calendarioHTML() {
   const porDia = {}; registros.filter(r => r.data.startsWith(mes)).forEach(r => (porDia[r.data] ||= []).push(r));
   let cel = Array(primeiro.getDay()).fill(`<span class="cal-vazio"></span>`);
   for (let d = 1; d <= ndias; d++) {
-    const iso = `${mes}-${String(d).padStart(2, "0")}`, rs = porDia[iso] || [], r = rs[0], fds = [0, 6].includes(new Date(ano, m - 1, d).getDay());
+    const iso = `${mes}-${String(d).padStart(2, "0")}`, rs = porDia[iso] || [], r = rs.find(x => x.tipo !== "justificativa") || rs[0], fds = !ehDiaDeAula(iso);
     const coment = rs.reduce((s, x) => s + (x.nComentarios || 0), 0);
     cel.push(`<button type="button" class="cal-dia${rs.length ? " tem" : ""}${iso === hojeISO() ? " hoje" : ""}${fds ? " fds" : ""}${iso === aberto ? " aberto" : ""}" data-dia="${iso}" ${!rs.length && !podeRegistrar() ? "disabled" : ""}
-      aria-label="${dataLonga(iso)}${rs.length ? ", com registro" : ""}"><span class="cal-n">${d}</span>${r ? `<span class="cal-emoji">${humorEmoji(r.respostas?.humorSaida || r.respostas?.humorChegada) || "📝"}</span>` : ""}
+      aria-label="${dataLonga(iso)}${rs.length ? ", com registro" : ""}"><span class="cal-n">${d}</span>${r ? `<span class="cal-emoji">${r.tipo === "justificativa" ? (MOTIVOS[r.motivo] || MOTIVOS.outro)[0] : humorEmoji(r.respostas?.humorSaida || r.respostas?.humorChegada) || "📝"}</span>` : ""}
       ${coment ? `<span class="cal-com" title="${coment} comentário(s)">💬${coment}</span>` : ""}</button>`);
   }
   return `<div class="cal-topo"><button type="button" class="leve mini" data-mes="-1" aria-label="Mês anterior">◀</button><h3>${MESES[m - 1]} ${ano}</h3><button type="button" class="leve mini" data-mes="1" aria-label="Próximo mês">▶</button></div>
     <div class="cal-grade">${DIAS.map(x => `<span class="cal-sem">${x}</span>`).join("")}${cel.join("")}</div>
-    <p class="pequeno cal-leg">A carinha é o humor na saída · 💬 comentários dos professores</p>`;
+    <p class="pequeno cal-leg">Carinha = humor na saída · 🚫 faltou · 📭 sem aula · 💬 comentários · dias em cinza não são dias de aula${diasAulaAluno().length ? ` (aulas: ${rotuloDias(diasAulaAluno())})` : ""}</p>`;
 }
 function ligarCalendario() {
   document.querySelectorAll("[data-mes]").forEach(b => b.onclick = () => {
@@ -164,15 +157,15 @@ function ligarCalendario() {
   document.querySelectorAll("[data-dia]").forEach(b => b.onclick = () => {
     const iso = b.dataset.dia;
     if (registros.some(r => r.data === iso)) { aberto = iso; desenharPainel(); $("#dDetalhe").scrollIntoView({ behavior: "smooth", block: "start" }); }
-    else if (podeRegistrar() && iso <= hojeISO()) abrirEditor(iso);
+    else if (podeRegistrar() && iso <= hojeISO()) iniciarRegistro(iso);
   });
 }
 function ultimosHTML() {
   const rs = registros.slice(0, 6);
   return `<h3 class="diario-h3">🗒 Últimos registros</h3>` + (rs.length ? rs.map(r => `<button type="button" class="ult-reg" data-dia-reg="${r.data}">
-    <span class="ult-emoji">${humorEmoji(r.respostas?.humorSaida || r.respostas?.humorChegada) || "📝"}</span>
+    <span class="ult-emoji">${r.tipo === "justificativa" ? (MOTIVOS[r.motivo] || MOTIVOS.outro)[0] : humorEmoji(r.respostas?.humorSaida || r.respostas?.humorChegada) || "📝"}</span>
     <span><b>${dataLonga(r.data)}</b> <span class="pequeno">· ${esc(r.autorNome || r.autor)}${r.nComentarios ? ` · 💬 ${r.nComentarios}` : ""}</span>
-    <span class="pequeno ult-txt">${esc(String(r.respostas?.atividades || r.respostas?.conquista || "").slice(0, 120))}</span></span>
+    <span class="pequeno ult-txt">${r.tipo === "justificativa" ? esc((MOTIVOS[r.motivo] || MOTIVOS.outro)[1] + (r.texto ? ": " + r.texto : "")).slice(0, 140) : esc(String(r.respostas?.atividades || r.respostas?.conquista || "").slice(0, 120))}</span></span>
     <span class="ult-estrelas">${"★".repeat(Number(r.respostas?.estrelas || 0))}</span></button>`).join("")
     : `<div class="vazio"><div class="icone">📔</div><p>Nenhum registro ainda.${podeRegistrar() ? " Comece pelo dia de hoje: leva uns 3 minutos." : ""}</p></div>`);
 }
@@ -195,8 +188,10 @@ async function mostrarDia(iso) {
     const meu = r.autor === ctx.eu.email;
     return `<article class="registro" data-reg="${esc(r.id)}">
       <div class="reg-cab"><span class="pequeno">✍ ${esc(r.autorNome || r.autor)} · ${r.completo ?? completude(r.respostas)}% preenchido · ${dataBR(r.atualizadoEm || r.criadoEm)}</span>
-        ${meu && podeRegistrar() ? `<span><button type="button" class="leve mini" data-editreg="${esc(r.data)}">✎ Editar</button> <button type="button" class="discreto mini perigo-txt" data-delreg="${esc(r.id)}">🗑</button></span>` : ""}</div>
-      ${SECOES_AUX.map(s => {
+        ${meu && podeRegistrar() ? `<span><button type="button" class="leve mini" data-editreg="${esc(r.data)}">${r.tipo === "justificativa" ? "📝 Preencher o diário" : "✎ Editar"}</button> <button type="button" class="discreto mini perigo-txt" data-delreg="${esc(r.id)}">🗑</button></span>` : ""}</div>
+      ${r.tipo === "justificativa" ? `<div class="reg-secao" style="--cor:#64748b"><h4>${(MOTIVOS[r.motivo] || MOTIVOS.outro)[0]} Justificativa</h4><p style="margin:0"><b>${esc((MOTIVOS[r.motivo] || MOTIVOS.outro)[1])}</b>${r.texto ? `<br>${esc(r.texto)}` : ""}</p></div>` : ""}
+      ${r.outroDia ? `<p class="pequeno">${(MOTIVOS[r.outroDia.motivo] || MOTIVOS.outro)[0]} Registrado depois: ${esc((MOTIVOS[r.outroDia.motivo] || MOTIVOS.outro)[1])}${r.outroDia.texto ? ` — ${esc(r.outroDia.texto)}` : ""}</p>` : ""}
+      ${r.tipo === "justificativa" ? "" : SECOES_AUX.map(s => {
         const its = s.itens.filter(it => visivel(it, r.respostas) && respondido(it, r.respostas));
         return its.length ? `<div class="reg-secao" style="--cor:${s.cor}"><h4>${s.icone} ${esc(s.titulo)}</h4><dl>${its.map(it => `<div><dt>${esc(it.rot)}</dt><dd>${valorHTML(it, r.respostas[it.id])}</dd></div>`).join("")}</dl></div>` : "";
       }).join("")}
@@ -204,14 +199,14 @@ async function mostrarDia(iso) {
     </article>`;
   }).join("");
   $("#dFechar").onclick = () => { aberto = null; desenharPainel(); };
-  box.querySelectorAll("[data-editreg]").forEach(b => b.onclick = () => abrirEditor(b.dataset.editreg));
+  box.querySelectorAll("[data-editreg]").forEach(b => b.onclick = () => { const r = registros.find(x => x.data === b.dataset.editreg && x.autor === ctx.eu.email); abrirEditor(b.dataset.editreg, r?.tipo === "justificativa" ? { motivo: r.motivo, texto: r.texto } : r?.outroDia || null); });
   box.querySelectorAll("[data-delreg]").forEach(b => b.onclick = async () => {
     if (!(await confirmar("Apagar este registro do diário? Os comentários dele também somem.", { titulo: "Apagar registro", ok: "Apagar", perigo: true }))) return;
     try {
       const cs = await getDocs(collection(db, "acessibilidadePrivado", atual.email, "diario", b.dataset.delreg, "comentarios"));
       await Promise.all(cs.docs.map(d => deleteDoc(d.ref)));
       await deleteDoc(doc(colDiario(atual.email), b.dataset.delreg));
-      registros = registros.filter(r => r.id !== b.dataset.delreg); aberto = registros.some(r => r.data === iso) ? iso : null; desenharPainel();
+      registros = registros.filter(r => r.id !== b.dataset.delreg); aberto = registros.some(r => r.data === iso) ? iso : null; desenharPainel(); atualizarResumo();
     } catch (e) { toast(traduzirErro(e), "erro"); }
   });
   for (const r of rs) carregarComentarios(r);
@@ -334,7 +329,59 @@ function limpar(r, itens) {
 
 // ---------- editor do dia (em etapas) ----------
 const chaveRascunho = iso => `diario:${atual.email}:${iso}:${ctx.eu.email}`;
-function abrirEditor(iso) {
+// atalhos: ontem e as últimas aulas sem registro (até 2)
+function atalhosDias() {
+  const tem = new Set(registros.map(r => r.data)), out = [], d = new Date();
+  const ontem = new Date(); ontem.setDate(ontem.getDate() - 1); const isoOntem = isoDe(ontem);
+  out.push([isoOntem, `Ontem${tem.has(isoOntem) ? " ✓" : ""}`]);
+  for (let i = 1; i < 30 && out.length < 3; i++) {
+    d.setDate(d.getDate() - 1); const iso = isoDe(d);
+    if (iso !== isoOntem && ehDiaDeAula(iso) && !tem.has(iso)) out.push([iso, `⚠ ${DIAS[d.getDay()]} ${dataCurta(iso).slice(0, 5)} sem registro`]);
+  }
+  return out;
+}
+// outro dia / dia sem aula: pergunta o motivo e se quer preencher o diário ou só justificar
+async function iniciarRegistro(iso) {
+  if (!podeRegistrar()) return;
+  if (iso > hojeISO()) return toast("Não dá para registrar um dia que ainda não chegou.", "erro");
+  const meu = registros.find(r => r.data === iso && r.autor === ctx.eu.email);
+  if (meu) return meu.tipo === "justificativa" ? (aberto = iso, desenharPainel()) : abrirEditor(iso, meu.outroDia || null);
+  if (iso === hojeISO() && ehDiaDeAula(iso)) return abrirEditor(iso);
+  const aula = ehDiaDeAula(iso);
+  let escolha = null;
+  const html = `<p style="margin-top:0"><b>${dataLonga(iso)}</b> ${aula ? "é dia de aula" : `<span class="tag aviso">não é dia de aula da turma${diasAulaAluno().length ? ` (${rotuloDias(diasAulaAluno())})` : ""}</span>`}. Por que você vai registrar este dia?</p>
+    <div class="op-pilulas op-motivos" role="radiogroup" aria-label="Motivo">${Object.entries(MOTIVOS).filter(([k]) => aula || k !== "atrasado").map(([k, [e, t]]) => `<button type="button" role="radio" aria-checked="false" data-motivo="${k}">${e} ${esc(t)}</button>`).join("")}</div>
+    <label for="jTexto" style="margin-top:12px">Explique (opcional)</label>
+    <textarea id="jTexto" style="min-height:70px" placeholder="Ex.: atestado médico; palestra no auditório; esqueci de registrar na hora."></textarea>
+    <p class="pequeno">Depois você escolhe: <b>preencher o diário</b> deste dia ou <b>só deixar a justificativa</b> registrada.</p>`;
+  const ok = await modal({ titulo: "📆 Registrar outro dia", conteudo: html, ok: "📝 Preencher o diário", cancelar: "Cancelar", largo: true,
+    aoAbrir: caixa => {
+      const so = document.createElement("button"); so.type = "button"; so.className = "leve"; so.textContent = "✔ Só justificar";
+      caixa.querySelector(".modal-acoes").insertBefore(so, caixa.querySelector("[data-r='1']"));
+      caixa.querySelectorAll("[data-motivo]").forEach(b => b.onclick = () => {
+        escolha = { motivo: b.dataset.motivo };
+        caixa.querySelectorAll("[data-motivo]").forEach(x => { x.classList.toggle("sel", x === b); x.setAttribute("aria-checked", x === b); });
+      });
+      so.onclick = async () => {
+        if (!escolha) return toast("Escolha o motivo.", "erro");
+        so.disabled = true;
+        try { await salvarJustificativa(iso, escolha.motivo, $("#jTexto", caixa).value.trim()); caixa.querySelector("[data-r='0']").click(); }
+        catch (e) { so.disabled = false; toast(traduzirErro(e), "erro"); }
+      };
+    },
+    antesDeConfirmar: caixa => { if (!escolha) { toast("Escolha o motivo.", "erro"); return false; } escolha.texto = $("#jTexto", caixa).value.trim(); return true; } });
+  if (ok && escolha) abrirEditor(iso, escolha);
+}
+async function salvarJustificativa(iso, motivo, texto) {
+  const id = `${iso}_${ctx.eu.email}`;
+  const dados = { data: iso, tipo: "justificativa", motivo, texto: texto.slice(0, 1000), autor: ctx.eu.email, autorNome: ctx.eu.nome || ctx.eu.email, papel: ctx.eu.papel,
+    respostas: {}, completo: 0, nComentarios: 0, criadoEm: serverTimestamp(), atualizadoEm: serverTimestamp() };
+  await setDoc(doc(colDiario(atual.email), id), dados);
+  registros = [{ id, ...dados, atualizadoEm: { toDate: () => new Date() } }, ...registros.filter(r => r.id !== id)].sort((a, b) => b.data.localeCompare(a.data));
+  toast("Justificativa registrada.", "ok");
+  aberto = iso; mes = iso.slice(0, 7); desenharPainel(); atualizarResumo();
+}
+function abrirEditor(iso, outroDia = null) {
   if (!podeRegistrar()) return;
   if (iso > hojeISO()) return toast("Não dá para registrar um dia que ainda não chegou.", "erro");
   const id = `${iso}_${ctx.eu.email}`, existente = registros.find(r => r.id === id);
@@ -379,37 +426,127 @@ function abrirEditor(iso) {
       passo = SECOES_AUX.findIndex(s => s.itens.includes(falta[0])); desenhar();
       return toast(`Falta: ${falta.map(f => f.rot).join(" · ")}`, "erro");
     }
-    const antes = { seq: sequencia(), meds: medalhas().filter(m => m.ok).map(m => m.t) };
-    const respostas = limpar(r, ITENS_AUX), dados = { data: iso, autor: ctx.eu.email, autorNome: ctx.eu.nome || ctx.eu.email, papel: ctx.eu.papel,
-      respostas, completo: completude(respostas), atualizadoEm: serverTimestamp() };
+    const antes = medalhasDiario(resumo()).filter(m => m.ok).map(m => m.t);
+    const respostas = limpar(r, ITENS_AUX), dados = { data: iso, tipo: "diario", autor: ctx.eu.email, autorNome: ctx.eu.nome || ctx.eu.email, papel: ctx.eu.papel,
+      respostas, completo: completude(respostas), outroDia: outroDia || null, atualizadoEm: serverTimestamp() };
     $("#edSalvar").disabled = true;
     try {
-      if (existente) await updateDoc(doc(colDiario(atual.email), id), dados);
+      if (existente) await updateDoc(doc(colDiario(atual.email), id), { ...dados, motivo: null, texto: null });
       else await setDoc(doc(colDiario(atual.email), id), { ...dados, nComentarios: 0, criadoEm: serverTimestamp() });
     } catch (e) { $("#edSalvar").disabled = false; return toast(String(e?.code || "").endsWith("permission-denied") ? "Sem permissão: publique o firestore.rules atual." : traduzirErro(e), "erro"); }
     localStorage.removeItem(chaveRascunho(iso));
     const novo = { id, ...dados, nComentarios: existente?.nComentarios || 0, atualizadoEm: { toDate: () => new Date() } };
     registros = [novo, ...registros.filter(x => x.id !== id)].sort((a, b) => b.data.localeCompare(a.data));
-    const depois = { seq: sequencia(), meds: medalhas().filter(m => m.ok) };
-    const ganhou = depois.meds.filter(m => !antes.meds.includes(m.t));
-    festa(respostas, depois.seq > antes.seq ? depois.seq : 0, ganhou);
-    aberto = iso; mes = iso.slice(0, 7); desenharPainel();
+    const ganhou = medalhasDiario(resumo()).filter(m => m.ok && !antes.includes(m.t));
+    festa(respostas, ganhou);
+    aberto = iso; mes = iso.slice(0, 7); desenharPainel(); atualizarResumo();
   };
   desenhar(); topo();
 }
 
-// comemoração ao salvar: confete de emojis, sequência e medalha nova
-function festa(resp, seq, ganhou) {
+// comemoração ao salvar: confete de emojis e a medalha nova que a aluna ganhou
+function festa(resp, ganhou) {
   const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const f = document.createElement("div");
   f.className = "festa-diario"; f.setAttribute("role", "status");
   const emojis = ["⭐", "🎉", humorEmoji(resp.humorSaida) || "😊", "💪", "✨", "🏆"];
   f.innerHTML = (reduz ? "" : Array.from({ length: 28 }, (_, i) => `<span class="conf" style="left:${Math.random() * 100}%;animation-delay:${Math.random() * .6}s;font-size:${18 + Math.random() * 22}px">${emojis[i % emojis.length]}</span>`).join("")) +
     `<div class="festa-caixa"><div class="festa-grande">${ganhou.length ? ganhou[0].e : "📔"}</div><b>Registro salvo!</b>
-      ${seq ? `<p>🔥 ${seq} dia(s) seguido(s) de diário</p>` : ""}
-      ${ganhou.map(m => `<p>🏅 Medalha nova: <b>${esc(m.t)}</b></p>`).join("")}
+      ${ganhou.map(m => `<p>🏅 ${esc(atual.nome?.split(" ")[0] || "A aluna")} ganhou a medalha <b>${esc(m.t)}</b>!</p>`).join("")}
       ${resp.conquista ? `<p class="pequeno">🏆 ${esc(String(resp.conquista).slice(0, 120))}</p>` : ""}</div>`;
   document.body.appendChild(f);
   const fechar = () => f.remove();
   f.onclick = fechar; setTimeout(fechar, ganhou.length ? 4200 : 2600);
+}
+
+// ---------- relatório formal (para coordenação, direção, sede) ----------
+async function relatorioFormal() {
+  const h = hojeISO(), ini = n => { const d = new Date(); d.setDate(d.getDate() - n); return isoDe(d); };
+  const sem = semestreDe(), semIni = `${sem.slice(0, 4)}-${sem.endsWith("1") ? "01" : "07"}-01`;
+  const html = `<div class="grade">
+      <div><label for="rfPeriodo">Período</label><select id="rfPeriodo">
+        <option value="${ini(6)}|${h}">Últimos 7 dias</option><option value="${h.slice(0, 7)}-01|${h}" selected>Este mês</option>
+        <option value="${ini(29)}|${h}">Últimos 30 dias</option><option value="${semIni}|${h}">Este semestre</option><option value="outro">Escolher datas…</option></select></div>
+      <div><label for="rfDe">De</label><input type="date" id="rfDe" value="${h.slice(0, 7)}-01" max="${h}"></div>
+      <div><label for="rfAte">Até</label><input type="date" id="rfAte" value="${h}" max="${h}"></div></div>
+    <label class="check"><input type="checkbox" id="rfComentarios" checked> <span>Incluir os comentários dos professores</span></label>
+    <label class="check"><input type="checkbox" id="rfDiario" checked> <span>Incluir o registro dia a dia (anexo)</span></label>
+    <label class="check"><input type="checkbox" id="rfSaude"> <span>Incluir "algo fora da rotina" (saúde, sono, medicação, família) <span class="pequeno">— informação sensível: só marque se o destinatário precisar</span></span></label>
+    <label for="rfConsid" style="margin-top:12px">Considerações finais da auxiliar (opcional)</label>
+    <textarea id="rfConsid" style="min-height:90px" placeholder="Síntese do período, avanços observados, encaminhamentos sugeridos…"></textarea>
+    <label for="rfDest" style="margin-top:12px">Destinatário (opcional)</label><input type="text" id="rfDest" placeholder="Ex.: Direção da unidade / Coordenação pedagógica">`;
+  let op = null;
+  const ok = await modal({ titulo: "📄 Relatório formal de acompanhamento", conteudo: html, ok: "Gerar PDF", cancelar: "Cancelar", largo: true,
+    aoAbrir: c => { $("#rfPeriodo", c).onchange = () => { const v = $("#rfPeriodo", c).value; if (v !== "outro") { const [a, b] = v.split("|"); $("#rfDe", c).value = a; $("#rfAte", c).value = b; } }; },
+    antesDeConfirmar: c => {
+      op = { de: $("#rfDe", c).value, ate: $("#rfAte", c).value, coment: $("#rfComentarios", c).checked, diario: $("#rfDiario", c).checked, saude: $("#rfSaude", c).checked,
+        consid: $("#rfConsid", c).value.trim(), dest: $("#rfDest", c).value.trim() };
+      if (!op.de || !op.ate || op.de > op.ate) { toast("Confira as datas do período.", "erro"); return false; }
+      return true;
+    } });
+  if (!ok) return;
+  const w = window.open("", "_blank");
+  if (!w) return toast("O navegador bloqueou a janela. Libere pop-ups para este site.", "erro");
+  w.document.write("<p style='font-family:sans-serif'>Montando o relatório…</p>");
+  const rs = registros.filter(r => r.data >= op.de && r.data <= op.ate).sort((a, b) => a.data.localeCompare(b.data));
+  const diarios = rs.filter(r => r.tipo !== "justificativa"), justs = rs.filter(r => r.tipo === "justificativa");
+  const coments = {};
+  if (op.coment) await Promise.all(rs.filter(r => r.nComentarios).map(async r => {
+    coments[r.id] = (await getDocs(collection(db, "acessibilidadePrivado", atual.email, "diario", r.id, "comentarios")).catch(() => null))?.docs.map(d => d.data()) || [];
+  }));
+  // dias de aula previstos no período
+  let previstos = 0; for (let d = dia(op.de); isoDe(d) <= op.ate; d.setDate(d.getDate() + 1)) if (ehDiaDeAula(isoDe(d))) previstos++;
+  const semAula = justs.filter(j => j.motivo === "semAula").length, faltas = justs.filter(j => j.motivo === "faltou").length;
+  const med = id => { const l = diarios.map(r => Number(r.respostas?.[id])).filter(Boolean); return l.length ? (l.reduce((s, x) => s + x, 0) / l.length) : null; };
+  const nivel = (it, v) => v == null ? "—" : `${v.toFixed(1)} / 5 — ${it.rotulos ? it.rotulos[Math.max(0, Math.min(4, Math.round(v) - 1))] : HUMOR[Math.max(0, Math.min(4, Math.round(v) - 1))].r}`;
+  const conta = id => { const c = {}; diarios.forEach(r => (r.respostas?.[id] || []).forEach(x => c[x] = (c[x] || 0) + 1)); return Object.entries(c).sort((a, b) => b[1] - a[1]); };
+  const mats = {}; diarios.forEach(r => (r.respostas?.materias || []).forEach(m => { const x = mats[m.materia] ||= { aulas: 0, topicos: {} }; x.aulas++; (m.topicos || []).forEach(t => x.topicos[t] = (x.topicos[t] || 0) + 1); }));
+  const sobre = { leve: diarios.filter(r => r.respostas?.sobrecarga === "leve").length, sim: diarios.filter(r => r.respostas?.sobrecarga === "sim").length };
+  const it = id => ITENS_AUX.find(x => x.id === id);
+  const p = s => esc(s || "").replace(/\n/g, "<br>");
+  const auxiliares = [...new Set(rs.map(r => r.autorNome || r.autor))];
+  const turma = turmasAluno.map(t => `${t.turma}${rotuloDias(t.diasAula) ? ` (aulas: ${rotuloDias(t.diasAula)})` : ""}`).join(", ") || "—";
+  const linhaInd = id => `<tr><td>${esc(it(id).rot)}</td><td>${nivel(it(id), med(id))}</td></tr>`;
+  const corpo = `
+  <header class="cab"><div class="marca">SENAI</div><div><h1>Relatório de acompanhamento pedagógico</h1><div class="sub">Educação inclusiva · Registro da auxiliar de inclusão</div></div></header>
+  <table class="ident">
+    <tr><th>Aluno(a)</th><td>${esc(atual.nome || atual.email)}</td><th>Turma</th><td>${esc(turma)}</td></tr>
+    <tr><th>Período</th><td>${dataCurta(op.de)} a ${dataCurta(op.ate)}</td><th>Horário</th><td>${esc(textoHorario(ctx.horario?.()))}</td></tr>
+    <tr><th>Responsável(is) pelo registro</th><td>${esc(auxiliares.join(", ") || "—")}</td><th>Emitido em</th><td>${new Date().toLocaleDateString("pt-BR")}</td></tr>
+    ${op.dest ? `<tr><th>Destinatário</th><td colspan="3">${esc(op.dest)}</td></tr>` : ""}
+  </table>
+  <h2>1. Frequência</h2>
+  <table><tr><th>Dias de aula previstos</th><th>Aulas com registro</th><th>Faltas</th><th>Sem aula (feriado, evento…)</th><th>Outras justificativas</th></tr>
+    <tr><td>${previstos}</td><td>${diarios.length}</td><td>${faltas}</td><td>${semAula}</td><td>${justs.length - faltas - semAula}</td></tr></table>
+  ${justs.length ? `<p class="peq">${justs.map(j => `${dataCurta(j.data)}: ${esc(MOTIVOS[j.motivo]?.[1] || "Outro")}${j.texto ? ` — ${esc(j.texto)}` : ""}`).join(" · ")}</p>` : ""}
+  <h2>2. Indicadores do período <span class="peq">(média dos registros, escala de 1 a 5)</span></h2>
+  <table><tr><th>Indicador</th><th>Resultado</th></tr>${["compreensao", "autonomia", "foco", "comunicacao", "humorChegada", "humorSaida", "estrelas"].map(id => id === "estrelas"
+    ? `<tr><td>Avaliação geral do dia</td><td>${med("estrelas") == null ? "—" : med("estrelas").toFixed(1) + " / 5"}</td></tr>` : linhaInd(id)).join("")}</table>
+  <h2>3. Conteúdos trabalhados</h2>
+  ${Object.keys(mats).length ? `<table><tr><th>Matéria</th><th>Aulas</th><th>Tópicos (nº de aulas)</th></tr>${Object.entries(mats).map(([m, x]) => `<tr><td>${esc(m)}</td><td>${x.aulas}</td><td>${Object.entries(x.topicos).map(([t, n]) => `${esc(t)} (${n})`).join("; ") || "—"}</td></tr>`).join("")}</table>` : `<p class="peq">Nenhuma matéria registrada no período.</p>`}
+  <h2>4. Comportamento e convivência</h2>
+  <table><tr><th>Sinais de sobrecarga</th><td>${sobre.leve} leve(s) · ${sobre.sim} com crise · ${diarios.length - sobre.leve - sobre.sim} sem sinais ou não informado</td></tr>
+    <tr><th>Possíveis causas observadas</th><td>${conta("gatilhos").map(([k, n]) => `${esc(k)} (${n})`).join("; ") || "—"}</td></tr>
+    <tr><th>Interações</th><td>${conta("interacao").map(([k, n]) => `${esc(k)} (${n})`).join("; ") || "—"}</td></tr></table>
+  <h2>5. Estratégias que funcionaram</h2>
+  <p>${conta("estrategias").map(([k, n]) => `${esc(k)} (${n})`).join("; ") || "—"}</p>
+  ${diarios.some(r => r.respostas?.paraProvas) ? `<h2>6. Recomendações para avaliações</h2><ul>${diarios.filter(r => r.respostas?.paraProvas).map(r => `<li><b>${dataCurta(r.data)}:</b> ${p(r.respostas.paraProvas)}</li>`).join("")}</ul>` : ""}
+  ${op.coment && Object.values(coments).some(l => l.length) ? `<h2>7. Observações dos professores</h2>${rs.filter(r => coments[r.id]?.length).map(r => coments[r.id].map(c => `<div class="bloco"><b>${dataCurta(r.data)} · ${esc(c.autorNome || c.autor)}${c.respostas?.materia ? ` (${esc(c.respostas.materia)})` : ""}</b>${c.respostas?.participacao ? ` · participação ${c.respostas.participacao}/5` : ""}<br>${p(c.respostas?.comentario)}${c.respostas?.sugestao ? `<br><i>Sugestão:</i> ${p(c.respostas.sugestao)}` : ""}</div>`).join("")).join("")}` : ""}
+  ${op.consid ? `<h2>Considerações finais</h2><p>${p(op.consid)}</p>` : ""}
+  ${op.diario && diarios.length ? `<h2 class="quebra-antes">Anexo — Registro dia a dia</h2><table class="anexo"><tr><th style="width:70px">Data</th><th>Atividades</th><th>Observações</th></tr>${diarios.map(r => `<tr><td>${dataCurta(r.data)}</td>
+    <td>${(r.respostas?.materias || []).map(m => `<b>${esc(m.materia)}</b>${m.topicos?.length ? ": " + m.topicos.map(esc).join(", ") : ""}`).join("<br>")}${r.respostas?.atividades ? `<br>${p(r.respostas.atividades)}` : ""}</td>
+    <td>${[r.respostas?.comportamentoTexto, r.respostas?.funcionou && "Funcionou: " + r.respostas.funcionou, r.respostas?.dificil && "Dificuldade: " + r.respostas.dificil, r.respostas?.conquista && "Conquista: " + r.respostas.conquista, op.saude && r.respostas?.foraRotina && "Fora da rotina: " + r.respostas.foraRotina].filter(Boolean).map(p).join("<br>") || "—"}</td></tr>`).join("")}</table>` : ""}
+  <div class="assin"><div>${esc(auxiliares[0] || "")}<br>Auxiliar de inclusão</div><div><br>Coordenação pedagógica</div></div>
+  <p class="peq rodape">Documento de uso interno, com informações pessoais do(a) aluno(a). Compartilhe apenas com quem precisa.</p>`;
+  w.document.open();
+  w.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório — ${esc(atual.nome || atual.email)} — ${dataCurta(op.de)} a ${dataCurta(op.ate)}</title>
+  <style>@page{size:A4;margin:16mm 14mm}body{font-family:Arial,sans-serif;font-size:10.5pt;color:#111;margin:0}
+  .cab{display:flex;gap:12px;align-items:center;border-bottom:3px solid #c1272d;padding-bottom:8px;margin-bottom:12px}.marca{background:#c1272d;color:#fff;font-weight:bold;padding:6px 10px;letter-spacing:2px}
+  h1{font-size:15pt;margin:0}.sub{color:#555;font-size:9.5pt}h2{font-size:11.5pt;margin:16px 0 6px;border-bottom:1px solid #ccc;padding-bottom:3px}
+  table{width:100%;border-collapse:collapse;margin:4px 0}th,td{border:1px solid #bbb;padding:4px 6px;text-align:left;vertical-align:top}th{background:#f1f1f1;font-weight:bold}
+  .ident th{width:18%}.peq{font-size:9pt;color:#444}.bloco{border-left:3px solid #999;padding:3px 8px;margin:6px 0;page-break-inside:avoid}
+  .anexo td{font-size:9.5pt}.quebra-antes{page-break-before:always}.assin{display:flex;justify-content:space-around;margin-top:48px;text-align:center}.assin div{border-top:1px solid #000;width:40%;padding-top:4px;font-size:9.5pt}
+  .rodape{margin-top:18px;text-align:center}tr{page-break-inside:avoid}</style></head>
+  <body>${corpo}<script>window.onload=()=>setTimeout(()=>window.print(),300)<\/script></body></html>`);
+  w.document.close();
 }
