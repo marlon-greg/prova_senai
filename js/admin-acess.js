@@ -173,7 +173,7 @@ async function abrirAluno(email, rolar = true) {
       <label for="acDescricao">Descrição das necessidades e do que funciona (a IA usa isto para adaptar as questões)</label>
       <textarea id="acDescricao" style="font-family:inherit;min-height:140px" placeholder="Ex.: aluna com TEA nível 1 e TDAH. Entende melhor frases curtas e uma instrução por vez. Perde o foco com textos longos. Ajuda: negrito no que é pedido, exemplos concretos.">${esc(descricao)}</textarea>
       <div class="linha acoes" style="margin-top:8px"><button id="acSalvarDesc" class="leve">Salvar descrição</button></div>
-      <h2 style="margin-top:16px">Laudos e documentos (PDF)</h2>
+      <h2 style="margin-top:16px">Laudos e documentos (PDF) <button data-ajuda-item="laudo"></button></h2>
       <p class="pequeno">Ficam guardados só para a equipe que cuida deste aluno. A IA lê até 3 PDFs ao adaptar.</p>
       <div class="linha acoes"><label class="botao-arquivo">⬆ Enviar PDF(s)<input type="file" id="acLaudoArq" accept="application/pdf,.pdf" multiple hidden></label><span id="acLaudoMsg" class="pequeno" aria-live="polite"></span></div>
       <div id="acLaudos" class="lista-materiais" style="margin-top:8px"></div>

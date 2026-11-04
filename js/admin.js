@@ -8,6 +8,7 @@ import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA,
 import { abrirLeitorPdf } from "./leitor-pdf.js";
 import { iniciarOrganizacao, carregarOrganizacao, listarPlanos, materiasSugeridas, editarTopicosBanco } from "./admin-org.js";
 import { iniciarDiario, carregarDiario } from "./admin-diario.js";
+import { ligarAjuda } from "./ajuda.js";
 import { iniciarAcessibilidade, carregarAcessibilidade, prepararNovo as prepararNovoAcess } from "./admin-acess.js";
 import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp, onSnapshot, increment, deleteField }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
@@ -57,7 +58,9 @@ aoMudarLogin(async user => {
   abrirAba(ehInclusao() ? "diario" : "provas");
 });
 function trocar(id) { ["telaLogin", "telaPainel", "telaAviso"].forEach(t => $("#" + t).classList.toggle("oculto", t !== id)); }
+let abaAtual = "provas";
 function abrirAba(a) {
+  abaAtual = a; ligarAjuda(() => abaAtual);
   if (a !== "resultados" && $("#rAoVivo").checked) { $("#rAoVivo").checked = false; pararAoVivo(); }   // sair da aba desliga o ao vivo
   document.querySelectorAll("[data-aba]").forEach(b => b.classList.toggle("ativa", b.dataset.aba === a));
   ["organizacao", "diario", "provas", "bancos", "turmas", "resultados", "acessibilidade", "equipe", "config"].forEach(x => $("#aba-" + x).classList.toggle("oculto", x !== a));
@@ -356,7 +359,7 @@ function formProvaHTML(f) {
     <p class="pequeno" style="margin:4px 0 0">Aluno perdeu vidas sem querer (ex.: TEA)? Em <b>Resultados</b> você restaura as vidas, dá vida extra ou reabre a prova dele.</p>
   </fieldset>
   <fieldset class="temas-box">
-    <legend>Material de consulta (opcional)</legend>
+    <legend>Material de consulta (opcional) <button data-ajuda-item="slides"></button></legend>
     <div class="grade">
       <div><label for="${f}MatTitulo">Título do material (topo do painel)</label><input type="text" id="${f}MatTitulo" placeholder="Slides das aulas 6 a 8"></div>
       <div class="col-2"><span class="rotulo">Slides em PDF — marque um ou vários (o aluno troca entre eles por abas, dentro da prova)</span>

@@ -211,7 +211,7 @@ function cartaoMateria(t, s, n) {
     <div class="cm-acoes">
       ${arqs.map(a => `<span class="item-arq"><button class="leve mini" type="button" data-verarq="${p.id}" data-arq="${a.id}" title="Abrir o PDF">📄 ${esc(a.titulo)}</button>${pode ? `<button class="discreto mini perigo-txt" type="button" data-delarq="${p.id}" data-arq="${a.id}" aria-label="Apagar o PDF ${esc(a.titulo)}">✕</button>` : ""}</span>`).join("")}
       ${pode && p ? `<button class="leve mini" type="button" data-editar="${p.id}">✎ Editar</button>
-        <label class="botao-arquivo leve mini">⬆ PDF do plano<input type="file" accept="application/pdf,.pdf" hidden data-enviar="${p.id}"></label>
+        <button data-ajuda-item="planoEnsino"></button><label class="botao-arquivo leve mini">⬆ PDF do plano<input type="file" accept="application/pdf,.pdf" hidden data-enviar="${p.id}"></label>
         ${arqs.length ? `<button class="leve mini" type="button" data-ler="${p.id}" title="A IA lê o PDF e preenche os tópicos e as provas previstas (você revisa antes de salvar)">🤖 Ler plano com IA</button>` : ""}
         <button class="leve mini" type="button" data-criar="${p.id}">+ Nova prova</button>
         ${ctx.ehAdmin() ? `<button class="discreto mini perigo-txt" type="button" data-delplano="${p.id}" aria-label="Apagar o plano">🗑</button>` : ""}` : ""}
@@ -540,7 +540,7 @@ function desenharCursos() {
             <div>${(m.topicos || []).map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div></div>`).join("") || `<p class="pequeno">Nenhuma matéria ainda. Envie o PDF e peça para a IA ler, ou use ✎ Editar.</p>`}</div>
           <div class="cm-acoes">${arqs.map(a => `<span class="item-arq"><button class="leve mini" type="button" data-vercurso="${c.id}" data-arq="${a.id}">📄 ${esc(a.titulo)}</button>${pode ? `<button class="discreto mini perigo-txt" type="button" data-delarqcurso="${c.id}" data-arq="${a.id}" aria-label="Apagar o PDF">✕</button>` : ""}</span>`).join("")}
             ${pode ? `<button class="leve mini" type="button" data-editcurso="${c.id}">✎ Editar</button>
-            <label class="botao-arquivo leve mini">⬆ PDF do plano de curso<input type="file" accept="application/pdf,.pdf" hidden data-enviarcurso="${c.id}"></label>
+            <button data-ajuda-item="planoCurso"></button><label class="botao-arquivo leve mini">⬆ PDF do plano de curso<input type="file" accept="application/pdf,.pdf" hidden data-enviarcurso="${c.id}"></label>
             ${arqs.length ? `<button class="leve mini" type="button" data-lercurso="${c.id}">🤖 Ler plano de curso com IA</button>` : ""}
             ${ctx.ehAdmin() ? `<button class="discreto mini perigo-txt" type="button" data-delcurso="${c.id}" aria-label="Apagar o plano de curso">🗑</button>` : ""}` : ""}</div></div></details>`;
     }).join("") : `<p class="pequeno">Nenhum plano de curso ainda.${pode ? " Clique em <b>+ Plano de curso</b>, dê o nome do curso e envie o PDF (pode ser só a parte das matérias)." : ""}</p>`);

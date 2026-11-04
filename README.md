@@ -142,6 +142,10 @@ Aba **Organização** (a primeira do menu). Mostra cada **turma**, dentro dela o
 
 A IA da organização roda no navegador do administrador principal (com a chave) ou no servidor (ação `organizar` do Worker, para professores). O Worker importa `servidor/organizar.js` e é publicado pela Cloudflare a cada push (colar o arquivo à mão no editor da Cloudflare não funciona mais).
 
+## Ajuda "?" em todas as telas
+
+O botão azul **?** (canto de baixo, à direita) explica a tela aberta, passo a passo. Os **?** pequenos ao lado de cada envio (banco JSON, slides, laudos, plano de ensino, plano de curso, lista de alunos) dizem como preparar o arquivo: só PDF, slides em paisagem, até 20 MB, como exportar do PowerPoint/Google Slides, que não precisa ser o documento inteiro etc. Os textos ficam em `js/ajuda.js`.
+
 ## Pesquisa e filtros em todas as telas
 
 | Tela | Pesquisa | Filtros |
