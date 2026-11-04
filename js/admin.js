@@ -6,7 +6,7 @@ import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, to
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
-import { iniciarOrganizacao, carregarOrganizacao, listarPlanos, materiasSugeridas, editarTopicosBanco } from "./admin-org.js";
+import { iniciarOrganizacao, carregarOrganizacao, listarPlanos, listarCursos, materiasSugeridas, editarTopicosBanco, topicosDaMateria } from "./admin-org.js";
 import { iniciarDiario, carregarDiario } from "./admin-diario.js";
 import { ligarAjuda } from "./ajuda.js";
 import { iniciarGamificacao, carregarGamificacao, carregarRetorno } from "./admin-gamificacao.js";
@@ -989,7 +989,7 @@ const semestreDoBanco = b => b.semestre || semestreDe(b.criadoEm || new Date());
 let bancosContagem = {};   // bancoId -> { tema: { alternativa, dissertativa } }
 const bancosFechados = new Set();
 async function carregarBancos() {
-  await Promise.all([listarBancos(), listarPlanos().catch(() => [])]);
+  await Promise.all([listarBancos(), listarPlanos().catch(() => []), listarCursos().catch(() => [])]);
   // formulário de importação: semestre e matérias sugeridas
   const sAntes = $("#bSemestre").value, base = semestreDe();
   $("#bSemestre").innerHTML = [-2, -1, 0, 1, 2].map(d => semestreVizinho(base, d)).reverse().map(x => `<option value="${x}">${rotuloSemestre(x)}${x === base ? " (atual)" : ""}</option>`).join("");
@@ -1066,6 +1066,52 @@ function desenharBancos() {
     lote.delete(doc(db, "bancos", id)); await lote.commit(); delete questoesCache[id]; carregarBancos();
   });
 }
+// ---------- 🤖 prompt pronto para gerar o banco numa IA ----------
+const giExtras = new Set(), giDesmarcados = new Set();
+function giTopicosDisponiveis() {
+  const m = $("#giMateria").value.trim();
+  if (!m) return [];
+  const dosBancos = bancosCache.filter(b => chaveTexto(b.materia) === chaveTexto(m)).flatMap(b => (questoesCache[b.id] || []).map(temaDe)).filter(t => t !== "Geral");
+  return ordenarTemas([...topicosDaMateria(m), ...dosBancos, ...giExtras]).filter((t, i, l) => l.findIndex(x => chaveTexto(x) === chaveTexto(t)) === i);
+}
+function giDesenharTopicos() {
+  const tops = giTopicosDisponiveis(), box = $("#giTopicos");
+  box.innerHTML = tops.length ? tops.map(t => `<label class="check"><input type="checkbox" value="${esc(t)}"${giDesmarcados.has(t) ? "" : " checked"}> <span>${esc(t)}</span></label>`).join("")
+    : `<p class="pequeno">${$("#giMateria").value.trim() ? "Nenhum tópico cadastrado para esta matéria (plano de curso/ensino ou bancos). Adicione abaixo." : "Escreva a matéria acima."}</p>`;
+  box.querySelectorAll("input").forEach(c => c.onchange = () => { c.checked ? giDesmarcados.delete(c.value) : giDesmarcados.add(c.value); giMontar(); });
+  giMontar();
+}
+const MODELO_JSON = { nome: "MS5 — DML", materia: "Banco de Dados", questoes: [
+  { tipo: "alternativa", tema: "DML - UPDATE", enunciado: "Qual comando altera o e-mail do cliente de id 3?", alternativas: ["UPDATE cliente SET email = 'novo@x.com' WHERE id_cliente = 3;", "UPDATE cliente SET email = 'novo@x.com';", "ALTER TABLE cliente SET email = 'novo@x.com' WHERE id_cliente = 3;", "INSERT INTO cliente (email) VALUES ('novo@x.com');"], correta: 0, explicacao: "UPDATE com WHERE altera só a linha do id 3. Sem WHERE mudaria todos; ALTER muda a estrutura; INSERT cria linha nova.", peso: 1 },
+  { tipo: "dissertativa", tema: "DML - SELECT", enunciado: "Escreva o comando que conta quantos clientes existem na tabela cliente.", respostasAceitas: ["SELECT COUNT(*) FROM cliente;", "SELECT COUNT(id_cliente) FROM cliente;"], palavrasChave: ["select count(", "from cliente"], explicacao: "COUNT(*) conta as linhas da tabela.", peso: 2 },
+  { tipo: "dissertativa", tema: "Modelagem", enunciado: "Explique, em 2 linhas, para que serve a chave estrangeira.", correcaoManual: true, explicacao: "Ela liga uma tabela a outra e garante que o valor exista na tabela de origem.", peso: 2 }] };
+function giMontar() {
+  const materia = $("#giMateria").value.trim() || "(a matéria)", tops = [...$("#giTopicos").querySelectorAll("input:checked")].map(c => c.value);
+  const nA = Math.max(0, Number($("#giAlt").value) || 0), nD = Math.max(0, Number($("#giDiss").value) || 0), op = Number($("#giOpcoes").value) || 4;
+  const nome = $("#giNome").value.trim() || `${materia} — banco gerado`, extra = $("#giContexto").value.trim(), total = tops.length * (nA + nD);
+  $("#giPrompt").value = `Você é professor de ${materia} em um curso técnico do SENAI. Crie um banco de questões de prova, nível ${$("#giNivel").value}, em português do Brasil.
+
+TÓPICOS (use exatamente estes nomes no campo "tema"):
+${tops.length ? tops.map(t => `- ${t}`).join("\n") : "- (escolha os tópicos no sistema)"}
+
+QUANTIDADE: para CADA tópico, ${nA} questão(ões) de múltipla escolha e ${nD} dissertativa(s) — ${total} questões no total.
+${extra ? `\nCONTEXTO/PEDIDO: ${extra}\n` : ""}
+REGRAS DAS QUESTÕES
+- Múltipla escolha ("tipo": "alternativa"): exatamente ${op} alternativas, uma só correta, as erradas plausíveis (erros comuns de aluno). "correta" é o ÍNDICE da certa, começando em 0 (0 = primeira). Varie a posição da certa.
+- Dissertativa de comando/código ("tipo": "dissertativa"): "respostasAceitas" com a resposta certa e as variações equivalentes (outra ordem de colunas, com e sem ponto e vírgula, maiúsculas), e "palavrasChave" com trechos bem específicos que toda resposta certa tem.
+- Dissertativa de explicar/justificar: use "correcaoManual": true (sem respostasAceitas).
+- "explicacao": 1 ou 2 frases dizendo por que a certa é certa (o aluno lê depois da prova).
+- "peso": 1 para múltipla escolha, 2 para dissertativa.
+- Enunciado claro, uma pergunta por questão, sem dupla negação e sem pegadinha. Código entre crases: \`SELECT * FROM x;\` ou bloco com três crases.
+
+FORMATO DA RESPOSTA: devolva SOMENTE um JSON válido (sem texto antes ou depois, sem comentários), exatamente neste formato:
+${JSON.stringify({ nome, materia: $("#giMateria").value.trim() || materia, questoes: MODELO_JSON.questoes.slice(0, 3).map((q, i) => ({ ...q, tema: tops[i % Math.max(1, tops.length)] || q.tema })) }, null, 2)}`;
+}
+["#giMateria", "#giNome", "#giNivel", "#giAlt", "#giDiss", "#giOpcoes", "#giContexto"].forEach(id => $(id).addEventListener("input", id === "#giMateria" ? giDesenharTopicos : giMontar));
+$("#gerarIA").addEventListener("toggle", () => { if ($("#gerarIA").open) { if (!$("#giMateria").value) $("#giMateria").value = $("#bMateria").value; Promise.all(bancosCache.map(b => questoesDoBanco(b.id).catch(() => []))).then(giDesenharTopicos); } });
+$("#giTopicoAdd").onclick = () => { const t = $("#giTopicoNovo").value.trim(); if (t) { giExtras.add(t); giDesmarcados.delete(t); $("#giTopicoNovo").value = ""; giDesenharTopicos(); } };
+$("#giCopiar").onclick = () => { if (![...$("#giTopicos").querySelectorAll("input:checked")].length) return toast("Marque pelo menos um tópico.", "erro"); navigator.clipboard.writeText($("#giPrompt").value).then(() => toast("Prompt copiado! Cole na IA. 📋", "ok"), () => { $("#giPrompt").select(); toast("Selecionei o prompt: use Ctrl+C.", "info"); }); };
+$("#giModelo").onclick = () => { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([JSON.stringify(MODELO_JSON, null, 2)], { type: "application/json" })); a.download = "modelo_banco.json"; a.click(); };
 ["#fbBusca", "#fbSemestre", "#fbMateria"].forEach(id => $(id).addEventListener(id === "#fbBusca" ? "input" : "change", desenharBancos));
 $("#fbLimpar").onclick = () => { $("#fbBusca").value = ""; $("#fbSemestre").value = ""; $("#fbMateria").value = ""; desenharBancos(); };
 async function lerBanco(bancoId) {

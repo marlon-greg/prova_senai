@@ -391,7 +391,7 @@ Cadastre em **Equipe** com o papel **auxiliar de inclusão** e vincule no cadast
 | `tema` | **opcional**. Texto livre que agrupa as questões (ex.: `"DCL - permissoes"`). Sem tema (ou vazio), a questão entra como **Geral**. Escreva sempre igual: `"DML"` e `"dml"` viram dois temas diferentes. Bancos antigos, sem tema, continuam funcionando. |
 | enunciado | aceita quebras de linha. Trecho entre crases vira código na linha: `` `SELECT * FROM x;` ``. Entre três crases (```` ``` ````) vira bloco de código. |
 
-Dica: peça ao Claude/ChatGPT "gere um banco de questões no formato do modelo_banco.json sobre o tema X" e cole o resultado em **Validar**.
+**🤖 Prompt pronto (aba Bancos → "Não tem o JSON? Gere as questões numa IA"):** escolha a matéria, os tópicos (vêm do plano de curso/ensino e dos bancos da matéria; dá para acrescentar), quantas alternativas e dissertativas por tópico, o nível e um contexto. O sistema monta o prompt com as regras e o formato exato do JSON (tema = o nome do tópico). **📋 Copiar prompt**, colar no Claude/ChatGPT/Gemini, colar o JSON na caixa → **Validar** → **Importar**. Também tem **⬇ Baixar o modelo JSON**.
 
 ---
 

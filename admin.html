@@ -109,6 +109,28 @@
           <div><label for="bSemestre">Semestre</label><select id="bSemestre"></select></div>
           <div><label for="bMateria">Matéria</label><input type="text" id="bMateria" list="bMaterias" placeholder="vazio = a do JSON"><datalist id="bMaterias"></datalist></div>
         </div>
+        <details class="gerar-ia" id="gerarIA"><summary>🤖 Não tem o JSON? Gere as questões numa IA com o prompt pronto</summary>
+          <p class="pequeno">Escolha a matéria, os tópicos e quantas questões. O sistema monta o prompt; você copia, cola no Claude, ChatGPT ou Gemini, e cola o JSON que ela devolver na caixa abaixo.</p>
+          <div class="grade">
+            <div><label for="giMateria">Matéria</label><input type="text" id="giMateria" list="bMaterias" placeholder="Banco de Dados"></div>
+            <div><label for="giNome">Nome do banco</label><input type="text" id="giNome" placeholder="MS5 — DML (gerado)"></div>
+            <div><label for="giNivel">Nível</label><select id="giNivel"><option value="básico">Básico (início do conteúdo)</option><option value="intermediário" selected>Intermediário</option><option value="avançado">Avançado</option></select></div>
+          </div>
+          <span class="rotulo">Tópicos <span class="pequeno">(do plano de curso/ensino e dos bancos desta matéria; marque os que entram)</span></span>
+          <div id="giTopicos" class="lista-temas" style="margin:6px 0"><p class="pequeno">Escreva a matéria acima.</p></div>
+          <div class="linha" style="gap:6px"><input type="text" id="giTopicoNovo" placeholder="+ outro tópico" style="flex:1"><button type="button" class="leve mini" id="giTopicoAdd">Adicionar</button></div>
+          <div class="grade">
+            <div><label for="giAlt">Alternativas por tópico</label><input type="number" id="giAlt" value="4" min="0" max="30"></div>
+            <div><label for="giDiss">Dissertativas por tópico</label><input type="number" id="giDiss" value="2" min="0" max="20"></div>
+            <div><label for="giOpcoes">Alternativas em cada questão</label><select id="giOpcoes"><option>4</option><option>5</option><option>3</option></select></div>
+          </div>
+          <label for="giContexto">Contexto ou pedido extra (opcional)</label>
+          <input type="text" id="giContexto" placeholder="Ex.: use o banco pf_suporte com as tabelas cliente e chamado; MySQL; evite pegadinhas">
+          <label for="giPrompt" style="margin-top:10px">Prompt pronto</label>
+          <textarea id="giPrompt" class="mono" readonly style="min-height:220px"></textarea>
+          <div class="linha acoes"><button type="button" id="giCopiar">📋 Copiar prompt</button><button type="button" class="leve" id="giModelo">⬇ Baixar o modelo JSON</button>
+            <span class="pequeno">Depois: cole a resposta da IA na caixa abaixo → <b>Validar</b> → <b>Importar</b>.</span></div>
+        </details>
         <input type="file" id="arqBanco" accept=".json,application/json">
         <textarea id="txtBanco" placeholder='{"nome": "...", "materia": "...", "questoes": [ ... ]}' style="min-height:160px;margin-top:8px"></textarea>
         <div class="linha acoes" style="margin-top:8px"><button id="btnValidarBanco" class="leve">Validar</button><button id="btnImportarBanco">Importar</button></div>
