@@ -1,5 +1,6 @@
 // Servidor de correção automática (Cloudflare Worker, plano gratuito).
-// Cole este arquivo inteiro em: Cloudflare → Workers & Pages → corretor-prova → Edit code → Deploy.
+// A Cloudflare publica sozinha a cada push na main (wrangler.toml), junto com servidor/organizar.js, que este arquivo importa.
+// (Colar à mão no editor da Cloudflare não funciona mais: o editor não leva o organizar.js.)
 //
 // Quando o aluno finaliza a prova, a página dele chama este servidor com o "crachá" do login (ID token do Firebase).
 // O servidor confere que a tentativa é DELE e está finalizada, corrige as dissertativas pendentes com a IA da
@@ -17,7 +18,13 @@
 // Professor/admin (ou a auxiliar de inclusão vinculada à aluna) pede; o servidor lê a descrição do professor e os laudos
 // (acessibilidadePrivado/{email}), reescreve cada questão com a IA SEM mudar a resposta correta e grava em
 // acessibilidade/{email}/questoes/{qid}. Edição manual (origem "manual") só é refeita com refazer: true.
+// Ação 3 — ORGANIZAR (professor/admin): POST { acao: "organizar", tipo: "plano", planoId, arquivoId }
+//   lê o PDF do plano de ensino (planos/{planoId}/arquivos/{arquivoId}) e devolve os tópicos e as provas previstas;
+//   POST { acao: "organizar", tipo: "topicos", bancoId, topicos: [...] } devolve o tópico de cada questão do banco.
+//   Nada é gravado: o painel mostra o resultado para o professor revisar e salvar.
 // (FIRESTORE_EMULADOR e ANTHROPIC_URL existem só para testar no computador; não crie no Cloudflare.)
+
+import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS } from "./organizar.js";
 
 export default {
   async fetch(req, env) {
@@ -41,6 +48,7 @@ export default {
       const usuario = await verificarIdToken(token, env.PROJECT_ID);
       const corpo = await req.json().catch(() => ({}));
       if (corpo.acao === "adaptar") return resposta(await adaptarQuestoes(env, usuario, corpo));
+      if (corpo.acao === "organizar") return resposta(await organizar(env, usuario, corpo));
       const { tentativaId } = corpo;
       if (!tentativaId || !/^[\w-]+$/.test(tentativaId)) throw falha("tentativaId inválido.", 400);
       return resposta(await corrigirTentativa(env, usuario, tentativaId));
@@ -318,6 +326,61 @@ async function adaptarComIA(chave, modelo, { q, g, descricao, orientacao, laudos
 }
 
 // =====================================================================
+// Organização: plano de ensino e tópicos das questões (servidor/organizar.js)
+// =====================================================================
+async function organizar(env, usuario, corpo) {
+  const quem = String(usuario.email || "").toLowerCase(), fs = await firestore(env);
+  if (quem !== SUPER_ADMIN && !["admin", "professor"].includes((await fs.ler(`equipe/${quem}`))?.papel)) throw falha("Só professor ou admin.", 403);
+  const modelo = env.MODELO_ADAPTACAO || "claude-sonnet-5-5";
+  const id = x => /^[\w-]+$/.test(String(x || "")) ? String(x) : null;
+  if (corpo.tipo === "plano") {
+    const planoId = id(corpo.planoId), arqId = id(corpo.arquivoId);
+    if (!planoId || !arqId) throw falha("planoId/arquivoId inválido.", 400);
+    const plano = await fs.ler(`planos/${planoId}`), meta = await fs.ler(`planos/${planoId}/arquivos/${arqId}`);
+    if (!plano || !meta) throw falha("Plano ou arquivo não encontrado.", 404);
+    const partes = Object.entries(await fs.listar(`planos/${planoId}/arquivos/${arqId}/partes`)).sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([, p]) => p.dados?.bytes64 ? bytesDe64(p.dados.bytes64) : new Uint8Array(0));
+    const n = partes.reduce((s, p) => s + p.length, 0);
+    if (!n || n > MAX_BYTES_LAUDOS) throw falha("PDF vazio ou grande demais (máx. 25 MB).", 400);
+    const tudo = new Uint8Array(n); let pos = 0;
+    for (const p of partes) { tudo.set(p, pos); pos += p.length; }
+    const r = await chamarClaude(env, { model: modelo, ...pedidoPlano({ pdf64: para64(tudo), titulo: meta.titulo, materia: plano.materia, semestre: plano.semestre }) });
+    return { ok: true, ...lerRespostaPlano(r) };
+  }
+  if (corpo.tipo === "topicos") {
+    const bancoId = id(corpo.bancoId);
+    if (!bancoId) throw falha("bancoId inválido.", 400);
+    const banco = await fs.ler(`bancos/${bancoId}`);
+    if (!banco) throw falha("Banco não encontrado.", 404);
+    const topicos = (Array.isArray(corpo.topicos) ? corpo.topicos : []).map(t => String(t).trim().slice(0, 120)).filter(Boolean).slice(0, 80);
+    const qs = Object.entries(await fs.listar(`bancos/${bancoId}/questoes`)).map(([qid, q]) => ({ id: qid, tipo: q.tipo, enunciado: q.enunciado, tema: q.tema }));
+    const so = Array.isArray(corpo.qids) && corpo.qids.length ? new Set(corpo.qids.map(String)) : null;
+    const alvo = so ? qs.filter(q => so.has(q.id)) : qs, out = {};
+    for (let i = 0; i < alvo.length; i += MAX_QUESTOES_TOPICOS) {
+      const lote = alvo.slice(i, i + MAX_QUESTOES_TOPICOS);
+      Object.assign(out, lerRespostaTopicos(await chamarClaude(env, { model: modelo, ...pedidoTopicos({ materia: corpo.materia || banco.materia, topicos, questoes: lote }) }), lote.map(q => q.id), topicos));
+    }
+    return { ok: true, topicos: out };
+  }
+  throw falha("tipo inválido (plano ou topicos).", 400);
+}
+// chamada genérica à API (com até 3 novas tentativas em 429/5xx)
+async function chamarClaude(env, corpo) {
+  const reserva = /^claude-(sonnet|opus)-5-5$/.test(corpo.model);
+  for (let i = 0; ; i++) {
+    const r = await fetch(env.ANTHROPIC_URL || "https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2026-10-21",
+                 ...(reserva ? { "anthropic-beta": "server-side-fallback-2026-07-01" } : {}) },
+      body: JSON.stringify(reserva ? { ...corpo, fallbacks: "default" } : corpo)
+    });
+    if (r.ok) return r.json();
+    if ((r.status === 429 || r.status >= 500) && i < 3) { await esperar(2000 * 2 ** i); continue; }
+    throw falha(`API ${r.status}: ${(await r.text()).slice(0, 200)}`, 502);
+  }
+}
+
+// =====================================================================
 // Login do aluno: confere o ID token do Firebase (assinatura do Google)
 // =====================================================================
 let chavesGoogle = null, chavesAte = 0;
@@ -451,4 +514,4 @@ function paraValor(v) {
 function paraFirestore(o) { const f = {}; for (const [k, v] of Object.entries(o)) f[k] = paraValor(v); return f; }
 
 // só para o teste local (o Cloudflare ignora)
-export const _teste = { corrigirTentativa, verificarIdToken, adaptarQuestoes, adaptarComIA, lerLaudos };
+export const _teste = { organizar, corrigirTentativa, verificarIdToken, adaptarQuestoes, adaptarComIA, lerLaudos };

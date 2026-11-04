@@ -117,6 +117,32 @@ O plano gratuito do Cloudflare aceita 100 mil chamadas por dia, muito mais do qu
 
 ---
 
+## Organização: Turma → Semestre → Matéria → Tópicos
+
+Aba **Organização** (a primeira do menu). Mostra cada **turma**, dentro dela os **semestres** (o atual aberto) e, em cada semestre, um cartão por **matéria**.
+
+- **Plano de ensino** (`planos/{id}`): uma matéria de uma turma num semestre. Tem os **tópicos** na ordem em que serão dados (com início e fim previstos), as **provas previstas** (título, data e tópicos) e o(s) professor(es). O plano é vivo: **✎ Editar** a qualquer momento.
+  - Tópicos, um por linha: `Tópico | início | fim` (ex.: `DDL - CREATE TABLE | 11/08 | 22/08`; sem ano, vale o do semestre).
+  - Provas previstas: `Título | data | tópico 1; tópico 2`.
+- **⬆ PDF do plano** + **🤖 Ler plano com IA**: a IA lê o PDF e preenche os tópicos, as datas e as provas previstas. Você **revisa e corrige** antes de salvar (substituir ou juntar com os tópicos atuais).
+- O cartão mostra, por tópico: **✓ dado / ▶ em andamento / 🗓 previsto** (pela data de hoje), quantas **questões** os bancos da matéria têm daquele tópico (em amarelo quando nenhuma) e em quantas **provas** ele já caiu. Também lista os tópicos que só existem nos bancos (fora do plano) e as provas da matéria; as **previstas** que ainda não existem têm **+ Criar**, que abre a Nova prova já com turma, semestre, matéria, data e **só os tópicos daquela prova marcados**.
+- **Semestre** = `2026-1` (jan–jun) ou `2026-2` (jul–dez).
+
+**Na prova** (Nova prova / ✎ Editar) entram **Semestre**, **Matéria** e **Data da prova**. A prova aparece na matéria pela combinação turma + semestre + matéria. Provas antigas, sem esses campos, usam a data de criação e a matéria do 1º banco. A aba **Provas** agrupa por turma → semestre · matéria e tem filtros de semestre e matéria.
+
+**Tópico das questões = o campo `tema`** (o mesmo que filtra o sorteio). Aba **Bancos → 🏷 Tópicos**: a tabela com todas as questões do banco, para trocar o tópico de cada uma, aplicar um tópico às marcadas (os tópicos do plano aparecem para clicar) e **🤖 Sugerir tópicos com IA** (usa os tópicos do plano da matéria; sem plano, a IA cria nomes curtos). Ao salvar, as provas que filtravam temas desse banco têm o filtro ajustado sozinho, para sortear as mesmas questões de antes. Também dá para mudar a matéria do banco ali.
+
+A IA da organização roda no navegador do administrador principal (com a chave) ou no servidor (ação `organizar` do Worker, para professores). O Worker importa `servidor/organizar.js` e é publicado pela Cloudflare a cada push (colar o arquivo à mão no editor da Cloudflare não funciona mais).
+
+## Regras publicadas sozinhas (GitHub Actions)
+
+O arquivo `.github/workflows/regras-firestore.yml` publica o `firestore.rules` no Firebase a cada push na `main` que mude as regras (e pelo botão **Actions → Publicar regras do Firestore → Run workflow**). Configurar uma vez:
+1. GitHub → repositório → **Settings → Secrets and variables → Actions → New repository secret**.
+2. Nome: `FIREBASE_SERVICE_ACCOUNT`. Valor: o JSON inteiro da conta de serviço (o mesmo arquivo do `FIREBASE_SA` da Cloudflare).
+3. Se a publicação falhar com "permission denied": Google Cloud Console → IAM → na conta `firebase-adminsdk-…` adicione o papel **Firebase Rules Admin**.
+
+Sem o segredo, a ação só falha (aparece um ❌ em Actions) e nada muda: aí publique à mão, como antes.
+
 ## Várias matérias e várias provas
 Cada **banco** tem um campo `materia`, e cada questão pode ter um `tema`. Dá para ter um banco por matéria (DML, Normalização, Front-End, IoT…) ou um banco grande dividido em temas, e criar quantas provas quiser apontando para o banco certo. Um banco pode servir a várias provas (1A e 1B, por exemplo) — o sorteio é diferente para cada aluno.
 

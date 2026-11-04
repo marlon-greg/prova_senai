@@ -31,6 +31,7 @@
 
   <section id="telaPainel" class="painel-layout oculto">
     <nav class="abas menu-lateral" aria-label="Seções do painel">
+      <button data-aba="organizacao">Organização</button>
       <button data-aba="provas" class="ativa">Provas</button>
       <button data-aba="resultados">Resultados</button>
       <button data-aba="acessibilidade">Acessibilidade</button>
@@ -40,6 +41,25 @@
       <button data-aba="config">Configuração</button>
     </nav>
     <div class="painel-conteudo">
+
+    <!-- ORGANIZAÇÃO (js/admin-org.js): turma → semestre → matéria → tópicos -->
+    <div id="aba-organizacao" class="oculto">
+      <div class="card">
+        <div class="card-cab"><h2>Organização</h2><button id="orgNovo" class="mini">+ Matéria / plano de ensino</button></div>
+        <details class="ajuda"><summary>Como funciona</summary>
+          <p>Tudo fica organizado em <b>Turma → Semestre → Matéria → Tópicos</b>. Cada matéria de uma turma num semestre tem um <b>plano de ensino</b>: os tópicos na ordem em que serão dados (com as datas previstas) e as provas previstas. O plano é vivo: edite quando mudar.</p>
+          <p>Envie o <b>PDF do plano</b> no cartão da matéria e clique em <b>🤖 Ler plano com IA</b>: a IA preenche os tópicos e as provas, e você revisa antes de salvar.</p>
+          <p>Os tópicos do plano são os mesmos <b>tópicos das questões</b> (aba Bancos → 🏷 Tópicos): assim o cartão mostra quantas questões há de cada tópico, quais já caíram em prova, e os relatórios mostram em quais tópicos cada aluno vai melhor ou pior.</p>
+          <p>A prova entra na matéria pela <b>turma + semestre + matéria</b> do formulário da prova. Provas antigas usam a data de criação e a matéria do banco.</p></details>
+        <div class="barra-filtros" role="search">
+          <input type="search" id="orgBusca" placeholder="🔎 Pesquisar matéria, tópico ou prova…" aria-label="Pesquisar matérias e tópicos">
+          <select id="orgTurma" aria-label="Filtrar por turma"><option value="">👥 Todas as turmas</option></select>
+          <select id="orgSemestre" aria-label="Filtrar por semestre"><option value="">📅 Todos os semestres</option></select>
+        </div>
+        <p id="orgContagem" class="pequeno" aria-live="polite"></p>
+      </div>
+      <div id="orgArvore"></div>
+    </div>
 
     <!-- PROVAS -->
     <div id="aba-provas">
@@ -52,6 +72,8 @@
       <div class="barra-filtros" role="search">
         <input type="search" id="fpBusca" placeholder="🔎 Pesquisar prova, turma ou banco…" aria-label="Pesquisar provas">
         <select id="fpTurma" aria-label="Filtrar por turma"><option value="">👥 Todas as turmas</option></select>
+        <select id="fpSemestre" aria-label="Filtrar por semestre"><option value="">📅 Todos os semestres</option></select>
+        <select id="fpMateria" aria-label="Filtrar por matéria"><option value="">📚 Todas as matérias</option></select>
         <select id="fpStatus" aria-label="Filtrar por situação"><option value="">Todas as situações</option><option value="liberada">● Liberadas</option><option value="fechada">○ Fechadas</option><option value="gabarito">Gabarito liberado</option></select>
         <select id="fpOrdem" aria-label="Ordenar"><option value="recentes">Mais recentes</option><option value="antigas">Mais antigas</option><option value="titulo">Título A–Z</option></select>
         <button id="fpLimpar" class="leve mini" type="button">Limpar filtros</button>

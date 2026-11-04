@@ -308,3 +308,30 @@ export const confirmar = (mensagem, opc = {}) => modal({ titulo: "Confirmar", me
 export const avisar = (mensagem, opc = {}) => modal({ titulo: "Aviso", mensagem, ...opc });
 // fecha todos os modais abertos como "cancelar" (ex.: tempo da prova acabou)
 export function fecharModais() { [...modaisAbertos].forEach(f => f(false)); }
+
+// ---------- organização: turma → semestre → matéria → tópicos ----------
+// semestre = "2026-1" (jan–jun) ou "2026-2" (jul–dez). d = Date, Timestamp do Firestore ou "AAAA-MM-DD"
+export function semestreDe(d = new Date()) {
+  const x = d?.toDate ? d.toDate() : typeof d === "string" ? new Date(d + "T12:00:00") : d instanceof Date ? d : new Date();
+  const dt = isNaN(x) ? new Date() : x;
+  return `${dt.getFullYear()}-${dt.getMonth() < 6 ? 1 : 2}`;
+}
+export const rotuloSemestre = s => /^\d{4}-[12]$/.test(String(s || "")) ? `${s.slice(0, 4)}/${s.slice(5)}º sem.` : (s || "sem semestre");
+// semestres em volta de um semestre: deslocamento -1 = o anterior, +1 = o próximo
+export function semestreVizinho(s, desloc) {
+  let [a, n] = String(s || semestreDe()).split("-").map(Number);
+  let i = a * 2 + (n - 1) + desloc;
+  return `${Math.floor(i / 2)}-${(i % 2) + 1}`;
+}
+// texto para comparar nomes de matéria/tópico: sem acento, minúsculo, espaços simples
+export const chaveTexto = s => String(s || "").normalize("NFD").replace(/\p{M}+/gu, "").toLowerCase().replace(/\s+/g, " ").trim();
+// semestre da prova: o gravado; senão o da data da prova; senão o da criação
+export const semestreDaProva = p => p?.semestre || semestreDe(p?.dataProva || p?.criadoEm || new Date());
+// matéria da prova: a gravada; senão a do 1º banco
+export function materiaDaProva(p, bancos = []) {
+  if (String(p?.materia || "").trim()) return String(p.materia).trim();
+  const b = bancos.find(x => x.id === bancosDaProva(p)[0]);
+  return String(b?.materia || "").trim();
+}
+// "AAAA-MM-DD" -> "dd/mm/aaaa"
+export const dataCurta = s => /^\d{4}-\d{2}-\d{2}$/.test(String(s || "")) ? `${s.slice(8, 10)}/${s.slice(5, 7)}/${s.slice(0, 4)}` : "";

@@ -125,6 +125,21 @@ service cloud.firestore {
       }
     }
 
+    // ---------- organização: plano de ensino de cada matéria (turma + semestre + matéria) ----------
+    // planos/{id}: tópicos com datas e provas previstas; arquivos = PDF do plano (em pedaços, como os materiais)
+    match /planos/{id} {
+      allow read: if equipe();
+      allow write: if professor();
+      match /arquivos/{a} {
+        allow read: if equipe();
+        allow write: if professor();
+        match /partes/{x} {
+          allow read: if equipe();
+          allow write: if professor();
+        }
+      }
+    }
+
     // ---------- acessibilidade (adaptações da prova por aluno) ----------
     // acessibilidade/{email}: o que o PRÓPRIO aluno lê (visual, tempo/vidas extras) + questões reescritas para ele.
     // A auxiliar de inclusão edita, mas não muda quem está vinculado (só professor).

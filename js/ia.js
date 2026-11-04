@@ -2,6 +2,7 @@
 // A chave fica em config/ia (as regras só deixam o administrador principal ler/gravar) e vai
 // apenas para api.anthropic.com. Nunca entra no repositório nem chega à página do aluno.
 import { db } from "./common.js";
+import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS } from "../servidor/organizar.js";
 import { doc, getDoc, setDoc, deleteDoc, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -186,4 +187,25 @@ Reescreva a questão para este aluno. ${alt ? `Devolva exatamente ${q.alternativ
   if (typeof d?.enunciado !== "string" || !d.enunciado.trim()) throw erroIA("A IA devolveu um formato inesperado. Tente de novo.");
   if (alt && (!Array.isArray(d.alternativas) || d.alternativas.length !== q.alternativas.length)) throw erroIA("A IA mudou o número de alternativas. Tente de novo ou adapte manualmente.");
   return { enunciado: d.enunciado.trim(), alternativas: alt ? d.alternativas.map(x => String(x).trim()) : null, apoios: (Array.isArray(d.apoios) ? d.apoios : []).map(a => String(a).trim()).filter(Boolean).slice(0, 4).map(a => a.slice(0, 400)), motivo: String(d.motivo || "").trim().slice(0, 1500) };
+}
+
+// ---------- organização: ler o plano de ensino e classificar o tópico das questões (servidor/organizar.js) ----------
+// Os outros (professores) usam o mesmo pelo servidor (corretor-worker.js, acao "organizar").
+const modeloOrganizar = m => String(m || "").includes("haiku") ? "claude-sonnet-5-5" : m;
+// pdf = Uint8Array. Devolve { materia, topicos: [{ nome, inicio, fim }], provas: [{ titulo, data, topicos }] }
+export async function lerPlanoIA({ chave, modelo, pdf, titulo, materia, semestre }) {
+  try { return lerRespostaPlano(await chamarAPI(chave, { model: modeloOrganizar(modelo), ...pedidoPlano({ pdf64: base64(pdf), titulo, materia, semestre }) })); }
+  catch (e) { throw e.ia ? e : erroIA(e.message); }
+}
+// questoes = [{ id, tipo, enunciado, tema }]. Devolve { id: tópico }. progresso(feitas, total)
+export async function classificarTopicosIA({ chave, modelo, materia, topicos, questoes, progresso = () => {} }) {
+  const out = {};
+  for (let i = 0; i < questoes.length; i += MAX_QUESTOES_TOPICOS) {
+    progresso(i, questoes.length);
+    const lote = questoes.slice(i, i + MAX_QUESTOES_TOPICOS);
+    try { Object.assign(out, lerRespostaTopicos(await chamarAPI(chave, { model: modeloOrganizar(modelo), ...pedidoTopicos({ materia, topicos, questoes: lote }) }), lote.map(q => q.id), topicos)); }
+    catch (e) { throw e.ia ? e : erroIA(e.message); }
+  }
+  progresso(questoes.length, questoes.length);
+  return out;
 }

@@ -1,0 +1,24 @@
+# Publica o firestore.rules no Firebase a cada push na main que mudar as regras (ou pelo botão "Run workflow").
+# Precisa, uma vez só, do segredo FIREBASE_SERVICE_ACCOUNT no GitHub (Settings → Secrets and variables → Actions):
+# o JSON inteiro da conta de serviço do Firebase (o mesmo do FIREBASE_SA da Cloudflare).
+name: Publicar regras do Firestore
+on:
+  push:
+    branches: [main]
+    paths: [firestore.rules]
+  workflow_dispatch:
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Conta de serviço
+        env:
+          SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          if [ -z "$SA" ]; then echo "::error::Falta o segredo FIREBASE_SERVICE_ACCOUNT (veja o README, 'Regras publicadas sozinhas')."; exit 1; fi
+          printf '%s' "$SA" > "$RUNNER_TEMP/sa.json"
+      - name: Publicar firestore.rules
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/sa.json
+        run: npx -y firebase-tools@14 deploy --only firestore:rules --project prova-senai-3e983 --non-interactive
