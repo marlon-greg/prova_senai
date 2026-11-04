@@ -113,9 +113,10 @@ aoMudarLogin(async user => {
     await abrirProva(provaTeste, "inicio");
     return;
   }
-  if (id.tipo === "equipe") {
-    $("#avisoTexto").innerHTML = `<h2>Olá, ${esc(id.nome)}</h2><p>Esta é a página do aluno. O seu painel é o <a href="admin.html"><b>admin.html</b></a>.</p>`;
-    mostrar("telaAviso"); return;
+  if (id.tipo === "equipe" && !new URLSearchParams(location.search).has("simular")) {
+    // professor, admin e auxiliares vão direto para o painel (o login vale nas duas páginas)
+    $("#avisoTexto").innerHTML = `<h2>Olá, ${esc(id.nome)}</h2><p>Abrindo o seu painel…</p>`;
+    mostrar("telaAviso"); location.replace("admin.html"); return;
   }
   // chave do nome da conta Google (vem do token, o mesmo que as regras usam) para o vínculo com a turma
   const tok = await user.getIdTokenResult().catch(() => null);
