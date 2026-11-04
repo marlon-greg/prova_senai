@@ -24,7 +24,7 @@
 //   Nada é gravado: o painel mostra o resultado para o professor revisar e salvar.
 // (FIRESTORE_EMULADOR e ANTHROPIC_URL existem só para testar no computador; não crie no Cloudflare.)
 
-import { temFormato, corrigirFormato } from "./formatos.js";
+import { temFormato, corrigirFormato, pedidoFormatos, lerRespostaFormatos, contextoDiario } from "./formatos.js";
 import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS, pedidoCurso, lerRespostaCurso } from "./organizar.js";
 
 export default {
@@ -50,6 +50,7 @@ export default {
       const corpo = await req.json().catch(() => ({}));
       if (corpo.acao === "adaptar") return resposta(await adaptarQuestoes(env, usuario, corpo));
       if (corpo.acao === "organizar") return resposta(await organizar(env, usuario, corpo));
+      if (corpo.acao === "formatos") return resposta(await sugerirFormatos(env, usuario, corpo));
       const { tentativaId } = corpo;
       if (!tentativaId || !/^[\w-]+$/.test(tentativaId)) throw falha("tentativaId inválido.", 400);
       return resposta(await corrigirTentativa(env, usuario, tentativaId));
@@ -336,6 +337,34 @@ async function adaptarComIA(chave, modelo, { q, g, descricao, orientacao, laudos
     if ((r.status === 429 || r.status >= 500) && i < 3) { await esperar(2000 * 2 ** i); continue; }
     throw new Error(`API ${r.status}: ${(await r.text()).slice(0, 200)}`);
   }
+}
+
+// =====================================================================
+// Formatos de questão adaptada: várias opções para UMA questão (servidor/formatos.js)
+// POST { acao: "formatos", email, qid, provaId?, orientacao? } -> { opcoes } (também grava em acessibilidadePrivado/{email}/opcoes/{qid})
+// =====================================================================
+async function sugerirFormatos(env, usuario, corpo) {
+  const quem = String(usuario.email || "").toLowerCase(), email = String(corpo.email || "").trim().toLowerCase(), qid = String(corpo.qid || "");
+  if (!/^[^\s@/]+@[^\s@/]+$/.test(email) || !/^[\w-]+$/.test(qid)) throw falha("email/qid inválido.", 400);
+  const fs = await firestore(env);
+  const acess = await fs.ler(`acessibilidade/${email}`);
+  let ok = quem === SUPER_ADMIN;
+  if (!ok) { const papel = (await fs.ler(`equipe/${quem}`))?.papel; ok = papel === "admin" || papel === "professor" || (papel === "inclusao" && (acess?.auxiliares || []).map(x => String(x).toLowerCase()).includes(quem)); }
+  if (!ok) throw falha("Sem permissão para este aluno.", 403);
+  const i = qid.lastIndexOf("_q"); let banco = i > 0 ? qid.slice(0, i) : null;
+  if (!banco && corpo.provaId && /^[\w-]+$/.test(corpo.provaId)) banco = (await fs.ler(`provas/${corpo.provaId}`))?.bancoId;
+  if (!banco) throw falha("Banco da questão desconhecido.", 400);
+  const [q, g, privado, laudos, diario] = await Promise.all([fs.ler(`bancos/${banco}/questoes/${qid}`), fs.ler(`bancos/${banco}/gabaritos/${qid}`),
+    fs.ler(`acessibilidadePrivado/${email}`), lerLaudos(fs, email), fs.listar(`acessibilidadePrivado/${email}/diario`)]);
+  if (!q) throw falha("Questão não encontrada.", 404);
+  const regs = Object.values(diario || {});
+  const comComent = Object.entries(diario || {}).filter(([, r]) => r.nComentarios > 0).sort((a, b) => String(b[1].data).localeCompare(String(a[1].data))).slice(0, 6);
+  const comentarios = (await Promise.all(comComent.map(([id]) => fs.listar(`acessibilidadePrivado/${email}/diario/${id}/comentarios`).catch(() => ({}))))).flatMap(o => Object.values(o));
+  const r = await chamarClaude(env, { model: env.MODELO_ADAPTACAO || "claude-sonnet-5-5",
+    ...pedidoFormatos({ q, g: g || {}, descricao: privado?.descricao, orientacao: String(corpo.orientacao || "").slice(0, 1000), diario: contextoDiario(regs, comentarios), laudos }) });
+  const opcoes = lerRespostaFormatos(r, q);
+  await fs.gravar(`acessibilidadePrivado/${email}/opcoes/${qid}`, { opcoes: JSON.stringify(opcoes), provaId: corpo.provaId || "", geradoPor: quem }, "geradoEm");
+  return { ok: true, opcoes };
 }
 
 // =====================================================================

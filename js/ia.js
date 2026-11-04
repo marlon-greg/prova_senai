@@ -2,6 +2,7 @@
 // A chave fica em config/ia (as regras só deixam o administrador principal ler/gravar) e vai
 // apenas para api.anthropic.com. Nunca entra no repositório nem chega à página do aluno.
 import { db } from "./common.js";
+import { pedidoFormatos, lerRespostaFormatos } from "../servidor/formatos.js";
 import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS, pedidoCurso, lerRespostaCurso } from "../servidor/organizar.js";
 import { doc, getDoc, setDoc, deleteDoc, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
@@ -213,4 +214,13 @@ export async function classificarTopicosIA({ chave, modelo, materia, topicos, qu
 export async function lerCursoIA({ chave, modelo, pdf, titulo, nome }) {
   try { return lerRespostaCurso(await chamarAPI(chave, { model: modeloOrganizar(modelo), ...pedidoCurso({ pdf64: base64(pdf), titulo, nome }) })); }
   catch (e) { throw e.ia ? e : erroIA(e.message); }
+}
+
+// ---------- formatos de questão adaptada: várias opções, da mais indicada para a menos (servidor/formatos.js) ----------
+// laudos = [{ titulo, bytes }]. Devolve a lista de opções (já validadas e em ordem de indicação)
+export async function formatosIA({ chave, modelo, q, g, descricao, orientacao, diario, laudos = [] }) {
+  try {
+    const r = await chamarAPI(chave, { model: modeloOrganizar(modelo), ...pedidoFormatos({ q, g, descricao, orientacao, diario, laudos: laudos.slice(0, 3).map(l => ({ titulo: l.titulo, data: base64(l.bytes) })) }) });
+    return lerRespostaFormatos(r, q);
+  } catch (e) { throw e.ia ? e : erroIA(e.message); }
 }

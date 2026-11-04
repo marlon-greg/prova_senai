@@ -952,3 +952,60 @@ button.medalha-aluno.ganha { background:linear-gradient(180deg, #fffbeb, #fff); 
 .medalha.nova { box-shadow:0 0 0 3px #fbbf24, 0 8px 22px rgba(245,158,11,.35); }
 @keyframes brilho { 50% { transform:scale(1.1) rotate(-4deg); } }
 @media (prefers-reduced-motion: reduce) { .medalha.ganha .m-emoji { animation:none; } }
+
+/* ---------- formatos de questão adaptada ---------- */
+.fmt .alt.gab-certa { outline:2px dashed var(--ok); }
+.vf-lista { display:flex; flex-direction:column; gap:8px; }
+.vf-linha { display:grid; grid-template-columns:auto 1fr auto auto; gap:10px; align-items:center; background:#fff; border:1.5px solid var(--borda); border-radius:12px; padding:10px 12px; }
+.vf-n { font-weight:800; color:var(--suave); }
+.vf-botoes { display:inline-flex; gap:6px; }
+.vf-b { min-width:52px; padding:10px 0; border-radius:10px; font-size:1.05em; font-weight:800; background:#fff; color:var(--texto); border:2px solid var(--borda-forte); }
+.vf-b:hover:not(:disabled) { background:#f6f7f9; }
+.vf-b.v.sel { background:var(--ok); border-color:var(--ok); color:#fff; }
+.vf-b.f.sel { background:var(--erro); border-color:var(--erro); color:#fff; }
+.ligar { display:grid; grid-template-columns:1fr 1fr; gap:14px 28px; }
+.lig-col { display:flex; flex-direction:column; gap:8px; }
+.lig-item { display:flex; align-items:center; gap:10px; text-align:left; background:#fff; color:var(--texto); border:2px solid var(--borda-forte); border-radius:12px; padding:10px 12px; font-weight:500; min-height:52px; }
+.lig-item:hover:not(:disabled) { background:#f6f7f9; }
+.lig-n { flex:0 0 30px; height:30px; border-radius:50%; background:#eef0f3; display:inline-flex; align-items:center; justify-content:center; font-weight:800; }
+.lig-t { flex:1; }
+.lig-par { font-weight:800; color:var(--cor, var(--suave)); white-space:nowrap; }
+.lig-item.feito { border-color:var(--cor); background:color-mix(in srgb, var(--cor) 9%, #fff); }
+.lig-item.feito .lig-n { background:var(--cor); color:#fff; }
+.lig-item.ativo { border-color:var(--info); box-shadow:0 0 0 4px rgba(29,95,168,.25); background:var(--info-claro); }
+.lig-item.dir.alvo:not(.feito) { border-style:dashed; border-color:var(--info); }
+@media (max-width:640px) { .ligar { grid-template-columns:1fr; } }
+.lac-banco { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; padding:10px; background:#f8fafc; border:1px dashed var(--borda-forte); border-radius:12px; }
+.lac-palavra { background:#fff; border:1.5px solid var(--info); color:var(--info); border-radius:999px; padding:4px 12px; font-weight:600; }
+.lac-palavra.usada { opacity:.4; text-decoration:line-through; }
+.lac-texto { line-height:2.4; font-size:1.05em; }
+.lac-sel { display:inline-block; width:auto; min-width:120px; margin:0 4px; padding:4px 8px; border:2px dashed var(--info); border-radius:8px; font-weight:600; }
+.lac-sel.ok { border-style:solid; background:var(--info-claro); }
+.ord-lista { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px; }
+.ord-item { display:grid; grid-template-columns:auto 1fr auto; gap:10px; align-items:center; background:#fff; border:1.5px solid var(--borda-forte); border-radius:12px; padding:8px 10px; }
+.ord-n { width:32px; height:32px; border-radius:50%; background:var(--info); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-weight:800; }
+.ord-bts { display:inline-flex; gap:4px; }
+.ord-bts button { min-width:40px; font-size:1.1em; }
+.ord-ok { margin-top:8px; }
+.etapa { border:1.5px solid var(--borda); border-radius:12px; padding:10px 14px; margin:0 0 10px; }
+.etapa legend { font-weight:600; padding:0 6px; }
+.etapa-n { display:inline-block; background:var(--info); color:#fff; border-radius:999px; padding:1px 10px; font-size:.8em; margin-right:6px; }
+.etapa.respondida { border-color:#86efac; background:#f0fdf4; }
+.gab-texto { color:var(--ok); }
+.resp-formato { display:inline-block; vertical-align:top; }
+.escrita-apoio { background:#f0f9ff; border-left:4px solid var(--info); border-radius:8px; padding:8px 12px; margin:8px 0; }
+.escrita-apoio p { margin:4px 0; } .escrita-apoio ul { margin:4px 0; padding-left:20px; }
+/* painel: opções e prévia */
+.fmt-barra { display:flex; flex-wrap:wrap; gap:8px; align-items:center; background:#f5f3ff; border:1px solid #ddd6fe; border-radius:10px; padding:8px 10px; margin-bottom:10px; }
+.fmt-previa, .ef-previa { border:1px dashed var(--borda-forte); border-radius:12px; padding:10px; margin-bottom:10px; background:#fff; }
+.opcao-fmt { border:1.5px solid var(--borda); border-radius:14px; padding:12px 14px; margin-bottom:12px; background:#fff; }
+.opcao-fmt.melhor { border-color:#fbbf24; box-shadow:0 6px 18px rgba(245,158,11,.15); }
+.of-cab { display:flex; gap:10px; align-items:center; }
+.of-rank { font-weight:800; color:var(--suave); }
+.of-icone { font-size:1.8em; }
+.of-estrelas { color:#f59e0b; letter-spacing:1px; }
+.of-estrelas .apagada { color:#e5e7eb; }
+.of-porque { margin:8px 0 2px; }
+.of-ref { margin:0 0 6px; }
+.of-prev > summary, .mais-opcoes > summary { cursor:pointer; font-weight:600; color:var(--info); margin:6px 0; }
+.previa-aluno { background:#fafbfc; border-radius:10px; padding:10px; }

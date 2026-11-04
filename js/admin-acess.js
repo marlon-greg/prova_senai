@@ -6,6 +6,8 @@ import { db, esc, $, toast, confirmar, modal, traduzirErro, dataBR, iniciais, te
 import { VISUAL_PADRAO, PROVA_PADRAO, FONTES, TEMAS, completar, aplicarVisual, apoiosDe } from "./acessibilidade.js";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, abrirMaterialEmAba, tamanhoTexto, erroMaterial } from "./material.js";
 import { adaptarQuestao } from "./ia.js";
+import { abrirOpcoes, editarFormato, previaAplicada, gerarOpcoes, lerOpcoes } from "./admin-formatos.js";
+import { FORMATOS, temFormato } from "./formatos-ui.js";
 import { collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, query, where, serverTimestamp, orderBy, FieldPath }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -410,6 +412,8 @@ function desenharQuestoes() {
       ${nVelhas ? `<button data-lote="velhas" class="leve" ${!ia || ocupado ? "disabled" : ""}>🔄 Refazer as desatualizadas (${nVelhas})</button>` : ""}
       <button data-lote="todas" class="leve" ${!ia || ocupado ? "disabled" : ""}>🔄 Refazer todas com IA</button>
       <button data-lote="apagar" class="perigo" ${!nFeitas || ocupado ? "disabled" : ""}>🗑 Apagar adaptações desta prova</button></div>
+    <div class="linha acoes" style="margin-top:8px"><button data-formatos-todas class="leve" ${!ia || ocupado ? "disabled" : ""} title="A IA prepara várias opções de formato para cada questão; depois você escolhe em cada uma">🎨 Sugerir formatos para todas</button>
+      <span class="pequeno">Liga-pontos, V/F, lacunas, ordenar, etapas… a IA propõe as opções, da mais indicada para a menos; você escolhe em cada questão (🎨 Formatos).</span></div>
     <div class="linha acoes" style="margin-top:8px">
       ${travada ? "" : `<button class="leve" data-add="alternativa" ${ocupado ? "disabled" : ""}>➕ Adicionar alternativa</button><button class="leve" data-add="dissertativa" ${ocupado ? "disabled" : ""}>➕ Adicionar dissertativa</button>`}
       <button class="ok" data-pdf ${ocupado ? "disabled" : ""}>📄 Baixar PDF da prova adaptada</button></div>
@@ -418,18 +422,24 @@ function desenharQuestoes() {
   resumo.querySelectorAll("[data-lote]").forEach(b => b.onclick = () => acaoEmLote(b.dataset.lote));
   resumo.querySelectorAll("[data-add]").forEach(b => b.onclick = () => adicionarQuestao(b.dataset.add));
   resumo.querySelector("[data-pdf]").onclick = () => baixarPdf();
+  resumo.querySelector("[data-formatos-todas]").onclick = () => sugerirTodas();
 
   box.innerHTML = itens.map((x, i) => {
     const alt = x.q.tipo === "alternativa", ad = x.ad || {}, velha = desatualizada(x);
     const status = !x.ad ? `<span class="tag">○ original</span>`
-      : `<span class="tag ${velha ? "aviso" : "ok"}">${ad.origem === "ia" ? "🤖 IA" : "✍ manual"}${ms(ad.atualizadoEm) ? ` · ${new Date(ms(ad.atualizadoEm)).toLocaleDateString("pt-BR")}` : ""}</span>${velha ? `<span class="tag aviso">⚠ desatualizada</span>` : ""}`;
+      : `${ad.formato && FORMATOS[ad.formato] ? `<span class="tag nota" title="Formato">${FORMATOS[ad.formato].icone} ${esc(FORMATOS[ad.formato].nome)}</span>` : ""}<span class="tag ${velha ? "aviso" : "ok"}">${ad.origem === "ia" ? "🤖 IA" : "✍ manual"}${ms(ad.atualizadoEm) ? ` · ${new Date(ms(ad.atualizadoEm)).toLocaleDateString("pt-BR")}` : ""}</span>${velha ? `<span class="tag aviso">⚠ desatualizada</span>` : ""}`;
     return `<details class="q-adapt${x.ad ? " feita" : ""}" data-i="${i}"><summary><b>Q${i + 1}</b><span class="tag">${alt ? "alternativa" : "dissertativa"}</span>${status}
         <span class="pequeno">${esc(temaDe(x.q))}</span> ${esc(String(x.q.enunciado || "").slice(0, 110))}${String(x.q.enunciado || "").length > 110 ? "…" : ""}</summary>
       <div class="q-adapt-corpo">
         <div class="q-orig"><span class="rotulo">Original</span><div class="enunciado pequeno">${esc(x.q.enunciado)}</div>
           ${alt ? `<ol type="A" class="pequeno">${x.q.alternativas.map((a, k) => `<li>${esc(a)}${k === x.g.correta ? " <b>✓</b>" : ""}</li>`).join("")}</ol>` : ""}</div>
-        <div class="q-nova"><label>Enunciado adaptado</label><textarea data-campo="enunciado" style="font-family:inherit">${esc(ad.enunciado || "")}</textarea>
-          ${alt ? x.q.alternativas.map((a, k) => `<label>Alternativa ${letra(k)}${k === x.g.correta ? " ✓" : ""}</label><input type="text" data-alt="${k}" value="${esc(ad.alternativas?.[k] ?? "")}" placeholder="${esc(a)}">`).join("") : ""}
+        <div class="q-nova">
+          <div class="fmt-barra"><span>🎨 Formato: <b>${ad.formato && FORMATOS[ad.formato] ? `${FORMATOS[ad.formato].icone} ${esc(FORMATOS[ad.formato].nome)}` : x.ad ? "📝 Texto simplificado" : "original"}</b></span>
+            ${ia ? `<button type="button" class="mini" data-formatos ${ocupado ? "disabled" : ""}>🎨 Opções de formato (IA)</button>` : ""}<button type="button" class="leve mini" data-editfmt>✎ Escolher / editar formato</button>
+            <span class="pequeno" data-temopcoes></span></div>
+          ${temFormato(ad) ? `<div class="fmt-previa" data-previa><p class="pequeno">Carregando a prévia…</p></div>` : ""}
+          <label>Enunciado adaptado</label><textarea data-campo="enunciado" style="font-family:inherit">${esc(ad.enunciado || "")}</textarea>
+          ${alt && !temFormato(ad) ? x.q.alternativas.map((a, k) => `<label>Alternativa ${letra(k)}${k === x.g.correta ? " ✓" : ""}</label><input type="text" data-alt="${k}" value="${esc(ad.alternativas?.[k] ?? "")}" placeholder="${esc(a)}">`).join("") : ""}
           <label>💡 Apoios que o mascote fala na prova <span class="pequeno">(um por vez; nunca podem entregar a resposta)</span></label>
           <div data-apoios>${apoiosDe(ad).map(a => linhaApoio(a)).join("")}</div>
           <button type="button" class="leve mini" data-maisapoio>+ Adicionar apoio</button>
@@ -444,6 +454,14 @@ function desenharQuestoes() {
   box.querySelectorAll(".q-adapt").forEach(el => {
     const x = qAtual.itens[+el.dataset.i];
     el.querySelector("[data-salvarq]").onclick = () => salvarQuestao(x, el);
+    const aplicado = d => { x.ad = { ...d, atualizadoEm: { toMillis: () => Date.now(), seconds: Date.now() / 1000 } }; desenharQuestoes(); document.querySelector(`.q-adapt[data-i="${el.dataset.i}"]`)?.setAttribute("open", ""); };
+    el.querySelector("[data-formatos]")?.addEventListener("click", () => abrirOpcoes({ ctx, email: qAtual.email, prova: qAtual.prova, x, laudos: () => laudosDoAluno(qAtual.email), aoAplicar: aplicado }));
+    el.querySelector("[data-editfmt]").onclick = () => editarFormato({ ctx, email: qAtual.email, prova: qAtual.prova, x, aoAplicar: aplicado });
+    el.addEventListener("toggle", () => {
+      if (!el.open || el.dataset.carregou) return; el.dataset.carregou = "1";
+      const pv = el.querySelector("[data-previa]"); if (pv) previaAplicada(pv, qAtual.email, x);
+      lerOpcoes(qAtual.email, x.qid).then(o => { if (o?.opcoes?.length) el.querySelector("[data-temopcoes]").textContent = `${o.opcoes.length} opções prontas`; });
+    });
     el.querySelector("[data-iaq]")?.addEventListener("click", () => adaptarUma(x, el));
     el.querySelector("[data-trocarq]")?.addEventListener("click", () => trocarQuestao(x));
     el.querySelector("[data-removerq]")?.addEventListener("click", () => removerQuestao(x));
@@ -452,7 +470,7 @@ function desenharQuestoes() {
     el.querySelector("[data-maisapoio]").onclick = () => { lista.insertAdjacentHTML("beforeend", linhaApoio("")); ligarApoios(); lista.lastElementChild.querySelector("input").focus(); };
     ligarApoios();
     el.querySelector("[data-apagarq]")?.addEventListener("click", async () => {
-      try { await deleteDoc(doc(db, "acessibilidade", qAtual.email, "questoes", x.qid)); x.ad = null; desenharQuestoes(); } catch (e) { toast(traduzirErro(e), "erro"); }
+      try { await deleteDoc(doc(db, "acessibilidade", qAtual.email, "questoes", x.qid)); await deleteDoc(doc(db, "acessibilidadePrivado", qAtual.email, "gabaritos", x.qid)).catch(() => {}); x.ad = null; desenharQuestoes(); } catch (e) { toast(traduzirErro(e), "erro"); }
     });
   });
 }
@@ -463,17 +481,34 @@ async function salvarQuestao(x, el) {
   const apoios = [...el.querySelectorAll("[data-apoio]")].map(i => i.value.trim()).filter(Boolean);
   const motivo = el.querySelector("[data-campo=motivo]").value.trim();
   if (!enunciado && !apoios.length) return toast("Escreva o enunciado adaptado ou pelo menos um apoio (ou use Voltar ao original).", "erro");
-  const alts = x.q.tipo === "alternativa" ? [...el.querySelectorAll("[data-alt]")].map((inp, k) => inp.value.trim() || x.q.alternativas[k]) : null;
+  const fmt = temFormato(x.ad || {});
+  const alts = x.q.tipo === "alternativa" && !fmt ? [...el.querySelectorAll("[data-alt]")].map((inp, k) => inp.value.trim() || x.q.alternativas[k]) : null;
   // quem só mexe nos apoios/motivo de uma adaptação da IA não a transforma em "manual"
   const mexeuNoTexto = !x.ad || enunciado !== (x.ad.enunciado || "") || JSON.stringify(alts) !== JSON.stringify(x.ad.alternativas ?? null);
   const dados = { enunciado, alternativas: alts, apoios, dica: apoios[0] || "", motivo, origem: mexeuNoTexto ? "manual" : (x.ad.origem || "manual"),
                   provaId: qAtual.prova.id, adaptadoPor: mexeuNoTexto ? ctx.eu.email : (x.ad.adaptadoPor || ctx.eu.email),
                   editadoPor: ctx.eu.email, atualizadoEm: serverTimestamp() };
   if (!mexeuNoTexto && x.ad.modelo) dados.modelo = x.ad.modelo;
+  if (fmt) Object.assign(dados, { formato: x.ad.formato, dados: x.ad.dados, opcaoTitulo: x.ad.opcaoTitulo || "" });   // o formato (e o gabarito privado) continuam
   try { await setDoc(doc(db, "acessibilidade", qAtual.email, "questoes", x.qid), dados); x.ad = { ...dados, atualizadoEm: null }; toast("Questão adaptada salva ✅", "ok"); desenharQuestoes(); }
   catch (e) { toast("Não foi possível salvar. " + traduzirErro(e), "erro"); }
 }
 
+// 🎨 prepara as opções de formato de todas as sorteadas que ainda não têm (a escolha é feita em cada questão)
+async function sugerirTodas() {
+  const itens = qAtual.itens, msg = $("#acIAMsg");
+  ocupado = true; desenharQuestoes();
+  let feitas = 0, erros = 0;
+  for (const [n, x] of itens.entries()) {
+    if (await lerOpcoes(qAtual.email, x.qid)) continue;
+    if (msg) msg.textContent = `🎨 Preparando formatos: questão ${n + 1} de ${itens.length}…`;
+    try { await gerarOpcoes({ ctx, email: qAtual.email, prova: qAtual.prova, x, orientacao: $("#acOrientacao")?.value.trim() || "", laudos: () => laudosDoAluno(qAtual.email) }); feitas++; }
+    catch (e) { erros++; console.warn("formatos", x.qid, e); if (/chave|crédito|configurad/i.test(e.message)) { toast(e.message, "erro"); break; } }
+  }
+  if (msg) msg.textContent = "";
+  ocupado = false; desenharQuestoes();
+  toast(`🎨 Opções prontas em ${feitas} questão(ões)${erros ? ` · ${erros} com erro` : ""}. Abra cada questão e clique em 🎨 Opções de formato para escolher.`, erros ? "erro" : "ok");
+}
 // IA: no navegador do administrador principal (chave em config/ia) ou pelo servidor (Cloudflare Worker, acao "adaptar")
 const podeIA = () => !!(ctx.iaCfg() || ctx.urlCorretor());
 let laudosCache = null;
