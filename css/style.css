@@ -1499,3 +1499,27 @@ details.cq-tema > .rc-corpo { padding:0 var(--sp-2) var(--sp-2); }
 .cq-corpo .cq-num input[type=number] { width:90px; }
 .cq-corpo .cq-num input.cq-emoji { width:64px; text-align:center; }
 .cq-corpo > .cq-cresce { flex:none; }
+
+/* Perfil: cartão com foto de fundo e lado do personagem; editor com ajustes finos */
+.perfil-aluno { position:relative; background-size:cover; background-position:center; }
+.perfil-aluno.lado-dir { flex-direction:row-reverse; }
+.perfil-aluno.lado-centro { flex-direction:column; text-align:center; }
+.perfil-aluno.lado-centro .pa-info { flex:0 1 auto; }
+.perfil-aluno.lado-centro .linha.acoes { justify-content:center; }
+.perfil-aluno.com-foto { text-shadow:0 1px 3px rgba(0,0,0,.6); }
+.perfil-aluno.com-foto .pa-avatar svg { filter:drop-shadow(0 8px 22px rgba(0,0,0,.55)); }
+.pa-credito { position:absolute; right:10px; bottom:6px; font-size:.68em; color:#ffffffb3; text-decoration:none; max-width:60%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.pa-credito:hover { color:#fff; text-decoration:underline; }
+.pc-fotos { display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:10px; margin-top:12px; max-height:56vh; overflow:auto; padding:2px; }
+.pc-foto { position:relative; padding:0; border:2px solid var(--borda); border-radius:10px; overflow:hidden; background:#14213d; aspect-ratio:16/10; color:#fff; font-weight:600; cursor:pointer; }
+.pc-foto img { width:100%; height:100%; object-fit:cover; display:block; }
+.pc-foto span { position:absolute; left:0; right:0; bottom:0; padding:4px 8px; font-size:.8em; background:linear-gradient(transparent, rgba(0,0,0,.75)); text-align:left; }
+.pc-foto.pc-sem { background:linear-gradient(135deg, #14213d, #1e3a8a); }
+.pc-foto.pc-sem span { position:static; background:none; text-align:center; }
+.pc-foto.sel { border-color:var(--vermelho); box-shadow:0 0 0 3px #c1272d55; }
+.ep-pos { display:flex; flex-direction:column; gap:6px; margin:0 0 10px; grid-column:1 / -1; }
+.ep-ajustes { display:flex; flex-direction:column; gap:8px; grid-column:1 / -1; width:100%; }
+.ep-aj { display:grid; grid-template-columns:minmax(170px, 1fr) 2fr 34px; align-items:center; gap:10px; margin:0; font-weight:500; }
+.ep-aj input[type=range] { width:100%; accent-color:var(--marinho-2); }
+.ep-aj output { font-variant-numeric:tabular-nums; text-align:right; color:var(--suave); }
+.ep-ajustes #epZerar { align-self:flex-start; margin-top:4px; }

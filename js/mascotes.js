@@ -292,7 +292,13 @@ const PERSONAGENS = {
       `<path d="M93.5 143 Q100 140 106.5 143 Q106 153 100 156 Q94 153 93.5 143 Z" fill="${p.barba}" stroke="${OUT}" stroke-width="2" stroke-linejoin="round"/>` ;
     const bigode =
       `<path d="M82 127 C88 118 95 118 100 120.5 C105 118 112 118 118 127 C112 123.5 106 123 100 124.5 C94 123 88 123.5 82 127 Z" fill="${p.barba}" stroke="${OUT}" stroke-width="2" stroke-linejoin="round"/>`;
+    const tufo = d => `<path d="${d}" fill="url(#cab-${id})" stroke="${OUT}" stroke-width="${SW}" stroke-linejoin="round"/>`;
+    const baguncado =
+      tufo("M56 52 C46 40 34 36 24 40 C36 42 44 50 48 60Z") + tufo("M74 36 C70 22 60 14 50 14 C60 20 64 30 64 42Z") + tufo("M96 26 C98 14 108 6 120 6 C110 12 106 20 108 30Z") +
+      tufo("M124 28 C134 18 148 16 156 20 C146 22 138 30 136 38Z") + tufo("M150 58 C162 52 174 54 180 62 C170 60 162 64 156 72Z") + tufo("M86 30 C80 20 82 12 88 8 C88 16 92 22 96 28Z");
+    const fiosSoltos = `<g fill="none" stroke="${OUT}" stroke-width="2.4" stroke-linecap="round"><path d="M70 72 Q74 82 70 90"/><path d="M134 76 Q128 86 132 94"/></g>`;
     const frente =
+      baguncado +
       // topo
       `<path d="M40 100 C34 46 68 22 102 22 C136 22 168 46 160 100 C156 80 146 64 132 56 C120 50 112 46 108 36 C100 48 80 54 66 60 C52 68 44 82 40 100 Z" fill="url(#cab-${id})" stroke="${OUT}" stroke-width="${SW}" stroke-linejoin="round"/>` +
       // franja repartida: mecha para a esquerda
@@ -304,10 +310,10 @@ const PERSONAGENS = {
       `<path d="M156 80 C164 112 160 146 180 168 C170 178 152 178 142 166 C144 146 146 118 148 96 Z" fill="url(#cab-${id})" stroke="${OUT}" stroke-width="${SW}" stroke-linejoin="round"/>` +
       `<g fill="none" stroke="${p.cabeloLuz}" stroke-width="2.2" stroke-linecap="round">` +
       `<path d="M100 38 Q80 46 66 66"/><path d="M114 38 Q136 46 148 72"/><path d="M46 110 Q46 140 38 164"/><path d="M154 110 Q154 140 162 164"/></g>` +
-      `<path d="M78 34 Q88 28 98 30" fill="none" stroke="#9a6e55" stroke-width="2.4" stroke-linecap="round" opacity=".7"/>`;
+      `<path d="M78 34 Q88 28 98 30" fill="none" stroke="#9a6e55" stroke-width="2.4" stroke-linecap="round" opacity=".7"/>` + fiosSoltos;
     return {
       tras, corpo, barba, bigode, frente, orelhas: false,
-      face: { by: 81, esp: 5.6, my: 130, bochechaY: 116, blush: 0.22, lagrimaX: 64, lagrimaY: 112 },
+      face: { caido: true, by: 81, esp: 5.6, my: 130, bochechaY: 116, blush: 0.22, lagrimaX: 64, lagrimaY: 112 },
     };
   },
 
@@ -407,6 +413,13 @@ export function svgMascote(id, humor = "feliz") {
   const corpoExtra = humor === "comemorando" ? bracoLevantado(p, uid) : "";
 
   let olhosSvg = olhos(humor, p);
+  if (fz.caido && !["comemorando", "triste"].includes(humor)) {
+    const palp = (ex, lado) => { const fora = ex + lado * 13, dentro = ex - lado * 13, ey = 98;
+      return `<path d="M${fora} ${ey - 17} L${dentro} ${ey - 17} L${dentro} ${ey - 9} Q${ex} ${ey - 8.5} ${fora} ${ey - 1.5}Z" fill="${p.pele}"/>` +
+        `<path d="M${dentro + lado * 2} ${ey - 8.6} Q${ex} ${ey - 8.2} ${fora - lado * 1.5} ${ey - 2}" fill="none" stroke="${OUT}" stroke-width="4" stroke-linecap="round"/>` +
+        `<path d="M${dentro + lado * 1} ${ey - 12.5} Q${ex} ${ey - 12.5} ${fora - lado * 2} ${ey - 6.5}" fill="none" stroke="${p.peleSombra}" stroke-width="2" stroke-linecap="round"/>`; };
+    olhosSvg = olhosSvg.replace(/<\/g>$/, palp(77, -1) + palp(123, 1) + "</g>");
+  }
   if (fz.olhosOcultos) {
     // olhos atrás das lentes escuras (aparecem levemente por transparência)
     olhosSvg = olhosSvg.replace('class="m-olhos"', 'class="m-olhos" opacity=".22"');

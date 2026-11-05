@@ -1,22 +1,32 @@
 // Página do aluno: cartão do perfil (personagem + nível + conquistas), editor do personagem com skins
 // liberadas pelas conquistas, download do cartão (PNG, JPG, PDF) e o painel da simulação (equipe, ?simular=1).
 import { db, esc, $, toast, modal } from "./common.js";
-import { CATALOGO, CORES, ORDEM_PELES, NOMES_PARTES, PELES, labioNatural, svgAvatar, liberado, textoTrava, avatarValido, avatarAleatorio, permitido, trocarSexo, PARTES_OCULTAS } from "./avatar.js";
+import { CATALOGO, CORES, ORDEM_PELES, NOMES_PARTES, PELES, labioNatural, svgAvatar, liberado, textoTrava, avatarValido, avatarAleatorio, permitido, trocarSexo, PARTES_OCULTAS, AJUSTES, POSICOES_ADESIVO } from "./avatar.js";
+import { FUNDOS_PERFIL, fundoPerfil, urlFundo, urlMini } from "./fundos-perfil.js";
 // status do dia: só frases prontas (ninguém escreve texto livre)
 export const STATUS = ["😊 Animado(a)", "📚 Estudando", "🎯 Focado(a)", "💪 Pronto(a) para a prova", "🚀 Motivado(a)", "🧘 Tranquilo(a)", "🤔 Pensativo(a)",
   "😴 Com sono", "☕ Precisando de café", "🎧 Ouvindo música", "🤝 Ajudando os colegas", "💻 Programando", "🎮 Modo jogo", "🏃 Na correria", "🌟 Dia incrível", "🙂 De boa"];
 import { botoesSocial } from "./aluno-social.js";
 import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
-// editor em abas: cada aba junta as partes e as cores que combinam
+// editor em abas; cada parte mostra só a(s) cor(es) dela
 const GRUPOS = [
-  { nome: "🙂 Rosto e corpo", partes: ["corpo", "rosto", "orelha", "nariz", "bochecha", "detalhe"], cores: [["pele", "Pele"]] },
-  { nome: "💇 Cabelo e barba", partes: ["cabelo", "sobrancelha", "barba"], cores: [["corCabelo", "Cabelo, sobrancelha e barba"]] },
-  { nome: "👀 Olhos e boca", partes: ["olhos", "cilios", "maquiagem", "boca"], cores: [["corOlhos", "Olhos"], ["corLabios", "Lábios"]] },
-  { nome: "👕 Roupa e acessórios", partes: ["roupa", "pescoco", "oculos", "brinco", "acessorio"],
-    cores: [["corRoupa", "Roupa"], ["corAcessorio", "Chapéu, laço, cachecol"], ["corOculos", "Armação dos óculos"], ["corJoia", "Brincos e colares"]] },
-  { nome: "🖼 Fundo e moldura", partes: ["fundo", "adesivo", "moldura"], cores: [] }
+  { nome: "🙂 Rosto e corpo", partes: ["corpo", "rosto", "orelha", "nariz", "bochecha", "detalhe"] },
+  { nome: "💇 Cabelo e barba", partes: ["cabelo", "sobrancelha", "barba"] },
+  { nome: "👀 Olhos e boca", partes: ["olhos", "cilios", "maquiagem", "boca"] },
+  { nome: "🎚 Ajustes finos", partes: ["ajustes"] },
+  { nome: "👕 Roupa e acessórios", partes: ["roupa", "pescoco", "oculos", "brinco", "acessorio"] },
+  { nome: "🖼 Fundo e moldura", partes: ["fundo", "adesivo", "moldura"] }
 ];
+const CORES_DA_PARTE = { corpo: ["pele"], rosto: ["pele"], orelha: ["pele"], nariz: ["pele"], bochecha: ["pele"], detalhe: ["pele"],
+  cabelo: ["corCabelo"], sobrancelha: ["corCabelo"], barba: ["corCabelo"], olhos: ["corOlhos"], boca: ["corLabios"],
+  roupa: ["corRoupa"], pescoco: ["corJoia", "corAcessorio"], oculos: ["corOculos"], brinco: ["corJoia"], acessorio: ["corAcessorio"] };
+const NOME_COR = { pele: "Cor da pele", corCabelo: "Cor do cabelo, da sobrancelha e da barba", corOlhos: "Cor dos olhos", corLabios: "Cor dos lábios",
+  corRoupa: "Cor da roupa", corJoia: "Cor das joias (brincos, correntes)", corAcessorio: "Cor do acessório (chapéu, laço, cachecol, gravata)", corOculos: "Cor da armação" };
+const NOMES_POS = { "sup-esq": "↖ em cima, à esquerda", "sup-dir": "↗ em cima, à direita", "inf-esq": "↙ embaixo, à esquerda", "inf-dir": "↘ embaixo, à direita" };
+// cartão do perfil: foto de fundo (só da lista) e lado do personagem
+const LADOS = { esq: "Personagem à esquerda", centro: "No centro", dir: "Personagem à direita" };
+const cartaoValido = c => ({ foto: fundoPerfil(c?.foto) ? c.foto : "", lado: LADOS[c?.lado] ? c.lado : "esq" });
 
 // perfil: Firestore (perfis/{uid}) ou, na simulação, o navegador
 async function lerPerfil(eu, sim) {
@@ -25,7 +35,7 @@ async function lerPerfil(eu, sim) {
 }
 async function gravarPerfil(eu, sim, dados) {
   if (sim) { localStorage.setItem("sim:perfil", JSON.stringify(dados)); return; }
-  await setDoc(doc(db, "perfis", eu.uid), { avatar: dados.avatar, apelido: String(dados.apelido || "").slice(0, 30), status: STATUS.includes(dados.status) ? dados.status : "", atualizadoEm: serverTimestamp() });
+  await setDoc(doc(db, "perfis", eu.uid), { avatar: dados.avatar, cartao: cartaoValido(dados.cartao), apelido: String(dados.apelido || "").slice(0, 30), status: STATUS.includes(dados.status) ? dados.status : "", atualizadoEm: serverTimestamp() });
 }
 
 // cq = resultado de desenharConquistas ({ ganhas, todas, nivel }); gami = config da gamificação
@@ -35,14 +45,18 @@ export async function desenharPerfil(box, { eu, cq, gami, simulacao = false }) {
   const perfil = await lerPerfil(eu, simulacao), titulos = cq?.ganhas || [];
   const av = avatarValido(perfil.avatar, titulos), nome = perfil.apelido || String(eu.nome || "").split(/\s+/)[0] || "Aluno";
   const liberadas = Object.values(CATALOGO).flat().filter(i => i.trava && liberado(i, titulos)).length, travadas = Object.values(CATALOGO).flat().filter(i => i.trava).length;
-  box.classList.remove("oculto"); box.className = "card perfil-aluno";
+  const cartao = cartaoValido(perfil.cartao), foto = fundoPerfil(cartao.foto);
+  box.classList.remove("oculto"); box.className = `card perfil-aluno lado-${cartao.lado}${foto ? " com-foto" : ""}`;
+  box.style.backgroundImage = foto ? `linear-gradient(90deg, rgba(10,18,40,.82), rgba(10,18,40,.45)), url("${urlFundo(foto.id)}")` : "";
   box.innerHTML = `<div class="pa-avatar">${svgAvatar(av, 150)}</div>
     <div class="pa-info"><h2>${esc(nome)}</h2><span class="pequeno">${esc(eu.nome || "")}</span>
       <button type="button" class="pa-status" id="paStatus" title="Como você está hoje? Toque para mudar">${perfil.status ? esc(perfil.status) : "＋ Como você está hoje?"}</button>
       <div class="pa-nivel"><b>Nível ${cq?.nivel || 1}</b> · ${(cq?.ganhas || []).length} conquista(s) · 🎨 ${liberadas}/${travadas} skins liberadas</div>
       <div class="pa-medalhas">${(cq?.ganhas || []).slice(-8).map(m => `<span title="${esc(m.t)}">${m.e}</span>`).join("") || `<span class="pequeno">Ganhe conquistas para liberar skins novas!</span>`}</div>
       <div class="linha acoes"><button type="button" id="paEditar">🎨 Editar meu personagem</button>
-        ${gami.download ? `<button type="button" class="leve" id="paBaixar">⬇ Baixar meu cartão</button>` : ""}</div></div>`;
+        <button type="button" class="leve" id="paCartao">🖼 Personalizar cartão</button>
+        ${gami.download ? `<button type="button" class="leve" id="paBaixar">⬇ Baixar meu cartão</button>` : ""}</div></div>
+    ${foto ? `<a class="pa-credito" href="${esc(foto.fonte)}" target="_blank" rel="noopener" title="Foto: ${esc(foto.autor)} · ${esc(foto.licenca)} (Wikimedia Commons)">📷 ${esc(foto.autor.slice(0, 40))} · ${esc(foto.licenca)}</a>` : ""}`;
   $("#paStatus", box).onclick = () => {
     let escolha = perfil.status || "";
     modal({ titulo: "Como você está hoje?", conteudo: `<p class="pequeno" style="margin-top:0">Escolha uma frase: ela aparece no seu perfil${gami.social ? " e no mural da turma, se você estiver lá" : ""}.</p>
@@ -54,6 +68,7 @@ export async function desenharPerfil(box, { eu, cq, gami, simulacao = false }) {
         perfil.status = escolha; $("#paStatus", box).textContent = escolha || "＋ Como você está hoje?"; return true;
       } });
   };
+  $("#paCartao", box).onclick = () => personalizarCartao({ eu, perfil, av, simulacao, aoSalvar: () => desenharPerfil(box, { eu, cq, gami, simulacao }) });
   $("#paEditar", box).onclick = () => editarPersonagem({ eu, perfil, titulos, simulacao, aoSalvar: () => desenharPerfil(box, { eu, cq, gami, simulacao }) });
   $("#paBaixar", box)?.addEventListener("click", () => baixarCartao({ eu, av, nome, cq }));
   botoesSocial(box, { eu, cq, gami, perfil: { ...perfil, avatar: av }, simulacao });
@@ -77,26 +92,69 @@ function editarPersonagem({ eu, perfil, titulos, simulacao, aoSalvar }) {
     if (!partes.includes(parte)) parte = partes[0];
     $("#epPrevia", c).innerHTML = svgAvatar(av, 220);
     c.querySelectorAll("[data-grupo]").forEach(b => { const on = Number(b.dataset.grupo) === grupo; b.classList.toggle("ativa", on); b.setAttribute("aria-selected", on); });
-    $("#epPartes", c).innerHTML = partes.map(k => `<button type="button" data-parte="${k}" class="${k === parte ? "ativa" : ""}" aria-pressed="${k === parte}">${esc(NOMES_PARTES[k] || k)}</button>`).join("");
-    $("#epCores", c).innerHTML = g.cores.filter(([k]) => !(k === "corLabios" && av.corpo !== "feminino")).map(([k, r]) => `<div><span class="pequeno">${r}</span><div class="ep-swatches">${swatches(k)}</div></div>`).join("");
+    $("#epPartes", c).innerHTML = partes.length < 2 ? "" : partes.map(k => `<button type="button" data-parte="${k}" class="${k === parte ? "ativa" : ""}" aria-pressed="${k === parte}">${esc(NOMES_PARTES[k] || k)}</button>`).join("");
+    $("#epCores", c).innerHTML = parte === "ajustes" ? "" : (CORES_DA_PARTE[parte] || []).filter(k => !(k === "corLabios" && av.corpo !== "feminino"))
+      .map(k => `<div><span class="pequeno">${NOME_COR[k]}</span><div class="ep-swatches">${swatches(k)}</div></div>`).join("");
     c.querySelectorAll("[data-cor]").forEach(b => { b.classList.toggle("sel", Number(av[b.dataset.cor]) === Number(b.dataset.i)); b.onclick = () => { av[b.dataset.cor] = Number(b.dataset.i); desenhar(c); }; });
     c.querySelectorAll("[data-parte]").forEach(b => b.onclick = () => { parte = b.dataset.parte; desenhar(c); });
-    $("#epItens", c).innerHTML = CATALOGO[parte].filter(it => parte === "corpo" || permitido(it, av.corpo)).map(it => { const ok = liberado(it, titulos);
+    if (parte === "ajustes") return desenharAjustes(c);
+    const posAdesivo = parte === "adesivo" ? `<div class="ep-pos"><span class="pequeno">Onde fica o adesivo:</span><div class="grupo-chips">${Object.entries(NOMES_POS).map(([k, t]) => `<button type="button" class="chip${av.adesivoPos === k ? " sel" : ""}" aria-pressed="${av.adesivoPos === k}" data-pos="${k}">${t}</button>`).join("")}</div></div>` : "";
+    $("#epItens", c).innerHTML = posAdesivo + CATALOGO[parte].filter(it => parte === "corpo" || permitido(it, av.corpo)).map(it => { const ok = liberado(it, titulos);
       return `<button type="button" class="ep-item${av[parte] === it.id ? " sel" : ""}${ok ? "" : " travado"}" data-item="${esc(it.id)}" ${ok ? "" : "disabled"} title="${esc(ok ? it.nome : textoTrava(it.trava))}">
         ${svgAvatar(parte === "corpo" ? trocarSexo(av, it.id, titulos) : { ...av, [parte]: it.id }, 74, { parte })}<span>${esc(it.nome)}</span>${ok ? (it.trava ? `<small class="ep-novo">✨ skin</small>` : "") : `<small>${esc(textoTrava(it.trava))}</small>`}</button>`; }).join("");
+    c.querySelectorAll("[data-pos]").forEach(b => b.onclick = () => { av = { ...av, adesivoPos: b.dataset.pos }; desenhar(c); });
     c.querySelectorAll("[data-item]").forEach(b => b.onclick = () => { av = parte === "corpo" ? trocarSexo(av, b.dataset.item, titulos) : { ...av, [parte]: b.dataset.item }; desenhar(c); });
+  };
+  // deslizantes: só a prévia redesenha (o foco fica no deslizante)
+  const desenharAjustes = c => {
+    const aj = av.ajustes || {};
+    $("#epItens", c).innerHTML = `<div class="ep-ajustes"><p class="pequeno" style="margin:0 0 6px">Afine o rosto do seu jeito. Os ajustes são pequenos de propósito: o personagem nunca fica deformado.</p>
+      ${AJUSTES.map(([k, r]) => `<label class="ep-aj"><span>${r}</span><input type="range" min="-3" max="3" step="1" value="${aj[k] || 0}" data-aj="${k}" aria-label="${r}"><output>${aj[k] > 0 ? "+" : ""}${aj[k] || 0}</output></label>`).join("")}
+      <button type="button" class="leve mini" id="epZerar">↺ Zerar ajustes</button></div>`;
+    c.querySelectorAll("[data-aj]").forEach(r => r.oninput = () => {
+      av = { ...av, ajustes: { ...(av.ajustes || {}), [r.dataset.aj]: Number(r.value) } };
+      r.nextElementSibling.textContent = (r.value > 0 ? "+" : "") + r.value;
+      $("#epPrevia", c).innerHTML = svgAvatar(av, 220);
+    });
+    $("#epZerar", c).onclick = () => { av = { ...av, ajustes: {} }; desenhar(c); };
   };
   return modal({ titulo: "🎨 Meu personagem", conteudo: html, ok: "Salvar personagem", cancelar: "Cancelar", largo: true,
     aoAbrir: c => {
       c.querySelectorAll("[data-grupo]").forEach(b => b.onclick = () => { grupo = Number(b.dataset.grupo); parte = GRUPOS[grupo].partes[0]; desenhar(c); });
-      $("#epSorte", c).onclick = () => { av = avatarValido(avatarAleatorio(titulos, { corpo: av.corpo, fundo: av.fundo, adesivo: av.adesivo, moldura: av.moldura }), titulos); desenhar(c); };
+      $("#epSorte", c).onclick = () => { av = avatarValido(avatarAleatorio(titulos, { corpo: av.corpo, fundo: av.fundo, adesivo: av.adesivo, moldura: av.moldura, adesivoPos: av.adesivoPos }), titulos); desenhar(c); };
       $("#epDesfaz", c).onclick = () => { av = { ...inicial }; desenhar(c); };
       desenhar(c);
     },
     antesDeConfirmar: async c => {
-      try { await gravarPerfil(eu, simulacao, { avatar: av, apelido: $("#epApelido", c).value.trim(), status: perfil.status || "" }); }
+      try { await gravarPerfil(eu, simulacao, { avatar: av, apelido: $("#epApelido", c).value.trim(), status: perfil.status || "", cartao: perfil.cartao }); }
       catch (e) { toast("Não foi possível salvar o personagem.", "erro"); return false; }
       toast(simulacao ? "🧪 Personagem salvo (só neste navegador)." : "Personagem salvo! 🎉", "ok"); aoSalvar(); return true;
+    } });
+}
+
+// ---------- personalizar o cartão do perfil: foto de fundo (lista fixa) e lado do personagem ----------
+function personalizarCartao({ eu, perfil, av, simulacao, aoSalvar }) {
+  let cartao = cartaoValido(perfil.cartao);
+  const html = `<p class="pequeno" style="margin-top:0">Escolha uma foto para o fundo do seu cartão (fotos reais, com os créditos do autor) e onde o personagem fica.</p>
+    <div class="grupo-chips" id="pcLado" role="group" aria-label="Posição do personagem"></div>
+    <div class="pc-fotos" role="radiogroup" aria-label="Foto de fundo">
+      <button type="button" class="pc-foto pc-sem" data-foto="" role="radio"><span>Sem foto<br><small>azul padrão</small></span></button>
+      ${FUNDOS_PERFIL.map(f => `<button type="button" class="pc-foto" data-foto="${f.id}" role="radio" title="${esc(f.nome)} · foto: ${esc(f.autor)} (${esc(f.licenca)})"><img src="${urlMini(f.id)}" alt="" loading="lazy"><span>${esc(f.nome)}</span></button>`).join("")}
+    </div>`;
+  const marcar = c => {
+    c.querySelectorAll("[data-foto]").forEach(b => { const on = b.dataset.foto === cartao.foto; b.classList.toggle("sel", on); b.setAttribute("aria-checked", on); });
+    c.querySelectorAll("[data-lado]").forEach(b => { const on = b.dataset.lado === cartao.lado; b.classList.toggle("sel", on); b.setAttribute("aria-pressed", on); });
+  };
+  modal({ titulo: "🖼 Personalizar cartão", conteudo: html, ok: "Salvar", cancelar: "Cancelar", largo: true,
+    aoAbrir: c => {
+      $("#pcLado", c).innerHTML = Object.entries(LADOS).map(([k, t]) => `<button type="button" class="chip" data-lado="${k}">${t}</button>`).join("");
+      c.querySelectorAll("[data-foto]").forEach(b => b.onclick = () => { cartao = { ...cartao, foto: b.dataset.foto }; marcar(c); });
+      c.querySelectorAll("[data-lado]").forEach(b => b.onclick = () => { cartao = { ...cartao, lado: b.dataset.lado }; marcar(c); });
+      marcar(c);
+    },
+    antesDeConfirmar: async () => {
+      try { await gravarPerfil(eu, simulacao, { ...perfil, avatar: av, cartao }); } catch (e) { toast("Não foi possível salvar o cartão.", "erro"); return false; }
+      perfil.cartao = cartao; toast("Cartão salvo! 🖼", "ok"); aoSalvar(); return true;
     } });
 }
 
