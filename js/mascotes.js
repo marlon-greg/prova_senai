@@ -200,10 +200,19 @@ function bracoLevantado(p, id) {
     `<path d="M150 190 Q172 166 178 118" fill="none" stroke="${p.pele}" stroke-width="15" stroke-linecap="round"/>` +
     `<path d="M148 196 Q160 182 166 168" fill="none" stroke="${OUT}" stroke-width="27" stroke-linecap="round"/>` +
     `<path d="M148 196 Q160 182 166 168" fill="none" stroke="${corM}" stroke-width="21" stroke-linecap="round"/>` +
-    `<circle cx="179" cy="106" r="12.5" fill="${p.pele}" stroke="${OUT}" stroke-width="${SW}"/>` +
-    `<path d="M171 101 Q179 97 187 101 M171 107 Q179 103 187 107" fill="none" stroke="${p.peleSombra}" stroke-width="2.2" stroke-linecap="round"/>` +
-    `<path d="M168 110 Q166 102 172 98" fill="none" stroke="${OUT}" stroke-width="2.6" stroke-linecap="round"/>` +
-    `</g>`;
+    maoAberta(p) + `</g>`;
+}
+// mão aberta acenando: palma, quatro dedos separados e o polegar (contorno por baixo, pele por cima, para as juntas ficarem limpas)
+function maoAberta(p) {
+  const dedos = [["171 101", "166.5 85", 8.6], ["177.5 99", "176 80.5", 9], ["184 100", "186 82.5", 8.8], ["189.5 104", "195 91", 7.6], ["171 114", "158.5 105", 8.6]];
+  const traco = (cor, extra) => dedos.map(([a, b, w]) => `<path d="M${a} L${b}" stroke="${cor}" stroke-width="${w + extra}" stroke-linecap="round"/>`).join("");
+  return traco(OUT, 5.2) +
+    `<ellipse cx="180" cy="108.5" rx="12" ry="12.5" fill="${p.pele}" stroke="${OUT}" stroke-width="${SW}"/>` +
+    traco(p.pele, 0) +
+    `<ellipse cx="180" cy="110" rx="7" ry="6.5" fill="${p.peleSombra}" opacity=".35"/>` +
+    `<path d="M170.5 112 Q175 115 177 120" fill="none" stroke="${p.peleSombra}" stroke-width="2" stroke-linecap="round"/>` +
+    [["166.8 87.5", "167.6 84.6"], ["176.1 83", "176.2 80"], ["185.8 85", "186.2 82"], ["194.4 93", "195 90.6"]].map(([a, b]) =>
+      `<path d="M${a} L${b}" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity=".45"/>`).join("");
 }
 
 function extrasHumor(humor, rosto) {
