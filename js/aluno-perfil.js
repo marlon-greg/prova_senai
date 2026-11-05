@@ -38,7 +38,8 @@ async function lerPerfil(eu, sim) {
 async function gravarPerfil(eu, sim, dados) {
   if (sim) { localStorage.setItem("sim:perfil", JSON.stringify({ ...dados, statusEm: dados.statusEm === "agora" ? new Date().toISOString() : dados.statusEm || null })); return; }
   await setDoc(doc(db, "perfis", eu.uid), { avatar: dados.avatar, cartao: cartaoValido(dados.cartao), apelido: String(dados.apelido || "").slice(0, 30), status: STATUS.includes(dados.status) ? dados.status : "",
-    statusEm: dados.statusEm === "agora" ? serverTimestamp() : dados.statusEm || null, email: String(eu.email || "").toLowerCase(), atualizadoEm: serverTimestamp() });
+    statusEm: dados.statusEm === "agora" ? serverTimestamp() : dados.statusEm || null, email: String(eu.email || "").toLowerCase(),
+    saves: (Array.isArray(dados.saves) ? dados.saves : []).slice(0, 4), atualizadoEm: serverTimestamp() });
 }
 
 // cq = resultado de desenharConquistas ({ ganhas, todas, nivel }); gami = config da gamificação
@@ -84,6 +85,7 @@ function editarPersonagem({ eu, perfil, titulos, simulacao, aoSalvar }) {
   let av = { ...inicial }, grupo = 0, parte = GRUPOS[0].partes[0];
   const html = `<div class="ed-perso"><div class="ep-previa"><div id="epPrevia"></div>
         <div class="linha acoes" style="justify-content:center"><button type="button" class="leve" id="epSorte">🎲 Aleatório</button><button type="button" class="leve" id="epDesfaz">↺ Desfazer</button></div>
+        <div class="ep-saves"><span class="pequeno"><b>💾 Meus visuais</b> (até 4)</span><div id="epSaves"></div></div>
         <label for="epApelido">Como quer ser chamado(a)</label><input type="text" id="epApelido" maxlength="30" value="${esc(perfil.apelido || "")}" placeholder="${esc(String(eu.nome || "").split(/\s+/)[0] || "")}"></div>
       <div class="ep-controles"><div class="ep-grupos" role="tablist">${GRUPOS.map((g, i) => `<button type="button" role="tab" data-grupo="${i}">${g.nome}</button>`).join("")}</div>
         <div class="ep-abas" id="epPartes"></div><div class="ep-cores" id="epCores"></div><div class="ep-itens" id="epItens"></div></div></div>
@@ -128,10 +130,27 @@ function editarPersonagem({ eu, perfil, titulos, simulacao, aoSalvar }) {
       c.querySelectorAll("[data-grupo]").forEach(b => b.onclick = () => { grupo = Number(b.dataset.grupo); parte = GRUPOS[grupo].partes[0]; desenhar(c); });
       $("#epSorte", c).onclick = () => { av = avatarValido(avatarAleatorio(titulos, { corpo: av.corpo, fundo: av.fundo, adesivo: av.adesivo, moldura: av.moldura, adesivoPos: av.adesivoPos }), titulos); desenhar(c); };
       $("#epDesfaz", c).onclick = () => { av = { ...inicial }; desenhar(c); };
+      // 💾 até 4 visuais salvos: abrir no editor, salvar o atual, apagar (o personagem em uso só muda no "Salvar personagem")
+      const slots = () => [0, 1, 2, 3].map(i => (perfil.saves || [])[i] || null);
+      const gravarSaves = async (novos, msg) => { try { await gravarPerfil(eu, simulacao, { ...perfil, saves: novos }); perfil.saves = novos; toast(msg, "ok"); desenharSaves(); } catch (e) { toast("Não foi possível salvar.", "erro"); } };
+      const desenharSaves = () => {
+        $("#epSaves", c).innerHTML = slots().map((sv, i) => sv ? `<div class="ep-save"><button type="button" class="ep-save-av" data-abrir="${i}" title="Abrir no editor">${svgAvatar(avatarValido(sv.avatar, titulos), 56)}</button>
+            <span class="pequeno">${esc(sv.nome)}</span><span class="ep-save-ac"><button type="button" class="leve mini" data-abrir="${i}">Abrir</button><button type="button" class="leve mini" data-guardar="${i}" title="Salvar o visual atual aqui">💾</button><button type="button" class="perigo mini" data-tirar="${i}" aria-label="Apagar ${esc(sv.nome)}">🗑</button></span></div>`
+          : `<div class="ep-save vazio"><button type="button" class="ep-save-av" data-guardar="${i}" title="Salvar o visual atual aqui">＋</button><span class="pequeno">Espaço ${i + 1}</span><button type="button" class="leve mini" data-guardar="${i}">💾 Salvar o atual</button></div>`).join("");
+        c.querySelectorAll("[data-abrir]").forEach(b => b.onclick = () => { av = avatarValido(slots()[b.dataset.abrir].avatar, titulos); desenhar(c); toast("Visual aberto. Clique em Salvar personagem para usar.", "info"); });
+        c.querySelectorAll("[data-guardar]").forEach(b => b.onclick = async () => { const i = Number(b.dataset.guardar), antigo = slots()[i];
+          if (antigo && !(await confirmar(`Trocar o visual salvo “${antigo.nome}” pelo que está no editor?`, { titulo: "Meus visuais", ok: "Trocar" }))) return;
+          const nome = (prompt("Nome deste visual:", antigo?.nome || `Visual ${i + 1}`) ?? "").trim(); if (!nome) return;
+          const novos = slots(); novos[i] = { nome: nome.slice(0, 24), avatar: { ...av } }; gravarSaves(novos, "Visual salvo! 💾"); });
+        c.querySelectorAll("[data-tirar]").forEach(b => b.onclick = async () => { const i = Number(b.dataset.tirar), sv = slots()[i];
+          if (!(await confirmar(`Apagar o visual salvo “${sv.nome}”?`, { titulo: "Meus visuais", ok: "Apagar", perigo: true }))) return;
+          const novos = slots(); novos[i] = null; gravarSaves(novos, "Visual apagado."); });
+      };
+      desenharSaves();
       desenhar(c);
     },
     antesDeConfirmar: async c => {
-      try { await gravarPerfil(eu, simulacao, { avatar: av, apelido: $("#epApelido", c).value.trim(), status: perfil.status || "", statusEm: perfil.statusEm, cartao: perfil.cartao }); }
+      try { await gravarPerfil(eu, simulacao, { avatar: av, apelido: $("#epApelido", c).value.trim(), status: perfil.status || "", statusEm: perfil.statusEm, cartao: perfil.cartao, saves: perfil.saves || [] }); }
       catch (e) { toast("Não foi possível salvar o personagem.", "erro"); return false; }
       toast(simulacao ? "🧪 Personagem salvo (só neste navegador)." : "Personagem salvo! 🎉", "ok"); aoSalvar(); return true;
     } });
