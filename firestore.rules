@@ -249,16 +249,24 @@ service cloud.firestore {
                    && (!('cartao' in request.resource.data) || (request.resource.data.cartao is map && request.resource.data.cartao.keys().hasOnly(['foto', 'lado', 'medalhas'])))
                    && (!('status' in request.resource.data) || (request.resource.data.status is string && request.resource.data.status.size() <= 40));
     }
+    // quem lê também está no mural (tem vitrine) e na mesma turma
+    function mesmaTurma(t) { return t != null && exists(/databases/$(db)/documents/vitrine/$(uid())) && get(/databases/$(db)/documents/vitrine/$(uid())).data.turmaId == t; }
     function socialLigado() { return get(/databases/$(db)/documents/config/gamificacao).data.get('social', false) == true; }
     // vitrine: só o que o próprio aluno marcou para mostrar (nunca nota sem ele querer)
     match /vitrine/{u} {
-      allow read: if logado() && (u == uid() || equipe() || socialLigado());
+      // colega: só com a parte social ligada, se ELE TAMBÉM compartilha (tem vitrine) e é da MESMA turma
+      allow read: if logado() && (u == uid() || equipe() || (socialLigado() && mesmaTurma(resource.data.turmaId)));
       allow write: if logado() && u == uid()
-                   && request.resource.data.keys().hasOnly(['nome', 'apelido', 'avatar', 'status', 'turmaId', 'conquistas', 'notas', 'nivel', 'atualizadoEm']);
+                   && request.resource.data.keys().hasOnly(['nome', 'apelido', 'avatar', 'status', 'turmaId', 'conquistas', 'notas', 'nivel', 'atualizadoEm'])
+                   // a turma gravada precisa ser uma turma em que o aluno está
+                   && (request.resource.data.turmaId == null || (request.resource.data.turmaId is string && exists(/databases/$(db)/documents/turmas/$(request.resource.data.turmaId))
+                       && email().lower() in get(/databases/$(db)/documents/turmas/$(request.resource.data.turmaId)).data.get('emails', [])))
+                   // status difíceis nunca vão para o mural (só a equipe vê, em perfis)
+                   && !(request.resource.data.get('status', '') in ['😫 Cansado(a)', '😔 Triste', '😟 Preocupado(a)', '😰 Ansioso(a)', '😣 Estressado(a)', '😠 Irritado(a)', '🤒 Não estou bem']);
       // curtidas e parabéns (sem comentários): uma por pessoa, só com a parte social ligada
       match /reacoes/{de} {
-        allow read: if logado() && (u == uid() || de == uid() || equipe() || socialLigado());
-        allow create, update: if logado() && de == uid() && de != u && socialLigado()
+        allow read: if logado() && (u == uid() || de == uid() || equipe() || (socialLigado() && mesmaTurma(get(/databases/$(db)/documents/vitrine/$(u)).data.turmaId)));
+        allow create, update: if logado() && de == uid() && de != u && socialLigado() && mesmaTurma(get(/databases/$(db)/documents/vitrine/$(u)).data.turmaId)
                               && request.resource.data.keys().hasOnly(['tipo', 'item', 'em']) && request.resource.data.tipo in ['curtida', 'parabens'];
         allow delete: if logado() && (de == uid() || admin());
       }

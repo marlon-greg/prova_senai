@@ -183,7 +183,8 @@ async function desenharSimulacao() {
   const cfg = lerSimulacao(), forcar = new Set(cfg.dados || []);
   const cq = await desenharConquistas(gami.conquistas ? $("#conquistas") : null, eu, cfg.acess ? RESUMO_SIMULADO : null, { provas: provasSimuladas(cfg), forcar, simulacao: true });
   if (!gami.conquistas) $("#conquistas").classList.add("oculto");
-  await desenharPerfil($("#perfilAluno"), { eu, cq, gami, simulacao: true });
+  // na simulação a parte social aparece sempre (para a equipe ver como fica), mesmo desligada para os alunos
+  await desenharPerfil($("#perfilAluno"), { eu, cq, gami: { ...gami, personagem: true, social: true, socialNotas: true, socialReal: gami.social }, simulacao: true });
   painelSimulacao($("#simPainel"), cq?.todas || [], desenharSimulacao);
   desenharFaleConosco($("#faleConosco"), eu, gami, true);
 }

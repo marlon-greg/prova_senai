@@ -6,7 +6,7 @@ import { FUNDOS_PERFIL, fundoPerfil, urlFundo, urlMini } from "./fundos-perfil.j
 // status do dia: só frases prontas (ninguém escreve texto livre)
 import { STATUS } from "./status-aluno.js";
 export { STATUS };
-import { botoesSocial } from "./aluno-social.js";
+import { botoesSocial, sincronizarStatus } from "./aluno-social.js";
 import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 // editor em abas; cada parte mostra só a(s) cor(es) dela
@@ -64,13 +64,13 @@ export async function desenharPerfil(box, { eu, cq, gami, simulacao = false }) {
     ${foto ? `<a class="pa-credito" href="${esc(foto.fonte)}" target="_blank" rel="noopener" title="Foto: ${esc(foto.autor)} · ${esc(foto.licenca)} (Wikimedia Commons)">📷 ${esc(foto.autor.slice(0, 40))} · ${esc(foto.licenca)}</a>` : ""}`;
   $("#paStatus", box).onclick = () => {
     let escolha = perfil.status || "";
-    modal({ titulo: "Como você está hoje?", conteudo: `<p class="pequeno" style="margin-top:0">Escolha uma frase: ela aparece no seu perfil${gami.social ? " e no mural da turma, se você estiver lá" : ""}. <b>Seus professores e a sua auxiliar também veem</b>, para poder te ajudar quando o dia não estiver bom. 💙</p>
+    modal({ titulo: "Como você está hoje?", conteudo: `<p class="pequeno" style="margin-top:0">Escolha uma frase: ela aparece no seu perfil${gami.social ? " e no mural da turma, se você estiver lá" : ""}. <b>Seus professores e a sua auxiliar também veem</b>, para poder te ajudar quando o dia não estiver bom. 💙${gami.social ? " Status como triste, ansioso ou estressado <b>não aparecem no mural</b>: só a equipe vê." : ""}</p>
         <div class="op-pilulas status-op">${STATUS.map(t => `<button type="button" data-st="${esc(t)}" class="${t === escolha ? "sel" : ""}">${esc(t)}</button>`).join("")}<button type="button" data-st="" class="${!escolha ? "sel" : ""}">Sem status</button></div>`,
       ok: "Salvar", cancelar: "Cancelar",
       aoAbrir: c => c.querySelectorAll("[data-st]").forEach(b => b.onclick = () => { escolha = b.dataset.st; c.querySelectorAll("[data-st]").forEach(x => x.classList.toggle("sel", x === b)); }),
       antesDeConfirmar: async () => {
         try { await gravarPerfil(eu, simulacao, { ...perfil, avatar: av, status: escolha, statusEm: "agora" }); } catch (e) { toast("Não foi possível salvar.", "erro"); return false; }
-        perfil.status = escolha; perfil.statusEm = new Date(); $("#paStatus", box).textContent = escolha || "＋ Como você está hoje?"; return true;
+        perfil.status = escolha; perfil.statusEm = new Date(); sincronizarStatus(eu, escolha, simulacao); $("#paStatus", box).textContent = escolha || "＋ Como você está hoje?"; return true;
       } });
   };
   $("#paCartao", box).onclick = () => personalizarCartao({ eu, perfil, av, simulacao, ganhas: cq?.ganhas || [], aoSalvar: () => desenharPerfil(box, { eu, cq, gami, simulacao }) });
@@ -140,24 +140,37 @@ function editarPersonagem({ eu, perfil, titulos, simulacao, aoSalvar }) {
 // ---------- personalizar o cartão do perfil: foto de fundo (lista fixa) e lado do personagem ----------
 function personalizarCartao({ eu, perfil, av, simulacao, ganhas = [], aoSalvar }) {
   let cartao = cartaoValido(perfil.cartao);
-  const html = `<p class="pequeno" style="margin-top:0">Escolha uma foto para o fundo do seu cartão (fotos reais, com os créditos do autor) e onde o personagem fica.</p>
-    <h3 class="conq-h3">Posição do personagem</h3><div class="grupo-chips" id="pcLado" role="group" aria-label="Posição do personagem"></div>
-    <h3 class="conq-h3">🏅 Conquistas fixas no cartão <span class="pequeno">— escolha até ${MAX_FIXAS}; sem nenhuma, aparecem as últimas</span></h3>
-    ${ganhas.length ? `<div class="grupo-chips" id="pcFixas" role="group" aria-label="Conquistas fixas">${ganhas.map((m, i) => `<button type="button" class="chip" data-fixa="${i}">${m.e} ${esc(m.t)}</button>`).join("")}</div><p class="pequeno" id="pcFixasN"></p>` : `<p class="pequeno">Você ainda não tem conquistas. Faça provas para ganhar!</p>`}
-    <h3 class="conq-h3">Foto de fundo</h3>
-    <div class="pc-fotos" role="radiogroup" aria-label="Foto de fundo">
-      <button type="button" class="pc-foto pc-sem" data-foto="" role="radio"><span>Sem foto<br><small>azul padrão</small></span></button>
-      ${FUNDOS_PERFIL.map(f => `<button type="button" class="pc-foto" data-foto="${f.id}" role="radio" title="${esc(f.nome)} · foto: ${esc(f.autor)} (${esc(f.licenca)})"><img src="${urlMini(f.id)}" alt="" loading="lazy"><span>${esc(f.nome)}</span></button>`).join("")}
-    </div>`;
+  const nome = perfil.apelido || String(eu.nome || "").split(/\s+/)[0] || "Aluno";
+  // bloco de seção: número, título, explicação curta e um selo à direita (ex.: "2 de 6")
+  const secao = (n, titulo, dica, corpo, selo = "") => `<section class="pc-secao"><div class="pc-secao-cab"><span class="pc-n">${n}</span><div class="pc-secao-tit"><h3>${titulo}</h3><span class="pequeno">${dica}</span></div>${selo}</div>${corpo}</section>`;
+  const desenhoLado = k => `<span class="pc-lado-desenho lado-${k}"><i class="pl-av"></i><i class="pl-l1"></i><i class="pl-l2"></i></span>`;
+  const html = `<div class="pc-previa-caixa"><span class="pc-previa-rot">Prévia do seu cartão</span><div class="pc-previa" id="pcPrevia"></div></div>
+    ${secao(1, "Posição do personagem", "Onde o personagem fica no cartão.",
+      `<div class="pc-lados" role="radiogroup" aria-label="Posição do personagem">${Object.entries(LADOS).map(([k, t]) => `<button type="button" class="pc-lado" data-lado="${k}" role="radio">${desenhoLado(k)}<span>${t}</span></button>`).join("")}</div>`)}
+    ${secao(2, "🏅 Conquistas fixas", `Escolha até ${MAX_FIXAS} para ficarem sempre à vista. Sem nenhuma, aparecem as últimas.`,
+      ganhas.length ? `<div class="pc-fixas" role="group" aria-label="Conquistas fixas">${ganhas.map((m, i) => `<button type="button" class="pc-fixa" data-fixa="${i}"><span class="pc-check" aria-hidden="true"></span><span class="pc-fixa-e">${m.e}</span><span>${esc(m.t)}</span></button>`).join("")}</div>`
+        : `<p class="pequeno">Você ainda não tem conquistas. Faça provas para ganhar!</p>`, `<span class="chip" id="pcFixasN"></span>`)}
+    ${secao(3, "Foto de fundo", "Fotos reais, com o crédito do autor no cantinho do cartão.",
+      `<div class="pc-fotos" role="radiogroup" aria-label="Foto de fundo">
+        <button type="button" class="pc-foto pc-sem" data-foto="" role="radio"><span>Sem foto<br><small>azul padrão</small></span></button>
+        ${FUNDOS_PERFIL.map(f => `<button type="button" class="pc-foto" data-foto="${f.id}" role="radio" title="${esc(f.nome)} · foto: ${esc(f.autor)} (${esc(f.licenca)})"><img src="${urlMini(f.id)}" alt="" loading="lazy"><span>${esc(f.nome)}</span></button>`).join("")}
+      </div>`)}`;
+  const previa = c => {
+    const foto = fundoPerfil(cartao.foto), fixas = cartao.medalhas.map(t => ganhas.find(m => m.t === t)).filter(Boolean), meds = fixas.length ? fixas : ganhas.slice(-4);
+    const p = $("#pcPrevia", c);
+    p.className = `pc-previa lado-${cartao.lado}`;
+    p.style.backgroundImage = foto ? `linear-gradient(90deg, rgba(10,18,40,.8), rgba(10,18,40,.45)), url("${urlMini(foto.id)}")` : "";
+    p.innerHTML = `<div class="pcp-av">${svgAvatar(av, 70)}</div><div class="pcp-info"><b>${esc(nome)}</b><div class="pcp-meds">${meds.map(m => fixas.length ? `<span class="pcp-fixa">${m.e} ${esc(m.t)}</span>` : `<span>${m.e}</span>`).join("")}</div></div>`;
+  };
   const marcar = c => {
     c.querySelectorAll("[data-foto]").forEach(b => { const on = b.dataset.foto === cartao.foto; b.classList.toggle("sel", on); b.setAttribute("aria-checked", on); });
-    c.querySelectorAll("[data-lado]").forEach(b => { const on = b.dataset.lado === cartao.lado; b.classList.toggle("sel", on); b.setAttribute("aria-pressed", on); });
+    c.querySelectorAll("[data-lado]").forEach(b => { const on = b.dataset.lado === cartao.lado; b.classList.toggle("sel", on); b.setAttribute("aria-checked", on); });
     c.querySelectorAll("[data-fixa]").forEach(b => { const on = cartao.medalhas.includes(ganhas[b.dataset.fixa].t); b.classList.toggle("sel", on); b.setAttribute("aria-pressed", on); });
-    const n = $("#pcFixasN", c); if (n) n.textContent = `${cartao.medalhas.length} de ${MAX_FIXAS} escolhidas`;
+    const n = $("#pcFixasN", c); if (n) { n.textContent = `${cartao.medalhas.length} de ${MAX_FIXAS}`; n.classList.toggle("ok", cartao.medalhas.length > 0); }
+    previa(c);
   };
-  modal({ titulo: "🖼 Personalizar cartão", conteudo: html, ok: "Salvar", cancelar: "Cancelar", largo: true,
+  modal({ titulo: "🖼 Personalizar cartão", conteudo: html, ok: "Salvar cartão", cancelar: "Cancelar", largo: true,
     aoAbrir: c => {
-      $("#pcLado", c).innerHTML = Object.entries(LADOS).map(([k, t]) => `<button type="button" class="chip" data-lado="${k}">${t}</button>`).join("");
       c.querySelectorAll("[data-foto]").forEach(b => b.onclick = () => { cartao = { ...cartao, foto: b.dataset.foto }; marcar(c); });
       c.querySelectorAll("[data-lado]").forEach(b => b.onclick = () => { cartao = { ...cartao, lado: b.dataset.lado }; marcar(c); });
       c.querySelectorAll("[data-fixa]").forEach(b => b.onclick = () => { const t = ganhas[b.dataset.fixa].t, tem = cartao.medalhas.includes(t);
@@ -249,9 +262,13 @@ export function painelSimulacao(box, todas, aoAplicar) {
     <label class="check"><input type="checkbox" id="simAcess"${cfg.acess ? " checked" : ""}> <span>Simular aluno com acessibilidade (medalhas da sala de aula, a partir do diário)</span></label>
     <details class="ajuda-extra"${cfg.dados?.length ? " open" : ""}><summary>🏅 Me dar conquistas (marque para ganhar na hora)</summary>
       <div class="lista-temas" style="margin-top:8px">${(todas || []).map(m => `<label class="check"><input type="checkbox" data-dar="${esc(m.t)}"${cfg.dados?.includes(m.t) ? " checked" : ""}> <span>${m.e} ${esc(m.t)}</span></label>`).join("")}</div></details>
+    <div class="sim-guia"><b>Como testar a parte social e o status</b><ol>
+      <li><b>💬 Status:</b> toque em “Como você está hoje?” no seu cartão. Os difíceis (triste, ansioso…) não vão para o mural; a equipe vê o status real dos alunos em <b>Turmas</b> e no <b>Diário</b>.</li>
+      <li><b>❤️ Mural da turma:</b> primeiro ele aparece <b>trancado</b> (só entra quem compartilha). Use <b>🔓 O que eu mostro</b>, marque uma conquista e o mural abre com 4 colegas <b>fictícios</b>.</li>
+      <li><b>👤 Perfil do colega:</b> no mural, toque no personagem ou no nome de alguém; o seu mostra “Como os colegas me veem”.</li></ol></div>
     <div class="linha acoes" style="margin-top:10px"><button type="button" id="simAplicar">Aplicar e ver</button><button type="button" class="leve" id="simTudo">🏆 Me dar todas</button><button type="button" class="leve" id="simZerar">↺ Zerar simulação</button></div>`;
   const salvar = c => { localStorage.setItem("sim:config", JSON.stringify(c)); aoAplicar(); };
   $("#simAplicar", box).onclick = () => salvar({ notas: $("#simNotas", box).value, acess: $("#simAcess", box).checked, dados: [...box.querySelectorAll("[data-dar]:checked")].map(x => x.dataset.dar) });
   $("#simTudo", box).onclick = () => salvar({ notas: $("#simNotas", box).value, acess: true, dados: (todas || []).map(m => m.t) });
-  $("#simZerar", box).onclick = () => { localStorage.removeItem("sim:config"); localStorage.removeItem("sim:perfil"); localStorage.removeItem("conquistas:sim:" + "x"); aoAplicar(); };
+  $("#simZerar", box).onclick = () => { localStorage.removeItem("sim:config"); localStorage.removeItem("sim:perfil"); localStorage.removeItem("sim:vitrine"); localStorage.removeItem("sim:reacoes"); localStorage.removeItem("conquistas:sim:" + "x"); aoAplicar(); };
 }
