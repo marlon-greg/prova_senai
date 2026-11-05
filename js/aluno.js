@@ -14,6 +14,7 @@ const controles = {};   // qid -> controle do formato adaptado (valor, preencher
 import { abrirLeitorPdf } from "./leitor-pdf.js";
 import { toolbar, collapsible, vazio, statTiles, chips } from "./ui.js";
 import { completar, aplicarVisual, mesclarQuestao } from "./acessibilidade.js";
+import { definirEstilos } from "./mascotes.js";
 import { mascoteLigado, ligarMascote, dadosMascote, htmlMascote, htmlEscolha, ligarEscolha, montarGuia, pararFala } from "./guia.js";
 import { collection, doc, getDoc, getDocFromServer, getDocs, setDoc, updateDoc, query, where, serverTimestamp, increment, arrayUnion, onSnapshot }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
@@ -101,6 +102,7 @@ aoMudarLogin(async user => {
   if (!user) { eu = null; modoTeste = false; $("#faixaTeste").classList.add("oculto"); $("#quem").textContent = ""; $("#avatar").classList.add("oculto"); $("#btnSair").classList.add("oculto"); mostrar("telaLogin"); return; }
   const id = await identificar(user);
   $("#quem").textContent = id.email; $("#btnSair").classList.remove("oculto");
+  await getDocs(collection(db, "mascotes")).then(r => { const m = {}; r.forEach(d => { m[d.id] = d.data().ativo || {}; }); definirEstilos(m); }).catch(() => {});   // visuais que os professores escolheram
   $("#avatar").textContent = iniciais(user.displayName || id.email); $("#avatar").title = user.displayName || id.email; $("#avatar").classList.remove("oculto");
   if (id.tipo === "bloqueado") {
     $("#avisoTexto").innerHTML = `<h2>Conta não autorizada</h2><p>A conta <b>${esc(id.email)}</b> não é de aluno do SENAI.<br>Entre com o e-mail <b>@${esc(id.dominios.join("</b> ou <b>@"))}</b>.</p>`;

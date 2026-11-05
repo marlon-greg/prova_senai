@@ -400,11 +400,56 @@ const PERSONAGENS = {
 };
 
 // ---------------------------------------------------------------- API
-export function svgMascote(id, humor = "feliz") {
+
+// ---------------------------------------------------------------- estilo editável (professor)
+// O desenho de cada mascote é fixo; o professor muda cores e põe um acessório. Estilo vazio = o PADRÃO (o original).
+// Os estilos em uso ficam em Firestore mascotes/{id}.ativo; a página carrega e chama definirEstilos().
+export const OPCOES_ESTILO = {
+  pele: ["#f9d7c0", "#f4cdb0", "#efc19e", "#e0ac69", "#c68642", "#a0662f", "#8d5524", "#5c3a1e"],
+  cabelo: ["#1f1a18", "#2a1c16", "#3b261b", "#6b4423", "#8b5a2b", "#b5482f", "#d9a441", "#e8d5a3", "#9ca3af", "#e5e7eb", "#2563eb", "#7c3aed"],
+  barba: ["#1f1a18", "#2e2420", "#3a2a22", "#4b2f22", "#6b4423", "#8b5a2b", "#b5482f", "#9ca3af", "#e5e7eb"],
+  iris: ["#3a2418", "#4a2a1a", "#5b3a1a", "#1d4ed8", "#047857", "#6b7280", "#7c3aed"],
+  camisa: ["#2c2b33", "#2a2c33", "#f6f6f4", "#7a2236", "#c1272d", "#1d4ed8", "#059669", "#0e7490", "#7c3aed", "#f59e0b", "#db2777", "#111827", "#92400e", "#64748b"],
+  acessorio: [["nenhum", "Nenhum"], ["bone", "Boné"], ["gorro", "Gorro"], ["fone", "Fone de ouvido"], ["gravata", "Gravata-borboleta"], ["cracha", "Crachá SENAI"], ["estrela", "Broche de estrela"]],
+  corAcessorio: ["#c1272d", "#1d4ed8", "#059669", "#111827", "#f59e0b", "#7c3aed", "#db2777", "#f8fafc"]
+};
+export const NOMES_ESTILO = { pele: "Pele", cabelo: "Cabelo", barba: "Barba e bigode", iris: "Olhos", camisa: "Roupa", acessorio: "Acessório", corAcessorio: "Cor do acessório" };
+const hex = h => { h = String(h || "#888").replace("#", ""); return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16) || 0); };
+const tom = (c, t) => { const A = hex(c), B = t > 0 ? [255, 255, 255] : [0, 0, 0], k = Math.abs(t); return "#" + A.map((v, i) => Math.round(v + (B[i] - v) * k).toString(16).padStart(2, "0")).join(""); };
+let ESTILOS = {};
+export function definirEstilos(mapa) { ESTILOS = mapa || {}; }
+export const estiloDe = id => ESTILOS[String(id || "").toLowerCase()] || {};
+function aplicarEstilo(p, e = {}) {
+  const q = { ...p };
+  if (e.pele) { q.pele = e.pele; q.peleSombra = tom(e.pele, -.14); }
+  if (e.cabelo) { q.cabelo = e.cabelo; q.cabeloLuz = tom(e.cabelo, .22); }
+  if (e.barba) { q.barba = e.barba; q.barbaLuz = tom(e.barba, .22); }
+  if (e.iris) q.iris = e.iris;
+  if (e.camisa) { q.camisa = e.camisa; q.camisaLuz = tom(e.camisa, .18); q.camisaSombra = tom(e.camisa, -.14); }
+  return q;
+}
+// acessório desenhado por cima de qualquer mascote (coordenadas do desenho: 200 x 220, rosto no centro)
+function acessorioSvg(e = {}) {
+  const c = e.corAcessorio || "#c1272d", cs = tom(c, -.3);
+  const tr = d => `<path d="${d}" fill="${c}" stroke="${OUT}" stroke-width="${SW}" stroke-linejoin="round"/>`;
+  return ({
+    bone: tr("M36 66 C36 24 64 8 100 8 C136 8 164 24 164 66 C140 56 120 54 100 54 C80 54 60 56 36 66 Z") + tr("M100 56 C132 52 162 56 186 70 C172 80 150 76 132 70 C120 66 110 64 100 62 Z") +
+      `<circle cx="100" cy="10" r="5" fill="${cs}" stroke="${OUT}" stroke-width="2"/><path d="M100 12 L100 52 M70 18 L76 56 M130 18 L124 56" stroke="${cs}" stroke-width="2" opacity=".6"/>`,
+    gorro: tr("M34 70 C34 20 64 2 100 2 C136 2 166 20 166 70 Z") + `<rect x="30" y="56" width="140" height="20" rx="10" fill="${tom(c, .55)}" stroke="${OUT}" stroke-width="${SW}"/><circle cx="100" cy="0" r="12" fill="${tom(c, .55)}" stroke="${OUT}" stroke-width="${SW}"/>`,
+    fone: `<path d="M34 104 C30 30 66 6 100 6 C134 6 170 30 166 104" fill="none" stroke="${OUT}" stroke-width="12" stroke-linecap="round"/><path d="M34 104 C30 30 66 6 100 6 C134 6 170 30 166 104" fill="none" stroke="${c}" stroke-width="7" stroke-linecap="round"/>` +
+      `<rect x="22" y="88" width="24" height="38" rx="11" fill="${c}" stroke="${OUT}" stroke-width="${SW}"/><rect x="154" y="88" width="24" height="38" rx="11" fill="${c}" stroke="${OUT}" stroke-width="${SW}"/>`,
+    gravata: `<path d="M100 178 L80 166 L80 190 Z M100 178 L120 166 L120 190 Z" fill="${c}" stroke="${OUT}" stroke-width="2.6" stroke-linejoin="round"/><circle cx="100" cy="178" r="6" fill="${cs}" stroke="${OUT}" stroke-width="2.4"/>`,
+    cracha: `<path d="M80 168 L118 200 M120 168 L126 200" stroke="#c1272d" stroke-width="5" stroke-linecap="round"/><rect x="108" y="196" width="34" height="24" rx="4" fill="#fff" stroke="${OUT}" stroke-width="2.4"/>` +
+      `<rect x="108" y="196" width="34" height="8" rx="3" fill="#c1272d"/><text x="125" y="214" font-size="7" font-family="Arial" font-weight="bold" text-anchor="middle" fill="#111">SENAI</text>`,
+    estrela: estrela(132, 190, 9, c)
+  })[e.acessorio] || "";
+}
+
+export function svgMascote(id, humor = "feliz", estilo = null) {
   const chave = String(id || "").toLowerCase();
   if (!PERSONAGENS[chave]) throw new Error(`Mascote desconhecido: ${id}`);
   if (!HUMORES.includes(humor)) humor = "feliz";
-  const p = PAL[chave];
+  const est = estilo || ESTILOS[chave] || {}, p = aplicarEstilo(PAL[chave], est);
   const uid = `${chave}-${sufixo()}`;
   const c = PERSONAGENS[chave](p, uid, humor);
   const fz = c.face;
@@ -441,6 +486,7 @@ export function svgMascote(id, humor = "feliz") {
     c.oculos || "",
     sobrancelhas(humor, p.cabelo, fz.by, fz.esp),
     c.frente,
+    acessorioSvg(est),
     corpoExtra,
     extrasHumor(humor, fz),
   ];

@@ -45,6 +45,7 @@
         <button data-aba="retorno"><span aria-hidden="true">🚩</span>Erros e sugestões</button></div>
       <div class="menu-grupo" role="group" aria-label="Sistema"><span class="menu-rotulo" aria-hidden="true">Sistema</span>
         <button data-aba="gamificacao"><span aria-hidden="true">🏅</span>Gamificação</button>
+        <button data-aba="meumascote"><span aria-hidden="true">🙂</span>Meu mascote</button>
         <button data-aba="simulacao"><span aria-hidden="true">🧪</span>Simulação</button>
         <button data-aba="equipe"><span aria-hidden="true">🤝</span>Equipe</button>
         <button data-aba="config"><span aria-hidden="true">⚙</span>Configuração</button></div>
@@ -383,6 +384,13 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
     </div>
 
     <!-- CONFIG -->
+    <!-- MEU MASCOTE (js/admin-mascote.js): cada professor edita o seu mascote, com padrão e 4 visuais salvos -->
+    <div id="aba-meumascote" class="oculto">
+      <div class="card"><div class="card-cab"><h2>🙂 Meu mascote</h2></div>
+        <p class="pequeno" style="margin:0">O mascote é o seu personagem nas provas: ele explica as regras e anima os alunos. Mude as cores, a roupa e o acessório; o <b>padrão</b> fica sempre guardado e você tem mais <b>4 visuais salvos</b>. Só vale para os alunos depois de “Usar este visual”.</p></div>
+      <div id="mascoteConteudo"></div>
+    </div>
+
     <!-- SIMULAÇÃO: todas as formas de testar e demonstrar num lugar só (nada é gravado) -->
     <div id="aba-simulacao" class="oculto">
       <div class="card"><div class="card-cab"><h2>🧪 Simulação</h2></div>
@@ -403,7 +411,7 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
         <div class="linha acoes"><button type="button" id="simAmbCriar">Criar ambiente de teste</button><button type="button" class="perigo" id="simAmbApagar">🗑 Apagar ambiente de teste</button></div></article>
       <div class="sim-grade">
         <article class="card sim-card"><div class="sim-e">🎒</div><h3>Ver como aluno</h3>
-          <p class="pequeno">A página do aluno com a <b>sua conta</b>: perfil, personagem, cartão, conquistas, status do dia e o <b>mural da turma com colegas fictícios</b>. Dá para se dar conquistas e notas de mentira. Fica só no seu navegador.</p>
+          <p class="pequeno">A página de um <b>aluno fictício</b> (Alex): perfil, personagem, cartão, conquistas, status do dia e o <b>mural da turma com colegas fictícios</b>. Dá para se dar conquistas e notas de mentira. Fica só no seu navegador.</p>
           <a class="btn" href="index.html?simular=1" target="_blank" rel="noopener">Abrir a simulação do aluno →</a></article>
         <article class="card sim-card"><div class="sim-e">♿</div><h3>Prova de demonstração de acessibilidade</h3>
           <p class="pequeno">Prova fixa de SQL com <b>3 perfis fictícios</b> (TEA, deficiência intelectual, baixa visão e dislexia) e a prova original: visual, tempo, vidas, leitura em voz, apoios e todos os formatos de questão adaptada, com os bastidores de cada adaptação.</p>

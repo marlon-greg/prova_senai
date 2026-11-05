@@ -55,6 +55,10 @@ service cloud.firestore {
       allow read: if logado();
       allow write: if admin();
     }
+    match /config/mascotes {
+      allow read: if logado();
+      allow write: if admin();
+    }
     match /config/gamificacao {
       allow read: if logado();
       allow write: if admin();
@@ -68,6 +72,16 @@ service cloud.firestore {
     match /equipe/{em} {
       allow read: if equipe() || (logado() && em == email());
       allow write: if admin();
+    }
+
+    // ---------- mascotes dos professores ----------
+    // estilo em uso (ativo) + até 4 "saves". Todos leem (o aluno vê o mascote com o estilo do professor);
+    // só o professor dono do mascote (config/mascotes.donos[id] = e-mail, definido pelo admin) ou o admin mudam.
+    match /mascotes/{m} {
+      allow read: if logado();
+      allow write: if (admin() || get(/databases/$(db)/documents/config/mascotes).data.get('donos', {}).get(m, '') == email().lower())
+                   && request.resource.data.keys().hasOnly(['ativo', 'saves', 'atualizadoEm', 'atualizadoPor'])
+                   && request.resource.data.get('saves', []).size() <= 4;
     }
 
     // ---------- bancos de questões ----------
@@ -199,6 +213,8 @@ service cloud.firestore {
       // diário do aluno: a auxiliar de inclusão vinculada escreve (id = data_autor); professores e admin leem e comentam
       match /diario/{d} {
         allow read: if cuidaDe(e);
+        // aluno FICTÍCIO do ambiente de teste (menu Simulação): a equipe grava e apaga o diário de mentira
+        allow create, update, delete: if professor() && e.matches('.+@simulacao[.]teste');
         allow create: if (minhaAluna(e) || superAdmin()) && request.resource.data.autor == email().lower()
                       && d == request.resource.data.data + '_' + email().lower();
         allow update: if ((minhaAluna(e) || superAdmin()) && resource.data.autor == email().lower()
@@ -246,7 +262,8 @@ service cloud.firestore {
       // alunos FICTÍCIOS do ambiente de teste (menu Simulação)
       allow write: if professor() && u.matches('sim-.+');
       allow write: if logado() && u == uid()
-                   && request.resource.data.keys().hasOnly(['avatar', 'apelido', 'status', 'statusEm', 'email', 'cartao', 'atualizadoEm'])
+                   && request.resource.data.keys().hasOnly(['avatar', 'apelido', 'status', 'statusEm', 'email', 'cartao', 'saves', 'atualizadoEm'])
+                   && request.resource.data.get('saves', []).size() <= 4
                    && (!('email' in request.resource.data) || request.resource.data.email == email().lower())
                    && (!('cartao' in request.resource.data) || (request.resource.data.cartao is map && request.resource.data.cartao.keys().hasOnly(['foto', 'lado', 'medalhas'])))
                    && (!('status' in request.resource.data) || (request.resource.data.status is string && request.resource.data.status.size() <= 40));
