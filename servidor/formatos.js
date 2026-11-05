@@ -12,7 +12,7 @@ export const FORMATOS = {
   ligar:        { nome: "Ligar colunas", icone: "🔗", auto: true, desc: "Liga-pontos: cada item da esquerda com o seu par da direita." },
   lacunas:      { nome: "Completar lacunas", icone: "🧩", auto: true, desc: "Texto com espaços para completar escolhendo de um banco de palavras." },
   ordenar:      { nome: "Ordenar passos", icone: "🔢", auto: true, desc: "Colocar os passos na ordem certa." },
-  etapas:       { nome: "Questão em etapas", icone: "🪜", auto: true, desc: "A questão dividida em perguntas pequenas, uma de cada vez, cada uma com poucas opções." },
+  etapas:       { nome: "Questão em etapas", icone: "👣", auto: true, desc: "A questão dividida em perguntas pequenas, uma de cada vez, cada uma com poucas opções." },
   escritaApoio: { nome: "Resposta escrita com apoio", icone: "✍", auto: false, desc: "Resposta escrita com começo da frase pronto e uma lista do que não pode faltar." }
 };
 export const FORMATOS_INTERATIVOS = new Set(["menosAlt", "vf", "ligar", "lacunas", "ordenar", "etapas"]);
