@@ -166,7 +166,18 @@ const diasMarcados = () => [...document.querySelectorAll("#tDias input:checked")
 function limparFormTurma() {
   turmaEditando = null; $("#tNome").value = ""; $("#tEmails").value = ""; previaTurma(); marcarDias([]);
   $("#tFormTitulo").textContent = "Nova turma"; $("#btnCancelarTurma").classList.add("oculto");
+  const d = drawerTurma; drawerTurma = null; d?.fechar();
 }
+// formulário da turma num drawer (o mesmo bloco #formTurma, com os mesmos ids)
+let drawerTurma = null;
+function abrirFormTurma() {
+  if (!podeEditar()) return toast("Seu papel não permite cadastrar turmas.", "erro");
+  if (drawerTurma) return;
+  drawerTurma = drawer({ titulo: $("#tFormTitulo").textContent, corpo: $("#formTurma"), largo: true,
+    aoFechar: () => { $("#formTurma").classList.add("oculto"); if (drawerTurma) { drawerTurma = null; limparFormTurma(); } },
+    acoes: [{ t: "Cancelar", classe: "leve" }, { t: "Salvar turma", onClick: () => { $("#btnSalvarTurma").click(); return false; } }] });
+}
+$("#btnNovaTurma").onclick = () => { limparFormTurma(); abrirFormTurma(); };
 $("#btnCancelarTurma").onclick = limparFormTurma;
 $("#btnSalvarTurma").onclick = async () => {
   if (!podeEditar()) return toast("Seu papel não permite cadastrar turmas.", "erro");
@@ -205,7 +216,7 @@ async function carregarTurmas() {
 }
 function desenharTurmas() {
   const box = $("#listaTurmas");
-  if (!turmasCache.length) { $("#ftContagem").textContent = ""; box.innerHTML = `<div class="vazio"><div class="icone">👥</div><p>Nenhuma turma ainda. Cadastre a primeira acima colando os nomes completos (ou e-mails) dos alunos.</p></div>`; return; }
+  if (!turmasCache.length) { $("#ftContagem").textContent = ""; box.innerHTML = vazio({ e: "👥", texto: "Nenhuma turma ainda. Cadastre a primeira colando os nomes completos (ou e-mails) dos alunos.", acao: podeEditar() ? `<button type="button" data-nova-turma>+ Nova turma</button>` : "" }); box.querySelector("[data-nova-turma]")?.addEventListener("click", () => $("#btnNovaTurma").click()); return; }
   const busca = semAcento($("#ftBusca").value.trim()), fS = $("#ftSemestre").value, fM = chaveTexto($("#ftMateria").value), fD = $("#ftDia").value;
   // pesquisa no nome da turma ou nos alunos (nome/e-mail); achou aluno = abre a lista com só quem bateu
   const linhas = turmasCache.filter(t => !fD || (t.diasAula || []).map(String).includes(fD)).filter(t => (!fS && !fM) || (turmaSemMat[t.id] || []).some(x => (!fS || x.sem === fS) && (!fM || x.mat === fM))).map(t => {
@@ -225,14 +236,14 @@ function desenharTurmas() {
        <details class="lista-alunos" ${achados ? "open" : ""}><summary class="pequeno">${achados ? `${achados.length} encontrado(s)` : "ver alunos"}</summary><ul>${lista}</ul></details></td>
      <td>${pv.length ? `<button class="leve mini" data-vprovas="${t.id}" title="${esc(pv.map(p => p.titulo).join(" · "))}">📝 ${pv.length} prova(s)</button>${pv.some(p => p.liberada) ? `<br><span class="tag on">● ${pv.filter(p => p.liberada).length} liberada(s)</span>` : ""}` : `<span class="pequeno">nenhuma</span>`}</td>
      <td class="pequeno">${dataBR(t.atualizadoEm || t.criadoEm)}</td>
-     <td class="td-acoes">${podeEditar() ? `<button class="leve mini" data-edt="${t.id}">✎ Editar</button>` : ""} ${ehAdmin() ? `<button class="perigo mini" data-delt="${t.id}">🗑 Apagar</button>` : ""}</td></tr>`;
+     <td class="td-acoes">${podeEditar() ? `<button class="leve mini" data-edt="${t.id}">✎ Editar</button>` : ""} ${ehAdmin() ? menuHTML({ aria: `Mais ações: ${t.nome}`, itensHTML: itemMenu({ e: "🗑", t: "Apagar turma", perigo: true, attrs: `data-delt="${t.id}"` }) }) : ""}</td></tr>`;
   }).join("") + "</table></div>";
   box.querySelectorAll("[data-vprovas]").forEach(b => b.onclick = () => { filtroTurmaPendente = b.dataset.vprovas; $("#fpBusca").value = ""; $("#fpStatus").value = ""; abrirAba("provas"); });
   box.querySelectorAll("[data-edt]").forEach(b => b.onclick = () => {
     const t = turmasCache.find(x => x.id === b.dataset.edt);
     turmaEditando = t.id; $("#tNome").value = t.nome || ""; $("#tEmails").value = alunosDaTurma(t).map(linhaAluno).join("\n"); previaTurma(); marcarDias(t.diasAula);
     $("#tFormTitulo").textContent = `Editar turma ${t.nome}`; $("#btnCancelarTurma").classList.remove("oculto");
-    $("#tNome").scrollIntoView({ behavior: "smooth", block: "center" }); $("#tNome").focus();
+    abrirFormTurma();
   });
   box.querySelectorAll("[data-delt]").forEach(b => b.onclick = async () => {
     const t = turmasCache.find(x => x.id === b.dataset.delt);
@@ -912,7 +923,7 @@ async function criarProva() {
 }
 $("#btnCriarProva").onclick = async () => { if (await criarProva()) drawerNovaProva?.fechar(); };
 $("#btnNovaProva").onclick = abrirFormNovaProva;
-ligarFiltros($("#aba-provas .toolbar")); ligarFiltros($("#aba-bancos .toolbar"));
+ligarFiltros(document);   // todas as barras de busca + Filtros do painel
 ajudasEmPopover(document);
 
 // ---------- editar prova ----------
@@ -1651,11 +1662,17 @@ function desenharEquipe() {
   document.querySelectorAll("[data-rm]").forEach(b => b.onclick = async () => { if (await confirmar("Remover " + b.dataset.rm + " da equipe?", { titulo: "Remover membro", ok: "Remover", perigo: true })) { await deleteDoc(doc(db, "equipe", b.dataset.rm)); carregarEquipe(); } });
 }
 $("#feBusca").oninput = $("#fePapel").onchange = () => desenharEquipe();
+let drawerEquipe = null;
+$("#btnNovoMembro").onclick = () => {
+  if (!ehAdmin()) return toast("Só admin cadastra equipe.", "erro");
+  drawerEquipe = drawer({ titulo: "Novo membro da equipe", corpo: $("#formEquipe"), aoFechar: () => { $("#formEquipe").classList.add("oculto"); drawerEquipe = null; },
+    acoes: [{ t: "Cancelar", classe: "leve" }, { t: "Adicionar", onClick: () => { $("#btnAddEquipe").click(); return false; } }] });
+};
 $("#btnAddEquipe").onclick = async () => {
   if (!ehAdmin()) return toast("Só admin cadastra equipe.", "erro");
   const email = $("#eEmail").value.trim().toLowerCase(); if (!email.includes("@")) return toast("E-mail inválido.", "erro");
   await setDoc(doc(db, "equipe", email), { email, nome: $("#eNome").value.trim(), papel: $("#ePapel").value, criadoEm: serverTimestamp(), criadoPor: eu.email });
-  $("#eEmail").value = ""; $("#eNome").value = ""; toast("Cadastrado", "ok"); carregarEquipe();
+  $("#eEmail").value = ""; $("#eNome").value = ""; toast("Cadastrado", "ok"); drawerEquipe?.fechar(); carregarEquipe();
 };
 
 // ============================================================ CONFIG

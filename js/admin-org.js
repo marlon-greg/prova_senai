@@ -9,6 +9,7 @@ import { db, esc, $, toast, modal, confirmar, traduzirErro, temaDe, ordenarTemas
          semestreDe, rotuloSemestre, semestreVizinho, chaveTexto, semestreDaProva, materiaDaProva, dataCurta, nomeTurma } from "./common.js";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, abrirMaterialEmAba, tamanhoTexto, erroMaterial } from "./material.js";
 import { lerPlanoIA, classificarTopicosIA, lerCursoIA } from "./ia.js";
+import { menuHTML, itemMenu, vazio } from "./ui.js";
 import { collection, doc, getDocs, addDoc, updateDoc, deleteDoc, writeBatch, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -123,7 +124,7 @@ function montar() {
 function desenhar() {
   desenharCursos();
   const box = $("#orgArvore");
-  if (!turmas.length) { box.innerHTML = `<div class="vazio"><div class="icone">🏫</div><p>Cadastre as turmas na aba <b>Turmas</b> primeiro.</p></div>`; $("#orgContagem").textContent = ""; return; }
+  if (!turmas.length) { box.innerHTML = vazio({ e: "🏫", texto: "Cadastre as turmas na aba <b>Turmas</b> primeiro." }); $("#orgContagem").textContent = ""; return; }
   const fT = $("#orgTurma").value, fS = $("#orgSemestre").value, busca = chaveTexto($("#orgBusca").value);
   const arv = montar(), atual = semestreDe();
   let nMat = 0, nTop = 0;
@@ -137,17 +138,17 @@ function desenhar() {
       if (!cards.length) return "";
       nMat += cards.length; nTop += cards.reduce((x, n) => x + (n.plano?.topicos?.length || 0), 0);
       const id = `s:${t.id}:${s}`, aberto = busca || fS || (s === atual ? !fechados.has(id) : abertos.has(id));
-      return `<details class="grupo-semestre" data-g="${id}" ${aberto ? "open" : ""}>
-        <summary><span class="gs-nome">📅 ${rotuloSemestre(s)}</span>${s === atual ? `<span class="tag on">atual</span>` : ""}
-          <span class="tag">${cards.length} matéria(s)</span><span class="tag">${cards.reduce((x, n) => x + n.provas.length, 0)} prova(s)</span></summary>
-        <div class="cartoes-materias">${cards.map(n => cartaoMateria(t, s, n)).join("")}</div></details>`;
+      return `<details class="recolhivel sub" data-g="${id}" ${aberto ? "open" : ""}>
+        <summary><span class="rc-titulo">📅 ${rotuloSemestre(s)}</span><span class="rc-resumo">${s === atual ? `<span class="chip on">atual</span>` : ""}
+          <span class="chip">${cards.length} matéria(s)</span><span class="chip">${cards.reduce((x, n) => x + n.provas.length, 0)} prova(s)</span></span></summary>
+        <div class="rc-corpo cartoes-materias">${cards.map(n => cartaoMateria(t, s, n)).join("")}</div></details>`;
     }).join("");
     if ((fS || busca) && !blocos) return "";
     const id = `t:${t.id}`, aberto = busca || fT || !fechados.has(id);
-    return `<details class="grupo-turma" data-g="${id}" ${aberto ? "open" : ""}>
-      <summary><span class="gt-nome">👥 ${esc(nomeTurma(t))}</span><span class="pequeno">${ctx.alunosDaTurma(t).length} alunos</span>
-        ${ctx.podeEditar() ? `<button class="leve mini" data-novo-t="${t.id}" type="button">+ Matéria</button>` : ""}</summary>
-      <div class="gt-corpo">${cursoDaTurmaHTML(t, sm)}${blocos || `<p class="pequeno" style="margin:0 16px 14px">Nenhuma matéria ${fS ? `em ${rotuloSemestre(fS)}` : "ainda"}. Use <b>+ Matéria</b> (ou as matérias do plano de curso, acima).</p>`}</div></details>`;
+    return `<details class="recolhivel" data-g="${id}" ${aberto ? "open" : ""}>
+      <summary><span class="rc-titulo">👥 ${esc(nomeTurma(t))}</span><span class="rc-resumo"><span class="chip">${ctx.alunosDaTurma(t).length} alunos</span></span>
+        ${ctx.podeEditar() ? `<span class="rc-direita"><button class="leve mini" data-novo-t="${t.id}" type="button">+ Matéria</button></span>` : ""}</summary>
+      <div class="rc-corpo">${cursoDaTurmaHTML(t, sm)}${blocos || `<p class="pequeno" style="margin:0 16px 14px">Nenhuma matéria ${fS ? `em ${rotuloSemestre(fS)}` : "ainda"}. Use <b>+ Matéria</b> (ou as matérias do plano de curso, acima).</p>`}</div></details>`;
   }).join("");
   $("#orgContagem").textContent = `${nMat} matéria(s) · ${nTop} tópico(s) nos planos`;
   box.innerHTML = html || `<div class="vazio"><div class="icone">🔎</div><p>Nada encontrado com esses filtros.</p></div>`;
@@ -193,13 +194,14 @@ function cartaoMateria(t, s, n) {
         <div class="barra"><i style="width:${Math.round(dados / topicos.length * 100)}%"></i></div></div>` : ""}
     </div>
     ${origemCurso ? `<p class="pequeno" style="margin:0">📘 Tópicos do plano de curso (${esc(doCurso.curso.nome)}), sem datas. As datas e as provas ficam no plano de ensino, se quiser.</p>` : ""}
-    ${topicos.length ? `<ol class="lista-topicos">${topicos.map(x => {
+    ${topicos.length ? `<details class="recolhivel leve topicos-materia"><summary><span class="rc-titulo">🏷 ${topicos.length} tópico(s)</span>${!origemCurso ? `<span class="rc-resumo"><span class="chip ok">✓ ${dados} dado(s)</span>${topicos.some(x => estadoTopico(x) === "andamento") ? `<span class="chip info">▶ em andamento</span>` : ""}</span>` : ""}</summary>
+      <div class="rc-corpo"><ol class="lista-topicos">${topicos.map(x => {
       const k = chaveTexto(x.nome), e = estadoTopico(x), nq = cont[k] || 0, ep = emProva[k] || [];
       return `<li class="topico${e ? " e-" + e : ""}"><span class="tp-nome">${esc(x.nome)}</span>
         ${periodo(x) ? `<span class="pequeno">${periodo(x)}</span>` : ""}${e ? `<span class="tag ${e === "dado" ? "ok" : e === "andamento" ? "nota" : "off"}">${ROT_ESTADO[e]}</span>` : ""}
         <span class="tag ${nq ? "" : "aviso"}" title="Questões com este tópico nos bancos da matéria">📝 ${nq} questão(ões)</span>
         ${ep.length ? `<span class="tag nota" title="${esc(ep.join(" · "))}">🧪 em ${ep.length} prova(s)</span>` : ""}</li>`;
-    }).join("")}</ol>` : p ? `<p class="pequeno">Nenhum tópico ainda. ${pode ? "Use <b>✎ Editar</b> ou envie o PDF do plano e peça para a IA ler." : ""}</p>` : ""}
+    }).join("")}</ol></div></details>` : p ? `<p class="pequeno">Nenhum tópico ainda. ${pode ? "Use <b>✎ Editar</b> ou envie o PDF do plano e peça para a IA ler." : ""}</p>` : ""}
     ${soBanco.length ? `<div class="cm-extra"><span class="pequeno">${p ? "Tópicos nos bancos, fora do plano:" : "Tópicos nos bancos:"}</span>
       ${soBanco.map(k => `<span class="tag${k === "geral" ? " aviso" : ""}" title="${k === "geral" ? "Questões sem tópico: use 🏷 Tópicos na aba Bancos" : ""}">${esc(nomeDe(k))} · ${cont[k]}</span>`).join("")}</div>` : ""}
     <div class="cm-provas"><span class="rotulo">Provas</span>
@@ -210,11 +212,13 @@ function cartaoMateria(t, s, n) {
     ${p?.observacoes ? `<p class="pequeno cm-obs">📝 ${esc(p.observacoes)}</p>` : ""}
     <div class="cm-acoes">
       ${arqs.map(a => `<span class="item-arq"><button class="leve mini" type="button" data-verarq="${p.id}" data-arq="${a.id}" title="Abrir o PDF">📄 ${esc(a.titulo)}</button>${pode ? `<button class="discreto mini perigo-txt" type="button" data-delarq="${p.id}" data-arq="${a.id}" aria-label="Apagar o PDF ${esc(a.titulo)}">✕</button>` : ""}</span>`).join("")}
-      ${pode && p ? `<button class="leve mini" type="button" data-editar="${p.id}">✎ Editar</button>
-        <button data-ajuda-item="planoEnsino"></button><label class="botao-arquivo leve mini">⬆ PDF do plano<input type="file" accept="application/pdf,.pdf" hidden data-enviar="${p.id}"></label>
-        ${arqs.length ? `<button class="leve mini" type="button" data-ler="${p.id}" title="A IA lê o PDF e preenche os tópicos e as provas previstas (você revisa antes de salvar)">🤖 Ler plano com IA</button>` : ""}
+      ${pode && p ? `<span class="cm-principais"><button class="leve mini" type="button" data-editar="${p.id}">✎ Editar</button>
         <button class="leve mini" type="button" data-criar="${p.id}">+ Nova prova</button>
-        ${ctx.ehAdmin() ? `<button class="discreto mini perigo-txt" type="button" data-delplano="${p.id}" aria-label="Apagar o plano">🗑</button>` : ""}` : ""}
+        ${menuHTML({ aria: `Mais ações: ${n.materia || "matéria"}`, itensHTML:
+          `<label class="menu-item botao-arquivo" role="menuitem" tabindex="0"><span class="e" aria-hidden="true">⬆</span><span>Enviar PDF do plano</span><input type="file" accept="application/pdf,.pdf" hidden data-enviar="${p.id}"></label>`
+          + (arqs.length ? itemMenu({ e: "🤖", t: "Ler plano com IA", attrs: `data-ler="${p.id}" title="A IA lê o PDF e preenche os tópicos e as provas previstas (você revisa antes de salvar)"` }) : "")
+          + (ctx.ehAdmin() ? "<hr>" + itemMenu({ e: "🗑", t: "Apagar o plano", perigo: true, attrs: `data-delplano="${p.id}"` }) : "") })}
+        <button data-ajuda-item="planoEnsino"></button></span>` : ""}
       ${pode && !p ? `<button class="mini${doCurso ? " leve" : ""}" type="button" data-cadastrar="${t.id}|${s}|${esc(n.materia)}">${doCurso ? "🗓 Datas das provas (plano de ensino)" : "+ Cadastrar plano desta matéria"}</button>` : ""}
     </div></article>`;
 }

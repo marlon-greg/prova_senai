@@ -31,37 +31,40 @@
 
   <section id="telaPainel" class="painel-layout oculto">
     <nav class="abas menu-lateral" aria-label="Seções do painel">
-      <button data-aba="organizacao">Organização</button>
-      <button data-aba="provas" class="ativa">Provas</button>
-      <button data-aba="diario">Diário</button>
-      <button data-aba="resultados">Resultados</button>
-      <button data-aba="relatorios">Relatórios</button>
-      <button data-aba="acessibilidade">Acessibilidade</button>
-      <button data-aba="historico">Provas adaptadas</button>
-      <button data-aba="bancos">Bancos de questões</button>
-      <button data-aba="turmas">Turmas</button>
-      <button data-aba="retorno">Retorno dos alunos</button>
-      <button data-aba="gamificacao">Gamificação</button>
-      <button data-aba="equipe">Equipe</button>
-      <button data-aba="config">Configuração</button>
+      <div class="menu-grupo" role="group" aria-label="Ensino"><span class="menu-rotulo" aria-hidden="true">Ensino</span>
+        <button data-aba="organizacao"><span aria-hidden="true">🏫</span>Organização</button>
+        <button data-aba="provas" class="ativa"><span aria-hidden="true">📝</span>Provas</button>
+        <button data-aba="bancos"><span aria-hidden="true">🗂</span>Bancos de questões</button>
+        <button data-aba="turmas"><span aria-hidden="true">👥</span>Turmas</button></div>
+      <div class="menu-grupo" role="group" aria-label="Alunos"><span class="menu-rotulo" aria-hidden="true">Alunos</span>
+        <button data-aba="resultados"><span aria-hidden="true">📊</span>Resultados</button>
+        <button data-aba="relatorios"><span aria-hidden="true">📈</span>Relatórios</button>
+        <button data-aba="diario"><span aria-hidden="true">📔</span>Diário</button>
+        <button data-aba="acessibilidade"><span aria-hidden="true">♿</span>Acessibilidade</button>
+        <button data-aba="historico"><span aria-hidden="true">🧩</span>Provas adaptadas</button>
+        <button data-aba="retorno"><span aria-hidden="true">💬</span>Retorno dos alunos</button></div>
+      <div class="menu-grupo" role="group" aria-label="Sistema"><span class="menu-rotulo" aria-hidden="true">Sistema</span>
+        <button data-aba="gamificacao"><span aria-hidden="true">🏅</span>Gamificação</button>
+        <button data-aba="equipe"><span aria-hidden="true">🧑‍🏫</span>Equipe</button>
+        <button data-aba="config"><span aria-hidden="true">⚙</span>Configuração</button></div>
     </nav>
     <div class="painel-conteudo">
 
     <!-- ORGANIZAÇÃO (js/admin-org.js): turma → semestre → matéria → tópicos -->
     <div id="aba-organizacao" class="oculto">
       <div class="card">
-        <div class="card-cab"><h2>Organização</h2><button id="orgNovo" class="mini">+ Matéria / plano de ensino</button></div>
+        <div class="card-cab"><h2>Organização</h2><div class="cc-acoes"><button id="orgNovo">+ Matéria / plano de ensino</button></div></div>
         <details class="ajuda"><summary>Como funciona</summary>
           <p>Tudo fica organizado em <b>Turma → Semestre → Matéria → Tópicos</b>. Cada matéria de uma turma num semestre tem um <b>plano de ensino</b>: os tópicos na ordem em que serão dados (com as datas previstas) e as provas previstas. O plano é vivo: edite quando mudar.</p>
           <p>Envie o <b>PDF do plano</b> no cartão da matéria e clique em <b>🤖 Ler plano com IA</b>: a IA preenche os tópicos e as provas, e você revisa antes de salvar.</p>
           <p>Os tópicos do plano são os mesmos <b>tópicos das questões</b> (aba Bancos → 🏷 Tópicos): assim o cartão mostra quantas questões há de cada tópico, quais já caíram em prova, e os relatórios mostram em quais tópicos cada aluno vai melhor ou pior.</p>
           <p>A prova entra na matéria pela <b>turma + semestre + matéria</b> do formulário da prova. Provas antigas usam a data de criação e a matéria do banco.</p></details>
-        <div class="barra-filtros" role="search">
+<div class="toolbar" role="search">
           <input type="search" id="orgBusca" placeholder="Pesquisar matéria, tópico ou prova…" aria-label="Pesquisar matérias e tópicos">
-          <select id="orgTurma" aria-label="Filtrar por turma"><option value="">👥 Todas as turmas</option></select>
-          <select id="orgSemestre" aria-label="Filtrar por semestre"><option value="">📅 Todos os semestres</option></select>
+          <button type="button" class="leve btn-filtros" aria-expanded="false" aria-controls="orgBuscaPainel"><span class="e" aria-hidden="true">⚙</span>Filtros<span class="badge" aria-label="filtros ativos"></span></button>
+          <span id="orgContagem" class="tb-contagem" aria-live="polite"></span>
+          <div class="painel-filtros" id="orgBuscaPainel" hidden><label class="pf-campo"><span>Turma</span><select id="orgTurma" aria-label="Filtrar por turma"><option value="">Todas as turmas</option></select></label><label class="pf-campo"><span>Semestre</span><select id="orgSemestre" aria-label="Filtrar por semestre"><option value="">Todos os semestres</option></select></label><div class="pf-acoes"><button type="button" class="discreto mini pf-limpar oculto">Limpar filtros</button></div></div>
         </div>
-        <p id="orgContagem" class="pequeno" aria-live="polite"></p>
       </div>
       <div class="card" id="orgCursos"></div>
       <div id="orgArvore"></div>
@@ -181,31 +184,32 @@
     <!-- TURMAS -->
     <div id="aba-turmas" class="oculto">
       <div class="card">
-        <h2 id="tFormTitulo">Nova turma</h2>
-        <div class="grade">
-          <div><label for="tNome">Nome da turma</label><input type="text" id="tNome" placeholder="DETS-1A-26CT-S"></div>
-          <div><span class="rotulo">Dias de aula</span><div id="tDias" class="dias-aula" role="group" aria-label="Dias de aula da turma">
-            <label><input type="checkbox" value="1"> seg</label><label><input type="checkbox" value="2"> ter</label><label><input type="checkbox" value="3"> qua</label>
-            <label><input type="checkbox" value="4"> qui</label><label><input type="checkbox" value="5"> sex</label><label><input type="checkbox" value="6"> sáb</label></div>
-            <p class="pequeno" style="margin:4px 0 0">O diário e a sequência 🔥 contam só os dias de aula. Horário: <span id="tHorario"></span> (igual para todas as turmas; muda em Configuração).</p></div>
+        <div class="card-cab"><h2>Turmas cadastradas</h2><div class="cc-acoes"><button type="button" id="btnNovaTurma" aria-haspopup="dialog">+ Nova turma</button></div></div>
+        <div class="toolbar" role="search">
+          <input type="search" id="ftBusca" placeholder="Pesquisar turma, aluno ou e-mail…" aria-label="Pesquisar turmas e alunos">
+          <button type="button" class="leve btn-filtros" aria-expanded="false" aria-controls="ftBuscaPainel"><span class="e" aria-hidden="true">⚙</span>Filtros<span class="badge" aria-label="filtros ativos"></span></button>
+          <span id="ftContagem" class="tb-contagem" aria-live="polite"></span>
+          <div class="painel-filtros" id="ftBuscaPainel" hidden><label class="pf-campo"><span>Dia de aula</span><select id="ftDia" aria-label="Filtrar por dia de aula"><option value="">Qualquer dia de aula</option><option value="1">segunda</option><option value="2">terça</option><option value="3">quarta</option><option value="4">quinta</option><option value="5">sexta</option><option value="6">sábado</option></select></label><label class="pf-campo"><span>Semestre</span><select id="ftSemestre" aria-label="Filtrar turmas por semestre"><option value="">Todos os semestres</option></select></label><label class="pf-campo"><span>Matéria</span><select id="ftMateria" aria-label="Filtrar turmas por matéria"><option value="">Todas as matérias</option></select></label><div class="pf-acoes"><button type="button" class="discreto mini pf-limpar oculto">Limpar filtros</button></div></div>
         </div>
+        <div id="listaTurmas"></div></div>
+      <!-- formulário da turma: abre num drawer -->
+      <div id="formTurma" class="oculto">
+        <h2 id="tFormTitulo" class="oculto">Nova turma</h2>
+        <label for="tNome">Nome da turma</label><input type="text" id="tNome" placeholder="DETS-1A-26CT-S">
+        <span class="rotulo" style="margin-top:16px">Dias de aula</span><div id="tDias" class="dias-aula" role="group" aria-label="Dias de aula da turma">
+          <label><input type="checkbox" value="1"> seg</label><label><input type="checkbox" value="2"> ter</label><label><input type="checkbox" value="3"> qua</label>
+          <label><input type="checkbox" value="4"> qui</label><label><input type="checkbox" value="5"> sex</label><label><input type="checkbox" value="6"> sáb</label></div>
+        <p class="pequeno" style="margin:4px 0 16px">O diário e a sequência 🔥 contam só os dias de aula. Horário: <span id="tHorario"></span> (igual para todas as turmas; muda em Configuração).</p>
         <label for="tEmails">Alunos — nome completo (um por linha) <button data-ajuda-item="turmaLista"></button></label>
-        <textarea id="tEmails" style="min-height:160px" placeholder="Maria Eduarda da Silva Souza
+        <textarea id="tEmails" style="min-height:220px" placeholder="Maria Eduarda da Silva Souza
 João Pedro Lima <joao.lima@edu.senai.br>
 ana.costa@edu.senai.br
 
 Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá para colar direto da planilha."></textarea>
-        <details class="ajuda"><summary>Como funciona</summary><p>Quem estiver <b>só com o nome</b> é vinculado sozinho no primeiro login: o sistema compara o nome da conta Google com a lista (sem diferenciar maiúsculas e acentos) e grava o e-mail. Se o nome da conta for diferente (abreviado, por exemplo), o aluno não vê a prova e a tela mostra o nome e o e-mail da conta: escreva o e-mail na linha dele.</p></details>
+        <details class="recolhivel leve"><summary><span class="rc-titulo">ⓘ Como o aluno só com o nome é vinculado</span></summary><div class="rc-corpo"><p class="pequeno" style="margin:0">Quem estiver <b>só com o nome</b> é vinculado sozinho no primeiro login: o sistema compara o nome da conta Google com a lista (sem diferenciar maiúsculas e acentos) e grava o e-mail. Se o nome da conta for diferente (abreviado, por exemplo), o aluno não vê a prova e a tela mostra o nome e o e-mail da conta: escreva o e-mail na linha dele.</p></div></details>
         <p id="tPrevia" class="pequeno" role="status" aria-live="polite"></p>
-        <div class="linha acoes"><button id="btnSalvarTurma">Salvar turma</button><button id="btnCancelarTurma" class="leve oculto">Cancelar edição</button></div>
+        <div class="oculto"><button id="btnSalvarTurma">Salvar turma</button><button id="btnCancelarTurma" class="leve oculto">Cancelar edição</button></div>
       </div>
-      <div class="card"><h2>Turmas cadastradas</h2>
-        <div class="barra-filtros" role="search"><input type="search" id="ftBusca" placeholder="Pesquisar turma, aluno ou e-mail…" aria-label="Pesquisar turmas e alunos">
-          <select id="ftDia" aria-label="Filtrar por dia de aula"><option value="">📆 Qualquer dia de aula</option><option value="1">segunda</option><option value="2">terça</option><option value="3">quarta</option><option value="4">quinta</option><option value="5">sexta</option><option value="6">sábado</option></select>
-          <select id="ftSemestre" aria-label="Filtrar turmas por semestre"><option value="">📅 Todos os semestres</option></select>
-          <select id="ftMateria" aria-label="Filtrar turmas por matéria"><option value="">📚 Todas as matérias</option></select></div>
-        <p id="ftContagem" class="pequeno" aria-live="polite"></p>
-        <div id="listaTurmas"></div></div>
     </div>
 
     <!-- RESULTADOS -->
@@ -264,21 +268,23 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
     <!-- ACESSIBILIDADE (js/admin-acess.js) -->
     <div id="aba-acessibilidade" class="oculto">
       <div class="card">
-        <h2>Acessibilidade</h2>
-        <details class="ajuda"><summary>Como funciona</summary><p>Alunos marcados aqui fazem a prova com as adaptações de cada um: letra, espaçamento, cores, tempo e vidas extras, leitura em voz alta e <b>questões reescritas</b> (à mão ou pela IA, a partir da sua descrição e dos laudos). A auxiliar de inclusão vinculada vê e edita só os alunos dela.</p></details>
-        <div id="acessNovo" class="grade" style="align-items:end;margin:0">
+        <div class="card-cab"><h2>Acessibilidade <span class="ajuda-pop"><button type="button" class="btn-ajuda" data-popover aria-haspopup="dialog" aria-expanded="false" aria-label="Como funciona" title="Como funciona">i</button><template><p>Alunos marcados aqui fazem a prova com as adaptações de cada um: letra, espaçamento, cores, tempo e vidas extras, leitura em voz alta e <b>questões reescritas</b> (à mão ou pela IA, a partir da sua descrição e dos laudos). A auxiliar de inclusão vinculada vê e edita só os alunos dela.</p></template></span></h2>
+          <div class="cc-acoes"><button type="button" id="btnAcessNovo" aria-haspopup="dialog">♿ Marcar acessibilidade</button></div></div>
+        <!-- formulário: abre num drawer -->
+        <div id="acessNovo" class="oculto">
           <div><label for="acessTurmaSel">1. Turma</label><select id="acessTurmaSel"></select></div>
           <div><label for="acessAlunoSel">2. Aluno</label><select id="acessAlunoSel" disabled><option value="">— escolha a turma primeiro —</option></select></div>
+          <p class="pequeno" style="margin:4px 0 0">Ou escreva o e-mail e o nome (aluno que ainda não está numa turma):</p>
           <div><label for="acessEmail">E-mail</label><input type="email" id="acessEmail" placeholder="aluna@edu.senai.br"></div>
           <div><label for="acessNome">Nome</label><input type="text" id="acessNome"></div>
-          <div><button id="btnAcessAdicionar">♿ Marcar acessibilidade</button></div>
+          <div class="oculto"><button id="btnAcessAdicionar">♿ Marcar acessibilidade</button></div>
         </div>
-      </div>
-      <div class="barra-filtros" id="acFiltros" role="search">
-        <input type="search" id="acFiltroBusca" placeholder="Pesquisar aluno, e-mail ou auxiliar…" aria-label="Pesquisar alunos com acessibilidade">
-        <select id="acFiltroTurma" aria-label="Filtrar por turma"><option value="">👥 Todas as turmas</option></select>
-        <select id="acFiltroSit" aria-label="Filtrar por situação"><option value="">Todas</option><option value="ativa">♿ Acessibilidade ativa</option><option value="desligada">○ Desligada</option></select>
-        <span id="acFiltroContagem" class="pequeno" aria-live="polite"></span>
+        <div id="acFiltros"><div class="toolbar" role="search">
+          <input type="search" id="acFiltroBusca" placeholder="Pesquisar aluno, e-mail ou auxiliar…" aria-label="Pesquisar alunos com acessibilidade">
+          <button type="button" class="leve btn-filtros" aria-expanded="false" aria-controls="acFiltroBuscaPainel"><span class="e" aria-hidden="true">⚙</span>Filtros<span class="badge" aria-label="filtros ativos"></span></button>
+          <span id="acFiltroContagem" class="tb-contagem" aria-live="polite"></span>
+          <div class="painel-filtros" id="acFiltroBuscaPainel" hidden><label class="pf-campo"><span>Turma</span><select id="acFiltroTurma" aria-label="Filtrar por turma"><option value="">Todas as turmas</option></select></label><label class="pf-campo"><span>Situação</span><select id="acFiltroSit" aria-label="Filtrar por situação"><option value="">Todas</option><option value="ativa">♿ Acessibilidade ativa</option><option value="desligada">○ Desligada</option></select></label><div class="pf-acoes"><button type="button" class="discreto mini pf-limpar oculto">Limpar filtros</button></div></div>
+        </div></div>
       </div>
       <div id="acessLista"></div>
       <div id="acessDetalhe"></div>
@@ -289,13 +295,12 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
       <div class="card">
         <h2>Provas adaptadas</h2>
         <p class="pequeno" style="margin-top:0">Histórico de todas as adaptações: por aluno e por prova, o formato de cada questão, o porquê, quem fez e quando, e as escolhas feitas entre as opções da IA.</p>
-        <div class="barra-filtros" role="search">
+<div class="toolbar" role="search">
           <input type="search" id="hBusca" placeholder="Pesquisar aluno, prova ou questão…" aria-label="Pesquisar provas adaptadas">
-          <select id="hTurma" aria-label="Filtrar por turma"><option value="">👥 Todas as turmas</option></select>
-          <select id="hFormato" aria-label="Filtrar por formato"></select>
-          <select id="hOrigem" aria-label="Filtrar por origem"><option value="">🤖 IA e manual</option><option value="ia">🤖 Feitas pela IA</option><option value="manual">✍ Feitas à mão</option></select>
+          <button type="button" class="leve btn-filtros" aria-expanded="false" aria-controls="hBuscaPainel"><span class="e" aria-hidden="true">⚙</span>Filtros<span class="badge" aria-label="filtros ativos"></span></button>
+          <span id="hContagem" class="tb-contagem" aria-live="polite"></span>
+          <div class="painel-filtros" id="hBuscaPainel" hidden><label class="pf-campo"><span>Turma</span><select id="hTurma" aria-label="Filtrar por turma"><option value="">Todas as turmas</option></select></label><label class="pf-campo"><span>Formato</span><select id="hFormato" aria-label="Filtrar por formato"></select></label><label class="pf-campo"><span>Origem</span><select id="hOrigem" aria-label="Filtrar por origem"><option value="">🤖 IA e manual</option><option value="ia">🤖 Feitas pela IA</option><option value="manual">✍ Feitas à mão</option></select></label><div class="pf-acoes"><button type="button" class="discreto mini pf-limpar oculto">Limpar filtros</button></div></div>
         </div>
-        <p id="hContagem" class="pequeno" aria-live="polite"></p>
       </div>
       <div id="hLista"></div>
     </div>
@@ -305,12 +310,12 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
       <div class="card">
         <h2>Retorno dos alunos</h2>
         <p class="pequeno" style="margin-top:0">🚩 Apontamentos que os alunos fizeram nas questões (na prova ou no gabarito) e 💡 sugestões para o sistema. Marque como procede/não procede e escreva uma resposta: o aluno vê na página dele.</p>
-        <div class="barra-filtros" role="search">
+<div class="toolbar" role="search">
           <input type="search" id="retBusca" placeholder="Pesquisar aluno, prova ou texto…" aria-label="Pesquisar retorno dos alunos">
-          <select id="retTipo" aria-label="Tipo"><option value="">Apontamentos e sugestões</option><option value="ap">🚩 Só apontamentos</option><option value="sg">💡 Só sugestões</option></select>
-          <select id="retStatus" aria-label="Situação"><option value="aberto">Abertos</option><option value="">Todos</option><option value="fechado">Respondidos</option></select>
+          <button type="button" class="leve btn-filtros" aria-expanded="false" aria-controls="retBuscaPainel"><span class="e" aria-hidden="true">⚙</span>Filtros<span class="badge" aria-label="filtros ativos"></span></button>
+          <span id="retContagem" class="tb-contagem" aria-live="polite"></span>
+          <div class="painel-filtros" id="retBuscaPainel" hidden><label class="pf-campo"><span>Tipo</span><select id="retTipo" aria-label="Tipo"><option value="">Apontamentos e sugestões</option><option value="ap">🚩 Só apontamentos</option><option value="sg">💡 Só sugestões</option></select></label><label class="pf-campo"><span>Situação</span><select id="retStatus" aria-label="Situação"><option value="aberto">Abertos</option><option value="">Todos</option><option value="fechado">Respondidos</option></select></label><div class="pf-acoes"><button type="button" class="discreto mini pf-limpar oculto">Limpar filtros</button></div></div>
         </div>
-        <p id="retContagem" class="pequeno" aria-live="polite"></p>
       </div>
       <div id="retLista"></div>
     </div>
@@ -339,11 +344,17 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
       <div class="card">
         <h2>Relatórios</h2>
         <p class="pequeno" style="margin-top:0">Notas das provas finalizadas por aluno, matéria e turma, com o <b>alerta de reprovação</b> (média da matéria abaixo de 50, cada prova vale o mesmo) e o <b>desempenho por tópico</b>.</p>
-        <div class="barra-filtros" role="search">
+<div class="toolbar" role="search">
           <input type="search" id="rlBusca" placeholder="Pesquisar aluno…" aria-label="Pesquisar aluno">
-          <select id="rlTurma" aria-label="Turma"></select><select id="rlSemestre" aria-label="Semestre"></select><select id="rlMateria" aria-label="Matéria"></select>
+          <button type="button" class="leve btn-filtros" aria-expanded="false" aria-controls="rlBuscaPainel"><span class="e" aria-hidden="true">⚙</span>Filtros<span class="badge" aria-label="filtros ativos"></span></button>
+          <button id="rlTopicos" class="leve" type="button">📊 Calcular por tópico</button>
+          <div class="menu-wrap"><button type="button" class="leve" data-menu aria-haspopup="menu" aria-expanded="false" aria-controls="menuRelatorios">⬇ Exportar ▾</button>
+            <div class="menu" role="menu" id="menuRelatorios" hidden>
+              <button type="button" role="menuitem" id="rlCSV"><span class="e" aria-hidden="true">📊</span><span>CSV das notas</span></button>
+              <button type="button" role="menuitem" id="rlPDF"><span class="e" aria-hidden="true">📄</span><span>PDF formal do relatório</span></button></div></div>
+          <span id="rlContagem" class="tb-contagem" aria-live="polite"></span>
+          <div class="painel-filtros" id="rlBuscaPainel" hidden><label class="pf-campo"><span>Turma</span><select id="rlTurma" aria-label="Turma"></select></label><label class="pf-campo"><span>Semestre</span><select id="rlSemestre" aria-label="Semestre"></select></label><label class="pf-campo"><span>Matéria</span><select id="rlMateria" aria-label="Matéria"></select></label><div class="pf-acoes"><button type="button" class="discreto mini pf-limpar oculto">Limpar filtros</button></div></div>
         </div>
-        <div class="linha acoes"><button id="rlTopicos" class="leve">📊 Calcular por tópico</button><button id="rlCSV" class="leve">⬇ CSV das notas</button><button id="rlPDF" class="leve">📄 PDF do relatório</button></div>
       </div>
       <div id="rlConteudo"></div>
     </div>
@@ -351,18 +362,20 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
     <!-- EQUIPE -->
     <div id="aba-equipe" class="oculto">
       <div class="card">
-        <h2>Equipe</h2>
-        <details class="ajuda"><summary>Como funciona</summary><p><b>admin</b> = tudo · <b>professor</b> = bancos, provas, correção e resultados · <b>auxiliar</b> = só vê resultados · <b>auxiliar de inclusão</b> = só os alunos vinculados a ela na aba Acessibilidade: vê os resultados deles, edita as adaptações da prova, sobe documentos, deixa sugestões e devolve vidas.</p></details>
-        <div class="grade" style="align-items:end">
-          <div><label for="eEmail">E-mail (conta Google)</label><input type="email" id="eEmail" placeholder="nome@docente.senai.br"></div>
-          <div><label for="eNome">Nome</label><input type="text" id="eNome"></div>
-          <div><label for="ePapel">Papel</label><select id="ePapel"><option value="professor">professor</option><option value="admin">admin</option><option value="auxiliar">auxiliar</option><option value="inclusao">auxiliar de inclusão</option></select></div>
-          <div><button id="btnAddEquipe">Adicionar</button></div>
+        <div class="card-cab"><h2>Equipe <span class="ajuda-pop"><button type="button" class="btn-ajuda" data-popover aria-haspopup="dialog" aria-expanded="false" aria-label="Como funciona" title="Como funciona">i</button><template><p><b>admin</b> = tudo · <b>professor</b> = bancos, provas, correção e resultados · <b>auxiliar</b> = só vê resultados · <b>auxiliar de inclusão</b> = só os alunos vinculados a ela na aba Acessibilidade: vê os resultados deles, edita as adaptações da prova, sobe documentos, deixa sugestões e devolve vidas.</p></template></span></h2>
+          <div class="cc-acoes"><button type="button" id="btnNovoMembro" aria-haspopup="dialog">+ Novo membro</button></div></div>
+        <!-- formulário: abre num drawer -->
+        <div id="formEquipe" class="oculto">
+          <label for="eEmail">E-mail (conta Google)</label><input type="email" id="eEmail" placeholder="nome@docente.senai.br">
+          <label for="eNome" style="margin-top:12px">Nome</label><input type="text" id="eNome">
+          <label for="ePapel" style="margin-top:12px">Papel</label><select id="ePapel"><option value="professor">professor</option><option value="admin">admin</option><option value="auxiliar">auxiliar</option><option value="inclusao">auxiliar de inclusão</option></select>
+          <div class="oculto"><button id="btnAddEquipe">Adicionar</button></div>
         </div>
-        <div class="barra-filtros" role="search" style="margin-top:16px">
+        <div class="toolbar" role="search">
           <input type="search" id="feBusca" placeholder="Pesquisar nome ou e-mail…" aria-label="Pesquisar na equipe">
-          <select id="fePapel" aria-label="Filtrar por papel"><option value="">Todos os papéis</option><option value="admin">admin</option><option value="professor">professor</option><option value="auxiliar">auxiliar</option><option value="inclusao">auxiliar de inclusão</option></select>
-          <span id="feContagem" class="pequeno" aria-live="polite"></span>
+          <button type="button" class="leve btn-filtros" aria-expanded="false" aria-controls="feBuscaPainel"><span class="e" aria-hidden="true">⚙</span>Filtros<span class="badge" aria-label="filtros ativos"></span></button>
+          <span id="feContagem" class="tb-contagem" aria-live="polite"></span>
+          <div class="painel-filtros" id="feBuscaPainel" hidden><label class="pf-campo"><span>Papel</span><select id="fePapel" aria-label="Filtrar por papel"><option value="">Todos os papéis</option><option value="admin">admin</option><option value="professor">professor</option><option value="auxiliar">auxiliar</option><option value="inclusao">auxiliar de inclusão</option></select></label><div class="pf-acoes"><button type="button" class="discreto mini pf-limpar oculto">Limpar filtros</button></div></div>
         </div>
         <div id="listaEquipe"></div>
       </div>
@@ -371,30 +384,34 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
     <!-- CONFIG -->
     <div id="aba-config" class="oculto">
       <div class="card">
-        <h2>Configuração</h2>
-        <label for="cDominios">Domínios de e-mail aceitos para alunos (separados por vírgula)</label>
-        <input type="text" id="cDominios" placeholder="edu.senai.br, aluno.senai.br">
-        <label for="cCorretor" style="margin-top:16px">Servidor de correção automática (opcional)</label>
-        <input type="url" id="cCorretor" placeholder="https://corretor-prova.SEU-NOME.workers.dev" spellcheck="false">
-        <p class="pequeno" style="margin:4px 0 0">Endereço do Cloudflare Worker (veja o README, "Servidor de correção"). Com ele, as dissertativas são corrigidas assim que o aluno finaliza, mesmo com o painel fechado. O endereço não é segredo; a chave fica só no Cloudflare. Vazio = desligado.</p>
-        <fieldset class="temas-box" style="margin-top:16px"><legend>Horário das turmas (vale para todas)</legend>
+        <div class="card-cab"><h2>Configuração</h2></div>
+        <details class="recolhivel" data-chave="cfg-dominios" open><summary><span class="rc-titulo">🌐 Domínios dos alunos</span></summary><div class="rc-corpo">
+          <label for="cDominios">Domínios de e-mail aceitos para alunos (separados por vírgula)</label>
+          <input type="text" id="cDominios" placeholder="edu.senai.br, aluno.senai.br"></div></details>
+        <details class="recolhivel" data-chave="cfg-horario"><summary><span class="rc-titulo">🕖 Horário das turmas</span><span class="rc-resumo pequeno">vale para todas</span></summary><div class="rc-corpo">
           <div class="grade"><div><label for="cHIni">Entrada</label><input type="time" id="cHIni"></div><div><label for="cHFim">Saída</label><input type="time" id="cHFim"></div></div>
           <label for="cHInt">Intervalos — um por linha: <span class="mono">Nome | início | fim</span></label>
           <textarea id="cHInt" style="min-height:80px" placeholder="Café da manhã | 09:10 | 09:25"></textarea>
-          <p class="pequeno" style="margin:4px 0 0">Aparece nas turmas, no diário e no relatório do aluno. Os dias de aula ficam em cada turma (aba Turmas).</p>
-        </fieldset>
-        <div class="linha acoes" style="margin-top:12px"><button id="btnSalvarConfig">Salvar</button><button id="btnTestarCorretor" class="leve">Testar servidor</button></div>
+          <p class="pequeno" style="margin:4px 0 0">Aparece nas turmas, no diário e no relatório do aluno. Os dias de aula ficam em cada turma (aba Turmas).</p></div></details>
+        <details class="recolhivel" data-chave="cfg-avancado"><summary><span class="rc-titulo">🛠 Avançado: servidor de correção</span></summary><div class="rc-corpo">
+          <label for="cCorretor">Servidor de correção automática (opcional)</label>
+          <input type="url" id="cCorretor" placeholder="https://corretor-prova.SEU-NOME.workers.dev" spellcheck="false">
+          <p class="pequeno" style="margin:4px 0 0">Endereço do Cloudflare Worker (veja o README, "Servidor de correção"). Com ele, as dissertativas são corrigidas assim que o aluno finaliza, mesmo com o painel fechado. O endereço não é segredo; a chave fica só no Cloudflare. Vazio = desligado.</p>
+          <div class="linha acoes" style="margin-top:12px"><button id="btnTestarCorretor" class="leve">Testar servidor</button></div></div></details>
+        <div class="rodape-card"><button id="btnSalvarConfig">Salvar</button></div>
         <p class="pequeno" id="msgConfig"></p>
       </div>
       <div class="card oculto" id="cardIA">
-        <h2>Correção por IA <span class="pequeno">(só você vê esta seção)</span></h2>
-        <details class="ajuda"><summary>Como funciona</summary><p>A chave fica num documento do Firestore que as regras deixam ler <b>somente</b> com a sua conta de administrador principal. Ela não vai para o GitHub, nem para a página do aluno, nem para os outros membros da equipe. Crie a chave em <b>console.anthropic.com → API Keys</b> e defina um limite de gasto mensal em <b>Settings → Limits</b>.</p></details>
+        <div class="card-cab"><h2>🤖 Correção por IA <span class="pequeno">(só você vê esta seção)</span> <span class="ajuda-pop"><button type="button" class="btn-ajuda" data-popover aria-haspopup="dialog" aria-expanded="false" aria-label="Como funciona" title="Como funciona">i</button><template><p>A chave fica num documento do Firestore que as regras deixam ler <b>somente</b> com a sua conta de administrador principal. Ela não vai para o GitHub, nem para a página do aluno, nem para os outros membros da equipe. Crie a chave em <b>console.anthropic.com → API Keys</b> e defina um limite de gasto mensal em <b>Settings → Limits</b>.</p></template></span></h2></div>
         <div class="grade">
           <div><label for="iaChave">Chave da API Anthropic</label><input type="password" id="iaChave" autocomplete="off" spellcheck="false" placeholder="sk-ant-… (deixe vazio para manter a salva)"></div>
           <div><label for="iaModelo">Modelo</label><select id="iaModelo"></select></div>
         </div>
         <p class="pequeno" id="iaChaveAtual"></p>
-        <div class="linha acoes"><button id="btnTestarIA" class="leve">Testar chave</button><button id="btnSalvarIA">Salvar</button><button id="btnApagarIA" class="perigo">Apagar chave</button></div>
+        <div class="rodape-card"><button id="btnTestarIA" class="leve">Testar chave</button>
+          <div class="menu-wrap"><button type="button" class="icone" data-menu aria-haspopup="menu" aria-expanded="false" aria-controls="menuIAChave" aria-label="Mais ações da chave" title="Mais ações">⋯</button>
+            <div class="menu" role="menu" id="menuIAChave" hidden><button type="button" role="menuitem" id="btnApagarIA" class="perigo"><span class="e" aria-hidden="true">🗑</span><span>Apagar chave</span></button></div></div>
+          <button id="btnSalvarIA">Salvar</button></div>
         <p class="pequeno" id="msgIA" role="status" aria-live="polite"></p>
       </div>
     </div>

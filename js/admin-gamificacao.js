@@ -4,6 +4,7 @@ import { db, esc, $, toast, traduzirErro, dataBR, GAMI_PADRAO, lerGamificacao } 
 import { CONQUISTAS_PADRAO, REGRAS, CAMPOS_DIARIO } from "./conquistas.js";
 import { CATALOGO } from "./avatar.js";
 import { sugerirConquistasIA } from "./ia.js";
+import { menuHTML, itemMenu, vazio } from "./ui.js";
 import { collection, doc, getDoc, getDocs, setDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 let ctx = null;
@@ -57,16 +58,16 @@ function desenharRetorno() {
   const abertos = [...itensRet.ap, ...itensRet.sg].filter(x => ["aberto", "aberta"].includes(x.status)).length;
   $("#retContagem").textContent = `${lista.length} item(ns) · ${abertos} aberto(s)`;
   $("#retLista").innerHTML = lista.length ? lista.map(x => `<article class="card ret-item${["aberto", "aberta"].includes(x.status) ? " aberto" : ""}">
-      <div class="ret-cab">${x.col === "apontamentos" ? `<span class="tag erro">🚩 ${esc(TIPOS_AP[x.tipo] || "Apontamento")}</span>` : `<span class="tag nota">💡 ${esc(x.categoria || "Sugestão")}</span>`}
-        <span class="tag ${["aberto", "aberta"].includes(x.status) ? "aviso" : x.status === "procede" || x.status === "feita" ? "ok" : "off"}">${esc(x.status)}</span>
+      <div class="ret-cab">${x.col === "apontamentos" ? `<span class="chip erro">🚩 ${esc(TIPOS_AP[x.tipo] || "Apontamento")}</span>` : `<span class="chip info">💡 ${esc(x.categoria || "Sugestão")}</span>`}
+        <span class="chip ${["aberto", "aberta"].includes(x.status) ? "aviso" : x.status === "procede" || x.status === "feita" ? "ok" : "off"}">${esc(x.status)}</span>
         <span class="pequeno">${esc(x.nome || x.email)} · ${dataBR(x.criadoEm)}</span></div>
       ${x.col === "apontamentos" ? `<p class="pequeno" style="margin:6px 0 2px"><b>${esc(x.provaTitulo || "Prova")}</b> · questão <span class="mono">${esc(x.qid)}</span></p><blockquote class="ret-enun">${esc(String(x.enunciado || "").slice(0, 400))}</blockquote>` : ""}
       <p style="margin:6px 0">${esc(x.texto).replace(/\n/g, "<br>")}</p>
       ${x.resposta ? `<p class="pequeno ret-resp">↩ <b>${esc(x.respondidoPor || "equipe")}:</b> ${esc(x.resposta)}</p>` : ""}
-      ${ctx.podeEditar() ? `<div class="linha acoes"><input type="text" data-resp="${x.id}" placeholder="Resposta para o aluno (ele vê na página dele)" value="${esc(x.resposta || "")}" style="flex:1 1 280px">
-        ${(x.col === "apontamentos" ? [["procede", "✅ Procede"], ["nao-procede", "✖ Não procede"], ["aberto", "↺ Reabrir"]] : [["feita", "✅ Vamos fazer / feita"], ["analisada", "👀 Analisada"], ["aberta", "↺ Reabrir"]])
-          .map(([v, r]) => `<button type="button" class="leve mini" data-st="${v}" data-id="${x.id}" data-col="${x.col}">${r}</button>`).join("")}</div>` : ""}</article>`).join("")
-    : `<div class="vazio"><div class="icone">📬</div><p>Nada por aqui${b || st || tipo ? " com esses filtros" : " ainda"}.</p></div>`;
+      ${ctx.podeEditar() ? `<div class="ret-resposta"><input type="text" data-resp="${x.id}" placeholder="Resposta para o aluno (ele vê na página dele)" value="${esc(x.resposta || "")}" aria-label="Resposta para ${esc(x.nome || x.email)}">
+        ${menuHTML({ rotulo: "Responder e marcar ▾", classe: "", aria: "Responder e marcar", itensHTML: (x.col === "apontamentos" ? [["procede", "✅", "Procede"], ["nao-procede", "✖", "Não procede"], ["aberto", "↺", "Reabrir"]] : [["feita", "✅", "Vamos fazer / feita"], ["analisada", "👀", "Analisada"], ["aberta", "↺", "Reabrir"]])
+          .map(([v, e, r]) => itemMenu({ e, t: r, attrs: `data-st="${v}" data-id="${x.id}" data-col="${x.col}"` })).join("") })}</div>` : ""}</article>`).join("")
+    : vazio({ e: "📬", texto: `Nada por aqui${b || st || tipo ? " com esses filtros" : " ainda"}.` });
   $("#retLista").querySelectorAll("[data-st]").forEach(bt => bt.onclick = async () => {
     const resp = $(`[data-resp="${bt.dataset.id}"]`).value.trim();
     try {

@@ -269,6 +269,8 @@ if (!window.__uiLigado) {
       const itens = [...aberto.el.querySelectorAll("[role=menuitem]:not(:disabled)")], i = itens.indexOf(document.activeElement);
       e.preventDefault(); itens[(i + (e.key === "ArrowDown" ? 1 : -1) + itens.length) % itens.length]?.focus();
     }
+    // item de menu que é um <label> (ex.: enviar arquivo): Enter/Espaço clica
+    if ((e.key === "Enter" || e.key === " ") && e.target.matches?.("label[role=menuitem]")) { e.preventDefault(); e.target.click(); return; }
     // Esc fecha o painel de filtros aberto
     if (e.key === "Escape") { const p = e.target.closest?.(".painel-filtros"); if (p) { p.hidden = true; const b = document.querySelector(`[aria-controls="${p.id}"]`); b?.setAttribute("aria-expanded", "false"); b?.focus(); } }
   }, true);

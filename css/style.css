@@ -914,6 +914,27 @@ details.recolhivel > .rc-corpo.cartoes-materias { padding:0 var(--sp-4) var(--sp
 .prev-conquistas .rc-corpo.medalhas { padding:0 var(--sp-4) var(--sp-4); }
 @media (max-width:700px) { .dh-numeros { grid-template-columns:repeat(2, minmax(0, 1fr)); } .dh-relatorios { margin-left:0; } }
 
+/* --- painel: menu lateral em grupos e área de conteúdo --- */
+.menu-grupo { display:flex; flex-direction:column; gap:2px; }
+.menu-grupo + .menu-grupo { border-top:1px solid rgba(255,255,255,.12); margin-top:6px; padding-top:6px; }
+.menu-grupo:not(:has(button:not(.oculto))) { display:none; }
+.menu-rotulo { font-size:.68em; font-weight:700; letter-spacing:.8px; text-transform:uppercase; color:#8f9bb3; padding:6px 14px 2px; }
+.menu-lateral button > span[aria-hidden] { width:1.4em; text-align:center; flex:0 0 auto; }
+.painel-conteudo { max-width:1240px; width:100%; margin:0 auto; }
+/* cabeçalho de cartão sem nada visível embaixo: sem a linha divisória */
+.card > .card-cab:not(:has(~ :not(.oculto, [hidden], details.ajuda[data-pop]))) { border-bottom:0; padding-bottom:0; margin-bottom:0; }
+/* --- formulários dentro do drawer --- */
+.drawer #acessNovo { display:grid; gap:var(--sp-3); }
+.drawer #formTurma > h2, .drawer #formEquipe > h2 { display:none; }
+.menu > label.menu-item { cursor:pointer; margin:0; }
+.menu > label.menu-item:hover, .menu > label.menu-item:focus-visible { background:var(--hover); }
+/* --- Organização e Retorno --- */
+.cm-principais { display:inline-flex; gap:6px; align-items:center; flex-wrap:wrap; }
+.topicos-materia .lista-topicos { padding-left:20px; }
+.ret-cab .chip { margin:0; }
+.ret-resposta { display:flex; gap:var(--sp-2); align-items:center; flex-wrap:wrap; margin-top:var(--sp-2); }
+.ret-resposta > input { flex:1 1 280px; width:auto; }
+
 /* com drawer aberto: o "?" flutuante não cobre o rodapé do painel; o toast fica por cima de tudo */
 body.com-drawer .ajuda-flutuante { display:none; }
 .toast { z-index:var(--z-toast); }
@@ -1412,3 +1433,8 @@ body:is(.tema-creme, .tema-azul, .tema-contraste, .tema-escuro) { background-ima
 }
 @media (prefers-reduced-motion: reduce) { .drawer, .drawer-fundo, details.recolhivel > summary::before, .chip.pulsante::before { transition:none !important; animation:none !important; } }
 @media (max-width:700px) { .cartao-prova.compacto { grid-template-columns:1fr; } .cp-botoes { justify-content:flex-start; } }
+@media (max-width:900px) {
+  .menu-lateral { display:flex; flex-wrap:nowrap; overflow-x:auto; }
+  .menu-grupo { display:contents; }
+  .menu-rotulo { display:none; }
+}

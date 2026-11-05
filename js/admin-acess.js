@@ -3,6 +3,7 @@
 // as necessidades, sobe laudos e adapta as questões (manual ou pela IA). Auxiliar de inclusão: só os alunos
 // vinculados a ela — edita as adaptações, sobe laudos e deixa sugestões.
 import { db, esc, $, toast, confirmar, modal, traduzirErro, dataBR, iniciais, temaDe, letra, sortearQuestoes, bancoDaQuestao, questoesDisponiveis, cotaDaProva } from "./common.js";
+import { drawer } from "./ui.js";
 import { VISUAL_PADRAO, PROVA_PADRAO, FONTES, TEMAS, completar, aplicarVisual, apoiosDe } from "./acessibilidade.js";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, abrirMaterialEmAba, tamanhoTexto, erroMaterial } from "./material.js";
 import { adaptarQuestao } from "./ia.js";
@@ -40,7 +41,7 @@ const priv = e => `acessibilidadePrivado/${e}`;
 export async function carregarAcessibilidade() {
   const box = $("#acessLista");
   box.innerHTML = "<p class='pequeno'>Carregando…</p>";
-  $("#acessNovo").classList.toggle("oculto", !ctx.podeEditar());
+  $("#btnAcessNovo").classList.toggle("oculto", !ctx.podeEditar());
   try {
     const q = ehInclusao() ? query(collection(db, "acessibilidade"), where("auxiliares", "array-contains", ctx.eu.email)) : collection(db, "acessibilidade");
     const s = await getDocs(q);
@@ -103,16 +104,23 @@ export async function prepararNovo() {
   selA.onchange = () => { const o = selA.selectedOptions[0]; $("#acessEmail").value = selA.value; $("#acessNome").value = o?.dataset.nome || ""; };
   desenharAlunos();
 }
+// formulário "Marcar acessibilidade" num drawer (o bloco #acessNovo, com os mesmos ids)
+let drawerNovo = null;
+$("#btnAcessNovo").onclick = () => {
+  if (!ctx.podeEditar()) return;
+  drawerNovo = drawer({ titulo: "♿ Marcar acessibilidade", corpo: $("#acessNovo"), aoFechar: () => { $("#acessNovo").classList.add("oculto"); drawerNovo = null; },
+    acoes: [{ t: "Cancelar", classe: "leve" }, { t: "♿ Marcar acessibilidade", onClick: () => { $("#btnAcessAdicionar").click(); return false; } }] });
+};
 $("#btnAcessAdicionar").onclick = async () => {
   const email = $("#acessEmail").value.trim().toLowerCase(), nome = $("#acessNome").value.trim();
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return toast("Informe o e-mail do aluno.", "erro");
-  if (lista.some(a => a.email === email)) { abrirAluno(email); return toast("Este aluno já tem acessibilidade: abri o cadastro.", "info"); }
+  if (lista.some(a => a.email === email)) { drawerNovo?.fechar(); abrirAluno(email); return toast("Este aluno já tem acessibilidade: abri o cadastro.", "info"); }
   try {
     await setDoc(doc(db, "acessibilidade", email), { email, nome, ativo: true, auxiliares: [], visual: { ...VISUAL_PADRAO }, prova: { ...PROVA_PADRAO },
       criadoEm: serverTimestamp(), criadoPor: ctx.eu.email });
     await setDoc(doc(db, "acessibilidadePrivado", email), { descricao: "", criadoEm: serverTimestamp() });
     $("#acessEmail").value = ""; $("#acessNome").value = ""; $("#acessAlunoSel").value = ""; prepararNovo();
-    aberto = email; toast("Aluno marcado com acessibilidade ♿", "ok"); carregarAcessibilidade();
+    aberto = email; toast("Aluno marcado com acessibilidade ♿", "ok"); drawerNovo?.fechar(); carregarAcessibilidade();
   } catch (e) { toast("Não foi possível salvar. " + traduzirErro(e), "erro"); }
 };
 
