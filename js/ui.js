@@ -194,11 +194,8 @@ export function drawer({ titulo, corpoHTML = "", corpo = null, acoes = [], aoFec
 
 // ---------- bloco recolhível (lembra o estado por chave) ----------
 const CHAVE_RC = "ui:recolhivel:";
-export function estaAberto(chave, padrao = false) {
-  if (!chave) return padrao;
-  const v = localStorage.getItem(CHAVE_RC + chave);
-  return v === null ? padrao : v === "1";
-}
+// tudo que é recolhível começa FECHADO (pedido da equipe): quem quiser ver, abre
+export function estaAberto() { return false; }
 export function collapsible({ chave = "", titulo = "", resumoHTML = "", corpoHTML = "", aberto: padrao = false, direitaHTML = "", classe = "", attrs = "" }) {
   return `<details class="recolhivel ${classe}"${chave ? ` data-chave="${esc(chave)}"` : ""}${estaAberto(chave, padrao) ? " open" : ""} ${attrs}>
     <summary><span class="rc-titulo">${titulo}</span>${resumoHTML ? `<span class="rc-resumo">${resumoHTML}</span>` : ""}${direitaHTML ? `<span class="rc-direita">${direitaHTML}</span>` : ""}</summary>

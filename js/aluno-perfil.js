@@ -260,7 +260,7 @@ export function painelSimulacao(box, todas, aoAplicar) {
     <label for="simNotas">Notas de mentira — uma prova por linha: <span class="mono">Matéria | nota | vidas perdidas (opcional)</span></label>
     <textarea id="simNotas" style="min-height:110px">${esc(cfg.notas)}</textarea>
     <label class="check"><input type="checkbox" id="simAcess"${cfg.acess ? " checked" : ""}> <span>Simular aluno com acessibilidade (medalhas da sala de aula, a partir do diário)</span></label>
-    <details class="ajuda-extra"${cfg.dados?.length ? " open" : ""}><summary>🏅 Me dar conquistas (marque para ganhar na hora)</summary>
+    <details class="ajuda-extra"><summary>🏅 Me dar conquistas (marque para ganhar na hora)</summary>
       <div class="lista-temas" style="margin-top:8px">${(todas || []).map(m => `<label class="check"><input type="checkbox" data-dar="${esc(m.t)}"${cfg.dados?.includes(m.t) ? " checked" : ""}> <span>${m.e} ${esc(m.t)}</span></label>`).join("")}</div></details>
     <div class="sim-guia"><b>Como testar a parte social e o status</b><ol>
       <li><b>💬 Status:</b> toque em “Como você está hoje?” no seu cartão. Os difíceis (triste, ansioso…) não vão para o mural; a equipe vê o status real dos alunos em <b>Turmas</b> e no <b>Diário</b>.</li>

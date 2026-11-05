@@ -137,14 +137,14 @@ function desenhar() {
         .sort((a, b) => ordemNatural(a.materia || "~", b.materia || "~"));
       if (!cards.length) return "";
       nMat += cards.length; nTop += cards.reduce((x, n) => x + (n.plano?.topicos?.length || 0), 0);
-      const id = `s:${t.id}:${s}`, aberto = busca || fS || (s === atual ? !fechados.has(id) : abertos.has(id));
+      const id = `s:${t.id}:${s}`, aberto = busca || fS || abertos.has(id);
       return `<details class="recolhivel sub" data-g="${id}" ${aberto ? "open" : ""}>
         <summary><span class="rc-titulo">📅 ${rotuloSemestre(s)}</span><span class="rc-resumo">${s === atual ? `<span class="chip on">atual</span>` : ""}
           <span class="chip">${cards.length} matéria(s)</span><span class="chip">${cards.reduce((x, n) => x + n.provas.length, 0)} prova(s)</span></span></summary>
         <div class="rc-corpo cartoes-materias">${cards.map(n => cartaoMateria(t, s, n)).join("")}</div></details>`;
     }).join("");
     if ((fS || busca) && !blocos) return "";
-    const id = `t:${t.id}`, aberto = busca || fT || !fechados.has(id);
+    const id = `t:${t.id}`, aberto = busca || fT || abertos.has(id);
     return `<details class="recolhivel" data-g="${id}" ${aberto ? "open" : ""}>
       <summary><span class="rc-titulo">👥 ${esc(nomeTurma(t))}</span><span class="rc-resumo"><span class="chip">${ctx.alunosDaTurma(t).length} alunos</span>${(sc => sc ? `<span class="chip ${sc.concluida ? "ok" : "info"}" title="Semestre do curso (avança sozinho em agosto e janeiro)">🎓 ${sc.rotulo}</span>` : "")(semestreCursoAtual(t))}</span>
         ${ctx.podeEditar() ? `<span class="rc-direita"><button class="leve mini" data-novo-t="${t.id}" type="button">+ Matéria</button></span>` : ""}</summary>

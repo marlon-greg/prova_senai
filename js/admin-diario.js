@@ -239,7 +239,7 @@ async function carregarComentarios(r) {
       <div class="pequeno"><b>${esc(c.autorNome || c.autor)}</b> · ${c.papel === "inclusao" ? "auxiliar de inclusão" : esc(c.papel || "")} · ${dataBR(c.criadoEm)}
         ${c.autor === ctx.eu.email ? `<button type="button" class="discreto mini perigo-txt" data-delcom="${c.id}" aria-label="Apagar comentário">🗑</button>` : ""}</div>
       <dl>${ITENS_PROF.filter(it => respondido(it, c.respostas)).map(it => `<div><dt>${esc(it.rot)}</dt><dd>${valorHTML(it, c.respostas[it.id])}</dd></div>`).join("")}</dl></div>`).join("") +
-    `<details class="novo-com"${prof && !cs.length ? " open" : ""}><summary>${prof ? "➕ Comentar este registro" : "➕ Responder"}</summary>
+    `<details class="novo-com"><summary>${prof ? "➕ Comentar este registro" : "➕ Responder"}</summary>
       <p class="pequeno">${prof ? "Você não muda o registro da auxiliar: deixa sua visão da aula. Nada é obrigatório; preencha o que fizer sentido." : "Responda aos comentários dos professores."}</p>
       <div class="form-com">${itens.map(it => campoHTML(it, {}, "c" + r.id)).join("")}</div>
       <button type="button" class="mini" data-enviarcom="${esc(r.id)}">Enviar comentário</button></details>`;

@@ -82,7 +82,7 @@ export async function abrirOpcoes({ ctx, email, prova, x, laudos, aoAplicar }) {
       <div class="of-cab"><span class="of-rank">${i + 1}º</span><span class="of-icone">${FORMATOS[o.formato].icone}</span><div><b>${esc(FORMATOS[o.formato].nome)}</b>${o.titulo && o.titulo !== FORMATOS[o.formato].nome ? ` <span class="pequeno">— ${esc(o.titulo)}</span>` : ""}
         <div class="of-estrelas" title="Indicação para este aluno: ${o.indicacao} de 5">${estrelas(o.indicacao)}${i === 0 ? ` <span class="tag ok">⭐ mais indicado</span>` : ""}</div></div></div>
       <p class="of-porque">💬 ${esc(o.porque)}</p>${o.referencia ? `<p class="pequeno of-ref">📚 ${esc(o.referencia)}</p>` : ""}
-      <details class="of-prev"${i < 2 ? " open" : ""}><summary>👁 Prévia — como o aluno vê (com o gabarito)</summary><div data-prev="${i}"></div></details>
+      <details class="of-prev"><summary>👁 Prévia — como o aluno vê (com o gabarito)</summary><div data-prev="${i}"></div></details>
       <div class="linha acoes"><button type="button" class="ok mini" data-usar="${i}">✅ Usar este</button><button type="button" class="leve mini" data-ajustar="${i}">✎ Ajustar e usar</button></div></article>`;
     box.innerHTML = `<p class="pequeno">Gerado ${salvas?.geradoEm?.toDate ? "em " + salvas.geradoEm.toDate().toLocaleString("pt-BR") : "agora"} · ${opcoes.length} opções</p>` +
       opcoes.slice(0, 2).map(cartao).join("") +

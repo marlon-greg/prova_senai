@@ -823,7 +823,7 @@ function opcoesDaProvaHTML(p) {
 
 // ---------- lista de provas: pesquisa, filtros e agrupada por turma ----------
 let provasCache = [], filtroTurmaPendente = null;
-const gruposFechados = new Set();   // turmas recolhidas pelo professor (fica enquanto a página estiver aberta)
+const gruposAbertos = new Set();   // turmas que o professor abriu (começam fechadas; fica enquanto a página estiver aberta)
 async function carregarProvas() {
   await Promise.all([listarBancos(), listarTurmas(), listarPlanos().catch(() => [])]);
   const turmaAntes = $("#pTurma").value;
@@ -880,7 +880,7 @@ function desenharProvas() {
   const chaves = [...turmasCache.map(t => t.id).filter(id => grupos.has(id)), ...(grupos.has("__sem") ? ["__sem"] : [])];
   box.innerHTML = chaves.map(k => {
     const ps = grupos.get(k), t = turmasCache.find(x => x.id === k), lib = ps.filter(p => p.liberada).length;
-    const aberto = busca || turma || fSem || fMat || !gruposFechados.has(k);
+    const aberto = busca || turma || fSem || fMat || gruposAbertos.has(k);
     // dentro da turma: semestre (mais recente primeiro) → matéria
     const sub = new Map();
     ps.forEach(p => { const sm = semestreDaProva(p), m = materiaDaProva(p, bancosCache) || "Sem matéria", ch = `${sm}|${chaveTexto(m)}`; if (!sub.has(ch)) sub.set(ch, { sm, m, ps: [] }); sub.get(ch).ps.push(p); });
@@ -893,7 +893,7 @@ function desenharProvas() {
       <div class="rc-corpo">${subs.map(g => `<div class="sub-grupo">${subs.length > 1 ? `<h4 class="sg-titulo"><span class="chip">📅 ${rotuloSemestre(g.sm)}</span><span class="chip">📚 ${esc(g.m)}</span><span class="pequeno">${g.ps.length} prova(s)</span></h4>` : ""}
         <div class="cartoes-provas">${g.ps.map(cartaoProvaHTML).join("")}</div></div>`).join("")}</div></details>`;
   }).join("");
-  box.querySelectorAll("[data-grupo]").forEach(d => d.ontoggle = () => { if (busca || turma || fSem || fMat) return; d.open ? gruposFechados.delete(d.dataset.grupo) : gruposFechados.add(d.dataset.grupo); });
+  box.querySelectorAll("[data-grupo]").forEach(d => d.ontoggle = () => { if (busca || turma || fSem || fMat) return; d.open ? gruposAbertos.add(d.dataset.grupo) : gruposAbertos.delete(d.dataset.grupo); });
   box.querySelectorAll("[data-alunos]").forEach(b => b.onclick = async () => {
     abrirAba("resultados"); $("#rTurma").value = ""; await prepararResultados();
     $("#rProva").value = b.dataset.alunos; $("#rAoVivo").checked = true; carregarResultados();
@@ -1080,7 +1080,7 @@ $("#btnImportarBanco").onclick = async () => {
 // semestre do banco: o gravado; senão o da criação
 const semestreDoBanco = b => b.semestre || semestreDe(b.criadoEm || new Date());
 let bancosContagem = {};   // bancoId -> { tema: { alternativa, dissertativa } }
-const bancosFechados = new Set();
+const bancosAbertos = new Set();   // grupos de bancos abertos pelo professor (começam fechados)
 async function carregarBancos() {
   await Promise.all([listarBancos(), listarPlanos().catch(() => []), listarCursos().catch(() => [])]);
   // formulário de importação: semestre e matérias sugeridas
@@ -1129,11 +1129,11 @@ function desenharBancos() {
   box.innerHTML = [...arv.keys()].sort().reverse().map(s => {
     const mats = [...arv.get(s).values()].sort((a, b) => a.m.localeCompare(b.m, "pt-BR")), ids = `bs:${s}`;
     const nB = mats.reduce((n, x) => n + x.bs.length, 0);
-    return `<details class="recolhivel" data-gb="${ids}" ${filtrando || !bancosFechados.has(ids) ? "open" : ""}>
+    return `<details class="recolhivel" data-gb="${ids}" ${filtrando || bancosAbertos.has(ids) ? "open" : ""}>
       <summary><span class="rc-titulo">📅 ${rotuloSemestre(s)}</span><span class="rc-resumo">${s === atual ? `<span class="chip on">atual</span>` : ""}<span class="chip">${mats.length} matéria(s)</span><span class="chip">${nB} banco(s)</span></span></summary>
       <div class="rc-corpo">${mats.map(({ m, bs }) => {
         const idm = `bm:${s}:${chaveTexto(m)}`;
-        return `<details class="recolhivel sub" data-gb="${idm}" ${filtrando || !bancosFechados.has(idm) ? "open" : ""}>
+        return `<details class="recolhivel sub" data-gb="${idm}" ${filtrando || bancosAbertos.has(idm) ? "open" : ""}>
           <summary><span class="rc-titulo">📚 ${esc(m)}</span><span class="rc-resumo"><span class="chip">${bs.length} banco(s)</span><span class="chip">${bs.reduce((n, b) => n + Number(b.nQuestoes || 0), 0)} questões</span></span></summary>
           <div class="rc-corpo cartoes-materias">${bs.map(b => {
             const c = bancosContagem[b.id], tot = c ? Object.values(c).reduce((x, y) => ({ alternativa: x.alternativa + y.alternativa, dissertativa: x.dissertativa + y.dissertativa }), { alternativa: 0, dissertativa: 0 }) : null;
@@ -1150,7 +1150,7 @@ function desenharBancos() {
           }).join("")}</div></details>`;
       }).join("")}</div></details>`;
   }).join("");
-  box.querySelectorAll("[data-gb]").forEach(d => d.ontoggle = () => { if (filtrando) return; d.open ? bancosFechados.delete(d.dataset.gb) : bancosFechados.add(d.dataset.gb); });
+  box.querySelectorAll("[data-gb]").forEach(d => d.ontoggle = () => { if (filtrando) return; d.open ? bancosAbertos.add(d.dataset.gb) : bancosAbertos.delete(d.dataset.gb); });
   box.querySelectorAll("[data-gab]").forEach(x => x.onclick = () => gerarGabarito(x.dataset.gab));
   box.querySelectorAll("[data-topicos]").forEach(x => x.onclick = () => editarTopicosBanco(x.dataset.topicos, carregarBancos));
   box.querySelectorAll("[data-delb]").forEach(x => x.onclick = async () => {
