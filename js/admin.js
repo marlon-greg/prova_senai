@@ -75,9 +75,20 @@ function abrirAba(a) {
   abaAtual = a; ligarAjuda(() => abaAtual);
   if (a !== "resultados" && $("#rAoVivo").checked) { $("#rAoVivo").checked = false; pararAoVivo(); }   // sair da aba desliga o ao vivo
   document.querySelectorAll("[data-aba]").forEach(b => b.classList.toggle("ativa", b.dataset.aba === a));
-  ["organizacao", "diario", "historico", "retorno", "relatorios", "gamificacao", "provas", "bancos", "turmas", "resultados", "acessibilidade", "equipe", "config"].forEach(x => $("#aba-" + x).classList.toggle("oculto", x !== a));
+  ["organizacao", "diario", "historico", "retorno", "relatorios", "gamificacao", "provas", "bancos", "turmas", "resultados", "acessibilidade", "equipe", "config", "simulacao"].forEach(x => $("#aba-" + x).classList.toggle("oculto", x !== a));
   return ({ organizacao: carregarOrganizacao, diario: carregarDiario, historico: carregarHistorico, retorno: carregarRetorno, relatorios: carregarRelatorios, gamificacao: carregarGamificacao, provas: carregarProvas, bancos: () => { carregarBancos(); carregarMateriais(); }, turmas: carregarTurmas, resultados: prepararResultados,
-     acessibilidade: () => { carregarAcessibilidade(); if (podeEditar()) prepararNovoAcess(); }, equipe: carregarEquipe, config: carregarConfig })[a]();
+     acessibilidade: () => { carregarAcessibilidade(); if (podeEditar()) prepararNovoAcess(); }, equipe: carregarEquipe, config: carregarConfig, simulacao: carregarSimulacao })[a]();
+}
+
+// ============================================================ SIMULAÇÃO (tudo para testar e demonstrar num lugar só)
+async function carregarSimulacao() {
+  const [ps, as] = await Promise.all([getDocs(collection(db, "provas")).catch(() => null), getDocs(collection(db, "acessibilidade")).catch(() => null)]);
+  const provas = (ps?.docs || []).map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
+  $("#simProva").innerHTML = provas.length ? provas.map(p => `<option value="${p.id}">${esc(p.titulo)}${p.turma ? ` · ${esc(p.turma)}` : ""}${p.liberada ? " · liberada" : ""}</option>`).join("") : `<option value="">Nenhuma prova cadastrada</option>`;
+  $("#simComo").innerHTML = `<option value="">Aluno sem adaptação</option>` + (as?.docs || []).filter(d => d.data().ativo !== false)
+    .map(d => `<option value="${esc(d.id)}">♿ ${esc(d.data().nome || d.id)}</option>`).join("");
+  $("#simTestar").onclick = () => { const p = $("#simProva").value, como = $("#simComo").value; if (!p) return toast("Escolha uma prova.", "erro");
+    window.open(`index.html?teste=${encodeURIComponent(p)}${como ? `&como=${encodeURIComponent(como)}` : ""}`, "_blank"); };
 }
 
 // primeiro acesso do superadmin: cria config/geral (sem ele a regra dos alunos não funciona)
