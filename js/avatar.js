@@ -159,8 +159,8 @@ export function avatarValido(a, ganhas) {
   if (v.corpo === "masculino") v.corLabios = 0;   // sem batom no masculino
   return v;
 }
-// trocou o sexo no editor: mantém o que serve e troca o resto pelo padrão do novo sexo
-export const trocarSexo = (av, corpo, ganhas) => avatarValido({ ...av, corpo }, ganhas);
+// trocou o sexo no editor: volta para o MODELO-BASE fixo daquele sexo (só a pele, o fundo, o adesivo e a moldura ficam)
+export const trocarSexo = (av, corpo, ganhas) => avatarValido({ ...padraoDo(corpo), pele: av.pele, fundo: av.fundo, adesivo: av.adesivo, moldura: av.moldura }, ganhas);
 
 // o Aleatório só usa peças "sérias" e cores naturais (nada de coração no olho, língua de fora, cabelo rosa...)
 const BRINCADEIRA = {

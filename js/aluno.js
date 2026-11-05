@@ -74,7 +74,7 @@ $("#btnFonte").onclick = () => { document.body.classList.toggle("grande"); local
 // ---------- mascote guia (liga/desliga no cabeçalho; fica guardado no navegador) ----------
 function marcarBotaoMascote() {
   const on = mascoteLigado(), b = $("#btnMascote");
-  b.setAttribute("aria-pressed", on); b.textContent = on ? "🧑‍🏫 Mascote: ligado" : "🧑‍🏫 Mascote: desligado";
+  b.setAttribute("aria-pressed", on); b.textContent = on ? "🙂 Mascote: ligado" : "🙂 Mascote: desligado";
 }
 marcarBotaoMascote();
 $("#btnMascote").onclick = () => {
@@ -198,7 +198,7 @@ function desenharSaudacao() {
          <div class="balao"><div class="balao-nome">${esc(m.nome)} <span>prof. ${esc(m.professor)}</span></div>
            <div class="balao-texto">Oi${nome ? `, <b>${esc(nome)}</b>` : ""}! ${esc(m.bordao)}<br>Escolha uma prova aqui embaixo que eu te explico tudo antes de começar.</div></div></div>
        ${collapsible({ chave: "aluno:trocarGuia", classe: "leve saudacao-troca", titulo: "Trocar o guia", corpoHTML: `<div class="saudacao-escolha">${htmlEscolha(m.id)}</div>` })}`
-    : `<p class="pequeno" style="margin:0">Mascote guia desligado. Para ligar, use o botão <b>🧑‍🏫 Mascote</b> no topo da página.</p>`;
+    : `<p class="pequeno" style="margin:0">Mascote guia desligado. Para ligar, use o botão <b>🙂 Mascote</b> no topo da página.</p>`;
   ligarEscolha(box, () => { desenharSaudacao(); humorHud = "feliz"; });
 }
 async function listarProvas() {

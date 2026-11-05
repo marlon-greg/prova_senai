@@ -4,7 +4,7 @@ import { db, esc, $, toast, traduzirErro, dataBR, GAMI_PADRAO, lerGamificacao } 
 import { CONQUISTAS_PADRAO, REGRAS, CAMPOS_DIARIO } from "./conquistas.js";
 import { CATALOGO } from "./avatar.js";
 import { sugerirConquistasIA } from "./ia.js";
-import { menuHTML, itemMenu, vazio } from "./ui.js";
+import { menuHTML, itemMenu, vazio, collapsible, chips } from "./ui.js";
 import { collection, doc, getDoc, getDocs, setDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 let ctx = null;
@@ -12,7 +12,7 @@ export function iniciarGamificacao(c) { ctx = c; }
 
 const OPCOES = [
   { k: "conquistas", t: "🏅 Conquistas dos alunos", d: "Medalhas gerais, por matéria e da sala de aula (diário), com nível. Aparecem na página do aluno." },
-  { k: "personagem", t: "🧑‍🎨 Personagem e skins", d: "O aluno cria o próprio personagem (rosto, cabelo, roupa…). Skins, molduras e acessórios especiais são liberados pelas conquistas." },
+  { k: "personagem", t: "🎨 Personagem e skins", d: "O aluno cria o próprio personagem (rosto, cabelo, roupa…). Skins, molduras e acessórios especiais são liberados pelas conquistas." },
   { k: "download", t: "🖼 Baixar o cartão do perfil", d: "O aluno baixa o cartão com o personagem e as conquistas em PNG, JPG ou PDF para mostrar aos colegas." },
   { k: "apontamentos", t: "🚩 Apontamentos nas questões", d: "Na prova e no gabarito, o aluno avisa sobre uma questão com problema (duas respostas certas, nenhuma certa, erro de digitação…). Chega em Retorno dos alunos." },
   { k: "sugestoes", t: "💡 Sugestões para o sistema", d: "Área do aluno para mandar ideias e problemas do sistema." },
@@ -86,33 +86,99 @@ export async function carregarConquistasAdmin() {
   conqLista = structuredClone(d?.data()?.lista?.length ? d.data().lista : CONQUISTAS_PADRAO).map(c => ({ ativa: true, ...c }));
   desenharConq();
 }
+// temas do editor: saem da regra (dá para trocar no ✎ de cada conquista). Fechados por padrão; lembram aberto/fechado.
+const TEMAS = {
+  participacao: { t: "🎓 Participação", d: "fazer provas" }, notas: { t: "🎯 Notas altas", d: "notas e sequências de notas" },
+  evolucao: { t: "📈 Evolução", d: "melhorar em relação à prova anterior" }, foco: { t: "❤️ Foco na prova", d: "provas sem perder vida" },
+  materia: { t: "📚 Por matéria", d: "valem em cada matéria; use {materia} no título" },
+  presenca: { t: "📅 Presença na sala", d: "diário · alunos com acessibilidade" }, aprendizagem: { t: "🧠 Aprendizagem na sala", d: "diário · alunos com acessibilidade" },
+  estrelas: { t: "⭐ Estrelas e vitórias", d: "diário · alunos com acessibilidade" }, outras: { t: "✨ Outras", d: "" }
+};
+function temaAuto(c) {
+  if (c.tema && TEMAS[c.tema]) return c.tema;
+  const r = c.regra;
+  if (r === "provas") return "participacao";
+  if (["nota", "notasSeguidas", "materiasMin"].includes(r)) return "notas";
+  if (r === "evolucao") return "evolucao";
+  if (r === "semVidas") return "foco";
+  if (String(r).startsWith("materia")) return "materia";
+  if (r === "diario") return ["aulas", "sequencia"].includes(c.campo) ? "presenca" : ["estrelas", "vitorias"].includes(c.campo) ? "estrelas" : "aprendizagem";
+  return "outras";
+}
+const nn = v => v ?? "?";
+function resumoRegra(c) {
+  return ({ provas: `fez ${nn(c.n)} prova(s)`, nota: `uma nota ≥ ${nn(c.min)}`, notasSeguidas: `${nn(c.n)} notas seguidas ≥ ${nn(c.min)}`, evolucao: `melhorou ${nn(c.n)} vez(es)`,
+    semVidas: `${nn(c.n)} provas sem perder vida`, materiasMin: `nota ≥ ${nn(c.min)} em ${nn(c.n)} matérias`, materiaNota: `na matéria: nota ≥ ${nn(c.min)}`,
+    materiaMedia: `na matéria: média ≥ ${nn(c.min)} com ${nn(c.n)} provas`, materiaEvolucao: `na matéria: melhorou ${nn(c.n)} vez(es)`,
+    diario: `${CAMPOS_DIARIO[c.campo] || "diário"} ≥ ${nn(c.n)}` })[c.regra] || "regra não reconhecida";
+}
+let conqAbertas = new Set(), conqFiltro = { busca: "", estado: "todas" };
+const normC = s => String(s || "").toLowerCase().normalize("NFD").replace(/\p{M}+/gu, "");
 function desenharConq() {
-  const box = $("#conqEditor"), admin = ctx.ehAdmin(), ia = !!(ctx.iaCfg?.() || ctx.urlCorretor?.());
-  const grupos = [["geral", "🌟 Gerais (todas as matérias)"], ["materia", "📚 Por matéria (valem em cada matéria; use {materia} no título)"], ["diario", "📔 Da sala de aula (diário, alunos com acessibilidade)"]];
-  const campo = (c, i, k) => k === "campo" ? `<select data-i="${i}" data-k="campo" ${admin ? "" : "disabled"}>${Object.entries(CAMPOS_DIARIO).map(([v, r]) => `<option value="${v}"${c.campo === v ? " selected" : ""}>${esc(r)}</option>`).join("")}</select>`
-    : `<label class="cq-num">${k === "n" ? "N" : "mín."}<input type="number" min="0" max="${k === "min" ? 100 : 500}" data-i="${i}" data-k="${k}" value="${c[k] ?? ""}" ${admin ? "" : "disabled"}></label>`;
-  box.innerHTML = grupos.map(([g, rot]) => `<h3 class="conq-h3">${rot}</h3>` + conqLista.map((c, i) => [c, i]).filter(([c]) => (REGRAS[c.regra]?.grupo || c.grupo) === g).map(([c, i]) => `
-    <div class="cq-linha${c.ativa === false ? " desligada" : ""}">
-      <span class="interruptor-g" title="Ligada"><input type="checkbox" data-i="${i}" data-k="ativa"${c.ativa !== false ? " checked" : ""} ${admin ? "" : "disabled"} aria-label="Conquista ligada"><i></i></span>
-      <input type="text" class="cq-emoji" data-i="${i}" data-k="e" value="${esc(c.e)}" maxlength="4" aria-label="Emoji" ${admin ? "" : "disabled"}>
-      <div class="cq-textos"><input type="text" data-i="${i}" data-k="t" value="${esc(c.t)}" maxlength="60" aria-label="Título" ${admin ? "" : "disabled"}>
-        <input type="text" data-i="${i}" data-k="d" value="${esc(c.d || "")}" maxlength="160" aria-label="Descrição" class="pequeno" ${admin ? "" : "disabled"}>
-        ${skinsDe(c.id).length ? `<span class="pequeno">🎨 libera: ${skinsDe(c.id).map(esc).join(", ")}</span>` : ""}</div>
-      <div class="cq-regra"><select data-i="${i}" data-k="regra" ${admin ? "" : "disabled"}>${Object.entries(REGRAS).map(([k, r]) => `<option value="${k}"${c.regra === k ? " selected" : ""}>${esc(r.nome)}</option>`).join("")}</select>
-        <div class="linha" style="gap:6px">${(REGRAS[c.regra]?.campos || []).map(k => campo(c, i, k)).join("")}</div></div>
-      ${admin ? `<button type="button" class="discreto mini perigo-txt" data-del="${i}" aria-label="Apagar a conquista ${esc(c.t)}">🗑</button>` : ""}
-    </div>`).join("")).join("") +
-    (admin ? `<div class="linha acoes" style="margin-top:14px"><button type="button" id="cqSalvar">Salvar conquistas</button><button type="button" class="leve" id="cqNova">+ Nova conquista</button>
-      ${ia ? `<button type="button" class="leve" id="cqIA">🤖 Sugerir novas com IA</button>` : ""}<button type="button" class="leve" id="cqPadrao">↺ Restaurar o padrão</button></div>
-      <p class="pequeno">As mudanças valem para todos os alunos ao recarregar a página. Conquistas com 🎨 liberam skins do personagem: se apagar, a skin fica sem jeito de liberar.</p>` : "");
+  const box = $("#conqEditor"), admin = ctx.ehAdmin(), ia = !!(ctx.iaCfg?.() || ctx.urlCorretor?.()), dis = admin ? "" : "disabled";
+  const campo = (c, i, k) => k === "campo" ? `<label class="cq-num">Contador<select data-i="${i}" data-k="campo" ${dis}>${Object.entries(CAMPOS_DIARIO).map(([v, r]) => `<option value="${v}"${c.campo === v ? " selected" : ""}>${esc(r)}</option>`).join("")}</select></label>`
+    : `<label class="cq-num">${k === "n" ? "N" : "mín."}<input type="number" min="0" max="${k === "min" ? 100 : 500}" data-i="${i}" data-k="${k}" value="${c[k] ?? ""}" ${dis}></label>`;
+  const item = (c, i) => { const sk = skinsDe(c.id);
+    return `<div class="cq-item${c.ativa === false ? " desligada" : ""}" data-item="${i}" data-busca="${esc(normC(`${c.t} ${c.d || ""} ${resumoRegra(c)}`))}">
+      <span class="interruptor-g" title="Ligada"><input type="checkbox" data-i="${i}" data-k="ativa"${c.ativa !== false ? " checked" : ""} ${dis} aria-label="Conquista ${esc(c.t)} ligada"><i></i></span>
+      <details class="cq-det" data-id="${esc(c.id)}"${conqAbertas.has(c.id) ? " open" : ""}>
+        <summary><span class="cq-e" aria-hidden="true">${esc(c.e || "🏅")}</span><span class="cq-tit"><b>${esc(c.t)}</b><span class="pequeno">${esc(resumoRegra(c))}${c.d ? ` · ${esc(c.d)}` : ""}</span></span>
+          ${sk.length ? `<span class="chip info" title="Libera: ${esc(sk.join(", "))}">🎨 ${sk.length} skin(s)</span>` : ""}<span class="cq-editar pequeno">${admin ? "✎ editar" : "ver"}</span></summary>
+        <div class="cq-corpo">
+          <div class="cq-l1"><label class="cq-num">Emoji<input type="text" class="cq-emoji" data-i="${i}" data-k="e" value="${esc(c.e)}" maxlength="4" ${dis}></label>
+            <label class="cq-num cq-cresce">Título<input type="text" data-i="${i}" data-k="t" value="${esc(c.t)}" maxlength="60" ${dis}></label></div>
+          <label class="cq-num cq-cresce">Descrição (o aluno vê)<input type="text" data-i="${i}" data-k="d" value="${esc(c.d || "")}" maxlength="160" ${dis}></label>
+          <div class="cq-l1"><label class="cq-num cq-cresce">Regra (quando o aluno ganha)<select data-i="${i}" data-k="regra" ${dis}>${Object.entries(REGRAS).map(([k, r]) => `<option value="${k}"${c.regra === k ? " selected" : ""}>${esc(r.nome)}</option>`).join("")}</select></label>
+            ${(REGRAS[c.regra]?.campos || []).map(k => campo(c, i, k)).join("")}
+            <label class="cq-num">Tema<select data-i="${i}" data-k="tema" ${dis}><option value="">automático</option>${Object.entries(TEMAS).map(([k, x]) => `<option value="${k}"${c.tema === k ? " selected" : ""}>${esc(x.t)}</option>`).join("")}</select></label></div>
+          ${sk.length ? `<p class="pequeno" style="margin:0">🎨 Libera no personagem: ${sk.map(esc).join(", ")}. Se apagar esta conquista, essas skins ficam sem jeito de liberar.</p>` : ""}
+        </div></details>
+      ${admin ? menuHTML({ aria: `Mais ações: ${c.t}`, itensHTML: itemMenu({ e: "⧉", t: "Duplicar", attrs: `data-dup="${i}"` }) + itemMenu({ e: "🗑", t: "Apagar", perigo: true, attrs: `data-del="${i}"` }) }) : ""}
+    </div>`; };
+  const porTema = {};
+  conqLista.forEach((c, i) => (porTema[temaAuto(c)] ||= []).push([c, i]));
+  const ligadas = conqLista.filter(c => c.ativa !== false).length;
+  box.innerHTML = `<div class="cq-barra">
+      <div class="toolbar" role="search"><input type="search" id="cqBusca" placeholder="Buscar conquista…" aria-label="Buscar conquista" value="${esc(conqFiltro.busca)}">
+        <div id="cqEstado"></div><span class="tb-contagem" id="cqContagem">${ligadas} de ${conqLista.length} ligadas</span></div>
+      ${admin ? `<div class="cq-acoes"><button type="button" class="leve" id="cqNova">+ Nova</button><button type="button" id="cqSalvar">Salvar conquistas</button>
+        ${menuHTML({ aria: "Mais ações das conquistas", itensHTML: (ia ? itemMenu({ e: "🤖", t: "Sugerir novas com IA", id: "cqIA" }) : "") + itemMenu({ e: "↺", t: "Restaurar o padrão", id: "cqPadrao" }) })}</div>` : ""}
+    </div>` +
+    Object.keys(TEMAS).filter(k => porTema[k]?.length).map(k => { const l = porTema[k], on = l.filter(([c]) => c.ativa !== false).length;
+      return collapsible({ chave: `conq:tema:${k}`, classe: "cq-tema", titulo: TEMAS[k].t, attrs: `data-tema="${k}"${l.some(([c]) => conqAbertas.has(c.id)) ? " open" : ""}`,
+        resumoHTML: `<span class="chip">${l.length}</span>${on < l.length ? `<span class="chip off">${l.length - on} desligada(s)</span>` : ""}${TEMAS[k].d ? `<span class="pequeno">${esc(TEMAS[k].d)}</span>` : ""}`,
+        corpoHTML: l.map(([c, i]) => item(c, i)).join("") }); }).join("") +
+    `<p class="pequeno cq-nada oculto">Nenhuma conquista com esse filtro.</p>` +
+    (admin ? `<p class="pequeno">As mudanças valem para todos os alunos ao recarregar a página. Clique numa conquista para editar; o ⋯ duplica ou apaga.</p>` : "");
+  // filtro: busca + ligadas/desligadas (com busca, os temas abrem)
+  const filtrar = () => {
+    const t = normC(conqFiltro.busca), est = conqFiltro.estado;
+    box.querySelectorAll(".cq-tema").forEach(tm => {
+      let n = 0;
+      tm.querySelectorAll(".cq-item").forEach(el => { const c = conqLista[+el.dataset.item];
+        const ok = (!t || el.dataset.busca.includes(t)) && (est === "todas" || (est === "ligadas") === (c.ativa !== false)); el.classList.toggle("oculto", !ok); n += ok; });
+      tm.classList.toggle("oculto", !n); if (t && n) tm.open = true;
+    });
+    box.querySelector(".cq-nada").classList.toggle("oculto", !!box.querySelector(".cq-tema:not(.oculto)"));
+  };
+  chips($("#cqEstado", box), [{ v: "todas", t: "Todas" }, { v: "ligadas", t: "Ligadas" }, { v: "desligadas", t: "Desligadas" }], { valor: conqFiltro.estado, aria: "Mostrar", aoMudar: v => { conqFiltro.estado = v; filtrar(); } });
+  $("#cqBusca", box).oninput = e => { conqFiltro.busca = e.target.value; filtrar(); };
+  filtrar();
+  box.querySelectorAll("details.cq-det").forEach(d => d.ontoggle = () => d.open ? conqAbertas.add(d.dataset.id) : conqAbertas.delete(d.dataset.id));
   box.querySelectorAll("[data-k]").forEach(el => el.onchange = () => {
     const c = conqLista[+el.dataset.i], k = el.dataset.k;
     c[k] = k === "ativa" ? el.checked : ["n", "min"].includes(k) ? (el.value === "" ? null : Number(el.value)) : el.value;
-    if (k === "regra") { c.grupo = REGRAS[c.regra].grupo; if (c.regra === "diario" && !c.campo) c.campo = "aulas"; desenharConq(); }
-    if (k === "ativa") el.closest(".cq-linha").classList.toggle("desligada", !el.checked);
+    if (k === "tema" && !el.value) delete c.tema;
+    if (k === "regra") { c.grupo = REGRAS[c.regra].grupo; if (c.regra === "diario" && !c.campo) c.campo = "aulas"; }
+    if (k === "ativa") { el.closest(".cq-item").classList.toggle("desligada", !el.checked); $("#cqContagem").textContent = `${conqLista.filter(x => x.ativa !== false).length} de ${conqLista.length} ligadas`; }
+    else desenharConq();   // o resumo, o tema e os campos da regra mudam
   });
   box.querySelectorAll("[data-del]").forEach(b => b.onclick = () => { conqLista.splice(+b.dataset.del, 1); desenharConq(); });
-  $("#cqNova")?.addEventListener("click", () => { conqLista.push({ id: "c-" + Date.now().toString(36), e: "🏅", t: "Nova conquista", d: "", grupo: "geral", regra: "provas", n: 1, ativa: true }); desenharConq(); });
+  box.querySelectorAll("[data-dup]").forEach(b => b.onclick = () => { const o = conqLista[+b.dataset.dup], c = { ...structuredClone(o), id: "c-" + Date.now().toString(36), t: o.t + " (cópia)", ativa: false };
+    conqLista.splice(+b.dataset.dup + 1, 0, c); conqAbertas.add(c.id); desenharConq(); });
+  $("#cqNova")?.addEventListener("click", () => { const c = { id: "c-" + Date.now().toString(36), e: "🏅", t: "Nova conquista", d: "", grupo: "geral", regra: "provas", n: 1, ativa: true };
+    conqLista.push(c); conqAbertas.add(c.id); conqFiltro = { busca: "", estado: "todas" }; desenharConq();
+    box.querySelector(`details.cq-det[data-id="${c.id}"]`)?.scrollIntoView({ behavior: "smooth", block: "center" }); });
   $("#cqPadrao")?.addEventListener("click", () => { conqLista = structuredClone(CONQUISTAS_PADRAO).map(c => ({ ativa: true, ...c })); desenharConq(); toast("Padrão carregado. Clique em Salvar para valer.", "info"); });
   $("#cqSalvar")?.addEventListener("click", async () => {
     const ruim = conqLista.find(c => !String(c.t || "").trim() || (REGRAS[c.regra]?.campos || []).some(k => k !== "campo" && !(Number(c[k]) >= 0 && c[k] !== null && c[k] !== "")));
@@ -134,7 +200,8 @@ function desenharConq() {
         const d = await r.json().catch(() => ({})); if (!r.ok) throw new Error(d.erro || `Erro ${r.status}`); novas = d.conquistas;
       }
       conqLista.push(...novas.map(c => ({ ...c, ativa: false })));
-      desenharConq(); toast(`🤖 ${novas.length} sugestão(ões) no fim de cada grupo, desligadas: revise, ligue as que gostar e salve.`, "ok");
+      novas.forEach(c => conqAbertas.add(c.id)); conqFiltro = { busca: "", estado: "desligadas" };
+      desenharConq(); toast(`🤖 ${novas.length} sugestão(ões) abertas e desligadas (filtro Desligadas): revise, ligue as que gostar e salve.`, "ok");
     } catch (e) { toast("🤖 " + (e.message || traduzirErro(e)), "erro"); }
   });
 }

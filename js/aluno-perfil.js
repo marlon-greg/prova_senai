@@ -83,7 +83,7 @@ function editarPersonagem({ eu, perfil, titulos, simulacao, aoSalvar }) {
     c.querySelectorAll("[data-parte]").forEach(b => b.onclick = () => { parte = b.dataset.parte; desenhar(c); });
     $("#epItens", c).innerHTML = CATALOGO[parte].filter(it => parte === "corpo" || permitido(it, av.corpo)).map(it => { const ok = liberado(it, titulos);
       return `<button type="button" class="ep-item${av[parte] === it.id ? " sel" : ""}${ok ? "" : " travado"}" data-item="${esc(it.id)}" ${ok ? "" : "disabled"} title="${esc(ok ? it.nome : textoTrava(it.trava))}">
-        ${svgAvatar({ ...av, [parte]: it.id }, 74, { parte })}<span>${esc(it.nome)}</span>${ok ? (it.trava ? `<small class="ep-novo">✨ skin</small>` : "") : `<small>${esc(textoTrava(it.trava))}</small>`}</button>`; }).join("");
+        ${svgAvatar(parte === "corpo" ? trocarSexo(av, it.id, titulos) : { ...av, [parte]: it.id }, 74, { parte })}<span>${esc(it.nome)}</span>${ok ? (it.trava ? `<small class="ep-novo">✨ skin</small>` : "") : `<small>${esc(textoTrava(it.trava))}</small>`}</button>`; }).join("");
     c.querySelectorAll("[data-item]").forEach(b => b.onclick = () => { av = parte === "corpo" ? trocarSexo(av, b.dataset.item, titulos) : { ...av, [parte]: b.dataset.item }; desenhar(c); });
   };
   return modal({ titulo: "🎨 Meu personagem", conteudo: html, ok: "Salvar personagem", cancelar: "Cancelar", largo: true,
