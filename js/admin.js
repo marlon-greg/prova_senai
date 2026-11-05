@@ -15,6 +15,7 @@ import { mesclarQuestao } from "./acessibilidade.js";
 import { temFormato, textoResposta, textoChave, FORMATOS } from "./formatos-ui.js";
 import { iniciarAcessibilidade, carregarAcessibilidade, prepararNovo as prepararNovoAcess, abrirDepois } from "./admin-acess.js";
 import { iniciarHistorico, carregarHistorico } from "./admin-historico.js";
+import { tarefa } from "./ui.js";
 import { drawer, ligarFiltros, atualizarFiltros, ajudasEmPopover, menuHTML, itemMenu, vazio, chips, statTiles } from "./ui.js";
 import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp, onSnapshot, increment, deleteField }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
@@ -1851,8 +1852,10 @@ function corrigirPendentesIA({ auto = false } = {}) {
   if (!auto && !novos && !rodandoIA) { toast("Nenhuma dissertativa pendente nesta prova.", "info"); return; }
   processarFilaIA();
 }
+let tarefaIA = null;   // painel de progresso da correção (canto da tela)
 function mostrarProgressoIA(atual) {
   const total = iaFeitas + iaErros + filaIA.length + (atual ? 1 : 0);
+  if (atual && tarefaIA) tarefaIA.total(total).passo(iaFeitas + iaErros, `${atual.nome} · questão ${atual.n}${iaErros ? ` · ${iaErros} com erro` : ""}`);
   const el = $("#iaProgresso");
   if (!total) { el.innerHTML = ""; return; }
   const feitos = iaFeitas + iaErros;
@@ -1863,6 +1866,7 @@ function mostrarProgressoIA(atual) {
 async function processarFilaIA() {
   if (rodandoIA) return;
   rodandoIA = true; iaFeitas = 0; iaErros = 0; atualizarControlesIA();
+  tarefaIA = tarefa({ titulo: "Corrigindo dissertativas com IA", icone: "🤖", total: filaIA.length, texto: "Começando…" });
   const provaId = resDados?.prova.id;
   try {
     while (filaIA.length) {
@@ -1892,6 +1896,8 @@ async function processarFilaIA() {
     if (iaErros && resDados?.prova.id === provaId) montarResultados();   // mostra os erros no detalhe
   } finally {
     rodandoIA = false; atualizarControlesIA(); mostrarProgressoIA(null);
+    if (iaErros && !iaFeitas) tarefaIA?.erro(`${iaErros} com erro: veja no detalhe do aluno.`); else tarefaIA?.fim(`${iaFeitas} corrigida(s)${iaErros ? ` · ${iaErros} com erro` : ""}`);
+    tarefaIA = null;
     if (iaFeitas || iaErros) toast(`IA: ${iaFeitas} corrigida(s)${iaErros ? `, ${iaErros} com erro (veja no detalhe do aluno)` : ""}.`, iaErros ? "erro" : "ok");
   }
 }

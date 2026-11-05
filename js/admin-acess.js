@@ -9,6 +9,7 @@ import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, abrirM
 import { adaptarQuestao } from "./ia.js";
 import { abrirOpcoes, editarFormato, previaAplicada, gerarOpcoes, lerOpcoes } from "./admin-formatos.js";
 import { perfilIA } from "./ia.js";
+import { tarefa } from "./ui.js";
 import { contextoDiario } from "../servidor/formatos.js";
 import { FORMATOS, temFormato, textoChave } from "./formatos-ui.js";
 // como a questão aparece impressa para o aluno (sem resposta)
@@ -279,6 +280,7 @@ async function abrirAluno(email, rolar = true) {
   };
   $("#acPerfilIA").onclick = async e => {
     const b = e.currentTarget; b.disabled = true; b.textContent = "🤖 Montando o perfil…";
+    const tf = tarefa({ titulo: "Montando o perfil do aluno", icone: "🤖", estimativaSeg: 40, texto: "Lendo o diário, os comentários e as provas adaptadas…" });
     try {
       const qs = await getDocs(collection(db, "acessibilidade", email, "questoes")).catch(() => null);
       const fmts = {}; (qs?.docs || []).forEach(d => { const f = d.data().formato || "texto"; fmts[f] = (fmts[f] || 0) + 1; });
@@ -295,8 +297,8 @@ async function abrirAluno(email, rolar = true) {
         const r = await fetch(ctx.urlCorretor(), { method: "POST", headers: { authorization: "Bearer " + token, "content-type": "application/json" }, body: JSON.stringify({ acao: "perfil", email, formatos }) });
         const d = await r.json().catch(() => ({})); if (!r.ok) throw new Error(d.erro || `Erro ${r.status}`); texto = d.texto;
       }
-      $("#acPerfil").value = texto; toast("🤖 Perfil montado. Revise e clique em Salvar perfil.", "ok");
-    } catch (err) { toast("🤖 " + (err.message || traduzirErro(err)), "erro"); }
+      $("#acPerfil").value = texto; tf.fim("Perfil montado. Revise e salve."); toast("🤖 Perfil montado. Revise e clique em Salvar perfil.", "ok");
+    } catch (err) { tf.erro(err.message || traduzirErro(err)); toast("🤖 " + (err.message || traduzirErro(err)), "erro"); }
     b.disabled = false; b.textContent = "🤖 Atualizar com o diário e as provas";
   };
   desenharLaudos(email);
@@ -560,13 +562,16 @@ async function sugerirTodas() {
   const itens = qAtual.itens, msg = $("#acIAMsg");
   ocupado = true; desenharQuestoes();
   let feitas = 0, erros = 0;
+  const tf = tarefa({ titulo: "Preparando os formatos da prova adaptada", icone: "🎨", total: itens.length });
   for (const [n, x] of itens.entries()) {
+    tf.passo(n, `Questão ${n + 1} de ${itens.length}`);
     if (await lerOpcoes(qAtual.email, x.qid)) continue;
     if (msg) msg.textContent = `🎨 Preparando formatos: questão ${n + 1} de ${itens.length}…`;
     try { await gerarOpcoes({ ctx, email: qAtual.email, prova: qAtual.prova, x, orientacao: $("#acOrientacao")?.value.trim() || "", laudos: () => laudosDoAluno(qAtual.email) }); feitas++; }
     catch (e) { erros++; console.warn("formatos", x.qid, e); if (/chave|crédito|configurad/i.test(e.message)) { toast(e.message, "erro"); break; } }
   }
   if (msg) msg.textContent = "";
+  erros && !feitas ? tf.erro(`${erros} questão(ões) com erro`) : tf.fim(`${feitas} questão(ões) com opções prontas${erros ? ` · ${erros} com erro` : ""}`);
   ocupado = false; desenharQuestoes();
   toast(`🎨 Opções prontas em ${feitas} questão(ões)${erros ? ` · ${erros} com erro` : ""}. Abra cada questão e clique em 🎨 Opções de formato para escolher.`, erros ? "erro" : "ok");
 }
@@ -585,12 +590,14 @@ async function laudosDoAluno(email) {
 async function adaptarComIA(itens) {
   const email = qAtual.email, orientacao = $("#acOrientacao").value.trim(), cfg = ctx.iaCfg();
   const res = { adaptadas: 0, erros: [] };
+  const tf = tarefa({ titulo: "Adaptando a prova com IA", icone: "🤖", total: itens.length, texto: "Lendo o perfil e os laudos…" });
+  try {
   if (cfg) {   // navegador
     const pv = (await getDoc(doc(db, "acessibilidadePrivado", email)).catch(() => null))?.data() || {};
     const descricao = [pv.descricao, pv.perfilIA?.texto ? `PERFIL REVISADO PELA EQUIPE:\n${pv.perfilIA.texto}` : ""].filter(Boolean).join("\n\n");
     const laudos = await laudosDoAluno(email);
     for (const [n, x] of itens.entries()) {
-      $("#acIAMsg").textContent = `🤖 Adaptando ${n + 1} de ${itens.length}…`;
+      $("#acIAMsg").textContent = `🤖 Adaptando ${n + 1} de ${itens.length}…`; tf.passo(n, `Questão ${n + 1} de ${itens.length}`);
       try {
         const r = await adaptarQuestao({ chave: cfg.chave, modelo: cfg.modelo.includes("haiku") ? "claude-sonnet-5-5" : cfg.modelo, q: x.q, g: x.g, descricao, orientacao, laudos });
         const dados = { ...r, dica: r.apoios[0] || "", origem: "ia", modelo: cfg.modelo, provaId: qAtual.prova.id, adaptadoPor: ctx.eu.email, atualizadoEm: serverTimestamp() };
@@ -601,7 +608,7 @@ async function adaptarComIA(itens) {
     const token = await ctx.auth.currentUser.getIdToken();
     for (let i = 0; i < itens.length; i += 15) {
       const lote = itens.slice(i, i + 15);
-      $("#acIAMsg").textContent = `🤖 Adaptando ${i + 1}–${i + lote.length} de ${itens.length} (servidor)…`;
+      $("#acIAMsg").textContent = `🤖 Adaptando ${i + 1}–${i + lote.length} de ${itens.length} (servidor)…`; tf.passo(i, `Questões ${i + 1} a ${i + lote.length} (no servidor)`);
       const r = await fetch(ctx.urlCorretor(), { method: "POST", headers: { authorization: "Bearer " + token, "content-type": "application/json" },
         body: JSON.stringify({ acao: "adaptar", email, provaId: qAtual.prova.id, qids: lote.map(x => x.qid), orientacao, refazer: true }) });
       const d = await r.json().catch(() => ({}));
@@ -609,7 +616,9 @@ async function adaptarComIA(itens) {
       res.adaptadas += d.adaptadas || 0; res.erros.push(...(d.erros || []));
     }
   }
+  } catch (e) { tf.erro(e.message || "Erro na adaptação"); throw e; }
   $("#acIAMsg").textContent = "";
+  res.erros.length && !res.adaptadas ? tf.erro(res.erros[0].erro) : tf.fim(`${res.adaptadas} adaptada(s)${res.erros.length ? ` · ${res.erros.length} com erro` : ""}`);
   return res;
 }
 async function rodarIA(itens) {

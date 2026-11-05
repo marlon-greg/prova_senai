@@ -2,6 +2,7 @@
 // A IA propõe várias formas de cobrar o mesmo conteúdo (V/F, ligar colunas, lacunas…), da mais indicada para a menos,
 // com o porquê e a base técnica. A pessoa vê a prévia (como o aluno vê, com o gabarito), escolhe, ajusta e aplica.
 import { db, esc, $, toast, modal, confirmar, traduzirErro } from "./common.js";
+import { tarefa } from "./ui.js";
 import { FORMATOS, montarDeOpcao, opcaoParaTexto, textoParaOpcao, AJUDA_TEXTO, contextoDiario } from "../servidor/formatos.js";
 import { montarFormato, temFormato } from "./formatos-ui.js";
 import { formatosIA } from "./ia.js";
@@ -99,9 +100,10 @@ export async function abrirOpcoes({ ctx, email, prova, x, laudos, aoAplicar }) {
       fechar = () => caixa.querySelector("[data-r='1']")?.click();
       desenhar(caixa);
       $("#fmtGerar", caixa).onclick = async e => {
-        const b = e.currentTarget; b.disabled = true; $("#fmtLista", caixa).innerHTML = `<p class="pequeno">🤖 Pensando nos formatos para este aluno… (até 1 minuto)</p>`;
-        try { opcoes = await gerarOpcoes({ ctx, email, prova, x, orientacao: $("#fmtOrient", caixa).value.trim(), laudos }); salvas = null; }
-        catch (err) { toast("🤖 " + (err.message || traduzirErro(err)), "erro"); }
+        const b = e.currentTarget; b.disabled = true; $("#fmtLista", caixa).innerHTML = `<div class="espera-ia"><span class="tf-ampulheta" aria-hidden="true">⏳</span><b>A IA está pensando nos formatos para este aluno…</b><span class="pequeno">costuma levar até 1 minuto</span><div class="tf-barra indet"><i></i></div></div>`;
+        const tf = tarefa({ titulo: "Pensando nos formatos da questão", icone: "🎨", estimativaSeg: 50 });
+        try { opcoes = await gerarOpcoes({ ctx, email, prova, x, orientacao: $("#fmtOrient", caixa).value.trim(), laudos }); salvas = null; tf.fim(`${opcoes?.length || 0} opção(ões) de formato`); }
+        catch (err) { tf.erro(err.message || traduzirErro(err)); toast("🤖 " + (err.message || traduzirErro(err)), "erro"); }
         b.disabled = false; b.textContent = "🤖 Gerar de novo"; desenhar(caixa);
       };
       if (!opcoes) $("#fmtGerar", caixa).click();

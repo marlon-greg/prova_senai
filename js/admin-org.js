@@ -9,7 +9,7 @@ import { db, esc, $, toast, modal, confirmar, traduzirErro, temaDe, ordenarTemas
          semestreDe, rotuloSemestre, semestreVizinho, chaveTexto, semestreDaProva, materiaDaProva, dataCurta, nomeTurma, semestreCursoAtual } from "./common.js";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, abrirMaterialEmAba, tamanhoTexto, erroMaterial } from "./material.js";
 import { lerPlanoIA, classificarTopicosIA, lerCursoIA } from "./ia.js";
-import { menuHTML, itemMenu, vazio, collapsible } from "./ui.js";
+import { menuHTML, itemMenu, vazio, collapsible, tarefa } from "./ui.js";
 import { collection, doc, getDocs, addDoc, updateDoc, deleteDoc, writeBatch, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -386,12 +386,13 @@ async function lerPlano(p, arqId = null) {
   const a = arqs.find(x => x.id === arqId) || arqs[0];
   if (!a) return toast("Envie o PDF do plano primeiro.", "erro");
   if (!temIA()) return toast("A IA não está configurada (Configuração).", "erro");
-  toast(`🤖 Lendo ${a.titulo}… pode levar até 1 minuto.`);
+  const tf = tarefa({ titulo: `Lendo o plano de ensino`, icone: "🤖", estimativaSeg: 60, texto: a.titulo });
   let r;
   try {
     r = await pedirIA({ tipo: "plano", planoId: p.id, arquivoId: a.id },
       async cfg => lerPlanoIA({ chave: cfg.chave, modelo: cfg.modelo, pdf: (await baixarMaterial(a.id, basePlano(p.id))).bytes, titulo: a.titulo, materia: p.materia, semestre: p.semestre }));
-  } catch (e) { return toast("🤖 " + (e.message || traduzirErro(e)), "erro"); }
+    tf.fim(`${r.topicos?.length || 0} tópico(s) encontrados: revise`);
+  } catch (e) { tf.erro(e.message || traduzirErro(e)); return toast("🤖 " + (e.message || traduzirErro(e)), "erro"); }
   const juntar = (p.topicos || []).length > 0;
   const html = `<p class="pequeno" style="margin-top:0">A IA leu <b>${esc(a.titulo)}</b>${r.materia && chaveTexto(r.materia) !== chaveTexto(p.materia) ? ` (no PDF a matéria se chama <b>${esc(r.materia)}</b>; o nome cadastrado continua <b>${esc(p.materia)}</b>)` : ""}. <b>Revise e corrija</b> antes de salvar: a IA pode errar datas e nomes.</p>
     <label for="iaTop">Tópicos encontrados (${r.topicos.length}) — <span class="mono">Tópico | início | fim</span></label>
@@ -469,16 +470,17 @@ export async function editarTopicosBanco(bancoId, aoSalvar = () => {}) {
         const alvo = qs.filter(q => !so || !String(caixa.querySelector(`[data-tema="${q.id}"]`).value || "").trim() || chaveTexto(caixa.querySelector(`[data-tema="${q.id}"]`).value) === "geral");
         if (!alvo.length) return toast("Todas as questões já têm tópico. Desmarque \"só as sem tópico\" para refazer todas.", "info");
         btn.disabled = true; $("#tbMsg", caixa).textContent = `🤖 Classificando ${alvo.length} questão(ões)…`;
+        const tf = tarefa({ titulo: "Classificando questões por tópico", icone: "🏷", total: alvo.length });
         try {
           const tops = topicosPlano(materia);
           const r = await pedirIA({ tipo: "topicos", bancoId, materia, topicos: tops, qids: alvo.map(q => q.id) },
             async cfg => ({ topicos: await classificarTopicosIA({ chave: cfg.chave, modelo: cfg.modelo, materia, topicos: tops, questoes: alvo.map(q => ({ id: q.id, tipo: q.tipo, enunciado: q.enunciado, tema: temaDe(q) })),
-              progresso: (i, n) => { $("#tbMsg", caixa).textContent = `🤖 Classificando… ${i} de ${n}`; } }) }));
+              progresso: (i, n) => { $("#tbMsg", caixa).textContent = `🤖 Classificando… ${i} de ${n}`; tf.total(n).passo(i); } }) }));
           let n = 0;
           for (const [id, t] of Object.entries(r.topicos || {})) { const i = caixa.querySelector(`[data-tema="${id}"]`); if (i && i.value.trim() !== t) { i.value = t; i.classList.add("mudou", "ia"); n++; } }
-          $("#tbMsg", caixa).textContent = `🤖 ${n} tópico(s) sugerido(s), destacados em azul. Revise e salve.`;
+          $("#tbMsg", caixa).textContent = `🤖 ${n} tópico(s) sugerido(s), destacados em azul. Revise e salve.`; tf.fim(`${n} tópico(s) sugerido(s)`);
           atualizarLista();
-        } catch (e) { $("#tbMsg", caixa).textContent = ""; toast("🤖 " + (e.message || traduzirErro(e)), "erro"); }
+        } catch (e) { tf.erro(e.message || traduzirErro(e)); $("#tbMsg", caixa).textContent = ""; toast("🤖 " + (e.message || traduzirErro(e)), "erro"); }
         btn.disabled = false;
       };
     },
@@ -617,12 +619,13 @@ async function lerCurso(c, arqId = null) {
   const arqs = arquivosCurso.get(c.id) || [], a = arqs.find(x => x.id === arqId) || arqs[0];
   if (!a) return toast("Envie o PDF do plano de curso primeiro.", "erro");
   if (!temIA()) return toast("A IA não está configurada (Configuração).", "erro");
-  toast(`🤖 Lendo ${a.titulo}… plano de curso grande pode levar 1 a 2 minutos.`);
+  const tf = tarefa({ titulo: "Lendo o plano de curso", icone: "🤖", estimativaSeg: 90, texto: a.titulo });
   let r;
   try {
     r = await pedirIA({ tipo: "curso", cursoId: c.id, arquivoId: a.id },
       async cfg => lerCursoIA({ chave: cfg.chave, modelo: cfg.modelo, pdf: (await baixarMaterial(a.id, baseCurso(c.id))).bytes, titulo: a.titulo, nome: c.nome }));
-  } catch (e) { return toast("🤖 " + (e.message || traduzirErro(e)), "erro"); }
+    tf.fim(`${r.materias?.length || 0} matéria(s) encontradas: revise`);
+  } catch (e) { tf.erro(e.message || traduzirErro(e)); return toast("🤖 " + (e.message || traduzirErro(e)), "erro"); }
   const tem = (c.materias || []).length > 0;
   const html = `<p class="pequeno" style="margin-top:0">A IA achou <b>${r.materias.length} matéria(s)</b> em <b>${esc(a.titulo)}</b>. <b>Revise</b> antes de salvar: corrija nomes de matéria para ficarem iguais aos dos bancos de questões.</p>
     <textarea id="iaCurso" style="min-height:340px">${esc(textoCurso(r.materias))}</textarea>

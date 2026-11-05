@@ -3,6 +3,7 @@
 import { db, esc, $, toast, traduzirErro, dataCurta, semestreDe, materiaDaProva, chaveTexto, textoHorario, rotuloDias } from "./common.js";
 import { HUMOR, ITENS_AUX } from "./diario-perguntas.js";
 import { analiseDiarioIA } from "./ia.js";
+import { tarefa } from "./ui.js";
 import { graficoLinhas, ligarGraficos } from "./graficos.js";
 import { desempenhoPorTopico, MEDIA_MINIMA } from "./admin-relatorios.js";
 import { collection, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
@@ -85,8 +86,9 @@ export async function relatorioAluno(box, ctx) {
     ligarGraficos($("#raCorpo"));
     $("#raIA")?.addEventListener("click", async e => {
       e.target.disabled = true; e.target.textContent = "🤖 Lendo o diário…";
-      try { analise = await analisar(diarios, regs, de, ate); analiseDe = `${de}|${ate}`; }
-      catch (err) { toast("🤖 " + (err.message || traduzirErro(err)), "erro"); }
+      const tf = tarefa({ titulo: "Analisando o diário do período", icone: "🤖", estimativaSeg: 45, texto: `${diarios.length} registro(s)` });
+      try { analise = await analisar(diarios, regs, de, ate); analiseDe = `${de}|${ate}`; tf.fim("Análise pronta"); }
+      catch (err) { tf.erro(err.message || traduzirErro(err)); toast("🤖 " + (err.message || traduzirErro(err)), "erro"); }
       desenhar();
     });
     $("#raTopicos")?.addEventListener("click", async e => {

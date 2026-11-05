@@ -4,7 +4,7 @@ import { db, esc, $, toast, traduzirErro, dataBR, GAMI_PADRAO, lerGamificacao } 
 import { CONQUISTAS_PADRAO, REGRAS, CAMPOS_DIARIO } from "./conquistas.js";
 import { CATALOGO } from "./avatar.js";
 import { sugerirConquistasIA } from "./ia.js";
-import { menuHTML, itemMenu, vazio, collapsible, chips } from "./ui.js";
+import { menuHTML, itemMenu, vazio, collapsible, chips, tarefa } from "./ui.js";
 import { collection, doc, getDoc, getDocs, setDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 let ctx = null;
@@ -189,7 +189,7 @@ function desenharConq() {
   $("#cqIA")?.addEventListener("click", async () => {
     const pedido = prompt("O que você quer de conquistas novas? (ex.: conquistas para quem melhora em Banco de Dados; algo para a semana de provas)", "") ?? null;
     if (pedido === null) return;
-    toast("🤖 Pensando em conquistas novas…");
+    const tf = tarefa({ titulo: "Pensando em conquistas novas", icone: "🤖", estimativaSeg: 30 });
     try {
       const existentes = conqLista.map(c => ({ t: c.t, regra: c.regra })), cfg = ctx.iaCfg?.();
       let novas;
@@ -200,8 +200,8 @@ function desenharConq() {
         const d = await r.json().catch(() => ({})); if (!r.ok) throw new Error(d.erro || `Erro ${r.status}`); novas = d.conquistas;
       }
       conqLista.push(...novas.map(c => ({ ...c, ativa: false })));
-      novas.forEach(c => conqAbertas.add(c.id)); conqFiltro = { busca: "", estado: "desligadas" };
+      tf.fim(`${novas.length} sugestão(ões)`); novas.forEach(c => conqAbertas.add(c.id)); conqFiltro = { busca: "", estado: "desligadas" };
       desenharConq(); toast(`🤖 ${novas.length} sugestão(ões) abertas e desligadas (filtro Desligadas): revise, ligue as que gostar e salve.`, "ok");
-    } catch (e) { toast("🤖 " + (e.message || traduzirErro(e)), "erro"); }
+    } catch (e) { tf.erro(e.message || traduzirErro(e)); toast("🤖 " + (e.message || traduzirErro(e)), "erro"); }
   });
 }

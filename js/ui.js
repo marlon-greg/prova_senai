@@ -244,6 +244,62 @@ export function dropzone({ id, accept = "", texto = "Arraste o arquivo aqui ou c
   return `<label class="dropzone${compacta ? " compacta" : ""}"><input type="file" id="${id}"${accept ? ` accept="${esc(accept)}"` : ""}><span class="dz-icone" aria-hidden="true">${e}</span><span class="dz-texto">${esc(texto)}</span><span class="dz-arquivo"></span></label>`;
 }
 
+// ---------- tarefa demorada (IA corrigindo, adaptando, lendo PDF…) ----------
+// Painel fixo no canto: ampulheta animada, título, o que está fazendo agora, barra (n de total), tempo decorrido e quanto falta.
+// Azul trabalhando, verde no fim, vermelho com erro. O título da aba mostra o progresso (dá para trocar de aba e acompanhar).
+//   const t = tarefa({ titulo: "Corrigindo com IA", total: 12, icone: "🤖" });
+//   t.passo(3, "Maria — Q2"); t.texto("Lendo o PDF…"); t.total(20); t.fim("12 corrigidas"); t.erro("Sem crédito na API")
+// Sem total = barra animada (não sabe quanto falta); estimativaSeg dá uma ideia do tempo nesse caso.
+let tarefasAbertas = 0;
+const tituloOriginal = typeof document !== "undefined" ? document.title : "";
+const relogio = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+export function tarefa({ titulo, total = 0, icone = "⏳", estimativaSeg = 0, texto = "" }) {
+  let pilha = document.getElementById("tarefas");
+  if (!pilha) { pilha = document.createElement("div"); pilha.id = "tarefas"; pilha.className = "tarefas"; pilha.setAttribute("aria-live", "polite"); document.body.appendChild(pilha); }
+  const el = document.createElement("div");
+  el.className = "tarefa rodando"; el.setAttribute("role", "status");
+  el.innerHTML = `<div class="tf-topo"><span class="tf-ampulheta" aria-hidden="true">⏳</span><div class="tf-tit"><b>${icone} ${esc(titulo)}</b><span class="tf-texto"></span></div>
+      <button type="button" class="icone tf-fechar" aria-label="Esconder" title="Esconder (o trabalho continua)">✕</button></div>
+    <div class="tf-barra${total ? "" : " indet"}"><i></i></div>
+    <div class="tf-rodape"><span class="tf-n"></span><span class="tf-tempo"></span></div>`;
+  pilha.appendChild(el); tarefasAbertas++;
+  const ini = Date.now();
+  let n = 0, tot = total, acabou = false;
+  const atualizar = () => {
+    const seg = (Date.now() - ini) / 1000;
+    let resta = "";
+    if (tot && n > 0 && n < tot) resta = ` · faltam ~${relogio(Math.max(1, seg / n * (tot - n)))}`;
+    else if (!tot && estimativaSeg) resta = seg < estimativaSeg ? ` · costuma levar ~${relogio(estimativaSeg)}` : " · quase lá…";
+    el.querySelector(".tf-tempo").textContent = acabou ? `em ${relogio(seg)}` : `⏱ ${relogio(seg)}${resta}`;
+    el.querySelector(".tf-n").textContent = tot ? `${Math.min(n, tot)} de ${tot}` : "";
+    el.querySelector(".tf-barra i").style.width = tot ? `${Math.min(100, n / tot * 100)}%` : "";
+    if (!acabou) document.title = `${tot ? `(${Math.min(n, tot)}/${tot}) ` : "⏳ "}${titulo} · ${tituloOriginal}`;
+  };
+  const timer = setInterval(atualizar, 1000);
+  el.querySelector(".tf-fechar").onclick = () => { el.classList.add("escondida"); };
+  const encerrar = (classe, msg, ms) => {
+    if (acabou) return; acabou = true; clearInterval(timer);
+    el.classList.remove("rodando"); el.classList.add(classe);
+    el.querySelector(".tf-ampulheta").textContent = classe === "ok" ? "✅" : "⚠️";
+    el.querySelector(".tf-barra").classList.remove("indet");
+    if (classe === "ok") { n = tot || 1; tot = tot || 1; }
+    if (msg !== undefined) el.querySelector(".tf-texto").textContent = msg;
+    atualizar(); el.classList.remove("escondida");
+    if (--tarefasAbertas <= 0) document.title = tituloOriginal;
+    setTimeout(() => { el.classList.add("saindo"); setTimeout(() => el.remove(), 400); }, ms);
+  };
+  const api = {
+    passo(i, txt) { n = i; if (txt !== undefined) el.querySelector(".tf-texto").textContent = txt; atualizar(); return api; },
+    texto(txt) { el.querySelector(".tf-texto").textContent = txt; return api; },
+    total(t) { tot = t; el.querySelector(".tf-barra").classList.toggle("indet", !t); atualizar(); return api; },
+    fim(msg = "Pronto!") { encerrar("ok", msg, 5000); },
+    erro(msg = "Não deu certo.") { encerrar("falhou", msg, 12000); }
+  };
+  if (texto) api.texto(texto);
+  atualizar();
+  return api;
+}
+
 // ---------- delegação global (liga uma vez) ----------
 if (!window.__uiLigado) {
   window.__uiLigado = true;
