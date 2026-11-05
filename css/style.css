@@ -343,10 +343,11 @@ header { position:sticky; top:0; z-index:200; backdrop-filter:saturate(1.2) blur
 .secao-titulo { display:flex; align-items:center; justify-content:space-between; margin:24px 0 12px; }
 .secao-titulo h2 { margin:0; font-size:1.25em; }
 .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
-.chip { display:inline-flex; align-items:center; gap:6px; padding:6px 12px; border-radius:999px; background:#f1f2f4; border:1px solid var(--borda); font-size:.9em; font-weight:500; }
-.chip.aviso { background:var(--aviso-claro); border-color:#f0d39a; color:var(--aviso); }
-.chip.info { background:var(--info-claro); border-color:#bcd3ef; color:var(--info); }
-.chip.vidas { background:#fff0f0; border-color:#f5c2c4; color:var(--erro); }
+/* chips grandes da tela de início da prova do aluno */
+.chips > .chip { gap:6px; padding:6px 12px; background:#f1f2f4; border:1px solid var(--borda); font-size:.9em; font-weight:500; color:var(--texto); margin:0; }
+.chips > .chip.aviso { background:var(--aviso-claro); border-color:#f0d39a; color:var(--aviso); }
+.chips > .chip.info { background:var(--info-claro); border-color:#bcd3ef; color:var(--info); }
+.chips > .chip.vidas { background:#fff0f0; border-color:#f5c2c4; color:var(--erro); }
 button.destaque { border-color:var(--vermelho) !important; color:var(--vermelho) !important; font-weight:700; }
 button.perigo-txt { color:var(--erro); }
 
@@ -845,6 +846,42 @@ td.rl-medio { background:var(--aviso-claro); }
 .graf-tabela > summary { cursor:pointer; color:var(--info); font-size:.85em; }
 .relatorio-aluno .barra-filtros input[type=date] { width:auto; }
 
+/* --- Provas: grupos recolhíveis e cartão compacto --- */
+.grupo-provas > .rc-corpo { padding-top:var(--sp-1); }
+.grupo-provas.sem-turma { border-color:#f3d58f; background:#fffaf0; }
+.grupo-provas .sub-grupo { padding:0; margin:0 0 var(--sp-3); }
+.grupo-provas .sg-titulo { margin:var(--sp-2) 0; }
+.cartoes-provas { grid-template-columns:1fr; gap:var(--sp-2); }
+.cartao-prova.compacto { display:grid; grid-template-columns:minmax(0, 1fr) auto; gap:var(--sp-2) var(--sp-4); align-items:center; padding:var(--sp-3) var(--sp-4);
+  border-top:1px solid var(--borda); border-left:5px solid #c8d0dc; border-radius:var(--raio); box-shadow:none; }
+.cartao-prova.compacto:hover { transform:none; box-shadow:var(--sombra); }
+.cartao-prova.compacto.aberta { border-left-color:var(--ok); }
+.cp-info { min-width:0; }
+.cp-l1 { display:flex; flex-wrap:wrap; align-items:center; gap:4px; }
+.cp-l1 h3 { margin:0 var(--sp-2) 0 0; font-size:1.05em; }
+.cp-l1 .chip { margin:0; }
+.cp-l2 { display:flex; flex-wrap:wrap; gap:2px 14px; margin-top:4px; font-size:var(--fs-sm); color:var(--suave); }
+.cp-l2 b { color:var(--texto); }
+.cp-botoes { display:flex; gap:var(--sp-2); align-items:center; flex-wrap:wrap; justify-content:flex-end; }
+.cp-mais { grid-column:1 / -1; }
+.cp-mais > summary { display:inline-flex; align-items:center; gap:6px; font-size:var(--fs-sm); color:var(--info); font-weight:600; list-style:none; }
+.cp-mais > summary::-webkit-details-marker { display:none; }
+.cp-mais > summary::after { content:"▾"; transition:transform var(--t-rapida); }
+.cp-mais[open] > summary::after { transform:rotate(180deg); }
+.cp-mais .cp-detalhes { margin-top:var(--sp-2); padding-top:var(--sp-2); border-top:1px dashed var(--borda); }
+/* --- Bancos --- */
+.rodape-card { display:flex; justify-content:flex-end; gap:var(--sp-2); flex-wrap:wrap; margin-top:var(--sp-4); }
+details.recolhivel.sub { background:var(--fundo); }
+details.recolhivel > .rc-corpo.cartoes-materias { padding:0 var(--sp-4) var(--sp-4); }
+.cartao-banco .cm-topo .chip { margin:0; }
+.topicos-banco .lista-topicos { padding-left:0; list-style:none; }
+.topicos-banco .lista-topicos .chip { font-size:.72em; min-height:20px; padding:1px 8px; }
+#aba-bancos .dropzone { margin-top:var(--sp-1); }
+
+/* com drawer aberto: o "?" flutuante não cobre o rodapé do painel; o toast fica por cima de tudo */
+body.com-drawer .ajuda-flutuante { display:none; }
+.toast { z-index:var(--z-toast); }
+
 /* =====================================================================
    9. Tela do aluno (início, prova, resultado, perfil)
    ===================================================================== */
@@ -1338,3 +1375,4 @@ body:is(.tema-creme, .tema-azul, .tema-contraste, .tema-escuro) { background-ima
   .card-cab .cc-acoes { margin-left:0; }
 }
 @media (prefers-reduced-motion: reduce) { .drawer, .drawer-fundo, details.recolhivel > summary::before, .chip.pulsante::before { transition:none !important; animation:none !important; } }
+@media (max-width:700px) { .cartao-prova.compacto { grid-template-columns:1fr; } .cp-botoes { justify-content:flex-start; } }

@@ -82,36 +82,46 @@
 
     <!-- PROVAS -->
     <div id="aba-provas">
-      <details class="card nova-prova" id="cardNovaProva">
-        <summary><h2>Nova prova</h2><span class="btn-fake">+ Criar nova prova</span></summary>
+      <div class="cab-pagina"><h2><span class="e" aria-hidden="true">📝</span>Provas
+        <span class="ajuda-pop"><button type="button" class="btn-ajuda" data-popover aria-haspopup="dialog" aria-expanded="false" aria-label="Como funciona" title="Como funciona">i</button><template><p>Crie a prova fechada e <b>libere na hora de aplicar</b>. Em <b>👥 Alunos</b> você acompanha ao vivo: progresso, vidas e nota.</p><p>O <b>gabarito</b> só aparece para o aluno quando você liberar (menu ⋯ do cartão). <b>🧪 Testar</b> abre a prova como o aluno vê, sem valer nota.</p></template></span></h2>
+        <button type="button" id="btnNovaProva" aria-haspopup="dialog">+ Criar nova prova</button></div>
+      <!-- formulário da nova prova: abre num drawer (o conteúdo é movido para lá e volta ao fechar) -->
+      <div id="cardNovaProva" class="oculto">
         <div id="formNovaProva"></div>   <!-- montado por formProvaHTML("p") em js/admin.js -->
-        <button id="btnCriarProva" style="margin-top:16px">Criar prova</button>
-      </details>
-      <div class="secao-titulo"><h2>Provas criadas</h2><span class="pequeno">Libere a prova na hora de aplicar · 👥 Alunos acompanha ao vivo</span></div>
-      <div class="barra-filtros" role="search">
-        <input type="search" id="fpBusca" placeholder="Pesquisar prova, turma ou banco…" aria-label="Pesquisar provas">
-        <select id="fpTurma" aria-label="Filtrar por turma"><option value="">👥 Todas as turmas</option></select>
-        <select id="fpSemestre" aria-label="Filtrar por semestre"><option value="">📅 Todos os semestres</option></select>
-        <select id="fpMateria" aria-label="Filtrar por matéria"><option value="">📚 Todas as matérias</option></select>
-        <select id="fpStatus" aria-label="Filtrar por situação"><option value="">Todas as situações</option><option value="liberada">● Liberadas</option><option value="fechada">○ Fechadas</option><option value="gabarito">Gabarito liberado</option></select>
-        <select id="fpOrdem" aria-label="Ordenar"><option value="recentes">Mais recentes</option><option value="antigas">Mais antigas</option><option value="titulo">Título A–Z</option></select>
-        <button id="fpLimpar" class="leve mini" type="button">Limpar filtros</button>
+        <button id="btnCriarProva" class="oculto">Criar prova</button>
       </div>
-      <p id="fpContagem" class="pequeno" aria-live="polite"></p>
+      <div class="toolbar" role="search">
+        <input type="search" id="fpBusca" placeholder="Pesquisar prova, turma ou banco…" aria-label="Pesquisar provas">
+        <button type="button" class="leve btn-filtros" aria-expanded="false" aria-controls="fpPainel"><span class="e" aria-hidden="true">⚙</span>Filtros<span class="badge" aria-label="filtros ativos"></span></button>
+        <select id="fpOrdem" class="tb-ordem" aria-label="Ordenar"><option value="recentes">Mais recentes</option><option value="antigas">Mais antigas</option><option value="titulo">Título A–Z</option></select>
+        <span id="fpContagem" class="tb-contagem" aria-live="polite"></span>
+        <div class="painel-filtros" id="fpPainel" hidden>
+          <label class="pf-campo"><span>Turma</span><select id="fpTurma" aria-label="Filtrar por turma"><option value="">Todas as turmas</option></select></label>
+          <label class="pf-campo"><span>Semestre</span><select id="fpSemestre" aria-label="Filtrar por semestre"><option value="">Todos os semestres</option></select></label>
+          <label class="pf-campo"><span>Matéria</span><select id="fpMateria" aria-label="Filtrar por matéria"><option value="">Todas as matérias</option></select></label>
+          <label class="pf-campo"><span>Situação</span><select id="fpStatus" aria-label="Filtrar por situação"><option value="">Todas as situações</option><option value="liberada">● Liberadas</option><option value="fechada">○ Fechadas</option><option value="gabarito">Gabarito liberado</option></select></label>
+          <div class="pf-acoes"><button id="fpLimpar" class="discreto mini pf-limpar oculto" type="button">Limpar filtros</button></div>
+        </div>
+      </div>
       <div id="listaProvas"></div>
     </div>
 
     <!-- BANCOS -->
     <div id="aba-bancos" class="oculto">
       <div class="card">
-        <h2>Importar banco de questões (JSON) <button data-ajuda-item="banco"></button></h2>
-        <p class="pequeno">Use o arquivo <b>modelo_banco.json</b> como modelo. Cole o conteúdo aqui ou escolha o arquivo.</p>
+        <div class="card-cab"><h2>Importar banco de questões <button data-ajuda-item="banco"></button></h2></div>
         <div class="grade">
           <div><label for="bSemestre">Semestre</label><select id="bSemestre"></select></div>
           <div><label for="bMateria">Matéria</label><input type="text" id="bMateria" list="bMaterias" placeholder="vazio = a do JSON"><datalist id="bMaterias"></datalist></div>
         </div>
-        <details class="gerar-ia" id="gerarIA"><summary>🤖 Não tem o JSON? Gere as questões numa IA com o prompt pronto</summary>
-          <p class="pequeno">Escolha a matéria, os tópicos e quantas questões. O sistema monta o prompt; você copia, cola no Claude, ChatGPT ou Gemini, e cola o JSON que ela devolver na caixa abaixo.</p>
+        <label class="dropzone"><input type="file" id="arqBanco" accept=".json,application/json" aria-label="Arquivo JSON do banco"><span class="dz-icone" aria-hidden="true">📄</span>
+          <span class="dz-texto">Arraste o arquivo <b>.json</b> aqui ou clique para escolher</span><span class="pequeno">Use o <b>modelo_banco.json</b> como modelo</span><span class="dz-arquivo"></span></label>
+        <details class="recolhivel leve" id="colarJSON" style="margin-top:12px"><summary><span class="rc-titulo">📋 Ou cole o JSON</span></summary>
+          <div class="rc-corpo"><div class="bloco-import"><div class="bi-cab">Conteúdo do JSON</div>
+            <textarea id="txtBanco" class="mono" placeholder='{"nome": "...", "materia": "...", "questoes": [ ... ]}' style="min-height:160px" aria-label="Conteúdo do JSON"></textarea></div></div></details>
+        <details class="recolhivel leve gerar-ia" id="gerarIA"><summary><span class="rc-titulo">🤖 Não tem o JSON? Gere as questões numa IA com o prompt pronto</span></summary>
+          <div class="rc-corpo">
+          <p class="pequeno">Escolha a matéria, os tópicos e quantas questões. O sistema monta o prompt; você copia, cola no Claude, ChatGPT ou Gemini, e cola o JSON que ela devolver em <b>Ou cole o JSON</b>.</p>
           <div class="grade">
             <div><label for="giMateria">Matéria</label><input type="text" id="giMateria" list="bMaterias" placeholder="Banco de Dados"></div>
             <div><label for="giNome">Nome do banco</label><input type="text" id="giNome" placeholder="MS5 — DML (gerado)"></div>
@@ -119,8 +129,8 @@
           </div>
           <span class="rotulo">Tópicos <span class="pequeno">(do plano de curso/ensino e dos bancos desta matéria; marque os que entram)</span></span>
           <div id="giTopicos" class="lista-temas" style="margin:6px 0"><p class="pequeno">Escreva a matéria acima.</p></div>
-          <div class="linha" style="gap:6px"><input type="text" id="giTopicoNovo" placeholder="+ outro tópico" style="flex:1"><button type="button" class="leve mini" id="giTopicoAdd">Adicionar</button></div>
-          <div class="grade">
+          <div class="linha" style="gap:6px"><input type="text" id="giTopicoNovo" placeholder="+ outro tópico" style="flex:1" aria-label="Outro tópico"><button type="button" class="leve mini" id="giTopicoAdd">Adicionar</button></div>
+          <div class="grade" style="margin-top:12px">
             <div><label for="giAlt">Alternativas por tópico</label><input type="number" id="giAlt" value="4" min="0" max="30"></div>
             <div><label for="giDiss">Dissertativas por tópico</label><input type="number" id="giDiss" value="2" min="0" max="20"></div>
             <div><label for="giOpcoes">Alternativas em cada questão</label><select id="giOpcoes"><option>4</option><option>5</option><option>3</option></select></div>
@@ -129,39 +139,42 @@
           <input type="text" id="giContexto" placeholder="Ex.: use o banco pf_suporte com as tabelas cliente e chamado; MySQL; evite pegadinhas">
           <label for="giPrompt" style="margin-top:10px">Prompt pronto</label>
           <textarea id="giPrompt" class="mono" readonly style="min-height:220px"></textarea>
-          <div class="linha acoes"><button type="button" id="giCopiar">📋 Copiar prompt</button><button type="button" class="leve" id="giModelo">⬇ Baixar o modelo JSON</button>
-            <span class="pequeno">Depois: cole a resposta da IA na caixa abaixo → <b>Validar</b> → <b>Importar</b>.</span></div>
+          <div class="linha acoes"><button type="button" class="leve" id="giCopiar">📋 Copiar prompt</button><button type="button" class="leve" id="giModelo">⬇ Baixar o modelo JSON</button>
+            <span class="pequeno">Depois: cole a resposta da IA em <b>Ou cole o JSON</b> → <b>Validar</b> → <b>Importar</b>.</span></div>
+          </div>
         </details>
-        <input type="file" id="arqBanco" accept=".json,application/json">
-        <textarea id="txtBanco" placeholder='{"nome": "...", "materia": "...", "questoes": [ ... ]}' style="min-height:160px;margin-top:8px"></textarea>
-        <div class="linha acoes" style="margin-top:8px"><button id="btnValidarBanco" class="leve">Validar</button><button id="btnImportarBanco">Importar</button></div>
-        <div id="msgBanco" class="pequeno" role="status" style="margin-top:8px"></div>
+        <div class="rodape-card"><button id="btnValidarBanco" class="leve">Validar</button><button id="btnImportarBanco">Importar</button></div>
+        <div id="msgBanco" class="pequeno" role="status" aria-live="polite"></div>
       </div>
-      <div class="card"><h2>Bancos cadastrados</h2>
-        <p class="pequeno" style="margin-top:0">Organizados em <b>Semestre → Matéria → Banco → Tópicos</b>. O semestre e a matéria de cada banco mudam em <b>🏷 Tópicos</b>.</p>
-        <div class="barra-filtros" role="search">
-          <input type="search" id="fbBusca" placeholder="Pesquisar banco, matéria, tópico ou questão…" aria-label="Pesquisar bancos">
-          <select id="fbSemestre" aria-label="Filtrar por semestre"><option value="">📅 Todos os semestres</option></select>
-          <select id="fbMateria" aria-label="Filtrar por matéria"><option value="">📚 Todas as matérias</option></select>
-          <button id="fbLimpar" class="leve mini" type="button">Limpar filtros</button>
+      <div class="cab-pagina"><h2><span class="e" aria-hidden="true">🗂</span>Bancos cadastrados
+        <span class="ajuda-pop"><button type="button" class="btn-ajuda" data-popover aria-haspopup="dialog" aria-expanded="false" aria-label="Como funciona" title="Como funciona">i</button><template><p>Organizados em <b>Semestre → Matéria → Banco → Tópicos</b>. O semestre e a matéria de cada banco mudam em <b>🏷 Tópicos</b>.</p><p>A busca também procura no enunciado das questões.</p></template></span></h2></div>
+      <div class="toolbar" role="search">
+        <input type="search" id="fbBusca" placeholder="Pesquisar banco, matéria, tópico ou questão…" aria-label="Pesquisar bancos">
+        <button type="button" class="leve btn-filtros" aria-expanded="false" aria-controls="fbPainel"><span class="e" aria-hidden="true">⚙</span>Filtros<span class="badge" aria-label="filtros ativos"></span></button>
+        <span id="fbContagem" class="tb-contagem" aria-live="polite"></span>
+        <div class="painel-filtros" id="fbPainel" hidden>
+          <label class="pf-campo"><span>Semestre</span><select id="fbSemestre" aria-label="Filtrar por semestre"><option value="">Todos os semestres</option></select></label>
+          <label class="pf-campo"><span>Matéria</span><select id="fbMateria" aria-label="Filtrar por matéria"><option value="">Todas as matérias</option></select></label>
+          <div class="pf-acoes"><button id="fbLimpar" class="discreto mini pf-limpar oculto" type="button">Limpar filtros</button></div>
         </div>
-        <p id="fbContagem" class="pequeno" aria-live="polite"></p>
-        <div id="listaBancos"></div></div>
-      <div class="card">
-        <h2>Slides e material de consulta (PDF) <button data-ajuda-item="slides"></button></h2>
+      </div>
+      <div id="listaBancos"></div>
+      <div class="card" style="margin-top:24px">
+        <div class="card-cab"><h2>Slides e material de consulta (PDF) <button data-ajuda-item="slides"></button></h2></div>
         <details class="ajuda"><summary>Como funciona</summary><p>Envie os slides em <b>PDF</b> (PowerPoint: Arquivo → Exportar → PDF · Google Slides: Arquivo → Fazer download → PDF). Na prova, escolha o PDF em <b>Material de consulta</b>: o aluno lê os slides num leitor dentro da própria tela da prova. Também dá para enviar direto pelo formulário da prova.</p></details>
-        <div class="grade">
+        <div class="grade" style="align-items:end">
           <div><label for="matTitulo">Título</label><input type="text" id="matTitulo" placeholder="Slides da aula 8 — DML"></div>
-          <div><label for="matArquivo">Arquivo PDF</label><input type="file" id="matArquivo" accept="application/pdf,.pdf"></div>
+          <div><label class="dropzone compacta" for="matArquivo"><input type="file" id="matArquivo" accept="application/pdf,.pdf" aria-label="Arquivo PDF"><span class="dz-icone" aria-hidden="true">📄</span><span class="dz-texto">Arraste o PDF ou clique</span><span class="dz-arquivo"></span></label></div>
         </div>
-        <div class="linha acoes"><button id="btnEnviarMaterial">Enviar PDF</button></div>
+        <div class="rodape-card"><button id="btnEnviarMaterial">Enviar PDF</button></div>
         <p id="msgMaterial" class="pequeno" role="status" aria-live="polite"></p>
         <div id="listaMateriais"></div>
       </div>
-      <div class="card oculto" id="cardGabarito"><h2>Gabarito para o Classroom</h2>
-        <p class="pequeno">Questões do banco agrupadas por tema, com a resposta e a explicação. Desmarque os temas que a prova não usou. Copie ou baixe e poste no Classroom depois da prova.</p>
+      <!-- gabarito para o Classroom: abre num drawer -->
+      <div class="oculto" id="cardGabarito">
+        <p class="pequeno" style="margin-top:0">Questões do banco agrupadas por tema, com a resposta e a explicação. Desmarque os temas que a prova não usou. Copie ou baixe e poste no Classroom depois da prova.</p>
         <fieldset class="temas-box"><legend>Temas no gabarito</legend><div id="gabTemas" class="lista-temas"></div></fieldset>
-        <div class="linha acoes"><button id="btnCopiarGab" class="leve">Copiar</button><button id="btnBaixarGab" class="leve">Baixar .txt</button></div>
+        <div class="linha acoes"><button id="btnCopiarGab" class="leve">📋 Copiar</button><button id="btnBaixarGab" class="leve">⬇ Baixar .txt</button></div>
         <pre class="bloco" id="txtGabarito"></pre></div>
     </div>
 

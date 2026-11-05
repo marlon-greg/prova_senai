@@ -273,7 +273,13 @@ if (!window.__uiLigado) {
     if (e.key === "Escape") { const p = e.target.closest?.(".painel-filtros"); if (p) { p.hidden = true; const b = document.querySelector(`[aria-controls="${p.id}"]`); b?.setAttribute("aria-expanded", "false"); b?.focus(); } }
   }, true);
   addEventListener("resize", () => fecharFlutuante());
-  addEventListener("scroll", e => { if (aberto && !aberto.el.contains(e.target)) fecharFlutuante(); }, true);
+  // rolar a página: o flutuante acompanha o botão; só fecha se o botão sair da tela
+  addEventListener("scroll", e => {
+    if (!aberto || aberto.el.contains(e.target)) return;
+    const r = aberto.botao.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > innerHeight || !aberto.botao.isConnected) fecharFlutuante();
+    else posicionar(aberto.el, aberto.botao, { alinhar: "fim" });
+  }, true);
   // details com data-chave: lembra aberto/fechado
   document.addEventListener("toggle", e => { const d = e.target; if (d.matches?.("details[data-chave]")) localStorage.setItem(CHAVE_RC + d.dataset.chave, d.open ? "1" : "0"); }, true);
   // dropzone: nome do arquivo e destaque ao arrastar
