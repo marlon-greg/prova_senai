@@ -50,7 +50,7 @@ aoMudarLogin(async user => {
   getDoc(doc(db, "config", "geral")).then(c => { urlCorretorCfg = String(c.data()?.urlCorretor || "").trim(); if (c.data()?.horario?.inicio) horarioCfg = c.data().horario; $("#tHorario").textContent = textoHorario(horarioCfg); }).catch(() => {});
   iniciarAcessibilidade({ eu, podeEditar, souDono, auth, iaCfg: () => iaCfg, urlCorretor: () => urlCorretorCfg,
     alunosDasTurmas: async () => { await listarTurmas().catch(() => {}); return turmasCache.flatMap(t => alunosDaTurma(t).map(a => ({ ...a, turma: t.nome, turmaId: t.id, diasAula: t.diasAula || [] }))); } });
-  iniciarDiario({ eu, podeEditar, souDono, horario: () => horarioCfg,
+  iniciarDiario({ eu, podeEditar, souDono, horario: () => horarioCfg, auth, iaCfg: () => iaCfg, urlCorretor: () => urlCorretorCfg,
     alunosDasTurmas: async () => { await listarTurmas().catch(() => {}); return turmasCache.flatMap(t => alunosDaTurma(t).map(a => ({ ...a, turma: t.nome, turmaId: t.id, diasAula: t.diasAula || [] }))); } });
   iniciarHistorico({ eu, abrirAluno: email => { abrirDepois(email); abrirAba("acessibilidade"); },
     alunosDasTurmas: async () => { await listarTurmas().catch(() => {}); return turmasCache.flatMap(t => alunosDaTurma(t).map(a => ({ ...a, turma: t.nome, turmaId: t.id }))); } });

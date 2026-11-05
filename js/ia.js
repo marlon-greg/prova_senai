@@ -3,7 +3,7 @@
 // apenas para api.anthropic.com. Nunca entra no repositório nem chega à página do aluno.
 import { db } from "./common.js";
 import { pedidoFormatos, lerRespostaFormatos } from "../servidor/formatos.js";
-import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS, pedidoCurso, lerRespostaCurso, pedidoConquistas, lerRespostaConquistas, pedidoPerfil, lerRespostaPerfil } from "../servidor/organizar.js";
+import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS, pedidoCurso, lerRespostaCurso, pedidoConquistas, lerRespostaConquistas, pedidoPerfil, lerRespostaPerfil, pedidoAnalise, lerRespostaAnalise, contextoPeriodo } from "../servidor/organizar.js";
 import { doc, getDoc, setDoc, deleteDoc, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -220,6 +220,11 @@ export async function lerCursoIA({ chave, modelo, pdf, titulo, nome }) {
 // laudos = [{ titulo, bytes }]. Devolve a lista de opções (já validadas e em ordem de indicação)
 export async function perfilIA({ chave, modelo, ...dados }) {
   try { return lerRespostaPerfil(await chamarAPI(chave, { model: modeloOrganizar(modelo), ...pedidoPerfil(dados) })); }
+  catch (e) { throw e.ia ? e : erroIA(e.message); }
+}
+// análise do diário de um período (registros e comentários já filtrados no navegador)
+export async function analiseDiarioIA({ chave, modelo, periodo, registros, comentarios }) {
+  try { return lerRespostaAnalise(await chamarAPI(chave, { model: modeloOrganizar(modelo), ...pedidoAnalise({ periodo, contexto: contextoPeriodo(registros, comentarios) }) })); }
   catch (e) { throw e.ia ? e : erroIA(e.message); }
 }
 export async function formatosIA({ chave, modelo, q, g, descricao, orientacao, diario, perfil, laudos = [] }) {

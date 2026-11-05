@@ -11,12 +11,12 @@ export const SECOES_AUX = [
   { id: "humor", icone: "😊", titulo: "Humor e energia", cor: "#f59e0b", itens: [
     { id: "humorChegada", tipo: "emoji", rot: "Como ela chegou?", obrig: true },
     { id: "humorSaida", tipo: "emoji", rot: "Como ela saiu?", obrig: true },
-    { id: "energia", tipo: "escolha", rot: "Energia / disposição", opcoes: [["baixa", "🪫 Baixa"], ["media", "🔋 Normal"], ["alta", "⚡ Alta"], ["agitada", "🌪 Agitada"]] },
+    { id: "energia", tipo: "escolha", rot: "Energia / disposição", opcoes: [["baixa", "🥱 Baixa"], ["media", "🔋 Normal"], ["alta", "⚡ Alta"], ["agitada", "🌪 Agitada"]] },
     { id: "humorTexto", tipo: "texto", rot: "Algo marcou o humor dela hoje?", dica: "Ex.: chegou chateada por causa do ônibus e melhorou depois do intervalo." }
   ] },
   { id: "atividades", icone: "📚", titulo: "Atividades do dia", cor: "#2563eb", itens: [
-    { id: "materias", tipo: "materias", rot: "Matérias e tópicos trabalhados", dica: "Toque na matéria e depois nos tópicos. Isso alimenta os relatórios por matéria e por tópico." },
-    { id: "atividades", tipo: "texto", rot: "O que foi feito hoje?", obrig: true, dica: "As atividades, exercícios e como foram propostos." },
+    { id: "materias", tipo: "materias", rot: "Quais matérias teve hoje?", obrig: true, dica: "Marque as matérias. Em cada uma, toque nos tópicos e escreva numa frase curta o que foi feito." },
+    { id: "atividades", tipo: "texto", rot: "Observação geral sobre as atividades (opcional)", dica: "Só se precisar de algo além do que já escreveu em cada matéria." },
     { id: "compreensao", tipo: "escala", icone: "🧠", rot: "Compreensão do conteúdo", rotulos: ["Não entendeu", "Entendeu pouco", "Entendeu com ajuda", "Entendeu bem", "Dominou"] },
     { id: "autonomia", tipo: "escala", icone: "🦸", rot: "Autonomia nas atividades", rotulos: ["Ajuda o tempo todo", "Muita ajuda", "Alguma ajuda", "Pouca ajuda", "Fez sozinha"] },
     { id: "foco", tipo: "escala", icone: "🎯", rot: "Foco e atenção", rotulos: ["Muito disperso", "Disperso", "Oscilou", "Focado", "Muito focado"] }
@@ -33,7 +33,8 @@ export const SECOES_AUX = [
     { id: "estrategias", tipo: "chips", rot: "Estratégias que ajudaram hoje", opcoes: ["Instrução passo a passo", "Apoio visual / imagem", "Exemplo concreto", "Atividade dividida em partes",
       "Pausa / intervalo", "Ambiente calmo / fone", "Reforço positivo", "Tempo extra", "Leitura em voz alta", "Material adaptado", "Mediação da auxiliar", "Ajuda de colega"] },
     { id: "funcionou", tipo: "texto", rot: "O que funcionou bem?", dica: "Vale ouro para as próximas provas." },
-    { id: "dificil", tipo: "texto", rot: "O que foi difícil?", dica: "Conteúdos, formatos de atividade ou situações." }
+    { id: "dificuldades", tipo: "chips", rot: "O que foi difícil hoje?", opcoes: ["Conteúdo novo", "Texto longo", "Muitas etapas", "Cálculos", "Escrever código", "Usar o computador", "Trabalho em grupo", "Manter a atenção", "Prova / avaliação", "Nada foi difícil"] },
+    { id: "dificil", tipo: "texto", rot: "Quer explicar a dificuldade? (opcional)", dica: "Uma frase basta." }
   ] },
   { id: "fechamento", icone: "🏆", titulo: "Fechamento do dia", cor: "#c1272d", itens: [
     { id: "estrelas", tipo: "estrelas", rot: "Como foi o dia, no geral?", obrig: true },

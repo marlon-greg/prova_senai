@@ -144,7 +144,7 @@ function desenharPainel() {
   }
   document.querySelectorAll("[data-rapido]").forEach(b => b.onclick = () => iniciarRegistro(b.dataset.rapido));
   $("#dRelatorio").onclick = () => relatorioFormal();
-  $("#dCompleto").onclick = () => relatorioAluno($("#diarioPainel"), { aluno: atual, turmas: turmasAluno, registros, horario: ctx.horario?.(), voltar: desenharPainel });
+  $("#dCompleto").onclick = () => relatorioAluno($("#diarioPainel"), { aluno: atual, turmas: turmasAluno, registros, horario: ctx.horario?.(), voltar: desenharPainel, ia: { cfg: ctx.iaCfg, url: ctx.urlCorretor, auth: ctx.auth } });
   ligarCalendario();
   if (aberto) mostrarDia(aberto);
   else ligarUltimos();
@@ -194,7 +194,7 @@ function valorHTML(it, v) {
   if (it.tipo === "escolha") return esc((it.opcoes.find(o => o[0] === v) || [, v])[1]);
   if (it.tipo === "chips") return (v || []).map(x => `<span class="tag">${esc(x)}</span>`).join("");
   if (it.tipo === "estrelas") return `<span class="v-estrelas">${"★".repeat(v)}<span>${"★".repeat(5 - v)}</span></span>`;
-  if (it.tipo === "materias") return (v || []).map(m => `<div>📚 <b>${esc(m.materia)}</b>${m.topicos?.length ? `: ${m.topicos.map(t => `<span class="tag nota">${esc(t)}</span>`).join("")}` : ""}</div>`).join("");
+  if (it.tipo === "materias") return (v || []).map(m => `<div>📚 <b>${esc(m.materia)}</b>${m.topicos?.length ? `: ${m.topicos.map(t => `<span class="tag nota">${esc(t)}</span>`).join("")}` : ""}${m.feito ? `<div class="mat-feito-txt">${esc(m.feito)}</div>` : ""}</div>`).join("");
   if (it.tipo === "materia1") return v ? `📚 ${esc(v)}` : "";
   return `<span class="v-texto">${esc(v).replace(/\n/g, "<br>")}</span>`;
 }
@@ -325,8 +325,9 @@ function desenharMaterias(box, r, iso, aoMudar) {
   box.innerHTML = `<div class="op-pilulas">${nomes.map(m => `<button type="button" class="${tem(m) ? "sel" : ""}" aria-pressed="${!!tem(m)}" data-mat="${esc(m)}">📚 ${esc(m)}</button>`).join("")}
       <span class="mat-outra"><input type="text" placeholder="+ outra matéria" aria-label="Outra matéria"><button type="button" class="leve mini">Adicionar</button></span></div>
     ${!ps.length ? `<p class="pequeno">A turma não tem plano de ensino cadastrado neste semestre (aba Organização): escreva o nome da matéria.</p>` : ""}
-    ${sel.map(x => { const p = ps.find(p => chaveTexto(p.materia) === chaveTexto(x.materia)); return p?.topicos?.length ? `<div class="mat-topicos"><span class="pequeno">Tópicos de <b>${esc(x.materia)}</b>:</span>
-      ${p.topicos.map(t => `<button type="button" class="tp${x.topicos?.includes(t.nome) ? " sel" : ""}" aria-pressed="${!!x.topicos?.includes(t.nome)}" data-tmat="${esc(x.materia)}" data-top="${esc(t.nome)}">${esc(t.nome)}</button>`).join("")}</div>` : ""; }).join("")}`;
+    ${sel.map(x => { const p = ps.find(p => chaveTexto(p.materia) === chaveTexto(x.materia)); return `<div class="mat-bloco"><div class="mat-bloco-tit">📚 ${esc(x.materia)}</div>${p?.topicos?.length ? `<div class="mat-topicos"><span class="pequeno">Tópicos:</span>
+      ${p.topicos.map(t => `<button type="button" class="tp${x.topicos?.includes(t.nome) ? " sel" : ""}" aria-pressed="${!!x.topicos?.includes(t.nome)}" data-tmat="${esc(x.materia)}" data-top="${esc(t.nome)}">${esc(t.nome)}</button>`).join("")}</div>` : ""}
+      <input type="text" class="mat-feito" maxlength="160" data-feito="${esc(x.materia)}" value="${esc(x.feito || "")}" placeholder="Em uma frase: o que foi feito em ${esc(x.materia)}?" aria-label="O que foi feito em ${esc(x.materia)}"></div>`; }).join("")}`;
   box.querySelectorAll("[data-mat]").forEach(b => b.onclick = () => {
     const m = b.dataset.mat, i = sel.findIndex(x => chaveTexto(x.materia) === chaveTexto(m));
     i >= 0 ? sel.splice(i, 1) : sel.push({ materia: m, topicos: [] });
@@ -336,6 +337,7 @@ function desenharMaterias(box, r, iso, aoMudar) {
     const x = tem(b.dataset.tmat), l = new Set(x.topicos || []); l.has(b.dataset.top) ? l.delete(b.dataset.top) : l.add(b.dataset.top);
     x.topicos = [...l]; b.classList.toggle("sel"); b.setAttribute("aria-pressed", l.has(b.dataset.top)); aoMudar({ id });
   });
+  box.querySelectorAll("[data-feito]").forEach(i => i.oninput = () => { const x = tem(i.dataset.feito); if (x) { x.feito = i.value.slice(0, 160); aoMudar({ id }); } });
   const inp = box.querySelector(".mat-outra input"), add = () => { const m = inp.value.trim(); if (m && !tem(m)) sel.push({ materia: m, topicos: [] }); desenharMaterias(box, r, iso, aoMudar); aoMudar({ id }); };
   box.querySelector(".mat-outra button").onclick = add;
   inp.onkeydown = e => { if (e.key === "Enter") { e.preventDefault(); add(); } };

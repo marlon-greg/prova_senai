@@ -25,7 +25,7 @@
 // (FIRESTORE_EMULADOR e ANTHROPIC_URL existem só para testar no computador; não crie no Cloudflare.)
 
 import { temFormato, corrigirFormato, pedidoFormatos, lerRespostaFormatos, contextoDiario } from "./formatos.js";
-import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS, pedidoCurso, lerRespostaCurso, pedidoConquistas, lerRespostaConquistas, pedidoPerfil, lerRespostaPerfil } from "./organizar.js";
+import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS, pedidoCurso, lerRespostaCurso, pedidoConquistas, lerRespostaConquistas, pedidoPerfil, lerRespostaPerfil, pedidoAnalise, lerRespostaAnalise, contextoPeriodo } from "./organizar.js";
 
 export default {
   async fetch(req, env) {
@@ -52,6 +52,7 @@ export default {
       if (corpo.acao === "organizar") return resposta(await organizar(env, usuario, corpo));
       if (corpo.acao === "formatos") return resposta(await sugerirFormatos(env, usuario, corpo));
       if (corpo.acao === "perfil") return resposta(await montarPerfil(env, usuario, corpo));
+      if (corpo.acao === "analiseDiario") return resposta(await analisarDiario(env, usuario, corpo));
       const { tentativaId } = corpo;
       if (!tentativaId || !/^[\w-]+$/.test(tentativaId)) throw falha("tentativaId inválido.", 400);
       return resposta(await corrigirTentativa(env, usuario, tentativaId));
@@ -369,6 +370,20 @@ async function sugerirFormatos(env, usuario, corpo) {
 }
 
 // perfil do aluno para a IA: POST { acao: "perfil", email, formatos?, desempenho? } -> { texto } (não grava: a equipe revisa)
+// análise do diário de um período (relatório completo): mesma permissão do perfil; lê só os registros de de..ate
+async function analisarDiario(env, usuario, corpo) {
+  const quem = String(usuario.email || "").toLowerCase(), email = String(corpo.email || "").trim().toLowerCase();
+  const de = String(corpo.de || ""), ate = String(corpo.ate || "");
+  if (!/^[^\s@/]+@[^\s@/]+$/.test(email) || !/^\d{4}-\d{2}-\d{2}$/.test(de) || !/^\d{4}-\d{2}-\d{2}$/.test(ate)) throw falha("dados inválidos.", 400);
+  const fs = await firestore(env), acess = await fs.ler(`acessibilidade/${email}`);
+  let ok = quem === SUPER_ADMIN;
+  if (!ok) { const papel = (await fs.ler(`equipe/${quem}`))?.papel; ok = papel === "admin" || papel === "professor" || (papel === "inclusao" && (acess?.auxiliares || []).map(x => String(x).toLowerCase()).includes(quem)); }
+  if (!ok) throw falha("Sem permissão para este aluno.", 403);
+  const diario = Object.entries((await fs.listar(`acessibilidadePrivado/${email}/diario`)) || {}).map(([id, r]) => ({ id, ...r })).filter(r => r.data >= de && r.data <= ate);
+  const comentarios = (await Promise.all(diario.filter(r => r.nComentarios > 0).slice(0, 15).map(r => fs.listar(`acessibilidadePrivado/${email}/diario/${r.id}/comentarios`).catch(() => ({}))))).flatMap(o => Object.values(o));
+  const r = await chamarClaude(env, { model: env.MODELO_ADAPTACAO || "claude-sonnet-5-5", ...pedidoAnalise({ periodo: `${de} a ${ate}`, contexto: contextoPeriodo(diario, comentarios) }) });
+  return { ok: true, analise: lerRespostaAnalise(r) };
+}
 async function montarPerfil(env, usuario, corpo) {
   const quem = String(usuario.email || "").toLowerCase(), email = String(corpo.email || "").trim().toLowerCase();
   if (!/^[^\s@/]+@[^\s@/]+$/.test(email)) throw falha("email inválido.", 400);
