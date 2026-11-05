@@ -1,5 +1,6 @@
 // Página do aluno: 🚩 apontamento numa questão e 💡 sugestões para o sistema, com a resposta da equipe.
 import { db, esc, $, toast, modal, traduzirErro, dataBR } from "./common.js";
+import { cardCab, collapsible } from "./ui.js";
 import { collection, addDoc, getDocs, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 export const TIPOS_AP = { duasCertas: "Tem mais de uma resposta certa", nenhumaCerta: "Nenhuma resposta parece certa", erroTexto: "Erro de digitação ou no texto",
@@ -34,12 +35,16 @@ export async function desenharFaleConosco(box, eu, cfg, simulacao = false) {
     meus = [...(a?.docs || []).map(d => ({ ap: true, ...d.data() })), ...(s?.docs || []).map(d => d.data())].sort((x, y) => (y.criadoEm?.seconds || 0) - (x.criadoEm?.seconds || 0));
   } catch (e) { console.warn("fale conosco", e); }
   box.classList.remove("oculto");
-  box.innerHTML = `<h2>💬 Fale com a equipe</h2>
-    <p class="pequeno" style="margin-top:0">${cfg.apontamentos ? "Viu um problema numa questão? Use o botão <b>🚩</b> na própria questão (na prova ou no gabarito). " : ""}${cfg.sugestoes ? "Tem uma ideia para o sistema ou algo não funcionou? Mande aqui." : ""}</p>
-    ${cfg.sugestoes ? `<button type="button" id="btnSugestao" class="leve">💡 Mandar uma sugestão</button>` : ""}
-    ${meus.length ? `<h3 class="conq-h3">Minhas mensagens</h3>${meus.map(m => `<div class="minha-msg"><span class="tag ${["aberto", "aberta"].includes(m.status) ? "aviso" : "ok"}">${m.ap ? "🚩" : "💡"} ${["aberto", "aberta"].includes(m.status) ? "aguardando" : esc(m.status === "procede" ? "você tinha razão!" : m.status === "nao-procede" ? "conferido" : m.status)}</span>
+  const aguardando = meus.filter(m => ["aberto", "aberta"].includes(m.status)).length, respondidas = meus.filter(m => m.resposta).length;
+  box.innerHTML = cardCab({ titulo: "💬 Fale com a equipe",
+      ajuda: !meus.length ? "" : `<p>${cfg.apontamentos ? "Viu um problema numa questão? Use o botão <b>🚩</b> na própria questão (na prova ou no gabarito). " : ""}${cfg.sugestoes ? "Tem uma ideia para o sistema ou algo não funcionou? Mande uma sugestão." : ""}</p>`,
+      primaria: cfg.sugestoes ? `<button type="button" id="btnSugestao" class="leve">💡 Mandar uma sugestão</button>` : "" })
+    + (meus.length ? "" : `<p class="pequeno" style="margin:0">${cfg.apontamentos ? "Achou algo errado numa questão? Toque em <b>🚩</b> nela. " : ""}${cfg.sugestoes ? "Ideias e problemas do site: <b>💡 Mandar uma sugestão</b>." : ""}</p>`)
+    + (meus.length ? collapsible({ chave: "aluno:minhasMensagens", classe: "leve", titulo: `Minhas mensagens`,
+      resumoHTML: `<span class="chip">${meus.length}</span>${aguardando ? `<span class="chip aviso">${aguardando} aguardando</span>` : ""}${respondidas ? `<span class="chip ok">${respondidas} com resposta</span>` : ""}`,
+      corpoHTML: meus.map(m => `<div class="minha-msg"><span class="tag ${["aberto", "aberta"].includes(m.status) ? "aviso" : "ok"}">${m.ap ? "🚩" : "💡"} ${["aberto", "aberta"].includes(m.status) ? "aguardando" : esc(m.status === "procede" ? "você tinha razão!" : m.status === "nao-procede" ? "conferido" : m.status)}</span>
       <span class="pequeno">${dataBR(m.criadoEm)}${m.ap ? ` · ${esc(m.provaTitulo || "")}` : ""}</span><p style="margin:4px 0">${esc(m.ap ? TIPOS_AP[m.tipo] || "" : m.categoria || "")}${m.texto ? `: ${esc(m.texto)}` : ""}</p>
-      ${m.resposta ? `<p class="ret-resp">↩ <b>${esc(m.respondidoPor || "Professor")}:</b> ${esc(m.resposta)}</p>` : ""}</div>`).join("")}` : ""}`;
+      ${m.resposta ? `<p class="ret-resp">↩ <b>${esc(m.respondidoPor || "Professor")}:</b> ${esc(m.resposta)}</p>` : ""}</div>`).join("") }) : "");
   $("#btnSugestao", box)?.addEventListener("click", () => {
     let cat = null;
     modal({ titulo: "💡 Sugestão para o sistema", conteudo: `<div class="op-pilulas" role="radiogroup" aria-label="Sobre o quê">${CATEGORIAS.map(c => `<button type="button" role="radio" aria-checked="false" data-c="${esc(c)}">${esc(c)}</button>`).join("")}</div>

@@ -2,6 +2,7 @@
 // acessibilidade, as do diário da sala (resumo positivo gravado pela auxiliar). Regras em js/conquistas.js.
 import { db, esc, $, modal } from "./common.js";
 import { conquistasNotas, medalhasDiario } from "./conquistas.js";
+import { estaAberto } from "./ui.js";
 export async function lerListaConquistas() { return (await getDoc(doc(db, "config", "conquistas")).catch(() => null))?.data()?.lista || null; }
 import { collection, doc, getDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -45,12 +46,15 @@ export async function desenharConquistas(box, eu, resumoDiario = null, opc = {})
   box.classList.remove("oculto");
   box.innerHTML = `<div class="conq-topo"><div><h2>🏅 Minhas conquistas</h2><span class="pequeno">${ganhas.length} de ${todas.length} conquistadas · cada 3 conquistas sobem 1 nível</span></div>
       <div class="conq-nivel" title="Faltam ${prox} conquista(s) para o próximo nível"><b>Nível ${nivel}</b><div class="barra"><i style="width:${Math.round(((ganhas.length % 3) / 3) * 100)}%"></i></div><span class="pequeno">faltam ${prox} para o nível ${nivel + 1}</span></div></div>
+    <details class="recolhivel leve conq-todas" data-chave="aluno:conquistas"${novas.length && vistas.size || estaAberto("aluno:conquistas") ? " open" : ""}>
+    <summary><span class="rc-titulo">Ver todas as conquistas</span>${novas.length && vistas.size ? `<span class="rc-resumo"><span class="chip ok">✨ ${novas.length} nova(s)</span></span>` : ""}</summary><div class="rc-corpo">
     <h3 class="conq-h3">🌟 Gerais <span class="pequeno">— todas as matérias</span></h3>
     <div class="medalhas">${bloco(c.gerais)}</div>
     ${c.materias.length ? `<h3 class="conq-h3">📚 Por matéria</h3>${c.materias.map(m => `<details class="conq-materia"${m.conquistas.some(x => x.ok) ? " open" : ""}><summary><b>${esc(m.materia)}</b>
         <span class="tag ${m.media >= 80 ? "ok" : m.media >= 50 ? "nota" : "aviso"}">média ${Math.round(m.media)}</span><span class="pequeno">${m.provas.length} prova(s) · ${m.conquistas.filter(x => x.ok).length}/${m.conquistas.length} conquistas</span></summary>
         <div class="medalhas">${bloco(m.conquistas)}</div></details>`).join("")}` : `<p class="pequeno">Faça a sua primeira prova para começar a ganhar conquistas por matéria.</p>`}
-    ${diario.length ? `<h3 class="conq-h3">📔 Na sala de aula</h3><p class="pequeno" style="margin-top:-4px">Conquistas das suas aulas, registradas pela sua auxiliar.</p><div class="medalhas">${bloco(diario)}</div>` : ""}`;
+    ${diario.length ? `<h3 class="conq-h3">📔 Na sala de aula</h3><p class="pequeno" style="margin-top:-4px">Conquistas das suas aulas, registradas pela sua auxiliar.</p><div class="medalhas">${bloco(diario)}</div>` : ""}
+    </div></details>`;
   box.querySelectorAll("[data-m]").forEach(b => b.onclick = () => {
     const m = lista[Number(b.dataset.m)];
     modal({ titulo: `${m.e} ${m.t}`, conteudo: `<p style="margin-top:0">${esc(m.d)}</p>

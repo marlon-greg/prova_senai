@@ -12,6 +12,7 @@ let gami = { ...GAMI_PADRAO };   // o que está ligado na gamificação (config/
 import { montarFormato, temFormato, FORMATOS, rotuloFormato, textoParaFalar, textoResposta, textoChave } from "./formatos-ui.js";
 const controles = {};   // qid -> controle do formato adaptado (valor, preencher, travar)
 import { abrirLeitorPdf } from "./leitor-pdf.js";
+import { toolbar, collapsible, vazio, statTiles, chips } from "./ui.js";
 import { completar, aplicarVisual, mesclarQuestao } from "./acessibilidade.js";
 import { mascoteLigado, ligarMascote, dadosMascote, htmlMascote, htmlEscolha, ligarEscolha, montarGuia, pararFala } from "./guia.js";
 import { collection, doc, getDoc, getDocFromServer, getDocs, setDoc, updateDoc, query, where, serverTimestamp, increment, arrayUnion, onSnapshot }
@@ -196,7 +197,7 @@ function desenharSaudacao() {
     ? `<div class="saudacao-linha">${htmlMascote("feliz", { classe: "saudacao-mascote" })}
          <div class="balao"><div class="balao-nome">${esc(m.nome)} <span>prof. ${esc(m.professor)}</span></div>
            <div class="balao-texto">Oi${nome ? `, <b>${esc(nome)}</b>` : ""}! ${esc(m.bordao)}<br>Escolha uma prova aqui embaixo que eu te explico tudo antes de começar.</div></div></div>
-       <div class="saudacao-escolha"><span class="pequeno">Escolha o seu guia:</span>${htmlEscolha(m.id)}</div>`
+       ${collapsible({ chave: "aluno:trocarGuia", classe: "leve saudacao-troca", titulo: "Trocar o guia", corpoHTML: `<div class="saudacao-escolha">${htmlEscolha(m.id)}</div>` })}`
     : `<p class="pequeno" style="margin:0">Mascote guia desligado. Para ligar, use o botão <b>🧑‍🏫 Mascote</b> no topo da página.</p>`;
   ligarEscolha(box, () => { desenharSaudacao(); humorHud = "feliz"; });
 }
@@ -231,9 +232,20 @@ async function listarProvas() {
   if (modoTeste || !gami.conquistas) $("#conquistas").classList.add("oculto");
   if (!modoTeste) desenharFaleConosco($("#faleConosco"), eu, gami).catch(e => console.warn("fale conosco", e));
   provasDaLista = Object.fromEntries(lista.map(p => [p.id, p]));
-  if (!lista.length) { box.innerHTML = `<div class="vazio"><div class="icone">📭</div><p><b>Nenhuma prova liberada no momento.</b></p><p class="pequeno">Quando o professor liberar, ela aparece aqui. Se a prova já começou na sala, recarregue a página.</p></div>`; return; }
-  box.innerHTML = "";
-  let mostradas = 0;
+  if (!lista.length) { box.innerHTML = vazio({ e: "📭", texto: `<b>Nenhuma prova liberada no momento.</b></p><p class="pequeno">Quando o professor liberar, ela aparece aqui. Se a prova já começou na sala, recarregue a página.` }); return; }
+  // "Para fazer" (em andamento primeiro) e "Já feitas" (recolhível, lembra aberto/fechado); busca só com muitas provas
+  box.innerHTML = (lista.length > 6 ? toolbar({ buscaId: "lpBusca", placeholder: "Buscar prova…", contagemId: "lpContagem" }) : "")
+    + `<div id="lpFazer"></div>`
+    + collapsible({ chave: "aluno:provasFeitas", titulo: "✓ Já feitas", resumoHTML: `<span class="chip" id="lpFeitasN">0</span>`, corpoHTML: `<div id="lpFeitas"></div>`, attrs: `id="lpFeitasBox" hidden` });
+  const fazer = $("#lpFazer"), feitas = $("#lpFeitas"), feitasBox = $("#lpFeitasBox");
+  $("#lpBusca")?.addEventListener("input", e => {
+    const t = normBusca(e.target.value), itens = [...box.querySelectorAll(".prova-item")];
+    let n = 0;
+    itens.forEach(el => { const ok = !t || el.dataset.busca.includes(t); el.classList.toggle("oculto", !ok); n += ok; });
+    if (t) feitasBox.open = true;
+    $("#lpContagem").textContent = t ? `${n} de ${itens.length}` : "";
+  });
+  let mostradas = 0, nFazer = 0, nFeitas = 0;
   for (const p of lista) {
     const t = await getDoc(doc(db, "tentativas", idTentativa(p.id)));
     const td = t.exists() ? t.data() : null;
@@ -243,16 +255,21 @@ async function listarProvas() {
     const andamento = p.modoExibicao === "todas" ? `${td?.indiceAtual || 0} de ${nQ(p, td)} enviadas` : `questão ${(td?.indiceAtual || 0) + 1} de ${nQ(p, td)}`;
     let status, acao;
     if (!td)                    { status = `<span class="tag">○ não iniciada</span>`; acao = podeFazer ? `<button data-acao="inicio" data-id="${p.id}">Fazer a prova</button>` : `<span class="pequeno">prova encerrada</span>`; }
-    else if (!td.finalizadaEm)  { status = `<span class="tag aviso">em andamento (${andamento})</span>`; acao = podeFazer ? `<button data-acao="continuar" data-id="${p.id}">Continuar</button>` : `<span class="pequeno">prova encerrada</span>`; }
-    else                        { status = `<span class="tag ok">✓ finalizada em ${dataBR(td.finalizadaEm)}</span> <span class="tag nota" data-placar="${p.id}">…</span>`; acao = podeVerResultado ? `<button class="sec" data-acao="resultado" data-id="${p.id}">Ver gabarito e resultado</button>` : `<span class="pequeno">gabarito ainda não liberado</span>`; }
-    box.insertAdjacentHTML("beforeend", `<div class="prova-item"><div class="info"><b>${esc(p.titulo)}</b><br><span class="pequeno">${esc(p.turma || "")} · ${nQ(p, td)} questões</span><div style="margin-top:4px">${status}</div></div><div class="acao">${acao}</div></div>`);
+    else if (!td.finalizadaEm)  { status = `<span class="tag aviso">em andamento · ${andamento}</span>`; acao = podeFazer ? `<button class="ok" data-acao="continuar" data-id="${p.id}">▶ Continuar</button>` : `<span class="pequeno">prova encerrada</span>`; }
+    else                        { status = `<span class="tag ok">✓ ${dataBR(td.finalizadaEm)}</span><span class="tag nota" data-placar="${p.id}">…</span>`; acao = podeVerResultado ? `<button class="sec" data-acao="resultado" data-id="${p.id}">Ver resultado</button>` : `<span class="pequeno">gabarito ainda não liberado</span>`; }
+    const item = `<div class="prova-item" data-busca="${esc(normBusca(`${p.titulo} ${p.turma || ""} ${p.materia || ""}`))}"><div class="info"><b>${esc(p.titulo)}</b>
+      <div class="pi-meta">${status}<span class="pequeno">${esc(p.turma || "")}${p.turma ? " · " : ""}${nQ(p, td)} questões</span></div></div><div class="acao">${acao}</div></div>`;
+    if (td?.finalizadaEm) { feitas.insertAdjacentHTML("beforeend", item); feitasBox.hidden = false; $("#lpFeitasN").textContent = ++nFeitas; }
+    else { fazer.insertAdjacentHTML(td ? "afterbegin" : "beforeend", item); nFazer++; }   // em andamento vai para o topo
     if (td?.finalizadaEm) {   // placar sem esperar: a lista não fica travada lendo gabaritos
       const el = box.querySelector(`[data-placar="${p.id}"]`);
       placarDaTentativa({ id: t.id, ...td }).then(r => { el.innerHTML = textoPlacarCurto(r); }).catch(() => { el.textContent = "placar indisponível"; });
     }
   }
-  if (!mostradas) box.innerHTML = `<div class="vazio"><div class="icone">📭</div><p><b>Nenhuma prova liberada para você no momento.</b></p><p class="pequeno">Quando o professor liberar uma prova da sua turma, ela aparece aqui. Se a prova já começou na sala, recarregue a página; se continuar sem aparecer, mostre ao professor o nome e o e-mail da sua conta: <b>${esc(eu.nomeConta || "(conta sem nome)")}</b> · <b>${esc(eu.email)}</b>. O nome cadastrado na turma precisa ser igual ao da conta.</p>${avisoVinculo ? `<p class="pequeno erro-texto">${esc(avisoVinculo)}</p>` : ""}</div>`;
+  if (!mostradas) { box.innerHTML = vazio({ e: "📭", texto: `<b>Nenhuma prova liberada para você no momento.</b></p><p class="pequeno">Quando o professor liberar uma prova da sua turma, ela aparece aqui. Se a prova já começou na sala, recarregue a página; se continuar sem aparecer, mostre ao professor o nome e o e-mail da sua conta: <b>${esc(eu.nomeConta || "(conta sem nome)")}</b> · <b>${esc(eu.email)}</b>. O nome cadastrado na turma precisa ser igual ao da conta.</p>${avisoVinculo ? `<p class="pequeno erro-texto">${esc(avisoVinculo)}` : ""}` }); return; }
+  if (!nFazer) fazer.innerHTML = `<p class="pequeno lp-nada">🎉 Nenhuma prova para fazer agora.${nFeitas ? " As que você já fez estão logo abaixo." : ""}</p>`;
 }
+const normBusca = t => String(t || "").toLowerCase().normalize("NFD").replace(/\p{M}+/gu, "");
 // turma da prova: sem turma = qualquer aluno; com turma = o e-mail precisa estar na lista
 // (o aluno só consegue ler a turma em que está; a proteção de verdade é a regra do create da tentativa)
 // Turma cadastrada pelo NOME: se o nome da conta Google bater com um nome ainda sem e-mail,
@@ -1421,6 +1438,8 @@ async function verResultado() {
   const resp = {}; rs.forEach(d => resp[d.id] = d.data());
   const corr = {}; cs.forEach(d => corr[d.id] = d.data());
   let total = 0, max = 0, certas = 0, html = "";
+  const grupoSt = st => st === "certa" ? "certas" : ["parcial", "revisar"].includes(st) ? "parciais" : "erradas";
+  const contagem = { certas: 0, parciais: 0, erradas: 0 };
   ids.forEach((qid, i) => {
     const q = { id: qid, ...(qgs[i].q || {}) }, g = qgs[i].g || {};
     const r = resp[qid]?.resposta ?? undefined, perdida = resp[qid]?.perdida === true, peso = Number(q.peso || 1); max += peso;
@@ -1432,7 +1451,8 @@ async function verResultado() {
     const fmt = temFormato(q), bloco = t => `<span class="resp-formato">${esc(t).replace(/\n/g, "<br>")}</span>`;
     let sua = perdida ? "<i>perdida por sair da prova</i>" : r === undefined ? "<i>não respondida</i>" : fmt ? bloco(textoResposta(q, r)) : q.tipo === "alternativa" ? esc(q.alternativas[r]) : `<span class="mono">${esc(r)}</span>`;
     let certa = fmt ? (g.chave ? bloco(textoChave(q, g)) : "—") : q.tipo === "alternativa" ? esc(q.alternativas?.[g.correta] ?? "—") : (g.respostasAceitas?.length ? `<span class="mono">${esc(g.respostasAceitas[0])}</span>` : "—");
-    html += `<div class="card"><div class="q-topo"><span class="q-numero" style="font-size:1.1em">Questão ${i + 1}</span><span class="tag ${rot[0]}">${rot[1]} · ${c.pontos}/${peso}</span></div>
+    contagem[grupoSt(c.status)]++;
+    html += `<div class="card res-q" data-grupo="${grupoSt(c.status)}"><div class="q-topo"><span class="q-numero" style="font-size:1.1em">Questão ${i + 1}</span><span class="tag ${rot[0]}">${rot[1]} · ${c.pontos}/${peso}</span></div>
       <div class="enunciado">${formatarEnunciado(q.enunciado)}</div>
       <p><b>Sua resposta:</b> ${sua}</p>
       ${c.status !== "certa" && certa !== "—" ? `<p><b>Resposta correta:</b> ${certa}</p>` : ""}
@@ -1441,7 +1461,14 @@ async function verResultado() {
       ${gami.apontamentos && !modoTeste ? `<button type="button" class="discreto mini b-apontar-res" data-qid="${esc(qid)}">🚩 Algo errado nesta questão?</button>` : ""}</div>`;
   });
   const nota = max ? Math.round((total / max) * 1000) / 10 : 0;
-  $("#resResumo").innerHTML = `<p style="font-family:var(--fonte-titulo);font-size:1.4em;font-weight:600;margin:8px 0">Você acertou ${certas} de ${ids.length} · Nota: ${tentativa.nota ?? nota} / 100 <span class="pequeno">(${total} de ${max} pontos)</span></p>`;
-  $("#resLista").innerHTML = html;
+  const notaFinal = tentativa.nota ?? nota, tom = notaFinal >= 70 ? "ok" : notaFinal >= 50 ? "aviso" : "erro";
+  $("#resResumo").innerHTML = statTiles([{ v: `${notaFinal}<small>/100</small>`, r: "sua nota", tom }, { v: `${certas}<small>/${ids.length}</small>`, r: "questões certas" },
+    { v: `${total}<small>/${max}</small>`, r: "pontos" }]);
+  // filtro por situação (só aparece quando há o que separar); a impressão mostra todas
+  const opcoes = [{ v: "todas", t: `Todas · ${ids.length}` }, { v: "erradas", t: `❌ Erradas · ${contagem.erradas}` }, { v: "parciais", t: `🟡 Parciais · ${contagem.parciais}` }, { v: "certas", t: `✅ Certas · ${contagem.certas}` }]
+    .filter(o => o.v === "todas" || contagem[o.v]);
+  $("#resLista").innerHTML = (opcoes.length > 2 ? `<div id="resFiltro" class="res-filtro"></div>` : "") + html;
+  if (opcoes.length > 2) chips($("#resFiltro"), opcoes, { valor: "todas", aria: "Mostrar as questões", aoMudar: v =>
+    $("#resLista").querySelectorAll(".res-q").forEach(c => c.classList.toggle("res-escondida", v !== "todas" && c.dataset.grupo !== v)) });
   $("#resLista").querySelectorAll(".b-apontar-res").forEach(b => b.onclick = () => { const qid = b.dataset.qid; apontar(eu, { provaId: provaAtual.id, provaTitulo: provaAtual.titulo, qid, enunciado: qgs[ids.indexOf(qid)]?.q?.enunciado || "" }); });
 }

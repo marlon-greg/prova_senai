@@ -1,7 +1,7 @@
 // Página do aluno: cartão do perfil (personagem + nível + conquistas), editor do personagem com skins
 // liberadas pelas conquistas, download do cartão (PNG, JPG, PDF) e o painel da simulação (equipe, ?simular=1).
 import { db, esc, $, toast, modal } from "./common.js";
-import { CATALOGO, CORES, ORDEM_PELES, NOMES_PARTES, PELES, labioNatural, svgAvatar, liberado, textoTrava, avatarValido, avatarAleatorio } from "./avatar.js";
+import { CATALOGO, CORES, ORDEM_PELES, NOMES_PARTES, PELES, labioNatural, svgAvatar, liberado, textoTrava, avatarValido, avatarAleatorio, permitido, trocarSexo, PARTES_OCULTAS } from "./avatar.js";
 // status do dia: só frases prontas (ninguém escreve texto livre)
 export const STATUS = ["😊 Animado(a)", "📚 Estudando", "🎯 Focado(a)", "💪 Pronto(a) para a prova", "🚀 Motivado(a)", "🧘 Tranquilo(a)", "🤔 Pensativo(a)",
   "😴 Com sono", "☕ Precisando de café", "🎧 Ouvindo música", "🤝 Ajudando os colegas", "💻 Programando", "🎮 Modo jogo", "🏃 Na correria", "🌟 Dia incrível", "🙂 De boa"];
@@ -67,28 +67,29 @@ function editarPersonagem({ eu, perfil, titulos, simulacao, aoSalvar }) {
         <label for="epApelido">Como quer ser chamado(a)</label><input type="text" id="epApelido" maxlength="30" value="${esc(perfil.apelido || "")}" placeholder="${esc(String(eu.nome || "").split(/\s+/)[0] || "")}"></div>
       <div class="ep-controles"><div class="ep-grupos" role="tablist">${GRUPOS.map((g, i) => `<button type="button" role="tab" data-grupo="${i}">${g.nome}</button>`).join("")}</div>
         <div class="ep-abas" id="epPartes"></div><div class="ep-cores" id="epCores"></div><div class="ep-itens" id="epItens"></div></div></div>
-    <p class="pequeno">Qualquer corpo pode usar qualquer cabelo, barba, maquiagem, roupa ou acessório. 🔒 Itens com cadeado são <b>skins</b>: liberam com as conquistas. Você tem ${titulos.length} conquista(s).</p>`;
+    <p class="pequeno">Escolha primeiro <b>Masculino</b> ou <b>Feminino</b> em “Corpo”: as opções de rosto, cabelo, olhos e acessórios se ajustam ao corpo, e o 🎲 Aleatório sorteia só do mesmo corpo. 🔒 Itens com cadeado são <b>skins</b>: liberam com as conquistas. Você tem ${titulos.length} conquista(s).</p>`;
   // cores na ordem de mostrar (a pele vai da mais clara para a mais escura)
   const swatches = k => (k === "pele" ? ORDEM_PELES : CORES[k].map((_, i) => i)).map(i => {
     const c = CORES[k][i] || labioNatural(PELES[av.pele] || PELES[1]), nat = k === "corLabios" && i === 0;
     return `<button type="button" class="sw${nat ? " sw-nat" : ""}" data-cor="${k}" data-i="${i}" style="background:${c}" title="${nat ? "Natural" : ""}" aria-label="${nat ? "Natural" : `cor ${i + 1}`}"></button>`; }).join("");
   const desenhar = c => {
-    const g = GRUPOS[grupo];
+    const g = GRUPOS[grupo], oculta = PARTES_OCULTAS[av.corpo === "feminino" ? "f" : "m"], partes = g.partes.filter(k => !oculta.includes(k));
+    if (!partes.includes(parte)) parte = partes[0];
     $("#epPrevia", c).innerHTML = svgAvatar(av, 220);
     c.querySelectorAll("[data-grupo]").forEach(b => { const on = Number(b.dataset.grupo) === grupo; b.classList.toggle("ativa", on); b.setAttribute("aria-selected", on); });
-    $("#epPartes", c).innerHTML = g.partes.map(k => `<button type="button" data-parte="${k}" class="${k === parte ? "ativa" : ""}" aria-pressed="${k === parte}">${esc(NOMES_PARTES[k] || k)}</button>`).join("");
-    $("#epCores", c).innerHTML = g.cores.map(([k, r]) => `<div><span class="pequeno">${r}</span><div class="ep-swatches">${swatches(k)}</div></div>`).join("");
+    $("#epPartes", c).innerHTML = partes.map(k => `<button type="button" data-parte="${k}" class="${k === parte ? "ativa" : ""}" aria-pressed="${k === parte}">${esc(NOMES_PARTES[k] || k)}</button>`).join("");
+    $("#epCores", c).innerHTML = g.cores.filter(([k]) => !(k === "corLabios" && av.corpo !== "feminino")).map(([k, r]) => `<div><span class="pequeno">${r}</span><div class="ep-swatches">${swatches(k)}</div></div>`).join("");
     c.querySelectorAll("[data-cor]").forEach(b => { b.classList.toggle("sel", Number(av[b.dataset.cor]) === Number(b.dataset.i)); b.onclick = () => { av[b.dataset.cor] = Number(b.dataset.i); desenhar(c); }; });
     c.querySelectorAll("[data-parte]").forEach(b => b.onclick = () => { parte = b.dataset.parte; desenhar(c); });
-    $("#epItens", c).innerHTML = CATALOGO[parte].map(it => { const ok = liberado(it, titulos);
+    $("#epItens", c).innerHTML = CATALOGO[parte].filter(it => parte === "corpo" || permitido(it, av.corpo)).map(it => { const ok = liberado(it, titulos);
       return `<button type="button" class="ep-item${av[parte] === it.id ? " sel" : ""}${ok ? "" : " travado"}" data-item="${esc(it.id)}" ${ok ? "" : "disabled"} title="${esc(ok ? it.nome : textoTrava(it.trava))}">
         ${svgAvatar({ ...av, [parte]: it.id }, 74, { parte })}<span>${esc(it.nome)}</span>${ok ? (it.trava ? `<small class="ep-novo">✨ skin</small>` : "") : `<small>${esc(textoTrava(it.trava))}</small>`}</button>`; }).join("");
-    c.querySelectorAll("[data-item]").forEach(b => b.onclick = () => { av[parte] = b.dataset.item; desenhar(c); });
+    c.querySelectorAll("[data-item]").forEach(b => b.onclick = () => { av = parte === "corpo" ? trocarSexo(av, b.dataset.item, titulos) : { ...av, [parte]: b.dataset.item }; desenhar(c); });
   };
   return modal({ titulo: "🎨 Meu personagem", conteudo: html, ok: "Salvar personagem", cancelar: "Cancelar", largo: true,
     aoAbrir: c => {
       c.querySelectorAll("[data-grupo]").forEach(b => b.onclick = () => { grupo = Number(b.dataset.grupo); parte = GRUPOS[grupo].partes[0]; desenhar(c); });
-      $("#epSorte", c).onclick = () => { av = avatarValido(avatarAleatorio(titulos, { fundo: av.fundo, adesivo: av.adesivo, moldura: av.moldura }), titulos); desenhar(c); };
+      $("#epSorte", c).onclick = () => { av = avatarValido(avatarAleatorio(titulos, { corpo: av.corpo, fundo: av.fundo, adesivo: av.adesivo, moldura: av.moldura }), titulos); desenhar(c); };
       $("#epDesfaz", c).onclick = () => { av = { ...inicial }; desenhar(c); };
       desenhar(c);
     },

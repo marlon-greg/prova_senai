@@ -1077,12 +1077,12 @@ function desenharBancos() {
             const nTop = c ? Object.keys(c).length : 0;
             return `<article class="cartao-materia cartao-banco">
               <div class="cm-topo"><div><h3>🗂 ${esc(b.nome)}</h3><span class="pequeno">${b.nQuestoes} questões${tot ? ` · ${textoContagem(tot)}` : ""}${achados[b.id] ? ` · <b>${achados[b.id]} questão(ões) com “${esc($("#fbBusca").value.trim())}”</b>` : ""}</span></div>
-                ${u.length ? `<span class="chip info" title="${esc(u.map(p => p.titulo).join(" · "))}">🧪 em ${u.length} prova(s)</span>` : `<span class="chip off">sem prova</span>`}</div>
+                <div class="cb-acoes">${u.length ? `<span class="chip info" title="${esc(u.map(p => p.titulo).join(" · "))}">🧪 em ${u.length} prova(s)</span>` : `<span class="chip off">sem prova</span>`}
+                ${podeEditar() ? `<button class="leve mini" data-topicos="${b.id}" title="Tópico de cada questão, matéria e semestre do banco (com sugestão da IA)">🏷 Tópicos</button>` : ""}
+                ${menuHTML({ aria: `Mais ações: ${b.nome}`, itensHTML: itemMenu({ e: "📋", t: "Gabarito para o Classroom", attrs: `data-gab="${b.id}"` }) + (ehAdmin() ? "<hr>" + itemMenu({ e: "🗑", t: "Apagar banco", perigo: true, attrs: `data-delb="${b.id}"` }) : "") })}</div></div>
               ${c ? `<details class="recolhivel leve topicos-banco"><summary><span class="rc-titulo">🏷 ${nTop} tópico(s)</span>${geral ? `<span class="chip aviso">⚠ ${geral} sem tópico</span>` : ""}</summary>
                 <div class="rc-corpo"><ul class="lista-topicos lista-topicos-banco">${Object.entries(c).map(([t, n]) => `<li class="topico${t === "Geral" ? " e-geral" : ""}"><span class="tp-nome">${esc(t)}</span><span class="chip" title="alternativas">🔘 ${n.alternativa}</span><span class="chip" title="dissertativas">✍ ${n.dissertativa}</span></li>`).join("")}</ul>
-                ${geral ? `<p class="pequeno aviso-texto">⚠ ${geral} questão(ões) sem tópico ("Geral"): use 🏷 Tópicos.</p>` : ""}</div></details>` : `<p class="pequeno">⚠ não foi possível ler as questões.</p>`}
-              <div class="cm-acoes">${podeEditar() ? `<button class="leve mini" data-topicos="${b.id}" title="Tópico de cada questão, matéria e semestre do banco (com sugestão da IA)">🏷 Tópicos</button>` : ""}
-                ${menuHTML({ aria: `Mais ações: ${b.nome}`, itensHTML: itemMenu({ e: "📋", t: "Gabarito para o Classroom", attrs: `data-gab="${b.id}"` }) + (ehAdmin() ? "<hr>" + itemMenu({ e: "🗑", t: "Apagar banco", perigo: true, attrs: `data-delb="${b.id}"` }) : "") })}</div></article>`;
+                ${geral ? `<p class="pequeno aviso-texto">⚠ ${geral} questão(ões) sem tópico ("Geral"): use 🏷 Tópicos.</p>` : ""}</div></details>` : `<p class="pequeno">⚠ não foi possível ler as questões.</p>`}</article>`;
           }).join("")}</div></details>`;
       }).join("")}</div></details>`;
   }).join("");

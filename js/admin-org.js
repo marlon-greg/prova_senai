@@ -9,7 +9,7 @@ import { db, esc, $, toast, modal, confirmar, traduzirErro, temaDe, ordenarTemas
          semestreDe, rotuloSemestre, semestreVizinho, chaveTexto, semestreDaProva, materiaDaProva, dataCurta, nomeTurma } from "./common.js";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, abrirMaterialEmAba, tamanhoTexto, erroMaterial } from "./material.js";
 import { lerPlanoIA, classificarTopicosIA, lerCursoIA } from "./ia.js";
-import { menuHTML, itemMenu, vazio } from "./ui.js";
+import { menuHTML, itemMenu, vazio, collapsible } from "./ui.js";
 import { collection, doc, getDocs, addDoc, updateDoc, deleteDoc, writeBatch, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -202,9 +202,11 @@ function cartaoMateria(t, s, n) {
         <span class="tag ${nq ? "" : "aviso"}" title="Questões com este tópico nos bancos da matéria">📝 ${nq} questão(ões)</span>
         ${ep.length ? `<span class="tag nota" title="${esc(ep.join(" · "))}">🧪 em ${ep.length} prova(s)</span>` : ""}</li>`;
     }).join("")}</ol></div></details>` : p ? `<p class="pequeno">Nenhum tópico ainda. ${pode ? "Use <b>✎ Editar</b> ou envie o PDF do plano e peça para a IA ler." : ""}</p>` : ""}
-    ${soBanco.length ? `<div class="cm-extra"><span class="pequeno">${p ? "Tópicos nos bancos, fora do plano:" : "Tópicos nos bancos:"}</span>
-      ${soBanco.map(k => `<span class="tag${k === "geral" ? " aviso" : ""}" title="${k === "geral" ? "Questões sem tópico: use 🏷 Tópicos na aba Bancos" : ""}">${esc(nomeDe(k))} · ${cont[k]}</span>`).join("")}</div>` : ""}
-    <div class="cm-provas"><span class="rotulo">Provas</span>
+    ${soBanco.length ? collapsible({ chave: `org:banco:${t.id}|${s}|${chaveM}`, classe: "leve cm-extra-rc",
+      titulo: `🗂 ${soBanco.length} tópico(s) ${p ? "nos bancos, fora do plano" : "nos bancos"}`,
+      resumoHTML: `<span class="chip">📝 ${soBanco.reduce((a, k) => a + cont[k], 0)} questões</span>${soBanco.includes("geral") ? `<span class="chip aviso">sem tópico: ${cont.geral}</span>` : ""}`,
+      corpoHTML: `<div class="cm-extra">${soBanco.map(k => `<span class="tag${k === "geral" ? " aviso" : ""}" title="${k === "geral" ? "Questões sem tópico: use 🏷 Tópicos na aba Bancos" : ""}">${esc(nomeDe(k))} · ${cont[k]}</span>`).join("")}</div>` }) : ""}
+    <div class="cm-provas"><span class="rotulo">Provas${n.provas.length ? ` · ${n.provas.length}` : ""}</span>
       ${n.provas.length ? `<ul>${n.provas.sort((a, b) => String(a.dataProva || "").localeCompare(String(b.dataProva || "")) || ordemNatural(a.titulo, b.titulo)).map(linhaProva).join("")}</ul>` : `<p class="pequeno" style="margin:2px 0">Nenhuma prova criada.</p>`}
       ${prevs.filter(pv => !feita(pv)).map(pv => `<div class="prevista">🗓 <b>Prevista:</b> ${esc(pv.titulo)}${pv.data ? ` · ${dataCurta(pv.data)}` : ""}${pv.topicos?.length ? ` <span class="pequeno">(${pv.topicos.map(esc).join(", ")})</span>` : ""}
         ${pode ? `<button class="leve mini" type="button" data-criar="${p.id}" data-titulo="${esc(pv.titulo)}" data-data="${pv.data || ""}" data-tops="${esc(JSON.stringify(pv.topicos || []))}">+ Criar</button>` : ""}</div>`).join("")}
@@ -219,7 +221,7 @@ function cartaoMateria(t, s, n) {
           + (arqs.length ? itemMenu({ e: "🤖", t: "Ler plano com IA", attrs: `data-ler="${p.id}" title="A IA lê o PDF e preenche os tópicos e as provas previstas (você revisa antes de salvar)"` }) : "")
           + (ctx.ehAdmin() ? "<hr>" + itemMenu({ e: "🗑", t: "Apagar o plano", perigo: true, attrs: `data-delplano="${p.id}"` }) : "") })}
         <button data-ajuda-item="planoEnsino"></button></span>` : ""}
-      ${pode && !p ? `<button class="mini${doCurso ? " leve" : ""}" type="button" data-cadastrar="${t.id}|${s}|${esc(n.materia)}">${doCurso ? "🗓 Datas das provas (plano de ensino)" : "+ Cadastrar plano desta matéria"}</button>` : ""}
+      ${pode && !p ? `<button class="leve mini" type="button" data-cadastrar="${t.id}|${s}|${esc(n.materia)}">${doCurso ? "🗓 Datas das provas (plano de ensino)" : "+ Plano de ensino"}</button>` : ""}
     </div></article>`;
 }
 
