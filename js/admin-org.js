@@ -6,7 +6,7 @@
 // A prova liga na matéria por turma + semestre + matéria (prova.semestre / prova.materia; provas antigas: data de criação e matéria do banco).
 // O tópico de uma questão é o campo "tema" dela (o mesmo que filtra o sorteio da prova).
 import { db, esc, $, toast, modal, confirmar, traduzirErro, temaDe, ordenarTemas, bancosDaProva, temasDoBanco,
-         semestreDe, rotuloSemestre, semestreVizinho, chaveTexto, semestreDaProva, materiaDaProva, dataCurta, nomeTurma } from "./common.js";
+         semestreDe, rotuloSemestre, semestreVizinho, chaveTexto, semestreDaProva, materiaDaProva, dataCurta, nomeTurma, semestreCursoAtual } from "./common.js";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, abrirMaterialEmAba, tamanhoTexto, erroMaterial } from "./material.js";
 import { lerPlanoIA, classificarTopicosIA, lerCursoIA } from "./ia.js";
 import { menuHTML, itemMenu, vazio, collapsible } from "./ui.js";
@@ -146,7 +146,7 @@ function desenhar() {
     if ((fS || busca) && !blocos) return "";
     const id = `t:${t.id}`, aberto = busca || fT || !fechados.has(id);
     return `<details class="recolhivel" data-g="${id}" ${aberto ? "open" : ""}>
-      <summary><span class="rc-titulo">👥 ${esc(nomeTurma(t))}</span><span class="rc-resumo"><span class="chip">${ctx.alunosDaTurma(t).length} alunos</span></span>
+      <summary><span class="rc-titulo">👥 ${esc(nomeTurma(t))}</span><span class="rc-resumo"><span class="chip">${ctx.alunosDaTurma(t).length} alunos</span>${(sc => sc ? `<span class="chip ${sc.concluida ? "ok" : "info"}" title="Semestre do curso (avança sozinho em agosto e janeiro)">🎓 ${sc.rotulo}</span>` : "")(semestreCursoAtual(t))}</span>
         ${ctx.podeEditar() ? `<span class="rc-direita"><button class="leve mini" data-novo-t="${t.id}" type="button">+ Matéria</button></span>` : ""}</summary>
       <div class="rc-corpo">${cursoDaTurmaHTML(t, sm)}${blocos || `<p class="pequeno" style="margin:0 16px 14px">Nenhuma matéria ${fS ? `em ${rotuloSemestre(fS)}` : "ainda"}. Use <b>+ Matéria</b> (ou as matérias do plano de curso, acima).</p>`}</div></details>`;
   }).join("");

@@ -320,6 +320,21 @@ export function semestreDe(d = new Date()) {
   return `${dt.getFullYear()}-${dt.getMonth() < 6 ? 1 : 2}`;
 }
 export const rotuloSemestre = s => /^\d{4}-[12]$/.test(String(s || "")) ? `${s.slice(0, 4)}/${s.slice(5)}º sem.` : (s || "sem semestre");
+// ---------- semestre do CURSO da turma (1º ao 4º) ----------
+// Período letivo: 1º = janeiro a julho (julho é férias, ainda conta o 1º), 2º = agosto a dezembro.
+// A turma guarda o semestre do curso escolhido no cadastro (semestreCurso) e o período em que foi escolhido
+// (semestreCursoRef). O semestre atual é calculado: avança SOZINHO em 1º de agosto e em 1º de janeiro.
+export const SEMESTRES_CURSO = 4;
+export function periodoLetivo(d = new Date()) { return `${d.getFullYear()}-${d.getMonth() <= 6 ? 1 : 2}`; }
+const indicePeriodo = p => { const [a, n] = String(p || "").split("-").map(Number); return a * 2 + (n - 1); };
+// devolve { n, concluida, rotulo } ou null (turma sem semestre informado)
+export function semestreCursoAtual(t, hoje = new Date()) {
+  const base = Number(t?.semestreCurso);
+  if (!base) return null;
+  const ref = /^\d{4}-[12]$/.test(t.semestreCursoRef || "") ? t.semestreCursoRef : periodoLetivo(hoje);
+  const n = base + Math.max(0, indicePeriodo(periodoLetivo(hoje)) - indicePeriodo(ref));
+  return { n, concluida: n > SEMESTRES_CURSO, rotulo: n > SEMESTRES_CURSO ? "Curso concluído" : `${n}º semestre` };
+}
 // semestres em volta de um semestre: deslocamento -1 = o anterior, +1 = o próximo
 export function semestreVizinho(s, desloc) {
   let [a, n] = String(s || semestreDe()).split("-").map(Number);

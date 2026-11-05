@@ -2,7 +2,7 @@
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, apagarTentativaTeste,
          confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco,
          rotuloDias, nomeTurma, HORARIO_PADRAO, textoHorario, DIAS_SEMANA_LONGO,
-         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, chaveTexto, dataCurta } from "./common.js";
+         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo } from "./common.js";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
@@ -160,11 +160,11 @@ function previaTurma() {
     (repetidos.length ? `<br><span class="erro-texto">⚠ Nome repetido: ${repetidos.map(esc).join(", ")}. Dois alunos com o mesmo nome precisam do e-mail (escreva o e-mail na linha de cada um).</span>` : "");
 }
 $("#tEmails").oninput = previaTurma;
-$("#ftBusca").oninput = $("#ftSemestre").onchange = $("#ftMateria").onchange = $("#ftDia").onchange = () => desenharTurmas();
+$("#ftBusca").oninput = $("#ftSemestre").onchange = $("#ftMateria").onchange = $("#ftDia").onchange = $("#ftSemCurso").onchange = () => desenharTurmas();
 const marcarDias = l => document.querySelectorAll("#tDias input").forEach(c => c.checked = (l || []).map(Number).includes(Number(c.value)));
 const diasMarcados = () => [...document.querySelectorAll("#tDias input:checked")].map(c => Number(c.value));
 function limparFormTurma() {
-  turmaEditando = null; $("#tNome").value = ""; $("#tEmails").value = ""; previaTurma(); marcarDias([]);
+  turmaEditando = null; $("#tNome").value = ""; $("#tSemCurso").value = ""; $("#tEmails").value = ""; previaTurma(); marcarDias([]);
   $("#tFormTitulo").textContent = "Nova turma"; $("#btnCancelarTurma").classList.add("oculto");
   const d = drawerTurma; drawerTurma = null; d?.fechar();
 }
@@ -188,7 +188,9 @@ $("#btnSalvarTurma").onclick = async () => {
   const emails = [...new Set(alunos.filter(a => a.email).map(a => a.email))].sort();
   const nomesChave = alunos.filter(a => !a.email).map(a => chaveNome(a.nome));
   // vínculos já feitos foram incorporados ao texto (nome <e-mail>) ao abrir a edição: recomeça do zero
-  const dados = { nome, diasAula: diasMarcados(), alunos: alunos.map(a => ({ nome: a.nome || "", email: a.email || null })), emails, nomesChave, vinculos: {} };
+  const semCurso = Number($("#tSemCurso").value) || null;
+  // guarda o semestre escolhido e o período de agora: daqui para frente ele avança sozinho
+  const dados = { nome, semestreCurso: semCurso, semestreCursoRef: semCurso ? periodoLetivo() : null, diasAula: diasMarcados(), alunos: alunos.map(a => ({ nome: a.nome || "", email: a.email || null })), emails, nomesChave, vinculos: {} };
   if (!dados.diasAula.length && !(await confirmar("Nenhum dia de aula marcado. Sem os dias, o diário considera segunda a sexta. Salvar assim?", { titulo: "Dias de aula", ok: "Salvar assim", cancelar: "Voltar e marcar" }))) return;
   try {
     if (turmaEditando) await updateDoc(doc(db, "turmas", turmaEditando), { ...dados, atualizadoEm: serverTimestamp(), atualizadoPor: eu.email });
@@ -217,21 +219,23 @@ async function carregarTurmas() {
 function desenharTurmas() {
   const box = $("#listaTurmas");
   if (!turmasCache.length) { $("#ftContagem").textContent = ""; box.innerHTML = vazio({ e: "👥", texto: "Nenhuma turma ainda. Cadastre a primeira colando os nomes completos (ou e-mails) dos alunos.", acao: podeEditar() ? `<button type="button" data-nova-turma>+ Nova turma</button>` : "" }); box.querySelector("[data-nova-turma]")?.addEventListener("click", () => $("#btnNovaTurma").click()); return; }
-  const busca = semAcento($("#ftBusca").value.trim()), fS = $("#ftSemestre").value, fM = chaveTexto($("#ftMateria").value), fD = $("#ftDia").value;
+  const busca = semAcento($("#ftBusca").value.trim()), fS = $("#ftSemestre").value, fM = chaveTexto($("#ftMateria").value), fD = $("#ftDia").value, fC = $("#ftSemCurso").value;
+  const bateCurso = t => { if (!fC) return true; const sc = semestreCursoAtual(t); return fC === "sem" ? !sc : fC === "fim" ? !!sc?.concluida : sc && !sc.concluida && String(sc.n) === fC; };
   // pesquisa no nome da turma ou nos alunos (nome/e-mail); achou aluno = abre a lista com só quem bateu
-  const linhas = turmasCache.filter(t => !fD || (t.diasAula || []).map(String).includes(fD)).filter(t => (!fS && !fM) || (turmaSemMat[t.id] || []).some(x => (!fS || x.sem === fS) && (!fM || x.mat === fM))).map(t => {
+  const linhas = turmasCache.filter(bateCurso).filter(t => !fD || (t.diasAula || []).map(String).includes(fD)).filter(t => (!fS && !fM) || (turmaSemMat[t.id] || []).some(x => (!fS || x.sem === fS) && (!fM || x.mat === fM))).map(t => {
     const al = alunosDaTurma(t);
     if (!busca || semAcento(`${t.nome} ${(t.diasAula || []).map(d => DIAS_SEMANA_LONGO[d]).join(" ")} ${rotuloDias(t.diasAula)}`).includes(busca)) return { t, al, achados: null };
     const achados = al.filter(a => semAcento(`${a.nome} ${a.email || ""}`).includes(busca));
     return achados.length ? { t, al, achados } : null;
   }).filter(Boolean);
-  $("#ftContagem").textContent = busca || fS || fM || fD ? `${linhas.length} de ${turmasCache.length} turma(s)` + (linhas.some(l => l.achados) ? ` · ${linhas.reduce((n, l) => n + (l.achados?.length || 0), 0)} aluno(s) encontrado(s)` : "") : `${turmasCache.length} turma(s)`;
+  $("#ftContagem").textContent = busca || fS || fM || fD || fC ? `${linhas.length} de ${turmasCache.length} turma(s)` + (linhas.some(l => l.achados) ? ` · ${linhas.reduce((n, l) => n + (l.achados?.length || 0), 0)} aluno(s) encontrado(s)` : "") : `${turmasCache.length} turma(s)`;
   if (!linhas.length) { box.innerHTML = `<div class="vazio"><div class="icone">🔎</div><p>Nenhuma turma ou aluno com esses filtros.</p></div>`; return; }
   box.innerHTML = `<div class="tabela"><table><tr><th>Turma</th><th>Alunos</th><th>Provas</th><th>Atualizada</th><th></th></tr>` + linhas.map(({ t, al, achados }) => {
     const pend = al.filter(a => !a.email), auto = al.filter(a => a.auto), mostrar = achados || al;
     const lista = mostrar.map(a => `<li>${a.email ? "✅" : "⏳"} ${esc(a.nome || a.email)}${a.nome && a.email ? ` <span class="pequeno">${esc(a.email)}${a.auto ? " · vinculado no login" : ""}</span>` : ""}${!a.email ? ` <span class="pequeno">— aguardando o 1º login</span>` : ""}</li>`).join("");
     const pv = provasPorTurma[t.id] || [];
-    return `<tr><td><b>${esc(t.nome)}</b><br>${rotuloDias(t.diasAula) ? `<span class="tag nota" title="Dias de aula">📆 ${rotuloDias(t.diasAula)}</span>` : `<span class="tag aviso" title="Edite a turma e marque os dias de aula">📆 sem dias</span>`}<br><span class="pequeno">${t.id}</span></td>
+    const sc = semestreCursoAtual(t);
+    return `<tr><td><b>${esc(t.nome)}</b><br>${sc ? `<span class="tag ${sc.concluida ? "ok" : "info"}" title="Semestre do curso (avança sozinho em agosto e janeiro)">🎓 ${sc.rotulo}</span> ` : ""}${rotuloDias(t.diasAula) ? `<span class="tag nota" title="Dias de aula">📆 ${rotuloDias(t.diasAula)}</span>` : `<span class="tag aviso" title="Edite a turma e marque os dias de aula">📆 sem dias</span>`}<br><span class="pequeno">${t.id}</span></td>
      <td>${al.length}${pend.length ? `<br><span class="tag aviso">⏳ ${pend.length} sem login ainda</span>` : ""}${auto.length ? `<br><span class="pequeno">${auto.length} vinculado(s) pelo nome</span>` : ""}
        <details class="lista-alunos" ${achados ? "open" : ""}><summary class="pequeno">${achados ? `${achados.length} encontrado(s)` : "ver alunos"}</summary><ul>${lista}</ul></details></td>
      <td>${pv.length ? `<button class="leve mini" data-vprovas="${t.id}" title="${esc(pv.map(p => p.titulo).join(" · "))}">📝 ${pv.length} prova(s)</button>${pv.some(p => p.liberada) ? `<br><span class="tag on">● ${pv.filter(p => p.liberada).length} liberada(s)</span>` : ""}` : `<span class="pequeno">nenhuma</span>`}</td>
@@ -241,7 +245,7 @@ function desenharTurmas() {
   box.querySelectorAll("[data-vprovas]").forEach(b => b.onclick = () => { filtroTurmaPendente = b.dataset.vprovas; $("#fpBusca").value = ""; $("#fpStatus").value = ""; abrirAba("provas"); });
   box.querySelectorAll("[data-edt]").forEach(b => b.onclick = () => {
     const t = turmasCache.find(x => x.id === b.dataset.edt);
-    turmaEditando = t.id; $("#tNome").value = t.nome || ""; $("#tEmails").value = alunosDaTurma(t).map(linhaAluno).join("\n"); previaTurma(); marcarDias(t.diasAula);
+    turmaEditando = t.id; $("#tNome").value = t.nome || ""; const sc = semestreCursoAtual(t); $("#tSemCurso").value = sc && !sc.concluida ? String(sc.n) : ""; $("#tEmails").value = alunosDaTurma(t).map(linhaAluno).join("\n"); previaTurma(); marcarDias(t.diasAula);
     $("#tFormTitulo").textContent = `Editar turma ${t.nome}`; $("#btnCancelarTurma").classList.remove("oculto");
     abrirFormTurma();
   });
