@@ -15,7 +15,7 @@ import { mesclarQuestao } from "./acessibilidade.js";
 import { temFormato, textoResposta, textoChave, FORMATOS } from "./formatos-ui.js";
 import { iniciarAcessibilidade, carregarAcessibilidade, prepararNovo as prepararNovoAcess, abrirDepois } from "./admin-acess.js";
 import { iniciarHistorico, carregarHistorico } from "./admin-historico.js";
-import { drawer, ligarFiltros, atualizarFiltros, ajudasEmPopover, menuHTML, itemMenu, vazio } from "./ui.js";
+import { drawer, ligarFiltros, atualizarFiltros, ajudasEmPopover, menuHTML, itemMenu, vazio, chips, statTiles } from "./ui.js";
 import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp, onSnapshot, increment, deleteField }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -1260,7 +1260,11 @@ function filtrarLinhas(linhas) {
   });
 }
 $("#btnCarregarRes").onclick = carregarResultados;
-$("#rProva").onchange = () => { pararAoVivo(); resDados = null; $("#resResumo").innerHTML = ""; $("#resTabela").innerHTML = ""; if ($("#rAoVivo").checked) carregarResultados(); };
+// situação em chips: o <select id="rSituacao"> continua sendo a fonte (fica oculto e sincronizado)
+chips($("#rSitChips"), [{ v: "", t: "Todas" }, { v: "andamento", t: "Em andamento", e: "⏳" }, { v: "finalizou", t: "Finalizou", e: "✅" }, { v: "revisar", t: "Revisar", e: "🟡" },
+  { v: "sinais", t: "Sinais", e: "⚠" }, { v: "abaixo", t: "< 50", e: "🔻" }], { aria: "Filtrar alunos por situação",
+  aoMudar: v => { $("#rSituacao").value = v; $("#rSituacao").dispatchEvent(new Event("change")); } });
+$("#rProva").onchange = () => { pararAoVivo(); resDados = null; $("#resResumo").innerHTML = ""; $("#resTabela").innerHTML = ""; $("#resAcoes").classList.add("oculto"); if ($("#rAoVivo").checked) carregarResultados(); };
 $("#rTestes").onchange = () => { if (resDados) desenharResultados(); };
 $("#rAoVivo").onchange = () => { if ($("#rAoVivo").checked) carregarResultados(); else pararAoVivo(); };
 
@@ -1530,12 +1534,9 @@ function desenharResultados() {
   const { linhas, testes } = resDados;
   const fin = linhas.filter(l => l.t.finalizadaEm), comSinal = linhas.filter(l => l.temSinal).length, media = fin.length ? (fin.reduce((s, l) => s + l.nota, 0) / fin.length).toFixed(1) : "—";
   const revisar = linhas.reduce((s, l) => s + l.revisar, 0);
-  $("#resResumo").innerHTML = `<div class="numeros">
-      <div class="numero"><b>${linhas.length}</b><span>alunos iniciaram</span></div>
-      <div class="numero"><b>${fin.length}</b><span>finalizaram</span></div>
-      <div class="numero"><b>${media}</b><span>média (0–100)</span></div>
-      <div class="numero ${revisar ? "aviso" : ""}"><b>${revisar}</b><span>respostas a revisar</span></div>
-      <div class="numero ${comSinal ? "aviso" : ""}"><b>${comSinal}</b><span>com sinais (aba, tela cheia, colar)</span></div></div>`;
+  $("#resAcoes").classList.remove("oculto");
+  $("#resResumo").innerHTML = statTiles([{ v: media, r: "média (0–100)" }, { v: `${fin.length}<small>/${linhas.length}</small>`, r: "finalizaram (de quem iniciou)", tom: linhas.length && fin.length === linhas.length ? "ok" : "" },
+    { v: revisar, r: "respostas a revisar", tom: revisar ? "aviso" : "" }, { v: comSinal, r: "com sinais (aba, tela cheia, colar)", tom: comSinal ? "erro" : "" }]);
   const mostrarTestes = $("#rTestes").checked;
   const emCartoes = (localStorage.getItem("visaoResultados") || "cartoes") === "cartoes";
   const vis = filtrarLinhas(linhas), filtrado = vis.length !== linhas.length;

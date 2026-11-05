@@ -878,6 +878,42 @@ details.recolhivel > .rc-corpo.cartoes-materias { padding:0 var(--sp-4) var(--sp
 .topicos-banco .lista-topicos .chip { font-size:.72em; min-height:20px; padding:1px 8px; }
 #aba-bancos .dropzone { margin-top:var(--sp-1); }
 
+/* --- Resultados: contexto · ações · IA --- */
+.barra-res { display:flex; align-items:flex-end; gap:var(--sp-3); flex-wrap:wrap; }
+.barra-res .campo-res { flex:1 1 150px; min-width:0; }
+.barra-res .campo-res.campo-prova { flex:2 1 280px; }
+.barra-res .campo-res label { font-size:var(--fs-xs); color:var(--suave); font-weight:600; margin-bottom:2px; }
+.barra-res .res-switches { display:flex; gap:var(--sp-4); align-items:center; min-height:42px; }
+.res-acoes { display:flex; flex-wrap:wrap; gap:var(--sp-2) var(--sp-3); align-items:center; margin-top:var(--sp-4); padding-top:var(--sp-4); border-top:1px solid var(--borda); }
+.res-acoes > input[type=search] { flex:1 1 240px; width:auto; }
+.res-acoes #rSitChips { flex:2 1 auto; }
+.res-acoes .res-acoes-dir { display:flex; gap:var(--sp-2); margin-left:auto; }
+.ia-linha { display:flex; flex-wrap:wrap; gap:var(--sp-2) var(--sp-3); align-items:center; margin-top:var(--sp-3); padding:var(--sp-2) var(--sp-3); border:1px solid var(--borda); border-radius:var(--raio-p); background:var(--fundo); }
+.ia-linha .ia-titulo { display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:var(--fs-sm); }
+.ia-linha .ia-modelo { font-size:var(--fs-xs); margin-left:auto; }
+.ia-linha .ia-progresso { flex:1 1 100%; font-size:var(--fs-sm); }
+.ia-linha .ia-progresso:empty { display:none; }
+.ia-linha .ia-progresso progress.barra { width:100%; max-width:none; height:6px; display:block; margin-bottom:4px; }
+.stat small { font-size:.6em; color:var(--suave); font-weight:500; }
+#resResumo .stats { margin-top:var(--sp-4); }
+
+/* --- Diário --- */
+.diario-alunos { display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap:var(--sp-2); }
+.diario-aluno { align-items:flex-start; padding:10px 12px; }
+.diario-aluno .da-info { display:flex; flex-direction:column; min-width:0; gap:1px; }
+.diario-aluno .da-ultimo { font-size:var(--fs-xs); color:var(--suave); display:flex; flex-wrap:wrap; align-items:center; gap:4px; margin-top:2px; }
+.diario-aluno .da-ultimo .chip { margin:0; font-size:.95em; min-height:20px; padding:0 8px; }
+.dh-horario { display:flex; flex-wrap:wrap; gap:4px; margin-top:4px; font-size:1.05em; }
+.dh-horario .chip { margin:0; font-weight:500; }
+.dh-numeros { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:var(--sp-2); }
+.dh-num { min-width:0; min-height:72px; padding:6px 10px; display:flex; flex-direction:column; justify-content:center; }
+.dh-num b { font-size:1.1em; }
+.dh-acao { gap:var(--sp-3); }
+.dh-relatorios { margin-left:auto; }
+.chip-dia .ponto { margin-right:2px; }
+.prev-conquistas .rc-corpo.medalhas { padding:0 var(--sp-4) var(--sp-4); }
+@media (max-width:700px) { .dh-numeros { grid-template-columns:repeat(2, minmax(0, 1fr)); } .dh-relatorios { margin-left:0; } }
+
 /* com drawer aberto: o "?" flutuante não cobre o rodapé do painel; o toast fica por cima de tudo */
 body.com-drawer .ajuda-flutuante { display:none; }
 .toast { z-index:var(--z-toast); }

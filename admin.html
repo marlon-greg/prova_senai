@@ -211,39 +211,51 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
     <!-- RESULTADOS -->
     <div id="aba-resultados" class="oculto">
       <div class="card">
-        <div class="card-cab"><h2>Resultados <span id="aoVivo" class="ao-vivo oculto" title="Atualizando sozinho">● ao vivo</span></h2></div>
-        <div class="barra-res">
-          <div class="campo-prova" style="flex:0 1 200px"><label for="rTurma">Turma</label><select id="rTurma"><option value="">Todas as turmas</option></select></div>
-          <div class="campo-prova" style="flex:0 1 160px"><label for="rSemestre">Semestre</label><select id="rSemestre"><option value="">Todos</option></select></div>
-          <div class="campo-prova" style="flex:0 1 200px"><label for="rMateria">Matéria</label><select id="rMateria"><option value="">Todas</option></select></div>
-          <div class="campo-prova"><label for="rProva">Prova</label><select id="rProva"></select></div>
-          <button id="btnCarregarRes">Carregar</button>
-          <label class="check interruptor"><input type="checkbox" id="rAoVivo"> Ao vivo</label>
-          <label class="check interruptor"><input type="checkbox" id="rTestes"> Testes da equipe</label>
-        </div>
-        <div class="barra-filtros" role="search" style="margin-top:8px">
-          <input type="search" id="rAluno" placeholder="Pesquisar aluno (nome ou e-mail)…" aria-label="Pesquisar aluno nos resultados">
-          <select id="rSituacao" aria-label="Filtrar alunos por situação"><option value="">Todas as situações</option><option value="andamento">⏳ Em andamento</option><option value="finalizou">✅ Finalizou</option><option value="revisar">🟡 Com respostas a revisar</option><option value="sinais">⚠ Com sinais (aba, tela cheia, colar)</option><option value="abaixo">🔻 Nota abaixo de 50</option></select>
-        </div>
-        <div class="grupos-acoes">
-          <div class="grupo"><span class="grupo-rotulo">Exportar</span><button id="btnCSV" class="leve mini">CSV</button><button id="btnPDFNotas" class="leve mini">PDF notas</button><button id="btnPDFBoletins" class="leve mini">PDF boletins</button></div>
-          <div class="grupo"><span class="grupo-rotulo">Notas</span><button id="btnFecharNotas" class="ok mini">Fechar notas</button></div>
-        </div>
-        <fieldset id="iaControles" class="temas-box oculto">
-          <legend>Correção das dissertativas por IA</legend>
-          <div class="linha acoes" style="align-items:center">
-            <button id="btnCorrigirIA" class="mini" disabled>Corrigir com IA</button>
-            <label class="check" style="margin:0"><input type="checkbox" id="iaRefazer" disabled> Refazer as que a IA já corrigiu</label>
-            <label class="check" style="margin:0"><input type="checkbox" id="iaAuto" disabled> Automático ao vivo</label>
-          </div>
-          <p class="pequeno" id="iaAviso">Configure a chave em Configuração.</p>
-          <p class="pequeno" id="iaProgresso" role="status" aria-live="polite"></p>
-        </fieldset>
+        <div class="card-cab"><h2>Resultados <span id="aoVivo" class="chip ok pulsante oculto" title="Atualizando sozinho">ao vivo</span></h2></div>
         <details class="ajuda"><summary>Como funciona</summary>
           <p>Dissertativas que o sistema não reconheceu ficam como <b>revisar</b>: use a IA ou abra o aluno e dê a nota. A IA só corrige provas finalizadas, enquanto o painel estiver aberto; correção manual nunca é sobrescrita.</p>
           <p>O aluno vê no fim só <b>quantas acertou e a nota</b>, e a tela dele atualiza sozinha. Gabarito e PDF aparecem quando você <b>liberar o gabarito</b> na aba Provas. <b>Fechar notas</b> grava a nota final. Os PDFs abrem a janela de impressão: escolha <b>Salvar como PDF</b>.</p>
           <p><b>Vidas:</b> no cartão do aluno, <b>Restaurar vidas</b>, <b>+1</b> e <b>Reabrir prova</b> (ex.: aluno com TEA que saiu sem querer).</p>
         </details>
+        <!-- 1. contexto: qual prova -->
+        <div class="barra-res">
+          <div class="campo-res"><label for="rTurma">Turma</label><select id="rTurma"><option value="">Todas as turmas</option></select></div>
+          <div class="campo-res"><label for="rSemestre">Semestre</label><select id="rSemestre"><option value="">Todos</option></select></div>
+          <div class="campo-res"><label for="rMateria">Matéria</label><select id="rMateria"><option value="">Todas</option></select></div>
+          <div class="campo-res campo-prova"><label for="rProva">Prova</label><select id="rProva"></select></div>
+          <button id="btnCarregarRes">Carregar</button>
+          <div class="res-switches">
+            <label class="switch-linha"><input type="checkbox" id="rAoVivo" class="switch"> Ao vivo</label>
+            <label class="switch-linha"><input type="checkbox" id="rTestes" class="switch"> Testes da equipe</label>
+          </div>
+        </div>
+        <!-- 2. ações (aparecem depois de carregar) -->
+        <div id="resAcoes" class="res-acoes oculto">
+          <input type="search" id="rAluno" placeholder="Pesquisar aluno (nome ou e-mail)…" aria-label="Pesquisar aluno nos resultados">
+          <div id="rSitChips" aria-label="Filtrar alunos por situação"></div>
+          <select id="rSituacao" class="oculto" aria-hidden="true" tabindex="-1"><option value="">Todas as situações</option><option value="andamento">⏳ Em andamento</option><option value="finalizou">✅ Finalizou</option><option value="revisar">🟡 Com respostas a revisar</option><option value="sinais">⚠ Com sinais (aba, tela cheia, colar)</option><option value="abaixo">🔻 Nota abaixo de 50</option></select>
+          <div class="res-acoes-dir">
+            <div class="menu-wrap"><button type="button" class="leve" data-menu aria-haspopup="menu" aria-expanded="false" aria-controls="menuExportar">⬇ Exportar ▾</button>
+              <div class="menu" role="menu" id="menuExportar" hidden>
+                <button type="button" role="menuitem" id="btnCSV"><span class="e" aria-hidden="true">📊</span><span>Planilha CSV</span></button>
+                <button type="button" role="menuitem" id="btnPDFNotas"><span class="e" aria-hidden="true">📄</span><span>PDF das notas</span></button>
+                <button type="button" role="menuitem" id="btnPDFBoletins"><span class="e" aria-hidden="true">🧾</span><span>PDF dos boletins</span></button>
+              </div></div>
+            <button id="btnFecharNotas" class="ok">✔ Fechar notas</button>
+          </div>
+        </div>
+        <!-- 3. correção por IA (só o administrador principal) -->
+        <div id="iaControles" class="ia-linha oculto">
+          <span class="ia-titulo"><span class="e" aria-hidden="true">🤖</span>Correção das dissertativas por IA</span>
+          <button id="btnCorrigirIA" class="leve mini" disabled>Corrigir com IA</button>
+          <div class="menu-wrap"><button type="button" class="icone mini" data-menu aria-haspopup="menu" aria-expanded="false" aria-controls="menuIA" aria-label="Opções da correção por IA" title="Opções da correção por IA">⚙</button>
+            <div class="menu" role="menu" id="menuIA" hidden>
+              <label class="check"><input type="checkbox" id="iaRefazer" disabled> Refazer as que a IA já corrigiu</label>
+              <label class="check"><input type="checkbox" id="iaAuto" disabled> Automático ao vivo</label>
+            </div></div>
+          <span class="pequeno ia-modelo" id="iaAviso">Configure a chave em Configuração.</span>
+          <div class="ia-progresso" id="iaProgresso" role="status" aria-live="polite"></div>
+        </div>
         <div id="resResumo"></div>
       </div>
       <div id="resTabela"></div>

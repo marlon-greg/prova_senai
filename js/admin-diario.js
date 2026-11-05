@@ -9,6 +9,7 @@ import { resumoDiario, medalhasDiario } from "./conquistas.js";
 import { relatorioAluno } from "./admin-relatorio-aluno.js";
 import { HUMOR, humorEmoji, SECOES_AUX, ITENS_AUX, ITENS_PROF, visivel, respondido, completude } from "./diario-perguntas.js";
 import { listarPlanos, listarCursos } from "./admin-org.js";
+import { menuHTML, itemMenu, vazio } from "./ui.js";
 import { collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, query, where, orderBy, serverTimestamp, increment }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -38,19 +39,23 @@ export async function carregarDiario() {
       .sort((a, b) => (a.nome || a.email).localeCompare(b.nome || b.email, "pt-BR"));
   } catch (e) { box.innerHTML = `<p class="erro-texto">${esc(traduzirErro(e))}</p>`; return; }
   if (!alunos.length) {
-    box.innerHTML = `<div class="vazio"><div class="icone">📔</div><p><b>${ehInclusao() ? "Nenhum aluno vinculado a você ainda." : "Nenhum aluno com acessibilidade."}</b></p>
-      <p class="pequeno">O diário é dos alunos marcados na aba Acessibilidade${ehInclusao() ? "; peça ao professor para vincular você." : "."}</p></div>`;
+    box.innerHTML = vazio({ e: "📔", texto: `<b>${ehInclusao() ? "Nenhum aluno vinculado a você ainda." : "Nenhum aluno com acessibilidade."}</b><br><span class="pequeno">O diário é dos alunos marcados na aba Acessibilidade${ehInclusao() ? "; peça ao professor para vincular você." : "."}</span>` });
     $("#diarioPainel").innerHTML = ""; return;
   }
   const tds = await ctx.alunosDasTurmas().catch(() => []);
   const turmaDe = e => tds.filter(x => x.email === e);
   const ts = new Map(); alunos.forEach(a => turmaDe(a.email).forEach(t => ts.set(t.turmaId, t.turma)));
-  box.innerHTML = (alunos.length > 1 ? `<div class="barra-filtros" role="search" style="margin-top:8px">
+  // último registro: o resumo do diário é regravado a cada registro salvo (diarioResumoEm)
+  const ultimoReg = a => a.diarioResumoEm?.toDate ? a.diarioResumoEm.toDate() : null;
+  const isoLocal = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  box.innerHTML = (alunos.length > 1 ? `<div class="toolbar" role="search" style="margin-top:8px">
       <input type="search" id="dBusca" placeholder="Pesquisar aluno…" aria-label="Pesquisar aluno">
-      ${ts.size > 1 ? `<select id="dTurma" aria-label="Filtrar por turma"><option value="">👥 Todas as turmas</option>${[...ts].map(([id, n]) => `<option value="${esc(id)}">${esc(n)}</option>`).join("")}</select>` : ""}</div>` : "") +
-    `<div class="diario-alunos">` + alunos.map(a => `<button type="button" class="diario-aluno${a.email === atual?.email ? " ativo" : ""}" data-al="${esc(a.email)}"
+      ${ts.size > 1 ? `<select id="dTurma" class="tb-ordem" aria-label="Filtrar por turma"><option value="">Todas as turmas</option>${[...ts].map(([id, n]) => `<option value="${esc(id)}">${esc(n)}</option>`).join("")}</select>` : ""}</div>` : "") +
+    `<div class="diario-alunos">` + alunos.map(a => { const u = ultimoReg(a), hoje = u && isoLocal(u) === hojeISO();
+      return `<button type="button" class="diario-aluno${a.email === atual?.email ? " ativo" : ""}" data-al="${esc(a.email)}"
       data-busca="${esc(chaveTexto(`${a.nome || ""} ${a.email}`))}" data-turmas="${esc(turmaDe(a.email).map(t => t.turmaId).join(" "))}">
-      <span class="avatar">${esc(iniciais(a.nome || a.email))}</span><span><b>${esc(a.nome || a.email)}</b><span class="pequeno">${esc(turmaDe(a.email).map(t => t.turma).join(", ") || a.email)}</span></span></button>`).join("") + `</div>`;
+      <span class="avatar">${esc(iniciais(a.nome || a.email))}</span><span class="da-info"><b>${esc(a.nome || a.email)}</b><span class="pequeno">${esc(turmaDe(a.email).map(t => t.turma).join(", ") || a.email)}</span>
+        <span class="da-ultimo">${u ? `último registro ${dataCurta(isoLocal(u)).slice(0, 5)}` : "sem registros"}${hoje ? ` <span class="chip ok">✓ hoje</span>` : ` <span class="chip aviso">sem registro hoje</span>`}</span></span></button>`; }).join("") + `</div>`;
   box.querySelectorAll("[data-al]").forEach(b => b.onclick = () => abrirAluno(b.dataset.al));
   const filtrar = () => {
     const q = chaveTexto($("#dBusca")?.value), t = $("#dTurma")?.value || "";
@@ -105,7 +110,7 @@ function desenharPainel() {
   <section class="card diario-hero">
     <div class="dh-aluno"><span class="avatar grande">${esc(iniciais(a.nome || a.email))}</span>
       <div><h2>${esc(a.nome || a.email)}</h2><span class="pequeno">${turma ? `👥 ${esc(turma)} · ` : ""}${esc(a.email)}</span>
-        <span class="pequeno" style="display:block">🕖 ${esc(textoHorario(ctx.horario?.()))}</span>
+        <div class="dh-horario" aria-label="Horário: ${esc(textoHorario(ctx.horario?.()))}">${horarioChips(ctx.horario?.())}</div>
         <div class="dh-humores" title="Humor na saída, últimos registros">${ultimos.map(d => { const r = registros.find(x => x.data === d); return `<span title="${dataCurta(d)}">${humorEmoji(r?.respostas?.humorSaida || r?.respostas?.humorChegada) || "·"}</span>`; }).join("") || `<span class="pequeno">ainda sem registros</span>`}</div></div></div>
     <div class="dh-numeros">
       <div class="dh-num"><b>📒 ${doMes.length}</b><span>aulas registradas no mês</span></div>
@@ -113,16 +118,15 @@ function desenharPainel() {
       <div class="dh-num"><b>${est ? "⭐ " + est.toFixed(1) : "—"}</b><span>estrelas no mês</span></div>
       <div class="dh-num"><b>${hum ? humorEmoji(Math.round(hum)) + " " + hum.toFixed(1) : "—"}</b><span>humor no mês</span></div>
     </div>
-    <div class="dh-acao">${podeRegistrar() ? `<button id="dNovo" class="grande-btn">${meuHoje ? "✎ Continuar o registro de hoje" : ehDiaDeAula(hojeISO()) ? "✍ Registrar a aula de hoje" : "✍ Registrar hoje (não é dia de aula)"}</button>
+    <div class="dh-acao">${podeRegistrar() ? `<button id="dNovo">${meuHoje ? "✎ Continuar o registro de hoje" : ehDiaDeAula(hojeISO()) ? "✍ Registrar a aula de hoje" : "✍ Registrar hoje (não é dia de aula)"}</button>
       <div class="outro-dia" role="group" aria-label="Registrar outro dia"><span class="pequeno">Outro dia:</span>
-        ${atalhosDias().map(([iso, rot]) => `<button type="button" class="chip-dia" data-rapido="${iso}" title="${dataLonga(iso)}">${rot}</button>`).join("")}
+        ${atalhosDias().map(([iso, rot, falta]) => `<button type="button" class="chip-dia" data-rapido="${iso}" title="${dataLonga(iso)}${falta ? " — sem registro" : ""}">${falta ? `<span class="ponto" aria-hidden="true"></span>` : ""}${rot}</button>`).join("")}
         <label class="chip-dia botao-data">📆 Escolher data<input type="date" id="dOutroDia" max="${hojeISO()}" aria-label="Escolher a data do registro"></label></div>` : `<p class="pequeno" style="margin:0">Você lê os registros e deixa o seu comentário em cada dia. Quem escreve o diário é a auxiliar de inclusão.</p>`}
-      <button id="dCompleto" class="leve" type="button" title="Notas, tópicos e diário juntos, com gráficos de evolução">📈 Relatório completo</button>
-      <button id="dRelatorio" class="leve" type="button" title="Relatório formal do período, para enviar à coordenação, direção ou sede">📄 Relatório formal (PDF)</button></div>
+      <span class="dh-relatorios">${menuHTML({ rotulo: "📈 Relatórios ▾", classe: "leve", itensHTML: itemMenu({ e: "📈", t: "Relatório completo", id: "dCompleto", attrs: `title="Notas, tópicos e diário juntos, com gráficos de evolução"` }) + itemMenu({ e: "📄", t: "Relatório formal (PDF)", id: "dRelatorio", attrs: `title="Relatório formal do período, para enviar à coordenação, direção ou sede"` }) })}</span></div>
   </section>
-  <details class="card prev-conquistas">
-    <summary><h3 class="diario-h3" style="display:inline">🏅 Conquistas que a aluna vê</h3> <span class="pequeno">— ${meds.filter(m => m.ok).length} de ${meds.length} · ela vê isto na página dela (só coisas positivas, nada dos textos do diário)</span></summary>
-    <div class="medalhas">${meds.map(m => `<div class="medalha${m.ok ? " ganha" : ""}" title="${esc(m.d || m.t)}"><span class="m-emoji">${m.e}</span><b>${esc(m.t)}</b>
+  <details class="recolhivel prev-conquistas" data-chave="diario-conquistas">
+    <summary><span class="rc-titulo">🏅 Conquistas que a aluna vê</span><span class="rc-resumo"><span class="chip">${meds.filter(m => m.ok).length}/${meds.length}</span><span class="pequeno">ela vê isto na página dela (só coisas positivas, nada dos textos do diário)</span></span></summary>
+    <div class="rc-corpo medalhas">${meds.map(m => `<div class="medalha${m.ok ? " ganha" : ""}" title="${esc(m.d || m.t)}"><span class="m-emoji">${m.e}</span><b>${esc(m.t)}</b>
       <span class="pequeno">${m.ok ? "conquistada!" : `${Math.min(m.v, m.meta)}/${m.meta}`}</span>${m.ok ? "" : `<i class="m-barra"><i style="width:${Math.round(Math.min(m.v, m.meta) / m.meta * 100)}%"></i></i>`}</div>`).join("")}</div>
   </details>
   <div class="diario-grade">
@@ -343,13 +347,19 @@ function limpar(r, itens) {
 // ---------- editor do dia (em etapas) ----------
 const chaveRascunho = iso => `diario:${atual.email}:${iso}:${ctx.eu.email}`;
 // atalhos: ontem e as últimas aulas sem registro (até 2)
+// horário da turma em chips: 🕖 entrada–saída · ☕/🍽 intervalos
+function horarioChips(h) {
+  if (!h?.inicio) return `<span class="pequeno">🕖 ${esc(textoHorario(h))}</span>`;
+  const ic = n => /almo|refei|janta/i.test(n) ? "🍽" : /caf|lanche/i.test(n) ? "☕" : "⏸";
+  return `<span class="chip" title="Entrada e saída">🕖 ${esc(h.inicio)}–${esc(h.fim)}</span>` + (h.intervalos || []).map(i => `<span class="chip" title="${esc(i.nome)}">${ic(i.nome)} ${esc(i.inicio)}–${esc(i.fim)}</span>`).join("");
+}
 function atalhosDias() {
   const tem = new Set(registros.map(r => r.data)), out = [], d = new Date();
   const ontem = new Date(); ontem.setDate(ontem.getDate() - 1); const isoOntem = isoDe(ontem);
-  out.push([isoOntem, `Ontem${tem.has(isoOntem) ? " ✓" : ""}`]);
+  out.push([isoOntem, `Ontem${tem.has(isoOntem) ? " ✓" : ""}`, ehDiaDeAula(isoOntem) && !tem.has(isoOntem)]);
   for (let i = 1; i < 30 && out.length < 3; i++) {
     d.setDate(d.getDate() - 1); const iso = isoDe(d);
-    if (iso !== isoOntem && ehDiaDeAula(iso) && !tem.has(iso)) out.push([iso, `⚠ ${DIAS[d.getDay()]} ${dataCurta(iso).slice(0, 5)} sem registro`]);
+    if (iso !== isoOntem && ehDiaDeAula(iso) && !tem.has(iso)) out.push([iso, `${DIAS[d.getDay()]} ${dataCurta(iso).slice(0, 5)}`, true]);
   }
   return out;
 }
