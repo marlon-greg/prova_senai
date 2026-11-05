@@ -4,8 +4,8 @@ import { db, esc, $, toast, modal } from "./common.js";
 import { CATALOGO, CORES, ORDEM_PELES, NOMES_PARTES, PELES, labioNatural, svgAvatar, liberado, textoTrava, avatarValido, avatarAleatorio, permitido, trocarSexo, PARTES_OCULTAS, AJUSTES, POSICOES_ADESIVO } from "./avatar.js";
 import { FUNDOS_PERFIL, fundoPerfil, urlFundo, urlMini } from "./fundos-perfil.js";
 // status do dia: só frases prontas (ninguém escreve texto livre)
-export const STATUS = ["😊 Animado(a)", "📚 Estudando", "🎯 Focado(a)", "💪 Pronto(a) para a prova", "🚀 Motivado(a)", "🧘 Tranquilo(a)", "🤔 Pensativo(a)",
-  "😴 Com sono", "☕ Precisando de café", "🎧 Ouvindo música", "🤝 Ajudando os colegas", "💻 Programando", "🎮 Modo jogo", "🏃 Na correria", "🌟 Dia incrível", "🙂 De boa"];
+import { STATUS } from "./status-aluno.js";
+export { STATUS };
 import { botoesSocial } from "./aluno-social.js";
 import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -26,7 +26,9 @@ const NOME_COR = { pele: "Cor da pele", corCabelo: "Cor do cabelo, da sobrancelh
 const NOMES_POS = { "sup-esq": "↖ em cima, à esquerda", "sup-dir": "↗ em cima, à direita", "inf-esq": "↙ embaixo, à esquerda", "inf-dir": "↘ embaixo, à direita" };
 // cartão do perfil: foto de fundo (só da lista) e lado do personagem
 const LADOS = { esq: "Personagem à esquerda", centro: "No centro", dir: "Personagem à direita" };
-const cartaoValido = c => ({ foto: fundoPerfil(c?.foto) ? c.foto : "", lado: LADOS[c?.lado] ? c.lado : "esq" });
+const MAX_FIXAS = 6;
+const cartaoValido = c => ({ foto: fundoPerfil(c?.foto) ? c.foto : "", lado: LADOS[c?.lado] ? c.lado : "esq",
+  medalhas: (Array.isArray(c?.medalhas) ? c.medalhas : []).filter(t => typeof t === "string" && t.length <= 60).slice(0, MAX_FIXAS) });
 
 // perfil: Firestore (perfis/{uid}) ou, na simulação, o navegador
 async function lerPerfil(eu, sim) {
@@ -34,8 +36,9 @@ async function lerPerfil(eu, sim) {
   return (await getDoc(doc(db, "perfis", eu.uid)).catch(() => null))?.data() || {};
 }
 async function gravarPerfil(eu, sim, dados) {
-  if (sim) { localStorage.setItem("sim:perfil", JSON.stringify(dados)); return; }
-  await setDoc(doc(db, "perfis", eu.uid), { avatar: dados.avatar, cartao: cartaoValido(dados.cartao), apelido: String(dados.apelido || "").slice(0, 30), status: STATUS.includes(dados.status) ? dados.status : "", atualizadoEm: serverTimestamp() });
+  if (sim) { localStorage.setItem("sim:perfil", JSON.stringify({ ...dados, statusEm: dados.statusEm === "agora" ? new Date().toISOString() : dados.statusEm || null })); return; }
+  await setDoc(doc(db, "perfis", eu.uid), { avatar: dados.avatar, cartao: cartaoValido(dados.cartao), apelido: String(dados.apelido || "").slice(0, 30), status: STATUS.includes(dados.status) ? dados.status : "",
+    statusEm: dados.statusEm === "agora" ? serverTimestamp() : dados.statusEm || null, email: String(eu.email || "").toLowerCase(), atualizadoEm: serverTimestamp() });
 }
 
 // cq = resultado de desenharConquistas ({ ganhas, todas, nivel }); gami = config da gamificação
@@ -46,29 +49,31 @@ export async function desenharPerfil(box, { eu, cq, gami, simulacao = false }) {
   const av = avatarValido(perfil.avatar, titulos), nome = perfil.apelido || String(eu.nome || "").split(/\s+/)[0] || "Aluno";
   const liberadas = Object.values(CATALOGO).flat().filter(i => i.trava && liberado(i, titulos)).length, travadas = Object.values(CATALOGO).flat().filter(i => i.trava).length;
   const cartao = cartaoValido(perfil.cartao), foto = fundoPerfil(cartao.foto);
+  const fixas = cartao.medalhas.map(t => (cq?.ganhas || []).find(m => m.t === t)).filter(Boolean);   // só as que ele ainda tem
   box.classList.remove("oculto"); box.className = `card perfil-aluno lado-${cartao.lado}${foto ? " com-foto" : ""}`;
   box.style.backgroundImage = foto ? `linear-gradient(90deg, rgba(10,18,40,.82), rgba(10,18,40,.45)), url("${urlFundo(foto.id)}")` : "";
   box.innerHTML = `<div class="pa-avatar">${svgAvatar(av, 150)}</div>
     <div class="pa-info"><h2>${esc(nome)}</h2><span class="pequeno">${esc(eu.nome || "")}</span>
       <button type="button" class="pa-status" id="paStatus" title="Como você está hoje? Toque para mudar">${perfil.status ? esc(perfil.status) : "＋ Como você está hoje?"}</button>
       <div class="pa-nivel"><b>Nível ${cq?.nivel || 1}</b> · ${(cq?.ganhas || []).length} conquista(s) · 🎨 ${liberadas}/${travadas} skins liberadas</div>
-      <div class="pa-medalhas">${(cq?.ganhas || []).slice(-8).map(m => `<span title="${esc(m.t)}">${m.e}</span>`).join("") || `<span class="pequeno">Ganhe conquistas para liberar skins novas!</span>`}</div>
+      ${fixas.length ? `<div class="pa-fixas">${fixas.map(m => `<span class="pa-fixa" title="${esc(m.d || m.t)}"><span aria-hidden="true">${m.e}</span>${esc(m.t)}</span>`).join("")}</div>`
+        : `<div class="pa-medalhas">${(cq?.ganhas || []).slice(-8).map(m => `<span title="${esc(m.t)}">${m.e}</span>`).join("") || `<span class="pequeno">Ganhe conquistas para liberar skins novas!</span>`}</div>`}
       <div class="linha acoes"><button type="button" id="paEditar">🎨 Editar meu personagem</button>
         <button type="button" class="leve" id="paCartao">🖼 Personalizar cartão</button>
         ${gami.download ? `<button type="button" class="leve" id="paBaixar">⬇ Baixar meu cartão</button>` : ""}</div></div>
     ${foto ? `<a class="pa-credito" href="${esc(foto.fonte)}" target="_blank" rel="noopener" title="Foto: ${esc(foto.autor)} · ${esc(foto.licenca)} (Wikimedia Commons)">📷 ${esc(foto.autor.slice(0, 40))} · ${esc(foto.licenca)}</a>` : ""}`;
   $("#paStatus", box).onclick = () => {
     let escolha = perfil.status || "";
-    modal({ titulo: "Como você está hoje?", conteudo: `<p class="pequeno" style="margin-top:0">Escolha uma frase: ela aparece no seu perfil${gami.social ? " e no mural da turma, se você estiver lá" : ""}.</p>
+    modal({ titulo: "Como você está hoje?", conteudo: `<p class="pequeno" style="margin-top:0">Escolha uma frase: ela aparece no seu perfil${gami.social ? " e no mural da turma, se você estiver lá" : ""}. <b>Seus professores e a sua auxiliar também veem</b>, para poder te ajudar quando o dia não estiver bom. 💙</p>
         <div class="op-pilulas status-op">${STATUS.map(t => `<button type="button" data-st="${esc(t)}" class="${t === escolha ? "sel" : ""}">${esc(t)}</button>`).join("")}<button type="button" data-st="" class="${!escolha ? "sel" : ""}">Sem status</button></div>`,
       ok: "Salvar", cancelar: "Cancelar",
       aoAbrir: c => c.querySelectorAll("[data-st]").forEach(b => b.onclick = () => { escolha = b.dataset.st; c.querySelectorAll("[data-st]").forEach(x => x.classList.toggle("sel", x === b)); }),
       antesDeConfirmar: async () => {
-        try { await gravarPerfil(eu, simulacao, { ...perfil, avatar: av, status: escolha }); } catch (e) { toast("Não foi possível salvar.", "erro"); return false; }
-        perfil.status = escolha; $("#paStatus", box).textContent = escolha || "＋ Como você está hoje?"; return true;
+        try { await gravarPerfil(eu, simulacao, { ...perfil, avatar: av, status: escolha, statusEm: "agora" }); } catch (e) { toast("Não foi possível salvar.", "erro"); return false; }
+        perfil.status = escolha; perfil.statusEm = new Date(); $("#paStatus", box).textContent = escolha || "＋ Como você está hoje?"; return true;
       } });
   };
-  $("#paCartao", box).onclick = () => personalizarCartao({ eu, perfil, av, simulacao, aoSalvar: () => desenharPerfil(box, { eu, cq, gami, simulacao }) });
+  $("#paCartao", box).onclick = () => personalizarCartao({ eu, perfil, av, simulacao, ganhas: cq?.ganhas || [], aoSalvar: () => desenharPerfil(box, { eu, cq, gami, simulacao }) });
   $("#paEditar", box).onclick = () => editarPersonagem({ eu, perfil, titulos, simulacao, aoSalvar: () => desenharPerfil(box, { eu, cq, gami, simulacao }) });
   $("#paBaixar", box)?.addEventListener("click", () => baixarCartao({ eu, av, nome, cq }));
   botoesSocial(box, { eu, cq, gami, perfil: { ...perfil, avatar: av }, simulacao });
@@ -126,17 +131,20 @@ function editarPersonagem({ eu, perfil, titulos, simulacao, aoSalvar }) {
       desenhar(c);
     },
     antesDeConfirmar: async c => {
-      try { await gravarPerfil(eu, simulacao, { avatar: av, apelido: $("#epApelido", c).value.trim(), status: perfil.status || "", cartao: perfil.cartao }); }
+      try { await gravarPerfil(eu, simulacao, { avatar: av, apelido: $("#epApelido", c).value.trim(), status: perfil.status || "", statusEm: perfil.statusEm, cartao: perfil.cartao }); }
       catch (e) { toast("Não foi possível salvar o personagem.", "erro"); return false; }
       toast(simulacao ? "🧪 Personagem salvo (só neste navegador)." : "Personagem salvo! 🎉", "ok"); aoSalvar(); return true;
     } });
 }
 
 // ---------- personalizar o cartão do perfil: foto de fundo (lista fixa) e lado do personagem ----------
-function personalizarCartao({ eu, perfil, av, simulacao, aoSalvar }) {
+function personalizarCartao({ eu, perfil, av, simulacao, ganhas = [], aoSalvar }) {
   let cartao = cartaoValido(perfil.cartao);
   const html = `<p class="pequeno" style="margin-top:0">Escolha uma foto para o fundo do seu cartão (fotos reais, com os créditos do autor) e onde o personagem fica.</p>
-    <div class="grupo-chips" id="pcLado" role="group" aria-label="Posição do personagem"></div>
+    <h3 class="conq-h3">Posição do personagem</h3><div class="grupo-chips" id="pcLado" role="group" aria-label="Posição do personagem"></div>
+    <h3 class="conq-h3">🏅 Conquistas fixas no cartão <span class="pequeno">— escolha até ${MAX_FIXAS}; sem nenhuma, aparecem as últimas</span></h3>
+    ${ganhas.length ? `<div class="grupo-chips" id="pcFixas" role="group" aria-label="Conquistas fixas">${ganhas.map((m, i) => `<button type="button" class="chip" data-fixa="${i}">${m.e} ${esc(m.t)}</button>`).join("")}</div><p class="pequeno" id="pcFixasN"></p>` : `<p class="pequeno">Você ainda não tem conquistas. Faça provas para ganhar!</p>`}
+    <h3 class="conq-h3">Foto de fundo</h3>
     <div class="pc-fotos" role="radiogroup" aria-label="Foto de fundo">
       <button type="button" class="pc-foto pc-sem" data-foto="" role="radio"><span>Sem foto<br><small>azul padrão</small></span></button>
       ${FUNDOS_PERFIL.map(f => `<button type="button" class="pc-foto" data-foto="${f.id}" role="radio" title="${esc(f.nome)} · foto: ${esc(f.autor)} (${esc(f.licenca)})"><img src="${urlMini(f.id)}" alt="" loading="lazy"><span>${esc(f.nome)}</span></button>`).join("")}
@@ -144,12 +152,17 @@ function personalizarCartao({ eu, perfil, av, simulacao, aoSalvar }) {
   const marcar = c => {
     c.querySelectorAll("[data-foto]").forEach(b => { const on = b.dataset.foto === cartao.foto; b.classList.toggle("sel", on); b.setAttribute("aria-checked", on); });
     c.querySelectorAll("[data-lado]").forEach(b => { const on = b.dataset.lado === cartao.lado; b.classList.toggle("sel", on); b.setAttribute("aria-pressed", on); });
+    c.querySelectorAll("[data-fixa]").forEach(b => { const on = cartao.medalhas.includes(ganhas[b.dataset.fixa].t); b.classList.toggle("sel", on); b.setAttribute("aria-pressed", on); });
+    const n = $("#pcFixasN", c); if (n) n.textContent = `${cartao.medalhas.length} de ${MAX_FIXAS} escolhidas`;
   };
   modal({ titulo: "🖼 Personalizar cartão", conteudo: html, ok: "Salvar", cancelar: "Cancelar", largo: true,
     aoAbrir: c => {
       $("#pcLado", c).innerHTML = Object.entries(LADOS).map(([k, t]) => `<button type="button" class="chip" data-lado="${k}">${t}</button>`).join("");
       c.querySelectorAll("[data-foto]").forEach(b => b.onclick = () => { cartao = { ...cartao, foto: b.dataset.foto }; marcar(c); });
       c.querySelectorAll("[data-lado]").forEach(b => b.onclick = () => { cartao = { ...cartao, lado: b.dataset.lado }; marcar(c); });
+      c.querySelectorAll("[data-fixa]").forEach(b => b.onclick = () => { const t = ganhas[b.dataset.fixa].t, tem = cartao.medalhas.includes(t);
+        if (!tem && cartao.medalhas.length >= MAX_FIXAS) return toast(`Escolha no máximo ${MAX_FIXAS}. Tire uma para trocar.`, "info");
+        cartao = { ...cartao, medalhas: tem ? cartao.medalhas.filter(x => x !== t) : [...cartao.medalhas, t] }; marcar(c); });
       marcar(c);
     },
     antesDeConfirmar: async () => {

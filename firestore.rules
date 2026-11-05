@@ -244,8 +244,9 @@ service cloud.firestore {
     match /perfis/{u} {
       allow read: if logado() && (u == uid() || equipe());
       allow write: if logado() && u == uid()
-                   && request.resource.data.keys().hasOnly(['avatar', 'apelido', 'status', 'cartao', 'atualizadoEm'])
-                   && (!('cartao' in request.resource.data) || (request.resource.data.cartao is map && request.resource.data.cartao.keys().hasOnly(['foto', 'lado'])))
+                   && request.resource.data.keys().hasOnly(['avatar', 'apelido', 'status', 'statusEm', 'email', 'cartao', 'atualizadoEm'])
+                   && (!('email' in request.resource.data) || request.resource.data.email == email().lower())
+                   && (!('cartao' in request.resource.data) || (request.resource.data.cartao is map && request.resource.data.cartao.keys().hasOnly(['foto', 'lado', 'medalhas'])))
                    && (!('status' in request.resource.data) || (request.resource.data.status is string && request.resource.data.status.size() <= 40));
     }
     function socialLigado() { return get(/databases/$(db)/documents/config/gamificacao).data.get('social', false) == true; }

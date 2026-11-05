@@ -199,9 +199,12 @@ $("#btnSalvarTurma").onclick = async () => {
   toast(`Turma ${nome} salva com ${alunos.length} aluno(s)` + (nomesChave.length ? ` (${nomesChave.length} aguardando o 1º login).` : "."), "ok");
   limparFormTurma(); carregarTurmas();
 };
+import { lerStatusAlunos, chipStatus } from "./status-aluno.js";
+let statusAlunos = new Map();   // e-mail -> status do dia (perfis)
 let provasPorTurma = {}, turmaSemMat = {};   // turmaId -> [{ id, titulo, liberada }]
 async function carregarTurmas() {
-  const [, ps, pls] = await Promise.all([listarTurmas(), getDocs(collection(db, "provas")).catch(() => null), listarPlanos().catch(() => []), listarBancos().catch(() => [])]);
+  const [, ps, pls, , st] = await Promise.all([listarTurmas(), getDocs(collection(db, "provas")).catch(() => null), listarPlanos().catch(() => []), listarBancos().catch(() => []), lerStatusAlunos().catch(() => new Map())]);
+  statusAlunos = st;
   provasPorTurma = {};
   ps?.forEach(d => { const p = d.data(); if (p.turmaId) (provasPorTurma[p.turmaId] ||= []).push({ id: d.id, ...p }); });
   // semestre/matéria de cada turma: pelos planos de ensino e pelas provas
@@ -232,16 +235,18 @@ function desenharTurmas() {
   if (!linhas.length) { box.innerHTML = `<div class="vazio"><div class="icone">🔎</div><p>Nenhuma turma ou aluno com esses filtros.</p></div>`; return; }
   box.innerHTML = `<div class="tabela"><table><tr><th>Turma</th><th>Alunos</th><th>Provas</th><th>Atualizada</th><th></th></tr>` + linhas.map(({ t, al, achados }) => {
     const pend = al.filter(a => !a.email), auto = al.filter(a => a.auto), mostrar = achados || al;
-    const lista = mostrar.map(a => `<li>${a.email ? "✅" : "⏳"} ${esc(a.nome || a.email)}${a.nome && a.email ? ` <span class="pequeno">${esc(a.email)}${a.auto ? " · vinculado no login" : ""}</span>` : ""}${!a.email ? ` <span class="pequeno">— aguardando o 1º login</span>` : ""}</li>`).join("");
+    const stT = al.map(a => a.email && statusAlunos.get(a.email.toLowerCase())).filter(i => i?.hoje), dificeis = stT.filter(i => i.dificil).length;
+    const lista = mostrar.map(a => `<li>${a.email ? "✅" : "⏳"} ${esc(a.nome || a.email)} ${a.email ? chipStatus(statusAlunos.get(a.email.toLowerCase()), esc) : ""}${a.nome && a.email ? ` <span class="pequeno">${esc(a.email)}${a.auto ? " · vinculado no login" : ""}</span>` : ""}${!a.email ? ` <span class="pequeno">— aguardando o 1º login</span>` : ""}</li>`).join("");
     const pv = provasPorTurma[t.id] || [];
     const sc = semestreCursoAtual(t);
     return `<tr><td><b>${esc(t.nome)}</b><br>${sc ? `<span class="tag ${sc.concluida ? "ok" : "info"}" title="Semestre do curso (avança sozinho em agosto e janeiro)">🎓 ${sc.rotulo}</span> ` : ""}${rotuloDias(t.diasAula) ? `<span class="tag nota" title="Dias de aula">📆 ${rotuloDias(t.diasAula)}</span>` : `<span class="tag aviso" title="Edite a turma e marque os dias de aula">📆 sem dias</span>`}<br><span class="pequeno">${t.id}</span></td>
-     <td>${al.length}${pend.length ? `<br><span class="tag aviso">⏳ ${pend.length} sem login ainda</span>` : ""}${auto.length ? `<br><span class="pequeno">${auto.length} vinculado(s) pelo nome</span>` : ""}
+     <td>${al.length}${stT.length ? `<br><button type="button" class="leve mini" data-status-turma="${t.id}" title="Como os alunos disseram que estão hoje">💬 ${stT.length} status hoje${dificeis ? ` · <b class="erro-texto">${dificeis} difícil(eis)</b>` : ""}</button>` : ""}${pend.length ? `<br><span class="tag aviso">⏳ ${pend.length} sem login ainda</span>` : ""}${auto.length ? `<br><span class="pequeno">${auto.length} vinculado(s) pelo nome</span>` : ""}
        <details class="lista-alunos" ${achados ? "open" : ""}><summary class="pequeno">${achados ? `${achados.length} encontrado(s)` : "ver alunos"}</summary><ul>${lista}</ul></details></td>
      <td>${pv.length ? `<button class="leve mini" data-vprovas="${t.id}" title="${esc(pv.map(p => p.titulo).join(" · "))}">📝 ${pv.length} prova(s)</button>${pv.some(p => p.liberada) ? `<br><span class="tag on">● ${pv.filter(p => p.liberada).length} liberada(s)</span>` : ""}` : `<span class="pequeno">nenhuma</span>`}</td>
      <td class="pequeno">${dataBR(t.atualizadoEm || t.criadoEm)}</td>
      <td class="td-acoes">${podeEditar() ? `<button class="leve mini" data-edt="${t.id}">✎ Editar</button>` : ""} ${ehAdmin() ? menuHTML({ aria: `Mais ações: ${t.nome}`, itensHTML: itemMenu({ e: "🗑", t: "Apagar turma", perigo: true, attrs: `data-delt="${t.id}"` }) }) : ""}</td></tr>`;
   }).join("") + "</table></div>";
+  box.querySelectorAll("[data-status-turma]").forEach(b => b.onclick = () => abrirStatusTurma(turmasCache.find(x => x.id === b.dataset.statusTurma)));
   box.querySelectorAll("[data-vprovas]").forEach(b => b.onclick = () => { filtroTurmaPendente = b.dataset.vprovas; $("#fpBusca").value = ""; $("#fpStatus").value = ""; abrirAba("provas"); });
   box.querySelectorAll("[data-edt]").forEach(b => b.onclick = () => {
     const t = turmasCache.find(x => x.id === b.dataset.edt);
@@ -255,6 +260,17 @@ function desenharTurmas() {
     if (!(await confirmar(`Apagar a turma ${t.nome}?` + (usadas ? `\n\n${usadas} prova(s) usam esta turma: elas deixam de aceitar qualquer aluno até você escolher outra turma.` : ""), { titulo: "Apagar turma", ok: "Apagar", perigo: true }))) return;
     await deleteDoc(doc(db, "turmas", t.id)); if (turmaEditando === t.id) limparFormTurma(); carregarTurmas();
   });
+}
+
+// status do dia da turma: difíceis primeiro, depois os de hoje, depois os antigos
+function abrirStatusTurma(t) {
+  if (!t) return;
+  const linhas = alunosDaTurma(t).filter(a => a.email).map(a => ({ a, i: statusAlunos.get(a.email.toLowerCase()) }))
+    .sort((x, y) => (y.i?.hoje && y.i?.dificil) - (x.i?.hoje && x.i?.dificil) || (!!y.i?.hoje - !!x.i?.hoje) || (x.a.nome || x.a.email).localeCompare(y.a.nome || y.a.email, "pt-BR"));
+  const hora = d => d ? d.toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "";
+  drawer({ titulo: `💬 Status da turma ${t.nome}`, ajuda: "<p>O aluno escolhe uma frase em “Como você está hoje?” na página dele. Os status difíceis (triste, estressado, ansioso…) aparecem primeiro: vale uma conversa. Status de outros dias aparecem com a data.</p>",
+    corpoHTML: `<ul class="lista-status">${linhas.map(({ a, i }) => `<li class="${i?.hoje && i.dificil ? "dificil" : ""}"><b>${esc(a.nome || a.email)}</b> ${i ? chipStatus(i, esc) + ` <span class="pequeno">${hora(i.em)}</span>` : `<span class="pequeno">sem status</span>`}</li>`).join("")}</ul>`,
+    acoes: [{ t: "Fechar", classe: "leve" }] });
 }
 
 // ============================================================ MATERIAIS DE CONSULTA (PDF)

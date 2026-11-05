@@ -28,6 +28,8 @@ const MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julh
 const dataLonga = s => { const d = dia(s); return `${DIAS[d.getDay()]}, ${d.getDate()} de ${MESES[d.getMonth()]}`; };
 
 export function iniciarDiario(c) { ctx = c; }
+import { lerStatusAlunos, chipStatus } from "./status-aluno.js";
+let statusAlunos = new Map();
 
 // ---------- lista de alunos ----------
 export async function carregarDiario() {
@@ -42,7 +44,8 @@ export async function carregarDiario() {
     box.innerHTML = vazio({ e: "📔", texto: `<b>${ehInclusao() ? "Nenhum aluno vinculado a você ainda." : "Nenhum aluno com acessibilidade."}</b><br><span class="pequeno">O diário é dos alunos marcados na aba Acessibilidade${ehInclusao() ? "; peça ao professor para vincular você." : "."}</span>` });
     $("#diarioPainel").innerHTML = ""; return;
   }
-  const tds = await ctx.alunosDasTurmas().catch(() => []);
+  const [tds, st] = await Promise.all([ctx.alunosDasTurmas().catch(() => []), lerStatusAlunos().catch(() => new Map())]);
+  statusAlunos = st;
   const turmaDe = e => tds.filter(x => x.email === e);
   const ts = new Map(); alunos.forEach(a => turmaDe(a.email).forEach(t => ts.set(t.turmaId, t.turma)));
   // último registro: o resumo do diário é regravado a cada registro salvo (diarioResumoEm)
@@ -54,7 +57,7 @@ export async function carregarDiario() {
     `<div class="diario-alunos">` + alunos.map(a => { const u = ultimoReg(a), hoje = u && isoLocal(u) === hojeISO();
       return `<button type="button" class="diario-aluno${a.email === atual?.email ? " ativo" : ""}" data-al="${esc(a.email)}"
       data-busca="${esc(chaveTexto(`${a.nome || ""} ${a.email}`))}" data-turmas="${esc(turmaDe(a.email).map(t => t.turmaId).join(" "))}">
-      <span class="avatar">${esc(iniciais(a.nome || a.email))}</span><span class="da-info"><b>${esc(a.nome || a.email)}</b><span class="pequeno">${esc(turmaDe(a.email).map(t => t.turma).join(", ") || a.email)}</span>
+      <span class="avatar">${esc(iniciais(a.nome || a.email))}</span><span class="da-info"><b>${esc(a.nome || a.email)}</b>${chipStatus(statusAlunos.get(a.email.toLowerCase()), esc)}<span class="pequeno">${esc(turmaDe(a.email).map(t => t.turma).join(", ") || a.email)}</span>
         <span class="da-ultimo">${u ? `último registro ${dataCurta(isoLocal(u)).slice(0, 5)}` : "sem registros"}${hoje ? ` <span class="chip ok">✓ hoje</span>` : ` <span class="chip aviso">sem registro hoje</span>`}</span></span></button>`; }).join("") + `</div>`;
   box.querySelectorAll("[data-al]").forEach(b => b.onclick = () => abrirAluno(b.dataset.al));
   const filtrar = () => {
@@ -109,7 +112,7 @@ function desenharPainel() {
   $("#diarioPainel").innerHTML = `
   <section class="card diario-hero">
     <div class="dh-aluno"><span class="avatar grande">${esc(iniciais(a.nome || a.email))}</span>
-      <div><h2>${esc(a.nome || a.email)}</h2><span class="pequeno">${turma ? `👥 ${esc(turma)} · ` : ""}${esc(a.email)}</span>
+      <div><h2>${esc(a.nome || a.email)} ${statusAlunos.get(a.email.toLowerCase())?.hoje ? `<span class="pequeno">hoje:</span> ${chipStatus(statusAlunos.get(a.email.toLowerCase()), esc)}` : ""}</h2><span class="pequeno">${turma ? `👥 ${esc(turma)} · ` : ""}${esc(a.email)}</span>
         <div class="dh-horario" aria-label="Horário: ${esc(textoHorario(ctx.horario?.()))}">${horarioChips(ctx.horario?.())}</div>
         <div class="dh-humores" title="Humor na saída, últimos registros">${ultimos.map(d => { const r = registros.find(x => x.data === d); return `<span title="${dataCurta(d)}">${humorEmoji(r?.respostas?.humorSaida || r?.respostas?.humorChegada) || "·"}</span>`; }).join("") || `<span class="pequeno">ainda sem registros</span>`}</div></div></div>
     <div class="dh-numeros">
