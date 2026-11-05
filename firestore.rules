@@ -243,6 +243,8 @@ service cloud.firestore {
     // Só o dono lê e grava; os outros só leem a VITRINE (perfisPublicos), e só se a parte social estiver ligada.
     match /perfis/{u} {
       allow read: if logado() && (u == uid() || equipe());
+      // alunos FICTÍCIOS do ambiente de teste (menu Simulação)
+      allow write: if professor() && u.matches('sim-.+');
       allow write: if logado() && u == uid()
                    && request.resource.data.keys().hasOnly(['avatar', 'apelido', 'status', 'statusEm', 'email', 'cartao', 'atualizadoEm'])
                    && (!('email' in request.resource.data) || request.resource.data.email == email().lower())
@@ -318,7 +320,9 @@ service cloud.firestore {
       || (equipe()
         && t == 'teste_' + uid() + '_' + request.resource.data.provaId
         && request.resource.data.uid == uid()
-        && request.resource.data.get('teste', false) == true);
+        && request.resource.data.get('teste', false) == true)
+      // EQUIPE: aluno FICTÍCIO do ambiente de teste (menu Simulação)
+      || (professor() && t.matches('sim_.+') && request.resource.data.get('simulado', false) == true);
 
       allow update: if
            // aluno: só avança, conta sinais e finaliza — nunca mexe nas questões sorteadas nem no placar
@@ -348,9 +352,11 @@ service cloud.firestore {
                   'vidasRestauradasPor', 'finalizadaEm', 'encerradaPor', 'indiceAtual', 'tempoTotalSegundos',
                   'minutosExtras', 'reabertaEm', 'reabertaPor', 'acertos', 'totalQuestoes', 'nota', 'notaPrevia', 'aguardandoCorrecao']))
            // equipe: a própria tentativa de teste
-        || (equipe() && resource.data.get('teste', false) == true && resource.data.uid == uid());
+        || (equipe() && resource.data.get('teste', false) == true && resource.data.uid == uid())
+        || (professor() && resource.data.get('simulado', false) == true);
 
-      allow delete: if admin() || (equipe() && resource.data.get('teste', false) == true && resource.data.uid == uid());
+      allow delete: if admin() || (equipe() && resource.data.get('teste', false) == true && resource.data.uid == uid())
+        || (professor() && resource.data.get('simulado', false) == true);
 
       // respostas: o aluno grava uma vez; com "ir e voltar" (prova.permitirVoltar) pode alterar até finalizar
       match /respostas/{q} {
@@ -362,7 +368,7 @@ service cloud.firestore {
           && q in tentativa(t).questoesIds
           && request.resource.data.keys().hasOnly(['resposta', 'enviadaEm', 'segundos', 'perdida'])
           && request.resource.data.enviadaEm == request.time)
-          || meuTeste(t);
+          || meuTeste(t) || (professor() && t.matches('sim_.+'));
         allow update: if (aluno()
           && tentativa(t).uid == uid()
           && tentativa(t).finalizadaEm == null
@@ -371,8 +377,8 @@ service cloud.firestore {
           && resource.data.get('perdida', false) != true
           && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['resposta', 'segundos', 'atualizadaEm'])
           && request.resource.data.atualizadaEm == request.time)
-          || meuTeste(t);
-        allow delete: if admin() || meuTeste(t)
+          || meuTeste(t) || (professor() && t.matches('sim_.+'));
+        allow delete: if admin() || meuTeste(t) || (professor() && t.matches('sim_.+'))
           || (cuidaDe(tentativa(t).email.lower()) && resource.data.get('perdida', false) == true);   // devolver questão perdida por sair da prova
       }
 

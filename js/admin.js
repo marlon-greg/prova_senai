@@ -82,12 +82,38 @@ function abrirAba(a) {
 }
 
 // ============================================================ SIMULAÇÃO (tudo para testar e demonstrar num lugar só)
+import { criarAmbiente, apagarAmbiente, existeAmbiente, SIM, ALUNOS_ACESS_SIM } from "./admin-sandbox.js";
+async function estadoAmbiente() {
+  const tem = await existeAmbiente();
+  $("#simAmbStatus").textContent = tem ? "✅ criado" : "não criado"; $("#simAmbStatus").className = "chip " + (tem ? "ok" : "");
+  $("#simAmbCriar").textContent = tem ? "↻ Recriar (volta ao começo)" : "Criar ambiente de teste";
+  $("#simAmbApagar").classList.toggle("oculto", !tem);
+  return tem;
+}
 async function carregarSimulacao() {
-  const [ps, as] = await Promise.all([getDocs(collection(db, "provas")).catch(() => null), getDocs(collection(db, "acessibilidade")).catch(() => null)]);
-  const provas = (ps?.docs || []).map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
-  $("#simProva").innerHTML = provas.length ? provas.map(p => `<option value="${p.id}">${esc(p.titulo)}${p.turma ? ` · ${esc(p.turma)}` : ""}${p.liberada ? " · liberada" : ""}</option>`).join("") : `<option value="">Nenhuma prova cadastrada</option>`;
-  $("#simComo").innerHTML = `<option value="">Aluno sem adaptação</option>` + (as?.docs || []).filter(d => d.data().ativo !== false)
-    .map(d => `<option value="${esc(d.id)}">♿ ${esc(d.data().nome || d.id)}</option>`).join("");
+  const tem = await estadoAmbiente();
+  $("#simAmbCriar").disabled = !podeEditar();
+  $("#simAmbCriar").onclick = async () => {
+    const recriar = await existeAmbiente();
+    if (!(await confirmar(recriar ? "Recriar o ambiente de teste?\n\nOs dados de teste voltam ao começo (o que você mudou neles é desfeito). Nada de turma ou aluno real é tocado." : "Criar o ambiente de teste?\n\nSerão criados uma turma, 8 alunos fictícios, um banco, 3 provas, respostas, notas, diário e status, todos com 🧪 TESTE no nome.", { titulo: "Ambiente de teste", ok: recriar ? "Recriar" : "Criar" }))) return;
+    const tf = tarefa({ titulo: recriar ? "Recriando o ambiente de teste" : "Criando o ambiente de teste", icone: "🏗", estimativaSeg: 15 });
+    try { if (recriar) await apagarAmbiente({ progresso: t => tf.texto(t) }); const r = await criarAmbiente({ eu, progresso: t => tf.texto(t) });
+      tf.fim(`${r.alunos} alunos, ${r.provas} provas e ${r.questoes} questões`); toast("🏗 Ambiente de teste pronto! Veja em Provas, Resultados, Turmas, Acessibilidade e Diário.", "ok"); }
+    catch (e) { tf.erro(traduzirErro(e)); toast(traduzirErro(e) + " (as regras novas do Firestore já foram publicadas?)", "erro"); }
+    estadoAmbiente(); carregarSimulacao();
+  };
+  $("#simAmbApagar").onclick = async () => {
+    if (!(await confirmar("Apagar TODO o ambiente de teste?\n\nSai a turma 🧪 TESTE, os alunos fictícios, o banco, as 3 provas, as respostas, o diário e os status de teste. Nada real é apagado.", { titulo: "Apagar ambiente de teste", ok: "Apagar", perigo: true }))) return;
+    const tf = tarefa({ titulo: "Apagando o ambiente de teste", icone: "🗑", estimativaSeg: 10 });
+    try { await apagarAmbiente({ progresso: t => tf.texto(t) }); tf.fim("Ambiente de teste apagado"); } catch (e) { tf.erro(traduzirErro(e)); }
+    estadoAmbiente(); carregarSimulacao();
+  };
+  // SÓ dados fictícios aqui: as provas e os alunos do ambiente de teste (nada de prova ou aluno real)
+  const sim = tem ? await Promise.all(SIM.provas.map(id => getDoc(doc(db, "provas", id)).catch(() => null))) : [];
+  const provas = sim.filter(d => d?.exists()).map(d => ({ id: d.id, ...d.data() }));
+  $("#simProva").innerHTML = provas.length ? provas.map(p => `<option value="${p.id}">${esc(p.titulo)}</option>`).join("") : `<option value="">Crie o ambiente de teste primeiro</option>`;
+  $("#simComo").innerHTML = `<option value="">Aluno fictício sem adaptação</option>` + (tem ? ALUNOS_ACESS_SIM.map(a => `<option value="${esc(a.email)}">♿ ${esc(a.nome)} (fictício)</option>`).join("") : "");
+  $("#simTestar").disabled = !provas.length;
   $("#simTestar").onclick = () => { const p = $("#simProva").value, como = $("#simComo").value; if (!p) return toast("Escolha uma prova.", "erro");
     window.open(`index.html?teste=${encodeURIComponent(p)}${como ? `&como=${encodeURIComponent(como)}` : ""}`, "_blank"); };
 }

@@ -121,9 +121,10 @@ aoMudarLogin(async user => {
   }
   if (id.tipo === "equipe" && new URLSearchParams(location.search).has("simular")) {
     simulacao = true;
-    eu = { uid: "sim-" + user.uid, email: id.email, nome: user.displayName || id.nome };
-    $("#faixaTeste").classList.remove("oculto"); $("#btnReiniciarTeste")?.classList.add("oculto");
-    $("#faixaTeste span").innerHTML = `<b>🧪 SIMULAÇÃO</b> — você está vendo a página do aluno com a sua conta. Nada é gravado e nenhum aluno vê. <a href="#simPainel">⚙ Ir para o painel da simulação</a>`;
+    // aluno FICTÍCIO (nada de nome real na simulação); o uid continua o da equipe só para separar o que fica no navegador
+    eu = { uid: "sim-" + user.uid, email: "aluno.ficticio@simulacao.teste", nome: "Alex Fictício", nomeConta: "Alex Fictício" };
+    $("#faixaTeste").classList.remove("oculto"); $("#btnReiniciarTeste")?.classList.add("oculto"); $("#quem").textContent = eu.email; $("#avatar").textContent = "AF";
+    $("#faixaTeste span").innerHTML = `<b>🧪 SIMULAÇÃO</b> — você está vendo a página de um aluno <b>fictício</b> (Alex). Nada é gravado e nenhum aluno vê. <a href="#simPainel">⚙ Ir para o painel da simulação</a>`;
     gami = await lerGamificacao();
     return desenharSimulacao();
   }
