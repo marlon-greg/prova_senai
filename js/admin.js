@@ -72,6 +72,7 @@ aoMudarLogin(async user => {
 function trocar(id) { ["telaLogin", "telaPainel", "telaAviso"].forEach(t => $("#" + t).classList.toggle("oculto", t !== id)); }
 let abaAtual = "provas";
 function abrirAba(a) {
+  window.scrollTo({ top: 0, behavior: "instant" });   // toda aba começa no topo
   abaAtual = a; ligarAjuda(() => abaAtual);
   if (a !== "resultados" && $("#rAoVivo").checked) { $("#rAoVivo").checked = false; pararAoVivo(); }   // sair da aba desliga o ao vivo
   document.querySelectorAll("[data-aba]").forEach(b => b.classList.toggle("ativa", b.dataset.aba === a));
@@ -1698,7 +1699,16 @@ function desenharEquipe() {
   $("#feContagem").textContent = `${lista.length} de ${equipeCache.length} pessoa(s)`;
   $("#listaEquipe").innerHTML = `<div class="tabela"><table><tr><th>E-mail</th><th>Nome</th><th>Papel</th><th></th></tr>
     ${!b && !fp ? `<tr><td>${esc(SUPER_ADMIN)}</td><td>—</td><td><span class="tag on">admin principal</span></td><td class="pequeno">fixo nas regras</td></tr>` : ""}` +
-    lista.map(m => `<tr><td>${esc(m.id)}</td><td>${esc(m.nome || "")}</td><td><span class="tag">${esc(ROT_PAPEL[m.papel] || m.papel)}</span></td><td>${ehAdmin() ? `<button class="perigo mini" data-rm="${m.id}">Remover</button>` : ""}</td></tr>`).join("") + "</table></div>";
+    lista.map(m => `<tr><td>${esc(m.id)}</td><td>${esc(m.nome || "")}</td><td>${ehAdmin() && m.id !== eu.email ? `<select class="sel-papel" data-papel="${esc(m.id)}" aria-label="Cargo de ${esc(m.nome || m.id)}">${Object.entries(ROT_PAPEL).map(([k, r]) => `<option value="${k}"${m.papel === k ? " selected" : ""}>${esc(r)}</option>`).join("")}</select>` : `<span class="tag">${esc(ROT_PAPEL[m.papel] || m.papel)}</span>${m.id === eu.email ? ` <span class="pequeno">(você)</span>` : ""}`}</td><td>${ehAdmin() && m.id !== eu.email ? `<button class="perigo mini" data-rm="${m.id}">Remover</button>` : ""}</td></tr>`).join("") + "</table></div>";
+  // trocar o cargo (só admin; ninguém muda o próprio cargo, para não se trancar fora)
+  document.querySelectorAll("[data-papel]").forEach(sel => sel.onchange = async () => {
+    const m = equipeCache.find(x => x.id === sel.dataset.papel), novo = sel.value;
+    const efeito = { admin: "Passa a ter acesso a tudo, inclusive equipe, configuração e gamificação.", professor: "Cria e edita provas, bancos, turmas e corrige.",
+      auxiliar: "Acompanha as provas e os resultados, sem editar.", inclusao: "Vê só os alunos com acessibilidade vinculados a ela e o diário deles." }[novo] || "";
+    if (!(await confirmar(`Mudar o cargo de ${m.nome || m.id} de ${ROT_PAPEL[m.papel] || m.papel} para ${ROT_PAPEL[novo]}?\n\n${efeito}`, { titulo: "Mudar cargo", ok: "Mudar cargo" }))) { sel.value = m.papel; return; }
+    try { await updateDoc(doc(db, "equipe", m.id), { papel: novo, atualizadoEm: serverTimestamp(), atualizadoPor: eu.email }); m.papel = novo; toast(`Cargo de ${m.nome || m.id}: ${ROT_PAPEL[novo]}. Vale a partir do próximo acesso dele(a).`, "ok"); desenharEquipe(); }
+    catch (e) { sel.value = m.papel; toast(traduzirErro(e), "erro"); }
+  });
   document.querySelectorAll("[data-rm]").forEach(b => b.onclick = async () => { if (await confirmar("Remover " + b.dataset.rm + " da equipe?", { titulo: "Remover membro", ok: "Remover", perigo: true })) { await deleteDoc(doc(db, "equipe", b.dataset.rm)); carregarEquipe(); } });
 }
 $("#feBusca").oninput = $("#fePapel").onchange = () => desenharEquipe();

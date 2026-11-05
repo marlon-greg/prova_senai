@@ -48,17 +48,30 @@ export async function carregarRetorno() {
     const ord = l => l.sort((x, y) => (y.criadoEm?.seconds || 0) - (x.criadoEm?.seconds || 0));
     itensRet = { ap: ord(a.docs.map(d => ({ id: d.id, col: "apontamentos", ...d.data() }))), sg: ord(s.docs.map(d => ({ id: d.id, col: "sugestoesSistema", ...d.data() }))) };
   } catch (e) { $("#retLista").innerHTML = `<p class="erro-texto">${esc(traduzirErro(e))} (Publique o firestore.rules atual.)</p>`; return; }
-  ["#retBusca", "#retTipo", "#retStatus"].forEach(id => $(id).oninput = $(id).onchange = desenharRetorno);
+  ["#retBusca", "#retStatus"].forEach(id => $(id).oninput = $(id).onchange = desenharRetorno);
   desenharRetorno();
 }
+// duas partes separadas: 🚩 erros reportados nas questões (agrupados por prova) e 💡 sugestões (agrupadas por assunto)
+let retAba = "ap";
+const aberto = x => ["aberto", "aberta"].includes(x.status);
+function desenharAbasRetorno() {
+  const n = l => l.filter(aberto).length;
+  $("#retAbas").innerHTML = [["ap", "🚩", "Erros nas questões", "O aluno avisou que uma questão tem problema", itensRet.ap], ["sg", "💡", "Sugestões para o sistema", "Ideias e problemas do site", itensRet.sg]]
+    .map(([k, e, t, d, l]) => `<button type="button" role="tab" class="ret-aba${retAba === k ? " sel" : ""}" aria-selected="${retAba === k}" data-retaba="${k}"><span class="ra-e">${e}</span><span class="ra-t"><b>${t}</b><small>${d}</small></span>
+      <span class="ra-n">${n(l) ? `<span class="chip aviso">${n(l)} abert${k === "ap" ? "o" : "a"}(s)</span>` : ""}<span class="chip">${l.length}</span></span></button>`).join("");
+  $("#retAbas").querySelectorAll("[data-retaba]").forEach(b => b.onclick = () => { retAba = b.dataset.retaba; desenharRetorno(); });
+}
 function desenharRetorno() {
-  const b = String($("#retBusca").value || "").toLowerCase(), tipo = $("#retTipo").value, st = $("#retStatus").value;
-  const lista = [...(tipo !== "sg" ? itensRet.ap : []), ...(tipo !== "ap" ? itensRet.sg : [])]
+  desenharAbasRetorno();
+  const b = String($("#retBusca").value || "").toLowerCase(), tipo = retAba, st = $("#retStatus").value;
+  const lista = [...(tipo === "ap" ? itensRet.ap : itensRet.sg)]
     .filter(x => (!st || (st === "aberto" ? ["aberto", "aberta"].includes(x.status) : !["aberto", "aberta"].includes(x.status))))
     .filter(x => !b || `${x.nome} ${x.email} ${x.texto} ${x.provaTitulo || ""} ${x.enunciado || ""}`.toLowerCase().includes(b));
   const abertos = [...itensRet.ap, ...itensRet.sg].filter(x => ["aberto", "aberta"].includes(x.status)).length;
   $("#retContagem").textContent = `${lista.length} item(ns) · ${abertos} aberto(s)`;
-  $("#retLista").innerHTML = lista.length ? lista.map(x => `<article class="card ret-item${["aberto", "aberta"].includes(x.status) ? " aberto" : ""}">
+  const grupoDe = x => tipo === "ap" ? (x.provaTitulo || "Prova sem nome") : (x.categoria || "Outro"), grupos = new Map();
+  lista.forEach(x => (grupos.get(grupoDe(x)) || grupos.set(grupoDe(x), []).get(grupoDe(x))).push(x));
+  const itemRet = x => `<article class="card ret-item${["aberto", "aberta"].includes(x.status) ? " aberto" : ""}">
       <div class="ret-cab">${x.col === "apontamentos" ? `<span class="chip erro">🚩 ${esc(TIPOS_AP[x.tipo] || "Apontamento")}</span>` : `<span class="chip info">💡 ${esc(x.categoria || "Sugestão")}</span>`}
         <span class="chip ${["aberto", "aberta"].includes(x.status) ? "aviso" : x.status === "procede" || x.status === "feita" ? "ok" : "off"}">${esc(x.status)}</span>
         <span class="pequeno">${esc(x.nome || x.email)} · ${dataBR(x.criadoEm)}</span></div>
@@ -67,8 +80,10 @@ function desenharRetorno() {
       ${x.resposta ? `<p class="pequeno ret-resp">↩ <b>${esc(x.respondidoPor || "equipe")}:</b> ${esc(x.resposta)}</p>` : ""}
       ${ctx.podeEditar() ? `<div class="ret-resposta"><input type="text" data-resp="${x.id}" placeholder="Resposta para o aluno (ele vê na página dele)" value="${esc(x.resposta || "")}" aria-label="Resposta para ${esc(x.nome || x.email)}">
         ${menuHTML({ rotulo: "Responder e marcar ▾", classe: "", aria: "Responder e marcar", itensHTML: (x.col === "apontamentos" ? [["procede", "✅", "Procede"], ["nao-procede", "✖", "Não procede"], ["aberto", "↺", "Reabrir"]] : [["feita", "✅", "Vamos fazer / feita"], ["analisada", "👀", "Analisada"], ["aberta", "↺", "Reabrir"]])
-          .map(([v, e, r]) => itemMenu({ e, t: r, attrs: `data-st="${v}" data-id="${x.id}" data-col="${x.col}"` })).join("") })}</div>` : ""}</article>`).join("")
-    : vazio({ e: "📬", texto: `Nada por aqui${b || st || tipo ? " com esses filtros" : " ainda"}.` });
+          .map(([v, e, r]) => itemMenu({ e, t: r, attrs: `data-st="${v}" data-id="${x.id}" data-col="${x.col}"` })).join("") })}</div>` : ""}</article>`;
+  $("#retLista").innerHTML = lista.length ? [...grupos].map(([g, l]) => collapsible({ chave: `ret:${tipo}:${g}`, aberto: true, classe: "ret-grupo", titulo: `${tipo === "ap" ? "📝" : "🏷"} ${esc(g)}`,
+      resumoHTML: `<span class="chip">${l.length}</span>${l.filter(aberto).length ? `<span class="chip aviso">${l.filter(aberto).length} em aberto</span>` : ""}`, corpoHTML: l.map(itemRet).join("") })).join("")
+    : vazio({ e: tipo === "ap" ? "🚩" : "💡", texto: `${tipo === "ap" ? "Nenhum erro reportado" : "Nenhuma sugestão"}${b || st ? " com esses filtros" : " ainda"}.` });
   $("#retLista").querySelectorAll("[data-st]").forEach(bt => bt.onclick = async () => {
     const resp = $(`[data-resp="${bt.dataset.id}"]`).value.trim(), rotSt = bt.textContent.trim();
     if (!(await confirmar(`Marcar como "${rotSt}"${resp ? " e enviar a resposta ao aluno" : ""}? O aluno vê isso na página dele.`, { titulo: "Responder", ok: "Confirmar" }))) return;
