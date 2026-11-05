@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Componentes de interface — Prova SENAI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<!-- Página de referência do design system (fora do menu). Troque o tema: ?tema=escuro | contraste | creme | azul -->
+<body class="painel">
+<header><span class="senai">SENAI</span><h1>Componentes de interface</h1></header>
+<main>
+  <div class="cab-pagina"><h2><span class="e" aria-hidden="true">🧩</span>Design system</h2><button type="button" id="demoDrawer">+ Abrir drawer</button></div>
+
+  <section class="card">
+    <h2>Botões</h2>
+    <div class="grupo-botoes">
+      <button type="button">Primário</button><button type="button" class="ok"><span class="e" aria-hidden="true">▶</span>Liberar prova</button>
+      <button type="button" class="leve"><span class="e" aria-hidden="true">👥</span>Alunos</button><button type="button" class="discreto">Limpar filtros</button>
+      <button type="button" class="perigo"><span class="e" aria-hidden="true">🗑</span>Apagar</button><button type="button" class="icone" aria-label="Editar">✎</button>
+      <button type="button" class="leve mini">Mini</button><button type="button" disabled>Desabilitado</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Campos</h2>
+    <div class="grade">
+      <div><label for="d1">Texto</label><input type="text" id="d1" placeholder="Digite…"></div>
+      <div><label for="d2">Lista</label><select id="d2"><option>Todas as situações</option><option>Liberadas</option></select></div>
+      <div><label for="d3">Busca</label><input type="search" id="d3" placeholder="Pesquisar aluno…"></div>
+    </div>
+    <div class="linha acoes" style="gap:24px">
+      <label class="check"><input type="checkbox" checked> Caixa de seleção</label>
+      <label class="switch-linha"><input type="checkbox" class="switch" checked> Ao vivo</label>
+      <label class="switch-linha"><input type="checkbox" class="switch"> Testes da equipe</label>
+    </div>
+    <div style="margin-top:16px" id="demoDZ"></div>
+  </section>
+
+  <section class="card">
+    <div id="demoCab"></div>
+    <div id="demoToolbar"></div>
+    <p class="pequeno">Chips:</p>
+    <div class="grupo-chips"><span class="chip ok">● liberada</span><span class="chip off">○ fechada</span><span class="chip aviso">🟡 revisar</span><span class="chip erro">🔻 &lt; 50</span><span class="chip info">2 provas</span><span class="chip sugerida">sugerida</span><span class="chip ok pulsante">ao vivo</span></div>
+    <p class="pequeno">Chips de seleção:</p>
+    <div id="demoChips"></div>
+    <div id="demoStats"></div>
+  </section>
+
+  <section class="card">
+    <h2>Recolhíveis</h2>
+    <div id="demoRec"></div>
+  </section>
+  <section class="card"><h2>Estado vazio</h2><div id="demoVazio"></div></section>
+</main>
+<script type="module">
+import { toolbar, ligarFiltros, cardCab, itemMenu, collapsible, chips, vazio, statTiles, drawer, dropzone, menuHTML } from "./js/ui.js";
+import { toast } from "./js/common.js";
+const tema = new URLSearchParams(location.search).get("tema"); if (tema) document.body.classList.add("tema-" + tema);
+document.getElementById("demoCab").innerHTML = cardCab({ titulo: "Provas criadas", ajuda: "<p>Texto do <b>Como funciona</b> aparece aqui, num popover.</p>",
+  primaria: { t: "+ Criar nova prova", id: "demoCriar" },
+  menuItensHTML: itemMenu({ e: "⬇", t: "Exportar CSV" }) + itemMenu({ e: "🧪", t: "Testar" }) + "<hr>" + itemMenu({ e: "🗑", t: "Apagar prova", perigo: true }) });
+document.getElementById("demoToolbar").innerHTML = toolbar({ buscaId: "dBusca", placeholder: "Pesquisar prova, turma ou banco…", contagemId: "dCont",
+  filtros: [{ id: "dTurma", label: "Turma", opcoesHTML: "<option value=''>Todas</option><option>DETS-1A</option>" }, { id: "dSit", label: "Situação", opcoesHTML: "<option value=''>Todas</option><option value='lib'>Liberadas</option>" }],
+  ordemId: "dOrdem", ordemHTML: "<option>Mais recentes</option><option>Mais antigas</option>" });
+document.getElementById("dCont").textContent = "2 de 2 provas";
+ligarFiltros(document.getElementById("demoToolbar"));
+chips(document.getElementById("demoChips"), [{ v: "", t: "Todas" }, { v: "and", t: "Em andamento", e: "⏳" }, { v: "fim", t: "Finalizou", e: "✅" }], { aoMudar: v => toast("Situação: " + (v || "todas")) });
+document.getElementById("demoStats").innerHTML = statTiles([{ v: "67,3", r: "média" }, { v: "3/4", r: "finalizaram", tom: "ok" }, { v: 6, r: "a revisar", tom: "aviso" }, { v: 1, r: "com sinais", tom: "erro" }]);
+document.getElementById("demoRec").innerHTML = collapsible({ chave: "demo1", titulo: "👥 DETS-1A", resumoHTML: "<span class='chip'>2 provas</span><span class='chip ok'>1 liberada</span>", corpoHTML: "<p>Conteúdo recolhível; o estado fica lembrado.</p>", direitaHTML: menuHTML({ itensHTML: itemMenu({ t: "Ação" }) }) })
+  + collapsible({ titulo: "🏷 7 tópicos", corpoHTML: "<p>DDL · DML · Chave estrangeira…</p>", classe: "leve" });
+document.getElementById("demoVazio").innerHTML = vazio({ e: "📝", texto: "Nenhuma prova ainda.", acao: "<button type='button'>+ Criar a primeira prova</button>" });
+document.getElementById("demoDZ").innerHTML = dropzone({ id: "dArq", accept: ".json" });
+document.getElementById("demoDrawer").onclick = () => drawer({ titulo: "Nova prova", ajuda: "<p>Ajuda dentro do drawer.</p>",
+  corpoHTML: `<label for="dx">Título</label><input id="dx" type="text"><label for="dy" style="margin-top:12px">Turma</label><select id="dy"><option>DETS-1A</option></select>`,
+  acoes: [{ t: "Cancelar", classe: "leve" }, { t: "Criar prova", onClick: () => toast("Criada!", "ok") }] });
+</script>
+</body>
+</html>

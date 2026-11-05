@@ -330,7 +330,7 @@ function formProvaHTML(f) {
     <legend>Bancos e temas que entram no sorteio</legend>
     <p class="pequeno" style="margin-top:0">Marque um ou vários bancos; o sorteio junta as questões de todos. Dentro de cada banco, desmarque os temas que não entram.</p>
     <div class="filtro-temas">
-      <input type="search" id="${f}TemasBusca" placeholder="🔎 Filtrar bancos e temas…" aria-label="Filtrar bancos e temas">
+      <input type="search" id="${f}TemasBusca" placeholder="Filtrar bancos e temas…" aria-label="Filtrar bancos e temas">
       <select id="${f}TemasVisao" aria-label="Como mostrar os temas"><option value="banco">Agrupar por banco</option><option value="juntos">Todos os temas juntos</option></select>
       <label class="check"><input type="checkbox" id="${f}TemasSoMarcados"> <span>Só os marcados</span></label>
       <span class="filtro-acoes"><button type="button" class="leve mini" id="${f}TemasMarcar">Marcar visíveis</button><button type="button" class="leve mini" id="${f}TemasDesmarcar">Desmarcar visíveis</button></span>

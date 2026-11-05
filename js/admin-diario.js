@@ -46,7 +46,7 @@ export async function carregarDiario() {
   const turmaDe = e => tds.filter(x => x.email === e);
   const ts = new Map(); alunos.forEach(a => turmaDe(a.email).forEach(t => ts.set(t.turmaId, t.turma)));
   box.innerHTML = (alunos.length > 1 ? `<div class="barra-filtros" role="search" style="margin-top:8px">
-      <input type="search" id="dBusca" placeholder="🔎 Pesquisar aluno…" aria-label="Pesquisar aluno">
+      <input type="search" id="dBusca" placeholder="Pesquisar aluno…" aria-label="Pesquisar aluno">
       ${ts.size > 1 ? `<select id="dTurma" aria-label="Filtrar por turma"><option value="">👥 Todas as turmas</option>${[...ts].map(([id, n]) => `<option value="${esc(id)}">${esc(n)}</option>`).join("")}</select>` : ""}</div>` : "") +
     `<div class="diario-alunos">` + alunos.map(a => `<button type="button" class="diario-aluno${a.email === atual?.email ? " ativo" : ""}" data-al="${esc(a.email)}"
       data-busca="${esc(chaveTexto(`${a.nome || ""} ${a.email}`))}" data-turmas="${esc(turmaDe(a.email).map(t => t.turmaId).join(" "))}">
