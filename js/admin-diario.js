@@ -394,7 +394,7 @@ async function iniciarRegistro(iso) {
         if (!escolha) return toast("Escolha o motivo.", "erro");
         so.disabled = true;
         try { await salvarJustificativa(iso, escolha.motivo, $("#jTexto", caixa).value.trim()); caixa.querySelector("[data-r='0']").click(); }
-        catch (e) { so.disabled = false; toast(traduzirErro(e), "erro"); }
+        catch (e) { so.disabled = false; if (!e.cancelado) toast(traduzirErro(e), "erro"); }
       };
     },
     antesDeConfirmar: caixa => { if (!escolha) { toast("Escolha o motivo.", "erro"); return false; } escolha.texto = $("#jTexto", caixa).value.trim(); return true; } });
@@ -402,6 +402,8 @@ async function iniciarRegistro(iso) {
 }
 async function salvarJustificativa(iso, motivo, texto) {
   const id = `${iso}_${ctx.eu.email}`;
+  const ja = registros.find(r => r.id === id);
+  if (ja && !(await confirmar(ja.tipo === "justificativa" ? `Trocar a justificativa de ${dataCurta(iso)}?` : `Já existe o seu registro do diário de ${dataCurta(iso)}. Substituir pela justificativa? O registro preenchido é apagado.`, { titulo: "Justificativa", ok: ja.tipo === "justificativa" ? "Trocar" : "Substituir", perigo: ja.tipo !== "justificativa" }))) throw Object.assign(new Error("cancelado"), { cancelado: true });
   const dados = { data: iso, tipo: "justificativa", motivo, texto: texto.slice(0, 1000), autor: ctx.eu.email, autorNome: ctx.eu.nome || ctx.eu.email, papel: ctx.eu.papel,
     respostas: {}, completo: 0, nComentarios: 0, criadoEm: serverTimestamp(), atualizadoEm: serverTimestamp() };
   await setDoc(doc(colDiario(atual.email), id), dados);
@@ -457,6 +459,7 @@ function abrirEditor(iso, outroDia = null) {
     const antes = medalhasDiario(resumo(), listaConq).filter(m => m.ok).map(m => m.t);
     const respostas = limpar(r, ITENS_AUX), dados = { data: iso, tipo: "diario", autor: ctx.eu.email, autorNome: ctx.eu.nome || ctx.eu.email, papel: ctx.eu.papel,
       respostas, completo: completude(respostas), outroDia: outroDia || null, atualizadoEm: serverTimestamp() };
+    if (existente && !(await confirmar(`Salvar as alterações no registro de ${dataCurta(iso)}?`, { titulo: "Salvar registro", ok: "Salvar" }))) return;
     $("#edSalvar").disabled = true;
     try {
       if (existente) await updateDoc(doc(colDiario(atual.email), id), { ...dados, motivo: null, texto: null });

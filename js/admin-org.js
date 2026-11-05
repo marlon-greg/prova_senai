@@ -358,6 +358,7 @@ DCL - GRANT e REVOKE | 01/09">${esc(textoTopicos(v.topicos))}</textarea>
       const dados = { turmaId, turma: turmas.find(x => x.id === turmaId)?.nome || "", semestre, materia,
         professores: [...caixa.querySelectorAll("fieldset input:checked")].map(c => c.value), topicos: t.topicos, provas: pv.provas,
         observacoes: $("#plObs", caixa).value.trim().slice(0, 2000), atualizadoEm: serverTimestamp(), atualizadoPor: ctx.eu.email };
+      if (p && !(await confirmar(`Salvar as alterações no plano de ${materia} (${rotuloSemestre(semestre)})?`, { titulo: "Salvar plano", ok: "Salvar" }))) return false;
       try {
         if (p) await updateDoc(doc(db, "planos", p.id), dados);
         else await addDoc(collection(db, "planos"), { ...dados, criadoEm: serverTimestamp(), criadoPor: ctx.eu.email });
@@ -408,6 +409,7 @@ async function lerPlano(p, arqId = null) {
       const atuais = subst ? [] : p.topicos || [], ja = new Set(atuais.map(x => chaveTexto(x.nome)));
       const topicos = [...atuais, ...t.topicos.filter(x => !ja.has(chaveTexto(x.nome)))];
       const provasPrev = subst ? pv.provas : [...(p.provas || []), ...pv.provas.filter(x => !(p.provas || []).some(y => chaveTexto(y.titulo) === chaveTexto(x.titulo)))];
+      if (!(await confirmar(`${subst ? "Substituir" : "Juntar"} os tópicos e as provas previstas do plano de ${p.materia}? Fica com ${topicos.length} tópico(s) e ${provasPrev.length} prova(s) prevista(s).`, { titulo: "Salvar no plano", ok: "Salvar", perigo: subst && (p.topicos || []).length > 0 }))) return false;
       try { await updateDoc(doc(db, "planos", p.id), { topicos, provas: provasPrev, lidoPorIAEm: serverTimestamp(), atualizadoEm: serverTimestamp(), atualizadoPor: ctx.eu.email }); }
       catch (e) { toast(regrasErro(e), "erro"); return false; }
       return true;
@@ -487,6 +489,8 @@ export async function editarTopicosBanco(bancoId, aoSalvar = () => {}) {
     antesDeConfirmar: async caixa => {
       const novo = Object.fromEntries([...caixa.querySelectorAll("[data-tema]")].map(i => [i.dataset.tema, i.value.trim().slice(0, 120)]));
       const materia = $("#tbMateria", caixa).value.trim();
+      const mudou = qs.filter(q => chaveTexto(novo[q.id] || "") !== chaveTexto(temaDe(q))).length;
+      if (!(await confirmar(`Salvar os tópicos do banco${mudou ? ` (${mudou} questão(ões) mudam de tópico)` : ""}? As provas que usam estes tópicos são ajustadas junto.`, { titulo: "Salvar tópicos", ok: "Salvar" }))) return false;
       try { await salvarTopicos(bancoId, qs, novo, { materia, semestre: $("#tbSemestre", caixa).value }); }
       catch (e) { toast(regrasErro(e), "erro"); return false; }
       return true;
@@ -603,6 +607,7 @@ CSS - Flexbox">${esc(textoCurso(c?.materias))}</textarea>
       try {
         let id = c?.id;
         const dados = { nome, materias, atualizadoEm: serverTimestamp(), atualizadoPor: ctx.eu.email };
+        if (id && !(await confirmar(`Salvar as alterações no plano de curso ${nome}?`, { titulo: "Salvar plano de curso", ok: "Salvar" }))) return false;
         if (id) await updateDoc(doc(db, "cursos", id), dados);
         else id = (await addDoc(collection(db, "cursos"), { ...dados, criadoEm: serverTimestamp(), criadoPor: ctx.eu.email })).id;
         for (const t of turmas) {
@@ -642,6 +647,7 @@ async function lerCurso(c, arqId = null) {
           if (!x) final.push(m); else m.topicos.forEach(t => { if (!x.topicos.some(y => chaveTexto(y) === chaveTexto(t))) x.topicos.push(t); });
         }
       }
+      if (!(await confirmar(`Salvar ${final.length} matéria(s) no plano de curso ${c.nome}${tem && $("#iaCursoSubst", caixa).checked ? ", substituindo as atuais" : ""}?`, { titulo: "Salvar plano de curso", ok: "Salvar", perigo: !!(tem && $("#iaCursoSubst", caixa).checked) }))) return false;
       try { await updateDoc(doc(db, "cursos", c.id), { materias: final, lidoPorIAEm: serverTimestamp(), atualizadoEm: serverTimestamp(), atualizadoPor: ctx.eu.email }); }
       catch (e) { toast(regrasErro(e), "erro"); return false; }
       return true;

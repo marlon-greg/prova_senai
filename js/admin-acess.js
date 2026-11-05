@@ -116,6 +116,7 @@ $("#btnAcessAdicionar").onclick = async () => {
   const email = $("#acessEmail").value.trim().toLowerCase(), nome = $("#acessNome").value.trim();
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return toast("Informe o e-mail do aluno.", "erro");
   if (lista.some(a => a.email === email)) { drawerNovo?.fechar(); abrirAluno(email); return toast("Este aluno já tem acessibilidade: abri o cadastro.", "info"); }
+  if (!(await confirmar(`Marcar acessibilidade para ${nome || email}? O aluno passa a fazer as provas com as adaptações que você configurar.`, { titulo: "Marcar acessibilidade", ok: "Marcar" }))) return;
   try {
     await setDoc(doc(db, "acessibilidade", email), { email, nome, ativo: true, auxiliares: [], visual: { ...VISUAL_PADRAO }, prova: { ...PROVA_PADRAO },
       criadoEm: serverTimestamp(), criadoPor: ctx.eu.email });
@@ -249,6 +250,7 @@ async function abrirAluno(email, rolar = true) {
                semPunicao: $("#acSemPunicao").checked, ocultarCronometro: $("#acOcultarTempo").checked, lerEmVoz: $("#acVoz").checked, mostrarDica: $("#acDica").checked },
       atualizadoEm: serverTimestamp(), atualizadoPor: ctx.eu.email };
     if (ctx.podeEditar()) dados.auxiliares = [...box.querySelectorAll("[data-aux]:checked")].map(x => x.dataset.aux);
+    if (!(await confirmar(`Salvar as alterações nas adaptações de ${a.nome || email}?${dados.ativo ? "" : " A acessibilidade fica DESLIGADA: o aluno volta a fazer a prova sem adaptações."}`, { titulo: "Salvar adaptações", ok: "Salvar" }))) return;
     try { await updateDoc(doc(db, "acessibilidade", email), dados); toast("Adaptações salvas ✅", "ok"); carregarAcessibilidade(); }
     catch (e) { toast("Não foi possível salvar. " + traduzirErro(e), "erro"); }
   };
@@ -263,6 +265,7 @@ async function abrirAluno(email, rolar = true) {
     } catch (e) { toast("Não foi possível remover. " + traduzirErro(e), "erro"); }
   });
   $("#acSalvarDesc").onclick = async () => {
+    if (!(await confirmar("Salvar a descrição do aluno? As adaptações feitas antes desta mudança passam a aparecer como desatualizadas.", { titulo: "Salvar descrição", ok: "Salvar" }))) return;
     try { await setDoc(doc(db, "acessibilidadePrivado", email), { descricao: $("#acDescricao").value.trim(), atualizadoEm: serverTimestamp(), atualizadoPor: ctx.eu.email, infoAtualizadaEm: serverTimestamp() }, { merge: true });
       toast("Descrição salva. Adaptações feitas antes desta mudança aparecem como ⚠ desatualizadas.", "ok"); recarregarSeAberta(email); }
     catch (e) { toast("Não foi possível salvar. " + traduzirErro(e), "erro"); }
@@ -274,6 +277,7 @@ async function abrirAluno(email, rolar = true) {
     if (novos && perfilEm) $("#acPerfilInfo").insertAdjacentHTML("beforeend", ` <span class="tag aviso">⚠ ${novos} registro(s) novo(s) no diário desde então: vale atualizar</span>`);
   }).catch(() => {});
   $("#acPerfilSalvar").onclick = async () => {
+    if (!(await confirmar("Salvar o perfil do aluno? As próximas adaptações por IA passam a usar este texto.", { titulo: "Salvar perfil", ok: "Salvar" }))) return;
     try { await setDoc(doc(db, "acessibilidadePrivado", email), { perfilIA: { texto: $("#acPerfil").value.trim().slice(0, 6000), atualizadoEm: serverTimestamp(), por: ctx.eu.email }, infoAtualizadaEm: serverTimestamp() }, { merge: true });
       $("#acPerfilInfo").textContent = `Atualizado agora por ${ctx.eu.email}.`; toast("Perfil salvo. As próximas adaptações já usam este perfil.", "ok"); recarregarSeAberta(email); }
     catch (e) { toast(traduzirErro(e), "erro"); }
@@ -343,6 +347,7 @@ async function desenharSugestoes(email) {
     <p>${esc(s.texto)}</p>${ctx.podeEditar() ? `<button class="leve mini" data-res="${s.id}">${s.resolvida ? "↺ Reabrir" : "✓ Resolvida"}</button>` : s.resolvida ? `<span class="tag ok">✓ resolvida</span>` : ""}</div>`).join("") : `<p class="pequeno">Nenhuma sugestão ainda.</p>`;
   box.querySelectorAll("[data-res]").forEach(b => b.onclick = async () => {
     const s = ss.find(x => x.id === b.dataset.res);
+    if (!(await confirmar(s.resolvida ? "Reabrir esta sugestão?" : "Marcar esta sugestão como resolvida?", { titulo: "Sugestão", ok: s.resolvida ? "Reabrir" : "Marcar resolvida" }))) return;
     try { await updateDoc(doc(db, "acessibilidadePrivado", email, "sugestoes", s.id), { resolvida: !s.resolvida }); desenharSugestoes(email); } catch (e) { toast(traduzirErro(e), "erro"); }
   });
 }
@@ -453,6 +458,7 @@ async function adicionarQuestao(tipo) {
   const livres = (tipo === "dissertativa" ? disp.diss : disp.alt).filter(q => !ids.includes(q));
   if (!livres.length) return toast(`Não há outra questão ${tipo} disponível nos temas da prova.`, "info");
   const novos = [...ids, livres[Math.floor(Math.random() * livres.length)]];
+  if (!(await confirmar(`Adicionar mais uma questão ${tipo} sorteada à prova deste aluno? A prova fica com ${novos.length} questões.`, { titulo: "➕ Adicionar questão", ok: "Adicionar" }))) return;
   try { await gravarSorteio(novos, cotaDe(novos)); toast(`➕ Questão ${tipo} adicionada. Ela ainda não está adaptada.`, "ok"); }
   catch (e) { return toast("Não foi possível adicionar. " + traduzirErro(e), "erro"); }
   carregarQuestoes(email, prova);
@@ -533,6 +539,7 @@ function desenharQuestoes() {
     el.querySelector("[data-maisapoio]").onclick = () => { lista.insertAdjacentHTML("beforeend", linhaApoio("")); ligarApoios(); lista.lastElementChild.querySelector("input").focus(); };
     ligarApoios();
     el.querySelector("[data-apagarq]")?.addEventListener("click", async () => {
+      if (!(await confirmar("Apagar a adaptação desta questão? Ela volta ao original para o aluno.", { titulo: "Voltar ao original", ok: "Apagar adaptação", perigo: true }))) return;
       try { await deleteDoc(doc(db, "acessibilidade", qAtual.email, "questoes", x.qid)); await deleteDoc(doc(db, "acessibilidadePrivado", qAtual.email, "gabaritos", x.qid)).catch(() => {}); x.ad = null; desenharQuestoes(); } catch (e) { toast(traduzirErro(e), "erro"); }
     });
   });
@@ -553,6 +560,7 @@ async function salvarQuestao(x, el) {
                   editadoPor: ctx.eu.email, atualizadoEm: serverTimestamp() };
   if (!mexeuNoTexto && x.ad.modelo) dados.modelo = x.ad.modelo;
   if (fmt) Object.assign(dados, { formato: x.ad.formato, dados: x.ad.dados, opcaoTitulo: x.ad.opcaoTitulo || "" });   // o formato (e o gabarito privado) continuam
+  if (!(await confirmar(x.ad ? "Salvar as alterações na questão adaptada? O aluno passa a ver esta versão." : "Salvar esta adaptação? O aluno passa a ver esta versão da questão.", { titulo: "Salvar questão adaptada", ok: "Salvar" }))) return;
   try { await setDoc(doc(db, "acessibilidade", qAtual.email, "questoes", x.qid), dados); x.ad = { ...dados, atualizadoEm: null }; toast("Questão adaptada salva ✅", "ok"); desenharQuestoes(); }
   catch (e) { toast("Não foi possível salvar. " + traduzirErro(e), "erro"); }
 }

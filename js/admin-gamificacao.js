@@ -1,6 +1,6 @@
 // Painel → aba "Gamificação" (admin): liga e desliga cada parte, e abre a simulação "ver como aluno".
 // Painel → aba "Retorno dos alunos" (professor/admin): apontamentos nas questões e sugestões para o sistema.
-import { db, esc, $, toast, traduzirErro, dataBR, GAMI_PADRAO, lerGamificacao } from "./common.js";
+import { db, esc, $, toast, confirmar, traduzirErro, dataBR, GAMI_PADRAO, lerGamificacao } from "./common.js";
 import { CONQUISTAS_PADRAO, REGRAS, CAMPOS_DIARIO } from "./conquistas.js";
 import { CATALOGO } from "./avatar.js";
 import { sugerirConquistasIA } from "./ia.js";
@@ -30,6 +30,7 @@ export async function carregarGamificacao() {
   box.querySelectorAll("[data-k]").forEach(c => c.onchange = dep); dep();
   $("#gamiSalvar")?.addEventListener("click", async () => {
     const dados = Object.fromEntries([...box.querySelectorAll("[data-k]")].map(c => [c.dataset.k, c.checked]));
+    if (!(await confirmar("Salvar as opções de gamificação? Os alunos veem a mudança ao recarregar a página.", { titulo: "Salvar gamificação", ok: "Salvar" }))) return;
     try { await setDoc(doc(db, "config", "gamificacao"), { ...dados, atualizadoEm: serverTimestamp(), atualizadoPor: ctx.eu.email }); toast("Gamificação salva. Os alunos veem a mudança ao recarregar a página.", "ok"); }
     catch (e) { toast(traduzirErro(e), "erro"); }
   });
@@ -69,7 +70,8 @@ function desenharRetorno() {
           .map(([v, e, r]) => itemMenu({ e, t: r, attrs: `data-st="${v}" data-id="${x.id}" data-col="${x.col}"` })).join("") })}</div>` : ""}</article>`).join("")
     : vazio({ e: "📬", texto: `Nada por aqui${b || st || tipo ? " com esses filtros" : " ainda"}.` });
   $("#retLista").querySelectorAll("[data-st]").forEach(bt => bt.onclick = async () => {
-    const resp = $(`[data-resp="${bt.dataset.id}"]`).value.trim();
+    const resp = $(`[data-resp="${bt.dataset.id}"]`).value.trim(), rotSt = bt.textContent.trim();
+    if (!(await confirmar(`Marcar como "${rotSt}"${resp ? " e enviar a resposta ao aluno" : ""}? O aluno vê isso na página dele.`, { titulo: "Responder", ok: "Confirmar" }))) return;
     try {
       await updateDoc(doc(db, bt.dataset.col, bt.dataset.id), { status: bt.dataset.st, resposta: resp, respondidoPor: ctx.eu.nome || ctx.eu.email, respondidoEm: serverTimestamp() });
       const x = [...itensRet.ap, ...itensRet.sg].find(y => y.id === bt.dataset.id); Object.assign(x, { status: bt.dataset.st, resposta: resp, respondidoPor: ctx.eu.nome || ctx.eu.email });
@@ -173,16 +175,20 @@ function desenharConq() {
     if (k === "ativa") { el.closest(".cq-item").classList.toggle("desligada", !el.checked); $("#cqContagem").textContent = `${conqLista.filter(x => x.ativa !== false).length} de ${conqLista.length} ligadas`; }
     else desenharConq();   // o resumo, o tema e os campos da regra mudam
   });
-  box.querySelectorAll("[data-del]").forEach(b => b.onclick = () => { conqLista.splice(+b.dataset.del, 1); desenharConq(); });
+  box.querySelectorAll("[data-del]").forEach(b => b.onclick = async () => { const c = conqLista[+b.dataset.del], sk = skinsDe(c.id);
+    if (!(await confirmar(`Apagar a conquista "${c.t}"?${sk.length ? ` Ela libera ${sk.join(", ")} no personagem: essas skins ficam sem jeito de liberar.` : ""} (Só vale depois de Salvar conquistas.)`, { titulo: "Apagar conquista", ok: "Apagar", perigo: true }))) return;
+    conqLista.splice(+b.dataset.del, 1); desenharConq(); });
   box.querySelectorAll("[data-dup]").forEach(b => b.onclick = () => { const o = conqLista[+b.dataset.dup], c = { ...structuredClone(o), id: "c-" + Date.now().toString(36), t: o.t + " (cópia)", ativa: false };
     conqLista.splice(+b.dataset.dup + 1, 0, c); conqAbertas.add(c.id); desenharConq(); });
   $("#cqNova")?.addEventListener("click", () => { const c = { id: "c-" + Date.now().toString(36), e: "🏅", t: "Nova conquista", d: "", grupo: "geral", regra: "provas", n: 1, ativa: true };
     conqLista.push(c); conqAbertas.add(c.id); conqFiltro = { busca: "", estado: "todas" }; desenharConq();
     box.querySelector(`details.cq-det[data-id="${c.id}"]`)?.scrollIntoView({ behavior: "smooth", block: "center" }); });
-  $("#cqPadrao")?.addEventListener("click", () => { conqLista = structuredClone(CONQUISTAS_PADRAO).map(c => ({ ativa: true, ...c })); desenharConq(); toast("Padrão carregado. Clique em Salvar para valer.", "info"); });
+  $("#cqPadrao")?.addEventListener("click", async () => {
+    if (!(await confirmar("Restaurar as conquistas do padrão? As suas mudanças e as conquistas criadas somem da lista (só vale depois de Salvar conquistas).", { titulo: "Restaurar o padrão", ok: "Restaurar", perigo: true }))) return; conqLista = structuredClone(CONQUISTAS_PADRAO).map(c => ({ ativa: true, ...c })); desenharConq(); toast("Padrão carregado. Clique em Salvar para valer.", "info"); });
   $("#cqSalvar")?.addEventListener("click", async () => {
     const ruim = conqLista.find(c => !String(c.t || "").trim() || (REGRAS[c.regra]?.campos || []).some(k => k !== "campo" && !(Number(c[k]) >= 0 && c[k] !== null && c[k] !== "")));
     if (ruim) return toast(`Confira “${ruim.t || "sem título"}”: falta título ou número.`, "erro");
+    if (!(await confirmar(`Salvar as ${conqLista.length} conquista(s) (${conqLista.filter(c => c.ativa !== false).length} ligadas)? Vale para todos os alunos ao recarregar a página.`, { titulo: "Salvar conquistas", ok: "Salvar" }))) return;
     try { await setDoc(doc(db, "config", "conquistas"), { lista: conqLista.map(c => ({ ...c, t: c.t.trim(), d: String(c.d || "").trim() })), atualizadoEm: serverTimestamp(), atualizadoPor: ctx.eu.email }); toast("Conquistas salvas 🏅", "ok"); }
     catch (e) { toast(traduzirErro(e), "erro"); }
   });

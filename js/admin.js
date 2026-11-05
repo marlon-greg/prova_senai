@@ -204,6 +204,7 @@ $("#btnSalvarTurma").onclick = async () => {
   // guarda o semestre escolhido e o período de agora: daqui para frente ele avança sozinho
   const dados = { nome, semestreCurso: semCurso, semestreCursoRef: semCurso ? periodoLetivo() : null, diasAula: diasMarcados(), alunos: alunos.map(a => ({ nome: a.nome || "", email: a.email || null })), emails, nomesChave, vinculos: {} };
   if (!dados.diasAula.length && !(await confirmar("Nenhum dia de aula marcado. Sem os dias, o diário considera segunda a sexta. Salvar assim?", { titulo: "Dias de aula", ok: "Salvar assim", cancelar: "Voltar e marcar" }))) return;
+  if (dados.diasAula.length && turmaEditando && !(await confirmar(`Salvar as alterações na turma ${nome}? (${alunos.length} aluno(s) na lista)`, { titulo: "Salvar turma", ok: "Salvar" }))) return;
   try {
     if (turmaEditando) await updateDoc(doc(db, "turmas", turmaEditando), { ...dados, atualizadoEm: serverTimestamp(), atualizadoPor: eu.email });
     else await addDoc(collection(db, "turmas"), { ...dados, criadoEm: serverTimestamp(), criadoPor: eu.email });
@@ -871,8 +872,11 @@ function desenharProvas() {
     $("#rProva").value = b.dataset.alunos; $("#rAoVivo").checked = true; carregarResultados();
   });
   box.querySelectorAll("[data-tg]").forEach(b => b.onclick = async () => {
-    const p = provasCache.find(x => x.id === b.dataset.id);
-    await updateDoc(doc(db, "provas", p.id), { [b.dataset.tg]: !p[b.dataset.tg] });
+    const p = provasCache.find(x => x.id === b.dataset.id), campo = b.dataset.tg, novo = !p[campo];
+    const txt = campo === "liberada" ? (novo ? [`Liberar a prova "${p.titulo}"? Os alunos da turma passam a ver a prova e podem começar.`, "Liberar prova"] : [`Encerrar a prova "${p.titulo}"? Os alunos não conseguem mais começar nem continuar.`, "Encerrar prova"])
+      : (novo ? [`Liberar o gabarito de "${p.titulo}"? Os alunos passam a ver quais acertaram, a resposta certa e o PDF da prova.`, "Liberar gabarito"] : [`Ocultar o gabarito de "${p.titulo}"? Os alunos deixam de ver o resultado detalhado.`, "Ocultar gabarito"]);
+    if (!(await confirmar(txt[0], { titulo: txt[1], ok: txt[1] }))) return;
+    await updateDoc(doc(db, "provas", p.id), { [campo]: novo });
     toast("Prova atualizada", "ok"); carregarProvas();
   });
   box.querySelectorAll("[data-editar]").forEach(b => b.onclick = () => editarProva(provasCache.find(x => x.id === b.dataset.editar)));
@@ -979,6 +983,7 @@ async function editarProva(p) {
     antesDeConfirmar: async () => {
       const r = await ctl.ler();
       if (r.erro) { toast(r.erro, "erro"); return false; }
+      if (!(await confirmar(`Salvar as alterações na prova "${p.titulo}"?`, { titulo: "Salvar prova", ok: "Salvar" }))) return false;
       try { await updateDoc(doc(db, "provas", p.id), r.dados); }
       catch (e) { toast("Não foi possível salvar. " + traduzirErro(e), "erro"); return false; }
       return true;
@@ -1488,6 +1493,7 @@ async function restaurarVidas(l) {
   } catch (e) { toast("Não foi possível restaurar as vidas. " + traduzirErro(e), "erro"); console.error(e); }
 }
 async function vidaExtra(l) {
+  if (!(await confirmar(`Dar +1 vida para ${l.t.nome || l.t.email}? A tela do aluno atualiza sozinha.`, { titulo: "+1 vida", ok: "Dar +1 vida" }))) return;
   try {
     await updateDoc(doc(db, "tentativas", l.t.id), { vidasExtras: increment(1) });
     toast(`+1 vida para ${l.t.nome || l.t.email} ❤️`, "ok");
@@ -1649,6 +1655,7 @@ function verAluno(id, rolar = true) {
   ligarAcoesVida(box);
   box.querySelectorAll("[data-corr]").forEach(b => b.onclick = async () => {
     const qid = b.dataset.corr, pontos = Number($("#pt_" + qid).value), comentario = $("#cm_" + qid).value.trim();
+    if (!(await confirmar(`Salvar a correção desta questão com ${pontos} ponto(s) para ${l.t.nome || l.t.email}?`, { titulo: "Salvar correção", ok: "Salvar" }))) return;
     await setDoc(doc(db, "tentativas", l.t.id, "correcoes", qid), { pontos, comentario, corrigidoPor: eu.email, corrigidoEm: serverTimestamp() });
     toast("Correção salva", "ok");
     document.activeElement?.blur?.();
@@ -1660,6 +1667,7 @@ $("#btnFecharNotas").onclick = async () => {
   if (!podeEditar()) return toast("Seu papel não permite fechar notas.", "erro");
   const pend = resDados.linhas.reduce((s, l) => s + l.revisar, 0);
   if (pend && !(await confirmar(`Ainda há ${pend} resposta(s) marcada(s) como "revisar" (valem 0 até você corrigir). Fechar mesmo assim?`, { titulo: "Fechar notas", ok: "Fechar mesmo assim" }))) return;
+  if (!pend && !(await confirmar(`Fechar as notas de ${resDados.linhas.length} aluno(s) em "${resDados.prova.titulo}"? A nota final fica gravada para cada um.`, { titulo: "Fechar notas", ok: "Fechar notas" }))) return;
   const lote = writeBatch(db);
   resDados.linhas.forEach(l => lote.update(doc(db, "tentativas", l.t.id), { nota: l.nota, notaMaxima: 100, corrigidaEm: serverTimestamp(), corrigidaPor: eu.email }));
   await lote.commit(); toast("Notas gravadas. Para o aluno ver o gabarito, clique em “Liberar gabarito/resultado” na aba Provas.", "ok"); carregarResultados();
@@ -1703,6 +1711,8 @@ $("#btnNovoMembro").onclick = () => {
 $("#btnAddEquipe").onclick = async () => {
   if (!ehAdmin()) return toast("Só admin cadastra equipe.", "erro");
   const email = $("#eEmail").value.trim().toLowerCase(); if (!email.includes("@")) return toast("E-mail inválido.", "erro");
+  const jaTem = equipeCache.find(m => m.id === email), papel = ROT_PAPEL[$("#ePapel").value] || $("#ePapel").value;
+  if (!(await confirmar(jaTem ? `${email} já está na equipe como ${ROT_PAPEL[jaTem.papel] || jaTem.papel}. Trocar o papel para ${papel}?` : `Adicionar ${email} à equipe como ${papel}? A pessoa passa a ter acesso ao painel com as permissões desse papel.`, { titulo: jaTem ? "Trocar papel" : "Adicionar à equipe", ok: jaTem ? "Trocar papel" : "Adicionar" }))) return;
   await setDoc(doc(db, "equipe", email), { email, nome: $("#eNome").value.trim(), papel: $("#ePapel").value, criadoEm: serverTimestamp(), criadoPor: eu.email });
   $("#eEmail").value = ""; $("#eNome").value = ""; toast("Cadastrado", "ok"); drawerEquipe?.fechar(); carregarEquipe();
 };
@@ -1734,6 +1744,7 @@ $("#btnSalvarConfig").onclick = async () => {
   const intervalos = $("#cHInt").value.split("\n").map(l => l.split("|").map(x => x.trim())).filter(x => x[0]).map(([nome, ini, fim]) => ({ nome, inicio: hora(ini), fim: hora(fim) }));
   if (!hora($("#cHIni").value) || !hora($("#cHFim").value) || intervalos.some(i => !i.inicio || !i.fim)) return toast("Horário inválido: use HH:MM (ex.: Almoço | 11:00 | 12:00).", "erro");
   const horario = { inicio: $("#cHIni").value, fim: $("#cHFim").value, intervalos };
+  if (!(await confirmar("Salvar as alterações na configuração? Domínios dos alunos, servidor da IA e horário valem para todo o sistema.", { titulo: "Salvar configuração", ok: "Salvar" }))) return;
   await setDoc(doc(db, "config", "geral"), { dominiosAlunos: dominios, urlCorretor: url, horario }, { merge: true });
   horarioCfg = horario;
   $("#msgConfig").textContent = "Salvo: " + dominios.join(", ") + (url ? ` · servidor de correção: ${url}` : " · sem servidor de correção");
@@ -1827,6 +1838,7 @@ $("#btnSalvarIA").onclick = async () => {
   const chave = chaveDigitada() || iaCfg?.chave, modelo = $("#iaModelo").value;
   if (!chave) return toast("Cole a chave da API.", "erro");
   if (!/^sk-ant-/.test(chave)) return toast("A chave da Anthropic começa com sk-ant-. Confira se copiou inteira.", "erro");
+  if (!(await confirmar(`Salvar a configuração da IA (modelo ${modelo})? A correção e as adaptações passam a usar esta chave.`, { titulo: "Salvar IA", ok: "Salvar" }))) return;
   try { await salvarConfigIA(chave, modelo, eu.email); toast("Configuração da IA salva.", "ok"); $("#msgIA").textContent = ""; await carregarIA(); }
   catch (e) { toast("Não foi possível salvar. " + traduzirErro(e), "erro"); }
 };

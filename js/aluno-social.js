@@ -3,7 +3,7 @@
 // e só vê colegas da MESMA turma (as regras do Firestore conferem). Reações: ❤️ curtida e 👏 parabéns, sem comentários.
 // O status do dia vai junto e se atualiza sozinho; os status difíceis (triste, ansioso…) nunca vão para o mural: só a equipe vê.
 // Na simulação da equipe (?simular=1) tudo funciona com colegas FICTÍCIOS e fica só no navegador.
-import { db, esc, $, toast, modal, traduzirErro } from "./common.js";
+import { db, esc, $, toast, modal, confirmar, traduzirErro } from "./common.js";
 import { svgAvatar, avatarValido } from "./avatar.js";
 import { ehDificil } from "./status-aluno.js";
 import { collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
@@ -66,6 +66,7 @@ async function escolherVitrine({ eu, cq, gami, perfil, simulacao, depois }) {
       const notas = gami.socialNotas ? provas.filter(p => c.querySelector(`[data-n="${CSS.escape(p.id)}"]`)?.checked).map(p => ({ id: p.id, titulo: p.titulo, materia: p.materia || "", nota: Math.round(p.nota) })) : [];
       const dados = { nome: String(eu.nome || "").split(/\s+/)[0], apelido: perfil?.apelido || "", avatar: perfil?.avatar || null, status: st, turmaId: simulacao ? "sim" : await minhaTurma(eu),
         conquistas, notas, nivel: cq?.nivel || 1, atualizadoEm: serverTimestamp() };
+      if (atual && !conquistas.length && !notas.length && !(await confirmar("Sair do mural da turma? Os colegas deixam de ver o que você mostrava, e você deixa de ver o mural deles.", { titulo: "Sair do mural", ok: "Sair do mural", perigo: true }))) return false;
       try {
         if (simulacao) { if (!conquistas.length && !notas.length) localStorage.removeItem("sim:vitrine"); else localStorage.setItem("sim:vitrine", JSON.stringify({ ...dados, atualizadoEm: null })); }
         else if (!conquistas.length && !notas.length) await deleteDoc(doc(db, "vitrine", eu.uid));   // nada marcado: sai do mural

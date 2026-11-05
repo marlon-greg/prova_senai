@@ -89,6 +89,8 @@ export async function abrirOpcoes({ ctx, email, prova, x, laudos, aoAplicar }) {
       (opcoes.length > 2 ? `<details class="mais-opcoes"><summary>Ver mais ${opcoes.length - 2} opção(ões)</summary>${opcoes.slice(2).map((o, k) => cartao(o, k + 2)).join("")}</details>` : "");
     box.querySelectorAll("[data-prev]").forEach(el => previaOpcao(el, opcoes[+el.dataset.prev], `${email}_${x.qid}`));
     box.querySelectorAll("[data-usar]").forEach(b => b.onclick = async () => {
+      const op = opcoes[+b.dataset.usar];
+      if (!(await confirmar(`Usar o formato "${op.titulo || FORMATOS[op.formato]?.nome || op.formato}" nesta questão? O aluno passa a ver esta versão${x.ad ? " no lugar da adaptação atual" : ""}.`, { titulo: "Aplicar formato", ok: "Aplicar" }))) return;
       b.disabled = true;
       try { const d = await aplicarOpcao({ ctx, email, prova, x, opcao: opcoes[+b.dataset.usar], origem: "ia", oferecidas: opcoes.length }); toast(`${FORMATOS[d.formato].icone} Formato aplicado: ${FORMATOS[d.formato].nome}.`, "ok"); fechar?.(); aoAplicar(d); }
       catch (e) { b.disabled = false; toast(traduzirErro(e), "erro"); }
@@ -138,6 +140,7 @@ export async function editarFormato({ ctx, email, prova, x, opcao = null, oferec
       const op = ler(c);
       if (op.formato === "texto" && ehAlt && (op.alternativas || []).length !== x.q.alternativas.length) { toast(`Texto simplificado: mantenha as ${x.q.alternativas.length} alternativas na mesma ordem.`, "erro"); return false; }
       try { montarDeOpcao(op, "v"); } catch (e) { toast(e.message, "erro"); return false; }
+      if (!(await confirmar("Salvar este formato na questão? O aluno passa a ver esta versão.", { titulo: "Salvar formato", ok: "Salvar" }))) return false;
       try { const d = await aplicarOpcao({ ctx, email, prova, x, opcao: op, origem: opcao && opcaoParaTexto(opcao) === opcaoParaTexto(op) && opcao.enunciado === op.enunciado ? "ia" : "manual", oferecidas }); toast("Formato aplicado.", "ok"); aoAplicar(d); }
       catch (e) { toast(traduzirErro(e), "erro"); return false; }
       return true;

@@ -1,6 +1,6 @@
 // Página do aluno: cartão do perfil (personagem + nível + conquistas), editor do personagem com skins
 // liberadas pelas conquistas, download do cartão (PNG, JPG, PDF) e o painel da simulação (equipe, ?simular=1).
-import { db, esc, $, toast, modal } from "./common.js";
+import { db, esc, $, toast, modal, confirmar } from "./common.js";
 import { CATALOGO, CORES, ORDEM_PELES, NOMES_PARTES, PELES, labioNatural, svgAvatar, liberado, textoTrava, avatarValido, avatarAleatorio, permitido, trocarSexo, PARTES_OCULTAS, AJUSTES, POSICOES_ADESIVO } from "./avatar.js";
 import { FUNDOS_PERFIL, fundoPerfil, urlFundo, urlMini } from "./fundos-perfil.js";
 // status do dia: só frases prontas (ninguém escreve texto livre)
@@ -270,5 +270,6 @@ export function painelSimulacao(box, todas, aoAplicar) {
   const salvar = c => { localStorage.setItem("sim:config", JSON.stringify(c)); aoAplicar(); };
   $("#simAplicar", box).onclick = () => salvar({ notas: $("#simNotas", box).value, acess: $("#simAcess", box).checked, dados: [...box.querySelectorAll("[data-dar]:checked")].map(x => x.dataset.dar) });
   $("#simTudo", box).onclick = () => salvar({ notas: $("#simNotas", box).value, acess: true, dados: (todas || []).map(m => m.t) });
-  $("#simZerar", box).onclick = () => { localStorage.removeItem("sim:config"); localStorage.removeItem("sim:perfil"); localStorage.removeItem("sim:vitrine"); localStorage.removeItem("sim:reacoes"); localStorage.removeItem("conquistas:sim:" + "x"); aoAplicar(); };
+  $("#simZerar", box).onclick = async () => {
+    if (!(await confirmar("Zerar a simulação? Somem as notas de mentira, as conquistas dadas, o personagem, o cartão, o mural e as reações desta simulação (só neste navegador).", { titulo: "Zerar simulação", ok: "Zerar", perigo: true }))) return; localStorage.removeItem("sim:config"); localStorage.removeItem("sim:perfil"); localStorage.removeItem("sim:vitrine"); localStorage.removeItem("sim:reacoes"); localStorage.removeItem("conquistas:sim:" + "x"); aoAplicar(); };
 }
