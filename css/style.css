@@ -1673,7 +1673,8 @@ label.pc-fixa:focus-within { box-shadow:var(--foco); }
 details.ret-grupo > .rc-corpo .ret-item { margin:8px 0; }
 @media (max-width:700px) { .ret-abas { grid-template-columns:1fr; } }
 /* menu lateral com rolagem própria: o conteúdo da aba abre sempre do topo, mesmo clicando nos últimos itens do menu */
-.menu-lateral { max-height:calc(100vh - 92px); overflow-y:auto; overscroll-behavior:contain; scrollbar-width:thin; }
+/* só no computador: o menu fica no lugar, e a rodinha do mouse em cima dele rola SÓ o menu (em cima do conteúdo, só o conteúdo) */
+@media (min-width:901px) { .menu-lateral { max-height:calc(100vh - 92px); overflow-y:auto; overflow-x:hidden; overscroll-behavior:contain; scrollbar-width:thin; } }
 /* Meu mascote */
 .mm-escolha { display:flex; flex-wrap:wrap; gap:10px; margin:0 0 14px; }
 .mm-tab { display:flex; align-items:center; gap:8px; background:var(--cartao); color:var(--texto); border:2px solid var(--borda); border-radius:14px; padding:6px 14px 6px 6px; font-weight:600; }
