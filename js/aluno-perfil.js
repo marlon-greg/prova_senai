@@ -15,7 +15,7 @@ const GRUPOS = [
   { nome: "💇 Cabelo e barba", partes: ["cabelo", "sobrancelha", "barba"] },
   { nome: "👀 Olhos e boca", partes: ["olhos", "cilios", "maquiagem", "boca"] },
   { nome: "🎚 Ajustes finos", partes: ["ajustes"] },
-  { nome: "👕 Roupa e acessórios", partes: ["roupa", "pescoco", "oculos", "brinco", "acessorio"] },
+  { nome: "👕 Roupa e acessórios", partes: ["roupa", "estampa", "pescoco", "oculos", "brinco", "acessorio"] },
   { nome: "🖼 Fundo e moldura", partes: ["fundo", "adesivo", "moldura"] }
 ];
 const CORES_DA_PARTE = { corpo: ["pele"], rosto: ["pele"], orelha: ["pele"], nariz: ["pele"], bochecha: ["pele"], detalhe: ["pele"],
@@ -95,7 +95,7 @@ function editarPersonagem({ eu, perfil, titulos, simulacao, aoSalvar }) {
     const c = CORES[k][i] || labioNatural(PELES[av.pele] || PELES[1]), nat = k === "corLabios" && i === 0;
     return `<button type="button" class="sw${nat ? " sw-nat" : ""}" data-cor="${k}" data-i="${i}" style="background:${c}" title="${nat ? "Natural" : ""}" aria-label="${nat ? "Natural" : `cor ${i + 1}`}"></button>`; }).join("");
   const desenhar = c => {
-    const g = GRUPOS[grupo], oculta = PARTES_OCULTAS[av.corpo === "feminino" ? "f" : "m"], partes = g.partes.filter(k => !oculta.includes(k));
+    const g = GRUPOS[grupo], oculta = PARTES_OCULTAS[av.corpo === "feminino" ? "f" : "m"], partes = g.partes.filter(k => !oculta.includes(k) && (k === "ajustes" || (CATALOGO[k] || []).length > 1));   // parte sem opção (ex.: estampa sem itens da equipe) não aparece
     if (!partes.includes(parte)) parte = partes[0];
     $("#epPrevia", c).innerHTML = svgAvatar(av, 220);
     c.querySelectorAll("[data-grupo]").forEach(b => { const on = Number(b.dataset.grupo) === grupo; b.classList.toggle("ativa", on); b.setAttribute("aria-selected", on); });

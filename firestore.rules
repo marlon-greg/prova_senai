@@ -84,6 +84,12 @@ service cloud.firestore {
                    && request.resource.data.get('saves', []).size() <= 4;
     }
 
+    // ---------- itens criados pela equipe (PNG em data URL, até ~600 KB) ----------
+    match /itensCustom/{i} {
+      allow read: if logado();
+      allow write: if professor() && (request.method == 'delete' || request.resource.data.png.size() < 700000);
+    }
+
     // ---------- bancos de questões ----------
     match /bancos/{b} {
       allow read: if equipe() || aluno();

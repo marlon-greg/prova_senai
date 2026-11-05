@@ -56,7 +56,7 @@ aoMudarLogin(async user => {
   iniciarHistorico({ eu, abrirAluno: email => { abrirDepois(email); abrirAba("acessibilidade"); },
     alunosDasTurmas: async () => { await listarTurmas().catch(() => {}); return turmasCache.flatMap(t => alunosDaTurma(t).map(a => ({ ...a, turma: t.nome, turmaId: t.id }))); } });
   iniciarRelatorios({ listarTurmas, listarBancos });
-  iniciarMeuMascote({ eu, ehAdmin }); carregarEstilosMascotes().catch(() => {});
+  iniciarMeuMascote({ eu, ehAdmin }); iniciarItens({ eu, podeEditar }); carregarItensCustom().then(() => carregarEstilosMascotes()).catch(() => {});
   iniciarGamificacao({ eu, ehAdmin, podeEditar, auth, iaCfg: () => iaCfg, urlCorretor: () => urlCorretorCfg });
   iniciarOrganizacao({ eu, podeEditar, ehAdmin, auth, iaCfg: () => iaCfg, urlCorretor: () => urlCorretorCfg,
     listarTurmas, alunosDaTurma, listarBancos, questoesDoBanco, questoesDoBancoCache: id => questoesCache[id],
@@ -77,14 +77,15 @@ function abrirAba(a) {
   abaAtual = a; ligarAjuda(() => abaAtual);
   if (a !== "resultados" && $("#rAoVivo").checked) { $("#rAoVivo").checked = false; pararAoVivo(); }   // sair da aba desliga o ao vivo
   document.querySelectorAll("[data-aba]").forEach(b => b.classList.toggle("ativa", b.dataset.aba === a));
-  ["organizacao", "diario", "historico", "retorno", "relatorios", "gamificacao", "provas", "bancos", "turmas", "resultados", "acessibilidade", "equipe", "config", "simulacao", "meumascote"].forEach(x => $("#aba-" + x).classList.toggle("oculto", x !== a));
+  ["organizacao", "diario", "historico", "retorno", "relatorios", "gamificacao", "provas", "bancos", "turmas", "resultados", "acessibilidade", "equipe", "config", "simulacao", "meumascote", "itens"].forEach(x => $("#aba-" + x).classList.toggle("oculto", x !== a));
   return ({ organizacao: carregarOrganizacao, diario: carregarDiario, historico: carregarHistorico, retorno: carregarRetorno, relatorios: carregarRelatorios, gamificacao: carregarGamificacao, provas: carregarProvas, bancos: () => { carregarBancos(); carregarMateriais(); }, turmas: carregarTurmas, resultados: prepararResultados,
-     acessibilidade: () => { carregarAcessibilidade(); if (podeEditar()) prepararNovoAcess(); }, equipe: carregarEquipe, config: carregarConfig, simulacao: carregarSimulacao, meumascote: carregarMeuMascote })[a]();
+     acessibilidade: () => { carregarAcessibilidade(); if (podeEditar()) prepararNovoAcess(); }, equipe: carregarEquipe, config: carregarConfig, simulacao: carregarSimulacao, meumascote: carregarMeuMascote, itens: carregarAbaItens })[a]();
 }
 
 // ============================================================ SIMULAÇÃO (tudo para testar e demonstrar num lugar só)
 import { criarAmbiente, apagarAmbiente, existeAmbiente, SIM, ALUNOS_ACESS_SIM } from "./admin-sandbox.js";
 import { iniciarMeuMascote, carregarMeuMascote, carregarEstilosMascotes } from "./admin-mascote.js";
+import { iniciarItens, carregarAbaItens, carregarItensCustom } from "./admin-itens.js";
 async function estadoAmbiente() {
   const tem = await existeAmbiente();
   $("#simAmbStatus").textContent = tem ? "✅ criado" : "não criado"; $("#simAmbStatus").className = "chip " + (tem ? "ok" : "");

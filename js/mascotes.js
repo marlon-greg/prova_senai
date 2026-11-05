@@ -15,6 +15,7 @@ export const MASCOTES = {
   xelxo:   { nome: "Xelxo",   professor: "Celso",  cor: "#8a2238", bordao: "Calma, tô de olho... por trás dos óculos." },
 };
 
+import { itemCustom, imagemItem, CATEGORIAS_ITEM } from "./itens-custom.js";
 const HUMORES = ["feliz", "falando", "surpreso", "triste", "comemorando"];
 const OUT = "#2a1a14"; // contorno
 const SW = 3;          // espessura do contorno
@@ -430,6 +431,7 @@ function aplicarEstilo(p, e = {}) {
 }
 // acessório desenhado por cima de qualquer mascote (coordenadas do desenho: 200 x 220, rosto no centro)
 function acessorioSvg(e = {}) {
+  if (String(e.acessorio || "").startsWith("cx-")) { const it = itemCustom(e.acessorio); return it ? imagemItem(it, CATEGORIAS_ITEM[it.categoria]?.masc) : ""; }   // item criado pela equipe
   const c = e.corAcessorio || "#c1272d", cs = tom(c, -.3);
   const tr = d => `<path d="${d}" fill="${c}" stroke="${OUT}" stroke-width="${SW}" stroke-linejoin="round"/>`;
   return ({

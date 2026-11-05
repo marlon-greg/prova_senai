@@ -89,7 +89,8 @@ export const CATALOGO = {
   moldura: [{ id: "nenhuma", nome: "Nenhuma" }, { id: "bronze", nome: "Bronze", cor: "#b45309", trava: { n: 1 } }, { id: "prata", nome: "Prata", cor: "#94a3b8", trava: { n: 5 } },
     { id: "ouro", nome: "Ouro", cor: "#f59e0b", trava: { n: 9 } }, { id: "diamante", nome: "Diamante", cor: "#22d3ee", trava: { n: 15 } }, { id: "fogo", nome: "Fogo", cor: "#ef4444", trava: { medalha: "em-chamas" } }]
 };
-export const NOMES_PARTES = { corpo: "Corpo", rosto: "Formato do rosto", orelha: "Orelhas", nariz: "Nariz", bochecha: "Bochechas", detalhe: "Detalhes",
+CATALOGO.estampa = [{ id: "nenhuma", nome: "Nenhuma" }];   // estampas da equipe (itens criados) entram aqui
+export const NOMES_PARTES = { estampa: "Estampa", corpo: "Corpo", rosto: "Formato do rosto", orelha: "Orelhas", nariz: "Nariz", bochecha: "Bochechas", detalhe: "Detalhes",
   cabelo: "Cabelo", sobrancelha: "Sobrancelhas", barba: "Barba e bigode", olhos: "Olhos", cilios: "Cílios", maquiagem: "Maquiagem", boca: "Boca",
   roupa: "Roupa", pescoco: "Pescoço", oculos: "Óculos", brinco: "Brincos", acessorio: "Cabeça", fundo: "Fundo", adesivo: "Adesivo", moldura: "Moldura" };
 export const CORES = { pele: PELES, corCabelo: CORES_CABELO, corOlhos: CORES_OLHOS, corLabios: CORES_LABIOS, corRoupa: CORES_ROUPA,
@@ -121,12 +122,15 @@ export const permitido = (item, corpo) => !item?.so || item.so === sexo(corpo);
 // partes que não aparecem no editor para o sexo (ficam no padrão)
 export const PARTES_OCULTAS = { m: ["cilios", "maquiagem"], f: ["barba"] };
 
-export const AVATAR_PADRAO = { corpo: "masculino", pele: 1, rosto: "redondo", orelha: "normal", nariz: "botao", bochecha: "rosada", detalhe: "nenhum",
+export const AVATAR_PADRAO = { estampa: "nenhuma", corpo: "masculino", pele: 1, rosto: "redondo", orelha: "normal", nariz: "botao", bochecha: "rosada", detalhe: "nenhum",
   cabelo: "curto", corCabelo: 1, sobrancelha: "normal", barba: "nenhuma", olhos: "normal", corOlhos: 0, cilios: "nenhum", maquiagem: "nenhuma",
   boca: "sorriso", corLabios: 0, roupa: "camiseta", corRoupa: 0, pescoco: "nenhum", oculos: "nenhum", corOculos: 0, brinco: "nenhum", corJoia: 0,
   acessorio: "nenhum", corAcessorio: 0, fundo: "azul", adesivo: "nenhum", moldura: "nenhuma" };
 
 import { CONQUISTAS_PADRAO } from "./conquistas.js";
+import { itemCustom, imagemItem, CATEGORIAS_ITEM, registrarItensCustom } from "./itens-custom.js";
+// itens criados pela equipe (itensCustom) entram no catálogo; chame depois de ler do Firestore
+export const usarItensCustom = lista => registrarItensCustom(lista, CATALOGO);
 // item liberado? ganhas = conquistas ganhas [{ id, t }] (a trava por medalha usa o id da conquista)
 export function liberado(item, ganhas) {
   if (!item?.trava) return true;
@@ -377,7 +381,7 @@ export function svgAvatar(av, tam = 200, opcoes = {}) {
     astronauta: () => pano(T(), "#e5e7eb") + bracos("#e5e7eb") + `<path d="M${100 - N - 14} ${topo - 1} Q100 ${topo + 18} ${100 + N + 14} ${topo - 1}" fill="none" stroke="#94a3b8" stroke-width="6"/><rect x="82" y="${topo + 16}" width="36" height="22" rx="4" fill="#64748b"/><circle cx="92" cy="${topo + 27}" r="3" fill="#22c55e"/><circle cx="102" cy="${topo + 27}" r="3" fill="#ef4444"/><circle cx="112" cy="${topo + 27}" r="3" fill="#3b82f6"/><rect x="${100 - S + 22}" y="${topo + 14}" width="14" height="9" fill="${roupa}"/>`
   };
   const capaTras = a.roupa === "capa" ? `<path d="M${100 - S - 12} 212 Q${100 - S} ${topo - 6} 100 ${topo - 10} Q${100 + S} ${topo - 6} ${100 + S + 12} 212Z" fill="#dc2626" stroke="#991b1b" stroke-width="1.8"/>` : "";
-  const corpo = (R[a.roupa] || R.camiseta)();
+  const corpo = (R[a.roupa] || R.camiseta)() + imagemItem(itemCustom(a.roupa), CATEGORIAS_ITEM.roupa.av) + imagemItem(itemCustom(a.estampa), CATEGORIAS_ITEM.estampa.av);
 
   const colar = {
     colar: `<path d="M${100 - N - 3} ${topo - 3} Q100 ${topo + 17} ${100 + N + 3} ${topo - 3}" fill="none" stroke="${joia}" stroke-width="1.8" stroke-dasharray="2 1.2"/>`,
@@ -389,7 +393,7 @@ export function svgAvatar(av, tam = 200, opcoes = {}) {
     cachecol: pano(`M${100 - N - 14} ${topo - 10} Q100 ${topo + 4} ${100 + N + 14} ${topo - 10} L${100 + N + 16} ${topo + 2} Q100 ${topo + 18} ${100 - N - 16} ${topo + 2}Z`, ac) + pano(`M${100 + 4} ${topo + 6} L${100 + 16} ${topo + 6} L${100 + 18} ${topo + 40} L${100 + 6} ${topo + 40}Z`, escuro(ac, .08)) + `<path d="M${100 + 7} ${topo + 40} l0 4 M${100 + 11} ${topo + 40} l0 4 M${100 + 15} ${topo + 40} l0 4" stroke="${ac}" stroke-width="1.5"/>`,
     cracha: `<path d="M${100 - N - 4} ${topo - 2} L${100 + S * .25} ${topo + 24} M${100 + N + 4} ${topo - 2} L${100 + S * .25 + 6} ${topo + 24}" stroke="#c1272d" stroke-width="2.6"/><rect x="${100 + S * .25 - 8}" y="${topo + 22}" width="22" height="28" rx="3" fill="#fff" stroke="#94a3b8"/><rect x="${100 + S * .25 - 8}" y="${topo + 22}" width="22" height="8" rx="2" fill="#c1272d"/><circle cx="${100 + S * .25 + 3}" cy="${topo + 38}" r="4" fill="#cbd5e1"/>`,
     medalha: `<path d="M${100 - N - 2} ${topo - 4} L96 ${topo + 18} M${100 + N + 2} ${topo - 4} L104 ${topo + 18}" stroke="#1d4ed8" stroke-width="4"/><circle cx="100" cy="${topo + 24}" r="8" fill="#facc15" stroke="#b45309" stroke-width="1.5"/><text x="100" y="${topo + 28}" font-size="9" text-anchor="middle" font-family="Arial" font-weight="bold" fill="#b45309">1</text>`
-  }[a.pescoco] || "";
+  }[a.pescoco] || imagemItem(itemCustom(a.pescoco), CATEGORIAS_ITEM.pescoco.av);
 
   // ----- rosto -----
   const cabeca = `<path d="${rostoD}" fill="url(#${id}pg)" stroke="${linha}" stroke-width="2.8"/>`;
@@ -524,7 +528,7 @@ export function svgAvatar(av, tam = 200, opcoes = {}) {
     coracoes: hastes + [80, 120].map(x => `<path d="M${x} 110 L${x - 13} 97 Q${x - 14} 86 ${x - 6} 86 Q${x} 86 ${x} 92 Q${x} 86 ${x + 6} 86 Q${x + 14} 86 ${x + 13} 97Z" fill="#ef4444" fill-opacity=".8" stroke="${arm}" stroke-width="2.2"/>`).join("") + `<path d="M93 92 L107 92" stroke="${arm}" stroke-width="2.4"/>`,
     escuros: hastes + `<g fill="#111827" stroke="${arm}" stroke-width="2"><rect x="64" y="89" width="30" height="19" rx="8"/><rect x="106" y="89" width="30" height="19" rx="8"/></g><path d="M94 96 L106 96" stroke="${arm}" stroke-width="3"/><path d="M70 93 L80 93 M112 93 L122 93" stroke="#fff6" stroke-width="2.6" stroke-linecap="round"/>`,
     monoculo: `<circle cx="120" cy="98" r="12.5" fill="#fff" fill-opacity=".18" stroke="#b45309" stroke-width="3"/><path d="M131 104 Q140 130 136 152" fill="none" stroke="#b45309" stroke-width="1.5"/>` + reflexo(120, 98)
-  }[a.oculos] || "";
+  }[a.oculos] || imagemItem(itemCustom(a.oculos), CATEGORIAS_ITEM.oculos.av);
 
   // ----- cabeça (chapéus etc.) -----
   const acS = escuro(ac, .35);
@@ -546,7 +550,7 @@ export function svgAvatar(av, tam = 200, opcoes = {}) {
     mago: pano("M56 64 L100 0 L144 64Z", ac === "#f8fafc" ? "#4c1d95" : ac) + pano("M40 66 Q100 52 160 66 Q100 80 40 66Z", ac === "#f8fafc" ? "#4c1d95" : ac) + `<text x="100" y="44" font-size="16" text-anchor="middle">⭐</text>`,
     coroa: `<path d="M62 46 L70 18 L86 38 L100 12 L114 38 L130 18 L138 46Z" fill="#facc15" stroke="#b45309" stroke-width="2" stroke-linejoin="round"/><circle cx="100" cy="30" r="4" fill="#ef4444"/><circle cx="78" cy="38" r="3" fill="#3b82f6"/><circle cx="122" cy="38" r="3" fill="#22c55e"/>`,
     aureola: `<ellipse cx="100" cy="22" rx="40" ry="9" fill="none" stroke="#facc15" stroke-width="5"/>${[64, 100, 136].map(x => `<text x="${x}" y="16" font-size="14" text-anchor="middle">⭐</text>`).join("")}`
-  }[a.acessorio] || "";
+  }[a.acessorio] || imagemItem(itemCustom(a.acessorio), CATEGORIAS_ITEM.cabeca.av);
 
   const odx = AJ("olhoDist") * 1.4, ody = AJ("olhoAltura") * 1.3, osx = 1 + AJ("olhoTam") * .06, osy = osx * (1 + AJ("olhoAbert") * .09);
   const metade = (lado, conteudo, { escala = true, dy = ody } = {}) => { const cx = lado === "E" ? 80 : 120, x = lado === "E" ? cx - odx : cx + odx;
@@ -563,11 +567,11 @@ export function svgAvatar(av, tam = 200, opcoes = {}) {
     <defs>${grad}<clipPath id="${id}c"><circle cx="100" cy="100" r="98"/></clipPath><clipPath id="${id}h"><path d="${rostoD}"/></clipPath><clipPath id="${id}E"><rect x="-60" y="-60" width="160" height="320"/></clipPath><clipPath id="${id}D"><rect x="100" y="-60" width="160" height="320"/></clipPath>
       <radialGradient id="${id}pg" cx=".45" cy=".38" r=".75"><stop offset="0" stop-color="${claro(pele, .1)}"/><stop offset=".65" stop-color="${pele}"/><stop offset="1" stop-color="${escuro(pele, .1)}"/></radialGradient>
       <linearGradient id="${id}hc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${claro(cab, .18)}"/><stop offset=".6" stop-color="${cab}"/><stop offset="1" stop-color="${escuro(cab, .15)}"/></linearGradient></defs>
-    <g clip-path="url(#${id}c)"><rect x="-20" y="-20" width="240" height="240" fill="${fundo.grad ? `url(#${id}g)` : fundo.cor}"/>${padrao}${estrelas}<g transform="${ENCAIXE}">
+    <g clip-path="url(#${id}c)"><rect x="-20" y="-20" width="240" height="240" fill="${fundo.grad ? `url(#${id}g)` : fundo.cor || "#e5e7eb"}"/>${itemCustom(a.fundo) ? `<image href="${itemCustom(a.fundo).png}" x="0" y="0" width="200" height="200" preserveAspectRatio="xMidYMid slice"/>` : ""}${padrao}${estrelas}<g transform="${ENCAIXE}">
       ${cabelo.B || ""}${capaTras}${pescoco}${pomo}${corpo}${colar}${cabelo.O || ""}
       ${orelhas}${cabeca}${bochecha}${detalhe}${barba}${narizA}${bocaA}${olhosTudo}${sobrTudo}${brinco ? espelho(brinco) : ""}
       ${cabelo.F || ""}${oculosA}${acess}</g></g>
     ${cheio && mold && mold.id !== "nenhuma" ? `<circle cx="100" cy="100" r="95" fill="none" stroke="${mold.cor}" stroke-width="8"/>${mold.id === "diamante" ? `<circle cx="100" cy="100" r="88" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="4 8"/>` : ""}${mold.id === "fogo" ? `<circle cx="100" cy="100" r="95" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="10 6"/>` : ""}` : ""}
-    ${cheio && a.adesivo && a.adesivo !== "nenhum" ? `<circle cx="${adx}" cy="${ady}" r="21" fill="#fff" stroke="${OUT}" stroke-width="2.4"/><text x="${adx}" y="${ady + 8}" font-size="23" text-anchor="middle">${a.adesivo}</text>` : ""}
+    ${cheio && a.adesivo && a.adesivo !== "nenhum" ? `<circle cx="${adx}" cy="${ady}" r="21" fill="#fff" stroke="${OUT}" stroke-width="2.4"/>${itemCustom(a.adesivo) ? imagemItem(itemCustom(a.adesivo), { x: adx, y: ady, w: 30 }) : `<text x="${adx}" y="${ady + 8}" font-size="23" text-anchor="middle">${a.adesivo}</text>`}` : ""}
   </svg>`;
 }

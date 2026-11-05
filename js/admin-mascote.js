@@ -3,6 +3,7 @@
 // Dono de cada mascote: config/mascotes.donos[id] = e-mail (o admin define). O admin pode editar qualquer um.
 import { db, esc, $, toast, confirmar, traduzirErro, SUPER_ADMIN } from "./common.js";
 import { MASCOTES, svgMascote, OPCOES_ESTILO, NOMES_ESTILO, definirEstilos } from "./mascotes.js";
+import { listaItensCustom, PARA_MASCOTE, CATEGORIAS_ITEM } from "./itens-custom.js";
 import { doc, getDoc, getDocs, setDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 const IDS = Object.keys(MASCOTES), HUMORES = [["feliz", "😄"], ["falando", "💬"], ["surpreso", "😮"], ["triste", "😢"], ["comemorando", "🎉"]];
@@ -82,8 +83,8 @@ function desenharEditor() {
     <section class="pc-secao"><div class="pc-secao-cab"><span class="pc-n">1</span><div class="pc-secao-tit"><h3>Cores</h3><span class="pequeno">↺ = igual ao padrão.</span></div></div>
       ${["pele", "cabelo", "barba", "iris", "camisa"].map(sw).join("")}</section>
     <section class="pc-secao"><div class="pc-secao-cab"><span class="pc-n">2</span><div class="pc-secao-tit"><h3>Acessório</h3><span class="pequeno">Aparece em todas as falas do mascote.</span></div></div>
-      <div class="grupo-chips">${OPCOES_ESTILO.acessorio.map(([k, t]) => `<button type="button" class="chip${(estilo.acessorio || "nenhum") === k ? " sel" : ""}" data-acess="${k}">${t}</button>`).join("")}</div>
-      ${estilo.acessorio && estilo.acessorio !== "nenhum" ? sw("corAcessorio") : ""}</section>
+      <div class="grupo-chips">${[...OPCOES_ESTILO.acessorio, ...listaItensCustom().filter(i => PARA_MASCOTE.includes(i.categoria)).map(i => [i.idCat, `${CATEGORIAS_ITEM[i.categoria].icone} ${i.nome} ✨`])].map(([k, t]) => `<button type="button" class="chip${(estilo.acessorio || "nenhum") === k ? " sel" : ""}" data-acess="${k}">${t}</button>`).join("")}</div>
+      ${estilo.acessorio && estilo.acessorio !== "nenhum" && !String(estilo.acessorio).startsWith("cx-") ? sw("corAcessorio") : ""}<p class="pequeno">✨ = item criado pela equipe na aba Itens e estampas.</p></section>
     <section class="pc-secao mm-saves"><div class="pc-secao-cab"><span class="pc-n">3</span><div class="pc-secao-tit"><h3>Meus visuais salvos</h3><span class="pequeno">O padrão sempre fica guardado. Você tem mais ${MAX_SAVES} espaços.</span></div></div>
       <div class="mm-slots"><div class="mm-slot padrao${igual({}, ativo) ? " em-uso" : ""}"><span class="mm-mini g">${svgMascote(atual, "feliz", {})}</span><b>⭐ Padrão</b>${igual({}, ativo) ? `<span class="chip ok">em uso</span>` : ""}
         <div class="mm-slot-acoes"><button type="button" class="leve mini" data-carregar="padrao">✎ Abrir no editor</button></div></div>
