@@ -16,6 +16,7 @@ export const MASCOTES = {
 };
 
 import { itemCustom, imagemItem, CATEGORIAS_ITEM } from "./itens-custom.js";
+import { ACESSORIOS, ENCAIXES, ENCAIXE_DA_CATEGORIA } from "./mascotes-acessorios.js";
 const HUMORES = ["feliz", "falando", "surpreso", "triste", "comemorando"];
 const OUT = "#2a1a14"; // contorno
 const SW = 3;          // espessura do contorno
@@ -201,6 +202,7 @@ function bracoLevantado(p, id) {
     `<path d="M150 190 Q172 166 178 118" fill="none" stroke="${p.pele}" stroke-width="15" stroke-linecap="round"/>` +
     `<path d="M148 196 Q160 182 166 168" fill="none" stroke="${OUT}" stroke-width="27" stroke-linecap="round"/>` +
     `<path d="M148 196 Q160 182 166 168" fill="none" stroke="${corM}" stroke-width="21" stroke-linecap="round"/>` +
+    `<circle cx="149" cy="198" r="14.6" fill="${corM}"/>` +
     maoAberta(p) + `</g>`;
 }
 // mão aberta acenando: palma, quatro dedos separados e o polegar (contorno por baixo, pele por cima, para as juntas ficarem limpas)
@@ -429,22 +431,37 @@ function aplicarEstilo(p, e = {}) {
   if (e.camisa) { q.camisa = e.camisa; q.camisaLuz = tom(e.camisa, .18); q.camisaSombra = tom(e.camisa, -.14); }
   return q;
 }
-// acessório desenhado por cima de qualquer mascote (coordenadas do desenho: 200 x 220, rosto no centro)
-function acessorioSvg(e = {}) {
-  if (String(e.acessorio || "").startsWith("cx-")) { const it = itemCustom(e.acessorio); return it ? imagemItem(it, CATEGORIAS_ITEM[it.categoria]?.masc) : ""; }   // item criado pela equipe
-  const c = e.corAcessorio || "#c1272d", cs = tom(c, -.3);
-  const tr = d => `<path d="${d}" fill="${c}" stroke="${OUT}" stroke-width="${SW}" stroke-linejoin="round"/>`;
-  return ({
-    bone: tr("M36 66 C36 24 64 8 100 8 C136 8 164 24 164 66 C140 56 120 54 100 54 C80 54 60 56 36 66 Z") + tr("M100 56 C132 52 162 56 186 70 C172 80 150 76 132 70 C120 66 110 64 100 62 Z") +
-      `<circle cx="100" cy="10" r="5" fill="${cs}" stroke="${OUT}" stroke-width="2"/><path d="M100 12 L100 52 M70 18 L76 56 M130 18 L124 56" stroke="${cs}" stroke-width="2" opacity=".6"/>`,
-    gorro: tr("M34 70 C34 20 64 2 100 2 C136 2 166 20 166 70 Z") + `<rect x="30" y="56" width="140" height="20" rx="10" fill="${tom(c, .55)}" stroke="${OUT}" stroke-width="${SW}"/><circle cx="100" cy="0" r="12" fill="${tom(c, .55)}" stroke="${OUT}" stroke-width="${SW}"/>`,
-    fone: `<path d="M34 104 C30 30 66 6 100 6 C134 6 170 30 166 104" fill="none" stroke="${OUT}" stroke-width="12" stroke-linecap="round"/><path d="M34 104 C30 30 66 6 100 6 C134 6 170 30 166 104" fill="none" stroke="${c}" stroke-width="7" stroke-linecap="round"/>` +
-      `<rect x="22" y="88" width="24" height="38" rx="11" fill="${c}" stroke="${OUT}" stroke-width="${SW}"/><rect x="154" y="88" width="24" height="38" rx="11" fill="${c}" stroke="${OUT}" stroke-width="${SW}"/>`,
-    gravata: `<path d="M100 178 L80 166 L80 190 Z M100 178 L120 166 L120 190 Z" fill="${c}" stroke="${OUT}" stroke-width="2.6" stroke-linejoin="round"/><circle cx="100" cy="178" r="6" fill="${cs}" stroke="${OUT}" stroke-width="2.4"/>`,
-    cracha: `<path d="M80 168 L118 200 M120 168 L126 200" stroke="#c1272d" stroke-width="5" stroke-linecap="round"/><rect x="108" y="196" width="34" height="24" rx="4" fill="#fff" stroke="${OUT}" stroke-width="2.4"/>` +
-      `<rect x="108" y="196" width="34" height="8" rx="3" fill="#c1272d"/><text x="125" y="214" font-size="7" font-family="Arial" font-weight="bold" text-anchor="middle" fill="#111">SENAI</text>`,
-    estrela: estrela(132, 190, 9, c)
-  })[e.acessorio] || "";
+// encaixe de um acessório (do catálogo ou criado pela equipe)
+export function encaixeDe(idAc) {
+  if (String(idAc).startsWith("cx-")) return ENCAIXE_DA_CATEGORIA[itemCustom(idAc)?.categoria] || "cabeca";
+  return ACESSORIOS[idAc]?.encaixe || null;
+}
+// estilo.ac = { encaixe: idAcessorio } · estilo.acCor = { encaixe: cor } · estilo.acAj = { encaixe: { dx, dy, e } }
+// visuais antigos (estilo.acessorio + corAcessorio) viram um encaixe; "nenhum" some
+export function normalizarEstilo(e = {}) {
+  const { acessorio, corAcessorio, ...n } = e || {};
+  if (acessorio && acessorio !== "nenhum") { const enc = encaixeDe(acessorio);
+    if (enc && !n.ac?.[enc]) { n.ac = { ...n.ac, [enc]: acessorio }; if (corAcessorio) n.acCor = { ...n.acCor, [enc]: corAcessorio }; } }
+  return n;
+}
+// desenho de um único acessório, sem mascote (miniaturas do editor)
+export function desenhoAcessorio(idAc, cor) {
+  if (String(idAc).startsWith("cx-")) { const it = itemCustom(idAc); return it ? imagemItem(it, CATEGORIAS_ITEM[it.categoria]?.masc) : ""; }
+  const a = ACESSORIOS[idAc]; if (!a) return "";
+  const c = cor || a.cor || "#c1272d", cs = tom(c, -.3);
+  return a.svg({ c, cs, cl: tom(c, .55), OUT, SW, estrela, t: d => `<path d="${d}" fill="${c}" stroke="${OUT}" stroke-width="${SW}" stroke-linejoin="round"/>` });
+}
+// acessórios do estilo, separados em atrás do corpo e na frente
+function acessoriosSvg(e = {}) {
+  const n = normalizarEstilo(e); let tras = "", frente = "";
+  for (const [enc, idAc] of Object.entries(n.ac || {})) {
+    const g = desenhoAcessorio(idAc, n.acCor?.[enc]); if (!g) continue;
+    const aj = n.acAj?.[enc] || {}, [ax, ay] = ENCAIXES[enc]?.ancora || [100, 110], k = Number(aj.e) || 1;
+    const tr = `translate(${(Number(aj.dx) || 0) + ax} ${(Number(aj.dy) || 0) + ay}) scale(${k}) translate(${-ax} ${-ay})`;
+    const s = `<g transform="${tr}">${g}</g>`;
+    if (ENCAIXES[enc]?.tras) tras += s; else frente += s;
+  }
+  return { tras, frente };
 }
 
 export function svgMascote(id, humor = "feliz", estilo = null) {
@@ -458,6 +475,7 @@ export function svgMascote(id, humor = "feliz", estilo = null) {
   const m = MASCOTES[chave];
 
   const corpoExtra = humor === "comemorando" ? bracoLevantado(p, uid) : "";
+  const acess = acessoriosSvg(est);
 
   let olhosSvg = olhos(humor, p);
   if (fz.caido && !["comemorando", "triste"].includes(humor)) {
@@ -474,6 +492,7 @@ export function svgMascote(id, humor = "feliz", estilo = null) {
 
   const partes = [
     defs(p, uid),
+    acess.tras,
     c.tras,
     `<g class="m-corpo">${c.corpo}</g>`,
     c.orelhas ? orelhas(p, p.w) : "",
@@ -488,12 +507,12 @@ export function svgMascote(id, humor = "feliz", estilo = null) {
     c.oculos || "",
     sobrancelhas(humor, p.cabelo, fz.by, fz.esp),
     c.frente,
-    acessorioSvg(est),
+    acess.frente,
     corpoExtra,
     extrasHumor(humor, fz),
   ];
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" class="mascote-svg mascote-${chave} m-${humor}" role="img" aria-label="${m.nome} (${humor})"><title>${m.nome}</title>${partes.join("")}</svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" style="overflow:visible" class="mascote-svg mascote-${chave} m-${humor}" role="img" aria-label="${m.nome} (${humor})"><title>${m.nome}</title>${partes.join("")}</svg>`;
 }
 
 export const CSS_MASCOTE = `

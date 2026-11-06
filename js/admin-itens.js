@@ -51,8 +51,9 @@ function reduzirPng(arquivo, max = 360) {
   });
 }
 
-function editarItem(orig) {
-  let it = orig ? { ...orig, ajuste: { dx: 0, dy: 0, escala: 1, ...(orig.ajuste || {}) } } : { nome: "", categoria: "estampa", png: "", ajuste: { dx: 0, dy: 0, escala: 1 }, trava: null, ativo: true };
+// opcoes = { categoria (de um item novo), aoSalvar() }: usado também pelo Meu mascote
+export function editarItem(orig, opcoes = {}) {
+  let it = orig ? { ...orig, ajuste: { dx: 0, dy: 0, escala: 1, ...(orig.ajuste || {}) } } : { nome: "", categoria: opcoes.categoria || "estampa", png: "", ajuste: { dx: 0, dy: 0, escala: 1 }, trava: null, ativo: true };
   const CORES = ["#111827", "#ffffff", "#c1272d", "#f59e0b", "#facc15", "#059669", "#1d4ed8", "#7c3aed", "#db2777", "#92400e", "#6b7280", "#22d3ee"];
   const corpo = document.createElement("div");
   corpo.innerHTML = `<div class="it-ed">
@@ -115,7 +116,7 @@ function editarItem(orig) {
       if (!(await confirmar(`${orig ? "Salvar as alterações no" : "Criar o"} item “${it.nome}”?${it.ativo ? " Ele aparece para os alunos no editor do personagem." : ""}`, { titulo: "Itens e estampas", ok: orig ? "Salvar" : "Criar" }))) return false;
       const id = orig?.id || "it-" + Date.now().toString(36);
       try { await setDoc(doc(db, "itensCustom", id), { nome: it.nome, categoria: it.categoria, png: it.png, ajuste: it.ajuste, trava: it.trava, ativo: it.ativo, atualizadoEm: serverTimestamp(), criadoPor: orig?.criadoPor || ctx.eu.email });
-        toast("Item salvo! 🧵", "ok"); carregarAbaItens(); }
+        toast("Item salvo! 🧵", "ok"); await carregarAbaItens(); opcoes.aoSalvar?.(); }
       catch (e) { toast(traduzirErro(e), "erro"); return false; }
     } }] });
 }
