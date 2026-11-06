@@ -415,7 +415,7 @@ body.painel main:has(> #telaLogin:not(.oculto)), body.painel main:has(> #telaAvi
 #telaAviso { max-width:520px; width:100%; margin:0; }
 .painel-layout:not(.oculto) { display:flex; align-items:stretch; min-height:100vh; }
 .painel-coluna { flex:1 1 0; min-width:0; display:flex; flex-direction:column; }
-.painel-conteudo { width:100%; max-width:1180px; padding:28px 32px 40px; display:flex; flex-direction:column; gap:var(--sp-5); }
+.painel-conteudo { width:100%; padding:28px 32px 40px; display:flex; flex-direction:column; gap:var(--sp-5); }
 .painel-conteudo > [id^="aba-"]:not(.oculto) { display:flex; flex-direction:column; gap:var(--sp-5); min-width:0; }
 .painel-conteudo > [id^="aba-"] > * { min-width:0; margin-top:0; margin-bottom:0; }
 .painel-conteudo > [id^="aba-"] > :empty { display:none; }
@@ -589,7 +589,7 @@ details.nova-prova[open] > summary { margin-bottom:16px; }
 details.nova-prova[open] > summary .pequeno { display:none; }
 
 /* ---------- provas: cartões em vez de tabela espremida ---------- */
-.cartoes-provas { display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 460px), 1fr)); gap:16px; }
+.cartoes-provas { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 460px), 1fr)); gap:16px; }
 .cartao-prova { background:#fff; border:1px solid var(--borda); border-radius:16px; box-shadow:var(--sombra); padding:20px; display:flex; flex-direction:column; gap:14px; border-top:4px solid #d4d8de; transition:transform .15s, box-shadow .15s; }
 .cartao-prova.aberta { border-top-color:var(--ok); }
 .cartao-prova:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(16,24,40,.08); }
@@ -713,7 +713,7 @@ label { color:#2b3548; }
 .grupo-semestre > summary::before { content:"▸"; color:var(--suave); transition:transform .15s; }
 .grupo-semestre[open] > summary::before { transform:rotate(90deg); }
 .grupo-semestre .gs-nome { font-weight:700; }
-.cartoes-materias { display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap:14px; padding:0 12px 12px; }
+.cartoes-materias { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap:14px; padding:0 12px 12px; }
 .cartao-materia { background:#fff; border:1px solid var(--borda); border-left:5px solid var(--info); border-radius:14px; box-shadow:var(--sombra); padding:16px 18px; display:flex; flex-direction:column; gap:10px; }
 .cartao-materia.sem-plano { border-left-color:#f0b429; background:#fffdf7; }
 .cartao-materia h3 { margin:0; font-size:1.05em; }
@@ -899,7 +899,7 @@ button.tag.tag-botao:hover { background:var(--info-claro); color:var(--info); }
 .prev-conquistas > summary::-webkit-details-marker { display:none; }
 .prev-conquistas[open] > summary { margin-bottom:12px; }
 #orgCursos .curso-item { margin:8px 0 0; }
-.cursos-materias { display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap:10px; margin-bottom:10px; }
+.cursos-materias { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap:10px; margin-bottom:10px; }
 .curso-mat { background:#fff; border:1px solid var(--borda); border-radius:10px; padding:8px 10px; }
 .curso-mat .tag { font-size:.72em; padding:1px 8px; }
 .curso-turma { margin:0 4px 12px; background:var(--info-claro); border-radius:10px; padding:8px 12px; }
@@ -1927,7 +1927,7 @@ details:not([open]) > .sub-cab { border-bottom:0; }
 .cp-mais .cp-detalhes { margin-top:var(--sp-3); padding-top:var(--sp-3); border-top:1px solid var(--borda); }
 
 /* banco dentro da matéria (quadro 2) */
-.bancos-grade { display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 380px), 1fr)); gap:14px; padding:var(--sp-5) 22px 22px; align-items:start; }
+.bancos-grade { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap:14px; padding:var(--sp-5) 22px 22px; align-items:start; }
 .banco-bloco { background:var(--cartao-2); border-radius:14px; padding:18px 20px; display:flex; flex-direction:column; gap:var(--sp-3); min-width:0; }
 .bb-topo { display:flex; align-items:flex-start; gap:var(--sp-3); }
 .bb-tile { flex:0 0 36px; width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; border-radius:10px; background:var(--cartao); color:var(--marinho); }
@@ -1948,7 +1948,7 @@ details:not([open]) > .sub-cab { border-bottom:0; }
 
 /* Organização: matéria como bloco interno da turma */
 .org-corpo { padding:var(--sp-5) 22px 22px; display:flex; flex-direction:column; gap:var(--sp-3); }
-.org-corpo .cartoes-materias { grid-template-columns:repeat(auto-fill, minmax(min(100%, 420px), 1fr)); padding:0; gap:14px; align-items:start; }
+.org-corpo .cartoes-materias { grid-template-columns:repeat(auto-fit, minmax(min(100%, 420px), 1fr)); padding:0; gap:14px; align-items:start; }
 .cartao-materia, .cartao-materia.sem-plano { background:var(--cartao-2); border:0; border-radius:14px; box-shadow:none; padding:18px 20px; display:flex; flex-direction:column; gap:var(--sp-3); }
 .cartao-materia h3 { margin:0 0 2px; font-family:var(--fonte-texto); font-size:var(--fs-lg); font-weight:600; color:var(--marinho); }
 .cm-progresso { min-width:130px; text-align:right; font-size:var(--fs-xs); }
@@ -1991,14 +1991,16 @@ td.td-acoes .menu-wrap { vertical-align:middle; }
 .painel-conteudo .stats { margin:0; }
 
 /* três camadas no mesmo cartão */
-.barra-res { display:grid; grid-template-columns:minmax(150px, 200px) minmax(120px, 150px) minmax(130px, 180px) minmax(240px, 1fr) auto; align-items:end; gap:var(--sp-3); }
-.barra-res .campo-res { min-width:0; }
+.barra-res { display:flex; flex-wrap:wrap; align-items:flex-end; gap:var(--sp-3); }
+.barra-res .campo-res { flex:1 1 150px; min-width:0; max-width:240px; }
+.barra-res .campo-res.campo-prova { flex:1 1 280px; max-width:none; }
+.barra-res #btnCarregarRes { flex:none; }
 .barra-res .campo-res label { font-size:var(--fs-xs); font-weight:500; color:var(--suave); margin:0 0 6px; }
-.barra-res .res-switches { grid-column:1 / -1; justify-content:flex-end; min-height:0; gap:var(--sp-5); }
+.barra-res .res-switches { flex:1 1 100%; grid-column:1 / -1; justify-content:flex-end; min-height:0; gap:var(--sp-5); }
 .switch-linha { display:inline-flex; align-items:center; gap:var(--sp-2); margin:0; font-size:var(--fs-sm); font-weight:400; color:var(--texto); cursor:pointer; }
 .res-acoes { margin-top:var(--sp-5); padding-top:var(--sp-5); gap:var(--sp-3); }
-.res-acoes > input[type=search] { flex:1 1 240px; max-width:380px; }
-.res-acoes #rSitChips { flex:1 1 auto; }
+.res-acoes > input[type=search] { flex:1 1 240px; }
+.res-acoes #rSitChips { flex:0 1 auto; }
 .grupo-chips { display:flex; flex-wrap:wrap; gap:6px; }
 .grupo-chips button.chip { height:30px; padding:0 12px; background:var(--cartao); color:var(--texto); border:1px solid var(--borda-forte); font-size:var(--fs-sm); font-weight:500; }
 .grupo-chips button.chip:hover { background:var(--hover); }
@@ -2033,7 +2035,7 @@ td.td-acoes .menu-wrap { vertical-align:middle; }
 .rl-cab { display:flex; align-items:center; flex-wrap:wrap; gap:var(--sp-2) 10px; margin:0 0 var(--sp-4); }
 .rl-cab h3 { margin:0; font-family:var(--fonte-texto); font-size:16px; font-weight:600; color:var(--marinho); }
 .rl-cab .e { font-size:20px; }
-.rl-risco { display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap:var(--sp-3); }
+.rl-risco { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap:var(--sp-3); }
 .rl-risco-item { display:flex; align-items:center; gap:var(--sp-3); padding:var(--sp-3) var(--sp-4); border-radius:var(--raio-m); background:var(--ambar-claro); min-width:0; }
 .rl-risco-item .avatar-p { background:var(--cartao); color:var(--ambar-texto); }
 .rl-risco-item > div { display:flex; flex-direction:column; min-width:0; line-height:1.35; }
@@ -2067,7 +2069,8 @@ td.td-acoes .menu-wrap { vertical-align:middle; }
 .graf-legenda { font-size:var(--fs-xs); }
 
 @media (max-width:900px) {
-  .barra-res { grid-template-columns:1fr 1fr; }
+  .barra-res { display:grid; grid-template-columns:1fr 1fr; }
+  .barra-res .campo-res { max-width:none; }
   .barra-res .campo-prova, .barra-res #btnCarregarRes { grid-column:1 / -1; }
   .barra-res .res-switches { justify-content:flex-start; flex-wrap:wrap; }
   .ia-linha { flex-wrap:wrap; }
@@ -2085,7 +2088,7 @@ td.td-acoes .menu-wrap { vertical-align:middle; }
 #diarioPainel:empty, #acessDetalhe:empty { display:none; }
 
 /* lista de alunos: cartões pequenos; selecionado é marinho, nunca vermelho */
-.diario-alunos { display:flex; flex-wrap:wrap; gap:var(--sp-3); margin:0; }
+.diario-alunos { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap:var(--sp-3); margin:0; }
 .diario-aluno { display:inline-flex; align-items:center; gap:var(--sp-3); flex:0 1 auto; max-width:100%; min-height:62px; padding:var(--sp-3) var(--sp-4); background:var(--cartao); color:var(--texto); border:0; border-radius:14px; box-shadow:var(--sombra); text-align:left; }
 .diario-aluno:hover { background:var(--hover); }
 .diario-aluno.ativo, .diario-aluno.ativo:hover { background:var(--marinho-claro); box-shadow:0 0 0 2px var(--marinho-2); }
@@ -2326,6 +2329,7 @@ button.cq-add { align-self:flex-start; }
 
 /* medalhas em níveis (aluno e prévia do diário) */
 .medalhas-n, .bloco-linha-corpo.medalhas-n { display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:var(--sp-3); }
+.painel-conteudo .medalhas-n { grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); }
 .medalha-n, button.medalha-n, button.medalha-n:hover { display:flex; flex-direction:column; align-items:center; gap:4px; height:auto; padding:var(--sp-3) var(--sp-2); background:transparent; border:0; border-radius:var(--raio-m); box-shadow:none; color:var(--texto); text-align:center; white-space:normal; font-weight:400; }
 button.medalha-n:hover { background:var(--hover); }
 .mn-disco { width:64px; height:64px; display:inline-flex; align-items:center; justify-content:center; border-radius:50%; background:var(--cartao-2); font-size:2.4em; line-height:1; filter:grayscale(1); opacity:.55; }
