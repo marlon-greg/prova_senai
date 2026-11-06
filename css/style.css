@@ -2232,3 +2232,24 @@ details.ret-grupo > .rc-corpo .ret-item { box-shadow:none; background:var(--cart
 .previa-acess .alt { box-shadow:none; }
 .previa-acess:not(.tema-contraste, .tema-escuro) .alt-letra { background:transparent; border-color:var(--marinho-2); color:var(--marinho-2); }
 #acessDetalhe, #diarioPainel { scroll-margin-top:84px; }
+
+/* menu lateral recolhível: botão fixo no fim; recolhido mostra só os ícones */
+.menu-lateral { transition:flex-basis var(--t-rapida), width var(--t-rapida); }
+.menu-lateral .menu-mais { order:1; bottom:30px; }
+.menu-lateral button.menu-recolher { order:2; position:sticky; bottom:-20px; z-index:1; flex:none; margin:auto -12px -20px; width:calc(100% + 24px); padding:12px 24px; border-radius:0; background:var(--menu-fundo); box-shadow:0 -1px 0 rgba(255,255,255,.1); }
+.menu-lateral button.menu-recolher:hover { background:#1b2a4c; }
+.mr-ic { display:inline-flex; flex:none; }
+.menu-dica { position:fixed; z-index:var(--z-popover); transform:translateY(-50%); padding:6px 10px; border-radius:8px; background:var(--marinho); color:#fff; font-size:var(--fs-sm); font-weight:500; white-space:nowrap; box-shadow:var(--sombra-flutuante); pointer-events:none; }
+@media (min-width:901px) {
+  .menu-lateral.recolhido { flex-basis:68px; width:68px; }
+  .menu-lateral.recolhido .m-t { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+  .menu-lateral.recolhido button { justify-content:center; padding-left:0; padding-right:0; gap:0; }
+  .menu-lateral.recolhido .menu-rotulo { display:none; }
+  .menu-lateral.recolhido .menu-grupo + .menu-grupo { margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,.12); }
+  .menu-lateral.recolhido .menu-logo { padding:6px 0; text-align:center; }
+  .menu-lateral.recolhido .menu-logo .logo { max-width:44px; height:auto; margin:0 auto; }
+  .menu-lateral.recolhido .menu-logo .logo-texto { font-size:12px; letter-spacing:0; }
+  .menu-lateral.recolhido .menu-mais { display:none; }
+}
+@media (max-width:900px) { .menu-lateral button.menu-recolher { display:none; } }
+@media (prefers-reduced-motion: reduce) { .menu-lateral { transition:none; } }

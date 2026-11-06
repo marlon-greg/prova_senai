@@ -394,8 +394,35 @@ if (!window.__uiLigado) {
 export { $ };
 
 // ---------- menu lateral: quando não cabe tudo na tela, avisa que há mais opções abaixo ----------
+// recolher o menu: fica só com os ícones e o nome aparece ao passar o mouse (a escolha fica neste navegador)
+const CHAVE_MENU = "painel:menuRecolhido";
+function ligarRecolherMenu(nav) {
+  const b = nav.querySelector("#btnRecolherMenu"); if (!b) return;
+  let dica = null;
+  const tirarDica = () => { dica?.remove(); dica = null; };
+  const aplicar = sim => {
+    nav.classList.toggle("recolhido", sim); tirarDica();
+    b.setAttribute("aria-pressed", String(sim));
+    b.querySelector(".mr-ic").innerHTML = ic(sim ? "chevr" : "chevl");
+    b.querySelector(".m-t").textContent = sim ? "Expandir menu" : "Recolher menu";
+  };
+  let inicial = false; try { inicial = localStorage.getItem(CHAVE_MENU) === "1"; } catch (e) { /* sem armazenamento: começa aberto */ }
+  aplicar(inicial);
+  b.onclick = () => { const sim = !nav.classList.contains("recolhido"); aplicar(sim); try { localStorage.setItem(CHAVE_MENU, sim ? "1" : "0"); } catch (e) { /* só não lembra */ } };
+  const mostrar = e => {
+    const alvo = e.target.closest?.("button"); tirarDica();
+    if (!alvo || !nav.classList.contains("recolhido") || !alvo.querySelector(".m-t") || innerWidth <= 900) return;
+    const r = alvo.getBoundingClientRect();
+    dica = document.createElement("div"); dica.className = "menu-dica"; dica.setAttribute("aria-hidden", "true"); dica.textContent = alvo.querySelector(".m-t").textContent;
+    dica.style.left = nav.getBoundingClientRect().right + 8 + "px"; dica.style.top = r.top + r.height / 2 + "px";
+    document.body.append(dica);
+  };
+  nav.addEventListener("mouseover", mostrar); nav.addEventListener("focusin", mostrar);
+  nav.addEventListener("mouseleave", tirarDica); nav.addEventListener("focusout", tirarDica); nav.addEventListener("scroll", tirarDica, { passive: true }); nav.addEventListener("click", tirarDica);
+}
 export function ligarMenuLateral(nav) {
   if (nav.querySelector(".menu-mais")) return;
+  ligarRecolherMenu(nav);
   const mais = document.createElement("button");
   mais.type = "button"; mais.className = "menu-mais"; mais.textContent = "▾ Mais opções";
   mais.onclick = () => nav.scrollTo({ top: nav.scrollHeight, behavior: "smooth" });
