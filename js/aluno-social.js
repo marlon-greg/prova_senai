@@ -117,7 +117,7 @@ async function abrirMural({ eu, cq, gami, perfil, simulacao }) {
         <div class="mi-reacoes">${eu_ ? `<span class="pequeno">❤️ ${cur} · 👏 ${par}</span>` : `<button type="button" class="leve mini${minhaR?.tipo === "curtida" ? " sel" : ""}" data-r="curtida" data-u="${v.uid}">❤️ ${cur}</button><button type="button" class="leve mini${minhaR?.tipo === "parabens" ? " sel" : ""}" data-r="parabens" data-u="${v.uid}">👏 ${par}</button>`}</div></div></article>`;
     }).join("");
     c.querySelectorAll("[data-ver]").forEach(b => b.onclick = () => { const v = itens[b.dataset.ver]; modal({ titulo: v.uid === eu.uid ? "👀 Como os colegas me veem" : `👤 Perfil de ${v.apelido || v.nome}`, conteudo: cartaoPublico(v, v.uid === eu.uid), ok: "Fechar", largo: true }); });
-    c.querySelectorAll("[data-r]").forEach(b => b.onclick = async () => {
+    c.querySelectorAll("#muralLista [data-r]").forEach(b => b.onclick = async () => {   // só as reações: o botão Fechar do modal também tem data-r
       const v = itens.find(x => x.uid === b.dataset.u), minhaR = v.reacoes.find(r => r.de === eu.uid), tirar = minhaR?.tipo === b.dataset.r;
       try {
         if (simulacao) { const r = reacoesSim(); if (tirar) delete r[v.uid]; else r[v.uid] = b.dataset.r; localStorage.setItem("sim:reacoes", JSON.stringify(r)); }
