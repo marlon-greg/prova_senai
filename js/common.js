@@ -1,4 +1,5 @@
 // Código comum (aluno + admin): Firebase, login, correção automática, utilidades.
+import { ic } from "./icones.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithCredential, signOut, onAuthStateChanged, connectAuthEmulator }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
@@ -158,7 +159,7 @@ export function $(sel, root = document) { return root.querySelector(sel); }
 export function toast(msg, tipo = "info") {
   let t = $("#toast");
   if (!t) { t = document.createElement("div"); t.id = "toast"; document.body.appendChild(t); }
-  t.textContent = msg; t.className = "toast " + tipo; t.style.display = "block";
+  t.innerHTML = ic(tipo === "ok" ? "check" : tipo === "erro" ? "alert" : "info", { size: 18 }) + `<span>${esc(msg)}</span>`; t.className = "toast " + tipo; t.style.display = "inline-flex";
   clearTimeout(t._h); t._h = setTimeout(() => (t.style.display = "none"), 4000);
 }
 export function dataBR(ts) {
@@ -271,7 +272,7 @@ export function modal({ titulo = "", mensagem = "", conteudo = null, ok = "OK", 
       ${titulo ? `<h2 id="modalTitulo">${esc(titulo)}</h2>` : ""}
       ${conteudo !== null ? `<div class="modal-corpo">${conteudo}</div>` : `<p class="modal-msg">${esc(mensagem)}</p>`}
       <div class="modal-acoes">${cancelar ? `<button type="button" class="leve" data-r="0">${esc(cancelar)}</button>` : ""}
-        <button type="button" class="${perigo ? "perigo-cheio" : ""}" data-r="1">${esc(ok)}</button></div></div>`;
+        <button type="button" class="${perigo ? "perigo" : ""}" data-r="1">${esc(ok)}</button></div></div>`;
     const caixa = fundo.querySelector(".modal"), anterior = document.activeElement;
     const focaveis = () => [...fundo.querySelectorAll("button, input, select, textarea, a[href]")].filter(el => !el.disabled && el.offsetParent !== null);
     const noTopo = () => [...document.querySelectorAll(".modal-fundo")].pop() === fundo;   // modal sobre modal: só o de cima responde

@@ -4,80 +4,130 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Componentes de interface — Prova SENAI</title>
+<title>Design system — Prova SENAI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<style>
+  .dv-pagina { max-width:1120px; margin:0 auto; padding:28px 24px 48px; display:flex; flex-direction:column; gap:20px; }
+  .dv-pagina .card { margin:0; }
+  .dv-titulo { font-size:var(--fs-3xl); color:var(--marinho); margin:0; }
+  .dv-amostras { display:grid; grid-template-columns:repeat(auto-fill, minmax(112px, 1fr)); gap:12px; }
+  .dv-cor { font-size:var(--fs-xs); color:var(--suave); } .dv-cor i { display:block; height:44px; border-radius:var(--raio-p); margin-bottom:6px; box-shadow:inset 0 0 0 1px rgba(20,33,61,.08); }
+  .dv-icones { display:grid; grid-template-columns:repeat(auto-fill, minmax(92px, 1fr)); gap:12px; color:var(--marinho-2); }
+  .dv-icones div { display:flex; flex-direction:column; align-items:center; gap:6px; font-size:var(--fs-xs); color:var(--suave); }
+  .dv-icones svg { color:var(--marinho-2); }
+  .dv-tipo > * { margin:0 0 6px; }
+  .dv-mt { margin-top:16px; }
+</style>
 </head>
-<!-- Página de referência do design system (fora do menu). Troque o tema: ?tema=escuro | contraste | creme | azul -->
-<body class="painel">
-<header><span class="senai">SENAI</span><h1>Componentes de interface</h1></header>
-<main>
-  <div class="cab-pagina"><h2><span class="e" aria-hidden="true">🧩</span>Design system</h2><button type="button" id="demoDrawer">+ Abrir drawer</button></div>
+<!-- Vitrine do design system (fora do menu). Troque o tema: ?tema=escuro | contraste | creme | azul -->
+<body>
+<div class="dv-pagina">
+  <h1 class="dv-titulo">Design system</h1>
 
-  <section class="card">
-    <h2>Botões</h2>
-    <div class="grupo-botoes">
-      <button type="button">Primário</button><button type="button" class="ok"><span class="e" aria-hidden="true">▶</span>Liberar prova</button>
-      <button type="button" class="leve"><span class="e" aria-hidden="true">👥</span>Alunos</button><button type="button" class="discreto">Limpar filtros</button>
-      <button type="button" class="perigo"><span class="e" aria-hidden="true">🗑</span>Apagar</button><button type="button" class="icone" aria-label="Editar">✎</button>
-      <button type="button" class="leve mini">Mini</button><button type="button" disabled>Desabilitado</button>
+  <section class="card"><h2>Tokens de cor</h2><div class="dv-amostras" id="dvCores"></div>
+    <hr class="div"><h2>Tipografia</h2>
+    <div class="dv-tipo">
+      <p style="font:600 var(--fs-3xl) var(--fonte-titulo);color:var(--marinho)">Título de página, Poppins 26</p>
+      <p style="font:600 var(--fs-2xl) var(--fonte-titulo);color:var(--marinho)">Título da aba, Poppins 20</p>
+      <p style="font:600 var(--fs-xl) var(--fonte-texto);color:var(--marinho)">Título do card, Inter 17</p>
+      <p style="font-size:var(--fs-md)">Texto do conteúdo, Inter 14</p>
+      <p class="help">Texto de apoio, Inter 13 em cor de apoio, com no máximo 60 caracteres por linha.</p>
     </div>
   </section>
 
-  <section class="card">
-    <h2>Campos</h2>
+  <section class="card"><h2>Ícones</h2><div class="dv-icones" id="dvIcones"></div></section>
+
+  <section class="card"><h2>Botões</h2>
+    <div class="grupo-botoes" id="dvBotoes"></div>
+    <div class="grupo-botoes dv-mt" id="dvBotoes2"></div>
+  </section>
+
+  <section class="card"><h2>Chips</h2>
+    <p class="help">Só para estado e seleção. Contagens informativas são texto.</p>
+    <div class="grupo-chips"><span class="chip">neutro</span><span class="chip ok">● liberada</span><span class="chip off">○ fechada</span><span class="chip info">gabarito liberado</span><span class="chip warn"><span class="e">🟡</span>a revisar</span><span class="chip err">&lt; 50</span><span class="chip navy">atual</span></div>
+    <p class="help dv-mt">Abas e filtros selecionáveis:</p><div id="dvChips"></div>
+    <p class="help dv-mt">Metadados em texto:</p><div class="meta" id="dvMeta"></div>
+  </section>
+
+  <section class="card"><h2>Campos</h2>
     <div class="grade">
       <div><label for="d1">Texto</label><input type="text" id="d1" placeholder="Digite…"></div>
       <div><label for="d2">Lista</label><select id="d2"><option>Todas as situações</option><option>Liberadas</option></select></div>
       <div><label for="d3">Busca</label><input type="search" id="d3" placeholder="Pesquisar aluno…"></div>
     </div>
     <div class="linha acoes" style="gap:24px">
-      <label class="check"><input type="checkbox" checked> Caixa de seleção</label>
+      <label class="check" style="margin:0"><input type="checkbox" checked> Marcado</label>
+      <label class="check" style="margin:0"><input type="checkbox"> Desmarcado</label>
       <label class="switch-linha"><input type="checkbox" class="switch" checked> Ao vivo</label>
       <label class="switch-linha"><input type="checkbox" class="switch"> Testes da equipe</label>
     </div>
-    <div style="margin-top:16px" id="demoDZ"></div>
+    <div class="dv-mt" style="max-width:420px"><label for="d4">Tamanho da letra <span class="chip navy" id="d4v" style="margin-left:6px">120%</span></label><input type="range" id="d4" min="80" max="200" value="120"></div>
+    <div class="dv-mt" id="dvDZ"></div>
   </section>
 
-  <section class="card">
-    <div id="demoCab"></div>
-    <div id="demoToolbar"></div>
-    <p class="pequeno">Chips:</p>
-    <div class="grupo-chips"><span class="chip ok">● liberada</span><span class="chip off">○ fechada</span><span class="chip aviso">🟡 revisar</span><span class="chip erro">🔻 &lt; 50</span><span class="chip info">2 provas</span><span class="chip sugerida">sugerida</span><span class="chip ok pulsante">ao vivo</span></div>
-    <p class="pequeno">Chips de seleção:</p>
-    <div id="demoChips"></div>
-    <div id="demoStats"></div>
+  <section class="card"><h2>Barra de ferramentas</h2><div id="dvToolbar"></div>
+    <hr class="div"><h2>Menu e popover</h2>
+    <div class="grupo-botoes"><div id="dvMenu" style="display:inline-flex"></div><span id="dvAjuda"></span><button type="button" class="leve" id="dvAbrir"></button><button type="button" class="leve" id="dvToast1">Aviso</button><button type="button" class="leve" id="dvToast2">Sucesso</button><button type="button" class="leve" id="dvToast3">Erro</button></div>
   </section>
 
-  <section class="card">
-    <h2>Recolhíveis</h2>
-    <div id="demoRec"></div>
+  <section style="display:flex;flex-direction:column;gap:12px">
+    <div class="secao-faixa"><span class="sf-tile" id="dvIcCal"></span><div><p class="sf-titulo">2026 · 2º semestre <span class="chip ok">atual</span></p><span class="sf-resumo">1 matéria · 3 bancos · 308 questões</span></div><button type="button" class="icone sf-fim" aria-label="Recolher" id="dvIcChev"></button></div>
+    <div class="card sem-padding">
+      <div class="sub-cab"><span class="sc-tile" id="dvIcBook"></span><div><p class="sc-titulo">Banco de Dados</p><span class="sc-resumo">3 bancos · 308 questões</span></div><div class="sc-fim"><button type="button" class="leve mini" id="dvMaisBanco"></button></div></div>
+      <div style="padding:20px 22px"><div class="bloco-2"><b>SQL básico</b><div class="meta"><span>78 questões</span><span>50 alternativa</span><span>28 dissertativa</span></div></div></div>
+    </div>
+    <div class="grupo-cab"><button type="button" class="icone" aria-label="Recolher" id="dvIcChev2"></button><p class="gc-titulo">DETS-I-1A-26CT-S · ter/qui</p><span class="gc-resumo">1 prova · 31 alunos · 2026/2º sem. · Banco de Dados</span></div>
   </section>
-  <section class="card"><h2>Estado vazio</h2><div id="demoVazio"></div></section>
-</main>
+
+  <div class="kpis" style="margin:0" id="dvKpis"></div>
+
+  <section class="card"><h2>Tabela</h2>
+    <div class="tab-grade"><div class="tab-cab"><span style="grid-column:span 5">Aluno</span><span style="grid-column:span 3">Situação</span><span style="grid-column:span 2">Acertos</span><span style="grid-column:span 2">Nota</span></div>
+      <div class="tab-linha"><span style="grid-column:span 5;display:flex;gap:10px;align-items:center"><span class="avatar-p">AF</span><span>Alex Fictício<br><small class="help">alex@simulacao.teste</small></span></span><span style="grid-column:span 3"><span class="chip ok"><span class="e">✅</span>finalizou</span></span><span style="grid-column:span 2">9 de 10</span><b style="grid-column:span 2;color:var(--ok-texto);font-family:var(--fonte-titulo)">90</b></div>
+      <div class="tab-linha"><span style="grid-column:span 5;display:flex;gap:10px;align-items:center"><span class="avatar-p">BT</span><span>Bia Teste<br><small class="help">bia@simulacao.teste</small></span></span><span style="grid-column:span 3"><span class="chip warn"><span class="e">🟡</span>a revisar</span></span><span style="grid-column:span 2">4 de 10</span><b style="grid-column:span 2;color:var(--erro-texto);font-family:var(--fonte-titulo)">42</b></div>
+    </div>
+    <p class="help dv-mt">Progresso:</p>
+    <div class="barra-p" style="max-width:420px"><i style="width:70%"></i></div><div class="barra-p info dv-mt" style="max-width:420px"><i style="width:45%"></i></div>
+  </section>
+
+  <section class="card"><h2>Recolhível e estado vazio</h2><div id="dvRec"></div><div id="dvVazio"></div></section>
+</div>
 <script type="module">
-import { toolbar, ligarFiltros, cardCab, itemMenu, collapsible, chips, vazio, statTiles, drawer, dropzone, menuHTML } from "./js/ui.js";
+import { toolbar, ligarFiltros, itemMenu, collapsible, chips, vazio, statTiles, drawer, dropzone, menuHTML, ajudaHTML } from "./js/ui.js";
 import { toast } from "./js/common.js";
+import { ic, ICONES } from "./js/icones.js";
+const $ = id => document.getElementById(id);
 const tema = new URLSearchParams(location.search).get("tema"); if (tema) document.body.classList.add("tema-" + tema);
-document.getElementById("demoCab").innerHTML = cardCab({ titulo: "Provas criadas", ajuda: "<p>Texto do <b>Como funciona</b> aparece aqui, num popover.</p>",
-  primaria: { t: "+ Criar nova prova", id: "demoCriar" },
-  menuItensHTML: itemMenu({ e: "⬇", t: "Exportar CSV" }) + itemMenu({ e: "🧪", t: "Testar" }) + "<hr>" + itemMenu({ e: "🗑", t: "Apagar prova", perigo: true }) });
-document.getElementById("demoToolbar").innerHTML = toolbar({ buscaId: "dBusca", placeholder: "Pesquisar prova, turma ou banco…", contagemId: "dCont",
-  filtros: [{ id: "dTurma", label: "Turma", opcoesHTML: "<option value=''>Todas</option><option>DETS-1A</option>" }, { id: "dSit", label: "Situação", opcoesHTML: "<option value=''>Todas</option><option value='lib'>Liberadas</option>" }],
+$("dvCores").innerHTML = ["marinho", "marinho-2", "marinho-claro", "vermelho", "vermelho-claro", "ok", "ok-claro", "info", "info-claro", "ambar", "ambar-claro", "erro-claro", "fundo", "cartao-2", "borda-forte", "texto", "suave", "apoio"].map(n => `<div class="dv-cor"><i style="background:var(--${n})"></i>--${n}</div>`).join("");
+$("dvIcones").innerHTML = ICONES.map(n => `<div>${ic(n, { size: 22 })}${n}</div>`).join("");
+$("dvBotoes").innerHTML = `<button type="button">${ic("plus", { size: 16 })}Primário</button><button type="button" class="ok">${ic("play", { size: 16 })}Liberar prova</button><button type="button" class="leve">${ic("users", { size: 16 })}Alunos</button><button type="button" class="discreto">Limpar filtros</button><button type="button" class="perigo">${ic("trash", { size: 16 })}Apagar</button><button type="button" class="icone" aria-label="Editar">${ic("edit")}</button><button type="button" disabled>Desabilitado</button>`;
+$("dvBotoes2").innerHTML = `<button type="button" class="leve mini">${ic("download", { size: 16 })}Mini</button><button type="button" class="icone mini" aria-label="Mais">${ic("dots", { size: 16 })}</button><button type="button" class="ok grande">Começar a prova</button>`;
+chips($("dvChips"), [{ v: "", t: "Todos · 27" }, { v: "fim", t: "Finalizou · 24", e: "✅" }, { v: "and", t: "Em andamento · 3", e: "⏳" }], { aoMudar: v => toast("Situação: " + (v || "todos")) });
+$("dvMeta").innerHTML = `<span>${ic("users", { size: 14 })}31 alunos</span><span>${ic("cal", { size: 14 })}2026/2º sem.</span><span>${ic("clock", { size: 14 })}<b>60 min</b></span>`;
+$("d4").oninput = e => { $("d4v").textContent = e.target.value + "%"; };
+$("dvDZ").innerHTML = dropzone({ id: "dArq", accept: ".json", texto: "Arraste o JSON do banco aqui", apoio: "ou clique para escolher" });
+$("dvToolbar").innerHTML = toolbar({ buscaId: "dBusca", placeholder: "Pesquisar prova, turma ou banco…", contagemId: "dCont",
+  filtros: [{ id: "dTurma", label: "Turma", opcoesHTML: "<option value=''>Todas</option><option selected>DETS-1A</option>" }, { id: "dSit", label: "Situação", opcoesHTML: "<option value=''>Todas</option><option value='lib'>Liberadas</option>" }],
   ordemId: "dOrdem", ordemHTML: "<option>Mais recentes</option><option>Mais antigas</option>" });
-document.getElementById("dCont").textContent = "2 de 2 provas";
-ligarFiltros(document.getElementById("demoToolbar"));
-chips(document.getElementById("demoChips"), [{ v: "", t: "Todas" }, { v: "and", t: "Em andamento", e: "⏳" }, { v: "fim", t: "Finalizou", e: "✅" }], { aoMudar: v => toast("Situação: " + (v || "todas")) });
-document.getElementById("demoStats").innerHTML = statTiles([{ v: "67,3", r: "média" }, { v: "3/4", r: "finalizaram", tom: "ok" }, { v: 6, r: "a revisar", tom: "aviso" }, { v: 1, r: "com sinais", tom: "erro" }]);
-document.getElementById("demoRec").innerHTML = collapsible({ chave: "demo1", titulo: "👥 DETS-1A", resumoHTML: "<span class='chip'>2 provas</span><span class='chip ok'>1 liberada</span>", corpoHTML: "<p>Conteúdo recolhível; o estado fica lembrado.</p>", direitaHTML: menuHTML({ itensHTML: itemMenu({ t: "Ação" }) }) })
-  + collapsible({ titulo: "🏷 7 tópicos", corpoHTML: "<p>DDL · DML · Chave estrangeira…</p>", classe: "leve" });
-document.getElementById("demoVazio").innerHTML = vazio({ e: "📝", texto: "Nenhuma prova ainda.", acao: "<button type='button'>+ Criar a primeira prova</button>" });
-document.getElementById("demoDZ").innerHTML = dropzone({ id: "dArq", accept: ".json" });
-document.getElementById("demoDrawer").onclick = () => drawer({ titulo: "Nova prova", ajuda: "<p>Ajuda dentro do drawer.</p>",
-  corpoHTML: `<label for="dx">Título</label><input id="dx" type="text"><label for="dy" style="margin-top:12px">Turma</label><select id="dy"><option>DETS-1A</option></select>`,
-  acoes: [{ t: "Cancelar", classe: "leve" }, { t: "Criar prova", onClick: () => toast("Criada!", "ok") }] });
+$("dCont").textContent = "2 de 2 provas";
+document.querySelectorAll("#dvToolbar .painel-filtros select").forEach(s => { s.dataset.padrao = ""; });
+ligarFiltros($("dvToolbar"));
+$("dvMenu").innerHTML = menuHTML({ aria: "Mais ações", itensHTML: itemMenu({ e: ic("download", { size: 16 }), t: "Exportar CSV" }) + itemMenu({ e: ic("eye", { size: 16 }), t: "Testar" }) + "<hr>" + itemMenu({ e: ic("trash", { size: 16 }), t: "Apagar prova", perigo: true }) });
+$("dvAjuda").innerHTML = ajudaHTML("<p>Texto de ajuda da aba aparece aqui, num popover.</p>");
+$("dvAbrir").innerHTML = ic("external", { size: 16 }) + "Abrir drawer";
+$("dvAbrir").onclick = () => drawer({ titulo: "Nova prova", corpoHTML: `<div><label for="dx">Título</label><input id="dx" type="text"></div><div><label for="dy">Turma</label><select id="dy"><option>DETS-1A</option></select></div>`,
+  acoes: [{ t: "Apagar", classe: "discreto vermelho", esquerda: true, onClick: () => toast("Apagaria") }, { t: "Cancelar", classe: "leve" }, { t: "Criar prova", onClick: () => toast("Criada!", "ok") }] });
+$("dvToast1").onclick = () => toast("Salvando o rascunho…");
+$("dvToast2").onclick = () => toast("Prova liberada.", "ok");
+$("dvToast3").onclick = () => toast("Sem permissão para isso.", "erro");
+$("dvIcCal").innerHTML = ic("cal", { size: 20 }); $("dvIcChev").innerHTML = ic("chev"); $("dvIcBook").innerHTML = ic("book", { size: 20 }); $("dvIcChev2").innerHTML = ic("chev", { size: 16 });
+$("dvMaisBanco").innerHTML = ic("plus", { size: 16 }) + "Banco nesta matéria";
+$("dvKpis").innerHTML = statTiles([{ v: "67,3", r: "média da turma" }, { v: "24 / 27", r: "finalizaram" }, { v: 6, r: "respostas a revisar", tom: "warn" }, { v: 1, r: "com sinais", tom: "err" }]).replace(/^<div class="stats">|<\/div>$/g, "");
+$("dvRec").innerHTML = collapsible({ chave: "dv1", titulo: "5 tópicos", resumoHTML: "fechado por padrão", corpoHTML: "<p>DDL · DML · Chave estrangeira…</p>" });
+$("dvVazio").innerHTML = vazio({ icone: "provas", texto: "Nenhuma prova ainda.", acao: "<button type='button' class='leve'>Criar a primeira prova</button>" });
 </script>
 </body>
 </html>

@@ -7,6 +7,7 @@
 //   details[data-chave]    lembra aberto/fechado no localStorage       → collapsible()
 //   .dropzone              mostra o nome do arquivo escolhido          → dropzone()
 import { $, esc } from "./common.js";
+import { ic } from "./icones.js";
 
 const uid = (p = "ui") => p + Math.random().toString(36).slice(2, 8);
 
@@ -46,7 +47,7 @@ export function menu(botao, itens, { alinhar = "fim" } = {}) {
 export function menuHTML({ rotulo = "⋯", aria = "Mais ações", classe = "leve", itensHTML = "", id = "" }) {
   const m = id || uid("menu");
   const icone = rotulo === "⋯";
-  return `<div class="menu-wrap"><button type="button" class="${icone ? "icone" : classe}" data-menu aria-haspopup="menu" aria-expanded="false" aria-controls="${m}"${icone ? ` aria-label="${esc(aria)}" title="${esc(aria)}"` : ""}>${rotulo}</button>
+  return `<div class="menu-wrap"><button type="button" class="${icone ? "icone" : classe}" data-menu aria-haspopup="menu" aria-expanded="false" aria-controls="${m}"${icone ? ` aria-label="${esc(aria)}" title="${esc(aria)}"` : ""}>${icone ? ic("dots") : rotulo}</button>
     <div class="menu" role="menu" id="${m}" hidden>${itensHTML}</div></div>`;
 }
 // item de menu em HTML (para usar dentro de menuHTML)
@@ -84,7 +85,7 @@ export function popover(ancora, conteudoHTML, { largura = 380, titulo = "" } = {
 }
 // botão ⓘ com o texto num <template> (o conteúdo continua no HTML, só aparece no popover)
 export function ajudaHTML(conteudoHTML, { titulo = "Como funciona" } = {}) {
-  return `<span class="ajuda-pop"><button type="button" class="btn-ajuda" data-popover aria-haspopup="dialog" aria-expanded="false" aria-label="${esc(titulo)}" title="${esc(titulo)}">i</button><template>${conteudoHTML}</template></span>`;
+  return `<span class="ajuda-pop"><button type="button" class="btn-ajuda" data-popover aria-haspopup="dialog" aria-expanded="false" aria-label="${esc(titulo)}" title="${esc(titulo)}">${ic("info", { size: 16 })}</button><template>${conteudoHTML}</template></span>`;
 }
 // transforma os <details class="ajuda"> de uma área em botões ⓘ no título do cartão
 export function ajudasEmPopover(raiz = document) {
@@ -109,13 +110,14 @@ export function toolbar({ buscaId, placeholder = "Pesquisar…", aria = "", filt
   const p = uid("filtros");
   return `<div class="toolbar" role="search">
     <input type="search" id="${buscaId}" placeholder="${esc(placeholder)}" aria-label="${esc(aria || placeholder)}">
-    ${filtros.length ? `<button type="button" class="leve btn-filtros" aria-expanded="false" aria-controls="${p}"><span class="e" aria-hidden="true">⚙</span>Filtros<span class="badge" aria-label="filtros ativos"></span></button>` : ""}
+    ${filtros.length ? `<button type="button" class="leve btn-filtros" aria-expanded="false" aria-controls="${p}">${ic("filter", { size: 16 })}Filtros<span class="badge" aria-label="filtros ativos"></span></button>` : ""}
     ${ordemId ? `<select id="${ordemId}" class="tb-ordem" aria-label="Ordenar">${ordemHTML}</select>` : ""}
     ${extras}
     ${contagemId ? `<span id="${contagemId}" class="tb-contagem" aria-live="polite"></span>` : ""}
     ${filtros.length ? `<div class="painel-filtros" id="${p}" hidden>
       ${filtros.map(f => `<label class="pf-campo"><span>${esc(f.label)}</span><select id="${f.id}" aria-label="${esc(f.label)}">${f.opcoesHTML || ""}</select></label>`).join("")}
-      <div class="pf-acoes"><button type="button" class="discreto mini pf-limpar oculto"${limparId ? ` id="${limparId}"` : ""}>Limpar filtros</button></div></div>` : ""}
+      <div class="pf-acoes"><button type="button" class="discreto mini pf-limpar oculto"${limparId ? ` id="${limparId}"` : ""}>Limpar</button><button type="button" class="leve mini pf-aplicar">Aplicar</button></div></div>` : ""}
+    ${filtros.length ? `<div class="tb-ativos" aria-label="Filtros ativos"></div>` : ""}
   </div>`;
 }
 // conta os filtros ativos (selects/inputs com valor no painel) e mostra "Filtros · 2" e o "Limpar"
@@ -123,11 +125,20 @@ export function atualizarFiltros(tb) {
   if (!tb) return;
   const painel = tb.querySelector(".painel-filtros");
   if (!painel) return;
-  const n = [...painel.querySelectorAll("select, input:not([type=checkbox])")].filter(x => x.value && !x.dataset.padrao?.includes(x.value)).length
-    + [...painel.querySelectorAll("input[type=checkbox]")].filter(x => x.checked).length;
+  const ativos = [...painel.querySelectorAll("select, input:not([type=checkbox])")].filter(x => x.value && !x.dataset.padrao?.includes(x.value))
+    .concat([...painel.querySelectorAll("input[type=checkbox]")].filter(x => x.checked));
+  const n = ativos.length;
+  // chips removíveis com o que está filtrando agora
+  const linha = tb.querySelector(".tb-ativos");
+  if (linha) linha.innerHTML = ativos.map(x => { const nome = x.closest(".pf-campo")?.querySelector("span")?.textContent || x.getAttribute("aria-label") || "", val = x.tagName === "SELECT" ? x.selectedOptions[0]?.textContent : x.type === "checkbox" ? "" : x.value;
+    return `<span class="chip filtro-ativo">${esc(nome)}${val ? ": " + esc(val) : ""}<button type="button" data-tirar="${esc(x.id)}" aria-label="Tirar o filtro ${esc(nome)}">${ic("x", { size: 12 })}</button></span>`; }).join("");
   const badge = tb.querySelector(".btn-filtros .badge");
   if (badge) badge.textContent = n || "";
   tb.querySelector(".pf-limpar")?.classList.toggle("oculto", !n);
+}
+function fecharPainelFiltros(p, foco = false) {
+  if (!p || p.hidden) return;
+  p.hidden = true; const b = document.querySelector(`[aria-controls="${p.id}"]`); b?.setAttribute("aria-expanded", "false"); if (foco) b?.focus();
 }
 // liga uma toolbar (ou todas de uma área): o "Limpar" zera os filtros e avisa a aba pelo evento change
 export function ligarFiltros(raiz = document, { onChange } = {}) {
@@ -137,6 +148,12 @@ export function ligarFiltros(raiz = document, { onChange } = {}) {
     const painel = tb.querySelector(".painel-filtros");
     painel?.querySelectorAll("select").forEach(s => { if (s.dataset.padrao === undefined) s.dataset.padrao = s.querySelector("option")?.value ?? ""; });
     tb.addEventListener("change", () => { atualizarFiltros(tb); onChange?.(); });
+    tb.querySelector(".pf-aplicar")?.addEventListener("click", () => fecharPainelFiltros(painel));
+    tb.querySelector(".tb-ativos")?.addEventListener("click", e => {
+      const b = e.target.closest("[data-tirar]"), x = b && document.getElementById(b.dataset.tirar); if (!x) return;
+      if (x.type === "checkbox") x.checked = false; else x.value = x.dataset.padrao || "";
+      x.dispatchEvent(new Event("change", { bubbles: true }));
+    });
     tb.querySelector(".pf-limpar")?.addEventListener("click", () => {
       painel.querySelectorAll("select").forEach(s => { s.value = s.dataset.padrao || ""; });
       painel.querySelectorAll("input[type=checkbox]").forEach(c => { c.checked = false; });
@@ -155,9 +172,9 @@ export function drawer({ titulo, corpoHTML = "", corpo = null, acoes = [], aoFec
   const fundo = document.createElement("div"); fundo.className = "drawer-fundo";
   const el = document.createElement("aside");
   el.className = "drawer" + (largo ? " largo" : ""); el.setAttribute("role", "dialog"); el.setAttribute("aria-modal", "true"); el.setAttribute("aria-labelledby", idT);
-  el.innerHTML = `<div class="drawer-cab"><h2 id="${idT}">${esc(titulo)}</h2>${ajuda ? ajudaHTML(ajuda) : ""}<button type="button" class="icone" data-fechar aria-label="Fechar painel" title="Fechar (Esc)">✕</button></div>
+  el.innerHTML = `<div class="drawer-cab"><h2 id="${idT}">${esc(titulo)}</h2>${ajuda ? ajudaHTML(ajuda) : ""}<button type="button" class="icone" data-fechar aria-label="Fechar painel" title="Fechar (Esc)">${ic("x")}</button></div>
     <div class="drawer-corpo">${corpo ? "" : corpoHTML}</div>
-    ${acoes.length ? `<div class="drawer-rodape">${acoes.map((a, i) => `<button type="button" class="${a.classe || ""}${a.esquerda ? " esquerda" : ""}" data-acao="${i}"${a.id ? ` id="${esc(a.id)}"` : ""}>${a.t}</button>`).join("")}</div>` : ""}`;
+    ${acoes.length ? `<div class="drawer-rodape">${acoes.map((a, i) => [a, i]).sort(([a, i], [b, j]) => (!!a.esquerda - !!b.esquerda) || (!!a.classe - !!b.classe) || (i - j)).map(([a, i]) => `<button type="button" class="${a.classe || ""}${a.esquerda ? " esquerda" : ""}" data-acao="${i}"${a.id ? ` id="${esc(a.id)}"` : ""}>${a.t}</button>`).join("")}</div>` : ""}`;
   // elemento existente: guarda o lugar para devolver depois
   let marcador = null;
   if (corpo) { marcador = document.createComment("drawer"); corpo.before(marcador); el.querySelector(".drawer-corpo").appendChild(corpo); corpo.classList.remove("oculto"); }
@@ -222,8 +239,9 @@ export function chips(container, opcoes, { multiplo = false, valor = multiplo ? 
 }
 
 // ---------- estado vazio ----------
-export function vazio({ e = "📭", texto = "Nada por aqui ainda.", acao = "" } = {}) {
-  return `<div class="vazio"><span class="vz-e" aria-hidden="true">${e}</span><p>${texto}</p>${acao ? `<div class="vz-acao">${acao}</div>` : ""}</div>`;
+const ICONE_DO_EMOJI = { "📝": "provas", "🗂": "bancos", "👥": "turmas", "📊": "resultados", "📈": "relatorios", "📔": "diario", "♿": "acess", "🧩": "adapt", "🚩": "retorno", "💡": "retorno", "🏅": "gami", "🙂": "mascote", "🧵": "itens", "🧪": "simulacao", "🤝": "equipe", "⚙": "config", "🔍": "search", "🏷": "tag", "📅": "cal", "🗓": "cal", "📚": "book", "🤖": "bot", "📄": "provas" };
+export function vazio({ e = "", icone = "", texto = "Nada por aqui ainda.", acao = "" } = {}) {
+  return `<div class="vazio"><span class="vz-e" aria-hidden="true">${ic(icone || ICONE_DO_EMOJI[e] || "info", { size: 40, sw: 1.5 })}</span><p>${texto}</p>${acao ? `<div class="vz-acao">${acao}</div>` : ""}</div>`;
 }
 
 // ---------- cabeçalho de cartão ----------
@@ -234,11 +252,11 @@ export function cardCab({ titulo, ajuda = "", primaria = "", menuItensHTML = "",
 }
 
 // ---------- números (stat tiles) ----------
-export const statTiles = itens => `<div class="stats">${itens.map(i => `<div class="stat${i.tom ? " " + i.tom : ""}"><b>${i.v}</b><span>${i.r}</span></div>`).join("")}</div>`;
+export const statTiles = itens => `<div class="stats">${itens.map(i => `<div class="kpi${i.tom ? " " + i.tom : ""}"><b>${i.v}</b><span>${i.r}</span></div>`).join("")}</div>`;
 
 // ---------- área de soltar arquivo ----------
-export function dropzone({ id, accept = "", texto = "Arraste o arquivo aqui ou clique para escolher", e = "📄", compacta = false }) {
-  return `<label class="dropzone${compacta ? " compacta" : ""}"><input type="file" id="${id}"${accept ? ` accept="${esc(accept)}"` : ""}><span class="dz-icone" aria-hidden="true">${e}</span><span class="dz-texto">${esc(texto)}</span><span class="dz-arquivo"></span></label>`;
+export function dropzone({ id, accept = "", texto = "Arraste o arquivo aqui ou clique para escolher", apoio = "", compacta = false }) {
+  return `<label class="dropzone${compacta ? " compacta" : ""}"><input type="file" id="${id}"${accept ? ` accept="${esc(accept)}"` : ""}><span class="dz-icone" aria-hidden="true">${ic("upload", { size: compacta ? 18 : 26 })}</span><span class="dz-texto">${esc(texto)}</span>${apoio ? `<span class="dz-apoio">${apoio}</span>` : ""}<span class="dz-arquivo"></span></label>`;
 }
 
 // ---------- tarefa demorada (IA corrigindo, adaptando, lendo PDF…) ----------
@@ -256,7 +274,7 @@ export function tarefa({ titulo, total = 0, icone = "⏳", estimativaSeg = 0, te
   const el = document.createElement("div");
   el.className = "tarefa rodando"; el.setAttribute("role", "status");
   el.innerHTML = `<div class="tf-topo"><span class="tf-ampulheta" aria-hidden="true">⏳</span><div class="tf-tit"><b>${icone} ${esc(titulo)}</b><span class="tf-texto"></span></div>
-      <button type="button" class="icone tf-fechar" aria-label="Esconder" title="Esconder (o trabalho continua)">✕</button></div>
+      <button type="button" class="icone tf-fechar" aria-label="Esconder" title="Esconder (o trabalho continua)">${ic("x", { size: 16 })}</button></div>
     <div class="tf-barra${total ? "" : " indet"}"><i></i></div>
     <div class="tf-rodape"><span class="tf-n"></span><span class="tf-tempo"></span></div>`;
   pilha.appendChild(el); tarefasAbertas++;
@@ -298,8 +316,12 @@ export function tarefa({ titulo, total = 0, icone = "⏳", estimativaSeg = 0, te
 }
 
 // ---------- delegação global (liga uma vez) ----------
+const pctRange = r => { const min = Number(r.min) || 0, max = Number(r.max) || 100; r.style.setProperty("--pct", ((Number(r.value) - min) / ((max - min) || 1) * 100) + "%"); };
 if (!window.__uiLigado) {
   window.__uiLigado = true;
+  document.addEventListener("input", e => { if (e.target.matches?.("input[type=range]")) pctRange(e.target); }, true);
+  let filaRange = 0;
+  new MutationObserver(() => { cancelAnimationFrame(filaRange); filaRange = requestAnimationFrame(() => document.querySelectorAll("input[type=range]").forEach(pctRange)); }).observe(document.documentElement, { childList: true, subtree: true });
   document.addEventListener("click", e => {
     const bMenu = e.target.closest("[data-menu]");
     if (bMenu) { e.preventDefault(); abrirMenuEstatico(bMenu); return; }
@@ -308,6 +330,8 @@ if (!window.__uiLigado) {
     const bFil = e.target.closest(".btn-filtros");
     if (bFil) {
       const p = document.getElementById(bFil.getAttribute("aria-controls")); if (!p) return;
+      document.querySelectorAll(".painel-filtros:not([hidden])").forEach(o => { if (o !== p) fecharPainelFiltros(o); });
+      p.style.setProperty("--pf-x", Math.max(0, Math.min(bFil.offsetLeft, (p.offsetParent?.offsetWidth || bFil.parentElement.offsetWidth) - 380)) + "px");
       p.hidden = !p.hidden; bFil.setAttribute("aria-expanded", String(!p.hidden));
       if (!p.hidden && e.detail === 0) p.querySelector("select, input")?.focus();   // só pelo teclado (o clique não deixa anel de foco preso)
       return;
@@ -315,6 +339,8 @@ if (!window.__uiLigado) {
     // clicar num item do menu estático fecha o menu (o onclick do item continua rodando)
     if (aberto && e.target.closest(".menu [role=menuitem]") && aberto.el.contains(e.target)) { setTimeout(() => fecharFlutuante(), 0); return; }
     if (aberto && !aberto.el.contains(e.target)) fecharFlutuante();
+    // clicar fora fecha o painel de filtros
+    document.querySelectorAll(".painel-filtros:not([hidden])").forEach(p => { if (!p.contains(e.target) && !e.target.closest("[data-tirar]")) fecharPainelFiltros(p); });
   });
   document.addEventListener("keydown", e => {
     if (e.key === "Escape" && aberto) { e.stopPropagation(); fecharFlutuante(true); return; }
@@ -325,7 +351,7 @@ if (!window.__uiLigado) {
     // item de menu que é um <label> (ex.: enviar arquivo): Enter/Espaço clica
     if ((e.key === "Enter" || e.key === " ") && e.target.matches?.("label[role=menuitem]")) { e.preventDefault(); e.target.click(); return; }
     // Esc fecha o painel de filtros aberto
-    if (e.key === "Escape") { const p = e.target.closest?.(".painel-filtros"); if (p) { p.hidden = true; const b = document.querySelector(`[aria-controls="${p.id}"]`); b?.setAttribute("aria-expanded", "false"); b?.focus(); } }
+    if (e.key === "Escape") { const p = e.target.closest?.(".painel-filtros"); if (p) fecharPainelFiltros(p, true); }
   }, true);
   addEventListener("resize", () => fecharFlutuante());
   // rolar a página: o flutuante acompanha o botão; só fecha se o botão sair da tela

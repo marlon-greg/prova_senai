@@ -67,8 +67,8 @@ export const AJUDA_ABAS = {
 export function abrirAjuda(chave) {
   const a = AJUDA_ABAS[chave] || AJUDA_ITENS[chave];
   if (!a) return;
-  const extras = (a.itens || []).map(k => `<details class="ajuda-extra"><summary>📎 ${esc(AJUDA_ITENS[k].t)}</summary>${AJUDA_ITENS[k].h}</details>`).join("");
-  modal({ titulo: `❓ ${a.t}`, conteudo: `<div class="ajuda-corpo">${a.h}${extras}</div>`, ok: "Entendi", largo: true });
+  const extras = (a.itens || []).map(k => `<details class="ajuda-extra"><summary>${esc(AJUDA_ITENS[k].t)}</summary>${AJUDA_ITENS[k].h}</details>`).join("");
+  modal({ titulo: a.t, conteudo: `<div class="ajuda-corpo">${a.h}${extras}</div>`, ok: "Entendi", largo: true });
 }
 
 // botão flutuante da aba atual + os "?" pequenos (data-ajuda-item="slides")
