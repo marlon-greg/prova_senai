@@ -2253,3 +2253,96 @@ details.ret-grupo > .rc-corpo .ret-item { box-shadow:none; background:var(--cart
 }
 @media (max-width:900px) { .menu-lateral button.menu-recolher { display:none; } }
 @media (prefers-reduced-motion: reduce) { .menu-lateral { transition:none; } }
+
+/* =====================================================================
+   Fase 8 · Conquistas em níveis (quadro 6)
+   ===================================================================== */
+#conqEditor { min-width:0; }
+.cq-layout { display:flex; align-items:flex-start; gap:var(--sp-5); }
+.cq-col { flex:1 1 520px; min-width:0; display:flex; flex-direction:column; gap:var(--sp-5); }
+.cq-col > .card { margin:0; }
+.cq-barra { display:flex; flex-wrap:wrap; align-items:center; gap:var(--sp-3); padding:14px 20px; }
+.cq-barra input[type=search] { flex:1 1 240px; width:auto; height:36px; }
+.cq-barra .chip.warn { flex:none; }
+.cq-acoes { display:flex; flex-wrap:wrap; align-items:center; gap:var(--sp-2); margin-left:auto; }
+.cq-lista { padding:var(--sp-4) var(--sp-5); }
+.cq-grupo { padding:var(--sp-2) 0; border-bottom:1px solid var(--borda); }
+.cq-grupo:last-of-type { border-bottom:0; }
+.cq-grupo > .grupo-cab { padding:var(--sp-2) 4px; }
+.cq-ge { font-size:18px; }
+.cq-linhas { display:flex; flex-direction:column; gap:2px; padding:var(--sp-1) 0 var(--sp-2); }
+.cq-linha { display:flex; align-items:center; gap:var(--sp-3); padding:10px 12px; border-radius:var(--raio-p); cursor:pointer; }
+.cq-linha:hover { background:var(--hover); }
+.cq-linha.sel, .cq-linha.sel:hover { background:var(--marinho-claro); }
+.cq-linha.desligada > :not(.switch):not(button) { opacity:.55; }
+.cq-e { flex:0 0 28px; width:28px; justify-content:center; font-size:20px; }
+.cq-texto { flex:1 1 auto; min-width:0; display:flex; flex-direction:column; line-height:1.35; }
+.cq-texto > b { font-size:var(--fs-md); font-weight:600; color:var(--marinho); }
+.cq-texto > span { font-size:var(--fs-xs); color:var(--suave); }
+.cq-texto > span b { color:var(--marinho); font-weight:600; }
+.cq-linha > .chip { flex:0 1 auto; min-width:0; max-width:220px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+
+/* painel de edição ao lado da lista */
+.cq-lado { flex:0 0 420px; width:420px; position:sticky; top:84px; max-height:calc(100vh - 104px); margin:0; padding:0; display:flex; flex-direction:column; overflow:hidden; }
+.cq-lado[hidden] { display:none !important; }
+.cq-lado-cab { flex:none; display:flex; align-items:center; justify-content:space-between; padding:18px 22px; border-bottom:1px solid var(--borda); }
+.card .cq-lado-cab h2 { margin:0; font-family:var(--fonte-titulo); font-size:16px; font-weight:600; color:var(--marinho); }
+.cq-lado-corpo { flex:1 1 auto; min-height:0; overflow:auto; padding:20px 22px; }
+.cq-lado-rodape { flex:none; display:flex; align-items:center; gap:var(--sp-2); padding:var(--sp-4) 22px; border-top:1px solid var(--borda); }
+.cq-lado-rodape #cqApagar { margin-left:auto; }
+.cq-ed { display:flex; flex-direction:column; gap:var(--sp-4); }
+.cq-ed label { font-size:var(--fs-xs); font-weight:500; color:var(--suave); margin:0 0 6px; }
+.cq-ed-l1 { display:flex; align-items:flex-end; gap:var(--sp-3); }
+.cq-cresce { flex:1 1 auto; min-width:0; }
+input.cq-emoji { flex:0 0 56px; width:56px; height:56px; padding:0; text-align:center; font-size:24px; }
+.cq-niveis-cab { display:flex; align-items:center; justify-content:space-between; gap:var(--sp-2); }
+.cq-niveis-cab b, .cq-sub { font-size:var(--fs-md); font-weight:600; color:var(--marinho); margin:0; }
+.cq-niveis { display:flex; flex-direction:column; gap:var(--sp-2); }
+.cq-nv { display:grid; grid-template-columns:16px var(--cols); align-items:center; gap:var(--sp-2); }
+.cq-nv input { width:100%; min-width:0; padding:0 8px; }
+.cq-nv input[type=number] { text-align:center; }
+.cq-nv-cab span { font-size:11px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--suave); }
+.cq-nv-n { font-size:var(--fs-xs); color:var(--suave); }
+.campo-erro, .campo-erro:focus { border-color:var(--erro); color:var(--erro-texto); }
+.cq-aviso { margin:0; font-size:var(--fs-xs); color:var(--erro-texto); }
+button.cq-add { align-self:flex-start; }
+.cq-previa { display:flex; align-items:center; gap:var(--sp-3); margin-top:var(--sp-2); padding:var(--sp-3) var(--sp-4); background:var(--cartao-2); border-radius:14px; }
+.cq-med { flex:0 0 56px; width:56px; height:56px; display:inline-flex; align-items:center; justify-content:center; background:var(--cartao); border-radius:50%; box-shadow:inset 0 0 0 3px var(--ambar); font-size:24px; }
+.cq-prev-txt { flex:1 1 auto; min-width:0; display:flex; flex-direction:column; gap:2px; }
+.cq-prev-txt > b { font-size:var(--fs-md); font-weight:600; color:var(--marinho); }
+.cq-prev-txt > span { font-size:var(--fs-xs); color:var(--suave); }
+.cq-prev-txt small { font-size:11px; color:var(--suave); }
+.cq-prev-txt small b { color:var(--marinho); }
+.barra-fina { display:block; height:6px; margin:4px 0 2px; border-radius:var(--raio-pill); background:var(--trilho); overflow:hidden; }
+.barra-fina i { display:block; height:100%; border-radius:inherit; background:var(--ok); }
+
+/* gerar do plano de ensino */
+.ge-campos { display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:var(--sp-3); margin-bottom:var(--sp-4); }
+.ge-provas { list-style:none; margin:var(--sp-2) 0 var(--sp-4); padding:0; display:flex; flex-direction:column; gap:6px; font-size:var(--fs-sm); }
+.ge-provas li { display:flex; align-items:center; gap:var(--sp-2); }
+.ge-cab { display:flex; align-items:center; justify-content:space-between; gap:var(--sp-2); margin-bottom:var(--sp-2); }
+.ge-tipo { padding:var(--sp-3) 0; border-top:1px solid var(--borda); }
+.ge-niveis { display:flex; flex-wrap:wrap; gap:6px; margin-top:var(--sp-2); }
+#geResumo > .help { margin-top:var(--sp-3); }
+
+/* medalhas em níveis (aluno e prévia do diário) */
+.medalhas-n, .bloco-linha-corpo.medalhas-n { display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:var(--sp-3); }
+.medalha-n, button.medalha-n, button.medalha-n:hover { display:flex; flex-direction:column; align-items:center; gap:4px; height:auto; padding:var(--sp-3) var(--sp-2); background:transparent; border:0; border-radius:var(--raio-m); box-shadow:none; color:var(--texto); text-align:center; white-space:normal; font-weight:400; }
+button.medalha-n:hover { background:var(--hover); }
+.mn-disco { width:64px; height:64px; display:inline-flex; align-items:center; justify-content:center; border-radius:50%; background:var(--cartao-2); font-size:2.4em; line-height:1; filter:grayscale(1); opacity:.55; }
+.medalha-n.ganha .mn-disco { background:var(--cartao); box-shadow:inset 0 0 0 3px var(--ambar); filter:none; opacity:1; }
+.medalha-n.maximo .mn-disco { background:var(--ambar-claro); box-shadow:inset 0 0 0 3px var(--ambar), 0 0 0 3px var(--ambar-claro); }
+.medalha-n.nova .mn-disco { box-shadow:inset 0 0 0 3px var(--ambar), 0 8px 22px rgba(245,165,36,.35); }
+.medalha-n > b { font-size:var(--fs-md); font-weight:600; line-height:1.25; color:var(--marinho); }
+.mn-tit { font-size:var(--fs-xs); line-height:1.3; color:var(--suave); }
+.medalha-n .barra-fina { width:100%; max-width:120px; margin:2px 0 0; }
+.medalha-n small { font-size:11px; color:var(--suave); }
+.medalha-n small b { color:var(--marinho); }
+.conq-grupos { display:flex; flex-direction:column; gap:var(--sp-2); }
+.conq-grupo { border-bottom:1px solid var(--borda); padding:var(--sp-1) 0; }
+.conq-grupo:last-child { border-bottom:0; }
+.conq-grupo > .medalhas-n { padding:var(--sp-2) 0 var(--sp-3); }
+
+@media (max-width:1199px) { .cq-lado { display:none !important; } }
+@media (max-width:600px) { .cq-linha { flex-wrap:wrap; } .cq-texto { flex-basis:60%; } .cq-acoes { margin-left:0; } }
+.cq-linha { border:0; }

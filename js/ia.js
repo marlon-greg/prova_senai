@@ -233,6 +233,18 @@ export async function formatosIA({ chave, modelo, q, g, descricao, orientacao, d
     return lerRespostaFormatos(r, q);
   } catch (e) { throw e.ia ? e : erroIA(e.message); }
 }
+// nomes próprios para os níveis das conquistas. conquistas = [{ id, t, d, regra, niveis }]. Devolve { id: [nomes, na ordem dos níveis] }
+export async function nomesNiveisIA({ chave, modelo, materia = "", topicos = [], conquistas }) {
+  const prompt = `Crie nomes curtos (até 28 caracteres), positivos e adequados a alunos de curso técnico para os níveis destas conquistas escolares, do mais fácil ao mais difícil.${materia ? ` Matéria: ${materia}.` : ""}${topicos.length ? ` Tópicos do plano: ${topicos.slice(0, 30).join(", ")}. Use o vocabulário da matéria (ex.: em Banco de Dados, "Cursor iniciante", "Join master", "DBA da sala").` : ""}
+Responda só com JSON no formato {"id da conquista": ["nome do nível 1", "nome do nível 2"]}, com um nome para cada nível.
+Conquistas: ${JSON.stringify(conquistas)}`;
+  try {
+    const r = await chamarAPI(chave, { model: modeloOrganizar(modelo), max_tokens: 1000, messages: [{ role: "user", content: prompt }] });
+    const txt = (r.content || []).filter(b => b.type === "text").map(b => b.text).join(""), ini = txt.indexOf("{"), fim = txt.lastIndexOf("}");
+    let d; try { d = JSON.parse(txt.slice(ini, fim + 1)); } catch (e) { throw erroIA("A IA não devolveu os nomes em um formato válido. Tente de novo."); }
+    return Object.fromEntries(Object.entries(d).map(([k, v]) => [k, (Array.isArray(v) ? v : []).map(x => String(x).trim().slice(0, 60)).filter(Boolean)]));
+  } catch (e) { throw e.ia ? e : erroIA(e.message); }
+}
 // sugestões de conquistas novas
 export async function sugerirConquistasIA({ chave, modelo, existentes, pedido }) {
   try { return lerRespostaConquistas(await chamarAPI(chave, { model: modeloOrganizar(modelo), ...pedidoConquistas({ existentes, pedido }) })); }

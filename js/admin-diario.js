@@ -5,7 +5,7 @@
 // acessibilidadePrivado/{email}/diario/{id}/comentarios/{c} = { autor, autorNome, papel, respostas, criadoEm }
 // (o aluno nunca lê acessibilidadePrivado)
 import { db, esc, $, toast, confirmar, modal, traduzirErro, iniciais, dataBR, semestreDe, chaveTexto, dataCurta, diaDeAula, rotuloDias, textoHorario } from "./common.js";
-import { resumoDiario, medalhasDiario } from "./conquistas.js";
+import { resumoDiario, medalhasDiario, medalhaHTML } from "./conquistas.js";
 import { relatorioAluno } from "./admin-relatorio-aluno.js";
 import { HUMOR, humorEmoji, SECOES_AUX, ITENS_AUX, ITENS_PROF, visivel, respondido, completude } from "./diario-perguntas.js";
 import { listarPlanos, listarCursos } from "./admin-org.js";
@@ -136,8 +136,7 @@ function desenharPainel() {
   </section>
   <details class="card sem-padding bloco-linha prev-conquistas" data-chave="diario-conquistas">
     <summary class="sub-cab"><span class="ch ch-esq" aria-hidden="true">${ic("chev")}</span><span class="e dc-med" aria-hidden="true">🏅</span><span class="sc-titulo">Conquistas que a aluna vê</span><span class="chip navy">${meds.filter(m => m.ok).length} / ${meds.length}</span><span class="sc-resumo">ela vê isto na página dela (só coisas positivas)</span></summary>
-    <div class="bloco-linha-corpo medalhas">${meds.map(m => `<div class="medalha${m.ok ? " ganha" : ""}" title="${esc(m.d || m.t)}"><span class="m-emoji">${m.e}</span><b>${esc(m.t)}</b>
-      <span class="pequeno">${m.ok ? "conquistada!" : `${Math.min(m.v, m.meta)}/${m.meta}`}</span>${m.ok ? "" : `<i class="m-barra"><i style="width:${Math.round(Math.min(m.v, m.meta) / m.meta * 100)}%"></i></i>`}</div>`).join("")}</div>
+    <div class="bloco-linha-corpo medalhas-n">${meds.map(m => medalhaHTML(m)).join("")}</div>
   </details>
   <div class="diario-grade">
     <section class="card diario-cal">${calendarioHTML()}</section>
@@ -464,7 +463,7 @@ function abrirEditor(iso, outroDia = null) {
       passo = SECOES_AUX.findIndex(s => s.itens.includes(falta[0])); desenhar();
       return toast(`Falta: ${falta.map(f => f.rot).join(" · ")}`, "erro");
     }
-    const antes = medalhasDiario(resumo(), listaConq).filter(m => m.ok).map(m => m.t);
+    const antes = medalhasDiario(resumo(), listaConq).filter(m => m.ok).map(m => `${m.id}#${m.nivelAtual}`);
     const respostas = limpar(r, ITENS_AUX), dados = { data: iso, tipo: "diario", autor: ctx.eu.email, autorNome: ctx.eu.nome || ctx.eu.email, papel: ctx.eu.papel,
       respostas, completo: completude(respostas), outroDia: outroDia || null, atualizadoEm: serverTimestamp() };
     if (existente && !(await confirmar(`Salvar as alterações no registro de ${dataCurta(iso)}?`, { titulo: "Salvar registro", ok: "Salvar" }))) return;
@@ -476,7 +475,7 @@ function abrirEditor(iso, outroDia = null) {
     localStorage.removeItem(chaveRascunho(iso));
     const novo = { id, ...dados, nComentarios: existente?.nComentarios || 0, atualizadoEm: { toDate: () => new Date() } };
     registros = [novo, ...registros.filter(x => x.id !== id)].sort((a, b) => b.data.localeCompare(a.data));
-    const ganhou = medalhasDiario(resumo(), listaConq).filter(m => m.ok && !antes.includes(m.t));
+    const ganhou = medalhasDiario(resumo(), listaConq).filter(m => m.ok && !antes.includes(`${m.id}#${m.nivelAtual}`));
     festa(respostas, ganhou);
     aberto = iso; mes = iso.slice(0, 7); desenharPainel(); atualizarResumo();
   };
@@ -491,7 +490,7 @@ function festa(resp, ganhou) {
   const emojis = ["⭐", "🎉", humorEmoji(resp.humorSaida) || "😊", "💪", "✨", "🏆"];
   f.innerHTML = (reduz ? "" : Array.from({ length: 28 }, (_, i) => `<span class="conf" style="left:${Math.random() * 100}%;animation-delay:${Math.random() * .6}s;font-size:${18 + Math.random() * 22}px">${emojis[i % emojis.length]}</span>`).join("")) +
     `<div class="festa-caixa"><div class="festa-grande">${ganhou.length ? ganhou[0].e : "📔"}</div><b>Registro salvo!</b>
-      ${ganhou.map(m => `<p>🏅 ${esc(atual.nome?.split(" ")[0] || "A aluna")} ganhou a medalha <b>${esc(m.t)}</b>!</p>`).join("")}
+      ${ganhou.map(m => `<p>🏅 ${esc(atual.nome?.split(" ")[0] || "A aluna")} ganhou a medalha <b>${esc(m.nivelNome || m.t)}</b>!</p>`).join("")}
       ${resp.conquista ? `<p class="pequeno">🏆 ${esc(String(resp.conquista).slice(0, 120))}</p>` : ""}</div>`;
   document.body.appendChild(f);
   const fechar = () => f.remove();

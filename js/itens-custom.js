@@ -25,7 +25,7 @@ export function registrarItensCustom(lista, CATALOGO) {
     if (it.ativo === false || !it.png || !CATEGORIAS_ITEM[it.categoria]) continue;
     const id = "cx-" + it.id, parte = CATEGORIAS_ITEM[it.categoria].parte;
     ITENS[id] = { ...it, idCat: id };
-    if (CATALOGO[parte]) CATALOGO[parte].push({ id, nome: `${it.nome} ✨`, custom: true, ...(it.trava?.n ? { trava: { n: it.trava.n } } : {}) });
+    if (CATALOGO[parte]) CATALOGO[parte].push({ id, nome: `${it.nome} ✨`, custom: true, ...(it.trava?.n ? { trava: { n: it.trava.n } } : it.trava?.medalha ? { trava: { medalha: it.trava.medalha, nivel: it.trava.nivel || 1 } } : {}) });
   }
 }
 // <image> do item numa caixa (com o ajuste fino da equipe)

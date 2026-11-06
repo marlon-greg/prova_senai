@@ -57,8 +57,8 @@ export async function desenharPerfil(box, { eu, cq, gami, simulacao = false }) {
     <div class="pa-info"><h2>${esc(nome)}</h2><span class="pequeno">${esc(eu.nome || "")}</span>
       <button type="button" class="pa-status" id="paStatus" title="Como você está hoje? Toque para mudar">${perfil.status ? esc(perfil.status) : "＋ Como você está hoje?"}</button>
       <div class="pa-nivel"><b>Nível ${cq?.nivel || 1}</b> · ${(cq?.ganhas || []).length} conquista(s) · 🎨 ${liberadas}/${travadas} skins liberadas</div>
-      ${fixas.length ? `<div class="pa-fixas">${fixas.map(m => `<span class="pa-fixa" title="${esc(m.d || m.t)}"><span aria-hidden="true">${m.e}</span>${esc(m.t)}</span>`).join("")}</div>`
-        : `<div class="pa-medalhas">${(cq?.ganhas || []).slice(-8).map(m => `<span title="${esc(m.t)}">${m.e}</span>`).join("") || `<span class="pequeno">Ganhe conquistas para liberar skins novas!</span>`}</div>`}
+      ${fixas.length ? `<div class="pa-fixas">${fixas.map(m => `<span class="pa-fixa" title="${esc(m.d || m.t)}"><span aria-hidden="true">${m.e}</span>${esc(m.nivelNome || m.t)}</span>`).join("")}</div>`
+        : `<div class="pa-medalhas">${(cq?.ganhas || []).slice(-8).map(m => `<span title="${esc(m.nivelNome || m.t)}">${m.e}</span>`).join("") || `<span class="pequeno">Ganhe conquistas para liberar skins novas!</span>`}</div>`}
       <div class="linha acoes"><button type="button" id="paEditar">🎨 Editar meu personagem</button>
         <button type="button" class="leve" id="paCartao">🖼 Personalizar cartão</button>
         ${gami.download ? `<button type="button" class="leve" id="paBaixar">⬇ Baixar meu cartão</button>` : ""}</div></div>
@@ -167,7 +167,7 @@ function personalizarCartao({ eu, perfil, av, simulacao, ganhas = [], aoSalvar }
     ${secao(1, "Posição do personagem", "Onde o personagem fica no cartão.",
       `<div class="pc-lados" role="radiogroup" aria-label="Posição do personagem">${Object.entries(LADOS).map(([k, t]) => `<button type="button" class="pc-lado" data-lado="${k}" role="radio">${desenhoLado(k)}<span>${t}</span></button>`).join("")}</div>`)}
     ${secao(2, "🏅 Conquistas fixas", `Escolha até ${MAX_FIXAS} para ficarem sempre à vista. Sem nenhuma, aparecem as últimas.`,
-      ganhas.length ? `<div class="pc-fixas" role="group" aria-label="Conquistas fixas">${ganhas.map((m, i) => `<button type="button" class="pc-fixa" data-fixa="${i}"><span class="pc-check" aria-hidden="true"></span><span class="pc-fixa-e">${m.e}</span><span>${esc(m.t)}</span></button>`).join("")}</div>`
+      ganhas.length ? `<div class="pc-fixas" role="group" aria-label="Conquistas fixas">${ganhas.map((m, i) => `<button type="button" class="pc-fixa" data-fixa="${i}"><span class="pc-check" aria-hidden="true"></span><span class="pc-fixa-e">${m.e}</span><span>${esc(m.nivelNome || m.t)}</span></button>`).join("")}</div>`
         : `<p class="pequeno">Você ainda não tem conquistas. Faça provas para ganhar!</p>`, `<span class="chip" id="pcFixasN"></span>`)}
     ${secao(3, "Foto de fundo", "Fotos reais, com o crédito do autor no cantinho do cartão.",
       `<div class="pc-fotos" role="radiogroup" aria-label="Foto de fundo">
@@ -179,7 +179,7 @@ function personalizarCartao({ eu, perfil, av, simulacao, ganhas = [], aoSalvar }
     const p = $("#pcPrevia", c);
     p.className = `pc-previa lado-${cartao.lado}`;
     p.style.backgroundImage = foto ? `linear-gradient(90deg, rgba(10,18,40,.8), rgba(10,18,40,.45)), url("${urlMini(foto.id)}")` : "";
-    p.innerHTML = `<div class="pcp-av">${svgAvatar(av, 70)}</div><div class="pcp-info"><b>${esc(nome)}</b><div class="pcp-meds">${meds.map(m => fixas.length ? `<span class="pcp-fixa">${m.e} ${esc(m.t)}</span>` : `<span>${m.e}</span>`).join("")}</div></div>`;
+    p.innerHTML = `<div class="pcp-av">${svgAvatar(av, 70)}</div><div class="pcp-info"><b>${esc(nome)}</b><div class="pcp-meds">${meds.map(m => fixas.length ? `<span class="pcp-fixa">${m.e} ${esc(m.nivelNome || m.t)}</span>` : `<span>${m.e}</span>`).join("")}</div></div>`;
   };
   const marcar = c => {
     c.querySelectorAll("[data-foto]").forEach(b => { const on = b.dataset.foto === cartao.foto; b.classList.toggle("sel", on); b.setAttribute("aria-checked", on); });
@@ -254,7 +254,7 @@ function pdfPerfil({ svg, nome, cq }) {
     h1{margin:6px 0 2px}h2{font-size:14pt;border-bottom:2px solid #c1272d;padding-bottom:4px;margin-top:18px}.g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
     .m{border:1px solid #ddd;border-radius:10px;padding:8px;page-break-inside:avoid}.m b{display:block}.e{font-size:26px}.f{opacity:.5}.pq{color:#555;font-size:9pt}</style></head>
     <body><div class="top">${svg.replace(/width="1080" height="1350"/, 'width="300" height="375"')}</div>
-    <h2>🏅 Conquistas (${ganhas.length})</h2><div class="g">${ganhas.map(m => `<div class="m"><span class="e">${m.e}</span><b>${esc(m.t)}</b><span class="pq">${esc(m.d)}</span></div>`).join("") || "<p>Nenhuma ainda.</p>"}</div>
+    <h2>🏅 Conquistas (${ganhas.length})</h2><div class="g">${ganhas.map(m => `<div class="m"><span class="e">${m.e}</span><b>${esc(m.nivelNome || m.t)}</b><span class="pq">${esc(m.nivelNome && m.nivelNome !== m.t ? m.t + " · " : "")}${esc(m.d)}</span></div>`).join("") || "<p>Nenhuma ainda.</p>"}</div>
     ${faltam.length ? `<h2>🎯 Próximas conquistas</h2><div class="g">${faltam.slice(0, 9).map(m => `<div class="m f"><span class="e">${m.e}</span><b>${esc(m.t)}</b><span class="pq">${esc(m.d)}${m.prog ? ` · ${m.prog[0]}/${m.prog[1]}` : ""}</span></div>`).join("")}</div>` : ""}
     <p class="pq" style="text-align:center;margin-top:16px">SENAI · Prova online · ${new Date().toLocaleDateString("pt-BR")}</p>
     <script>window.onload=()=>setTimeout(()=>window.print(),400)<\/script></body></html>`);

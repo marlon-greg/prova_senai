@@ -44,7 +44,7 @@ export const CATALOGO = {
   olhos: [{ id: "normal", nome: "Normal" }, { id: "amendoado", nome: "Amendoados" }, { id: "grandes", nome: "Grandes" }, { id: "bolinha", nome: "Bolinha" },
     { id: "feliz", nome: "Feliz" }, { id: "sereno", nome: "Serenos" }, { id: "sono", nome: "Sonolentos" }, { id: "surpresa", nome: "Surpresos" },
     { id: "determinado", nome: "Determinados" }, { id: "estreito", nome: "Estreitos" }, { id: "pesado", nome: "Pálpebra pesada" }, { id: "lado", nome: "Olhar de lado" }, { id: "piscando", nome: "Piscando", trava: { n: 2 } },
-    { id: "coracao", nome: "Apaixonados", trava: { n: 4 } }, { id: "estrela", nome: "Olhos de estrela", trava: { medalha: "gabaritou" } }],
+    { id: "coracao", nome: "Apaixonados", trava: { n: 4 } }, { id: "estrela", nome: "Olhos de estrela", trava: { medalha: "gabaritou", nivel: 3 } }],
   cilios: [{ id: "nenhum", nome: "Discretos" }, { id: "curtos", nome: "Curtos" }, { id: "longos", nome: "Longos" }, { id: "volumosos", nome: "Volumosos" },
     { id: "delineado", nome: "Delineado" }],
   maquiagem: [{ id: "nenhuma", nome: "Nenhuma" }, { id: "rosa", nome: "Sombra rosa" }, { id: "dourada", nome: "Sombra dourada" }, { id: "azul", nome: "Sombra azul" },
@@ -127,18 +127,17 @@ export const AVATAR_PADRAO = { estampa: "nenhuma", corpo: "masculino", pele: 1, 
   boca: "sorriso", corLabios: 0, roupa: "camiseta", corRoupa: 0, pescoco: "nenhum", oculos: "nenhum", corOculos: 0, brinco: "nenhum", corJoia: 0,
   acessorio: "nenhum", corAcessorio: 0, fundo: "azul", adesivo: "nenhum", moldura: "nenhuma" };
 
-import { CONQUISTAS_PADRAO } from "./conquistas.js";
+import { temMedalha, pontosConquistas, nomeMedalha } from "./conquistas.js";
 import { itemCustom, imagemItem, CATEGORIAS_ITEM, registrarItensCustom } from "./itens-custom.js";
 // itens criados pela equipe (itensCustom) entram no catálogo; chame depois de ler do Firestore
 export const usarItensCustom = lista => registrarItensCustom(lista, CATALOGO);
 // item liberado? ganhas = conquistas ganhas [{ id, t }] (a trava por medalha usa o id da conquista)
 export function liberado(item, ganhas) {
   if (!item?.trava) return true;
-  if (item.trava.n) return ganhas.length >= item.trava.n;
-  return ganhas.some(g => g.id === item.trava.medalha || String(g.id || "").startsWith(item.trava.medalha + ":"));
+  if (item.trava.n) return pontosConquistas(ganhas) >= item.trava.n;
+  return temMedalha(ganhas, item.trava.medalha, item.trava.nivel || 1);
 }
-const nomeMedalha = id => CONQUISTAS_PADRAO.find(c => c.id === id)?.t || id;
-export const textoTrava = t => !t ? "" : t.n ? `🔒 ${t.n} conquista(s)` : `🔒 medalha “${nomeMedalha(t.medalha)}”`;
+export const textoTrava = t => !t ? "" : t.n ? `🔒 ${t.n} conquista(s)` : `🔒 medalha “${nomeMedalha(t.medalha, t.nivel || 1)}”`;
 
 // personagens salvos na versão anterior: sardas/corado viraram "bochecha"; óculos saíram de "acessório"
 function migrar(a) {

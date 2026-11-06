@@ -56,13 +56,13 @@ async function escolherVitrine({ eu, cq, gami, perfil, simulacao, depois }) {
   const secao = (n, titulo, dica, corpo) => `<section class="pc-secao"><div class="pc-secao-cab"><span class="pc-n">${n}</span><div class="pc-secao-tit"><h3>${titulo}</h3><span class="pequeno">${dica}</span></div></div>${corpo}</section>`;
   const caixa = (attr, marcado, conteudo) => `<label class="pc-fixa${marcado ? " sel" : ""}"><input type="checkbox" ${attr}${marcado ? " checked" : ""}><span class="pc-fixa-e">${conteudo}</label>`;
   const html = `<p class="pequeno" style="margin-top:0">Escolha o que os colegas da <b>sua turma</b> podem ver. <b>O que você não marcar, ninguém vê.</b> Só quem mostra alguma coisa entra no mural e vê o dos colegas.</p>
-    ${secao(1, "🏅 Conquistas", "Marque as que quer mostrar.", (cq?.ganhas || []).length ? `<div class="pc-fixas">${cq.ganhas.map(m => caixa(`data-c="${esc(m.t)}"`, marcadas.has(m.t), `${m.e}</span><span>${esc(m.t)}</span>`)).join("")}</div>` : `<p class="pequeno">Você ainda não tem conquistas.</p>`)}
+    ${secao(1, "🏅 Conquistas", "Marque as que quer mostrar.", (cq?.ganhas || []).length ? `<div class="pc-fixas">${cq.ganhas.map(m => caixa(`data-c="${esc(m.t)}"`, marcadas.has(m.t), `${m.e}</span><span>${esc(m.nivelNome || m.t)}</span>`)).join("")}</div>` : `<p class="pequeno">Você ainda não tem conquistas.</p>`)}
     ${gami.socialNotas ? secao(2, "📊 Notas", "Opcional: só aparece a nota que você marcar.", provas.length ? `<div class="pc-fixas">${provas.map(p => caixa(`data-n="${esc(p.id)}"`, notasMarc.has(p.id), `📊</span><span>${esc(p.titulo)}${p.materia ? ` · ${esc(p.materia)}` : ""}: <b>${Math.round(p.nota)}</b></span>`)).join("")}</div>` : `<p class="pequeno">Sem notas ainda.</p>`) : ""}
     ${secao(gami.socialNotas ? 3 : 2, "👀 Também aparece", "Sempre junto, para quem está no mural.", `<ul class="lista-mostra"><li>🧑 Seu personagem e ${esc(perfil?.apelido || String(eu.nome || "").split(/\s+/)[0])}</li><li>⭐ Seu nível</li><li>💬 O status do dia${st ? ` (agora: ${esc(st)})` : ""}: <b>triste, ansioso, estressado e parecidos nunca aparecem</b> (só a equipe vê)</li></ul>`)}`;
   await modal({ titulo: "🔓 O que eu mostro no mural", conteudo: html, ok: "Salvar", cancelar: "Cancelar", largo: true,
     aoAbrir: c => c.querySelectorAll(".pc-fixa input").forEach(i => i.onchange = () => i.closest(".pc-fixa").classList.toggle("sel", i.checked)),
     antesDeConfirmar: async c => {
-      const conquistas = (cq?.ganhas || []).filter(m => c.querySelector(`[data-c="${CSS.escape(m.t)}"]`)?.checked).map(m => ({ e: m.e, t: m.t }));
+      const conquistas = (cq?.ganhas || []).filter(m => c.querySelector(`[data-c="${CSS.escape(m.t)}"]`)?.checked).map(m => ({ e: m.e, t: m.t, ...(m.nivelNome ? { nome: m.nivelNome } : {}) }));
       const notas = gami.socialNotas ? provas.filter(p => c.querySelector(`[data-n="${CSS.escape(p.id)}"]`)?.checked).map(p => ({ id: p.id, titulo: p.titulo, materia: p.materia || "", nota: Math.round(p.nota) })) : [];
       const dados = { nome: String(eu.nome || "").split(/\s+/)[0], apelido: perfil?.apelido || "", avatar: perfil?.avatar || null, status: st, turmaId: simulacao ? "sim" : await minhaTurma(eu),
         conquistas, notas, nivel: cq?.nivel || 1, atualizadoEm: serverTimestamp() };
@@ -81,7 +81,7 @@ async function escolherVitrine({ eu, cq, gami, perfil, simulacao, depois }) {
 const cartaoPublico = (v, eu_) => `<div class="perfil-publico"><div class="pp-av">${svgAvatar(v.avatar, 170)}</div>
   <div class="pp-info"><h2>${esc(v.apelido || v.nome)}${eu_ ? ` <span class="tag">você</span>` : ""}</h2><span class="pequeno">nível ${v.nivel || 1}</span>
     ${v.status ? `<div class="pp-status">${esc(v.status)}</div>` : ""}
-    <h3 class="conq-h3">🏅 Conquistas que ${eu_ ? "você mostra" : "mostra"}</h3><div class="mi-conq">${(v.conquistas || []).map(m => `<span class="tag">${m.e} ${esc(m.t)}</span>`).join("") || `<span class="pequeno">—</span>`}</div>
+    <h3 class="conq-h3">🏅 Conquistas que ${eu_ ? "você mostra" : "mostra"}</h3><div class="mi-conq">${(v.conquistas || []).map(m => `<span class="tag">${m.e} ${esc(m.nome || m.t)}</span>`).join("") || `<span class="pequeno">—</span>`}</div>
     ${(v.notas || []).length ? `<h3 class="conq-h3">📊 Notas que ${eu_ ? "você mostra" : "mostra"}</h3><div class="mi-conq">${v.notas.map(n => `<span class="tag nota">${esc(n.titulo)}${n.materia ? ` (${esc(n.materia)})` : ""}: ${n.nota}</span>`).join("")}</div>` : ""}
     <p class="pequeno pp-nota">🔒 Só isto aparece${eu_ ? " de você" : ""} para os colegas. Notas, provas, cartão, e-mail e o resto do perfil ficam privados.</p></div></div>`;
 
@@ -112,7 +112,7 @@ async function abrirMural({ eu, cq, gami, perfil, simulacao }) {
     $("#muralLista", c).innerHTML = itens.map((v, i) => {
       const minhaR = v.reacoes.find(r => r.de === eu.uid), cur = v.reacoes.filter(r => r.tipo === "curtida").length, par = v.reacoes.filter(r => r.tipo === "parabens").length, eu_ = v.uid === eu.uid;
       return `<article class="mural-item${eu_ ? " mi-eu" : ""}"><button type="button" class="mi-av" data-ver="${i}" title="Ver o perfil">${svgAvatar(v.avatar, 84)}</button><div class="mi-info"><button type="button" class="mi-nome" data-ver="${i}"><b>${esc(v.apelido || v.nome)}</b></button>${eu_ ? ` <span class="tag">você</span>` : ""} <span class="pequeno">nível ${v.nivel || 1}</span>${v.status ? ` <span class="tag">${esc(v.status)}</span>` : ""}
-        <div class="mi-conq">${(v.conquistas || []).map(m => `<span class="tag" title="${esc(m.t)}">${m.e} ${esc(m.t)}</span>`).join("")}</div>
+        <div class="mi-conq">${(v.conquistas || []).map(m => `<span class="tag" title="${esc(m.t)}">${m.e} ${esc(m.nome || m.t)}</span>`).join("")}</div>
         ${(v.notas || []).length ? `<div class="mi-conq">${v.notas.map(n => `<span class="tag nota">📊 ${esc(n.titulo)}${n.materia ? ` (${esc(n.materia)})` : ""}: ${n.nota}</span>`).join("")}</div>` : ""}
         <div class="mi-reacoes">${eu_ ? `<span class="pequeno">❤️ ${cur} · 👏 ${par}</span>` : `<button type="button" class="leve mini${minhaR?.tipo === "curtida" ? " sel" : ""}" data-r="curtida" data-u="${v.uid}">❤️ ${cur}</button><button type="button" class="leve mini${minhaR?.tipo === "parabens" ? " sel" : ""}" data-r="parabens" data-u="${v.uid}">👏 ${par}</button>`}</div></div></article>`;
     }).join("");
