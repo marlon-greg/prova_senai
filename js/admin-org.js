@@ -9,7 +9,8 @@ import { db, esc, $, toast, modal, confirmar, traduzirErro, temaDe, ordenarTemas
          semestreDe, rotuloSemestre, semestreVizinho, chaveTexto, semestreDaProva, materiaDaProva, dataCurta, nomeTurma, semestreCursoAtual } from "./common.js";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, abrirMaterialEmAba, tamanhoTexto, erroMaterial } from "./material.js";
 import { lerPlanoIA, classificarTopicosIA, lerCursoIA } from "./ia.js";
-import { menuHTML, itemMenu, vazio, collapsible, tarefa } from "./ui.js";
+import { menuHTML, itemMenu, vazio, collapsible, tarefa, pl, semestreLongo, seta, drawerForm } from "./ui.js";
+import { ic } from "./icones.js";
 import { collection, doc, getDocs, addDoc, updateDoc, deleteDoc, writeBatch, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -126,32 +127,36 @@ function desenhar() {
   const box = $("#orgArvore");
   if (!turmas.length) { box.innerHTML = vazio({ e: "🏫", texto: "Cadastre as turmas na aba <b>Turmas</b> primeiro." }); $("#orgContagem").textContent = ""; return; }
   const fT = $("#orgTurma").value, fS = $("#orgSemestre").value, busca = chaveTexto($("#orgBusca").value);
-  const arv = montar(), atual = semestreDe();
+  const arv = montar(), atual = semestreDe(), alvo = fS || atual;
   let nMat = 0, nTop = 0;
-  const html = turmas.filter(t => !fT || t.id === fT).map(t => {
-    const sm = arv.get(t.id) || new Map();
-    const sems = [...sm.keys()].filter(s => !fS || s === fS).sort().reverse();
-    const blocos = sems.map(s => {
-      const cards = [...sm.get(s).values()].filter(n => !busca || chaveTexto(n.materia).includes(busca)
-        || (n.plano?.topicos || []).some(x => chaveTexto(x.nome).includes(busca)) || n.provas.some(p => chaveTexto(p.titulo).includes(busca)))
-        .sort((a, b) => ordemNatural(a.materia || "~", b.materia || "~"));
-      if (!cards.length) return "";
+  const filtradas = turmas.filter(t => !fT || t.id === fT);
+  const bate = n => !busca || chaveTexto(n.materia).includes(busca) || (n.plano?.topicos || []).some(x => chaveTexto(x.nome).includes(busca)) || n.provas.some(p => chaveTexto(p.titulo).includes(busca));
+  // Semestre → Turma → Matéria. O semestre atual (ou o filtrado) lista todas as turmas, para dar para criar matéria mesmo sem nenhuma ainda
+  const sems = [...new Set([...filtradas.flatMap(t => [...(arv.get(t.id)?.keys() || [])]), ...(busca ? [] : [alvo])])].filter(s => !fS || s === fS).sort().reverse();
+  const html = sems.map(s => {
+    let matS = 0, provS = 0, turS = 0;
+    const blocos = filtradas.map(t => {
+      const sm = arv.get(t.id) || new Map();
+      const cards = [...(sm.get(s)?.values() || [])].filter(bate).sort((a, b) => ordemNatural(a.materia || "~", b.materia || "~"));
+      if (!cards.length && (busca || s !== alvo)) return "";
+      turS++; matS += cards.length; provS += cards.reduce((x, n) => x + n.provas.length, 0);
       nMat += cards.length; nTop += cards.reduce((x, n) => x + (n.plano?.topicos?.length || 0), 0);
-      const id = `s:${t.id}:${s}`, aberto = busca || fS || abertos.has(id);
-      return `<details class="recolhivel sub" data-g="${id}" ${aberto ? "open" : ""}>
-        <summary><span class="rc-titulo">📅 ${rotuloSemestre(s)}</span><span class="rc-resumo">${s === atual ? `<span class="chip on">atual</span>` : ""}
-          <span class="chip">${cards.length} matéria(s)</span><span class="chip">${cards.reduce((x, n) => x + n.provas.length, 0)} prova(s)</span></span></summary>
-        <div class="rc-corpo cartoes-materias">${cards.map(n => cartaoMateria(t, s, n)).join("")}</div></details>`;
+      const id = `t:${t.id}:${s}`, aberto = busca || fT || abertos.has(id), sc = semestreCursoAtual(t);
+      const resumo = [pl(ctx.alunosDaTurma(t).length, "aluno"), sc?.rotulo, pl(cards.length, "matéria")].filter(Boolean).join(" · ");
+      return `<details class="card sem-padding" data-g="${id}" ${aberto ? "open" : ""}>
+        <summary class="sub-cab"><span class="sc-tile sc-navy">${ic("users", { size: 20 })}</span><span class="sc-texto"><span class="sc-titulo">${esc(nomeTurma(t))}</span><span class="sc-resumo">${esc(resumo)}</span></span>
+          ${ctx.podeEditar() ? `<span class="sc-fim"><button class="leve mini" data-novo-t="${t.id}" data-sem="${esc(s)}" type="button">${ic("plus", { size: 16 })}Matéria</button></span>` : ""}${seta()}</summary>
+        <div class="org-corpo">${s === alvo ? cursoDaTurmaHTML(t, sm) : ""}${cards.length ? `<div class="cartoes-materias">${cards.map(n => cartaoMateria(t, s, n)).join("")}</div>` : `<p class="help">Nenhuma matéria em ${esc(rotuloSemestre(s))}. Use <b>Matéria</b> (ou as matérias do plano de curso, acima).</p>`}</div></details>`;
     }).join("");
-    if ((fS || busca) && !blocos) return "";
-    const id = `t:${t.id}`, aberto = busca || fT || abertos.has(id);
-    return `<details class="recolhivel" data-g="${id}" ${aberto ? "open" : ""}>
-      <summary><span class="rc-titulo">👥 ${esc(nomeTurma(t))}</span><span class="rc-resumo"><span class="chip">${ctx.alunosDaTurma(t).length} alunos</span>${(sc => sc ? `<span class="chip ${sc.concluida ? "ok" : "info"}" title="Semestre do curso (avança sozinho em agosto e janeiro)">🎓 ${sc.rotulo}</span>` : "")(semestreCursoAtual(t))}</span>
-        ${ctx.podeEditar() ? `<span class="rc-direita"><button class="leve mini" data-novo-t="${t.id}" type="button">+ Matéria</button></span>` : ""}</summary>
-      <div class="rc-corpo">${cursoDaTurmaHTML(t, sm)}${blocos || `<p class="pequeno" style="margin:0 16px 14px">Nenhuma matéria ${fS ? `em ${rotuloSemestre(fS)}` : "ainda"}. Use <b>+ Matéria</b> (ou as matérias do plano de curso, acima).</p>`}</div></details>`;
+    if (!blocos) return "";
+    const id = `s:${s}`, aberto = busca || fS || (fechados.has(id) ? false : abertos.has(id) || s === atual);
+    return `<details class="faixa" data-g="${id}" ${aberto ? "open" : ""}>
+      <summary class="secao-faixa"><span class="sf-tile">${ic("cal", { size: 20 })}</span><h3 class="sf-titulo">${esc(semestreLongo(s))}</h3>${s === atual ? `<span class="chip ok">atual</span>` : ""}
+        <span class="sf-resumo">${pl(turS, "turma")} · ${pl(matS, "matéria")} · ${pl(provS, "prova")}</span><span class="sf-fim sf-tile">${seta()}</span></summary>
+      <div class="faixa-corpo">${blocos}</div></details>`;
   }).join("");
-  $("#orgContagem").textContent = `${nMat} matéria(s) · ${nTop} tópico(s) nos planos`;
-  box.innerHTML = html || `<div class="vazio"><div class="icone">🔎</div><p>Nada encontrado com esses filtros.</p></div>`;
+  $("#orgContagem").textContent = `${pl(nMat, "matéria")} · ${pl(nTop, "tópico")} nos planos`;
+  box.innerHTML = html || vazio({ e: "🔎", texto: "Nada encontrado com esses filtros." });
   ligarArvore(box);
 }
 
@@ -162,7 +167,7 @@ function estadoTopico(x) {
   if (x.fim && h > x.fim) return "dado";
   return "andamento";
 }
-const ROT_ESTADO = { previsto: "🗓 previsto", andamento: "▶ em andamento", dado: "✓ dado" };
+const ROT_ESTADO = { previsto: "previsto", andamento: "em andamento", dado: "dado" };
 const periodo = x => x.inicio || x.fim ? `${dataCurta(x.inicio) || "?"}${x.fim && x.fim !== x.inicio ? ` – ${dataCurta(x.fim)}` : ""}` : "";
 
 function cartaoMateria(t, s, n) {
@@ -182,46 +187,46 @@ function cartaoMateria(t, s, n) {
   const arqs = p ? arquivosPlano.get(p.id) || [] : [];
   const prevs = p?.provas || [];
   const pode = ctx.podeEditar();
-  const linhaProva = pr => `<li><span class="tag ${pr.liberada ? "on" : "off"}">${pr.liberada ? "● liberada" : "○ fechada"}</span>
+  const linhaProva = pr => `<li><span class="chip ${pr.liberada ? "ok" : "off"}">${pr.liberada ? "● liberada" : "○ fechada"}</span>
       <b>${esc(pr.titulo)}</b> ${pr.dataProva ? `<span class="pequeno">${dataCurta(pr.dataProva)}</span>` : ""}
-      <button class="discreto mini" data-res="${pr.id}" type="button" title="Abrir os resultados">📊 Resultados</button></li>`;
+      <button class="discreto mini" data-res="${pr.id}" type="button" title="Abrir os resultados">${ic("resultados", { size: 16 })}Resultados</button></li>`;
   const feita = pv => n.provas.some(pr => chaveTexto(pr.titulo) === chaveTexto(pv.titulo) || (pv.data && pr.dataProva === pv.data));
   return `<article class="cartao-materia${p ? "" : " sem-plano"}">
     <div class="cm-topo">
-      <div><h3>📚 ${esc(n.materia || "Sem matéria")}</h3>
-        <span class="pequeno">${profs.length ? `👤 ${profs.map(esc).join(", ")}` : p ? "sem professor definido" : doCurso ? "📘 do plano de curso · sem plano de ensino (opcional)" : "⚠ sem plano de ensino cadastrado"}</span></div>
-      ${topicos.length && !origemCurso ? `<div class="cm-progresso" title="Tópicos já dados, pelas datas do plano"><b>${dados}/${topicos.length}</b><span>tópicos dados</span>
+      <div><h3>${esc(n.materia || "Sem matéria")}</h3>
+        <span class="pequeno">${profs.length ? profs.map(esc).join(", ") : p ? "sem professor definido" : doCurso ? "do plano de curso · sem plano de ensino (opcional)" : "sem plano de ensino cadastrado"}</span></div>
+      ${topicos.length && !origemCurso ? `<div class="cm-progresso" title="Tópicos já dados, pelas datas do plano"><span><b>${dados}/${topicos.length}</b> tópicos dados</span>
         <div class="barra"><i style="width:${Math.round(dados / topicos.length * 100)}%"></i></div></div>` : ""}
     </div>
-    ${origemCurso ? `<p class="pequeno" style="margin:0">📘 Tópicos do plano de curso (${esc(doCurso.curso.nome)}), sem datas. As datas e as provas ficam no plano de ensino, se quiser.</p>` : ""}
-    ${topicos.length ? `<details class="recolhivel leve topicos-materia"><summary><span class="rc-titulo">🏷 ${topicos.length} tópico(s)</span>${!origemCurso ? `<span class="rc-resumo"><span class="chip ok">✓ ${dados} dado(s)</span>${topicos.some(x => estadoTopico(x) === "andamento") ? `<span class="chip info">▶ em andamento</span>` : ""}</span>` : ""}</summary>
-      <div class="rc-corpo"><ol class="lista-topicos">${topicos.map(x => {
+    ${origemCurso ? `<p class="help" style="margin:0;max-width:none">Tópicos do plano de curso (${esc(doCurso.curso.nome)}), sem datas. As datas e as provas ficam no plano de ensino, se quiser.</p>` : ""}
+    ${topicos.length ? `<details class="bb-topicos"><summary>${seta(16)}${ic("tag", { size: 15 })}${pl(topicos.length, "tópico")}${!origemCurso && topicos.some(x => estadoTopico(x) === "andamento") ? `<span class="chip info">em andamento</span>` : ""}</summary>
+      <div><ol class="lista-topicos">${topicos.map(x => {
       const k = chaveTexto(x.nome), e = estadoTopico(x), nq = cont[k] || 0, ep = emProva[k] || [];
       return `<li class="topico${e ? " e-" + e : ""}"><span class="tp-nome">${esc(x.nome)}</span>
-        ${periodo(x) ? `<span class="pequeno">${periodo(x)}</span>` : ""}${e ? `<span class="tag ${e === "dado" ? "ok" : e === "andamento" ? "nota" : "off"}">${ROT_ESTADO[e]}</span>` : ""}
-        <span class="tag ${nq ? "" : "aviso"}" title="Questões com este tópico nos bancos da matéria">📝 ${nq} questão(ões)</span>
-        ${ep.length ? `<span class="tag nota" title="${esc(ep.join(" · "))}">🧪 em ${ep.length} prova(s)</span>` : ""}</li>`;
+        ${periodo(x) ? `<span class="pequeno">${periodo(x)}</span>` : ""}${e ? `<span class="chip ${e === "dado" ? "ok" : e === "andamento" ? "info" : "off"}">${ROT_ESTADO[e]}</span>` : ""}
+        <span class="meta-txt${nq ? "" : " falta"}" title="Questões com este tópico nos bancos da matéria">${pl(nq, "questão", "questões")}</span>
+        ${ep.length ? `<span class="chip info" title="${esc(ep.join(" · "))}">em ${pl(ep.length, "prova")}</span>` : ""}</li>`;
     }).join("")}</ol></div></details>` : p ? `<p class="pequeno">Nenhum tópico ainda. ${pode ? "Use <b>✎ Editar</b> ou envie o PDF do plano e peça para a IA ler." : ""}</p>` : ""}
     ${soBanco.length ? collapsible({ chave: `org:banco:${t.id}|${s}|${chaveM}`, classe: "leve cm-extra-rc",
       titulo: `🗂 ${soBanco.length} tópico(s) ${p ? "nos bancos, fora do plano" : "nos bancos"}`,
       resumoHTML: `<span class="chip">📝 ${soBanco.reduce((a, k) => a + cont[k], 0)} questões</span>${soBanco.includes("geral") ? `<span class="chip aviso">sem tópico: ${cont.geral}</span>` : ""}`,
       corpoHTML: `<div class="cm-extra">${soBanco.map(k => `<span class="tag${k === "geral" ? " aviso" : ""}" title="${k === "geral" ? "Questões sem tópico: use 🏷 Tópicos na aba Bancos" : ""}">${esc(nomeDe(k))} · ${cont[k]}</span>`).join("")}</div>` }) : ""}
-    <div class="cm-provas"><span class="rotulo">Provas${n.provas.length ? ` · ${n.provas.length}` : ""}</span>
-      ${n.provas.length ? `<ul>${n.provas.sort((a, b) => String(a.dataProva || "").localeCompare(String(b.dataProva || "")) || ordemNatural(a.titulo, b.titulo)).map(linhaProva).join("")}</ul>` : `<p class="pequeno" style="margin:2px 0">Nenhuma prova criada.</p>`}
-      ${prevs.filter(pv => !feita(pv)).map(pv => `<div class="prevista">🗓 <b>Prevista:</b> ${esc(pv.titulo)}${pv.data ? ` · ${dataCurta(pv.data)}` : ""}${pv.topicos?.length ? ` <span class="pequeno">(${pv.topicos.map(esc).join(", ")})</span>` : ""}
-        ${pode ? `<button class="leve mini" type="button" data-criar="${p.id}" data-titulo="${esc(pv.titulo)}" data-data="${pv.data || ""}" data-tops="${esc(JSON.stringify(pv.topicos || []))}">+ Criar</button>` : ""}</div>`).join("")}
+    <div class="cm-provas">${n.provas.length || prevs.length ? `<span class="rotulo">Provas${n.provas.length ? ` · ${n.provas.length}` : ""}</span>` : ""}
+      ${n.provas.length ? `<ul>${n.provas.sort((a, b) => String(a.dataProva || "").localeCompare(String(b.dataProva || "")) || ordemNatural(a.titulo, b.titulo)).map(linhaProva).join("")}</ul>` : ""}
+      ${prevs.filter(pv => !feita(pv)).map(pv => `<div class="prevista"><span class="chip off" title="${esc((pv.topicos || []).join(", "))}">${ic("cal", { size: 14 })}${esc(pv.titulo)}${pv.data ? ` · ${dataCurta(pv.data)}` : ""}</span>
+        ${pode ? `<button class="leve mini" type="button" data-criar="${p.id}" data-titulo="${esc(pv.titulo)}" data-data="${pv.data || ""}" data-tops="${esc(JSON.stringify(pv.topicos || []))}">${ic("plus", { size: 16 })}Criar</button>` : ""}</div>`).join("")}
     </div>
     ${p?.observacoes ? `<p class="pequeno cm-obs">📝 ${esc(p.observacoes)}</p>` : ""}
     <div class="cm-acoes">
-      ${arqs.map(a => `<span class="item-arq"><button class="leve mini" type="button" data-verarq="${p.id}" data-arq="${a.id}" title="Abrir o PDF">📄 ${esc(a.titulo)}</button>${pode ? `<button class="discreto mini perigo-txt" type="button" data-delarq="${p.id}" data-arq="${a.id}" aria-label="Apagar o PDF ${esc(a.titulo)}">✕</button>` : ""}</span>`).join("")}
-      ${pode && p ? `<span class="cm-principais"><button class="leve mini" type="button" data-editar="${p.id}">✎ Editar</button>
-        <button class="leve mini" type="button" data-criar="${p.id}">+ Nova prova</button>
+      ${arqs.map(a => `<span class="item-arq"><button class="leve mini" type="button" data-verarq="${p.id}" data-arq="${a.id}" title="Abrir o PDF">${ic("provas", { size: 16 })}${esc(a.titulo)}</button>${pode ? `<button class="discreto mini perigo-txt" type="button" data-delarq="${p.id}" data-arq="${a.id}" aria-label="Apagar o PDF ${esc(a.titulo)}">✕</button>` : ""}</span>`).join("")}
+      ${pode && p ? `<span class="cm-principais"><button class="leve mini" type="button" data-editar="${p.id}">${ic("edit", { size: 16 })}Editar</button>
+        <button class="leve mini" type="button" data-criar="${p.id}">${ic("plus", { size: 16 })}Nova prova</button>
         ${menuHTML({ aria: `Mais ações: ${n.materia || "matéria"}`, itensHTML:
-          `<label class="menu-item botao-arquivo" role="menuitem" tabindex="0"><span class="e" aria-hidden="true">⬆</span><span>Enviar PDF do plano</span><input type="file" accept="application/pdf,.pdf" hidden data-enviar="${p.id}"></label>`
-          + (arqs.length ? itemMenu({ e: "🤖", t: "Ler plano com IA", attrs: `data-ler="${p.id}" title="A IA lê o PDF e preenche os tópicos e as provas previstas (você revisa antes de salvar)"` }) : "")
-          + (ctx.ehAdmin() ? "<hr>" + itemMenu({ e: "🗑", t: "Apagar o plano", perigo: true, attrs: `data-delplano="${p.id}"` }) : "") })}
+          `<label class="menu-item botao-arquivo" role="menuitem" tabindex="0">${ic("upload", { size: 16 })}<span>Enviar PDF do plano</span><input type="file" accept="application/pdf,.pdf" hidden data-enviar="${p.id}"></label>`
+          + (arqs.length ? itemMenu({ i: "bot", t: "Ler plano com IA", attrs: `data-ler="${p.id}" title="A IA lê o PDF e preenche os tópicos e as provas previstas (você revisa antes de salvar)"` }) : "")
+          + (ctx.ehAdmin() ? "<hr>" + itemMenu({ i: "trash", t: "Apagar o plano", perigo: true, attrs: `data-delplano="${p.id}"` }) : "") })}
         <button data-ajuda-item="planoEnsino"></button></span>` : ""}
-      ${pode && !p ? `<button class="leve mini" type="button" data-cadastrar="${t.id}|${s}|${esc(n.materia)}">${doCurso ? "🗓 Datas das provas (plano de ensino)" : "+ Plano de ensino"}</button>` : ""}
+      ${pode && !p ? `<button class="leve mini" type="button" data-cadastrar="${t.id}|${s}|${esc(n.materia)}">${ic(doCurso ? "cal" : "plus", { size: 16 })}${doCurso ? "Datas das provas (plano de ensino)" : "Plano de ensino"}</button>` : ""}
     </div></article>`;
 }
 
@@ -231,7 +236,7 @@ function ligarArvore(box) {
     const id = d.dataset.g; if (d.open) { fechados.delete(id); abertos.add(id); } else { fechados.add(id); abertos.delete(id); }
   });
   const plano = id => planos.find(p => p.id === id);
-  box.querySelectorAll("[data-novo-t]").forEach(b => b.onclick = e => { e.preventDefault(); editarPlano(null, { turmaId: b.dataset.novoT, semestre: $("#orgSemestre").value || semestreDe() }); });
+  box.querySelectorAll("[data-novo-t]").forEach(b => b.onclick = e => { e.preventDefault(); editarPlano(null, { turmaId: b.dataset.novoT, semestre: b.dataset.sem || $("#orgSemestre").value || semestreDe() }); });
   box.querySelectorAll("[data-matcurso]").forEach(b => b.onclick = () => { const [turmaId, semestre, materia] = b.dataset.matcurso.split("|"); editarPlano(null, { turmaId, semestre, materia }); });
   box.querySelectorAll("[data-cadastrar]").forEach(b => b.onclick = () => { const [turmaId, semestre, materia] = b.dataset.cadastrar.split("|"); editarPlano(null, { turmaId, semestre, materia }); });
   box.querySelectorAll("[data-editar]").forEach(b => b.onclick = () => editarPlano(plano(b.dataset.editar)));
@@ -336,7 +341,7 @@ DCL - GRANT e REVOKE | 01/09">${esc(textoTopicos(v.topicos))}</textarea>
     <p class="pequeno" style="margin:4px 0 12px">Sem tópicos aqui, a matéria usa os do <b>plano de curso</b>. Os nomes dos tópicos viram os <b>tópicos das questões</b> (aba Bancos → 🏷 Tópicos) e o filtro do sorteio da prova. Dica: envie o PDF do plano no cartão da matéria e peça para a IA preencher.</p>
     <label for="plObs" style="margin-top:12px">Observações (opcional)</label>
     <textarea id="plObs" style="min-height:60px" placeholder="Ex.: o plano pode mudar; recuperação em dezembro.">${esc(v.observacoes || "")}</textarea>`;
-  const salvou = await modal({ titulo: p ? `Editar plano — ${p.materia}` : "Nova matéria / plano de ensino", conteudo: html, ok: "Salvar", cancelar: "Cancelar", largo: true,
+  const salvou = await drawerForm({ titulo: p ? `Editar plano — ${p.materia}` : "Nova matéria / plano de ensino", conteudo: html, ok: "Salvar",
     aoAbrir: caixa => {
       $("#plPuxar", caixa).onclick = () => {
         const m = materiaDoCurso($("#plMateria", caixa).value, $("#plTurma", caixa).value) || materiaDoCurso($("#plMateria", caixa).value);
@@ -542,8 +547,10 @@ function lerTextoCurso(txt) {
 function desenharCursos() {
   const box = $("#orgCursos"); if (!box) return;
   const pode = ctx.podeEditar();
-  box.innerHTML = `<div class="card-cab"><h3 class="diario-h3" style="margin:0">📘 Planos de curso</h3>${pode ? `<button class="leve mini" id="cursoNovo" type="button">+ Plano de curso</button>` : ""}</div>
-    <p class="pequeno" style="margin:4px 0 10px">O plano de curso traz <b>todas as matérias</b> com os tópicos. Com ele, cada matéria já nasce com os tópicos; o plano de ensino (opcional) fica para as <b>datas das provas</b>.</p>` +
+  const aberto = box.querySelector("details.bloco-linha")?.open ? "open" : "";
+  box.innerHTML = `<details class="card sem-padding bloco-linha" ${aberto}><summary class="sub-cab"><span class="ch ch-esq" aria-hidden="true">${ic("chev")}</span><span class="sc-tile">${ic("book", { size: 20 })}</span><span class="sc-texto"><span class="sc-titulo">Planos de curso</span><span class="sc-resumo">${pl(cursos.length, "plano")} · trazem todas as matérias com os tópicos</span></span>
+      ${pode ? `<span class="sc-fim"><button class="leve mini" id="cursoNovo" type="button">${ic("plus", { size: 16 })}Plano de curso</button></span>` : ""}</summary><div class="bloco-linha-corpo">
+    <p class="help" style="max-width:none">Com o plano de curso, cada matéria já nasce com os tópicos; o plano de ensino (opcional) fica para as <b>datas das provas</b>.</p>` +
     (cursos.length ? cursos.map(c => {
       const ts = turmas.filter(t => t.cursoId === c.id), arqs = arquivosCurso.get(c.id) || [];
       return `<details class="grupo-semestre curso-item"><summary><span class="gs-nome">📘 ${esc(c.nome)}</span><span class="tag">${(c.materias || []).length} matéria(s)</span>
@@ -555,7 +562,7 @@ function desenharCursos() {
             <button data-ajuda-item="planoCurso"></button><label class="botao-arquivo leve mini">⬆ PDF do plano de curso<input type="file" accept="application/pdf,.pdf" hidden data-enviarcurso="${c.id}"></label>
             ${arqs.length ? `<button class="leve mini" type="button" data-lercurso="${c.id}">🤖 Ler plano de curso com IA</button>` : ""}
             ${ctx.ehAdmin() ? `<button class="discreto mini perigo-txt" type="button" data-delcurso="${c.id}" aria-label="Apagar o plano de curso">🗑</button>` : ""}` : ""}</div></div></details>`;
-    }).join("") : `<p class="pequeno">Nenhum plano de curso ainda.${pode ? " Clique em <b>+ Plano de curso</b>, dê o nome do curso e envie o PDF (pode ser só a parte das matérias)." : ""}</p>`);
+    }).join("") : `<p class="help">Nenhum plano de curso ainda.${pode ? " Clique em <b>Plano de curso</b>, dê o nome do curso e envie o PDF (pode ser só a parte das matérias)." : ""}</p>`) + `</div></details>`;
   const curso = id => cursos.find(c => c.id === id);
   $("#cursoNovo")?.addEventListener("click", () => editarCurso(null));
   box.querySelectorAll("[data-editcurso]").forEach(b => b.onclick = () => editarCurso(curso(b.dataset.editcurso)));

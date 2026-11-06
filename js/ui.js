@@ -20,6 +20,13 @@ function posicionar(el, ancora, { alinhar = "fim" } = {}) {
   el.style.left = x + "px"; el.style.top = y + "px";
 }
 
+// "3 bancos", "1 banco"
+export const pl = (n, um, varios = um + "s") => `${n} ${n === 1 ? um : varios}`;
+// "2026-2" → "2026 · 2º semestre"
+export const semestreLongo = s => /^\d{4}-[12]$/.test(s || "") ? `${s.slice(0, 4)} · ${s.slice(5)}º semestre` : String(s || "");
+// seta de um <details>: gira sozinha pelo CSS (.ch)
+export const seta = (size = 18) => `<span class="ch" aria-hidden="true">${ic("chev", { size })}</span>`;
+
 // ---------- flutuante aberto (só um por vez) ----------
 let aberto = null;   // { el, botao, fechar }
 function fecharFlutuante(devolverFoco = false) {
@@ -51,8 +58,8 @@ export function menuHTML({ rotulo = "⋯", aria = "Mais ações", classe = "leve
     <div class="menu" role="menu" id="${m}" hidden>${itensHTML}</div></div>`;
 }
 // item de menu em HTML (para usar dentro de menuHTML)
-export const itemMenu = ({ e = "", t, id = "", perigo = false, attrs = "" }) =>
-  `<button type="button" role="menuitem"${id ? ` id="${esc(id)}"` : ""} class="${perigo ? "perigo" : ""}" ${attrs}>${e ? `<span class="e" aria-hidden="true">${e}</span>` : ""}<span>${t}</span></button>`;
+export const itemMenu = ({ e = "", i = "", t, id = "", perigo = false, attrs = "" }) =>
+  `<button type="button" role="menuitem"${id ? ` id="${esc(id)}"` : ""} class="${perigo ? "perigo" : ""}" ${attrs}>${i ? ic(i, { size: 16 }) : e ? `<span class="e" aria-hidden="true">${e}</span>` : ""}<span>${t}</span></button>`;
 function abrirMenuEstatico(botao) {
   const el = document.getElementById(botao.getAttribute("aria-controls")) || botao.parentElement.querySelector(".menu");
   if (!el) return;
@@ -209,6 +216,16 @@ export function drawer({ titulo, corpoHTML = "", corpo = null, acoes = [], aoFec
   return { el, corpo: el.querySelector(".drawer-corpo"), fechar };
 }
 
+// formulário num drawer: mesma ideia do modal({ conteudo, aoAbrir, antesDeConfirmar }); devolve true se confirmou
+export function drawerForm({ titulo, conteudo, ok = "Salvar", cancelar = "Cancelar", aoAbrir = null, antesDeConfirmar = null, largo = true }) {
+  return new Promise(resolve => {
+    let salvou = false;
+    const d = drawer({ titulo, corpoHTML: conteudo, largo, aoFechar: () => resolve(salvou),
+      acoes: [{ t: ok, onClick: async () => { if (antesDeConfirmar && (await antesDeConfirmar(d.corpo)) === false) return false; salvou = true; } }, { t: cancelar, classe: "leve" }] });
+    aoAbrir?.(d.corpo);
+  });
+}
+
 // ---------- bloco recolhível (lembra o estado por chave) ----------
 const CHAVE_RC = "ui:recolhivel:";
 // tudo que é recolhível começa FECHADO (pedido da equipe): quem quiser ver, abre
@@ -322,6 +339,8 @@ if (!window.__uiLigado) {
   document.addEventListener("input", e => { if (e.target.matches?.("input[type=range]")) pctRange(e.target); }, true);
   let filaRange = 0;
   new MutationObserver(() => { cancelAnimationFrame(filaRange); filaRange = requestAnimationFrame(() => document.querySelectorAll("input[type=range]").forEach(pctRange)); }).observe(document.documentElement, { childList: true, subtree: true });
+  // botões nas pontas de um cabeçalho recolhível não abrem nem fecham o bloco
+  document.addEventListener("click", e => { if (e.target.closest("summary :is(.sc-fim, .sf-acoes)")) e.preventDefault(); }, true);
   document.addEventListener("click", e => {
     const bMenu = e.target.closest("[data-menu]");
     if (bMenu) { e.preventDefault(); abrirMenuEstatico(bMenu); return; }

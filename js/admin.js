@@ -17,7 +17,7 @@ import { iniciarAcessibilidade, carregarAcessibilidade, prepararNovo as preparar
 import { iniciarHistorico, carregarHistorico } from "./admin-historico.js";
 import { tarefa, ligarMenuLateral } from "./ui.js";
 import { ic } from "./icones.js";
-import { drawer, ligarFiltros, atualizarFiltros, ajudasEmPopover, menuHTML, itemMenu, vazio, chips, statTiles } from "./ui.js";
+import { drawer, ligarFiltros, atualizarFiltros, ajudasEmPopover, menuHTML, itemMenu, vazio, chips, statTiles, pl, semestreLongo, seta } from "./ui.js";
 import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp, onSnapshot, increment, deleteField }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -87,7 +87,7 @@ let abaAtual = "provas";
 const ABAS = {
   organizacao: { titulo: "Organização", icone: "org", primaria: { id: "orgNovo", rotulo: "Matéria / plano de ensino", icone: "plus" } },
   provas: { titulo: "Provas", icone: "provas", primaria: { id: "btnNovaProva", rotulo: "Criar nova prova", icone: "plus" } },
-  bancos: { titulo: "Bancos de questões", icone: "bancos", primaria: { id: "btnImportarTopo", rotulo: "Importar banco", icone: "upload" } },
+  bancos: { titulo: "Bancos de questões", icone: "bancos", primaria: { id: "btnImportarTopo", rotulo: "Importar banco", icone: "download" } },
   turmas: { titulo: "Turmas", icone: "turmas", primaria: { id: "btnNovaTurma", rotulo: "Nova turma", icone: "plus" } },
   resultados: { titulo: "Resultados", icone: "resultados" },
   relatorios: { titulo: "Relatórios", icone: "relatorios" },
@@ -104,9 +104,22 @@ const ABAS = {
 };
 document.querySelectorAll(".menu-lateral [data-aba]").forEach(b => b.insertAdjacentHTML("afterbegin", ic(ABAS[b.dataset.aba].icone)));
 Object.values(ABAS).forEach(({ primaria: p }) => { if (!p) return; const b = $("#" + p.id); b.innerHTML = ic(p.icone, { size: 16 }) + `<span class="bt-texto">${esc(p.rotulo)}</span>`; b.setAttribute("aria-label", p.rotulo); b.title = p.rotulo; });
+document.querySelectorAll("[data-ic]").forEach(e => { e.innerHTML = ic(e.dataset.ic, { size: Number(e.dataset.icSize) || 18 }); });
 $("#btnAjuda").innerHTML = ic("info", { size: 16 }); $("#usuarioChev").innerHTML = ic("chev", { size: 16 });
-// até a importação ir para um drawer (etapa C), o botão do cabeçalho leva ao formulário que está no topo da aba
-$("#btnImportarTopo").onclick = () => { $("#bSemestre").focus({ preventScroll: true }); $("#bSemestre").closest(".card").scrollIntoView({ block: "start", behavior: "smooth" }); };
+// a importação de banco abre num drawer: #bancoImportar é movido para lá e volta ao fechar (ids e eventos continuam os mesmos)
+let drawerImportar = null;
+function abrirImportarBanco({ semestre = "", materia = "" } = {}) {
+  if (!podeEditar()) return toast("Seu papel não permite importar.", "erro");
+  if (drawerImportar) return;
+  if (semestre) $("#bSemestre").value = semestre;
+  if (materia) $("#bMateria").value = materia;
+  $("#msgBanco").textContent = "";
+  drawerImportar = drawer({ titulo: "Importar banco de questões", corpo: $("#bancoImportar"), largo: true, aoFechar: () => { drawerImportar = null; $("#bancoImportar").classList.add("oculto"); },
+    acoes: [{ t: "Importar", onClick: async () => (await $("#btnImportarBanco").onclick()) === true },
+            { t: "Validar", classe: "leve", onClick: () => { $("#btnValidarBanco").click(); return false; } }] });
+}
+$("#btnImportarTopo").onclick = () => abrirImportarBanco();
+$("#btnAbrirMaterial").onclick = () => { $("#cardMateriais").open = true; $("#matTitulo").focus({ preventScroll: true }); };
 function pintarTopo(a) {
   $("#topoTitulo").textContent = ABAS[a].titulo;
   document.querySelectorAll("[data-topo]").forEach(s => { s.hidden = s.dataset.topo !== a; });
@@ -282,6 +295,7 @@ $("#btnSalvarTurma").onclick = async () => {
   limparFormTurma(); carregarTurmas();
 };
 import { lerStatusAlunos, chipStatus } from "./status-aluno.js";
+const turmasAbertas = new Set();   // turmas abertas pelo professor (começam fechadas)
 let statusAlunos = new Map();   // e-mail -> status do dia (perfis)
 let provasPorTurma = {}, turmaSemMat = {};   // turmaId -> [{ id, titulo, liberada }]
 async function carregarTurmas() {
@@ -314,20 +328,24 @@ function desenharTurmas() {
     return achados.length ? { t, al, achados } : null;
   }).filter(Boolean);
   $("#ftContagem").textContent = busca || fS || fM || fD || fC ? `${linhas.length} de ${turmasCache.length} turma(s)` + (linhas.some(l => l.achados) ? ` · ${linhas.reduce((n, l) => n + (l.achados?.length || 0), 0)} aluno(s) encontrado(s)` : "") : `${turmasCache.length} turma(s)`;
-  if (!linhas.length) { box.innerHTML = `<div class="vazio"><div class="icone">🔎</div><p>Nenhuma turma ou aluno com esses filtros.</p></div>`; return; }
-  box.innerHTML = `<div class="tabela"><table><tr><th>Turma</th><th>Alunos</th><th>Provas</th><th>Atualizada</th><th></th></tr>` + linhas.map(({ t, al, achados }) => {
-    const pend = al.filter(a => !a.email), auto = al.filter(a => a.auto), mostrar = achados || al;
+  if (!linhas.length) { box.innerHTML = vazio({ e: "🔎", texto: "Nenhuma turma ou aluno com esses filtros." }); return; }
+  box.innerHTML = linhas.map(({ t, al, achados }) => {
+    const pend = al.filter(a => !a.email), mostrar = achados || al;
     const stT = al.map(a => a.email && statusAlunos.get(a.email.toLowerCase())).filter(i => i?.hoje), dificeis = stT.filter(i => i.dificil).length;
-    const lista = mostrar.map(a => `<li>${a.email ? "✅" : "⏳"} ${esc(a.nome || a.email)} ${a.email ? chipStatus(statusAlunos.get(a.email.toLowerCase()), esc) : ""}${a.nome && a.email ? ` <span class="pequeno">${esc(a.email)}${a.auto ? " · vinculado no login" : ""}</span>` : ""}${!a.email ? ` <span class="pequeno">— aguardando o 1º login</span>` : ""}</li>`).join("");
-    const pv = provasPorTurma[t.id] || [];
-    const sc = semestreCursoAtual(t);
-    return `<tr><td><b>${esc(t.nome)}</b><br>${sc ? `<span class="tag ${sc.concluida ? "ok" : "info"}" title="Semestre do curso (avança sozinho em agosto e janeiro)">🎓 ${sc.rotulo}</span> ` : ""}${rotuloDias(t.diasAula) ? `<span class="tag nota" title="Dias de aula">📆 ${rotuloDias(t.diasAula)}</span>` : `<span class="tag aviso" title="Edite a turma e marque os dias de aula">📆 sem dias</span>`}<br><span class="pequeno">${t.id}</span></td>
-     <td>${al.length}${stT.length ? `<br><button type="button" class="leve mini" data-status-turma="${t.id}" title="Como os alunos disseram que estão hoje">💬 ${stT.length} status hoje${dificeis ? ` · <b class="erro-texto">${dificeis} difícil(eis)</b>` : ""}</button>` : ""}${pend.length ? `<br><span class="tag aviso">⏳ ${pend.length} sem login ainda</span>` : ""}${auto.length ? `<br><span class="pequeno">${auto.length} vinculado(s) pelo nome</span>` : ""}
-       <details class="lista-alunos" ${achados ? "open" : ""}><summary class="pequeno">${achados ? `${achados.length} encontrado(s)` : "ver alunos"}</summary><ul>${lista}</ul></details></td>
-     <td>${pv.length ? `<button class="leve mini" data-vprovas="${t.id}" title="${esc(pv.map(p => p.titulo).join(" · "))}">📝 ${pv.length} prova(s)</button>${pv.some(p => p.liberada) ? `<br><span class="tag on">● ${pv.filter(p => p.liberada).length} liberada(s)</span>` : ""}` : `<span class="pequeno">nenhuma</span>`}</td>
-     <td class="pequeno">${dataBR(t.atualizadoEm || t.criadoEm)}</td>
-     <td class="td-acoes">${podeEditar() ? `<button class="leve mini" data-edt="${t.id}">✎ Editar</button>` : ""} ${ehAdmin() ? menuHTML({ aria: `Mais ações: ${t.nome}`, itensHTML: itemMenu({ e: "🗑", t: "Apagar turma", perigo: true, attrs: `data-delt="${t.id}"` }) }) : ""}</td></tr>`;
-  }).join("") + "</table></div>";
+    const pv = provasPorTurma[t.id] || [], sc = semestreCursoAtual(t), libs = pv.filter(p => p.liberada).length;
+    const resumo = [pl(al.length, "aluno"), rotuloDias(t.diasAula) || "sem dias de aula", sc?.rotulo, `atualizada em ${dataBR(t.atualizadoEm || t.criadoEm)}`].filter(Boolean).join(" · ");
+    const vinculo = a => !a.email ? `<span class="chip warn">aguardando o 1º login</span>` : a.auto ? `<span class="chip info">vinculado no login</span>` : `<span class="chip ok">vinculado</span>`;
+    return `<details class="card sem-padding" data-turma="${t.id}" ${achados || turmasAbertas.has(t.id) ? "open" : ""}>
+      <summary class="sub-cab"><span class="sc-tile sc-navy">${ic("users", { size: 20 })}</span><span class="sc-texto"><span class="sc-titulo">${esc(t.nome)}</span><span class="sc-resumo">${esc(resumo)}${achados ? ` · ${pl(achados.length, "encontrado")}` : ""}</span></span>
+        <span class="sc-fim">${pend.length ? `<span class="chip warn">${pend.length} sem login</span>` : ""}
+          ${stT.length ? `<button type="button" class="leve mini" data-status-turma="${t.id}" title="Como os alunos disseram que estão hoje">${pl(stT.length, "status", "status")} hoje${dificeis ? ` · ${pl(dificeis, "difícil", "difíceis")}` : ""}</button>` : ""}
+          ${pv.length ? `<button class="leve mini" data-vprovas="${t.id}" title="${esc(pv.map(p => p.titulo).join(" · "))}">${ic("provas", { size: 16 })}${pl(pv.length, "prova")}${libs ? ` · ${libs} ${libs === 1 ? "liberada" : "liberadas"}` : ""}</button>` : ""}
+          ${podeEditar() ? `<button class="leve mini" data-edt="${t.id}">${ic("edit", { size: 16 })}Editar</button>` : ""}
+          ${ehAdmin() ? menuHTML({ aria: `Mais ações: ${t.nome}`, itensHTML: itemMenu({ i: "trash", t: "Apagar turma", perigo: true, attrs: `data-delt="${t.id}"` }) }) : ""}</span>${seta()}</summary>
+      <div class="tabela sem-borda"><table><thead><tr><th>Aluno</th><th>E-mail</th><th>Vínculo</th><th>Status do dia</th></tr></thead><tbody>${mostrar.map(a => `<tr>
+        <td><span class="aluno-celula"><span class="avatar-p">${esc(iniciais(a.nome || a.email))}</span>${esc(a.nome || a.email)}</span></td><td class="pequeno">${esc(a.email || "")}</td><td>${vinculo(a)}</td><td>${a.email ? chipStatus(statusAlunos.get(a.email.toLowerCase()), esc) : ""}</td></tr>`).join("")}</tbody></table></div></details>`;
+  }).join("");
+  box.querySelectorAll("[data-turma]").forEach(d => d.ontoggle = () => { if (busca) return; d.open ? turmasAbertas.add(d.dataset.turma) : turmasAbertas.delete(d.dataset.turma); });
   box.querySelectorAll("[data-status-turma]").forEach(b => b.onclick = () => abrirStatusTurma(turmasCache.find(x => x.id === b.dataset.statusTurma)));
   box.querySelectorAll("[data-vprovas]").forEach(b => b.onclick = () => { filtroTurmaPendente = b.dataset.vprovas; $("#fpBusca").value = ""; $("#fpStatus").value = ""; abrirAba("provas"); });
   box.querySelectorAll("[data-edt]").forEach(b => b.onclick = () => {
@@ -391,10 +409,11 @@ async function verMaterial(id) {
 async function carregarMateriais() {
   const box = $("#listaMateriais");
   try { await listarMateriaisCache(); } catch (e) { box.innerHTML = `<p class="pequeno">Não foi possível listar. ${esc(traduzirErro(e))}</p>`; return; }
-  if (!materiaisCache.length) { box.innerHTML = `<p class="pequeno">Nenhum PDF enviado ainda.</p>`; return; }
+  $("#matResumo").textContent = `${pl(materiaisCache.length, "arquivo")} · o aluno lê dentro da tela da prova`;
+  if (!materiaisCache.length) { box.innerHTML = `<p class="help">Nenhum PDF enviado ainda.</p>`; return; }
   box.innerHTML = `<div class="tabela"><table><tr><th>Material</th><th>Tamanho</th><th>Enviado</th><th></th></tr>` + materiaisCache.map(m =>
     `<tr><td><b>${esc(m.titulo)}</b><br><span class="pequeno">${esc(m.arquivo || "")}</span></td><td>${tamanhoTexto(m.tamanho)}</td><td class="pequeno">${dataBR(m.criadoEm)}<br>${esc(m.criadoPor || "")}</td>
-     <td class="td-acoes"><button class="leve mini" data-vermat="${m.id}" title="Abre o PDF numa aba nova">👁 Ver</button> ${podeEditar() ? `<button class="perigo mini" data-delmat="${m.id}">🗑 Apagar</button>` : ""}</td></tr>`).join("") + "</table></div>";
+     <td class="td-acoes"><button class="leve mini" data-vermat="${m.id}" title="Abre o PDF numa aba nova">${ic("eye", { size: 16 })}Ver</button> ${podeEditar() ? menuHTML({ aria: `Mais ações: ${m.titulo}`, itensHTML: itemMenu({ i: "trash", t: "Apagar", perigo: true, attrs: `data-delmat="${m.id}"` }) }) : ""}</td></tr>`).join("") + "</table></div>";
   box.querySelectorAll("[data-vermat]").forEach(b => b.onclick = () => abrirMaterialEmAba(b.dataset.vermat, traduzirErro).catch(e => toast(e.message, "erro")));
   box.querySelectorAll("[data-delmat]").forEach(b => b.onclick = async () => {
     const m = materiaisCache.find(x => x.id === b.dataset.delmat);
@@ -865,7 +884,7 @@ function opcoesDaProvaHTML(p) {
 
 // ---------- lista de provas: pesquisa, filtros e agrupada por turma ----------
 let provasCache = [], filtroTurmaPendente = null;
-const gruposAbertos = new Set();   // turmas que o professor abriu (começam fechadas; fica enquanto a página estiver aberta)
+const gruposFechados = new Set();   // turmas que o professor fechou (fica enquanto a página estiver aberta)
 async function carregarProvas() {
   await Promise.all([listarBancos(), listarTurmas(), listarPlanos().catch(() => [])]);
   const turmaAntes = $("#pTurma").value;
@@ -914,7 +933,7 @@ function desenharProvas() {
   lista.sort(ordem === "titulo" ? (a, b) => (a.titulo || "").localeCompare(b.titulo || "", "pt-BR", { numeric: true })
            : ordem === "antigas" ? (a, b) => seg(a) - seg(b) : (a, b) => seg(b) - seg(a));
   const nLib = lista.filter(p => p.liberada).length;
-  $("#fpContagem").innerHTML = `<span class="chip">${lista.length} de ${provasCache.length} prova(s)</span>${nLib ? `<span class="chip on">● ${nLib} liberada(s)</span>` : ""}`;
+  $("#fpContagem").textContent = `${lista.length} de ${pl(provasCache.length, "prova")} · ${nLib} ${nLib === 1 ? "liberada" : "liberadas"}`;
   if (!lista.length) { box.innerHTML = vazio({ e: "🔎", texto: "Nenhuma prova com esses filtros." }); return; }
   // agrupa por turma (na ordem das turmas cadastradas; "sem turma" por último)
   const grupos = new Map();
@@ -922,20 +941,19 @@ function desenharProvas() {
   const chaves = [...turmasCache.map(t => t.id).filter(id => grupos.has(id)), ...(grupos.has("__sem") ? ["__sem"] : [])];
   box.innerHTML = chaves.map(k => {
     const ps = grupos.get(k), t = turmasCache.find(x => x.id === k), lib = ps.filter(p => p.liberada).length;
-    const aberto = busca || turma || fSem || fMat || gruposAbertos.has(k);
+    const aberto = busca || turma || fSem || fMat || !gruposFechados.has(k);
     // dentro da turma: semestre (mais recente primeiro) → matéria
     const sub = new Map();
     ps.forEach(p => { const sm = semestreDaProva(p), m = materiaDaProva(p, bancosCache) || "Sem matéria", ch = `${sm}|${chaveTexto(m)}`; if (!sub.has(ch)) sub.set(ch, { sm, m, ps: [] }); sub.get(ch).ps.push(p); });
     const subs = [...sub.values()].sort((a, b) => b.sm.localeCompare(a.sm) || a.m.localeCompare(b.m, "pt-BR"));
-    return `<details class="recolhivel grupo-provas${k === "__sem" ? " sem-turma" : ""}" data-grupo="${k}" ${aberto ? "open" : ""}>
-      <summary><span class="rc-titulo">${k === "__sem" ? "⚠ Sem turma" : `👥 ${esc(nomeTurma(t))}`}</span>
-        <span class="rc-resumo"><span class="chip">${ps.length} prova(s)</span>${lib ? `<span class="chip on">● ${lib} liberada(s)</span>` : ""}
-        ${t ? `<span class="chip">${alunosDaTurma(t).length} alunos</span>` : `<span class="chip aviso">nenhum aluno vê estas provas: use ✎ Editar e escolha a turma</span>`}
-        ${subs.length === 1 ? `<span class="chip">📅 ${rotuloSemestre(subs[0].sm)}</span><span class="chip">📚 ${esc(subs[0].m)}</span>` : ""}</span></summary>
-      <div class="rc-corpo">${subs.map(g => `<div class="sub-grupo">${subs.length > 1 ? `<h4 class="sg-titulo"><span class="chip">📅 ${rotuloSemestre(g.sm)}</span><span class="chip">📚 ${esc(g.m)}</span><span class="pequeno">${g.ps.length} prova(s)</span></h4>` : ""}
+    const resumo = [pl(ps.length, "prova"), lib ? `${lib} ${lib === 1 ? "liberada" : "liberadas"}` : "", t ? pl(alunosDaTurma(t).length, "aluno") : "", subs.length === 1 ? rotuloSemestre(subs[0].sm) : "", subs.length === 1 ? subs[0].m : ""].filter(Boolean).join(" · ");
+    return `<details class="grupo-lista" data-grupo="${k}" ${aberto ? "open" : ""}>
+      <summary class="grupo-cab">${seta()}<h3 class="gc-titulo">${k === "__sem" ? "Sem turma" : `${esc(t.nome || "")}${rotuloDias(t.diasAula) ? `<span class="gc-dias"> · ${esc(rotuloDias(t.diasAula))}</span>` : ""}`}</h3>
+        <span class="gc-resumo">${esc(resumo)}</span>${t ? "" : `<span class="chip warn">nenhum aluno vê estas provas: use Editar e escolha a turma</span>`}</summary>
+      <div class="grupo-corpo">${subs.map(g => `<div class="sub-grupo">${subs.length > 1 ? `<h4 class="sg-titulo">${esc(rotuloSemestre(g.sm))} · ${esc(g.m)} · ${pl(g.ps.length, "prova")}</h4>` : ""}
         <div class="cartoes-provas">${g.ps.map(cartaoProvaHTML).join("")}</div></div>`).join("")}</div></details>`;
   }).join("");
-  box.querySelectorAll("[data-grupo]").forEach(d => d.ontoggle = () => { if (busca || turma || fSem || fMat) return; d.open ? gruposAbertos.add(d.dataset.grupo) : gruposAbertos.delete(d.dataset.grupo); });
+  box.querySelectorAll("[data-grupo]").forEach(d => d.ontoggle = () => { if (busca || turma || fSem || fMat) return; d.open ? gruposFechados.delete(d.dataset.grupo) : gruposFechados.add(d.dataset.grupo); });
   box.querySelectorAll("[data-alunos]").forEach(b => b.onclick = async () => {
     abrirAba("resultados"); $("#rTurma").value = ""; await prepararResultados();
     $("#rProva").value = b.dataset.alunos; $("#rAoVivo").checked = true; carregarResultados();
@@ -966,23 +984,24 @@ function cartaoProvaHTML(p) {
     const bs = bancosDaProva(p).map(id => bancosCache.find(x => x.id === id) || { id, nome: id });
     const qtd = p.nAlternativas !== undefined && p.nAlternativas !== null ? `${p.nAlternativas} alt. + ${p.nDissertativas || 0} dissert.` : p.nDissertativas ? `${p.nDissertativas} dissert.` : "";
     const vidas = !p.permitirTrocaAba && Number(p.maxTrocasDeAba) > 0 ? Number(p.maxTrocasDeAba) : 0;
-    const itens = (podeEditar() ? itemMenu({ e: p.resultadosLiberados ? "🙈" : "📖", t: p.resultadosLiberados ? "Ocultar gabarito" : "Liberar gabarito", attrs: `data-tg="resultadosLiberados" data-id="${p.id}" title="O aluno vê quais acertou, o gabarito e baixa o PDF da prova"` })
-        + itemMenu({ e: "✎", t: "Editar", attrs: `data-editar="${p.id}"` }) : "")
-      + itemMenu({ e: "🧪", t: "Testar como aluno", attrs: `data-testar="${p.id}" title="Abre a prova em nova aba, como o aluno vê (não vale nota)"` })
-      + itemMenu({ e: "↺", t: "Apagar meu teste", attrs: `data-apagarteste="${p.id}" title="Apaga a sua tentativa de teste desta prova"` })
-      + (podeEditar() && ehAdmin() ? "<hr>" + itemMenu({ e: "🗑", t: "Apagar prova", perigo: true, attrs: `data-del="${p.id}"` }) : "");
-    return `<article class="cartao-prova compacto${p.liberada ? " aberta" : ""}">
+    const itens = (podeEditar() ? itemMenu({ i: p.resultadosLiberados ? "lock" : "unlock", t: p.resultadosLiberados ? "Ocultar gabarito" : "Liberar gabarito", attrs: `data-tg="resultadosLiberados" data-id="${p.id}" title="O aluno vê quais acertou, o gabarito e baixa o PDF da prova"` })
+        + itemMenu({ i: "edit", t: "Editar", attrs: `data-editar="${p.id}"` }) : "")
+      + itemMenu({ i: "simulacao", t: "Testar como aluno", attrs: `data-testar="${p.id}" title="Abre a prova em nova aba, como o aluno vê (não vale nota)"` })
+      + itemMenu({ i: "refresh", t: "Apagar meu teste", attrs: `data-apagarteste="${p.id}" title="Apaga a sua tentativa de teste desta prova"` })
+      + (podeEditar() && ehAdmin() ? "<hr>" + itemMenu({ i: "trash", t: "Apagar prova", perigo: true, attrs: `data-del="${p.id}"` }) : "");
+    const m = 15;   // ícones dos metadados
+    return `<article class="cartao-prova compacto">
       <div class="cp-info">
-        <div class="cp-l1"><h3>${esc(p.titulo)}</h3><span class="chip ${p.liberada ? "on" : "off"}">${p.liberada ? "● liberada" : "○ fechada"}</span>${p.resultadosLiberados ? `<span class="chip on">📖 gabarito liberado</span>` : `<span class="chip off" title="O aluno vê só quantas acertou e a nota">só o placar</span>`}</div>
-        <div class="cp-l2"><span>${p.turmaId ? "👥 " : "⚠ "}${esc(p.turma || "sem turma")}</span><span>📚 ${esc(materiaDaProva(p, bancosCache) || "sem matéria")}</span>${p.dataProva ? `<span>🗓 ${dataCurta(p.dataProva)}</span>` : ""}
-          <span><b>${p.nQuestoes}</b> questões${qtd ? ` (${qtd})` : ""}</span><span>${p.tempoMinutos > 0 ? `<b>${p.tempoMinutos}</b> min` : "sem limite de tempo"}</span><span title="${vidas ? `${vidas} vida(s)` : "sem vidas"}">${vidas ? "❤️".repeat(Math.min(5, vidas)) : "sem vidas"}</span></div>
+        <div class="cp-l1"><h3>${esc(p.titulo)}</h3><span class="chip ${p.liberada ? "ok" : "off"}">${p.liberada ? "● liberada" : "○ fechada"}</span>${p.resultadosLiberados ? `<span class="chip info">gabarito liberado</span>` : `<span class="chip off" title="O aluno vê só quantas acertou e a nota">só o placar</span>`}</div>
+        <div class="cp-l2"><span>${ic(p.turmaId ? "users" : "alert", { size: m })}${esc(p.turma || "sem turma")}</span><span>${ic("book", { size: m })}${esc(materiaDaProva(p, bancosCache) || "sem matéria")}</span>${p.dataProva ? `<span>${ic("cal", { size: m })}${dataCurta(p.dataProva)}</span>` : ""}
+          <span><b>${p.nQuestoes}</b> questões${qtd ? ` · ${qtd}` : ""}</span><span>${ic("clock", { size: m })}${p.tempoMinutos > 0 ? `<b>${p.tempoMinutos} min</b>` : "sem limite de tempo"}</span><span title="${vidas ? pl(vidas, "vida") : "sem vidas"}">${vidas ? `<span class="e" aria-hidden="true">${"❤️".repeat(Math.min(5, vidas))}</span>` : "sem vidas"}</span></div>
       </div>
       <div class="cp-botoes">
-        ${podeEditar() ? `<button class="${p.liberada ? "leve" : "ok"}" data-tg="liberada" data-id="${p.id}">${p.liberada ? "⏹ Encerrar" : "▶ Liberar prova"}</button>` : ""}
-        <button class="leve" data-alunos="${p.id}" title="Ver aluno por aluno (ao vivo): vidas, progresso e nota">👥 Alunos</button>
+        ${podeEditar() ? `<button class="${p.liberada ? "leve" : "ok"}" data-tg="liberada" data-id="${p.id}">${ic(p.liberada ? "stop" : "play", { size: 16 })}${p.liberada ? "Encerrar" : "Liberar prova"}</button>` : ""}
+        <button class="leve" data-alunos="${p.id}" title="Ver aluno por aluno (ao vivo): vidas, progresso e nota">${ic("users", { size: 16 })}Alunos</button>
         ${menuHTML({ aria: `Mais ações: ${p.titulo}`, itensHTML: itens })}
       </div>
-      <details class="cp-mais"><summary>Detalhes</summary>
+      <details class="cp-mais"><summary>Detalhes${seta(14)}</summary>
         <dl class="cp-detalhes">
           <div><dt>Banco(s)</dt><dd>${bs.map(b => esc(b.nome)).join(" · ")}</dd></div>
           <div><dt>Temas</dt><dd class="pequeno">${temasDaProvaTexto(p, bs)}</dd></div>
@@ -1101,7 +1120,8 @@ $("#btnValidarBanco").onclick = () => {
 };
 $("#btnImportarBanco").onclick = async () => {
   if (!podeEditar()) return toast("Seu papel não permite importar.", "erro");
-  let b; try { b = validarBanco($("#txtBanco").value); } catch (e) { return $("#msgBanco").innerHTML = `❌ ${esc(e.message)}`; }
+  let b; try { b = validarBanco($("#txtBanco").value); } catch (e) { $("#msgBanco").innerHTML = `❌ ${esc(e.message)}`; return false; }
+  if (!(await confirmar(`Importar o banco "${b.nome}" com ${pl(b.questoes.length, "questão", "questões")}?`, { titulo: "Importar banco", ok: "Importar" }))) return false;
   const temas = ordenarTemas(b.questoes.map(temaDe));
   const ref = await addDoc(collection(db, "bancos"), { nome: b.nome, materia: $("#bMateria").value.trim() || b.materia || "", semestre: $("#bSemestre").value || semestreDe(),
     nQuestoes: b.questoes.length, temas, criadoEm: serverTimestamp(), criadoPor: eu.email });
@@ -1116,13 +1136,14 @@ $("#btnImportarBanco").onclick = async () => {
     lote.set(doc(db, "bancos", ref.id, "gabaritos", qid), gab);
   });
   await lote.commit();
-  $("#msgBanco").innerHTML = `✅ Banco <b>${esc(b.nome)}</b> importado com ${b.questoes.length} questões em ${temas.length} tema(s): ${temas.map(esc).join(", ")}.`; $("#txtBanco").value = "";
+  $("#msgBanco").textContent = ""; toast(`Banco ${b.nome} importado com ${pl(b.questoes.length, "questão", "questões")} em ${pl(temas.length, "tema")}.`, "ok"); $("#txtBanco").value = "";
   carregarBancos();
+  return true;
 };
 // semestre do banco: o gravado; senão o da criação
 const semestreDoBanco = b => b.semestre || semestreDe(b.criadoEm || new Date());
 let bancosContagem = {};   // bancoId -> { tema: { alternativa, dissertativa } }
-const bancosAbertos = new Set();   // grupos de bancos abertos pelo professor (começam fechados)
+const bancosEstado = new Map();   // grupos que o professor abriu ou fechou (semestre atual e matérias começam abertos; semestres anteriores, fechados)
 async function carregarBancos() {
   await Promise.all([listarBancos(), listarPlanos().catch(() => []), listarCursos().catch(() => [])]);
   // formulário de importação: semestre e matérias sugeridas
@@ -1131,7 +1152,7 @@ async function carregarBancos() {
   $("#bSemestre").value = sAntes || base;
   $("#bMaterias").innerHTML = materiasSugeridas().map(m => `<option value="${esc(m)}">`).join("");
   const box = $("#listaBancos");
-  if (!bancosCache.length) { $("#fbContagem").textContent = ""; box.innerHTML = vazio({ e: "📚", texto: "Nenhum banco ainda. Importe o <b>modelo_banco.json</b> acima para começar." }); return; }
+  if (!bancosCache.length) { $("#fbContagem").textContent = ""; box.innerHTML = vazio({ e: "📚", texto: "Nenhum banco ainda. Use <b>Importar banco</b>, no alto da tela, para começar." }); return; }
   box.innerHTML = `<p class="pequeno">Carregando…</p>`;
   const cs = await Promise.all(bancosCache.map(b => questoesDoBanco(b.id).then(contarPorTema).catch(() => null)));
   bancosContagem = Object.fromEntries(bancosCache.map((b, i) => [b.id, cs[i]]));
@@ -1158,7 +1179,7 @@ function desenharBancos() {
     return n > 0;
   });
   atualizarFiltros($("#aba-bancos .toolbar"));
-  $("#fbContagem").innerHTML = `<span class="chip">${lista.length} de ${bancosCache.length} banco(s)</span><span class="chip">${lista.reduce((n, b) => n + Number(b.nQuestoes || 0), 0)} questões</span>`;
+  $("#fbContagem").textContent = `${pl(lista.length, "banco")} · ${pl(lista.reduce((n, b) => n + Number(b.nQuestoes || 0), 0), "questão", "questões")}`;
   if (!lista.length) { box.innerHTML = vazio({ e: "🔎", texto: "Nenhum banco com esses filtros." }); return; }
   const arv = new Map();
   for (const b of lista) {
@@ -1168,31 +1189,39 @@ function desenharBancos() {
   }
   const filtrando = busca || fS || fM, atual = semestreDe();
   const usos = id => provasCache.filter(p => bancosDaProva(p).includes(id));
+  const aberto = (id, padrao) => filtrando || (bancosEstado.has(id) ? bancosEstado.get(id) : padrao);
+  const somaQ = bs => bs.reduce((n, b) => n + Number(b.nQuestoes || 0), 0);
   box.innerHTML = [...arv.keys()].sort().reverse().map(s => {
     const mats = [...arv.get(s).values()].sort((a, b) => a.m.localeCompare(b.m, "pt-BR")), ids = `bs:${s}`;
-    const nB = mats.reduce((n, x) => n + x.bs.length, 0);
-    return `<details class="recolhivel" data-gb="${ids}" ${filtrando || bancosAbertos.has(ids) ? "open" : ""}>
-      <summary><span class="rc-titulo">📅 ${rotuloSemestre(s)}</span><span class="rc-resumo">${s === atual ? `<span class="chip on">atual</span>` : ""}<span class="chip">${mats.length} matéria(s)</span><span class="chip">${nB} banco(s)</span></span></summary>
-      <div class="rc-corpo">${mats.map(({ m, bs }) => {
+    const todos = mats.flatMap(x => x.bs);
+    return `<details class="faixa" data-gb="${ids}" ${aberto(ids, s === atual) ? "open" : ""}>
+      <summary class="secao-faixa"><span class="sf-tile">${ic("cal", { size: 20 })}</span><h3 class="sf-titulo">${esc(semestreLongo(s))}</h3>${s === atual ? `<span class="chip ok">atual</span>` : ""}
+        <span class="sf-resumo">${pl(mats.length, "matéria")} · ${pl(todos.length, "banco")} · ${pl(somaQ(todos), "questão", "questões")}</span><span class="sf-fim sf-tile">${seta()}</span></summary>
+      <div class="faixa-corpo">${mats.map(({ m, bs }) => {
         const idm = `bm:${s}:${chaveTexto(m)}`;
-        return `<details class="recolhivel sub" data-gb="${idm}" ${filtrando || bancosAbertos.has(idm) ? "open" : ""}>
-          <summary><span class="rc-titulo">📚 ${esc(m)}</span><span class="rc-resumo"><span class="chip">${bs.length} banco(s)</span><span class="chip">${bs.reduce((n, b) => n + Number(b.nQuestoes || 0), 0)} questões</span></span></summary>
-          <div class="rc-corpo cartoes-materias">${bs.map(b => {
+        return `<details class="card sem-padding" data-gb="${idm}" ${aberto(idm, true) ? "open" : ""}>
+          <summary class="sub-cab"><span class="sc-tile">${ic("book", { size: 20 })}</span><span class="sc-texto"><span class="sc-titulo">${esc(m)}</span><span class="sc-resumo">${pl(bs.length, "banco")} · ${pl(somaQ(bs), "questão", "questões")}</span></span>
+            ${podeEditar() ? `<span class="sc-fim"><button type="button" class="leve mini" data-banco-sem="${esc(s)}" data-banco-mat="${m === "Sem matéria" ? "" : esc(m)}">${ic("plus", { size: 16 })}Banco nesta matéria</button></span>` : ""}${seta()}</summary>
+          <div class="bancos-grade">${bs.map(b => {
             const c = bancosContagem[b.id], tot = c ? Object.values(c).reduce((x, y) => ({ alternativa: x.alternativa + y.alternativa, dissertativa: x.dissertativa + y.dissertativa }), { alternativa: 0, dissertativa: 0 }) : null;
             const u = usos(b.id), geral = c?.Geral ? (c.Geral.alternativa + c.Geral.dissertativa) : 0;
             const nTop = c ? Object.keys(c).length : 0;
-            return `<article class="cartao-materia cartao-banco">
-              <div class="cm-topo"><div><h3>🗂 ${esc(b.nome)}</h3><span class="pequeno">${b.nQuestoes} questões${tot ? ` · ${textoContagem(tot)}` : ""}${achados[b.id] ? ` · <b>${achados[b.id]} questão(ões) com “${esc($("#fbBusca").value.trim())}”</b>` : ""}</span></div>
-                <div class="cb-acoes">${u.length ? `<span class="chip info" title="${esc(u.map(p => p.titulo).join(" · "))}">🧪 em ${u.length} prova(s)</span>` : `<span class="chip off">sem prova</span>`}
-                ${podeEditar() ? `<button class="leve mini" data-topicos="${b.id}" title="Tópico de cada questão, matéria e semestre do banco (com sugestão da IA)">🏷 Tópicos</button>` : ""}
-                ${menuHTML({ aria: `Mais ações: ${b.nome}`, itensHTML: itemMenu({ e: "📋", t: "Gabarito para o Classroom", attrs: `data-gab="${b.id}"` }) + (ehAdmin() ? "<hr>" + itemMenu({ e: "🗑", t: "Apagar banco", perigo: true, attrs: `data-delb="${b.id}"` }) : "") })}</div></div>
-              ${c ? `<details class="recolhivel leve topicos-banco"><summary><span class="rc-titulo">🏷 ${nTop} tópico(s)</span>${geral ? `<span class="chip aviso">⚠ ${geral} sem tópico</span>` : ""}</summary>
-                <div class="rc-corpo"><ul class="lista-topicos lista-topicos-banco">${Object.entries(c).map(([t, n]) => `<li class="topico${t === "Geral" ? " e-geral" : ""}"><span class="tp-nome">${esc(t)}</span><span class="chip" title="alternativas">🔘 ${n.alternativa}</span><span class="chip" title="dissertativas">✍ ${n.dissertativa}</span></li>`).join("")}</ul>
-                ${geral ? `<p class="pequeno aviso-texto">⚠ ${geral} questão(ões) sem tópico ("Geral"): use 🏷 Tópicos.</p>` : ""}</div></details>` : `<p class="pequeno">⚠ não foi possível ler as questões.</p>`}</article>`;
+            return `<article class="banco-bloco">
+              <div class="bb-topo"><span class="bb-tile">${ic("bancos", { size: 18 })}</span>
+                <div class="bb-info"><h4>${esc(b.nome)}</h4><span class="bb-resumo">${pl(Number(b.nQuestoes) || 0, "questão", "questões")}${tot ? ` · ${tot.alternativa} alternativa · ${tot.dissertativa} dissertativa` : ""}${achados[b.id] ? ` · <b>${pl(achados[b.id], "questão", "questões")} com “${esc($("#fbBusca").value.trim())}”</b>` : ""}</span></div>
+                ${u.length ? `<span class="chip info" title="${esc(u.map(p => p.titulo).join(" · "))}">em ${pl(u.length, "prova")}</span>` : `<span class="chip off">sem prova</span>`}</div>
+              <div class="bb-rodape">
+                ${c ? `<details class="bb-topicos"><summary>${seta(16)}${ic("tag", { size: 15 })}${pl(nTop, "tópico")}${geral ? `<span class="chip warn">${geral} sem tópico</span>` : ""}</summary>
+                  <ul class="lista-topicos lista-topicos-banco">${Object.entries(c).map(([t, n]) => `<li class="topico${t === "Geral" ? " e-geral" : ""}"><span class="tp-nome">${esc(t)}</span><span class="meta-txt">${n.alternativa} alt. · ${n.dissertativa} dissert.</span></li>`).join("")}</ul>
+                  ${geral ? `<p class="help">${pl(geral, "questão", "questões")} sem tópico ("Geral"): use Tópicos.</p>` : ""}</details>` : `<p class="help">Não foi possível ler as questões.</p>`}
+                <div class="bb-acoes">${podeEditar() ? `<button class="leve mini" data-topicos="${b.id}" title="Tópico de cada questão, matéria e semestre do banco (com sugestão da IA)">${ic("tag", { size: 16 })}Tópicos</button>` : ""}
+                  ${menuHTML({ aria: `Mais ações: ${b.nome}`, itensHTML: itemMenu({ i: "copy", t: "Gabarito para o Classroom", attrs: `data-gab="${b.id}"` }) + (ehAdmin() ? "<hr>" + itemMenu({ i: "trash", t: "Apagar banco", perigo: true, attrs: `data-delb="${b.id}"` }) : "") })}</div>
+              </div></article>`;
           }).join("")}</div></details>`;
       }).join("")}</div></details>`;
   }).join("");
-  box.querySelectorAll("[data-gb]").forEach(d => d.ontoggle = () => { if (filtrando) return; d.open ? bancosAbertos.add(d.dataset.gb) : bancosAbertos.delete(d.dataset.gb); });
+  box.querySelectorAll("[data-gb]").forEach(d => d.ontoggle = () => { if (!filtrando) bancosEstado.set(d.dataset.gb, d.open); });
+  box.querySelectorAll("[data-banco-sem]").forEach(x => x.onclick = () => abrirImportarBanco({ semestre: x.dataset.bancoSem, materia: x.dataset.bancoMat }));
   box.querySelectorAll("[data-gab]").forEach(x => x.onclick = () => gerarGabarito(x.dataset.gab));
   box.querySelectorAll("[data-topicos]").forEach(x => x.onclick = () => editarTopicosBanco(x.dataset.topicos, carregarBancos));
   box.querySelectorAll("[data-delb]").forEach(x => x.onclick = async () => {
