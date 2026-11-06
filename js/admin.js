@@ -105,6 +105,8 @@ const ABAS = {
 document.querySelectorAll(".menu-lateral [data-aba]").forEach(b => b.insertAdjacentHTML("afterbegin", ic(ABAS[b.dataset.aba].icone)));
 Object.values(ABAS).forEach(({ primaria: p }) => { if (!p) return; const b = $("#" + p.id); b.innerHTML = ic(p.icone, { size: 16 }) + `<span class="bt-texto">${esc(p.rotulo)}</span>`; b.setAttribute("aria-label", p.rotulo); b.title = p.rotulo; });
 document.querySelectorAll("[data-ic]").forEach(e => { e.innerHTML = ic(e.dataset.ic, { size: Number(e.dataset.icSize) || 18 }); });
+document.querySelectorAll("[data-salvar-config]").forEach(b => { b.onclick = () => $("#btnSalvarConfig").click(); });
+document.querySelectorAll("[data-ir-aba]").forEach(b => { b.onclick = () => abrirAba(b.dataset.irAba); });
 $("#btnAjuda").innerHTML = ic("info", { size: 16 }); $("#usuarioChev").innerHTML = ic("chev", { size: 16 });
 // a importação de banco abre num drawer: #bancoImportar é movido para lá e volta ao fechar (ids e eventos continuam os mesmos)
 let drawerImportar = null;
@@ -1734,10 +1736,11 @@ async function carregarEquipe() {
 function desenharEquipe() {
   const b = semAcento($("#feBusca").value.trim()), fp = $("#fePapel").value;
   const lista = equipeCache.filter(m => (!b || semAcento(`${m.id} ${m.nome || ""}`).includes(b)) && (!fp || m.papel === fp));
+  const corPapel = { admin: "navy", professor: "info", inclusao: "warn", auxiliar: "off" };
   $("#feContagem").textContent = `${lista.length} de ${equipeCache.length} pessoa(s)`;
-  $("#listaEquipe").innerHTML = `<div class="tabela"><table><tr><th>E-mail</th><th>Nome</th><th>Papel</th><th></th></tr>
-    ${!b && !fp ? `<tr><td>${esc(SUPER_ADMIN)}</td><td>—</td><td><span class="tag on">admin principal</span></td><td class="pequeno">fixo nas regras</td></tr>` : ""}` +
-    lista.map(m => `<tr><td>${esc(m.id)}</td><td>${esc(m.nome || "")}</td><td>${ehAdmin() && m.id !== eu.email ? `<select class="sel-papel" data-papel="${esc(m.id)}" aria-label="Cargo de ${esc(m.nome || m.id)}">${Object.entries(ROT_PAPEL).map(([k, r]) => `<option value="${k}"${m.papel === k ? " selected" : ""}>${esc(r)}</option>`).join("")}</select>` : `<span class="tag">${esc(ROT_PAPEL[m.papel] || m.papel)}</span>${m.id === eu.email ? ` <span class="pequeno">(você)</span>` : ""}`}</td><td>${ehAdmin() && m.id !== eu.email ? `<button class="perigo mini" data-rm="${m.id}">Remover</button>` : ""}</td></tr>`).join("") + "</table></div>";
+  $("#listaEquipe").innerHTML = `<div class="tabela sem-borda tabela-alunos"><table><thead><tr><th>E-mail</th><th>Nome</th><th>Papel</th><th><span class="sr-only">Ações</span></th></tr></thead><tbody>
+    ${!b && !fp ? `<tr><td>${esc(SUPER_ADMIN)}</td><td>—</td><td><span class="chip ok">admin principal</span></td><td class="td-acoes"><span class="meta-txt eq-fixo">fixo nas regras</span></td></tr>` : ""}` +
+    lista.map(m => `<tr><td>${esc(m.id)}</td><td>${esc(m.nome || "")}</td><td>${ehAdmin() && m.id !== eu.email ? `<select class="sel-papel ${corPapel[m.papel] || "off"}" data-papel="${esc(m.id)}" aria-label="Cargo de ${esc(m.nome || m.id)}">${Object.entries(ROT_PAPEL).map(([k, r]) => `<option value="${k}"${m.papel === k ? " selected" : ""}>${esc(r)}</option>`).join("")}</select>` : `<span class="chip ${corPapel[m.papel] || "off"}">${esc(ROT_PAPEL[m.papel] || m.papel)}</span>${m.id === eu.email ? ` <span class="meta-txt">(você)</span>` : ""}`}</td><td class="td-acoes">${ehAdmin() && m.id !== eu.email ? `<button class="discreto vermelho mini" data-rm="${m.id}">Remover</button>` : ""}</td></tr>`).join("") + "</tbody></table></div>";
   // trocar o cargo (só admin; ninguém muda o próprio cargo, para não se trancar fora)
   document.querySelectorAll("[data-papel]").forEach(sel => sel.onchange = async () => {
     const m = equipeCache.find(x => x.id === sel.dataset.papel), novo = sel.value;

@@ -356,8 +356,7 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
     <!-- EQUIPE -->
     <div id="aba-equipe" class="oculto">
       <template class="ajuda-aba"><p><b>admin</b> = tudo · <b>professor</b> = bancos, provas, correção e resultados · <b>auxiliar</b> = só vê resultados · <b>auxiliar de inclusão</b> = só os alunos vinculados a ela na aba Acessibilidade: vê os resultados deles, edita as adaptações da prova, sobe documentos, deixa sugestões e devolve vidas.</p></template>
-      <div class="card">
-        <!-- formulário: abre num drawer -->
+      <!-- formulário: abre num drawer -->
         <div id="formEquipe" class="oculto">
           <label for="eEmail">E-mail (conta Google)</label><input type="email" id="eEmail" placeholder="nome@docente.senai.br">
           <label for="eNome" style="margin-top:12px">Nome</label><input type="text" id="eNome">
@@ -370,8 +369,7 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
           <span id="feContagem" class="tb-contagem" aria-live="polite"></span>
           <div class="painel-filtros" id="feBuscaPainel" hidden><label class="pf-campo"><span>Papel</span><select id="fePapel" aria-label="Filtrar por papel"><option value="">Todos os papéis</option><option value="admin">admin</option><option value="professor">professor</option><option value="auxiliar">auxiliar</option><option value="inclusao">auxiliar de inclusão</option></select></label><div class="pf-acoes"><button type="button" class="discreto mini pf-limpar oculto">Limpar filtros</button></div></div>
         </div>
-        <div id="listaEquipe"></div>
-      </div>
+      <div class="card sem-padding"><div id="listaEquipe"></div></div>
     </div>
 
     <!-- CONFIG -->
@@ -390,59 +388,46 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
     <!-- SIMULAÇÃO: todas as formas de testar e demonstrar num lugar só (nada é gravado) -->
     <div id="aba-simulacao" class="oculto">
       <template class="ajuda-aba">Teste e demonstre o sistema <b>sem conta de aluno</b>. Tudo abre numa aba nova; nada vale nota e nenhum aluno vê.</template>
-      <article class="card sim-card sim-ambiente"><div class="sa-cab"><div class="sim-e">🏗</div><div><h3>Ambiente de teste completo</h3>
+      <article class="card sim-card sim-ambiente"><div class="sa-cab"><div class="sim-e grande" data-ic="simulacao" data-ic-size="26" aria-hidden="true"></div><div><h3>Ambiente de teste completo</h3>
           <span id="simAmbStatus" class="chip">verificando…</span></div></div>
         <p class="pequeno">Cria dados <b>fictícios de verdade</b> para usar todas as telas do painel como num dia normal. Tudo vem com <b>🧪 TESTE</b> no nome e os e-mails dos alunos são <b>@simulacao.teste</b> (ninguém consegue entrar com eles).</p>
         <div class="sa-colunas"><div><b>O que é criado</b><ul class="pequeno">
-          <li>👥 Turma <b>🧪 TESTE · DS-SIM-1A</b> com 8 alunos fake (2º semestre do curso)</li>
-          <li>🗂 Banco <b>🧪 TESTE · SQL básico</b> com 8 questões (6 de marcar e 2 escritas)</li>
-          <li>📝 3 provas: uma <b>corrigida</b> com gabarito liberado, uma com <b>escritas para corrigir</b> e um <b>rascunho</b></li>
-          <li>📊 Tentativas com respostas, notas variadas e saídas da prova</li>
-          <li>♿ 3 alunos com acessibilidade (perfis TEA, DI e baixa visão) com <b>1 mês de diário</b></li>
-          <li>💬 Perfil e status do dia de cada aluno (alguns difíceis)</li></ul></div>
+          <li><span data-ic="users" data-ic-size="14" aria-hidden="true"></span>Turma <b>🧪 TESTE · DS-SIM-1A</b> com 8 alunos fake (2º semestre do curso)</li>
+          <li><span data-ic="bancos" data-ic-size="14" aria-hidden="true"></span>Banco <b>🧪 TESTE · SQL básico</b> com 8 questões (6 de marcar e 2 escritas)</li>
+          <li><span data-ic="provas" data-ic-size="14" aria-hidden="true"></span>3 provas: uma <b>corrigida</b> com gabarito liberado, uma com <b>escritas para corrigir</b> e um <b>rascunho</b></li>
+          <li><span data-ic="resultados" data-ic-size="14" aria-hidden="true"></span>Tentativas com respostas, notas variadas e saídas da prova</li>
+          <li><span data-ic="acess" data-ic-size="14" aria-hidden="true"></span>3 alunos com acessibilidade (perfis TEA, DI e baixa visão) com <b>1 mês de diário</b></li>
+          <li><span data-ic="retorno" data-ic-size="14" aria-hidden="true"></span>Perfil e status do dia de cada aluno (alguns difíceis)</li></ul></div>
           <div><b>Onde ver</b><ul class="pequeno">
           <li><b>Provas</b> e <b>Bancos</b>: editar, liberar, testar como aluno</li><li><b>Resultados</b>: corrigir à mão ou com IA, fechar notas, vidas</li>
           <li><b>Relatórios</b>, <b>Organização</b> e <b>Turmas</b> (status do dia)</li><li><b>Acessibilidade</b>, <b>Diário</b> e <b>Provas adaptadas</b></li></ul></div></div>
-        <div class="linha acoes"><button type="button" id="simAmbCriar">Criar ambiente de teste</button><button type="button" class="perigo" id="simAmbApagar">🗑 Apagar ambiente de teste</button></div></article>
+        <div class="linha acoes"><button type="button" id="simAmbCriar">Criar ambiente de teste</button><button type="button" class="discreto vermelho" id="simAmbApagar"><span data-ic="trash" data-ic-size="16" aria-hidden="true"></span>Apagar ambiente de teste</button></div></article>
       <div class="sim-grade">
-        <article class="card sim-card"><div class="sim-e">🎒</div><h3>Ver como aluno</h3>
+        <article class="card sim-card"><div class="sim-e" data-ic="users" data-ic-size="20" aria-hidden="true"></div><h3>Ver como aluno</h3>
           <p class="pequeno">A página de um <b>aluno fictício</b> (Alex): perfil, personagem, cartão, conquistas, status do dia e o <b>mural da turma com colegas fictícios</b>. Dá para se dar conquistas e notas de mentira. Fica só no seu navegador.</p>
-          <a class="btn" href="index.html?simular=1" target="_blank" rel="noopener">Abrir a simulação do aluno →</a></article>
-        <article class="card sim-card"><div class="sim-e">♿</div><h3>Prova de demonstração de acessibilidade</h3>
+          <a class="btn leve" href="index.html?simular=1" target="_blank" rel="noopener">Abrir a simulação do aluno<span data-ic="external" data-ic-size="14" aria-hidden="true"></span></a></article>
+        <article class="card sim-card"><div class="sim-e" data-ic="acess" data-ic-size="20" aria-hidden="true"></div><h3>Prova de demonstração de acessibilidade</h3>
           <p class="pequeno">Prova fixa de SQL com <b>3 perfis fictícios</b> (TEA, deficiência intelectual, baixa visão e dislexia) e a prova original: visual, tempo, vidas, leitura em voz, apoios e todos os formatos de questão adaptada, com os bastidores de cada adaptação.</p>
-          <a class="btn" href="demo-acessibilidade.html" target="_blank" rel="noopener">Abrir a demonstração →</a></article>
-        <article class="card sim-card"><div class="sim-e">📝</div><h3>Fazer uma prova de teste como aluno</h3>
+          <a class="btn leve" href="demo-acessibilidade.html" target="_blank" rel="noopener">Abrir a demonstração<span data-ic="external" data-ic-size="14" aria-hidden="true"></span></a></article>
+        <article class="card sim-card"><div class="sim-e" data-ic="provas" data-ic-size="20" aria-hidden="true"></div><h3>Fazer uma prova de teste como aluno</h3>
           <p class="pequeno">Abre uma das <b>provas 🧪 TESTE</b> do ambiente de teste, como o aluno vê. Escolha um <b>aluno fictício</b> com acessibilidade para ver as adaptações dele. Só dados fictícios: nenhuma prova ou aluno real aparece aqui.</p>
           <label for="simProva">Prova</label><select id="simProva"><option value="">Carregando…</option></select>
           <label for="simComo" style="margin-top:8px">Ver como</label><select id="simComo"><option value="">Aluno fictício sem adaptação</option></select>
-          <button type="button" id="simTestar" style="margin-top:10px">Abrir a prova em modo teste →</button></article>
-        <article class="card sim-card"><div class="sim-e">🎨</div><h3>Componentes da interface</h3>
+          <button type="button" class="leve" id="simTestar" style="margin-top:10px">Abrir a prova em modo teste<span data-ic="external" data-ic-size="14" aria-hidden="true"></span></button></article>
+        <article class="card sim-card"><div class="sim-e" data-ic="itens" data-ic-size="20" aria-hidden="true"></div><h3>Componentes da interface</h3>
           <p class="pequeno">Vitrine dos botões, filtros, menus, painéis e avisos usados no sistema (útil para conferir o visual).</p>
-          <a class="btn leve" href="ui-demo.html" target="_blank" rel="noopener">Abrir a vitrine →</a></article>
+          <a class="btn leve" href="ui-demo.html" target="_blank" rel="noopener">Abrir a vitrine<span data-ic="external" data-ic-size="14" aria-hidden="true"></span></a></article>
       </div>
     </div>
 
     <div id="aba-config" class="oculto">
-      <div class="card">
-        <details class="recolhivel" data-chave="cfg-dominios"><summary><span class="rc-titulo">🌐 Domínios dos alunos</span></summary><div class="rc-corpo">
+      <div class="lista-cartoes">
+      <details class="card sem-padding bloco-linha"  data-chave="cfg-dominios"><summary class="sub-cab"><span class="ch ch-esq" aria-hidden="true" data-ic="chev"></span><span class="sc-tile sc-navy" data-ic="users" data-ic-size="20" aria-hidden="true"></span><span class="sc-texto"><span class="sc-titulo">Domínios de login</span><span class="sc-resumo">e-mails aceitos para alunos</span></span></summary>
+        <div class="bloco-linha-corpo">
           <label for="cDominios">Domínios de e-mail aceitos para alunos (separados por vírgula)</label>
-          <input type="text" id="cDominios" placeholder="edu.senai.br, aluno.senai.br"></div></details>
-        <details class="recolhivel" data-chave="cfg-horario"><summary><span class="rc-titulo">🕖 Horário das turmas</span><span class="rc-resumo pequeno">vale para todas</span></summary><div class="rc-corpo">
-          <div class="grade"><div><label for="cHIni">Entrada</label><input type="time" id="cHIni"></div><div><label for="cHFim">Saída</label><input type="time" id="cHFim"></div></div>
-          <label for="cHInt">Intervalos — um por linha: <span class="mono">Nome | início | fim</span></label>
-          <textarea id="cHInt" style="min-height:80px" placeholder="Café da manhã | 09:10 | 09:25"></textarea>
-          <p class="pequeno" style="margin:4px 0 0">Aparece nas turmas, no diário e no relatório do aluno. Os dias de aula ficam em cada turma (aba Turmas).</p></div></details>
-        <details class="recolhivel" data-chave="cfg-avancado"><summary><span class="rc-titulo">🛠 Avançado: servidor de correção</span></summary><div class="rc-corpo">
-          <label for="cCorretor">Servidor de correção automática (opcional)</label>
-          <input type="url" id="cCorretor" placeholder="https://corretor-prova.SEU-NOME.workers.dev" spellcheck="false">
-          <p class="pequeno" style="margin:4px 0 0">Endereço do Cloudflare Worker (veja o README, "Servidor de correção"). Com ele, as dissertativas são corrigidas assim que o aluno finaliza, mesmo com o painel fechado. O endereço não é segredo; a chave fica só no Cloudflare. Vazio = desligado.</p>
-          <div class="linha acoes" style="margin-top:12px"><button id="btnTestarCorretor" class="leve">Testar servidor</button></div></div></details>
-        <div class="rodape-card"><button id="btnSalvarConfig">Salvar</button></div>
-        <p class="pequeno" id="msgConfig"></p>
-      </div>
-      <div class="card oculto" id="cardIA">
-        <div class="card-cab"><h2>🤖 Correção por IA <span class="pequeno">(só você vê esta seção)</span> <span class="ajuda-pop"><button type="button" class="btn-ajuda" data-popover aria-haspopup="dialog" aria-expanded="false" aria-label="Como funciona" title="Como funciona">i</button><template><p>A chave fica num documento do Firestore que as regras deixam ler <b>somente</b> com a sua conta de administrador principal. Ela não vai para o GitHub, nem para a página do aluno, nem para os outros membros da equipe. Crie a chave em <b>console.anthropic.com → API Keys</b> e defina um limite de gasto mensal em <b>Settings → Limits</b>.</p></template></span></h2></div>
-        <div class="grade">
+          <input type="text" id="cDominios" placeholder="edu.senai.br, aluno.senai.br"><div class="rodape-card"><button id="btnSalvarConfig">Salvar</button></div></div></details>
+      <details class="card sem-padding bloco-linha" id="cardIA" data-chave="cfg-ia"><summary class="sub-cab"><span class="ch ch-esq" aria-hidden="true" data-ic="chev"></span><span class="sc-tile sc-navy" data-ic="bot" data-ic-size="20" aria-hidden="true"></span><span class="sc-texto"><span class="sc-titulo">Chave e modelo da IA</span><span class="sc-resumo">correção por IA · só você vê este bloco</span></span><span class="sc-fim"><span class="ajuda-pop"><button type="button" class="btn-ajuda" data-popover aria-haspopup="dialog" aria-expanded="false" aria-label="Como funciona" title="Como funciona">i</button><template><p>A chave fica num documento do Firestore que as regras deixam ler <b>somente</b> com a sua conta de administrador principal. Ela não vai para o GitHub, nem para a página do aluno, nem para os outros membros da equipe. Crie a chave em <b>console.anthropic.com → API Keys</b> e defina um limite de gasto mensal em <b>Settings → Limits</b>.</p></template></span></span></summary>
+        <div class="bloco-linha-corpo"><div class="grade">
           <div><label for="iaChave">Chave da API Anthropic</label><input type="password" id="iaChave" autocomplete="off" spellcheck="false" placeholder="sk-ant-… (deixe vazio para manter a salva)"></div>
           <div><label for="iaModelo">Modelo</label><select id="iaModelo"></select></div>
         </div>
@@ -451,8 +436,23 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
           <div class="menu-wrap"><button type="button" class="icone" data-menu aria-haspopup="menu" aria-expanded="false" aria-controls="menuIAChave" aria-label="Mais ações da chave" title="Mais ações">⋯</button>
             <div class="menu" role="menu" id="menuIAChave" hidden><button type="button" role="menuitem" id="btnApagarIA" class="perigo"><span class="e" aria-hidden="true">🗑</span><span>Apagar chave</span></button></div></div>
           <button id="btnSalvarIA">Salvar</button></div>
-        <p class="pequeno" id="msgIA" role="status" aria-live="polite"></p>
+        <p class="pequeno" id="msgIA" role="status" aria-live="polite"></p></div></details>
+      <details class="card sem-padding bloco-linha"  data-chave="cfg-horario"><summary class="sub-cab"><span class="ch ch-esq" aria-hidden="true" data-ic="chev"></span><span class="sc-tile sc-navy" data-ic="clock" data-ic-size="20" aria-hidden="true"></span><span class="sc-texto"><span class="sc-titulo">Horário das aulas</span><span class="sc-resumo">vale para todas as turmas</span></span></summary>
+        <div class="bloco-linha-corpo">
+          <div class="grade"><div><label for="cHIni">Entrada</label><input type="time" id="cHIni"></div><div><label for="cHFim">Saída</label><input type="time" id="cHFim"></div></div>
+          <label for="cHInt">Intervalos — um por linha: <span class="mono">Nome | início | fim</span></label>
+          <textarea id="cHInt" style="min-height:80px" placeholder="Café da manhã | 09:10 | 09:25"></textarea>
+          <p class="pequeno" style="margin:4px 0 0">Aparece nas turmas, no diário e no relatório do aluno. Os dias de aula ficam em cada turma (aba Turmas).</p><div class="rodape-card"><button type="button" data-salvar-config>Salvar</button></div></div></details>
+      <details class="card sem-padding bloco-linha"  data-chave="cfg-mascotes"><summary class="sub-cab"><span class="ch ch-esq" aria-hidden="true" data-ic="chev"></span><span class="sc-tile sc-navy" data-ic="mascote" data-ic-size="20" aria-hidden="true"></span><span class="sc-texto"><span class="sc-titulo">Mascotes e donos</span><span class="sc-resumo">quem edita cada mascote</span></span></summary>
+        <div class="bloco-linha-corpo"><p class="help">O dono de cada mascote e os visuais ficam na aba <b>Meu mascote</b>.</p><div><button type="button" class="leve" data-ir-aba="meumascote">Abrir Meu mascote</button></div></div></details>
+      <details class="card sem-padding bloco-linha"  data-chave="cfg-avancado"><summary class="sub-cab"><span class="ch ch-esq" aria-hidden="true" data-ic="chev"></span><span class="sc-tile sc-navy" data-ic="config" data-ic-size="20" aria-hidden="true"></span><span class="sc-texto"><span class="sc-titulo">Avançado</span><span class="sc-resumo">servidor de correção automática</span></span></summary>
+        <div class="bloco-linha-corpo">
+          <label for="cCorretor">Servidor de correção automática (opcional)</label>
+          <input type="url" id="cCorretor" placeholder="https://corretor-prova.SEU-NOME.workers.dev" spellcheck="false">
+          <p class="pequeno" style="margin:4px 0 0">Endereço do Cloudflare Worker (veja o README, "Servidor de correção"). Com ele, as dissertativas são corrigidas assim que o aluno finaliza, mesmo com o painel fechado. O endereço não é segredo; a chave fica só no Cloudflare. Vazio = desligado.</p>
+          <div class="linha acoes" style="margin-top:12px"><button id="btnTestarCorretor" class="leve">Testar servidor</button></div><div class="rodape-card"><button type="button" data-salvar-config>Salvar</button></div></div></details>
       </div>
+      <p class="help" id="msgConfig" style="max-width:none"></p>
     </div>
     </div>
     </div>

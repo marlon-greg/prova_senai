@@ -96,7 +96,7 @@ function acessoriosHTML() {
       <label class="ep-aj"><span>Para os lados</span><input type="range" data-aj="dx" min="-60" max="60" value="${aj.dx || 0}"><output>${aj.dx || 0}</output></label>
       <label class="ep-aj"><span>Para cima / baixo</span><input type="range" data-aj="dy" min="-60" max="60" value="${aj.dy || 0}"><output>${aj.dy || 0}</output></label>
       <label class="ep-aj"><span>Tamanho</span><input type="range" data-aj="e" min="40" max="180" value="${Math.round((aj.e || 1) * 100)}"><output>${Math.round((aj.e || 1) * 100)}%</output></label>
-      <button type="button" class="leve mini" data-aj-zerar>↺ Voltar à posição original</button></div>` : ""}`;
+      <button type="button" class="leve mini" data-aj-zerar>Voltar à posição original</button></div>` : ""}`;
 }
 // atualiza só o desenho e o aviso (os controles deslizantes não podem ser redesenhados enquanto a pessoa arrasta)
 function atualizarPrevia() {
@@ -110,28 +110,29 @@ function desenharEditor() {
   const sw = (k) => `<div class="mm-cor"><span class="pequeno">${NOMES_ESTILO[k]}</span><div class="ep-swatches"><button type="button" class="sw sw-nat${!estilo[k] ? " sel" : ""}" data-k="${k}" data-v="" title="Como no padrão" aria-label="Como no padrão">↺</button>
     ${OPCOES_ESTILO[k].map(c => `<button type="button" class="sw${estilo[k] === c ? " sel" : ""}" data-k="${k}" data-v="${c}" style="background:${c}" aria-label="${NOMES_ESTILO[k]} ${c}"></button>`).join("")}</div></div>`;
   const slot = (s, i) => s ? `<div class="mm-slot${igual(s.estilo, ativo) ? " em-uso" : ""}"><span class="mm-mini g">${svgMascote(atual, "feliz", s.estilo)}</span><b>${esc(s.nome)}</b>${igual(s.estilo, ativo) ? `<span class="chip ok">em uso</span>` : ""}
-      <div class="mm-slot-acoes"><button type="button" class="leve mini" data-carregar="${i}">✎ Abrir no editor</button><button type="button" class="leve mini" data-salvar="${i}">💾 Salvar aqui</button><button type="button" class="perigo mini" data-apagar="${i}" aria-label="Apagar ${esc(s.nome)}">🗑</button></div></div>`
-    : `<div class="mm-slot vazio-slot"><span class="mm-vazio">＋</span><b>Espaço ${i + 1} livre</b><div class="mm-slot-acoes"><button type="button" class="leve mini" data-salvar="${i}">💾 Salvar o visual atual aqui</button></div></div>`;
+      <div class="mm-slot-acoes"><button type="button" class="leve mini" data-carregar="${i}">Abrir no editor</button><button type="button" class="leve mini" data-salvar="${i}">Salvar aqui</button><button type="button" class="perigo mini" data-apagar="${i}" aria-label="Apagar ${esc(s.nome)}">🗑</button></div></div>`
+    : `<div class="mm-slot vazio-slot"><span class="mm-vazio">＋</span><b>Espaço ${i + 1} livre</b><div class="mm-slot-acoes"><button type="button" class="leve mini" data-salvar="${i}">Salvar o visual atual aqui</button></div></div>`;
   $("#mmEditor").innerHTML = `<div class="mm-grade">
     <section class="pc-secao mm-previa"><div class="pc-secao-cab"><span class="pc-n">👀</span><div class="pc-secao-tit"><h3>${m.nome} <small class="pequeno">prof. ${esc(m.professor)}</small></h3><span class="pequeno">“${esc(m.bordao)}”</span></div></div>
       <div class="mm-palco" id="mmPalco" style="--cor-mascote:${m.cor}">${svgMascote(atual, humor, estilo)}</div>
       <div class="grupo-chips" style="justify-content:center">${HUMORES.map(([h, e]) => `<button type="button" class="chip${humor === h ? " sel" : ""}" data-humor="${h}">${e} ${h}</button>`).join("")}</div>
       <p class="pequeno mm-estado" id="mmEstado">${igual(estilo, ativo) ? "✅ Este é o visual em uso nas provas." : "✏ Você mudou o visual: ainda não está valendo para os alunos."}</p>
-      <div class="linha acoes" style="justify-content:center"><button type="button" id="mmUsar"${igual(estilo, ativo) ? " disabled" : ""}>✔ Usar este visual nas provas</button><button type="button" class="leve" id="mmPadrao">↺ Voltar ao padrão</button></div></section>
+      <div class="linha acoes" style="justify-content:center"><button type="button" class="ok" id="mmUsar"${igual(estilo, ativo) ? " disabled" : ""}>Usar este visual</button><button type="button" class="leve" id="mmSalvarComo">Salvar como…</button><button type="button" class="discreto" id="mmPadrao">Voltar ao padrão</button></div></section>
     <div class="mm-coluna"><section class="pc-secao"><div class="pc-secao-cab"><span class="pc-n">1</span><div class="pc-secao-tit"><h3>Cores</h3><span class="pequeno">↺ = igual ao padrão.</span></div></div>
       ${["pele", "cabelo", "barba", "iris", "camisa"].map(sw).join("")}</section>
     <section class="pc-secao"><div class="pc-secao-cab"><span class="pc-n">2</span><div class="pc-secao-tit"><h3>Acessórios</h3><span class="pequeno">${TOTAL_ACESSORIOS} prontos, mais os criados pela equipe. Use um em cada parte ao mesmo tempo, troque a cor, mova e aumente.</span></div></div>
       <div id="mmAcessorios">${acessoriosHTML()}</div></section>
     <section class="pc-secao mm-saves"><div class="pc-secao-cab"><span class="pc-n">3</span><div class="pc-secao-tit"><h3>Meus visuais salvos</h3><span class="pequeno">O padrão sempre fica guardado. Você tem mais ${MAX_SAVES} espaços.</span></div></div>
       <div class="mm-slots"><div class="mm-slot padrao${igual({}, ativo) ? " em-uso" : ""}"><span class="mm-mini g">${svgMascote(atual, "feliz", {})}</span><b>⭐ Padrão</b>${igual({}, ativo) ? `<span class="chip ok">em uso</span>` : ""}
-        <div class="mm-slot-acoes"><button type="button" class="leve mini" data-carregar="padrao">✎ Abrir no editor</button></div></div>
+        <div class="mm-slot-acoes"><button type="button" class="leve mini" data-carregar="padrao">Abrir no editor</button></div></div>
         ${Array.from({ length: MAX_SAVES }, (_, i) => slot(saves[i], i)).join("")}</div></section></div></div>`;
   const ed = $("#mmEditor");
   ed.querySelectorAll("[data-k]").forEach(b => b.onclick = () => { estilo = { ...estilo, [b.dataset.k]: b.dataset.v || undefined }; if (!b.dataset.v) delete estilo[b.dataset.k]; desenharEditor(); });
   ligarAcessorios();
   ed.querySelectorAll("[data-humor]").forEach(b => b.onclick = () => { humor = b.dataset.humor; desenharEditor(); });
   $("#mmUsar").onclick = () => gravar({ ativo: estilo }, `Usar este visual do ${m.nome} nas provas? Os alunos passam a ver o mascote assim.`, "Usar visual", "Visual em uso! Os alunos veem na próxima vez que abrirem a página.");
-  $("#mmPadrao").onclick = () => gravar({ ativo: {} }, `Voltar o ${m.nome} ao visual padrão? Seus visuais salvos continuam guardados.`, "Voltar ao padrão", "Padrão em uso.", () => { estilo = {}; });
+  document.querySelector("#mmSalvarComo")?.addEventListener("click", () => document.querySelector(".mm-saves")?.scrollIntoView({ behavior: "smooth", block: "center" }));
+$("#mmPadrao").onclick = () => gravar({ ativo: {} }, `Voltar o ${m.nome} ao visual padrão? Seus visuais salvos continuam guardados.`, "Voltar ao padrão", "Padrão em uso.", () => { estilo = {}; });
   ed.querySelectorAll("[data-carregar]").forEach(b => b.onclick = () => { estilo = b.dataset.carregar === "padrao" ? {} : normalizarEstilo(saves[b.dataset.carregar].estilo); desenharEditor(); toast("Aberto no editor. Para valer nas provas, clique em “Usar este visual”.", "info"); });
   ed.querySelectorAll("[data-salvar]").forEach(b => b.onclick = async () => {
     const i = Number(b.dataset.salvar), antigo = saves[i];

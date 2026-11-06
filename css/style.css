@@ -936,7 +936,6 @@ button.ajuda-mini:hover { background:var(--info); color:#fff; }
 .hist-linha > summary { cursor:pointer; font-weight:600; color:var(--info); }
 .hist-linha li { margin:6px 0; }
 .gami-op { display:flex; gap:14px; align-items:flex-start; padding:12px 0; border-bottom:1px solid var(--borda); cursor:pointer; margin:0; }
-.gami-op.beta { background:#fffbeb; padding:12px; border-radius:10px; border:1px dashed #fcd34d; margin-top:8px; }
 .interruptor-g { position:relative; flex:0 0 40px; width:40px; height:22px; display:inline-block; margin-top:6px; }
 .interruptor-g input { position:absolute; opacity:0; inset:0; margin:0; cursor:pointer; }
 .interruptor-g i { position:absolute; inset:0; background:var(--desligado); border-radius:999px; transition:background .2s; }
@@ -1787,7 +1786,7 @@ details.ret-grupo > .rc-corpo .ret-item { margin:8px 0; }
 /* Meu mascote */
 .mm-escolha { display:flex; flex-wrap:wrap; gap:10px; margin:0 0 14px; }
 .mm-tab { display:flex; align-items:center; gap:8px; background:var(--cartao); color:var(--texto); border:2px solid var(--borda); border-radius:14px; padding:6px 14px 6px 6px; font-weight:600; }
-.mm-tab.sel { border-color:var(--vermelho); background:#fff5f5; }
+.mm-tab.sel { border-color:transparent; background:var(--marinho-claro); box-shadow:0 0 0 2px var(--marinho-2); }
 .mm-mini { width:52px; height:52px; border-radius:50%; overflow:hidden; background:var(--marinho-claro); display:inline-block; flex:0 0 auto; }
 .mm-mini svg { width:100%; height:auto; transform:scale(1.35) translateY(6%); }
 .mm-mini.g { width:84px; height:84px; }
@@ -1800,7 +1799,7 @@ details.ret-grupo > .rc-corpo .ret-item { margin:8px 0; }
 .mm-item-c { display:flex; flex-direction:column; gap:4px; min-width:0; }
 .mm-item { display:flex; flex-direction:column; align-items:center; gap:4px; width:100%; height:100%; padding:8px 6px; background:var(--cartao); color:var(--texto); border:2px solid var(--borda); border-radius:12px; font-size:.78em; font-weight:500; line-height:1.2; text-align:center; }
 .mm-item:hover { background:var(--hover); border-color:var(--borda-forte); }
-.mm-item.sel { border-color:var(--vermelho); background:var(--vermelho-claro); font-weight:700; }
+.mm-item.sel { border-color:transparent; background:var(--marinho-claro); box-shadow:0 0 0 2px var(--marinho-2); font-weight:600; }
 .mm-item.criar { border-style:dashed; color:var(--info); font-weight:600; }
 .mm-item-img { width:72px; height:52px; display:grid; place-items:center; font-size:1.8em; overflow:hidden; }
 .mm-item-img svg, .mm-item-img img { width:100%; height:100%; object-fit:contain; display:block; }
@@ -2346,3 +2345,69 @@ button.medalha-n:hover { background:var(--hover); }
 @media (max-width:1199px) { .cq-lado { display:none !important; } }
 @media (max-width:600px) { .cq-linha { flex-wrap:wrap; } .cq-texto { flex-basis:60%; } .cq-acoes { margin-left:0; } }
 .cq-linha { border:0; }
+
+/* =====================================================================
+   Fase 8 · Gamificação (opções), Meu mascote, Itens, Simulação, Equipe, Configuração
+   ===================================================================== */
+.gami-op { align-items:center; padding:var(--sp-3) 0; font-weight:400; }
+.gami-op:last-of-type { border-bottom:0; }
+.gami-op .chip { vertical-align:1px; }
+.gami-op + .linha, #gamiOpcoes .linha.acoes { margin-top:var(--sp-3); }
+
+/* Meu mascote: prévia (5) + editor (7) */
+.mm-grade { grid-template-columns:minmax(0, 5fr) minmax(0, 7fr); gap:var(--sp-5); }
+.mm-coluna { display:flex; flex-direction:column; gap:var(--sp-5); }
+#mascoteConteudo .pc-secao { margin:0 0 var(--sp-5); background:var(--cartao); border:0; border-radius:var(--raio); box-shadow:var(--sombra); padding:var(--sp-6); }
+.mm-coluna .pc-secao { margin:0 !important; }
+.mm-grade .mm-previa { margin:0 !important; }
+.mm-palco { background:var(--cartao-2); border-radius:14px; }
+.mm-tab { border:0; box-shadow:var(--sombra); }
+.mm-cor .sw, .mm-ajuste .sw { width:32px; height:32px; min-width:32px; min-height:32px; padding:0; border-radius:50%; }
+.mm-cor .sw.sel, .mm-ajuste .sw.sel { box-shadow:0 0 0 2px var(--cartao), 0 0 0 4px var(--marinho-2); border-color:transparent; }
+.mm-item { border:0; background:var(--cartao-2); border-radius:var(--raio-m); }
+.mm-item.criar { background:transparent; border:1.5px dashed var(--borda-forte); color:var(--marinho-2); }
+.mm-slot, .mm-slot.padrao, .mm-slot.vazio-slot { border:0; background:var(--cartao-2); }
+.mm-slot.vazio-slot { outline:1.5px dashed var(--borda-forte); outline-offset:-1.5px; background:transparent; }
+.mm-slot.em-uso { border:0; background:var(--ok-claro); }
+.mm-dono { border:0; background:var(--cartao-2); border-radius:var(--raio-m); padding:var(--sp-3); }
+.mm-ajuste { background:var(--cartao-2); }
+.mm-vazio { background:var(--cartao); }
+
+/* Itens: cartões com a prévia em fundo quadriculado */
+.it-grade { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:var(--sp-4); }
+.it-card { position:relative; display:flex; flex-direction:column; gap:var(--sp-3); padding:var(--sp-4); background:var(--cartao); border:0; border-radius:var(--raio); box-shadow:var(--sombra); }
+.it-card.desligado .it-prev { opacity:.5; }
+.it-prev { min-height:130px; display:flex; align-items:center; justify-content:center; gap:var(--sp-2); border-radius:var(--raio-m); background-color:var(--cartao-2); background-image:linear-gradient(45deg, var(--borda) 25%, transparent 25%, transparent 75%, var(--borda) 75%), linear-gradient(45deg, var(--borda) 25%, transparent 25%, transparent 75%, var(--borda) 75%); background-size:16px 16px; background-position:0 0, 8px 8px; }
+.it-info { display:flex; flex-direction:column; gap:6px; min-width:0; }
+.it-info > b { font-size:var(--fs-md); font-weight:600; color:var(--marinho); }
+.it-chips { display:flex; flex-wrap:wrap; gap:4px; }
+.it-acoes { position:absolute; right:var(--sp-2); bottom:var(--sp-2); }
+
+/* Simulação */
+#aba-simulacao > .card { margin:0; }
+.sim-ambiente { margin:0 !important; gap:var(--sp-3); }
+.sim-card h3 { font-family:var(--fonte-texto); font-size:var(--fs-lg); font-weight:600; }
+.sim-ambiente h3 { font-size:var(--fs-xl); }
+.sim-card .sim-e { width:40px; height:40px; flex:0 0 40px; display:inline-flex; align-items:center; justify-content:center; border-radius:var(--raio-m); background:var(--marinho-claro); color:var(--marinho-2); font-size:inherit; }
+.sim-card .sim-e.grande { width:48px; height:48px; flex-basis:48px; }
+.sa-colunas { background:transparent; padding:0; margin:0; font-size:var(--fs-sm); }
+.sa-colunas ul { list-style:none; padding:0; margin:var(--sp-2) 0 0; display:flex; flex-direction:column; gap:6px; }
+.sa-colunas li > [data-ic] { display:inline-flex; vertical-align:-2px; margin-right:6px; color:var(--icone); }
+.sim-grade { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:var(--sp-5); }
+@media (max-width:760px) { .sim-grade, .sa-colunas { grid-template-columns:minmax(0, 1fr); } }
+.sim-card { gap:var(--sp-2); }
+.sim-card > :is(a.btn, button) { margin-top:auto; align-self:flex-start; }
+.sim-card label { font-size:var(--fs-xs); font-weight:500; color:var(--suave); margin:0 0 -2px; }
+
+/* Equipe: papel colorido; o seletor assume a cor do chip */
+select.sel-papel { width:auto; height:30px; min-height:0; padding:0 28px 0 12px; border:0; border-radius:var(--raio-pill); font-size:var(--fs-xs); font-weight:500; background-position:right 10px center; }
+select.sel-papel.navy { background-color:var(--marinho-claro); color:var(--marinho); }
+select.sel-papel.info { background-color:var(--info-claro); color:var(--info-texto); }
+select.sel-papel.warn { background-color:var(--ambar-claro); color:var(--ambar-texto); }
+select.sel-papel.off { background-color:var(--chip-fundo); color:var(--suave); }
+.eq-fixo { font-size:var(--fs-xs); }
+
+/* Configuração */
+#aba-config .bloco-linha-corpo .grade { margin:0; }
+#aba-config .rodape-card { margin-top:0; }
+#cardIA.oculto { display:none !important; }

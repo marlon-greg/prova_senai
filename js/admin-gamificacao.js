@@ -16,7 +16,7 @@ const OPCOES = [
   { k: "conquistas", t: "🏅 Conquistas dos alunos", d: "Medalhas gerais, por matéria e da sala de aula (diário), com nível. Aparecem na página do aluno." },
   { k: "personagem", t: "🎨 Personagem e skins", d: "O aluno cria o próprio personagem (rosto, cabelo, roupa…). Skins, molduras e acessórios especiais são liberados pelas conquistas." },
   { k: "download", t: "🖼 Baixar o cartão do perfil", d: "O aluno baixa o cartão com o personagem e as conquistas em PNG, JPG ou PDF para mostrar aos colegas." },
-  { k: "apontamentos", t: "🚩 Apontamentos nas questões", d: "Na prova e no gabarito, o aluno avisa sobre uma questão com problema (duas respostas certas, nenhuma certa, erro de digitação…). Chega em Retorno dos alunos." },
+  { k: "apontamentos", t: "🚩 Apontamentos nas questões", d: "Na prova e no gabarito, o aluno avisa sobre uma questão com problema (duas respostas certas, nenhuma certa, erro de digitação…). Chega em Erros e sugestões." },
   { k: "sugestoes", t: "💡 Sugestões para o sistema", d: "Área do aluno para mandar ideias e problemas do sistema." },
   { k: "social", t: "❤️ Parte social (curtidas e parabéns)", d: "Mural da turma com o que cada aluno ESCOLHEU mostrar (conquistas e, se ele quiser, notas). Só curtidas ❤️ e parabéns 👏, sem comentários. Nada aparece sem o aluno marcar.", beta: true },
   { k: "socialNotas", t: "📊 Permitir compartilhar notas no mural", d: "Com a parte social ligada, o aluno pode escolher mostrar notas de provas. Desligado, só conquistas podem ser mostradas.", beta: true, depende: "social" }
@@ -25,8 +25,8 @@ const OPCOES = [
 export async function carregarGamificacao() {
   carregarConquistasAdmin();
   const box = $("#gamiOpcoes"), cfg = await lerGamificacao(), admin = ctx.ehAdmin();
-  box.innerHTML = OPCOES.map(o => `<label class="gami-op${o.beta ? " beta" : ""}"><span class="interruptor-g"><input type="checkbox" data-k="${o.k}"${cfg[o.k] ? " checked" : ""}${admin ? "" : " disabled"}><i></i></span>
-      <span><b>${o.t}</b>${o.beta ? ` <span class="tag aviso">2ª parte · começa desligado</span>` : ""}<br><span class="pequeno">${esc(o.d)}</span></span></label>`).join("") +
+  box.innerHTML = OPCOES.map(o => `<label class="gami-op"><span class="interruptor-g"><input type="checkbox" data-k="${o.k}"${cfg[o.k] ? " checked" : ""}${admin ? "" : " disabled"}><i></i></span>
+      <span><b>${o.t}</b>${o.beta ? ` <span class="chip info" title="2ª parte · começa desligada">beta</span>` : ""}<br><span class="pequeno">${esc(o.d)}</span></span></label>`).join("") +
     (admin ? `<div class="linha acoes" style="margin-top:12px"><button id="gamiSalvar">Salvar</button><button id="gamiPadrao" class="leve">Voltar ao padrão</button></div>` : `<p class="pequeno">Só o admin muda estas opções.</p>`);
   const dep = () => box.querySelectorAll("[data-k]").forEach(c => { const o = OPCOES.find(x => x.k === c.dataset.k); if (o.depende) { const pai = box.querySelector(`[data-k="${o.depende}"]`); c.disabled = !admin || !pai.checked; if (!pai.checked) c.checked = false; } });
   box.querySelectorAll("[data-k]").forEach(c => c.onchange = dep); dep();

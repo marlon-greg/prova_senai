@@ -1,7 +1,7 @@
 // Painel → "🧵 Itens e estampas": a equipe cria itens para o personagem dos alunos e para os mascotes,
 // enviando um PNG (fundo transparente fica transparente) ou DESENHANDO na tela. Ajusta posição e tamanho com prévia ao vivo.
 import { db, esc, $, toast, confirmar, traduzirErro } from "./common.js";
-import { drawer, vazio } from "./ui.js";
+import { drawer, vazio, menuHTML, itemMenu } from "./ui.js";
 import { CATEGORIAS_ITEM, PARA_MASCOTE } from "./itens-custom.js";
 import { svgAvatar, avatarValido, usarItensCustom } from "./avatar.js";
 import { svgMascote } from "./mascotes.js";
@@ -27,10 +27,15 @@ export async function carregarAbaItens() {
   box.innerHTML = itens.length ? `<div class="it-grade">${itens.map(it => { const cat = CATEGORIAS_ITEM[it.categoria] || {};
     return `<article class="it-card${it.ativo === false ? " desligado" : ""}"><div class="it-prev">${cat.av || it.categoria === "fundo" || it.categoria === "adesivo" ? svgAvatar(comItem(BASE_M, it), 110) : ""}
       ${PARA_MASCOTE.includes(it.categoria) ? `<span class="it-masc">${svgMascote("marlin", "feliz", { acessorio: "cx-" + it.id })}</span>` : ""}</div>
-      <div class="it-info"><b>${esc(it.nome)}</b><span class="pequeno">${cat.icone || ""} ${esc(cat.nome || it.categoria)}${it.trava?.n ? ` · 🔒 ${it.trava.n} conquista(s)` : " · livre"}${it.ativo === false ? " · desligado" : ""}</span></div>
-      ${pode ? `<div class="it-acoes"><button type="button" class="leve mini" data-edit="${it.id}">✎ Editar</button><button type="button" class="perigo mini" data-del="${it.id}">🗑</button></div>` : ""}</article>`; }).join("")}</div>`
+      <div class="it-info"><b>${esc(it.nome)}</b><div class="it-chips"><span class="chip off">${esc(cat.nome || it.categoria)}</span><span class="chip ${it.ativo === false ? "off" : "ok"}">${it.ativo === false ? "desligado" : "ativo"}</span>${it.trava?.n ? `<span class="chip off">🔒 ${it.trava.n}</span>` : ""}</div></div>
+      ${pode ? `<div class="it-acoes">${menuHTML({ aria: `Mais ações: ${it.nome}`, itensHTML: itemMenu({ i: "edit", t: "Editar", attrs: `data-edit="${it.id}"` }) + itemMenu({ i: it.ativo === false ? "check" : "x", t: it.ativo === false ? "Ligar" : "Desligar", attrs: `data-ligar="${it.id}"` }) + "<hr>" + itemMenu({ i: "trash", t: "Apagar", perigo: true, attrs: `data-del="${it.id}"` }) })}</div>` : ""}</article>`; }).join("")}</div>`
     : vazio({ e: "🧵", texto: "Nenhum item ainda. Crie o primeiro: envie um PNG ou desenhe.", acao: pode ? `<button type="button" data-novo>+ Novo item</button>` : "" });
   box.querySelector("[data-novo]")?.addEventListener("click", () => editarItem(null));
+  box.querySelectorAll("[data-ligar]").forEach(b => b.onclick = async () => {
+    const it = itens.find(x => x.id === b.dataset.ligar), ligar = it.ativo === false;
+    if (!(await confirmar(ligar ? `Ligar o item “${it.nome}”? Ele volta a aparecer no editor.` : `Desligar o item “${it.nome}”? Ele some do editor; quem estiver usando volta ao item padrão daquela parte.`, { titulo: ligar ? "Ligar item" : "Desligar item", ok: ligar ? "Ligar" : "Desligar" }))) return;
+    try { await setDoc(doc(db, "itensCustom", it.id), { ativo: ligar, atualizadoEm: serverTimestamp() }, { merge: true }); toast(ligar ? "Item ligado." : "Item desligado.", "ok"); carregarAbaItens(); } catch (e) { toast(traduzirErro(e), "erro"); }
+  });
   box.querySelectorAll("[data-edit]").forEach(b => b.onclick = () => editarItem(itens.find(x => x.id === b.dataset.edit)));
   box.querySelectorAll("[data-del]").forEach(b => b.onclick = async () => {
     const it = itens.find(x => x.id === b.dataset.del);
