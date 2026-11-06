@@ -148,11 +148,22 @@ A IA da organização roda no navegador do administrador principal (com a chave)
 
 O botão azul **?** (canto de baixo, à direita) explica a tela aberta, passo a passo. Os **?** pequenos ao lado de cada envio (banco JSON, slides, laudos, plano de ensino, plano de curso, lista de alunos) dizem como preparar o arquivo: só PDF, slides em paisagem, até 20 MB, como exportar do PowerPoint/Google Slides, que não precisa ser o documento inteiro etc. Os textos ficam em `js/ajuda.js`.
 
+## Interface
+
+O visual segue um design system único, em variáveis CSS (`css/style.css`, seção de tokens). A vitrine `ui-demo.html` mostra todos os componentes (`?tema=contraste` etc.).
+
+- **Casca do painel:** menu lateral de 240 px em altura total, que **recolhe para só os ícones** (botão no fim do menu; o nome aparece ao passar o mouse e a escolha fica no navegador). Em telas até 900 px vira uma barra superior rolável. O cabeçalho branco mostra o título da aba, o ⓘ (ajuda), a ação principal e o menu do usuário. Cada aba declara isso no mapa `ABAS` de `js/admin.js`.
+- **Logo:** coloque o arquivo oficial em `img/senai.svg` (e `img/senai-branco.svg` para o menu marinho). Sem os arquivos, aparece o texto SENAI (`js/logo.js`).
+- **Ícones:** `js/icones.js` (traço, sem CDN) no menu, nos botões e nos metadados. Emoji fica só no conteúdo: medalhas, vidas, humor, estrelas e situação do aluno.
+- **Hierarquia:** faixa marinho para o semestre, cartão com cabeçalho para matéria ou turma, bloco cinza claro dentro do cartão. Nunca cartão dentro de cartão. Um botão primário por área; verde para liberar e fechar; ações destrutivas em menu ⋯ ou com confirmação.
+- **Temas de acessibilidade:** `.tema-creme`, `.tema-azul`, `.tema-contraste` e `.tema-escuro` só trocam os valores das variáveis. Texto de apoio tem contraste de pelo menos 4,5:1 em todos.
+- **Celular:** funciona em 360 px; tabelas viram cartões e os chips de aba rolam de lado. **Impressão:** sem menu, cabeçalho, barras e painéis.
+
 ## Conquistas dos alunos (página do aluno)
 
-Todo aluno vê **🏅 Minhas conquistas** embaixo das provas, com **nível** (cada 3 conquistas sobem 1). Clicar na medalha mostra o que falta ou como ele conquistou (ex.: as 3 notas, com a matéria de cada uma). Medalha nova desde a última visita aparece com comemoração.
-- **Gerais** (todas as matérias): primeira prova · **Trinca de ouro** (3 notas seguidas acima de 80) · Constância (5 seguidas de 60 para cima) · Gabaritou (100) · Em evolução (melhorou 3 vezes) · Coração intacto (5 provas sem perder vida) · Veterano (10 provas).
-- **Por matéria**: média da matéria e as conquistas Mandou bem (80+), Mestre (média 80+ com 2 provas) e Decolando (melhorou 2 vezes).
+Todo aluno vê **🏅 Minhas conquistas** embaixo das provas. Cada conquista tem **níveis com nome próprio** (ex.: Provas feitas: Estreante · Em ritmo · Veterano · Maratonista), e cada 3 níveis somados sobem 1 nível do perfil. Clicar na medalha mostra o que falta ou como ele conquistou (ex.: as 3 notas, com a matéria de cada uma). Medalha nova desde a última visita aparece com comemoração.
+- **Gerais** (todas as matérias): Provas feitas (1·2·3·4) · Sequência (2 notas de 60, 3 de 80, 4 de 80) · Gabaritou! (60·80·100) · Em evolução (1·2·3) · Coração intacto (1·2·3·4).
+- **Por matéria**: média da matéria e as conquistas Mestre de {materia} (média 70, 80 e 85 com 2, 3 e 4 provas), Mandou bem em {materia} (60·80·100) e Decolando em {materia} (1·2·3). Em **Gamificação → Gerar do plano de ensino** o sistema cria sugestões com o número de provas previstas como teto.
 - **Na sala de aula** (só alunos com acessibilidade): as medalhas do diário, só positivas.
 - Usa a nota fechada (ou a prévia) das provas finalizadas. As regras deixam o aluno ler a prova que ele já fez (título e matéria). As regras das conquistas ficam em `js/conquistas.js`.
 

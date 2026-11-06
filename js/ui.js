@@ -27,6 +27,16 @@ export const semestreLongo = s => /^\d{4}-[12]$/.test(s || "") ? `${s.slice(0, 4
 // seta de um <details>: gira sozinha pelo CSS (.ch)
 export const seta = (size = 18) => `<span class="ch" aria-hidden="true">${ic("chev", { size })}</span>`;
 
+// no celular a linha da tabela vira cartão: cada célula leva o rótulo da coluna
+function rotularTabelas() {
+  document.querySelectorAll(".tabela table:not([data-rot])").forEach(tb => {
+    const cab = tb.querySelector("tr:has(> th)"); if (!cab) return;
+    const rot = [...cab.children].map(th => th.querySelector(".sr-only") ? "" : th.textContent.trim());
+    tb.dataset.rot = "1";
+    tb.querySelectorAll("tr").forEach(tr => [...tr.children].forEach((td, i) => { if (td.tagName === "TD" && rot[i]) td.dataset.rot = rot[i]; }));
+  });
+}
+
 // ---------- flutuante aberto (só um por vez) ----------
 let aberto = null;   // { el, botao, fechar }
 function fecharFlutuante(devolverFoco = false) {
@@ -338,7 +348,7 @@ if (!window.__uiLigado) {
   window.__uiLigado = true;
   document.addEventListener("input", e => { if (e.target.matches?.("input[type=range]")) pctRange(e.target); }, true);
   let filaRange = 0;
-  new MutationObserver(() => { cancelAnimationFrame(filaRange); filaRange = requestAnimationFrame(() => document.querySelectorAll("input[type=range]").forEach(pctRange)); }).observe(document.documentElement, { childList: true, subtree: true });
+  new MutationObserver(() => { cancelAnimationFrame(filaRange); filaRange = requestAnimationFrame(() => { document.querySelectorAll("input[type=range]").forEach(pctRange); rotularTabelas(); }); }).observe(document.documentElement, { childList: true, subtree: true });
   // botões nas pontas de um cabeçalho recolhível não abrem nem fecham o bloco
   document.addEventListener("click", e => { if (e.target.closest("summary :is(.sc-fim, .sf-acoes)")) e.preventDefault(); }, true);
   document.addEventListener("click", e => {

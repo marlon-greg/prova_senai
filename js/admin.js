@@ -124,7 +124,8 @@ $("#btnImportarTopo").onclick = () => abrirImportarBanco();
 $("#btnAbrirMaterial").onclick = () => { $("#cardMateriais").open = true; $("#matTitulo").focus({ preventScroll: true }); };
 function pintarTopo(a) {
   $("#topoTitulo").textContent = ABAS[a].titulo;
-  document.querySelectorAll("[data-topo]").forEach(s => { s.hidden = s.dataset.topo !== a; });
+  // a ação principal só aparece para quem pode usá-la (as regras do Firestore continuam sendo a proteção de verdade)
+  document.querySelectorAll("[data-topo]").forEach(s => { s.hidden = s.dataset.topo !== a || !(a === "equipe" ? ehAdmin() : podeEditar()); });
 }
 function abrirAba(a) {
   window.scrollTo({ top: 0, behavior: "instant" });   // toda aba começa no topo

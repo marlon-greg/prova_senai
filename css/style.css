@@ -2355,7 +2355,8 @@ button.medalha-n:hover { background:var(--hover); }
 .gami-op + .linha, #gamiOpcoes .linha.acoes { margin-top:var(--sp-3); }
 
 /* Meu mascote: prévia (5) + editor (7) */
-.mm-grade { grid-template-columns:minmax(0, 5fr) minmax(0, 7fr); gap:var(--sp-5); }
+@media (min-width:901px) { .mm-grade { grid-template-columns:minmax(0, 5fr) minmax(0, 7fr); gap:var(--sp-5); } }
+@media (max-width:900px) { .mm-grade { grid-template-columns:minmax(0, 1fr); gap:var(--sp-5); } #mascoteConteudo .pc-secao { padding:var(--sp-4); min-width:0; } .mm-donos { grid-template-columns:minmax(0, 1fr); } }
 .mm-coluna { display:flex; flex-direction:column; gap:var(--sp-5); }
 #mascoteConteudo .pc-secao { margin:0 0 var(--sp-5); background:var(--cartao); border:0; border-radius:var(--raio); box-shadow:var(--sombra); padding:var(--sp-6); }
 .mm-coluna .pc-secao { margin:0 !important; }
@@ -2463,3 +2464,69 @@ details.res-q[open] > summary { margin-bottom:var(--sp-3); }
 .demo-perfil > button { background:var(--ok); border-color:var(--ok); }
 .demo-perfil > button:hover { background:#0d6648; }
 .mural-item.mi-eu { background:var(--marinho-claro); }
+
+/* =====================================================================
+   Fase 8 · Responsivo, impressão e últimos ajustes do checklist
+   ===================================================================== */
+details.ajuda > summary { color:var(--marinho-2); font-weight:500; }
+details.ajuda > summary::before { background:var(--marinho-claro); color:var(--marinho-2); }
+details.ajuda[open] { background:var(--cartao-2); border:0; }
+
+@media (max-width:900px) {
+  .kpis, .stats, .painel-conteudo .stats { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+  .toolbar > input[type=search] { flex:1 1 100%; }
+  .toolbar > .tb-contagem { margin:0 0 0 auto; }
+  .bancos-grade, .org-corpo .cartoes-materias, .it-grade { grid-template-columns:minmax(0, 1fr); }
+  .it-grade { grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); }
+  .cq-barra input[type=search] { flex:1 1 100%; }
+  .cq-acoes { margin-left:0; width:100%; }
+}
+@media (max-width:600px) {
+  /* chips de aba rolam de lado */
+  .grupo-chips { flex-wrap:nowrap; overflow-x:auto; scrollbar-width:thin; padding-bottom:2px; }
+  .grupo-chips > button { flex:none; }
+  .barra-res { grid-template-columns:minmax(0, 1fr); }
+  .barra-res .campo-res { grid-column:1; }
+  .res-acoes .res-acoes-dir { margin-left:0; width:100%; }
+  .res-acoes > input[type=search] { max-width:none; flex:1 1 100%; }
+  .card { padding:var(--sp-4); }
+  .card.sem-padding { padding:0; }
+  .cartao-prova.compacto { padding:var(--sp-4); }
+  .ac-faixas { grid-template-columns:minmax(0, 1fr); }
+  .cq-nv { grid-template-columns:12px var(--cols); gap:4px; }
+  .diario-aluno { width:100%; }
+  .cq-lista { padding:var(--sp-2) var(--sp-3); }
+
+  /* tabelas viram cartões: cada linha é um cartão, com o rótulo da coluna */
+  .tabela { max-height:none; overflow:visible; }
+  .tabela table[data-rot], .tabela table[data-rot] tbody { display:block; width:100%; }
+  .tabela table[data-rot] thead, .tabela table[data-rot] tr:has(> th:first-child) { display:none; }
+  .tabela table[data-rot] tr { display:flex; flex-direction:column; gap:6px; padding:var(--sp-3) var(--sp-4); border-bottom:1px solid var(--borda); }
+  .tabela table[data-rot] tr:last-child { border-bottom:0; }
+  .tabela table[data-rot] td { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:4px var(--sp-2); padding:0 !important; border:0; min-width:0; overflow-wrap:anywhere; text-align:left; }
+  .tabela table[data-rot] td:empty { display:none; }
+  .tabela table[data-rot] td[data-rot]::before { content:attr(data-rot); font-size:var(--fs-xs); font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--suave); }
+  .tabela table[data-rot] td.td-acoes { justify-content:flex-end; }
+  .rl-media { flex:1 1 140px; max-width:none; }
+}
+
+@media print {
+  body, body.painel { background:#fff; }
+  .menu-lateral, header, .toolbar, .tb-ativos, .drawer, .drawer-fundo, .popover, .menu, .painel-filtros, .menu-dica, .topo-acao, .cq-barra, .cq-lado, .bb-acoes, .td-acoes, .sc-fim, .cp-botoes, .cp-mais > summary .ch { display:none !important; }
+  .painel-layout:not(.oculto), .painel-coluna, .painel-conteudo, .painel-conteudo > [id^="aba-"]:not(.oculto) { display:block; min-height:0; }
+  .painel-conteudo { padding:0; max-width:none; }
+  .card, .kpi, .stat, .secao-faixa, .banco-bloco, .cartao-materia, .rl-risco-item, .dh-num { box-shadow:none !important; page-break-inside:avoid; }
+  .card { border:1px solid #bbb; }
+  .kpi, .stat, :is(.kpi, .stat):is(.warn, .aviso, .err, .erro, .ok) { background:#fff !important; border:1px solid #888; color:#000; }
+  .kpi b, .stat b, .kpi span, .stat span { color:#000 !important; }
+  .secao-faixa { background:#fff !important; color:#000 !important; border:1px solid #888; }
+  .secao-faixa :is(.sf-titulo, .sf-resumo, .sf-tile) { color:#000 !important; background:none !important; }
+  .lista-grupos, .faixa-corpo, .grupo-corpo { gap:var(--sp-2); }
+}
+/* alto contraste: a regra de texto preto é para botões cheios; estes têm fundo escuro */
+.tema-contraste :is(.menu-lateral button, .topo-info, .diario-aluno, .ult-reg, .cal-dia, .chip-dia, .medalha-n, .mm-item, .mm-tab, .q-faixa button, .cq-add):not(#x) { color:var(--texto); }
+.tema-contraste .menu-lateral button.ativa:not(#x) { color:var(--texto); background:var(--menu-ativo); }
+.tema-contraste :is(.menu-lateral button.ativa, .menu-lateral button:hover) svg { color:var(--texto); }
+.tema-contraste .menu-lateral button.menu-recolher:hover { background:var(--menu-ativo); }
+.tema-contraste .topo-info { background:var(--marinho-claro); }
+@media (max-width:600px) { body:not(.painel) header .quem #quem { flex:0 0 auto; max-width:90px; } }
