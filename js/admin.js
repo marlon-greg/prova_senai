@@ -1407,8 +1407,9 @@ function filtrarLinhas(linhas) {
 }
 $("#btnCarregarRes").onclick = carregarResultados;
 // situação em chips: o <select id="rSituacao"> continua sendo a fonte (fica oculto e sincronizado)
-chips($("#rSitChips"), [{ v: "", t: "Todas" }, { v: "andamento", t: "Em andamento", e: "⏳" }, { v: "finalizou", t: "Finalizou", e: "✅" }, { v: "revisar", t: "Revisar", e: "🟡" },
-  { v: "sinais", t: "Sinais", e: "⚠" }, { v: "abaixo", t: "< 50", e: "🔻" }], { aria: "Filtrar alunos por situação",
+const SITUACOES = [{ v: "", t: "Todos" }, { v: "finalizou", t: "Finalizou", e: "✅" }, { v: "andamento", t: "Em andamento", e: "⏳" }, { v: "revisar", t: "A revisar", e: "🟡" },
+  { v: "sinais", t: "Sinais", e: "⚠" }, { v: "abaixo", t: "< 50", e: "🔻" }];
+const chipsSituacao = chips($("#rSitChips"), SITUACOES, { aria: "Filtrar alunos por situação",
   aoMudar: v => { $("#rSituacao").value = v; $("#rSituacao").dispatchEvent(new Event("change")); } });
 $("#rProva").onchange = () => { pararAoVivo(); resDados = null; $("#resResumo").innerHTML = ""; $("#resTabela").innerHTML = ""; $("#resAcoes").classList.add("oculto"); if ($("#rAoVivo").checked) carregarResultados(); };
 $("#rTestes").onchange = () => { if (resDados) desenharResultados(); };
@@ -1558,82 +1559,24 @@ function coracoesHTML(v) {
     `${v.lim > max ? ` <b>${v.restam}/${v.lim}</b>` : ""}</span>`;
 }
 // coluna "Sinais · vidas" da tabela: corações + quantas vezes o professor restaurou
-function saidasHTML(l) {
-  const v = vidasDe(l.t);
-  return v ? `<br>${coracoesHTML(v)}${l.t.vidasRestauradas ? ` <span class="pequeno" title="Vezes que o professor restaurou as vidas">↺${l.t.vidasRestauradas}</span>` : ""}` : "";
-}
-// botões de vida/reabrir de um aluno (professor e admin)
+// as mesmas ações em botões, no detalhe do aluno
 function acoesVidaHTML(l) {
   if (!podeCuidar()) return "";
   const v = vidasDe(l.t), b = [];
   if (!l.t.finalizadaEm) {
-    if (v) b.push(`<button class="ok mini" data-vrest="${l.t.id}" title="Devolve todas as vidas${l.perdidas ? " e as questões perdidas" : ""}"${v.usadas || l.perdidas ? "" : " disabled"}>❤️ Restaurar vidas</button>`,
-                  `<button class="leve mini" data-vmais="${l.t.id}" title="Dá uma vida a mais só para este aluno">+1 ❤️</button>`);
-  } else b.push(`<button class="leve mini${l.t.encerradaPor === "trocasDeAba" ? " destaque" : ""}" data-reabrir="${l.t.id}" title="Volta a prova para o aluno continuar de onde parou">↩ Reabrir prova</button>`);
+    if (v) b.push(`<button class="ok mini" data-vrest="${l.t.id}" title="Devolve todas as vidas${l.perdidas ? " e as questões perdidas" : ""}"${v.usadas || l.perdidas ? "" : " disabled"}>${ic("heart", { size: 16 })}Restaurar vidas</button>`,
+                  `<button class="leve mini" data-vmais="${l.t.id}" title="Dá uma vida a mais só para este aluno">${ic("plus", { size: 16 })}1 vida</button>`);
+  } else b.push(`<button class="leve mini" data-reabrir="${l.t.id}" title="Volta a prova para o aluno continuar de onde parou">${ic("unlock", { size: 16 })}Reabrir prova</button>`);
   return b.join(" ");
 }
-// questões perdidas por sair da prova (respostas com perdida: true) — o professor pode devolver
-const perdidasDe = id => Object.entries(cacheTent.get(id)?.resp || {}).filter(([, r]) => r?.perdida === true).map(([q]) => q);
-function lotePerdidas(lote, id) { perdidasDe(id).forEach(q => lote.delete(doc(db, "tentativas", id, "respostas", q))); }
-async function restaurarVidas(l) {
-  const v = vidasDe(l.t), perd = perdidasDe(l.t.id), nome = l.t.nome || l.t.email;
-  const ok = await confirmar(`Devolver ${v ? `as ${v.lim} vidas` : "as vidas"} de ${nome}?${perd.length ? `\n\nAs ${perd.length} questão(ões) perdida(s) por sair da prova também voltam para o aluno responder.` : ""}\n\nA tela do aluno atualiza sozinha. O histórico de saídas continua no relatório.`,
-    { titulo: "❤️ Restaurar vidas", ok: "Restaurar vidas" });
-  if (!ok) return;
-  try {
-    const lote = writeBatch(db), n = l.t.trocasDeAba || 0;
-    lote.update(doc(db, "tentativas", l.t.id), { trocasDeAba: 0, trocasDeAbaTotal: increment(n), vidasRestauradas: increment(1),
-      vidasRestauradasEm: serverTimestamp(), vidasRestauradasPor: eu.email });
-    lotePerdidas(lote, l.t.id);
-    await lote.commit();
-    toast(`Vidas de ${nome} restauradas ❤️`, "ok");
-    await recarregarTentativa(l.t.id);
-  } catch (e) { toast("Não foi possível restaurar as vidas. " + traduzirErro(e), "erro"); console.error(e); }
-}
-async function vidaExtra(l) {
-  if (!(await confirmar(`Dar +1 vida para ${l.t.nome || l.t.email}? A tela do aluno atualiza sozinha.`, { titulo: "+1 vida", ok: "Dar +1 vida" }))) return;
-  try {
-    await updateDoc(doc(db, "tentativas", l.t.id), { vidasExtras: increment(1) });
-    toast(`+1 vida para ${l.t.nome || l.t.email} ❤️`, "ok");
-    await recarregarTentativa(l.t.id);
-  } catch (e) { toast("Não foi possível dar a vida extra. " + traduzirErro(e), "erro"); console.error(e); }
-}
-async function reabrirProva(l) {
-  const p = resDados.prova, nome = l.t.nome || l.t.email, perd = perdidasDe(l.t.id), temTempo = Number(p.tempoMinutos) > 0;
-  const motivo = l.t.encerradaPor === "trocasDeAba" ? "A prova foi encerrada porque as vidas acabaram." : "O aluno já tinha finalizado a prova (ou o tempo acabou).";
-  const ok = await modal({
-    titulo: `↩ Reabrir a prova de ${nome}`, ok: "Reabrir prova", cancelar: "Cancelar",
-    conteudo: `<p>${esc(motivo)} Reabrindo, o aluno <b>continua de onde parou</b>, com as respostas já enviadas, e recebe as vidas de volta. A tela dele atualiza sozinha (se fechou, é só abrir a prova de novo e clicar em Continuar).</p>
-      ${perd.length ? `<label class="check"><input type="checkbox" id="rbPerdidas" checked> Devolver as ${perd.length} questão(ões) perdida(s) por sair da prova</label>` : ""}
-      ${temTempo ? `<label for="rbMin" style="margin-top:12px">Tempo para terminar, a partir de agora (min)</label><input type="number" id="rbMin" min="1" step="1" value="${Math.max(5, Math.min(Number(p.tempoMinutos), 30))}">` : ""}
-      ${p.liberada ? "" : `<div class="aviso-box erro" style="margin-top:12px">A prova está <b>encerrada</b> na aba Provas: o aluno só consegue continuar depois que você liberar de novo.</div>`}
-      ${l.t.encerradaPor !== "trocasDeAba" ? `<p class="pequeno">Atenção: depois de finalizar, o sistema libera o gabarito para o aluno ler. Ao reabrir, o gabarito volta a ficar fechado, mas use isto só quando fizer sentido (ex.: aluno com TEA, queda de internet).</p>` : ""}`
-  });
-  if (!ok) return;
-  try {
-    const dados = { finalizadaEm: null, encerradaPor: deleteField(), indiceAtual: 0, trocasDeAba: 0, trocasDeAbaTotal: increment(l.t.trocasDeAba || 0),
-      tempoTotalSegundos: deleteField(), acertos: deleteField(), totalQuestoes: deleteField(), nota: deleteField(), notaPrevia: null, aguardandoCorrecao: 0,
-      reabertaEm: serverTimestamp(), reabertaPor: eu.email, vidasRestauradasEm: serverTimestamp(), vidasRestauradasPor: eu.email };
-    if (temTempo) {
-      const min = Math.max(1, Math.round(Number(document.getElementById("rbMin")?.value || 10)));
-      const ini = l.t.iniciadaEm?.toMillis?.() || Date.now(), fimNovo = Date.now() + min * 60000;
-      dados.minutosExtras = Math.max(0, Math.ceil((fimNovo - ini) / 60000) - Number(p.tempoMinutos));
-    }
-    const lote = writeBatch(db);
-    lote.update(doc(db, "tentativas", l.t.id), dados);
-    l.t.questoesIds.forEach(q => lote.delete(doc(db, "marcadores", `${l.t.uid}_${q}`)));   // o gabarito volta a ficar fechado
-    if (perd.length && document.getElementById("rbPerdidas")?.checked !== false) lotePerdidas(lote, l.t.id);
-    await lote.commit();
-    toast(`Prova de ${nome} reaberta ↩`, "ok");
-    await recarregarTentativa(l.t.id);
-  } catch (e) { toast("Não foi possível reabrir a prova. " + traduzirErro(e), "erro"); console.error(e); }
-}
-// relê uma tentativa (sem o "ao vivo", a tela não atualiza sozinha)
-async function recarregarTentativa(id) {
-  if ($("#rAoVivo").checked) return;
-  const d = await getDoc(doc(db, "tentativas", id));
-  if (d.exists()) await atualizarCache(d); else cacheTent.delete(id);
-  montarResultados();
+// ações de vidas no menu ⋯ da linha (mesmos data-*: ligarAcoesVida cuida dos cliques)
+function acoesVidaItens(l) {
+  if (!podeCuidar()) return "";
+  const v = vidasDe(l.t);
+  if (l.t.finalizadaEm) return itemMenu({ i: "unlock", t: "Reabrir prova", attrs: `data-reabrir="${l.t.id}" title="Volta a prova para o aluno continuar de onde parou"` });
+  if (!v) return "";
+  return itemMenu({ i: "heart", t: "Restaurar vidas", attrs: `data-vrest="${l.t.id}" title="Devolve todas as vidas${l.perdidas ? " e as questões perdidas" : ""}"${v.usadas || l.perdidas ? "" : " disabled"}` })
+    + itemMenu({ i: "plus", t: "+1 vida", attrs: `data-vmais="${l.t.id}" title="Dá uma vida a mais só para este aluno"` });
 }
 function ligarAcoesVida(raiz) {
   const achar = id => [...resDados.linhas, ...resDados.testes].find(x => x.t.id === id);
@@ -1643,60 +1586,59 @@ function ligarAcoesVida(raiz) {
 }
 
 // ---------- visão em cartões: um cartão por aluno (bom para acompanhar a prova ao vivo) ----------
-function cartoesHTML(lista) {
-  const total = resDados.prova.nQuestoes || 0;
-  return `<div class="cartoes-alunos">` + lista.map(l => {
-    const v = vidasDe(l.t), feitas = l.itens.filter(x => x.r !== undefined || x.perdida).length, fin = !!l.t.finalizadaEm;
-    const estado = l.t.encerradaPor === "trocasDeAba" ? ["erro", "⛔ sem vidas"] : fin ? ["ok", "✓ finalizou"] : ["aviso", "fazendo"];
-    const alerta = (v && !fin && v.restam <= 1) || l.t.encerradaPor === "trocasDeAba";
-    const tempo = l.tempo ?? (l.t.iniciadaEm?.toMillis ? (Date.now() - l.t.iniciadaEm.toMillis()) / 1000 : null);
-    return `<div class="cartao-aluno${alerta ? " alerta" : ""}${fin ? " fim" : ""}">
-      <div class="ca-topo"><span class="avatar">${esc(iniciais(l.t.nome || l.t.email))}</span>
-        <div class="ca-nome"><b>${esc(l.t.nome || l.t.email)}</b><span class="pequeno">${esc(l.t.email)}</span></div>
-        <span class="tag ${estado[0]}">${estado[1]}</span></div>
-      <div class="ca-meio">
-        <div class="ca-prog"><div class="progresso"><div style="width:${(l.itens.length || total) ? feitas / (l.itens.length || total) * 100 : 0}%"></div></div><span class="pequeno">⭐ ${feitas}/${l.itens.length || total} questões · ⏱ ${fmtTempo(tempo)}</span></div>
-        <div class="ca-vidas">${v ? coracoesHTML(v) : `<span class="pequeno">sem vidas</span>`}</div>
-      </div>
-      <div class="ca-sinais">${sinaisHTML(l.sinais)}${l.perdidas ? ` <span class="tag erro">⛔ ${l.perdidas} perdida(s)</span>` : ""}${l.rapidas ? ` <span class="tag erro" title="Respostas em menos de ${RAPIDO} s">⚡ ${l.rapidas}</span>` : ""}</div>
-      <div class="ca-rodape"><span class="ca-nota" title="Nota (0–100)">${fin ? `<b>${l.nota}</b><span class="pequeno">/100</span>` : `<span class="pequeno">parcial: ${l.nota}</span>`}${l.revisar ? ` <span class="tag aviso">${l.revisar} a revisar</span>` : ""}</span>
-        <span class="ca-acoes">${acoesVidaHTML(l)} <button class="leve mini" data-ver="${l.t.id}">Ver</button></span></div>
-    </div>`;
-  }).join("") + `</div>`;
+// situação do aluno na tabela: um chip só, o que mais pede atenção
+function chipSituacao(l) {
+  if (l.t.encerradaPor === "trocasDeAba") return `<span class="chip err"><span class="e" aria-hidden="true">⛔</span>Sem vidas</span>`;
+  if (!l.t.finalizadaEm) return `<span class="chip info"><span class="e" aria-hidden="true">⏳</span>Em andamento</span>`;
+  if (l.temSinal) return `<span class="chip err"><span class="e" aria-hidden="true">⚠</span>Sinais</span>`;
+  if (l.revisar) return `<span class="chip warn"><span class="e" aria-hidden="true">🟡</span>A revisar${l.revisar > 1 ? ` · ${l.revisar}` : ""}</span>`;
+  return `<span class="chip ok"><span class="e" aria-hidden="true">✅</span>Finalizou</span>`;
 }
-function situacaoHTML(l) {
-  const t = l.t;
-  let h = t.finalizadaEm ? `<span class="pequeno">${dataBR(t.finalizadaEm)}</span>` : "<span class='tag aviso'>em andamento</span>";
-  if (t.encerradaPor === "trocasDeAba") h += `<br><span class="tag erro">⛔ encerrada: limite de saídas</span>`;
-  if (l.perdidas) h += `<br><span class="tag erro">⛔ ${l.perdidas} perdida(s)</span>`;
-  return h;
+// o que importa acompanhar ao vivo fica logo abaixo do chip: vidas, sinais, perdidas e respostas rápidas
+function extrasSituacao(l) {
+  const v = vidasDe(l.t), x = [];
+  if (v && !l.t.finalizadaEm) x.push(coracoesHTML(v));
+  if (l.temSinal) x.push(sinaisHTML(l.sinais));
+  if (l.perdidas) x.push(`<span>${pl(l.perdidas, "perdida")}</span>`);
+  if (l.rapidas) x.push(`<span title="Respostas enviadas em menos de ${RAPIDO} segundos">${pl(l.rapidas, "rápida")}</span>`);
+  if (l.t.vidasRestauradas) x.push(`<span title="Vezes que o professor restaurou as vidas">${pl(l.t.vidasRestauradas, "restauração", "restaurações")}</span>`);
+  return x.length ? `<div class="res-extra">${x.join("")}</div>` : "";
 }
 function tabelaHTML(lista, prefixo) {
-  return `<div class="tabela"><table><tr><th>Aluno</th><th>Início</th><th>Fim</th><th>Tempo</th><th>Sinais · vidas</th><th>Nota</th><th>Revisar</th><th></th></tr>` +
-    lista.map(l => `<tr class="${l.temSinal ? "com-sinal" : ""}"><td><b>${esc(l.t.nome || "")}</b><br><span class="pequeno">${esc(l.t.email)}</span></td><td class="pequeno">${dataBR(l.t.iniciadaEm)}</td><td>${situacaoHTML(l)}</td>
-      <td>${fmtTempo(l.tempo)}${l.rapidas ? `<br><span class="tag erro" title="Respostas enviadas em menos de ${RAPIDO} segundos">⚡ ${l.rapidas} rápida(s)</span>` : ""}</td><td>${sinaisHTML(l.sinais)}${saidasHTML(l)}</td><td><b>${l.nota}</b>${l.t.nota !== undefined ? ` <span class="pequeno">(fechada: ${l.t.nota})</span>` : l.t.notaPrevia !== null && l.t.notaPrevia !== undefined ? ` <span class="pequeno">(prévia: ${l.t.notaPrevia})</span>` : ""}</td><td>${l.revisar ? `<span class="tag aviso">${l.revisar}</span>` : "—"}</td>
-      <td class="td-acoes"><button class="leve mini" data-ver="${l.t.id}">Ver</button> ${acoesVidaHTML(l)} ${ehAdmin() && prefixo === "aluno" ? `<button class="perigo mini" data-reset="${l.t.id}" title="Apagar a tentativa (o aluno pode refazer)">↺ Apagar</button>` : ""}</td></tr>`).join("") + `</table></div>`;
+  return `<div class="tabela sem-borda tabela-alunos"><table><thead><tr><th>Aluno</th><th>Situação</th><th>Acertos</th><th>Nota</th><th><span class="sr-only">Ações</span></th></tr></thead><tbody>` +
+    lista.map(l => {
+      const acertos = l.itens.filter(x => x.status === "certa").length, itens = acoesVidaItens(l) + (ehAdmin() && prefixo === "aluno" ? "<hr>" + itemMenu({ i: "trash", t: "Apagar tentativa", perigo: true, attrs: `data-reset="${l.t.id}" title="Apagar a tentativa (o aluno pode refazer)"` }) : "");
+      const fechada = l.t.nota !== undefined ? `fechada: ${l.t.nota}` : l.t.notaPrevia !== null && l.t.notaPrevia !== undefined ? `prévia: ${l.t.notaPrevia}` : "";
+      return `<tr><td><span class="aluno-celula"><span class="avatar-p">${esc(iniciais(l.t.nome || l.t.email))}</span><span class="ac-texto"><b>${esc(l.t.nome || l.t.email)}</b><span>${esc(l.t.email)}</span></span></span></td>
+      <td>${chipSituacao(l)}${extrasSituacao(l)}</td>
+      <td class="res-acertos" title="Início: ${esc(dataBR(l.t.iniciadaEm))} · tempo: ${esc(fmtTempo(l.tempo))}">${acertos} de ${l.itens.length}</td>
+      <td><span class="res-nota ${l.nota >= 60 ? "boa" : "baixa"}"${fechada ? ` title="${esc(fechada)}"` : ""}>${String(l.nota).replace(".", ",")}</span></td>
+      <td class="td-acoes"><button class="leve mini" data-ver="${l.t.id}">${ic("eye", { size: 16 })}Ver</button> ${itens ? menuHTML({ aria: `Mais ações: ${l.t.nome || l.t.email}`, itensHTML: itens }) : ""}</td></tr>`;
+    }).join("") + `</tbody></table></div>`;
 }
 function desenharResultados() {
   const { linhas, testes } = resDados;
   const fin = linhas.filter(l => l.t.finalizadaEm), comSinal = linhas.filter(l => l.temSinal).length, media = fin.length ? (fin.reduce((s, l) => s + l.nota, 0) / fin.length).toFixed(1) : "—";
   const revisar = linhas.reduce((s, l) => s + l.revisar, 0);
   $("#resAcoes").classList.remove("oculto");
-  $("#resResumo").innerHTML = statTiles([{ v: media, r: "média (0–100)" }, { v: `${fin.length}<small>/${linhas.length}</small>`, r: "finalizaram (de quem iniciou)", tom: linhas.length && fin.length === linhas.length ? "ok" : "" },
-    { v: revisar, r: "respostas a revisar", tom: revisar ? "aviso" : "" }, { v: comSinal, r: "com sinais (aba, tela cheia, colar)", tom: comSinal ? "erro" : "" }]);
+  $("#resResumo").innerHTML = statTiles([{ v: String(media).replace(".", ","), r: "média da turma" }, { v: `${fin.length} / ${linhas.length}`, r: "finalizaram" },
+    { v: revisar, r: "respostas a revisar", tom: revisar ? "aviso" : "" }, { v: comSinal, r: "com sinais de aba, tela cheia ou colar", tom: comSinal ? "erro" : "" }]);
+  pintarResumoIA(revisar);
+  // contagem em cada chip de situação
+  const nSit = { "": linhas.length, finalizou: fin.length, andamento: linhas.length - fin.length, revisar: linhas.filter(l => l.revisar).length, sinais: comSinal };
+  SITUACOES.forEach(o => { o.t = o.t.split(" · ")[0] + (nSit[o.v] !== undefined ? ` · ${nSit[o.v]}` : ""); });
+  chipsSituacao.definir($("#rSituacao").value);
   const mostrarTestes = $("#rTestes").checked;
-  const emCartoes = (localStorage.getItem("visaoResultados") || "cartoes") === "cartoes";
-  const vis = filtrarLinhas(linhas), filtrado = vis.length !== linhas.length;
-  let html = linhas.length ? `<div class="card"><div class="linha acoes visao-res" role="group" aria-label="Visão"><b style="flex:1">Alunos (${filtrado ? `${vis.length} de ${linhas.length}` : linhas.length})</b>
-      <button class="mini ${emCartoes ? "" : "leve"}" data-visao="cartoes" aria-pressed="${emCartoes}">▦ Cartões</button><button class="mini ${emCartoes ? "leve" : ""}" data-visao="tabela" aria-pressed="${!emCartoes}">☰ Tabela</button></div>
-      ${!vis.length ? `<p class="pequeno">Nenhum aluno com esse filtro.</p>` : emCartoes ? cartoesHTML(vis) : tabelaHTML(vis, "aluno")}</div>` : `<div class="card vazio"><div class="icone">⏳</div><p>Nenhum aluno fez esta prova ainda.</p></div>`;
+  const vis = filtrarLinhas(linhas);
+  const vis0 = vis;
+  let html = linhas.length ? `<div class="card sem-padding">${!vis0.length ? vazio({ e: "🔎", texto: "Nenhum aluno com esse filtro." }) : tabelaHTML(vis0, "aluno")}</div>` : `<div class="card">${vazio({ e: "⏳", texto: "Nenhum aluno fez esta prova ainda." })}</div>`;
   if (resDados.turma) {
     const fizeram = new Set(linhas.map(l => String(l.t.email || "").toLowerCase()));
     const todos = alunosDaTurma(resDados.turma), faltam = todos.filter(a => !a.email || !fizeram.has(a.email));
-    html += `<div class="card secao-faltam"><h2>Não fizeram <span class="pequeno">(${faltam.length} de ${todos.length} da turma ${esc(resDados.turma.nome)})</span></h2>` +
-      (faltam.length ? `<ul class="lista-faltam">${faltam.map(a => `<li>${esc(a.nome || a.email)}${a.nome && a.email ? ` <span class="pequeno">${esc(a.email)}</span>` : ""}${!a.email ? ` <span class="pequeno">— ainda não entrou no sistema</span>` : ""}</li>`).join("")}</ul>` : `<p class="pequeno">Todos os alunos da turma começaram a prova. ✅</p>`) + `</div>`;
+    html += `<div class="card secao-faltam"><h2>Não fizeram <span class="meta-txt">${faltam.length} de ${todos.length} da turma ${esc(resDados.turma.nome)}</span></h2>` +
+      (faltam.length ? `<ul class="lista-faltam">${faltam.map(a => `<li>${esc(a.nome || a.email)}${a.nome && a.email ? ` <span class="pequeno">${esc(a.email)}</span>` : ""}${!a.email ? ` <span class="pequeno">— ainda não entrou no sistema</span>` : ""}</li>`).join("")}</ul>` : `<p class="help">Todos os alunos da turma começaram a prova.</p>`) + `</div>`;
   } else if (resDados.prova.turmaId) html += `<div class="card"><p class="pequeno">A turma desta prova não foi encontrada (apagada?). Escolha outra em Provas → Editar.</p></div>`;
-  if (mostrarTestes) html += `<div class="card secao-testes"><h2>Testes da equipe <span class="pequeno">(não entram na média, no CSV, nos PDFs nem em "Fechar notas")</span></h2>${testes.length ? tabelaHTML(testes, "teste") : `<p class="pequeno">Nenhuma tentativa de teste nesta prova. Abra <b>Testar como aluno</b> na aba Provas.</p>`}</div>`;
+  if (mostrarTestes) html += `<div class="card secao-testes"><h2>Testes da equipe <span class="meta-txt">não entram na média, no CSV, nos PDFs nem em "Fechar notas"</span></h2>${testes.length ? tabelaHTML(testes, "teste") : `<p class="pequeno">Nenhuma tentativa de teste nesta prova. Abra <b>Testar como aluno</b> na aba Provas.</p>`}</div>`;
   // preserva o detalhe aberto (e o que o professor estiver digitando nele)
   const box = $("#resDetalhe");
   const digitando = box && box.contains(document.activeElement) && /INPUT|TEXTAREA/.test(document.activeElement.tagName);
@@ -1707,7 +1649,6 @@ function desenharResultados() {
     else verAluno(detalheId, false);
   }
   document.querySelectorAll("[data-ver]").forEach(b => b.onclick = () => verAluno(b.dataset.ver));
-  document.querySelectorAll("[data-visao]").forEach(b => b.onclick = () => { localStorage.setItem("visaoResultados", b.dataset.visao); desenharResultados(); });
   ligarAcoesVida($("#resTabela"));
   document.querySelectorAll("[data-reset]").forEach(b => b.onclick = async () => {
     const l = linhas.find(x => x.t.id === b.dataset.reset);
@@ -1924,11 +1865,15 @@ async function carregarIA() {
   $("#iaChaveAtual").innerHTML = iaCfg ? `Chave salva: <span class="mono">${esc(finalChave(iaCfg.chave))}</span> · atualizada em ${dataBR(iaCfg.atualizadoEm)}` : "Nenhuma chave salva.";
   atualizarControlesIA();
 }
+function pintarResumoIA(revisar) {
+  $("#iaResumo").textContent = [iaCfg?.modelo || "configure a chave em Configuração", revisar === null ? "" : pl(revisar, "resposta a revisar", "respostas a revisar")].filter(Boolean).map(x => " · " + x).join("");
+}
 function atualizarControlesIA() {
   const ok = souDono() && !!iaCfg;
   $("#btnCorrigirIA").disabled = !ok || rodandoIA; $("#iaAuto").disabled = !ok; $("#iaRefazer").disabled = !ok;
   if (!ok) $("#iaAuto").checked = false;
   $("#iaAviso").textContent = ok ? `Modelo: ${iaCfg.modelo}. A IA pode errar: confira as marcadas com 🤖 IA.` : "Configure a chave em Configuração.";
+  pintarResumoIA(resDados?.linhas ? resDados.linhas.reduce((s, l) => s + l.revisar, 0) : null);
 }
 // chave digitada agora, ou a salva
 const chaveDigitada = () => $("#iaChave").value.trim();

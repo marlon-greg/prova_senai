@@ -248,34 +248,35 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
         </div>
         <!-- 2. ações (aparecem depois de carregar) -->
         <div id="resAcoes" class="res-acoes oculto">
-          <input type="search" id="rAluno" placeholder="Pesquisar aluno (nome ou e-mail)…" aria-label="Pesquisar aluno nos resultados">
+          <input type="search" id="rAluno" placeholder="Pesquisar aluno…" aria-label="Pesquisar aluno nos resultados">
           <div id="rSitChips" aria-label="Filtrar alunos por situação"></div>
           <select id="rSituacao" class="oculto" aria-hidden="true" tabindex="-1"><option value="">Todas as situações</option><option value="andamento">⏳ Em andamento</option><option value="finalizou">✅ Finalizou</option><option value="revisar">🟡 Com respostas a revisar</option><option value="sinais">⚠ Com sinais (aba, tela cheia, colar)</option><option value="abaixo">🔻 Nota abaixo de 50</option></select>
           <div class="res-acoes-dir">
-            <div class="menu-wrap"><button type="button" class="leve" data-menu aria-haspopup="menu" aria-expanded="false" aria-controls="menuExportar">⬇ Exportar ▾</button>
+            <div class="menu-wrap"><button type="button" class="leve" data-menu aria-haspopup="menu" aria-expanded="false" aria-controls="menuExportar"><span data-ic="download" data-ic-size="16" aria-hidden="true"></span>Exportar<span data-ic="chev" data-ic-size="14" aria-hidden="true"></span></button>
               <div class="menu" role="menu" id="menuExportar" hidden>
-                <button type="button" role="menuitem" id="btnCSV"><span class="e" aria-hidden="true">📊</span><span>Planilha CSV</span></button>
-                <button type="button" role="menuitem" id="btnPDFNotas"><span class="e" aria-hidden="true">📄</span><span>PDF das notas</span></button>
-                <button type="button" role="menuitem" id="btnPDFBoletins"><span class="e" aria-hidden="true">🧾</span><span>PDF dos boletins</span></button>
+                <button type="button" role="menuitem" id="btnCSV"><span data-ic="resultados" data-ic-size="16" aria-hidden="true"></span><span>Planilha CSV</span></button>
+                <button type="button" role="menuitem" id="btnPDFNotas"><span data-ic="provas" data-ic-size="16" aria-hidden="true"></span><span>PDF das notas</span></button>
+                <button type="button" role="menuitem" id="btnPDFBoletins"><span data-ic="provas" data-ic-size="16" aria-hidden="true"></span><span>PDF dos boletins</span></button>
               </div></div>
-            <button id="btnFecharNotas" class="ok">✔ Fechar notas</button>
+            <button id="btnFecharNotas" class="ok">Fechar notas</button>
           </div>
         </div>
         <!-- 3. correção por IA (só o administrador principal) -->
         <div id="iaControles" class="ia-linha oculto">
-          <span class="ia-titulo"><span class="e" aria-hidden="true">🤖</span>Correção das dissertativas por IA</span>
-          <button id="btnCorrigirIA" class="leve mini" disabled>Corrigir com IA</button>
-          <div class="menu-wrap"><button type="button" class="icone mini" data-menu aria-haspopup="menu" aria-expanded="false" aria-controls="menuIA" aria-label="Opções da correção por IA" title="Opções da correção por IA">⚙</button>
-            <div class="menu" role="menu" id="menuIA" hidden>
+          <span class="ia-ic" data-ic="bot" data-ic-size="20" aria-hidden="true"></span>
+          <div class="ia-texto"><div><b class="ia-titulo">Correção das dissertativas por IA</b> <span class="ia-sub" id="iaResumo"></span></div>
+            <div class="ia-progresso" id="iaProgresso" role="status" aria-live="polite"></div></div>
+          <button id="btnCorrigirIA" class="leve mini" disabled><span data-ic="sparkle" data-ic-size="16" aria-hidden="true"></span>Corrigir com IA</button>
+          <div class="menu-wrap"><button type="button" class="icone mini" data-menu aria-haspopup="menu" aria-expanded="false" aria-controls="menuIA" aria-label="Opções da correção por IA" title="Opções da correção por IA"><span data-ic="config" data-ic-size="16" aria-hidden="true"></span></button>
+            <div class="menu ia-menu" role="menu" id="menuIA" hidden>
               <label class="check"><input type="checkbox" id="iaRefazer" disabled> Refazer as que a IA já corrigiu</label>
               <label class="check"><input type="checkbox" id="iaAuto" disabled> Automático ao vivo</label>
+              <p class="help" id="iaAviso">Configure a chave em Configuração.</p>
             </div></div>
-          <span class="pequeno ia-modelo" id="iaAviso">Configure a chave em Configuração.</span>
-          <div class="ia-progresso" id="iaProgresso" role="status" aria-live="polite"></div>
         </div>
-        <div id="resResumo"></div>
-      </div>
-      <div id="resTabela"></div>
+        </div>
+      <div id="resResumo"></div>
+      <div id="resTabela" class="lista-cartoes"></div>
     </div>
 
     <!-- ACESSIBILIDADE (js/admin-acess.js) -->
@@ -352,16 +353,16 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
 <div class="toolbar" role="search">
           <input type="search" id="rlBusca" placeholder="Pesquisar aluno…" aria-label="Pesquisar aluno">
           <button type="button" class="leve btn-filtros" aria-expanded="false" aria-controls="rlBuscaPainel"><span data-ic="filter" data-ic-size="16" aria-hidden="true"></span>Filtros<span class="badge" aria-label="filtros ativos"></span></button>
-          <button id="rlTopicos" class="leve" type="button">📊 Calcular por tópico</button>
-          <div class="menu-wrap"><button type="button" class="leve" data-menu aria-haspopup="menu" aria-expanded="false" aria-controls="menuRelatorios">⬇ Exportar ▾</button>
+          <button id="rlTopicos" class="leve" type="button"><span data-ic="resultados" data-ic-size="16" aria-hidden="true"></span>Calcular por tópico</button>
+          <div class="menu-wrap"><button type="button" class="leve" data-menu aria-haspopup="menu" aria-expanded="false" aria-controls="menuRelatorios"><span data-ic="download" data-ic-size="16" aria-hidden="true"></span>Exportar<span data-ic="chev" data-ic-size="14" aria-hidden="true"></span></button>
             <div class="menu" role="menu" id="menuRelatorios" hidden>
-              <button type="button" role="menuitem" id="rlCSV"><span class="e" aria-hidden="true">📊</span><span>CSV das notas</span></button>
-              <button type="button" role="menuitem" id="rlPDF"><span class="e" aria-hidden="true">📄</span><span>PDF formal do relatório</span></button></div></div>
+              <button type="button" role="menuitem" id="rlCSV"><span data-ic="resultados" data-ic-size="16" aria-hidden="true"></span><span>CSV das notas</span></button>
+              <button type="button" role="menuitem" id="rlPDF"><span data-ic="provas" data-ic-size="16" aria-hidden="true"></span><span>PDF formal do relatório</span></button></div></div>
           <span id="rlContagem" class="tb-contagem" aria-live="polite"></span>
           <div class="painel-filtros" id="rlBuscaPainel" hidden><label class="pf-campo"><span>Turma</span><select id="rlTurma" aria-label="Turma"></select></label><label class="pf-campo"><span>Semestre</span><select id="rlSemestre" aria-label="Semestre"></select></label><label class="pf-campo"><span>Matéria</span><select id="rlMateria" aria-label="Matéria"></select></label><div class="pf-acoes"><button type="button" class="discreto mini pf-limpar oculto">Limpar filtros</button></div></div>
         </div>
       </div>
-      <div id="rlConteudo"></div>
+      <div id="rlConteudo" class="lista-grupos"></div>
     </div>
 
     <!-- EQUIPE -->

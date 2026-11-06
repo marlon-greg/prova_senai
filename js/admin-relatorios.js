@@ -3,6 +3,8 @@
 import { db, esc, $, toast, traduzirErro, corrigir, bancosDaProva, temaDe, semestreDaProva, materiaDaProva, rotuloSemestre, chaveTexto } from "./common.js";
 import { graficoLinhas, ligarGraficos } from "./graficos.js";
 import { imprimir } from "./admin-relatorio-aluno.js";
+import { pl, ajudaHTML, vazio } from "./ui.js";
+import { ic } from "./icones.js";
 import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 export const MEDIA_MINIMA = 50;
@@ -14,7 +16,7 @@ export function iniciarRelatorios(c) {
   $("#rlCSV").onclick = csv;
   $("#rlPDF").onclick = () => {
     const filtros = [["#rlTurma", "turma"], ["#rlSemestre", "semestre"], ["#rlMateria", "matéria"]].map(([id, r]) => $(id).value ? `${r}: ${$(id).selectedOptions[0].textContent}` : "").filter(Boolean).join(" · ") || "todas as turmas, semestres e matérias";
-    imprimir("Relatório de notas", `<header class="cab"><div class="marca">SENAI</div><div><h1>Relatório de notas</h1><div class="sub">${esc(filtros)} · emitido em ${new Date().toLocaleDateString("pt-BR")} · média mínima ${MEDIA_MINIMA}</div></div></header>${$("#rlConteudo").innerHTML}
+    imprimir("Relatório de notas", `<header class="cab"><div class="marca">SENAI</div><div><h1>Relatório de notas</h1><div class="sub">${esc(filtros)} · emitido em ${new Date().toLocaleDateString("pt-BR")} · média mínima ${MEDIA_MINIMA}</div></div></header>${conteudoPDF()}
       <div style="display:flex;justify-content:space-around;margin-top:40px;text-align:center"><div style="border-top:1px solid #000;width:40%;padding-top:4px">Professor(a)</div><div style="border-top:1px solid #000;width:40%;padding-top:4px">Coordenação</div></div>`);
   };
 }
@@ -53,47 +55,79 @@ function agrupar(ls) {
   }
   return [...al.values()].sort((a, b) => String(a.nome).localeCompare(String(b.nome), "pt-BR"));
 }
+// o que as telas e o PDF usam
+function dados() {
+  const ls = filtradas(), alunos = agrupar(ls), materias = [...new Set(ls.map(l => l.materia))].sort((a, b) => a.localeCompare(b, "pt-BR"));
+  const risco = alunos.flatMap(a => [...a.materias].map(([m, l]) => ({ a, m, l, med: media(l.map(x => x.nota)) })).filter(x => x.med < MEDIA_MINIMA)).sort((x, y) => x.med - y.med);
+  const porTurma = new Map(); ls.forEach(l => { const k = l.turmaId; if (!porTurma.has(k)) porTurma.set(k, new Map()); const m = porTurma.get(k); if (!m.has(l.materia)) m.set(l.materia, []); m.get(l.materia).push(l.nota); });
+  return { ls, alunos, materias, risco, porTurma, nomeTurma: id => base.turmas.find(t => t.id === id)?.nome || "—" };
+}
+const precisa = r => MEDIA_MINIMA * (r.l.length + 1) - r.l.reduce((s, x) => s + x.nota, 0);
+const iniciaisDe = n => String(n || "?").trim().split(/\s+/).filter(Boolean).map((p, i, a) => i === 0 || i === a.length - 1 ? p[0] : "").join("").slice(0, 2).toUpperCase();
+function porTurmaHTML({ porTurma, nomeTurma }) {
+  return [...porTurma].map(([t, ms]) => `<div class="rl-turma"><b>${esc(nomeTurma(t))}</b> ${[...ms].map(([m, l]) => `<span class="chip ${media(l) < MEDIA_MINIMA ? "err" : media(l) < 70 ? "warn" : "ok"}">${esc(m)}: ${fmt(media(l))} · ${pl(l.length, "nota")}</span>`).join("")}</div>`).join("") || `<p class="help">Sem notas com esses filtros.</p>`;
+}
+// tendência: da primeira para a última prova da matéria
+function tendencia(notas, med) {
+  if (med < MEDIA_MINIMA) return `<span class="chip warn">em risco</span>`;
+  if (notas.length < 2) return `<span class="meta-txt" title="Precisa de 2 provas ou mais">—</span>`;
+  const d = notas.at(-1) - notas[0];
+  return d > 0 ? `<span class="rl-tend sobe" title="Subiu ${fmt(d)} pontos da primeira para a última prova" role="img" aria-label="Subindo">${ic("relatorios")}</span>`
+    : `<span class="rl-tend ${d < 0 ? "desce" : "igual"}" title="${d < 0 ? `Caiu ${fmt(-d)} pontos da primeira para a última prova` : "Sem mudança da primeira para a última prova"}" role="img" aria-label="${d < 0 ? "Caindo" : "Estável"}">${ic("relatorios")}</span>`;
+}
 function desenhar() {
   if (!base) return;
-  const ls = filtradas(), alunos = agrupar(ls), materias = [...new Set(ls.map(l => l.materia))].sort((a, b) => a.localeCompare(b, "pt-BR"));
-  const nomeTurma = id => base.turmas.find(t => t.id === id)?.nome || "—";
-  const risco = alunos.flatMap(a => [...a.materias].map(([m, l]) => ({ a, m, l, med: media(l.map(x => x.nota)) })).filter(x => x.med < MEDIA_MINIMA)).sort((x, y) => x.med - y.med);
-  const geral = media(ls.map(l => l.nota));
-  // por turma e matéria
-  const porTurma = new Map(); ls.forEach(l => { const k = l.turmaId; if (!porTurma.has(k)) porTurma.set(k, new Map()); const m = porTurma.get(k); if (!m.has(l.materia)) m.set(l.materia, []); m.get(l.materia).push(l.nota); });
+  const d = dados(), { ls, alunos, risco } = d, geral = media(ls.map(l => l.nota));
+  const nRisco = new Set(risco.map(r => r.a.email)).size;
+  // uma linha por aluno e matéria
+  const totalProvas = (m, turmaId) => new Set(ls.filter(x => x.materia === m && x.turmaId === turmaId).map(x => x.p.id)).size;
+  const linhasMedia = alunos.flatMap(a => [...a.materias].map(([m, l]) => {
+    const ord = [...l].sort((x, y) => (x.t.finalizadaEm?.seconds || 0) - (y.t.finalizadaEm?.seconds || 0)), med = media(l.map(x => x.nota));
+    return `<tr><td><b class="rl-nome">${esc(a.nome)}</b>${d.materias.length > 1 ? `<span class="rl-sub">${esc(m)}</span>` : ""}</td><td class="meta-txt">${l.length} de ${totalProvas(m, a.turmaId)}</td>
+      <td title="${esc(ord.map(x => `${x.p.titulo}: ${fmt(x.nota)}`).join(" · "))}"><span class="rl-media"><span class="rl-barra"><i class="${cor(med)}" style="width:${Math.max(0, Math.min(100, Math.round(med)))}%"></i></span><b class="${cor(med)}">${fmt(med)}</b></span></td><td>${tendencia(ord.map(x => x.nota), med)}</td></tr>`;
+  })).join("");
   $("#rlConteudo").innerHTML = `
-  <div class="numeros">
-    <div class="numero"><b>${alunos.length}</b><span>alunos com nota</span></div>
-    <div class="numero"><b>${new Set(ls.map(l => l.p.id)).size}</b><span>provas</span></div>
-    <div class="numero"><b>${fmt(geral)}</b><span>média geral</span></div>
-    <div class="numero ${risco.length ? "aviso" : ""}"><b>${new Set(risco.map(r => r.a.email)).size}</b><span>aluno(s) em risco (média &lt; ${MEDIA_MINIMA} em alguma matéria)</span></div></div>
-  <section class="card"><h3 class="diario-h3">⚠ Risco de reprovação <span class="pequeno">— média das provas da matéria abaixo de ${MEDIA_MINIMA} (cada prova vale o mesmo)</span></h3>
-    ${risco.length ? `<div class="tabela"><table><tr><th>Aluno</th><th>Turma</th><th>Matéria</th><th>Média</th><th>Notas</th><th>Precisa na próxima*</th></tr>${risco.map(r => {
-      const n = r.l.length, prec = MEDIA_MINIMA * (n + 1) - r.l.reduce((s, x) => s + x.nota, 0);
-      return `<tr><td><b>${esc(r.a.nome)}</b><br><span class="pequeno">${esc(r.a.email)}</span></td><td>${esc(nomeTurma(r.a.turmaId))}</td><td>${esc(r.m)}</td><td class="${cor(r.med)}"><b>${fmt(r.med)}</b></td>
-        <td class="pequeno">${r.l.map(x => `${esc(x.p.titulo)}: <b>${fmt(x.nota)}</b>`).join("<br>")}</td><td>${prec > 100 ? `<span class="tag erro">mais de 100 (só com recuperação)</span>` : `<b>${fmt(Math.max(0, prec))}</b>`}</td></tr>`; }).join("")}</table></div>
-      <p class="pequeno">* Nota que o aluno precisa tirar numa próxima prova da matéria para a média chegar a ${MEDIA_MINIMA}.</p>` : `<p class="pequeno">Ninguém abaixo de ${MEDIA_MINIMA} com esses filtros. 🎉</p>`}</section>
-  <section class="card"><h3 class="diario-h3">👤 Médias por aluno e matéria</h3>
-    ${alunos.length ? `<div class="tabela"><table class="rl-tab"><tr><th>Aluno</th>${materias.map(m => `<th>${esc(m)}</th>`).join("")}<th>Geral</th></tr>${alunos.map(a => {
-      const todas = [...a.materias.values()].flat().map(x => x.nota);
-      return `<tr><td><b>${esc(a.nome)}</b><br><span class="pequeno">${esc(nomeTurma(a.turmaId))}</span></td>${materias.map(m => { const l = a.materias.get(m); const md = l ? media(l.map(x => x.nota)) : null;
-        return `<td class="${cor(md)}" title="${l ? esc(l.map(x => `${x.p.titulo}: ${fmt(x.nota)}`).join(" · ")) : ""}">${fmt(md)}${l ? `<span class="pequeno"> (${l.length})</span>` : ""}</td>`; }).join("")}<td class="${cor(media(todas))}"><b>${fmt(media(todas))}</b></td></tr>`; }).join("")}</table></div>`
-      : `<div class="vazio"><div class="icone">📊</div><p>Nenhuma prova finalizada com esses filtros.</p></div>`}</section>
+  <div class="kpis">
+    <div class="kpi"><b>${alunos.length}</b><span>alunos com nota</span></div>
+    <div class="kpi"><b>${new Set(ls.map(l => l.p.id)).size}</b><span>provas finalizadas</span></div>
+    <div class="kpi"><b>${fmt(geral)}</b><span>média geral</span></div>
+    <div class="kpi ${nRisco ? "warn" : ""}"><b>${nRisco}</b><span>em risco · média &lt; ${MEDIA_MINIMA}</span></div></div>
+  <section class="card"><div class="rl-cab"><span class="e" aria-hidden="true">⚠️</span><h3>Risco de reprovação</h3>${ajudaHTML(`<p>Média das provas da matéria abaixo de ${MEDIA_MINIMA}; cada prova vale o mesmo. "Precisa de" é a nota que o aluno tem de tirar numa próxima prova da matéria para a média chegar a ${MEDIA_MINIMA}.</p>`, { titulo: "Como é calculado o risco" })}${risco.length ? `<span class="chip warn">${pl(nRisco, "aluno")}</span>` : ""}</div>
+    ${risco.length ? `<div class="rl-risco">${risco.map(r => { const prec = precisa(r);
+      return `<article class="rl-risco-item" title="${esc(r.l.map(x => `${x.p.titulo}: ${fmt(x.nota)}`).join(" · "))}"><span class="avatar-p">${esc(iniciaisDe(r.a.nome))}</span><div><b>${esc(r.a.nome)}</b><span>${esc(r.m)} · média ${fmt(r.med)}</span><span>${prec > 100 ? "só com recuperação" : `precisa de ${fmt(Math.max(0, prec))} na próxima`}</span></div></article>`; }).join("")}</div>`
+      : `<p class="rl-ok">${ic("check")}Ninguém abaixo de ${MEDIA_MINIMA} com esses filtros.</p>`}</section>
+  <section class="card"><div class="rl-cab"><h3>Médias por aluno e matéria</h3></div>
+    ${alunos.length ? `<div class="tabela sem-borda rl-tabela"><table class="rl-tab"><thead><tr><th>Aluno</th><th>Provas</th><th>Média</th><th>Tendência</th></tr></thead><tbody>${linhasMedia}</tbody></table></div>`
+      : vazio({ e: "📊", texto: "Nenhuma prova finalizada com esses filtros." })}</section>
   <section class="card">${evolucaoHTML(ls)}</section>
-  <section class="card"><h3 class="diario-h3">👥 Por turma e matéria</h3>
-    ${[...porTurma].map(([t, ms]) => `<div class="rl-turma"><b>${esc(nomeTurma(t))}</b> ${[...ms].map(([m, l]) => `<span class="tag ${media(l) < MEDIA_MINIMA ? "erro" : media(l) < 70 ? "aviso" : "ok"}">${esc(m)}: ${fmt(media(l))} <span class="pequeno">(${l.length} notas)</span></span>`).join("")}</div>`).join("") || `<p class="pequeno">—</p>`}</section>
-  <section class="card" id="rlTopicosBox"><h3 class="diario-h3">🧩 Desempenho por tópico</h3>${base.topicos ? topicosHTML() : `<p class="pequeno">Clique em <b>📊 Calcular por tópico</b> (lê as respostas das provas filtradas; pode levar alguns segundos).</p>`}</section>`;
+  <section class="card"><div class="rl-cab"><h3>Por turma e matéria</h3></div>${porTurmaHTML(d)}</section>
+  <section class="card" id="rlTopicosBox"><div class="rl-cab"><h3>Desempenho por tópico</h3></div>${base.topicos ? topicosHTML() : `<p class="help">Clique em <b>Calcular por tópico</b> (lê as respostas das provas filtradas; pode levar alguns segundos).</p>`}</section>`;
   ligarGraficos($("#rlConteudo"));
+}
+// PDF formal: tabelas completas, com as notas de cada prova e a matriz aluno × matéria
+function conteudoPDF() {
+  const d = dados(), { ls, alunos, materias, risco, nomeTurma } = d;
+  return `<h2>Risco de reprovação</h2><p class="pequeno">Média das provas da matéria abaixo de ${MEDIA_MINIMA} (cada prova vale o mesmo).</p>
+    ${risco.length ? `<div class="tabela"><table><tr><th>Aluno</th><th>Turma</th><th>Matéria</th><th>Média</th><th>Notas</th><th>Precisa na próxima*</th></tr>${risco.map(r => { const prec = precisa(r);
+      return `<tr><td><b>${esc(r.a.nome)}</b><br><span class="pequeno">${esc(r.a.email)}</span></td><td>${esc(nomeTurma(r.a.turmaId))}</td><td>${esc(r.m)}</td><td><b>${fmt(r.med)}</b></td>
+        <td class="pequeno">${r.l.map(x => `${esc(x.p.titulo)}: <b>${fmt(x.nota)}</b>`).join("<br>")}</td><td>${prec > 100 ? "mais de 100 (só com recuperação)" : `<b>${fmt(Math.max(0, prec))}</b>`}</td></tr>`; }).join("")}</table></div>
+      <p class="pequeno">* Nota que o aluno precisa tirar numa próxima prova da matéria para a média chegar a ${MEDIA_MINIMA}.</p>` : `<p class="pequeno">Ninguém abaixo de ${MEDIA_MINIMA} com esses filtros.</p>`}
+    <h2>Médias por aluno e matéria</h2>
+    ${alunos.length ? `<div class="tabela"><table><tr><th>Aluno</th>${materias.map(m => `<th>${esc(m)}</th>`).join("")}<th>Geral</th></tr>${alunos.map(a => {
+      const todas = [...a.materias.values()].flat().map(x => x.nota);
+      return `<tr><td><b>${esc(a.nome)}</b><br><span class="pequeno">${esc(nomeTurma(a.turmaId))}</span></td>${materias.map(m => { const l = a.materias.get(m); return `<td>${fmt(l ? media(l.map(x => x.nota)) : null)}${l ? ` <span class="pequeno">(${l.length})</span>` : ""}</td>`; }).join("")}<td><b>${fmt(media(todas))}</b></td></tr>`; }).join("")}</table></div>` : `<p class="pequeno">Nenhuma prova finalizada com esses filtros.</p>`}
+    <h2>Por turma e matéria</h2>${porTurmaHTML(d)}
+    ${base.topicos ? `<h2>Desempenho por tópico</h2>${topicosHTML()}` : ""}`;
 }
 
 // média da turma em cada prova, em ordem de data (uma série por matéria, até 4; mais que isso: filtre a matéria)
 function evolucaoHTML(ls) {
   const provas = new Map(); ls.forEach(l => { if (!provas.has(l.p.id)) provas.set(l.p.id, { p: l.p, materia: l.materia, notas: [], data: l.t.finalizadaEm?.seconds || 0 }); const x = provas.get(l.p.id); x.notas.push(l.nota); x.data = Math.max(x.data, l.t.finalizadaEm?.seconds || 0); });
   const lista = [...provas.values()].sort((a, b) => a.data - b.data);
-  if (lista.length < 2) return `<h3 class="diario-h3">📈 Evolução</h3><p class="pequeno">Com 2 provas ou mais no filtro aparece o gráfico de evolução.</p>`;
+  if (lista.length < 2) return `<div class="rl-cab"><h3>Evolução</h3></div><p class="help">Com 2 provas ou mais no filtro aparece o gráfico de evolução.</p>`;
   const materias = [...new Set(lista.map(x => x.materia))];
-  if (materias.length > 4) return `<h3 class="diario-h3">📈 Evolução</h3><p class="pequeno">São ${materias.length} matérias: escolha uma matéria (ou turma) no filtro para ver o gráfico de evolução.</p>`;
-  return graficoLinhas({ titulo: "📈 Média da turma em cada prova (0 a 100)", rotulos: lista.map(x => x.p.titulo.slice(0, 14)),
+  if (materias.length > 4) return `<div class="rl-cab"><h3>Evolução</h3></div><p class="help">São ${materias.length} matérias: escolha uma matéria (ou turma) no filtro para ver o gráfico de evolução.</p>`;
+  return graficoLinhas({ titulo: "Média da turma em cada prova (0 a 100)", rotulos: lista.map(x => x.p.titulo.slice(0, 14)),
     series: materias.map(m => ({ nome: m, valores: lista.map(x => x.materia === m ? media(x.notas) : null) })), y: { min: 0, max: 100, passo: 25 }, ref: { valor: MEDIA_MINIMA, rotulo: `mínimo ${MEDIA_MINIMA}` } });
 }
 // ---------- desempenho por tópico (reaproveitável: docs/INTEGRACOES.md) ----------
@@ -128,7 +162,7 @@ async function calcularTopicos() {
   if (!ls.length) return toast("Nenhuma prova com esses filtros.", "erro");
   const box = $("#rlTopicosBox");
   try {
-    base.topicos = { porAluno: await desempenhoPorTopico(ls.map(l => ({ t: l.t, p: l.p, materia: l.materia })), (i, n) => { if (box) box.innerHTML = `<h3 class="diario-h3">🧩 Desempenho por tópico</h3><p class="pequeno">Lendo as respostas… ${i} de ${n} provas</p>`; }), nomes: Object.fromEntries(ls.map(l => [l.email, l.nome])) };
+    base.topicos = { porAluno: await desempenhoPorTopico(ls.map(l => ({ t: l.t, p: l.p, materia: l.materia })), (i, n) => { if (box) box.innerHTML = `<div class="rl-cab"><h3>Desempenho por tópico</h3></div><p class="help">Lendo as respostas… ${i} de ${n} provas</p>`; }), nomes: Object.fromEntries(ls.map(l => [l.email, l.nome])) };
   } catch (e) { toast(traduzirErro(e), "erro"); }
   desenhar();
 }

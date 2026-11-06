@@ -1,8 +1,8 @@
 // Gráfico de linhas em SVG (sem biblioteca), seguindo as regras de visualização do projeto:
 // um eixo só, linhas de 2px, marcadores de 8px com anel da cor do fundo, grade discreta, rótulo direto no fim de cada
 // linha, legenda quando há 2+ séries, dica (tooltip) ao passar o mouse e tabela com os mesmos dados (acessibilidade).
-// Paleta categórica validada (scripts do dataviz): azul, laranja, verde-água, amarelo — nessa ordem, sempre.
-export const CORES_SERIES = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100"];
+// Paleta do sistema (tokens --marinho-2, --info, --ok, --ambar, --vermelho), nessa ordem, sempre.
+export const CORES_SERIES = ["#1f3160", "#2459c7", "#12805c", "#f5a524", "#c8102e"];
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const fmt = v => (Math.round(v * 10) / 10).toLocaleString("pt-BR");
 
