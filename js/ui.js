@@ -347,3 +347,17 @@ if (!window.__uiLigado) {
   ["dragleave", "drop"].forEach(t => document.addEventListener(t, e => e.target.closest?.(".dropzone")?.classList.remove("arrastando")));
 }
 export { $ };
+
+// ---------- menu lateral: quando não cabe tudo na tela, avisa que há mais opções abaixo ----------
+export function ligarMenuLateral(nav) {
+  if (nav.querySelector(".menu-mais")) return;
+  const mais = document.createElement("button");
+  mais.type = "button"; mais.className = "menu-mais"; mais.textContent = "▾ Mais opções";
+  mais.onclick = () => nav.scrollTo({ top: nav.scrollHeight, behavior: "smooth" });
+  nav.append(mais);
+  const ver = () => { mais.hidden = nav.scrollHeight - nav.clientHeight - nav.scrollTop <= 4; };
+  nav.addEventListener("scroll", ver, { passive: true });
+  new ResizeObserver(ver).observe(nav);
+  document.fonts?.ready.then(ver);
+  ver();
+}

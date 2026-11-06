@@ -15,7 +15,7 @@ import { mesclarQuestao } from "./acessibilidade.js";
 import { temFormato, textoResposta, textoChave, FORMATOS } from "./formatos-ui.js";
 import { iniciarAcessibilidade, carregarAcessibilidade, prepararNovo as prepararNovoAcess, abrirDepois } from "./admin-acess.js";
 import { iniciarHistorico, carregarHistorico } from "./admin-historico.js";
-import { tarefa } from "./ui.js";
+import { tarefa, ligarMenuLateral } from "./ui.js";
 import { drawer, ligarFiltros, atualizarFiltros, ajudasEmPopover, menuHTML, itemMenu, vazio, chips, statTiles } from "./ui.js";
 import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp, onSnapshot, increment, deleteField }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
@@ -67,6 +67,7 @@ aoMudarLogin(async user => {
     b.onclick = () => abrirAba(b.dataset.aba);
     b.classList.toggle("oculto", (ehInclusao() && !ABAS_INCLUSAO.includes(b.dataset.aba)) || (["diario", "historico"].includes(b.dataset.aba) && !podeCuidar()) || (b.dataset.aba === "gamificacao" && !ehAdmin()) || (["retorno", "relatorios"].includes(b.dataset.aba) && !podeEditar()));
   });
+  ligarMenuLateral($(".menu-lateral"));
   document.body.classList.toggle("papel-inclusao", ehInclusao());
   abrirAba(ehInclusao() ? "diario" : "provas");
 });
