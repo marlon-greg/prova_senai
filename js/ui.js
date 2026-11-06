@@ -69,7 +69,7 @@ function abrirFlutuante(el, botao, alinhar, fechar) {
 }
 
 // ---------- popover ----------
-export function popover(ancora, conteudoHTML, { largura = 380, titulo = "" } = {}) {
+export function popover(ancora, conteudoHTML, { largura = 380, titulo = "", alinhar = "fim" } = {}) {
   if (aberto?.botao === ancora) return fecharFlutuante();
   fecharFlutuante();
   const el = document.createElement("div");
@@ -79,7 +79,7 @@ export function popover(ancora, conteudoHTML, { largura = 380, titulo = "" } = {
   el.innerHTML = (titulo ? `<p class="pop-titulo">${esc(titulo)}</p>` : "") + conteudoHTML;
   document.body.appendChild(el);
   ancora.setAttribute("aria-controls", el.id);
-  abrirFlutuante(el, ancora, "fim", () => el.remove());
+  abrirFlutuante(el, ancora, alinhar, () => el.remove());
   el.focus({ preventScroll: true });
   return el;
 }
@@ -338,7 +338,7 @@ if (!window.__uiLigado) {
     }
     // clicar num item do menu estático fecha o menu (o onclick do item continua rodando)
     if (aberto && e.target.closest(".menu [role=menuitem]") && aberto.el.contains(e.target)) { setTimeout(() => fecharFlutuante(), 0); return; }
-    if (aberto && !aberto.el.contains(e.target)) fecharFlutuante();
+    if (aberto && !aberto.el.contains(e.target) && !aberto.botao?.contains(e.target)) fecharFlutuante();   // o botão que abriu cuida de fechar
     // clicar fora fecha o painel de filtros
     document.querySelectorAll(".painel-filtros:not([hidden])").forEach(p => { if (!p.contains(e.target) && !e.target.closest("[data-tirar]")) fecharPainelFiltros(p); });
   });

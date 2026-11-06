@@ -397,15 +397,107 @@ progress.barra { width:100%; max-width:420px; height:10px; vertical-align:middle
 /* =====================================================================
    7. Layout do painel e da página (cabeçalho, cartões, menu lateral)
    ===================================================================== */
-/* ---------- cabeçalho ---------- */
-header { background:#fff; border-bottom:1px solid var(--borda); box-shadow:inset 0 -3px 0 var(--vermelho); padding:12px 24px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
-header h1 { font-size:1.05em; margin:0; color:var(--texto); }
-header .senai { background:var(--vermelho); color:#fff; font-family:var(--fonte-titulo); font-weight:700; padding:4px 12px; border-radius:6px; letter-spacing:1.5px; font-size:.95em; }
+/* ---------- cabeçalho branco (painel e aluno) ---------- */
+header { position:sticky; top:0; z-index:200; min-height:64px; padding:8px var(--sp-7); display:flex; align-items:center; gap:var(--sp-3) var(--sp-4); flex-wrap:wrap; background:var(--cartao); color:var(--texto); box-shadow:0 1px 0 var(--borda); }
+header h1 { font-family:var(--fonte-titulo); font-size:var(--fs-lg); font-weight:600; margin:0; color:var(--marinho); }
+header .quem { margin-left:auto; font-size:var(--fs-sm); color:var(--suave); display:flex; align-items:center; gap:var(--sp-2); min-width:0; }
+header .quem #quem { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:260px; }
+
+/* ---------- logo oficial (img/senai.svg); sem o arquivo, o texto SENAI ---------- */
+.logo { display:block; height:36px; width:auto; }
+.logo-texto { font-family:var(--fonte-titulo); font-weight:700; font-size:22px; line-height:36px; letter-spacing:.04em; color:var(--marinho); }
+.menu-logo { padding:6px 8px; margin-bottom:18px; flex:none; }
+.menu-logo .logo-texto { color:#fff; }
+
+/* ---------- casca do painel: menu 240 px + coluna com cabeçalho e conteúdo ---------- */
+body.painel main { max-width:none; margin:0; padding:0; }
+body.painel main:has(> #telaLogin:not(.oculto)), body.painel main:has(> #telaAviso:not(.oculto)) { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:var(--sp-4); }
+#telaAviso { max-width:520px; width:100%; margin:0; }
+.painel-layout:not(.oculto) { display:flex; align-items:stretch; min-height:100vh; }
+.painel-coluna { flex:1 1 0; min-width:0; display:flex; flex-direction:column; }
+.painel-conteudo { width:100%; max-width:1180px; padding:28px 32px 40px; display:flex; flex-direction:column; gap:var(--sp-5); }
+.painel-conteudo > [id^="aba-"]:not(.oculto) { display:flex; flex-direction:column; gap:var(--sp-5); min-width:0; }
+.painel-conteudo > [id^="aba-"] > * { min-width:0; margin-top:0; margin-bottom:0; }
+.painel-conteudo > [id^="aba-"] > :empty { display:none; }
+body.papel-inclusao #btnFecharNotas, body.papel-inclusao #iaControles { display:none !important; }
+
+/* menu lateral: barra marinho de altura total */
+.menu-lateral { position:sticky; top:0; flex:0 0 240px; width:240px; height:100vh; margin:0; padding:16px 12px 20px; display:flex; flex-direction:column; flex-wrap:nowrap; gap:0; background:var(--menu-fundo); border:0; border-radius:0; overflow:hidden auto; overscroll-behavior:contain; scrollbar-width:thin; scrollbar-color:var(--menu-rotulo) transparent; }
+.menu-grupo { display:flex; flex-direction:column; gap:2px; flex:none; }
+.menu-grupo:not(:has(button:not(.oculto))) { display:none; }
+.menu-rotulo { padding:14px 10px 6px; font-family:var(--fonte-texto); font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--menu-rotulo); }
+.menu-lateral button { display:flex; align-items:center; justify-content:flex-start; gap:12px; flex:none; width:100%; height:auto; min-height:0; padding:10px 12px; border:0; border-radius:10px; background:transparent; color:var(--menu-texto); font-family:var(--fonte-texto); font-size:var(--fs-md); font-weight:500; line-height:1.25; text-align:left; white-space:normal; box-shadow:none; }
+.menu-lateral button svg { color:var(--menu-icone); }
+.menu-lateral button:hover { background:rgba(255,255,255,.07); color:#fff; }
+.menu-lateral button.ativa { background:var(--menu-ativo); color:#fff; font-weight:600; box-shadow:inset 3px 0 0 var(--vermelho); }
+.menu-lateral button.ativa svg, .menu-lateral button:hover svg { color:#fff; }
+.menu-lateral button:focus-visible { box-shadow:0 0 0 2px #fff; }
+.menu-lateral button.ativa:focus-visible { box-shadow:inset 3px 0 0 var(--vermelho), 0 0 0 2px #fff; }
+/* se o menu não couber na altura da tela, "Mais opções" avisa que há itens abaixo */
+.menu-lateral .menu-mais { position:sticky; bottom:-20px; flex:none; display:block; height:38px; margin:-20px 0 -20px; width:100%; padding:14px 12px 0; border-radius:0; text-align:center; font-size:var(--fs-xs); font-weight:600; color:#fff; background:linear-gradient(to bottom, transparent, var(--menu-fundo) 55%); }
+.menu-lateral .menu-mais:hover { background:linear-gradient(to bottom, transparent, var(--menu-fundo) 55%); text-decoration:underline; }
+/* telas baixas: itens mais justos para o máximo caber sem rolar */
+@media (min-width:901px) and (max-height:820px) {
+  .menu-lateral { padding-top:10px; }
+  .menu-logo { margin-bottom:6px; }
+  .menu-lateral button { padding:7px 12px; }
+  .menu-rotulo { padding:8px 10px 3px; }
+}
+
+/* barra do topo do painel */
+body.painel header { height:64px; min-height:0; padding:0 var(--sp-7); flex-wrap:nowrap; gap:var(--sp-4); }
+.topo-titulo { display:flex; align-items:center; gap:10px; min-width:0; margin-right:auto; }
+body.painel header h1 { font-size:var(--fs-2xl); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
+button.topo-info { flex:none; width:32px; height:32px; padding:0; display:inline-flex; align-items:center; justify-content:center; border:0; border-radius:50%; background:var(--marinho-claro); color:var(--marinho-2); }
+button.topo-info:hover { background:var(--borda-forte); }
+.topo-acao { flex:none; display:flex; align-items:center; gap:var(--sp-2); }
+.topo-usuario { flex:none; }
+button.usuario-pill { height:40px; padding:0 10px 0 6px; gap:var(--sp-2); border-radius:var(--raio-pill); }
+.usuario-pill .avatar { width:28px; height:28px; flex-basis:28px; font-size:11px; }
+.usuario-pill #usuarioChev { display:inline-flex; color:var(--icone); }
+.usuario-pill #quem { font-size:var(--fs-sm); font-weight:500; max-width:140px; overflow:hidden; text-overflow:ellipsis; }
+#menuUsuario { width:max-content; max-width:min(360px, 92vw); }
+.usuario-info { display:flex; flex-direction:column; gap:2px; padding:10px 14px 12px; border-bottom:1px solid var(--borda); margin-bottom:4px; }
+.usuario-info b { font-size:var(--fs-sm); font-weight:600; color:var(--marinho); overflow-wrap:anywhere; }
+.usuario-info span { font-size:var(--fs-xs); color:var(--suave); }
+.popover .pop-rodape { margin:var(--sp-2) 0 0; }
+
+@media (max-width:900px) {
+  .painel-layout:not(.oculto) { flex-direction:column; }
+  .menu-lateral { top:0; z-index:190; flex:none; width:100%; height:56px; padding:0 8px; flex-direction:row; align-items:center; gap:2px; overflow:auto hidden; }
+  .menu-logo { margin:0 6px 0 0; padding:0 4px; }
+  .menu-logo .logo { height:28px; }
+  .menu-logo .logo-texto { font-size:17px; line-height:28px; }
+  .menu-grupo { display:contents; }
+  .menu-rotulo { display:none; }
+  .menu-lateral button { width:auto; padding:8px 10px; gap:8px; font-size:var(--fs-sm); white-space:nowrap; }
+  .menu-lateral button[data-curto] .m-t { display:none; }
+  .menu-lateral button[data-curto]::after { content:attr(data-curto); }
+  .menu-lateral .menu-mais { display:none; }
+  body.painel header { top:56px; height:56px; padding:0 var(--sp-4); gap:var(--sp-2); z-index:180; }
+  body.painel header h1 { font-size:var(--fs-xl); }
+  .painel-conteudo { padding:20px 16px 32px; }
+}
+@media (max-width:600px) {
+  .topo-acao button { width:40px; padding:0; justify-content:center; }
+  .topo-acao .bt-texto { display:none; }
+  .usuario-pill #quem { display:none; }
+  button.usuario-pill { padding:0 6px; gap:2px; }
+  .painel-conteudo { padding:16px 8px 28px; }
+}
 header .quem { margin-left:auto; font-size:.875em; color:var(--suave); display:flex; align-items:center; gap:8px; min-width:0; }
 header .quem #quem { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:260px; }
 .avatar { width:32px; height:32px; border-radius:50%; background:var(--vermelho); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-family:var(--fonte-titulo); font-weight:600; font-size:.8rem; flex:0 0 32px; }
 main { max-width:900px; margin:24px auto; padding:0 16px; }
 main.estreito { max-width:760px; }
+
+/* ---------- login (painel e aluno) ---------- */
+.card.login { width:100%; max-width:420px; margin:48px auto; padding:40px 32px; text-align:center; }
+body.painel .card.login { margin:0; }
+.login .logo, .login .logo-texto { display:block; margin:0 auto var(--sp-5); height:40px; line-height:40px; width:auto; }
+.card.login :is(h2, p) { text-align:center; } .card.login h2 { justify-content:center; }
+.card.login h2 { font-family:var(--fonte-titulo); font-size:var(--fs-2xl); font-weight:600; color:var(--marinho); }
+.login button { width:100%; height:44px; margin-top:var(--sp-4); justify-content:center; }
 
 /* ---------- cartões ---------- */
 .card { background:var(--cartao); border:0; border-radius:var(--raio); box-shadow:var(--sombra); padding:24px; margin-bottom:var(--sp-5); }
@@ -413,11 +505,6 @@ main.estreito { max-width:760px; }
 .card > :last-child { margin-bottom:0; }
 
 /* ---------- login ---------- */
-.login { max-width:440px; margin:48px auto; text-align:center; padding:40px 32px; }
-.login .marca { display:inline-block; background:var(--vermelho); color:#fff; font-family:var(--fonte-titulo); font-weight:700; letter-spacing:2px; padding:8px 16px; border-radius:8px; margin-bottom:16px; }
-.login h2 { font-size:1.35em; }
-.login button { width:100%; margin-top:16px; padding:12px; }
-header { position:sticky; top:0; z-index:200; backdrop-filter:saturate(1.2) blur(6px); background:rgba(255,255,255,.92); }
 .card h2 { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
 .secao-titulo { display:flex; align-items:center; justify-content:space-between; margin:24px 0 12px; }
 .secao-titulo h2 { margin:0; font-size:1.25em; }
@@ -431,24 +518,8 @@ button.destaque { border-color:var(--vermelho) !important; color:var(--vermelho)
 button.perigo-txt { color:var(--erro); }
 
 /* ---------- painel: menu lateral ---------- */
-body.painel main { max-width:1440px; }
-.painel-layout:not(.oculto) { display:grid; grid-template-columns:220px minmax(0, 1fr); gap:24px; align-items:start; }
-.menu-lateral { position:sticky; top:80px; flex-direction:column; gap:4px; background:#fff; border:1px solid var(--borda); border-radius:16px; padding:8px; box-shadow:var(--sombra); margin:0; }
-.menu-lateral button { display:flex; align-items:center; gap:10px; width:100%; text-align:left; border:0; border-radius:10px; padding:10px 12px; background:transparent; color:var(--texto); font-weight:500; }
-.menu-lateral button:hover { background:#f6f7f9; }
-.menu-lateral button.ativa { background:var(--vermelho); color:#fff; box-shadow:0 4px 12px rgba(193,39,45,.25); }
-.menu-lateral button span { width:1.4em; text-align:center; }
-.painel-conteudo { min-width:0; }
 body.papel-inclusao #btnFecharNotas, body.papel-inclusao #iaControles { display:none !important; }
 
-/* cabeçalho escuro */
-header { background:var(--marinho); border:0; box-shadow:inset 0 -3px 0 var(--vermelho); color:#fff; backdrop-filter:none; }
-header h1 { color:#fff; font-weight:600; }
-header .quem { color:#c9d3e6; }
-header .quem button.leve { background:rgba(255,255,255,.08); color:#fff; border-color:rgba(255,255,255,.22); }
-header .quem button.leve:hover { background:rgba(255,255,255,.16); }
-header .quem button.discreto { color:#c9d3e6; }
-header .quem button.discreto:hover { background:rgba(255,255,255,.1); color:#fff; }
 .avatar { background:var(--ambar); color:#14213d; }
 
 /* cartões com cabeçalho e divisória */
@@ -464,11 +535,6 @@ details.ajuda > summary::-webkit-details-marker { display:none; }
 details.ajuda[open] { background:#f8fafd; border:1px solid var(--borda); border-radius:10px; padding:10px 14px; }
 details.ajuda p { margin:8px 0 0; }
 
-/* ---------- painel: menu lateral escuro, sem emojis ---------- */
-.menu-lateral { background:var(--marinho); border:0; padding:10px; gap:2px; top:76px; }
-.menu-lateral button { color:#c9d3e6; font-weight:500; padding:11px 14px; border-left:3px solid transparent; border-radius:8px; }
-.menu-lateral button:hover { background:rgba(255,255,255,.07); color:#fff; }
-.menu-lateral button.ativa { background:rgba(255,255,255,.1); color:#fff; box-shadow:none; border-left-color:var(--vermelho); font-weight:600; }
 
 /* =====================================================================
    8. Telas do professor
@@ -840,10 +906,7 @@ button.tag.tag-botao:hover { background:var(--info-claro); color:var(--info); }
 .curso-mat .tag { font-size:.72em; padding:1px 8px; }
 .curso-turma { margin:0 4px 12px; background:var(--info-claro); border-radius:10px; padding:8px 12px; }
 .curso-turma > summary { cursor:pointer; }
-.ajuda-flutuante { position:fixed; right:20px; bottom:20px; z-index:900; width:52px; height:52px; border-radius:50%; padding:0; font-size:1.5em; font-weight:800;
-  background:var(--info); box-shadow:0 8px 20px rgba(29,95,168,.35); display:flex; align-items:center; justify-content:center; }
-.ajuda-flutuante:hover { background:#174c87; }
-button.ajuda-mini { width:22px; height:22px; min-width:0; border-radius:50%; padding:0; font-size:.75rem; font-weight:800; background:var(--info-claro); color:var(--info); border:1px solid #9cc0ea; vertical-align:middle; line-height:1; margin:0 4px; }
+button.ajuda-mini { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; min-height:0; min-width:0; border-radius:50%; padding:0; font-size:.75rem; font-weight:800; background:var(--info-claro); color:var(--info); border:1px solid #9cc0ea; vertical-align:middle; line-height:1; margin:0 4px; }
 button.ajuda-mini:hover { background:var(--info); color:#fff; }
 .ajuda-corpo ol, .ajuda-corpo ul { padding-left:20px; }
 .ajuda-corpo li { margin:4px 0; }
@@ -993,12 +1056,6 @@ details.recolhivel > .rc-corpo.cartoes-materias { padding:0 var(--sp-4) var(--sp
 @media (max-width:700px) { .dh-numeros { grid-template-columns:repeat(2, minmax(0, 1fr)); } .dh-relatorios { margin-left:0; } }
 
 /* --- painel: menu lateral em grupos e área de conteúdo --- */
-.menu-grupo { display:flex; flex-direction:column; gap:2px; }
-.menu-grupo + .menu-grupo { border-top:1px solid rgba(255,255,255,.12); margin-top:6px; padding-top:6px; }
-.menu-grupo:not(:has(button:not(.oculto))) { display:none; }
-.menu-rotulo { font-size:.68em; font-weight:700; letter-spacing:.8px; text-transform:uppercase; color:#8f9bb3; padding:6px 14px 2px; }
-.menu-lateral button > span[aria-hidden] { width:1.4em; text-align:center; flex:0 0 auto; }
-.painel-conteudo { max-width:1240px; width:100%; margin:0 auto; }
 /* cabeçalho de cartão sem nada visível embaixo: sem a linha divisória */
 .card > .card-cab:not(:has(~ :not(.oculto, [hidden], details.ajuda[data-pop]))) { border-bottom:0; padding-bottom:0; margin-bottom:0; }
 /* --- formulários dentro do drawer --- */
@@ -1014,7 +1071,6 @@ details.recolhivel > .rc-corpo.cartoes-materias { padding:0 var(--sp-4) var(--sp
 .ret-resposta > input { flex:1 1 280px; width:auto; }
 
 /* com drawer aberto: o "?" flutuante não cobre o rodapé do painel; o toast fica por cima de tudo */
-body.com-drawer .ajuda-flutuante { display:none; }
 .toast { z-index:var(--z-toast); }
 
 /* =====================================================================
@@ -1458,7 +1514,6 @@ body:is(.tema-creme, .tema-azul, .tema-contraste, .tema-escuro) { background-ima
   .tabela { max-height:none; overflow:visible; border:0; }
   th { position:static; }
 }
-@media print { .ajuda-flutuante { display:none; } }
 
 @media print { .toolbar, .btn-filtros, .painel-filtros, .menu, .menu-wrap, .popover, .drawer, .drawer-fundo, .btn-ajuda, .ajuda-pop, .cc-acoes { display:none !important; } }
 
@@ -1485,17 +1540,12 @@ body:is(.tema-creme, .tema-azul, .tema-contraste, .tema-escuro) { background-ima
   header .quem #quem { max-width:none; flex:1; }
   main { margin:16px auto; padding:0 8px; }
   .card { padding:16px; }
-  .login { padding:32px 16px; margin:24px auto; }
+  .card.login { padding:32px 16px; margin:24px auto; }
   .q-topo .titulo-prova { margin-left:0; text-align:left; width:100%; }
   .acoes-questao button { flex:1 1 100%; }
   .acoes-questao .direita { margin-left:0; }
   .linha > * { min-width:100%; }
   .linha.acoes > * { min-width:0; }
-}
-@media (max-width:900px) {
-  .painel-layout:not(.oculto) { display:block; }
-  .menu-lateral { position:static; flex-direction:row; overflow-x:auto; margin-bottom:16px; }
-  .menu-lateral button { width:auto; white-space:nowrap; }
 }
 @media (max-width:600px) {
   .guia { grid-template-columns:1fr; justify-items:center; }
@@ -1505,7 +1555,6 @@ body:is(.tema-creme, .tema-azul, .tema-contraste, .tema-escuro) { background-ima
 }
 @media (max-width:800px) { .q-adapt-corpo { grid-template-columns:1fr; } }
 @media (prefers-reduced-motion: reduce) { .hud-vidas *, .estrela.on, .confete, .cartao-prova { animation:none !important; transition:none !important; } }
-@media (max-width:900px) { .menu-lateral { border-radius:12px; } }
 @media (max-width:600px) {
   .hud-stats { width:100%; } .hud-stat { flex:1; min-width:0; padding:6px 8px; }
   .q-cab, .q-corpo, .q-rodape { padding-left:16px; padding-right:16px; }
@@ -1530,11 +1579,6 @@ body:is(.tema-creme, .tema-azul, .tema-contraste, .tema-escuro) { background-ima
 }
 @media (prefers-reduced-motion: reduce) { .drawer, .drawer-fundo, details.recolhivel > summary::before, .chip.pulsante::before { transition:none !important; animation:none !important; } }
 @media (max-width:700px) { .cartao-prova.compacto { grid-template-columns:1fr; } .cp-botoes { justify-content:flex-start; } }
-@media (max-width:900px) {
-  .menu-lateral { display:flex; flex-wrap:nowrap; overflow-x:auto; }
-  .menu-grupo { display:contents; }
-  .menu-rotulo { display:none; }
-}
 
 /* Organização e Bancos compactos */
 .cartao-materia { padding:12px 16px; gap:8px; box-shadow:none; border-radius:var(--raio); }
@@ -1575,7 +1619,6 @@ details.cq-tema > .rc-corpo { padding:0 var(--sp-2) var(--sp-2); }
 .cq-corpo .cq-num input[type=number] { width:80px; }
 .cq-corpo .cq-cresce { flex:1 1 240px; }
 .cq-corpo .cq-emoji { width:64px; text-align:center; font-size:1.2em; }
-.menu-lateral button span { flex:0 0 1.4em; overflow:hidden; }
 .cq-corpo .cq-num { align-items:stretch; text-align:left; }
 .cq-corpo .cq-num :is(input, select) { width:100%; margin:0; font-size:1rem; text-align:left; }
 .cq-corpo .cq-num input[type=number] { width:90px; }
@@ -1754,19 +1797,6 @@ label.pc-fixa:focus-within { box-shadow:var(--foco); }
 .ret-aba .ra-n { display:flex; gap:4px; flex-wrap:wrap; justify-content:flex-end; } .ret-aba .chip { margin:0; }
 details.ret-grupo > .rc-corpo .ret-item { margin:8px 0; }
 @media (max-width:700px) { .ret-abas { grid-template-columns:1fr; } }
-/* menu lateral com rolagem própria: o conteúdo da aba abre sempre do topo, mesmo clicando nos últimos itens do menu */
-/* só no computador: o menu fica no lugar, e a rodinha do mouse em cima dele rola SÓ o menu (em cima do conteúdo, só o conteúdo) */
-/* mais compacto para caber o máximo sem rolar; se não couber, a barra de rolagem é visível no fundo escuro e "Mais opções" avisa que tem mais abaixo */
-.menu-lateral .menu-mais { display:none; }
-@media (min-width:901px) {
-  .menu-lateral { flex-wrap:nowrap; max-height:calc(100vh - 92px); overflow-y:auto; overflow-x:hidden; overscroll-behavior:contain; scrollbar-width:thin; scrollbar-color:#8f9bb3 transparent; padding:8px; }
-  .menu-lateral > .menu-grupo { flex:none; }   /* sem isto os grupos que não cabem pulam para uma 2ª coluna, cortada e invisível */
-  .menu-lateral button { padding:7px 12px; font-size:.92em; line-height:1.25; }
-  .menu-lateral .menu-rotulo { padding:4px 14px 1px; }
-  .menu-lateral .menu-grupo + .menu-grupo { margin-top:4px; padding-top:4px; }
-  .menu-lateral .menu-mais { display:block; flex:none; position:sticky; bottom:0; height:38px; margin:-40px 0 0; width:100%; padding:14px 12px 0; border:0; border-radius:0; text-align:center; font-size:.8em; font-weight:700; color:#fff; background:linear-gradient(to bottom, rgba(20,33,61,0), var(--marinho) 55%); }
-  .menu-lateral .menu-mais:hover { background:linear-gradient(to bottom, rgba(20,33,61,0), var(--marinho) 55%); color:#fff; text-decoration:underline; }
-}
 
 /* Meu mascote */
 .mm-escolha { display:flex; flex-wrap:wrap; gap:10px; margin:0 0 14px; }
@@ -1802,9 +1832,9 @@ details.ret-grupo > .rc-corpo .ret-item { margin:8px 0; }
 .mm-vazio { width:84px; height:84px; border-radius:50%; display:grid; place-items:center; font-size:2em; background:var(--fundo); }
 .mm-slot .chip { margin:0; } .mm-slot-acoes { display:flex; flex-wrap:wrap; gap:4px; justify-content:center; }
 .mm-donos { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:10px; }
-.mm-dono { display:flex; align-items:center; gap:10px; margin:0; border:1px solid var(--borda); border-radius:12px; padding:8px; }
+.mm-dono { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:0; border:1px solid var(--borda); border-radius:12px; padding:8px; }
 .mm-dono > span:nth-child(2) { display:flex; flex-direction:column; min-width:90px; } .mm-dono small { color:var(--suave); }
-.mm-dono select { flex:1; min-width:0; }
+.mm-dono select { flex:1 1 130px; min-width:110px; padding-right:30px; text-overflow:ellipsis; }
 @media (max-width:900px) { .mm-grade { grid-template-columns:1fr; } .mm-grade .mm-previa { position:static; max-height:none; } }
 /* Simulação: blocos bem separados */
 #aba-simulacao > .card { margin-bottom:20px; }

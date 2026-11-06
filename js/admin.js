@@ -16,6 +16,7 @@ import { temFormato, textoResposta, textoChave, FORMATOS } from "./formatos-ui.j
 import { iniciarAcessibilidade, carregarAcessibilidade, prepararNovo as prepararNovoAcess, abrirDepois } from "./admin-acess.js";
 import { iniciarHistorico, carregarHistorico } from "./admin-historico.js";
 import { tarefa, ligarMenuLateral } from "./ui.js";
+import { ic } from "./icones.js";
 import { drawer, ligarFiltros, atualizarFiltros, ajudasEmPopover, menuHTML, itemMenu, vazio, chips, statTiles } from "./ui.js";
 import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp, onSnapshot, increment, deleteField }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
@@ -35,10 +36,11 @@ const souDono = () => !!eu && eu.email === SUPER_ADMIN.toLowerCase();
 // ---------- login ----------
 $("#btnEntrar").onclick = async () => { try { await entrar(); } catch (e) { $("#msgLogin").textContent = "Não foi possível entrar. " + traduzirErro(e); } };
 $("#btnSair").onclick = () => sair();
+$("#btnSairAviso").onclick = () => sair();
 aoMudarLogin(async user => {
-  if (!user) { eu = null; $("#btnSair").classList.add("oculto"); $("#avatar").classList.add("oculto"); $("#quem").textContent = ""; trocar("telaLogin"); return; }
+  if (!user) { eu = null; $("#btnSair").classList.add("oculto"); $("#avatar").classList.add("oculto"); $("#quem").textContent = ""; $("#quem").removeAttribute("title"); trocar("telaLogin"); return; }
   const id = await identificar(user);
-  $("#quem").textContent = `${id.email}${id.papel ? " · " + id.papel : ""}`; $("#btnSair").classList.remove("oculto");
+  pintarUsuario(user, id); $("#btnSair").classList.remove("oculto");
   $("#avatar").textContent = iniciais(user.displayName || id.email); $("#avatar").title = user.displayName || id.email; $("#avatar").classList.remove("oculto");
   if (id.tipo === "aluno") { location.replace("index.html"); return; }   // aluno no painel: vai para a página dele
   if (id.tipo !== "equipe") {
@@ -56,7 +58,7 @@ aoMudarLogin(async user => {
   iniciarHistorico({ eu, abrirAluno: email => { abrirDepois(email); abrirAba("acessibilidade"); },
     alunosDasTurmas: async () => { await listarTurmas().catch(() => {}); return turmasCache.flatMap(t => alunosDaTurma(t).map(a => ({ ...a, turma: t.nome, turmaId: t.id }))); } });
   iniciarRelatorios({ listarTurmas, listarBancos });
-  iniciarMeuMascote({ eu, ehAdmin }); iniciarItens({ eu, podeEditar }); carregarItensCustom().then(() => carregarEstilosMascotes()).catch(() => {});
+  iniciarMeuMascote({ eu, ehAdmin, podeEditar }); iniciarItens({ eu, podeEditar }); carregarItensCustom().then(() => carregarEstilosMascotes()).catch(() => {});
   iniciarGamificacao({ eu, ehAdmin, podeEditar, auth, iaCfg: () => iaCfg, urlCorretor: () => urlCorretorCfg });
   iniciarOrganizacao({ eu, podeEditar, ehAdmin, auth, iaCfg: () => iaCfg, urlCorretor: () => urlCorretorCfg,
     listarTurmas, alunosDaTurma, listarBancos, questoesDoBanco, questoesDoBancoCache: id => questoesCache[id],
@@ -71,13 +73,49 @@ aoMudarLogin(async user => {
   document.body.classList.toggle("papel-inclusao", ehInclusao());
   abrirAba(ehInclusao() ? "diario" : "provas");
 });
+// cabeçalho: primeiro nome na pílula; e-mail completo e papel no menu do usuário
+const ROTULO_PAPEL = { admin: "Administrador", professor: "Professor", auxiliar: "Auxiliar", inclusao: "Auxiliar de inclusão" };
+function pintarUsuario(user, id) {
+  const nome = (user.displayName || id.email.split("@")[0]).trim().split(/[\s._-]+/)[0];
+  $("#quem").textContent = nome.charAt(0).toUpperCase() + nome.slice(1); $("#quem").title = id.email;
+  $("#usuarioEmail").textContent = id.email;
+  $("#usuarioPapel").textContent = id.email === SUPER_ADMIN.toLowerCase() ? "Administrador principal" : (ROTULO_PAPEL[id.papel] || id.papel || "");
+}
 function trocar(id) { ["telaLogin", "telaPainel", "telaAviso"].forEach(t => $("#" + t).classList.toggle("oculto", t !== id)); }
 let abaAtual = "provas";
+// cada aba declara o título, o ícone do menu e a ação primária do cabeçalho (o botão já existe em admin.html, com o mesmo id; a ajuda vem de ajuda.js)
+const ABAS = {
+  organizacao: { titulo: "Organização", icone: "org", primaria: { id: "orgNovo", rotulo: "Matéria / plano de ensino", icone: "plus" } },
+  provas: { titulo: "Provas", icone: "provas", primaria: { id: "btnNovaProva", rotulo: "Criar nova prova", icone: "plus" } },
+  bancos: { titulo: "Bancos de questões", icone: "bancos", primaria: { id: "btnImportarTopo", rotulo: "Importar banco", icone: "upload" } },
+  turmas: { titulo: "Turmas", icone: "turmas", primaria: { id: "btnNovaTurma", rotulo: "Nova turma", icone: "plus" } },
+  resultados: { titulo: "Resultados", icone: "resultados" },
+  relatorios: { titulo: "Relatórios", icone: "relatorios" },
+  diario: { titulo: "Diário", icone: "diario" },
+  acessibilidade: { titulo: "Acessibilidade", icone: "acess", primaria: { id: "btnAcessNovo", rotulo: "Marcar acessibilidade", icone: "plus" } },
+  historico: { titulo: "Provas adaptadas", icone: "adapt" },
+  retorno: { titulo: "Erros e sugestões", icone: "retorno" },
+  gamificacao: { titulo: "Gamificação", icone: "gami" },
+  meumascote: { titulo: "Meu mascote", icone: "mascote" },
+  itens: { titulo: "Itens e estampas", icone: "itens", primaria: { id: "btnNovoItem", rotulo: "Novo item", icone: "plus" } },
+  simulacao: { titulo: "Simulação", icone: "simulacao" },
+  equipe: { titulo: "Equipe", icone: "equipe", primaria: { id: "btnNovoMembro", rotulo: "Novo membro", icone: "plus" } },
+  config: { titulo: "Configuração", icone: "config" }
+};
+document.querySelectorAll(".menu-lateral [data-aba]").forEach(b => b.insertAdjacentHTML("afterbegin", ic(ABAS[b.dataset.aba].icone)));
+Object.values(ABAS).forEach(({ primaria: p }) => { if (!p) return; const b = $("#" + p.id); b.innerHTML = ic(p.icone, { size: 16 }) + `<span class="bt-texto">${esc(p.rotulo)}</span>`; b.setAttribute("aria-label", p.rotulo); b.title = p.rotulo; });
+$("#btnAjuda").innerHTML = ic("info", { size: 16 }); $("#usuarioChev").innerHTML = ic("chev", { size: 16 });
+// até a importação ir para um drawer (etapa C), o botão do cabeçalho leva ao formulário que está no topo da aba
+$("#btnImportarTopo").onclick = () => { $("#bSemestre").focus({ preventScroll: true }); $("#bSemestre").closest(".card").scrollIntoView({ block: "start", behavior: "smooth" }); };
+function pintarTopo(a) {
+  $("#topoTitulo").textContent = ABAS[a].titulo;
+  document.querySelectorAll("[data-topo]").forEach(s => { s.hidden = s.dataset.topo !== a; });
+}
 function abrirAba(a) {
   window.scrollTo({ top: 0, behavior: "instant" });   // toda aba começa no topo
-  abaAtual = a; ligarAjuda(() => abaAtual);
+  abaAtual = a; pintarTopo(a); ligarAjuda(() => abaAtual);
   if (a !== "resultados" && $("#rAoVivo").checked) { $("#rAoVivo").checked = false; pararAoVivo(); }   // sair da aba desliga o ao vivo
-  document.querySelectorAll("[data-aba]").forEach(b => b.classList.toggle("ativa", b.dataset.aba === a));
+  document.querySelectorAll("[data-aba]").forEach(b => { const ativa = b.dataset.aba === a; b.classList.toggle("ativa", ativa); if (ativa) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); if (ativa && matchMedia("(max-width:900px)").matches) b.scrollIntoView({ inline: "center", block: "nearest" }); });
   ["organizacao", "diario", "historico", "retorno", "relatorios", "gamificacao", "provas", "bancos", "turmas", "resultados", "acessibilidade", "equipe", "config", "simulacao", "meumascote", "itens"].forEach(x => $("#aba-" + x).classList.toggle("oculto", x !== a));
   return ({ organizacao: carregarOrganizacao, diario: carregarDiario, historico: carregarHistorico, retorno: carregarRetorno, relatorios: carregarRelatorios, gamificacao: carregarGamificacao, provas: carregarProvas, bancos: () => { carregarBancos(); carregarMateriais(); }, turmas: carregarTurmas, resultados: prepararResultados,
      acessibilidade: () => { carregarAcessibilidade(); if (podeEditar()) prepararNovoAcess(); }, equipe: carregarEquipe, config: carregarConfig, simulacao: carregarSimulacao, meumascote: carregarMeuMascote, itens: carregarAbaItens })[a]();

@@ -1,6 +1,7 @@
 // Ajuda "?" de cada tela do painel e de cada lugar onde se envia algo.
 // Botão flutuante "?" abre a ajuda da aba aberta; botões "?" pequenos (data-ajuda-item) explicam um envio específico.
 import { modal, esc } from "./common.js";
+import { popover } from "./ui.js";
 
 const PDF_SLIDES = `<ul>
   <li><b>Só PDF.</b> PowerPoint: <i>Arquivo → Exportar → Criar PDF</i>. Google Slides: <i>Arquivo → Fazer download → PDF</i>. Word/Docs: <i>Salvar como PDF</i>.</li>
@@ -71,16 +72,16 @@ export function abrirAjuda(chave) {
   modal({ titulo: a.t, conteudo: `<div class="ajuda-corpo">${a.h}${extras}</div>`, ok: "Entendi", largo: true });
 }
 
-// botão flutuante da aba atual + os "?" pequenos (data-ajuda-item="slides")
+// ⓘ do cabeçalho: abre a explicação da aba em popover (com o passo a passo completo no modal); e os "?" pequenos (data-ajuda-item="slides")
 export function ligarAjuda(abaAtual) {
-  let b = document.getElementById("btnAjuda");
-  if (!b) {
-    b = document.createElement("button");
-    b.id = "btnAjuda"; b.type = "button"; b.className = "ajuda-flutuante"; b.innerHTML = `<span aria-hidden="true">?</span>`;
-    b.onclick = () => abrirAjuda(abaAtual());
-    document.body.appendChild(b);
-  }
-  b.setAttribute("aria-label", `Ajuda: ${AJUDA_ABAS[abaAtual()]?.t || "esta tela"}`); b.title = b.getAttribute("aria-label");
+  const b = document.getElementById("btnAjuda");
+  const titulo = AJUDA_ABAS[abaAtual()]?.t || "esta tela";
+  b.setAttribute("aria-label", `Ajuda: ${titulo}`); b.title = b.getAttribute("aria-label");
+  b.onclick = () => {
+    const aba = abaAtual(), a = AJUDA_ABAS[aba], resumo = document.querySelector(`#aba-${aba} > template.ajuda-aba`)?.innerHTML;
+    const el = popover(b, (resumo || a?.h || "") + (resumo && a ? `<p class="pop-rodape"><button type="button" class="discreto mini" data-passo-a-passo>Ver o passo a passo</button></p>` : ""), { titulo: a?.t || "Ajuda", alinhar: "inicio", largura: 420 });
+    el?.querySelector("[data-passo-a-passo]")?.addEventListener("click", () => { b.click(); abrirAjuda(aba); });
+  };
   ligarItens();
   if (!observando) { observando = true; new MutationObserver(() => ligarItens()).observe(document.body, { childList: true, subtree: true }); }
 }

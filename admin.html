@@ -6,23 +6,16 @@
 <title>Painel do Professor — Prova SENAI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="img/senai.svg">
+<script src="js/logo.js"></script>
 
 </head>
 <body class="painel">
-<header>
-  <span class="senai">SENAI</span>
-  <h1>Painel do Professor</h1>
-  <div class="quem">
-    <span id="avatar" class="avatar oculto" aria-hidden="true"></span>
-    <span id="quem"></span>
-    <button id="btnSair" class="discreto oculto">Sair</button>
-  </div>
-</header>
 <main>
   <section id="telaLogin" class="card login">
-    <div class="marca">SENAI</div>
+    <img src="img/senai.svg" alt="SENAI" class="logo" data-alt="img/senai.png" onerror="logoFalhou(this)">
     <h2>Acesso da equipe</h2>
     <p class="pequeno">Entre com a conta Google cadastrada como professor, administrador ou auxiliar.</p>
     <button id="btnEntrar">Entrar com Google</button>
@@ -31,37 +24,60 @@
 
   <section id="telaPainel" class="painel-layout oculto">
     <nav class="abas menu-lateral" aria-label="Seções do painel">
+      <div class="menu-logo"><img src="img/senai-branco.svg" alt="SENAI" class="logo" data-alt="img/senai.svg|img/senai.png" onerror="logoFalhou(this)"></div>
       <div class="menu-grupo" role="group" aria-label="Ensino"><span class="menu-rotulo" aria-hidden="true">Ensino</span>
-        <button data-aba="organizacao"><span aria-hidden="true">🏫</span>Organização</button>
-        <button data-aba="provas" class="ativa"><span aria-hidden="true">📝</span>Provas</button>
-        <button data-aba="bancos"><span aria-hidden="true">🗂</span>Bancos de questões</button>
-        <button data-aba="turmas"><span aria-hidden="true">👥</span>Turmas</button></div>
+        <button type="button" data-aba="organizacao"><span class="m-t">Organização</span></button>
+        <button type="button" data-aba="provas" class="ativa"><span class="m-t">Provas</span></button>
+        <button type="button" data-aba="bancos" data-curto="Bancos"><span class="m-t">Bancos de questões</span></button>
+        <button type="button" data-aba="turmas"><span class="m-t">Turmas</span></button></div>
       <div class="menu-grupo" role="group" aria-label="Alunos"><span class="menu-rotulo" aria-hidden="true">Alunos</span>
-        <button data-aba="resultados"><span aria-hidden="true">📊</span>Resultados</button>
-        <button data-aba="relatorios"><span aria-hidden="true">📈</span>Relatórios</button>
-        <button data-aba="diario"><span aria-hidden="true">📔</span>Diário</button>
-        <button data-aba="acessibilidade"><span aria-hidden="true">♿</span>Acessibilidade</button>
-        <button data-aba="historico"><span aria-hidden="true">🧩</span>Provas adaptadas</button>
-        <button data-aba="retorno"><span aria-hidden="true">🚩</span>Erros e sugestões</button></div>
+        <button type="button" data-aba="resultados"><span class="m-t">Resultados</span></button>
+        <button type="button" data-aba="relatorios"><span class="m-t">Relatórios</span></button>
+        <button type="button" data-aba="diario"><span class="m-t">Diário</span></button>
+        <button type="button" data-aba="acessibilidade" data-curto="Acessível"><span class="m-t">Acessibilidade</span></button>
+        <button type="button" data-aba="historico" data-curto="Adaptadas"><span class="m-t">Provas adaptadas</span></button>
+        <button type="button" data-aba="retorno" data-curto="Erros"><span class="m-t">Erros e sugestões</span></button></div>
       <div class="menu-grupo" role="group" aria-label="Sistema"><span class="menu-rotulo" aria-hidden="true">Sistema</span>
-        <button data-aba="gamificacao"><span aria-hidden="true">🏅</span>Gamificação</button>
-        <button data-aba="meumascote"><span aria-hidden="true">🙂</span>Meu mascote</button>
-        <button data-aba="itens"><span aria-hidden="true">🧵</span>Itens e estampas</button>
-        <button data-aba="simulacao"><span aria-hidden="true">🧪</span>Simulação</button>
-        <button data-aba="equipe"><span aria-hidden="true">🤝</span>Equipe</button>
-        <button data-aba="config"><span aria-hidden="true">⚙</span>Configuração</button></div>
+        <button type="button" data-aba="gamificacao"><span class="m-t">Gamificação</span></button>
+        <button type="button" data-aba="meumascote" data-curto="Mascote"><span class="m-t">Meu mascote</span></button>
+        <button type="button" data-aba="itens" data-curto="Itens"><span class="m-t">Itens e estampas</span></button>
+        <button type="button" data-aba="simulacao"><span class="m-t">Simulação</span></button>
+        <button type="button" data-aba="equipe"><span class="m-t">Equipe</span></button>
+        <button type="button" data-aba="config" data-curto="Config."><span class="m-t">Configuração</span></button></div>
     </nav>
+    <div class="painel-coluna">
+    <header>
+      <div class="topo-titulo"><h1 id="topoTitulo">Provas</h1>
+        <button type="button" id="btnAjuda" class="topo-info" aria-haspopup="dialog" aria-expanded="false" aria-label="Ajuda" title="Ajuda"></button>
+        <span id="aoVivo" class="chip ok pulsante oculto" title="Atualizando sozinho">ao vivo</span></div>
+      <!-- ação primária de cada aba: js/admin.js (ABAS, pintarTopo) mostra só a da aba aberta -->
+      <div class="topo-acao">
+        <span data-topo="organizacao" hidden><button type="button" id="orgNovo"></button></span>
+        <span data-topo="provas" hidden><button type="button" id="btnNovaProva" aria-haspopup="dialog"></button></span>
+        <span data-topo="bancos" hidden><button type="button" id="btnImportarTopo"></button></span>
+        <span data-topo="turmas" hidden><button type="button" id="btnNovaTurma" aria-haspopup="dialog"></button></span>
+        <span data-topo="acessibilidade" hidden><button type="button" id="btnAcessNovo" aria-haspopup="dialog"></button></span>
+        <span data-topo="itens" hidden><button type="button" id="btnNovoItem"></button></span>
+        <span data-topo="equipe" hidden><button type="button" id="btnNovoMembro" aria-haspopup="dialog"></button></span>
+      </div>
+      <div class="menu-wrap topo-usuario">
+        <button type="button" class="leve usuario-pill" data-menu aria-haspopup="menu" aria-expanded="false" aria-controls="menuUsuario" aria-label="Menu do usuário">
+          <span id="avatar" class="avatar oculto" aria-hidden="true"></span><span id="quem"></span><span id="usuarioChev" aria-hidden="true"></span></button>
+        <div class="menu" role="menu" id="menuUsuario" hidden>
+          <div class="usuario-info" role="presentation"><b id="usuarioEmail"></b><span id="usuarioPapel"></span></div>
+          <button type="button" role="menuitem" id="btnSair" class="oculto">Sair</button>
+        </div>
+      </div>
+    </header>
     <div class="painel-conteudo">
 
     <!-- ORGANIZAÇÃO (js/admin-org.js): turma → semestre → matéria → tópicos -->
     <div id="aba-organizacao" class="oculto">
-      <div class="card">
-        <div class="card-cab"><h2>Organização</h2><div class="cc-acoes"><button id="orgNovo">+ Matéria / plano de ensino</button></div></div>
-        <details class="ajuda"><summary>Como funciona</summary>
-          <p>Tudo fica organizado em <b>Turma → Semestre → Matéria → Tópicos</b>. Cada matéria de uma turma num semestre tem um <b>plano de ensino</b>: os tópicos na ordem em que serão dados (com as datas previstas) e as provas previstas. O plano é vivo: edite quando mudar.</p>
+      <template class="ajuda-aba"><p>Tudo fica organizado em <b>Turma → Semestre → Matéria → Tópicos</b>. Cada matéria de uma turma num semestre tem um <b>plano de ensino</b>: os tópicos na ordem em que serão dados (com as datas previstas) e as provas previstas. O plano é vivo: edite quando mudar.</p>
           <p>Envie o <b>PDF do plano</b> no cartão da matéria e clique em <b>🤖 Ler plano com IA</b>: a IA preenche os tópicos e as provas, e você revisa antes de salvar.</p>
           <p>Os tópicos do plano são os mesmos <b>tópicos das questões</b> (aba Bancos → 🏷 Tópicos): assim o cartão mostra quantas questões há de cada tópico, quais já caíram em prova, e os relatórios mostram em quais tópicos cada aluno vai melhor ou pior.</p>
-          <p>A prova entra na matéria pela <b>turma + semestre + matéria</b> do formulário da prova. Provas antigas usam a data de criação e a matéria do banco.</p></details>
+          <p>A prova entra na matéria pela <b>turma + semestre + matéria</b> do formulário da prova. Provas antigas usam a data de criação e a matéria do banco.</p></template>
+      <div class="card">
 <div class="toolbar" role="search">
           <input type="search" id="orgBusca" placeholder="Pesquisar matéria, tópico ou prova…" aria-label="Pesquisar matérias e tópicos">
           <button type="button" class="leve btn-filtros" aria-expanded="false" aria-controls="orgBuscaPainel"><span class="e" aria-hidden="true">⚙</span>Filtros<span class="badge" aria-label="filtros ativos"></span></button>
@@ -75,12 +91,10 @@
 
     <!-- DIÁRIO (js/admin-diario.js) -->
     <div id="aba-diario" class="oculto">
-      <div class="card">
-        <h2>Diário</h2>
-        <details class="ajuda"><summary>Como funciona</summary>
-          <p>A <b>auxiliar de inclusão</b> registra cada dia do aluno em 5 etapas rápidas: humor e energia, atividades (com as matérias e os tópicos do plano de ensino), comportamento, o que funcionou e o fechamento do dia. Leva uns 3 minutos e o rascunho fica salvo enquanto ela preenche.</p>
+      <template class="ajuda-aba"><p>A <b>auxiliar de inclusão</b> registra cada dia do aluno em 5 etapas rápidas: humor e energia, atividades (com as matérias e os tópicos do plano de ensino), comportamento, o que funcionou e o fechamento do dia. Leva uns 3 minutos e o rascunho fica salvo enquanto ela preenche.</p>
           <p>Os <b>professores</b> leem e deixam o seu comentário em cada dia (como ela estava na aula, participação, sugestões). Eles não mudam o registro da auxiliar.</p>
-          <p>O diário alimenta os relatórios do aluno e as adaptações das provas. O aluno nunca vê o diário.</p></details>
+          <p>O diário alimenta os relatórios do aluno e as adaptações das provas. O aluno nunca vê o diário.</p></template>
+      <div class="card">
         <div id="diarioAlunos"></div>
       </div>
       <div id="diarioPainel"></div>
@@ -88,9 +102,7 @@
 
     <!-- PROVAS -->
     <div id="aba-provas">
-      <div class="cab-pagina"><h2><span class="e" aria-hidden="true">📝</span>Provas
-        <span class="ajuda-pop"><button type="button" class="btn-ajuda" data-popover aria-haspopup="dialog" aria-expanded="false" aria-label="Como funciona" title="Como funciona">i</button><template><p>Crie a prova fechada e <b>libere na hora de aplicar</b>. Em <b>👥 Alunos</b> você acompanha ao vivo: progresso, vidas e nota.</p><p>O <b>gabarito</b> só aparece para o aluno quando você liberar (menu ⋯ do cartão). <b>🧪 Testar</b> abre a prova como o aluno vê, sem valer nota.</p></template></span></h2>
-        <button type="button" id="btnNovaProva" aria-haspopup="dialog">+ Criar nova prova</button></div>
+      <template class="ajuda-aba"><p>Crie a prova fechada e <b>libere na hora de aplicar</b>. Em <b>👥 Alunos</b> você acompanha ao vivo: progresso, vidas e nota.</p><p>O <b>gabarito</b> só aparece para o aluno quando você liberar (menu ⋯ do cartão). <b>🧪 Testar</b> abre a prova como o aluno vê, sem valer nota.</p></template>
       <!-- formulário da nova prova: abre num drawer (o conteúdo é movido para lá e volta ao fechar) -->
       <div id="cardNovaProva" class="oculto">
         <div id="formNovaProva"></div>   <!-- montado por formProvaHTML("p") em js/admin.js -->
@@ -187,7 +199,7 @@
     <!-- TURMAS -->
     <div id="aba-turmas" class="oculto">
       <div class="card">
-        <div class="card-cab"><h2>Turmas cadastradas</h2><div class="cc-acoes"><button type="button" id="btnNovaTurma" aria-haspopup="dialog">+ Nova turma</button></div></div>
+        <div class="card-cab"><h2>Turmas cadastradas</h2></div>
         <div class="toolbar" role="search">
           <input type="search" id="ftBusca" placeholder="Pesquisar turma, aluno ou e-mail…" aria-label="Pesquisar turmas e alunos">
           <button type="button" class="leve btn-filtros" aria-expanded="false" aria-controls="ftBuscaPainel"><span class="e" aria-hidden="true">⚙</span>Filtros<span class="badge" aria-label="filtros ativos"></span></button>
@@ -220,13 +232,10 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
 
     <!-- RESULTADOS -->
     <div id="aba-resultados" class="oculto">
-      <div class="card">
-        <div class="card-cab"><h2>Resultados <span id="aoVivo" class="chip ok pulsante oculto" title="Atualizando sozinho">ao vivo</span></h2></div>
-        <details class="ajuda"><summary>Como funciona</summary>
-          <p>Dissertativas que o sistema não reconheceu ficam como <b>revisar</b>: use a IA ou abra o aluno e dê a nota. A IA só corrige provas finalizadas, enquanto o painel estiver aberto; correção manual nunca é sobrescrita.</p>
+      <template class="ajuda-aba"><p>Dissertativas que o sistema não reconheceu ficam como <b>revisar</b>: use a IA ou abra o aluno e dê a nota. A IA só corrige provas finalizadas, enquanto o painel estiver aberto; correção manual nunca é sobrescrita.</p>
           <p>O aluno vê no fim só <b>quantas acertou e a nota</b>, e a tela dele atualiza sozinha. Gabarito e PDF aparecem quando você <b>liberar o gabarito</b> na aba Provas. <b>Fechar notas</b> grava a nota final. Os PDFs abrem a janela de impressão: escolha <b>Salvar como PDF</b>.</p>
-          <p><b>Vidas:</b> no cartão do aluno, <b>Restaurar vidas</b>, <b>+1</b> e <b>Reabrir prova</b> (ex.: aluno com TEA que saiu sem querer).</p>
-        </details>
+          <p><b>Vidas:</b> no cartão do aluno, <b>Restaurar vidas</b>, <b>+1</b> e <b>Reabrir prova</b> (ex.: aluno com TEA que saiu sem querer).</p></template>
+      <div class="card">
         <!-- 1. contexto: qual prova -->
         <div class="barra-res">
           <div class="campo-res"><label for="rTurma">Turma</label><select id="rTurma"><option value="">Todas as turmas</option></select></div>
@@ -273,9 +282,8 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
 
     <!-- ACESSIBILIDADE (js/admin-acess.js) -->
     <div id="aba-acessibilidade" class="oculto">
+      <template class="ajuda-aba"><p>Alunos marcados aqui fazem a prova com as adaptações de cada um: letra, espaçamento, cores, tempo e vidas extras, leitura em voz alta e <b>questões reescritas</b> (à mão ou pela IA, a partir da sua descrição e dos laudos). A auxiliar de inclusão vinculada vê e edita só os alunos dela.</p></template>
       <div class="card">
-        <div class="card-cab"><h2>Acessibilidade <span class="ajuda-pop"><button type="button" class="btn-ajuda" data-popover aria-haspopup="dialog" aria-expanded="false" aria-label="Como funciona" title="Como funciona">i</button><template><p>Alunos marcados aqui fazem a prova com as adaptações de cada um: letra, espaçamento, cores, tempo e vidas extras, leitura em voz alta e <b>questões reescritas</b> (à mão ou pela IA, a partir da sua descrição e dos laudos). A auxiliar de inclusão vinculada vê e edita só os alunos dela.</p></template></span></h2>
-          <div class="cc-acoes"><button type="button" id="btnAcessNovo" aria-haspopup="dialog">♿ Marcar acessibilidade</button></div></div>
         <!-- formulário: abre num drawer -->
         <div id="acessNovo" class="oculto">
           <div><label for="acessTurmaSel">1. Turma</label><select id="acessTurmaSel"></select></div>
@@ -298,9 +306,8 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
 
     <!-- PROVAS ADAPTADAS (js/admin-historico.js) -->
     <div id="aba-historico" class="oculto">
+      <template class="ajuda-aba">Histórico de todas as adaptações: por aluno e por prova, o formato de cada questão, o porquê, quem fez e quando, e as escolhas feitas entre as opções da IA.</template>
       <div class="card">
-        <h2>Provas adaptadas</h2>
-        <p class="pequeno" style="margin-top:0">Histórico de todas as adaptações: por aluno e por prova, o formato de cada questão, o porquê, quem fez e quando, e as escolhas feitas entre as opções da IA.</p>
 <div class="toolbar" role="search">
           <input type="search" id="hBusca" placeholder="Pesquisar aluno, prova ou questão…" aria-label="Pesquisar provas adaptadas">
           <button type="button" class="leve btn-filtros" aria-expanded="false" aria-controls="hBuscaPainel"><span class="e" aria-hidden="true">⚙</span>Filtros<span class="badge" aria-label="filtros ativos"></span></button>
@@ -313,9 +320,8 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
 
     <!-- RETORNO DOS ALUNOS (js/admin-gamificacao.js) -->
     <div id="aba-retorno" class="oculto">
+      <template class="ajuda-aba">Duas coisas separadas: <b>🚩 erros que os alunos reportaram nas questões</b> (na prova ou no gabarito) e <b>💡 sugestões para o sistema</b>. Responda e marque a situação: o aluno vê a resposta na página dele.</template>
       <div class="card">
-        <h2>Erros e sugestões dos alunos</h2>
-        <p class="pequeno" style="margin-top:0">Duas coisas separadas: <b>🚩 erros que os alunos reportaram nas questões</b> (na prova ou no gabarito) e <b>💡 sugestões para o sistema</b>. Responda e marque a situação: o aluno vê a resposta na página dele.</p>
         <div class="ret-abas" id="retAbas" role="tablist" aria-label="Tipo"></div>
 <div class="toolbar" role="search">
           <input type="search" id="retBusca" placeholder="Pesquisar aluno, prova ou texto…" aria-label="Pesquisar erros e sugestões">
@@ -329,9 +335,8 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
 
     <!-- GAMIFICAÇÃO (js/admin-gamificacao.js) -->
     <div id="aba-gamificacao" class="oculto">
+      <template class="ajuda-aba">Ligue e desligue cada parte. A parte social começa desligada: quando ligar, os alunos só mostram o que eles mesmos escolherem.</template>
       <div class="card">
-        <h2>Gamificação</h2>
-        <p class="pequeno" style="margin-top:0">Ligue e desligue cada parte. A parte social começa desligada: quando ligar, os alunos só mostram o que eles mesmos escolherem.</p>
         <div id="gamiOpcoes"></div>
       </div>
       <div class="card">
@@ -344,9 +349,8 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
 
     <!-- RELATÓRIOS (js/admin-relatorios.js) -->
     <div id="aba-relatorios" class="oculto">
+      <template class="ajuda-aba">Notas das provas finalizadas por aluno, matéria e turma, com o <b>alerta de reprovação</b> (média da matéria abaixo de 50, cada prova vale o mesmo) e o <b>desempenho por tópico</b>.</template>
       <div class="card">
-        <h2>Relatórios</h2>
-        <p class="pequeno" style="margin-top:0">Notas das provas finalizadas por aluno, matéria e turma, com o <b>alerta de reprovação</b> (média da matéria abaixo de 50, cada prova vale o mesmo) e o <b>desempenho por tópico</b>.</p>
 <div class="toolbar" role="search">
           <input type="search" id="rlBusca" placeholder="Pesquisar aluno…" aria-label="Pesquisar aluno">
           <button type="button" class="leve btn-filtros" aria-expanded="false" aria-controls="rlBuscaPainel"><span class="e" aria-hidden="true">⚙</span>Filtros<span class="badge" aria-label="filtros ativos"></span></button>
@@ -364,9 +368,8 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
 
     <!-- EQUIPE -->
     <div id="aba-equipe" class="oculto">
+      <template class="ajuda-aba"><p><b>admin</b> = tudo · <b>professor</b> = bancos, provas, correção e resultados · <b>auxiliar</b> = só vê resultados · <b>auxiliar de inclusão</b> = só os alunos vinculados a ela na aba Acessibilidade: vê os resultados deles, edita as adaptações da prova, sobe documentos, deixa sugestões e devolve vidas.</p></template>
       <div class="card">
-        <div class="card-cab"><h2>Equipe <span class="ajuda-pop"><button type="button" class="btn-ajuda" data-popover aria-haspopup="dialog" aria-expanded="false" aria-label="Como funciona" title="Como funciona">i</button><template><p><b>admin</b> = tudo · <b>professor</b> = bancos, provas, correção e resultados · <b>auxiliar</b> = só vê resultados · <b>auxiliar de inclusão</b> = só os alunos vinculados a ela na aba Acessibilidade: vê os resultados deles, edita as adaptações da prova, sobe documentos, deixa sugestões e devolve vidas.</p></template></span></h2>
-          <div class="cc-acoes"><button type="button" id="btnNovoMembro" aria-haspopup="dialog">+ Novo membro</button></div></div>
         <!-- formulário: abre num drawer -->
         <div id="formEquipe" class="oculto">
           <label for="eEmail">E-mail (conta Google)</label><input type="email" id="eEmail" placeholder="nome@docente.senai.br">
@@ -387,22 +390,19 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
     <!-- CONFIG -->
     <!-- MEU MASCOTE (js/admin-mascote.js): cada professor edita o seu mascote, com padrão e 4 visuais salvos -->
     <div id="aba-meumascote" class="oculto">
-      <div class="card"><div class="card-cab"><h2>🙂 Meu mascote</h2></div>
-        <p class="pequeno" style="margin:0">O mascote é o seu personagem nas provas: ele explica as regras e anima os alunos. Mude as cores, a roupa e o acessório; o <b>padrão</b> fica sempre guardado e você tem mais <b>4 visuais salvos</b>. Só vale para os alunos depois de “Usar este visual”.</p></div>
+      <template class="ajuda-aba">O mascote é o seu personagem nas provas: ele explica as regras e anima os alunos. Mude as cores, a roupa e o acessório; o <b>padrão</b> fica sempre guardado e você tem mais <b>4 visuais salvos</b>. Só vale para os alunos depois de “Usar este visual”.</template>
       <div id="mascoteConteudo"></div>
     </div>
 
     <!-- ITENS E ESTAMPAS (js/admin-itens.js): itens criados pela equipe para o personagem dos alunos e os mascotes -->
     <div id="aba-itens" class="oculto">
-      <div class="card"><div class="card-cab"><h2>🧵 Itens e estampas</h2><div class="cc-acoes"><button type="button" id="btnNovoItem">+ Novo item</button></div></div>
-        <p class="pequeno" style="margin:0">Crie estampas de camiseta, roupas, bonés, óculos, colares, adesivos e fundos: <b>envie um PNG</b> ou <b>desenhe</b> aqui. Os itens aparecem no editor do personagem dos alunos (podem ser skins liberadas por conquistas) e nos acessórios dos mascotes.</p></div>
+      <template class="ajuda-aba">Crie estampas de camiseta, roupas, bonés, óculos, colares, adesivos e fundos: <b>envie um PNG</b> ou <b>desenhe</b> aqui. Os itens aparecem no editor do personagem dos alunos (podem ser skins liberadas por conquistas) e nos acessórios dos mascotes.</template>
       <div id="itensLista"></div>
     </div>
 
     <!-- SIMULAÇÃO: todas as formas de testar e demonstrar num lugar só (nada é gravado) -->
     <div id="aba-simulacao" class="oculto">
-      <div class="card"><div class="card-cab"><h2>🧪 Simulação</h2></div>
-        <p class="pequeno" style="margin:0">Teste e demonstre o sistema <b>sem conta de aluno</b>. Tudo abre numa aba nova; nada vale nota e nenhum aluno vê.</p></div>
+      <template class="ajuda-aba">Teste e demonstre o sistema <b>sem conta de aluno</b>. Tudo abre numa aba nova; nada vale nota e nenhum aluno vê.</template>
       <article class="card sim-card sim-ambiente"><div class="sa-cab"><div class="sim-e">🏗</div><div><h3>Ambiente de teste completo</h3>
           <span id="simAmbStatus" class="chip">verificando…</span></div></div>
         <p class="pequeno">Cria dados <b>fictícios de verdade</b> para usar todas as telas do painel como num dia normal. Tudo vem com <b>🧪 TESTE</b> no nome e os e-mails dos alunos são <b>@simulacao.teste</b> (ninguém consegue entrar com eles).</p>
@@ -437,7 +437,6 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
 
     <div id="aba-config" class="oculto">
       <div class="card">
-        <div class="card-cab"><h2>Configuração</h2></div>
         <details class="recolhivel" data-chave="cfg-dominios"><summary><span class="rc-titulo">🌐 Domínios dos alunos</span></summary><div class="rc-corpo">
           <label for="cDominios">Domínios de e-mail aceitos para alunos (separados por vírgula)</label>
           <input type="text" id="cDominios" placeholder="edu.senai.br, aluno.senai.br"></div></details>
@@ -469,8 +468,9 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
       </div>
     </div>
     </div>
+    </div>
   </section>
-  <section id="telaAviso" class="card centro oculto"><div id="avisoTexto"></div></section>
+  <section id="telaAviso" class="card centro oculto"><div id="avisoTexto"></div><button type="button" id="btnSairAviso" class="leve">Sair</button></section>
 </main>
 <script type="module" src="js/admin.js"></script>
 </body>
