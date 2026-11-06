@@ -9,7 +9,8 @@ import { resumoDiario, medalhasDiario } from "./conquistas.js";
 import { relatorioAluno } from "./admin-relatorio-aluno.js";
 import { HUMOR, humorEmoji, SECOES_AUX, ITENS_AUX, ITENS_PROF, visivel, respondido, completude } from "./diario-perguntas.js";
 import { listarPlanos, listarCursos } from "./admin-org.js";
-import { menuHTML, itemMenu, vazio } from "./ui.js";
+import { menuHTML, itemMenu, vazio, seta, pl } from "./ui.js";
+import { ic } from "./icones.js";
 import { collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, query, where, orderBy, serverTimestamp, increment }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -51,14 +52,15 @@ export async function carregarDiario() {
   // último registro: o resumo do diário é regravado a cada registro salvo (diarioResumoEm)
   const ultimoReg = a => a.diarioResumoEm?.toDate ? a.diarioResumoEm.toDate() : null;
   const isoLocal = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-  box.innerHTML = (alunos.length > 1 ? `<div class="toolbar" role="search" style="margin-top:8px">
+  box.innerHTML = (alunos.length > 1 ? `<div class="toolbar" role="search">
       <input type="search" id="dBusca" placeholder="Pesquisar aluno…" aria-label="Pesquisar aluno">
       ${ts.size > 1 ? `<select id="dTurma" class="tb-ordem" aria-label="Filtrar por turma"><option value="">Todas as turmas</option>${[...ts].map(([id, n]) => `<option value="${esc(id)}">${esc(n)}</option>`).join("")}</select>` : ""}</div>` : "") +
     `<div class="diario-alunos">` + alunos.map(a => { const u = ultimoReg(a), hoje = u && isoLocal(u) === hojeISO();
+      const turmas = turmaDe(a.email).map(t => t.turma).join(", ") || a.email, st = statusAlunos.get(a.email.toLowerCase());
       return `<button type="button" class="diario-aluno${a.email === atual?.email ? " ativo" : ""}" data-al="${esc(a.email)}"
       data-busca="${esc(chaveTexto(`${a.nome || ""} ${a.email}`))}" data-turmas="${esc(turmaDe(a.email).map(t => t.turmaId).join(" "))}">
-      <span class="avatar">${esc(iniciais(a.nome || a.email))}</span><span class="da-info"><b>${esc(a.nome || a.email)}</b>${chipStatus(statusAlunos.get(a.email.toLowerCase()), esc)}<span class="pequeno">${esc(turmaDe(a.email).map(t => t.turma).join(", ") || a.email)}</span>
-        <span class="da-ultimo">${u ? `último registro ${dataCurta(isoLocal(u)).slice(0, 5)}` : "sem registros"}${hoje ? ` <span class="chip ok">✓ hoje</span>` : ` <span class="chip aviso">sem registro hoje</span>`}</span></span></button>`; }).join("") + `</div>`;
+      <span class="avatar">${esc(iniciais(a.nome || a.email))}</span><span class="da-info"><b>${esc(a.nome || a.email)}</b><span class="da-sub">${esc(turmas)} · ${u ? `último ${dataCurta(isoLocal(u)).slice(0, 5)}` : "sem registros"}</span>${st?.hoje ? `<span class="da-status">${chipStatus(st, esc)}</span>` : ""}</span>
+      ${hoje ? `<span class="chip ok">${ic("check", { size: 12 })}hoje</span>` : `<span class="chip warn">sem registro hoje</span>`}</button>`; }).join("") + `</div>`;
   box.querySelectorAll("[data-al]").forEach(b => b.onclick = () => abrirAluno(b.dataset.al));
   const filtrar = () => {
     const q = chaveTexto($("#dBusca")?.value), t = $("#dTurma")?.value || "";
@@ -106,30 +108,35 @@ function desenharPainel() {
   const faltasMes = registros.filter(r => r.data.startsWith(mes) && r.tipo === "justificativa" && r.motivo === "faltou").length;
   const est = media(doMes.map(r => Number(r.respostas?.estrelas)).filter(Boolean));
   const hum = media(doMes.flatMap(r => [r.respostas?.humorChegada, r.respostas?.humorSaida].map(Number).filter(Boolean)));
-  const ultimos = [...new Set(completos().map(r => r.data))].slice(0, 10).reverse();
-  const turma = turmasAluno.map(t => `${t.turma}${rotuloDias(t.diasAula) ? ` (${rotuloDias(t.diasAula)})` : ""}`).join(", ");
-  const meuHoje = registros.find(r => r.data === hojeISO() && r.autor === ctx.eu.email);
+  const turma = turmasAluno.map(t => `${t.turma}${rotuloDias(t.diasAula) ? ` · ${rotuloDias(t.diasAula)}` : ""}`).join(", ");
+  const meuHoje = registros.find(r => r.data === hojeISO() && r.autor === ctx.eu.email), deHoje = registros.find(r => r.data === hojeISO() && r.tipo !== "justificativa");
+  const humorHoje = humorEmoji(deHoje?.respostas?.humorSaida || deHoje?.respostas?.humorChegada), stHoje = statusAlunos.get(a.email.toLowerCase());
+  const f1 = n => n.toFixed(1).replace(".", ",");
+  const diaSemana = new Date().toLocaleDateString("pt-BR", { weekday: "long" }).split("-")[0];
+  const botaoHoje = meuHoje ? `<button id="dNovo" class="ok">${ic("edit", { size: 16 })}Continuar o registro de hoje</button>`
+    : ehDiaDeAula(hojeISO()) ? `<button id="dNovo">${ic("edit", { size: 16 })}Registrar a aula de hoje</button>`
+    : `<button id="dNovo" class="leve">${ic("edit", { size: 16 })}Registrar hoje</button><span class="dh-nota">${esc(diaSemana)} não é dia de aula</span>`;
   $("#diarioPainel").innerHTML = `
   <section class="card diario-hero">
-    <div class="dh-aluno"><span class="avatar grande">${esc(iniciais(a.nome || a.email))}</span>
-      <div><h2>${esc(a.nome || a.email)} ${statusAlunos.get(a.email.toLowerCase())?.hoje ? `<span class="pequeno">hoje:</span> ${chipStatus(statusAlunos.get(a.email.toLowerCase()), esc)}` : ""}</h2><span class="pequeno">${turma ? `👥 ${esc(turma)} · ` : ""}${esc(a.email)}</span>
-        <div class="dh-horario" aria-label="Horário: ${esc(textoHorario(ctx.horario?.()))}">${horarioChips(ctx.horario?.())}</div>
-        <div class="dh-humores" title="Humor na saída, últimos registros">${ultimos.map(d => { const r = registros.find(x => x.data === d); return `<span title="${dataCurta(d)}">${humorEmoji(r?.respostas?.humorSaida || r?.respostas?.humorChegada) || "·"}</span>`; }).join("") || `<span class="pequeno">ainda sem registros</span>`}</div></div></div>
+    <div class="dh-topo"><div class="dh-aluno"><span class="avatar dh-avatar">${esc(iniciais(a.nome || a.email))}</span>
+      <div class="dh-texto"><h2>${esc(a.nome || a.email)}</h2><p class="dh-linha">${turma ? `${ic("users", { size: 15 })}<span>${esc(turma)}</span>` : ""}<span>${esc(a.email)}</span></p>
+        <div class="dh-horario" aria-label="Horário: ${esc(textoHorario(ctx.horario?.()))}">${horarioChips(ctx.horario?.())}${humorHoje ? `<span class="chip navy">humor hoje <span class="e" aria-hidden="true">${humorHoje}</span></span>` : ""}${stHoje?.hoje ? chipStatus(stHoje, esc) : ""}</div></div></div>
     <div class="dh-numeros">
-      <div class="dh-num"><b>📒 ${doMes.length}</b><span>aulas registradas no mês</span></div>
-      <div class="dh-num"><b>🚫 ${faltasMes}</b><span>faltas no mês</span></div>
-      <div class="dh-num"><b>${est ? "⭐ " + est.toFixed(1) : "—"}</b><span>estrelas no mês</span></div>
-      <div class="dh-num"><b>${hum ? humorEmoji(Math.round(hum)) + " " + hum.toFixed(1) : "—"}</b><span>humor no mês</span></div>
-    </div>
-    <div class="dh-acao">${podeRegistrar() ? `<button id="dNovo">${meuHoje ? "✎ Continuar o registro de hoje" : ehDiaDeAula(hojeISO()) ? "✍ Registrar a aula de hoje" : "✍ Registrar hoje (não é dia de aula)"}</button>
-      <div class="outro-dia" role="group" aria-label="Registrar outro dia"><span class="pequeno">Outro dia:</span>
-        ${atalhosDias().map(([iso, rot, falta]) => `<button type="button" class="chip-dia" data-rapido="${iso}" title="${dataLonga(iso)}${falta ? " — sem registro" : ""}">${falta ? `<span class="ponto" aria-hidden="true"></span>` : ""}${rot}</button>`).join("")}
-        <label class="chip-dia botao-data">📆 Escolher data<input type="date" id="dOutroDia" max="${hojeISO()}" aria-label="Escolher a data do registro"></label></div>` : `<p class="pequeno" style="margin:0">Você lê os registros e deixa o seu comentário em cada dia. Quem escreve o diário é a auxiliar de inclusão.</p>`}
-      <span class="dh-relatorios">${menuHTML({ rotulo: "📈 Relatórios ▾", classe: "leve", itensHTML: itemMenu({ e: "📈", t: "Relatório completo", id: "dCompleto", attrs: `title="Notas, tópicos e diário juntos, com gráficos de evolução"` }) + itemMenu({ e: "📄", t: "Relatório formal (PDF)", id: "dRelatorio", attrs: `title="Relatório formal do período, para enviar à coordenação, direção ou sede"` }) })}</span></div>
+      <div class="dh-num"><b>${doMes.length}</b><span>aulas no mês</span></div>
+      <div class="dh-num"><b>${faltasMes}</b><span>faltas no mês</span></div>
+      <div class="dh-num"><b>${est ? f1(est) : "—"}</b><span><span class="e" aria-hidden="true">⭐</span> estrelas</span></div>
+      <div class="dh-num"><b>${hum ? f1(hum) : "—"}</b><span>${hum ? `<span class="e" aria-hidden="true">${humorEmoji(Math.round(hum))}</span> ` : ""}humor</span></div>
+    </div></div>
+    <hr class="div">
+    <div class="dh-acao">${podeRegistrar() ? `${botaoHoje}
+      <div class="outro-dia" role="group" aria-label="Registrar outro dia"><span class="dh-rotulo">Outro dia:</span>
+        ${atalhosDias().map(([iso, rot, falta, feito]) => `<button type="button" class="chip-dia" data-rapido="${iso}" title="${dataLonga(iso)}${falta ? " — sem registro" : ""}">${falta ? `<span class="ponto" aria-hidden="true"></span>` : ""}${rot}${feito ? `<span class="cd-ok">${ic("check", { size: 14 })}</span>` : ""}</button>`).join("")}
+        <label class="chip-dia botao-data">${ic("cal", { size: 15 })}Escolher data<input type="date" id="dOutroDia" max="${hojeISO()}" aria-label="Escolher a data do registro"></label></div>` : `<p class="help" style="max-width:none">Você lê os registros e deixa o seu comentário em cada dia. Quem escreve o diário é a auxiliar de inclusão.</p>`}
+      <span class="dh-relatorios">${menuHTML({ rotulo: `${ic("relatorios", { size: 16 })}Relatórios${ic("chev", { size: 14 })}`, aria: "Relatórios", classe: "leve", itensHTML: itemMenu({ i: "relatorios", t: "Relatório completo", id: "dCompleto", attrs: `title="Notas, tópicos e diário juntos, com gráficos de evolução"` }) + itemMenu({ i: "provas", t: "Relatório formal (PDF)", id: "dRelatorio", attrs: `title="Relatório formal do período, para enviar à coordenação, direção ou sede"` }) })}</span></div>
   </section>
-  <details class="recolhivel prev-conquistas" data-chave="diario-conquistas">
-    <summary><span class="rc-titulo">🏅 Conquistas que a aluna vê</span><span class="rc-resumo"><span class="chip">${meds.filter(m => m.ok).length}/${meds.length}</span><span class="pequeno">ela vê isto na página dela (só coisas positivas, nada dos textos do diário)</span></span></summary>
-    <div class="rc-corpo medalhas">${meds.map(m => `<div class="medalha${m.ok ? " ganha" : ""}" title="${esc(m.d || m.t)}"><span class="m-emoji">${m.e}</span><b>${esc(m.t)}</b>
+  <details class="card sem-padding bloco-linha prev-conquistas" data-chave="diario-conquistas">
+    <summary class="sub-cab"><span class="ch ch-esq" aria-hidden="true">${ic("chev")}</span><span class="e dc-med" aria-hidden="true">🏅</span><span class="sc-titulo">Conquistas que a aluna vê</span><span class="chip navy">${meds.filter(m => m.ok).length} / ${meds.length}</span><span class="sc-resumo">ela vê isto na página dela (só coisas positivas)</span></summary>
+    <div class="bloco-linha-corpo medalhas">${meds.map(m => `<div class="medalha${m.ok ? " ganha" : ""}" title="${esc(m.d || m.t)}"><span class="m-emoji">${m.e}</span><b>${esc(m.t)}</b>
       <span class="pequeno">${m.ok ? "conquistada!" : `${Math.min(m.v, m.meta)}/${m.meta}`}</span>${m.ok ? "" : `<i class="m-barra"><i style="width:${Math.round(Math.min(m.v, m.meta) / m.meta * 100)}%"></i></i>`}</div>`).join("")}</div>
   </details>
   <div class="diario-grade">
@@ -157,13 +164,13 @@ function calendarioHTML() {
   for (let d = 1; d <= ndias; d++) {
     const iso = `${mes}-${String(d).padStart(2, "0")}`, rs = porDia[iso] || [], r = rs.find(x => x.tipo !== "justificativa") || rs[0], fds = !ehDiaDeAula(iso);
     const coment = rs.reduce((s, x) => s + (x.nComentarios || 0), 0);
-    cel.push(`<button type="button" class="cal-dia${rs.length ? " tem" : ""}${iso === hojeISO() ? " hoje" : ""}${fds ? " fds" : ""}${iso === aberto ? " aberto" : ""}" data-dia="${iso}" ${!rs.length && !podeRegistrar() ? "disabled" : ""}
-      aria-label="${dataLonga(iso)}${rs.length ? ", com registro" : ""}"><span class="cal-n">${d}</span>${r ? `<span class="cal-emoji">${r.tipo === "justificativa" ? (MOTIVOS[r.motivo] || MOTIVOS.outro)[0] : humorEmoji(r.respostas?.humorSaida || r.respostas?.humorChegada) || "📝"}</span>` : ""}
+    cel.push(`<button type="button" class="cal-dia${rs.some(x => x.tipo !== "justificativa") ? " tem" : ""}${!rs.length && !fds && iso < hojeISO() ? " falta" : ""}${iso === hojeISO() ? " hoje" : ""}${fds ? " fds" : ""}${iso === aberto ? " aberto" : ""}" data-dia="${iso}" ${!rs.length && !podeRegistrar() ? "disabled" : ""}
+      aria-label="${dataLonga(iso)}${rs.length ? ", com registro" : ""}"><span class="cal-n">${d}</span>${r?.tipo === "justificativa" ? `<span class="cal-emoji" title="${esc((MOTIVOS[r.motivo] || MOTIVOS.outro)[1])}">${(MOTIVOS[r.motivo] || MOTIVOS.outro)[0]}</span>` : ""}
       ${coment ? `<span class="cal-com" title="${coment} comentário(s)">💬${coment}</span>` : ""}</button>`);
   }
-  return `<div class="cal-topo"><button type="button" class="leve mini" data-mes="-1" aria-label="Mês anterior">◀</button><h3>${MESES[m - 1]} ${ano}</h3><button type="button" class="leve mini" data-mes="1" aria-label="Próximo mês">▶</button></div>
-    <div class="cal-grade">${DIAS.map(x => `<span class="cal-sem">${x}</span>`).join("")}${cel.join("")}</div>
-    <p class="pequeno cal-leg">Carinha = humor na saída · 🚫 faltou · 📭 sem aula · 💬 comentários · dias em cinza não são dias de aula${diasAulaAluno().length ? ` (aulas: ${rotuloDias(diasAulaAluno())})` : ""}</p>`;
+  return `<div class="cal-topo"><button type="button" class="icone mini" data-mes="-1" aria-label="Mês anterior">${ic("chevl", { size: 16 })}</button><h3>${MESES[m - 1]} ${ano}</h3><button type="button" class="icone mini" data-mes="1" aria-label="Próximo mês">${ic("chevr", { size: 16 })}</button></div>
+    <div class="cal-grade">${DIAS.map(x => `<span class="cal-sem" title="${x}">${x[0].toUpperCase()}</span>`).join("")}${cel.join("")}</div>
+    <p class="help cal-leg">Verde: com registro · âmbar: aula sem registro · 🚫 faltou · 📭 sem aula · 💬 comentários${diasAulaAluno().length ? ` · aulas: ${rotuloDias(diasAulaAluno())}` : ""}</p>`;
 }
 function ligarCalendario() {
   document.querySelectorAll("[data-mes]").forEach(b => b.onclick = () => {
@@ -178,12 +185,13 @@ function ligarCalendario() {
 }
 function ultimosHTML() {
   const rs = registros.slice(0, 6);
-  return `<h3 class="diario-h3">🗒 Últimos registros</h3>` + (rs.length ? rs.map(r => `<button type="button" class="ult-reg" data-dia-reg="${r.data}">
-    <span class="ult-emoji">${r.tipo === "justificativa" ? (MOTIVOS[r.motivo] || MOTIVOS.outro)[0] : humorEmoji(r.respostas?.humorSaida || r.respostas?.humorChegada) || "📝"}</span>
-    <span><b>${dataLonga(r.data)}</b> <span class="pequeno">· ${esc(r.autorNome || r.autor)}${r.nComentarios ? ` · 💬 ${r.nComentarios}` : ""}</span>
-    <span class="pequeno ult-txt">${r.tipo === "justificativa" ? esc((MOTIVOS[r.motivo] || MOTIVOS.outro)[1] + (r.texto ? ": " + r.texto : "")).slice(0, 140) : esc(String(r.respostas?.atividades || r.respostas?.conquista || "").slice(0, 120))}</span></span>
-    <span class="ult-estrelas">${"★".repeat(Number(r.respostas?.estrelas || 0))}</span></button>`).join("")
-    : `<div class="vazio"><div class="icone">📔</div><p>Nenhum registro ainda.${podeRegistrar() ? " Comece pelo dia de hoje: leva uns 3 minutos." : ""}</p></div>`);
+  const chipsMat = r => (r.respostas?.materias || []).flatMap(m => [m.materia, ...(m.topicos || []).map(t => `${m.materia} · ${t}`)]).slice(0, 4).map(x => `<span class="chip off">${esc(x)}</span>`).join("");
+  return `<h3 class="diario-h3">Últimos registros</h3>` + (rs.length ? `<div class="ult-lista">${rs.map(r => `<button type="button" class="ult-reg" data-dia-reg="${r.data}">
+    <span class="ult-emoji e" aria-hidden="true">${r.tipo === "justificativa" ? (MOTIVOS[r.motivo] || MOTIVOS.outro)[0] : humorEmoji(r.respostas?.humorSaida || r.respostas?.humorChegada) || "📝"}</span>
+    <span class="ult-corpo"><span class="ult-cab"><b>${dataLonga(r.data)}</b><span class="ult-quem"> · ${esc(r.autorNome || r.autor)}${r.nComentarios ? ` · 💬 ${r.nComentarios}` : ""}${r.respostas?.estrelas ? ` · <span class="e" aria-hidden="true">${"⭐".repeat(Number(r.respostas.estrelas))}</span>` : ""}</span></span>
+    <span class="ult-txt">${r.tipo === "justificativa" ? esc((MOTIVOS[r.motivo] || MOTIVOS.outro)[1] + (r.texto ? ": " + r.texto : "")).slice(0, 140) : esc(String(r.respostas?.atividades || r.respostas?.conquista || "").slice(0, 160))}</span>
+    ${chipsMat(r) ? `<span class="ult-chips">${chipsMat(r)}</span>` : ""}</span></button>`).join("")}</div>`
+    : vazio({ e: "📔", texto: `Nenhum registro ainda.${podeRegistrar() ? " Comece pelo dia de hoje: leva uns 3 minutos." : ""}` }));
 }
 function ligarUltimos() { document.querySelectorAll("[data-dia-reg]").forEach(b => b.onclick = () => { aberto = b.dataset.diaReg; desenharPainel(); }); }
 
@@ -354,17 +362,17 @@ const chaveRascunho = iso => `diario:${atual.email}:${iso}:${ctx.eu.email}`;
 // atalhos: ontem e as últimas aulas sem registro (até 2)
 // horário da turma em chips: 🕖 entrada–saída · ☕/🍽 intervalos
 function horarioChips(h) {
-  if (!h?.inicio) return `<span class="pequeno">🕖 ${esc(textoHorario(h))}</span>`;
-  const ic = n => /almo|refei|janta/i.test(n) ? "🍽" : /caf|lanche/i.test(n) ? "☕" : "⏸";
-  return `<span class="chip" title="Entrada e saída">🕖 ${esc(h.inicio)}–${esc(h.fim)}</span>` + (h.intervalos || []).map(i => `<span class="chip" title="${esc(i.nome)}">${ic(i.nome)} ${esc(i.inicio)}–${esc(i.fim)}</span>`).join("");
+  if (!h?.inicio) return `<span class="chip off">${ic("clock", { size: 14 })}${esc(textoHorario(h))}</span>`;
+  const em = n => /almo|refei|janta/i.test(n) ? "🍽" : /caf|lanche/i.test(n) ? "☕" : "⏸";
+  return `<span class="chip off" title="Entrada e saída">${ic("clock", { size: 14 })}${esc(h.inicio)}–${esc(h.fim)}</span>` + (h.intervalos || []).map(i => `<span class="chip off" title="${esc(i.nome)}"><span class="e" aria-hidden="true">${em(i.nome)}</span>${esc(i.inicio)}–${esc(i.fim)}</span>`).join("");
 }
 function atalhosDias() {
   const tem = new Set(registros.map(r => r.data)), out = [], d = new Date();
   const ontem = new Date(); ontem.setDate(ontem.getDate() - 1); const isoOntem = isoDe(ontem);
-  out.push([isoOntem, `Ontem${tem.has(isoOntem) ? " ✓" : ""}`, ehDiaDeAula(isoOntem) && !tem.has(isoOntem)]);
+  out.push([isoOntem, "Ontem", ehDiaDeAula(isoOntem) && !tem.has(isoOntem), tem.has(isoOntem)]);
   for (let i = 1; i < 30 && out.length < 3; i++) {
     d.setDate(d.getDate() - 1); const iso = isoDe(d);
-    if (iso !== isoOntem && ehDiaDeAula(iso) && !tem.has(iso)) out.push([iso, `${DIAS[d.getDay()]} ${dataCurta(iso).slice(0, 5)}`, true]);
+    if (iso !== isoOntem && ehDiaDeAula(iso) && !tem.has(iso)) out.push([iso, `${DIAS[d.getDay()]} ${dataCurta(iso).slice(0, 5)}`, true, false]);
   }
   return out;
 }

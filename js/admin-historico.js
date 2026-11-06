@@ -2,6 +2,8 @@
 // Auxiliar de inclusão: só os alunos dela. Professor e admin: todos.
 // Fontes: acessibilidade/{email}/questoes (o que está aplicado hoje) e acessibilidadePrivado/{email}/historico (cada escolha feita).
 import { db, esc, $, traduzirErro, iniciais, dataBR, chaveTexto } from "./common.js";
+import { ic } from "./icones.js";
+import { vazio, pl } from "./ui.js";
 import { FORMATOS } from "../servidor/formatos.js";
 import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -52,8 +54,8 @@ function desenhar() {
         const p = provas[pid], hist = a.historico.filter(h => h.provaId === pid), ultima = Math.max(...qs.map(q => ms(q.atualizadoEm)));
         const formatos = {}; qs.forEach(q => formatos[fmtDe(q)] = (formatos[fmtDe(q)] || 0) + 1);
         const quem = [...new Set(qs.map(q => q.adaptadoPor).filter(Boolean))];
-        return `<details class="hist-prova"><summary><b>📝 ${esc(p?.titulo || (pid === "__sem" ? "Sem prova definida" : "Prova apagada"))}</b>
-            ${p?.turma ? `<span class="pequeno">${esc(p.turma)}</span>` : ""}<span class="tag">${qs.length} questão(ões)</span>
+        return `<details class="hist-prova"><summary><b>${esc(p?.titulo || (pid === "__sem" ? "Sem prova definida" : "Prova apagada"))}</b>
+            ${p?.turma ? `<span class="pequeno">${esc(p.turma)}</span>` : ""}<span class="pequeno">${pl(qs.length, "questão", "questões")}</span>
             ${Object.entries(formatos).map(([f, n]) => `<span class="tag nota" title="${esc(FORMATOS[f]?.nome || f)}">${FORMATOS[f]?.icone || "📝"} ${n}</span>`).join("")}
             <span class="pequeno">${ultima ? new Date(ultima).toLocaleDateString("pt-BR") : ""}${quem.length ? ` · ${quem.map(esc).join(", ")}` : ""}</span></summary>
           <div class="hist-corpo"><table class="hist-tab"><tr><th>Formato</th><th>Questão adaptada</th><th>Por quê</th><th>Quem / quando</th></tr>
@@ -63,10 +65,10 @@ function desenhar() {
             ${hist.length ? `<details class="hist-linha"><summary>🕘 Histórico de escolhas (${hist.length})</summary><ul>${hist.map(h => `<li><b>${dataBR(h.em)}</b> · ${esc(h.porNome || h.por)}${h.papel === "inclusao" ? " (auxiliar de inclusão)" : ""} escolheu
               ${FORMATOS[h.formato]?.icone || ""} <b>${esc(FORMATOS[h.formato]?.nome || h.formato)}</b>${h.oferecidas ? ` entre ${h.oferecidas} opções da IA` : ""}${h.origem === "manual" ? " (ajustado à mão)" : ""}
               <br><span class="pequeno">“${esc(String(h.enunciadoOriginal || "").slice(0, 120))}” → “${esc(String(h.enunciado || "").slice(0, 120))}”</span></li>`).join("")}</ul></details>` : ""}
-            <div class="linha acoes"><button type="button" class="leve mini" data-abrir="${esc(a.email)}">♿ Abrir na Acessibilidade</button></div></div></details>`;
+            <div class="linha acoes"><button type="button" class="leve mini" data-abrir="${esc(a.email)}">${ic("acess", { size: 16 })}Abrir na Acessibilidade</button></div></div></details>`;
       }).join("")}</section>`;
   }).join("");
-  $("#hContagem").textContent = `${nProvas} prova(s) adaptada(s) · ${nQ} questão(ões)`;
-  box.innerHTML = html || `<div class="vazio"><div class="icone">🗂</div><p>${dados.length ? "Nada com esses filtros." : "Nenhuma prova adaptada ainda."}</p></div>`;
+  $("#hContagem").textContent = `${pl(nProvas, "prova adaptada", "provas adaptadas")} · ${pl(nQ, "questão", "questões")}`;
+  box.innerHTML = html || vazio({ e: "🗂", texto: dados.length ? "Nada com esses filtros." : "Nenhuma prova adaptada ainda." });
   box.querySelectorAll("[data-abrir]").forEach(x => x.onclick = () => ctx.abrirAluno(x.dataset.abrir));
 }

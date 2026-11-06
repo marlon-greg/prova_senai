@@ -22,6 +22,7 @@ const P = {
   search: `<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>`,
   filter: `<path d="M3 6h18M7 12h10M10 18h4"/>`,
   chev: `<path d="m6 9 6 6 6-6"/>`,
+  chevl: `<path d="m15 6-6 6 6 6"/>`,
   chevr: `<path d="m9 6 6 6-6 6"/>`,
   dots: `<path d="M5 12h.01M12 12h.01M19 12h.01" stroke-width="3"/>`,
   play: `<path d="M7 4.5v15l12-7.5z"/>`,

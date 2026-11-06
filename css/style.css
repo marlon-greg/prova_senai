@@ -636,7 +636,6 @@ button.cartao-acess:hover { background:#fafbfc; }
 .faixa input[type=range] { width:100%; }
 .previa-acess { border-radius:12px; padding:12px; background:var(--fundo); border:1px dashed var(--borda-forte); max-height:420px; overflow:auto; }
 .previa-acess .card { margin:0; }
-.barra-salvar { position:sticky; bottom:12px; z-index:50; background:#fff; border:1px solid var(--borda); border-radius:14px; padding:10px 14px; margin:16px 0; box-shadow:0 8px 24px rgba(16,24,40,.12); }
 .sugestoes { margin-top:12px; display:flex; flex-direction:column; gap:8px; max-height:420px; overflow:auto; }
 .sugestao { border:1px solid var(--borda); border-radius:10px; padding:10px 12px; background:#fcfcfd; }
 .sugestao p { margin:4px 0 8px; white-space:pre-wrap; }
@@ -2078,3 +2077,158 @@ td.td-acoes .menu-wrap { vertical-align:middle; }
 #resResumo > * { margin:0; }
 .card.sem-padding > .tabela.sem-borda { border-radius:var(--raio); }
 .grupo-chips .e { font-size:14px; margin-right:2px; }
+
+/* =====================================================================
+   Fase 8 · Diário, Acessibilidade, Provas adaptadas, Erros e sugestões (quadros 4 e 5)
+   ===================================================================== */
+#diarioPainel, #acessDetalhe, #diarioAlunos { display:flex; flex-direction:column; gap:var(--sp-5); min-width:0; }
+#diarioPainel > *, #acessDetalhe > * { margin:0; min-width:0; }
+#diarioPainel:empty, #acessDetalhe:empty { display:none; }
+
+/* lista de alunos: cartões pequenos; selecionado é marinho, nunca vermelho */
+.diario-alunos { display:flex; flex-wrap:wrap; gap:var(--sp-3); margin:0; }
+.diario-aluno { display:inline-flex; align-items:center; gap:var(--sp-3); flex:0 1 auto; max-width:100%; min-height:62px; padding:var(--sp-3) var(--sp-4); background:var(--cartao); color:var(--texto); border:0; border-radius:14px; box-shadow:var(--sombra); text-align:left; }
+.diario-aluno:hover { background:var(--hover); }
+.diario-aluno.ativo, .diario-aluno.ativo:hover { background:var(--marinho-claro); box-shadow:0 0 0 2px var(--marinho-2); }
+.diario-aluno.inativo { opacity:.6; }
+.diario-aluno .avatar { width:38px; height:38px; flex:0 0 38px; font-size:13px; }
+.diario-aluno .da-info { display:flex; flex-direction:column; gap:1px; min-width:0; }
+.diario-aluno .da-info b { font-size:var(--fs-md); font-weight:600; color:var(--marinho); }
+.da-sub { font-size:var(--fs-xs); color:var(--suave); }
+.da-status .chip { margin-top:2px; }
+.diario-aluno > .chip { flex:none; margin:0; white-space:nowrap; }
+
+/* cartão do aluno, sem gradiente */
+.diario-hero { display:block; background:var(--cartao); }
+.dh-topo { display:flex; align-items:flex-start; justify-content:space-between; gap:var(--sp-5); flex-wrap:wrap; }
+.dh-aluno { display:flex; align-items:flex-start; gap:var(--sp-5); flex:1 1 360px; min-width:0; }
+.avatar.dh-avatar { width:64px; height:64px; flex:0 0 64px; font-size:20px; }
+.dh-texto { min-width:0; }
+.card.diario-hero h2 { margin:0 0 6px; font-family:var(--fonte-titulo); font-size:var(--fs-2xl); font-weight:600; color:var(--marinho); }
+.dh-linha { display:flex; flex-wrap:wrap; align-items:center; gap:4px var(--sp-3); margin:0 0 var(--sp-2); font-size:var(--fs-sm); color:var(--suave); }
+.dh-linha svg { color:var(--icone); margin-right:-6px; }
+.dh-horario { display:flex; flex-wrap:wrap; gap:6px; margin:0; }
+.dh-numeros { display:grid; grid-template-columns:repeat(4, minmax(84px, 1fr)); gap:var(--sp-3); flex:0 1 auto; }
+.dh-num { background:var(--cartao-2); border:0; border-radius:var(--raio-m); padding:var(--sp-3) var(--sp-4); text-align:left; min-width:0; }
+.dh-num b { display:block; font-family:var(--fonte-titulo); font-size:22px; font-weight:700; line-height:1.2; color:var(--marinho); }
+.dh-num span { font-size:var(--fs-xs); color:var(--suave); white-space:nowrap; }
+.diario-hero .div { margin:var(--sp-5) 0; }
+.dh-acao { display:flex; flex-wrap:wrap; align-items:center; gap:var(--sp-3); }
+.dh-nota { font-size:var(--fs-xs); color:var(--suave); }
+.outro-dia { display:flex; flex-wrap:wrap; align-items:center; gap:var(--sp-2); }
+.dh-rotulo { font-size:var(--fs-sm); color:var(--suave); }
+.chip-dia, .chip-dia.botao-data { height:32px; min-height:32px; padding:0 12px; gap:6px; border:1px solid var(--borda-forte); border-radius:var(--raio-pill); background:var(--cartao); color:var(--texto); font-size:var(--fs-sm); font-weight:500; }
+.chip-dia:hover { background:var(--hover); border-color:var(--borda-forte); color:var(--texto); }
+.chip-dia .ponto { width:8px; height:8px; position:static; flex:none; border-radius:50%; background:var(--ambar); }
+.cd-ok { display:inline-flex; color:var(--ok); }
+.dh-relatorios { margin-left:auto; }
+.dc-med { font-size:20px; }
+.prev-conquistas .sub-cab { flex-wrap:wrap; }
+.prev-conquistas .bloco-linha-corpo { display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); }
+.prev-conquistas .sc-resumo { font-size:var(--fs-sm); }
+
+/* calendário + últimos registros */
+.diario-grade { display:grid; grid-template-columns:minmax(0, 4fr) minmax(0, 8fr); gap:var(--sp-5); align-items:start; }
+.diario-grade > .card { margin:0; }
+.cal-topo h3 { font-family:var(--fonte-titulo); font-size:var(--fs-lg); font-weight:600; color:var(--marinho); }
+.cal-grade { gap:4px; }
+.cal-sem { padding:var(--sp-2) 0; font-size:var(--fs-xs); font-weight:500; color:var(--suave); }
+.cal-dia, .cal-dia.fds { aspect-ratio:auto; height:34px; min-height:0; padding:0; border:0; border-radius:var(--raio-p); background:transparent; color:var(--texto); flex-direction:row; gap:2px; }
+.cal-dia:hover:not(:disabled) { background:var(--hover); border:0; }
+.cal-dia:disabled { opacity:1; background:transparent; color:var(--apoio); }
+.cal-n { font-size:var(--fs-sm); color:inherit; font-weight:500; }
+.cal-emoji { font-size:11px; line-height:1; }
+.cal-dia.tem, .cal-dia.tem:hover:not(:disabled) { background:var(--ok-claro); color:var(--ok-texto); }
+.cal-dia.falta, .cal-dia.falta:hover:not(:disabled), .cal-dia.falta:disabled { background:var(--ambar-claro); color:var(--ambar-texto); }
+.cal-dia.hoje { box-shadow:inset 0 0 0 2px var(--marinho-2); border:0; }
+.cal-dia.aberto { box-shadow:0 0 0 2px var(--marinho-2); }
+.cal-leg { margin:var(--sp-3) 0 0; max-width:none; font-size:var(--fs-xs); }
+.card .diario-h3 { margin:0 0 var(--sp-4); font-family:var(--fonte-texto); font-size:16px; font-weight:600; color:var(--marinho); }
+.ult-lista { display:flex; flex-direction:column; }
+.ult-reg, .ult-reg:hover { display:flex; align-items:flex-start; gap:var(--sp-3); width:100%; padding:var(--sp-3) 0; background:transparent; border:0; border-bottom:1px solid var(--borda); border-radius:0; color:var(--texto); text-align:left; white-space:normal; height:auto; font-weight:400; box-shadow:none; }
+.ult-lista .ult-reg:last-child { border-bottom:0; }
+.ult-reg:hover .ult-cab b { color:var(--marinho-2); }
+.ult-emoji { flex:none; font-size:22px; line-height:1.2; }
+.ult-corpo { display:flex; flex-direction:column; gap:4px; min-width:0; }
+.ult-cab b { font-size:var(--fs-md); font-weight:600; color:var(--marinho); }
+.ult-quem { font-size:var(--fs-sm); color:var(--suave); }
+.ult-quem .e { font-size:12px; }
+.ult-txt { font-size:var(--fs-sm); line-height:1.5; color:var(--apoio); }
+.ult-chips { display:flex; flex-wrap:wrap; gap:6px; }
+
+/* fluxo de registro em 5 etapas: passo atual com anel marinho, feito em verde claro */
+.ed-passos button { background:var(--cartao); border:1px solid var(--borda-forte); border-radius:var(--raio-m); }
+.ed-passos button.feito { background:var(--ok-claro); border-color:transparent; }
+.ed-passos button.atual { background:var(--cartao); border-color:transparent; box-shadow:0 0 0 2px var(--marinho-2); }
+.op-emoji button, .op-escala button { background:var(--cartao); border:1px solid var(--borda-forte); border-radius:var(--raio-m); }
+.op-emoji button.sel { background:var(--marinho-claro); border-color:transparent; box-shadow:0 0 0 2px var(--marinho-2); }
+.op-escala button.cheio { background:var(--marinho-claro); border-color:transparent; }
+.op-escala button.sel { box-shadow:0 0 0 2px var(--marinho-2); }
+.op-pilulas button, .mat-topicos button { background:var(--cartao); border:1px solid var(--borda-forte); }
+.op-pilulas button.sel { background:var(--ok-claro); border-color:transparent; color:var(--ok-texto); }
+
+/* Acessibilidade */
+.acess-cab { display:flex; align-items:center; flex-wrap:wrap; gap:var(--sp-3) var(--sp-4); margin:0; padding:var(--sp-4) var(--sp-6); }
+.avatar.ac-avatar { width:48px; height:48px; flex:0 0 48px; font-size:16px; }
+.ac-id { min-width:0; display:flex; flex-direction:column; }
+.card.acess-cab h2 { margin:0; font-family:var(--fonte-titulo); font-size:18px; font-weight:600; color:var(--marinho); }
+.ac-id > span { font-size:var(--fs-sm); color:var(--suave); }
+.ac-aux { margin-left:auto; display:flex; align-items:center; flex-wrap:wrap; gap:var(--sp-2); }
+.ac-aux-lista { display:flex; flex-direction:column; gap:var(--sp-2); margin-top:var(--sp-2); }
+.ac-grade { display:grid; grid-template-columns:minmax(0, 5fr) minmax(0, 7fr); gap:var(--sp-5); align-items:start; }
+.ac-grade > .card { margin:0; }
+.ac-adapt { display:flex; flex-direction:column; gap:var(--sp-4); }
+.ac-adapt > [data-painel] { display:flex; flex-direction:column; gap:var(--sp-3); }
+.ac-adapt > [data-painel][hidden] { display:none !important; }
+.ac-adapt .check { margin:0; align-items:flex-start; }
+.ac-faixas { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:var(--sp-4); align-items:end; }
+.ac-faixas label { font-size:var(--fs-sm); font-weight:400; color:var(--suave); margin:0 0 6px; }
+.ac-adapt .faixa label { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:4px var(--sp-2); color:var(--texto); }
+.faixa output { display:inline-flex; align-items:center; height:24px; padding:0 10px; border-radius:var(--raio-pill); background:var(--marinho-claro); color:var(--marinho); font-size:var(--fs-xs); font-weight:500; }
+.ac-adapt .div { margin:0; }
+.ac-rodape { display:flex; flex-wrap:wrap; gap:var(--sp-2); }
+.ac-previa-cab { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:var(--sp-2) var(--sp-4); margin:0 0 var(--sp-4); }
+.card .ac-previa-cab h2 { margin:0; font-family:var(--fonte-titulo); font-size:var(--fs-lg); font-weight:600; color:var(--marinho); }
+.ac-comovê { display:flex; align-items:center; gap:var(--sp-2); margin:0; font-size:var(--fs-xs); font-weight:400; color:var(--suave); white-space:nowrap; min-width:0; }
+.ac-comovê select { width:auto; max-width:220px; height:34px; font-size:var(--fs-sm); }
+/* a prévia cresce com o conteúdo, sem rolagem interna */
+.previa-acess { display:flex; flex-direction:column; gap:var(--sp-5); max-height:none; overflow:visible; padding:28px 32px; border:0; border-radius:14px; background:var(--cartao-2); }
+.previa-chips { display:flex; flex-wrap:wrap; gap:6px; }
+.previa-acess .questao { display:flex; flex-direction:column; gap:var(--sp-4); background:transparent; box-shadow:none; padding:0; margin:0; }
+.previa-acess .enunciado { margin:0; }
+.acess-linha-curta.previa-acess :is(.enunciado, .apoio) { max-width:34ch; }
+.previa-acess .apoio { display:flex; gap:var(--sp-2); margin:0; padding:var(--sp-3) var(--sp-4); background:var(--info-claro); border:0; border-left:4px solid var(--info); border-radius:var(--raio-p); }
+.previa-acess .alt { display:flex; align-items:center; gap:var(--sp-3); margin:0; padding:var(--sp-3) var(--sp-4); background:var(--cartao); border:0; border-radius:var(--raio-m); box-shadow:var(--sombra); cursor:default; }
+.previa-acess .alt-letra { flex:0 0 30px; width:30px; height:30px; display:inline-flex; align-items:center; justify-content:center; background:transparent; color:var(--marinho-2); border:2px solid var(--marinho-2); border-radius:50%; font-weight:600; font-size:var(--fs-sm); }
+.previa-acess .alt-texto { font-family:var(--fonte-mono); font-size:calc(15px * var(--a-escala, 1)); }
+.previa-acess code { font-family:var(--fonte-mono); }
+.acess-grade { gap:var(--sp-5); }
+
+/* Provas adaptadas · Erros e sugestões */
+.hist-aluno, .ret-item { margin:0; padding:var(--sp-5); }
+.hist-cab h3 { font-family:var(--fonte-texto); font-size:var(--fs-lg); font-weight:600; color:var(--marinho); }
+.hist-prova { border:0; background:var(--cartao-2); border-radius:14px; }
+.hist-tab { background:transparent; }
+.hist-tab th { background:transparent; }
+.ret-item.aberto { border-left:0; }
+.ret-cab { display:flex; flex-wrap:wrap; align-items:center; gap:var(--sp-2); }
+.ret-resposta { display:flex; flex-wrap:wrap; gap:var(--sp-2); align-items:center; margin-top:var(--sp-3); }
+.ret-resposta input { flex:1 1 280px; width:auto; }
+details.ret-grupo > .rc-corpo .ret-item { box-shadow:none; background:var(--cartao-2); margin:var(--sp-2) 0; }
+
+@media (max-width:1000px) {
+  .ac-grade, .diario-grade { grid-template-columns:minmax(0, 1fr); }
+}
+@media (max-width:600px) {
+  .dh-numeros { grid-template-columns:repeat(2, minmax(0, 1fr)); width:100%; }
+  .dh-aluno { flex-basis:100%; gap:var(--sp-3); }
+  .avatar.dh-avatar { width:48px; height:48px; flex-basis:48px; font-size:16px; }
+  .dh-relatorios { margin-left:0; }
+  .ac-aux { margin-left:0; width:100%; }
+  .previa-acess { padding:var(--sp-4); }
+  .ac-comovê { white-space:normal; }
+}
+.previa-chips .chip { font-size:12px; }
+.previa-acess .alt { box-shadow:none; }
+.previa-acess:not(.tema-contraste, .tema-escuro) .alt-letra { background:transparent; border-color:var(--marinho-2); color:var(--marinho-2); }
+#acessDetalhe, #diarioPainel { scroll-margin-top:84px; }

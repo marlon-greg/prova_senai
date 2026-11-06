@@ -26,10 +26,10 @@ export const PROVA_PADRAO = {
 };
 export const FONTES = {
   padrao:   { nome: "Padrão do sistema (Inter)", css: "" },
-  atkinson: { nome: "Atkinson Hyperlegible (baixa visão)", css: "'Atkinson Hyperlegible', Arial, sans-serif", google: "Atkinson+Hyperlegible:wght@400;700" },
-  lexend:   { nome: "Lexend (leitura fluida / dislexia)", css: "'Lexend', Arial, sans-serif", google: "Lexend:wght@400;600" },
-  comic:    { nome: "Comic Neue (letras arredondadas)", css: "'Comic Neue', 'Comic Sans MS', sans-serif", google: "Comic+Neue:wght@400;700" },
-  arial:    { nome: "Arial / Verdana (simples)", css: "Verdana, Arial, sans-serif" }
+  atkinson: { nome: "Atkinson Hyperlegible (baixa visão)", css: "'Atkinson Hyperlegible', Inter, sans-serif", google: "Atkinson+Hyperlegible:wght@400;700" },
+  lexend:   { nome: "Lexend (leitura fluida / dislexia)", css: "'Lexend', Inter, sans-serif", google: "Lexend:wght@400;600" },
+  comic:    { nome: "Comic Neue (letras arredondadas)", css: "'Comic Neue', 'Comic Sans MS', Inter, sans-serif", google: "Comic+Neue:wght@400;700" },
+  arial:    { nome: "Arial / Verdana (simples)", css: "Verdana, Arial, Inter, sans-serif" }
 };
 export const TEMAS = {
   padrao:    { nome: "Padrão (branco)" },

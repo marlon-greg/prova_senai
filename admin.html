@@ -6,7 +6,7 @@
 <title>Painel do Professor — Prova SENAI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <link rel="icon" href="img/senai.svg">
 <script src="js/logo.js"></script>
@@ -92,9 +92,7 @@
       <template class="ajuda-aba"><p>A <b>auxiliar de inclusão</b> registra cada dia do aluno em 5 etapas rápidas: humor e energia, atividades (com as matérias e os tópicos do plano de ensino), comportamento, o que funcionou e o fechamento do dia. Leva uns 3 minutos e o rascunho fica salvo enquanto ela preenche.</p>
           <p>Os <b>professores</b> leem e deixam o seu comentário em cada dia (como ela estava na aula, participação, sugestões). Eles não mudam o registro da auxiliar.</p>
           <p>O diário alimenta os relatórios do aluno e as adaptações das provas. O aluno nunca vê o diário.</p></template>
-      <div class="card">
-        <div id="diarioAlunos"></div>
-      </div>
+      <div id="diarioAlunos"></div>
       <div id="diarioPainel"></div>
     </div>
 
@@ -282,8 +280,7 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
     <!-- ACESSIBILIDADE (js/admin-acess.js) -->
     <div id="aba-acessibilidade" class="oculto">
       <template class="ajuda-aba"><p>Alunos marcados aqui fazem a prova com as adaptações de cada um: letra, espaçamento, cores, tempo e vidas extras, leitura em voz alta e <b>questões reescritas</b> (à mão ou pela IA, a partir da sua descrição e dos laudos). A auxiliar de inclusão vinculada vê e edita só os alunos dela.</p></template>
-      <div class="card">
-        <!-- formulário: abre num drawer -->
+      <!-- formulário: abre num drawer -->
         <div id="acessNovo" class="oculto">
           <div><label for="acessTurmaSel">1. Turma</label><select id="acessTurmaSel"></select></div>
           <div><label for="acessAlunoSel">2. Aluno</label><select id="acessAlunoSel" disabled><option value="">— escolha a turma primeiro —</option></select></div>
@@ -298,7 +295,6 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
           <span id="acFiltroContagem" class="tb-contagem" aria-live="polite"></span>
           <div class="painel-filtros" id="acFiltroBuscaPainel" hidden><label class="pf-campo"><span>Turma</span><select id="acFiltroTurma" aria-label="Filtrar por turma"><option value="">Todas as turmas</option></select></label><label class="pf-campo"><span>Situação</span><select id="acFiltroSit" aria-label="Filtrar por situação"><option value="">Todas</option><option value="ativa">♿ Acessibilidade ativa</option><option value="desligada">○ Desligada</option></select></label><div class="pf-acoes"><button type="button" class="discreto mini pf-limpar oculto">Limpar filtros</button></div></div>
         </div></div>
-      </div>
       <div id="acessLista"></div>
       <div id="acessDetalhe"></div>
     </div>
@@ -306,30 +302,26 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
     <!-- PROVAS ADAPTADAS (js/admin-historico.js) -->
     <div id="aba-historico" class="oculto">
       <template class="ajuda-aba">Histórico de todas as adaptações: por aluno e por prova, o formato de cada questão, o porquê, quem fez e quando, e as escolhas feitas entre as opções da IA.</template>
-      <div class="card">
-<div class="toolbar" role="search">
+      <div class="toolbar" role="search">
           <input type="search" id="hBusca" placeholder="Pesquisar aluno, prova ou questão…" aria-label="Pesquisar provas adaptadas">
           <button type="button" class="leve btn-filtros" aria-expanded="false" aria-controls="hBuscaPainel"><span data-ic="filter" data-ic-size="16" aria-hidden="true"></span>Filtros<span class="badge" aria-label="filtros ativos"></span></button>
           <span id="hContagem" class="tb-contagem" aria-live="polite"></span>
           <div class="painel-filtros" id="hBuscaPainel" hidden><label class="pf-campo"><span>Turma</span><select id="hTurma" aria-label="Filtrar por turma"><option value="">Todas as turmas</option></select></label><label class="pf-campo"><span>Formato</span><select id="hFormato" aria-label="Filtrar por formato"></select></label><label class="pf-campo"><span>Origem</span><select id="hOrigem" aria-label="Filtrar por origem"><option value="">🤖 IA e manual</option><option value="ia">🤖 Feitas pela IA</option><option value="manual">✍ Feitas à mão</option></select></label><div class="pf-acoes"><button type="button" class="discreto mini pf-limpar oculto">Limpar filtros</button></div></div>
         </div>
-      </div>
-      <div id="hLista"></div>
+      <div id="hLista" class="lista-cartoes"></div>
     </div>
 
     <!-- RETORNO DOS ALUNOS (js/admin-gamificacao.js) -->
     <div id="aba-retorno" class="oculto">
       <template class="ajuda-aba">Duas coisas separadas: <b>🚩 erros que os alunos reportaram nas questões</b> (na prova ou no gabarito) e <b>💡 sugestões para o sistema</b>. Responda e marque a situação: o aluno vê a resposta na página dele.</template>
-      <div class="card">
-        <div class="ret-abas" id="retAbas" role="tablist" aria-label="Tipo"></div>
+      <div class="ret-abas" id="retAbas" role="tablist" aria-label="Tipo"></div>
 <div class="toolbar" role="search">
           <input type="search" id="retBusca" placeholder="Pesquisar aluno, prova ou texto…" aria-label="Pesquisar erros e sugestões">
           <button type="button" class="leve btn-filtros" aria-expanded="false" aria-controls="retBuscaPainel"><span data-ic="filter" data-ic-size="16" aria-hidden="true"></span>Filtros<span class="badge" aria-label="filtros ativos"></span></button>
           <span id="retContagem" class="tb-contagem" aria-live="polite"></span>
           <div class="painel-filtros" id="retBuscaPainel" hidden><label class="pf-campo"><span>Situação</span><select id="retStatus" aria-label="Situação"><option value="aberto">Abertos</option><option value="">Todos</option><option value="fechado">Respondidos</option></select></label><div class="pf-acoes"><button type="button" class="discreto mini pf-limpar oculto">Limpar filtros</button></div></div>
         </div>
-      </div>
-      <div id="retLista"></div>
+      <div id="retLista" class="lista-cartoes"></div>
     </div>
 
     <!-- GAMIFICAÇÃO (js/admin-gamificacao.js) -->

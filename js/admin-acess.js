@@ -3,7 +3,8 @@
 // as necessidades, sobe laudos e adapta as questões (manual ou pela IA). Auxiliar de inclusão: só os alunos
 // vinculados a ela — edita as adaptações, sobe laudos e deixa sugestões.
 import { db, esc, $, toast, confirmar, modal, traduzirErro, dataBR, iniciais, temaDe, letra, sortearQuestoes, bancoDaQuestao, questoesDisponiveis, cotaDaProva } from "./common.js";
-import { drawer } from "./ui.js";
+import { drawer, chips, vazio } from "./ui.js";
+import { ic } from "./icones.js";
 import { VISUAL_PADRAO, PROVA_PADRAO, FONTES, TEMAS, completar, aplicarVisual, apoiosDe } from "./acessibilidade.js";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, abrirMaterialEmAba, tamanhoTexto, erroMaterial } from "./material.js";
 import { adaptarQuestao } from "./ia.js";
@@ -65,18 +66,12 @@ function desenharLista() {
   const vis = lista.filter(a => (!b || `${a.nome || ""} ${a.email} ${(a.auxiliares || []).join(" ")}`.normalize("NFD").replace(/\p{M}+/gu, "").toLowerCase().includes(b))
     && (!fT || (turmasDe.get(a.email) || []).some(t => t.id === fT)) && (!fA || (fA === "ativa" ? a.ativo !== false : a.ativo === false)));
   $("#acFiltroContagem").textContent = lista.length > 1 ? `${vis.length} de ${lista.length} aluno(s)` : "";
-  if (lista.length && !vis.length) { box.innerHTML = `<div class="vazio"><div class="icone">🔎</div><p>Nenhum aluno com esses filtros.</p></div>`; return; }
-  if (!lista.length) {
-    box.innerHTML = `<div class="vazio"><div class="icone">♿</div><p><b>${ehInclusao() ? "Nenhum aluno vinculado a você ainda." : "Nenhum aluno com acessibilidade."}</b></p>
-      <p class="pequeno">${ehInclusao() ? "Peça ao professor para vincular você ao aluno." : "Use o formulário acima para marcar um aluno."}</p></div>`;
-  } else box.innerHTML = `<div class="cartoes-alunos">` + vis.map(a => `
-    <button type="button" class="cartao-aluno cartao-acess${a.ativo === false ? " inativo" : ""}${a.email === aberto ? " selecionado" : ""}" data-acess="${esc(a.email)}">
-      <div class="ca-topo"><span class="avatar">${esc(iniciais(a.nome || a.email))}</span>
-        <div class="ca-nome"><b>${esc(a.nome || a.email)}</b><span class="pequeno">${esc(a.email)}</span></div>
-        <span class="tag ${a.ativo === false ? "off" : "ok"}">${a.ativo === false ? "○ desligada" : "♿ ativa"}</span></div>
-      ${(turmasDe.get(a.email) || []).length ? `<div class="pequeno">👥 ${turmasDe.get(a.email).map(t => esc(t.nome)).join(", ")}</div>` : ""}
-      <div class="pequeno">${(a.auxiliares || []).length ? `🤝 ${a.auxiliares.map(esc).join(", ")}` : "sem auxiliar vinculada"}${a.uid ? "" : " · ainda não entrou no sistema"}</div>
-    </button>`).join("") + `</div>`;
+  if (lista.length && !vis.length) { box.innerHTML = vazio({ e: "🔎", texto: "Nenhum aluno com esses filtros." }); return; }
+  if (!lista.length) box.innerHTML = vazio({ e: "♿", texto: ehInclusao() ? "<b>Nenhum aluno vinculado a você ainda.</b> Peça ao professor para vincular você ao aluno." : "<b>Nenhum aluno com acessibilidade.</b> Use <b>Marcar acessibilidade</b>, no alto da tela." });
+  else box.innerHTML = `<div class="diario-alunos">` + vis.map(a => `
+    <button type="button" class="diario-aluno${a.ativo === false ? " inativo" : ""}${a.email === aberto ? " ativo" : ""}" data-acess="${esc(a.email)}">
+      <span class="avatar">${esc(iniciais(a.nome || a.email))}</span><span class="da-info"><b>${esc(a.nome || a.email)}</b><span class="da-sub">${esc((turmasDe.get(a.email) || []).map(t => t.nome).join(", ") || a.email)}${a.uid ? "" : " · ainda não entrou"}</span></span>
+      <span class="chip ${a.ativo === false ? "off" : "ok"}">${a.ativo === false ? "desligada" : "ativa"}</span></button>`).join("") + `</div>`;
   box.querySelectorAll("[data-acess]").forEach(b => b.onclick = () => abrirAluno(b.dataset.acess));
 }
 
@@ -129,7 +124,7 @@ $("#btnAcessAdicionar").onclick = async () => {
 // ---------- cadastro de um aluno ----------
 async function abrirAluno(email, rolar = true) {
   aberto = email;
-  document.querySelectorAll("[data-acess]").forEach(b => b.classList.toggle("selecionado", b.dataset.acess === email));
+  document.querySelectorAll("[data-acess]").forEach(b => b.classList.toggle("ativo", b.dataset.acess === email));
   const box = $("#acessDetalhe");
   box.innerHTML = "<div class='card'><p class='pequeno'>Carregando…</p></div>";
   const [d, p, equipe, todasProvas, alunosT] = await Promise.all([
@@ -148,51 +143,70 @@ async function abrirAluno(email, rolar = true) {
   provas.sort((x, y) => (y.criadoEm?.seconds || 0) - (x.criadoEm?.seconds || 0));
   box.innerHTML = `
   <div class="card acess-cab">
-    <div class="linha"><h2 style="flex:3">♿ ${esc(a.nome || email)} <span class="pequeno">${esc(email)}</span></h2>
-      ${ctx.podeEditar() ? `<button class="perigo mini" id="acRemover" style="flex:0 0 auto">Remover acessibilidade</button>` : ""}</div>
-    <label class="check"><input type="checkbox" id="acAtivo" ${a.ativo !== false ? "checked" : ""}> <span><b>Acessibilidade ativa</b> <span class="pequeno">— as adaptações abaixo valem em todas as provas deste aluno</span></span></label>
-    ${ctx.podeEditar() ? `<div style="margin-top:12px"><span class="rotulo">🤝 Auxiliar(es) de inclusão com acesso a este aluno</span>
-      ${inclusoes.length ? `<div class="linha acoes">${inclusoes.map(x => `<label class="check" style="margin:0"><input type="checkbox" data-aux="${esc(x.email)}" ${(a.auxiliares || []).includes(x.email) ? "checked" : ""}> ${esc(x.nome || x.email)}</label>`).join("")}</div>`
-        : `<p class="pequeno">Nenhuma auxiliar cadastrada. Cadastre em <b>Equipe</b> com o papel <b>auxiliar de inclusão</b>.</p>`}</div>` : ""}
+    <span class="avatar ac-avatar">${esc(iniciais(a.nome || email))}</span>
+    <div class="ac-id"><h2>${esc(a.nome || email)}</h2><span>${[...turmasDele.map(t => esc(t.turma)), esc(email)].join(" · ")}</span></div>
+    <span class="chip" id="acChipAtivo"></span>
+    <div class="ac-aux"><span class="meta-txt">Auxiliar:</span><span id="acChipsAux"></span><button type="button" class="leve mini" id="acEditarCab" aria-haspopup="dialog">${ic("edit", { size: 16 })}Editar</button></div>
+    <!-- situação e auxiliares: abrem num drawer -->
+    <div id="acCabForm" class="oculto">
+      <label class="check"><input type="checkbox" id="acAtivo" ${a.ativo !== false ? "checked" : ""}> <span><b>Acessibilidade ativa</b> <span class="pequeno">— as adaptações valem em todas as provas deste aluno</span></span></label>
+      ${ctx.podeEditar() ? `<div style="margin-top:16px"><span class="rotulo">Auxiliares de inclusão com acesso a este aluno</span>
+        ${inclusoes.length ? `<div class="ac-aux-lista">${inclusoes.map(x => `<label class="check" style="margin:0"><input type="checkbox" data-aux="${esc(x.email)}" data-nome="${esc(x.nome || x.email)}" ${(a.auxiliares || []).includes(x.email) ? "checked" : ""}> ${esc(x.nome || x.email)}</label>`).join("")}</div>`
+          : `<p class="help">Nenhuma auxiliar cadastrada. Cadastre em <b>Equipe</b> com o papel <b>auxiliar de inclusão</b>.</p>`}</div>` : ""}
+      <p class="help" style="margin-top:16px">Estas mudanças são gravadas ao clicar em <b>Salvar adaptações</b>.</p>
+      ${ctx.podeEditar() ? `<hr class="div"><button class="discreto vermelho mini" id="acRemover">${ic("trash", { size: 16 })}Remover acessibilidade</button>` : ""}
+    </div>
   </div>
-  <div class="acess-grade">
-    <div class="card">
-      <h2>Visual</h2>
-      <div class="grade">
+  <div class="ac-grade">
+    <div class="card ac-adapt">
+      <div id="acAbas"></div>
+      <div data-painel="visual">
+        <div class="ac-faixas">
         ${faixa("acEscala", "Tamanho da letra", 80, 250, 10, v.escala, "%")}
         ${faixa("acLetras", "Espaço entre letras", 0, 0.4, 0.02, v.letras, "em")}
         ${faixa("acPalavras", "Espaço entre palavras", 0, 1, 0.05, v.palavras, "em")}
         ${faixa("acLinhas", "Altura da linha", 1.2, 3, 0.1, v.linhas, "")}
         <div><label for="acFonte">Fonte</label><select id="acFonte">${Object.entries(FONTES).map(([k, f]) => `<option value="${k}" ${v.fonte === k ? "selected" : ""}>${esc(f.nome)}</option>`).join("")}</select></div>
         <div><label for="acTema">Cores</label><select id="acTema">${Object.entries(TEMAS).map(([k, t]) => `<option value="${k}" ${v.tema === k ? "selected" : ""}>${esc(t.nome)}</option>`).join("")}</select></div>
+        </div>
+        <label class="check"><input type="checkbox" id="acMaiusculas" ${v.maiusculas ? "checked" : ""}> Texto em CAIXA ALTA (enunciado e alternativas)</label>
+        <label class="check"><input type="checkbox" id="acLinhaCurta" ${v.linhaCurta ? "checked" : ""}> Linhas curtas (coluna estreita)</label>
+        <label class="check"><input type="checkbox" id="acRegua" ${v.regua ? "checked" : ""}> Régua de leitura (acompanha o mouse)</label>
+        <label class="check"><input type="checkbox" id="acSemAnim" ${v.semAnimacao ? "checked" : ""}> Sem animações (confete, mascote parado)</label>
       </div>
-      <label class="check"><input type="checkbox" id="acMaiusculas" ${v.maiusculas ? "checked" : ""}> TEXTO EM CAIXA ALTA (enunciado e alternativas)</label>
-      <label class="check"><input type="checkbox" id="acLinhaCurta" ${v.linhaCurta ? "checked" : ""}> Linhas curtas (texto numa coluna estreita)</label>
-      <label class="check"><input type="checkbox" id="acRegua" ${v.regua ? "checked" : ""}> Régua de leitura (faixa que acompanha o mouse)</label>
-      <label class="check"><input type="checkbox" id="acSemAnim" ${v.semAnimacao ? "checked" : ""}> Sem animações (confete, mascote parado)</label>
+      <div data-painel="tempo" hidden>
+        <div class="ac-faixas">
+          <div><label for="acTempo">Tempo extra (min)</label><input type="number" id="acTempo" min="0" step="5" value="${pr.tempoExtraMin}"></div>
+          <div><label for="acVidas">Vidas extras</label><input type="number" id="acVidas" min="0" max="10" step="1" value="${pr.vidasExtras}"></div>
+        </div>
+        <label class="check"><input type="checkbox" id="acSemPunicao" ${pr.semPunicao ? "checked" : ""}> <span>Sem perder vidas <span class="pequeno">— sair da tela ou colar só fica registrado (bom para TEA)</span></span></label>
+        <label class="check"><input type="checkbox" id="acOcultarTempo" ${pr.ocultarCronometro ? "checked" : ""}> <span>Esconder o cronômetro <span class="pequeno">— o tempo vale, mas não aparece (menos ansiedade)</span></span></label>
+      </div>
+      <div data-painel="voz" hidden>
+        <label class="check"><input type="checkbox" id="acVoz" ${pr.lerEmVoz !== false ? "checked" : ""}> Botão Ouvir em cada questão (leitura em voz alta)</label>
+      </div>
+      <div data-painel="reescritas" hidden>
+        <p class="help" style="max-width:none">As questões reescritas (sorteio, adaptação com IA e revisão) ficam em <b>Prova adaptada</b>, mais abaixo nesta tela.</p>
+        <button type="button" class="leve mini" id="acIrProva">${ic("adapt", { size: 16 })}Ir para a prova adaptada</button>
+      </div>
+      <div data-painel="apoios" hidden>
+        <label class="check"><input type="checkbox" id="acDica" ${pr.mostrarDica !== false ? "checked" : ""}> Mostrar o apoio (💡) das questões adaptadas</label>
+      </div>
+      <hr class="div">
+      <div class="ac-rodape"><button id="acSalvar" class="ok">Salvar adaptações</button><button id="acVerComo" class="leve">${ic("eye", { size: 16 })}Abrir a prova como o aluno</button></div>
     </div>
-    <div class="card">
-      <h2>Pré-visualização</h2>
+    <div class="card ac-previa">
+      <div class="ac-previa-cab"><h2>Pré-visualização</h2><label class="ac-comovê"><span>como o aluno vê ·</span><select id="acProvaTeste" aria-label="Prova">${provas.map(x => `<option value="${x.id}">${esc(x.titulo)}</option>`).join("") || `<option value="">sem provas nesta turma</option>`}</select></label></div>
       <div id="acPrevia" class="previa-acess">
-        <div class="card questao"><div class="enunciado">Escreva o comando que mostra <b>todos os clientes</b> da tabela <code>cliente</code> que moram em <b>Curitiba</b>.</div>
+        <div class="previa-chips"><span class="chip navy">Questão 3 de 10</span><span class="chip off">DDL</span></div>
+        <div class="questao"><div class="enunciado">Escreva o comando que mostra <b>todos os clientes</b> da tabela <code>cliente</code> que moram em <b>Curitiba</b>.</div>
           <div class="apoio"><span aria-hidden="true">💡</span><div><b>Apoio:</b> primeiro ache a tabela; depois pense na condição (onde moram).</div></div>
           <label class="alt"><span class="alt-letra">A</span><span class="alt-texto">SELECT * FROM cliente WHERE cidade = 'Curitiba';</span></label>
           <label class="alt"><span class="alt-letra">B</span><span class="alt-texto">DELETE FROM cliente WHERE cidade = 'Curitiba';</span></label></div>
       </div>
-      <h2 style="margin-top:16px">Na prova</h2>
-      <div class="grade">
-        <div><label for="acTempo">Tempo extra (min)</label><input type="number" id="acTempo" min="0" step="5" value="${pr.tempoExtraMin}"></div>
-        <div><label for="acVidas">Vidas extras ❤️</label><input type="number" id="acVidas" min="0" max="10" step="1" value="${pr.vidasExtras}"></div>
-      </div>
-      <label class="check"><input type="checkbox" id="acSemPunicao" ${pr.semPunicao ? "checked" : ""}> <span>Sem perder vidas <span class="pequeno">— sair da tela/colar só fica registrado (bom para TEA)</span></span></label>
-      <label class="check"><input type="checkbox" id="acOcultarTempo" ${pr.ocultarCronometro ? "checked" : ""}> <span>Esconder o cronômetro <span class="pequeno">— o tempo vale, mas não aparece (menos ansiedade)</span></span></label>
-      <label class="check"><input type="checkbox" id="acVoz" ${pr.lerEmVoz !== false ? "checked" : ""}> Botão 🔊 Ouvir em cada questão (leitura em voz alta)</label>
-      <label class="check"><input type="checkbox" id="acDica" ${pr.mostrarDica !== false ? "checked" : ""}> Mostrar o 💡 apoio das questões adaptadas</label>
+      <p class="help" style="max-width:none;margin-top:12px">A prévia usa a fonte escolhida de verdade; se ela não carregar, cai em Inter.</p>
     </div>
   </div>
-  <div class="linha acoes barra-salvar"><button id="acSalvar" class="ok">Salvar adaptações</button>
-    <span class="pequeno">Ver como o aluno vê:</span><select id="acProvaTeste" style="width:auto;flex:0 1 320px">${provas.map(x => `<option value="${x.id}">${esc(x.titulo)}</option>`).join("")}</select>
-    <button id="acVerComo" class="leve">👁 Abrir a prova como o aluno</button></div>
 
   <div class="acess-grade">
     <div class="card">
@@ -207,7 +221,7 @@ async function abrirAluno(email, rolar = true) {
       <p class="pequeno">A IA usa este perfil (junto com a descrição) ao sugerir formatos e adaptar as questões. Revise: é você quem decide o que fica.</p>
       <h2 style="margin-top:16px">Laudos e documentos (PDF) <button data-ajuda-item="laudo"></button></h2>
       <p class="pequeno">Ficam guardados só para a equipe que cuida deste aluno. A IA lê até 3 PDFs ao adaptar.</p>
-      <div class="linha acoes"><label class="botao-arquivo">⬆ Enviar PDF(s)<input type="file" id="acLaudoArq" accept="application/pdf,.pdf" multiple hidden></label><span id="acLaudoMsg" class="pequeno" aria-live="polite"></span></div>
+      <div class="linha acoes"><label class="botao-arquivo leve">${ic("upload", { size: 16 })}Enviar PDF(s)<input type="file" id="acLaudoArq" accept="application/pdf,.pdf" multiple hidden></label><span id="acLaudoMsg" class="pequeno" aria-live="polite"></span></div>
       <div id="acLaudos" class="lista-materiais" style="margin-top:8px"></div>
     </div>
     <div class="card">
@@ -236,6 +250,21 @@ async function abrirAluno(email, rolar = true) {
   </div>`;
   if (rolar) box.scrollIntoView({ behavior: "smooth", block: "start" });
 
+  // cabeçalho: situação e auxiliares (editados no drawer; gravados com Salvar adaptações)
+  const pintarCab = () => {
+    const on = $("#acAtivo").checked, marcadas = [...$("#acCabForm").querySelectorAll("[data-aux]:checked")];
+    const nomes = ctx.podeEditar() ? marcadas.map(x => x.dataset.nome) : (a.auxiliares || []);
+    $("#acChipAtivo").className = "chip " + (on ? "ok" : "off"); $("#acChipAtivo").innerHTML = on ? `<span class="e" aria-hidden="true">♿</span>acessibilidade ativa` : "acessibilidade desligada";
+    $("#acChipsAux").innerHTML = nomes.length ? nomes.map(n => `<span class="chip navy">${esc(n)}</span>`).join(" ") : `<span class="meta-txt">nenhuma</span>`;
+  };
+  pintarCab();
+  let drawerCab = null;
+  $("#acEditarCab").onclick = () => { drawerCab = drawer({ titulo: "Situação e auxiliares", corpo: $("#acCabForm"), aoFechar: () => { $("#acCabForm").classList.add("oculto"); drawerCab = null; pintarCab(); }, acoes: [{ t: "Aplicar" }] }); };
+  // abas de adaptações: cada uma mostra só o seu grupo
+  chips($("#acAbas"), [{ v: "visual", t: "Visual" }, { v: "tempo", t: "Tempo e vidas" }, { v: "voz", t: "Leitura em voz" }, { v: "reescritas", t: "Questões reescritas" }, { v: "apoios", t: "Apoios" }],
+    { valor: "visual", aria: "Grupo de adaptações", aoMudar: v => box.querySelectorAll("[data-painel]").forEach(p => { p.hidden = p.dataset.painel !== v; }) });
+  $("#acIrProva").onclick = () => $("#acProvaQ").closest(".card").scrollIntoView({ behavior: "smooth", block: "start" });
+
   // pré-visualização ao vivo
   const lerVisual = () => ({ escala: +$("#acEscala").value, letras: +$("#acLetras").value, palavras: +$("#acPalavras").value, linhas: +$("#acLinhas").value,
     fonte: $("#acFonte").value, tema: $("#acTema").value, maiusculas: $("#acMaiusculas").checked, linhaCurta: $("#acLinhaCurta").checked,
@@ -261,7 +290,7 @@ async function abrirAluno(email, rolar = true) {
       const qs = await getDocs(collection(db, "acessibilidade", email, "questoes"));
       await Promise.all(qs.docs.map(x => deleteDoc(x.ref)));
       await deleteDoc(doc(db, "acessibilidade", email));
-      aberto = null; $("#acessDetalhe").innerHTML = ""; toast("Acessibilidade removida.", "ok"); carregarAcessibilidade();
+      aberto = null; drawerCab?.fechar(); $("#acessDetalhe").innerHTML = ""; toast("Acessibilidade removida.", "ok"); carregarAcessibilidade();
     } catch (e) { toast("Não foi possível remover. " + traduzirErro(e), "erro"); }
   });
   $("#acSalvarDesc").onclick = async () => {
