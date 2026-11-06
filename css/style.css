@@ -2411,3 +2411,55 @@ select.sel-papel.off { background-color:var(--chip-fundo); color:var(--suave); }
 #aba-config .bloco-linha-corpo .grade { margin:0; }
 #aba-config .rodape-card { margin-top:0; }
 #cardIA.oculto { display:none !important; }
+
+/* =====================================================================
+   Fase 8 · Página do aluno e demonstração
+   ===================================================================== */
+/* lista de provas */
+.prova-item { display:flex; align-items:center; gap:var(--sp-4); padding:var(--sp-4) 0; border:0; border-bottom:1px solid var(--borda); border-left:0; background:transparent; box-shadow:none; border-radius:0; }
+.prova-item:last-child { border-bottom:0; }
+.prova-item .info { flex:1 1 auto; min-width:0; }
+.prova-item .info > b { display:block; font-size:var(--fs-xl); font-weight:600; line-height:1.3; color:var(--marinho); }
+.pi-meta { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:6px 0 0; }
+.pi-dados { margin-top:6px; font-size:var(--fs-sm); color:var(--suave); }
+.prova-item .acao { flex:none; }
+.conquistas { background:var(--cartao); }
+.conq-nivel b { color:var(--marinho); font-family:var(--fonte-titulo); }
+.conq-nivel .barra { background:var(--trilho); border:0; height:8px; }
+.conq-nivel .barra i { background:var(--ok); }
+
+/* questão: alternativas como cartões, seleção em marinho */
+.alt { border:1px solid var(--borda-forte); border-radius:var(--raio-m); background:var(--cartao); align-items:center; }
+.alt:hover { background:var(--hover); border-color:var(--borda-forte); }
+.alt-letra { flex:0 0 30px; width:30px; height:30px; border:2px solid var(--marinho-2); color:var(--marinho-2); background:transparent; }
+.alt.sel { background:var(--marinho-claro); border-color:transparent; box-shadow:0 0 0 2px var(--marinho-2); }
+.alt.sel .alt-letra { background:var(--marinho-2); border-color:var(--marinho-2); color:#fff; }
+.q-faixa { gap:6px; }
+.q-faixa button.mini { min-width:32px; height:32px; min-height:32px; padding:0 6px; border-radius:var(--raio-p); font-size:var(--fs-sm); }
+.q-faixa button.pendente { background:var(--cartao); color:var(--texto); border:1px solid var(--borda-forte); }
+.q-faixa button.respondida { background:var(--ok-claro); color:var(--ok-texto); border:1px solid transparent; }
+.q-faixa button.rascunho { background:var(--ambar-claro); color:var(--ambar-texto); border:1px solid transparent; }
+.q-faixa button.atual { outline:0; box-shadow:0 0 0 2px var(--marinho-2); }
+.hud { border-top:0; }
+.q-cabecalho { box-shadow:var(--sombra); }
+.apoio { background:var(--info-claro); border:0; border-left:4px solid var(--info); border-radius:var(--raio-p); }
+
+/* gabarito: uma dobra por questão */
+details.res-q { display:block; padding:var(--sp-4) var(--sp-5); }
+details.res-q > summary.q-topo { display:flex; align-items:center; gap:var(--sp-2); margin:0; list-style:none; cursor:pointer; }
+details.res-q > summary::-webkit-details-marker { display:none; }
+details.res-q > summary .q-numero { font-family:var(--fonte-texto); font-size:var(--fs-lg); font-weight:600; color:var(--marinho); }
+details.res-q[open] > summary { margin-bottom:var(--sp-3); }
+.res-q .feedback { background:var(--info-claro); border:0; border-left:4px solid var(--info); border-radius:var(--raio-p); color:var(--texto); }
+.res-q.res-escondida { display:none; }
+
+/* mural e demonstração */
+.mural-item { border:0; background:var(--cartao); border-radius:var(--raio); box-shadow:var(--sombra); }
+.demo-perfil { border:0; border-top:0; margin:0; }
+#dmAbas { margin:0 0 var(--sp-4); }
+#palco > .demo-intro { margin-bottom:var(--sp-5); }
+
+@media (max-width:600px) { .prova-item { flex-direction:column; align-items:stretch; } .prova-item .acao button { width:100%; } }
+.demo-perfil > button { background:var(--ok); border-color:var(--ok); }
+.demo-perfil > button:hover { background:#0d6648; }
+.mural-item.mi-eu { background:var(--marinho-claro); }

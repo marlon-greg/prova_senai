@@ -41,11 +41,18 @@ function telaEscolha() {
   $("#palco").innerHTML = `<section class="card demo-intro"><h2>🧪 Prova de demonstração de acessibilidade</h2>
       <p>Escolha um <b>perfil fictício</b> e faça a prova como se fosse esse aluno. Cada perfil tem adaptações diferentes: visual, tempo, vidas, leitura em voz alta, apoios e <b>formatos de questão</b>.
       As 6 questões de SQL são as mesmas para todos; só muda a adaptação. <b>Nada é gravado</b> e os perfis não são alunos reais.</p></section>
-    <div class="demo-perfis">${[...PERFIS_DEMO, ORIGINAL].map(p => `<article class="card demo-perfil" style="--cor:${p.cor}">
+    <div id="dmAbas"></div><div id="dmPerfil"></div>`;
+  const todos = [...PERFIS_DEMO, ORIGINAL];
+  const pintar = id => { const p = todos.find(x => x.id === id);
+    $("#dmPerfil").innerHTML = `<article class="card demo-perfil">
       <div class="dp-cab"><span class="dp-e">${p.e}</span><div><h3>${esc(p.nome)}</h3><span class="pequeno">${esc(p.resumo)}</span></div></div>
       <p class="pequeno">${esc(p.descricao)}</p><div class="dp-chips">${chipsDoPerfil(p)}</div>
-      <button type="button" data-perfil="${p.id}">${p.id === "original" ? "Fazer a prova original" : `Fazer a prova como ${esc(p.nome.split(" ")[0])}`} →</button></article>`).join("")}</div>`;
-  $("#palco").querySelectorAll("[data-perfil]").forEach(b => b.onclick = () => comecar(b.dataset.perfil));
+      <button type="button" data-perfil="${p.id}">${p.id === "original" ? "Fazer a prova original" : `Fazer a prova como ${esc(p.nome.split(" ")[0])}`} →</button></article>`;
+    $("#dmPerfil").querySelector("[data-perfil]").onclick = () => comecar(p.id); };
+  $("#dmAbas").className = "grupo-chips"; $("#dmAbas").setAttribute("role", "group"); $("#dmAbas").setAttribute("aria-label", "Perfil");
+  const abas = id => { $("#dmAbas").innerHTML = todos.map(p => `<button type="button" class="chip${p.id === id ? " sel" : ""}" aria-pressed="${p.id === id}" data-aba-perfil="${p.id}"><span class="e" aria-hidden="true">${p.e}</span>${esc(p.nome)}</button>`).join(""); pintar(id);
+    $("#dmAbas").querySelectorAll("[data-aba-perfil]").forEach(b => b.onclick = () => abas(b.dataset.abaPerfil)); };
+  abas(todos[0].id);
 }
 
 // ---------- 2. prova ----------

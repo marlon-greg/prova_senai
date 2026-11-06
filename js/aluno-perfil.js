@@ -1,5 +1,7 @@
 // Página do aluno: cartão do perfil (personagem + nível + conquistas), editor do personagem com skins
 // liberadas pelas conquistas, download do cartão (PNG, JPG, PDF) e o painel da simulação (equipe, ?simular=1).
+import { ic } from "./icones.js";
+import { menuHTML, itemMenu } from "./ui.js";
 import { db, esc, $, toast, modal, confirmar } from "./common.js";
 import { CATALOGO, CORES, ORDEM_PELES, NOMES_PARTES, PELES, labioNatural, svgAvatar, liberado, textoTrava, avatarValido, avatarAleatorio, permitido, trocarSexo, PARTES_OCULTAS, AJUSTES, POSICOES_ADESIVO } from "./avatar.js";
 import { FUNDOS_PERFIL, fundoPerfil, urlFundo, urlMini } from "./fundos-perfil.js";
@@ -61,7 +63,7 @@ export async function desenharPerfil(box, { eu, cq, gami, simulacao = false }) {
         : `<div class="pa-medalhas">${(cq?.ganhas || []).slice(-8).map(m => `<span title="${esc(m.nivelNome || m.t)}">${m.e}</span>`).join("") || `<span class="pequeno">Ganhe conquistas para liberar skins novas!</span>`}</div>`}
       <div class="linha acoes"><button type="button" id="paEditar">🎨 Editar meu personagem</button>
         <button type="button" class="leve" id="paCartao">🖼 Personalizar cartão</button>
-        ${gami.download ? `<button type="button" class="leve" id="paBaixar">⬇ Baixar meu cartão</button>` : ""}</div></div>
+        ${gami.download ? menuHTML({ rotulo: `${ic("download", { size: 16 })}Baixar${ic("chev", { size: 14 })}`, aria: "Baixar meu cartão", classe: "leve", itensHTML: itemMenu({ i: "eye", t: "Ver o cartão", id: "paBaixar" }) + itemMenu({ i: "download", t: "Imagem PNG", attrs: `data-baixar="png"` }) + itemMenu({ i: "download", t: "Imagem JPG", attrs: `data-baixar="jpg"` }) + itemMenu({ i: "provas", t: "PDF com as conquistas", attrs: `data-baixar="pdf"` }) }) : ""}</div></div>
     ${foto ? `<a class="pa-credito" href="${esc(foto.fonte)}" target="_blank" rel="noopener" title="Foto: ${esc(foto.autor)} · ${esc(foto.licenca)} (Wikimedia Commons)">📷 ${esc(foto.autor.slice(0, 40))} · ${esc(foto.licenca)}</a>` : ""}`;
   $("#paStatus", box).onclick = () => {
     let escolha = perfil.status || "";
@@ -77,6 +79,7 @@ export async function desenharPerfil(box, { eu, cq, gami, simulacao = false }) {
   $("#paCartao", box).onclick = () => personalizarCartao({ eu, perfil, av, simulacao, ganhas: cq?.ganhas || [], aoSalvar: () => desenharPerfil(box, { eu, cq, gami, simulacao }) });
   $("#paEditar", box).onclick = () => editarPersonagem({ eu, perfil, titulos, simulacao, aoSalvar: () => desenharPerfil(box, { eu, cq, gami, simulacao }) });
   $("#paBaixar", box)?.addEventListener("click", () => baixarCartao({ eu, av, nome, cq }));
+  box.querySelectorAll("[data-baixar]").forEach(b => b.onclick = () => baixarFormato(b.dataset.baixar, dadosCartao({ eu, av, nome, cq })));
   botoesSocial(box, { eu, cq, gami, perfil: { ...perfil, avatar: av }, simulacao });
 }
 
@@ -233,17 +236,19 @@ async function svgParaImagem(svg, tipo) {
   return cv.toDataURL(tipo, .92);
 }
 function baixar(href, nome) { const a = document.createElement("a"); a.href = href; a.download = nome; document.body.appendChild(a); a.click(); a.remove(); }
+async function baixarFormato(f, { svg, arq, nome, cq }) {
+  try {
+    if (f === "pdf") return pdfPerfil({ svg, nome, cq });
+    baixar(await svgParaImagem(svg, f === "png" ? "image/png" : "image/jpeg"), `${arq}.${f}`);
+  } catch (e) { toast("Não foi possível gerar a imagem neste navegador.", "erro"); console.error(e); }
+}
+const dadosCartao = ({ av, nome, cq }) => ({ svg: svgCartao({ av, nome, cq }), arq: `meu-perfil-${String(nome).toLowerCase().normalize("NFD").replace(/[^\w]+/g, "-")}`, nome, cq });
 function baixarCartao({ eu, av, nome, cq }) {
-  const svg = svgCartao({ av, nome, cq }), arq = `meu-perfil-${String(nome).toLowerCase().normalize("NFD").replace(/[^\w]+/g, "-")}`;
+  const dados = dadosCartao({ av, nome, cq }), { svg } = dados;
   modal({ titulo: "⬇ Baixar meu cartão", conteudo: `<div class="cartao-previa">${svg.replace(/width="1080" height="1350"/, 'width="100%"')}</div>
       <div class="linha acoes" style="justify-content:center"><button type="button" data-f="png">🖼 PNG</button><button type="button" data-f="jpg" class="leve">📷 JPG</button><button type="button" data-f="pdf" class="leve">📄 PDF da página com as conquistas</button></div>
       <p class="pequeno" style="text-align:center">O cartão mostra só o seu personagem, o nível e as medalhas: <b>nenhuma nota</b>.</p>`, ok: "Fechar", largo: true,
-    aoAbrir: c => c.querySelectorAll("[data-f]").forEach(b => b.onclick = async () => {
-      try {
-        if (b.dataset.f === "pdf") return pdfPerfil({ svg, nome, cq });
-        baixar(await svgParaImagem(svg, b.dataset.f === "png" ? "image/png" : "image/jpeg"), `${arq}.${b.dataset.f}`);
-      } catch (e) { toast("Não foi possível gerar a imagem neste navegador.", "erro"); console.error(e); }
-    }) });
+    aoAbrir: c => c.querySelectorAll("[data-f]").forEach(b => b.onclick = () => baixarFormato(b.dataset.f, dados)) });
 }
 function pdfPerfil({ svg, nome, cq }) {
   const w = window.open("", "_blank");

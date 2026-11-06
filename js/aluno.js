@@ -1,4 +1,5 @@
 // Página do aluno: login, lista de provas, prova (uma questão por vez ou todas na página), resultado.
+import { ic } from "./icones.js";
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar, sortearAleatorio, esc, $, toast, dataBR, letra,
          idTentativaTeste, apagarTentativaTeste, confirmar, traduzirErro, iniciais, fecharModais, temaDe, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco, bancoDaQuestao, sortearQuestoes }
   from "./common.js";
@@ -102,7 +103,7 @@ $("#btnSair").onclick = () => sair();
 aoMudarLogin(async user => {
   if (!user) { eu = null; modoTeste = false; $("#faixaTeste").classList.add("oculto"); $("#quem").textContent = ""; $("#avatar").classList.add("oculto"); $("#btnSair").classList.add("oculto"); mostrar("telaLogin"); return; }
   const id = await identificar(user);
-  $("#quem").textContent = id.email; $("#btnSair").classList.remove("oculto");
+  $("#quem").textContent = (user.displayName || id.email.split("@")[0]).trim().split(/[\s._-]+/)[0]; $("#quem").title = id.email; $("#btnSair").classList.remove("oculto");
   await getDocs(collection(db, "itensCustom")).then(r => usarItensCustom(r.docs.map(d => ({ id: d.id, ...d.data() })))).catch(() => {});   // itens criados pela equipe
   await getDocs(collection(db, "mascotes")).then(r => { const m = {}; r.forEach(d => { m[d.id] = d.data().ativo || {}; }); definirEstilos(m); }).catch(() => {});   // visuais que os professores escolheram
   $("#avatar").textContent = iniciais(user.displayName || id.email); $("#avatar").title = user.displayName || id.email; $("#avatar").classList.remove("oculto");
@@ -127,7 +128,7 @@ aoMudarLogin(async user => {
     simulacao = true;
     // aluno FICTÍCIO (nada de nome real na simulação); o uid continua o da equipe só para separar o que fica no navegador
     eu = { uid: "sim-" + user.uid, email: "aluno.ficticio@simulacao.teste", nome: "Alex Fictício", nomeConta: "Alex Fictício" };
-    $("#faixaTeste").classList.remove("oculto"); $("#btnReiniciarTeste")?.classList.add("oculto"); $("#quem").textContent = eu.email; $("#avatar").textContent = "AF";
+    $("#faixaTeste").classList.remove("oculto"); $("#btnReiniciarTeste")?.classList.add("oculto"); $("#quem").textContent = "Alex"; $("#quem").title = eu.email; $("#avatar").textContent = "AF";
     $("#faixaTeste span").innerHTML = `<b>🧪 SIMULAÇÃO</b> — você está vendo a página de um aluno <b>fictício</b> (Alex). Nada é gravado e nenhum aluno vê. <a href="#simPainel">⚙ Ir para o painel da simulação</a>`;
     gami = await lerGamificacao();
     return desenharSimulacao();
@@ -260,11 +261,11 @@ async function listarProvas() {
     const podeFazer = modoTeste || p.liberada, podeVerResultado = modoTeste || p.resultadosLiberados;
     const andamento = p.modoExibicao === "todas" ? `${td?.indiceAtual || 0} de ${nQ(p, td)} enviadas` : `questão ${(td?.indiceAtual || 0) + 1} de ${nQ(p, td)}`;
     let status, acao;
-    if (!td)                    { status = `<span class="tag">○ não iniciada</span>`; acao = podeFazer ? `<button data-acao="inicio" data-id="${p.id}">Fazer a prova</button>` : `<span class="pequeno">prova encerrada</span>`; }
-    else if (!td.finalizadaEm)  { status = `<span class="tag aviso">em andamento · ${andamento}</span>`; acao = podeFazer ? `<button class="ok" data-acao="continuar" data-id="${p.id}">▶ Continuar</button>` : `<span class="pequeno">prova encerrada</span>`; }
-    else                        { status = `<span class="tag ok">✓ ${dataBR(td.finalizadaEm)}</span><span class="tag nota" data-placar="${p.id}">…</span>`; acao = podeVerResultado ? `<button class="sec" data-acao="resultado" data-id="${p.id}">Ver resultado</button>` : `<span class="pequeno">gabarito ainda não liberado</span>`; }
+    if (!td)                    { status = `<span class="chip off">○ não iniciada</span>`; acao = podeFazer ? `<button class="ok" data-acao="inicio" data-id="${p.id}">Fazer a prova</button>` : `<span class="pequeno">prova encerrada</span>`; }
+    else if (!td.finalizadaEm)  { status = `<span class="chip warn">em andamento · ${andamento}</span>`; acao = podeFazer ? `<button class="leve" data-acao="continuar" data-id="${p.id}">Continuar</button>` : `<span class="pequeno">prova encerrada</span>`; }
+    else                        { status = `<span class="chip ok">✓ ${dataBR(td.finalizadaEm)}</span><span class="chip navy" data-placar="${p.id}">…</span>`; acao = podeVerResultado ? `<button class="leve" data-acao="resultado" data-id="${p.id}">Ver resultado</button>` : `<span class="pequeno">gabarito ainda não liberado</span>`; }
     const item = `<div class="prova-item" data-busca="${esc(normBusca(`${p.titulo} ${p.turma || ""} ${p.materia || ""}`))}"><div class="info"><b>${esc(p.titulo)}</b>
-      <div class="pi-meta">${status}<span class="pequeno">${esc(p.turma || "")}${p.turma ? " · " : ""}${nQ(p, td)} questões</span></div></div><div class="acao">${acao}</div></div>`;
+      <div class="pi-meta">${status}</div><div class="pi-dados">${[p.materia, `${nQ(p, td)} questões`, p.tempoMinutos > 0 ? `${p.tempoMinutos} min` : ""].filter(Boolean).map(esc).join(" · ")}${!p.permitirTrocaAba && Number(p.maxTrocasDeAba) > 0 ? ` · <span class="e" aria-hidden="true">${"❤️".repeat(Math.min(5, Number(p.maxTrocasDeAba)))}</span>` : ""}</div></div><div class="acao">${acao}</div></div>`;
     if (td?.finalizadaEm) { feitas.insertAdjacentHTML("beforeend", item); feitasBox.hidden = false; $("#lpFeitasN").textContent = ++nFeitas; }
     else { fazer.insertAdjacentHTML(td ? "afterbegin" : "beforeend", item); nFazer++; }   // em andamento vai para o topo
     if (td?.finalizadaEm) {   // placar sem esperar: a lista não fica travada lendo gabaritos
@@ -1458,13 +1459,13 @@ async function verResultado() {
     let sua = perdida ? "<i>perdida por sair da prova</i>" : r === undefined ? "<i>não respondida</i>" : fmt ? bloco(textoResposta(q, r)) : q.tipo === "alternativa" ? esc(q.alternativas[r]) : `<span class="mono">${esc(r)}</span>`;
     let certa = fmt ? (g.chave ? bloco(textoChave(q, g)) : "—") : q.tipo === "alternativa" ? esc(q.alternativas?.[g.correta] ?? "—") : (g.respostasAceitas?.length ? `<span class="mono">${esc(g.respostasAceitas[0])}</span>` : "—");
     contagem[grupoSt(c.status)]++;
-    html += `<div class="card res-q" data-grupo="${grupoSt(c.status)}"><div class="q-topo"><span class="q-numero" style="font-size:1.1em">Questão ${i + 1}</span><span class="tag ${rot[0]}">${rot[1]} · ${c.pontos}/${peso}</span></div>
+    html += `<details class="card res-q" data-grupo="${grupoSt(c.status)}"${c.status === "certa" ? "" : " open"}><summary class="q-topo"><span class="ch" aria-hidden="true">${ic("chev")}</span><span class="q-numero">Questão ${i + 1}</span><span class="chip ${({ ok: "ok", erro: "err", aviso: "warn" })[rot[0]]}">${rot[1]} · ${c.pontos}/${peso}</span></summary>
       <div class="enunciado">${formatarEnunciado(q.enunciado)}</div>
       <p><b>Sua resposta:</b> ${sua}</p>
       ${c.status !== "certa" && certa !== "—" ? `<p><b>Resposta correta:</b> ${certa}</p>` : ""}
       ${g.explicacao ? `<div class="feedback ${c.status === "certa" ? "certa" : "errada"}"><span class="icone" aria-hidden="true">💡</span><div><b>Por quê:</b> ${esc(g.explicacao)}</div></div>` : ""}
       ${obs ? `<p class="pequeno"><b>Comentário do professor:</b> ${esc(obs)}</p>` : ""}
-      ${gami.apontamentos && !modoTeste ? `<button type="button" class="discreto mini b-apontar-res" data-qid="${esc(qid)}">🚩 Algo errado nesta questão?</button>` : ""}</div>`;
+      ${gami.apontamentos && !modoTeste ? `<button type="button" class="discreto mini b-apontar-res" data-qid="${esc(qid)}">🚩 Algo errado nesta questão?</button>` : ""}</details>`;
   });
   const nota = max ? Math.round((total / max) * 1000) / 10 : 0;
   const notaFinal = tentativa.nota ?? nota, tom = notaFinal >= 70 ? "ok" : notaFinal >= 50 ? "aviso" : "erro";
@@ -1476,5 +1477,8 @@ async function verResultado() {
   $("#resLista").innerHTML = (opcoes.length > 2 ? `<div id="resFiltro" class="res-filtro"></div>` : "") + html;
   if (opcoes.length > 2) chips($("#resFiltro"), opcoes, { valor: "todas", aria: "Mostrar as questões", aoMudar: v =>
     $("#resLista").querySelectorAll(".res-q").forEach(c => c.classList.toggle("res-escondida", v !== "todas" && c.dataset.grupo !== v)) });
+  // o PDF mostra todas as questões, abertas
+  window.onbeforeprint = () => { $("#resLista").querySelectorAll("details.res-q").forEach(d => { d.dataset.antes = d.open ? "1" : ""; d.open = true; }); };
+  window.onafterprint = () => { $("#resLista").querySelectorAll("details.res-q").forEach(d => { d.open = d.dataset.antes === "1"; }); };
   $("#resLista").querySelectorAll(".b-apontar-res").forEach(b => b.onclick = () => { const qid = b.dataset.qid; apontar(eu, { provaId: provaAtual.id, provaTitulo: provaAtual.titulo, qid, enunciado: qgs[ids.indexOf(qid)]?.q?.enunciado || "" }); });
 }
