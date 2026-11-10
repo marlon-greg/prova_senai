@@ -1581,6 +1581,7 @@ function acoesVidaHTML(l) {
     if (v) b.push(`<button class="ok mini" data-vrest="${l.t.id}" title="Devolve todas as vidas${l.perdidas ? " e as questões perdidas" : ""}"${v.usadas || l.perdidas ? "" : " disabled"}>${ic("heart", { size: 16 })}Restaurar vidas</button>`,
                   `<button class="leve mini" data-vmais="${l.t.id}" title="Dá uma vida a mais só para este aluno">${ic("plus", { size: 16 })}1 vida</button>`,
                   `<button class="leve mini" data-vmenos="${l.t.id}" title="${v.restam > 1 ? "Tira uma vida deste aluno" : "Resta só 1 vida: use Encerrar prova"}"${v.restam > 1 ? "" : " disabled"}>− 1 vida</button>`);
+    if (Number(resDados.prova.tempoMinutos) > 0) b.push(`<button class="leve mini" data-tempo="${l.t.id}" title="Dá mais minutos só para este aluno (ex.: caiu a internet)">⏱ + tempo</button>`);
     b.push(`<button class="perigo mini" data-encerrar="${l.t.id}" title="Encerra a prova só deste aluno, com as respostas já enviadas">⛔ Encerrar prova</button>`);
   } else b.push(`<button class="leve mini" data-reabrir="${l.t.id}" title="Volta a prova para o aluno continuar de onde parou">${ic("unlock", { size: 16 })}Reabrir prova</button>`);
   if (l.sinais.total || l.sinais.abas) b.push(`<button class="leve mini" data-sinais="${l.t.id}" title="Apaga sinais registrados por engano (aba, tela cheia, colar), sem mexer nas respostas">🧹 Apagar sinais</button>`);
@@ -1594,11 +1595,12 @@ function acoesVidaItens(l) {
   if (l.t.finalizadaEm) return itemMenu({ i: "unlock", t: "Reabrir prova", attrs: `data-reabrir="${l.t.id}" title="Volta a prova para o aluno continuar de onde parou"` })
     + itemSinais(l);
   const encerrar = itemMenu({ i: "lock", t: "Encerrar prova", attrs: `data-encerrar="${l.t.id}" title="Encerra a prova só deste aluno, com as respostas já enviadas"` });
-  if (!v) return encerrar + itemSinais(l);
+  const tempo = Number(resDados.prova.tempoMinutos) > 0 ? itemMenu({ i: "plus", t: "+ tempo", attrs: `data-tempo="${l.t.id}" title="Dá mais minutos só para este aluno"` }) : "";
+  if (!v) return tempo + encerrar + itemSinais(l);
   return itemMenu({ i: "heart", t: "Restaurar vidas", attrs: `data-vrest="${l.t.id}" title="Devolve todas as vidas${l.perdidas ? " e as questões perdidas" : ""}"${v.usadas || l.perdidas ? "" : " disabled"}` })
     + itemMenu({ i: "plus", t: "+1 vida", attrs: `data-vmais="${l.t.id}" title="Dá uma vida a mais só para este aluno"` })
     + itemMenu({ i: "x", t: "−1 vida", attrs: `data-vmenos="${l.t.id}" title="${v.restam > 1 ? "Tira uma vida deste aluno" : "Resta só 1 vida: use Encerrar prova"}"${v.restam > 1 ? "" : " disabled"}` })
-    + encerrar + itemSinais(l);
+    + tempo + encerrar + itemSinais(l);
 }
 function ligarAcoesVida(raiz) {
   const achar = id => [...resDados.linhas, ...resDados.testes].find(x => x.t.id === id);
@@ -1607,6 +1609,7 @@ function ligarAcoesVida(raiz) {
   raiz.querySelectorAll("[data-vmenos]").forEach(b => b.onclick = () => tirarVida(achar(b.dataset.vmenos)));
   raiz.querySelectorAll("[data-encerrar]").forEach(b => b.onclick = () => encerrarProvas([achar(b.dataset.encerrar)]));
   raiz.querySelectorAll("[data-reabrir]").forEach(b => b.onclick = () => reabrirProva(achar(b.dataset.reabrir)));
+  raiz.querySelectorAll("[data-tempo]").forEach(b => b.onclick = () => maisTempo(achar(b.dataset.tempo)));
   raiz.querySelectorAll("[data-sinais]").forEach(b => b.onclick = () => apagarSinais(achar(b.dataset.sinais)));
 }
 // questões perdidas por sair da prova (respostas com perdida: true): o professor pode devolver
@@ -1635,6 +1638,28 @@ async function restaurarVidas(l) {
     toast(`Vidas de ${nome} restauradas ❤️`, "ok");
     await recarregarTentativa(l.t.id);
   } catch (e) { toast("Não foi possível restaurar as vidas. " + traduzirErro(e), "erro"); console.error(e); }
+}
+// mais minutos só para este aluno (ex.: caiu a internet). A tela dele atualiza o cronômetro sozinha.
+async function maisTempo(l) {
+  if (!l || l.t.finalizadaEm) return;
+  const nome = l.t.nome || l.t.email, ja = Number(l.t.minutosExtras || 0);
+  let min = 10;
+  const ok = await modal({
+    titulo: `⏱ Mais tempo para ${nome}`, ok: "Dar mais tempo", cancelar: "Cancelar",
+    conteudo: `<label for="mtMin">Minutos a mais</label><input type="number" id="mtMin" min="1" max="240" step="1" value="10">
+      <p class="pequeno">${ja ? `Já recebeu ${ja} min a mais. ` : ""}O cronômetro do aluno atualiza sozinho. Se o tempo dele já acabou e a prova foi finalizada, use <b>Reabrir prova</b>.</p>`,
+    antesDeConfirmar: caixa => {
+      const v = Math.round(Number(caixa.querySelector("#mtMin")?.value || 0));
+      if (!(v >= 1 && v <= 240)) { toast("Escolha de 1 a 240 minutos.", "erro"); return false; }
+      min = v;
+    }
+  });
+  if (!ok) return;
+  try {
+    await updateDoc(doc(db, "tentativas", l.t.id), { minutosExtras: increment(min) });
+    toast(`+${min} min para ${nome} ⏱`, "ok");
+    await recarregarTentativa(l.t.id);
+  } catch (e) { toast("Não foi possível dar mais tempo. " + traduzirErro(e), "erro"); console.error(e); }
 }
 async function vidaExtra(l) {
   if (!l) return;
