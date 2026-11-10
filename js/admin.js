@@ -1571,14 +1571,15 @@ function acoesVidaHTML(l) {
                   `<button class="leve mini" data-vmais="${l.t.id}" title="Dá uma vida a mais só para este aluno">${ic("plus", { size: 16 })}1 vida</button>`,
                   `<button class="leve mini" data-vmenos="${l.t.id}" title="${v.restam > 1 ? "Tira uma vida deste aluno" : "Resta só 1 vida: use Encerrar prova"}"${v.restam > 1 ? "" : " disabled"}>− 1 vida</button>`);
     b.push(`<button class="perigo mini" data-encerrar="${l.t.id}" title="Encerra a prova só deste aluno, com as respostas já enviadas">⛔ Encerrar prova</button>`);
-  } else b.push(`<button class="leve mini" data-reabrir="${l.t.id}" title="Volta a prova para o aluno continuar de onde parou">${ic("unlock", { size: 16 })}Reabrir prova</button>`);
+  } else b.push(`<button class="leve mini" data-reabrir="${l.t.id}" title="Volta a prova para o aluno continuar de onde parou">${ic("unlock", { size: 16 })}Reabrir prova</button>${l.sinais.abas && !l.sinais.abasPermitido ? ` <button class="ok mini" data-perdoar="${l.t.id}" title="Apaga as vidas perdidas sem reabrir a prova (ex.: saiu da tela sem querer)">${ic("heart", { size: 16 })}Devolver vidas</button>` : ""}`);
   return b.join(" ");
 }
 // ações de vidas no menu ⋯ da linha (mesmos data-*: ligarAcoesVida cuida dos cliques)
 function acoesVidaItens(l) {
   if (!podeCuidar()) return "";
   const v = vidasDe(l.t);
-  if (l.t.finalizadaEm) return itemMenu({ i: "unlock", t: "Reabrir prova", attrs: `data-reabrir="${l.t.id}" title="Volta a prova para o aluno continuar de onde parou"` });
+  if (l.t.finalizadaEm) return itemMenu({ i: "unlock", t: "Reabrir prova", attrs: `data-reabrir="${l.t.id}" title="Volta a prova para o aluno continuar de onde parou"` })
+    + (l.sinais.abas && !l.sinais.abasPermitido ? itemMenu({ i: "heart", t: "Devolver vidas", attrs: `data-perdoar="${l.t.id}" title="Apaga as vidas perdidas sem reabrir a prova"` }) : "");
   const encerrar = itemMenu({ i: "lock", t: "Encerrar prova", attrs: `data-encerrar="${l.t.id}" title="Encerra a prova só deste aluno, com as respostas já enviadas"` });
   if (!v) return encerrar;
   return itemMenu({ i: "heart", t: "Restaurar vidas", attrs: `data-vrest="${l.t.id}" title="Devolve todas as vidas${l.perdidas ? " e as questões perdidas" : ""}"${v.usadas || l.perdidas ? "" : " disabled"}` })
@@ -1593,6 +1594,7 @@ function ligarAcoesVida(raiz) {
   raiz.querySelectorAll("[data-vmenos]").forEach(b => b.onclick = () => tirarVida(achar(b.dataset.vmenos)));
   raiz.querySelectorAll("[data-encerrar]").forEach(b => b.onclick = () => encerrarProvas([achar(b.dataset.encerrar)]));
   raiz.querySelectorAll("[data-reabrir]").forEach(b => b.onclick = () => reabrirProva(achar(b.dataset.reabrir)));
+  raiz.querySelectorAll("[data-perdoar]").forEach(b => b.onclick = () => perdoarVidas(achar(b.dataset.perdoar)));
 }
 // questões perdidas por sair da prova (respostas com perdida: true): o professor pode devolver
 const perdidasDe = id => Object.entries(cacheTent.get(id)?.resp || {}).filter(([, r]) => r?.perdida === true).map(([q]) => q);
@@ -1673,6 +1675,37 @@ async function encerrarProvas(ls, { todos = false } = {}) {
     toast(ls.length === 1 ? `Prova de ${nomes[0]} encerrada` : `${ls.length} provas encerradas`, "ok");
     if (!$("#rAoVivo").checked) carregarResultados();
   } catch (e) { toast("Não foi possível encerrar. " + traduzirErro(e), "erro"); console.error(e); }
+}
+// prova já terminada: apaga vidas perdidas por engano (ex.: o carregador caiu no ESC) sem reabrir nem mexer nas respostas.
+// Diminui o contador de vidas perdidas como se a saída não tivesse acontecido: não aparece no relatório nem nas conquistas do aluno.
+async function perdoarVidas(l) {
+  if (!l || !l.t.finalizadaEm) return;
+  const nome = l.t.nome || l.t.email, total = l.sinais.abas;
+  if (!total) return toast(`${nome} não perdeu vidas nesta prova.`, "ok");
+  let n = total;
+  const ok = await modal({
+    titulo: `❤️ Devolver vidas a ${nome}`, ok: "Devolver vidas", cancelar: "Cancelar",
+    conteudo: `<p>${esc(nome)} perdeu <b>${total === 1 ? "1 vida" : `${total} vidas`}</b> nesta prova. As vidas devolvidas somem do histórico, como se a saída não tivesse acontecido.
+        A prova continua terminada, com as mesmas respostas e a mesma nota.</p>
+      ${total > 1 ? `<label for="pvN">Quantas vidas devolver</label><input type="number" id="pvN" min="1" max="${total}" step="1" value="${total}">` : ""}
+      ${l.t.encerradaPor === "trocasDeAba" ? `<div class="aviso-box erro" style="margin-top:12px">A prova foi <b>encerrada porque as vidas acabaram</b>. Devolver as vidas não reabre a prova: para o aluno continuar, use <b>Reabrir prova</b>.</div>` : ""}
+      ${l.sinais.telaCheia ? `<p class="pequeno">As saídas da tela cheia (⛶ ${l.sinais.telaCheia}) continuam registradas como sinal.</p>` : ""}`,
+    antesDeConfirmar: caixa => {
+      const v = Math.round(Number(caixa.querySelector("#pvN")?.value || total));
+      if (!(v >= 1 && v <= total)) { toast(`Escolha de 1 a ${total}.`, "erro"); return false; }
+      n = v;
+    }
+  });
+  if (!ok) return;
+  // tira primeiro do contador atual e depois do acumulado (o que foi zerado ao perder questão ou restaurar)
+  const atual = l.t.trocasDeAba || 0, doAtual = Math.min(atual, n), doAcum = n - doAtual;
+  const dados = { trocasDeAba: atual - doAtual };
+  if (doAcum) dados.trocasDeAbaTotal = Math.max(0, (l.t.trocasDeAbaTotal || 0) - doAcum);
+  try {
+    await updateDoc(doc(db, "tentativas", l.t.id), dados);
+    toast(`${n === 1 ? "1 vida devolvida" : `${n} vidas devolvidas`} a ${nome} ❤️`, "ok");
+    await recarregarTentativa(l.t.id);
+  } catch (e) { toast("Não foi possível devolver as vidas. " + traduzirErro(e), "erro"); console.error(e); }
 }
 async function reabrirProva(l) {
   if (!l) return;
