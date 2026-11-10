@@ -2116,7 +2116,7 @@ function pintarResumoIA(revisar) {
 }
 function atualizarControlesIA() {
   const ok = souDono() && !!iaCfg;
-  $("#btnCorrigirIA").disabled = !ok || rodandoIA; $("#iaAuto").disabled = !ok; $("#iaRefazer").disabled = !ok;
+  $("#btnCorrigirIA").disabled = !ok || rodandoIA; $("#btnPenteFino").disabled = !ok || rodandoIA; $("#iaAuto").disabled = !ok; $("#iaRefazer").disabled = !ok;
   if (!ok) $("#iaAuto").checked = false;
   const p = resDados?.prova, estado = !p ? "" : p.iaAutomatica === false ? " Esta prova: correção automática DESLIGADA (ligue na aba Provas)." : urlCorretorCfg ? " Esta prova: corrigida pelo servidor quando o aluno finaliza." : " Esta prova: corrigida por este painel com o ao vivo ligado.";
   $("#iaAviso").textContent = (ok ? `Modelo: ${iaCfg.modelo}. A IA pode errar: confira as marcadas com 🤖 IA.` : "Configure a chave em Configuração.") + estado;
@@ -2161,9 +2161,9 @@ function pendentesIA({ refazer = false } = {}) {
   }
   return lista;
 }
-function corrigirPendentesIA({ auto = false } = {}) {
+function corrigirPendentesIA({ auto = false, refazer = null } = {}) {
   if (!souDono() || !iaCfg) return;
-  let itens = pendentesIA({ refazer: !auto && $("#iaRefazer").checked });
+  let itens = pendentesIA({ refazer: refazer ?? (!auto && $("#iaRefazer").checked) });
   if (auto) itens = itens.filter(it => !tentadasAutoIA.has(it.tid + "/" + it.qid));   // ao vivo: nunca repete (nem as que deram erro)
   let novos = 0;
   for (const it of itens) {
@@ -2245,6 +2245,18 @@ async function processarFilaIA() {
     if (iaFeitas || iaErros) toast(`IA: ${iaFeitas} corrigida(s)${iaErros ? `, ${iaErros} com erro (veja no detalhe do aluno)` : ""}.`, iaErros ? "erro" : "ok");
   }
 }
+// PENTE FINO: corrige de novo, com as regras atuais, todas as dissertativas desta prova que a IA já corrigiu (e as pendentes).
+// A correção manual do professor nunca é mexida.
+$("#btnPenteFino").onclick = async () => {
+  if (!resDados) return toast("Carregue uma prova primeiro.", "erro");
+  if (rodandoIA) return toast("A IA já está corrigindo. Espere terminar.", "erro");
+  const itens = pendentesIA({ refazer: true });
+  if (!itens.length) return toast("Nenhuma dissertativa corrigida pela IA nesta prova.", "info");
+  const alunos = new Set(itens.map(x => x.tid)).size;
+  if (!(await confirmar(`Corrigir de novo ${pl(itens.length, "resposta", "respostas")} de ${pl(alunos, "aluno", "alunos")} com as regras atuais da IA?\n\nAs suas correções manuais não mudam. É uma chamada à IA por resposta (gasta créditos) e leva alguns minutos.`,
+    { titulo: "🔎 Pente fino", ok: "Corrigir de novo" }))) return;
+  corrigirPendentesIA({ refazer: true });
+};
 $("#btnCorrigirIA").onclick = () => {
   if (!resDados) return toast("Carregue uma prova primeiro.", "erro");
   corrigirPendentesIA();
