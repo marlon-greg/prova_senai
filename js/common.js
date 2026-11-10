@@ -188,16 +188,53 @@ export function bancoDaQuestao(qid, padrao) {
 export async function questoesDisponiveis(prova) {
   const bancos = bancosDaProva(prova);
   const lotes = await Promise.all(bancos.map(b => getDocs(collection(db, "bancos", b, "questoes"))));
-  const ids = [], diss = [], alt = [], tipo = {};
+  const ids = [], diss = [], alt = [], tipo = {}, dados = {};
   lotes.forEach((qs, i) => {
     const temas = temasDoBanco(prova, bancos[i]);
     qs.forEach(d => {
       if (temas && !temas.has(temaDe(d.data()))) return;
       const t = d.data().tipo === "dissertativa" ? "dissertativa" : "alternativa";
-      ids.push(d.id); (t === "dissertativa" ? diss : alt).push(d.id); tipo[d.id] = t;
+      ids.push(d.id); (t === "dissertativa" ? diss : alt).push(d.id); tipo[d.id] = t; dados[d.id] = d.data();
     });
   });
-  return { ids, alt, diss, tipo };
+  return { ids, alt, diss, tipo, dados };
+}
+// QUESTÕES IRMÃS: a mesma pergunta com outro enunciado (ou a mesma questão em dois bancos).
+// Podem cair para pessoas diferentes, nunca duas na prova da mesma pessoa.
+// São irmãs quando: têm o mesmo "grupo" (campo opcional no banco), as mesmas alternativas (em qualquer ordem,
+// 3 de 4 já bastam) ou enunciados com a maioria das palavras em comum.
+const PARADAS = new Set("que qual quais como para por com sem uma uns umas dos das nos nas num numa pelo pela pelos pelas sobre entre quando onde quem cujo isso este esta esse essa aquele aquela seu sua seus suas mais menos muito ser sao esta estao tem ter abaixo acima seguinte seguintes correta corretamente certo errado alternativa opcao assinale marque indique responda explique descreva cite exemplo voce".split(" "));
+const normTexto = t => String(t ?? "").normalize("NFD").replace(/\p{M}+/gu, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+const palavrasDe = t => new Set(normTexto(t).split(" ").filter(p => p.length >= 3 && !PARADAS.has(p)));
+function parecidos(a, b) {   // fração de itens em comum (sobre o maior conjunto)
+  if (!a.size || !b.size) return 0;
+  let n = 0; a.forEach(x => { if (b.has(x)) n++; });
+  return n / Math.max(a.size, b.size);
+}
+// mesmo contexto no começo (ex.: "Contexto: a empresa X..."): compara só a pergunta, o que vem depois do trecho igual
+function perguntasParecidas(a, b) {
+  let i = 0; while (i < a.length && i < b.length && a[i] === b[i]) i++;
+  if (i >= 40) { const corte = a.lastIndexOf(" ", i); a = a.slice(corte + 1); b = b.slice(corte + 1); }
+  const pa = palavrasDe(a), pb = palavrasDe(b);
+  return pa.size >= 4 && pb.size >= 4 && parecidos(pa, pb) >= 0.6;
+}
+export function gruposDeIrmas(dados) {
+  const ids = Object.keys(dados), pai = {}, raiz = x => pai[x] === x ? x : (pai[x] = raiz(pai[x]));
+  const info = ids.map(id => {
+    const q = dados[id] || {}; pai[id] = id;
+    const alts = Array.isArray(q.alternativas) ? new Set(q.alternativas.map(normTexto).filter(Boolean)) : new Set();
+    return { id, grupo: String(q.grupo || "").trim().toLowerCase(), alts, txt: normTexto(q.enunciado) };
+  });
+  for (let i = 0; i < info.length; i++) for (let j = i + 1; j < info.length; j++) {
+    const a = info[i], b = info[j];
+    const irmas = (a.grupo && a.grupo === b.grupo)
+      || (a.txt && a.txt === b.txt)
+      || (a.alts.size >= 3 && b.alts.size >= 3 && parecidos(a.alts, b.alts) >= 0.75)
+      || perguntasParecidas(a.txt, b.txt);
+    if (irmas) pai[raiz(a.id)] = raiz(b.id);
+  }
+  const g = {}; ids.forEach(id => g[id] = raiz(id));
+  return g;   // id -> id do grupo
 }
 // cota padrão da prova: quantas alternativas e dissertativas cada aluno recebe
 export function cotaDaProva(p) {
@@ -207,11 +244,25 @@ export function cotaDaProva(p) {
 // sorteia as questões da prova (ids), igual para todo aluno: só temas marcados, respeitando a cota de tipos.
 // cota = { nA, nD } opcional (acessibilidade: o professor escolhe quantas de cada tipo).
 export async function sortearQuestoes(prova, cota = null) {
-  const { ids, alt, diss } = await questoesDisponiveis(prova);
+  const { ids, alt, diss, dados } = await questoesDisponiveis(prova);
+  // no máximo uma questão de cada grupo de irmãs; se o banco não tiver grupos suficientes, completa com as que sobraram
+  // (a prova nunca deixa de abrir por causa deste filtro)
+  let grupo = {};
+  try { grupo = gruposDeIrmas(dados); } catch (e) { console.warn("grupos de questões irmãs", e); }
+  const usados = new Set();
+  const pegar = (lista, n) => {
+    const ordem = sortearAleatorio(lista, lista.length), sai = [], resto = [];
+    for (const id of ordem) {
+      const g = grupo[id] || id;
+      if (sai.length < n && !usados.has(g)) { usados.add(g); sai.push(id); } else resto.push(id);
+    }
+    while (sai.length < n && resto.length) sai.push(resto.shift());
+    return sai;
+  };
   if (cota) {
     if (cota.nA + cota.nD < 1) throw new Error("Escolha pelo menos 1 questão.");
     if (diss.length < cota.nD || alt.length < cota.nA) throw new Error(`Não há questões suficientes: ${alt.length} alternativas e ${diss.length} dissertativas disponíveis nos temas da prova.`);
-    return sortearAleatorio([...sortearAleatorio(diss, cota.nD), ...sortearAleatorio(alt, cota.nA)], cota.nA + cota.nD);
+    return sortearAleatorio([...pegar(diss, cota.nD), ...pegar(alt, cota.nA)], cota.nA + cota.nD);
   }
   if (ids.length < prova.nQuestoes) throw new Error("O banco não tem questões suficientes nos temas escolhidos. Avise o professor.");
   const nD = Number(prova.nDissertativas || 0);
@@ -219,11 +270,11 @@ export async function sortearQuestoes(prova, cota = null) {
     // cota fixa: exatamente nAlternativas alternativas + nDissertativas dissertativas
     const nA = Number(prova.nAlternativas || 0);
     if (diss.length < nD || alt.length < nA) throw new Error("O banco não tem questões suficientes de cada tipo nos temas escolhidos. Avise o professor.");
-    return sortearAleatorio([...sortearAleatorio(diss, nD), ...sortearAleatorio(alt, nA)], nA + nD);
+    return sortearAleatorio([...pegar(diss, nD), ...pegar(alt, nA)], nA + nD);
   }
   if (nD > 0 && diss.length >= nD && alt.length >= prova.nQuestoes - nD)
-    return sortearAleatorio([...sortearAleatorio(diss, nD), ...sortearAleatorio(alt, prova.nQuestoes - nD)], prova.nQuestoes);
-  return sortearAleatorio(ids, prova.nQuestoes);
+    return sortearAleatorio([...pegar(diss, nD), ...pegar(alt, prova.nQuestoes - nD)], prova.nQuestoes);
+  return pegar(ids, prova.nQuestoes);
 }
 export function ordenarTemas(lista) { return [...new Set(lista)].sort((a, b) => a.localeCompare(b, "pt-BR")); }
 // chave do nome completo para vincular aluno cadastrado só pelo nome (IGUAL à chaveNome do firestore.rules):
