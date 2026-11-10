@@ -360,20 +360,21 @@ service cloud.firestore {
             && request.resource.data.get('trocasDeAba', 0) + request.resource.data.get('trocasDeAbaTotal', 0)
                  >= resource.data.get('trocasDeAba', 0) + resource.data.get('trocasDeAbaTotal', 0))
            // professor: fecha a nota e grava o placar que o aluno vê (acertos, nota prévia, pendentes)
-           // e cuida das VIDAS do aluno: restaurar, dar vida extra, reabrir a prova (ex.: aluno com TEA)
+           // e cuida das VIDAS do aluno: restaurar, dar vida extra, reabrir a prova (ex.: aluno com TEA) e apagar sinais registrados por engano
         || (professor()
             && request.resource.data.diff(resource.data).affectedKeys().hasOnly(
                  ['nota', 'notaMaxima', 'corrigidaEm', 'corrigidaPor',
                   'acertos', 'totalQuestoes', 'notaPrevia', 'aguardandoCorrecao',
                   'trocasDeAba', 'trocasDeAbaTotal', 'vidasExtras', 'vidasRestauradas', 'vidasRestauradasEm',
                   'vidasRestauradasPor', 'finalizadaEm', 'encerradaPor', 'indiceAtual', 'tempoTotalSegundos',
-                  'minutosExtras', 'reabertaEm', 'reabertaPor']))
+                  'minutosExtras', 'reabertaEm', 'reabertaPor', 'saidasTelaCheia', 'tentativasColar']))
            // auxiliar de inclusão: vidas e reabrir a prova dos alunos vinculados a ela
         || (minhaAluna(resource.data.email.lower())
             && request.resource.data.diff(resource.data).affectedKeys().hasOnly(
                  ['trocasDeAba', 'trocasDeAbaTotal', 'vidasExtras', 'vidasRestauradas', 'vidasRestauradasEm',
                   'vidasRestauradasPor', 'finalizadaEm', 'encerradaPor', 'indiceAtual', 'tempoTotalSegundos',
-                  'minutosExtras', 'reabertaEm', 'reabertaPor', 'acertos', 'totalQuestoes', 'nota', 'notaPrevia', 'aguardandoCorrecao']))
+                  'minutosExtras', 'reabertaEm', 'reabertaPor', 'acertos', 'totalQuestoes', 'nota', 'notaPrevia', 'aguardandoCorrecao',
+                  'saidasTelaCheia', 'tentativasColar']))
            // equipe: a própria tentativa de teste
         || (equipe() && resource.data.get('teste', false) == true && resource.data.uid == uid())
         || (professor() && resource.data.get('simulado', false) == true);

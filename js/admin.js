@@ -505,6 +505,11 @@ function formProvaHTML(f) {
     <p class="pequeno" style="margin:4px 0 0">Aluno perdeu vidas sem querer (ex.: TEA)? Em <b>Resultados</b> você restaura as vidas, dá vida extra ou reabre a prova dele.</p>
   </fieldset>
   <fieldset class="temas-box">
+    <legend>Correção</legend>
+    <label class="check"><input type="checkbox" id="${f}IaAuto" checked> <span>🤖 Corrigir as dissertativas com IA automaticamente</span></label>
+    <p class="pequeno" style="margin:4px 0 0">Ligado: cada prova é corrigida quando o aluno finaliza (pelo servidor de correção, ou pelo painel aberto em Resultados com o ao vivo). Desligado: você corrige à mão ou clica em Corrigir com IA quando quiser. A nota fica provisória até corrigir.</p>
+  </fieldset>
+  <fieldset class="temas-box">
     <legend>Material de consulta (opcional) <button data-ajuda-item="slides"></button></legend>
     <div class="grade">
       <div><label for="${f}MatTitulo">Título do material (topo do painel)</label><input type="text" id="${f}MatTitulo" placeholder="Slides das aulas 6 a 8"></div>
@@ -795,6 +800,7 @@ function controleProva(f) {
     opcoesMaterial(idsConsulta(p));
     $f("MaxTrocas").value = p.maxTrocasDeAba || 0; $f("AcaoExceder").value = p.acaoAoExceder === "perderQuestao" ? "perderQuestao" : "encerrar";
     $f("ColarVida").checked = p.colarTiraVida !== false;
+    $f("IaAuto").checked = p.iaAutomatica !== false;
     previaMaterial(); atualizarLimite();
   }
   // lê e valida; devolve { erro } ou { dados }
@@ -822,6 +828,7 @@ function controleProva(f) {
       permitirTrocaAba: $f("PermitirTrocaAba").checked, permitirColar: $f("PermitirColar").checked,
       maxTrocasDeAba: $f("PermitirTrocaAba").checked ? 0 : Math.min(10, Math.max(0, Math.round(Number($f("MaxTrocas").value || 0)))),
       colarTiraVida: $f("ColarVida").checked,
+      iaAutomatica: $f("IaAuto").checked,
       acaoAoExceder: $f("Modo").value !== "todas" && !$f("Voltar").checked && $f("AcaoExceder").value === "perderQuestao" ? "perderQuestao" : "encerrar",
       // vários PDFs em materiaisConsultaIds; materialConsultaArquivoId (um PDF só) fica para provas antigas
       materialConsultaUrl: url, materiaisConsultaIds: arquivos, materialConsultaArquivoId: null,
@@ -1425,6 +1432,7 @@ function pararAoVivo() {
   $("#aoVivo").classList.add("oculto");
 }
 
+let provaIAPadrao = null;   // prova em que o "Automático ao vivo" já recebeu o padrão da prova (depois vale o que o professor escolher)
 async function carregarResultados() {
   pararAoVivo();
   const provaId = $("#rProva").value; if (!provaId) return;
@@ -1437,6 +1445,9 @@ async function carregarResultados() {
   // alunos com acessibilidade: as questões deles podem estar em outro formato (gabarito privado)
   const acessEmails = new Set((await getDocs(ehInclusao() ? query(collection(db, "acessibilidade"), where("auxiliares", "array-contains", eu.email)) : collection(db, "acessibilidade")).catch(() => null))?.docs.map(d => d.id) || []);
   resDados = { prova, questoes, gabaritos, turma, acessEmails, linhas: [], testes: [] };
+  // correção automática da prova: sem servidor, o painel aberto (ao vivo) faz o papel dele
+  if (souDono() && iaCfg && provaIAPadrao !== provaId && $("#rAoVivo").checked) { provaIAPadrao = provaId; $("#iaAuto").checked = prova.iaAutomatica !== false && !urlCorretorCfg; }
+  atualizarControlesIA();
   cacheTent.clear(); detalheId = null;
   // auxiliar de inclusão: só as tentativas dos alunos vinculados a ela (lidas pelo id: <uid do aluno>_<prova>)
   if (ehInclusao()) {
@@ -1571,21 +1582,23 @@ function acoesVidaHTML(l) {
                   `<button class="leve mini" data-vmais="${l.t.id}" title="Dá uma vida a mais só para este aluno">${ic("plus", { size: 16 })}1 vida</button>`,
                   `<button class="leve mini" data-vmenos="${l.t.id}" title="${v.restam > 1 ? "Tira uma vida deste aluno" : "Resta só 1 vida: use Encerrar prova"}"${v.restam > 1 ? "" : " disabled"}>− 1 vida</button>`);
     b.push(`<button class="perigo mini" data-encerrar="${l.t.id}" title="Encerra a prova só deste aluno, com as respostas já enviadas">⛔ Encerrar prova</button>`);
-  } else b.push(`<button class="leve mini" data-reabrir="${l.t.id}" title="Volta a prova para o aluno continuar de onde parou">${ic("unlock", { size: 16 })}Reabrir prova</button>${l.sinais.abas && !l.sinais.abasPermitido ? ` <button class="ok mini" data-perdoar="${l.t.id}" title="Apaga as vidas perdidas sem reabrir a prova (ex.: saiu da tela sem querer)">${ic("heart", { size: 16 })}Devolver vidas</button>` : ""}`);
+  } else b.push(`<button class="leve mini" data-reabrir="${l.t.id}" title="Volta a prova para o aluno continuar de onde parou">${ic("unlock", { size: 16 })}Reabrir prova</button>`);
+  if (l.sinais.total || l.sinais.abas) b.push(`<button class="leve mini" data-sinais="${l.t.id}" title="Apaga sinais registrados por engano (aba, tela cheia, colar), sem mexer nas respostas">🧹 Apagar sinais</button>`);
   return b.join(" ");
 }
 // ações de vidas no menu ⋯ da linha (mesmos data-*: ligarAcoesVida cuida dos cliques)
+const itemSinais = l => l.sinais.total || l.sinais.abas ? itemMenu({ i: "x", t: "Apagar sinais", attrs: `data-sinais="${l.t.id}" title="Apaga sinais registrados por engano, sem mexer nas respostas"` }) : "";
 function acoesVidaItens(l) {
   if (!podeCuidar()) return "";
   const v = vidasDe(l.t);
   if (l.t.finalizadaEm) return itemMenu({ i: "unlock", t: "Reabrir prova", attrs: `data-reabrir="${l.t.id}" title="Volta a prova para o aluno continuar de onde parou"` })
-    + (l.sinais.abas && !l.sinais.abasPermitido ? itemMenu({ i: "heart", t: "Devolver vidas", attrs: `data-perdoar="${l.t.id}" title="Apaga as vidas perdidas sem reabrir a prova"` }) : "");
+    + itemSinais(l);
   const encerrar = itemMenu({ i: "lock", t: "Encerrar prova", attrs: `data-encerrar="${l.t.id}" title="Encerra a prova só deste aluno, com as respostas já enviadas"` });
-  if (!v) return encerrar;
+  if (!v) return encerrar + itemSinais(l);
   return itemMenu({ i: "heart", t: "Restaurar vidas", attrs: `data-vrest="${l.t.id}" title="Devolve todas as vidas${l.perdidas ? " e as questões perdidas" : ""}"${v.usadas || l.perdidas ? "" : " disabled"}` })
     + itemMenu({ i: "plus", t: "+1 vida", attrs: `data-vmais="${l.t.id}" title="Dá uma vida a mais só para este aluno"` })
     + itemMenu({ i: "x", t: "−1 vida", attrs: `data-vmenos="${l.t.id}" title="${v.restam > 1 ? "Tira uma vida deste aluno" : "Resta só 1 vida: use Encerrar prova"}"${v.restam > 1 ? "" : " disabled"}` })
-    + encerrar;
+    + encerrar + itemSinais(l);
 }
 function ligarAcoesVida(raiz) {
   const achar = id => [...resDados.linhas, ...resDados.testes].find(x => x.t.id === id);
@@ -1594,7 +1607,7 @@ function ligarAcoesVida(raiz) {
   raiz.querySelectorAll("[data-vmenos]").forEach(b => b.onclick = () => tirarVida(achar(b.dataset.vmenos)));
   raiz.querySelectorAll("[data-encerrar]").forEach(b => b.onclick = () => encerrarProvas([achar(b.dataset.encerrar)]));
   raiz.querySelectorAll("[data-reabrir]").forEach(b => b.onclick = () => reabrirProva(achar(b.dataset.reabrir)));
-  raiz.querySelectorAll("[data-perdoar]").forEach(b => b.onclick = () => perdoarVidas(achar(b.dataset.perdoar)));
+  raiz.querySelectorAll("[data-sinais]").forEach(b => b.onclick = () => apagarSinais(achar(b.dataset.sinais)));
 }
 // questões perdidas por sair da prova (respostas com perdida: true): o professor pode devolver
 const perdidasDe = id => Object.entries(cacheTent.get(id)?.resp || {}).filter(([, r]) => r?.perdida === true).map(([q]) => q);
@@ -1676,36 +1689,49 @@ async function encerrarProvas(ls, { todos = false } = {}) {
     if (!$("#rAoVivo").checked) carregarResultados();
   } catch (e) { toast("Não foi possível encerrar. " + traduzirErro(e), "erro"); console.error(e); }
 }
-// prova já terminada: apaga vidas perdidas por engano (ex.: o carregador caiu no ESC) sem reabrir nem mexer nas respostas.
-// Diminui o contador de vidas perdidas como se a saída não tivesse acontecido: não aparece no relatório nem nas conquistas do aluno.
-async function perdoarVidas(l) {
-  if (!l || !l.t.finalizadaEm) return;
-  const nome = l.t.nome || l.t.email, total = l.sinais.abas;
-  if (!total) return toast(`${nome} não perdeu vidas nesta prova.`, "ok");
-  let n = total;
+// apaga sinais registrados por engano (ex.: o carregador caiu no ESC), durante ou depois da prova, sem mexer nas respostas.
+// Some do relatório, do chip "Sinais" e das conquistas do aluno, como se não tivesse acontecido.
+// Vidas perdidas (trocas de aba e saídas da tela cheia contam vida): apagar devolve as vidas. Com a prova em andamento,
+// a tela do aluno atualiza sozinha; se a prova foi encerrada porque as vidas acabaram, ela continua encerrada (use Reabrir prova).
+async function apagarSinais(l) {
+  if (!l) return;
+  const nome = l.t.nome || l.t.email, s = l.sinais;
+  const tipos = [
+    { k: "abas", n: s.abasPermitido ? 0 : s.abas, rot: "🔀 Vidas perdidas (troca de aba/janela ou saída da tela cheia)" },
+    { k: "tela", n: s.telaCheia, rot: "⛶ Saídas da tela cheia (registro)" },
+    { k: "colar", n: s.colar, rot: "📋 Tentativas de colar" }
+  ].filter(x => x.n > 0);
+  if (!tipos.length) return toast(`${nome} não tem sinais nesta prova.`, "ok");
+  const escolha = {};
   const ok = await modal({
-    titulo: `❤️ Devolver vidas a ${nome}`, ok: "Devolver vidas", cancelar: "Cancelar",
-    conteudo: `<p>${esc(nome)} perdeu <b>${total === 1 ? "1 vida" : `${total} vidas`}</b> nesta prova. As vidas devolvidas somem do histórico, como se a saída não tivesse acontecido.
-        A prova continua terminada, com as mesmas respostas e a mesma nota.</p>
-      ${total > 1 ? `<label for="pvN">Quantas vidas devolver</label><input type="number" id="pvN" min="1" max="${total}" step="1" value="${total}">` : ""}
-      ${l.t.encerradaPor === "trocasDeAba" ? `<div class="aviso-box erro" style="margin-top:12px">A prova foi <b>encerrada porque as vidas acabaram</b>. Devolver as vidas não reabre a prova: para o aluno continuar, use <b>Reabrir prova</b>.</div>` : ""}
-      ${l.sinais.telaCheia ? `<p class="pequeno">As saídas da tela cheia (⛶ ${l.sinais.telaCheia}) continuam registradas como sinal.</p>` : ""}`,
+    titulo: `🧹 Apagar sinais de ${nome}`, ok: "Apagar", cancelar: "Cancelar",
+    conteudo: `<p>Os sinais apagados somem do histórico, como se não tivessem acontecido. As respostas e a nota não mudam.</p>
+      ${tipos.map(x => `<label for="as_${x.k}" style="margin-top:10px">${x.rot}: <b>${x.n}</b>. Quantos apagar</label><input type="number" id="as_${x.k}" min="0" max="${x.n}" step="1" value="${x.n}">`).join("")}
+      ${!l.t.finalizadaEm && tipos.some(x => x.k === "abas") ? `<p class="pequeno">A prova está em andamento: apagar vidas perdidas devolve as vidas ao aluno (a tela dele atualiza sozinha).</p>` : ""}
+      ${l.t.encerradaPor === "trocasDeAba" ? `<div class="aviso-box erro" style="margin-top:12px">A prova foi <b>encerrada porque as vidas acabaram</b>. Apagar os sinais não reabre a prova: para o aluno continuar, use <b>Reabrir prova</b>.</div>` : ""}`,
     antesDeConfirmar: caixa => {
-      const v = Math.round(Number(caixa.querySelector("#pvN")?.value || total));
-      if (!(v >= 1 && v <= total)) { toast(`Escolha de 1 a ${total}.`, "erro"); return false; }
-      n = v;
+      for (const x of tipos) {
+        const v = Math.round(Number(caixa.querySelector("#as_" + x.k)?.value ?? x.n));
+        if (!(v >= 0 && v <= x.n)) { toast(`Escolha de 0 a ${x.n}.`, "erro"); return false; }
+        escolha[x.k] = v;
+      }
+      if (!Object.values(escolha).some(Boolean)) { toast("Escolha pelo menos 1 sinal para apagar.", "erro"); return false; }
     }
   });
   if (!ok) return;
-  // tira primeiro do contador atual e depois do acumulado (o que foi zerado ao perder questão ou restaurar)
-  const atual = l.t.trocasDeAba || 0, doAtual = Math.min(atual, n), doAcum = n - doAtual;
-  const dados = { trocasDeAba: atual - doAtual };
-  if (doAcum) dados.trocasDeAbaTotal = Math.max(0, (l.t.trocasDeAbaTotal || 0) - doAcum);
+  const dados = {};
+  if (escolha.abas) {   // tira primeiro do contador atual e depois do acumulado (o que foi zerado ao perder questão ou restaurar)
+    const atual = l.t.trocasDeAba || 0, doAtual = Math.min(atual, escolha.abas), doAcum = escolha.abas - doAtual;
+    dados.trocasDeAba = atual - doAtual;
+    if (doAcum) dados.trocasDeAbaTotal = Math.max(0, (l.t.trocasDeAbaTotal || 0) - doAcum);
+  }
+  if (escolha.tela) dados.saidasTelaCheia = Math.max(0, (l.t.saidasTelaCheia || 0) - escolha.tela);
+  if (escolha.colar) dados.tentativasColar = Math.max(0, (l.t.tentativasColar || 0) - escolha.colar);
   try {
     await updateDoc(doc(db, "tentativas", l.t.id), dados);
-    toast(`${n === 1 ? "1 vida devolvida" : `${n} vidas devolvidas`} a ${nome} ❤️`, "ok");
+    toast(`Sinais de ${nome} apagados 🧹`, "ok");
     await recarregarTentativa(l.t.id);
-  } catch (e) { toast("Não foi possível devolver as vidas. " + traduzirErro(e), "erro"); console.error(e); }
+  } catch (e) { toast("Não foi possível apagar os sinais. " + traduzirErro(e), "erro"); console.error(e); }
 }
 async function reabrirProva(l) {
   if (!l) return;
@@ -2036,7 +2062,8 @@ function atualizarControlesIA() {
   const ok = souDono() && !!iaCfg;
   $("#btnCorrigirIA").disabled = !ok || rodandoIA; $("#iaAuto").disabled = !ok; $("#iaRefazer").disabled = !ok;
   if (!ok) $("#iaAuto").checked = false;
-  $("#iaAviso").textContent = ok ? `Modelo: ${iaCfg.modelo}. A IA pode errar: confira as marcadas com 🤖 IA.` : "Configure a chave em Configuração.";
+  const p = resDados?.prova, estado = !p ? "" : p.iaAutomatica === false ? " Esta prova: correção automática DESLIGADA (ligue na aba Provas)." : urlCorretorCfg ? " Esta prova: corrigida pelo servidor quando o aluno finaliza." : " Esta prova: corrigida por este painel com o ao vivo ligado.";
+  $("#iaAviso").textContent = (ok ? `Modelo: ${iaCfg.modelo}. A IA pode errar: confira as marcadas com 🤖 IA.` : "Configure a chave em Configuração.") + estado;
   pintarResumoIA(resDados?.linhas ? resDados.linhas.reduce((s, l) => s + l.revisar, 0) : null);
 }
 // chave digitada agora, ou a salva
@@ -2102,6 +2129,26 @@ function mostrarProgressoIA(atual) {
     (atual ? `Corrigindo ${feitos + 1} de ${total} — ${esc(atual.nome)}, Q${atual.n}` : `Concluído: ${iaFeitas} corrigida(s)`) + (iaErros ? ` · <span class="erro-texto">${iaErros} com erro</span>` : "");
 }
 // uma chamada por vez
+// DESLIZES (vírgula esquecida, letra trocada): a IA dá a nota cheia com aviso. Se acontecer em 3 ou mais questões
+// da mesma prova, cada uma perde 1/4 do peso (mínimo 0,25). Uma vez ou outra não pesa. Correção manual nunca é mexida.
+// Mesma regra do servidor (servidor/corretor-worker.js ajusteDeslizes).
+const DESLIZES_PARA_DESCONTAR = 3;
+function ajusteDeslizes(corrs) {
+  const ds = Object.entries(corrs || {}).filter(([, c]) => c && c.deslize === true && String(c.corrigidoPor || "").startsWith("ia:") && Number.isFinite(Number(c.pontosBase)));
+  const repetido = ds.length >= DESLIZES_PARA_DESCONTAR, out = {};
+  for (const [qid, c] of ds) {
+    const base = Number(c.pontosBase), peso = Number(c.peso || 1);
+    const desconto = repetido ? Math.min(base, Math.max(0.25, Math.round(peso * 0.25 * 4) / 4)) : 0;
+    const pontos = Math.round((base - desconto) * 100) / 100;
+    const comentario = String(c.comentarioBase ?? c.comentario ?? "") + (desconto ? ` (Deslize repetido em ${ds.length} questões da prova: −${String(desconto).replace(".", ",")}.)` : "");
+    if (Number(c.pontos) !== pontos || c.comentario !== comentario || Number(c.desconto || 0) !== desconto) out[qid] = { pontos, comentario, desconto };
+  }
+  return out;
+}
+async function ajustarDeslizes(tid) {
+  const corrs = {}; (await getDocs(collection(db, "tentativas", tid, "correcoes"))).forEach(d => corrs[d.id] = d.data());
+  await Promise.all(Object.entries(ajusteDeslizes(corrs)).map(([qid, d]) => updateDoc(doc(db, "tentativas", tid, "correcoes", qid), d)));
+}
 async function processarFilaIA() {
   if (rodandoIA) return;
   rodandoIA = true; iaFeitas = 0; iaErros = 0; atualizarControlesIA();
@@ -2118,7 +2165,9 @@ async function processarFilaIA() {
         const porIA = String(atual.data()?.corrigidoPor || "").startsWith("ia:");
         if (atual.exists() && (!porIA || !it.refazer)) { filaIA.shift(); emFilaIA.delete(k); continue; }
         const r = await corrigirDissertativa({ chave: iaCfg.chave, modelo: iaCfg.modelo, q: it.q, g: it.g, resposta: it.resposta });
-        await setDoc(ref, { pontos: r.pontos, comentario: r.justificativa, corrigidoPor: "ia:" + iaCfg.modelo, corrigidoEm: serverTimestamp() });
+        await setDoc(ref, { pontos: r.pontos, comentario: r.justificativa, corrigidoPor: "ia:" + iaCfg.modelo, corrigidoEm: serverTimestamp(),
+                            deslize: r.deslize, pontosBase: r.pontos, comentarioBase: r.justificativa, peso: Number(it.q.peso || 1) });
+        await ajustarDeslizes(it.tid).catch(e => console.warn("deslizes", e));
         errosIA.delete(k); iaFeitas++;
         if (resDados?.prova.id === provaId) { await atualizarCache(await getDoc(doc(db, "tentativas", it.tid))); montarResultados(); }
       } catch (e) {
@@ -2146,6 +2195,7 @@ $("#btnCorrigirIA").onclick = () => {
 };
 $("#iaAuto").onchange = () => {
   if (!$("#iaAuto").checked) return;
+  if (!$("#rProva").value) { $("#iaAuto").checked = false; return toast("Escolha uma prova primeiro: a correção automática vale para a prova aberta em Resultados.", "erro"); }
   if (!$("#rAoVivo").checked) { $("#rAoVivo").checked = true; carregarResultados(); }   // a correção automática precisa do ao vivo
   else corrigirPendentesIA({ auto: true });
 };
