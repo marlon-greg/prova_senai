@@ -1568,7 +1568,9 @@ function acoesVidaHTML(l) {
   const v = vidasDe(l.t), b = [];
   if (!l.t.finalizadaEm) {
     if (v) b.push(`<button class="ok mini" data-vrest="${l.t.id}" title="Devolve todas as vidas${l.perdidas ? " e as questões perdidas" : ""}"${v.usadas || l.perdidas ? "" : " disabled"}>${ic("heart", { size: 16 })}Restaurar vidas</button>`,
-                  `<button class="leve mini" data-vmais="${l.t.id}" title="Dá uma vida a mais só para este aluno">${ic("plus", { size: 16 })}1 vida</button>`);
+                  `<button class="leve mini" data-vmais="${l.t.id}" title="Dá uma vida a mais só para este aluno">${ic("plus", { size: 16 })}1 vida</button>`,
+                  `<button class="leve mini" data-vmenos="${l.t.id}" title="${v.restam > 1 ? "Tira uma vida deste aluno" : "Resta só 1 vida: use Encerrar prova"}"${v.restam > 1 ? "" : " disabled"}>− 1 vida</button>`);
+    b.push(`<button class="perigo mini" data-encerrar="${l.t.id}" title="Encerra a prova só deste aluno, com as respostas já enviadas">⛔ Encerrar prova</button>`);
   } else b.push(`<button class="leve mini" data-reabrir="${l.t.id}" title="Volta a prova para o aluno continuar de onde parou">${ic("unlock", { size: 16 })}Reabrir prova</button>`);
   return b.join(" ");
 }
@@ -1577,15 +1579,137 @@ function acoesVidaItens(l) {
   if (!podeCuidar()) return "";
   const v = vidasDe(l.t);
   if (l.t.finalizadaEm) return itemMenu({ i: "unlock", t: "Reabrir prova", attrs: `data-reabrir="${l.t.id}" title="Volta a prova para o aluno continuar de onde parou"` });
-  if (!v) return "";
+  const encerrar = itemMenu({ i: "lock", t: "Encerrar prova", attrs: `data-encerrar="${l.t.id}" title="Encerra a prova só deste aluno, com as respostas já enviadas"` });
+  if (!v) return encerrar;
   return itemMenu({ i: "heart", t: "Restaurar vidas", attrs: `data-vrest="${l.t.id}" title="Devolve todas as vidas${l.perdidas ? " e as questões perdidas" : ""}"${v.usadas || l.perdidas ? "" : " disabled"}` })
-    + itemMenu({ i: "plus", t: "+1 vida", attrs: `data-vmais="${l.t.id}" title="Dá uma vida a mais só para este aluno"` });
+    + itemMenu({ i: "plus", t: "+1 vida", attrs: `data-vmais="${l.t.id}" title="Dá uma vida a mais só para este aluno"` })
+    + itemMenu({ i: "x", t: "−1 vida", attrs: `data-vmenos="${l.t.id}" title="${v.restam > 1 ? "Tira uma vida deste aluno" : "Resta só 1 vida: use Encerrar prova"}"${v.restam > 1 ? "" : " disabled"}` })
+    + encerrar;
 }
 function ligarAcoesVida(raiz) {
   const achar = id => [...resDados.linhas, ...resDados.testes].find(x => x.t.id === id);
   raiz.querySelectorAll("[data-vrest]").forEach(b => b.onclick = () => restaurarVidas(achar(b.dataset.vrest)));
   raiz.querySelectorAll("[data-vmais]").forEach(b => b.onclick = () => vidaExtra(achar(b.dataset.vmais)));
+  raiz.querySelectorAll("[data-vmenos]").forEach(b => b.onclick = () => tirarVida(achar(b.dataset.vmenos)));
+  raiz.querySelectorAll("[data-encerrar]").forEach(b => b.onclick = () => encerrarProvas([achar(b.dataset.encerrar)]));
   raiz.querySelectorAll("[data-reabrir]").forEach(b => b.onclick = () => reabrirProva(achar(b.dataset.reabrir)));
+}
+// questões perdidas por sair da prova (respostas com perdida: true): o professor pode devolver
+const perdidasDe = id => Object.entries(cacheTent.get(id)?.resp || {}).filter(([, r]) => r?.perdida === true).map(([q]) => q);
+// apagar respostas é só do administrador nas regras: os outros papéis devolvem as vidas sem mexer nas perdidas
+function lotePerdidas(lote, id) { if (ehAdmin()) perdidasDe(id).forEach(q => lote.delete(doc(db, "tentativas", id, "respostas", q))); }
+// relê uma tentativa (sem o "ao vivo", a tela não atualiza sozinha)
+async function recarregarTentativa(id) {
+  if ($("#rAoVivo").checked) return;
+  const d = await getDoc(doc(db, "tentativas", id));
+  if (d.exists()) await atualizarCache(d); else cacheTent.delete(id);
+  montarResultados();
+}
+async function restaurarVidas(l) {
+  if (!l) return;
+  const v = vidasDe(l.t), perd = ehAdmin() ? perdidasDe(l.t.id) : [], nome = l.t.nome || l.t.email;
+  const ok = await confirmar(`Devolver ${v ? `as ${v.lim} vidas` : "as vidas"} de ${nome}?${perd.length ? `\n\nAs ${perd.length} questão(ões) perdida(s) por sair da prova também voltam para o aluno responder.` : ""}\n\nA tela do aluno atualiza sozinha. O histórico de saídas continua no relatório.`,
+    { titulo: "❤️ Restaurar vidas", ok: "Restaurar vidas" });
+  if (!ok) return;
+  try {
+    const lote = writeBatch(db), n = l.t.trocasDeAba || 0;
+    lote.update(doc(db, "tentativas", l.t.id), { trocasDeAba: 0, trocasDeAbaTotal: increment(n), vidasRestauradas: increment(1),
+      vidasRestauradasEm: serverTimestamp(), vidasRestauradasPor: eu.email });
+    lotePerdidas(lote, l.t.id);
+    await lote.commit();
+    toast(`Vidas de ${nome} restauradas ❤️`, "ok");
+    await recarregarTentativa(l.t.id);
+  } catch (e) { toast("Não foi possível restaurar as vidas. " + traduzirErro(e), "erro"); console.error(e); }
+}
+async function vidaExtra(l) {
+  if (!l) return;
+  try {
+    await updateDoc(doc(db, "tentativas", l.t.id), { vidasExtras: increment(1) });
+    toast(`+1 vida para ${l.t.nome || l.t.email} ❤️`, "ok");
+    await recarregarTentativa(l.t.id);
+  } catch (e) { toast("Não foi possível dar a vida extra. " + traduzirErro(e), "erro"); console.error(e); }
+}
+// tira uma vida: primeiro as extras que o professor deu; depois conta como uma saída (o coração apaga na tela do aluno).
+// A última vida não é tirada por aqui: zerar sem encerrar deixaria o aluno na prova sem vidas (use Encerrar prova).
+async function tirarVida(l) {
+  if (!l) return;
+  const v = vidasDe(l.t), nome = l.t.nome || l.t.email;
+  if (!v || v.restam <= 1) return toast("Resta só 1 vida. Para tirar a prova do aluno, use Encerrar prova.", "erro");
+  if (!(await confirmar(`Tirar 1 vida de ${nome}? Fica com ${v.restam - 1} de ${v.lim - (v.extras ? 1 : 0)}.`, { titulo: "Tirar 1 vida", ok: "Tirar vida", perigo: true }))) return;
+  try {
+    await updateDoc(doc(db, "tentativas", l.t.id), v.extras ? { vidasExtras: increment(-1) } : { trocasDeAba: increment(1) });
+    toast(`−1 vida para ${nome}`, "ok");
+    await recarregarTentativa(l.t.id);
+  } catch (e) { toast("Não foi possível tirar a vida. " + traduzirErro(e), "erro"); console.error(e); }
+}
+// encerra a prova de um ou mais alunos (as respostas já enviadas valem; as outras ficam em branco).
+// Grava como se o aluno tivesse finalizado: a partir daí as regras não aceitam mais respostas dele.
+async function encerrarProvas(ls, { todos = false } = {}) {
+  ls = ls.filter(l => l && !l.t.finalizadaEm);
+  if (!ls.length) return toast("Nenhum aluno com a prova em andamento.", "erro");
+  const p = resDados.prova, nomes = ls.map(l => l.t.nome || l.t.email);
+  let fecharProva = false;
+  const ok = await modal({
+    titulo: todos ? `⛔ Encerrar a prova de todos (${ls.length})` : `⛔ Encerrar a prova de ${nomes[0]}`, ok: "Encerrar", cancelar: "Cancelar", perigo: true,
+    conteudo: `<p>${todos ? `Os <b>${ls.length} alunos</b> com a prova em andamento terminam agora` : `<b>${esc(nomes[0])}</b> termina agora`}: valem as respostas já enviadas, as outras ficam em branco.</p>
+      <p class="pequeno">Se a tela do aluno ainda mostrar a questão, ao tentar enviar ou finalizar ela passa para o fim da prova. Dá para desfazer com <b>Reabrir prova</b>.</p>
+      ${todos && p.liberada ? `<label class="check"><input type="checkbox" id="encFechar" checked> Fechar a prova também (ninguém mais começa)</label>` : ""}`,
+    antesDeConfirmar: caixa => { fecharProva = !!caixa.querySelector("#encFechar")?.checked; }
+  });
+  if (!ok) return;
+  try {
+    for (let i = 0; i < ls.length; i += 400) {
+      const lote = writeBatch(db);
+      ls.slice(i, i + 400).forEach(l => {
+        const dados = { finalizadaEm: serverTimestamp(), encerradaPor: "professor", indiceAtual: (l.t.questoesIds || []).length };
+        const ini = l.t.iniciadaEm?.toMillis?.();
+        if (ini) dados.tempoTotalSegundos = Math.max(0, Math.round((Date.now() - ini) / 1000));
+        lote.update(doc(db, "tentativas", l.t.id), dados);
+      });
+      await lote.commit();
+    }
+    if (fecharProva) await updateDoc(doc(db, "provas", p.id), { liberada: false }).then(() => { p.liberada = false; })
+      .catch(e => toast("As provas foram encerradas, mas não deu para fechar a prova. Feche na aba Provas. " + traduzirErro(e), "erro"));
+    toast(ls.length === 1 ? `Prova de ${nomes[0]} encerrada` : `${ls.length} provas encerradas`, "ok");
+    if (!$("#rAoVivo").checked) carregarResultados();
+  } catch (e) { toast("Não foi possível encerrar. " + traduzirErro(e), "erro"); console.error(e); }
+}
+async function reabrirProva(l) {
+  if (!l) return;
+  const p = resDados.prova, nome = l.t.nome || l.t.email, perd = ehAdmin() ? perdidasDe(l.t.id) : [], temTempo = Number(p.tempoMinutos) > 0;
+  const motivo = l.t.encerradaPor === "trocasDeAba" ? "A prova foi encerrada porque as vidas acabaram."
+    : l.t.encerradaPor === "professor" ? "A prova foi encerrada pelo professor." : "O aluno já tinha finalizado a prova (ou o tempo acabou).";
+  let devolver = true, min = 10;
+  const ok = await modal({
+    titulo: `↩ Reabrir a prova de ${nome}`, ok: "Reabrir prova", cancelar: "Cancelar",
+    conteudo: `<p>${esc(motivo)} Reabrindo, o aluno <b>continua de onde parou</b>, com as respostas já enviadas, e recebe as vidas de volta. Se a tela dele estiver no fim da prova, é só abrir a prova de novo e clicar em Continuar.</p>
+      ${perd.length ? `<label class="check"><input type="checkbox" id="rbPerdidas" checked> Devolver as ${perd.length} questão(ões) perdida(s) por sair da prova</label>` : ""}
+      ${temTempo ? `<label for="rbMin" style="margin-top:12px">Tempo para terminar, a partir de agora (min)</label><input type="number" id="rbMin" min="1" step="1" value="${Math.max(5, Math.min(Number(p.tempoMinutos), 30))}">` : ""}
+      ${p.liberada ? "" : `<div class="aviso-box erro" style="margin-top:12px">A prova está <b>fechada</b> na aba Provas: o aluno só consegue continuar depois que você liberar de novo.</div>`}
+      ${l.t.encerradaPor ? "" : `<p class="pequeno">Atenção: depois de finalizar, o sistema libera o gabarito para o aluno ler. Ao reabrir, o gabarito volta a ficar fechado, mas use isto só quando fizer sentido (ex.: aluno com TEA, queda de internet).</p>`}`,
+    antesDeConfirmar: caixa => {
+      devolver = caixa.querySelector("#rbPerdidas")?.checked !== false;
+      min = Math.max(1, Math.round(Number(caixa.querySelector("#rbMin")?.value || 10)));
+    }
+  });
+  if (!ok) return;
+  try {
+    const dados = { finalizadaEm: null, encerradaPor: deleteField(), indiceAtual: 0, trocasDeAba: 0, trocasDeAbaTotal: increment(l.t.trocasDeAba || 0),
+      tempoTotalSegundos: deleteField(), acertos: deleteField(), totalQuestoes: deleteField(), nota: deleteField(), notaPrevia: null, aguardandoCorrecao: 0,
+      reabertaEm: serverTimestamp(), reabertaPor: eu.email, vidasRestauradasEm: serverTimestamp(), vidasRestauradasPor: eu.email };
+    if (temTempo) {
+      const ini = l.t.iniciadaEm?.toMillis?.() || Date.now(), fimNovo = Date.now() + min * 60000;
+      dados.minutosExtras = Math.max(0, Math.ceil((fimNovo - ini) / 60000) - Number(p.tempoMinutos));
+    }
+    const lote = writeBatch(db);
+    lote.update(doc(db, "tentativas", l.t.id), dados);
+    if (devolver) lotePerdidas(lote, l.t.id);
+    await lote.commit();
+    // o gabarito volta a ficar fechado (um por vez: marcador que não existe não derruba a reabertura)
+    await Promise.allSettled((l.t.questoesIds || []).map(q => deleteDoc(doc(db, "marcadores", `${l.t.uid}_${q}`))));
+    toast(`Prova de ${nome} reaberta ↩`, "ok");
+    await recarregarTentativa(l.t.id);
+  } catch (e) { toast("Não foi possível reabrir a prova. " + traduzirErro(e), "erro"); console.error(e); }
 }
 
 // ---------- visão em cartões: um cartão por aluno (bom para acompanhar a prova ao vivo) ----------
@@ -1624,6 +1748,8 @@ function desenharResultados() {
   const fin = linhas.filter(l => l.t.finalizadaEm), comSinal = linhas.filter(l => l.temSinal).length, media = fin.length ? (fin.reduce((s, l) => s + l.nota, 0) / fin.length).toFixed(1) : "—";
   const revisar = linhas.reduce((s, l) => s + l.revisar, 0);
   $("#resAcoes").classList.remove("oculto");
+  { const andando = resDados.linhas.filter(l => !l.t.finalizadaEm).length, be = $("#btnEncerrarTodas");
+    be.classList.toggle("oculto", !podeCuidar() || !andando); be.textContent = `⛔ Encerrar todas (${andando})`; }
   $("#resResumo").innerHTML = statTiles([{ v: String(media).replace(".", ","), r: "média da turma" }, { v: `${fin.length} / ${linhas.length}`, r: "finalizaram" },
     { v: revisar, r: "respostas a revisar", tom: revisar ? "aviso" : "" }, { v: comSinal, r: "com sinais de aba, tela cheia ou colar", tom: comSinal ? "erro" : "" }]);
   pintarResumoIA(revisar);
@@ -1681,7 +1807,7 @@ function verAluno(id, rolar = true) {
   box.innerHTML = `<div class="card"><div class="linha"><h2 style="flex:3">${l.t.teste ? "🧪 " : ""}${esc(l.t.nome || l.t.email)} — ${l.nota}/100 (${l.pts} de ${l.max} pontos)</h2><button class="leve mini" id="btnPDFAluno" style="flex:0 0 auto">PDF deste aluno</button></div>
     ${vidasDe(l.t) || podeEditar() ? `<div class="linha acoes detalhe-vidas">${vidasDe(l.t) ? `<span>Vidas: ${coracoesHTML(vidasDe(l.t))}</span>` : ""}${acoesVidaHTML(l)}</div>` : ""}
     <p class="pequeno">Tempo total: <b>${fmtTempo(l.tempo)}</b> · ${sinaisHTML(l.sinais)}${lim ? ` · vidas perdidas <b>${l.sinais.abas}</b>${l.t.vidasRestauradas ? ` · restauradas ${l.t.vidasRestauradas}×` : ""}` : ""}${l.t.reabertaEm ? ` · <span class="tag nota">↩ reaberta por ${esc(l.t.reabertaPor || "professor")}</span>` : ""}
-      ${l.t.encerradaPor === "trocasDeAba" ? ` · <span class="tag erro">⛔ encerrada: limite de saídas atingido</span>` : ""}${l.perdidas ? ` · <span class="tag erro">⛔ ${l.perdidas} questão(ões) perdida(s)</span>` : ""}</p>` + l.itens.map(x => {
+      ${l.t.encerradaPor === "trocasDeAba" ? ` · <span class="tag erro">⛔ encerrada: limite de saídas atingido</span>` : ""}${l.t.encerradaPor === "professor" ? ` · <span class="tag erro">⛔ encerrada pelo professor</span>` : ""}${l.perdidas ? ` · <span class="tag erro">⛔ ${l.perdidas} questão(ões) perdida(s)</span>` : ""}</p>` + l.itens.map(x => {
     const rapida = x.r !== undefined && !x.perdida && typeof x.segundos === "number" && x.segundos < RAPIDO;
     const tempo = typeof x.segundos === "number" ? `<span class="tag ${rapida ? "erro" : ""}" title="Tempo entre a questão aparecer e a resposta ser enviada">⏱ ${fmtTempo(x.segundos)}${rapida ? ` · menos de ${RAPIDO} s` : ""}</span>` : "";
     const fmt = temFormato(x.q), bloco = t => `<span class="resp-formato">${esc(t).replace(/\n/g, "<br>")}</span>`;
@@ -1704,6 +1830,7 @@ function verAluno(id, rolar = true) {
     const d = await getDoc(doc(db, "tentativas", l.t.id)); await atualizarCache(d); montarResultados(); verAluno(id, false);
   });
 }
+$("#btnEncerrarTodas").onclick = () => resDados && encerrarProvas(resDados.linhas, { todos: true });
 $("#btnFecharNotas").onclick = async () => {
   if (!resDados) return toast("Carregue uma prova primeiro.", "erro");
   if (!podeEditar()) return toast("Seu papel não permite fechar notas.", "erro");
