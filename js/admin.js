@@ -1579,7 +1579,7 @@ function acoesVidaHTML(l) {
   const v = vidasDe(l.t), b = [];
   if (!l.t.finalizadaEm) {
     if (v) b.push(`<button class="ok mini" data-vrest="${l.t.id}" title="Devolve todas as vidas${l.perdidas ? " e as questões perdidas" : ""}"${v.usadas || l.perdidas ? "" : " disabled"}>${ic("heart", { size: 16 })}Restaurar vidas</button>`,
-                  `<button class="leve mini" data-vmais="${l.t.id}" title="Dá uma vida a mais só para este aluno">${ic("plus", { size: 16 })}1 vida</button>`,
+                  `<button class="leve mini" data-vmais="${l.t.id}" title="Reacende um coração perdido; com todos cheios, dá uma vida a mais">${ic("plus", { size: 16 })}1 vida</button>`,
                   `<button class="leve mini" data-vmenos="${l.t.id}" title="${v.restam > 1 ? "Tira uma vida deste aluno" : "Resta só 1 vida: use Encerrar prova"}"${v.restam > 1 ? "" : " disabled"}>− 1 vida</button>`);
     if (Number(resDados.prova.tempoMinutos) > 0) b.push(`<button class="leve mini" data-tempo="${l.t.id}" title="Dá mais minutos só para este aluno (ex.: caiu a internet)">⏱ + tempo</button>`);
     b.push(`<button class="perigo mini" data-encerrar="${l.t.id}" title="Encerra a prova só deste aluno, com as respostas já enviadas">⛔ Encerrar prova</button>`);
@@ -1598,7 +1598,7 @@ function acoesVidaItens(l) {
   const tempo = Number(resDados.prova.tempoMinutos) > 0 ? itemMenu({ i: "plus", t: "+ tempo", attrs: `data-tempo="${l.t.id}" title="Dá mais minutos só para este aluno"` }) : "";
   if (!v) return tempo + encerrar + itemSinais(l);
   return itemMenu({ i: "heart", t: "Restaurar vidas", attrs: `data-vrest="${l.t.id}" title="Devolve todas as vidas${l.perdidas ? " e as questões perdidas" : ""}"${v.usadas || l.perdidas ? "" : " disabled"}` })
-    + itemMenu({ i: "plus", t: "+1 vida", attrs: `data-vmais="${l.t.id}" title="Dá uma vida a mais só para este aluno"` })
+    + itemMenu({ i: "plus", t: "+1 vida", attrs: `data-vmais="${l.t.id}" title="Reacende um coração perdido; com todos cheios, dá uma vida a mais"` })
     + itemMenu({ i: "x", t: "−1 vida", attrs: `data-vmenos="${l.t.id}" title="${v.restam > 1 ? "Tira uma vida deste aluno" : "Resta só 1 vida: use Encerrar prova"}"${v.restam > 1 ? "" : " disabled"}` })
     + tempo + encerrar + itemSinais(l);
 }
@@ -1661,13 +1661,16 @@ async function maisTempo(l) {
     await recarregarTentativa(l.t.id);
   } catch (e) { toast("Não foi possível dar mais tempo. " + traduzirErro(e), "erro"); console.error(e); }
 }
+// +1 vida: primeiro reacende um coração perdido; com todos cheios, dá uma vida a mais (aumenta o total).
+// O coração reacendido continua no histórico (soma em trocasDeAbaTotal), como no Restaurar vidas.
 async function vidaExtra(l) {
   if (!l) return;
+  const v = vidasDe(l.t), nome = l.t.nome || l.t.email, reacender = !!v && v.usadas > 0 && (l.t.trocasDeAba || 0) > 0;
   try {
-    await updateDoc(doc(db, "tentativas", l.t.id), { vidasExtras: increment(1) });
-    toast(`+1 vida para ${l.t.nome || l.t.email} ❤️`, "ok");
+    await updateDoc(doc(db, "tentativas", l.t.id), reacender ? { trocasDeAba: increment(-1), trocasDeAbaTotal: increment(1) } : { vidasExtras: increment(1) });
+    toast(reacender ? `+1 vida para ${nome}: ${v.restam + 1} de ${v.lim} ❤️` : `+1 vida extra para ${nome}: ${v ? `${v.lim + 1} vidas` : "1 vida"} ❤️`, "ok");
     await recarregarTentativa(l.t.id);
-  } catch (e) { toast("Não foi possível dar a vida extra. " + traduzirErro(e), "erro"); console.error(e); }
+  } catch (e) { toast("Não foi possível dar a vida. " + traduzirErro(e), "erro"); console.error(e); }
 }
 // tira uma vida: primeiro as extras que o professor deu; depois conta como uma saída (o coração apaga na tela do aluno).
 // A última vida não é tirada por aqui: zerar sem encerrar deixaria o aluno na prova sem vidas (use Encerrar prova).
