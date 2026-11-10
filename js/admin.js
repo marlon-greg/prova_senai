@@ -1833,7 +1833,8 @@ function desenharResultados() {
   const revisar = linhas.reduce((s, l) => s + l.revisar, 0);
   $("#resAcoes").classList.remove("oculto");
   { const andando = resDados.linhas.filter(l => !l.t.finalizadaEm).length, be = $("#btnEncerrarTodas");
-    be.classList.toggle("oculto", !podeCuidar() || !andando); be.textContent = `⛔ Encerrar todas (${andando})`; }
+    be.classList.toggle("oculto", !podeCuidar() || !andando); be.textContent = `⛔ Encerrar todas (${andando})`;
+    $("#btnTempoTodas").classList.toggle("oculto", !podeCuidar() || !andando || !(Number(resDados.prova.tempoMinutos) > 0)); }
   $("#resResumo").innerHTML = statTiles([{ v: String(media).replace(".", ","), r: "média da turma" }, { v: `${fin.length} / ${linhas.length}`, r: "finalizaram" },
     { v: revisar, r: "respostas a revisar", tom: revisar ? "aviso" : "" }, { v: comSinal, r: "com sinais de aba, tela cheia ou colar", tom: comSinal ? "erro" : "" }]);
   pintarResumoIA(revisar);
@@ -1914,6 +1915,33 @@ function verAluno(id, rolar = true) {
     const d = await getDoc(doc(db, "tentativas", l.t.id)); await atualizarCache(d); montarResultados(); verAluno(id, false);
   });
 }
+// mais tempo para todos que estão fazendo a prova agora (cada um conta do próprio início; quem ainda não começou já terá o tempo inteiro)
+$("#btnTempoTodas").onclick = async () => {
+  if (!resDados) return;
+  const ls = resDados.linhas.filter(l => !l.t.finalizadaEm);
+  if (!ls.length) return toast("Nenhum aluno com a prova em andamento.", "erro");
+  let min = 10;
+  const ok = await modal({
+    titulo: `⏱ Mais tempo para todos (${ls.length})`, ok: "Dar mais tempo", cancelar: "Cancelar",
+    conteudo: `<label for="mtTodos">Minutos a mais</label><input type="number" id="mtTodos" min="1" max="240" step="1" value="10">
+      <p class="pequeno">Vale para os ${ls.length} alunos com a prova em andamento; o cronômetro de cada um atualiza sozinho. Quem ainda não começou já terá o tempo inteiro da prova a partir do próprio início. Quem já finalizou não muda (use Reabrir prova).</p>`,
+    antesDeConfirmar: caixa => {
+      const v = Math.round(Number(caixa.querySelector("#mtTodos")?.value || 0));
+      if (!(v >= 1 && v <= 240)) { toast("Escolha de 1 a 240 minutos.", "erro"); return false; }
+      min = v;
+    }
+  });
+  if (!ok) return;
+  try {
+    for (let i = 0; i < ls.length; i += 400) {
+      const lote = writeBatch(db);
+      ls.slice(i, i + 400).forEach(l => lote.update(doc(db, "tentativas", l.t.id), { minutosExtras: increment(min) }));
+      await lote.commit();
+    }
+    toast(`+${min} min para ${ls.length} aluno(s) ⏱`, "ok");
+    if (!$("#rAoVivo").checked) carregarResultados();
+  } catch (e) { toast("Não foi possível dar mais tempo. " + traduzirErro(e), "erro"); console.error(e); }
+};
 $("#btnEncerrarTodas").onclick = () => resDados && encerrarProvas(resDados.linhas, { todos: true });
 $("#btnFecharNotas").onclick = async () => {
   if (!resDados) return toast("Carregue uma prova primeiro.", "erro");
