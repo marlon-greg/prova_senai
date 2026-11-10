@@ -127,9 +127,11 @@ export function corrigir(questao, gabarito, resposta, perdida = false) {
 
 // Placar que o aluno vê: acertos (pontos cheios) de total, nota 0–100 e dissertativas ainda sem correção.
 // itens = [{ pontos, peso, status }] (status de corrigir() ou da correção manual/IA)
+// ACERTO = nota cheia ou MAIS DA METADE do peso (ex.: 1,5 de 2). Parcial até a metade não conta como acerto.
+export const contaAcerto = x => x.status === "certa" || Number(x.pontos) > Number(x.peso || 1) / 2;
 export function placar(itens) {
   const max = itens.reduce((s, x) => s + x.peso, 0), pts = itens.reduce((s, x) => s + x.pontos, 0);
-  return { acertos: itens.filter(x => x.status === "certa").length, totalQuestoes: itens.length,
+  return { acertos: itens.filter(contaAcerto).length, totalQuestoes: itens.length,
            notaPrevia: max ? Math.round(pts / max * 1000) / 10 : 0, aguardandoCorrecao: itens.filter(x => x.status === "revisar").length };
 }
 

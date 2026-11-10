@@ -31,7 +31,7 @@ const COLEGAS_SIM = [
   { uid: "sim-lucas", apelido: "Lucas", nivel: 4, status: "💻 Programando", av: { corpo: "masculino", cabelo: "topete", corCabelo: 1, pele: 2, olhos: "amendoado", roupa: "moletom", corRoupa: 1, fundo: "verde" },
     conquistas: [{ e: "🎓", t: "Primeira prova" }, { e: "🥇", t: "Trinca de ouro" }, { e: "⭐", t: "Mandou bem em Banco de Dados" }], notas: [{ id: "n1", titulo: "MS3 - DDL", materia: "Banco de Dados", nota: 92 }], cur: 5, par: 3 },
   { uid: "sim-julia", apelido: "Juh", nivel: 3, status: "📚 Estudando", av: { corpo: "feminino", cabelo: "cacheado", corCabelo: 0, pele: 4, olhos: "grandes", roupa: "listrada", corRoupa: 6, fundo: "rosa", oculos: "oculos" },
-    conquistas: [{ e: "💯", t: "Gabaritou!" }, { e: "📈", t: "Em evolução" }], notas: [], cur: 8, par: 6 },
+    conquistas: [{ e: "💯", t: "Nota alta" }, { e: "📈", t: "Em evolução" }], notas: [], cur: 8, par: 6 },
   { uid: "sim-pedro", apelido: "Pedro", nivel: 2, status: "🎮 Modo jogo", av: { corpo: "masculino", cabelo: "afrocurto", corCabelo: 0, pele: 5, olhos: "pesado", barba: "cavanhaque", roupa: "time", corRoupa: 2, fundo: "azul" },
     conquistas: [{ e: "🎓", t: "Primeira prova" }], notas: [], cur: 2, par: 1 },
   { uid: "sim-bia", apelido: "Bia", nivel: 5, status: "🚀 Motivado(a)", av: { corpo: "feminino", cabelo: "rabo", corCabelo: 3, pele: 0, olhos: "normal", roupa: "jaqueta", corRoupa: 5, fundo: "lilas", brinco: "argola" },

@@ -25,7 +25,7 @@ export const CAMPOS_DIARIO = { aulas: "aulas registradas", sequencia: "aulas seg
 export const CONQUISTAS_PADRAO = [
   { id: "provas-feitas", e: "🎓", t: "Provas feitas", d: "Termine provas", grupo: "geral", regra: "provas", niveis: [{ n: 1, nome: "Estreante" }, { n: 2, nome: "Em ritmo" }, { n: 3, nome: "Veterano" }, { n: 4, nome: "Maratonista" }] },
   { id: "sequencia", e: "🏆", t: "Sequência", d: "Notas seguidas acima do mínimo (qualquer matéria)", grupo: "geral", regra: "notasSeguidas", niveis: [{ n: 2, min: 60, nome: "Aquecendo" }, { n: 3, min: 80, nome: "Trinca de ouro" }, { n: 4, min: 80, nome: "Constância" }] },
-  { id: "gabaritou", e: "💯", t: "Gabaritou!", d: "Uma nota alta em uma prova", grupo: "geral", regra: "nota", niveis: [{ min: 60, nome: "Bom de prova" }, { min: 80, nome: "Mandou muito" }, { min: 100, nome: "Gabaritou!" }] },
+  { id: "gabaritou", e: "💯", t: "Nota alta", d: "Uma nota alta em uma prova", grupo: "geral", regra: "nota", niveis: [{ min: 60, nome: "Bom de prova" }, { min: 80, nome: "Mandou muito" }, { min: 100, nome: "Gabaritou!" }] },
   { id: "em-evolucao", e: "📈", t: "Em evolução", d: "Melhore a nota em relação à prova anterior", grupo: "geral", regra: "evolucao", niveis: [{ n: 1, nome: "Subindo" }, { n: 2, nome: "Em evolução" }, { n: 3, nome: "Sempre melhor" }] },
   { id: "coracao-intacto", e: "❤️", t: "Coração intacto", d: "Provas sem perder nenhuma vida", grupo: "geral", regra: "semVidas", niveis: [{ n: 1, nome: "Atento" }, { n: 2, nome: "Concentrado" }, { n: 3, nome: "Focado" }, { n: 4, nome: "Coração intacto" }] },
   { id: "mestre", e: "🧩", t: "Mestre de {materia}", d: "Média alta nesta matéria ao longo do semestre", grupo: "materia", regra: "materiaMedia", niveis: [{ n: 2, min: 70, nome: "Aprendiz de {materia}" }, { n: 3, min: 80, nome: "Praticante de {materia}" }, { n: 4, min: 85, nome: "Mestre de {materia}" }] },
@@ -46,7 +46,8 @@ export const ALIASES = { "primeira-prova": { id: "provas-feitas", nivel: 1 }, ve
   "presenca-em-dia": { id: "presenca", nivel: 1 }, "em-chamas": { id: "presenca", nivel: 2 } };
 // sem niveis: a conquista antiga vira um nível só, com o próprio título
 export const niveisDe = c => Array.isArray(c.niveis) && c.niveis.length ? c.niveis : [{ ...(c.n !== undefined ? { n: c.n } : {}), ...(c.min !== undefined ? { min: c.min } : {}), nome: c.t }];
-export const normalizarConquista = c => ({ ...c, niveis: niveisDe(c).map(x => ({ ...x })) });
+// listas salvas antes da troca: o título da conquista de nota era "Gabaritou!" mesmo nos níveis de 60 e 80 ("Gabaritou!" é só o nível de 100)
+export const normalizarConquista = c => ({ ...c, ...(c.id === "gabaritou" && c.t === "Gabaritou!" ? { t: "Nota alta" } : {}), niveis: niveisDe(c).map(x => ({ ...x })) });
 // ganhas = conquistas ganhas (a trava por medalha usa o id da conquista e, se pedir, o nível mínimo)
 export function temMedalha(ganhas, medalha, nivelMin = 1) {
   const testar = (id, nec) => ganhas.some(g => (g.id === id || String(g.id || "").startsWith(id + ":")) && (g.nivelAtual === undefined || g.nivelAtual + 1 >= Math.min(nec, g.niveisTotal || nec)));

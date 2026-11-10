@@ -162,7 +162,7 @@ O visual segue um design system único, em variáveis CSS (`css/style.css`, seç
 ## Conquistas dos alunos (página do aluno)
 
 Todo aluno vê **🏅 Minhas conquistas** embaixo das provas. Cada conquista tem **níveis com nome próprio** (ex.: Provas feitas: Estreante · Em ritmo · Veterano · Maratonista), e cada 3 níveis somados sobem 1 nível do perfil. Clicar na medalha mostra o que falta ou como ele conquistou (ex.: as 3 notas, com a matéria de cada uma). Medalha nova desde a última visita aparece com comemoração.
-- **Gerais** (todas as matérias): Provas feitas (1·2·3·4) · Sequência (2 notas de 60, 3 de 80, 4 de 80) · Gabaritou! (60·80·100) · Em evolução (1·2·3) · Coração intacto (1·2·3·4).
+- **Gerais** (todas as matérias): Provas feitas (1·2·3·4) · Sequência (2 notas de 60, 3 de 80, 4 de 80) · Nota alta (60 Bom de prova · 80 Mandou muito · 100 Gabaritou!) · Em evolução (1·2·3) · Coração intacto (1·2·3·4).
 - **Por matéria**: média da matéria e as conquistas Mestre de {materia} (média 70, 80 e 85 com 2, 3 e 4 provas), Mandou bem em {materia} (60·80·100) e Decolando em {materia} (1·2·3). Em **Gamificação → Gerar do plano de ensino** o sistema cria sugestões com o número de provas previstas como teto.
 - **Na sala de aula** (só alunos com acessibilidade): as medalhas do diário, só positivas.
 - Usa a nota fechada (ou a prévia) das provas finalizadas. As regras deixam o aluno ler a prova que ele já fez (título e matéria). As regras das conquistas ficam em `js/conquistas.js`.
