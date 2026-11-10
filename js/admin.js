@@ -15,6 +15,7 @@ import { mesclarQuestao } from "./acessibilidade.js";
 import { temFormato, textoResposta, textoChave, FORMATOS } from "./formatos-ui.js";
 import { iniciarAcessibilidade, carregarAcessibilidade, prepararNovo as prepararNovoAcess, abrirDepois } from "./admin-acess.js";
 import { iniciarHistorico, carregarHistorico } from "./admin-historico.js";
+import { exportarExcel, exportarPDF } from "./exportar-turmas.js";
 import { tarefa, ligarMenuLateral } from "./ui.js";
 import { ic } from "./icones.js";
 import { drawer, ligarFiltros, atualizarFiltros, ajudasEmPopover, menuHTML, itemMenu, vazio, chips, statTiles, pl, semestreLongo, seta } from "./ui.js";
@@ -344,10 +345,17 @@ function desenharTurmas() {
           ${stT.length ? `<button type="button" class="leve mini" data-status-turma="${t.id}" title="Como os alunos disseram que estão hoje">${pl(stT.length, "status", "status")} hoje${dificeis ? ` · ${pl(dificeis, "difícil", "difíceis")}` : ""}</button>` : ""}
           ${pv.length ? `<button class="leve mini" data-vprovas="${t.id}" title="${esc(pv.map(p => p.titulo).join(" · "))}">${ic("provas", { size: 16 })}${pl(pv.length, "prova")}${libs ? ` · ${libs} ${libs === 1 ? "liberada" : "liberadas"}` : ""}</button>` : ""}
           ${podeEditar() ? `<button class="leve mini" data-edt="${t.id}">${ic("edit", { size: 16 })}Editar</button>` : ""}
-          ${ehAdmin() ? menuHTML({ aria: `Mais ações: ${t.nome}`, itensHTML: itemMenu({ i: "trash", t: "Apagar turma", perigo: true, attrs: `data-delt="${t.id}"` }) }) : ""}</span>${seta()}</summary>
-      <div class="tabela sem-borda"><table><thead><tr><th>Aluno</th><th>E-mail</th><th>Vínculo</th><th>Status do dia</th></tr></thead><tbody>${mostrar.map(a => `<tr>
-        <td><span class="aluno-celula"><span class="avatar-p">${esc(iniciais(a.nome || a.email))}</span>${esc(a.nome || a.email)}</span></td><td class="pequeno">${esc(a.email || "")}</td><td>${vinculo(a)}</td><td>${a.email ? chipStatus(statusAlunos.get(a.email.toLowerCase()), esc) : ""}</td></tr>`).join("")}</tbody></table></div></details>`;
+          ${menuHTML({ aria: `Mais ações: ${t.nome}`, itensHTML: itemMenu({ i: "download", t: "Exportar em Excel", attrs: `data-xls-t="${t.id}"` }) + itemMenu({ i: "provas", t: "Exportar em PDF", attrs: `data-pdf-t="${t.id}"` }) +
+            (ehAdmin() ? itemMenu({ i: "trash", t: "Apagar turma", perigo: true, attrs: `data-delt="${t.id}"` }) : "") })}</span>${seta()}</summary>
+      <div class="tabela sem-borda"><table class="tabela-alunos"><thead><tr><th>Aluno</th><th>E-mail</th><th>Vínculo</th><th>Status do dia</th>${podeEditar() ? `<th><span class="oculto">Ações</span></th>` : ""}</tr></thead><tbody>${mostrar.map(a => `<tr>
+        <td><span class="aluno-celula"><span class="avatar-p">${esc(iniciais(a.nome || a.email))}</span>${esc(a.nome || a.email)}</span></td><td class="pequeno">${esc(a.email || "")}</td><td>${vinculo(a)}</td><td>${a.email ? chipStatus(statusAlunos.get(a.email.toLowerCase()), esc) : ""}</td>
+        ${podeEditar() ? `<td style="text-align:right">${menuHTML({ aria: `Ações: ${a.nome || a.email}`, itensHTML: itemMenu({ i: "turmas", t: "Mover para outra turma", attrs: `data-mover-al="${t.id}|${al.indexOf(a)}"` }) + itemMenu({ i: "trash", t: "Tirar da turma", perigo: true, attrs: `data-tirar-al="${t.id}|${al.indexOf(a)}"` }) })}</td>` : ""}</tr>`).join("")}</tbody></table></div></details>`;
   }).join("");
+  turmasVisiveis = linhas.map(l => l.t);
+  box.querySelectorAll("[data-xls-t]").forEach(b => b.onclick = () => exportarTurmas("xlsx", [turmasCache.find(x => x.id === b.dataset.xlsT)]));
+  box.querySelectorAll("[data-pdf-t]").forEach(b => b.onclick = () => exportarTurmas("pdf", [turmasCache.find(x => x.id === b.dataset.pdfT)]));
+  box.querySelectorAll("[data-tirar-al]").forEach(b => b.onclick = () => { const [id, i] = b.dataset.tirarAl.split("|"); tirarAluno(turmasCache.find(x => x.id === id), Number(i)); });
+  box.querySelectorAll("[data-mover-al]").forEach(b => b.onclick = () => { const [id, i] = b.dataset.moverAl.split("|"); moverAluno(turmasCache.find(x => x.id === id), Number(i)); });
   box.querySelectorAll("[data-turma]").forEach(d => d.ontoggle = () => { if (busca) return; d.open ? turmasAbertas.add(d.dataset.turma) : turmasAbertas.delete(d.dataset.turma); });
   box.querySelectorAll("[data-status-turma]").forEach(b => b.onclick = () => abrirStatusTurma(turmasCache.find(x => x.id === b.dataset.statusTurma)));
   box.querySelectorAll("[data-vprovas]").forEach(b => b.onclick = () => { filtroTurmaPendente = b.dataset.vprovas; $("#fpBusca").value = ""; $("#fpStatus").value = ""; abrirAba("provas"); });
@@ -363,6 +371,67 @@ function desenharTurmas() {
     if (!(await confirmar(`Apagar a turma ${t.nome}?` + (usadas ? `\n\n${usadas} prova(s) usam esta turma: elas deixam de aceitar qualquer aluno até você escolher outra turma.` : ""), { titulo: "Apagar turma", ok: "Apagar", perigo: true }))) return;
     await deleteDoc(doc(db, "turmas", t.id)); if (turmaEditando === t.id) limparFormTurma(); carregarTurmas();
   });
+}
+
+// ---------- exportar (Excel / PDF): nome e e-mail dos alunos, cada turma separada
+let turmasVisiveis = [];   // turmas que passam nos filtros da aba (o botão Exportar da barra usa estas)
+function exportarTurmas(tipo, lista = turmasVisiveis) {
+  lista = lista.filter(Boolean);
+  if (!lista.length) return toast("Nenhuma turma para exportar com esses filtros.", "erro");
+  const dados = lista.map(t => ({ nome: t.nome || "Turma", alunos: alunosDaTurma(t).map(a => ({ nome: a.nome || "", email: a.email || "" })),
+    info: [rotuloDias(t.diasAula), semestreCursoAtual(t)?.rotulo].filter(Boolean).join(" · ") }));
+  const titulo = lista.length === turmasCache.length ? "Todas as turmas" : "Turmas";
+  if (tipo === "xlsx") { exportarExcel(dados, titulo); toast(`Planilha baixada: ${pl(lista.length, "turma")}${lista.length > 1 ? " (uma aba para cada, mais o resumo)" : ""}.`, "ok"); }
+  else if (!exportarPDF(dados, titulo)) toast("O navegador bloqueou a janela. Libere pop-ups para este site.", "erro");
+  else toast('Na janela que abriu, escolha "Salvar como PDF".', "ok");
+}
+$("#btnTurmasXLS").onclick = () => exportarTurmas("xlsx");
+$("#btnTurmasPDF").onclick = () => exportarTurmas("pdf");
+
+// ---------- tirar um aluno da turma / mover para outra
+// grava a lista no mesmo formato do formulário da turma (vínculos já feitos viram o e-mail na lista)
+function dadosDaLista(lista) {
+  const alunos = lista.map(a => ({ nome: a.nome || "", email: a.email ? a.email.toLowerCase() : null }));
+  return { alunos, emails: [...new Set(alunos.filter(a => a.email).map(a => a.email))].sort(), nomesChave: alunos.filter(a => !a.email).map(a => chaveNome(a.nome)), vinculos: {} };
+}
+const mesmaPessoa = (a, b) => (a.email && b.email && a.email.toLowerCase() === b.email.toLowerCase()) || (!!a.nome && !!b.nome && chaveNome(a.nome) === chaveNome(b.nome) && (!a.email || !b.email || a.email.toLowerCase() === b.email.toLowerCase()));
+const quem = a => a.nome ? `${a.nome}${a.email ? ` (${a.email})` : ""}` : a.email;
+async function tirarAluno(t, i) {
+  if (!t || !podeEditar()) return;
+  const lista = alunosDaTurma(t), a = lista[i];
+  if (!a) return;
+  if (!(await confirmar(`Tirar ${quem(a)} da turma ${t.nome}?\n\nO aluno deixa de ver as provas desta turma. As notas e tentativas que ele já fez continuam guardadas.`, { titulo: "Tirar da turma", ok: "Tirar da turma", perigo: true }))) return;
+  try { await updateDoc(doc(db, "turmas", t.id), { ...dadosDaLista(lista.filter((_, k) => k !== i)), atualizadoEm: serverTimestamp(), atualizadoPor: eu.email }); }
+  catch (e) { return toast("Não foi possível tirar o aluno. " + traduzirErro(e), "erro"); }
+  toast(`${a.nome || a.email} saiu da turma ${t.nome}.`, "ok");
+  carregarTurmas();
+}
+async function moverAluno(t, i) {
+  if (!t || !podeEditar()) return;
+  const lista = alunosDaTurma(t), a = lista[i], outras = turmasCache.filter(x => x.id !== t.id);
+  if (!a) return;
+  if (!outras.length) return toast("Não há outra turma cadastrada. Crie a turma de destino primeiro.", "erro");
+  let destinoId = "";
+  const ok = await modal({ titulo: "Mover para outra turma", ok: "Mover", cancelar: "Cancelar",
+    conteudo: `<p>Mover <b>${esc(quem(a))}</b> da turma <b>${esc(t.nome)}</b> para:</p>
+      <label for="mvDestino">Turma de destino</label><select id="mvDestino"><option value="">— escolha a turma —</option>${outras.map(x => `<option value="${x.id}">${esc(nomeTurma(x))}</option>`).join("")}</select>
+      <label class="check" style="margin-top:12px"><input type="checkbox" id="mvManter"> <span>Manter também na turma ${esc(t.nome)} (copiar em vez de mover)</span></label>
+      <p class="pequeno">As notas e tentativas que o aluno já fez continuam guardadas.</p>`,
+    antesDeConfirmar: async caixa => {
+      destinoId = $("#mvDestino", caixa).value;
+      const dest = turmasCache.find(x => x.id === destinoId), manter = $("#mvManter", caixa).checked;
+      if (!dest) { toast("Escolha a turma de destino.", "erro"); return false; }
+      const listaDest = alunosDaTurma(dest);
+      if (listaDest.some(b => mesmaPessoa(a, b))) { toast(`${a.nome || a.email} já está na turma ${dest.nome}.`, "erro"); return false; }
+      if (!(await confirmar(`${manter ? "Copiar" : "Mover"} ${quem(a)} ${manter ? "também para" : `de ${t.nome} para`} ${dest.nome}?`, { titulo: manter ? "Copiar aluno" : "Mover aluno", ok: manter ? "Copiar" : "Mover" }))) return false;
+      const lote = writeBatch(db), carimbo = { atualizadoEm: serverTimestamp(), atualizadoPor: eu.email };
+      lote.update(doc(db, "turmas", dest.id), { ...dadosDaLista([...listaDest, { nome: a.nome, email: a.email }]), ...carimbo });
+      if (!manter) lote.update(doc(db, "turmas", t.id), { ...dadosDaLista(lista.filter((_, k) => k !== i)), ...carimbo });
+      try { await lote.commit(); } catch (e) { toast("Não foi possível mover o aluno. " + traduzirErro(e), "erro"); return false; }
+      toast(`${a.nome || a.email} ${manter ? "agora também está" : "agora está"} na turma ${dest.nome}.`, "ok");
+      return true;
+    } });
+  if (ok) carregarTurmas();
 }
 
 // status do dia da turma: difíceis primeiro, depois os de hoje, depois os antigos
