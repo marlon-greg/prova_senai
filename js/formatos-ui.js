@@ -8,8 +8,8 @@ const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": 
 const LETRAS = "ABCDEFGH";
 const CORES = ["#2563eb", "#059669", "#d97706", "#7c3aed", "#db2777", "#0891b2", "#65a30d", "#dc2626"];
 
-export const rotuloFormato = q => ({ menosAlt: "Escolha uma alternativa", vf: "Marque V (verdadeiro) ou F (falso) em cada frase", ligar: "Toque num item da esquerda e depois no par dele na direita",
-  lacunas: "Escolha a palavra de cada espaço", ordenar: "Use ↑ e ↓ para pôr os passos na ordem certa", etapas: "Responda uma etapa de cada vez" }[q.formato] || "Sua resposta");
+export const rotuloFormato = q => ({ menosAlt: "Escolha uma alternativa", vf: "Marque V (verdadeiro) ou F (falso) em cada frase", ligar: "Arraste cada item da esquerda até o par dele na direita (ou toque num e depois no outro)",
+  lacunas: "Puxe cada palavra até o espaço certo (ou toque na palavra e depois no espaço)", ordenar: "Use ↑ e ↓ para pôr os passos na ordem certa", etapas: "Responda uma etapa de cada vez" }[q.formato] || "Sua resposta");
 export const textoParaFalar = q => {
   const d = q.dados || {};
   if (q.formato === "menosAlt") return d.alternativas.map((a, i) => `Alternativa ${LETRAS[i]}: ${a}.`).join(" ");
@@ -20,6 +20,38 @@ export const textoParaFalar = q => {
   if (q.formato === "etapas") return d.etapas.map((e, i) => `Etapa ${i + 1}: ${e.pergunta}. ${e.alternativas.map((a, k) => `${LETRAS[k]}: ${a}`).join(". ")}.`).join(" ");
   return "";
 };
+
+// arrastar com o dedo ou o mouse: soltar sobre um elemento que casa com "alvos" chama aoSoltar(alvo).
+// Movimento curto (< 8 px) conta como toque (o clique normal continua valendo).
+function arrastavel(el, { alvos, aoSoltar, podeArrastar = () => true, aoMover = null, aoParar = null }) {
+  el.addEventListener("pointerdown", e => {
+    if (e.button !== 0 || !podeArrastar()) return;
+    const x0 = e.clientX, y0 = e.clientY; let fantasma = null, sobre = null;
+    const mover = ev => {
+      if (!fantasma && Math.hypot(ev.clientX - x0, ev.clientY - y0) < 8) return;
+      if (!fantasma) {
+        fantasma = el.cloneNode(true); fantasma.classList.add("arrastando-fantasma"); fantasma.removeAttribute("id");
+        const r = el.getBoundingClientRect(); fantasma.style.width = r.width + "px";
+        document.body.append(fantasma); el.classList.add("arrastando");
+      }
+      ev.preventDefault();
+      fantasma.style.left = ev.clientX + "px"; fantasma.style.top = ev.clientY + "px";
+      fantasma.hidden = true; const embaixo = document.elementFromPoint(ev.clientX, ev.clientY)?.closest(alvos); fantasma.hidden = false;
+      if (embaixo !== sobre) { sobre?.classList.remove("sobre"); sobre = embaixo; sobre?.classList.add("sobre"); }
+      aoMover?.(ev);
+    };
+    const parar = ev => {
+      document.removeEventListener("pointermove", mover); document.removeEventListener("pointerup", parar); document.removeEventListener("pointercancel", parar);
+      if (!fantasma) return;
+      fantasma.remove(); el.classList.remove("arrastando"); sobre?.classList.remove("sobre"); aoParar?.();
+      // engole o clique que vem depois do arrasto
+      const engolir = c => { c.stopPropagation(); c.preventDefault(); };
+      el.addEventListener("click", engolir, { capture: true, once: true }); setTimeout(() => el.removeEventListener("click", engolir, { capture: true }), 50);
+      if (sobre && ev.type === "pointerup") aoSoltar(sobre);
+    };
+    document.addEventListener("pointermove", mover, { passive: false }); document.addEventListener("pointerup", parar); document.addEventListener("pointercancel", parar);
+  });
+}
 
 export function montarFormato(area, q, { aoMudar = () => {}, chave = null, nome = "f" } = {}) {
   const d = q.dados || {}, k = chave?.chave || null;
@@ -48,7 +80,7 @@ export function montarFormato(area, q, { aoMudar = () => {}, chave = null, nome 
 
   if (q.formato === "ligar") {
     const pares = d.esquerda.map(() => null); let sel = null;
-    area.innerHTML = `<div class="ligar"><div class="lig-col">${d.esquerda.map((t, i) => `<button type="button" class="lig-item esq" data-e="${i}"><span class="lig-n">${i + 1}</span><span class="lig-t">${esc(t)}</span><span class="lig-par"></span></button>`).join("")}</div>
+    area.innerHTML = `<div class="ligar"><svg class="lig-linhas" aria-hidden="true"></svg><div class="lig-col">${d.esquerda.map((t, i) => `<button type="button" class="lig-item esq" data-e="${i}"><span class="lig-n">${i + 1}</span><span class="lig-t">${esc(t)}</span><span class="lig-par"></span></button>`).join("")}</div>
       <div class="lig-col">${d.direita.map((t, j) => `<button type="button" class="lig-item dir" data-d="${j}"><span class="lig-n">${LETRAS[j]}</span><span class="lig-t">${esc(t)}</span><span class="lig-par"></span></button>`).join("")}</div></div>
       ${k ? `<p class="pequeno gab-texto">Gabarito: ${d.esquerda.map((t, i) => `${i + 1}→${LETRAS[k.pares[i]]}`).join(" · ")}</p>` : ""}`;
     const pintar = () => {
@@ -56,14 +88,29 @@ export function montarFormato(area, q, { aoMudar = () => {}, chave = null, nome 
         b.style.setProperty("--cor", p !== null ? CORES[i % CORES.length] : ""); b.querySelector(".lig-par").textContent = p !== null ? `→ ${LETRAS[p]}` : ""; b.setAttribute("aria-pressed", sel === i); });
       area.querySelectorAll(".dir").forEach(b => { const j = Number(b.dataset.d), i = pares.indexOf(j); b.classList.toggle("feito", i >= 0);
         b.style.setProperty("--cor", i >= 0 ? CORES[i % CORES.length] : ""); b.querySelector(".lig-par").textContent = i >= 0 ? `← ${i + 1}` : ""; b.classList.toggle("alvo", sel !== null); });
+      linhas();
     };
-    area.querySelectorAll(".esq").forEach(b => b.onclick = () => { if (travado) return; const i = Number(b.dataset.e); sel = sel === i ? null : i; pintar(); });
-    area.querySelectorAll(".dir").forEach(b => b.onclick = () => {
-      if (travado || sel === null) return;
-      const j = Number(b.dataset.d), antes = pares.indexOf(j);
-      if (pares[sel] === j) pares[sel] = null; else { if (antes >= 0) pares[antes] = null; pares[sel] = j; }
-      sel = null; pintar(); muda();
+    // linhas coloridas ligando os pares (só com as colunas lado a lado)
+    const caixa = area.querySelector(".ligar"), svg = area.querySelector(".lig-linhas");
+    let linhaArrasto = null;
+    function linhas() {
+      const cb = caixa.getBoundingClientRect(), esq = area.querySelectorAll(".esq"), dir = area.querySelectorAll(".dir");
+      if (!esq.length || !dir.length || dir[0].getBoundingClientRect().left <= esq[0].getBoundingClientRect().left + 10) { svg.innerHTML = ""; return; }
+      const ponto = (el, lado) => { const r = el.getBoundingClientRect(); return [lado === "d" ? r.right - cb.left : r.left - cb.left, r.top + r.height / 2 - cb.top]; };
+      svg.setAttribute("viewBox", `0 0 ${cb.width} ${cb.height}`);
+      svg.innerHTML = pares.map((j, i) => { if (j === null) return ""; const [x1, y1] = ponto(esq[i], "d"), [x2, y2] = ponto(dir[j], "e");
+        return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${CORES[i % CORES.length]}" stroke-width="4" stroke-linecap="round"/><circle cx="${x1}" cy="${y1}" r="6" fill="${CORES[i % CORES.length]}"/><circle cx="${x2}" cy="${y2}" r="6" fill="${CORES[i % CORES.length]}"/>`; }).join("")
+        + (linhaArrasto ? `<line x1="${linhaArrasto[0]}" y1="${linhaArrasto[1]}" x2="${linhaArrasto[2]}" y2="${linhaArrasto[3]}" stroke="#1d5fa8" stroke-width="3" stroke-dasharray="6 5"/>` : "");
+    }
+    if (typeof ResizeObserver !== "undefined") new ResizeObserver(() => linhas()).observe(caixa);
+    const ligarPar = (i, j) => { const antes = pares.indexOf(j); if (pares[i] === j) pares[i] = null; else { if (antes >= 0) pares[antes] = null; pares[i] = j; } sel = null; pintar(); muda(); };
+    area.querySelectorAll(".esq").forEach(b => {
+      b.onclick = () => { if (travado) return; const i = Number(b.dataset.e); sel = sel === i ? null : i; pintar(); };
+      arrastavel(b, { alvos: ".lig-item.dir", podeArrastar: () => !travado, aoSoltar: alvo => { if (area.contains(alvo)) ligarPar(Number(b.dataset.e), Number(alvo.dataset.d)); },
+        aoMover: ev => { const cb = caixa.getBoundingClientRect(), r = b.getBoundingClientRect(); linhaArrasto = [r.right - cb.left, r.top + r.height / 2 - cb.top, ev.clientX - cb.left, ev.clientY - cb.top]; linhas(); },
+        aoParar: () => { linhaArrasto = null; linhas(); } });
     });
+    area.querySelectorAll(".dir").forEach(b => b.onclick = () => { if (travado || sel === null) return; ligarPar(sel, Number(b.dataset.d)); });
     pintar();
     return { valor: () => pares.some(x => x !== null) ? [...pares] : null, preencher: v => { (v || []).forEach((x, i) => pares[i] = x ?? null); pintar(); },
       travar: () => { travado = true; area.querySelectorAll("button").forEach(b => b.disabled = true); } };
@@ -71,14 +118,29 @@ export function montarFormato(area, q, { aoMudar = () => {}, chave = null, nome 
 
   if (q.formato === "lacunas") {
     const n = (String(d.texto).match(/\[\[\d+\]\]/g) || []).length;
-    area.innerHTML = `<div class="lac-banco" aria-label="Palavras para usar">${d.banco.map(p => `<span class="lac-palavra">${esc(p)}</span>`).join("")}</div>
-      <p class="lac-texto">${esc(d.texto).replace(/\[\[(\d+)\]\]/g, (_, i) => `<select class="lac-sel" data-i="${i - 1}" aria-label="Espaço ${i}"><option value="">— ${i} —</option>${d.banco.map(p => `<option>${esc(p)}</option>`).join("")}</select>${k ? `<span class="tag ok">${esc(k.respostas[i - 1])}</span>` : ""}`).replace(/\n/g, "<br>")}</p>`;
-    const sels = [...area.querySelectorAll(".lac-sel")];
-    const marcarUsadas = () => { const us = sels.map(s => s.value); area.querySelectorAll(".lac-palavra").forEach(p => p.classList.toggle("usada", us.includes(p.textContent))); };
-    sels.forEach(s => s.onchange = () => { s.classList.toggle("ok", !!s.value); marcarUsadas(); muda(); });
-    return { valor: () => sels.some(s => s.value) ? sels.map(s => s.value || null) : null,
-      preencher: v => { sels.forEach((s, i) => { s.value = v?.[i] || ""; s.classList.toggle("ok", !!s.value); }); marcarUsadas(); },
-      travar: () => { travado = true; sels.forEach(s => s.disabled = true); }, total: n };
+    const val = Array.from({ length: n }, () => null); let sel = null;
+    area.innerHTML = `<div class="lac-banco" aria-label="Palavras para usar">${d.banco.map((p, w) => `<button type="button" class="lac-palavra" data-w="${w}" aria-pressed="false">${esc(p)}</button>`).join("")}</div>
+      <p class="lac-texto">${esc(d.texto).replace(/\[\[(\d+)\]\]/g, (_, i) => `<button type="button" class="lac-vaga" data-i="${i - 1}" aria-label="Espaço ${i}"><span class="lac-num">${i}</span><span class="lac-v"></span></button>${k ? `<span class="tag ok">${esc(k.respostas[i - 1])}</span>` : ""}`).replace(/\n/g, "<br>")}</p>`;
+    const vagas = [...area.querySelectorAll(".lac-vaga")], palavras = [...area.querySelectorAll(".lac-palavra")];
+    const pintar = () => {
+      vagas.forEach((b, i) => { b.classList.toggle("ok", !!val[i]); b.classList.toggle("alvo", sel !== null && !travado); b.querySelector(".lac-v").textContent = val[i] || "";
+        b.setAttribute("aria-label", `Espaço ${i + 1}: ${val[i] || "vazio"}`); b.title = val[i] && !travado ? "Toque para tirar a palavra" : ""; });
+      palavras.forEach(p => { const w = Number(p.dataset.w); p.classList.toggle("usada", val.includes(d.banco[w])); p.classList.toggle("ativo", sel === w); p.setAttribute("aria-pressed", sel === w); });
+    };
+    const colocar = (i, w) => { val[i] = d.banco[w]; sel = null; pintar(); muda(); };
+    palavras.forEach(p => {
+      p.onclick = () => { if (travado) return; const w = Number(p.dataset.w); sel = sel === w ? null : w; pintar(); };
+      arrastavel(p, { alvos: ".lac-vaga", podeArrastar: () => !travado, aoSoltar: alvo => { if (area.contains(alvo)) colocar(Number(alvo.dataset.i), Number(p.dataset.w)); } });
+    });
+    vagas.forEach(b => b.onclick = () => {
+      if (travado) return; const i = Number(b.dataset.i);
+      if (sel !== null) colocar(i, sel);
+      else if (val[i]) { val[i] = null; pintar(); muda(); }
+    });
+    pintar();
+    return { valor: () => val.some(Boolean) ? [...val] : null,
+      preencher: v => { val.forEach((_, i) => val[i] = v?.[i] || null); pintar(); },
+      travar: () => { travado = true; sel = null; pintar(); vagas.forEach(b => b.disabled = true); palavras.forEach(b => b.disabled = true); }, total: n };
   }
 
   if (q.formato === "ordenar") {

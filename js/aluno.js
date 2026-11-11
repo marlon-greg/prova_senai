@@ -43,7 +43,9 @@ const normalizarCodigo = c => String(c || "").toUpperCase().replace(/\s+/g, "");
 // VIDAS = limite de saídas da prova (aba/janela, tela cheia e, se a prova quiser, colar); com troca de aba permitida não há vidas.
 // O professor pode dar vidas extras ao aluno (tentativa.vidasExtras) e restaurar as vidas (zera trocasDeAba).
 const vidasBase = () => trocaAbaPermitida() ? 0 : Math.max(0, Math.round(Number(provaAtual?.maxTrocasDeAba || 0)));
-const limiteSaidas = () => vidasBase() && !ap().semPunicao
+// acessibilidade: sempre SEM vidas e SEM limite de tempo (não conta para o aluno com adaptações ativas)
+const semLimites = () => !!acess;
+const limiteSaidas = () => vidasBase() && !semLimites()
   ? vidasBase() + Math.max(0, Number(tentativa?.vidasExtras || 0)) + Math.max(0, Number(ap().vidasExtras || 0)) : 0;
 // tentar colar também tira vida (padrão das provas com vidas; o professor pode desligar)
 const colarTiraVida = () => !colarPermitido() && provaAtual?.colarTiraVida !== false;
@@ -265,7 +267,7 @@ async function listarProvas() {
     else if (!td.finalizadaEm)  { status = `<span class="chip warn">em andamento · ${andamento}</span>`; acao = podeFazer ? `<button class="leve" data-acao="continuar" data-id="${p.id}">Continuar</button>` : `<span class="pequeno">prova encerrada</span>`; }
     else                        { status = `<span class="chip ok">✓ ${dataBR(td.finalizadaEm)}</span><span class="chip navy" data-placar="${p.id}">…</span>`; acao = podeVerResultado ? `<button class="leve" data-acao="resultado" data-id="${p.id}">Ver resultado</button>` : `<span class="pequeno">gabarito ainda não liberado</span>`; }
     const item = `<div class="prova-item" data-busca="${esc(normBusca(`${p.titulo} ${p.turma || ""} ${p.materia || ""}`))}"><div class="info"><b>${esc(p.titulo)}</b>
-      <div class="pi-meta">${status}</div><div class="pi-dados">${[p.materia, `${nQ(p, td)} questões`, p.tempoMinutos > 0 ? `${p.tempoMinutos} min` : ""].filter(Boolean).map(esc).join(" · ")}${!p.permitirTrocaAba && Number(p.maxTrocasDeAba) > 0 ? ` · <span class="e" aria-hidden="true">${"❤️".repeat(Math.min(5, Number(p.maxTrocasDeAba)))}</span>` : ""}</div></div><div class="acao">${acao}</div></div>`;
+      <div class="pi-meta">${status}</div><div class="pi-dados">${[p.materia, `${nQ(p, td)} questões`, p.tempoMinutos > 0 && !semLimites() ? `${p.tempoMinutos} min` : ""].filter(Boolean).map(esc).join(" · ")}${!p.permitirTrocaAba && Number(p.maxTrocasDeAba) > 0 && !semLimites() ? ` · <span class="e" aria-hidden="true">${"❤️".repeat(Math.min(5, Number(p.maxTrocasDeAba)))}</span>` : ""}</div></div><div class="acao">${acao}</div></div>`;
     if (td?.finalizadaEm) { feitas.insertAdjacentHTML("beforeend", item); feitasBox.hidden = false; $("#lpFeitasN").textContent = ++nFeitas; }
     else { fazer.insertAdjacentHTML(td ? "afterbegin" : "beforeend", item); nFazer++; }   // em andamento vai para o topo
     if (td?.finalizadaEm) {   // placar sem esperar: a lista não fica travada lendo gabaritos
@@ -320,13 +322,14 @@ function regrasDaProva(p) {
     : "As questões aparecem <b>uma por vez</b>. Depois de enviar uma resposta, não é possível voltar.");
   r.push("A ordem das questões e das alternativas é diferente para cada aluno.");
   r.push("No final você vê <b>quantas acertou e a nota</b>. Quais acertou e o gabarito aparecem só quando o professor liberar.");
-  const base = !p.permitirTrocaAba && !ap().semPunicao ? Math.max(0, Number(p.maxTrocasDeAba || 0)) : 0;
+  const base = !p.permitirTrocaAba && !semLimites() ? Math.max(0, Number(p.maxTrocasDeAba || 0)) : 0;
   const vidas = base ? base + Math.max(0, Number(ap().vidasExtras || 0)) : 0, colarCusta = vidas > 0 && !p.permitirColar && p.colarTiraVida !== false;
   if (!p.permitirColar) r.push(`<b>Colar texto está desativado</b> nos campos de resposta: digite. As tentativas de colar ficam registradas${colarCusta ? " e <b>custam 1 vida</b>" : ""}.`);
   if (!p.permitirTrocaAba) r.push("A prova abre em <b>tela cheia</b>. Sair da tela cheia e trocar de aba ou de janela <b>ficam registrados</b> para o professor.");
   if (vidas) r.push(`<b>Você tem ${vidas === 1 ? "1 vida" : `${vidas} vidas`}: ${"❤️".repeat(Math.min(vidas, 10))}</b><br>Perde 1 vida ao trocar de aba ou de janela (Alt+Tab), sair da tela cheia${colarCusta ? " ou tentar colar (Ctrl+V)" : ""}. Se as vidas acabarem, ${textoPena(p)}.<br>Saiu sem querer? Calma: chame o professor, ele pode devolver suas vidas.`);
   r.push("Copiar e selecionar o enunciado, imprimir e atalhos como Ctrl+C e Ctrl+P ficam desativados durante a prova.");
-  if (Number(p.tempoMinutos) > 0) r.push(`<b>Tempo limite: ${Number(p.tempoMinutos) + Math.max(0, Number(ap().tempoExtraMin || 0))} min${ap().tempoExtraMin > 0 ? ` (com ${ap().tempoExtraMin} min a mais para você)` : ""}.</b>${ap().ocultarCronometro ? " O relógio fica escondido para você ficar tranquilo; avisamos quando faltar 1 minuto." : ""} O cronômetro começa ao clicar em Começar; quando zerar, a prova é finalizada com as respostas já enviadas.`);
+  if (semLimites()) r.push("<b>Sem limite de tempo e sem vidas para você.</b> Faça com calma: sair da tela fica só registrado.");
+  else if (Number(p.tempoMinutos) > 0) r.push(`<b>Tempo limite: ${Number(p.tempoMinutos) + Math.max(0, Number(ap().tempoExtraMin || 0))} min${ap().tempoExtraMin > 0 ? ` (com ${ap().tempoExtraMin} min a mais para você)` : ""}.</b>${ap().ocultarCronometro ? " O relógio fica escondido para você ficar tranquilo; avisamos quando faltar 1 minuto." : ""} O cronômetro começa ao clicar em Começar; quando zerar, a prova é finalizada com as respostas já enviadas.`);
   if (String(p.codigoAcesso || "").trim() && !modoTeste) r.push("Esta prova pede um <b>código de acesso</b>, informado pelo professor na sala.");
   const nPdfs = idsConsulta(p).length;
   if (nPdfs || p.materialConsultaUrl) r.push(`Consulta permitida: <b>${esc(p.materialConsultaTitulo || "material de consulta")}</b>${nPdfs > 1 ? ` (${nPdfs} PDFs: troque pelas abas no topo do painel)` : ""}, aberto ao lado das questões (no celular, pelo botão <b>📖 Consulta</b>).`);
@@ -341,7 +344,7 @@ async function abrirProva(id, acao) {
   tentativa = t.exists() ? { id: t.id, ...t.data() } : null;
   if (acao === "resultado") return verResultado();
   if (!tentativa) {
-    const min = Number(provaAtual.tempoMinutos || 0) + (Number(provaAtual.tempoMinutos || 0) > 0 ? Math.max(0, Number(ap().tempoExtraMin || 0)) : 0);
+    const min = semLimites() ? 0 : Number(provaAtual.tempoMinutos || 0) + (Number(provaAtual.tempoMinutos || 0) > 0 ? Math.max(0, Number(ap().tempoExtraMin || 0)) : 0);
     $("#inicioTitulo").textContent = provaAtual.titulo;
     const vidas = limiteSaidas();
     $("#inicioInfo").innerHTML = `<span class="chip">📝 ${nQ(provaAtual)} questões</span>` +
@@ -1384,7 +1387,7 @@ function fimDoTempo() {
   const min = Number(provaAtual?.tempoMinutos || 0), ini = tentativa?.iniciadaEm;
   const extra = Math.max(0, Number(tentativa?.minutosExtras || 0))     // tempo a mais dado pelo professor (ex.: ao reabrir a prova)
               + Math.max(0, Number(ap().tempoExtraMin || 0));            // acessibilidade: tempo extra do aluno
-  return min > 0 && ini?.toMillis ? ini.toMillis() + (min + extra) * 60000 : null;
+  return min > 0 && !semLimites() && ini?.toMillis ? ini.toMillis() + (min + extra) * 60000 : null;
 }
 function tempoAcabou() { const f = fimDoTempo(); return f !== null && Date.now() >= f; }
 function iniciarCronometro() {

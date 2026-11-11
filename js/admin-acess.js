@@ -8,7 +8,7 @@ import { ic } from "./icones.js";
 import { VISUAL_PADRAO, PROVA_PADRAO, FONTES, TEMAS, completar, aplicarVisual, apoiosDe } from "./acessibilidade.js";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, abrirMaterialEmAba, tamanhoTexto, erroMaterial } from "./material.js";
 import { adaptarQuestao } from "./ia.js";
-import { abrirOpcoes, editarFormato, previaAplicada, gerarOpcoes, lerOpcoes } from "./admin-formatos.js";
+import { abrirOpcoes, editarFormato, previaAplicada, gerarOpcoes, lerOpcoes, aplicarOpcao } from "./admin-formatos.js?v=20261111a";
 import { perfilIA } from "./ia.js";
 import { tarefa } from "./ui.js";
 import { contextoDiario } from "../servidor/formatos.js";
@@ -175,7 +175,8 @@ async function abrirAluno(email, rolar = true) {
         <label class="check"><input type="checkbox" id="acSemAnim" ${v.semAnimacao ? "checked" : ""}> Sem animações (confete, mascote parado)</label>
       </div>
       <div data-painel="tempo" hidden>
-        <div class="ac-faixas">
+        <p class="help" style="max-width:none">⏱❤️ <b>Aluno com acessibilidade faz a prova SEM limite de tempo e SEM vidas</b>, sempre (automático). Sair da tela ou tentar colar fica só registrado. Os campos abaixo não são usados enquanto a acessibilidade estiver ativa.</p>
+        <div class="ac-faixas" style="opacity:.55">
           <div><label for="acTempo">Tempo extra (min)</label><input type="number" id="acTempo" min="0" step="5" value="${pr.tempoExtraMin}"></div>
           <div><label for="acVidas">Vidas extras</label><input type="number" id="acVidas" min="0" max="10" step="1" value="${pr.vidasExtras}"></div>
         </div>
@@ -401,10 +402,10 @@ async function questoesDoAluno(email, prova) {
   const a = (await getDoc(doc(db, "acessibilidade", email))).data() || {};
   if (a.uid) {
     const t = await getDoc(doc(db, "tentativas", `${a.uid}_${prova.id}`)).catch(() => null);
-    if (t?.exists()) return { ids: t.data().questoesIds || [], travada: true };
+    if (t?.exists()) return { ids: t.data().questoesIds || [], travada: true, plano: a.planos?.[prova.id] || null };
   }
   const s = a.sorteios?.[prova.id];
-  return { ids: Array.isArray(s?.ids) ? s.ids : [], travada: false, sorteio: s };
+  return { ids: Array.isArray(s?.ids) ? s.ids : [], travada: false, sorteio: s, plano: a.planos?.[prova.id] || null };
 }
 async function carregarQuestoes(email, prova) {
   const box = $("#acQuestoes"), sbox = $("#acSorteioBox");
@@ -412,7 +413,7 @@ async function carregarQuestoes(email, prova) {
   if (!prova) { box.innerHTML = ""; sbox.innerHTML = "<p class='pequeno'>Nenhuma prova para a turma deste aluno. Crie a prova em <b>Provas</b> escolhendo a turma dele(a) (ou cadastre o aluno na turma em <b>Turmas</b>).</p>"; return; }
   box.innerHTML = "<p class='pequeno'>Carregando…</p>"; sbox.innerHTML = "";
   try {
-    const [{ ids, travada, sorteio }, disp, pv] = await Promise.all([questoesDoAluno(email, prova), questoesDisponiveis(prova),
+    const [{ ids, travada, sorteio, plano }, disp, pv] = await Promise.all([questoesDoAluno(email, prova), questoesDisponiveis(prova),
       getDoc(doc(db, "acessibilidadePrivado", email)).catch(() => null)]);
     const pd = pv?.data() || {};
     const banco = q => bancoDaQuestao(q, prova.bancoId);
@@ -422,7 +423,7 @@ async function carregarQuestoes(email, prova) {
       Promise.all(ids.map(q => getDoc(doc(db, "acessibilidade", email, "questoes", q)).catch(() => null)))
     ]);
     const itens = ids.map((qid, i) => qs[i].exists() ? { qid, q: qs[i].data(), g: gs[i]?.data() || {}, ad: ads[i]?.exists() ? ads[i].data() : null } : null).filter(Boolean);
-    qAtual = { email, prova, itens, ids, travada, sorteio, disp, infoEm: ms(pd.infoAtualizadaEm) ?? ms(pd.atualizadoEm) };
+    qAtual = { email, prova, itens, ids, travada, sorteio, disp, plano: { ...(plano || {}) }, infoEm: ms(pd.infoAtualizadaEm) ?? ms(pd.atualizadoEm) };
     desenharSorteio(); desenharQuestoes();
   } catch (e) { box.innerHTML = `<p class="erro-texto">${esc(traduzirErro(e))}</p>`; }
 }
@@ -505,6 +506,7 @@ function desenharQuestoes() {
       <span class="tag ok">✓ ${nFeitas - nVelhas} adaptadas em dia</span>
       ${nVelhas ? `<span class="tag aviso">⚠ ${nVelhas} desatualizadas</span>` : ""}
       <span class="tag">○ ${nFaltam} sem adaptação</span></div>
+    <details class="montar-prova" id="acMontar"><summary>🧩 <b>Montar a prova</b> — escolha o formato de cada questão (ligar colunas, completar lacunas…) e gere tudo de uma vez</summary><div class="mp-corpo"></div></details>
     <div class="linha acoes" style="margin-top:8px">
       <button data-lote="faltam" ${!ia || !nFaltam || ocupado ? "disabled" : ""}>🤖 Adaptar as que faltam${nFaltam ? ` (${nFaltam})` : ""}</button>
       ${nVelhas ? `<button data-lote="velhas" class="leve" ${!ia || ocupado ? "disabled" : ""}>🔄 Refazer as desatualizadas (${nVelhas})</button>` : ""}
@@ -517,6 +519,7 @@ function desenharQuestoes() {
       <button class="ok" data-pdf ${ocupado ? "disabled" : ""}>📄 Baixar PDF da prova adaptada</button></div>
     ${ia ? "" : `<p class="pequeno">A IA precisa da chave (administrador principal) ou do servidor de correção configurado.</p>`}
     ${nManuais ? `<p class="pequeno">✍ ${nManuais} adaptada(s) à mão: “Refazer” pergunta antes de substituir.</p>` : ""}`;
+  desenharMontar(ia);
   resumo.querySelectorAll("[data-lote]").forEach(b => b.onclick = () => acaoEmLote(b.dataset.lote));
   resumo.querySelectorAll("[data-add]").forEach(b => b.onclick = () => adicionarQuestao(b.dataset.add));
   resumo.querySelector("[data-pdf]").onclick = () => baixarPdf();
@@ -592,6 +595,81 @@ async function salvarQuestao(x, el) {
   if (!(await confirmar(x.ad ? "Salvar as alterações na questão adaptada? O aluno passa a ver esta versão." : "Salvar esta adaptação? O aluno passa a ver esta versão da questão.", { titulo: "Salvar questão adaptada", ok: "Salvar" }))) return;
   try { await setDoc(doc(db, "acessibilidade", qAtual.email, "questoes", x.qid), dados); x.ad = { ...dados, atualizadoEm: null }; toast("Questão adaptada salva ✅", "ok"); desenharQuestoes(); }
   catch (e) { toast("Não foi possível salvar. " + traduzirErro(e), "erro"); }
+}
+
+// ---------- 🧩 Montar a prova: o professor escolhe o formato de cada questão (ou quantas de cada) e a IA gera tudo ----------
+// plano = { qid: "manter" | "auto" | formato } (fica em acessibilidade/{email}.planos.{provaId}; o aluno não usa)
+const formatosDa = x => Object.keys(FORMATOS).filter(f => !(f === "escritaApoio" && x.q.tipo === "alternativa"));
+const planoDe = x => qAtual.plano[x.qid] || (x.ad ? "manter" : "auto");
+const NOME_PLANO = f => f === "manter" ? "— manter como está —" : f === "auto" ? "🤖 A IA escolhe o melhor formato" : `${FORMATOS[f].icone} ${FORMATOS[f].nome}`;
+function desenharMontar(ia) {
+  const box = $("#acMontar .mp-corpo"), { itens } = qAtual; if (!box) return;
+  const ordemF = ["ligar", "lacunas", "vf", "menosAlt", "ordenar", "etapas", "escritaApoio", "texto"];
+  const contar = f => itens.filter(x => planoDe(x) === f).length;
+  const nGerar = itens.filter(x => planoDe(x) !== "manter").length;
+  box.innerHTML = `<div class="mp-secao"><h4>1. Quantas questões de cada formato <span class="pequeno">(depois dá para mudar uma por uma no passo 2)</span></h4>
+      <div class="mp-cotas">${ordemF.map(f => `<label class="mp-cota" title="${esc(FORMATOS[f].desc)}"><span>${FORMATOS[f].icone} ${esc(FORMATOS[f].nome)}</span>
+        <input type="number" min="0" max="${itens.length}" value="${contar(f)}" data-cota="${f}" aria-label="Quantas questões em ${esc(FORMATOS[f].nome)}"></label>`).join("")}</div>
+      <div class="linha acoes" style="margin-top:8px"><button type="button" class="leve mini" data-distribuir>↻ Distribuir nas questões</button>
+        <span class="pequeno">As que sobrarem ficam com <b>🤖 a IA escolhe</b>. Resposta escrita com apoio só vale para dissertativa.</span></div></div>
+    <div class="mp-secao"><h4>2. Formato de cada questão</h4>
+      <div class="mp-lista">${itens.map((x, i) => `<div class="mp-linha"><b>Q${i + 1}</b><span class="tag">${x.q.tipo === "alternativa" ? "alternativa" : "dissertativa"}</span>
+        <span class="mp-enun pequeno" title="${esc(x.q.enunciado)}">${esc(String(x.q.enunciado || "").slice(0, 90))}${String(x.q.enunciado || "").length > 90 ? "…" : ""}</span>
+        <select data-plano="${x.qid}" aria-label="Formato da questão ${i + 1}">${["manter", "auto", ...formatosDa(x)].map(f => `<option value="${f}"${planoDe(x) === f ? " selected" : ""}>${esc(NOME_PLANO(f))}${f === "manter" && x.ad?.formato && FORMATOS[x.ad.formato] ? ` (hoje: ${esc(FORMATOS[x.ad.formato].nome)})` : f === "manter" && !x.ad ? " (original)" : ""}</option>`).join("")}</select></div>`).join("")}</div>
+      <div class="linha acoes" style="margin-top:6px"><button type="button" class="leve mini" data-todas="auto">Todas: 🤖 a IA escolhe</button><button type="button" class="leve mini" data-todas="manter">Todas: manter</button></div></div>
+    <div class="mp-secao"><h4>3. Gerar</h4>
+      <div class="linha acoes"><button type="button" class="ok" data-gerar ${!ia || !nGerar || ocupado ? "disabled" : ""}>⚙ Gerar a prova adaptada (${nGerar} questão(ões))</button>
+        <span class="pequeno">A IA monta cada questão no formato escolhido, com a descrição, o perfil e os laudos do aluno. Depois revise em cada questão abaixo (dá para editar à mão).</span></div>
+      ${ia ? "" : `<p class="pequeno erro-texto">A IA precisa da chave (administrador principal) ou do servidor de correção configurado.</p>`}</div>`;
+  const atualizar = () => { const aberto = $("#acMontar").open; desenharMontar(ia); $("#acMontar").open = aberto; };
+  box.querySelectorAll("[data-plano]").forEach(s => s.onchange = () => { qAtual.plano[s.dataset.plano] = s.value; atualizar(); });
+  box.querySelectorAll("[data-todas]").forEach(b => b.onclick = () => { itens.forEach(x => qAtual.plano[x.qid] = b.dataset.todas); atualizar(); });
+  box.querySelector("[data-distribuir]").onclick = () => {
+    const cotas = Object.fromEntries([...box.querySelectorAll("[data-cota]")].map(i => [i.dataset.cota, Math.max(0, Math.round(+i.value || 0))]));
+    const total = Object.values(cotas).reduce((s, n) => s + n, 0);
+    if (total > itens.length) return toast(`A soma (${total}) passa das ${itens.length} questões da prova.`, "erro");
+    const livres = new Set(itens.map(x => x.qid)), novo = {};
+    // primeiro o que tem restrição (escrita com apoio só em dissertativa), depois o resto, na ordem das questões
+    for (const f of ["escritaApoio", ...ordemF.filter(f => f !== "escritaApoio")]) for (let n = 0; n < cotas[f]; n++) {
+      const x = itens.find(x => livres.has(x.qid) && formatosDa(x).includes(f));
+      if (!x) { toast(`Não há questão que aceite ${FORMATOS[f].nome} para todas as que você pediu.`, "erro"); break; }
+      novo[x.qid] = f; livres.delete(x.qid);
+    }
+    itens.forEach(x => qAtual.plano[x.qid] = novo[x.qid] || "auto");
+    toast("Formatos distribuídos. Confira no passo 2 e clique em ⚙ Gerar.", "ok"); atualizar();
+  };
+  box.querySelector("[data-gerar]").onclick = () => gerarMontada();
+}
+async function gerarMontada() {
+  const { email, prova, itens } = qAtual;
+  let alvo = itens.filter(x => planoDe(x) !== "manter");
+  const resumo = Object.entries(alvo.reduce((c, x) => (c[planoDe(x)] = (c[planoDe(x)] || 0) + 1, c), {})).map(([f, n]) => `${n}× ${NOME_PLANO(f)}`).join(", ");
+  if (!(await confirmar(`Gerar a prova adaptada de ${prova.titulo}? A IA vai montar ${alvo.length} questão(ões): ${resumo}. Leva cerca de 30 segundos por questão. O aluno passa a ver estas versões.`, { titulo: "⚙ Gerar a prova adaptada", ok: "Gerar" }))) return;
+  const manuais = alvo.filter(x => x.ad?.origem === "manual");
+  if (manuais.length && !(await confirmar(`${manuais.length} dessas questões foram adaptadas à mão. Substituir também essas?`, { titulo: "Adaptadas à mão", ok: "Substituir também", cancelar: "Manter as feitas à mão" })))
+    alvo = alvo.filter(x => x.ad?.origem !== "manual");
+  if (!alvo.length) return toast("Nada para gerar.", "info");
+  try { await updateDoc(doc(db, "acessibilidade", email), new FieldPath("planos", prova.id), { ...qAtual.plano, ...Object.fromEntries(itens.map(x => [x.qid, planoDe(x)])) }); }
+  catch (e) { console.warn("plano", e); }
+  ocupado = true; desenharQuestoes();
+  const tf = tarefa({ titulo: "Gerando a prova adaptada", icone: "🧩", total: alvo.length });
+  let feitas = 0; const erros = [];
+  for (const [n, x] of alvo.entries()) {
+    const f = planoDe(x);
+    tf.passo(n, `Questão ${itens.indexOf(x) + 1}: ${f === "auto" ? "a IA escolhe" : FORMATOS[f].nome}`);
+    $("#acIAMsg").textContent = `🧩 Gerando ${n + 1} de ${alvo.length}…`;
+    try {
+      const opcoes = await gerarOpcoes({ ctx, email, prova, x, orientacao: $("#acOrientacao")?.value.trim() || "", laudos: () => laudosDoAluno(email), formatoAlvo: f === "auto" ? "" : f });
+      const op = (f === "auto" ? opcoes?.[0] : opcoes?.find(o => o.formato === f)) || null;
+      if (!op) throw new Error(`a IA não devolveu o formato ${FORMATOS[f]?.nome || f}`);
+      await aplicarOpcao({ ctx, email, prova, x, opcao: op, origem: "ia", oferecidas: opcoes.length }); feitas++;
+    } catch (e) { erros.push(`Q${itens.indexOf(x) + 1}: ${e.message || traduzirErro(e)}`); console.warn("montar", x.qid, e); if (/chave|crédito|configurad/i.test(e.message || "")) break; }
+  }
+  $("#acIAMsg").textContent = "";
+  erros.length && !feitas ? tf.erro(erros[0]) : tf.fim(`${feitas} questão(ões) prontas${erros.length ? ` · ${erros.length} com erro` : ""}`);
+  toast(`🧩 Prova adaptada: ${feitas} questão(ões) geradas${erros.length ? ` · erro em ${erros.join("; ")}` : ""}. Revise cada uma e use 👁 Abrir a prova como o aluno.`, erros.length ? "erro" : "ok");
+  ocupado = false;
+  await carregarQuestoes(email, prova);
 }
 
 // 🎨 prepara as opções de formato de todas as sorteadas que ainda não têm (a escolha é feita em cada questão)
@@ -734,7 +812,9 @@ async function baixarPdf() {
     const a = completar(d.data() || {}), descricao = pv?.data()?.descricao || "";
     const turma = alunos.find(x => x.email === email)?.turma || prova.turma || "";
     const nome = a.nome || email;
-    const geral = Object.entries(MOTIVOS_PROVA).map(([k, f]) => f(a.prova[k])).filter(Boolean);
+    // tempo e vidas: aluno com acessibilidade sempre faz a prova sem limite de tempo e sem vidas
+    const geral = [["Sem limite de tempo e sem vidas", "a prova não tem cronômetro nem perde vidas; sair da tela ou tentar colar fica apenas registrado, para que a pressão do tempo e comportamentos involuntários não prejudiquem a avaliação."],
+      ...Object.entries(MOTIVOS_PROVA).filter(([k]) => k === "lerEmVoz" || k === "mostrarDica").map(([k, f]) => f(a.prova[k])).filter(Boolean)];
     const vis = ajustesVisuais(a.visual);
     if (vis.length) geral.push(["Ajustes visuais (" + vis.join(", ") + ")", "facilitam a leitura e reduzem o cansaço visual, conforme a necessidade do aluno."]);
     const nIA = itens.filter(x => x.ad?.origem === "ia").length, nMan = itens.filter(x => x.ad && x.ad.origem !== "ia").length;

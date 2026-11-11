@@ -13,7 +13,7 @@ import { iniciarRelatorios, carregarRelatorios } from "./admin-relatorios.js";
 import { iniciarGamificacao, carregarGamificacao, carregarRetorno } from "./admin-gamificacao.js";
 import { mesclarQuestao } from "./acessibilidade.js";
 import { temFormato, textoResposta, textoChave, FORMATOS } from "./formatos-ui.js";
-import { iniciarAcessibilidade, carregarAcessibilidade, prepararNovo as prepararNovoAcess, abrirDepois } from "./admin-acess.js";
+import { iniciarAcessibilidade, carregarAcessibilidade, prepararNovo as prepararNovoAcess, abrirDepois } from "./admin-acess.js?v=20261111a";
 import { iniciarHistorico, carregarHistorico } from "./admin-historico.js";
 import { exportarExcel, exportarPDF } from "./exportar-turmas.js?v=20261110b";
 import { tarefa, ligarMenuLateral } from "./ui.js";
@@ -1630,7 +1630,7 @@ async function gravarPlacares(linhas) {
 // vidas do aluno nesta prova: limite da prova + vidas extras dadas pelo professor − vidas perdidas (trocasDeAba)
 function vidasDe(t) {
   const base = limiteSaidas(resDados.prova);
-  if (!base) return null;
+  if (!base || resDados.acessEmails?.has(String(t.email || "").toLowerCase())) return null;   // acessibilidade: sem vidas
   const extras = Math.max(0, Number(t.vidasExtras || 0)), lim = base + extras, usadas = Math.min(lim, t.trocasDeAba || 0);
   return { base, extras, lim, usadas, restam: lim - usadas };
 }

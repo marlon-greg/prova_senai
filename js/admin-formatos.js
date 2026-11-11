@@ -47,21 +47,23 @@ export async function lerOpcoes(email, qid) {
   if (!d?.exists()) return null;
   try { return { opcoes: JSON.parse(d.data().opcoes || "[]"), geradoEm: d.data().geradoEm }; } catch (e) { return null; }
 }
-export async function gerarOpcoes({ ctx, email, prova, x, orientacao = "", laudos }) {
+// formatoAlvo (Montar a prova): a IA faz só aquele formato; o resultado não substitui as opções guardadas da questão
+export async function gerarOpcoes({ ctx, email, prova, x, orientacao = "", laudos, formatoAlvo = "" }) {
   const cfg = ctx.iaCfg();
   if (cfg) {
     const [p, regs] = await Promise.all([getDoc(doc(db, "acessibilidadePrivado", email)).catch(() => null), getDocs(collection(db, ...priv(email).split("/"), "diario")).catch(() => null)]);
     const rs = regs?.docs.map(d => ({ id: d.id, ...d.data() })) || [];
     const coms = (await Promise.all(rs.filter(r => r.nComentarios > 0).slice(0, 6).map(r => getDocs(collection(db, ...priv(email).split("/"), "diario", r.id, "comentarios")).catch(() => null))))
       .flatMap(s => s?.docs.map(d => d.data()) || []);
-    const opcoes = await formatosIA({ chave: cfg.chave, modelo: cfg.modelo, q: x.q, g: x.g, descricao: p?.data()?.descricao || "", perfil: p?.data()?.perfilIA?.texto || "", orientacao, diario: contextoDiario(rs, coms), laudos: await laudos() });
+    const opcoes = await formatosIA({ chave: cfg.chave, modelo: cfg.modelo, q: x.q, g: x.g, descricao: p?.data()?.descricao || "", perfil: p?.data()?.perfilIA?.texto || "", orientacao, diario: contextoDiario(rs, coms), laudos: await laudos(), formatoAlvo });
+    if (formatoAlvo) return opcoes;
     await setDoc(doc(db, ...priv(email).split("/"), "opcoes", x.qid), { opcoes: JSON.stringify(opcoes), provaId: prova.id, geradoPor: ctx.eu.email, geradoEm: serverTimestamp() });
     return opcoes;
   }
   if (!ctx.urlCorretor()) throw new Error("A IA não está configurada: chave do administrador principal ou servidor de correção (Configuração).");
   const token = await ctx.auth.currentUser.getIdToken();
   const r = await fetch(ctx.urlCorretor(), { method: "POST", headers: { authorization: "Bearer " + token, "content-type": "application/json" },
-    body: JSON.stringify({ acao: "formatos", email, qid: x.qid, provaId: prova.id, orientacao }) });
+    body: JSON.stringify({ acao: "formatos", email, qid: x.qid, provaId: prova.id, orientacao, ...(formatoAlvo ? { formato: formatoAlvo } : {}) }) });
   const d = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error(d.erro || `Erro ${r.status} no servidor.`);
   return d.opcoes;

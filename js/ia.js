@@ -232,9 +232,9 @@ export async function analiseDiarioIA({ chave, modelo, periodo, registros, comen
   try { return lerRespostaAnalise(await chamarAPI(chave, { model: modeloOrganizar(modelo), ...pedidoAnalise({ periodo, contexto: contextoPeriodo(registros, comentarios) }) })); }
   catch (e) { throw e.ia ? e : erroIA(e.message); }
 }
-export async function formatosIA({ chave, modelo, q, g, descricao, orientacao, diario, perfil, laudos = [] }) {
+export async function formatosIA({ chave, modelo, q, g, descricao, orientacao, diario, perfil, laudos = [], formatoAlvo = "" }) {
   try {
-    const r = await chamarAPI(chave, { model: modeloOrganizar(modelo), ...pedidoFormatos({ q, g, descricao, orientacao, diario, perfil, laudos: laudos.slice(0, 3).map(l => ({ titulo: l.titulo, data: base64(l.bytes) })) }) });
+    const r = await chamarAPI(chave, { model: modeloOrganizar(modelo), ...pedidoFormatos({ q, g, descricao, orientacao, diario, perfil, formatoAlvo, laudos: laudos.slice(0, 3).map(l => ({ titulo: l.titulo, data: base64(l.bytes) })) }) });
     return lerRespostaFormatos(r, q);
   } catch (e) { throw e.ia ? e : erroIA(e.message); }
 }

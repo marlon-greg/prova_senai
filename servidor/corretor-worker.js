@@ -374,7 +374,7 @@ async function adaptarComIA(chave, modelo, { q, g, descricao, orientacao, laudos
 
 // =====================================================================
 // Formatos de questão adaptada: várias opções para UMA questão (servidor/formatos.js)
-// POST { acao: "formatos", email, qid, provaId?, orientacao? } -> { opcoes } (também grava em acessibilidadePrivado/{email}/opcoes/{qid})
+// POST { acao: "formatos", email, qid, provaId?, orientacao?, formato? } -> { opcoes } (também grava em acessibilidadePrivado/{email}/opcoes/{qid})
 // =====================================================================
 async function sugerirFormatos(env, usuario, corpo) {
   const quem = String(usuario.email || "").toLowerCase(), email = String(corpo.email || "").trim().toLowerCase(), qid = String(corpo.qid || "");
@@ -394,8 +394,9 @@ async function sugerirFormatos(env, usuario, corpo) {
   const comComent = Object.entries(diario || {}).filter(([, r]) => r.nComentarios > 0).sort((a, b) => String(b[1].data).localeCompare(String(a[1].data))).slice(0, 6);
   const comentarios = (await Promise.all(comComent.map(([id]) => fs.listar(`acessibilidadePrivado/${email}/diario/${id}/comentarios`).catch(() => ({}))))).flatMap(o => Object.values(o));
   const r = await chamarClaude(env, { model: env.MODELO_ADAPTACAO || "claude-sonnet-5-5",
-    ...pedidoFormatos({ q, g: g || {}, descricao: privado?.descricao, perfil: privado?.perfilIA?.texto || "", orientacao: String(corpo.orientacao || "").slice(0, 1000), diario: contextoDiario(regs, comentarios), laudos }) });
+    ...pedidoFormatos({ q, g: g || {}, descricao: privado?.descricao, perfil: privado?.perfilIA?.texto || "", orientacao: String(corpo.orientacao || "").slice(0, 1000), diario: contextoDiario(regs, comentarios), laudos, formatoAlvo: String(corpo.formato || "") }) });
   const opcoes = lerRespostaFormatos(r, q);
+  if (corpo.formato) return { ok: true, opcoes };   // Montar a prova: quem chamou aplica direto (não substitui as opções guardadas)
   await fs.gravar(`acessibilidadePrivado/${email}/opcoes/${qid}`, { opcoes: JSON.stringify(opcoes), provaId: corpo.provaId || "", geradoPor: quem }, "geradoEm");
   return { ok: true, opcoes };
 }

@@ -213,7 +213,9 @@ export function contextoDiario(registros = [], comentarios = []) {
     comentarios.length && `Comentários dos professores:\n${comentarios.slice(0, 10).map(c => `- ${limpo([c.respostas?.comentario, c.respostas?.sugestao].filter(Boolean).join(" Sugestão: "), 300)}`).join("\n")}`
   ].filter(Boolean).join("\n");
 }
-export function pedidoFormatos({ q, g = {}, descricao, orientacao, diario, perfil, laudos = [] }) {
+// formatoAlvo: o professor já escolheu o formato (Montar a prova): a IA faz só aquele, bem feito
+export function pedidoFormatos({ q, g = {}, descricao, orientacao, diario, perfil, laudos = [], formatoAlvo = "" }) {
+  const alvo = FORMATOS[formatoAlvo] ? formatoAlvo : "";
   const alt = q.tipo === "alternativa" && Array.isArray(q.alternativas);
   const texto = `<descricao_da_equipe>\n${descricao || "(sem descrição)"}\n</descricao_da_equipe>\n` +
     (orientacao ? `<orientacao>\n${orientacao}\n</orientacao>\n` : "") +
@@ -224,7 +226,8 @@ export function pedidoFormatos({ q, g = {}, descricao, orientacao, diario, perfi
          : `<respostas_aceitas>\n${(g.respostasAceitas || []).join("\n") || "(nenhuma)"}\n</respostas_aceitas>\n<palavras_chave>${(g.palavrasChave || []).join(", ")}</palavras_chave>\n`) +
     (g.explicacao ? `<explicacao>${g.explicacao}</explicacao>\n` : "") + `</questao>\n` +
     (laudos.length ? `Laudos anexados: ${laudos.map(l => l.titulo).join("; ")}.\n` : "") +
-    `Proponha de 4 a 6 formatos diferentes para este aluno, do mais indicado para o menos indicado.`;
+    (alvo ? `O PROFESSOR JÁ ESCOLHEU O FORMATO: "${alvo}" (${FORMATOS[alvo].nome}). Ignore a regra de 4 a 6 opções: devolva UMA opção só, nesse formato, a melhor possível para este aluno (enunciado bem curto e direto, itens curtos, linguagem simples), avaliando o mesmo conteúdo da questão original.`
+          : `Proponha de 4 a 6 formatos diferentes para este aluno, do mais indicado para o menos indicado.`);
   return {
     max_tokens: 16000, system: SISTEMA_FORMATOS,
     output_config: { effort: "medium", format: { type: "json_schema", schema: ESQUEMA_FORMATOS } },
