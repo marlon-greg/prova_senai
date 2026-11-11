@@ -1602,7 +1602,13 @@ function montarResultados() {
   resDados.testes = todas.filter(l => l.t.teste === true);
   desenharResultados();
   gravarPlacares(todas);
-  if ($("#iaAuto").checked && $("#rAoVivo").checked) corrigirPendentesIA({ auto: true });
+  if ($("#iaAuto").checked && $("#rAoVivo").checked) agendarAutoIA();
+}
+// automático: junta as provas entregues nos últimos 20 s e corrige em lote, sem janelas nem avisos (só a linha da barra da IA)
+let timerAutoIA = null;
+function agendarAutoIA() {
+  if (timerAutoIA || !pendentesIA().some(it => !tentadasAutoIA.has(it.tid + "/" + it.qid))) return;
+  timerAutoIA = setTimeout(() => { timerAutoIA = null; if ($("#iaAuto").checked && $("#rAoVivo").checked) corrigirPendentesIA({ auto: true }); }, 20000);
 }
 
 // Grava na tentativa o placar que o aluno vê (acertos, nota, pendentes), com as correções manuais e da IA.
@@ -2241,15 +2247,21 @@ function corrigirPendentesIA({ auto = false, refazer = null } = {}) {
     emFilaIA.add(k); if (auto) tentadasAutoIA.add(k); filaIA.push(it); novos++;
   }
   if (!auto && !novos && !rodandoIA) { toast("Nenhuma dissertativa pendente nesta prova.", "info"); return; }
-  processarFilaIA();
+  if (!novos && auto) return;
+  processarFilaIA({ silencioso: auto });
 }
 let tarefaIA = null;   // painel de progresso da correção (canto da tela)
 function mostrarProgressoIA(atual) {
   const total = iaFeitas + iaErros + filaIA.length + (atual ? 1 : 0);
   if (atual && tarefaIA) tarefaIA.total(total).passo(iaFeitas + iaErros, `${atual.nome} · questão ${atual.n}${iaErros ? ` · ${iaErros} com erro` : ""}`);
   const el = $("#iaProgresso");
-  if (!total) { el.innerHTML = ""; return; }
   const feitos = iaFeitas + iaErros;
+  if (iaSilencioso) {   // automático: uma linha só, com o total desde que o painel abriu
+    el.innerHTML = `🤖 Correção automática: <b>${autoFeitas + iaFeitas}</b> dissertativa(s) corrigida(s) das provas entregues` +
+      (atual ? ` · corrigindo ${feitos + 1} de ${total}…` : "") + (autoErros + iaErros ? ` · <span class="erro-texto">${autoErros + iaErros} com erro</span>` : "");
+    return;
+  }
+  if (!total) { el.innerHTML = ""; return; }
   el.innerHTML = `<progress class="barra" max="${total}" value="${feitos}"></progress> ` +
     (atual ? `Corrigindo ${feitos + 1} de ${total} — ${esc(atual.nome)}, Q${atual.n}` : `Concluído: ${iaFeitas} corrigida(s)`) + (iaErros ? ` · <span class="erro-texto">${iaErros} com erro</span>` : "");
 }
@@ -2274,10 +2286,11 @@ async function ajustarDeslizes(tid) {
   const corrs = {}; (await getDocs(collection(db, "tentativas", tid, "correcoes"))).forEach(d => corrs[d.id] = d.data());
   await Promise.all(Object.entries(ajusteDeslizes(corrs)).map(([qid, d]) => updateDoc(doc(db, "tentativas", tid, "correcoes", qid), d)));
 }
-async function processarFilaIA() {
+let iaSilencioso = false, autoFeitas = 0, autoErros = 0;   // automático: sem janela de progresso nem aviso no fim
+async function processarFilaIA({ silencioso = false } = {}) {
   if (rodandoIA) return;
-  rodandoIA = true; iaFeitas = 0; iaErros = 0; atualizarControlesIA();
-  tarefaIA = tarefa({ titulo: "Corrigindo dissertativas com IA", icone: "🤖", total: filaIA.length, texto: "Começando…" });
+  rodandoIA = true; iaFeitas = 0; iaErros = 0; iaSilencioso = silencioso; atualizarControlesIA();
+  tarefaIA = silencioso ? null : tarefa({ titulo: "Corrigindo dissertativas com IA", icone: "🤖", total: filaIA.length, texto: "Começando…" });
   const provaId = resDados?.prova.id;
   try {
     while (filaIA.length) {
@@ -2308,7 +2321,9 @@ async function processarFilaIA() {
     }
     if (iaErros && resDados?.prova.id === provaId) montarResultados();   // mostra os erros no detalhe
   } finally {
-    rodandoIA = false; atualizarControlesIA(); mostrarProgressoIA(null);
+    rodandoIA = false; atualizarControlesIA();
+    if (iaSilencioso) { autoFeitas += iaFeitas; autoErros += iaErros; iaFeitas = 0; iaErros = 0; mostrarProgressoIA(null); iaSilencioso = false; return; }
+    mostrarProgressoIA(null);
     if (iaErros && !iaFeitas) tarefaIA?.erro(`${iaErros} com erro: veja no detalhe do aluno.`); else tarefaIA?.fim(`${iaFeitas} corrigida(s)${iaErros ? ` · ${iaErros} com erro` : ""}`);
     tarefaIA = null;
     if (iaFeitas || iaErros) toast(`IA: ${iaFeitas} corrigida(s)${iaErros ? `, ${iaErros} com erro (veja no detalhe do aluno)` : ""}.`, iaErros ? "erro" : "ok");
