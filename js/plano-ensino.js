@@ -5,6 +5,7 @@
 // com o que mostrou na prova. Um critério pode voltar em várias provas até a capacidade ser completada.
 //
 // Fonte: Plano_Ensino_BD_2026_2sem_Turma_2A.xlsx / _2B.xlsx (aba Critérios, igual nas duas turmas).
+// As socioemocionais de cada avaliação seguem a aula dela no Plano de Aulas (completadas em 12/11/2026).
 // Critério: [id, capacidade (do plano-curso.js), texto literal do plano de ensino, explicação para o aluno, extras]
 //   extras.grupo = só faz sentido em trabalho em grupo (não entra sozinho nas provas individuais).
 // Detalhados = critérios da RUBRICA de uma prova (mais específicos), sempre ligados a um critério oficial.
@@ -87,20 +88,20 @@ const MS3_1A_RUBRICA = [
 ];
 export const PLANOS_ENSINO = [
   { unidade: "bd", periodo: "2026-2", turma: "1A", planilha: "Turma 2A (EM Integrado) · terças", avaliacoes: [
-    { id: "ms1", nome: "MS1 — SGBD", data: "2026-08-11", caps: [1], socio: [1, 2] },
-    { id: "ms2", nome: "MS2 — MER completo", data: "2026-08-25", caps: [4, 5], socio: [2, 4] },
-    { id: "ms3", nome: "MS3 — Modelo conceitual + lógico", data: "2026-09-29", caps: [4, 5, 7], socio: [1, 2], detalhados: MS3_1A_RUBRICA },
-    { id: "ms4", nome: "MS4 — Modelo físico (DDL, DCL, import/export)", data: "2026-10-27", caps: [8, 9, 13], socio: [1, 2, 4] },
-    { id: "ms5", nome: "MS5 — SQL prático", data: "2026-11-24", caps: [10, 11], socio: [1, 2, 4] },
+    { id: "ms1", nome: "MS1 — SGBD", data: "2026-08-11", caps: [1], socio: [1, 2, 3] },
+    { id: "ms2", nome: "MS2 — MER completo", data: "2026-08-25", caps: [4, 5], socio: [1, 2, 3, 4] },
+    { id: "ms3", nome: "MS3 — Modelo conceitual + lógico", data: "2026-09-29", caps: [4, 5, 7], socio: [1, 2, 3], detalhados: MS3_1A_RUBRICA },
+    { id: "ms4", nome: "MS4 — Modelo físico (DDL, DCL, import/export)", data: "2026-10-27", caps: [8, 9, 13], socio: [1, 2, 3, 4] },
+    { id: "ms5", nome: "MS5 — SQL prático", data: "2026-11-24", caps: [10, 11], socio: [1, 2, 3, 4] },
     { id: "som", nome: "SOM GERAL — Projeto final em grupo + prova oral", data: "2026-12-15", grupo: true, caps: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], socio: [1, 2, 3, 4] }
   ] },
   { unidade: "bd", periodo: "2026-2", turma: "1B", planilha: "Turma 2B (EM Integrado) · quartas", avaliacoes: [
-    { id: "ms1", nome: "MS1 — SGBD", data: "2026-08-12", caps: [1], socio: [1, 2] },
-    { id: "ms2", nome: "MS2 — MER completo", data: "2026-08-26", caps: [4, 5], socio: [2, 4] },
-    { id: "ms3", nome: "MS3 — Modelo relacional", data: "2026-09-23", caps: [5, 7], socio: [1, 2] },
-    { id: "ms4", nome: "MS4 — Normalização", data: "2026-10-14", caps: [6], socio: [2] },
+    { id: "ms1", nome: "MS1 — SGBD", data: "2026-08-12", caps: [1], socio: [1, 2, 3] },
+    { id: "ms2", nome: "MS2 — MER completo", data: "2026-08-26", caps: [4, 5], socio: [1, 2, 3, 4] },
+    { id: "ms3", nome: "MS3 — Modelo relacional", data: "2026-09-23", caps: [5, 7], socio: [1, 2, 3] },
+    { id: "ms4", nome: "MS4 — Normalização", data: "2026-10-14", caps: [6], socio: [1, 2, 3] },
     { id: "som1", nome: "SOMATIVA 1 — Aetheria: modelagem completa", data: "2026-11-04", caps: [1, 2, 3, 4, 5, 6, 7, 8, 9], socio: [1, 2, 3, 4] },
-    { id: "ms5", nome: "MS5 — SQL prático", data: "2026-12-02", caps: [10, 11], socio: [1, 2, 4] },
+    { id: "ms5", nome: "MS5 — SQL prático", data: "2026-12-02", caps: [10, 11], socio: [1, 2, 3, 4] },
     { id: "som2", nome: "SOMATIVA 2 — ArenaCraft: operação completa", data: "2026-12-16", caps: [5, 10, 11, 12, 13], socio: [1, 2, 3, 4] }
   ] }
 ];
