@@ -36,13 +36,18 @@ própria; coopera (C47) ← trabalho em grupo. As demais são observação do pr
    Nada de sincronizar dados entre projetos.
    - O **Revisão SAEP** (`revisao-saep`, projeto Firebase próprio) continua como está: é outro produto.
    - O **sistema de aulas** é um repositório novo feito a partir do código do Revisão SAEP, mas ligado a **este** projeto.
-   - A **autoavaliação** (do colega) **fica no Supabase**, onde já está no ar. A ligação é por uma **ponte no Worker**
-     `prova-senai` (`servidor/integracao.js`), automática e sem exportar nada:
-     - **ida:** um Database Webhook do Supabase chama `POST /integracao/autoavaliacao` a cada resposta, e o Worker grava a
-       evidência `autoavaliacao` aqui;
-     - **volta:** `GET /integracao/situacao` devolve a situação por aluno e critério;
-     - **segurança:** cabeçalho `x-chave` = segredo `INTEGRACAO_CHAVE` (Cloudflare), só servidor com servidor.
-     Detalhes em `docs/CONTRATO-AUTOAVALIACAO.md`.
+   - A **autoavaliação** é o **Stacktrace** do colega (API Fastify + PostgreSQL próprios, login próprio). Ela **não**
+     usa este Firebase e **não muda de regras**:
+     - resposta binária Consigo / Não consigo, nunca tratada como acerto ou nota;
+     - cada "Não consigo" vira uma pendência que o professor atende;
+     - socioemocional fora.
+
+     A ligação é **só leitura, automática**:
+     - o Worker `prova-senai` busca as respostas e as pendências na API dele (`GET /integracao/respostas` e
+       `/integracao/pendencias`, cabeçalho `x-chave`) a cada 15 min e quando o professor abre a comparação;
+     - o Worker grava a evidência `autoavaliacao` aqui.
+
+     Os critérios casam pela numeração do plano: `BD/TECNICA/9/25` = `bd.cr25`. Detalhes em `docs/CONTRATO-AUTOAVALIACAO.md`.
 2. **Regras do Firestore: um arquivo só**, `prova_senai/firestore.rules`, publicado sozinho pelo GitHub Actions a cada
    push na `main` (se não compilar, o Firebase recusa e as regras antigas continuam). Cada sistema edita **só a sua
    seção**, entre os marcadores `// >>> AULAS` … `// <<< AULAS` e `// >>> AUTOAVALIACAO` … `// <<< AUTOAVALIACAO`
@@ -118,6 +123,51 @@ Fonte: `css/style.css` (tokens em `:root` e componentes), `js/ui.js` (componente
 1. Aulas: login e turmas deste projeto; estrutura das aulas de BD (1A e 1B) a partir dos planos de ensino.
 2. Aulas: "O que vamos aprender hoje" (critérios explicados), sessão ao vivo e evidência `aula` ao encerrar.
 3. Aulas: aba Atividades (treino e lançadas) com `aulasEntregas` e evidências `atividade`/`treino`.
-4. Autoavaliação: perguntas com os IDs dos critérios + webhook do Supabase para a ponte (`docs/CONTRATO-AUTOAVALIACAO.md`).
-5. Provas: ligar questões/rubrica aos critérios, gravar a evidência `prova` e montar o **boletim por critério**
-   (aluno e turma) com as três vertentes.
+4. Autoavaliação (colega): as issues de integração (`docs/CONTRATO-AUTOAVALIACAO.md`); aqui, trocar a ponte de webhook
+   por busca (pull) na API do Stacktrace.
+5. Provas, nesta ordem:
+   1. ligar questões e itens da rubrica aos critérios;
+   2. registrar a cola por questão;
+   3. relatório por critério com a comparação das três vertentes;
+   4. recuperação automática;
+   5. TRI opcional.
+6. Provas: avaliação de **seminários** (seção 5).
+
+## 5. Regras de avaliação (decididas com o professor em 12/11/2026)
+
+- **Aprovação:** a prova aprova com **mais de 50%**, e ponto. Cada microsomativa tem peso 1, e a média de todas vai para
+  o portal oficial do SENAI.
+- **Resultado por critério:** é só **diagnóstico** (onde o aluno teve mais dificuldade); critério "bem" = acima de 50%.
+  - **Objetiva:** a questão inteira fica ligada a 1 critério.
+  - **Dissertativa:** os pontos são divididos em **itens da rubrica**, cada um ligado a 1 critério. A IA corrige item
+    por item e a nota pode ser quebrada (0,5, 1, 1,5…).
+  - Nada de "consigo em parte" na prova: o resultado geral do critério é que diz.
+- **Microsomativa = página virada.** Cada MS avalia 1 capacidade técnica (às vezes 2 que se completam). Capacidade
+  concluída e aprovada **não volta** como tópico nas provas seguintes. A comparação de cada critério olha a janela
+  daquela MS: aulas, autoavaliações e atendimentos entre a prova anterior e esta.
+- **Recuperação de cada MS:** só para quem ficou **abaixo de 50%**. Uma chance por MS.
+  - **Antes dela**, a **pré-recuperação** é obrigatória: atividade sem nota, no sistema de aulas, só com os critérios em
+    que o aluno foi mal.
+  - **A prova de recuperação** é gerada **por aluno**, com os critérios em que ele foi pior (abaixo de 50%):
+    - pelo menos 1 objetiva e 1 dissertativa por critério, para pegar o chute;
+    - questões de "marque todas as corretas";
+    - sorteadas do banco ligado a critérios e dificuldade.
+  - **A nota da recuperação** chega no máximo à média (50%), mesmo que o aluno tire 100%.
+- **Nivelamento:** uma lista separada (só para os professores) de quem **passou**, mas foi muito mal (zero ou muito baixo)
+  em algum critério. Esses alunos recebem atividades de nivelamento junto com a pré-recuperação.
+- **Recuperação geral** (fim da UC):
+  - o professor analisa os critérios em que o aluno foi pior em **todas** as provas;
+  - o professor vê **quanto** o aluno melhorou nas recuperações;
+  - objetivo: apontar para a ferida.
+- **Cola:**
+  - registrar cada saída da prova (alt+tab, tela cheia) **com a questão que estava na tela** e o tempo fora;
+  - no relatório, "acerto sob suspeita" (acertou uma questão em que saiu, ainda mais se for difícil e ele errou as fáceis);
+  - o sistema não tira ponto sozinho: o professor decide.
+- **TRI (opcional, o professor liga ou desliga):**
+  - começa com a dificuldade marcada pelo professor e o aviso de incoerência ("acertou difíceis e errou fáceis do mesmo critério");
+  - depois, a dificuldade calculada pelas respostas acumuladas;
+  - TRI completa só quando houver dados suficientes.
+- **Quem vê a comparação** (aulas × autoavaliação × prova):
+  - admin, professor, **coordenador** (papel novo, só leitura) e auxiliar (só da aluna dela);
+  - o **aluno vê só a média e a evolução nas provas**, por enquanto.
+- **Seminários:** avaliação de apresentações em equipe, com partes individuais e de grupo, ligada a critérios (em definição).
