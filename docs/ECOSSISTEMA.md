@@ -50,13 +50,13 @@ própria; coopera (C47) ← trabalho em grupo. As demais são observação do pr
    | `autoavaliacoes`, `recuperacoes` | autoavaliação | autoavaliação | autoavaliação; provas e aulas leem |
    | **`evidencias`** | **comum** | cada sistema, só as suas fontes | equipe; o aluno lê as dele |
 
-4. **Contrato comum em 3 módulos sem dependências** (copiar, nunca editar a cópia):
+4. **Contrato comum em 3 módulos, importados direto do site publicado** (nada de cópia, nada de sincronizar):
    - `js/plano-curso.js`: as 12 UCs, as capacidades, as socioemocionais e os conhecimentos (IDs `bd`, `bd.ct9`, `bd.cs2`, `bd.k2.4`).
    - `js/plano-ensino.js`: os critérios (`bd.cr25`) com a explicação para o aluno e as avaliações previstas por turma.
    - `js/evidencias.js`: o formato das evidências, as escalas, os sinais socioemocionais e o cruzamento das três vertentes.
 
-   Nos outros sistemas: uma pasta `js/compartilhado/` com um script `sincronizar` que copia esses 3 arquivos de
-   `C:\Users\marli\Documents\github\prova_senai\js\`. Mudou o plano? Muda aqui primeiro.
+   Os outros sistemas fazem `import { … } from "https://marlon-greg.github.io/prova_senai/js/plano-ensino.js"` (o GitHub Pages libera CORS).
+   Mudou o plano aqui, com push, os três sistemas passam a usar a versão nova sozinhos. Ninguém edita esses módulos fora daqui.
 5. **Quem grava cada evidência** (`evidencias/{fonte}__{ref}__{email}`):
 
    | Fonte | Quando | Quem grava | Conteúdo |

@@ -52,7 +52,12 @@ As regras já estão publicadas no `firestore.rules` (seção `>>> AUTOAVALIACAO
 - **Das provas:** a situação de cada aluno em cada critério (`situacaoCriterio` em `js/evidencias.js`): ilusão de saber,
   dificuldade real etc. Com isso as ações de recuperação vão direto para quem precisa.
 
-## Se o sistema da autoavaliação não puder usar este projeto Firebase
+## Vínculo real, sem exportar nada
 
-A alternativa (pior) é exportar um JSON no mesmo formato de `evidencias` por turma e o professor importar no sistema de
-provas, ou pedir uma `acao` no Worker `prova-senai` que receba as evidências autenticadas. Combine com o professor.
+Os três sistemas leem e gravam no **mesmo banco**, em tempo real. O aluno responde a autoavaliação e, no mesmo instante,
+ela já aparece no boletim do sistema de provas e no painel das aulas. **Não existe exportação, importação nem planilha
+intermediária.** Por isso, usar o projeto Firebase `prova-senai-3e983` é condição, não opção.
+
+Os critérios também não são copiados: importe direto do site publicado,
+`import { criteriosDaUnidade, criterioPorId } from "https://marlon-greg.github.io/prova_senai/js/plano-ensino.js"` e
+`import { montarEvidencia, idEvidencia } from "https://marlon-greg.github.io/prova_senai/js/evidencias.js"`.
