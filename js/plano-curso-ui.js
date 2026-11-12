@@ -3,8 +3,8 @@
 // critérios técnicos + socioemocionais; a rubrica (critérios detalhados) liga cada item a um critério oficial.
 // Unidade sem critérios: marca capacidades e conhecimentos (plano-curso.js), como antes.
 // Grava prova.planoCurso = { unidade, avaliacao, criterios, detalhados } ou { unidade, itens }.
-import { PLANO_CURSO, unidadePorId, unidadeDaMateria, rotuloTec, nivelK } from "./plano-curso.js";
-import { criteriosDaUnidade, planoDaTurma, criteriosSugeridos, avaliacaoDaProva, proximaAvaliacao, codigoCriterio } from "./plano-ensino.js";
+import { PLANO_CURSO, unidadePorId, unidadeDaMateria, rotuloTec, nivelK } from "./plano-curso.js?v=20261112d";
+import { criteriosDaUnidade, planoDaTurma, criteriosSugeridos, avaliacaoDaProva, proximaAvaliacao, codigoCriterio } from "./plano-ensino.js?v=20261112d";
 import { esc, $ } from "./common.js";
 
 const NENHUMA = "nenhuma";

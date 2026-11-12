@@ -10,7 +10,7 @@
 //   extras.grupo = só faz sentido em trabalho em grupo (não entra sozinho nas provas individuais).
 // Detalhados = critérios da RUBRICA de uma prova (mais específicos), sempre ligados a um critério oficial.
 //   Níveis da rubrica: Mais que Satisfatório, Satisfatório, Parcialmente Satisfatório, Não Satisfatório.
-import { unidadeDaMateria, unidadePorId } from "./plano-curso.js";
+import { unidadeDaMateria, unidadePorId } from "./plano-curso.js?v=20261112d";
 
 export const NIVEIS_RUBRICA = ["Mais que Satisfatório", "Satisfatório", "Parcialmente Satisfatório", "Não Satisfatório"];
 
@@ -112,9 +112,10 @@ export const criterioPorId = id => criteriosDaUnidade(id.split(".")[0]).find(c =
 export const codigoCriterio = id => "C" + id.split(".cr")[1];   // "bd.cr10" -> "C10"
 // "DETS-I-1A-26CT-S" -> "1A"
 export const codigoTurma = nome => (String(nome || "").toUpperCase().match(/(?:^|[^0-9A-Z])(\d[A-Z])(?=[^0-9A-Z]|$)/) || [])[1] || "";
-export function planoDaTurma(unidadeId, turmaNome) {
-  const c = codigoTurma(turmaNome);
-  return PLANOS_ENSINO.filter(p => p.unidade === unidadeId && p.turma === c).sort((a, b) => b.periodo.localeCompare(a.periodo))[0] || null;
+// plano da turma; turma sem plano (ex.: turma de teste) usa o primeiro plano da unidade (critérios são iguais entre turmas)
+export function planoDaTurma(unidadeId, turmaNome, { exato = false } = {}) {
+  const c = codigoTurma(turmaNome), daUnidade = PLANOS_ENSINO.filter(p => p.unidade === unidadeId).sort((a, b) => b.periodo.localeCompare(a.periodo));
+  return daUnidade.find(p => p.turma === c) || (exato ? null : daUnidade[0] || null);
 }
 // critérios sugeridos para uma avaliação prevista: os das capacidades dela (os de grupo só em avaliação de grupo)
 export function criteriosSugeridos(uid, av) {
@@ -122,17 +123,20 @@ export function criteriosSugeridos(uid, av) {
   const caps = new Set([...(av.caps || []).map(n => `${uid}.ct${n}`), ...(av.socio || []).map(n => `${uid}.cs${n}`)]);
   return criteriosDaUnidade(uid).filter(c => caps.has(c[1]) && (av.grupo || !c[4]?.grupo)).map(c => c[0]);
 }
-// avaliação prevista que corresponde à prova: a escolhida, ou pelo título (MS5, SOM…), ou pela data
+// avaliação prevista que corresponde à prova: a escolhida, ou pelo título (MS5, SOM…), ou pela data,
+// ou (sem nada disso) a próxima prevista a partir da data da prova (ou de hoje)
 export function avaliacaoDaProva(p, plano) {
   if (!plano) return null;
   const pc = p?.planoCurso || {};
   if (pc.avaliacao) return plano.avaliacoes.find(a => a.id === pc.avaliacao) || null;
   const t = String(p?.titulo || "").toUpperCase(), ms = t.match(/\bMS\s*-?\s*(\d)\b/);
   return (ms && plano.avaliacoes.find(a => a.id === "ms" + ms[1]))
-    || (p?.dataProva && plano.avaliacoes.find(a => a.data === p.dataProva)) || null;
+    || (p?.dataProva && plano.avaliacoes.find(a => a.data === p.dataProva))
+    || proximaAvaliacao(plano, p?.dataProva || undefined) || plano.avaliacoes[plano.avaliacoes.length - 1] || null;
 }
+const hojeISO = () => { const d = new Date(); return new Date(d - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10); };
 // próxima avaliação prevista (hoje ou depois), para destacar no formulário
-export const proximaAvaliacao = (plano, hoje = new Date().toISOString().slice(0, 10)) => plano?.avaliacoes.find(a => a.data >= hoje) || null;
+export const proximaAvaliacao = (plano, hoje = hojeISO()) => plano?.avaliacoes.find(a => a.data >= hoje) || null;
 
 // O que a prova avalia, em critérios. null = a unidade não tem critérios cadastrados (cai nas capacidades).
 // prova.planoCurso = { unidade, avaliacao, criterios: [ids], detalhados: [{ id, titulo, texto, liga, pontos }] }

@@ -13,8 +13,8 @@ let gami = { ...GAMI_PADRAO };   // o que está ligado na gamificação (config/
 import { montarFormato, temFormato, FORMATOS, rotuloFormato, textoParaFalar, textoResposta, textoChave } from "./formatos-ui.js";
 const controles = {};   // qid -> controle do formato adaptado (valor, preencher, travar)
 import { abrirLeitorPdf } from "./leitor-pdf.js";
-import { topicosDaProva, htmlConhecimentos, rotuloTec, nivelK } from "./plano-curso.js";
-import { criteriosDaProva, NIVEIS_RUBRICA } from "./plano-ensino.js";
+import { topicosDaProva, htmlConhecimentos, rotuloTec, nivelK } from "./plano-curso.js?v=20261112d";
+import { criteriosDaProva, NIVEIS_RUBRICA } from "./plano-ensino.js?v=20261112d";
 import { toolbar, collapsible, vazio, statTiles, chips } from "./ui.js";
 import { completar, aplicarVisual, mesclarQuestao } from "./acessibilidade.js";
 import { definirEstilos } from "./mascotes.js";
