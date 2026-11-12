@@ -13,6 +13,7 @@ let gami = { ...GAMI_PADRAO };   // o que está ligado na gamificação (config/
 import { montarFormato, temFormato, FORMATOS, rotuloFormato, textoParaFalar, textoResposta, textoChave } from "./formatos-ui.js";
 const controles = {};   // qid -> controle do formato adaptado (valor, preencher, travar)
 import { abrirLeitorPdf } from "./leitor-pdf.js";
+import { topicosDaProva, htmlConhecimentos, rotuloTec, nivelK } from "./plano-curso.js";
 import { toolbar, collapsible, vazio, statTiles, chips } from "./ui.js";
 import { completar, aplicarVisual, mesclarQuestao } from "./acessibilidade.js";
 import { definirEstilos } from "./mascotes.js";
@@ -354,6 +355,7 @@ async function abrirProva(id, acao) {
       (podeVoltar() ? `<span class="chip">↔ pode ir e voltar</span>` : "") +
       (temConsulta() ? `<span class="chip info">📖 consulta: ${esc(provaAtual.materialConsultaTitulo || "material")}</span>` : "");
     $("#inicioRegras").innerHTML = regrasDaProva(provaAtual).map(x => `<li>${x}</li>`).join("");
+    desenharTopicos(provaAtual);
     desenharGuia(provaAtual);
     $("#inicioCodigoBox").classList.toggle("oculto", !pedeCodigo());
     $("#inicioCodigo").value = ""; $("#inicioCodigoErro").textContent = "";
@@ -361,6 +363,23 @@ async function abrirProva(id, acao) {
     mostrar("telaInicio"); return;
   }
   await carregarTentativa();
+}
+
+// o que a prova avalia, do plano de curso: três blocos recolhidos (capacidades técnicas, socioemocionais, conhecimentos)
+function desenharTopicos(p) {
+  const box = $("#inicioTopicos"); if (!box) return;   // index.html antigo no cache
+  const t = topicosDaProva(p);
+  box.classList.toggle("oculto", !t);
+  if (!t) { box.innerHTML = ""; return; }
+  // conta os itens de 2º nível (e os de 1º nível sem subitens), que são as linhas da lista
+  const nK = t.con.filter(([id]) => nivelK(id) === 2 || (nivelK(id) === 1 && !t.con.some(([o]) => o.startsWith(id + ".")))).length;
+  const bloco = (chave, titulo, n, corpo) => n ? collapsible({ chave, titulo, resumoHTML: `<span class="chip">${n}</span>`, corpoHTML: corpo }) : "";
+  const lista = l => `<ol class="pc-lista">${l.map(([, x]) => `<li>${esc(x)}</li>`).join("")}</ol>`;
+  box.innerHTML = `<h3 class="pc-titulo">🎯 O que esta prova avalia</h3>
+    <p class="pequeno pc-origem">Unidade curricular <b>${esc(t.unidade.nome)}</b>, do plano de curso${t.inteira ? " (a unidade inteira)" : ""}. Toque em cada bloco para ver.</p>` +
+    bloco("pc-tec", `🛠 ${rotuloTec(t.unidade)}`, t.tec.length, lista(t.tec)) +
+    bloco("pc-soc", "🤝 Capacidades socioemocionais", t.soc.length, lista(t.soc)) +
+    bloco("pc-con", "📚 Conhecimentos", nK, htmlConhecimentos(t.con, esc));
 }
 
 function aoFimGuia() { $("#btnComecar").scrollIntoView({ behavior: "smooth", block: "center" }); (pedeCodigo() ? $("#inicioCodigo") : $("#btnComecar")).focus({ preventScroll: true }); }

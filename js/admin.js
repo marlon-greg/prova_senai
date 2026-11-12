@@ -6,6 +6,7 @@ import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, to
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
+import { htmlEditorTopicos, editorTopicos } from "./plano-curso-ui.js?v=20261112a";
 import { iniciarOrganizacao, carregarOrganizacao, listarPlanos, listarCursos, materiasSugeridas, editarTopicosBanco, topicosDaMateria } from "./admin-org.js";
 import { iniciarDiario, carregarDiario } from "./admin-diario.js";
 import { ligarAjuda } from "./ajuda.js";
@@ -530,6 +531,7 @@ function formProvaHTML(f) {
     <div><label for="${f}Data">Data da prova</label><input type="date" id="${f}Data">
       <p class="pequeno" style="margin:4px 0 0">Organiza a prova em Turma → Semestre → Matéria (aba Organização) e nos relatórios.</p></div>
   </div>
+  ${htmlEditorTopicos(f)}
   <p id="${f}Trava" class="aviso-box oculto" role="note"></p>
   <fieldset class="temas-box">
     <legend>Bancos e temas que entram no sorteio</legend>
@@ -622,6 +624,8 @@ function gerarCodigo() {
 function controleProva(f) {
   const $f = s => $("#" + f + s);
   let travado = false, turmaLegada = "", matMarcados = [];
+  // tópicos do plano de curso: a unidade automática segue a matéria (ou a do 1º banco marcado)
+  const topicosPlano = editorTopicos(f, () => $f("Materia").value.trim() || (bancosCache.find(x => x.id === bancosMarcados()[0])?.materia || ""));
   // sel: bancoId -> Set de temas marcados (null = "todos", resolvido quando os temas do banco carregam)
   // contagens: bancoId -> { tema: {alternativa, dissertativa} } ou "erro"; abertos: bancos expandidos na visão por banco
   let sel = new Map(), contagens = {}, abertos = new Set(), carregando = null;
@@ -643,6 +647,7 @@ function controleProva(f) {
     return "";
   }
   function atualizar() {
+    topicosPlano.aoMudarMateria();
     const nAlt = Number($f("NAlt").value || 0), nDiss = Number($f("NDiss").value || 0);
     $f("NTotal").textContent = `Total: ${nAlt + nDiss} questões por aluno.`;
     const el = $f("TemasResumo");
@@ -823,6 +828,8 @@ function controleProva(f) {
     $f("Semestre").onchange = () => { semestreMexido = true; opcoesMateria(); };
     $f("Turma").addEventListener("change", opcoesMateria);
     $f("Materia").onfocus = opcoesMateria;
+    topicosPlano.ligar(); topicosPlano.definir();
+    $f("Materia").addEventListener("input", topicosPlano.aoMudarMateria);
     $f("Data").onchange = () => { const d = $f("Data").value; if (d && !semestreMexido) { opcoesSemestre(semestreDe(d)); opcoesMateria(); } };
   }
   // semestre (os de perto do atual + o da prova) e matérias sugeridas (planos da turma/semestre, depois as dos bancos)
@@ -859,6 +866,7 @@ function controleProva(f) {
     dadosAtuais = p;
     $f("Titulo").value = p.titulo || ""; opcoesTurma(p); $f("Codigo").value = p.codigoAcesso || "";
     opcoesSemestre(semestreDaProva(p)); semestreMexido = !!p.semestre; $f("Materia").value = p.materia || ""; $f("Data").value = p.dataProva || ""; opcoesMateria();
+    topicosPlano.definir(p.planoCurso);
     // provas antigas só têm o total (nQuestoes) e as dissertativas
     $f("NDiss").value = p.nDissertativas ?? 0; $f("NAlt").value = p.nAlternativas ?? Math.max(0, (p.nQuestoes ?? 10) - (p.nDissertativas ?? 0));
     $f("Tempo").value = p.tempoMinutos || 0;
@@ -887,10 +895,12 @@ function controleProva(f) {
     const arquivos = idsMarcados();
     const urlBruta = arquivos.length ? "" : $f("MatUrl").value.trim(), url = converterLinkMaterial(urlBruta);
     if (url && !/^https:\/\//.test(url)) return { erro: "O link do material de consulta precisa começar com https://." };
+    const tp = topicosPlano.ler();
+    if (tp.erro) return { erro: tp.erro };
     const materia = $f("Materia").value.trim() || (bancosCache.find(x => x.id === (bancoIds[0] || bancosDaProva(dadosAtuais)[0]))?.materia || "").trim();
     const dados = {
       titulo, ...turmaEscolhida(), codigoAcesso: normalizarCodigo($f("Codigo").value),
-      semestre: $f("Semestre").value || semestreDe(), materia, dataProva: $f("Data").value || "",
+      semestre: $f("Semestre").value || semestreDe(), materia, dataProva: $f("Data").value || "", planoCurso: tp.valor,
       permitirVoltar: $f("Voltar").checked,
       tempoMinutos: Math.max(0, Math.round(Number($f("Tempo").value || 0))),
       modoExibicao: $f("Modo").value === "todas" ? "todas" : "uma",
@@ -925,7 +935,7 @@ function controleProva(f) {
     if (turmaId) $f("Turma").value = turmaId;
     opcoesSemestre(semestre || semestreDe()); semestreMexido = !!semestre;
     $f("Materia").value = materia || ""; if (titulo) $f("Titulo").value = titulo; $f("Data").value = data || "";
-    opcoesMateria();
+    opcoesMateria(); topicosPlano.definir();
     // marca só os bancos dessa matéria
     const daMateria = bancosCache.filter(b => materia && chaveTexto(b.materia) === chaveTexto(materia)).map(b => b.id);
     // prova prevista no plano com tópicos: marca só esses tópicos (os bancos sem nenhum deles ficam de fora)
