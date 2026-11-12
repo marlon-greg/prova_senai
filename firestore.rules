@@ -413,5 +413,82 @@ service cloud.firestore {
         allow write: if professor() || (meuTeste(t) && request.method == 'delete');
       }
     }
+    // =====================================================================================
+    // ECOSSISTEMA (aulas · autoavaliação · provas) — decisões em docs/ECOSSISTEMA.md
+    // Os 3 sistemas usam ESTE projeto Firebase (mesmo login, mesmas turmas, mesma equipe).
+    // ESTE arquivo é a fonte única das regras (publicado sozinho pelo GitHub Actions deste repositório).
+    // =====================================================================================
+    function naTurma(t)    { return logado() && t is string && exists(/databases/$(db)/documents/turmas/$(t))
+                               && email().lower() in get(/databases/$(db)/documents/turmas/$(t)).data.get('emails', []); }
+    function meuDoc()      { return logado() && resource.data.email == email().lower(); }
+    function souEu()       { return logado() && request.resource.data.email == email().lower() && request.resource.data.uid == uid(); }
+
+    // ---------- evidências (contrato comum: js/evidencias.js) ----------
+    // Um doc por aluno por evento: id = {fonte}__{ref}__{email}. Aluno lê as próprias; equipe lê tudo.
+    // O aluno só grava as PRÓPRIAS evidências sem nota (autoavaliação, treino, simulado); aula, atividade e prova:
+    // professor ou servidor (Admin SDK). Assim nota nenhuma depende de algo que o aluno gravou.
+    match /evidencias/{id} {
+      allow read: if equipeGeral() || meuDoc() || minhaAluna(resource.data.email);
+      allow create, update: if professor()
+        || (aluno() && souEu() && request.resource.data.fonte in ['autoavaliacao', 'treino', 'simulado']
+            && id == request.resource.data.fonte + '__' + request.resource.data.ref + '__' + email().lower()
+            && (resource == null || (resource.data.email == email().lower() && resource.data.fonte == request.resource.data.fonte)));
+      allow delete: if professor();
+    }
+
+    // >>> AUTOAVALIACAO (o sistema de autoavaliação edita SÓ entre estes marcadores) >>>
+    // respostas completas do aluno (a evidência resumida vai em evidencias/autoavaliacao__…)
+    match /autoavaliacoes/{id} {
+      allow read: if equipeGeral() || meuDoc() || minhaAluna(resource.data.email);
+      allow create, update: if professor() || (aluno() && souEu() && (resource == null || resource.data.email == email().lower()));
+      allow delete: if professor();
+    }
+    // ações de recuperação do professor (orientação, outra explicação, divulgação de conteúdo); a turma lê as dela
+    match /recuperacoes/{id} {
+      allow read: if equipe() || naTurma(resource.data.turmaId) || (logado() && email().lower() in resource.data.get('alunos', []));
+      allow write: if professor();
+    }
+    // <<< AUTOAVALIACAO <<<
+
+    // >>> AULAS (o sistema de aulas edita SÓ entre estes marcadores; coleções sempre com prefixo "aulas") >>>
+    // aula planejada/dada: { unidade, turma, turmaId, periodo, data, aulasNo, titulo, capacidades, criterios, conhecimentos, status, ... }
+    match /aulas/{id} {
+      allow read: if equipe() || naTurma(resource.data.turmaId);
+      allow write: if professor();
+    }
+    // atividade lançada pelo professor ou de treino: { unidade, turma, turmaId, tipo, titulo, enunciado, criterios, prazo, publicada, ... }
+    match /aulasAtividades/{id} {
+      allow read: if equipe() || (naTurma(resource.data.turmaId) && resource.data.get('publicada', false) == true);
+      allow write: if professor();
+    }
+    // entrega do aluno: id = {atividadeId}__{email}; o aluno cria e altera a própria até o professor devolver
+    match /aulasEntregas/{id} {
+      allow read: if equipeGeral() || meuDoc() || minhaAluna(resource.data.email);
+      allow create, update: if professor()
+        || (aluno() && souEu() && id == request.resource.data.atividadeId + '__' + email().lower()
+            && (resource == null || (resource.data.email == email().lower() && resource.data.get('devolvida', false) != true)));
+      allow delete: if professor();
+    }
+    // sessões ao vivo (como no revisão-SAEP): o sistema de aulas define aqui presença, respostas e dúvidas
+    match /aulasSessoes/{id} {
+      allow read: if equipe() || naTurma(resource.data.turmaId);
+      allow write: if professor();
+      match /presenca/{em} {
+        allow read: if equipe() || (logado() && em == email().lower());
+        allow write: if professor() || (logado() && em == email().lower() && request.resource.data.uid == uid());
+      }
+      match /respostas/{rid} {
+        allow read: if equipe() || meuDoc();
+        allow create, update: if professor() || (logado() && souEu());
+        allow delete: if professor();
+      }
+      match /duvidas/{did} {
+        allow read: if equipe() || meuDoc();
+        allow create: if logado() && souEu();
+        allow update, delete: if professor();
+      }
+    }
+    // <<< AULAS <<<
+
   }
 }

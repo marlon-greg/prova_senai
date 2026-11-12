@@ -1,5 +1,7 @@
 # Integrações futuras e domínio próprio
 
+> ⚠ **Atualizado em 12/11/2026:** as decisões valendo estão em [`docs/ECOSSISTEMA.md`](ECOSSISTEMA.md). A ponte entre os sistemas passou a ser o **critério de avaliação** (IDs de `js/plano-ensino.js`), não o nome do tópico; o contrato de dados é `js/evidencias.js`. A seção 1 (domínio) e a ideia da seção 2 (calibração) continuam valendo.
+
 > **Registro de decisão (04/11/2026):** este sistema de provas **vai ser ligado** a outros dois sistemas do mesmo autor:
 > 1. **Sistema de aulas interativas**
 > 2. **Sistema de autoavaliação**: o aluno responde depois das atividades **formativas** em sala, dizendo onde sente dificuldade, e o professor aplica **reforço** nesses pontos.

@@ -8,6 +8,7 @@
 // As socioemocionais de cada avaliação seguem a aula dela no Plano de Aulas (completadas em 12/11/2026).
 // Critério: [id, capacidade (do plano-curso.js), texto literal do plano de ensino, explicação para o aluno, extras]
 //   extras.grupo = só faz sentido em trabalho em grupo (não entra sozinho nas provas individuais).
+//   extras.sinal = a participação no sistema de aulas gera evidência deste critério (ver sinaisDaParticipacao em evidencias.js).
 // Detalhados = critérios da RUBRICA de uma prova (mais específicos), sempre ligados a um critério oficial.
 //   Níveis da rubrica: Mais que Satisfatório, Satisfatório, Parcialmente Satisfatório, Não Satisfatório.
 import { unidadeDaMateria, unidadePorId } from "./plano-curso.js?v=20261112d";
@@ -55,17 +56,17 @@ export const CRITERIOS = {
     ["bd.cr37", "bd.ct13", "Realizou exportação completa da base com ferramentas adequadas", "Gerar o backup completo do banco (ex.: mysqldump ou exportação do Workbench)."],
     ["bd.cr38", "bd.ct13", "Importou arquivos SQL sem erros de estrutura ou chave", "Restaurar um arquivo .sql no banco sem erro de estrutura ou de chave."],
     ["bd.cr39", "bd.ct13", "Validou se os dados foram mantidos corretamente após a migração", "Conferir, depois da importação, que os dados chegaram todos e certos."],
-    ["bd.cr40", "bd.cs1", "Entrega tarefas dentro do prazo acordado", "Entregar as atividades no prazo combinado."],
+    ["bd.cr40", "bd.cs1", "Entrega tarefas dentro do prazo acordado", "Entregar as atividades no prazo combinado.", { sinal: "prazo" }],
     ["bd.cr41", "bd.cs1", "Organiza o projeto e divide o trabalho adequadamente", "Organizar o próprio trabalho (e o do grupo) e dividir as tarefas de forma justa.", { grupo: true }],
-    ["bd.cr42", "bd.cs1", "Apresenta consistência entre as atividades e o tempo dedicado", "Usar bem o tempo da aula e da prova: o que você entrega combina com o tempo que teve."],
+    ["bd.cr42", "bd.cs1", "Apresenta consistência entre as atividades e o tempo dedicado", "Usar bem o tempo da aula e da prova: o que você entrega combina com o tempo que teve.", { sinal: "tempo" }],
     ["bd.cr43", "bd.cs2", "Identifica falhas e propõe soluções", "Encontrar o erro sozinho e propor uma correção."],
     ["bd.cr44", "bd.cs2", "Demonstra lógica coerente ao estruturar consultas e fluxos de dados", "Montar consultas e modelos com um raciocínio que faz sentido do começo ao fim."],
     ["bd.cr45", "bd.cs2", "Interpreta problemas e adapta o script SQL para solucioná-los", "Entender o problema do enunciado e adaptar o SQL ou o modelo para resolver."],
     ["bd.cr46", "bd.cs3", "Responde de forma respeitosa a críticas ou correções", "Receber correções e críticas com respeito e usar para melhorar."],
-    ["bd.cr47", "bd.cs3", "Coopera com colegas em atividades em dupla ou grupo", "Ajudar e trabalhar junto com os colegas em dupla ou em grupo.", { grupo: true }],
+    ["bd.cr47", "bd.cs3", "Coopera com colegas em atividades em dupla ou grupo", "Ajudar e trabalhar junto com os colegas em dupla ou em grupo.", { grupo: true, sinal: "coopera" }],
     ["bd.cr48", "bd.cs3", "Lida com frustrações durante a depuração e ajustes no código", "Manter a calma quando algo dá erro e seguir tentando até resolver."],
-    ["bd.cr49", "bd.cs4", "Busca referências (documentação, exemplos) por conta própria", "Procurar sozinho na documentação e em exemplos quando tem dúvida."],
-    ["bd.cr50", "bd.cs4", "Demonstra iniciativa ao explorar além do que foi mostrado", "Ir além do que foi mostrado em aula, testando e explorando por conta própria."],
+    ["bd.cr49", "bd.cs4", "Busca referências (documentação, exemplos) por conta própria", "Procurar sozinho na documentação e em exemplos quando tem dúvida.", { sinal: "busca" }],
+    ["bd.cr50", "bd.cs4", "Demonstra iniciativa ao explorar além do que foi mostrado", "Ir além do que foi mostrado em aula, testando e explorando por conta própria.", { sinal: "iniciativa" }],
     ["bd.cr51", "bd.cs4", "Contribui para o desenvolvimento do próprio projeto de forma independente", "Fazer a sua parte do projeto sem depender de alguém mandando."]
   ]
   // próximas unidades: montar com o professor a partir do plano de ensino de cada uma
