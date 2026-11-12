@@ -170,4 +170,25 @@ Fonte: `css/style.css` (tokens em `:root` e componentes), `js/ui.js` (componente
 - **Quem vê a comparação** (aulas × autoavaliação × prova):
   - admin, professor, **coordenador** (papel novo, só leitura) e auxiliar (só da aluna dela);
   - o **aluno vê só a média e a evolução nas provas**, por enquanto.
-- **Seminários:** avaliação de apresentações em equipe, com partes individuais e de grupo, ligada a critérios (em definição).
+- **Seminários** (a construir no sistema de provas): a nota sai **só do que o aluno mostrou**, com evidência.
+  Não entra presença, comportamento nem nota anterior.
+  - **Equipes de 4.** Temas **sorteados ou escolhidos** (o professor decide em cada seminário; as duas opções).
+  - **Antes:** a rubrica é publicada antes; cada aluno registra a parte que vai apresentar e a equipe confirma.
+  - **Durante:** entregas parciais com devolutiva.
+  - **Peso:** **40% grupo** (conteúdo, organização, tempo, slides; mesma nota para todos) e **60% individual**
+    (domínio da própria parte + pergunta individual sorteada, ligada a critério).
+  - **No dia:** o professor marca o nível da rubrica em cada item; **abaixo de Satisfatório, justificativa obrigatória**.
+  - **Depois:** o aluno vê item por item, no grupo e no individual, com a justificativa.
+  - **Avaliação entre colegas:** **só informa** (não entra na nota). O relatório para o professor discrimina:
+    - quem citou quem;
+    - se algum colega foi apontado como quem não contribuiu;
+    - divergências entre o que cada um declarou.
+  - **Quem faltou no dia** faz uma atividade individual depois, como uma recuperação. O professor escolhe:
+    - **prova** (escrita);
+    - **prova oral**;
+    - **seminário individual**.
+- **Prova oral** (nova modalidade no sistema):
+  - perguntas ligadas a critérios, sorteadas do banco;
+  - o professor marca o nível da rubrica e a justificativa na hora;
+  - o aluno vê o resultado item por item, como no seminário.
+  - Ideia ainda em formulação.
