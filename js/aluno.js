@@ -14,6 +14,7 @@ import { montarFormato, temFormato, FORMATOS, rotuloFormato, textoParaFalar, tex
 const controles = {};   // qid -> controle do formato adaptado (valor, preencher, travar)
 import { abrirLeitorPdf } from "./leitor-pdf.js";
 import { topicosDaProva, htmlConhecimentos, rotuloTec, nivelK } from "./plano-curso.js";
+import { criteriosDaProva, NIVEIS_RUBRICA } from "./plano-ensino.js";
 import { toolbar, collapsible, vazio, statTiles, chips } from "./ui.js";
 import { completar, aplicarVisual, mesclarQuestao } from "./acessibilidade.js";
 import { definirEstilos } from "./mascotes.js";
@@ -368,6 +369,8 @@ async function abrirProva(id, acao) {
 // o que a prova avalia, do plano de curso: três blocos recolhidos (capacidades técnicas, socioemocionais, conhecimentos)
 function desenharTopicos(p) {
   const box = $("#inicioTopicos"); if (!box) return;   // index.html antigo no cache
+  const c = criteriosDaProva(p);
+  if (c) { box.classList.remove("oculto"); box.innerHTML = htmlCriterios(c); return; }
   const t = topicosDaProva(p);
   box.classList.toggle("oculto", !t);
   if (!t) { box.innerHTML = ""; return; }
@@ -380,6 +383,21 @@ function desenharTopicos(p) {
     bloco("pc-tec", `🛠 ${rotuloTec(t.unidade)}`, t.tec.length, lista(t.tec)) +
     bloco("pc-soc", "🤝 Capacidades socioemocionais", t.soc.length, lista(t.soc)) +
     bloco("pc-con", "📚 Conhecimentos", nK, htmlConhecimentos(t.con, esc));
+}
+
+// critérios de avaliação do plano de ensino, agrupados pela capacidade, cada um com a explicação para o aluno
+function htmlCriterios(c) {
+  const n = l => l.reduce((x, g) => x + g.criterios.length, 0);
+  const grupo = g => `<div class="cr-cap"><p class="cr-cap-nome">Capacidade: ${esc(g.nome)}</p><ul class="cr-lista">${g.criterios.map(k => `<li>
+      <p class="cr-texto"><span class="cr-cod">${k.codigo}</span>${esc(k.texto)}</p>
+      <p class="cr-expl"><b>O que você precisa mostrar:</b> ${esc(k.explicacao)}</p>
+      ${k.detalhados.length ? `<ul class="cr-det">${k.detalhados.map(d => `<li><b>${esc(d.titulo)}</b>${d.pontos ? ` <span class="chip">${d.pontos} pts</span>` : ""}<br>${esc(d.texto)}</li>`).join("")}</ul>` : ""}
+    </li>`).join("")}</ul></div>`;
+  const bloco = (chave, titulo, l) => l.length ? collapsible({ chave, titulo, resumoHTML: `<span class="chip">${n(l)}</span>`, corpoHTML: l.map(grupo).join("") }) : "";
+  return `<h3 class="pc-titulo">🎯 O que vai ser avaliado</h3>
+    <p class="pequeno pc-origem">${c.avaliacao ? `<b>${esc(c.avaliacao.nome)}</b> · ` : ""}${esc(c.unidade.nome)}. Estes são os critérios do plano de ensino que o professor vai observar na sua prova. Toque em cada bloco para ver.</p>` +
+    bloco("cr-tec", "🛠 Critérios técnicos", c.tec) + bloco("cr-soc", "🤝 Critérios socioemocionais", c.soc) +
+    `<p class="pequeno cr-niveis">Em cada critério você fica em um nível: ${NIVEIS_RUBRICA.map(x => `<b>${x}</b>`).join(", ")}.</p>`;
 }
 
 function aoFimGuia() { $("#btnComecar").scrollIntoView({ behavior: "smooth", block: "center" }); (pedeCodigo() ? $("#inicioCodigo") : $("#btnComecar")).focus({ preventScroll: true }); }

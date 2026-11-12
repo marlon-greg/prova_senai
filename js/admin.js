@@ -6,7 +6,7 @@ import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, to
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
-import { htmlEditorTopicos, editorTopicos } from "./plano-curso-ui.js?v=20261112a";
+import { htmlEditorTopicos, editorTopicos } from "./plano-curso-ui.js?v=20261112b";
 import { iniciarOrganizacao, carregarOrganizacao, listarPlanos, listarCursos, materiasSugeridas, editarTopicosBanco, topicosDaMateria } from "./admin-org.js";
 import { iniciarDiario, carregarDiario } from "./admin-diario.js";
 import { ligarAjuda } from "./ajuda.js";
@@ -625,7 +625,8 @@ function controleProva(f) {
   const $f = s => $("#" + f + s);
   let travado = false, turmaLegada = "", matMarcados = [];
   // tópicos do plano de curso: a unidade automática segue a matéria (ou a do 1º banco marcado)
-  const topicosPlano = editorTopicos(f, () => $f("Materia").value.trim() || (bancosCache.find(x => x.id === bancosMarcados()[0])?.materia || ""));
+  const topicosPlano = editorTopicos(f, () => $f("Materia").value.trim() || (bancosCache.find(x => x.id === bancosMarcados()[0])?.materia || ""),
+    () => ({ turma: turmaEscolhida().turma, titulo: $f("Titulo").value, data: $f("Data").value }));
   // sel: bancoId -> Set de temas marcados (null = "todos", resolvido quando os temas do banco carregam)
   // contagens: bancoId -> { tema: {alternativa, dissertativa} } ou "erro"; abertos: bancos expandidos na visão por banco
   let sel = new Map(), contagens = {}, abertos = new Set(), carregando = null;
@@ -830,6 +831,7 @@ function controleProva(f) {
     $f("Materia").onfocus = opcoesMateria;
     topicosPlano.ligar(); topicosPlano.definir();
     $f("Materia").addEventListener("input", topicosPlano.aoMudarMateria);
+    $f("Turma").addEventListener("change", topicosPlano.aoMudarMateria);
     $f("Data").onchange = () => { const d = $f("Data").value; if (d && !semestreMexido) { opcoesSemestre(semestreDe(d)); opcoesMateria(); } };
   }
   // semestre (os de perto do atual + o da prova) e matérias sugeridas (planos da turma/semestre, depois as dos bancos)
