@@ -30,12 +30,19 @@ própria; coopera (C47) ← trabalho em grupo. As demais são observação do pr
 
 ## 2. Decisões
 
-1. **Um projeto Firebase para os três sistemas: `prova-senai-3e983`.** Mesmo login (o aluno é o mesmo `uid` e e-mail
+1. **Aulas e provas no mesmo projeto Firebase: `prova-senai-3e983`.** Mesmo login (o aluno é o mesmo `uid` e e-mail
    em todos), mesmas **turmas** (`turmas/`), mesma **equipe** (`equipe/{email}.papel`: admin, professor, auxiliar,
    inclusao; superadmin `marlon.frodrigues@docente.senai.br`), mesmos domínios de aluno (`config/geral.dominiosAlunos`).
    Nada de sincronizar dados entre projetos.
    - O **Revisão SAEP** (`revisao-saep`, projeto Firebase próprio) continua como está: é outro produto.
    - O **sistema de aulas** é um repositório novo feito a partir do código do Revisão SAEP, mas ligado a **este** projeto.
+   - A **autoavaliação** (do colega) **fica no Supabase**, onde já está no ar. A ligação é por uma **ponte no Worker**
+     `prova-senai` (`servidor/integracao.js`), automática e sem exportar nada:
+     - **ida:** um Database Webhook do Supabase chama `POST /integracao/autoavaliacao` a cada resposta, e o Worker grava a
+       evidência `autoavaliacao` aqui;
+     - **volta:** `GET /integracao/situacao` devolve a situação por aluno e critério;
+     - **segurança:** cabeçalho `x-chave` = segredo `INTEGRACAO_CHAVE` (Cloudflare), só servidor com servidor.
+     Detalhes em `docs/CONTRATO-AUTOAVALIACAO.md`.
 2. **Regras do Firestore: um arquivo só**, `prova_senai/firestore.rules`, publicado sozinho pelo GitHub Actions a cada
    push na `main` (se não compilar, o Firebase recusa e as regras antigas continuam). Cada sistema edita **só a sua
    seção**, entre os marcadores `// >>> AULAS` … `// <<< AULAS` e `// >>> AUTOAVALIACAO` … `// <<< AUTOAVALIACAO`
@@ -47,7 +54,7 @@ própria; coopera (C47) ← trabalho em grupo. As demais são observação do pr
    | `turmas`, `equipe`, `config` | provas | professor/admin | todos os sistemas |
    | `provas`, `tentativas`, `bancos`, `materiais`… | provas | provas | provas |
    | `aulas`, `aulasAtividades`, `aulasEntregas`, `aulasSessoes` | aulas | aulas | aulas; provas lê `aulas` |
-   | `autoavaliacoes`, `recuperacoes` | autoavaliação | autoavaliação | autoavaliação; provas e aulas leem |
+   | (respostas, recuperações) | autoavaliação | no **Supabase** dele | só a evidência resumida vem para cá |
    | **`evidencias`** | **comum** | cada sistema, só as suas fontes | equipe; o aluno lê as dele |
 
 4. **Contrato comum em 3 módulos, importados direto do site publicado** (nada de cópia, nada de sincronizar):
@@ -64,7 +71,7 @@ própria; coopera (C47) ← trabalho em grupo. As demais são observação do pr
    | `aula` | ao encerrar a sessão ao vivo (ou marcar a aula como dada) | professor, no sistema de aulas | critérios trabalhados (`trabalhado: true`, `valor` = acerto nas questões da aula ligadas ao critério) + participação |
    | `atividade` | ao fechar o prazo ou devolver | professor, no sistema de aulas | entregue, no prazo, desempenho por critério (sem nota) |
    | `treino`, `simulado` | ao terminar | o próprio aluno | desempenho por critério; `espontaneo: true` se não foi pedido |
-   | `autoavaliacao` | ao enviar | o próprio aluno | nível declarado por critério |
+   | `autoavaliacao` | ao enviar (webhook do Supabase) | o Worker, pela ponte | nível declarado por critério (`origem: "supabase"`) |
    | `prova` | após a correção | sistema de provas (painel ou Worker) | nível da rubrica por critério |
 
    Nenhuma nota depende do que o próprio aluno gravou.
@@ -111,6 +118,6 @@ Fonte: `css/style.css` (tokens em `:root` e componentes), `js/ui.js` (componente
 1. Aulas: login e turmas deste projeto; estrutura das aulas de BD (1A e 1B) a partir dos planos de ensino.
 2. Aulas: "O que vamos aprender hoje" (critérios explicados), sessão ao vivo e evidência `aula` ao encerrar.
 3. Aulas: aba Atividades (treino e lançadas) com `aulasEntregas` e evidências `atividade`/`treino`.
-4. Autoavaliação: gravar `autoavaliacoes` + evidência `autoavaliacao` com os IDs dos critérios (`docs/CONTRATO-AUTOAVALIACAO.md`).
+4. Autoavaliação: perguntas com os IDs dos critérios + webhook do Supabase para a ponte (`docs/CONTRATO-AUTOAVALIACAO.md`).
 5. Provas: ligar questões/rubrica aos critérios, gravar a evidência `prova` e montar o **boletim por critério**
    (aluno e turma) com as três vertentes.

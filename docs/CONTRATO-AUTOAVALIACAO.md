@@ -1,63 +1,77 @@
 # Contrato: sistema de AUTOAVALIAÇÃO ↔ aulas e provas
 
-> Para o colega que está construindo o sistema de autoavaliação. Decisões gerais em `docs/ECOSSISTEMA.md`.
-> Fonte da verdade: repositório `prova_senai` (caminho local do professor: `C:\Users\marli\Documents\github\prova_senai`).
+> Para o colega que mantém o sistema de autoavaliação (já no ar, banco no **Supabase**). Decisões gerais em `docs/ECOSSISTEMA.md`.
+> Fonte da verdade: repositório `prova_senai`.
 
-## O que a autoavaliação é no ciclo
+## Resumo em 30 segundos
 
-Depois da aula (ou de uma atividade formativa), o aluno diz se **consegue fazer** o que cada critério pede.
-As perguntas cobrem os critérios **sem citar a capacidade** (o aluno não entende capacidades). O professor registra
-**ações de recuperação** para os gaps: orientação, outra forma de explicar, divulgação de conteúdo (não é aula particular).
-O sistema de provas depois **comprova ou não** cada critério e cruza com o que o aluno declarou.
+A autoavaliação **continua no Supabase, do jeito que está.** A ligação com os outros dois sistemas é automática, sem
+exportar arquivo nenhum:
 
-## O que precisamos da autoavaliação (o mínimo)
-
-1. **Mesmo login e mesmas turmas:** projeto Firebase `prova-senai-3e983` (aluno = mesmo `uid`/e-mail; turmas em `turmas/`).
-2. **Cada pergunta ligada a 1 critério** pelo ID estável (`bd.cr25` etc., lista em `js/plano-ensino.js`).
-   Pode haver várias perguntas por critério; o nível do critério é o pior/médio delas (decisão do sistema, documentada).
-3. **Escala de 3 níveis** (igual nos três sistemas): `sim` = Consigo fazer · `parcial` = Consigo em parte · `nao` = Ainda não consigo.
-4. **A que se refere:** a aula (`aulas/{id}` do sistema de aulas) ou a atividade, mais turma, unidade e data.
-5. **Socioemocional junto:** pelo menos uma pergunta de critério socioemocional em cada autoavaliação.
-
-## O que gravar
-
-```js
-// respostas completas (coleção da autoavaliação)
-autoavaliacoes/{id} = {
-  email, uid, turma: "1A", turmaId, unidade: "bd", periodo: "2026-2", data: "2026-11-17",
-  aulaId: "…" | null, atividadeId: "…" | null,
-  respostas: [ { pergunta: "Consigo juntar duas tabelas com INNER JOIN?", criterio: "bd.cr33", nivel: "parcial" }, … ],
-  dificuldade: "texto livre do aluno",
-  enviadaEm: serverTimestamp()
-}
-// evidência resumida (contrato comum: js/evidencias.js → montarEvidencia({ fonte: "autoavaliacao", … }))
-evidencias/autoavaliacao__{id}__{email} = {
-  email, uid, turma, turmaId, unidade, periodo, data, fonte: "autoavaliacao", ref: id, titulo: "Autoavaliação — JOINs",
-  criterios: { "bd.cr33": { valor: 0.5, nivel: "parcial" }, "bd.cr43": { valor: 1, nivel: "sim" } },
-  gravadoPor: "autoavaliacao"
-}
-// ações de recuperação do professor
-recuperacoes/{id} = { turmaId, turma, unidade, criterios: ["bd.cr33"], alunos: [emails] | [], tipo: "orientacao" | "explicacao" | "conteudo",
-  texto, link?, criadaPor, criadaEm }
+```
+ Supabase (autoavaliação)                      Worker "prova-senai" (Cloudflare)              Firebase (aulas + provas)
+ aluno responde ── Database Webhook (INSERT) ──▶ POST /integracao/autoavaliacao ──grava──▶ evidencias/autoavaliacao__…
+ tela do professor ◀──────── JSON ─────────────── GET  /integracao/situacao     ◀──lê──── evidencias (aulas + provas)
 ```
 
-As regras já estão publicadas no `firestore.rules` (seção `>>> AUTOAVALIACAO`):
-- o aluno grava só a própria autoavaliação;
-- a equipe lê tudo;
-- o professor grava as recuperações.
+1. **Ida (Supabase → nós):** um **Database Webhook** do Supabase, configurado no painel, sem escrever código. A cada
+   resposta gravada, o Supabase avisa o Worker, e a resposta aparece na hora no boletim do sistema de provas e no
+   sistema de aulas.
+2. **Volta (nós → Supabase):** uma chamada `GET` devolve a situação de cada aluno em cada critério (ilusão de saber,
+   dificuldade real…). A autoavaliação usa isso para direcionar as ações de recuperação.
+3. **As perguntas** usam os critérios do plano de ensino, importados direto do site publicado (nada de copiar):
+   `import { criteriosDaUnidade, criterioPorId } from "https://marlon-greg.github.io/prova_senai/js/plano-ensino.js"`.
 
-## O que a autoavaliação recebe dos outros
+## O que a autoavaliação precisa ter (o mínimo)
 
-- **Das aulas:** quais critérios a aula trabalhou (`aulas/{id}.criterios`) → é daí que saem as perguntas do dia.
-- **Das provas:** a situação de cada aluno em cada critério (`situacaoCriterio` em `js/evidencias.js`): ilusão de saber,
-  dificuldade real etc. Com isso as ações de recuperação vão direto para quem precisa.
+1. **E-mail institucional do aluno** em cada resposta (é a chave entre os sistemas; o aluno precisa estar numa turma do
+   sistema de provas).
+2. **Cada pergunta ligada a 1 critério** pelo código estável (`bd.cr33` etc.; lista em `plano-ensino.js`).
+   Pode haver várias perguntas por critério (vale a última que chegar).
+3. **Escala de 3 níveis:** `sim` = Consigo fazer · `parcial` = Consigo em parte · `nao` = Ainda não consigo.
+   (A ponte também entende "Consigo em parte", "Ainda não consigo", `0/1/2` e `true/false`, mas prefira o texto.)
+4. **Socioemocional junto:** pelo menos uma pergunta de critério socioemocional em cada autoavaliação.
+5. Opcional: `turma` (1A, 1B…; se faltar, a ponte descobre pelo e-mail), `titulo`, `aula_id`, `atividade_id`.
 
-## Vínculo real, sem exportar nada
+## Ida: configurar o webhook (5 minutos, sem código)
 
-Os três sistemas leem e gravam no **mesmo banco**, em tempo real. O aluno responde a autoavaliação e, no mesmo instante,
-ela já aparece no boletim do sistema de provas e no painel das aulas. **Não existe exportação, importação nem planilha
-intermediária.** Por isso, usar o projeto Firebase `prova-senai-3e983` é condição, não opção.
+No Supabase: **Database → Webhooks → Create a new hook**:
+- **Table:** a tabela das respostas · **Events:** `Insert` (e `Update`, se o aluno puder mudar a resposta)
+- **Type:** HTTP Request · **Method:** POST
+- **URL:** `https://prova-senai.<conta>.workers.dev/integracao/autoavaliacao` (o professor passa o endereço exato)
+- **HTTP Headers:** `x-chave` = a chave combinada com o professor (`Content-type: application/json` já vem)
 
-Os critérios também não são copiados: importe direto do site publicado,
-`import { criteriosDaUnidade, criterioPorId } from "https://marlon-greg.github.io/prova_senai/js/plano-ensino.js"` e
-`import { montarEvidencia, idEvidencia } from "https://marlon-greg.github.io/prova_senai/js/evidencias.js"`.
+A ponte aceita qualquer um destes formatos de linha (nomes de coluna alternativos entre parênteses):
+
+```js
+// A) uma linha por resposta (o mais comum)
+{ email, criterio, nivel, autoavaliacao_id, created_at }
+//   (email: aluno_email · criterio: criterio_id · nivel: resposta · autoavaliacao_id: avaliacao_id, formulario_id, sessao_id)
+//   autoavaliacao_id junta as linhas da mesma autoavaliação; sem ele, junta pelo dia.
+// B) uma linha por autoavaliação, com as respostas numa coluna JSON
+{ id, email, respostas: [ { criterio: "bd.cr33", nivel: "parcial" }, … ], titulo, created_at }
+```
+
+Se preferir chamar pelo código (Edge Function), mande o mesmo JSON com `POST` e o cabeçalho `x-chave`.
+Respostas: `200 { ok, id, criterios, ignorados }`; `400` sem resposta válida; `401` chave errada;
+`422` e-mail fora das turmas.
+
+## Volta: situação dos alunos
+
+```
+GET https://prova-senai.<conta>.workers.dev/integracao/situacao?unidade=bd&turma=1A[&email=aluno@…]
+x-chave: <a mesma chave>
+→ { unidade, turma, geradoEm, alunos: [ { email, criterios: { "bd.cr33": { situacao: "ilusao", nome: "Ilusão de saber",
+     acao: "…", ensinado, participou, declarado, comprovado, atingido }, … } } ] }
+```
+
+Situações: `dominio`, `ilusao`, `subconfianca`, `dificuldade`, `semAula`, `ausente`, `semDeclaracao`, `pendente`
+(descrição de cada uma em `SITUACOES`, `js/evidencias.js`).
+
+**A chave é segredo.** Chame só de servidor (webhook ou Edge Function do Supabase), nunca do navegador do aluno.
+
+## O que fica de cada lado
+
+- **No Supabase (dele):** as respostas completas, os textos de dificuldade do aluno e as ações de recuperação.
+- **No Firebase (nosso):** só a evidência resumida por aluno e critério (`evidencias/autoavaliacao__{ref}__{email}`,
+  `origem: "supabase"`). É ela que entra no cruzamento com as aulas e as provas.

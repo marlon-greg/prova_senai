@@ -22,9 +22,12 @@
 //   lê o PDF do plano de ensino (planos/{planoId}/arquivos/{arquivoId}) e devolve os tópicos e as provas previstas;
 //   POST { acao: "organizar", tipo: "topicos", bancoId, topicos: [...] } devolve o tópico de cada questão do banco.
 //   Nada é gravado: o painel mostra o resultado para o professor revisar e salvar.
+// Ponte com a AUTOAVALIAÇÃO (Supabase): POST /integracao/autoavaliacao e GET /integracao/situacao, com o cabeçalho
+//   x-chave = segredo INTEGRACAO_CHAVE (Cloudflare). Detalhes em servidor/integracao.js e docs/CONTRATO-AUTOAVALIACAO.md.
 // (FIRESTORE_EMULADOR e ANTHROPIC_URL existem só para testar no computador; não crie no Cloudflare.)
 
 import { temFormato, corrigirFormato, pedidoFormatos, lerRespostaFormatos, contextoDiario } from "./formatos.js";
+import { integracao } from "./integracao.js";
 import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS, pedidoCurso, lerRespostaCurso, pedidoConquistas, lerRespostaConquistas, pedidoPerfil, lerRespostaPerfil, pedidoAnalise, lerRespostaAnalise, contextoPeriodo } from "./organizar.js";
 
 export default {
@@ -40,6 +43,9 @@ export default {
     };
     const resposta = (dados, status = 200) => new Response(JSON.stringify(dados), { status, headers: { ...cors, "content-type": "application/json" } });
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
+    // ponte com sistemas de fora (autoavaliação no Supabase): servidor com servidor, protegida pela chave (servidor/integracao.js)
+    const url = new URL(req.url);
+    if (url.pathname.startsWith("/integracao")) return integracao(req, env, url, () => firestore(env));
     if (req.method === "GET") return resposta({ ok: true, servico: "corretor-prova", configurado: faltando(env).length === 0, faltando: faltando(env) });
     if (req.method !== "POST") return resposta({ erro: "Use POST." }, 405);
     if (!origens.includes(origem)) return resposta({ erro: "Origem não permitida." }, 403);
@@ -611,6 +617,20 @@ async function firestore(env) {
         update: { name: `${raiz}/${caminho}`, fields: paraFirestore(dados) },
         ...(carimbo ? { updateTransforms: [{ fieldPath: carimbo, setToServerValue: "REQUEST_TIME" }] } : {})
       }] }) });
+    },
+    // grava SÓ os campos listados (cria o doc se faltar); campos podem ter caminho com crase: criterios.`bd.cr33`.
+    // Várias gravações ao mesmo tempo no mesmo doc não se apagam (cada uma mexe só nos seus campos).
+    async mesclar(caminho, dados, campos, carimbo) {
+      await chamar(`${base}:commit`, { method: "POST", body: JSON.stringify({ writes: [{
+        update: { name: `${raiz}/${caminho}`, fields: paraFirestore(dados) }, updateMask: { fieldPaths: campos },
+        ...(carimbo ? { updateTransforms: [{ fieldPath: carimbo, setToServerValue: "REQUEST_TIME" }] } : {})
+      }] }) });
+    },
+    // documentos de uma coleção com campo == valor (consulta simples, sem índice composto)
+    async consultar(colecao, campo, valor) {
+      const d = await chamar(`${base}:runQuery`, { method: "POST", body: JSON.stringify({ structuredQuery: {
+        from: [{ collectionId: colecao }], where: { fieldFilter: { field: { fieldPath: campo }, op: "EQUAL", value: paraValor(valor) } } } }) });
+      return (d || []).filter(x => x.document).map(x => ({ id: x.document.name.split("/").pop(), ...deFirestore(x.document.fields) }));
     },
     async atualizar(caminho, dados) {
       const mask = Object.keys(dados).map(k => "updateMask.fieldPaths=" + encodeURIComponent(k)).join("&");
