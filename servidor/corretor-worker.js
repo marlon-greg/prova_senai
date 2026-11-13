@@ -22,15 +22,24 @@
 //   lê o PDF do plano de ensino (planos/{planoId}/arquivos/{arquivoId}) e devolve os tópicos e as provas previstas;
 //   POST { acao: "organizar", tipo: "topicos", bancoId, topicos: [...] } devolve o tópico de cada questão do banco.
 //   Nada é gravado: o painel mostra o resultado para o professor revisar e salvar.
-// Ponte com a AUTOAVALIAÇÃO (Supabase): POST /integracao/autoavaliacao e GET /integracao/situacao, com o cabeçalho
-//   x-chave = segredo INTEGRACAO_CHAVE (Cloudflare). Detalhes em servidor/integracao.js e docs/CONTRATO-AUTOAVALIACAO.md.
+// Ponte com a AUTOAVALIAÇÃO (Stacktrace do colega) — integração por BUSCA (pull), não mais por webhook:
+//   o cron de 15 min (e a ação "buscarAutoavaliacao") chama servidor/integracao.js → buscarEGravar().
+//   HTTP (x-chave): GET /integracao/situacao, POST /integracao/buscar. Detalhes: docs/CONTRATO-AUTOAVALIACAO.md.
+//   STACKTRACE_URL (texto no Cloudflare): URL base da API do Stacktrace.
+//   INTEGRACAO_CHAVE (segredo): chave compartilhada com o Stacktrace.
 // (FIRESTORE_EMULADOR e ANTHROPIC_URL existem só para testar no computador; não crie no Cloudflare.)
 
 import { temFormato, corrigirFormato, pedidoFormatos, lerRespostaFormatos, contextoDiario } from "./formatos.js";
-import { integracao } from "./integracao.js";
+import { integracao, buscarEGravar } from "./integracao.js";
 import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS, pedidoCurso, lerRespostaCurso, pedidoConquistas, lerRespostaConquistas, pedidoPerfil, lerRespostaPerfil, pedidoAnalise, lerRespostaAnalise, contextoPeriodo } from "./organizar.js";
 
 export default {
+  // cron: busca as respostas e as pendências do Stacktrace a cada 15 min
+  async scheduled(event, env, ctx) {
+    const fs = await firestore(env).catch(e => { console.error("cron: firestore falhou:", e.message); return null; });
+    if (!fs) return;
+    ctx.waitUntil(buscarEGravar(env, fs).then(r => console.log("cron buscar:", JSON.stringify(r))).catch(e => console.error("cron buscar:", e.message)));
+  },
   async fetch(req, env) {
     const origens = String(env.ORIGENS || "").split(",").map(s => s.trim().replace(/\/$/, "")).filter(Boolean);
     const origem = req.headers.get("Origin") || "";
@@ -59,6 +68,7 @@ export default {
       if (corpo.acao === "formatos") return resposta(await sugerirFormatos(env, usuario, corpo));
       if (corpo.acao === "perfil") return resposta(await montarPerfil(env, usuario, corpo));
       if (corpo.acao === "analiseDiario") return resposta(await analisarDiario(env, usuario, corpo));
+      if (corpo.acao === "buscarAutoavaliacao") return resposta(await buscarAutoavaliacaoAutenticado(env, usuario));
       const { tentativaId } = corpo;
       if (!tentativaId || !/^[\w-]+$/.test(tentativaId)) throw falha("tentativaId inválido.", 400);
       return resposta(await corrigirTentativa(env, usuario, tentativaId));
@@ -67,6 +77,15 @@ export default {
     }
   }
 };
+
+// professor/admin força uma busca imediata no Stacktrace (mesma coisa que o cron faz de 15 em 15 min)
+async function buscarAutoavaliacaoAutenticado(env, usuario) {
+  const quem = String(usuario.email || "").toLowerCase();
+  const fs = await firestore(env);
+  const papel = quem === SUPER_ADMIN ? "superadmin" : (await fs.ler(`equipe/${quem}`))?.papel;
+  if (!["superadmin", "admin", "professor"].includes(papel)) throw falha("Só professor ou admin pode forçar a busca.", 403);
+  return buscarEGravar(env, fs);
+}
 
 const faltando = env => ["ANTHROPIC_API_KEY", "FIREBASE_SA", "PROJECT_ID", "ORIGENS"].filter(k => !env[k]);
 const falha = (msg, status = 500) => Object.assign(new Error(msg), { status });
