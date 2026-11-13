@@ -235,6 +235,13 @@ button.btn-ajuda:hover, button.btn-ajuda[aria-expanded=true] { background:var(--
   box-shadow:var(--sombra-flutuante); display:flex; flex-direction:column; transform:translateX(100%); transition:transform var(--t-normal) ease; }
 .drawer.aberto { transform:none; }
 .drawer.largo { --largura:720px; }
+/* drawer centralizado e largo (criação de prova) — desliza de cima */
+.drawer.extra-largo { left:50%; right:auto; width:min(1120px,95vw); transform:translateX(-50%) translateY(-100%); border-radius:0 0 var(--raio) var(--raio); }
+.drawer.extra-largo.aberto { transform:translateX(-50%); }
+.drawer.extra-largo .drawer-rodape { border-radius:0 0 var(--raio) var(--raio); }
+/* cabeçalho de grupo de bancos por matéria */
+.grupo-materia-cab { font-size:12px; font-weight:600; color:var(--texto-suave); text-transform:uppercase; letter-spacing:.04em; padding:10px 4px 4px; border-bottom:1px solid var(--borda); margin-bottom:4px; }
+.grupo-materia-cab:first-child { padding-top:2px; }
 .drawer-cab { display:flex; align-items:center; gap:var(--sp-3); padding:18px 22px; border-bottom:1px solid var(--borda); }
 .drawer-cab h2 { margin:0; font-family:var(--fonte-texto); font-size:16px; font-weight:600; flex:1; color:var(--marinho); }
 .drawer-corpo { flex:1; overflow:auto; padding:20px 22px; overscroll-behavior:contain; }

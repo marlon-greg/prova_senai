@@ -527,9 +527,9 @@ function formProvaHTML(f) {
   </div>
   <div class="grade">
     <div><label for="${f}Semestre">Semestre</label><select id="${f}Semestre"></select></div>
-    <div><label for="${f}Materia">Matéria</label><input type="text" id="${f}Materia" list="${f}Materias" placeholder="vazio = a do 1º banco"><datalist id="${f}Materias"></datalist></div>
-    <div><label for="${f}Data">Data da prova</label><input type="date" id="${f}Data">
-      <p class="pequeno" style="margin:4px 0 0">Organiza a prova em Turma → Semestre → Matéria (aba Organização) e nos relatórios.</p></div>
+    <div><label for="${f}Materia">Matéria</label><select id="${f}Materia" aria-label="Matéria da prova"><option value="">— Todas as matérias —</option></select>
+      <p class="pequeno" style="margin:4px 0 0">Filtra os bancos abaixo; sem seleção, o campo é detectado do primeiro banco marcado.</p></div>
+    <div><label for="${f}Data">Data da prova</label><input type="date" id="${f}Data"></div>
   </div>
   ${htmlEditorTopicos(f)}
   <p id="${f}Trava" class="aviso-box oculto" role="note"></p>
@@ -671,6 +671,7 @@ function controleProva(f) {
       .then(() => {
         // "todos" (null) vira a lista completa de temas do banco
         for (const [b, s] of sel) if (s === null) sel.set(b, new Set(temasDe(b)));
+        opcoesMateria();
         desenharTemas();
       });
     return carregando;
@@ -679,8 +680,9 @@ function controleProva(f) {
   const casa = (txt, busca) => !busca || txt.toLocaleLowerCase("pt-BR").includes(busca);
   // temas visíveis com os filtros atuais: [{ b, t }]
   function temasVisiveis() {
-    const busca = $f("TemasBusca").value.trim().toLocaleLowerCase("pt-BR"), so = $f("TemasSoMarcados").checked, r = [];
+    const busca = $f("TemasBusca").value.trim().toLocaleLowerCase("pt-BR"), so = $f("TemasSoMarcados").checked, filtroMat = $f("Materia").value, r = [];
     for (const banco of bancosCache) {
+      if (filtroMat && banco.materia !== filtroMat) continue;
       const nomeCasa = casa(banco.nome || "", busca);
       for (const t of temasDe(banco.id)) if ((nomeCasa || casa(t, busca)) && (!so || marcadoTema(banco.id, t))) r.push({ b: banco.id, t });
     }
@@ -696,22 +698,36 @@ function controleProva(f) {
       vis.sort((x, y) => ordemNatural(x.t, y.t) || ordemNatural(nomeBanco(x.b), nomeBanco(y.b)));
       h = vis.length ? `<div class="lista-temas">${vis.map(({ b, t }) => checkTema(b, t, ` <span class="tag banco-tag">${esc(nomeBanco(b))}</span>`)).join("")}</div>` : "";
     } else {
-      for (const banco of bancosCache) {
+      const filtroMat = $f("Materia").value;
+      const bancosFiltrados = bancosCache.filter(b => !filtroMat || b.materia === filtroMat);
+      const bancoPorGrupo = banco => {
         const b = banco.id, c = contagens[b], dele = vis.filter(v => v.b === b);
-        // com filtro, só aparecem bancos com algum tema visível (ou que ainda carregam)
-        if ((busca || so) && c && !dele.length) continue;
-        if (so && !c && !sel.get(b)?.size && sel.get(b) !== null) continue;
+        if ((busca || so) && c && !dele.length) return "";
+        if (so && !c && !sel.get(b)?.size && sel.get(b) !== null) return "";
         const todos = temasDe(b), n = sel.get(b)?.size || 0, aberto = abertos.has(b) || !!busca;
         const tot = c && c !== "erro" ? Object.values(c).reduce((s, x) => ({ alternativa: s.alternativa + x.alternativa, dissertativa: s.dissertativa + x.dissertativa }), { alternativa: 0, dissertativa: 0 }) : null;
-        h += `<div class="grupo-banco${n ? " marcado" : ""}" data-grupo="${b}">
+        const mostraMat = !filtroMat && banco.materia;   // matéria no cabeçalho do banco quando não há grupo
+        return `<div class="grupo-banco${n ? " marcado" : ""}" data-grupo="${b}">
           <div class="banco-cab">
             <label class="check"><input type="checkbox" data-banco="${b}"${todos.length && n === todos.length ? " checked" : ""}${!todos.length || travado ? " disabled" : ""}>
-              <span><b>${esc(banco.nome)}</b> <span class="pequeno">${esc(banco.materia || "")}</span></span></label>
+              <span><b>${esc(banco.nome)}</b>${mostraMat ? "" : ""}</span></label>
             <span class="pequeno banco-info">${!c ? "carregando…" : c === "erro" ? "⚠ não carregou" : `${n}/${todos.length} temas · ${textoContagem(tot)}`}</span>
             ${todos.length ? `<button type="button" class="leve mini" data-abrir="${b}" aria-expanded="${aberto}" aria-label="${aberto ? "Recolher" : "Mostrar"} temas de ${esc(banco.nome)}">${aberto ? "▾ temas" : "▸ temas"}</button>` : ""}
           </div>
           ${aberto && dele.length ? `<div class="lista-temas">${dele.map(({ t }) => checkTema(b, t)).join("")}</div>` : ""}
         </div>`;
+      };
+      if (!filtroMat) {
+        // agrupar por matéria
+        const materias = [...new Set(bancosFiltrados.map(b => b.materia || ""))].sort((a, v) => a.localeCompare(v, "pt-BR"));
+        for (const mat of materias) {
+          const grupo = bancosFiltrados.filter(b => (b.materia || "") === mat).map(bancoPorGrupo).join("");
+          if (!grupo) continue;
+          if (mat) h += `<div class="grupo-materia-cab">${esc(mat)}</div>`;
+          h += grupo;
+        }
+      } else {
+        h += bancosFiltrados.map(bancoPorGrupo).join("");
       }
     }
     box.innerHTML = h || `<p class="pequeno">Nada encontrado com esse filtro.</p>`;
@@ -826,11 +842,10 @@ function controleProva(f) {
     $f("GerarCodigo").onclick = () => { $f("Codigo").value = gerarCodigo(); };
     $f("Codigo").onblur = () => { $f("Codigo").value = normalizarCodigo($f("Codigo").value); };
     opcoesSemestre();
-    $f("Semestre").onchange = () => { semestreMexido = true; opcoesMateria(); };
+    $f("Semestre").onchange = () => { semestreMexido = true; };
     $f("Turma").addEventListener("change", opcoesMateria);
-    $f("Materia").onfocus = opcoesMateria;
+    $f("Materia").onchange = () => { topicosPlano.aoMudarMateria(); desenharTemas(); };
     topicosPlano.ligar(); topicosPlano.definir();
-    $f("Materia").addEventListener("input", topicosPlano.aoMudarMateria);
     $f("Turma").addEventListener("change", topicosPlano.aoMudarMateria);
     $f("Data").onchange = () => { const d = $f("Data").value; if (d && !semestreMexido) { opcoesSemestre(semestreDe(d)); opcoesMateria(); } };
   }
@@ -842,10 +857,10 @@ function controleProva(f) {
     $f("Semestre").value = atual || base;
   }
   function opcoesMateria() {
-    const sug = materiasSugeridas($f("Turma").value, $f("Semestre").value);
-    $f("Materias").innerHTML = sug.map(m => `<option value="${esc(m)}">`).join("");
-    const b = bancosCache.find(x => x.id === bancosMarcados()[0]);
-    $f("Materia").placeholder = b?.materia ? `vazio = ${b.materia} (do banco)` : "vazio = a do 1º banco";
+    const materias = [...new Set(bancosCache.map(b => b.materia).filter(Boolean))].sort((a, b) => a.localeCompare(b, "pt-BR"));
+    const atual = $f("Materia").value;
+    $f("Materia").innerHTML = `<option value="">— Todas as matérias —</option>` + materias.map(m => `<option value="${esc(m)}">${esc(m)}</option>`).join("");
+    if (materias.includes(atual)) $f("Materia").value = atual;
   }
   // select de turmas; prova antiga com turma em texto livre ganha uma opção própria para não perder o nome
   function opcoesTurma(p = {}) {
@@ -867,7 +882,13 @@ function controleProva(f) {
   function preencher(p) {
     dadosAtuais = p;
     $f("Titulo").value = p.titulo || ""; opcoesTurma(p); $f("Codigo").value = p.codigoAcesso || "";
-    opcoesSemestre(semestreDaProva(p)); semestreMexido = !!p.semestre; $f("Materia").value = p.materia || ""; $f("Data").value = p.dataProva || ""; opcoesMateria();
+    opcoesSemestre(semestreDaProva(p)); semestreMexido = !!p.semestre;
+    const mat = p.materia || ""; $f("Materia").value = mat;
+    if (mat && !$f("Materia").value) {   // matéria da prova não está no select: adiciona como opção
+      const opt = document.createElement("option"); opt.value = mat; opt.textContent = mat;
+      $f("Materia").appendChild(opt); $f("Materia").value = mat;
+    }
+    $f("Data").value = p.dataProva || ""; opcoesMateria();
     topicosPlano.definir(p.planoCurso);
     // provas antigas só têm o total (nQuestoes) e as dissertativas
     $f("NDiss").value = p.nDissertativas ?? 0; $f("NAlt").value = p.nAlternativas ?? Math.max(0, (p.nQuestoes ?? 10) - (p.nDissertativas ?? 0));
@@ -1125,8 +1146,9 @@ let drawerNovaProva = null;
 function abrirFormNovaProva() {
   if (!podeEditar()) return toast("Seu papel não permite criar provas.", "erro");
   if (drawerNovaProva) return;
-  drawerNovaProva = drawer({ titulo: "Nova prova", corpo: $("#cardNovaProva"), largo: true, aoFechar: () => { drawerNovaProva = null; $("#cardNovaProva").classList.add("oculto"); },
+  drawerNovaProva = drawer({ titulo: "Nova prova", corpo: $("#cardNovaProva"), aoFechar: () => { drawerNovaProva = null; $("#cardNovaProva").classList.add("oculto"); },
     acoes: [{ t: "Cancelar", classe: "leve" }, { t: "Criar prova", onClick: () => criarProva() }] });
+  drawerNovaProva.el.classList.add("extra-largo");
 }
 async function criarProva() {
   if (!podeEditar()) { toast("Seu papel não permite criar provas.", "erro"); return false; }
