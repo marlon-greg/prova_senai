@@ -456,9 +456,14 @@ service cloud.firestore {
       allow read: if equipe() || naTurma(resource.data.turmaId);
       allow write: if professor();
     }
-    // atividade lançada pelo professor ou de treino: { unidade, turma, turmaId, tipo, titulo, enunciado, criterios, prazo, publicada, ... }
+    // atividade: { unidade, turma, turmaId, tipo: lancada|prerecuperacao|nivelamento, titulo, enunciado, criterios, prazo, publicada, alunos, ... }
+    // alunos == [] → a turma toda lê (consulta com where alunos == []); alunos com e-mails → SÓ esses alunos leem
+    // (consulta com where alunos array-contains), para a turma não saber quem foi para a pré-recuperação ou o nivelamento.
     match /aulasAtividades/{id} {
-      allow read: if equipe() || (naTurma(resource.data.turmaId) && resource.data.get('publicada', false) == true);
+      allow read: if equipe()
+        || (resource.data.get('publicada', false) == true
+            && ((resource.data.get('alunos', []).size() == 0 && naTurma(resource.data.turmaId))
+                || (logado() && email().lower() in resource.data.get('alunos', []))));
       allow write: if professor();
     }
     // entrega do aluno: id = {atividadeId}__{email}; o aluno cria e altera a própria até o professor devolver
@@ -466,6 +471,7 @@ service cloud.firestore {
       allow read: if equipeGeral() || meuDoc() || minhaAluna(resource.data.email);
       allow create, update: if professor()
         || (aluno() && souEu() && id == request.resource.data.atividadeId + '__' + email().lower()
+            && request.resource.data.get('devolvida', false) != true
             && (resource == null || (resource.data.email == email().lower() && resource.data.get('devolvida', false) != true)));
       allow delete: if professor();
     }
@@ -477,9 +483,12 @@ service cloud.firestore {
         allow read: if equipe() || (logado() && em == email().lower());
         allow write: if professor() || (logado() && em == email().lower() && request.resource.data.uid == uid());
       }
+      // o aluno responde só com a sessão aberta e antes de o professor revelar o gabarito daquela questão
       match /respostas/{rid} {
         allow read: if equipe() || meuDoc();
-        allow create, update: if professor() || (logado() && souEu());
+        allow create, update: if professor() || (logado() && souEu()
+          && get(/databases/$(db)/documents/aulasSessoes/$(id)).data.get('aberta', false) == true
+          && !(request.resource.data.qid in get(/databases/$(db)/documents/aulasSessoes/$(id)).data.get('revelados', [])));
         allow delete: if professor();
       }
       match /duvidas/{did} {
