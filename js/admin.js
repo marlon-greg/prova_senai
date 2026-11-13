@@ -6,7 +6,7 @@ import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, to
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
-import { htmlEditorTopicos, editorTopicos } from "./plano-curso-ui.js?v=20261113a";
+import { htmlEditorTopicos, editorTopicos } from "./plano-curso-ui.js?v=20261113b";
 import { PLANO_CURSO } from "./plano-curso.js?v=20261113a";
 import { iniciarOrganizacao, carregarOrganizacao, listarPlanos, listarCursos, materiasSugeridas, editarTopicosBanco, editarCriteriosBanco, topicosDaMateria } from "./admin-org.js";
 import { iniciarDiario, carregarDiario } from "./admin-diario.js";

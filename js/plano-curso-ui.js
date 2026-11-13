@@ -15,7 +15,7 @@ export function htmlEditorTopicos(f) {
   const grupos = [...new Set(PLANO_CURSO.unidades.map(u => u.modulo))];
   return `<fieldset class="temas-box pc-editor">
     <legend>O que a prova avalia</legend>
-    <p class="pequeno" style="margin-top:0">O aluno vê os critérios de avaliação antes de começar, cada um explicado. Sempre junto: pelo menos um critério técnico e um socioemocional.</p>
+    <p class="pequeno" style="margin-top:0">O aluno vê os critérios antes de começar, cada um explicado. Sempre junto: pelo menos um critério técnico e um socioemocional.</p>
     <div class="grade">
       <div><label for="${f}PcUnidade">Unidade curricular</label><select id="${f}PcUnidade">
         <option value="">Automática, pela matéria</option>
@@ -23,6 +23,10 @@ export function htmlEditorTopicos(f) {
         <option value="${NENHUMA}">Nenhuma (não mostrar nada ao aluno)</option>
       </select></div>
       <div id="${f}PcAvBox"><label for="${f}PcAv">Avaliação do plano de ensino</label><select id="${f}PcAv"></select></div>
+      <div><label for="${f}PcInstrumento">Por qual meio</label><select id="${f}PcInstrumento">
+        <option value="escrita">Prova escrita (alternativas + dissertativas)</option>
+        <option value="seminario">Seminário (apresentação oral)</option>
+      </select></div>
     </div>
     <p class="pequeno" id="${f}PcResumo" aria-live="polite"></p>
     <div id="${f}PcBlocos"></div>
@@ -101,10 +105,10 @@ export function editorTopicos(f, materia, ctx = () => ({})) {
     if (comCriterios(u)) {
       const crit = criteriosDaUnidade(u.id), nT = crit.filter(c => c[1].includes(".ct") && marcados.has(c[0])).length, nS = crit.filter(c => c[1].includes(".cs") && marcados.has(c[0])).length;
       const p = plano(u);
-      return $f("PcResumo").innerHTML = `${v ? "" : "Pela matéria: "}<b>${esc(u.nome)}</b>${p ? ` · plano de ensino: ${esc(p.planilha)}` : ""} · <b>${nT}</b> critério(s) técnico(s) · <b>${nS}</b> socioemocional(is)${nS ? "" : ` <span class="erro-texto">— falta o socioemocional</span>`}${detalhados.length ? ` · rubrica com ${detalhados.length} item(ns)` : ""}.`;
+      return $f("PcResumo").innerHTML = `<b>${esc(u.nome)}</b>${p ? ` · plano de ensino: ${esc(p.planilha)}` : ""} · <b>${nT}</b> critério(s) técnico(s) · <b>${nS}</b> socioemocional(is)${nS ? "" : ` <span class="erro-texto">— falta o socioemocional</span>`}${detalhados.length ? ` · rubrica com ${detalhados.length} item(ns)` : ""}.`;
     }
     const n = l => l.filter(([id]) => marcados.has(id)).length;
-    $f("PcResumo").innerHTML = `${v ? "" : "Pela matéria: "}<b>${esc(u.nome)}</b> (ainda sem critérios do plano de ensino: o aluno vê as capacidades) · ${n(u.tec)}/${u.tec.length} ${rotuloTec(u).toLowerCase()} · ${n(u.soc)}/${u.soc.length} socioemocionais · ${n(k12(u))}/${k12(u).length} conhecimentos.`;
+    $f("PcResumo").innerHTML = `<b>${esc(u.nome)}</b> (ainda sem critérios do plano de ensino: o aluno vê as capacidades) · ${n(u.tec)}/${u.tec.length} ${rotuloTec(u).toLowerCase()} · ${n(u.soc)}/${u.soc.length} socioemocionais · ${n(k12(u))}/${k12(u).length} conhecimentos.`;
   }
   function desenhar() {
     const u = unidade(), ab = abertos();
@@ -134,6 +138,7 @@ export function editorTopicos(f, materia, ctx = () => ({})) {
   function ligar() {
     $f("PcUnidade").onchange = padrao;
     $f("PcAv").onchange = aplicarAv;
+    $f("PcInstrumento").onchange = resumo;
     $f("PcBlocos").addEventListener("change", e => {
       const x = e.target, u = unidade();
       if (x.closest("[data-det]")) { lerDetalhados(); return resumo(); }
@@ -168,6 +173,7 @@ export function editorTopicos(f, materia, ctx = () => ({})) {
   // carrega o que a prova tem salvo (sem planoCurso = automático)
   function definir(pc = null) {
     $f("PcUnidade").value = pc && (pc.unidade === NENHUMA || unidadePorId(pc.unidade)) ? pc.unidade : "";
+    $f("PcInstrumento").value = pc?.instrumento || "escrita";
     turmaAntes = ctx().turma || "";
     const u = unidade(); ultima = u?.id || null;
     if (!pc || !u) return padrao();
@@ -193,16 +199,17 @@ export function editorTopicos(f, materia, ctx = () => ({})) {
       if (!crit.some(c => c[1].includes(".cs") && marcados.has(c[0]))) return { erro: "O que a prova avalia: a capacidade socioemocional vai junto. Marque pelo menos um critério socioemocional." };
       const ruim = detalhados.find(d => !d.titulo || !d.liga || !marcados.has(d.liga));
       if (ruim) return { erro: `Rubrica da prova: cada item precisa de título e de um critério oficial marcado${ruim.titulo ? ` (veja "${ruim.titulo}")` : ""}.` };
-      return { valor: { unidade: u.id, avaliacao: $f("PcAv").value || "", criterios: ids, detalhados: detalhados.map(({ id, titulo, liga, pontos, texto }) => ({ id, titulo, liga, pontos: pontos ?? null, texto: texto || "" })) } };
+      const instrumento = $f("PcInstrumento").value || "escrita";
+      return { valor: { unidade: u.id, avaliacao: $f("PcAv").value || "", criterios: ids, detalhados: detalhados.map(({ id, titulo, liga, pontos, texto }) => ({ id, titulo, liga, pontos: pontos ?? null, texto: texto || "" })), instrumento } };
     }
-    const tudo = todosCap(u);
+    const tudo = todosCap(u), instrumento = $f("PcInstrumento").value || "escrita";
     if (!tudo.some(id => marcados.has(id))) return { erro: "O que a prova avalia: marque pelo menos um item, ou escolha Nenhuma na unidade curricular." };
-    if (tudo.every(id => marcados.has(id))) return { valor: { unidade: u.id, itens: [] } };
+    if (tudo.every(id => marcados.has(id))) return { valor: { unidade: u.id, itens: [], instrumento } };
     const itens = [...u.tec, ...u.soc].map(([id]) => id).filter(id => marcados.has(id));
     for (const [id] of u.con.filter(([c]) => nivelK(c) === 1)) {
       if (marcados.has(id)) itens.push(id); else itens.push(...filhos(u, id).map(([c]) => c).filter(c => marcados.has(c)));
     }
-    return { valor: { unidade: u.id, itens } };
+    return { valor: { unidade: u.id, itens, instrumento } };
   }
   return { ligar, definir, ler, aoMudarMateria };
 }
