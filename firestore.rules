@@ -512,7 +512,7 @@ service cloud.firestore {
       }
       match /duvidas/{did} {
         allow read: if equipe() || meuDoc();
-        allow create: if logado() && souEu();
+        allow create: if professor() || (logado() && souEu());   // professor: dúvidas fictícias da Simulação
         allow update, delete: if professor();
       }
     }
@@ -522,6 +522,21 @@ service cloud.firestore {
       allow read: if cuidaDe(resource.data.email) || eu(resource.data.email);
       allow create, update: if professor() || minhaAluna(request.resource.data.email);
       allow delete: if professor();
+    }
+    // configuração própria do sistema de aulas (link da autoavaliação, escola, curso)
+    match /config/aulas {
+      allow read: if logado();
+      allow write: if professor();
+    }
+    // erros e sugestões dos alunos sobre as aulas (o aluno lê e cria os dele; a equipe responde)
+    match /aulasRetorno/{id} {
+      allow read: if equipe() || (logado() && resource.data.uid == uid());
+      allow create: if logado() && request.resource.data.uid == uid() && request.resource.data.email == email().lower()
+                    && request.resource.data.status == 'aberto' && request.resource.data.tipo in ['erro', 'sugestao']
+                    && request.resource.data.keys().hasOnly(['tipo', 'uid', 'email', 'nome', 'turmaId', 'turmaNome', 'aulaId', 'aulaTitulo', 'onde', 'motivo', 'categoria', 'texto', 'status', 'criadoEm'])
+                    && request.resource.data.texto is string && request.resource.data.texto.size() <= 2000;
+      allow update: if professor() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'resposta', 'respondidoPor', 'respondidoEm']);
+      allow delete: if admin();
     }
     // <<< AULAS <<<
 
