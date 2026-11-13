@@ -344,7 +344,12 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
 
     <!-- RELATÓRIOS (js/admin-relatorios.js) -->
     <div id="aba-relatorios" class="oculto">
-      <template class="ajuda-aba">Notas das provas finalizadas por aluno, matéria e turma, com o <b>alerta de reprovação</b> (média da matéria abaixo de 50, cada prova vale o mesmo) e o <b>desempenho por tópico</b>.</template>
+      <template class="ajuda-aba">Notas das provas finalizadas por aluno, matéria e turma, com o <b>alerta de reprovação</b> e o <b>desempenho por tópico</b>. A aba <b>Comparativo</b> cruza participação nas aulas × autoavaliação × prova por critério.</template>
+      <div class="vista-toggle">
+        <button id="vistaNotas" class="ativo" type="button">📊 Notas</button>
+        <button id="vistaComp" type="button">🔀 Comparativo</button>
+      </div>
+      <div id="painelNotas">
       <div class="card">
 <div class="toolbar" role="search">
           <input type="search" id="rlBusca" placeholder="Pesquisar aluno…" aria-label="Pesquisar aluno">
@@ -359,6 +364,18 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
         </div>
       </div>
       <div id="rlConteudo" class="lista-grupos"></div>
+      </div><!-- /painelNotas -->
+
+      <!-- painel comparativo -->
+      <div id="painelComp" class="oculto">
+        <div class="card">
+          <div class="toolbar">
+            <label class="pf-campo"><span>Turma</span><select id="compTurma" aria-label="Turma"></select></label>
+            <label class="pf-campo"><span>Unidade</span><select id="compUnidade" aria-label="Unidade/matéria"></select></label>
+          </div>
+        </div>
+        <div id="rlCompConteudo" class="lista-grupos"></div>
+      </div>
     </div>
 
     <!-- EQUIPE -->

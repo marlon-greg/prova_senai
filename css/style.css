@@ -2099,6 +2099,28 @@ td.td-acoes .menu-wrap { vertical-align:middle; }
 .rl-tend.desce svg { transform:scaleY(-1); }
 .rl-turma { display:flex; flex-wrap:wrap; align-items:center; gap:6px var(--sp-2); padding:var(--sp-2) 0; }
 .rl-turma:last-child { border-bottom:0; }
+/* ---- comparativo diagnóstico (5.3) ---- */
+.sit { display:inline-block; border-radius:3px; font-size:11px; font-weight:700; padding:3px 6px; white-space:nowrap; line-height:1.2; cursor:default; }
+.sit-dominio      { background:#dcfce7; color:#15803d; }
+.sit-ilusao       { background:#fef9c3; color:#a16207; }
+.sit-subconfianca { background:#dbeafe; color:#1d4ed8; }
+.sit-dificuldade  { background:#fee2e2; color:#b91c1c; }
+.sit-semAula      { background:#f3f4f6; color:#6b7280; }
+.sit-ausente      { background:#ffedd5; color:#c2410c; }
+.sit-semDeclaracao{ background:#fafafa; color:#9ca3af; border:1px dashed #d1d5db; }
+.sit-pendente     { background:#fff; color:#d1d5db; border:1px dashed #e5e7eb; }
+.comp-wrap { overflow-x:auto; }
+.comp-tab { border-collapse:collapse; min-width:100%; font-size:13px; }
+.comp-tab th, .comp-tab td { padding:5px 8px; border-bottom:1px solid var(--borda); }
+.comp-tab th { font-size:11px; font-weight:600; color:var(--texto-suave); background:var(--fundo); }
+.comp-tab td:first-child, .comp-tab th:first-child { text-align:left; min-width:140px; position:sticky; left:0; background:inherit; z-index:1; }
+.comp-tab td:not(:first-child), .comp-tab th:not(:first-child) { text-align:center; }
+.comp-tab th:not(:first-child) { max-width:52px; overflow:hidden; text-overflow:ellipsis; }
+.comp-tab tbody tr:nth-child(even) { background:var(--fundo); }
+.comp-legenda { display:flex; flex-wrap:wrap; gap:6px; padding:12px 0 4px; }
+.vista-toggle { display:flex; gap:4px; margin-bottom:12px; }
+.vista-toggle button { padding:5px 14px; border-radius:20px; border:1.5px solid var(--borda); background:transparent; color:var(--texto-suave); font-size:13px; cursor:pointer; transition:var(--t-fast); }
+.vista-toggle button.ativo { background:var(--marinho); color:#fff; border-color:var(--marinho); }
 .graf-fig figcaption { font-family:var(--fonte-texto); font-size:16px; font-weight:600; color:var(--marinho); }
 .graf-legenda { font-size:var(--fs-xs); }
 

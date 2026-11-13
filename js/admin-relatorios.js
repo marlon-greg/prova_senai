@@ -1,19 +1,35 @@
 // Painel → aba "Relatórios": notas por aluno, matéria e turma, alerta de reprovação (média < 50, peso igual por prova)
 // e desempenho por tópico (o "tema" das questões). desempenhoPorTopico() é a conta que a autoavaliação vai usar (docs/INTEGRACOES.md).
-import { db, esc, $, toast, traduzirErro, corrigir, bancosDaProva, temaDe, semestreDaProva, materiaDaProva, rotuloSemestre, chaveTexto } from "./common.js";
+import { db, esc, $, toast, traduzirErro, corrigir, bancosDaProva, temaDe, semestreDaProva, materiaDaProva, rotuloSemestre, chaveTexto } from "./common.js?v=20261113a";
 import { graficoLinhas, ligarGraficos } from "./graficos.js";
 import { imprimir } from "./admin-relatorio-aluno.js";
 import { pl, ajudaHTML, vazio } from "./ui.js";
 import { ic } from "./icones.js";
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { situacaoCriterio, SITUACOES } from "./evidencias.js";
+import { criteriosDaUnidade, codigoCriterio, CRITERIOS } from "./plano-ensino.js?v=20261113a";
+import { PLANO_CURSO } from "./plano-curso.js?v=20261113a";
 
 export const MEDIA_MINIMA = 50;
-let ctx = null, base = null;
+let ctx = null, base = null, compBase = null;
+
+// toggle Notas ↔ Comparativo
+function ligarToggle() {
+  const btnN = $("#vistaNotas"), btnC = $("#vistaComp");
+  const pN = $("#painelNotas"), pC = $("#painelComp");
+  btnN.onclick = () => { btnN.classList.add("ativo"); btnC.classList.remove("ativo"); pN.classList.remove("oculto"); pC.classList.add("oculto"); };
+  btnC.onclick = () => { btnC.classList.add("ativo"); btnN.classList.remove("ativo"); pC.classList.remove("oculto"); pN.classList.add("oculto"); carregarComparativo(); };
+}
+
 export function iniciarRelatorios(c) {
   ctx = c;
+  ligarToggle();
   ["#rlTurma", "#rlSemestre", "#rlMateria", "#rlBusca"].forEach(id => $(id).addEventListener(id === "#rlBusca" ? "input" : "change", desenhar));
   $("#rlTopicos").onclick = calcularTopicos;
   $("#rlCSV").onclick = csv;
+  // filtros comparativo
+  $("#compTurma").onchange = () => { compBase = null; carregarComparativo(); };
+  $("#compUnidade").onchange = () => { compBase = null; carregarComparativo(); };
   $("#rlPDF").onclick = () => {
     const filtros = [["#rlTurma", "turma"], ["#rlSemestre", "semestre"], ["#rlMateria", "matéria"]].map(([id, r]) => $(id).value ? `${r}: ${$(id).selectedOptions[0].textContent}` : "").filter(Boolean).join(" · ") || "todas as turmas, semestres e matérias";
     imprimir("Relatório de notas", `<header class="cab"><div class="marca">SENAI</div><div><h1>Relatório de notas</h1><div class="sub">${esc(filtros)} · emitido em ${new Date().toLocaleDateString("pt-BR")} · média mínima ${MEDIA_MINIMA}</div></div></header>${conteudoPDF()}
@@ -40,6 +56,10 @@ export async function carregarRelatorios() {
   sel($("#rlTurma"), "👥 Todas as turmas", base.turmas.filter(t => base.linhas.some(l => l.turmaId === t.id)).map(t => [t.id, t.nome]));
   sel($("#rlSemestre"), "📅 Todos os semestres", [...new Set(base.linhas.map(l => l.semestre))].sort().reverse().map(s => [s, rotuloSemestre(s)]));
   sel($("#rlMateria"), "📚 Todas as matérias", [...new Set(base.linhas.map(l => l.materia))].sort((a, b) => a.localeCompare(b, "pt-BR")).map(m => [m, m]));
+  // popula selects do comparativo com as mesmas turmas
+  const unidades = Object.keys(CRITERIOS).map(uid => { const u = PLANO_CURSO.unidades.find(x => x.id === uid); return [uid, u?.nome || uid]; });
+  sel($("#compTurma"), "👥 Selecione uma turma", base.turmas.map(t => [t.id, t.nome]));
+  sel($("#compUnidade"), "📚 Selecione uma unidade", unidades);
   desenhar();
 }
 function filtradas() {
@@ -176,6 +196,69 @@ function topicosHTML() {
       <div class="rl-barra"><i class="${cor(pct(x))}" style="width:${Math.round(pct(x) || 0)}%"></i></div></div>`).join("")}</div>
     <details style="margin-top:12px"><summary><b>Por aluno</b> (os 3 tópicos com menor acerto de cada um)</summary><ul>${[...porAluno].map(([e, m]) => `<li><b>${esc(nomes[e] || e)}</b>: ${[...m].sort((a, b) => pct(a[1]) - pct(b[1])).slice(0, 3).map(([t, x]) => `${esc(t)} <span class="${cor(pct(x))}">${fmt(pct(x))}%</span>`).join(" · ")}</li>`).join("")}</ul></details>`;
 }
+// ---------- comparativo diagnóstico (5.3) ----------
+const ICONE_SIT = { dominio:"✓", ilusao:"!", subconfianca:"↑", dificuldade:"✗", semAula:"—", ausente:"○", semDeclaracao:"?", pendente:"·" };
+
+async function carregarComparativo() {
+  const turmaId = $("#compTurma").value, unidadeId = $("#compUnidade").value;
+  const box = $("#rlCompConteudo");
+  if (!turmaId || !unidadeId) { box.innerHTML = `<p class="help">Selecione uma turma e uma unidade.</p>`; return; }
+  if (compBase?.turmaId === turmaId && compBase?.unidadeId === unidadeId) { desenharComparativo(); return; }
+  box.innerHTML = `<p class="pequeno">Carregando evidências…</p>`;
+  try {
+    const snap = await getDocs(query(collection(db, "evidencias"), where("turmaId", "==", turmaId)));
+    const evs = snap.docs.map(d => d.data()).filter(e => e.unidade === unidadeId);
+    // agrupa por email
+    const porAluno = new Map();
+    for (const ev of evs) {
+      const k = String(ev.email || "").toLowerCase();
+      if (!porAluno.has(k)) porAluno.set(k, { nome: ev.aluno || ev.email || k, evs: [] });
+      porAluno.get(k).evs.push(ev);
+    }
+    // adiciona alunos da turma que não têm nenhuma evidência (aparecem como "pendente")
+    if (base) for (const t of base.turmas.filter(t => t.id === turmaId)) for (const al of (t.alunos || [])) {
+      const k = String(al.email || "").toLowerCase(); if (!k) continue;
+      if (!porAluno.has(k)) porAluno.set(k, { nome: al.nome || k, evs: [] });
+    }
+    compBase = { turmaId, unidadeId, porAluno };
+  } catch (e) { box.innerHTML = `<p class="erro-texto">${esc(traduzirErro(e))}</p>`; return; }
+  desenharComparativo();
+}
+
+function desenharComparativo() {
+  const box = $("#rlCompConteudo");
+  if (!compBase) return;
+  const { porAluno, unidadeId } = compBase;
+  const criterios = criteriosDaUnidade(unidadeId);
+  if (!criterios.length) { box.innerHTML = `<p class="help">Nenhum critério definido para esta unidade.</p>`; return; }
+  const alunos = [...porAluno.values()].sort((a, b) => String(a.nome).localeCompare(String(b.nome), "pt-BR"));
+  // cabeçalho da tabela
+  const thCrits = criterios.map(c => `<th title="${esc(c[2])}">${esc(codigoCriterio(c[0]))}</th>`).join("");
+  // linhas por aluno
+  const linhas = alunos.map(({ nome, evs }) => {
+    const tds = criterios.map(c => {
+      const r = situacaoCriterio(evs, c[0]);
+      return `<td><span class="sit sit-${r.situacao}" title="${esc(SITUACOES[r.situacao]?.nome || r.situacao)}">${ICONE_SIT[r.situacao] || "·"}</span></td>`;
+    }).join("");
+    return `<tr><td><b>${esc(nome)}</b></td>${tds}</tr>`;
+  }).join("");
+  // legenda
+  const legenda = Object.entries(SITUACOES).map(([k, v]) =>
+    `<span class="sit sit-${k}" title="${esc(v.acao)}">${ICONE_SIT[k]} ${esc(v.nome)}</span>`
+  ).join("");
+  box.innerHTML = `
+    <section class="card">
+      <div class="rl-cab"><h3>Comparativo: aulas × autoavaliação × prova</h3></div>
+      <div class="comp-wrap">
+        <table class="comp-tab">
+          <thead><tr><th>Aluno</th>${thCrits}</tr></thead>
+          <tbody>${linhas}</tbody>
+        </table>
+      </div>
+      <div class="comp-legenda">${legenda}</div>
+    </section>`;
+}
+
 function csv() {
   if (!base) return;
   const ls = filtradas(), nomeTurma = id => base.turmas.find(t => t.id === id)?.nome || "";
