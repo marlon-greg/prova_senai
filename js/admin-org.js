@@ -7,7 +7,8 @@
 // O tópico de uma questão é o campo "tema" dela (o mesmo que filtra o sorteio da prova).
 import { db, esc, $, toast, modal, confirmar, traduzirErro, temaDe, ordenarTemas, bancosDaProva, temasDoBanco,
          semestreDe, rotuloSemestre, semestreVizinho, chaveTexto, semestreDaProva, materiaDaProva, dataCurta, nomeTurma, semestreCursoAtual } from "./common.js";
-import { criteriosDaUnidade, unidadeDaMateria } from "./plano-ensino.js?v=20261112d";
+import { criteriosDaUnidade } from "./plano-ensino.js?v=20261113a";
+import { unidadeDaMateria } from "./plano-curso.js?v=20261113a";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, abrirMaterialEmAba, tamanhoTexto, erroMaterial } from "./material.js";
 import { lerPlanoIA, classificarTopicosIA, lerCursoIA } from "./ia.js";
 import { menuHTML, itemMenu, vazio, collapsible, tarefa, pl, semestreLongo, seta, drawerForm } from "./ui.js";
