@@ -7,6 +7,7 @@
 // O tópico de uma questão é o campo "tema" dela (o mesmo que filtra o sorteio da prova).
 import { db, esc, $, toast, modal, confirmar, traduzirErro, temaDe, ordenarTemas, bancosDaProva, temasDoBanco,
          semestreDe, rotuloSemestre, semestreVizinho, chaveTexto, semestreDaProva, materiaDaProva, dataCurta, nomeTurma, semestreCursoAtual } from "./common.js";
+import { criteriosDaUnidade, unidadeDaMateria } from "./plano-ensino.js?v=20261112d";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, abrirMaterialEmAba, tamanhoTexto, erroMaterial } from "./material.js";
 import { lerPlanoIA, classificarTopicosIA, lerCursoIA } from "./ia.js";
 import { menuHTML, itemMenu, vazio, collapsible, tarefa, pl, semestreLongo, seta, drawerForm } from "./ui.js";
@@ -671,4 +672,80 @@ function cursoDaTurmaHTML(t, sm) {
   return `<details class="curso-turma"><summary>📘 <b>${esc(c.nome)}</b> <span class="pequeno">· ${(c.materias || []).length} matérias no plano de curso${livres.length ? ` · ${livres.length} sem cartão em ${rotuloSemestre(sem)}` : ""}</span></summary>
     <div class="op-pilulas" style="margin:8px 0">${livres.map(m => `<button type="button" data-matcurso="${t.id}|${sem}|${esc(m.nome)}" title="${esc((m.topicos || []).join(" · "))}">+ ${esc(m.nome)}${m.modulo ? ` <span class="pequeno">(${esc(m.modulo)})</span>` : ""}</button>`).join("") || `<span class="pequeno">Todas as matérias do curso já têm cartão neste semestre.</span>`}</div>
     <p class="pequeno">Clique na matéria para criar o cartão dela em ${rotuloSemestre(sem)} (já com os tópicos do plano de curso; as datas das provas você coloca depois).</p></details>`;
+}
+
+// ---------- Editor de critérios por questão ----------
+// Liga cada questão do banco a um critério do plano de ensino (ex.: bd.cr25).
+// Objetiva: a questão inteira → 1 critério. Dissertativa: a questão inteira → 1 critério
+// (rubrica item a item vem com os seminários; por ora a questão tem 1 critério principal).
+// Questão sem critério: não entra na evidência da prova — não bloqueia nada.
+export async function editarCriteriosBanco(bancoId, aoSalvar = () => {}) {
+  if (!ctx.podeEditar()) return;
+  if (!bancos.length) bancos = await ctx.listarBancos();
+  const banco = bancos.find(b => b.id === bancoId);
+  const materia = banco?.materia || "";
+  const unidade = unidadeDaMateria(materia);
+  const crits = unidade ? criteriosDaUnidade(unidade.id) : [];
+  if (!crits.length) return toast(`Sem critérios cadastrados para "${materia}". Adicione o plano de ensino da matéria primeiro.`, "info");
+  const qs = [...await ctx.questoesDoBanco(bancoId, true)].sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
+  // opções do select: grupos técnico e socioemocional
+  const grupos = {};
+  for (const [id, cap, texto] of crits) {
+    const tipo = cap.includes(".ct") ? "Técnico" : "Socioemocional";
+    (grupos[tipo] ||= []).push({ id, texto });
+  }
+  const optsHTML = `<option value="">— sem critério —</option>` +
+    Object.entries(grupos).map(([g, lista]) =>
+      `<optgroup label="${esc(g)}">${lista.map(c => `<option value="${c.id}">${esc(c.id.replace(/.*\.cr/, "C"))} — ${esc(c.texto.slice(0, 70))}</option>`).join("")}</optgroup>`
+    ).join("");
+  const html = `
+    <div class="linha acoes" style="margin-bottom:8px;align-items:center">
+      <span class="pequeno">Matéria: <b>${esc(materia)}</b> · <b>${pl(crits.length, "critério")}</b> disponíveis · <b>${pl(qs.length, "questão", "questões")}</b></span>
+      <span id="cbMsg" class="pequeno" aria-live="polite"></span>
+    </div>
+    <div style="margin-bottom:8px"><label for="cbAplicar">Critério para as marcadas</label>
+      <div class="linha" style="flex-wrap:nowrap;gap:4px"><select id="cbAplicar" style="flex:1">${optsHTML}</select>
+        <button type="button" class="leve mini" id="cbAplicarBtn" style="flex:0 0 auto">Aplicar</button></div></div>
+    <div class="tabela tb-questoes"><table>
+      <tr><th><input type="checkbox" id="cbTodas" aria-label="Marcar todas"></th><th>#</th><th>Questão</th><th style="min-width:260px">Critério</th></tr>
+      ${qs.map(q => `<tr data-q="${q.id}"><td><input type="checkbox" data-marca="${q.id}" aria-label="Marcar questão ${q.ordem}"></td>
+        <td class="pequeno">${q.ordem || ""}<br>${q.tipo === "dissertativa" ? "✍" : "🔘"}</td>
+        <td class="pequeno tb-enun">${esc(String(q.enunciado || "").replace(/\s+/g, " ").slice(0, 160))}${String(q.enunciado || "").length > 160 ? "…" : ""}</td>
+        <td><select data-criterio="${q.id}">${optsHTML}</select></td></tr>`).join("")}
+    </table></div>
+    <p class="pequeno" style="margin-top:8px">Questão sem critério não entra na evidência da prova (não bloqueia nada). Dissertativa com critério: a pontuação da questão inteira vai para aquele critério.</p>`;
+  const salvou = await modal({ titulo: `🎯 Critérios — ${banco?.nome || bancoId}`, conteudo: html, ok: "Salvar critérios", cancelar: "Cancelar", largo: true,
+    aoAbrir: caixa => {
+      // preenche os selects com o valor atual
+      qs.forEach(q => {
+        const sel = caixa.querySelector(`[data-criterio="${q.id}"]`);
+        if (sel && q.criterio) sel.value = q.criterio;
+      });
+      caixa.querySelector("#cbTodas").onchange = e => caixa.querySelectorAll("[data-marca]").forEach(c => c.checked = e.target.checked);
+      caixa.querySelector("#cbAplicarBtn").onclick = () => {
+        const v = caixa.querySelector("#cbAplicar").value;
+        const marc = [...caixa.querySelectorAll("[data-marca]:checked")];
+        if (!marc.length) return toast("Marque as questões primeiro.", "erro");
+        marc.forEach(c => { const sel = caixa.querySelector(`[data-criterio="${c.dataset.marca}"]`); if (sel) { sel.value = v; sel.classList.add("mudou"); } });
+      };
+      caixa.querySelectorAll("[data-criterio]").forEach(s => s.onchange = () => s.classList.add("mudou"));
+    },
+    antesDeConfirmar: async caixa => {
+      const novo = Object.fromEntries([...caixa.querySelectorAll("[data-criterio]")].map(s => [s.dataset.criterio, s.value]));
+      const mudadas = qs.filter(q => (novo[q.id] || "") !== (q.criterio || ""));
+      if (!mudadas.length) { toast("Nenhuma mudança.", "info"); return false; }
+      if (!(await confirmar(`Salvar os critérios do banco (${mudadas.length} questão(ões) mudam)?`, { titulo: "Salvar critérios", ok: "Salvar" }))) return false;
+      try {
+        for (let i = 0; i < mudadas.length; i += 400) {
+          const lote = writeBatch(db);
+          for (const q of mudadas.slice(i, i + 400)) {
+            const v = novo[q.id] || "";
+            lote.update(doc(db, "bancos", bancoId, "questoes", q.id), v ? { criterio: v } : { criterio: null });
+          }
+          await lote.commit();
+        }
+      } catch (e) { toast(traduzirErro(e), "erro"); return false; }
+      return true;
+    } });
+  if (salvou) { toast("Critérios salvos.", "ok"); ctx.invalidarBanco(bancoId); aoSalvar(); }
 }

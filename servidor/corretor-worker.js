@@ -31,6 +31,7 @@
 
 import { temFormato, corrigirFormato, pedidoFormatos, lerRespostaFormatos, contextoDiario } from "./formatos.js";
 import { integracao, buscarEGravar } from "./integracao.js";
+import { montarEvidencia, NIVEIS_PROVA, chaveEmail } from "../js/evidencias.js";
 import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS, pedidoCurso, lerRespostaCurso, pedidoConquistas, lerRespostaConquistas, pedidoPerfil, lerRespostaPerfil, pedidoAnalise, lerRespostaAnalise, contextoPeriodo } from "./organizar.js";
 
 export default {
@@ -77,6 +78,53 @@ export default {
     }
   }
 };
+
+// gera e salva a evidência "prova" com os critérios atingidos
+// chamada em paralelo após o placar — se falhar, não bloqueia a resposta ao aluno
+async function gravarEvidenciaProva(fs, t, prova, ids, docs, correcoes) {
+  const unidade = String(prova?.planoCurso?.unidade || "").toLowerCase();
+  if (!unidade || unidade === "nenhuma") return;
+  const bancoDe = qid => { const i = String(qid).lastIndexOf("_q"); return i > 0 ? String(qid).slice(0, i) : t.bancoId; };
+  // acumula pontos e peso por critério (questão inteira → 1 critério)
+  const acc = {};   // criterioId → { pontos, peso }
+  for (const qid of ids) {
+    const q = docs[`bancos/${bancoDe(qid)}/questoes/${qid}`];
+    if (!q) continue;
+    const cid = String(q.criterio || "").trim().toLowerCase();
+    if (!cid || !/^[a-z]+\.cr\d{2,}$/.test(cid)) continue;
+    const peso = Number(q.peso || 1);
+    const pontos = correcoes[qid] ? Number(correcoes[qid].pontos ?? 0) : 0;
+    if (!acc[cid]) acc[cid] = { pontos: 0, peso: 0 };
+    acc[cid].pontos += pontos;
+    acc[cid].peso += peso;
+  }
+  if (!Object.keys(acc).length) return;
+  // converte para valor normalizado e nível da rubrica
+  const criterios = {};
+  for (const [cid, { pontos, peso }] of Object.entries(acc)) {
+    const v = peso > 0 ? Math.min(1, Math.max(0, pontos / peso)) : 0;
+    const nivel = v >= 0.9 ? "ms" : v >= 0.6 ? "s" : v > 0 ? "ps" : "ns";
+    criterios[cid] = { valor: NIVEIS_PROVA[nivel].valor, nivel };
+  }
+  const email = chaveEmail(t.email || "");
+  const turma = codigoTurmaDaProva(prova);
+  if (!email || !turma) return;
+  const finEm = t.finalizadaEm;
+  const data = finEm ? (finEm.seconds ? new Date(finEm.seconds * 1000).toISOString().slice(0, 10) : String(finEm).slice(0, 10)) : new Date().toISOString().slice(0, 10);
+  const periodo = `${data.slice(0, 4)}-${Number(data.slice(5, 7)) <= 6 ? 1 : 2}`;
+  const { id: evidId, dados } = montarEvidencia({
+    fonte: "prova", ref: t.provaId || "prova", email, uid: t.uid || "",
+    turma, turmaId: String(prova.turmaId || ""), unidade, periodo, data,
+    titulo: String(prova.titulo || "Prova").slice(0, 120), criterios, gravadoPor: "provas"
+  });
+  await fs.gravar(`evidencias/${evidId}`, dados, "em");
+}
+
+// extrai código de turma "1A" do campo turma da prova ("DETS-I-1A-26CT-S")
+function codigoTurmaDaProva(prova) {
+  const nome = String(prova?.turma || "");
+  return (nome.toUpperCase().match(/(?:^|[^0-9A-Z])(\d[A-Z])(?=[^0-9A-Z]|$)/) || [])[1] || "";
+}
 
 // professor/admin força uma busca imediata no Stacktrace (mesma coisa que o cron faz de 15 em 15 min)
 async function buscarAutoavaliacaoAutenticado(env, usuario) {
@@ -158,6 +206,8 @@ async function corrigirTentativa(env, usuario, tid) {
   const placar = calcularPlacar(itens);
   if (t.nota !== undefined && t.nota !== null && t.nota !== placar.notaPrevia) placar.nota = placar.notaPrevia;
   if (Object.keys(placar).some(k => t[k] !== placar[k])) await fs.atualizar(`tentativas/${tid}`, placar);
+  // evidência da prova: critérios atingidos (não bloqueia o retorno se falhar)
+  if (prova) gravarEvidenciaProva(fs, t, prova, ids, docs, atuais).catch(e => console.log("evidência prova:", e.message));
   return { ok: true, corrigidas, erros, ...placar };
 }
 

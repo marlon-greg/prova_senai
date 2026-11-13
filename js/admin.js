@@ -7,7 +7,7 @@ import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanh
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
 import { htmlEditorTopicos, editorTopicos } from "./plano-curso-ui.js?v=20261112d";
-import { iniciarOrganizacao, carregarOrganizacao, listarPlanos, listarCursos, materiasSugeridas, editarTopicosBanco, topicosDaMateria } from "./admin-org.js";
+import { iniciarOrganizacao, carregarOrganizacao, listarPlanos, listarCursos, materiasSugeridas, editarTopicosBanco, editarCriteriosBanco, topicosDaMateria } from "./admin-org.js";
 import { iniciarDiario, carregarDiario } from "./admin-diario.js";
 import { ligarAjuda } from "./ajuda.js";
 import { iniciarRelatorios, carregarRelatorios } from "./admin-relatorios.js";
@@ -1306,6 +1306,7 @@ function desenharBancos() {
                   <ul class="lista-topicos lista-topicos-banco">${Object.entries(c).map(([t, n]) => `<li class="topico${t === "Geral" ? " e-geral" : ""}"><span class="tp-nome">${esc(t)}</span><span class="meta-txt">${n.alternativa} alt. · ${n.dissertativa} dissert.</span></li>`).join("")}</ul>
                   ${geral ? `<p class="help">${pl(geral, "questão", "questões")} sem tópico ("Geral"): use Tópicos.</p>` : ""}</details>` : `<p class="help">Não foi possível ler as questões.</p>`}
                 <div class="bb-acoes">${podeEditar() ? `<button class="leve mini" data-topicos="${b.id}" title="Tópico de cada questão, matéria e semestre do banco (com sugestão da IA)">${ic("tag", { size: 16 })}Tópicos</button>` : ""}
+                  ${podeEditar() ? `<button class="leve mini" data-criterios="${b.id}" title="Liga cada questão a um critério do plano de ensino (para gerar evidência da prova)">${ic("star", { size: 16 })}Critérios</button>` : ""}
                   ${menuHTML({ aria: `Mais ações: ${b.nome}`, itensHTML: itemMenu({ i: "copy", t: "Gabarito para o Classroom", attrs: `data-gab="${b.id}"` }) + (ehAdmin() ? "<hr>" + itemMenu({ i: "trash", t: "Apagar banco", perigo: true, attrs: `data-delb="${b.id}"` }) : "") })}</div>
               </div></article>`;
           }).join("")}</div></details>`;
@@ -1315,6 +1316,7 @@ function desenharBancos() {
   box.querySelectorAll("[data-banco-sem]").forEach(x => x.onclick = () => abrirImportarBanco({ semestre: x.dataset.bancoSem, materia: x.dataset.bancoMat }));
   box.querySelectorAll("[data-gab]").forEach(x => x.onclick = () => gerarGabarito(x.dataset.gab));
   box.querySelectorAll("[data-topicos]").forEach(x => x.onclick = () => editarTopicosBanco(x.dataset.topicos, carregarBancos));
+  box.querySelectorAll("[data-criterios]").forEach(x => x.onclick = () => editarCriteriosBanco(x.dataset.criterios, carregarBancos));
   box.querySelectorAll("[data-delb]").forEach(x => x.onclick = async () => {
     if (!(await confirmar("Apagar o banco e todas as suas questões?", { titulo: "Apagar banco", ok: "Apagar", perigo: true }))) return;
     const id = x.dataset.delb, lote = writeBatch(db);
