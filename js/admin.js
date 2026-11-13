@@ -6,7 +6,8 @@ import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, to
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
-import { htmlEditorTopicos, editorTopicos } from "./plano-curso-ui.js?v=20261112d";
+import { htmlEditorTopicos, editorTopicos } from "./plano-curso-ui.js?v=20261113a";
+import { PLANO_CURSO } from "./plano-curso.js?v=20261113a";
 import { iniciarOrganizacao, carregarOrganizacao, listarPlanos, listarCursos, materiasSugeridas, editarTopicosBanco, editarCriteriosBanco, topicosDaMateria } from "./admin-org.js";
 import { iniciarDiario, carregarDiario } from "./admin-diario.js";
 import { ligarAjuda } from "./ajuda.js";
@@ -857,10 +858,15 @@ function controleProva(f) {
     $f("Semestre").value = atual || base;
   }
   function opcoesMateria() {
-    const materias = [...new Set(bancosCache.map(b => b.materia).filter(Boolean))].sort((a, b) => a.localeCompare(b, "pt-BR"));
+    const doCurso = PLANO_CURSO.unidades.map(u => u.nome);
+    const dosBancos = bancosCache.map(b => b.materia).filter(Boolean);
+    const chave = s => s.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
+    const vistas = new Set(doCurso.map(chave));
+    const extras = dosBancos.filter(m => !vistas.has(chave(m)));
+    const materias = [...doCurso, ...extras].sort((a, b) => a.localeCompare(b, "pt-BR"));
     const atual = $f("Materia").value;
     $f("Materia").innerHTML = `<option value="">— Todas as matérias —</option>` + materias.map(m => `<option value="${esc(m)}">${esc(m)}</option>`).join("");
-    if (materias.includes(atual)) $f("Materia").value = atual;
+    if (materias.some(m => m === atual)) $f("Materia").value = atual;
   }
   // select de turmas; prova antiga com turma em texto livre ganha uma opção própria para não perder o nome
   function opcoesTurma(p = {}) {
