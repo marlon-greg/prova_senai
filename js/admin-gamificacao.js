@@ -7,6 +7,7 @@ import { sugerirConquistasIA, nomesNiveisIA } from "./ia.js";
 import { listarPlanos } from "./admin-org.js";
 import { menuHTML, itemMenu, vazio, collapsible, chips, tarefa, drawer, drawerForm, pl, seta } from "./ui.js";
 import { ic } from "./icones.js";
+import { botaoExportarHTML, ligarBotaoExportar } from "./exportar.js";
 import { collection, doc, getDoc, getDocs, setDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 let ctx = null;
@@ -51,7 +52,26 @@ export async function carregarRetorno() {
     itensRet = { ap: ord(a.docs.map(d => ({ id: d.id, col: "apontamentos", ...d.data() }))), sg: ord(s.docs.map(d => ({ id: d.id, col: "sugestoesSistema", ...d.data() }))) };
   } catch (e) { $("#retLista").innerHTML = `<p class="erro-texto">${esc(traduzirErro(e))} (Publique o firestore.rules atual.)</p>`; return; }
   ["#retBusca", "#retStatus"].forEach(id => $(id).oninput = $(id).onchange = desenharRetorno);
+  if (!$("#retExportar")) $("#retLista").insertAdjacentHTML("beforebegin", `<div style="display:flex;justify-content:flex-end;margin:6px 0">${botaoExportarHTML("retExportar")}</div>`);
+  ligarBotaoExportar($("#aba-retorno"), exportarRetorno, "retExportar");
   desenharRetorno();
+}
+// ⬇ baixar em PDF/TXT/CSV o que está na tela (aba + filtros); "sem nomes" troca o aluno por Aluno 1, Aluno 2… (mesmo aluno, mesmo número)
+function exportarRetorno(anon) {
+  const b = String($("#retBusca").value || "").toLowerCase(), st = $("#retStatus").value, ap = retAba === "ap", ids = new Map();
+  const lista = [...(ap ? itensRet.ap : itensRet.sg)]
+    .filter(x => (!st || (st === "aberto" ? aberto(x) : !aberto(x))))
+    .filter(x => !b || `${x.nome} ${x.email} ${x.texto} ${x.provaTitulo || ""} ${x.enunciado || ""}`.toLowerCase().includes(b));
+  const quem = x => anon ? `Aluno ${ids.get(x.email) || ids.set(x.email, ids.size + 1).get(x.email)}` : `${x.nome || ""} <${x.email}>`;
+  const campos = [{ k: "data", t: "Data" }, { k: "quem", t: "Aluno" },
+    ...(ap ? [{ k: "prova", t: "Prova" }, { k: "qid", t: "Questão" }, { k: "tipo", t: "Problema" }] : [{ k: "categoria", t: "Assunto" }]),
+    { k: "status", t: "Situação" }, ...(ap ? [{ k: "enunciado", t: "Enunciado da questão", longo: true }] : []),
+    { k: "texto", t: ap ? "O que o aluno disse" : "Sugestão", longo: true }, { k: "resposta", t: "Resposta da equipe", longo: true }];
+  return { titulo: ap ? "Erros apontados nas questões" : "Sugestões para o sistema de provas", arquivo: ap ? "erros_questoes" : "sugestoes_provas",
+    subtitulo: ["Sistema de provas SENAI", st === "aberto" ? "só abertos" : st === "fechado" ? "só respondidos" : "todos", b ? `busca "${b}"` : "", anon ? "sem nomes dos alunos" : ""].filter(Boolean).join(" · "),
+    campos, linhas: lista.map(x => ({ data: dataBR(x.criadoEm), quem: quem(x), prova: x.provaTitulo || "", qid: x.qid || "", tipo: TIPOS_AP[x.tipo] || x.tipo || "",
+      categoria: x.categoria || "", status: x.status || "", enunciado: x.enunciado || "", texto: x.texto || "",
+      resposta: x.resposta ? `${x.respondidoPor || "equipe"}: ${x.resposta}` : "" })) };
 }
 // duas partes separadas: 🚩 erros reportados nas questões (agrupados por prova) e 💡 sugestões (agrupadas por assunto)
 let retAba = "ap";
