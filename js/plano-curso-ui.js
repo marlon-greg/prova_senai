@@ -46,18 +46,20 @@ export function editorTopicos(f, materia, ctx = () => ({})) {
   const bloco = (b, titulo, corpo, acoes = true) => `<details class="recolhivel pc-bloco" data-pc-bloco="${b}"><summary><span class="rc-titulo">${titulo}</span></summary><div class="rc-corpo">${acoes ? `<div class="pc-acoes"><button type="button" class="leve mini" data-pc-tudo="${b}">Marcar tudo</button><button type="button" class="leve mini" data-pc-nada="${b}">Desmarcar tudo</button></div>` : ""}${corpo}</div></details>`;
   const ck = (id, html, cls = "") => `<label class="check ${cls}"><input type="checkbox" value="${id}"${marcados.has(id) ? " checked" : ""}> <span>${html}</span></label>`;
 
+  const isSeminario = () => $f("PcInstrumento")?.value === "seminario";
   // ---------- modo capacidades (unidade sem critérios cadastrados) ----------
   const k12 = u => u.con.filter(([id]) => nivelK(id) <= 2);
   const filhos = (u, id) => u.con.filter(([c]) => c.startsWith(id + ".") && nivelK(c) === nivelK(id) + 1);
   const todosCap = u => [...u.tec, ...u.soc, ...k12(u)].map(([id]) => id);
   function desenharCapacidades(u) {
+    const sem = isSeminario();
     const con = u.con.filter(([id]) => nivelK(id) === 1).map(([id, t]) =>
       ck(id, esc(t), "pc-k1") + filhos(u, id).map(([id2, t2]) => {
         const f3 = filhos(u, id2).map(([, t3]) => t3).join(", ");
         return `<div class="pc-k2">${ck(id2, esc(t2))}${f3 ? `<div class="pc-k3" style="margin-left:26px">${esc(f3)}</div>` : ""}</div>`;
       }).join("")).join("");
-    $f("PcBlocos").innerHTML = bloco("tec", "🛠 " + rotuloTec(u), u.tec.map(([id, t]) => ck(id, esc(t))).join("")) +
-      bloco("soc", "🤝 Capacidades socioemocionais", u.soc.map(([id, t]) => ck(id, esc(t))).join("")) +
+    $f("PcBlocos").innerHTML = bloco("tec", sem ? "🗣 Conteúdos a apresentar" : "🛠 " + rotuloTec(u), u.tec.map(([id, t]) => ck(id, esc(t))).join("")) +
+      bloco("soc", sem ? "🎤 Postura e comunicação oral" : "🤝 Capacidades socioemocionais", u.soc.map(([id, t]) => ck(id, esc(t))).join("")) +
       bloco("con", "📚 Conhecimentos", con);
     sincronizarPais(u);
   }
@@ -85,17 +87,19 @@ export function editorTopicos(f, materia, ctx = () => ({})) {
       `<p class="pc-cap">${esc(nome)}</p>` + crit.filter(c => c[1] === cid).map(([id, , t, , x]) =>
         ck(id, `<b>${codigoCriterio(id)}</b> ${esc(t)}${x?.grupo ? ` <span class="pequeno">(trabalho em grupo)</span>` : ""}`, "pc-cr")).join("")).join("");
     const opLiga = sel => crit.filter(c => marcados.has(c[0]) || c[0] === sel).map(c => `<option value="${c[0]}"${c[0] === sel ? " selected" : ""}>${codigoCriterio(c[0])} ${esc(c[2].slice(0, 60))}</option>`).join("");
+    const sem = isSeminario();
     const rub = detalhados.map((d, i) => `<div class="pc-det" data-det="${i}">
         <div class="grade">
-          <div><label>Título</label><input type="text" data-campo="titulo" value="${esc(d.titulo || "")}" placeholder="Identificação de entidades"></div>
+          <div><label>Título</label><input type="text" data-campo="titulo" value="${esc(d.titulo || "")}" placeholder="${sem ? "Introdução e contextualização" : "Identificação de entidades"}"></div>
           <div><label>Critério oficial</label><select data-campo="liga"><option value="">— escolha —</option>${opLiga(d.liga)}</select></div>
           <div style="max-width:110px"><label>Pontos</label><input type="number" min="0" data-campo="pontos" value="${d.pontos ?? ""}"></div>
         </div>
-        <label>O que o aluno precisa mostrar</label><textarea rows="2" data-campo="texto">${esc(d.texto || "")}</textarea>
+        <label>${sem ? "O que o apresentador precisa demonstrar" : "O que o aluno precisa mostrar"}</label><textarea rows="2" data-campo="texto">${esc(d.texto || "")}</textarea>
         <button type="button" class="leve mini" data-det-tirar="${i}">Tirar este item</button></div>`).join("");
-    $f("PcBlocos").innerHTML = bloco("tec", "🛠 Critérios técnicos", lista(u.tec)) +
-      bloco("soc", "🤝 Critérios socioemocionais", lista(u.soc)) +
-      bloco("rub", `📋 Rubrica da prova (critérios detalhados: ${detalhados.length})`, `<p class="pequeno" style="margin-top:0">Opcional. Itens mais específicos desta prova, cada um ligado a um critério oficial. O aluno vê embaixo do critério.</p>${rub}<button type="button" class="leve mini" data-det-mais>+ Adicionar item da rubrica</button>`, false);
+    $f("PcBlocos").innerHTML = bloco("tec", sem ? "🗣 Conteúdos a apresentar (domínio técnico)" : "🛠 Critérios técnicos", lista(u.tec)) +
+      bloco("soc", sem ? "🎤 Postura e comunicação oral" : "🤝 Critérios socioemocionais", lista(u.soc)) +
+      bloco("rub", sem ? `📋 Roteiro do seminário (itens detalhados: ${detalhados.length})` : `📋 Rubrica da somativa (critérios detalhados: ${detalhados.length})`,
+        `<p class="pequeno" style="margin-top:0">${sem ? "Opcional. Pontos específicos da apresentação oral, cada um ligado a um critério oficial. O aluno vê como guia antes de apresentar." : "Opcional. Itens mais específicos desta somativa, cada um ligado a um critério oficial. O aluno vê embaixo do critério."}</p>${rub}<button type="button" class="leve mini" data-det-mais>+ Adicionar item${sem ? " do roteiro" : " da rubrica"}</button>`, false);
   }
 
   function resumo() {
@@ -135,10 +139,19 @@ export function editorTopicos(f, materia, ctx = () => ({})) {
       el.querySelectorAll("[data-campo]").forEach(c => { d[c.dataset.campo] = c.dataset.campo === "pontos" ? (c.value === "" ? null : Number(c.value)) : c.value.trim(); });
     });
   }
+  // re-tenta casar avaliação quando data ou título mudam (somente se nenhuma foi escolhida à mão)
+  function aoMudarDataTitulo() {
+    const u = unidade();
+    if (!comCriterios(u)) return;
+    const p = plano(u); if (!p) return;
+    if ($f("PcAv").value) return;   // professor já escolheu manualmente
+    const av = avaliacaoDaProva({ titulo: ctx().titulo, dataProva: ctx().data }, p);
+    if (av?.id) { opcoesAv(u, av.id); aplicarAv(); }
+  }
   function ligar() {
     $f("PcUnidade").onchange = padrao;
     $f("PcAv").onchange = aplicarAv;
-    $f("PcInstrumento").onchange = resumo;
+    $f("PcInstrumento").onchange = () => { resumo(); desenhar(); };
     $f("PcBlocos").addEventListener("change", e => {
       const x = e.target, u = unidade();
       if (x.closest("[data-det]")) { lerDetalhados(); return resumo(); }
@@ -211,5 +224,5 @@ export function editorTopicos(f, materia, ctx = () => ({})) {
     }
     return { valor: { unidade: u.id, itens, instrumento } };
   }
-  return { ligar, definir, ler, aoMudarMateria };
+  return { ligar, definir, ler, aoMudarMateria, aoMudarDataTitulo };
 }

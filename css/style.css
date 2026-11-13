@@ -431,8 +431,10 @@ body.papel-inclusao #btnFecharNotas, body.papel-inclusao #iaControles { display:
 /* menu lateral: barra marinho de altura total */
 .menu-lateral { position:sticky; top:0; flex:0 0 240px; width:240px; height:100vh; margin:0; padding:16px 12px 20px; display:flex; flex-direction:column; flex-wrap:nowrap; gap:0; background:var(--menu-fundo); border:0; border-radius:0; overflow:hidden auto; overscroll-behavior:contain; scrollbar-width:thin; scrollbar-color:var(--menu-rotulo) transparent; }
 .menu-grupo { display:flex; flex-direction:column; gap:2px; flex:none; }
-.menu-grupo:not(:has(button:not(.oculto))) { display:none; }
+.menu-grupo:not(:has(button:not(.oculto), a)) { display:none; }
 .menu-rotulo { padding:14px 10px 6px; font-family:var(--fonte-texto); font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--menu-rotulo); }
+.menu-lateral .menu-link-ext { display:flex; align-items:center; justify-content:flex-start; gap:12px; flex:none; width:100%; padding:10px 12px; border-radius:10px; background:transparent; color:var(--menu-texto); font-family:var(--fonte-texto); font-size:var(--fs-md); font-weight:500; line-height:1.25; text-align:left; white-space:normal; text-decoration:none; opacity:.8; }
+.menu-lateral .menu-link-ext:hover { background:rgba(255,255,255,.07); color:#fff; opacity:1; }
 .menu-lateral button { display:flex; align-items:center; justify-content:flex-start; gap:12px; flex:none; width:100%; height:auto; min-height:0; padding:10px 12px; border:0; border-radius:10px; background:transparent; color:var(--menu-texto); font-family:var(--fonte-texto); font-size:var(--fs-md); font-weight:500; line-height:1.25; text-align:left; white-space:normal; box-shadow:none; }
 .menu-lateral button svg { color:var(--menu-icone); }
 .menu-lateral button:hover { background:rgba(255,255,255,.07); color:#fff; }
@@ -477,7 +479,7 @@ button.usuario-pill { height:40px; padding:0 10px 0 6px; gap:var(--sp-2); border
   .menu-logo .logo-texto { font-size:17px; line-height:28px; }
   .menu-grupo { display:contents; }
   .menu-rotulo { display:none; }
-  .menu-lateral button { width:auto; padding:8px 10px; gap:8px; font-size:var(--fs-sm); white-space:nowrap; }
+  .menu-lateral button, .menu-lateral .menu-link-ext { width:auto; padding:8px 10px; gap:8px; font-size:var(--fs-sm); white-space:nowrap; }
   .menu-lateral button[data-curto] .m-t { display:none; }
   .menu-lateral button[data-curto]::after { content:attr(data-curto); }
   .menu-lateral .menu-mais { display:none; }

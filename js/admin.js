@@ -6,7 +6,8 @@ import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, to
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
-import { htmlEditorTopicos, editorTopicos } from "./plano-curso-ui.js?v=20261113b";
+import { htmlEditorTopicos, editorTopicos } from "./plano-curso-ui.js?v=20261113c";
+import { criteriosDaUnidade, codigoCriterio } from "./plano-ensino.js?v=20261113a";
 import { PLANO_CURSO } from "./plano-curso.js?v=20261113a";
 import { iniciarOrganizacao, carregarOrganizacao, listarPlanos, listarCursos, materiasSugeridas, editarTopicosBanco, editarCriteriosBanco, topicosDaMateria } from "./admin-org.js";
 import { iniciarDiario, carregarDiario } from "./admin-diario.js";
@@ -89,14 +90,14 @@ let abaAtual = "provas";
 // cada aba declara o título, o ícone do menu e a ação primária do cabeçalho (o botão já existe em admin.html, com o mesmo id; a ajuda vem de ajuda.js)
 const ABAS = {
   organizacao: { titulo: "Organização", icone: "org", primaria: { id: "orgNovo", rotulo: "Matéria / plano de ensino", icone: "plus" } },
-  provas: { titulo: "Provas", icone: "provas", primaria: { id: "btnNovaProva", rotulo: "Criar nova prova", icone: "plus" } },
+  provas: { titulo: "Somativas", icone: "provas", primaria: { id: "btnNovaProva", rotulo: "Criar nova somativa", icone: "plus" } },
   bancos: { titulo: "Bancos de questões", icone: "bancos", primaria: { id: "btnImportarTopo", rotulo: "Importar banco", icone: "download" } },
   turmas: { titulo: "Turmas", icone: "turmas", primaria: { id: "btnNovaTurma", rotulo: "Nova turma", icone: "plus" } },
   resultados: { titulo: "Resultados", icone: "resultados" },
   relatorios: { titulo: "Relatórios", icone: "relatorios" },
   diario: { titulo: "Diário", icone: "diario" },
   acessibilidade: { titulo: "Acessibilidade", icone: "acess", primaria: { id: "btnAcessNovo", rotulo: "Marcar acessibilidade", icone: "plus" } },
-  historico: { titulo: "Provas adaptadas", icone: "adapt" },
+  historico: { titulo: "Somativas adaptadas", icone: "adapt" },
   retorno: { titulo: "Erros e sugestões", icone: "retorno" },
   gamificacao: { titulo: "Gamificação", icone: "gami" },
   meumascote: { titulo: "Meu mascote", icone: "mascote" },
@@ -345,7 +346,7 @@ function desenharTurmas() {
       <summary class="sub-cab"><span class="sc-tile sc-navy">${ic("users", { size: 20 })}</span><span class="sc-texto"><span class="sc-titulo">${esc(t.nome)}</span><span class="sc-resumo">${esc(resumo)}${achados ? ` · ${pl(achados.length, "encontrado")}` : ""}</span></span>
         <span class="sc-fim">${pend.length ? `<span class="chip warn">${pend.length} sem login</span>` : ""}
           ${stT.length ? `<button type="button" class="leve mini" data-status-turma="${t.id}" title="Como os alunos disseram que estão hoje">${pl(stT.length, "status", "status")} hoje${dificeis ? ` · ${pl(dificeis, "difícil", "difíceis")}` : ""}</button>` : ""}
-          ${pv.length ? `<button class="leve mini" data-vprovas="${t.id}" title="${esc(pv.map(p => p.titulo).join(" · "))}">${ic("provas", { size: 16 })}${pl(pv.length, "prova")}${libs ? ` · ${libs} ${libs === 1 ? "liberada" : "liberadas"}` : ""}</button>` : ""}
+          ${pv.length ? `<button class="leve mini" data-vprovas="${t.id}" title="${esc(pv.map(p => p.titulo).join(" · "))}">${ic("provas", { size: 16 })}${pl(pv.length, "somativa")}${libs ? ` · ${libs} ${libs === 1 ? "liberada" : "liberadas"}` : ""}</button>` : ""}
           ${podeEditar() ? `<button class="leve mini" data-edt="${t.id}">${ic("edit", { size: 16 })}Editar</button>` : ""}
           ${menuHTML({ aria: `Mais ações: ${t.nome}`, itensHTML: itemMenu({ i: "download", t: "Exportar em Excel", attrs: `data-xls-t="${t.id}"` }) + itemMenu({ i: "provas", t: "Exportar em PDF", attrs: `data-pdf-t="${t.id}"` }) +
             (ehAdmin() ? itemMenu({ i: "trash", t: "Apagar turma", perigo: true, attrs: `data-delt="${t.id}"` }) : "") })}</span>${seta()}</summary>
@@ -530,7 +531,7 @@ function formProvaHTML(f) {
     <div><label for="${f}Semestre">Semestre</label><select id="${f}Semestre"></select></div>
     <div><label for="${f}Materia">Matéria</label><select id="${f}Materia" aria-label="Matéria da prova"><option value="">— Todas as matérias —</option></select>
       <p class="pequeno" style="margin:4px 0 0">Filtra os bancos abaixo; sem seleção, o campo é detectado do primeiro banco marcado.</p></div>
-    <div><label for="${f}Data">Data da prova</label><input type="date" id="${f}Data"></div>
+    <div><label for="${f}Data">Data da somativa</label><input type="date" id="${f}Data"></div>
   </div>
   ${htmlEditorTopicos(f)}
   <p id="${f}Trava" class="aviso-box oculto" role="note"></p>
@@ -562,24 +563,24 @@ function formProvaHTML(f) {
       <select id="${f}Modo"><option value="uma">Uma por vez</option><option value="todas">Todas na mesma página (cada uma com seu botão Enviar)</option></select></div>
   </div>
   <fieldset class="temas-box">
-    <legend>Regras da prova</legend>
-    <p class="pequeno" style="margin-top:0">A ordem das questões e das alternativas é sempre embaralhada para cada aluno. Durante a prova o aluno não vê se acertou; no fim vê só quantas acertou e a nota.</p>
+    <legend>Regras da somativa</legend>
+    <p class="pequeno" style="margin-top:0">A ordem das questões e das alternativas é sempre embaralhada para cada aluno. Durante a somativa o aluno não vê se acertou; no fim vê só quantas acertou e a nota.</p>
     <label class="check"><input type="checkbox" id="${f}Voltar"> <span>Permitir ir e voltar entre as questões <span class="pequeno">— o aluno pode alterar as respostas até clicar em Finalizar; sem isso, cada resposta enviada fica travada</span></span></label>
     <label class="check"><input type="checkbox" id="${f}PermitirTrocaAba"> <span>Permitir trocar de aba/janela <span class="pequeno">— sem tela cheia e sem aviso; as trocas continuam contadas, marcadas como "permitido"</span></span></label>
     <label class="check"><input type="checkbox" id="${f}PermitirColar"> <span>Permitir colar nos campos de resposta <span class="pequeno">— colar e arrastar liberados, sem registro</span></span></label>
     <div class="grade" style="margin:12px 0 0">
       <div><label for="${f}MaxTrocas">❤️ Vidas do aluno (0 = sem vidas)</label><input type="number" id="${f}MaxTrocas" value="0" min="0" max="10" step="1"></div>
       <div><label for="${f}AcaoExceder">Quando as vidas acabam</label>
-        <select id="${f}AcaoExceder"><option value="encerrar">Encerrar a prova</option><option value="perderQuestao">Perder a questão atual (só em "uma por vez" sem ir e voltar)</option></select></div>
+        <select id="${f}AcaoExceder"><option value="encerrar">Encerrar a somativa</option><option value="perderQuestao">Perder a questão atual (só em "uma por vez" sem ir e voltar)</option></select></div>
     </div>
     <label class="check"><input type="checkbox" id="${f}ColarVida" checked> <span>Tentar colar (Ctrl+V) também custa 1 vida</span></label>
     <p class="pequeno" id="${f}LimiteDica">Perde 1 vida: trocar de aba/janela (Alt+Tab) ou sair da tela cheia.</p>
-    <p class="pequeno" style="margin:4px 0 0">Aluno perdeu vidas sem querer (ex.: TEA)? Em <b>Resultados</b> você restaura as vidas, dá vida extra ou reabre a prova dele.</p>
+    <p class="pequeno" style="margin:4px 0 0">Aluno perdeu vidas sem querer (ex.: TEA)? Em <b>Resultados</b> você restaura as vidas, dá vida extra ou reabre a somativa dele.</p>
   </fieldset>
   <fieldset class="temas-box">
     <legend>Correção</legend>
     <label class="check"><input type="checkbox" id="${f}IaAuto" checked> <span>🤖 Corrigir as dissertativas com IA automaticamente</span></label>
-    <p class="pequeno" style="margin:4px 0 0">Ligado: cada prova é corrigida quando o aluno finaliza (pelo servidor de correção, ou pelo painel aberto em Resultados com o ao vivo). Desligado: você corrige à mão ou clica em Corrigir com IA quando quiser. A nota fica provisória até corrigir.</p>
+    <p class="pequeno" style="margin:4px 0 0">Ligado: cada somativa é corrigida quando o aluno finaliza (pelo servidor de correção, ou pelo painel aberto em Resultados com o ao vivo). Desligado: você corrige à mão ou clica em Corrigir com IA quando quiser. A nota fica provisória até corrigir.</p>
   </fieldset>
   <fieldset class="temas-box">
     <legend>Material de consulta (opcional) <button data-ajuda-item="slides"></button></legend>
@@ -848,7 +849,8 @@ function controleProva(f) {
     $f("Materia").onchange = () => { topicosPlano.aoMudarMateria(); desenharTemas(); };
     topicosPlano.ligar(); topicosPlano.definir();
     $f("Turma").addEventListener("change", topicosPlano.aoMudarMateria);
-    $f("Data").onchange = () => { const d = $f("Data").value; if (d && !semestreMexido) { opcoesSemestre(semestreDe(d)); opcoesMateria(); } };
+    $f("Titulo").addEventListener("input", () => topicosPlano.aoMudarDataTitulo());
+    $f("Data").onchange = () => { const d = $f("Data").value; if (d && !semestreMexido) { opcoesSemestre(semestreDe(d)); opcoesMateria(); } topicosPlano.aoMudarDataTitulo(); };
   }
   // semestre (os de perto do atual + o da prova) e matérias sugeridas (planos da turma/semestre, depois as dos bancos)
   let semestreMexido = false;
@@ -1033,7 +1035,7 @@ async function carregarProvas() {
 function desenharProvas() {
   const box = $("#listaProvas");
   atualizarFiltros($("#aba-provas .toolbar"));
-  if (!provasCache.length) { $("#fpContagem").textContent = ""; box.innerHTML = vazio({ e: "📝", texto: "Nenhuma prova ainda.", acao: podeEditar() ? `<button type="button" data-nova-prova>+ Criar a primeira prova</button>` : "" }); box.querySelector("[data-nova-prova]")?.addEventListener("click", abrirFormNovaProva); return; }
+  if (!provasCache.length) { $("#fpContagem").textContent = ""; box.innerHTML = vazio({ e: "📝", texto: "Nenhuma somativa ainda.", acao: podeEditar() ? `<button type="button" data-nova-prova>+ Criar a primeira somativa</button>` : "" }); box.querySelector("[data-nova-prova]")?.addEventListener("click", abrirFormNovaProva); return; }
   const busca = semAcento($("#fpBusca").value.trim()), turma = $("#fpTurma").value, status = $("#fpStatus").value, ordem = $("#fpOrdem").value;
   const fSem = $("#fpSemestre").value, fMat = chaveTexto($("#fpMateria").value);
   const nomeBanco = id => bancosCache.find(x => x.id === id)?.nome || id;
@@ -1051,8 +1053,8 @@ function desenharProvas() {
   lista.sort(ordem === "titulo" ? (a, b) => (a.titulo || "").localeCompare(b.titulo || "", "pt-BR", { numeric: true })
            : ordem === "antigas" ? (a, b) => seg(a) - seg(b) : (a, b) => seg(b) - seg(a));
   const nLib = lista.filter(p => p.liberada).length;
-  $("#fpContagem").textContent = `${lista.length} de ${pl(provasCache.length, "prova")} · ${nLib} ${nLib === 1 ? "liberada" : "liberadas"}`;
-  if (!lista.length) { box.innerHTML = vazio({ e: "🔎", texto: "Nenhuma prova com esses filtros." }); return; }
+  $("#fpContagem").textContent = `${lista.length} de ${pl(provasCache.length, "somativa")} · ${nLib} ${nLib === 1 ? "liberada" : "liberadas"}`;
+  if (!lista.length) { box.innerHTML = vazio({ e: "🔎", texto: "Nenhuma somativa com esses filtros." }); return; }
   // agrupa por turma (na ordem das turmas cadastradas; "sem turma" por último)
   const grupos = new Map();
   lista.forEach(p => { const k = p.turmaId && turmasCache.some(t => t.id === p.turmaId) ? p.turmaId : "__sem"; if (!grupos.has(k)) grupos.set(k, []); grupos.get(k).push(p); });
@@ -1064,11 +1066,11 @@ function desenharProvas() {
     const sub = new Map();
     ps.forEach(p => { const sm = semestreDaProva(p), m = materiaDaProva(p, bancosCache) || "Sem matéria", ch = `${sm}|${chaveTexto(m)}`; if (!sub.has(ch)) sub.set(ch, { sm, m, ps: [] }); sub.get(ch).ps.push(p); });
     const subs = [...sub.values()].sort((a, b) => b.sm.localeCompare(a.sm) || a.m.localeCompare(b.m, "pt-BR"));
-    const resumo = [pl(ps.length, "prova"), lib ? `${lib} ${lib === 1 ? "liberada" : "liberadas"}` : "", t ? pl(alunosDaTurma(t).length, "aluno") : "", subs.length === 1 ? rotuloSemestre(subs[0].sm) : "", subs.length === 1 ? subs[0].m : ""].filter(Boolean).join(" · ");
+    const resumo = [pl(ps.length, "somativa"), lib ? `${lib} ${lib === 1 ? "liberada" : "liberadas"}` : "", t ? pl(alunosDaTurma(t).length, "aluno") : "", subs.length === 1 ? rotuloSemestre(subs[0].sm) : "", subs.length === 1 ? subs[0].m : ""].filter(Boolean).join(" · ");
     return `<details class="grupo-lista" data-grupo="${k}" ${aberto ? "open" : ""}>
       <summary class="grupo-cab">${seta()}<h3 class="gc-titulo">${k === "__sem" ? "Sem turma" : `${esc(t.nome || "")}${rotuloDias(t.diasAula) ? `<span class="gc-dias"> · ${esc(rotuloDias(t.diasAula))}</span>` : ""}`}</h3>
-        <span class="gc-resumo">${esc(resumo)}</span>${t ? "" : `<span class="chip warn">nenhum aluno vê estas provas: use Editar e escolha a turma</span>`}</summary>
-      <div class="grupo-corpo">${subs.map(g => `<div class="sub-grupo">${subs.length > 1 ? `<h4 class="sg-titulo">${esc(rotuloSemestre(g.sm))} · ${esc(g.m)} · ${pl(g.ps.length, "prova")}</h4>` : ""}
+        <span class="gc-resumo">${esc(resumo)}</span>${t ? "" : `<span class="chip warn">nenhum aluno vê estas somativas: use Editar e escolha a turma</span>`}</summary>
+      <div class="grupo-corpo">${subs.map(g => `<div class="sub-grupo">${subs.length > 1 ? `<h4 class="sg-titulo">${esc(rotuloSemestre(g.sm))} · ${esc(g.m)} · ${pl(g.ps.length, "somativa")}</h4>` : ""}
         <div class="cartoes-provas">${g.ps.map(cartaoProvaHTML).join("")}</div></div>`).join("")}</div></details>`;
   }).join("");
   box.querySelectorAll("[data-grupo]").forEach(d => d.ontoggle = () => { if (busca || turma || fSem || fMat) return; d.open ? gruposFechados.delete(d.dataset.grupo) : gruposFechados.add(d.dataset.grupo); });
@@ -1078,8 +1080,8 @@ function desenharProvas() {
   });
   box.querySelectorAll("[data-tg]").forEach(b => b.onclick = async () => {
     const p = provasCache.find(x => x.id === b.dataset.id), campo = b.dataset.tg, novo = !p[campo];
-    const txt = campo === "liberada" ? (novo ? [`Liberar a prova "${p.titulo}"? Os alunos da turma passam a ver a prova e podem começar.`, "Liberar prova"] : [`Encerrar a prova "${p.titulo}"? Os alunos não conseguem mais começar nem continuar.`, "Encerrar prova"])
-      : (novo ? [`Liberar o gabarito de "${p.titulo}"? Os alunos passam a ver quais acertaram, a resposta certa e o PDF da prova.`, "Liberar gabarito"] : [`Ocultar o gabarito de "${p.titulo}"? Os alunos deixam de ver o resultado detalhado.`, "Ocultar gabarito"]);
+    const txt = campo === "liberada" ? (novo ? [`Liberar a somativa "${p.titulo}"? Os alunos da turma passam a ver e podem começar.`, "Liberar somativa"] : [`Encerrar a somativa "${p.titulo}"? Os alunos não conseguem mais começar nem continuar.`, "Encerrar somativa"])
+      : (novo ? [`Liberar o gabarito de "${p.titulo}"? Os alunos passam a ver quais acertaram, a resposta certa e o PDF da somativa.`, "Liberar gabarito"] : [`Ocultar o gabarito de "${p.titulo}"? Os alunos deixam de ver o resultado detalhado.`, "Ocultar gabarito"]);
     if (!(await confirmar(txt[0], { titulo: txt[1], ok: txt[1] }))) return;
     await updateDoc(doc(db, "provas", p.id), { [campo]: novo });
     toast("Prova atualizada", "ok"); carregarProvas();
@@ -1094,7 +1096,7 @@ function desenharProvas() {
     } catch (e) { toast("Não foi possível apagar o teste. " + traduzirErro(e), "erro"); console.error(e); }
   });
   box.querySelectorAll("[data-del]").forEach(b => b.onclick = async () => {
-    if (!(await confirmar("Apagar a prova? As tentativas dos alunos continuam no banco de dados, mas ficam órfãs.", { titulo: "Apagar prova", ok: "Apagar", perigo: true }))) return;
+    if (!(await confirmar("Apagar a somativa? As tentativas dos alunos continuam no banco de dados, mas ficam órfãs.", { titulo: "Apagar somativa", ok: "Apagar", perigo: true }))) return;
     await deleteDoc(doc(db, "provas", b.dataset.del)); carregarProvas();
   });
 }
@@ -1106,7 +1108,7 @@ function cartaoProvaHTML(p) {
         + itemMenu({ i: "edit", t: "Editar", attrs: `data-editar="${p.id}"` }) : "")
       + itemMenu({ i: "simulacao", t: "Testar como aluno", attrs: `data-testar="${p.id}" title="Abre a prova em nova aba, como o aluno vê (não vale nota)"` })
       + itemMenu({ i: "refresh", t: "Apagar meu teste", attrs: `data-apagarteste="${p.id}" title="Apaga a sua tentativa de teste desta prova"` })
-      + (podeEditar() && ehAdmin() ? "<hr>" + itemMenu({ i: "trash", t: "Apagar prova", perigo: true, attrs: `data-del="${p.id}"` }) : "");
+      + (podeEditar() && ehAdmin() ? "<hr>" + itemMenu({ i: "trash", t: "Apagar somativa", perigo: true, attrs: `data-del="${p.id}"` }) : "");
     const m = 15;   // ícones dos metadados
     return `<article class="cartao-prova compacto">
       <div class="cp-info">
@@ -1115,7 +1117,7 @@ function cartaoProvaHTML(p) {
           <span><b>${p.nQuestoes}</b> questões${qtd ? ` · ${qtd}` : ""}</span><span>${ic("clock", { size: m })}${p.tempoMinutos > 0 ? `<b>${p.tempoMinutos} min</b>` : "sem limite de tempo"}</span><span title="${vidas ? pl(vidas, "vida") : "sem vidas"}">${vidas ? `<span class="e" aria-hidden="true">${"❤️".repeat(Math.min(5, vidas))}</span>` : "sem vidas"}</span></div>
       </div>
       <div class="cp-botoes">
-        ${podeEditar() ? `<button class="${p.liberada ? "leve" : "ok"}" data-tg="liberada" data-id="${p.id}">${ic(p.liberada ? "stop" : "play", { size: 16 })}${p.liberada ? "Encerrar" : "Liberar prova"}</button>` : ""}
+        ${podeEditar() ? `<button class="${p.liberada ? "leve" : "ok"}" data-tg="liberada" data-id="${p.id}">${ic(p.liberada ? "stop" : "play", { size: 16 })}${p.liberada ? "Encerrar" : "Liberar somativa"}</button>` : ""}
         <button class="leve" data-alunos="${p.id}" title="Ver aluno por aluno (ao vivo): vidas, progresso e nota">${ic("users", { size: 16 })}Alunos</button>
         ${menuHTML({ aria: `Mais ações: ${p.titulo}`, itensHTML: itens })}
       </div>
@@ -1150,18 +1152,18 @@ async function abrirNovaProva(pre) {
 // o formulário (#cardNovaProva) é movido para um drawer e volta ao fechar: ids e eventos continuam os mesmos
 let drawerNovaProva = null;
 function abrirFormNovaProva() {
-  if (!podeEditar()) return toast("Seu papel não permite criar provas.", "erro");
+  if (!podeEditar()) return toast("Seu papel não permite criar somativas.", "erro");
   if (drawerNovaProva) return;
-  drawerNovaProva = drawer({ titulo: "Nova prova", corpo: $("#cardNovaProva"), aoFechar: () => { drawerNovaProva = null; $("#cardNovaProva").classList.add("oculto"); },
-    acoes: [{ t: "Cancelar", classe: "leve" }, { t: "Criar prova", onClick: () => criarProva() }] });
+  drawerNovaProva = drawer({ titulo: "Nova somativa", corpo: $("#cardNovaProva"), aoFechar: () => { drawerNovaProva = null; $("#cardNovaProva").classList.add("oculto"); },
+    acoes: [{ t: "Cancelar", classe: "leve" }, { t: "Criar somativa", onClick: () => criarProva() }] });
   drawerNovaProva.el.classList.add("extra-largo");
 }
 async function criarProva() {
-  if (!podeEditar()) { toast("Seu papel não permite criar provas.", "erro"); return false; }
+  if (!podeEditar()) { toast("Seu papel não permite criar somativas.", "erro"); return false; }
   const r = await formNova.ler();
   if (r.erro) { toast(r.erro, "erro"); return false; }
   await addDoc(collection(db, "provas"), { ...r.dados, liberada: false, resultadosLiberados: false, criadoEm: serverTimestamp(), criadoPor: eu.email });
-  $("#pTitulo").value = ""; $("#pCodigo").value = ""; $("#pData").value = ""; toast("Prova criada (ainda fechada). Libere quando for aplicar.", "ok"); carregarProvas();
+  $("#pTitulo").value = ""; $("#pCodigo").value = ""; $("#pData").value = ""; toast("Somativa criada (ainda fechada). Libere quando for aplicar.", "ok"); carregarProvas();
   return true;
 }
 $("#btnCriarProva").onclick = async () => { if (await criarProva()) drawerNovaProva?.fechar(); };
@@ -1169,34 +1171,84 @@ $("#btnNovaProva").onclick = abrirFormNovaProva;
 ligarFiltros(document);   // todas as barras de busca + Filtros do painel
 ajudasEmPopover(document);
 
-// ---------- editar prova ----------
+// ---------- motivo de alteração (só no editar) ----------
+function htmlMotivoAlteracao(f) {
+  return `<fieldset class="temas-box motivo-alter" style="border-color:var(--cor-aviso,#f59e0b)">
+    <legend>⚠ Por que está alterando?</legend>
+    <p class="pequeno" style="margin-top:0">Obrigatório. Fica registrado no histórico da somativa.</p>
+    <div class="grade">
+      <div><label for="${f}Motivo">Motivo da alteração</label>
+        <select id="${f}Motivo">
+          <option value="">— selecione o motivo —</option>
+          <option value="nao_ministrado">Conteúdo previsto ainda não foi ministrado</option>
+          <option value="mais_tempo">A turma precisou de mais tempo no conteúdo</option>
+          <option value="feriado">Feriado ou evento escolar</option>
+          <option value="administrativo">Decisão administrativa da instituição</option>
+          <option value="erro_config">Correção de configuração (data, questões, etc.)</option>
+          <option value="outro">Outro motivo</option>
+        </select></div>
+    </div>
+    <div id="${f}TopicosBox" class="oculto" style="margin-top:12px">
+      <p class="pequeno" style="margin:0 0 6px"><b>Quais tópicos ficaram de fora?</b> Marque os que a turma ainda não viu:</p>
+      <div id="${f}TopicosLista" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:4px"></div>
+    </div>
+  </fieldset>`;
+}
+function ligarMotivoAlteracao(f, pc) {
+  const $f2 = id => document.getElementById(f + id);
+  const unidadeId = pc?.unidade;
+  const criteriosSomativa = unidadeId ? criteriosDaUnidade(unidadeId).filter(c => (pc.criterios || []).includes(c[0])) : [];
+  function atualizar() {
+    const mot = $f2("Motivo").value, mostrar = mot === "nao_ministrado" || mot === "mais_tempo";
+    $f2("TopicosBox").classList.toggle("oculto", !mostrar);
+    if (mostrar && !$f2("TopicosLista").children.length) {
+      $f2("TopicosLista").innerHTML = criteriosSomativa.length
+        ? criteriosSomativa.map(c => `<label class="check"><input type="checkbox" value="${c[0]}"> <span><b>${codigoCriterio(c[0])}</b> ${esc(c[2].slice(0, 80))}</span></label>`).join("")
+        : "<p class='pequeno'>Sem critérios do plano de ensino registrados para esta somativa.</p>";
+    }
+  }
+  $f2("Motivo").onchange = atualizar;
+}
+function lerMotivo(f) {
+  const $f2 = id => document.getElementById(f + id);
+  const motivo = $f2("Motivo").value;
+  if (!motivo) return { erro: "Informe o motivo da alteração antes de salvar." };
+  const topicosNaoCobertos = [...($f2("TopicosLista")?.querySelectorAll("input:checked") || [])].map(x => x.value);
+  return { motivo, topicosNaoCobertos };
+}
+
+// ---------- editar somativa ----------
 async function editarProva(p) {
-  if (!podeEditar()) return toast("Seu papel não permite editar provas.", "erro");
+  if (!podeEditar()) return toast("Seu papel não permite editar somativas.", "erro");
   // tentativas de alunos (as de teste não contam) travam os campos do sorteio
   let nTentativas = 0;
   try {
     const ts = await getDocs(query(collection(db, "tentativas"), where("provaId", "==", p.id)));
     nTentativas = ts.docs.filter(d => d.data().teste !== true).length;
-  } catch (e) { return toast("Não foi possível conferir as tentativas da prova. " + traduzirErro(e), "erro"); }
+  } catch (e) { return toast("Não foi possível conferir as tentativas da somativa. " + traduzirErro(e), "erro"); }
   await listarTurmas();
   const ctl = controleProva("e");
   const salvou = await modal({
-    titulo: "Editar prova", conteudo: formProvaHTML("e"), ok: "Salvar alterações", cancelar: "Cancelar", largo: true,
+    titulo: "Editar somativa", conteudo: formProvaHTML("e") + htmlMotivoAlteracao("e"), ok: "Salvar alterações", cancelar: "Cancelar", largo: true,
     aoAbrir: () => {
       ctl.ligar(); ctl.preencher(p);
-      if (nTentativas) ctl.travar(`🔒 <b>${nTentativas} aluno(s) já começaram esta prova.</b> Bancos, número de questões, dissertativas e temas não podem mudar: isso mudaria o sorteio de quem já começou e a correção. As outras opções podem ser alteradas.`);
+      if (nTentativas) ctl.travar(`🔒 <b>${nTentativas} aluno(s) já começaram esta somativa.</b> Bancos, número de questões, dissertativas e temas não podem mudar: isso mudaria o sorteio de quem já começou e a correção. As outras opções podem ser alteradas.`);
       ctl.carregarTemas(ctl.selecaoDaProva(p));
+      ligarMotivoAlteracao("e", p.planoCurso);
     },
     antesDeConfirmar: async () => {
       const r = await ctl.ler();
       if (r.erro) { toast(r.erro, "erro"); return false; }
-      if (!(await confirmar(`Salvar as alterações na prova "${p.titulo}"?`, { titulo: "Salvar prova", ok: "Salvar" }))) return false;
-      try { await updateDoc(doc(db, "provas", p.id), r.dados); }
+      const mot = lerMotivo("e");
+      if (mot.erro) { toast(mot.erro, "erro"); return false; }
+      if (!(await confirmar(`Salvar as alterações na somativa "${p.titulo}"?`, { titulo: "Salvar somativa", ok: "Salvar" }))) return false;
+      const historico = [...(p.historico || []), { timestamp: new Date().toISOString(), motivo: mot.motivo, topicosNaoCobertos: mot.topicosNaoCobertos, editadoPor: eu.email }];
+      try { await updateDoc(doc(db, "provas", p.id), { ...r.dados, historico }); }
       catch (e) { toast("Não foi possível salvar. " + traduzirErro(e), "erro"); return false; }
       return true;
     }
   });
-  if (salvou) { toast("Prova atualizada.", "ok"); carregarProvas(); }
+  if (salvou) { toast("Somativa atualizada.", "ok"); carregarProvas(); }
 }
 
 // ============================================================ BANCOS
