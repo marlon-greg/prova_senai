@@ -20,7 +20,7 @@ import { completar, aplicarVisual, mesclarQuestao } from "./acessibilidade.js";
 import { definirEstilos } from "./mascotes.js";
 import { usarItensCustom } from "./avatar.js";
 import { mascoteLigado, ligarMascote, dadosMascote, htmlMascote, htmlEscolha, ligarEscolha, montarGuia, pararFala } from "./guia.js";
-import { collection, doc, getDoc, getDocFromServer, getDocs, setDoc, updateDoc, query, where, serverTimestamp, increment, arrayUnion, onSnapshot }
+import { collection, doc, addDoc, getDoc, getDocFromServer, getDocs, setDoc, updateDoc, query, where, serverTimestamp, increment, arrayUnion, onSnapshot }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 let eu = null;            // { uid, email, nome }
@@ -805,6 +805,7 @@ function bloquearColar(el) {
     if (agora - ultimoColar < 800) return;   // o mesmo gesto dispara mais de um evento
     ultimoColar = agora;
     registrar("tentativasColar");
+    registrarSaida("colar");
     if (limiteSaidas() && colarTiraVida()) { perderVida("colar"); return; }
     toast("Colar está desativado nesta prova. A tentativa fica registrada.", "erro");
   };
@@ -1268,6 +1269,26 @@ function registrar(campo) {
   updateDoc(doc(db, "tentativas", tentativa.id), { [campo]: increment(1) }).catch(e => console.warn("não registrou " + campo, e));
 }
 
+// ---------- log de saídas por questão (subcoleção saidas) ----------
+let _saidaRef = null, _saidaTs = null;
+function registrarSaida(motivo) {
+  if (!tentativa || tentativa.finalizadaEm) return;
+  if (motivo !== "colar" && _saidaTs !== null) return;   // já saiu; evita duplo log (ex.: telaCheia + aba simultâneos)
+  const i = tentativa.indiceAtual || 0;
+  const qid = (tentativa.questoesIds || [])[i] || null;
+  if (motivo !== "colar") { _saidaTs = Date.now(); _saidaRef = null; }
+  addDoc(collection(db, "tentativas", tentativa.id, "saidas"), {
+    questaoId: qid, indice: i + 1, motivo, saidaEm: serverTimestamp()
+  }).then(ref => { if (motivo !== "colar") _saidaRef = ref; })
+    .catch(e => console.warn("não registrou saída", e));
+}
+function registrarVolta() {
+  if (!_saidaRef || !_saidaTs) return;
+  const ref = _saidaRef, segundosFora = Math.round((Date.now() - _saidaTs) / 1000);
+  _saidaRef = null; _saidaTs = null;
+  updateDoc(ref, { voltouEm: serverTimestamp(), segundosFora }).catch(() => {});
+}
+
 // ---------- tela cheia (não é pedida quando a prova permite trocar de aba) ----------
 function suportaTelaCheia() { return !!(document.documentElement.requestFullscreen && document.fullscreenEnabled); }
 function pedirTelaCheia(permitida = trocaAbaPermitida()) {
@@ -1279,7 +1300,8 @@ document.addEventListener("fullscreenchange", () => {
   if (document.fullscreenElement) { if (!sobreposicaoFixa) esconderSobreposicao(); return; }
   if (!emProvaAtiva() || trocaAbaPermitida()) return;
   registrar("saidasTelaCheia");                   // só registro
-  const punido = perderVida("saida");             // conta para o limite (vidas)
+  registrarSaida("telaCheia");
+  const punido = perderVida("telaCheia");         // conta para o limite (vidas)
   if (!punido && emProvaAtiva()) mostrarSobreposicao("telaCheia");
 });
 
@@ -1371,7 +1393,7 @@ $("#btnVoltarProva").onclick = () => { pedirTelaCheia(); esconderSobreposicao();
 // ---------- troca de aba / janela (contada uma vez por saída; com troca permitida, só conta) ----------
 let foraDaProva = false;
 const focoNoMaterial = () => document.activeElement === $("#consultaFrame");
-function contarSaida() { if (!emProvaAtiva() || foraDaProva) return; foraDaProva = true; perderVida("saida"); }
+function contarSaida() { if (!emProvaAtiva() || foraDaProva) return; foraDaProva = true; registrarSaida("aba"); perderVida("aba"); }
 function saiuDaProva(e) {
   if (!emProvaAtiva() || foraDaProva) return;
   // clicar dentro do material de consulta tira o foco da página, mas não é troca de aba
@@ -1388,6 +1410,7 @@ function saiuDaProva(e) {
 function voltouParaProva() {
   if (!foraDaProva) return;
   foraDaProva = false;
+  registrarVolta();
   if (!emProvaAtiva() || trocaAbaPermitida()) return;
   if (avisoPendente) { mostrarSobreposicao("perdeu", avisoPendente); avisoPendente = null; }   // perdeu a questão enquanto estava fora
   else if (!punindo) mostrarSobreposicao("aba");

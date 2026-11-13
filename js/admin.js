@@ -1962,6 +1962,7 @@ function desenharResultados() {
     const lote = writeBatch(db);
     (await getDocs(collection(db, "tentativas", l.t.id, "respostas"))).forEach(d => lote.delete(d.ref));
     (await getDocs(collection(db, "tentativas", l.t.id, "correcoes"))).forEach(d => lote.delete(d.ref));
+    (await getDocs(collection(db, "tentativas", l.t.id, "saidas"))).forEach(d => lote.delete(d.ref));
     for (const qid of l.t.questoesIds) lote.delete(doc(db, "marcadores", `${l.t.uid}_${qid}`));
     lote.delete(doc(db, "tentativas", l.t.id)); await lote.commit(); toast("Tentativa apagada", "ok");
     if (!$("#rAoVivo").checked) carregarResultados();
@@ -1994,7 +1995,7 @@ function verAluno(id, rolar = true) {
     const rot = ROTULOS[x.status] || ROTULOS.revisar;
     return `<div class="feedback bloco ${x.status === "certa" ? "certa" : ["errada", "perdida", "em_branco"].includes(x.status) ? "errada" : "revisar"}"><div class="linha acoes"><b>Q${x.n}</b> <span class="tag ${rot[0]}">${rot[1]} · ${x.pontos}/${x.peso}${x.manual ? " · manual" : ""}</span>${x.ia ? `<span class="tag nota" title="Corrigida pela IA — confira e ajuste se precisar">🤖 IA</span>` : ""}${errosIA.has(l.t.id + "/" + x.qid) ? `<span class="tag erro ia-erro">⚠ IA: ${esc(errosIA.get(l.t.id + "/" + x.qid))}</span>` : ""}${tempo}</div>
       <div class="enunciado pequeno">${esc(x.q.enunciado)}</div><p><b>Resposta do aluno:</b> ${sua}<br><b>Esperada:</b> ${certa}</p>${manual}</div>`;
-  }).join("") + "</div>";
+  }).join("") + `<div id="saidasDetalhe" class="bloco pequeno" style="margin-top:8px"><span class="texto-suave">Carregando saídas…</span></div></div>`;
   if (rolar) box.scrollIntoView({ behavior: "smooth" });
   $("#btnPDFAluno").onclick = () => abrirImpressao(`Boletim — ${resDados.prova.titulo}`, boletimHTML(l));
   ligarAcoesVida(box);
@@ -2006,6 +2007,38 @@ function verAluno(id, rolar = true) {
     document.activeElement?.blur?.();
     const d = await getDoc(doc(db, "tentativas", l.t.id)); await atualizarCache(d); montarResultados(); verAluno(id, false);
   });
+  carregarSaidasDetalhe(id, l);
+}
+
+async function carregarSaidasDetalhe(tentativaId, l) {
+  const el = document.getElementById("saidasDetalhe");
+  if (!el) return;
+  let snap;
+  try { snap = await getDocs(collection(db, "tentativas", tentativaId, "saidas")); }
+  catch { el.innerHTML = ""; return; }
+  if (snap.empty) { el.innerHTML = ""; return; }
+  const saidas = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+    .sort((a, b) => (a.saidaEm?.toMillis?.() ?? 0) - (b.saidaEm?.toMillis?.() ?? 0));
+  const acertouQuestoes = new Set(l.itens.filter(x => x.status === "certa").map(x => x.qid));
+  const fmtTs = ts => ts?.toDate ? ts.toDate().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" }) : "—";
+  const fmtSeg = s => typeof s === "number" ? `${s}s` : "—";
+  const MOTIVO = { aba: "troca de aba/janela", telaCheia: "saiu da tela cheia", colar: "tentou colar" };
+  const rows = saidas.map(s => {
+    const suspeita = s.questaoId && acertouQuestoes.has(s.questaoId) && s.motivo !== "colar";
+    return `<tr>
+      <td>${s.indice ? `Q${s.indice}` : "—"}</td>
+      <td>${esc(MOTIVO[s.motivo] || s.motivo)}</td>
+      <td>${fmtTs(s.saidaEm)}</td>
+      <td>${s.voltouEm ? fmtTs(s.voltouEm) : "—"}</td>
+      <td>${fmtSeg(s.segundosFora)}</td>
+      <td>${suspeita ? '<span class="tag erro" title="O aluno saiu da prova durante esta questão e a acertou">⚠ acerto sob suspeita</span>' : ""}</td>
+    </tr>`;
+  }).join("");
+  el.innerHTML = `<details><summary style="cursor:pointer"><b>Saídas durante a prova</b> (${saidas.length})</summary>
+    <table class="tabela-saidas" style="width:100%;border-collapse:collapse;margin-top:6px;font-size:12px">
+      <thead><tr style="text-align:left"><th>Questão</th><th>Motivo</th><th>Saiu às</th><th>Voltou às</th><th>Fora</th><th></th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></details>`;
 }
 // mais tempo para todos que estão fazendo a prova agora (cada um conta do próprio início; quem ainda não começou já terá o tempo inteiro)
 $("#btnTempoTodas").onclick = async () => {

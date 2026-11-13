@@ -412,6 +412,25 @@ service cloud.firestore {
                     || (logado() && tentativa(t).uid == uid() && prova(tentativa(t).provaId).resultadosLiberados == true);
         allow write: if professor() || (meuTeste(t) && request.method == 'delete');
       }
+
+      // log de saídas por questão (aba, tela cheia, colar) — gravado pelo aluno, lido pela equipe
+      match /saidas/{s} {
+        allow read: if equipeGeral() || minhaAluna(tentativa(t).email.lower());
+        allow create: if (aluno()
+          && tentativa(t).uid == uid()
+          && tentativa(t).finalizadaEm == null
+          && prova(tentativa(t).provaId).liberada == true
+          && request.resource.data.keys().hasOnly(['questaoId', 'indice', 'motivo', 'saidaEm'])
+          && request.resource.data.motivo in ['aba', 'telaCheia', 'colar']
+          && request.resource.data.saidaEm == request.time)
+          || meuTeste(t);
+        allow update: if (aluno()
+          && tentativa(t).uid == uid()
+          && resource.data.motivo != 'colar'
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['voltouEm', 'segundosFora'])
+          && request.resource.data.voltouEm == request.time)
+          || meuTeste(t);
+      }
     }
     // =====================================================================================
     // ECOSSISTEMA (aulas · autoavaliação · provas) — decisões em docs/ECOSSISTEMA.md
