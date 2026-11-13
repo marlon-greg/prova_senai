@@ -2,7 +2,7 @@
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, apagarTentativaTeste,
          confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco,
          rotuloDias, nomeTurma, HORARIO_PADRAO, textoHorario, DIAS_SEMANA_LONGO,
-         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo } from "./common.js";
+         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo } from "./common.js?v=20261113a";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
