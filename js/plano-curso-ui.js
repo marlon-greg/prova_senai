@@ -4,7 +4,7 @@
 // Unidade sem critérios: marca capacidades e conhecimentos (plano-curso.js), como antes.
 // Grava prova.planoCurso = { unidade, avaliacao, criterios, detalhados } ou { unidade, itens }.
 import { PLANO_CURSO, unidadePorId, unidadeDaMateria, rotuloTec, nivelK } from "./plano-curso.js?v=20261112d";
-import { criteriosDaUnidade, planoDaTurma, criteriosSugeridos, avaliacaoDaProva, proximaAvaliacao, codigoCriterio } from "./plano-ensino.js?v=20261112d";
+import { criteriosDaUnidade, planoDaTurma, criteriosSugeridos, avaliacaoDaProva, proximaAvaliacao, codigoCriterio, CRITERIOS_SEM } from "./plano-ensino.js?v=20261113d";
 import { esc, $ } from "./common.js";
 
 const NENHUMA = "nenhuma";
@@ -83,11 +83,12 @@ export function editorTopicos(f, materia, ctx = () => ({})) {
   }
   function desenharCriterios(u) {
     const crit = criteriosDaUnidade(u.id);
+    const sem = isSeminario();
+    const textoSem = (id, t) => sem ? (CRITERIOS_SEM[id] || t) : t;
     const lista = caps => caps.filter(([cid]) => crit.some(c => c[1] === cid)).map(([cid, nome]) =>
       `<p class="pc-cap">${esc(nome)}</p>` + crit.filter(c => c[1] === cid).map(([id, , t, , x]) =>
-        ck(id, `<b>${codigoCriterio(id)}</b> ${esc(t)}${x?.grupo ? ` <span class="pequeno">(trabalho em grupo)</span>` : ""}`, "pc-cr")).join("")).join("");
-    const opLiga = sel => crit.filter(c => marcados.has(c[0]) || c[0] === sel).map(c => `<option value="${c[0]}"${c[0] === sel ? " selected" : ""}>${codigoCriterio(c[0])} ${esc(c[2].slice(0, 60))}</option>`).join("");
-    const sem = isSeminario();
+        ck(id, `<b>${codigoCriterio(id)}</b> ${esc(textoSem(id, t))}${x?.grupo ? ` <span class="pequeno">(trabalho em grupo)</span>` : ""}`, "pc-cr")).join("")).join("");
+    const opLiga = sel => crit.filter(c => marcados.has(c[0]) || c[0] === sel).map(c => `<option value="${c[0]}"${c[0] === sel ? " selected" : ""}>${codigoCriterio(c[0])} ${esc(textoSem(c[0], c[2]).slice(0, 60))}</option>`).join("");
     const rub = detalhados.map((d, i) => `<div class="pc-det" data-det="${i}">
         <div class="grade">
           <div><label>Título</label><input type="text" data-campo="titulo" value="${esc(d.titulo || "")}" placeholder="${sem ? "Introdução e contextualização" : "Identificação de entidades"}"></div>
