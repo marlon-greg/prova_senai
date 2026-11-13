@@ -516,6 +516,13 @@ service cloud.firestore {
         allow update, delete: if professor();
       }
     }
+    // slides adaptados por aluno com acessibilidade: id = {aulaId}__{email}. Gerados pela equipe (IA + revisão) a partir do
+    // perfil privado; o aluno lê SÓ a versão dele (nunca a descrição nem os laudos, que ficam em acessibilidadePrivado).
+    match /aulasAdaptacoes/{id} {
+      allow read: if cuidaDe(resource.data.email) || eu(resource.data.email);
+      allow create, update: if professor() || minhaAluna(request.resource.data.email);
+      allow delete: if professor();
+    }
     // <<< AULAS <<<
 
   }
