@@ -50,12 +50,18 @@ function tokenGoogle() {
   });
 }
 
-export async function entrar() {
+export function entrar() {
   if (!GOOGLE_CLIENT_ID || USAR_EMULADOR) return signInWithPopup(auth, provider);
-  try { await carregarGIS(); }
-  catch { return signInWithPopup(auth, provider); }   // script do Google não carregou: tenta o jeito antigo
-  const token = await tokenGoogle();
-  return signInWithCredential(auth, GoogleAuthProvider.credential(null, token));
+  // GIS já carregado → chama requestAccessToken de forma síncrona dentro do clique do usuário.
+  // Nunca usar await antes de abrir popup: qualquer await (mesmo Promise.resolve) pode anular
+  // a "transient user activation" do browser e o popup é bloqueado silenciosamente.
+  if (window.google?.accounts?.oauth2) {
+    return tokenGoogle().then(token =>
+      signInWithCredential(auth, GoogleAuthProvider.credential(null, token))
+    );
+  }
+  // GIS ainda não carregou (rede lenta): fallback imediato para o popup do Firebase.
+  return signInWithPopup(auth, provider);
 }
 export function sair()   { return signOut(auth); }
 export function aoMudarLogin(cb) { return onAuthStateChanged(auth, cb); }
