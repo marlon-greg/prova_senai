@@ -413,8 +413,9 @@ header .quem #quem { overflow:hidden; text-overflow:ellipsis; white-space:nowrap
 /* ---------- logo oficial (img/senai.svg); sem o arquivo, o texto SENAI ---------- */
 .logo { display:block; height:36px; width:auto; }
 .logo-texto { font-family:var(--fonte-titulo); font-weight:700; font-size:22px; line-height:36px; letter-spacing:.04em; color:var(--marinho); }
-.menu-logo { padding:6px 8px; margin-bottom:18px; flex:none; }
+.menu-logo { display:flex; align-items:center; gap:10px; padding:6px 8px; margin-bottom:18px; flex:none; }
 .menu-logo .logo-texto { color:#fff; }
+.logo-sistema { color:rgba(255,255,255,.85); font-family:var(--fonte-titulo); font-weight:600; font-size:14px; letter-spacing:.02em; white-space:nowrap; line-height:1; }
 
 /* ---------- casca do painel: menu 240 px + coluna com cabeçalho e conteúdo ---------- */
 body.painel main { max-width:none; margin:0; padding:0; }
@@ -2306,9 +2307,10 @@ details.ret-grupo > .rc-corpo .ret-item { box-shadow:none; background:var(--cart
   .menu-lateral.recolhido button { justify-content:center; padding-left:0; padding-right:0; gap:0; }
   .menu-lateral.recolhido .menu-rotulo { display:none; }
   .menu-lateral.recolhido .menu-grupo + .menu-grupo { margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,.12); }
-  .menu-lateral.recolhido .menu-logo { padding:6px 0; text-align:center; }
+  .menu-lateral.recolhido .menu-logo { padding:6px 0; text-align:center; justify-content:center; }
   .menu-lateral.recolhido .menu-logo .logo { max-width:44px; height:auto; margin:0 auto; }
   .menu-lateral.recolhido .menu-logo .logo-texto { font-size:12px; letter-spacing:0; }
+  .menu-lateral.recolhido .logo-sistema { display:none; }
   .menu-lateral.recolhido .menu-mais { display:none; }
 }
 @media (max-width:900px) { .menu-lateral button.menu-recolher { display:none; } }
