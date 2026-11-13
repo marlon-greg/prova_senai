@@ -1992,7 +1992,8 @@ function tabelaHTML(lista, prefixo) {
     lista.map(l => {
       const acertos = l.itens.filter(x => x.status === "certa" || Number(x.pontos) > Number(x.peso || 1) / 2).length, itens = acoesVidaItens(l) + (ehAdmin() && prefixo === "aluno" ? "<hr>" + itemMenu({ i: "trash", t: "Apagar tentativa", perigo: true, attrs: `data-reset="${l.t.id}" title="Apagar a tentativa (o aluno pode refazer)"` }) : "");
       const fechada = l.t.nota !== undefined ? `fechada: ${l.t.nota}` : l.t.notaPrevia !== null && l.t.notaPrevia !== undefined ? `prévia: ${l.t.notaPrevia}` : "";
-      return `<tr><td><span class="aluno-celula"><span class="avatar-p">${esc(iniciais(l.t.nome || l.t.email))}</span><span class="ac-texto"><b>${esc(l.t.nome || l.t.email)}</b><span>${esc(l.t.email)}</span></span></span></td>
+      const obsAda = l.t.obsAcessibilidade?.adaptacoes?.length;
+      return `<tr><td><span class="aluno-celula"><span class="avatar-p">${esc(iniciais(l.t.nome || l.t.email))}</span><span class="ac-texto"><b>${esc(l.t.nome || l.t.email)}</b><span>${esc(l.t.email)}</span>${obsAda ? ` <span class="tag nota" title="${obsAda} adaptação(ões) registrada(s)">♿</span>` : ""}</span></span></td>
       <td>${chipSituacao(l)}${extrasSituacao(l)}</td>
       <td class="res-acertos" title="Início: ${esc(dataBR(l.t.iniciadaEm))} · tempo: ${esc(fmtTempo(l.tempo))}">${acertos} de ${l.itens.length}</td>
       <td><span class="res-nota ${l.nota >= 60 ? "boa" : "baixa"}"${fechada ? ` title="${esc(fechada)}"` : ""}>${String(l.nota).replace(".", ",")}</span></td>
@@ -2075,7 +2076,7 @@ function verAluno(id, rolar = true) {
     const rot = ROTULOS[x.status] || ROTULOS.revisar;
     return `<div class="feedback bloco ${x.status === "certa" ? "certa" : ["errada", "perdida", "em_branco"].includes(x.status) ? "errada" : "revisar"}"><div class="linha acoes"><b>Q${x.n}</b> <span class="tag ${rot[0]}">${rot[1]} · ${x.pontos}/${x.peso}${x.manual ? " · manual" : ""}</span>${x.ia ? `<span class="tag nota" title="Corrigida pela IA — confira e ajuste se precisar">🤖 IA</span>` : ""}${errosIA.has(l.t.id + "/" + x.qid) ? `<span class="tag erro ia-erro">⚠ IA: ${esc(errosIA.get(l.t.id + "/" + x.qid))}</span>` : ""}${tempo}</div>
       <div class="enunciado pequeno">${esc(x.q.enunciado)}</div><p><b>Resposta do aluno:</b> ${sua}<br><b>Esperada:</b> ${certa}</p>${manual}</div>`;
-  }).join("") + `<div id="saidasDetalhe" class="bloco pequeno" style="margin-top:8px"><span class="texto-suave">Carregando saídas…</span></div></div>`;
+  }).join("") + `<div id="saidasDetalhe" class="bloco pequeno" style="margin-top:8px"><span class="texto-suave">Carregando saídas…</span></div>${podeEditar() ? obsAcessHTML(l) : ""}</div>`;
   if (rolar) box.scrollIntoView({ behavior: "smooth" });
   $("#btnPDFAluno").onclick = () => abrirImpressao(`Boletim — ${resDados.prova.titulo}`, boletimHTML(l));
   ligarAcoesVida(box);
@@ -2087,7 +2088,42 @@ function verAluno(id, rolar = true) {
     document.activeElement?.blur?.();
     const d = await getDoc(doc(db, "tentativas", l.t.id)); await atualizarCache(d); montarResultados(); verAluno(id, false);
   });
+  if (podeEditar()) box.querySelector(`[data-salvar-obs]`)?.addEventListener("click", async () => {
+    const adaptacoes = [...box.querySelectorAll(".obs-ada:checked")].map(x => x.value);
+    const nota = box.querySelector(`#obsNota_${id}`)?.value.trim() || "";
+    const obsAcessibilidade = adaptacoes.length || nota ? { adaptacoes, nota } : null;
+    try {
+      await updateDoc(doc(db, "tentativas", id), { obsAcessibilidade });
+      toast("Observação de acessibilidade salva.", "ok");
+      const d = await getDoc(doc(db, "tentativas", id)); await atualizarCache(d); montarResultados(); verAluno(id, false);
+    } catch (e) { toast("Não foi possível salvar. " + traduzirErro(e), "erro"); }
+  });
   carregarSaidasDetalhe(id, l);
+}
+const OBS_ACESS_OPTS = [
+  ["lida_voz", "Questões lidas em voz alta pelo professor/auxiliar"],
+  ["tech_assist", "Tecnologia assistiva (leitor de tela, ampliador, etc.)"],
+  ["tempo_extra", "Tempo extra concedido"],
+  ["formato_access", "Questões no formato de acessibilidade do sistema (ampliado, simplificado)"],
+  ["sala_separada", "Sala ou espaço separado"],
+  ["acompanhante", "Acompanhante ou auxiliar presente durante a somativa"],
+  ["outra", "Outra adaptação (descreva no campo abaixo)"],
+];
+function obsAcessHTML(l) {
+  const obs = l.t.obsAcessibilidade || {}, adas = obs.adaptacoes || [];
+  const temObs = adas.length || obs.nota;
+  return `<details class="bloco pequeno obs-acess-bloco" style="margin-top:8px" ${temObs ? "open" : ""}>
+    <summary style="cursor:pointer"><b>♿ Adaptações nesta somativa</b>${adas.length ? ` <span class="tag nota">${adas.length} registrada(s)</span>` : " <span class='meta-txt'>nenhuma registrada</span>"}</summary>
+    <div style="padding:8px 0 0">
+      <p class="pequeno" style="margin:0 0 8px">Adapatações de acessibilidade realizadas para este aluno <em>nesta somativa</em>. Fica anexado ao resultado individual.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:4px">
+        ${OBS_ACESS_OPTS.map(([v, t]) => `<label class="check"><input type="checkbox" class="obs-ada" value="${v}"${adas.includes(v) ? " checked" : ""}> <span>${esc(t)}</span></label>`).join("")}
+      </div>
+      <div style="margin-top:8px"><label for="obsNota_${l.t.id}">Observação adicional (opcional)</label>
+        <textarea id="obsNota_${l.t.id}" rows="2" style="margin-top:4px">${esc(obs.nota || "")}</textarea></div>
+      <button class="leve mini" data-salvar-obs="${l.t.id}" style="margin-top:8px">Salvar observação</button>
+    </div>
+  </details>`;
 }
 
 async function carregarSaidasDetalhe(tentativaId, l) {
