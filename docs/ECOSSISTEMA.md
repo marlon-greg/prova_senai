@@ -30,6 +30,15 @@ própria; coopera (C47) ← trabalho em grupo. As demais são observação do pr
 
 ## 2. Decisões
 
+> **REGRA FIXA (16/11/2026, definida pelo professor): os critérios de avaliação vêm SÓ do sistema de autoavaliação.**
+> - O professor sobe o **plano de ensino** (datas, avaliações previstas e critérios) **no sistema de autoavaliação**.
+>   Lá é o único lugar onde critério é criado, editado ou removido.
+> - O sistema de provas **só lê**. Ele **não cria, não edita e não guarda cópia editável** de critério.
+> - Na prova, o professor **escolhe**, entre os critérios que vieram de lá, quais vai usar. Por padrão vêm os critérios
+>   da avaliação prevista no plano para aquela data. Ele só mexe se quiser trocar a seleção.
+> - Isso substitui o item 4 abaixo no que diz respeito a `js/plano-ensino.js` como fonte dos critérios. O arquivo
+>   `stacktrace-importacao-BD.json` (critérios gerados aqui e importados lá) foi só a carga inicial e não vale mais como fonte.
+
 1. **Aulas e provas no mesmo projeto Firebase: `prova-senai-3e983`.** Mesmo login (o aluno é o mesmo `uid` e e-mail
    em todos), mesmas **turmas** (`turmas/`), mesma **equipe** (`equipe/{email}.papel`: admin, professor, auxiliar,
    inclusao; superadmin `marlon.frodrigues@docente.senai.br`), mesmos domínios de aluno (`config/geral.dominiosAlunos`).
@@ -65,6 +74,7 @@ própria; coopera (C47) ← trabalho em grupo. As demais são observação do pr
 4. **Contrato comum em 3 módulos, importados direto do site publicado** (nada de cópia, nada de sincronizar):
    - `js/plano-curso.js`: as 12 UCs, as capacidades, as socioemocionais e os conhecimentos (IDs `bd`, `bd.ct9`, `bd.cs2`, `bd.k2.4`).
    - `js/plano-ensino.js`: os critérios (`bd.cr25`) com a explicação para o aluno e as avaliações previstas por turma.
+     **Provisório:** vai deixar de ser a fonte. Os critérios e o plano de ensino passam a ser lidos da autoavaliação (ver a regra fixa acima).
    - `js/evidencias.js`: o formato das evidências, as escalas, os sinais socioemocionais e o cruzamento das três vertentes.
 
    Os outros sistemas fazem `import { … } from "https://marlon-greg.github.io/prova_senai/js/plano-ensino.js"` (o GitHub Pages libera CORS).
