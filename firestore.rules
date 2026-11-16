@@ -68,6 +68,14 @@ service cloud.firestore {
       allow read, write: if superAdmin();
     }
 
+    // ---------- critérios de avaliação (vêm do sistema de AUTOAVALIAÇÃO) ----------
+    // criteriosOficiais/{SIGLA}: gravado pelo Worker (conta de serviço, passa por fora das regras) com o que vem
+    // da autoavaliação. Aqui ninguém cria critério; só o administrador principal, em último caso, importa à mão.
+    match /criteriosOficiais/{uc} {
+      allow read: if logado();
+      allow write: if superAdmin();
+    }
+
     // ---------- equipe ----------
     match /equipe/{em} {
       allow read: if equipe() || (logado() && em == email());

@@ -36,6 +36,13 @@ própria; coopera (C47) ← trabalho em grupo. As demais são observação do pr
 > - O sistema de provas **só lê**. Ele **não cria, não edita e não guarda cópia editável** de critério.
 > - Na prova, o professor **escolhe**, entre os critérios que vieram de lá, quais vai usar. Por padrão vêm os critérios
 >   da avaliação prevista no plano para aquela data. Ele só mexe se quiser trocar a seleção.
+> - **Como funciona (feito em 16/11/2026):** os critérios ficam em `criteriosOficiais/{SIGLA}` no Firestore, no formato
+>   da importação do Stacktrace (`js/criterios-formato.js`). O Worker busca `GET /integracao/criterios` na autoavaliação
+>   (rota pedida ao colega) e grava lá. Em último caso, **só o administrador principal** importa ou adiciona à mão
+>   (Organização > Critérios de avaliação, com o prompt para gerar o JSON); o que entra assim fica marcado `manual` e
+>   é trocado pelo de lá quando o mesmo número chegar. A rubrica detalhada por prova e os textos de seminário feitos
+>   aqui foram retirados. As avaliações previstas (datas, MS1 a MS5) continuam provisórias em `js/plano-ensino.js`
+>   até o plano de ensino estar lá.
 > - Isso substitui o item 4 abaixo no que diz respeito a `js/plano-ensino.js` como fonte dos critérios. O arquivo
 >   `stacktrace-importacao-BD.json` (critérios gerados aqui e importados lá) foi só a carga inicial e não vale mais como fonte.
 

@@ -17,6 +17,7 @@
 //   acao "buscarAutoavaliacao" no endpoint principal do Worker (corretor-worker.js)
 
 import { montarEvidencia, situacaoCriterio, SITUACOES, NIVEIS_AUTO, chaveEmail } from "../js/evidencias.js";
+import { validarPlanos, mesclarPlano } from "../js/criterios-formato.js";
 
 const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const CRITERIO = /^[a-z]+\.cr\d{2,}$/;
@@ -44,7 +45,9 @@ export async function buscarEGravar(env, fs) {
     buscarPaginas(env, "/integracao/respostas", cursor.respostas || {}),
     buscarPaginas(env, "/integracao/pendencias", cursor.pendencias || {})
   ]);
-  const stats = { respostas: 0, pendencias: 0, erros: [] };
+  const stats = { respostas: 0, pendencias: 0, criterios: null, erros: [] };
+  // critérios de avaliação: a fonte é a autoavaliação (regra fixa, docs/ECOSSISTEMA.md seção 2)
+  try { stats.criterios = await buscarCriterios(env, fs); } catch (e) { stats.erros.push("critérios: " + e.message.slice(0, 120)); }
   if (respostas.itens.length) {
     const r = await processarRespostas(respostas.itens, fs);
     stats.respostas = r.gravadas;
@@ -62,6 +65,26 @@ export async function buscarEGravar(env, fs) {
   };
   if (Object.keys(novoCursor).length) await fs.gravar(CURSOR_DOC, novoCursor);
   return { ok: true, buscadoEm: new Date().toISOString(), ...stats };
+}
+
+// ---------- critérios de avaliação (plano de ensino) vindos da autoavaliação ----------
+// GET /integracao/criterios → { ucs: [ ImportarConteudoBody ] } (mesmo formato da importação de lá; ver
+// js/criterios-formato.js). Grava criteriosOficiais/{SIGLA}. Rota ainda não existe lá: 404 = pula sem erro.
+async function buscarCriterios(env, fs) {
+  const base = String(env.STACKTRACE_URL).replace(/\/$/, "");
+  let r;
+  try { r = await fetch(`${base}/integracao/criterios`, { headers: { "x-chave": env.INTEGRACAO_CHAVE } }); }
+  catch (e) { console.log("Stacktrace indisponível: /integracao/criterios", e.message); return null; }
+  if (r.status === 404) return null;
+  if (!r.ok) throw erro(`Stacktrace ${r.status} em /integracao/criterios`, r.status);
+  const { planos, erros } = validarPlanos(await r.json());
+  if (erros.length) console.log("critérios com erro:", erros.slice(0, 10));
+  for (const novo of planos) {
+    const caminho = `criteriosOficiais/${novo.uc.sigla}`;
+    const { plano } = mesclarPlano(await fs.ler(caminho), novo, "autoavaliacao");
+    await fs.gravar(caminho, { ...plano, atualizadoPor: "autoavaliacao" }, "atualizadoEm");
+  }
+  return { ucs: planos.length, erros: erros.length };
 }
 
 // ---------- busca paginada na API do Stacktrace ----------

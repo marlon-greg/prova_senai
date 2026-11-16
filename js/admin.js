@@ -7,10 +7,11 @@ import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanh
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
 import { htmlEditorTopicos, editorTopicos } from "./plano-curso-ui.js?v=20261113d";
-import { criteriosDaUnidade, codigoCriterio } from "./plano-ensino.js?v=20261113d";
+import { criteriosDaUnidade, codigoCriterio, carregarCriteriosOficiais } from "./plano-ensino.js?v=20261116a";
 import { PLANO_CURSO } from "./plano-curso.js?v=20261113a";
 import { iniciarOrganizacao, carregarOrganizacao, listarPlanos, listarCursos, materiasSugeridas, editarTopicosBanco, editarCriteriosBanco, topicosDaMateria } from "./admin-org.js";
 import { iniciarDiario, carregarDiario } from "./admin-diario.js";
+import { iniciarCriterios, carregarCriterios } from "./admin-criterios.js?v=20261116a";
 import { ligarAjuda } from "./ajuda.js";
 import { iniciarRelatorios, carregarRelatorios } from "./admin-relatorios.js";
 import { iniciarGamificacao, carregarGamificacao, carregarRetorno } from "./admin-gamificacao.js";
@@ -53,6 +54,7 @@ aoMudarLogin(async user => {
   }
   eu = id;
   await garantirConfig();
+  await carregarCriteriosOficiais(db, { collection, getDocs });   // critérios de avaliação: vêm do sistema de autoavaliação
   await carregarIA();
   getDoc(doc(db, "config", "geral")).then(c => { urlCorretorCfg = String(c.data()?.urlCorretor || "").trim(); if (c.data()?.horario?.inicio) horarioCfg = c.data().horario; $("#tHorario").textContent = textoHorario(horarioCfg); }).catch(() => {});
   iniciarAcessibilidade({ eu, podeEditar, souDono, auth, iaCfg: () => iaCfg, urlCorretor: () => urlCorretorCfg,
@@ -62,6 +64,7 @@ aoMudarLogin(async user => {
   iniciarHistorico({ eu, abrirAluno: email => { abrirDepois(email); abrirAba("acessibilidade"); },
     alunosDasTurmas: async () => { await listarTurmas().catch(() => {}); return turmasCache.flatMap(t => alunosDaTurma(t).map(a => ({ ...a, turma: t.nome, turmaId: t.id }))); } });
   iniciarRelatorios({ listarTurmas, listarBancos });
+  iniciarCriterios({ eu });
   iniciarMeuMascote({ eu, ehAdmin, podeEditar }); iniciarItens({ eu, podeEditar }); carregarItensCustom().then(() => carregarEstilosMascotes()).catch(() => {});
   iniciarGamificacao({ eu, ehAdmin, podeEditar, auth, iaCfg: () => iaCfg, urlCorretor: () => urlCorretorCfg });
   iniciarOrganizacao({ eu, podeEditar, ehAdmin, auth, iaCfg: () => iaCfg, urlCorretor: () => urlCorretorCfg,
@@ -137,7 +140,7 @@ function abrirAba(a) {
   if (a !== "resultados" && $("#rAoVivo").checked) { $("#rAoVivo").checked = false; pararAoVivo(); }   // sair da aba desliga o ao vivo
   document.querySelectorAll("[data-aba]").forEach(b => { const ativa = b.dataset.aba === a; b.classList.toggle("ativa", ativa); if (ativa) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); if (ativa && matchMedia("(max-width:900px)").matches) b.scrollIntoView({ inline: "center", block: "nearest" }); });
   ["organizacao", "diario", "historico", "retorno", "relatorios", "gamificacao", "provas", "bancos", "turmas", "resultados", "acessibilidade", "equipe", "config", "simulacao", "meumascote", "itens"].forEach(x => $("#aba-" + x).classList.toggle("oculto", x !== a));
-  return ({ organizacao: carregarOrganizacao, diario: carregarDiario, historico: carregarHistorico, retorno: carregarRetorno, relatorios: carregarRelatorios, gamificacao: carregarGamificacao, provas: carregarProvas, bancos: () => { carregarBancos(); carregarMateriais(); }, turmas: carregarTurmas, resultados: prepararResultados,
+  return ({ organizacao: () => { carregarCriterios(); return carregarOrganizacao(); }, diario: carregarDiario, historico: carregarHistorico, retorno: carregarRetorno, relatorios: carregarRelatorios, gamificacao: carregarGamificacao, provas: carregarProvas, bancos: () => { carregarBancos(); carregarMateriais(); }, turmas: carregarTurmas, resultados: prepararResultados,
      acessibilidade: () => { carregarAcessibilidade(); if (podeEditar()) prepararNovoAcess(); }, equipe: carregarEquipe, config: carregarConfig, simulacao: carregarSimulacao, meumascote: carregarMeuMascote, itens: carregarAbaItens })[a]();
 }
 

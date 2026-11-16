@@ -14,7 +14,7 @@ import { montarFormato, temFormato, FORMATOS, rotuloFormato, textoParaFalar, tex
 const controles = {};   // qid -> controle do formato adaptado (valor, preencher, travar)
 import { abrirLeitorPdf } from "./leitor-pdf.js";
 import { topicosDaProva, htmlConhecimentos, rotuloTec, nivelK } from "./plano-curso.js?v=20261112d";
-import { criteriosDaProva, NIVEIS_RUBRICA } from "./plano-ensino.js?v=20261112d";
+import { criteriosDaProva, NIVEIS_RUBRICA, carregarCriteriosOficiais } from "./plano-ensino.js?v=20261116a";
 import { toolbar, collapsible, vazio, statTiles, chips } from "./ui.js";
 import { completar, aplicarVisual, mesclarQuestao } from "./acessibilidade.js";
 import { definirEstilos } from "./mascotes.js";
@@ -108,6 +108,7 @@ aoMudarLogin(async user => {
   if (!user) { eu = null; modoTeste = false; $("#faixaTeste").classList.add("oculto"); $("#quem").textContent = ""; $("#avatar").classList.add("oculto"); $("#btnSair").classList.add("oculto"); mostrar("telaLogin"); return; }
   const id = await identificar(user);
   $("#quem").textContent = (user.displayName || id.email.split("@")[0]).trim().split(/[\s._-]+/)[0]; $("#quem").title = id.email; $("#btnSair").classList.remove("oculto");
+  await carregarCriteriosOficiais(db, { collection, getDocs });   // critérios de avaliação: vêm do sistema de autoavaliação
   await getDocs(collection(db, "itensCustom")).then(r => usarItensCustom(r.docs.map(d => ({ id: d.id, ...d.data() })))).catch(() => {});   // itens criados pela equipe
   await getDocs(collection(db, "mascotes")).then(r => { const m = {}; r.forEach(d => { m[d.id] = d.data().ativo || {}; }); definirEstilos(m); }).catch(() => {});   // visuais que os professores escolheram
   $("#avatar").textContent = iniciais(user.displayName || id.email); $("#avatar").title = user.displayName || id.email; $("#avatar").classList.remove("oculto");
@@ -391,7 +392,6 @@ function htmlCriterios(c) {
   const grupo = g => `<div class="cr-cap"><p class="cr-cap-nome">Capacidade: ${esc(g.nome)}</p><ul class="cr-lista">${g.criterios.map(k => `<li>
       <p class="cr-texto"><span class="cr-cod">${k.codigo}</span>${esc(k.texto)}</p>
       <p class="cr-expl"><b>O que você precisa mostrar:</b> ${esc(k.explicacao)}</p>
-      ${k.detalhados.length ? `<ul class="cr-det">${k.detalhados.map(d => `<li><b>${esc(d.titulo)}</b>${d.pontos ? ` <span class="chip">${d.pontos} pts</span>` : ""}<br>${esc(d.texto)}</li>`).join("")}</ul>` : ""}
     </li>`).join("")}</ul></div>`;
   const bloco = (chave, titulo, l) => l.length ? collapsible({ chave, titulo, resumoHTML: `<span class="chip">${n(l)}</span>`, corpoHTML: l.map(grupo).join("") }) : "";
   return `<h3 class="pc-titulo">🎯 O que vai ser avaliado</h3>

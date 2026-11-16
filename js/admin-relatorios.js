@@ -7,7 +7,7 @@ import { pl, ajudaHTML, vazio } from "./ui.js";
 import { ic } from "./icones.js";
 import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { situacaoCriterio, SITUACOES } from "./evidencias.js";
-import { criteriosDaUnidade, codigoCriterio, CRITERIOS } from "./plano-ensino.js?v=20261113a";
+import { criteriosDaUnidade, codigoCriterio, CRITERIOS } from "./plano-ensino.js?v=20261116a";
 import { PLANO_CURSO } from "./plano-curso.js?v=20261113a";
 
 export const MEDIA_MINIMA = 50;
