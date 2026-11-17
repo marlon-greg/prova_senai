@@ -2,7 +2,7 @@
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, apagarTentativaTeste,
          confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco,
          rotuloDias, nomeTurma, HORARIO_PADRAO, textoHorario, DIAS_SEMANA_LONGO,
-         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo } from "./common.js?v=20261113a";
+         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo } from "./common.js?v=20261116b";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
@@ -14,7 +14,8 @@ import { iniciarDiario, carregarDiario } from "./admin-diario.js";
 import { iniciarCriterios, carregarCriterios } from "./admin-criterios.js?v=20261116a";
 import { ligarAjuda } from "./ajuda.js";
 import { iniciarRelatorios, carregarRelatorios } from "./admin-relatorios.js";
-import { iniciarGamificacao, carregarGamificacao, carregarRetorno } from "./admin-gamificacao.js";
+import { iniciarGamificacao, carregarGamificacao, carregarRetorno } from "./admin-gamificacao.js?v=20261116c";
+import { lerRevisoes, revisoesDaProva, faixaRevisoesHTML, avisoQuestaoHTML, abrirRevisao } from "./admin-revisoes.js?v=20261116c";
 import { mesclarQuestao } from "./acessibilidade.js";
 import { temFormato, textoResposta, textoChave, FORMATOS } from "./formatos-ui.js";
 import { iniciarAcessibilidade, carregarAcessibilidade, prepararNovo as prepararNovoAcess, abrirDepois } from "./admin-acess.js?v=20261111a";
@@ -1611,6 +1612,8 @@ async function carregarResultados() {
   // alunos com acessibilidade: as questões deles podem estar em outro formato (gabarito privado)
   const acessEmails = new Set((await getDocs(ehInclusao() ? query(collection(db, "acessibilidade"), where("auxiliares", "array-contains", eu.email)) : collection(db, "acessibilidade")).catch(() => null))?.docs.map(d => d.id) || []);
   resDados = { prova, questoes, gabaritos, turma, acessEmails, linhas: [], testes: [] };
+  // 🚩 questões com erro reportado (lembrete no topo e dentro da questão do aluno)
+  resDados.gruposRev = podeEditar() ? await lerRevisoes().catch(e => { console.warn("revisões", e); return null; }) : null;
   // correção automática da prova: sem servidor, o painel aberto (ao vivo) faz o papel dele
   if (souDono() && iaCfg && provaIAPadrao !== provaId && $("#rAoVivo").checked) { provaIAPadrao = provaId; $("#iaAuto").checked = prova.iaAutomatica !== false && !urlCorretorCfg; }
   atualizarControlesIA();
@@ -1698,8 +1701,22 @@ function montarResultados() {
   resDados.linhas = todas.filter(l => l.t.teste !== true);
   resDados.testes = todas.filter(l => l.t.teste === true);
   desenharResultados();
+  desenharFaixaRevisoes();
   gravarPlacares(todas);
   if ($("#iaAuto").checked && $("#rAoVivo").checked) agendarAutoIA();
+}
+// ⚠ faixa no topo: questões desta prova com erro reportado ainda sem decisão (abre o mesmo cartão da tela Erros e sugestões)
+function desenharFaixaRevisoes() {
+  if (!$("#resRevisoes")) $("#resTabela").insertAdjacentHTML("beforebegin", `<div id="resRevisoes"></div>`);
+  resDados.revMap = revisoesDaProva(resDados.gruposRev, resDados.linhas.map(l => l.t));
+  $("#resRevisoes").innerHTML = faixaRevisoesHTML(resDados.revMap);
+  ligarRevisar($("#resRevisoes"));
+}
+function ligarRevisar(box) {
+  box.querySelectorAll("[data-revisar]").forEach(b => b.onclick = () => {
+    const g = resDados.gruposRev?.get(b.dataset.revisar);
+    if (g) abrirRevisao(g, () => carregarResultados());
+  });
 }
 // automático: junta as provas entregues nos últimos 20 s e corrige em lote, sem janelas nem avisos (só a linha da barra da IA)
 let timerAutoIA = null;
@@ -2078,9 +2095,10 @@ function verAluno(id, rolar = true) {
     const manual = podeEditar() && x.q.tipo === "dissertativa" && !x.perdida ? `<div class="linha" style="margin-top:6px"><div style="flex:0 0 120px"><label>Pontos (0–${x.peso})</label><input type="number" min="0" max="${x.peso}" step="0.25" value="${x.pontos}" id="pt_${x.qid}"></div><div><label>Comentário para o aluno</label><input type="text" id="cm_${x.qid}" value="${esc(x.comentario)}"></div><div style="flex:0 0 120px;align-self:flex-end"><button class="mini" data-corr="${x.qid}">Salvar</button></div></div>` : "";
     const rot = ROTULOS[x.status] || ROTULOS.revisar;
     return `<div class="feedback bloco ${x.status === "certa" ? "certa" : ["errada", "perdida", "em_branco"].includes(x.status) ? "errada" : "revisar"}"><div class="linha acoes"><b>Q${x.n}</b> <span class="tag ${rot[0]}">${rot[1]} · ${x.pontos}/${x.peso}${x.manual ? " · manual" : ""}</span>${x.ia ? `<span class="tag nota" title="Corrigida pela IA — confira e ajuste se precisar">🤖 IA</span>` : ""}${errosIA.has(l.t.id + "/" + x.qid) ? `<span class="tag erro ia-erro">⚠ IA: ${esc(errosIA.get(l.t.id + "/" + x.qid))}</span>` : ""}${tempo}</div>
-      <div class="enunciado pequeno">${esc(x.q.enunciado)}</div><p><b>Resposta do aluno:</b> ${sua}<br><b>Esperada:</b> ${certa}</p>${manual}</div>`;
+      <div class="enunciado pequeno">${esc(x.q.enunciado)}</div>${avisoQuestaoHTML(resDados.revMap?.get(x.qid), l.t, x.status !== "certa")}<p><b>Resposta do aluno:</b> ${sua}<br><b>Esperada:</b> ${certa}</p>${manual}</div>`;
   }).join("") + `<div id="saidasDetalhe" class="bloco pequeno" style="margin-top:8px"><span class="texto-suave">Carregando saídas…</span></div>${podeEditar() ? obsAcessHTML(l) : ""}</div>`;
   if (rolar) box.scrollIntoView({ behavior: "smooth" });
+  ligarRevisar(box);
   $("#btnPDFAluno").onclick = () => abrirImpressao(`Boletim — ${resDados.prova.titulo}`, boletimHTML(l));
   ligarAcoesVida(box);
   box.querySelectorAll("[data-corr]").forEach(b => b.onclick = async () => {

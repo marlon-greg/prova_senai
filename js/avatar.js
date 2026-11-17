@@ -3,8 +3,11 @@
 // barba, maquiagem, roupa ou acessório. Algumas partes são SKINS liberadas por conquistas (nº de conquistas ou uma medalha).
 
 // ---------- cores ----------
-export const PELES = ["#f9d7c0", "#f1c27d", "#e0ac69", "#c68642", "#8d5524", "#5c3a1e", "#fde7d6", "#e8b48a", "#a0662f", "#3d2614"];
-export const ORDEM_PELES = [6, 0, 1, 7, 2, 3, 8, 4, 5, 9]; // do mais claro ao mais escuro (só para mostrar)
+// tons novos entram SEMPRE no fim (o personagem salvo guarda o índice): 10 porcelana rosada, 11 oliva claro, 12 oliva,
+// 13 bronzeado dourado, 14 marrom avermelhado, 15 ébano
+export const PELES = ["#f9d7c0", "#f1c27d", "#e0ac69", "#c68642", "#8d5524", "#5c3a1e", "#fde7d6", "#e8b48a", "#a0662f", "#3d2614",
+  "#f6d2cb", "#dcbc8e", "#b48a58", "#d39a5c", "#8a4b33", "#45302a"];
+export const ORDEM_PELES = [6, 0, 10, 1, 11, 7, 2, 13, 3, 12, 8, 4, 14, 5, 15, 9]; // do mais claro ao mais escuro (só para mostrar)
 export const CORES_CABELO = ["#1f1a17", "#4a2c1a", "#8b5a2b", "#d9a441", "#e8d5a3", "#b5482f", "#6b7280", "#2563eb", "#db2777", "#7c3aed",
   "#f5f0e1", "#d9661f", "#0d9488", "#f9a8d4", "#e5e7eb", "#a78bfa"];
 export const CORES_ROUPA = ["#c1272d", "#1d4ed8", "#059669", "#111827", "#f59e0b", "#7c3aed", "#db2777", "#0e7490", "#f3f4f6",
@@ -14,15 +17,20 @@ export const CORES_ACESSORIO = ["#111827", "#c1272d", "#2563eb", "#f59e0b", "#db
 export const CORES_LABIOS = [null, "#e11d48", "#f472b6", "#9f1239", "#ea580c", "#b9836b", "#7c3aed", "#111827"]; // 0 = natural (vem da pele)
 export const CORES_OCULOS = ["#111827", "#7c2d12", "#c1272d", "#2563eb", "#db2777", "#e5b84b", "#cbd5e1", "#7c3aed", "#059669"];
 export const CORES_JOIA = ["#e5b84b", "#cbd5e1", "#e7a29b", "#111827", "#f8fafc", "#22d3ee", "#c1272d", "#7c3aed"];
+// sobrancelha e barba: 0 = igual ao cabelo (personagens antigos continuam iguais); 1.. = as cores do cabelo
+export const CORES_PELOS = [null, ...CORES_CABELO];
+// cor livre (input type=color) para cabelo, sobrancelha e barba: guardada como "#rrggbb" em corCabeloHex etc.
+export const CORES_LIVRES = { corCabelo: "corCabeloHex", corSobrancelha: "corSobrancelhaHex", corBarba: "corBarbaHex" };
+export const hexValido = h => typeof h === "string" && /^#[0-9a-f]{6}$/i.test(h) ? h.toLowerCase() : "";
 
 // ---------- catálogo ----------
 // cada item pode ter { trava: { n } (nº de conquistas) ou { medalha: "id da conquista" } }
 export const CATALOGO = {
   corpo: [{ id: "masculino", nome: "Masculino" }, { id: "feminino", nome: "Feminino" }],
   rosto: [{ id: "redondo", nome: "Redondo" }, { id: "oval", nome: "Oval" }, { id: "quadrado", nome: "Quadrado" }, { id: "coracao", nome: "Coração" },
-    { id: "longo", nome: "Comprido" }, { id: "diamante", nome: "Diamante" }],
+    { id: "longo", nome: "Comprido" }, { id: "diamante", nome: "Diamante" }, { id: "triangular", nome: "Triangular" }],
   orelha: [{ id: "normal", nome: "Normal" }, { id: "pequena", nome: "Pequena" }, { id: "grande", nome: "Grande" }, { id: "redonda", nome: "Redonda" },
-    { id: "pontuda", nome: "Pontuda (elfo)", trava: { n: 3 } }],
+    { id: "pontuda", nome: "Pontuda (elfo)", trava: { n: 3 } }, { id: "abano", nome: "De abano" }, { id: "alongada", nome: "Alongada" }, { id: "lobulo", nome: "Lóbulo grande" }],
   nariz: [{ id: "botao", nome: "Botão" }, { id: "redondo", nome: "Redondo" }, { id: "pontudo", nome: "Pontudo" }, { id: "largo", nome: "Largo" },
     { id: "arrebitado", nome: "Arrebitado" }, { id: "linha", nome: "Traço" }, { id: "pontinhos", nome: "Pontinhos" }],
   bochecha: [{ id: "nada", nome: "Nada" }, { id: "rosada", nome: "Rosada" }, { id: "corada", nome: "Bem corada" }, { id: "pessego", nome: "Pêssego" },
@@ -35,7 +43,10 @@ export const CATALOGO = {
     { id: "puffs", nome: "Puffs" }, { id: "rabo", nome: "Rabo de cavalo" }, { id: "coque", nome: "Coque" }, { id: "meio-coque", nome: "Meio preso" },
     { id: "maria", nome: "Maria-chiquinha" }, { id: "mullet", nome: "Mullet" }, { id: "nago", nome: "Nagô" }, { id: "raspado", nome: "Raspado" },
     { id: "lateral", nome: "Lado raspado" }, { id: "careca", nome: "Careca" }, { id: "espetado", nome: "Espetado", trava: { n: 2 } },
-    { id: "moicano", nome: "Moicano", trava: { n: 3 } }, { id: "trancas", nome: "Tranças", trava: { n: 5 } }, { id: "dread", nome: "Dreads", trava: { n: 6 } }],
+    { id: "moicano", nome: "Moicano", trava: { n: 3 } }, { id: "trancas", nome: "Tranças", trava: { n: 5 } }, { id: "dread", nome: "Dreads", trava: { n: 6 } },
+    { id: "curto-franja", nome: "Curto com franja" }, { id: "curto-ondulado", nome: "Curto ondulado" }, { id: "cacheado-curto", nome: "Cacheado curto" },
+    { id: "bob-franja", nome: "Curtinho com franja" }, { id: "franja-lateral", nome: "Franja lateral" }, { id: "ondulado-medio", nome: "Ondulado médio" },
+    { id: "cachos-medios", nome: "Cachos médios" }, { id: "ondas-longas", nome: "Ondas longas" }],
   sobrancelha: [{ id: "normal", nome: "Normal" }, { id: "fina", nome: "Fina" }, { id: "grossa", nome: "Grossas" }, { id: "arqueada", nome: "Arqueadas" },
     { id: "reta", nome: "Retas" }, { id: "brava", nome: "Determinada" }, { id: "preocupada", nome: "Preocupada" }, { id: "nenhuma", nome: "Sem" }],
   barba: [{ id: "nenhuma", nome: "Nenhuma" }, { id: "porfazer", nome: "Por fazer" }, { id: "bigode", nome: "Bigode" }, { id: "bigode-fino", nome: "Bigode fino" },
@@ -51,7 +62,7 @@ export const CATALOGO = {
     { id: "roxa", nome: "Sombra roxa" }, { id: "esfumada", nome: "Esfumada" }, { id: "glitter", nome: "Glitter", trava: { n: 4 } }],
   boca: [{ id: "sorriso", nome: "Sorriso" }, { id: "grande", nome: "Sorrisão" }, { id: "risada", nome: "Risada" }, { id: "labios", nome: "Lábios cheios" },
     { id: "neutra", nome: "Tranquila" }, { id: "lado", nome: "Sorriso de lado" }, { id: "timido", nome: "Tímido" }, { id: "o", nome: "Uau" },
-    { id: "beijo", nome: "Beijinho" }, { id: "dentes", nome: "Dentuço" }, { id: "lingua", nome: "Língua", trava: { n: 4 } }],
+    { id: "beijo", nome: "Beijinho" }, { id: "dentes", nome: "Dentuço" }, { id: "lingua", nome: "Língua de fora" }],
   roupa: [{ id: "camiseta", nome: "Camiseta" }, { id: "decote", nome: "Gola V" }, { id: "regata", nome: "Regata" }, { id: "gola", nome: "Camisa polo" },
     { id: "social", nome: "Camisa e gravata" }, { id: "golaalta", nome: "Gola alta" }, { id: "moletom", nome: "Moletom" }, { id: "sueter", nome: "Suéter" },
     { id: "jaqueta", nome: "Jaqueta" }, { id: "listrada", nome: "Listrada" }, { id: "jardineira", nome: "Jardineira" }, { id: "quimono", nome: "Quimono" },
@@ -94,13 +105,13 @@ export const NOMES_PARTES = { estampa: "Estampa", corpo: "Corpo", rosto: "Format
   cabelo: "Cabelo", sobrancelha: "Sobrancelhas", barba: "Barba e bigode", olhos: "Olhos", cilios: "Cílios", maquiagem: "Maquiagem", boca: "Boca",
   roupa: "Roupa", pescoco: "Pescoço", oculos: "Óculos", brinco: "Brincos", acessorio: "Cabeça", fundo: "Fundo", adesivo: "Adesivo", moldura: "Moldura" };
 export const CORES = { pele: PELES, corCabelo: CORES_CABELO, corOlhos: CORES_OLHOS, corLabios: CORES_LABIOS, corRoupa: CORES_ROUPA,
-  corAcessorio: CORES_ACESSORIO, corOculos: CORES_OCULOS, corJoia: CORES_JOIA };
+  corAcessorio: CORES_ACESSORIO, corOculos: CORES_OCULOS, corJoia: CORES_JOIA, corSobrancelha: CORES_PELOS, corBarba: CORES_PELOS };
 // ---------- o que é de cada sexo ----------
 // m = só masculino, f = só feminino; o resto serve aos dois. Assim o personagem masculino de cabelo comprido
 // continua com cara de homem (sem cílios, maquiagem, batom, laço...) e o feminino não ganha barba.
 const SO = {
   cabelo: { curto: "m", social: "m", topete: "m", raspado: "m", careca: "m", espetado: "m", moicano: "m", mullet: "m", lateral: "m", afrocurto: "m",
-    pixie: "f", chanel: "f", franja: "f", puffs: "f", maria: "f" },
+    pixie: "f", chanel: "f", franja: "f", puffs: "f", maria: "f", "bob-franja": "f", "franja-lateral": "f" },
   barba: { porfazer: "m", bigode: "m", "bigode-fino": "m", cavanhaque: "m", costeleta: "m", curta: "m", cheia: "m", longa: "m" },
   sobrancelha: { grossa: "m", fina: "f", arqueada: "f" },
   olhos: { grandes: "f", coracao: "f" },
@@ -123,17 +134,19 @@ export const permitido = (item, corpo) => !item?.so || item.so === sexo(corpo);
 export const PARTES_OCULTAS = { m: ["cilios", "maquiagem"], f: ["barba"] };
 
 export const AVATAR_PADRAO = { estampa: "nenhuma", corpo: "masculino", pele: 1, rosto: "redondo", orelha: "normal", nariz: "botao", bochecha: "rosada", detalhe: "nenhum",
-  cabelo: "curto", corCabelo: 1, sobrancelha: "normal", barba: "nenhuma", olhos: "normal", corOlhos: 0, cilios: "nenhum", maquiagem: "nenhuma",
+  cabelo: "curto", corCabelo: 1, corSobrancelha: 0, corBarba: 0, sobrancelha: "normal", barba: "nenhuma", olhos: "normal", corOlhos: 0, cilios: "nenhum", maquiagem: "nenhuma",
   boca: "sorriso", corLabios: 0, roupa: "camiseta", corRoupa: 0, pescoco: "nenhum", oculos: "nenhum", corOculos: 0, brinco: "nenhum", corJoia: 0,
   acessorio: "nenhum", corAcessorio: 0, fundo: "azul", adesivo: "nenhum", moldura: "nenhuma" };
 
 import { temMedalha, pontosConquistas, nomeMedalha } from "./conquistas.js";
-import { itemCustom, imagemItem, CATEGORIAS_ITEM, registrarItensCustom } from "./itens-custom.js";
+import { itemCustom, imagemItem, CATEGORIAS_ITEM, registrarItensCustom, skinCustom } from "./itens-custom.js";
 // itens criados pela equipe (itensCustom) entram no catálogo; chame depois de ler do Firestore
+// (as "skins prontas" do admin, categoria "skin", ficam numa lista à parte: skinsProntas() em itens-custom.js)
 export const usarItensCustom = lista => registrarItensCustom(lista, CATALOGO);
-// item liberado? ganhas = conquistas ganhas [{ id, t }] (a trava por medalha usa o id da conquista)
+// item liberado? ganhas = conquistas ganhas [{ id, t }] (a trava por medalha usa o id da conquista); ganhas = TUDO libera tudo (painel do admin)
+export const TUDO = Symbol("tudo");
 export function liberado(item, ganhas) {
-  if (!item?.trava) return true;
+  if (!item?.trava || ganhas === TUDO) return true;
   if (item.trava.n) return pontosConquistas(ganhas) >= item.trava.n;
   return temMedalha(ganhas, item.trava.medalha, item.trava.nivel || 1);
 }
@@ -157,8 +170,12 @@ const padraoDo = corpo => ({ ...AVATAR_PADRAO, bochecha: "nada", ...PADRAO_SEXO[
 // troca o que estiver travado (ou que não serve para o sexo) pelo padrão
 export function avatarValido(a, ganhas) {
   const v = migrar(a || {}), pad = padraoDo(v.corpo);
-  for (const parte of Object.keys(CATALOGO)) { const it = CATALOGO[parte].find(x => x.id === v[parte]); if (!it || !liberado(it, ganhas) || !permitido(it, v.corpo)) v[parte] = pad[parte]; }
+  // skin pronta do admin aplicada (e liberada para este aluno): as peças que ainda são as da skin valem mesmo travadas
+  const sk = skinCustom(v.skin), daSkin = sk && liberado(sk, ganhas) ? parte => sk.avatar?.[parte] === v[parte] : () => false;
+  if (!sk) delete v.skin;
+  for (const parte of Object.keys(CATALOGO)) { const it = CATALOGO[parte].find(x => x.id === v[parte]); if (!it || (!liberado(it, ganhas) && !daSkin(parte)) || !permitido(it, v.corpo)) v[parte] = pad[parte]; }
   for (const [k, lista] of Object.entries(CORES)) v[k] = Math.max(0, Math.min(lista.length - 1, Math.round(Number(v[k]) || 0)));
+  for (const k of Object.values(CORES_LIVRES)) { if (hexValido(v[k])) v[k] = hexValido(v[k]); else delete v[k]; }
   if (v.corpo === "masculino") v.corLabios = 0;   // sem batom no masculino
   v.ajustes = ajustesValidos(v.ajustes);
   if (!POSICOES_ADESIVO[v.adesivoPos]) v.adesivoPos = "inf-dir";
@@ -166,9 +183,11 @@ export function avatarValido(a, ganhas) {
 }
 // ajustes finos (deslizantes de -3 a +3, 0 = padrão): mexem pouco, para não deformar o personagem
 export const AJUSTES = [
-  ["rostoLarg", "Largura do rosto"], ["rostoAlt", "Comprimento do rosto"], ["olhoTam", "Tamanho dos olhos"], ["olhoAbert", "Abertura dos olhos"],
+  ["rostoLarg", "Largura do rosto"], ["rostoAlt", "Comprimento do rosto"], ["queixoLarg", "Largura do queixo"], ["orelhaTam", "Tamanho das orelhas"],
+  ["olhoTam", "Tamanho dos olhos"], ["olhoAbert", "Abertura dos olhos"],
   ["olhoDist", "Distância entre os olhos"], ["olhoAltura", "Altura dos olhos"], ["sobrAltura", "Altura das sobrancelhas"], ["sobrEsp", "Espessura das sobrancelhas"],
-  ["narizTam", "Tamanho do nariz"], ["bocaLarg", "Largura da boca"], ["bocaAltura", "Altura da boca"]
+  ["sobrTam", "Comprimento das sobrancelhas"], ["narizTam", "Tamanho do nariz"], ["narizAltura", "Altura do nariz"],
+  ["bocaLarg", "Largura da boca"], ["bocaTam", "Tamanho da boca"], ["bocaAltura", "Altura da boca"], ["pescocoLarg", "Largura do pescoço"]
 ];
 export const POSICOES_ADESIVO = { "inf-dir": [144, 144], "inf-esq": [56, 144], "sup-dir": [144, 56], "sup-esq": [56, 56] };
 const ajustesValidos = aj => Object.fromEntries(AJUSTES.map(([k]) => [k, Math.max(-3, Math.min(3, Math.round(Number(aj?.[k]) || 0)))]).filter(([, v]) => v));
@@ -178,14 +197,14 @@ export const trocarSexo = (av, corpo, ganhas) => avatarValido({ ...padraoDo(corp
 // o Aleatório só usa peças "sérias" e cores naturais (nada de coração no olho, língua de fora, cabelo rosa...)
 const BRINCADEIRA = {
   olhos: ["coracao", "estrela", "piscando", "surpresa", "sono", "lado", "bolinha"], boca: ["lingua", "dentes", "beijo", "o", "risada"],
-  sobrancelha: ["preocupada", "brava", "nenhuma"], nariz: ["pontinhos", "linha"], orelha: ["pontuda", "grande"],
+  sobrancelha: ["preocupada", "brava", "nenhuma"], nariz: ["pontinhos", "linha"], orelha: ["pontuda", "grande", "abano"],
   detalhe: ["pintura", "brilho", "curativo", "cicatriz", "piercing"], cabelo: ["moicano", "espetado", "puffs", "maria", "careca"],
   oculos: ["coracoes", "monoculo", "escuros", "nerd"], roupa: ["astronauta", "capa", "quimono", "time", "jaleco", "terno"],
   acessorio: ["mago", "gatinho", "coroa", "aureola", "faixa", "headset", "fone", "chapeu", "boina", "bandana", "gorro", "bone"],
   pescoco: ["medalha", "cracha", "cachecol", "choker"], maquiagem: ["glitter", "azul", "roxa"], brinco: ["estrela", "varios", "alargador"],
   cilios: ["volumosos", "delineado"], barba: ["longa", "costeleta"], bochecha: ["corada", "brilho"]
 };
-const NATURAIS = { corCabelo: [0, 1, 2, 3, 4, 5, 6], corOlhos: [0, 1, 2, 3, 4, 6], corLabios: [0, 0, 0, 1, 2, 5] };
+const NATURAIS = { corCabelo: [0, 1, 2, 3, 4, 5, 6], corOlhos: [0, 1, 2, 3, 4, 6], corLabios: [0, 0, 0, 1, 2, 5], corSobrancelha: [0], corBarba: [0] };
 // sorteia um personagem do MESMO sexo de base.corpo (ou sorteia o sexo, se não vier), só com o que está liberado
 export function avatarAleatorio(ganhas, base = {}) {
   const sorte = l => l[Math.floor(Math.random() * l.length)], chance = p => Math.random() < p;
@@ -197,8 +216,8 @@ export function avatarAleatorio(ganhas, base = {}) {
     v[parte] = (ops.length ? sorte(ops) : CATALOGO[parte][0]).id;
   }
   for (const [k, lista] of Object.entries(CORES)) v[k] = NATURAIS[k] ? sorte(NATURAIS[k]) : Math.floor(Math.random() * lista.length);
-  if (m && !["curto", "social", "topete", "afrocurto", "raspado", "lateral", "mullet", "longo", "black", "cacheado", "rabo"].includes(v.cabelo) || m && chance(.7))
-    v.cabelo = sorte(["curto", "social", "topete", "afrocurto", "raspado", "lateral"].filter(c => liberado(CATALOGO.cabelo.find(i => i.id === c), ganhas)));
+  if (m && !["curto", "social", "topete", "afrocurto", "raspado", "lateral", "mullet", "longo", "black", "cacheado", "rabo", "curto-franja", "curto-ondulado", "cacheado-curto"].includes(v.cabelo) || m && chance(.7))
+    v.cabelo = sorte(["curto", "social", "topete", "afrocurto", "raspado", "lateral", "curto-franja", "curto-ondulado", "cacheado-curto"].filter(c => liberado(CATALOGO.cabelo.find(i => i.id === c), ganhas)));
   if (m && chance(.65)) v.olhos = sorte(["estreito", "pesado", "amendoado", "normal"]);
   v.ajustes = Object.fromEntries(AJUSTES.map(([k]) => [k, chance(.5) ? sorte([-1, 0, 1]) : 0]));
   v.barba = m && chance(.45) ? v.barba : "nenhuma";
@@ -223,13 +242,15 @@ const espelho = s => `${s}<g transform="matrix(-1 0 0 1 200 0)">${s}</g>`;
 
 // formatos do rosto (centro x=100, olhos em y=98) e meia largura na altura das orelhas
 // w = meia largura (altura das orelhas), top/chin = alto da cabeça e queixo, jaw = largura do queixo (o masculino é mais quadrado)
+// baixo = onde a lateral começa a fechar para o queixo (0..1); com "baixo" o formato não muda com o corpo (redondo: .56 = curva de círculo)
 const ROSTOS = {
-  redondo: { w: 53, top: 42, chin: 150, jaw: .62 }, oval: { w: 50, top: 40, chin: 152, jaw: .52 }, quadrado: { w: 52, top: 40, chin: 150, jaw: .8 },
-  coracao: { w: 52, top: 40, chin: 153, jaw: .38 }, longo: { w: 47, top: 36, chin: 158, jaw: .55 }, diamante: { w: 50, top: 42, chin: 152, jaw: .42, testa: .45 }
+  redondo: { w: 53, top: 42, chin: 150, jaw: .56, baixo: .56 }, oval: { w: 50, top: 40, chin: 152, jaw: .52 }, quadrado: { w: 52, top: 40, chin: 150, jaw: .8 },
+  coracao: { w: 52, top: 40, chin: 153, jaw: .38 }, longo: { w: 47, top: 36, chin: 158, jaw: .55 }, diamante: { w: 50, top: 42, chin: 152, jaw: .42, testa: .45 },
+  triangular: { w: 51, top: 43, chin: 151, jaw: .9, baixo: .7, testa: .3 }   // testa estreita e queixo largo
 };
 const OUT = "#2a1a14";   // contorno escuro, igual ao dos mascotes
 function caminhoRosto(r, fem) {
-  const w = r.w, cy = 98, jaw = Math.min(.9, r.jaw + (fem ? -.08 : .16)), baixo = fem ? .62 : .82, tw = r.testa || .6, chin = r.chin + (fem ? 0 : 2);
+  const w = r.w, cy = 98, jaw = Math.max(.3, Math.min(.92, (r.baixo ? r.jaw : Math.min(.9, r.jaw + (fem ? -.08 : .16))) + (r.queixo || 0))), baixo = r.baixo || (fem ? .62 : .82), tw = r.testa || .6, chin = r.chin + (fem ? 0 : 2);
   const f = n => +n.toFixed(1);
   return `M${100 - w} ${cy} C${100 - w} ${r.top + 14} ${f(100 - w * tw)} ${r.top} 100 ${r.top} C${f(100 + w * tw)} ${r.top} ${100 + w} ${r.top + 14} ${100 + w} ${cy} ` +
     `C${100 + w} ${f(cy + (chin - cy) * baixo)} ${f(100 + w * jaw)} ${chin} 100 ${chin} C${f(100 - w * jaw)} ${chin} ${100 - w} ${f(cy + (chin - cy) * baixo)} ${100 - w} ${cy}Z`;
@@ -246,14 +267,17 @@ let seq = 0;
 // opcoes.parte: usado nas miniaturas do editor (aproxima a parte do rosto que está sendo escolhida)
 export function svgAvatar(av, tam = 200, opcoes = {}) {
   const a = migrar(av || {}), id = "av" + (++seq);
-  const pele = pega(PELES, a.pele, 1), cab = pega(CORES_CABELO, a.corCabelo, 1), roupa = pega(CORES_ROUPA, a.corRoupa), olho = pega(CORES_OLHOS, a.corOlhos);
+  // cabelo, sobrancelha e barba: cor livre (#rrggbb) > cor da lista; sobrancelha e barba com 0 = igual ao cabelo
+  const pelos = (k, lista) => hexValido(a[CORES_LIVRES[k]]) || lista[Number(a[k])] || null;
+  const pele = pega(PELES, a.pele, 1), cab = pelos("corCabelo", CORES_CABELO) || CORES_CABELO[1], corSobrBase = pelos("corSobrancelha", CORES_PELOS) || cab, cBar = pelos("corBarba", CORES_PELOS) || cab, roupa = pega(CORES_ROUPA, a.corRoupa), olho = pega(CORES_OLHOS, a.corOlhos);
   const ac = pega(CORES_ACESSORIO, a.corAcessorio), joia = pega(CORES_JOIA, a.corJoia), arm = pega(CORES_OCULOS, a.corOculos);
   const lab = CORES_LABIOS[Number(a.corLabios)] || labioNatural(pele), labS = escuro(lab, .35);
   const fem = a.corpo === "feminino";
   const peleS = escuro(pele, .16), linha = OUT, cabS = OUT, cabL = claro(cab, .38);
   const fundo = CATALOGO.fundo.find(f => f.id === a.fundo) || CATALOGO.fundo[0], mold = CATALOGO.moldura.find(m => m.id === a.moldura);
   const AJ = k => Math.max(-3, Math.min(3, Math.round(Number(a.ajustes?.[k]) || 0)));
-  const formato0 = ROSTOS[a.rosto] || ROSTOS.redondo, formato = { ...formato0, w: formato0.w + AJ("rostoLarg") * 1.3, chin: formato0.chin + AJ("rostoAlt") * 2.6 }, rostoD = caminhoRosto(formato, fem), hw = formato.w, { S, N, topo } = CORPOS[a.corpo] || CORPOS.masculino;
+  const formato0 = ROSTOS[a.rosto] || ROSTOS.redondo, formato = { ...formato0, w: formato0.w + AJ("rostoLarg") * 1.3, chin: formato0.chin + AJ("rostoAlt") * 2.6, queixo: AJ("queixoLarg") * .045 }, rostoD = caminhoRosto(formato, fem), hw = formato.w;
+  const { S, topo } = CORPOS[a.corpo] || CORPOS.masculino, N = (CORPOS[a.corpo] || CORPOS.masculino).N + AJ("pescocoLarg") * 1.1;
   const ex = 100 - hw - 1; // x da orelha esquerda
 
   // ----- traços reutilizados -----
@@ -327,9 +351,40 @@ export function svgAvatar(av, tam = 200, opcoes = {}) {
       O: espelho(`<g>${[0, 1, 2, 3, 4, 5, 6].map(i => `<ellipse cx="${52 - i * .4}" cy="${104 + i * 12}" rx="8" ry="7.5" fill="url(#${id}hc)" stroke="${cabS}" stroke-width="1.3"/>`).join("")}<rect x="45" y="184" width="12" height="6" rx="3" fill="${ac}"/></g>`) },
     dread: { B: H("M48 96 C44 50 66 28 100 28 C134 28 156 50 152 96 L150 126 Q100 140 50 126Z"),
       F: H("M48 92 C44 52 68 30 100 30 C132 30 156 52 152 92 C148 74 132 62 100 60 C68 62 52 74 48 92Z") + [70, 86, 100, 114, 130].map(x => `<path d="M${x} 36 L${x + (x - 100) * .3} 60" stroke="${cabS}" stroke-width="1.3" opacity=".6"/>`).join(""),
-      O: espelho(`<path d="M50 96 L46 182" stroke="${cabS}" stroke-width="10" stroke-linecap="round"/><path d="M50 96 L46 182" stroke="${cab}" stroke-width="7.5" stroke-linecap="round" stroke-dasharray="5 1.5"/>`) }
+      O: espelho(`<path d="M50 96 L46 182" stroke="${cabS}" stroke-width="10" stroke-linecap="round"/><path d="M50 96 L46 182" stroke="${cab}" stroke-width="7.5" stroke-linecap="round" stroke-dasharray="5 1.5"/>`) },
+    // ----- cabelos novos (servem aos dois corpos, menos os marcados em SO) -----
+    "curto-franja": { F: H("M46 98 C41 52 66 28 100 28 C134 28 159 52 154 98 C152 88 150 80 147 74 Q143 80 138 72 Q132 80 125 71 Q118 79 111 70 Q104 78 97 69 Q90 78 83 70 Q76 79 69 71 Q62 80 56 73 C52 80 48 88 46 98Z") +
+      Hb("M68 44 Q86 34 104 36") + Hb("M118 38 Q134 44 142 56") + Hb("M84 58 L82 68 M112 58 L114 68") },
+    "curto-ondulado": { F: H("M46 98 C40 88 44 76 43 66 C41 50 54 36 66 36 C72 26 88 23 99 28 C110 21 128 24 135 34 C148 35 159 50 157 64 C158 76 161 88 154 98 C152 88 149 80 143 72 C136 76 128 68 120 70 C112 64 104 72 96 68 C88 72 80 66 72 72 C64 70 58 74 55 80 C51 86 48 92 46 98Z") +
+      Hb("M58 52 Q64 44 72 46 Q80 40 88 42") + Hb("M108 38 Q118 34 126 40 Q134 40 140 48") + Hb("M70 60 Q78 54 86 58") + Hb("M114 56 Q122 52 130 58") },
+    "cacheado-curto": { B: bolas(curvaCachos(100, 78, 52, 12, 14).concat([[46, 98, 12], [154, 98, 12]])),
+      F: bolas([[52, 84, 10], [58, 70, 11], [70, 58, 11], [85, 51, 11], [100, 49, 11], [115, 51, 11], [130, 58, 11], [142, 70, 11], [148, 84, 10]]) +
+        [[70, 52], [100, 43], [130, 52], [85, 45], [115, 45]].map(([x, y]) => Hb(`M${x - 3} ${y} q3 -4 6 0`)).join("") },
+    "bob-franja": { B: H("M44 96 C40 50 66 26 100 26 C134 26 160 50 156 96 L158 124 Q148 130 138 126 L62 126 Q52 130 42 124Z"),
+      F: H("M46 100 C42 52 66 28 100 28 C134 28 158 52 154 100 L157 124 Q150 130 142 125 C146 108 147 90 145 76 Q100 70 55 76 C53 90 54 108 58 125 Q50 130 43 124Z") +
+        Hb("M66 44 Q86 34 112 36") + Hb("M80 62 L79 73 M96 60 L96 72 M112 60 L113 72 M128 62 L129 73") + Hb("M148 84 Q151 100 150 116") },
+    "franja-lateral": { B: H("M44 96 C40 50 66 26 100 26 C134 26 160 50 156 96 L158 140 Q146 148 134 142 L66 142 Q54 148 42 140Z"),
+      F: H("M46 100 C42 52 66 28 100 28 C134 28 158 52 154 100 L157 140 Q150 146 141 141 C146 116 147 90 143 70 C130 62 112 62 96 70 C84 76 72 86 64 98 C58 106 56 114 57 122 C57 130 57 136 59 141 Q50 146 43 140Z") +
+        Hb("M124 38 Q94 42 74 70") + Hb("M140 56 Q112 56 88 78") + Hb("M146 84 Q150 108 148 132") },
+    "ondulado-medio": { B: H("M44 96 C40 50 66 26 100 26 C134 26 160 50 156 96 C164 108 156 120 162 132 C166 144 158 154 148 154 L52 154 C42 154 34 144 38 132 C44 120 36 108 44 96Z"),
+      F: H("M46 100 C42 52 66 28 100 28 C134 28 158 52 154 100 C160 112 152 124 158 136 C161 146 154 153 145 152 C149 140 142 128 147 114 C150 98 146 82 136 68 C120 60 100 56 84 50 C76 62 62 66 58 78 C54 92 57 104 54 114 C50 126 58 140 55 152 C46 153 39 146 42 136 C48 124 40 112 46 100Z") +
+        Hb("M64 46 Q86 32 116 34") + Hb("M150 104 Q155 116 151 128") + Hb("M50 108 Q45 120 49 132") },
+    "cachos-medios": { B: H(`${capa} L158 140 Q100 150 42 140Z`) + bolas([[42, 100], [40, 120], [44, 140], [158, 100], [160, 120], [156, 140], [64, 148], [84, 152], [116, 152], [136, 148]], 13),
+      F: bolas([[54, 78, 12], [62, 62, 12], [76, 50, 12], [92, 44, 12], [108, 44, 12], [124, 50, 12], [138, 62, 12], [146, 78, 12]]) +
+        [[62, 56], [92, 38], [124, 44]].map(([x, y]) => Hb(`M${x - 3} ${y} q3 -4 6 0`)).join(""),
+      O: espelho(bolas([[50, 108], [48, 126], [52, 144]], 11)) },
+    "ondas-longas": { B: H("M46 96 C40 50 66 26 100 26 C134 26 160 50 154 96 C168 110 152 126 164 142 C174 158 156 172 162 186 L38 186 C44 172 26 158 36 142 C48 126 32 110 46 96Z"),
+      F: H(repartido) + Hb("M64 50 Q80 36 98 34") + Hb("M106 34 Q126 38 140 54"),
+      O: espelho(`<path d="M47 94 C38 110 54 124 44 142 C36 158 52 170 46 186 Q56 192 63 184 C66 170 52 158 60 142 C68 126 54 110 58 100Z" fill="url(#${id}hc)" stroke="${cabS}" stroke-width="2.4"/>`) + espelho(Hb("M50 112 Q54 124 49 138 Q45 152 51 166")) }
   };
-  const cabelo = C[a.cabelo] || {};
+  // "cabelo solto na raiz": os cabelos lisos/ondulados ganham volume no alto (não ficam colados no contorno da cabeça).
+  // Fica de fora o que já é volumoso (cachos, crespo) ou rente (raspado, careca...) e quando há chapéu/boné por cima.
+  const SEM_VOLUME = ["raspado", "careca", "moicano", "espetado", "nago", "afrocurto", "black", "cacheado", "cachos-longos", "cacheado-curto", "cachos-medios", "dread", "topete"];
+  const PRESO_ATRAS = ["coque", "meio-coque", "rabo", "puffs", "maria"];   // o coque/rabo de trás fica no lugar (não sobe para fora do círculo)
+  const COBRE_CABECA = ["bandana", "gorro", "boina", "chapeu", "bone", "mago"];
+  const volume = !SEM_VOLUME.includes(a.cabelo) && !COBRE_CABECA.includes(a.acessorio) && !itemCustom(a.acessorio);
+  const comVolume = s => s && volume ? `<g transform="translate(100 100) scale(1.035 1.075) translate(-100 -100)">${s}</g>` : s;
+  const cabelo0 = C[a.cabelo] || {}, cabelo = { ...cabelo0, B: PRESO_ATRAS.includes(a.cabelo) ? cabelo0.B : comVolume(cabelo0.B), F: comVolume(cabelo0.F) };
 
   // ----- orelhas e brincos -----
   const orelha = {
@@ -337,10 +392,16 @@ export function svgAvatar(av, tam = 200, opcoes = {}) {
     pequena: `<path d="M${ex + 6} 92 C${ex - 3} 89 ${ex - 8} 96 ${ex - 6} 103 C${ex - 5} 108 ${ex - 1} 111 ${ex + 6} 110Z"/>`,
     grande: `<path d="M${ex + 6} 84 C${ex - 9} 78 ${ex - 17} 92 ${ex - 13} 106 C${ex - 10} 116 ${ex - 3} 120 ${ex + 6} 117Z"/>`,
     redonda: `<path d="M${ex + 6} 88 C${ex - 10} 84 ${ex - 13} 112 ${ex + 6} 113Z"/>`,
-    pontuda: `<path d="M${ex + 6} 90 L${ex - 16} 72 C${ex - 14} 88 ${ex - 10} 100 ${ex - 8} 106 C${ex - 6} 112 ${ex - 1} 116 ${ex + 6} 114Z"/>`
+    pontuda: `<path d="M${ex + 6} 90 L${ex - 16} 72 C${ex - 14} 88 ${ex - 10} 100 ${ex - 8} 106 C${ex - 6} 112 ${ex - 1} 116 ${ex + 6} 114Z"/>`,
+    abano: `<path d="M${ex + 6} 87 C${ex - 10} 76 ${ex - 21} 90 ${ex - 17} 104 C${ex - 14} 114 ${ex - 4} 118 ${ex + 6} 115Z"/>`,
+    alongada: `<path d="M${ex + 6} 82 C${ex - 6} 76 ${ex - 12} 90 ${ex - 10} 104 C${ex - 9} 116 ${ex - 3} 122 ${ex + 6} 119Z"/>`,
+    lobulo: `<path d="M${ex + 6} 88 C${ex - 6} 84 ${ex - 12} 94 ${ex - 10} 104 C${ex - 11} 113 ${ex - 9} 122 ${ex - 2} 122 C${ex + 3} 122 ${ex + 6} 119 ${ex + 6} 114Z"/>`
   }[a.orelha] || "";
-  const orelhas = espelho(`<g fill="${pele}" stroke="${linha}" stroke-width="2.4" stroke-linejoin="round">${orelha}</g><path d="M${ex + 2} 96 C${ex - 4} 96 ${ex - 5} 104 ${ex} 107" fill="none" stroke="${peleS}" stroke-width="2.2" stroke-linecap="round"/>`);
-  const ly = { grande: 116, pequena: 109 }[a.orelha] || 112, lx = ex - 3; // lóbulo
+  // ajuste "Tamanho das orelhas": cresce a partir de onde a orelha encosta no rosto (o brinco acompanha o lóbulo)
+  const oS = 1 + AJ("orelhaTam") * .07, oEsc = s => oS === 1 ? s : `<g transform="translate(${ex + 6} 100) scale(${oS}) translate(${-(ex + 6)} -100)">${s}</g>`;
+  const orelhas = espelho(oEsc(`<g fill="${pele}" stroke="${linha}" stroke-width="2.4" stroke-linejoin="round">${orelha}</g><path d="M${ex + 2} 96 C${ex - 4} 96 ${ex - 5} 104 ${ex} 107" fill="none" stroke="${peleS}" stroke-width="2.2" stroke-linecap="round"/>`));
+  const ly0 = { grande: 116, pequena: 109, abano: 114, alongada: 117, lobulo: 119 }[a.orelha] || 112, lx0 = ex - ({ abano: 7, lobulo: 4 }[a.orelha] || 3); // lóbulo
+  const lx = +(ex + 6 + (lx0 - ex - 6) * oS).toFixed(1), ly = +(100 + (ly0 - 100) * oS).toFixed(1);
   const brinco = {
     ponto: `<circle cx="${lx}" cy="${ly}" r="2.4" fill="${joia}" stroke="${escuro(joia)}" stroke-width=".8"/>`,
     perola: `<circle cx="${lx}" cy="${ly + 1}" r="3.3" fill="#f8fafc" stroke="#cbd5e1"/><circle cx="${lx - 1}" cy="${ly}" r="1" fill="#fff"/>`,
@@ -439,20 +500,23 @@ export function svgAvatar(av, tam = 200, opcoes = {}) {
       : `<path d="M${x - eRx - 1} ${y - 1} Q${x} ${y - eRy - 2.6} ${x + eRx + 1} ${y - 1.6}" fill="none" stroke="${OUT}" stroke-width="3.8" stroke-linecap="round"/>`);
   const palpebra = (x, y, w = 8, h = 8, larg = 3) => `<path d="M${x - w} ${y} Q${x} ${y - h} ${x + w} ${y}" fill="none" stroke="${OUT}" stroke-width="${larg}" stroke-linecap="round"/>`;
   const branco = d => `<path d="${d}" fill="#fff" stroke="${OUT}" stroke-width="1.8"/>`;
+  // branco + íris recortada pelo formato do olho (nos olhos estreitos a íris/pupila não sai para fora); contorno por cima
+  let nOlho = 0;
+  const brancoCom = (d, dentro) => { const c = `${id}o${++nOlho}`; return `<clipPath id="${c}"><path d="${d}"/></clipPath><path d="${d}" fill="#fff"/><g clip-path="url(#${c})">${dentro}</g><path d="${d}" fill="none" stroke="${OUT}" stroke-width="1.8"/>`; };
   const amendoa = (x, y, w = 8.8) => `M${x - w} ${y} Q${x} ${y - (fem ? 9 : 7)} ${x + w} ${y - 1} Q${x} ${y + 6.5} ${x - w} ${y}Z`;
   const arco = (x, y, up = true) => `<path d="M${x - 8} ${y + (up ? 2 : -2)} Q${x} ${y + (up ? -8 : 6)} ${x + 8} ${y + (up ? 2 : -2)}" fill="none" stroke="${OUT}" stroke-width="3.4" stroke-linecap="round"/>`;
   const OLHO = {
     normal: [(x, y, lado) => branco(oval(x, y)) + iris(x, y, iR) + palp(x, y, lado), fem ? 9 : 6],
-    amendoado: [(x, y, lado) => branco(amendoa(x, y)) + iris(x, y - .5, iR - .4) + `<path d="M${x - 8.8} ${y} Q${x} ${y - (fem ? 9 : 7)} ${x + 8.8} ${y - 1}" fill="none" stroke="${OUT}" stroke-width="3.2" stroke-linecap="round"/>` +
+    amendoado: [(x, y, lado) => brancoCom(amendoa(x, y), iris(x, y - 1.2, iR - .8)) + `<path d="M${x - 8.8} ${y} Q${x} ${y - (fem ? 9 : 7)} ${x + 8.8} ${y - 1}" fill="none" stroke="${OUT}" stroke-width="3.2" stroke-linecap="round"/>` +
       (fem ? `<path d="M${x + lado * 7.8} ${y - 2} l${lado * 3.6} -3" stroke="${OUT}" stroke-width="2.4" stroke-linecap="round"/>` : ""), 5],
     grandes: [(x, y, lado) => branco(`M${x} ${y - 11} A9.5 11 0 1 1 ${x - .1} ${y - 11}Z`) + iris(x, y + 1, 6.6) + palpebra(x, y - 4.5, 9.5, 8, 3.4) +
       `<path d="M${x + lado * 8.6} ${y - 5} l${lado * 3.8} -3.4" stroke="${OUT}" stroke-width="2.4" stroke-linecap="round"/>`, 10],
     bolinha: [(x, y) => `<circle cx="${x}" cy="${y}" r="5" fill="${escuro(olho, .45)}"/>${brilhoOlho(x - .3, y + .3, 1.7)}`, 5],
     feliz: [(x, y) => arco(x, y + 1), 4],
     sereno: [(x, y) => arco(x, y - 1, false), 2],
-    sono: [(x, y) => branco(`M${x - 8} ${y} A8 6 0 0 0 ${x + 8} ${y}Z`) + `<circle cx="${x}" cy="${y + 1.5}" r="3.6" fill="${olho}"/><path d="M${x - 9} ${y} L${x + 9} ${y}" stroke="${OUT}" stroke-width="2.4" stroke-linecap="round"/>`, 1],
+    sono: [(x, y) => brancoCom(`M${x - 8} ${y} A8 6 0 0 0 ${x + 8} ${y}Z`, `<circle cx="${x}" cy="${y + 1.5}" r="3.6" fill="${olho}"/>`) + `<path d="M${x - 9} ${y} L${x + 9} ${y}" stroke="${OUT}" stroke-width="2.4" stroke-linecap="round"/>`, 1],
     surpresa: [(x, y) => `<circle cx="${x}" cy="${y}" r="8.5" fill="#fff" stroke="${OUT}" stroke-width="1.8"/><circle cx="${x}" cy="${y}" r="3.2" fill="${olho}"/><circle cx="${x}" cy="${y}" r="1.5" fill="#111"/>`, 9],
-    estreito: [(x, y, lado) => branco(`M${x - 9.2} ${y} Q${x} ${y - 6.5} ${x + 9.2} ${y - 1} Q${x} ${y + 4.6} ${x - 9.2} ${y}Z`) + iris(x, y - .4, 4.4) +
+    estreito: [(x, y, lado) => brancoCom(`M${x - 9.2} ${y} Q${x} ${y - 6.5} ${x + 9.2} ${y - 1} Q${x} ${y + 4.6} ${x - 9.2} ${y}Z`, iris(x, y - 1.4, 3.8)) +
       `<path d="M${x - 9.6} ${y + .3} Q${x} ${y - 7} ${x + 9.6} ${y - 1.2}" fill="none" stroke="${OUT}" stroke-width="3.6" stroke-linecap="round"/>` +
       (fem ? `<path d="M${x + lado * 8.6} ${y - 1.5} l${lado * 3.4} -2.6" stroke="${OUT}" stroke-width="2.2" stroke-linecap="round"/>` : ""), 4],
     pesado: [(x, y, lado) => branco(oval(x, y)) + iris(x, y + .8, iR - .2) +
@@ -461,7 +525,7 @@ export function svgAvatar(av, tam = 200, opcoes = {}) {
       `<path d="M${x - eRx + 1} ${y - eRy * .45 - 4} Q${x} ${y - eRy * .45 - 7} ${x + eRx - 1} ${y - eRy * .45 - 4.4}" fill="none" stroke="${peleS}" stroke-width="1.6" stroke-linecap="round"/>`, 4],
     determinado: [(x, y, lado) => branco(oval(x, y)) + iris(x, y + .5, iR - .2) +
       `<path d="M${x - 9} ${y - (lado < 0 ? 6 : 1)} L${x + 9} ${y - (lado < 0 ? 1 : 6)} L${x + 9} ${y - 12} L${x - 9} ${y - 12}Z" fill="${pele}"/><path d="M${x - 9} ${y - (lado < 0 ? 6 : 1)} L${x + 9} ${y - (lado < 0 ? 1 : 6)}" stroke="${OUT}" stroke-width="2.4" stroke-linecap="round"/>`, 3],
-    lado: [(x, y, lado) => branco(oval(x, y)) + iris(x, y, iR - .3, 3) + palp(x, y, lado), fem ? 9 : 6],
+    lado: [(x, y, lado) => brancoCom(oval(x, y), iris(x, y, iR - .3, 3)) + palp(x, y, lado), fem ? 9 : 6],
     piscando: [(x, y, lado) => lado > 0 ? `<path d="M${x - 8} ${y} Q${x} ${y + 5} ${x + 8} ${y}" fill="none" stroke="${OUT}" stroke-width="3.2" stroke-linecap="round"/><path d="M${x + 8} ${y} l4 -3" stroke="${OUT}" stroke-width="2" stroke-linecap="round"/>`
       : branco(oval(x, y)) + iris(x, y, iR) + palp(x, y, lado), fem ? 9 : 6],
     coracao: [(x, y) => `<path d="M${x} ${y + 9} L${x - 9} ${y} Q${x - 10} ${y - 8} ${x - 4} ${y - 8} Q${x} ${y - 8} ${x} ${y - 3} Q${x} ${y - 8} ${x + 4} ${y - 8} Q${x + 10} ${y - 8} ${x + 9} ${y}Z" fill="#ef4444" stroke="#b91c1c" stroke-width="1"/><circle cx="${x - 4}" cy="${y - 4}" r="1.6" fill="#fff"/>`, 8],
@@ -477,7 +541,7 @@ export function svgAvatar(av, tam = 200, opcoes = {}) {
   }[a.cilios];
   const cilios = cilio && !["sereno", "feliz"].includes(a.olhos) ? espelho(cilio) : cilio ? espelho(`<path d="M72 98 l-4 -1 M73 100 l-4 1" stroke="${OUT}" stroke-width="1.4" stroke-linecap="round"/>`) : "";
 
-  const corSobr = escuro(cab, .12);
+  const corSobr = escuro(corSobrBase, .12), sobrS = 1 + AJ("sobrTam") * .07;
   const sobr = {
     normal: [3.5, "M70 86 Q80 80 90 84"], fina: [2, "M70 85 Q80 80 90 84"], grossa: [6.5, "M70 85 Q80 79 90 84"], arqueada: [3.5, "M70 88 Q78 76 90 84"],
     reta: [4.5, "M70 84 L90 84"], brava: [4.5, "M70 81 L90 87"], preocupada: [3.5, "M70 86 Q80 84 90 79"]
@@ -485,19 +549,19 @@ export function svgAvatar(av, tam = 200, opcoes = {}) {
   // masculino: mais grossa, mais baixa e mais reta (o arco cai pela metade) · contorno escuro como nos mascotes
   const sobrD = d => fem ? d : d.replace(/M70 (\d+) Q(\d+) (\d+) 90 (\d+)/, (_, a, qx, qy, b) => `M69 ${+a + 1.5} Q${qx} ${+(((+qy) + (+a + 1.5)) / 2 + 1).toFixed(1)} 91 ${+b + 1.5}`).replace(/M70 (\d+) L90 (\d+)/, (_, a, b) => `M69 ${+a + 1.5} L91 ${+b + 1.5}`);
   const sobrW = sobr ? Math.max(1.5, sobr[0] + (fem ? 0 : 2.4) + AJ("sobrEsp") * .8) : 0;
-  const sobrancelhas = sobr ? espelho(`<path d="${sobrD(sobr[1])}" fill="none" stroke="${OUT}" stroke-width="${sobrW + 2.4}" stroke-linecap="round" stroke-linejoin="round"/><path d="${sobrD(sobr[1])}" fill="none" stroke="${corSobr}" stroke-width="${sobrW}" stroke-linecap="round" stroke-linejoin="round"/>`) : "";
+  const sobrancelhas = sobr ? espelho(`<g transform="translate(80 84) scale(${sobrS} 1) translate(-80 -84)"><path d="${sobrD(sobr[1])}" fill="none" stroke="${OUT}" stroke-width="${sobrW + 2.4}" stroke-linecap="round" stroke-linejoin="round"/><path d="${sobrD(sobr[1])}" fill="none" stroke="${corSobr}" stroke-width="${sobrW}" stroke-linecap="round" stroke-linejoin="round"/></g>`) : "";
 
   const barbaArea = d => `<g clip-path="url(#${id}h)">${d}</g>`;
   const queixo = "M30 90 L50 90 C54 106 60 118 78 123 Q90 119 100 121 Q110 119 122 123 C140 118 146 106 150 90 L170 90 L170 175 L30 175Z";
-  const bigode = `<path d="M84 123 Q92 116 100 120 Q108 116 116 123 Q108 126 100 123 Q92 126 84 123Z" fill="${cab}" stroke="${cabS}" stroke-width="1"/>`;
+  const bigode = `<path d="M84 123 Q92 116 100 120 Q108 116 116 123 Q108 126 100 123 Q92 126 84 123Z" fill="${cBar}" stroke="${cabS}" stroke-width="1"/>`;
   const barba = {
-    porfazer: barbaArea(`<path d="${queixo}" fill="${cab}" opacity=".22"/>`),
-    bigode, "bigode-fino": `<path d="M88 122 Q100 117 112 122" fill="none" stroke="${cab}" stroke-width="2.4" stroke-linecap="round"/>`,
-    cavanhaque: bigode + `<path d="M91 136 Q100 152 109 136 Q100 140 91 136Z" fill="${cab}" stroke="${cabS}" stroke-width="1"/>`,
-    costeleta: barbaArea(`<path d="M44 80 L58 80 L58 116 Q52 112 44 104Z M156 80 L142 80 L142 116 Q148 112 156 104Z" fill="${cab}"/>`),
-    curta: barbaArea(`<path d="${queixo}" fill="${cab}" opacity=".6"/>`) + bigode,
-    cheia: barbaArea(`<path d="${queixo}" fill="url(#${id}hc)"/>`) + `<path d="${rostoD}" fill="none" stroke="${linha}" stroke-width="2.8"/>` + bigode,
-    longa: `<path d="M64 136 Q100 194 136 136Z" fill="url(#${id}hc)" stroke="${cabS}" stroke-width="1.4"/>` + barbaArea(`<path d="${queixo}" fill="url(#${id}hc)"/>`) + Hb("M92 150 Q96 166 100 176") + bigode
+    porfazer: barbaArea(`<path d="${queixo}" fill="${cBar}" opacity=".22"/>`),
+    bigode, "bigode-fino": `<path d="M88 122 Q100 117 112 122" fill="none" stroke="${cBar}" stroke-width="2.4" stroke-linecap="round"/>`,
+    cavanhaque: bigode + `<path d="M91 136 Q100 152 109 136 Q100 140 91 136Z" fill="${cBar}" stroke="${cabS}" stroke-width="1"/>`,
+    costeleta: barbaArea(`<path d="M44 80 L58 80 L58 116 Q52 112 44 104Z M156 80 L142 80 L142 116 Q148 112 156 104Z" fill="${cBar}"/>`),
+    curta: barbaArea(`<path d="${queixo}" fill="${cBar}" opacity=".6"/>`) + bigode,
+    cheia: barbaArea(`<path d="${queixo}" fill="url(#${id}bc)"/>`) + `<path d="${rostoD}" fill="none" stroke="${linha}" stroke-width="2.8"/>` + bigode,
+    longa: `<path d="M64 136 Q100 194 136 136Z" fill="url(#${id}bc)" stroke="${cabS}" stroke-width="1.4"/>` + barbaArea(`<path d="${queixo}" fill="url(#${id}bc)"/>`) + `<path d="M92 150 Q96 166 100 176" fill="none" stroke="${claro(cBar, .38)}" stroke-width="1.8" stroke-linecap="round" opacity=".5"/>` + bigode
   }[a.barba] || "";
 
   const boca = {
@@ -511,7 +575,11 @@ export function svgAvatar(av, tam = 200, opcoes = {}) {
     o: `<ellipse cx="100" cy="130" rx="6.5" ry="8" fill="#5b1a1a" stroke="${lab}" stroke-width="2.6"/>`,
     beijo: `<ellipse cx="100" cy="130" rx="5" ry="5.5" fill="${lab}" stroke="${labS}" stroke-width="1"/><path d="M96 130 L104 130" stroke="${labS}" stroke-width="1.4" stroke-linecap="round"/><path d="M118 124 l-3 -3 a2 2 0 0 1 3 -2 a2 2 0 0 1 3 2z" fill="#ef4444"/>`,
     dentes: `<path d="M86 126 Q100 136 114 126" fill="none" stroke="${labS}" stroke-width="2.6" stroke-linecap="round"/><rect x="94.5" y="129" width="5.5" height="7" rx="1.5" fill="#fff" stroke="#cbd5e1"/><rect x="100" y="129" width="5.5" height="7" rx="1.5" fill="#fff" stroke="#cbd5e1"/>`,
-    lingua: `<path d="M86 126 Q100 136 114 126" fill="none" stroke="${labS}" stroke-width="2.6" stroke-linecap="round"/><path d="M95 131 Q96 142 101 142 Q106 142 106 131Z" fill="#f472b6" stroke="#db2777" stroke-width="1"/>`
+    // língua de fora: sorriso aberto e a língua passando do lábio de baixo (com o risco do meio)
+    lingua: `<path d="M85 125 Q100 130 115 125 Q113 138 100 138 Q87 138 85 125Z" fill="#5b1a1a" stroke="${OUT}" stroke-width="2.2" stroke-linejoin="round"/>` +
+      `<path d="M88 126.5 Q100 130.5 112 126.5 L111.4 129.5 Q100 132.5 88.6 129.5Z" fill="#fff"/>` +
+      `<path d="M91 133 C90 142 93 148 100 148 C107 148 110 142 109 133 Q100 131 91 133Z" fill="#f472b6" stroke="${OUT}" stroke-width="2" stroke-linejoin="round"/>` +
+      `<path d="M100 135 L100 143" stroke="#db2777" stroke-width="1.5" stroke-linecap="round"/><ellipse cx="96" cy="138" rx="2" ry="1.2" fill="#fff" opacity=".45"/>`
   }[a.boca] || "";
 
   // ----- óculos -----
@@ -557,15 +625,17 @@ export function svgAvatar(av, tam = 200, opcoes = {}) {
     return `<g transform="${t}"><g clip-path="url(#${id}${lado})">${conteudo}</g></g>`; };
   const ambos = (c, o) => metade("E", c, o) + metade("D", c, o);
   const olhosTudo = ambos(maquiagem + olhos + cilios), sobrTudo = sobrancelhas ? ambos(sobrancelhas, { escala: false, dy: ody + AJ("sobrAltura") * 1.3 }) : "";
-  const narizA = `<g transform="translate(100 112) scale(${1 + AJ("narizTam") * .1}) translate(-100 -112)">${nariz}</g>`;
-  const bocaA = `<g transform="translate(100 ${130 + AJ("bocaAltura") * 1.3}) scale(${1 + AJ("bocaLarg") * .08} 1) translate(-100 -130)">${boca}</g>`;
+  const narizA = `<g transform="translate(100 ${112 + AJ("narizAltura") * 1.2}) scale(${1 + AJ("narizTam") * .1}) translate(-100 -112)">${nariz}</g>`;
+  const bocaT = 1 + AJ("bocaTam") * .07;
+  const bocaA = `<g transform="translate(100 ${130 + AJ("bocaAltura") * 1.3}) scale(${+((1 + AJ("bocaLarg") * .08) * bocaT).toFixed(3)} ${bocaT}) translate(-100 -130)">${boca}</g>`;
   const oculosA = ody ? `<g transform="translate(0 ${ody})">${oculos}</g>` : oculos;
   const [adx, ady] = POSICOES_ADESIVO[a.adesivoPos] || POSICOES_ADESIVO["inf-dir"];
   const cheio = !(opcoes.parte && ZOOM[opcoes.parte] && opcoes.parte !== "cabelo"), vb = cheio ? "0 0 200 200" : encaixa(ZOOM[opcoes.parte]);
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" width="${tam}" height="${tam}" role="img" aria-label="Personagem">
     <defs>${grad}<clipPath id="${id}c"><circle cx="100" cy="100" r="98"/></clipPath><clipPath id="${id}h"><path d="${rostoD}"/></clipPath><clipPath id="${id}E"><rect x="-60" y="-60" width="160" height="320"/></clipPath><clipPath id="${id}D"><rect x="100" y="-60" width="160" height="320"/></clipPath>
       <radialGradient id="${id}pg" cx=".45" cy=".38" r=".75"><stop offset="0" stop-color="${claro(pele, .1)}"/><stop offset=".65" stop-color="${pele}"/><stop offset="1" stop-color="${escuro(pele, .1)}"/></radialGradient>
-      <linearGradient id="${id}hc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${claro(cab, .18)}"/><stop offset=".6" stop-color="${cab}"/><stop offset="1" stop-color="${escuro(cab, .15)}"/></linearGradient></defs>
+      <linearGradient id="${id}hc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${claro(cab, .18)}"/><stop offset=".6" stop-color="${cab}"/><stop offset="1" stop-color="${escuro(cab, .15)}"/></linearGradient>
+      <linearGradient id="${id}bc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${claro(cBar, .18)}"/><stop offset=".6" stop-color="${cBar}"/><stop offset="1" stop-color="${escuro(cBar, .15)}"/></linearGradient></defs>
     <g clip-path="url(#${id}c)"><rect x="-20" y="-20" width="240" height="240" fill="${fundo.grad ? `url(#${id}g)` : fundo.cor || "#e5e7eb"}"/>${itemCustom(a.fundo) ? `<image href="${itemCustom(a.fundo).png}" x="0" y="0" width="200" height="200" preserveAspectRatio="xMidYMid slice"/>` : ""}${padrao}${estrelas}<g transform="${ENCAIXE}">
       ${cabelo.B || ""}${capaTras}${pescoco}${pomo}${corpo}${colar}${cabelo.O || ""}
       ${orelhas}${cabeca}${bochecha}${detalhe}${barba}${narizA}${bocaA}${olhosTudo}${sobrTudo}${brinco ? espelho(brinco) : ""}

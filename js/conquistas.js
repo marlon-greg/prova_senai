@@ -17,7 +17,12 @@ export const REGRAS = {
   materiaNota:     { grupo: "materia", nome: "Na matéria: uma nota ≥ mínimo", campos: ["min"] },
   materiaMedia:    { grupo: "materia", nome: "Na matéria: média ≥ mínimo com N provas", campos: ["n", "min"] },
   materiaEvolucao: { grupo: "materia", nome: "Na matéria: melhorou N vezes", campos: ["n"] },
-  diario:          { grupo: "diario", nome: "Diário: contador ≥ N", campos: ["campo", "n"] }
+  diario:          { grupo: "diario", nome: "Diário: contador ≥ N", campos: ["campo", "n"] },
+  // em dupla ou grupo (provas em dupla e seminários): a regra está pronta, mas ainda não há dados de dupla/grupo (ninguém ganha por enquanto)
+  duplaAcima:      { grupo: "grupo", nome: "Em dupla: os dois acima da média, N vezes", campos: ["n"] },
+  seminarioTodos:  { grupo: "grupo", nome: "Seminário: todos apresentaram a sua parte, N vezes", campos: ["n"] },
+  equipeSatisf:    { grupo: "grupo", nome: "Equipe inteira no Satisfatório, N vezes", campos: ["n"] },
+  duplaMelhora:    { grupo: "grupo", nome: "A mesma dupla melhorou junta, N vezes", campos: ["n"] }
 };
 export const CAMPOS_DIARIO = { aulas: "aulas registradas", sequencia: "aulas seguidas com presença", estrelas: "estrelas somadas", autonomia: "aulas com autonomia (4–5)",
   foco: "aulas bem focadas (4–5)", compreensao: "aulas entendendo bem (4–5)", vitorias: "vitórias do dia", topicos: "tópicos diferentes trabalhados" };
@@ -39,8 +44,19 @@ export const CONQUISTAS_PADRAO = [
   { id: "entendi-tudo", e: "🧠", t: "Entendi tudo", d: "5 aulas entendendo bem o conteúdo", grupo: "diario", regra: "diario", campo: "compreensao", n: 5 },
   { id: "exploradora", e: "📚", t: "Exploradora", d: "Trabalhe 8 tópicos diferentes", grupo: "diario", regra: "diario", campo: "topicos", n: 8 },
   { id: "colecionadora", e: "🏆", t: "Colecionadora de vitórias", d: "10 vitórias do dia", grupo: "diario", regra: "diario", campo: "vitorias", n: 10 },
-  { id: "diario-de-ouro", e: "📒", t: "Diário de ouro", d: "30 aulas registradas", grupo: "diario", regra: "diario", campo: "aulas", n: 30 }
+  { id: "diario-de-ouro", e: "📒", t: "Diário de ouro", d: "30 aulas registradas", grupo: "diario", regra: "diario", campo: "aulas", n: 30 },
+  { id: "dupla-afinada", e: "🤝", t: "Dupla afinada", d: "Na prova em dupla, você e a sua dupla passam acima da média", grupo: "grupo", regra: "duplaAcima", niveis: [{ n: 1, nome: "Dupla afinada" }] },
+  { id: "equipe-completa", e: "🎤", t: "Equipe completa", d: "No seminário, todos da equipe apresentam a sua parte", grupo: "grupo", regra: "seminarioTodos", niveis: [{ n: 1, nome: "Equipe completa" }] },
+  { id: "ninguem-fica", e: "🙌", t: "Ninguém fica para trás", d: "A equipe inteira chega ao Satisfatório", grupo: "grupo", regra: "equipeSatisf", niveis: [{ n: 1, nome: "Ninguém fica para trás" }] },
+  { id: "parceria-que-rende", e: "🔗", t: "Parceria que rende", d: "A mesma dupla melhora junta de uma prova para a outra", grupo: "grupo", regra: "duplaMelhora", niveis: [{ n: 1, nome: "Parceria que rende" }] }
 ];
+// conquistas novas do padrão que entram mesmo em listas já salvas pelo admin (config/conquistas); o admin pode desligá-las
+const NOVAS_DO_PADRAO = ["dupla-afinada", "equipe-completa", "ninguem-fica", "parceria-que-rende"];
+export function completarComNovas(lista) {
+  if (!Array.isArray(lista) || !lista.length) return lista;
+  const ids = new Set(lista.map(c => c?.id));
+  return [...lista, ...CONQUISTAS_PADRAO.filter(c => NOVAS_DO_PADRAO.includes(c.id) && !ids.has(c.id)).map(c => structuredClone(c))];
+}
 // ids antigos que viraram um nível de uma conquista nova: as skins travadas por eles continuam valendo
 export const ALIASES = { "primeira-prova": { id: "provas-feitas", nivel: 1 }, veterano: { id: "provas-feitas", nivel: 3 }, "trinca-de-ouro": { id: "sequencia", nivel: 2 }, constancia: { id: "sequencia", nivel: 3 },
   "presenca-em-dia": { id: "presenca", nivel: 1 }, "em-chamas": { id: "presenca", nivel: 2 } };
@@ -72,7 +88,7 @@ export function medalhaHTML(m, { i = null, nova = false } = {}) {
 }
 // lista válida (config do admin ou o padrão); só as ativas
 export function listaAtiva(cfg) {
-  const l = Array.isArray(cfg) && cfg.length ? cfg : CONQUISTAS_PADRAO;
+  const l = Array.isArray(cfg) && cfg.length ? completarComNovas(cfg) : CONQUISTAS_PADRAO;
   return l.filter(c => c && c.ativa !== false && REGRAS[c.regra] && c.id && c.t).map(normalizarConquista);
 }
 
@@ -149,4 +165,31 @@ export function conquistasNotas(provas, lista = null) {
   const materias = [...porMateria].map(([m, l]) => ({ materia: m, media: l.reduce((s, p) => s + p.nota, 0) / l.length, provas: l,
     conquistas: lst.filter(c => c.grupo === "materia" && daMateria(c, m)).map(c => ({ ...avaliarNiveis(c, l, m), id: `${c.id}:${m}` })) })).sort((a, b) => a.materia.localeCompare(b.materia, "pt-BR"));
   return { gerais, materias };
+}
+
+// ---------- em dupla ou grupo (provas em dupla e seminários) ----------
+// trabalhos = [{ tipo: "dupla" | "grupo" | "seminario", data (ms), titulo, media (nota de corte, padrão 60),
+//   membros: [{ uid, nota (0–100), satisfatorio (true/false), apresentou (true/false) }] }]
+// Ainda NÃO há dados de dupla/grupo no sistema: sem trabalhos, todas ficam travadas (aparecem apagadas com o que fazer).
+export function conquistasGrupo(trabalhos = [], lista = null) {
+  const ts = (Array.isArray(trabalhos) ? trabalhos : []).filter(t => t && Array.isArray(t.membros) && t.membros.length >= 2).sort((a, b) => (a.data || 0) - (b.data || 0));
+  const notaOk = x => Number.isFinite(Number(x?.nota)) && x.nota !== null;
+  const contar = c => {
+    if (c.regra === "duplaAcima") return ts.filter(t => t.tipo === "dupla" && t.membros.every(m => notaOk(m) && Number(m.nota) >= Number(t.media ?? 60))).map(t => t.titulo || "Prova em dupla");
+    if (c.regra === "seminarioTodos") return ts.filter(t => t.tipo === "seminario" && t.membros.every(m => m.apresentou === true)).map(t => t.titulo || "Seminário");
+    if (c.regra === "equipeSatisf") return ts.filter(t => t.membros.every(m => m.satisfatorio === true)).map(t => t.titulo || "Trabalho em equipe");
+    if (c.regra === "duplaMelhora") {   // a mesma dupla (mesmos 2 uids), de um trabalho para o seguinte, os dois sobem a nota
+      const porDupla = new Map(), out = [];
+      ts.filter(t => t.tipo === "dupla" && t.membros.length === 2 && t.membros.every(notaOk)).forEach(t => { const k = t.membros.map(m => m.uid).sort().join("|"); (porDupla.get(k) || porDupla.set(k, []).get(k)).push(t); });
+      porDupla.forEach(l => { for (let i = 1; i < l.length; i++) if (l[i].membros.every(m => Number(m.nota) > Number(l[i - 1].membros.find(x => x.uid === m.uid)?.nota ?? 101))) out.push(`${l[i - 1].titulo || "Prova"} → ${l[i].titulo || "Prova"}`); });
+      return out;
+    }
+    return [];
+  };
+  return listaAtiva(lista).filter(c => c.grupo === "grupo").map(c => {
+    const feitos = contar(c), ns = c.niveis;
+    let a = -1; ns.forEach((x, i) => { if (feitos.length >= Number(x.n || 1)) a = i; });
+    const prox = ns[a + 1] || null, meta = Number((prox || ns[ns.length - 1]).n || 1);
+    return { ...c, ok: a >= 0, detalhe: feitos.slice(0, 3), prog: [Math.min(feitos.length, meta), meta], nivelAtual: a, nivelNome: a >= 0 ? ns[a].nome : null, proximo: prox, maximo: a === ns.length - 1, niveisTotal: ns.length };
+  });
 }

@@ -2,13 +2,16 @@
 import { ic } from "./icones.js";
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar, sortearAleatorio, esc, $, toast, dataBR, letra,
          idTentativaTeste, apagarTentativaTeste, confirmar, traduzirErro, iniciais, fecharModais, temaDe, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco, bancoDaQuestao, sortearQuestoes }
-  from "./common.js?v=20261113a";
+  from "./common.js?v=20261116b";
 import { baixarMaterial } from "./material.js";
 import { desenharConquistas } from "./aluno-conquistas.js";
-import { apontar, desenharFaleConosco } from "./aluno-retorno.js";
+import { apontar, desenharFaleConosco } from "./aluno-retorno.js?v=20261116c";
 import { desenharPerfil, painelSimulacao, lerSimulacao, provasSimuladas, RESUMO_SIMULADO } from "./aluno-perfil.js";
+import { iniciarAbas, definirAbasVisiveis, irParaAba, abaAtual } from "./aluno-nav.js";
+import { desenharTurma } from "./aluno-social.js";
+import { desenharRecompensas } from "./aluno-recompensas.js";
 let simulacao = false;   // equipe vendo a página como aluno (?simular=1): nada é gravado
-import { lerGamificacao, GAMI_PADRAO } from "./common.js?v=20261113a";
+import { lerGamificacao, GAMI_PADRAO } from "./common.js?v=20261116b";
 let gami = { ...GAMI_PADRAO };   // o que está ligado na gamificação (config/gamificacao)
 import { montarFormato, temFormato, FORMATOS, rotuloFormato, textoParaFalar, textoResposta, textoChave } from "./formatos-ui.js";
 const controles = {};   // qid -> controle do formato adaptado (valor, preencher, travar)
@@ -65,6 +68,7 @@ const telas = ["telaLogin", "telaProvas", "telaInicio", "telaQuestao", "telaFim"
 function mostrar(id) {
   telas.forEach(t => $("#" + t).classList.toggle("oculto", t !== id));
   document.body.classList.toggle("em-prova", id === "telaQuestao");   // ativa os bloqueios e avisos da prova
+  document.body.classList.toggle("com-abas", id === "telaProvas");    // barra de seções (js/aluno-nav.js): só na lista, nunca na prova
   document.body.classList.toggle("com-consulta", id === "telaQuestao" && temConsulta());
   if (id !== "telaQuestao") { esconderSobreposicao(); $("#painelConsulta").classList.remove("aberto"); }
   if (id !== "telaFim") pararOuvinteFim();
@@ -189,13 +193,14 @@ function lerQuestao(qid, botao) {
 
 // ---------- simulação da equipe: perfil, personagem e conquistas com dados de mentira ----------
 async function desenharSimulacao() {
-  mostrar("telaProvas"); desenharSaudacao();
+  mostrar("telaProvas"); desenharSaudacao(); prepararAbas();
   $("#listaProvas").innerHTML = `<p class="pequeno">🧪 Na simulação a lista de provas fica vazia. Use o <b>Painel da simulação</b> para inventar notas e ganhar conquistas.</p>`;
+  $("#listaFeitas").innerHTML = `<p class="pequeno">🧪 Na simulação não há provas feitas de verdade. As notas inventadas no <b>Painel da simulação</b> aparecem em <b>Estudos</b> e nas conquistas.</p>`;
   const cfg = lerSimulacao(), forcar = new Set(cfg.dados || []);
   const cq = await desenharConquistas(gami.conquistas ? $("#conquistas") : null, eu, cfg.acess ? RESUMO_SIMULADO : null, { provas: provasSimuladas(cfg), forcar, simulacao: true });
   if (!gami.conquistas) $("#conquistas").classList.add("oculto");
   // na simulação a parte social aparece sempre (para a equipe ver como fica), mesmo desligada para os alunos
-  await desenharPerfil($("#perfilAluno"), { eu, cq, gami: { ...gami, personagem: true, social: true, socialNotas: true, socialReal: gami.social }, simulacao: true });
+  await desenharAbasDoPerfil(cq, gamiTurma());
   painelSimulacao($("#simPainel"), cq?.todas || [], desenharSimulacao);
   desenharFaleConosco($("#faleConosco"), eu, gami, true);
 }
@@ -216,9 +221,12 @@ function desenharSaudacao() {
 async function listarProvas() {
   mostrar("telaProvas");
   desenharSaudacao();
-  const box = $("#listaProvas"); box.innerHTML = "<p class='pequeno'>Carregando…</p>";
+  // Somativas (#listaProvas: para fazer) e Resultados (#listaFeitas: já feitas) são abas da mesma tela (js/aluno-nav.js)
+  const box = $("#listaProvas"), boxF = $("#listaFeitas"); box.innerHTML = boxF.innerHTML = "<p class='pequeno'>Carregando…</p>";
   // delegação: os botões funcionam assim que aparecem, mesmo com o resto da lista ainda carregando
-  box.onclick = e => {
+  box.onclick = boxF.onclick = e => {
+    const ir = e.target.closest("[data-ir]");
+    if (ir) return irParaAba(ir.dataset.ir);
     const btn = e.target.closest("button[data-acao]");
     if (!btn) return;
     if (btn.dataset.acao === "continuar") pedirTelaCheia(provasDaLista[btn.dataset.id]?.permitirTrocaAba === true);   // direto no clique (exigência do navegador)
@@ -239,24 +247,26 @@ async function listarProvas() {
     b.forEach(d => provas[d.id] = { id: d.id, ...d.data() });
     lista = Object.values(provas).sort((x, y) => (y.criadoEm?.seconds || 0) - (x.criadoEm?.seconds || 0));
   }
+  prepararAbas();
   if (!modoTeste) desenharConquistas(gami.conquistas ? $("#conquistas") : null, eu, acess?.diarioResumo || null)
-    .then(cq => desenharPerfil($("#perfilAluno"), { eu, cq, gami })).catch(e => console.warn("conquistas", e));
+    .then(cq => desenharAbasDoPerfil(cq, gami)).catch(e => console.warn("conquistas", e));
   if (modoTeste || !gami.conquistas) $("#conquistas").classList.add("oculto");
   if (!modoTeste) desenharFaleConosco($("#faleConosco"), eu, gami).catch(e => console.warn("fale conosco", e));
   provasDaLista = Object.fromEntries(lista.map(p => [p.id, p]));
-  if (!lista.length) { box.innerHTML = vazio({ e: "📭", texto: `<b>Nenhuma prova liberada no momento.</b></p><p class="pequeno">Quando o professor liberar, ela aparece aqui. Se a prova já começou na sala, recarregue a página.` }); return; }
-  // "Para fazer" (em andamento primeiro) e "Já feitas" (recolhível, lembra aberto/fechado); busca só com muitas provas
-  box.innerHTML = (lista.length > 6 ? toolbar({ buscaId: "lpBusca", placeholder: "Buscar prova…", contagemId: "lpContagem" }) : "")
-    + `<div id="lpFazer"></div>`
-    + collapsible({ chave: "aluno:provasFeitas", titulo: "✓ Já feitas", resumoHTML: `<span class="chip" id="lpFeitasN">0</span>`, corpoHTML: `<div id="lpFeitas"></div>`, attrs: `id="lpFeitasBox" hidden` });
-  const fazer = $("#lpFazer"), feitas = $("#lpFeitas"), feitasBox = $("#lpFeitasBox");
-  $("#lpBusca")?.addEventListener("input", e => {
-    const t = normBusca(e.target.value), itens = [...box.querySelectorAll(".prova-item")];
+  const semFeitas = `<p class="pequeno lp-nada">Você ainda não terminou nenhuma prova. Quando terminar, o resultado aparece aqui.</p>`;
+  if (!lista.length) { box.innerHTML = vazio({ e: "📭", texto: `<b>Nenhuma prova liberada no momento.</b></p><p class="pequeno">Quando o professor liberar, ela aparece aqui. Se a prova já começou na sala, recarregue a página.` }); boxF.innerHTML = semFeitas; return; }
+  // Somativas: "Para fazer" (em andamento primeiro) · Resultados: "Já feitas"; busca só com muitas provas
+  box.innerHTML = (lista.length > 6 ? toolbar({ buscaId: "lpBusca", placeholder: "Buscar prova…", contagemId: "lpContagem" }) : "") + `<div id="lpFazer"></div>`;
+  boxF.innerHTML = (lista.length > 6 ? toolbar({ buscaId: "lfBusca", placeholder: "Buscar resultado…", contagemId: "lfContagem" }) : "") + `<div id="lpFeitas"></div>`;
+  const fazer = $("#lpFazer"), feitas = $("#lpFeitas");
+  const buscar = (lugar, contagem) => e => {
+    const t = normBusca(e.target.value), itens = [...lugar.querySelectorAll(".prova-item")];
     let n = 0;
     itens.forEach(el => { const ok = !t || el.dataset.busca.includes(t); el.classList.toggle("oculto", !ok); n += ok; });
-    if (t) feitasBox.open = true;
-    $("#lpContagem").textContent = t ? `${n} de ${itens.length}` : "";
-  });
+    $(contagem).textContent = t ? `${n} de ${itens.length}` : "";
+  };
+  $("#lpBusca")?.addEventListener("input", buscar(box, "#lpContagem"));
+  $("#lfBusca")?.addEventListener("input", buscar(boxF, "#lfContagem"));
   let mostradas = 0, nFazer = 0, nFeitas = 0;
   for (const p of lista) {
     const t = await getDoc(doc(db, "tentativas", idTentativa(p.id)));
@@ -271,15 +281,49 @@ async function listarProvas() {
     else                        { status = `<span class="chip ok">✓ ${dataBR(td.finalizadaEm)}</span><span class="chip navy" data-placar="${p.id}">…</span>`; acao = podeVerResultado ? `<button class="leve" data-acao="resultado" data-id="${p.id}">Ver resultado</button>` : `<span class="pequeno">gabarito ainda não liberado</span>`; }
     const item = `<div class="prova-item" data-busca="${esc(normBusca(`${p.titulo} ${p.turma || ""} ${p.materia || ""}`))}"><div class="info"><b>${esc(p.titulo)}</b>
       <div class="pi-meta">${status}</div><div class="pi-dados">${[p.materia, `${nQ(p, td)} questões`, p.tempoMinutos > 0 && !semLimites() ? `${p.tempoMinutos} min` : ""].filter(Boolean).map(esc).join(" · ")}${!p.permitirTrocaAba && Number(p.maxTrocasDeAba) > 0 && !semLimites() ? ` · <span class="e" aria-hidden="true">${"❤️".repeat(Math.min(5, Number(p.maxTrocasDeAba)))}</span>` : ""}</div></div><div class="acao">${acao}</div></div>`;
-    if (td?.finalizadaEm) { feitas.insertAdjacentHTML("beforeend", item); feitasBox.hidden = false; $("#lpFeitasN").textContent = ++nFeitas; }
+    if (td?.finalizadaEm) { feitas.insertAdjacentHTML("beforeend", item); nFeitas++; }
     else { fazer.insertAdjacentHTML(td ? "afterbegin" : "beforeend", item); nFazer++; }   // em andamento vai para o topo
     if (td?.finalizadaEm) {   // placar sem esperar: a lista não fica travada lendo gabaritos
-      const el = box.querySelector(`[data-placar="${p.id}"]`);
+      const el = boxF.querySelector(`[data-placar="${p.id}"]`);
       placarDaTentativa({ id: t.id, ...td }).then(r => { el.innerHTML = textoPlacarCurto(r); }).catch(() => { el.textContent = "placar indisponível"; });
     }
   }
-  if (!mostradas) { box.innerHTML = vazio({ e: "📭", texto: `<b>Nenhuma prova liberada para você no momento.</b></p><p class="pequeno">Quando o professor liberar uma prova da sua turma, ela aparece aqui. Se a prova já começou na sala, recarregue a página; se continuar sem aparecer, mostre ao professor o nome e o e-mail da sua conta: <b>${esc(eu.nomeConta || "(conta sem nome)")}</b> · <b>${esc(eu.email)}</b>. O nome cadastrado na turma precisa ser igual ao da conta.</p>${avisoVinculo ? `<p class="pequeno erro-texto">${esc(avisoVinculo)}` : ""}` }); return; }
-  if (!nFazer) fazer.innerHTML = `<p class="pequeno lp-nada">🎉 Nenhuma prova para fazer agora.${nFeitas ? " As que você já fez estão logo abaixo." : ""}</p>`;
+  if (!mostradas) { box.innerHTML = vazio({ e: "📭", texto: `<b>Nenhuma prova liberada para você no momento.</b></p><p class="pequeno">Quando o professor liberar uma prova da sua turma, ela aparece aqui. Se a prova já começou na sala, recarregue a página; se continuar sem aparecer, mostre ao professor o nome e o e-mail da sua conta: <b>${esc(eu.nomeConta || "(conta sem nome)")}</b> · <b>${esc(eu.email)}</b>. O nome cadastrado na turma precisa ser igual ao da conta.</p>${avisoVinculo ? `<p class="pequeno erro-texto">${esc(avisoVinculo)}` : ""}` }); boxF.innerHTML = semFeitas; return; }
+  if (!nFazer) fazer.innerHTML = `<p class="pequeno lp-nada">🎉 Nenhuma prova para fazer agora.${nFeitas ? ` <button type="button" class="leve mini" data-ir="resultados">📊 Ver as que você já fez</button>` : ""}</p>`;
+  if (!nFeitas) feitas.innerHTML = semFeitas;
+}
+
+// ---------- abas da lista (Somativas · Resultados · Estudos · Turma · Perfil) ----------
+let cqAtual = null;   // conquistas calculadas (Estudos, Turma, Recompensas)
+const gamiTurma = () => simulacao ? { ...gami, personagem: true, social: true, socialNotas: true, socialReal: gami.social } : gami;
+function prepararAbas() {
+  iniciarAbas({ aoMudar: id => { if (id === "turma" && cqAtual) desenharTurma($("#turmaMural"), { eu, cq: cqAtual, gami: gamiTurma(), simulacao }); } });
+  const g = gamiTurma();
+  definirAbasVisiveis(modoTeste ? ["resultados"] : ["resultados", "estudos", ...(g.social ? ["turma"] : []), ...(g.conquistas || g.personagem ? ["perfil"] : [])]);
+}
+// depois das conquistas: perfil, recompensas, estudos e (se a aba estiver aberta) o mural
+async function desenharAbasDoPerfil(cq, g) {
+  cqAtual = cq;
+  desenharEstudos(cq);
+  desenharRecompensas($("#recompensas"), { eu, cq, gami: g, simulacao }).catch(e => console.warn("recompensas", e));
+  if (abaAtual() === "turma") desenharTurma($("#turmaMural"), { eu, cq, gami: gamiTurma(), simulacao });
+  await desenharPerfil($("#perfilAluno"), { eu, cq, gami: g, simulacao });
+}
+// 📚 Estudos: como o aluno está em cada matéria (média das provas) e onde revisar
+function desenharEstudos(cq) {
+  const box = $("#estudosMaterias"), ms = cq?.materias || [];
+  const nota = n => Math.round(n), tom = n => n >= 80 ? "ok" : n >= 60 ? "navy" : "warn";
+  const dica = n => n >= 80 ? "Mandando bem! Continue assim." : n >= 60 ? "No caminho certo. Revise o que errou para subir mais." : "Vale reforçar: revise o gabarito e tire as dúvidas com o professor.";
+  box.innerHTML = `<h2>📚 Como você está em cada matéria</h2>
+    <p class="pequeno" style="margin-top:0">A média das suas provas em cada matéria. Para estudar uma prova, abra <b>Resultados</b> e toque em <b>Ver resultado</b> (quando o professor liberar o gabarito).</p>
+    ${ms.length ? `<div class="estudo-lista">${ms.map(m => {
+      const l = [...m.provas].sort((a, b) => a.data - b.data), ult = l[l.length - 1], ant = l[l.length - 2];
+      const seta = ant ? (ult.nota > ant.nota ? `<span class="chip ok">▲ subiu</span>` : ult.nota < ant.nota ? `<span class="chip warn">▼ caiu</span>` : `<span class="chip off">= igual</span>`) : "";
+      return `<div class="estudo-item"><div class="ei-info"><b>${esc(m.materia)}</b><span class="pequeno">${m.provas.length} prova${m.provas.length > 1 ? "s" : ""} · última: ${esc(ult.titulo)} (${nota(ult.nota)})</span><span class="pequeno">${dica(m.media)}</span></div>
+        <div class="ei-nota"><span class="chip ${tom(m.media)}">média ${nota(m.media)}</span>${seta}</div></div>`; }).join("")}</div>
+      <div class="linha acoes"><button type="button" class="leve" id="estudosResultados">📊 Ver meus resultados</button></div>`
+    : `<p class="pequeno lp-nada">Faça a sua primeira prova para ver aqui como você está em cada matéria.</p>`}`;
+  $("#estudosResultados", box)?.addEventListener("click", () => irParaAba("resultados"));
 }
 const normBusca = t => String(t || "").toLowerCase().normalize("NFD").replace(/\p{M}+/gu, "");
 // turma da prova: sem turma = qualquer aluno; com turma = o e-mail precisa estar na lista
@@ -1493,6 +1537,14 @@ window.addEventListener("online", atualizarBanner);
 window.addEventListener("beforeunload", e => { if (emProvaAtiva()) { e.preventDefault(); e.returnValue = ""; } });
 
 // ---------- resultado ----------
+// observação na questão que o aluno apontou: a resposta do professor (ou o aviso de que ainda vai conferir)
+function obsApontamento(l) {
+  if (!l?.length) return "";
+  const resp = l.find(a => a.resposta && !["aberto", "aberta"].includes(a.status));
+  if (resp) return `<div class="feedback obs-apontamento"><span class="icone" aria-hidden="true">📝</span><div><b>Observação sobre esta questão:</b> ${esc(resp.resposta)}</div></div>`;
+  if (l.some(a => !["aberto", "aberta"].includes(a.status))) return `<p class="pequeno">📝 O professor conferiu o problema que você avisou nesta questão.</p>`;
+  return `<p class="pequeno">🚩 Você avisou um problema nesta questão. O professor ainda vai conferir.</p>`;
+}
 async function verResultado() {
   if (!tentativa) return toast("Você não fez esta prova.", "erro");
   if (!modoTeste && provaAtual.resultadosLiberados !== true) return toast("O gabarito desta prova ainda não foi liberado.", "erro");
@@ -1500,13 +1552,16 @@ async function verResultado() {
   $("#resTitulo").textContent = provaAtual.titulo;
   $("#resResumo").innerHTML = "<p class='pequeno'>Carregando…</p>"; $("#resLista").innerHTML = "";
   const ids = tentativa.questoesIds;
-  const [qgs, rs, cs] = await Promise.all([
+  const [qgs, rs, cs, aps] = await Promise.all([
     Promise.all(ids.map(q => questaoEGabarito(q, tentativa.bancoId))),
     getDocs(collection(db, "tentativas", tentativa.id, "respostas")),
-    getDocs(collection(db, "tentativas", tentativa.id, "correcoes")).catch(() => ({ forEach() {} }))
+    getDocs(collection(db, "tentativas", tentativa.id, "correcoes")).catch(() => ({ forEach() {} })),
+    // 🚩 o que este aluno apontou nesta prova: a resposta do professor aparece como observação na própria questão
+    gami.apontamentos && !modoTeste ? getDocs(query(collection(db, "apontamentos"), where("uid", "==", eu.uid))).catch(() => null) : null
   ]);
   const resp = {}; rs.forEach(d => resp[d.id] = d.data());
   const corr = {}; cs.forEach(d => corr[d.id] = d.data());
+  const meusAps = {}; (aps?.docs || []).map(d => d.data()).filter(a => a.provaId === provaAtual.id).forEach(a => (meusAps[a.qid] ||= []).push(a));
   let total = 0, max = 0, certas = 0, html = "";
   const grupoSt = st => st === "certa" ? "certas" : ["parcial", "revisar"].includes(st) ? "parciais" : "erradas";
   const contagem = { certas: 0, parciais: 0, erradas: 0 };
@@ -1527,7 +1582,8 @@ async function verResultado() {
       <p><b>Sua resposta:</b> ${sua}</p>
       ${c.status !== "certa" && certa !== "—" ? `<p><b>Resposta correta:</b> ${certa}</p>` : ""}
       ${g.explicacao ? `<div class="feedback ${c.status === "certa" ? "certa" : "errada"}"><span class="icone" aria-hidden="true">💡</span><div><b>Por quê:</b> ${esc(g.explicacao)}</div></div>` : ""}
-      ${obs ? `<p class="pequeno"><b>Comentário do professor:</b> ${esc(obs)}</p>` : ""}
+      ${obs ? `<p class="pequeno"><b>${corr[qid]?.revisao ? "Observação" : "Comentário do professor"}:</b> ${esc(obs)}</p>` : ""}
+      ${obsApontamento(meusAps[qid])}
       ${gami.apontamentos && !modoTeste ? `<button type="button" class="discreto mini b-apontar-res" data-qid="${esc(qid)}">🚩 Algo errado nesta questão?</button>` : ""}</details>`;
   });
   const nota = max ? Math.round((total / max) * 1000) / 10 : 0;

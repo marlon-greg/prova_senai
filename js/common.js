@@ -226,19 +226,32 @@ function perguntasParecidas(a, b) {
   const pa = palavrasDe(a), pb = palavrasDe(b);
   return pa.size >= 4 && pb.size >= 4 && parecidos(pa, pb) >= 0.6;
 }
+// questões geradas por modelo: "Contexto: <empresa, tabelas…>\n\n<pergunta>". Cada contexto troca os nomes (padaria/encomenda,
+// cinema/sessao…), então a MESMA pergunta em dois contextos parecia diferente e caía duas vezes na prova (apontamentos de nov/2026).
+// Aqui separamos o contexto e tiramos da pergunta (e das alternativas) as palavras que vêm dele: sobra o "molde" da pergunta.
+const INSTRUCAO = new Set("escreva comando comandos tabela tabelas banco coluna colunas".split(" "));
+function moldeDe(q) {
+  const e = String(q?.enunciado ?? ""), m = e.match(/^\s*contexto\b[\s\S]*?\n\s*\n/i);
+  if (!m) return null;
+  const ctx = palavrasDe(e.slice(0, m[0].length)), tira = s => new Set([...palavrasDe(s)].filter(p => !ctx.has(p) && !INSTRUCAO.has(p)));
+  return { perg: tira(e.slice(m[0].length)), alts: Array.isArray(q.alternativas) ? new Set(q.alternativas.map(a => [...tira(a)].sort().join(" ")).filter(Boolean)) : new Set() };
+}
 export function gruposDeIrmas(dados) {
   const ids = Object.keys(dados), pai = {}, raiz = x => pai[x] === x ? x : (pai[x] = raiz(pai[x]));
   const info = ids.map(id => {
     const q = dados[id] || {}; pai[id] = id;
     const alts = Array.isArray(q.alternativas) ? new Set(q.alternativas.map(normTexto).filter(Boolean)) : new Set();
-    return { id, grupo: String(q.grupo || "").trim().toLowerCase(), alts, txt: normTexto(q.enunciado) };
+    return { id, grupo: String(q.grupo || "").trim().toLowerCase(), alts, txt: normTexto(q.enunciado), molde: moldeDe(q) };
   });
   for (let i = 0; i < info.length; i++) for (let j = i + 1; j < info.length; j++) {
-    const a = info[i], b = info[j];
+    const a = info[i], b = info[j], ma = a.molde, mb = b.molde;
     const irmas = (a.grupo && a.grupo === b.grupo)
       || (a.txt && a.txt === b.txt)
       || (a.alts.size >= 3 && b.alts.size >= 3 && parecidos(a.alts, b.alts) >= 0.75)
-      || perguntasParecidas(a.txt, b.txt);
+      || perguntasParecidas(a.txt, b.txt)
+      // mesma pergunta em contextos diferentes (sem os nomes do contexto)
+      || (ma && mb && ma.perg.size >= 3 && mb.perg.size >= 3 && parecidos(ma.perg, mb.perg) >= 0.6)
+      || (ma && mb && ma.alts.size >= 3 && mb.alts.size >= 3 && parecidos(ma.alts, mb.alts) >= 0.75);
     if (irmas) pai[raiz(a.id)] = raiz(b.id);
   }
   const g = {}; ids.forEach(id => g[id] = raiz(id));

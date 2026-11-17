@@ -7,7 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=20261116d">
+<link rel="stylesheet" href="css/aluno-nav.css">
 <link rel="icon" href="img/senai.svg">
 <script src="js/logo.js"></script>
 </head>
@@ -41,15 +42,39 @@
 
   <!-- LISTA DE PROVAS -->
   <section id="telaProvas" class="oculto">
-    <div id="perfilAluno" class="oculto"></div>   <!-- 1º: personagem e cartão do perfil (js/aluno-perfil.js) -->
-    <div id="conquistas" class="card conquistas oculto" aria-live="polite"></div>   <!-- 2º: conquistas (js/aluno-conquistas.js) -->
-    <div id="provasSaudacao" class="card saudacao"></div>   <!-- mascote + "Oi, Fulano!" + escolha do mascote (js/aluno.js) -->
-    <div class="card">
-      <h2>Suas provas</h2>
-      <div id="listaProvas"><p class="pequeno">Carregando…</p></div>
+    <!-- barra de seções (js/aluno-nav.js): no computador fica no topo; no celular, fixa embaixo. Some durante a prova. -->
+    <nav id="abasAluno" class="abas-aluno" aria-label="Seções da página"></nav>
+    <!-- 📝 SOMATIVAS: provas para fazer -->
+    <div data-secao="somativas" class="secao-aluno">
+      <div id="provasSaudacao" class="card saudacao"></div>   <!-- mascote + "Oi, Fulano!" + escolha do mascote (js/aluno.js) -->
+      <div class="card">
+        <h2>Suas provas</h2>
+        <div id="listaProvas"><p class="pequeno">Carregando…</p></div>
+      </div>
     </div>
-    <div id="faleConosco" class="card oculto"></div>   <!-- apontamentos e sugestões (js/aluno-retorno.js) -->
-    <div id="simPainel" class="card sim-painel oculto"></div>   <!-- só na simulação da equipe (?simular=1) -->
+    <!-- 📊 RESULTADOS: provas já feitas, com o placar e o gabarito (quando liberado) -->
+    <div data-secao="resultados" class="secao-aluno oculto">
+      <div class="card">
+        <h2>Seus resultados</h2>
+        <div id="listaFeitas"><p class="pequeno">Carregando…</p></div>
+      </div>
+    </div>
+    <!-- 📚 ESTUDOS: como está em cada matéria + fale com a equipe -->
+    <div data-secao="estudos" class="secao-aluno oculto">
+      <div id="estudosMaterias" class="card"><p class="pequeno">Carregando…</p></div>   <!-- js/aluno.js (desenharEstudos) -->
+      <div id="faleConosco" class="card oculto"></div>   <!-- apontamentos e sugestões (js/aluno-retorno.js) -->
+    </div>
+    <!-- 👥 TURMA: mural da turma (js/aluno-social.js, desenharTurma) -->
+    <div data-secao="turma" class="secao-aluno oculto">
+      <div id="turmaMural" class="card"></div>
+    </div>
+    <!-- 👤 PERFIL: personagem, recompensas desejadas e conquistas -->
+    <div data-secao="perfil" class="secao-aluno oculto">
+      <div id="perfilAluno" class="oculto"></div>   <!-- personagem e cartão do perfil (js/aluno-perfil.js) -->
+      <div id="recompensas" class="card oculto"></div>   <!-- recompensas que o aluno quer (js/aluno-recompensas.js) -->
+      <div id="conquistas" class="card conquistas oculto" aria-live="polite"></div>   <!-- conquistas (js/aluno-conquistas.js) -->
+    </div>
+    <div id="simPainel" class="card sim-painel oculto"></div>   <!-- só na simulação da equipe (?simular=1), aparece em todas as abas -->
   </section>
 
   <!-- INSTRUÇÕES / INÍCIO -->
@@ -180,6 +205,6 @@
 </div>
 <!-- sem conexão / resposta não enviada -->
 <div id="bannerConexao" class="banner-conexao oculto" role="alert"></div>
-<script type="module" src="js/aluno.js?v=20261116a"></script>
+<script type="module" src="js/aluno.js?v=20261116d"></script>
 </body>
 </html>

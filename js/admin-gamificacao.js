@@ -1,17 +1,20 @@
 // Painel → aba "Gamificação" (admin): liga e desliga cada parte, e abre a simulação "ver como aluno".
 // Painel → aba "Retorno dos alunos" (professor/admin): apontamentos nas questões e sugestões para o sistema.
 import { db, esc, $, toast, confirmar, traduzirErro, dataBR, GAMI_PADRAO, lerGamificacao, rotuloSemestre, dataCurta } from "./common.js";
-import { CONQUISTAS_PADRAO, REGRAS, CAMPOS_DIARIO, ALIASES, normalizarConquista } from "./conquistas.js";
+import { CONQUISTAS_PADRAO, REGRAS, CAMPOS_DIARIO, ALIASES, normalizarConquista, completarComNovas } from "./conquistas.js";
+import { desenharResumoRecompensas } from "./aluno-recompensas.js";
 import { CATALOGO } from "./avatar.js";
 import { sugerirConquistasIA, nomesNiveisIA } from "./ia.js";
 import { listarPlanos } from "./admin-org.js";
 import { menuHTML, itemMenu, vazio, collapsible, chips, tarefa, drawer, drawerForm, pl, seta } from "./ui.js";
 import { ic } from "./icones.js";
 import { botaoExportarHTML, ligarBotaoExportar } from "./exportar.js";
+import { iniciarRevisoes, lerRevisoes, desenharListaRevisoes, analisarPendentes } from "./admin-revisoes.js?v=20261116c";
+import { respostaPronta } from "./sugestoes-prontas.js?v=20261116a";
 import { collection, doc, getDoc, getDocs, setDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 let ctx = null;
-export function iniciarGamificacao(c) { ctx = c; }
+export function iniciarGamificacao(c) { ctx = c; iniciarRevisoes(c); }
 
 const OPCOES = [
   { k: "conquistas", t: "🏅 Conquistas dos alunos", d: "Medalhas gerais, por matéria e da sala de aula (diário), com nível. Aparecem na página do aluno." },
@@ -25,6 +28,9 @@ const OPCOES = [
 
 export async function carregarGamificacao() {
   carregarConquistasAdmin();
+  // 🎁 recompensas que os alunos querem (só leitura): bloco logo abaixo das opções
+  if (!$("#gamiRecompensas")) $("#gamiBloco")?.insertAdjacentHTML("afterend", `<div id="gamiRecompensas"></div>`);
+  desenharResumoRecompensas($("#gamiRecompensas")).catch(e => console.warn("recompensas", e));
   const box = $("#gamiOpcoes"), cfg = await lerGamificacao(), admin = ctx.ehAdmin();
   box.innerHTML = OPCOES.map(o => `<label class="gami-op"><span class="interruptor-g"><input type="checkbox" data-k="${o.k}"${cfg[o.k] ? " checked" : ""}${admin ? "" : " disabled"}><i></i></span>
       <span><b>${o.t}</b>${o.beta ? ` <span class="chip info" title="2ª parte · começa desligada">beta</span>` : ""}<br><span class="pequeno">${esc(o.d)}</span></span></label>`).join("") +
@@ -43,18 +49,21 @@ export async function carregarGamificacao() {
 // ---------- retorno dos alunos ----------
 const TIPOS_AP = { duasCertas: "Mais de uma resposta certa", nenhumaCerta: "Nenhuma resposta certa", erroTexto: "Erro de digitação ou no texto", confusa: "Enunciado confuso", gabarito: "Acho que o gabarito está errado", outro: "Outro" };
 export { TIPOS_AP };
-let itensRet = { ap: [], sg: [] };
+let itensRet = { ap: [], sg: [] }, gruposRev = new Map(), iaRodou = false;
 export async function carregarRetorno() {
   $("#retLista").innerHTML = `<p class="pequeno">Carregando…</p>`;
   try {
     const [a, s] = await Promise.all([getDocs(collection(db, "apontamentos")), getDocs(collection(db, "sugestoesSistema"))]);
     const ord = l => l.sort((x, y) => (y.criadoEm?.seconds || 0) - (x.criadoEm?.seconds || 0));
     itensRet = { ap: ord(a.docs.map(d => ({ id: d.id, col: "apontamentos", ...d.data() }))), sg: ord(s.docs.map(d => ({ id: d.id, col: "sugestoesSistema", ...d.data() }))) };
+    gruposRev = await lerRevisoes();
   } catch (e) { $("#retLista").innerHTML = `<p class="erro-texto">${esc(traduzirErro(e))} (Publique o firestore.rules atual.)</p>`; return; }
   ["#retBusca", "#retStatus"].forEach(id => $(id).oninput = $(id).onchange = desenharRetorno);
   if (!$("#retExportar")) $("#retLista").insertAdjacentHTML("beforebegin", `<div style="display:flex;justify-content:flex-end;margin:6px 0">${botaoExportarHTML("retExportar")}</div>`);
   ligarBotaoExportar($("#aba-retorno"), exportarRetorno, "retExportar");
   desenharRetorno();
+  // questões apontadas ainda sem análise: a IA analisa sozinha (uma vez; fica gravada) e o cartão se redesenha
+  if (!iaRodou) { iaRodou = true; analisarPendentes([...gruposRev.values()], () => { if (retAba === "ap") desenharRetorno(); }); }
 }
 // ⬇ baixar em PDF/TXT/CSV o que está na tela (aba + filtros); "sem nomes" troca o aluno por Aluno 1, Aluno 2… (mesmo aluno, mesmo número)
 function exportarRetorno(anon) {
@@ -76,8 +85,11 @@ function exportarRetorno(anon) {
 // duas partes separadas: 🚩 erros reportados nas questões (agrupados por prova) e 💡 sugestões (agrupadas por assunto)
 let retAba = "ap";
 const aberto = x => ["aberto", "aberta"].includes(x.status);
+const ROT_SG = { feita: "aplicada", analisada: "não aplicada" }, rotSt = x => x.col === "sugestoesSistema" ? ROT_SG[x.status] || x.status : x.status;
+// sugestão aberta, ainda sem resposta, que tem resposta pronta (js/sugestoes-prontas.js)
+const prontaDe = x => x.col === "sugestoesSistema" && aberto(x) && !x.resposta ? respostaPronta(x.texto) : null;
 function desenharAbasRetorno() {
-  const n = l => l.filter(aberto).length;
+  const n = l => l === itensRet.ap ? [...gruposRev.values()].filter(g => g.pendente).length : l.filter(aberto).length;
   $("#retAbas").innerHTML = [["ap", "🚩", "Erros nas questões", "O aluno avisou que uma questão tem problema", itensRet.ap], ["sg", "💡", "Sugestões para o sistema", "Ideias e problemas do site", itensRet.sg]]
     .map(([k, e, t, d, l]) => `<button type="button" role="tab" class="ret-aba${retAba === k ? " sel" : ""}" aria-selected="${retAba === k}" data-retaba="${k}"><span class="ra-e">${e}</span><span class="ra-t"><b>${t}</b><small>${d}</small></span>
       <span class="ra-n">${n(l) ? `<span class="chip aviso">${n(l)} abert${k === "ap" ? "o" : "a"}(s)</span>` : ""}<span class="chip">${l.length}</span></span></button>`).join("");
@@ -85,6 +97,12 @@ function desenharAbasRetorno() {
 }
 function desenharRetorno() {
   desenharAbasRetorno();
+  // 🚩 erros: um cartão por QUESTÃO (todos os apontamentos dela juntos), com a sugestão, quem errou e a decisão
+  if (retAba === "ap") {
+    const l = desenharListaRevisoes($("#retLista"), gruposRev, { busca: String($("#retBusca").value || ""), status: $("#retStatus").value, aoMudar: () => desenharAbasRetorno() });
+    $("#retContagem").textContent = `${pl(l.length, "questão", "questões")} · ${[...gruposRev.values()].filter(g => g.pendente).length} aguardando decisão`;
+    return;
+  }
   const b = String($("#retBusca").value || "").toLowerCase(), tipo = retAba, st = $("#retStatus").value;
   const lista = [...(tipo === "ap" ? itensRet.ap : itensRet.sg)]
     .filter(x => (!st || (st === "aberto" ? ["aberto", "aberta"].includes(x.status) : !["aberto", "aberta"].includes(x.status))))
@@ -95,17 +113,32 @@ function desenharRetorno() {
   lista.forEach(x => (grupos.get(grupoDe(x)) || grupos.set(grupoDe(x), []).get(grupoDe(x))).push(x));
   const itemRet = x => `<article class="card ret-item${["aberto", "aberta"].includes(x.status) ? " aberto" : ""}">
       <div class="ret-cab">${x.col === "apontamentos" ? `<span class="chip err"><span class="e" aria-hidden="true">🚩</span>${esc(TIPOS_AP[x.tipo] || "Apontamento")}</span>` : `<span class="chip info"><span class="e" aria-hidden="true">💡</span>${esc(x.categoria || "Sugestão")}</span>`}
-        <span class="chip ${["aberto", "aberta"].includes(x.status) ? "warn" : x.status === "procede" || x.status === "feita" ? "ok" : "off"}">${esc(x.status)}</span>
+        <span class="chip ${["aberto", "aberta"].includes(x.status) ? "warn" : x.status === "procede" || x.status === "feita" ? "ok" : "off"}">${esc(rotSt(x))}</span>${prontaDe(x) ? `<span class="chip info">resposta pronta · ${prontaDe(x).status === "feita" ? "aplicada" : "não aplicada"}</span>` : ""}
         <span class="meta-txt">${esc(x.nome || x.email)} · ${dataBR(x.criadoEm)}</span></div>
       ${x.col === "apontamentos" ? `<p class="pequeno" style="margin:6px 0 2px"><b>${esc(x.provaTitulo || "Prova")}</b> · questão <span class="mono">${esc(x.qid)}</span></p><blockquote class="ret-enun">${esc(String(x.enunciado || "").slice(0, 400))}</blockquote>` : ""}
       <p style="margin:6px 0">${esc(x.texto).replace(/\n/g, "<br>")}</p>
       ${x.resposta ? `<p class="pequeno ret-resp">↩ <b>${esc(x.respondidoPor || "equipe")}:</b> ${esc(x.resposta)}</p>` : ""}
-      ${ctx.podeEditar() ? `<div class="ret-resposta"><input type="text" data-resp="${x.id}" placeholder="Resposta para o aluno (ele vê na página dele)" value="${esc(x.resposta || "")}" aria-label="Resposta para ${esc(x.nome || x.email)}">
-        ${menuHTML({ rotulo: `Responder e marcar${ic("chev", { size: 14 })}`, classe: "leve mini", aria: "Responder e marcar", itensHTML: (x.col === "apontamentos" ? [["procede", "check", "Procede"], ["nao-procede", "x", "Não procede"], ["aberto", "refresh", "Reabrir"]] : [["feita", "check", "Vamos fazer / feita"], ["analisada", "eye", "Analisada"], ["aberta", "refresh", "Reabrir"]])
+      ${ctx.podeEditar() ? `<div class="ret-resposta"><input type="text" data-resp="${x.id}" placeholder="Resposta para o aluno (ele vê na página dele)" value="${esc(x.resposta || prontaDe(x)?.resposta || "")}" aria-label="Resposta para ${esc(x.nome || x.email)}">
+        ${menuHTML({ rotulo: `Responder e marcar${ic("chev", { size: 14 })}`, classe: "leve mini", aria: "Responder e marcar", itensHTML: (x.col === "apontamentos" ? [["procede", "check", "Procede"], ["nao-procede", "x", "Não procede"], ["aberto", "refresh", "Reabrir"]] : [["feita", "check", "Aplicada"], ["analisada", "x", "Não aplicada"], ["aberta", "refresh", "Reabrir"]])
           .map(([v, i, r]) => itemMenu({ i, t: r, attrs: `data-st="${v}" data-id="${x.id}" data-col="${x.col}"` })).join("") })}</div>` : ""}</article>`;
-  $("#retLista").innerHTML = lista.length ? [...grupos].map(([g, l]) => collapsible({ chave: `ret:${tipo}:${g}`, aberto: true, classe: "ret-grupo", titulo: esc(g),
+  const prontas = itensRet.sg.filter(prontaDe);
+  $("#retLista").innerHTML = (prontas.length && ctx.podeEditar() ? `<div class="card ret-prontas" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px"><span style="flex:1;min-width:220px">📨 <b>${pl(prontas.length, "sugestão tem", "sugestões têm")} resposta pronta</b>, dizendo se foi aplicada ou não. Confira nos cartões abaixo.</span><button type="button" id="retEnviarProntas">Enviar as ${prontas.length} respostas</button></div>` : "")
+    + (lista.length ? [...grupos].map(([g, l]) => collapsible({ chave: `ret:${tipo}:${g}`, aberto: true, classe: "ret-grupo", titulo: esc(g),
       resumoHTML: `<span class="meta-txt">${l.length}</span>${l.filter(aberto).length ? `<span class="chip warn">${l.filter(aberto).length} em aberto</span>` : ""}`, corpoHTML: l.map(itemRet).join("") })).join("")
-    : vazio({ e: tipo === "ap" ? "🚩" : "💡", texto: `${tipo === "ap" ? "Nenhum erro reportado" : "Nenhuma sugestão"}${b || st ? " com esses filtros" : " ainda"}.` });
+    : vazio({ e: tipo === "ap" ? "🚩" : "💡", texto: `${tipo === "ap" ? "Nenhum erro reportado" : "Nenhuma sugestão"}${b || st ? " com esses filtros" : " ainda"}.` }));
+  $("#retEnviarProntas")?.addEventListener("click", async () => {
+    if (!(await confirmar(`Enviar a resposta pronta de ${pl(prontas.length, "sugestão", "sugestões")}? Cada aluno vê na página dele se a sugestão foi aplicada ou não.`, { titulo: "Responder sugestões", ok: "Enviar" }))) return;
+    let ok = 0;
+    for (const x of prontas) {
+      const r = prontaDe(x); if (!r) continue;
+      const resposta = $(`[data-resp="${x.id}"]`)?.value.trim() || r.resposta;   // vale o que o professor editou no cartão
+      try { await updateDoc(doc(db, x.col, x.id), { status: r.status, resposta, respondidoPor: ctx.eu.nome || ctx.eu.email, respondidoEm: serverTimestamp() });
+        Object.assign(x, { status: r.status, resposta, respondidoPor: ctx.eu.nome || ctx.eu.email }); ok++; }
+      catch (e) { toast(traduzirErro(e), "erro"); break; }
+    }
+    if (ok) toast(`${pl(ok, "sugestão respondida", "sugestões respondidas")}.`, "ok");
+    desenharRetorno();
+  });
   $("#retLista").querySelectorAll("[data-st]").forEach(bt => bt.onclick = async () => {
     const resp = $(`[data-resp="${bt.dataset.id}"]`).value.trim(), rotSt = bt.textContent.trim();
     if (!(await confirmar(`Marcar como "${rotSt}"${resp ? " e enviar a resposta ao aluno" : ""}? O aluno vê isso na página dele.`, { titulo: "Responder", ok: "Confirmar" }))) return;
@@ -120,7 +153,7 @@ function desenharRetorno() {
 // ---------- 🏅 editor das conquistas (config/conquistas.lista): lista + painel de edição ao lado (quadro 6) ----------
 let conqLista = [], conqSel = -1, conqRasc = null, conqAlt = 0, conqFiltro = { busca: "", aba: "todas" }, drawerConq = null;
 const grupoEstado = {};   // grupos abertos ou fechados pelo professor
-const GRUPOS = { geral: { e: "🌟", t: "Gerais", aberto: true }, materia: { e: "📚", t: "Por matéria", aberto: true }, diario: { e: "📔", t: "Sala de aula (diário)", aberto: false } };
+const GRUPOS = { geral: { e: "🌟", t: "Gerais", aberto: true }, grupo: { e: "👥", t: "Em dupla ou grupo", aberto: false }, materia: { e: "📚", t: "Por matéria", aberto: true }, diario: { e: "📔", t: "Sala de aula (diário)", aberto: false } };
 const grupoDe = c => REGRAS[c.regra]?.grupo || c.grupo || "geral";
 const normC = s => String(s || "").toLowerCase().normalize("NFD").replace(/\p{M}+/gu, "");
 const skinsDe = id => Object.values(CATALOGO).flat().filter(i => i.trava?.medalha && (i.trava.medalha === id || ALIASES[i.trava.medalha]?.id === id)).map(i => i.nome);
@@ -139,7 +172,7 @@ function validarConq(c) {
 }
 export async function carregarConquistasAdmin() {
   const d = await getDoc(doc(db, "config", "conquistas")).catch(() => null);
-  conqLista = structuredClone(d?.data()?.lista?.length ? d.data().lista : CONQUISTAS_PADRAO).map(c => normalizarConquista({ ativa: true, ...c }));
+  conqLista = structuredClone(d?.data()?.lista?.length ? completarComNovas(d.data().lista) : CONQUISTAS_PADRAO).map(c => normalizarConquista({ ativa: true, ...c }));
   conqSel = -1; conqRasc = null; conqAlt = 0;
   desenharConq();
 }
@@ -276,6 +309,7 @@ function pintarCorpoConq(box) {
     <div><label for="cqEdRegra">Regra</label><select id="cqEdRegra">${Object.entries(REGRAS).map(([k, x]) => `<option value="${k}"${r.regra === k ? " selected" : ""}>${esc(x.nome)}</option>`).join("")}</select></div>
     ${r.regra === "diario" ? `<div><label for="cqEdCampo">Contador</label><select id="cqEdCampo">${Object.entries(CAMPOS_DIARIO).map(([v, t]) => `<option value="${v}"${r.campo === v ? " selected" : ""}>${esc(t)}</option>`).join("")}</select></div>` : ""}
     ${r.materia ? `<p class="help">Vale só em <b>${esc(r.materia)}</b>.</p>` : ""}
+    ${REGRAS[r.regra]?.grupo === "grupo" ? `<p class="help">Provas em dupla e seminários ainda estão entrando no sistema: a regra está pronta, mas por enquanto ninguém ganha (o aluno vê a conquista apagada, com o que fazer).</p>` : ""}
     <div class="cq-niveis-cab"><b>Níveis</b>${iaNav ? `<button type="button" class="leve mini" id="cqNomesIA">${ic("sparkle", { size: 16 })}Sugerir nomes com IA</button>` : ""}</div>
     <div class="cq-niveis">
       <div class="cq-nv cq-nv-cab" style="--cols:${colunas}"><span></span>${n ? `<span>${rotuloN}</span>` : ""}${m ? `<span>Mín.</span>` : ""}<span>Nome do nível</span><span></span></div>

@@ -260,6 +260,11 @@ service cloud.firestore {
       allow update: if professor() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'resposta', 'respondidoPor', 'respondidoEm']);
       allow delete: if admin();
     }
+    // revisão de uma questão apontada (id = id da questão): análise sugerida (IA), correção do enunciado,
+    // quem errou e a decisão do professor (dar ou não o ponto, vale para todos os prejudicados). Só a equipe docente.
+    match /revisoesQuestoes/{q} {
+      allow read, write: if professor();
+    }
     // sugestão para o sistema
     match /sugestoesSistema/{id} {
       allow read: if equipe() || (logado() && resource.data.uid == uid());
@@ -289,7 +294,9 @@ service cloud.firestore {
     match /vitrine/{u} {
       // colega: só com a parte social ligada, se ELE TAMBÉM compartilha (tem vitrine) e é da MESMA turma
       allow read: if logado() && (u == uid() || equipe() || (socialLigado() && mesmaTurma(resource.data.turmaId)));
-      allow write: if logado() && u == uid()
+      // sair do mural: o aluno apaga a própria vitrine (no delete não há request.resource, por isso a regra separada)
+      allow delete: if (logado() && u == uid()) || admin();
+      allow create, update: if logado() && u == uid()
                    && request.resource.data.keys().hasOnly(['nome', 'apelido', 'avatar', 'status', 'turmaId', 'conquistas', 'notas', 'nivel', 'atualizadoEm'])
                    // a turma gravada precisa ser uma turma em que o aluno está
                    && (request.resource.data.turmaId == null || (request.resource.data.turmaId is string && exists(/databases/$(db)/documents/turmas/$(request.resource.data.turmaId))
@@ -303,6 +310,18 @@ service cloud.firestore {
                               && request.resource.data.keys().hasOnly(['tipo', 'item', 'em']) && request.resource.data.tipo in ['curtida', 'parabens'];
         allow delete: if logado() && (de == uid() || admin());
       }
+    }
+    // recompensas que o aluno gostaria de ganhar (1 ou 2, escolhidas no Perfil): só o dono grava; a equipe lê (resumo na Gamificação)
+    match /desejos/{u} {
+      allow read: if logado() && (u == uid() || equipe());
+      allow delete: if logado() && u == uid();
+      allow create, update: if logado() && u == uid()
+                   && request.resource.data.keys().hasOnly(['escolhas', 'turmaId', 'email', 'atualizadoEm'])
+                   && request.resource.data.escolhas is list && request.resource.data.escolhas.size() >= 1 && request.resource.data.escolhas.size() <= 2
+                   && request.resource.data.escolhas[0] is string && request.resource.data.escolhas[0].size() <= 80
+                   && (request.resource.data.escolhas.size() < 2 || (request.resource.data.escolhas[1] is string && request.resource.data.escolhas[1].size() <= 80))
+                   && request.resource.data.email == email().lower()
+                   && (request.resource.data.get('turmaId', null) == null || request.resource.data.turmaId is string);
     }
 
     // ---------- provas ----------

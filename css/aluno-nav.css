@@ -1,0 +1,50 @@
+/* Página do aluno: barra de seções (js/aluno-nav.js), aba Turma (mural), Estudos e Recompensas.
+   Arquivo separado do style.css de propósito. */
+
+/* ---------- barra de seções ---------- */
+.abas-aluno { position:sticky; top:var(--altura-cab, 64px); z-index:150; display:flex; gap:4px; margin:0 0 var(--sp-5);
+  padding:6px; background:var(--cartao); border-radius:var(--raio); box-shadow:var(--sombra); }
+.aba-aluno { flex:1 1 0; min-width:0; display:flex; align-items:center; justify-content:center; gap:6px; padding:9px 10px;
+  background:transparent; color:var(--suave); border:0; border-radius:var(--raio-m); font-weight:600; font-size:var(--fs-md);
+  cursor:pointer; box-shadow:none; transition:background var(--t-rapida), color var(--t-rapida); }
+.aba-aluno:hover { background:var(--hover); color:var(--marinho); }
+.aba-aluno.ativa { background:var(--marinho-claro); color:var(--marinho); box-shadow:inset 0 -3px 0 var(--marinho-2); }
+.aba-aluno:focus-visible { outline:none; box-shadow:var(--foco); }
+.aba-aluno .aa-e { font-size:1.15em; line-height:1; }
+.aba-aluno .aa-t { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.aba-aluno[hidden] { display:none; }
+/* nunca durante a prova (nem fora da lista) */
+body.em-prova .abas-aluno, body:not(.com-abas) .abas-aluno { display:none !important; }
+
+/* celular: a mesma barra FIXA EMBAIXO da tela (alcance do polegar) */
+@media (max-width:700px) {
+  .abas-aluno { position:fixed; top:auto; left:0; right:0; bottom:0; margin:0; border-radius:16px 16px 0 0; padding:4px 4px calc(4px + env(safe-area-inset-bottom, 0px));
+    box-shadow:0 -1px 0 var(--borda), 0 -8px 24px rgba(20,33,61,.10); }
+  .aba-aluno { flex-direction:column; gap:2px; padding:6px 2px; font-size:11px; font-weight:600; }
+  .aba-aluno .aa-e { font-size:20px; }
+  .aba-aluno.ativa { box-shadow:inset 0 3px 0 var(--marinho-2); }
+  body.com-abas:not(.em-prova) { padding-bottom:calc(72px + env(safe-area-inset-bottom, 0px)); }
+  body.com-abas:not(.em-prova) .toast { bottom:calc(84px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* ---------- 👥 Turma: quem reagiu ---------- */
+#turmaMural .card-cab h2 { margin:0; }
+.mi-quem { display:flex; flex-direction:column; gap:2px; margin-top:6px; font-size:var(--fs-sm); color:var(--suave); }
+.mi-quem b { color:var(--texto); font-weight:600; }
+.mural-trava button { margin-top:6px; }
+
+/* ---------- 📚 Estudos ---------- */
+.estudo-lista { display:flex; flex-direction:column; gap:8px; margin-bottom:var(--sp-3); }
+.estudo-item { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 12px; border:1px solid var(--borda); border-radius:var(--raio-m); }
+.estudo-item .ei-info { display:flex; flex-direction:column; gap:2px; min-width:0; }
+.estudo-item .ei-nota { display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex-shrink:0; }
+
+/* ---------- 🎁 Recompensas ---------- */
+#recompensas h2 { margin-top:0; }
+.rec-atual { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:8px 0 12px; }
+.rec-escolhidas { display:flex; flex-wrap:wrap; gap:6px; }
+.rec-h3 { font-size:var(--fs-lg); margin:14px 0 6px; color:var(--marinho); }
+.rec-parte { margin:8px 0 4px; font-weight:600; }
+.rec-acoes { margin-top:14px; }
+.rec-ranking { margin:4px 0 12px; padding-left:22px; }
+.rec-ranking li { margin:3px 0; }

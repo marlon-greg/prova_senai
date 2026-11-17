@@ -1,6 +1,6 @@
 // Painel → aba "Relatórios": notas por aluno, matéria e turma, alerta de reprovação (média < 50, peso igual por prova)
 // e desempenho por tópico (o "tema" das questões). desempenhoPorTopico() é a conta que a autoavaliação vai usar (docs/INTEGRACOES.md).
-import { db, esc, $, toast, traduzirErro, corrigir, bancosDaProva, temaDe, semestreDaProva, materiaDaProva, rotuloSemestre, chaveTexto } from "./common.js?v=20261113a";
+import { db, esc, $, toast, traduzirErro, corrigir, bancosDaProva, temaDe, semestreDaProva, materiaDaProva, rotuloSemestre, chaveTexto } from "./common.js?v=20261116b";
 import { graficoLinhas, ligarGraficos } from "./graficos.js";
 import { imprimir } from "./admin-relatorio-aluno.js";
 import { pl, ajudaHTML, vazio } from "./ui.js";

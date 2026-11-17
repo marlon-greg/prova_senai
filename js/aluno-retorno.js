@@ -9,7 +9,7 @@ export const TIPOS_AP = { duasCertas: "Tem mais de uma resposta certa", nenhumaC
 // eu = { uid, email, nome }; info = { provaId, provaTitulo, qid, enunciado }; simulacao = não grava
 export async function apontar(eu, info, simulacao = false) {
   let tipo = null;
-  const html = `<p class="pequeno" style="margin-top:0">Achou algo estranho nesta questão? Conte para o professor. <b>Isso não muda a sua resposta nem a sua nota</b>: ele confere depois e te responde aqui no site.</p>
+  const html = `<p class="pequeno" style="margin-top:0">Achou algo estranho nesta questão? Conte para o professor. <b>Isso não muda a sua resposta nem a sua nota</b>: ele confere depois, e a resposta aparece como observação nesta questão, no resultado da prova.</p>
     <div class="op-pilulas op-motivos" role="radiogroup" aria-label="O que aconteceu">${Object.entries(TIPOS_AP).map(([k, t]) => `<button type="button" role="radio" aria-checked="false" data-t="${k}">${esc(t)}</button>`).join("")}</div>
     <label for="apTexto" style="margin-top:10px">Explique (o que você viu)</label><textarea id="apTexto" maxlength="2000" style="min-height:90px" placeholder="Ex.: as alternativas B e D dizem a mesma coisa."></textarea>`;
   return modal({ titulo: "🚩 Algo errado nesta questão?", conteudo: html, ok: "Enviar para o professor", cancelar: "Cancelar", largo: true,
@@ -25,6 +25,8 @@ export async function apontar(eu, info, simulacao = false) {
     } });
 }
 
+// situação que o aluno vê: 🚩 apontamento (procede / não procede) e 💡 sugestão (aplicada / não aplicada)
+const ROTULO_ST = { procede: "você tinha razão!", "nao-procede": "conferido", feita: "✅ aplicada", analisada: "não aplicada por enquanto" };
 const CATEGORIAS = ["Ideia nova", "Algo não funcionou", "Ficou difícil de usar", "Acessibilidade", "Outro"];
 export async function desenharFaleConosco(box, eu, cfg, simulacao = false) {
   if (!box) return;
@@ -42,9 +44,10 @@ export async function desenharFaleConosco(box, eu, cfg, simulacao = false) {
     + (meus.length ? "" : `<p class="pequeno" style="margin:0">${cfg.apontamentos ? "Achou algo errado numa questão? Toque em <b>🚩</b> nela. " : ""}${cfg.sugestoes ? "Ideias e problemas do site: <b>💡 Mandar uma sugestão</b>." : ""}</p>`)
     + (meus.length ? collapsible({ chave: "aluno:minhasMensagens", classe: "leve", titulo: `Minhas mensagens`,
       resumoHTML: `<span class="chip">${meus.length}</span>${aguardando ? `<span class="chip aviso">${aguardando} aguardando</span>` : ""}${respondidas ? `<span class="chip ok">${respondidas} com resposta</span>` : ""}`,
-      corpoHTML: meus.map(m => `<div class="minha-msg"><span class="tag ${["aberto", "aberta"].includes(m.status) ? "aviso" : "ok"}">${m.ap ? "🚩" : "💡"} ${["aberto", "aberta"].includes(m.status) ? "aguardando" : esc(m.status === "procede" ? "você tinha razão!" : m.status === "nao-procede" ? "conferido" : m.status)}</span>
+      corpoHTML: meus.map(m => `<div class="minha-msg"><span class="tag ${["aberto", "aberta", "analisada"].includes(m.status) ? "aviso" : "ok"}">${m.ap ? "🚩" : "💡"} ${["aberto", "aberta"].includes(m.status) ? "aguardando" : esc(ROTULO_ST[m.status] || m.status)}</span>
       <span class="pequeno">${dataBR(m.criadoEm)}${m.ap ? ` · ${esc(m.provaTitulo || "")}` : ""}</span><p style="margin:4px 0">${esc(m.ap ? TIPOS_AP[m.tipo] || "" : m.categoria || "")}${m.texto ? `: ${esc(m.texto)}` : ""}</p>
-      ${m.resposta ? `<p class="ret-resp">↩ <b>${esc(m.respondidoPor || "Professor")}:</b> ${esc(m.resposta)}</p>` : ""}</div>`).join("") }) : "");
+      ${m.ap ? (m.resposta && !["aberto", "aberta"].includes(m.status) ? `<p class="pequeno ret-resp">📝 A resposta está na própria questão, como observação: abra o resultado de <b>${esc(m.provaTitulo || "a prova")}</b>.</p>` : "")
+        : m.resposta ? `<p class="ret-resp">↩ <b>${esc(m.respondidoPor || "Professor")}:</b> ${esc(m.resposta)}</p>` : ""}</div>`).join("") }) : "");
   $("#btnSugestao", box)?.addEventListener("click", () => {
     let cat = null;
     modal({ titulo: "💡 Sugestão para o sistema", conteudo: `<div class="op-pilulas" role="radiogroup" aria-label="Sobre o quê">${CATEGORIAS.map(c => `<button type="button" role="radio" aria-checked="false" data-c="${esc(c)}">${esc(c)}</button>`).join("")}</div>

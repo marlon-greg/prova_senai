@@ -1,6 +1,8 @@
 // Itens criados pela equipe (PNG enviado ou desenhado no painel): estampas, roupas, chapéus, óculos, colares, adesivos e fundos.
 // Firestore itensCustom/{id} = { nome, categoria, png (data URL, até ~300 KB), ajuste { dx, dy, escala }, trava { n } | null, ativo, criadoPor }.
 // Viram itens do catálogo do personagem (id "cx-<id>") e acessórios dos mascotes. Sem dependência do Firebase aqui.
+// SKIN PRONTA (categoria "skin"): personagem montado pelo admin (moldura e adesivo continuam os do aluno) = { nome, categoria: "skin", avatar {...}, png: "" (sem imagem), trava, ativo }.
+// Fica numa lista à parte (id "sk-<id>"): o aluno aplica com um clique no editor e depois continua editando.
 
 // cat: em que parte do personagem entra · av: caixa no personagem (0..200) · masc: caixa no mascote (200 x 220) · w = largura base
 export const CATEGORIAS_ITEM = {
@@ -14,18 +16,26 @@ export const CATEGORIAS_ITEM = {
 };
 export const PARA_MASCOTE = ["estampa", "roupa", "cabeca", "oculos", "pescoco"];
 
-let ITENS = {};   // "cx-<id>" -> item
+export const CATEGORIA_SKIN = "skin";
+let ITENS = {}, SKINS = {};   // "cx-<id>" -> item · "sk-<id>" -> skin pronta
 export const itemCustom = id => ITENS[id] || null;
 export const listaItensCustom = () => Object.values(ITENS);
+export const skinCustom = id => SKINS[id] || null;
+export const skinsProntas = () => Object.values(SKINS);
+const travaDe = t => t?.n ? { trava: { n: t.n } } : t?.medalha ? { trava: { medalha: t.medalha, nivel: t.nivel || 1 } } : {};
 // guarda os itens e põe no catálogo do personagem (sem repetir)
 export function registrarItensCustom(lista, CATALOGO) {
-  ITENS = {};
+  ITENS = {}; SKINS = {};
   Object.keys(CATALOGO).forEach(p => { CATALOGO[p] = CATALOGO[p].filter(i => !String(i.id).startsWith("cx-")); });
   for (const it of lista || []) {
+    if (it.categoria === CATEGORIA_SKIN) {
+      if (it.ativo !== false && it.avatar && typeof it.avatar === "object") SKINS["sk-" + it.id] = { id: "sk-" + it.id, nome: String(it.nome || "Skin"), avatar: it.avatar, ...travaDe(it.trava) };
+      continue;
+    }
     if (it.ativo === false || !it.png || !CATEGORIAS_ITEM[it.categoria]) continue;
     const id = "cx-" + it.id, parte = CATEGORIAS_ITEM[it.categoria].parte;
     ITENS[id] = { ...it, idCat: id };
-    if (CATALOGO[parte]) CATALOGO[parte].push({ id, nome: `${it.nome} ✨`, custom: true, ...(it.trava?.n ? { trava: { n: it.trava.n } } : it.trava?.medalha ? { trava: { medalha: it.trava.medalha, nivel: it.trava.nivel || 1 } } : {}) });
+    if (CATALOGO[parte]) CATALOGO[parte].push({ id, nome: `${it.nome} ✨`, custom: true, ...travaDe(it.trava) });
   }
 }
 // <image> do item numa caixa (com o ajuste fino da equipe)

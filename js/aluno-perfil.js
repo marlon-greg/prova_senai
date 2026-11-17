@@ -3,12 +3,13 @@
 import { ic } from "./icones.js";
 import { menuHTML, itemMenu } from "./ui.js";
 import { db, esc, $, toast, modal, confirmar } from "./common.js";
-import { CATALOGO, CORES, ORDEM_PELES, NOMES_PARTES, PELES, labioNatural, svgAvatar, liberado, textoTrava, avatarValido, avatarAleatorio, permitido, trocarSexo, PARTES_OCULTAS, AJUSTES, POSICOES_ADESIVO } from "./avatar.js";
+import { CATALOGO, CORES, ORDEM_PELES, NOMES_PARTES, PELES, labioNatural, svgAvatar, liberado, textoTrava, avatarValido, avatarAleatorio, permitido, trocarSexo, PARTES_OCULTAS, AJUSTES, POSICOES_ADESIVO, CORES_LIVRES, hexValido, TUDO } from "./avatar.js";
+import { skinsProntas } from "./itens-custom.js";
 import { FUNDOS_PERFIL, fundoPerfil, urlFundo, urlMini } from "./fundos-perfil.js";
 // status do dia: só frases prontas (ninguém escreve texto livre)
 import { STATUS } from "./status-aluno.js";
 export { STATUS };
-import { botoesSocial, sincronizarStatus } from "./aluno-social.js";
+import { botoesSocial, sincronizarStatus, sincronizarVisual } from "./aluno-social.js";
 import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 // editor em abas; cada parte mostra só a(s) cor(es) dela
@@ -18,12 +19,13 @@ const GRUPOS = [
   { nome: "👀 Olhos e boca", partes: ["olhos", "cilios", "maquiagem", "boca"] },
   { nome: "🎚 Ajustes finos", partes: ["ajustes"] },
   { nome: "👕 Roupa e acessórios", partes: ["roupa", "estampa", "pescoco", "oculos", "brinco", "acessorio"] },
-  { nome: "🖼 Fundo e moldura", partes: ["fundo", "adesivo", "moldura"] }
+  { nome: "🖼 Fundo e moldura", partes: ["fundo", "adesivo", "moldura"] },
+  { nome: "✨ Prontos", partes: ["skins"] }   // skins prontas montadas pelo admin (só aparece se houver alguma)
 ];
 const CORES_DA_PARTE = { corpo: ["pele"], rosto: ["pele"], orelha: ["pele"], nariz: ["pele"], bochecha: ["pele"], detalhe: ["pele"],
-  cabelo: ["corCabelo"], sobrancelha: ["corCabelo"], barba: ["corCabelo"], olhos: ["corOlhos"], boca: ["corLabios"],
+  cabelo: ["corCabelo"], sobrancelha: ["corSobrancelha"], barba: ["corBarba"], olhos: ["corOlhos"], boca: ["corLabios"],
   roupa: ["corRoupa"], pescoco: ["corJoia", "corAcessorio"], oculos: ["corOculos"], brinco: ["corJoia"], acessorio: ["corAcessorio"] };
-const NOME_COR = { pele: "Cor da pele", corCabelo: "Cor do cabelo, da sobrancelha e da barba", corOlhos: "Cor dos olhos", corLabios: "Cor dos lábios",
+const NOME_COR = { pele: "Cor da pele", corCabelo: "Cor do cabelo", corSobrancelha: "Cor das sobrancelhas", corBarba: "Cor da barba e do bigode", corOlhos: "Cor dos olhos", corLabios: "Cor dos lábios",
   corRoupa: "Cor da roupa", corJoia: "Cor das joias (brincos, correntes)", corAcessorio: "Cor do acessório (chapéu, laço, cachecol, gravata)", corOculos: "Cor da armação" };
 const NOMES_POS = { "sup-esq": "↖ em cima, à esquerda", "sup-dir": "↗ em cima, à direita", "inf-esq": "↙ embaixo, à esquerda", "inf-dir": "↘ embaixo, à direita" };
 // cartão do perfil: foto de fundo (só da lista) e lado do personagem
@@ -94,26 +96,47 @@ function editarPersonagem({ eu, perfil, titulos, simulacao, aoSalvar }) {
         <div class="ep-abas" id="epPartes"></div><div class="ep-cores" id="epCores"></div><div class="ep-itens" id="epItens"></div></div></div>
     <p class="pequeno">Escolha primeiro <b>Masculino</b> ou <b>Feminino</b> em “Corpo”: as opções de rosto, cabelo, olhos e acessórios se ajustam ao corpo, e o 🎲 Aleatório sorteia só do mesmo corpo. 🔒 Itens com cadeado são <b>skins</b>: liberam com as conquistas. Você tem ${titulos.length} conquista(s).</p>`;
   // cores na ordem de mostrar (a pele vai da mais clara para a mais escura)
+  const corCabeloAtual = () => hexValido(av.corCabeloHex) || CORES.corCabelo[Number(av.corCabelo)] || CORES.corCabelo[1];
   const swatches = k => (k === "pele" ? ORDEM_PELES : CORES[k].map((_, i) => i)).map(i => {
-    const c = CORES[k][i] || labioNatural(PELES[av.pele] || PELES[1]), nat = k === "corLabios" && i === 0;
-    return `<button type="button" class="sw${nat ? " sw-nat" : ""}" data-cor="${k}" data-i="${i}" style="background:${c}" title="${nat ? "Natural" : ""}" aria-label="${nat ? "Natural" : `cor ${i + 1}`}"></button>`; }).join("");
+    const igual = CORES[k] === CORES.corSobrancelha && i === 0, nat = (k === "corLabios" && i === 0) || igual;
+    const c = CORES[k][i] || (igual ? corCabeloAtual() : labioNatural(PELES[av.pele] || PELES[1])), rot = igual ? "Igual ao cabelo" : nat ? "Natural" : "";
+    return `<button type="button" class="sw${nat ? " sw-nat" : ""}" data-cor="${k}" data-i="${i}" style="background:${c}" title="${rot}" aria-label="${rot || `cor ${i + 1}`}"></button>`; }).join("") +
+    (CORES_LIVRES[k] ? `<label class="sw sw-livre${hexValido(av[CORES_LIVRES[k]]) ? " sel" : ""}" title="Escolher qualquer cor" style="${hexValido(av[CORES_LIVRES[k]]) ? `background:${hexValido(av[CORES_LIVRES[k]])}` : ""}">
+      <input type="color" data-livre="${CORES_LIVRES[k]}" value="${hexValido(av[CORES_LIVRES[k]]) || (k === "corCabelo" ? corCabeloAtual() : CORES[k][Number(av[k])] || corCabeloAtual())}" aria-label="Escolher qualquer cor"></label>` : "");
   const desenhar = c => {
-    const g = GRUPOS[grupo], oculta = PARTES_OCULTAS[av.corpo === "feminino" ? "f" : "m"], partes = g.partes.filter(k => !oculta.includes(k) && (k === "ajustes" || (CATALOGO[k] || []).length > 1));   // parte sem opção (ex.: estampa sem itens da equipe) não aparece
+    const g = GRUPOS[grupo], oculta = PARTES_OCULTAS[av.corpo === "feminino" ? "f" : "m"], partes = g.partes.filter(k => !oculta.includes(k) && (k === "ajustes" || k === "skins" || (CATALOGO[k] || []).length > 1));   // parte sem opção (ex.: estampa sem itens da equipe) não aparece
     if (!partes.includes(parte)) parte = partes[0];
     $("#epPrevia", c).innerHTML = svgAvatar(av, 220);
-    c.querySelectorAll("[data-grupo]").forEach(b => { const on = Number(b.dataset.grupo) === grupo; b.classList.toggle("ativa", on); b.setAttribute("aria-selected", on); });
+    c.querySelectorAll("[data-grupo]").forEach(b => { const on = Number(b.dataset.grupo) === grupo; b.classList.toggle("ativa", on); b.setAttribute("aria-selected", on);
+      if (GRUPOS[b.dataset.grupo].partes[0] === "skins") b.hidden = !skinsProntas().length; });
     $("#epPartes", c).innerHTML = partes.length < 2 ? "" : partes.map(k => `<button type="button" data-parte="${k}" class="${k === parte ? "ativa" : ""}" aria-pressed="${k === parte}">${esc(NOMES_PARTES[k] || k)}</button>`).join("");
-    $("#epCores", c).innerHTML = parte === "ajustes" ? "" : (CORES_DA_PARTE[parte] || []).filter(k => !(k === "corLabios" && av.corpo !== "feminino"))
+    $("#epCores", c).innerHTML = parte === "ajustes" || parte === "skins" ? "" : (CORES_DA_PARTE[parte] || []).filter(k => !(k === "corLabios" && av.corpo !== "feminino"))
       .map(k => `<div><span class="pequeno">${NOME_COR[k]}</span><div class="ep-swatches">${swatches(k)}</div></div>`).join("");
-    c.querySelectorAll("[data-cor]").forEach(b => { b.classList.toggle("sel", Number(av[b.dataset.cor]) === Number(b.dataset.i)); b.onclick = () => { av[b.dataset.cor] = Number(b.dataset.i); desenhar(c); }; });
+    c.querySelectorAll("[data-cor]").forEach(b => { const k = b.dataset.cor; b.classList.toggle("sel", !hexValido(av[CORES_LIVRES[k]]) && Number(av[k]) === Number(b.dataset.i));
+      b.onclick = () => { av = { ...av, [k]: Number(b.dataset.i) }; if (CORES_LIVRES[k]) delete av[CORES_LIVRES[k]]; desenhar(c); }; });
+    // cor livre: enquanto arrasta só a prévia muda; ao soltar redesenha tudo
+    c.querySelectorAll("[data-livre]").forEach(inp => { inp.oninput = () => { av = { ...av, [inp.dataset.livre]: hexValido(inp.value) }; $("#epPrevia", c).innerHTML = svgAvatar(av, 220); inp.parentElement.style.background = inp.value; };
+      inp.onchange = () => desenhar(c); });
     c.querySelectorAll("[data-parte]").forEach(b => b.onclick = () => { parte = b.dataset.parte; desenhar(c); });
     if (parte === "ajustes") return desenharAjustes(c);
+    if (parte === "skins") return desenharSkins(c);
     const posAdesivo = parte === "adesivo" ? `<div class="ep-pos"><span class="pequeno">Onde fica o adesivo:</span><div class="grupo-chips">${Object.entries(NOMES_POS).map(([k, t]) => `<button type="button" class="chip${av.adesivoPos === k ? " sel" : ""}" aria-pressed="${av.adesivoPos === k}" data-pos="${k}">${t}</button>`).join("")}</div></div>` : "";
     $("#epItens", c).innerHTML = posAdesivo + CATALOGO[parte].filter(it => parte === "corpo" || permitido(it, av.corpo)).map(it => { const ok = liberado(it, titulos);
       return `<button type="button" class="ep-item${av[parte] === it.id ? " sel" : ""}${ok ? "" : " travado"}" data-item="${esc(it.id)}" ${ok ? "" : "disabled"} title="${esc(ok ? it.nome : textoTrava(it.trava))}">
         ${svgAvatar(parte === "corpo" ? trocarSexo(av, it.id, titulos) : { ...av, [parte]: it.id }, 74, { parte })}<span>${esc(it.nome)}</span>${ok ? (it.trava ? `<small class="ep-novo">✨ skin</small>` : "") : `<small>${esc(textoTrava(it.trava))}</small>`}</button>`; }).join("");
     c.querySelectorAll("[data-pos]").forEach(b => b.onclick = () => { av = { ...av, adesivoPos: b.dataset.pos }; desenhar(c); });
     c.querySelectorAll("[data-item]").forEach(b => b.onclick = () => { av = parte === "corpo" ? trocarSexo(av, b.dataset.item, titulos) : { ...av, [parte]: b.dataset.item }; desenhar(c); });
+  };
+  // skins prontas do admin: um clique veste o visual inteiro (a moldura e o adesivo do aluno ficam); depois dá para continuar editando
+  const desenharSkins = c => {
+    const lista = skinsProntas();
+    $("#epItens", c).innerHTML = `<p class="pequeno" style="margin:0 0 6px;grid-column:1 / -1">Visuais prontos montados pela equipe. Toque para vestir; depois você pode mudar o que quiser.</p>` +
+      lista.map(sk => { const ok = liberado(sk, titulos), corpo = sk.avatar?.corpo === "feminino" ? "Feminino" : "Masculino";
+        return `<button type="button" class="ep-item${av.skin === sk.id ? " sel" : ""}${ok ? "" : " travado"}" data-skin="${esc(sk.id)}" ${ok ? "" : "disabled"} title="${esc(ok ? `${sk.nome} (${corpo})` : textoTrava(sk.trava))}">
+          ${svgAvatar(avatarValido(sk.avatar, TUDO), 74)}<span>${esc(sk.nome)}</span><small>${ok ? corpo : esc(textoTrava(sk.trava))}</small></button>`; }).join("");
+    c.querySelectorAll("[data-skin]").forEach(b => b.onclick = () => { const sk = lista.find(x => x.id === b.dataset.skin); if (!sk) return;
+      av = avatarValido({ ...sk.avatar, skin: sk.id, moldura: av.moldura, adesivo: av.adesivo, adesivoPos: av.adesivoPos }, titulos);
+      toast(`Visual “${sk.nome}” aplicado. Clique em Salvar personagem para usar.`, "info"); desenhar(c); });
   };
   // deslizantes: só a prévia redesenha (o foco fica no deslizante)
   const desenharAjustes = c => {
@@ -155,6 +178,7 @@ function editarPersonagem({ eu, perfil, titulos, simulacao, aoSalvar }) {
     antesDeConfirmar: async c => {
       try { await gravarPerfil(eu, simulacao, { avatar: av, apelido: $("#epApelido", c).value.trim(), status: perfil.status || "", statusEm: perfil.statusEm, cartao: perfil.cartao, saves: perfil.saves || [] }); }
       catch (e) { toast("Não foi possível salvar o personagem.", "erro"); return false; }
+      sincronizarVisual(eu, { avatar: avatarValido(av, titulos), apelido: $("#epApelido", c).value.trim() }, simulacao);   // o mural da turma acompanha a skin nova
       toast(simulacao ? "🧪 Personagem salvo (só neste navegador)." : "Personagem salvo! 🎉", "ok"); aoSalvar(); return true;
     } });
 }
