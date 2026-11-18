@@ -285,7 +285,7 @@ async function listarProvas() {
     else { fazer.insertAdjacentHTML(td ? "afterbegin" : "beforeend", item); nFazer++; }   // em andamento vai para o topo
     if (td?.finalizadaEm) {   // placar sem esperar: a lista não fica travada lendo gabaritos
       const el = boxF.querySelector(`[data-placar="${p.id}"]`);
-      placarDaTentativa({ id: t.id, ...td }).then(r => { el.innerHTML = textoPlacarCurto(r); }).catch(() => { el.textContent = "placar indisponível"; });
+      placarDaTentativa({ id: t.id, ...td }).then(r => { el.innerHTML = textoPlacarCurto(r, p); }).catch(() => { el.textContent = "placar indisponível"; });
     }
   }
   if (!mostradas) { box.innerHTML = vazio({ e: "📭", texto: `<b>Nenhuma prova liberada para você no momento.</b></p><p class="pequeno">Quando o professor liberar uma prova da sua turma, ela aparece aqui. Se a prova já começou na sala, recarregue a página; se continuar sem aparecer, mostre ao professor o nome e o e-mail da sua conta: <b>${esc(eu.nomeConta || "(conta sem nome)")}</b> · <b>${esc(eu.email)}</b>. O nome cadastrado na turma precisa ser igual ao da conta.</p>${avisoVinculo ? `<p class="pequeno erro-texto">${esc(avisoVinculo)}` : ""}` }); boxF.innerHTML = semFeitas; return; }
@@ -1080,8 +1080,17 @@ async function placarDaTentativa(t) {
   const p = placar(itens);
   return { acertos: p.acertos, totalQuestoes: p.totalQuestoes, nota: t.nota ?? p.notaPrevia, pendentes: p.aguardandoCorrecao };
 }
-function textoPlacarCurto(r) {
-  return `acertou <b>${r.acertos}</b> de ${r.totalQuestoes} · nota <b>${r.nota}</b>${r.pendentes ? ` <span class="pequeno">(${r.pendentes} em correção)</span>` : ""}`;
+// recuperação/substitutiva: a prova vale 0–100 e a nota final é convertida para 0–valeAte (o professor define por aluno)
+function notaFinalAluno(prova, nota) {
+  const v = Number(prova?.valeAte?.[String(eu?.email || "").toLowerCase()]);
+  if (!(v > 0) || nota === undefined || nota === null) return null;
+  const tipo = prova?.tipoPorAluno?.[String(eu.email).toLowerCase()] === "substitutiva" ? "substitutiva" : "recuperação";
+  const br = n => String(n).replace(".", ",");
+  return { texto: `${br(Math.round(Number(nota) * v / 100 * 10) / 10)} de ${br(v)}`, tipo };
+}
+function textoPlacarCurto(r, prova = null) {
+  const f = notaFinalAluno(prova, r.nota);
+  return `acertou <b>${r.acertos}</b> de ${r.totalQuestoes} · nota <b>${r.nota}</b>${f ? ` · <b>nota final (${f.tipo}): ${f.texto}</b>` : ""}${r.pendentes ? ` <span class="pequeno">(${r.pendentes} em correção)</span>` : ""}`;
 }
 
 let ouvinteFim = null, ouvinteProvaFim = null, desenhoFim = 0;
@@ -1146,6 +1155,7 @@ async function desenharFim() {
   $("#fimNota").innerHTML = avisos + (r ? `
     <p class="placar">Você acertou <b>${r.acertos}</b> de <b>${r.totalQuestoes}</b></p>
     <p class="placar-nota">Nota: <b>${r.nota}</b> / 100</p>
+    ${(f => f ? `<p class="placar-nota">Nota final da ${f.tipo}: <b>${f.texto}</b></p>` : "")(notaFinalAluno(provaAtual, r.nota))}
     ${r.pendentes ? `<p class="aviso-box">✍ ${r.pendentes === 1 ? "1 resposta ainda vai ser corrigida" : `${r.pendentes} respostas ainda vão ser corrigidas`}; o total pode mudar. Esta tela atualiza sozinha.</p>` : ""}` : `<p class="pequeno">Não foi possível calcular o resultado agora. Volte para a lista de provas e abra de novo.</p>`) +
     (liberado ? "" : `<p class="pequeno">Quais você acertou e o gabarito aparecem quando o professor liberar.</p>`);
   $("#btnVerResultadoTeste").classList.toggle("oculto", !liberado);
