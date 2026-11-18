@@ -5,6 +5,7 @@ import { graficoLinhas, ligarGraficos } from "./graficos.js";
 import { imprimir } from "./admin-relatorio-aluno.js";
 import { pl, ajudaHTML, vazio } from "./ui.js";
 import { ic } from "./icones.js";
+import { notaQueConta } from "./nota-final.js";
 import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { situacaoCriterio, SITUACOES } from "./evidencias.js";
 import { criteriosDaUnidade, codigoCriterio, CRITERIOS } from "./plano-ensino.js?v=20261116a";
@@ -48,7 +49,7 @@ export async function carregarRelatorios() {
     const provas = Object.fromEntries(ps.docs.map(d => [d.id, { id: d.id, ...d.data() }]));
     const linhas = tn.docs.map(d => ({ id: d.id, ...d.data() })).filter(t => t.teste !== true && t.finalizadaEm && provas[t.provaId] && nota(t) !== null).map(t => {
       const p = provas[t.provaId];
-      return { t, p, email: String(t.email || "").toLowerCase(), nome: t.nome || t.email, nota: nota(t), turmaId: p.turmaId || "", semestre: semestreDaProva(p), materia: materiaDaProva(p, bs) || "Sem matéria" };
+      return { t, p, email: String(t.email || "").toLowerCase(), nome: t.nome || t.email, nota: notaQueConta(p, t.email, nota(t)), turmaId: p.turmaId || "", semestre: semestreDaProva(p), materia: materiaDaProva(p, bs) || "Sem matéria" };
     });
     base = { provas, turmas: ts, linhas, topicos: null };
   } catch (e) { $("#rlConteudo").innerHTML = `<p class="erro-texto">${esc(traduzirErro(e))}</p>`; return; }

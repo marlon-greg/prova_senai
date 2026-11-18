@@ -36,6 +36,10 @@ service cloud.firestore {
                                && email().lower() in get(/databases/$(db)/documents/acessibilidade/$(e)).data.get('auxiliares', []); }
     function cuidaDe(e)    { return professor() || minhaAluna(e); }
     function eu(e)         { return logado() && email().lower() == e; }
+    // aluno com acessibilidade ativa: anda livre entre as questões (ir e voltar) em qualquer prova, salvo se desligado
+    function acessLivre()  { return exists(/databases/$(db)/documents/acessibilidade/$(email().lower()))
+                               && get(/databases/$(db)/documents/acessibilidade/$(email().lower())).data.get('ativo', true) != false
+                               && get(/databases/$(db)/documents/acessibilidade/$(email().lower())).data.get('prova', {}).get('navegacaoLivre', true) != false; }
     // tentativa de teste da própria pessoa da equipe
     // sorteio feito pelo professor para o aluno com acessibilidade (acessibilidade/{email}.sorteios.{prova}.ids)
     function sorteioAcess(p) {
@@ -427,7 +431,7 @@ service cloud.firestore {
           && tentativa(t).uid == uid()
           && tentativa(t).finalizadaEm == null
           && prova(tentativa(t).provaId).liberada == true
-          && prova(tentativa(t).provaId).get('permitirVoltar', false) == true
+          && (prova(tentativa(t).provaId).get('permitirVoltar', false) == true || acessLivre())
           && resource.data.get('perdida', false) != true
           && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['resposta', 'segundos', 'atualizadaEm'])
           && request.resource.data.atualizadaEm == request.time)

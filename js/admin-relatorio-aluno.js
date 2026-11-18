@@ -4,6 +4,7 @@ import { db, esc, $, toast, traduzirErro, dataCurta, semestreDe, materiaDaProva,
 import { HUMOR, ITENS_AUX } from "./diario-perguntas.js";
 import { analiseDiarioIA } from "./ia.js";
 import { tarefa } from "./ui.js";
+import { notaQueConta } from "./nota-final.js";
 import { graficoLinhas, ligarGraficos } from "./graficos.js";
 import { desempenhoPorTopico, MEDIA_MINIMA } from "./admin-relatorios.js";
 import { collection, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
@@ -45,7 +46,7 @@ export async function relatorioAluno(box, ctx) {
       const t = await getDoc(doc(db, "tentativas", `${uid}_${p.id}`)).catch(() => null);
       if (!t?.exists() || !t.data().finalizadaEm) return null;
       const n = Number.isFinite(Number(t.data().nota)) && t.data().nota !== null ? Number(t.data().nota) : Number(t.data().notaPrevia);
-      return Number.isFinite(n) ? { t: { id: t.id, ...t.data() }, p, materia: materiaDaProva(p, bancos) || "Sem matéria", nota: n, data: isoDe(t.data().finalizadaEm.toDate ? t.data().finalizadaEm.toDate() : new Date()) } : null;
+      return Number.isFinite(n) ? { t: { id: t.id, ...t.data() }, p, materia: materiaDaProva(p, bancos) || "Sem matéria", nota: notaQueConta(p, t.data().email, n), data: isoDe(t.data().finalizadaEm.toDate ? t.data().finalizadaEm.toDate() : new Date()) } : null;
     }))).filter(Boolean).sort((a, b) => a.data.localeCompare(b.data));
   } catch (e) { console.warn("relatório: provas", e); }
   let topicos = null, analise = null, analiseDe = "";

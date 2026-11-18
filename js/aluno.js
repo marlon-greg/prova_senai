@@ -4,7 +4,8 @@ import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar
          idTentativaTeste, apagarTentativaTeste, confirmar, traduzirErro, iniciais, fecharModais, temaDe, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco, bancoDaQuestao, sortearQuestoes }
   from "./common.js?v=20261116b";
 import { baixarMaterial } from "./material.js";
-import { desenharConquistas } from "./aluno-conquistas.js";
+import { desenharConquistas } from "./aluno-conquistas.js?v=20261118e";
+import { regraDoTipo, calcNotaFinal } from "./nota-final.js";
 import { apontar, desenharFaleConosco } from "./aluno-retorno.js?v=20261116c";
 import { desenharPerfil, painelSimulacao, lerSimulacao, provasSimuladas, RESUMO_SIMULADO } from "./aluno-perfil.js";
 import { iniciarAbas, definirAbasVisiveis, irParaAba, abaAtual } from "./aluno-nav.js";
@@ -40,7 +41,9 @@ const ap = () => acess?.prova || {};
 const modoTodas = () => provaAtual?.modoExibicao === "todas";          // todas as questões na mesma página
 const trocaAbaPermitida = () => provaAtual?.permitirTrocaAba === true; // sem tela cheia e sem aviso (só conta)
 const colarPermitido = () => provaAtual?.permitirColar === true;
-const podeVoltar = () => provaAtual?.permitirVoltar === true;          // ir e voltar, alterando as respostas até finalizar
+// ir e voltar, alterando as respostas até finalizar. Aluno com ACESSIBILIDADE: sempre (padrão; acessibilidade.prova.navegacaoLivre = false desliga)
+const voltarNaProva = p => p?.permitirVoltar === true || (!!acess && ap().navegacaoLivre !== false);
+const podeVoltar = () => voltarNaProva(provaAtual);
 const temConsulta = () => !!(idsConsulta(provaAtual).length || provaAtual?.materialConsultaUrl);
 // código de acesso (o modo teste da equipe não pede)
 const pedeCodigo = () => !modoTeste && !!String(provaAtual?.codigoAcesso || "").trim();
@@ -56,7 +59,7 @@ const limiteSaidas = () => vidasBase() && !semLimites()
 const colarTiraVida = () => !colarPermitido() && provaAtual?.colarTiraVida !== false;
 // "perder a questão" só existe no modo uma por vez sem voltar; nos outros a prova é encerrada
 const acaoAoExceder = () => !modoTodas() && !podeVoltar() && provaAtual?.acaoAoExceder === "perderQuestao" ? "perderQuestao" : "encerrar";
-const textoPena = p => (p.modoExibicao !== "todas" && p.permitirVoltar !== true && p.acaoAoExceder === "perderQuestao") ? "você perde a questão atual" : "a prova é encerrada";
+const textoPena = p => (p.modoExibicao !== "todas" && !voltarNaProva(p) && p.acaoAoExceder === "perderQuestao") ? "você perde a questão atual" : "a prova é encerrada";
 
 // ---------- modo teste (equipe vê a prova como o aluno: index.html?teste=<provaId>) ----------
 const provaTeste = new URLSearchParams(location.search).get("teste");
@@ -362,7 +365,7 @@ $("#btnImprimir").onclick = () => window.print();
 // regras mostradas antes de começar: só o que vale para esta prova
 function regrasDaProva(p) {
   const r = ["A prova só pode ser feita <b>uma vez</b>. Depois de clicar em Começar, não dá para reiniciar."];
-  const voltar = p.permitirVoltar === true;
+  const voltar = voltarNaProva(p);
   if (p.modoExibicao === "todas") r.push(voltar
     ? "Todas as questões aparecem <b>nesta página</b>. Salve cada resposta pelo botão <b>Salvar resposta</b>: dá para alterar e salvar de novo até clicar em <b>Finalizar prova</b>."
     : "Todas as questões aparecem <b>nesta página</b>. Envie cada resposta pelo botão <b>Enviar resposta</b> dela: depois de enviada, ela fica travada. No fim, clique em <b>Finalizar prova</b>.");
@@ -1079,15 +1082,6 @@ async function placarDaTentativa(t) {
   });
   const p = placar(itens);
   return { acertos: p.acertos, totalQuestoes: p.totalQuestoes, nota: t.nota ?? p.notaPrevia, pendentes: p.aguardandoCorrecao };
-}
-// regra da nota final (por tipo, em prova.regraNota): a prova sempre vale 0–100 para o aluno
-//  teto: nota limitada a "vale até" (padrão) · proporcional: nota × vale ÷ 100 · meta: nota × vale ÷ meta, limitada a vale
-const REGRAS_NOTA = { teto: "Teto (nota limitada ao valor)", proporcional: "Proporcional (nota × valor ÷ 100)", meta: "Proporcional com meta (atingiu a meta = valor)" };
-function regraDoTipo(prova, tipo) { const r = prova?.regraNota?.[tipo] || {}; return { modo: REGRAS_NOTA[r.modo] ? r.modo : "teto", meta: Number(r.meta) > 0 ? Number(r.meta) : 70 }; }
-function calcNotaFinal(nota, vale, regra) {
-  const n = Number(nota || 0), v = Number(vale);
-  const f = regra.modo === "proporcional" ? n * v / 100 : regra.modo === "meta" ? Math.min(v, n * v / regra.meta) : Math.min(v, n);
-  return Math.round(f * 10) / 10;
 }
 function notaFinalAluno(prova, nota) {
   const v = Number(prova?.valeAte?.[String(eu?.email || "").toLowerCase()]);

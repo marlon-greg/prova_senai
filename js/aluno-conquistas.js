@@ -3,6 +3,7 @@
 import { db, esc, $, modal } from "./common.js";
 import { conquistasNotas, conquistasGrupo, medalhasDiario, medalhaHTML, pontosConquistas } from "./conquistas.js";
 import { seta } from "./ui.js";
+import { notaQueConta } from "./nota-final.js";
 export async function lerListaConquistas() { return (await getDoc(doc(db, "config", "conquistas")).catch(() => null))?.data()?.lista || null; }
 import { collection, doc, getDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -23,7 +24,7 @@ export async function desenharConquistas(box, eu, resumoDiario = null, opc = {})
     const lerBanco = async id => bancos[id] ??= (await getDoc(doc(db, "bancos", id)).catch(() => null))?.data() || null;
     provas = await Promise.all(ts.map(async t => {
       const p = await lerProva(t.provaId), b = t.bancoId ? await lerBanco(t.bancoId) : null;
-      return { id: t.provaId, titulo: p?.titulo || "Prova", materia: String(p?.materia || b?.materia || "").trim(), nota: nota(t),
+      return { id: t.provaId, titulo: p?.titulo || "Prova", materia: String(p?.materia || b?.materia || "").trim(), nota: notaQueConta(p, t.email, nota(t)),
         data: (t.finalizadaEm?.seconds || 0) * 1000, vidasPerdidas: Number(t.trocasDeAba || 0) + Number(t.trocasDeAbaTotal || 0) };
     }));
   } catch (e) { console.warn("conquistas", e); }

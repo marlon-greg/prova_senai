@@ -23,6 +23,7 @@ import { iniciarHistorico, carregarHistorico } from "./admin-historico.js";
 import { exportarExcel, exportarPDF } from "./exportar-turmas.js?v=20261110b";
 import { tarefa, ligarMenuLateral } from "./ui.js";
 import { ic } from "./icones.js";
+import { REGRAS_NOTA, regraDoTipo, calcNotaFinal } from "./nota-final.js";
 import { drawer, drawerForm, ligarFiltros, atualizarFiltros, ajudasEmPopover, menuHTML, itemMenu, vazio, chips, statTiles, pl, semestreLongo, seta } from "./ui.js";
 import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp, onSnapshot, increment, deleteField }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
@@ -1141,15 +1142,6 @@ function cartaoProvaHTML(p) {
 // (entra no histórico, nos resultados e nos relatórios), mas só os e-mails de alunosEmails conseguem fazer.
 const NOTA_RECUPERACAO = 50, NOTA_SUBSTITUTIVA = 80;
 // nota final do aluno na recuperação/substitutiva: a prova vale 0–100 e a nota final é a mesma, com TETO em valeAte (ex.: 70 com teto 50 = 50). null = prova normal
-// regra da nota final (por tipo, em prova.regraNota): a prova sempre vale 0–100 para o aluno
-//  teto: nota limitada a "vale até" (padrão) · proporcional: nota × vale ÷ 100 · meta: nota × vale ÷ meta, limitada a vale
-const REGRAS_NOTA = { teto: "Teto (nota limitada ao valor)", proporcional: "Proporcional (nota × valor ÷ 100)", meta: "Proporcional com meta (atingiu a meta = valor)" };
-function regraDoTipo(prova, tipo) { const r = prova?.regraNota?.[tipo] || {}; return { modo: REGRAS_NOTA[r.modo] ? r.modo : "teto", meta: Number(r.meta) > 0 ? Number(r.meta) : 70 }; }
-function calcNotaFinal(nota, vale, regra) {
-  const n = Number(nota || 0), v = Number(vale);
-  const f = regra.modo === "proporcional" ? n * v / 100 : regra.modo === "meta" ? Math.min(v, n * v / regra.meta) : Math.min(v, n);
-  return Math.round(f * 10) / 10;
-}
 function notaConvertida(prova, email, nota) {
   const v = Number(prova?.valeAte?.[String(email || "").toLowerCase()]);
   return v > 0 ? calcNotaFinal(nota, v, regraDoTipo(prova, prova?.tipoPorAluno?.[String(email).toLowerCase()] === "substitutiva" ? "substitutiva" : "recuperacao")) : null;
