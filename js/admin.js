@@ -18,7 +18,7 @@ import { iniciarGamificacao, carregarGamificacao, carregarRetorno } from "./admi
 import { lerRevisoes, revisoesDaProva, faixaRevisoesHTML, avisoQuestaoHTML, abrirRevisao } from "./admin-revisoes.js?v=20261116c";
 import { mesclarQuestao } from "./acessibilidade.js";
 import { temFormato, textoResposta, textoChave, FORMATOS } from "./formatos-ui.js";
-import { iniciarAcessibilidade, carregarAcessibilidade, prepararNovo as prepararNovoAcess, abrirDepois } from "./admin-acess.js?v=20261111a";
+import { iniciarAcessibilidade, carregarAcessibilidade, prepararNovo as prepararNovoAcess, abrirDepois } from "./admin-acess.js?v=20261118f";
 import { iniciarHistorico, carregarHistorico } from "./admin-historico.js";
 import { exportarExcel, exportarPDF } from "./exportar-turmas.js?v=20261110b";
 import { tarefa, ligarMenuLateral } from "./ui.js";

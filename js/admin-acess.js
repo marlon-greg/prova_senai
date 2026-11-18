@@ -181,6 +181,7 @@ async function abrirAluno(email, rolar = true) {
           <div><label for="acVidas">Vidas extras</label><input type="number" id="acVidas" min="0" max="10" step="1" value="${pr.vidasExtras}"></div>
         </div>
         <label class="check"><input type="checkbox" id="acSemPunicao" ${pr.semPunicao ? "checked" : ""}> <span>Sem perder vidas <span class="pequeno">— sair da tela ou colar só fica registrado (bom para TEA)</span></span></label>
+        <label class="check"><input type="checkbox" id="acNavLivre" ${pr.navegacaoLivre !== false ? "checked" : ""}> <span><b>Navegação livre entre as questões</b> <span class="pequeno">— pode ir e voltar e alterar as respostas até finalizar, em qualquer prova (padrão: ligado)</span></span></label>
         <label class="check"><input type="checkbox" id="acOcultarTempo" ${pr.ocultarCronometro ? "checked" : ""}> <span>Esconder o cronômetro <span class="pequeno">— o tempo vale, mas não aparece (menos ansiedade)</span></span></label>
       </div>
       <div data-painel="voz" hidden>
@@ -262,7 +263,7 @@ async function abrirAluno(email, rolar = true) {
   let drawerCab = null;
   $("#acEditarCab").onclick = () => { drawerCab = drawer({ titulo: "Situação e auxiliares", corpo: $("#acCabForm"), aoFechar: () => { $("#acCabForm").classList.add("oculto"); drawerCab = null; pintarCab(); }, acoes: [{ t: "Aplicar" }] }); };
   // abas de adaptações: cada uma mostra só o seu grupo
-  chips($("#acAbas"), [{ v: "visual", t: "Visual" }, { v: "tempo", t: "Tempo e vidas" }, { v: "voz", t: "Leitura em voz" }, { v: "reescritas", t: "Questões reescritas" }, { v: "apoios", t: "Apoios" }],
+  chips($("#acAbas"), [{ v: "visual", t: "Visual" }, { v: "tempo", t: "Tempo, vidas e navegação" }, { v: "voz", t: "Leitura em voz" }, { v: "reescritas", t: "Questões reescritas" }, { v: "apoios", t: "Apoios" }],
     { valor: "visual", aria: "Grupo de adaptações", aoMudar: v => box.querySelectorAll("[data-painel]").forEach(p => { p.hidden = p.dataset.painel !== v; }) });
   $("#acIrProva").onclick = () => $("#acProvaQ").closest(".card").scrollIntoView({ behavior: "smooth", block: "start" });
 
@@ -277,7 +278,7 @@ async function abrirAluno(email, rolar = true) {
   $("#acSalvar").onclick = async () => {
     const dados = { ativo: $("#acAtivo").checked, visual: lerVisual(),
       prova: { tempoExtraMin: Math.max(0, Math.round(+$("#acTempo").value || 0)), vidasExtras: Math.min(10, Math.max(0, Math.round(+$("#acVidas").value || 0))),
-               semPunicao: $("#acSemPunicao").checked, ocultarCronometro: $("#acOcultarTempo").checked, lerEmVoz: $("#acVoz").checked, mostrarDica: $("#acDica").checked },
+               semPunicao: $("#acSemPunicao").checked, ocultarCronometro: $("#acOcultarTempo").checked, lerEmVoz: $("#acVoz").checked, mostrarDica: $("#acDica").checked, navegacaoLivre: $("#acNavLivre").checked },
       atualizadoEm: serverTimestamp(), atualizadoPor: ctx.eu.email };
     if (ctx.podeEditar()) dados.auxiliares = [...box.querySelectorAll("[data-aux]:checked")].map(x => x.dataset.aux);
     if (!(await confirmar(`Salvar as alterações nas adaptações de ${a.nome || email}?${dados.ativo ? "" : " A acessibilidade fica DESLIGADA: o aluno volta a fazer a prova sem adaptações."}`, { titulo: "Salvar adaptações", ok: "Salvar" }))) return;
@@ -779,6 +780,7 @@ const MOTIVOS_PROVA = {
   semPunicao: v => v && ["Sem perder vidas", "sair da tela ou tentar colar fica apenas registrado, para que comportamentos involuntários não encerrem a prova."],
   ocultarCronometro: v => v && ["Cronômetro escondido", "o tempo continua valendo, mas não aparece na tela, para reduzir a ansiedade."],
   lerEmVoz: v => v !== false && ["Botão 🔊 Ouvir", "leitura em voz alta do enunciado, das alternativas e dos apoios."],
+  navegacaoLivre: v => v !== false && ["Navegação livre entre as questões", "pode ir e voltar entre as questões e alterar as respostas até finalizar, sem a pressão de não poder voltar."],
   mostrarDica: v => v !== false && ["Apoios do mascote", "dicas curtas de leitura e organização faladas pelo mascote da prova, uma por vez (nunca revelam a resposta)."]
 };
 function ajustesVisuais(v) {

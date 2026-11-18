@@ -22,7 +22,8 @@ export const PROVA_PADRAO = {
   semPunicao: false,    // saídas e colar só ficam registrados: não tiram vida
   ocultarCronometro: false,   // o tempo continua valendo, mas não aparece (reduz ansiedade)
   lerEmVoz: true,       // botão 🔊 em cada questão
-  mostrarDica: true     // mostra o apoio ("dica") das questões adaptadas
+  mostrarDica: true,    // mostra o apoio ("dica") das questões adaptadas
+  navegacaoLivre: true  // anda livre entre as questões (ir e voltar) em qualquer prova; padrão SEMPRE ligado
 };
 export const FONTES = {
   padrao:   { nome: "Padrão do sistema (Inter)", css: "" },
