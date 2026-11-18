@@ -1137,7 +1137,14 @@ function cartaoProvaHTML(p) {
 // ---------- RECUPERAÇÃO: nova somativa só para quem tirou abaixo de NOTA_RECUPERACAO, com os temas em falha ----------
 // Só aparece com a somativa encerrada e as notas (gabarito) liberadas. A recuperação é uma somativa normal
 // (entra no histórico, nos resultados e nos relatórios), mas só os e-mails de alunosEmails conseguem fazer.
-const NOTA_RECUPERACAO = 50;
+const NOTA_RECUPERACAO = 50, NOTA_SUBSTITUTIVA = 80;
+// nota convertida do aluno na recuperação/substitutiva (a prova sempre vale 0–100; converte para 0–valeAte). null = prova normal
+function notaConvertida(prova, email, nota) {
+  const v = Number(prova?.valeAte?.[String(email || "").toLowerCase()]);
+  return v > 0 ? Math.round(Number(nota || 0) * v / 100 * 10) / 10 : null;
+}
+const textoConvertida = (prova, email, nota) => { const c = notaConvertida(prova, email, nota); return c === null ? "" : `${String(c).replace(".", ",")} de ${String(prova.valeAte[String(email).toLowerCase()]).replace(".", ",")}`; };
+const tipoRec = (prova, email) => prova?.tipoPorAluno?.[String(email || "").toLowerCase()] === "substitutiva" ? "substitutiva" : "recuperação";
 async function gerarRecuperacao(p) {
   if (!p || !podeEditar()) return;
   if (p.liberada || !p.resultadosLiberados) return toast("Encerre a somativa e libere as notas (gabarito) antes de gerar a recuperação.", "erro");
@@ -1187,15 +1194,17 @@ async function gerarRecuperacao(p) {
   const nomeBanco = id => bancosCache.find(x => x.id === id)?.nome || id;
   const pct = x => x.max ? `${Math.round(x.pts / x.max * 100)}% de acerto` : "não caiu para eles";
   const cota = cotaDaProva(p);
-  const linhaRec = (a, marcado, extra) => `<label class="check-linha" style="display:flex;gap:8px;align-items:center;padding:2px 0"><input type="checkbox" data-rec-aluno="${esc(a.email)}" ${marcado ? "checked" : ""}> <span><b>${esc(a.nome)}</b> <span class="pequeno">${esc(a.email)} · ${extra}</span></span></label>`;
+  // cada aluno: marcado ou não, tipo (recuperação ou substitutiva) e quanto a nota vale na conversão (0–100 → 0–vale)
+  const linhaRec = (a, marcado, extra, tipo, vale) => `<div style="display:flex;gap:8px;align-items:center;padding:2px 0;flex-wrap:wrap"><label style="display:flex;gap:8px;align-items:center;flex:1 1 260px;margin:0"><input type="checkbox" data-rec-aluno="${esc(a.email)}" data-rec-tipo="${tipo}" ${marcado ? "checked" : ""}> <span><b>${esc(a.nome)}</b> <span class="pequeno">${esc(a.email)} · ${extra}</span></span></label>
+    <label class="pequeno" style="display:flex;gap:6px;align-items:center;margin:0">vale até <input type="number" min="1" max="100" step="1" value="${vale}" data-rec-vale="${esc(a.email)}" style="width:72px" aria-label="Nota máxima de ${esc(a.nome)} na conversão"></label></div>`;
   const conteudo = `
     <p class="pequeno" style="margin-top:0">Somativa de origem: <b>${esc(p.titulo)}</b>. A recuperação é criada <b>fechada</b>: confira, edite se precisar e clique em <b>Liberar somativa</b> quando for aplicar. Só os alunos marcados abaixo conseguem ver e fazer.</p>
     <div class="grade"><div><label for="recTitulo">Título</label><input id="recTitulo" type="text" value="${esc(`Recuperação — ${p.titulo}`)}"></div>
       <div><label for="recData">Data da recuperação</label><input id="recData" type="date"></div></div>
-    <fieldset class="temas-box"><legend>Alunos com nota abaixo de ${NOTA_RECUPERACAO} (${abaixo.length})</legend>
-      ${abaixo.length ? abaixo.map(a => linhaRec(a, true, `nota <b>${String(a.nota).replace(".", ",")}</b>`)).join("") : `<p class="pequeno">Ninguém abaixo de ${NOTA_RECUPERACAO}.</p>`}</fieldset>
-    ${faltaram.length ? `<fieldset class="temas-box"><legend>Não fizeram a somativa (${faltaram.length})</legend><p class="pequeno" style="margin-top:0">Marque se eles também devem fazer a recuperação.</p>
-      ${faltaram.map(a => linhaRec(a, false, "não fez")).join("")}</fieldset>` : ""}
+    <fieldset class="temas-box"><legend>Recuperação: nota abaixo de ${NOTA_RECUPERACAO} (${abaixo.length})</legend><p class="pequeno" style="margin-top:0">A prova vale 0 a 100 para o aluno; no fim a nota é convertida para 0 a ${NOTA_RECUPERACAO} (ou o valor que você puser).</p>
+      ${abaixo.length ? abaixo.map(a => linhaRec(a, true, `nota <b>${String(a.nota).replace(".", ",")}</b>`, "recuperacao", NOTA_RECUPERACAO)).join("") : `<p class="pequeno">Ninguém abaixo de ${NOTA_RECUPERACAO}.</p>`}</fieldset>
+    ${faltaram.length ? `<fieldset class="temas-box"><legend>Substitutiva: faltaram (${faltaram.length})</legend><p class="pequeno" style="margin-top:0">Marque quem vai fazer a <b>prova substitutiva</b> junto com a recuperação. A prova vale 0 a 100 e no fim é convertida para 0 a ${NOTA_SUBSTITUTIVA} (padrão, sem atestado). <b>Com atestado, ponha 100.</b></p>
+      ${faltaram.map(a => linhaRec(a, false, "faltou", "substitutiva", NOTA_SUBSTITUTIVA)).join("")}</fieldset>` : ""}
     <fieldset class="temas-box"><legend>Temas da recuperação</legend>
       <p class="pequeno" style="margin-top:0">${nenhumEmFalha ? "Nenhum tema ficou abaixo de 50% de acerto: todos vêm marcados." : "Marcados automaticamente: os temas em <b>FALHA</b> (os alunos de recuperação acertaram menos de 50%)."}</p>
       ${[...temasTodos.entries()].map(([k, x]) => `<label style="display:flex;gap:8px;align-items:center;padding:2px 0"><input type="checkbox" data-rec-tema="${esc(k)}" ${nenhumEmFalha || emFalha(x) ? "checked" : ""}> <span>${bancos.length > 1 ? `<span class="pequeno">${esc(nomeBanco(x.banco))} ›</span> ` : ""}<b>${esc(x.tema)}</b> <span class="pequeno">${pct(x)}</span>${emFalha(x) ? ` <span class="chip warn">em falha</span>` : ""}</span></label>`).join("")}</fieldset>
@@ -1218,7 +1227,13 @@ async function gerarRecuperacao(p) {
     },
     antesDeConfirmar: async corpo => {
       const titulo = corpo.querySelector("#recTitulo").value.trim();
-      const emails = [...corpo.querySelectorAll("[data-rec-aluno]:checked")].map(i => i.dataset.recAluno);
+      const marcados = [...corpo.querySelectorAll("[data-rec-aluno]:checked")], emails = marcados.map(i => i.dataset.recAluno);
+      const valeAte = {}, tipoPorAluno = {};
+      for (const i of marcados) {
+        const e = i.dataset.recAluno, v = Number(corpo.querySelector(`[data-rec-vale="${CSS.escape(e)}"]`)?.value);
+        if (!(v > 0 && v <= 100)) { toast(`"Vale até" de ${e} precisa ser de 1 a 100.`, "erro"); return false; }
+        valeAte[e] = Math.round(v * 10) / 10; tipoPorAluno[e] = i.dataset.recTipo;
+      }
       const marc = [...corpo.querySelectorAll("[data-rec-tema]:checked")].map(i => temasTodos.get(i.dataset.recTema));
       const nA = Math.max(0, Math.round(Number(corpo.querySelector("#recNAlt").value || 0))), nD = Math.max(0, Math.round(Number(corpo.querySelector("#recNDiss").value || 0)));
       if (!titulo) { toast("Preencha o título.", "erro"); return false; }
@@ -1236,7 +1251,7 @@ async function gerarRecuperacao(p) {
       const dados = Object.fromEntries(copiar.filter(k => p[k] !== undefined).map(k => [k, p[k]]));
       Object.assign(dados, { titulo, dataProva: corpo.querySelector("#recData").value || "", codigoAcesso: "",
         bancoId: bancoIds[0], bancoIds, temasPorBanco, temas: temasPorBanco[bancoIds[0]], nQuestoes: nA + nD, nAlternativas: nA, nDissertativas: nD,
-        recuperacao: true, provaOrigemId: p.id, provaOrigemTitulo: p.titulo || "", notaCorte: NOTA_RECUPERACAO, alunosEmails: emails,
+        recuperacao: true, provaOrigemId: p.id, provaOrigemTitulo: p.titulo || "", notaCorte: NOTA_RECUPERACAO, alunosEmails: emails, valeAte, tipoPorAluno,
         liberada: false, resultadosLiberados: false, criadoEm: serverTimestamp(), criadoPor: eu.email,
         historico: [{ timestamp: new Date().toISOString(), motivo: "recuperacao", origem: p.id, editadoPor: eu.email }] });
       try {
@@ -2131,7 +2146,7 @@ function tabelaHTML(lista, prefixo) {
       return `<tr><td><span class="aluno-celula"><span class="avatar-p">${esc(iniciais(l.t.nome || l.t.email))}</span><span class="ac-texto"><b>${esc(l.t.nome || l.t.email)}</b><span>${esc(l.t.email)}</span>${obsAda ? ` <span class="tag nota" title="${obsAda} adaptação(ões) registrada(s)">♿</span>` : ""}</span></span></td>
       <td>${chipSituacao(l)}${extrasSituacao(l)}</td>
       <td class="res-acertos" title="Início: ${esc(dataBR(l.t.iniciadaEm))} · tempo: ${esc(fmtTempo(l.tempo))}">${acertos} de ${l.itens.length}</td>
-      <td><span class="res-nota ${l.nota >= 60 ? "boa" : "baixa"}"${fechada ? ` title="${esc(fechada)}"` : ""}>${String(l.nota).replace(".", ",")}</span></td>
+      <td><span class="res-nota ${l.nota >= 60 ? "boa" : "baixa"}"${fechada ? ` title="${esc(fechada)}"` : ""}>${String(l.nota).replace(".", ",")}</span>${textoConvertida(resDados.prova, l.t.email, l.nota) ? `<br><span class="pequeno" title="${tipoRec(resDados.prova, l.t.email)}: nota convertida">→ <b>${textoConvertida(resDados.prova, l.t.email, l.nota)}</b> (${tipoRec(resDados.prova, l.t.email)})</span>` : ""}</td>
       <td class="td-acoes"><button class="leve mini" data-ver="${l.t.id}">${ic("eye", { size: 16 })}Ver</button> ${itens ? menuHTML({ aria: `Mais ações: ${l.t.nome || l.t.email}`, itensHTML: itens }) : ""}</td></tr>`;
     }).join("") + `</tbody></table></div>`;
 }
@@ -2198,7 +2213,7 @@ function verAluno(id, rolar = true) {
     }, e => console.warn("detalhe ao vivo parou", e));
   }
   const lim = limiteSaidas(resDados.prova);
-  box.innerHTML = `<div class="card"><div class="linha"><h2 style="flex:3">${l.t.teste ? "🧪 " : ""}${esc(l.t.nome || l.t.email)} — ${l.nota}/100 (${l.pts} de ${l.max} pontos)</h2><button class="leve mini" id="btnPDFAluno" style="flex:0 0 auto">PDF deste aluno</button></div>
+  box.innerHTML = `<div class="card"><div class="linha"><h2 style="flex:3">${l.t.teste ? "🧪 " : ""}${esc(l.t.nome || l.t.email)} — ${l.nota}/100 (${l.pts} de ${l.max} pontos)${textoConvertida(resDados.prova, l.t.email, l.nota) ? ` → ${textoConvertida(resDados.prova, l.t.email, l.nota)} (${tipoRec(resDados.prova, l.t.email)})` : ""}</h2><button class="leve mini" id="btnPDFAluno" style="flex:0 0 auto">PDF deste aluno</button></div>
     ${vidasDe(l.t) || podeEditar() ? `<div class="linha acoes detalhe-vidas">${vidasDe(l.t) ? `<span>Vidas: ${coracoesHTML(vidasDe(l.t))}</span>` : ""}${acoesVidaHTML(l)}</div>` : ""}
     <p class="pequeno">Tempo total: <b>${fmtTempo(l.tempo)}</b> · ${sinaisHTML(l.sinais)}${lim ? ` · vidas perdidas <b>${l.sinais.abas}</b>${l.t.vidasRestauradas ? ` · restauradas ${l.t.vidasRestauradas}×` : ""}` : ""}${l.t.reabertaEm ? ` · <span class="tag nota">↩ reaberta por ${esc(l.t.reabertaPor || "professor")}</span>` : ""}
       ${l.t.encerradaPor === "trocasDeAba" ? ` · <span class="tag erro">⛔ encerrada: limite de saídas atingido</span>` : ""}${l.t.encerradaPor === "professor" ? ` · <span class="tag erro">⛔ encerrada pelo professor</span>` : ""}${l.perdidas ? ` · <span class="tag erro">⛔ ${l.perdidas} questão(ões) perdida(s)</span>` : ""}</p>` + l.itens.map(x => {
@@ -2333,10 +2348,11 @@ $("#btnFecharNotas").onclick = async () => {
 $("#btnCSV").onclick = () => {
   if (!resDados) return toast("Carregue uma prova primeiro.", "erro");
   const n = Math.max(resDados.prova.nQuestoes || 0, ...resDados.linhas.map(l => l.itens.length));
-  const cab = ["Nome", "E-mail", "Início", "Fim", "Tempo", "Tempo (segundos)", "Trocas de aba", "Saídas da tela cheia", "Tentativas de colar", `Respostas < ${RAPIDO}s`, "Encerrada por", "Questões perdidas", "Nota",
+  const cab = ["Nome", "E-mail", "Início", "Fim", "Tempo", "Tempo (segundos)", "Trocas de aba", "Saídas da tela cheia", "Tentativas de colar", `Respostas < ${RAPIDO}s`, "Encerrada por", "Questões perdidas", "Nota", ...(resDados.prova.valeAte ? ["Tipo", "Vale até", "Nota convertida"] : []),
                ...Array.from({ length: n }, (_, i) => `Q${i + 1}`)];
   const rows = resDados.linhas.map(l => [l.t.nome || "", l.t.email, dataBR(l.t.iniciadaEm), l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "em andamento",
     fmtTempo(l.tempo), l.tempo ?? "", abasTexto(l.sinais), l.sinais.telaCheia, l.sinais.colar, l.rapidas, l.t.encerradaPor === "trocasDeAba" ? "limite de saídas" : "", l.perdidas, String(l.nota).replace(".", ","),
+    ...(resDados.prova.valeAte ? [resDados.prova.valeAte[String(l.t.email).toLowerCase()] ? tipoRec(resDados.prova, l.t.email) : "", String(resDados.prova.valeAte[String(l.t.email).toLowerCase()] ?? "").replace(".", ","), String(notaConvertida(resDados.prova, l.t.email, l.nota) ?? "").replace(".", ",")] : []),
     ...l.itens.map(x => `${x.pontos}/${x.peso} ${x.status}${typeof x.segundos === "number" ? ` (${x.segundos}s)` : ""}`)]);
   const csv = [cab, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(";")).join("\n");
   baixar(`resultados_${resDados.prova.titulo.replace(/\W+/g, "_")}.csv`, "﻿" + csv);
@@ -2435,7 +2451,7 @@ function boletimHTML(l, quebra = false) {
   const p = resDados.prova;
   const rot = { certa: "✔ certa", errada: "✘ errada", parcial: "parcial", revisar: "◌ em correção", em_branco: "□ em branco", perdida: "⛔ perdida (saiu da prova)" };
   let h = cab(`Boletim — ${p.titulo}`, `${l.t.nome || ""} · ${l.t.email} · ${p.turma || ""} · finalizada em ${l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "—"}`);
-  h += `<h2>Nota: ${l.nota} / 100 <span class="peq">(${l.pts} de ${l.max} pontos)</span></h2>`;
+  h += `<h2>Nota: ${l.nota} / 100 <span class="peq">(${l.pts} de ${l.max} pontos)</span>${textoConvertida(resDados.prova, l.t.email, l.nota) ? ` → nota convertida: ${textoConvertida(resDados.prova, l.t.email, l.nota)} (${tipoRec(resDados.prova, l.t.email)})` : ""}</h2>`;
   if (l.t.encerradaPor === "trocasDeAba") h += `<div class="rapida">⛔ Prova encerrada: limite de saídas da prova atingido.</div>`;
   h += `<div class="peq">Tempo total: ${fmtTempo(l.tempo)} · Trocas de aba: ${abasTexto(l.sinais)} · Saídas da tela cheia: ${l.sinais.telaCheia} · Tentativas de colar: ${l.sinais.colar}</div>`;
   h += l.itens.map(x => {
@@ -2457,7 +2473,7 @@ $("#btnPDFNotas").onclick = () => {
   const media = fin.length ? (fin.reduce((s, l) => s + l.nota, 0) / fin.length).toFixed(1) : "—";
   const corpo = cab(`Notas — ${p.titulo}`, `${p.turma || ""} · ${resDados.linhas.length} aluno(s) · média ${media} · gerado em ${new Date().toLocaleString("pt-BR")}`) +
     `<table><tr><th>#</th><th>Aluno</th><th>E-mail</th><th>Finalizada</th><th>Tempo</th><th>Sinais</th><th>Nota</th></tr>` +
-    resDados.linhas.map((l, i) => `<tr class="${l.temSinal ? "sinal" : ""}"><td>${i + 1}</td><td>${esc(l.t.nome || "")}</td><td>${esc(l.t.email)}</td><td>${l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "em andamento"}</td><td>${fmtTempo(l.tempo)}${l.rapidas ? `<br><span class="rapida">${l.rapidas} resp. &lt; ${RAPIDO} s</span>` : ""}</td><td>${sinaisTexto(l.sinais)}${l.t.encerradaPor === "trocasDeAba" ? `<br><span class="rapida">encerrada: limite de saídas</span>` : ""}${l.perdidas ? `<br><span class="rapida">${l.perdidas} perdida(s)</span>` : ""}</td><td><b>${l.nota}</b></td></tr>`).join("") + "</table>" +
+    resDados.linhas.map((l, i) => `<tr class="${l.temSinal ? "sinal" : ""}"><td>${i + 1}</td><td>${esc(l.t.nome || "")}</td><td>${esc(l.t.email)}</td><td>${l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "em andamento"}</td><td>${fmtTempo(l.tempo)}${l.rapidas ? `<br><span class="rapida">${l.rapidas} resp. &lt; ${RAPIDO} s</span>` : ""}</td><td>${sinaisTexto(l.sinais)}${l.t.encerradaPor === "trocasDeAba" ? `<br><span class="rapida">encerrada: limite de saídas</span>` : ""}${l.perdidas ? `<br><span class="rapida">${l.perdidas} perdida(s)</span>` : ""}</td><td><b>${l.nota}</b>${textoConvertida(resDados.prova, l.t.email, l.nota) ? `<br>→ ${textoConvertida(resDados.prova, l.t.email, l.nota)}` : ""}</td></tr>`).join("") + "</table>" +
     `<p class="peq">Sinais = trocas de aba/janela · saídas da tela cheia · tentativas de colar. Linhas destacadas têm pelo menos um sinal. São indícios para conferir, não prova de cola.</p>`;
   abrirImpressao(`Notas — ${p.titulo}`, corpo);
 };
