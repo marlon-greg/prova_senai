@@ -2,7 +2,7 @@
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, apagarTentativaTeste,
          confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco,
          rotuloDias, nomeTurma, HORARIO_PADRAO, textoHorario, DIAS_SEMANA_LONGO,
-         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo } from "./common.js?v=20261116b";
+         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261116b";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
@@ -23,7 +23,7 @@ import { iniciarHistorico, carregarHistorico } from "./admin-historico.js";
 import { exportarExcel, exportarPDF } from "./exportar-turmas.js?v=20261110b";
 import { tarefa, ligarMenuLateral } from "./ui.js";
 import { ic } from "./icones.js";
-import { drawer, ligarFiltros, atualizarFiltros, ajudasEmPopover, menuHTML, itemMenu, vazio, chips, statTiles, pl, semestreLongo, seta } from "./ui.js";
+import { drawer, drawerForm, ligarFiltros, atualizarFiltros, ajudasEmPopover, menuHTML, itemMenu, vazio, chips, statTiles, pl, semestreLongo, seta } from "./ui.js";
 import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp, onSnapshot, increment, deleteField }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -1090,6 +1090,7 @@ function desenharProvas() {
     await updateDoc(doc(db, "provas", p.id), { [campo]: novo });
     toast("Prova atualizada", "ok"); carregarProvas();
   });
+  box.querySelectorAll("[data-recuperacao]").forEach(b => b.onclick = () => gerarRecuperacao(provasCache.find(x => x.id === b.dataset.recuperacao)));
   box.querySelectorAll("[data-editar]").forEach(b => b.onclick = () => editarProva(provasCache.find(x => x.id === b.dataset.editar)));
   box.querySelectorAll("[data-testar]").forEach(b => b.onclick = () => window.open(`index.html?teste=${encodeURIComponent(b.dataset.testar)}`, "_blank"));
   box.querySelectorAll("[data-apagarteste]").forEach(b => b.onclick = async () => {
@@ -1116,12 +1117,13 @@ function cartaoProvaHTML(p) {
     const m = 15;   // ícones dos metadados
     return `<article class="cartao-prova compacto">
       <div class="cp-info">
-        <div class="cp-l1"><h3>${esc(p.titulo)}</h3><span class="chip ${p.liberada ? "ok" : "off"}">${p.liberada ? "● liberada" : "○ fechada"}</span>${p.resultadosLiberados ? `<span class="chip info">gabarito liberado</span>` : `<span class="chip off" title="O aluno vê só quantas acertou e a nota">só o placar</span>`}</div>
+        <div class="cp-l1"><h3>${esc(p.titulo)}</h3><span class="chip ${p.liberada ? "ok" : "off"}">${p.liberada ? "● liberada" : "○ fechada"}</span>${p.resultadosLiberados ? `<span class="chip info">gabarito liberado</span>` : `<span class="chip off" title="O aluno vê só quantas acertou e a nota">só o placar</span>`}${p.recuperacao ? `<span class="chip warn" title="Recuperação de &quot;${esc(p.provaOrigemTitulo || "")}&quot;: só os ${(p.alunosEmails || []).length} alunos listados veem">recuperação · ${pl((p.alunosEmails || []).length, "aluno")}</span>` : ""}${p.recuperacaoIds?.length ? `<span class="chip info">recuperação gerada</span>` : ""}</div>
         <div class="cp-l2"><span>${ic(p.turmaId ? "users" : "alert", { size: m })}${esc(p.turma || "sem turma")}</span><span>${ic("book", { size: m })}${esc(materiaDaProva(p, bancosCache) || "sem matéria")}</span>${p.dataProva ? `<span>${ic("cal", { size: m })}${dataCurta(p.dataProva)}</span>` : ""}
           <span><b>${p.nQuestoes}</b> questões${qtd ? ` · ${qtd}` : ""}</span><span>${ic("clock", { size: m })}${p.tempoMinutos > 0 ? `<b>${p.tempoMinutos} min</b>` : "sem limite de tempo"}</span><span title="${vidas ? pl(vidas, "vida") : "sem vidas"}">${vidas ? `<span class="e" aria-hidden="true">${"❤️".repeat(Math.min(5, vidas))}</span>` : "sem vidas"}</span></div>
       </div>
       <div class="cp-botoes">
         ${podeEditar() ? `<button class="${p.liberada ? "leve" : "ok"}" data-tg="liberada" data-id="${p.id}">${ic(p.liberada ? "stop" : "play", { size: 16 })}${p.liberada ? "Encerrar" : "Liberar somativa"}</button>` : ""}
+        ${podeEditar() && !p.liberada && p.resultadosLiberados ? `<button class="leve" data-recuperacao="${p.id}" title="Cria uma somativa de recuperação só para quem tirou abaixo de ${NOTA_RECUPERACAO}, com os temas em que a turma falhou">${ic("copy", { size: 16 })}${p.recuperacaoIds?.length ? "Gerar outra recuperação" : "Gerar recuperação"}</button>` : ""}
         <button class="leve" data-alunos="${p.id}" title="Ver aluno por aluno (ao vivo): vidas, progresso e nota">${ic("users", { size: 16 })}Alunos</button>
         ${menuHTML({ aria: `Mais ações: ${p.titulo}`, itensHTML: itens })}
       </div>
@@ -1131,6 +1133,119 @@ function cartaoProvaHTML(p) {
           <div><dt>Temas</dt><dd class="pequeno">${temasDaProvaTexto(p, bs)}</dd></div>
           <div><dt>Opções</dt><dd class="td-opcoes">${opcoesDaProvaHTML(p)}</dd></div>
         </dl></details></article>`;
+}
+// ---------- RECUPERAÇÃO: nova somativa só para quem tirou abaixo de NOTA_RECUPERACAO, com os temas em falha ----------
+// Só aparece com a somativa encerrada e as notas (gabarito) liberadas. A recuperação é uma somativa normal
+// (entra no histórico, nos resultados e nos relatórios), mas só os e-mails de alunosEmails conseguem fazer.
+const NOTA_RECUPERACAO = 50;
+async function gerarRecuperacao(p) {
+  if (!p || !podeEditar()) return;
+  if (p.liberada || !p.resultadosLiberados) return toast("Encerre a somativa e libere as notas (gabarito) antes de gerar a recuperação.", "erro");
+  if (p.recuperacaoIds?.length && !(await confirmar(`"${p.titulo}" já tem ${pl(p.recuperacaoIds.length, "recuperação", "recuperações")}. Gerar mais uma?`, { titulo: "Gerar recuperação", ok: "Gerar outra" }))) return;
+  toast("Calculando as notas da somativa…", "info");
+  const bancos = bancosDaProva(p);
+  let tents, lotes, turma = null;
+  try {
+    [tents, lotes] = await Promise.all([getDocs(query(collection(db, "tentativas"), where("provaId", "==", p.id))), Promise.all(bancos.map(lerBanco))]);
+    if (p.turmaId) { const td = await getDoc(doc(db, "turmas", p.turmaId)).catch(() => null); if (td?.exists()) turma = td.data(); }
+  } catch (e) { toast("Não foi possível ler as notas. " + traduzirErro(e), "erro"); console.error(e); return; }
+  const questoes = {}, gabaritos = {}, bancoDe = {};
+  lotes.forEach((l, i) => { Object.assign(questoes, l.questoes); Object.assign(gabaritos, l.gabaritos); Object.keys(l.questoes).forEach(q => bancoDe[q] = bancos[i]); });
+  const chaveTema = (b, tema) => `${b}\u0001${tema}`;
+  // nota de cada aluno (a gravada pelo painel; senão, calculada com as correções) e pontos por tema
+  const alunos = (await Promise.all(tents.docs.map(async d => {
+    const t = { id: d.id, ...d.data() };
+    if (t.teste || t.simulado || !t.email || d.id.startsWith("teste_") || d.id.startsWith("sim_")) return null;
+    const [rs, cs] = await Promise.all([getDocs(collection(db, "tentativas", t.id, "respostas")), getDocs(collection(db, "tentativas", t.id, "correcoes"))]);
+    const resp = {}, corr = {}; rs.forEach(x => resp[x.id] = x.data()); cs.forEach(x => corr[x.id] = x.data());
+    const porTema = {}; let pts = 0, max = 0;
+    (t.questoesIds || []).forEach(qid => {
+      const q = questoes[qid]; if (!q) return;
+      const peso = Number(q.peso || 1), perdida = resp[qid]?.perdida === true;
+      let pontos = corrigir(q, gabaritos[qid] || {}, resp[qid]?.resposta ?? undefined, perdida).pontos || 0;
+      if (!perdida && corr[qid]?.pontos !== undefined) pontos = Number(corr[qid].pontos);
+      pts += pontos; max += peso;
+      const k = chaveTema(bancoDe[qid] || p.bancoId, temaDe(q)); (porTema[k] ||= { pts: 0, max: 0 }); porTema[k].pts += pontos; porTema[k].max += peso;
+    });
+    const nota = typeof t.nota === "number" ? t.nota : max ? Math.round(pts / max * 1000) / 10 : 0;
+    return { email: String(t.email).toLowerCase(), nome: t.nome || t.email, nota, porTema };
+  }))).filter(Boolean).sort((a, b) => a.nota - b.nota || a.nome.localeCompare(b.nome, "pt-BR"));
+  const abaixo = alunos.filter(a => a.nota < NOTA_RECUPERACAO);
+  const fizeram = new Set(alunos.map(a => a.email));
+  const faltaram = (turma ? alunosDaTurma(turma) : []).filter(a => a.email && !fizeram.has(String(a.email).toLowerCase()))
+    .map(a => ({ email: String(a.email).toLowerCase(), nome: a.nome || String(a.email).replace(/@.*/, "") }));
+  if (!abaixo.length && !faltaram.length) return toast(`Ninguém tirou abaixo de ${NOTA_RECUPERACAO} nesta somativa: não há recuperação para gerar.`, "ok");
+  // temas em FALHA: os que os alunos de recuperação acertaram menos da metade (soma dos pontos deles no tema)
+  const temasTodos = new Map();   // chave -> { banco, tema, pts, max }
+  for (const b of bancos) {
+    const marcados = temasDoBanco(p, b);
+    (await questoesDoBanco(b)).forEach(q => { const tema = temaDe(q); if (marcados && !marcados.has(tema)) return; const k = chaveTema(b, tema); if (!temasTodos.has(k)) temasTodos.set(k, { banco: b, tema, pts: 0, max: 0 }); });
+  }
+  abaixo.forEach(a => Object.entries(a.porTema).forEach(([k, v]) => { const x = temasTodos.get(k); if (x) { x.pts += v.pts; x.max += v.max; } }));
+  const emFalha = x => x.max > 0 && x.pts / x.max < 0.5;
+  const nenhumEmFalha = ![...temasTodos.values()].some(emFalha);
+  const nomeBanco = id => bancosCache.find(x => x.id === id)?.nome || id;
+  const pct = x => x.max ? `${Math.round(x.pts / x.max * 100)}% de acerto` : "não caiu para eles";
+  const cota = cotaDaProva(p);
+  const linhaRec = (a, marcado, extra) => `<label class="check-linha" style="display:flex;gap:8px;align-items:center;padding:2px 0"><input type="checkbox" data-rec-aluno="${esc(a.email)}" ${marcado ? "checked" : ""}> <span><b>${esc(a.nome)}</b> <span class="pequeno">${esc(a.email)} · ${extra}</span></span></label>`;
+  const conteudo = `
+    <p class="pequeno" style="margin-top:0">Somativa de origem: <b>${esc(p.titulo)}</b>. A recuperação é criada <b>fechada</b>: confira, edite se precisar e clique em <b>Liberar somativa</b> quando for aplicar. Só os alunos marcados abaixo conseguem ver e fazer.</p>
+    <div class="grade"><div><label for="recTitulo">Título</label><input id="recTitulo" type="text" value="${esc(`Recuperação — ${p.titulo}`)}"></div>
+      <div><label for="recData">Data da recuperação</label><input id="recData" type="date"></div></div>
+    <fieldset class="temas-box"><legend>Alunos com nota abaixo de ${NOTA_RECUPERACAO} (${abaixo.length})</legend>
+      ${abaixo.length ? abaixo.map(a => linhaRec(a, true, `nota <b>${String(a.nota).replace(".", ",")}</b>`)).join("") : `<p class="pequeno">Ninguém abaixo de ${NOTA_RECUPERACAO}.</p>`}</fieldset>
+    ${faltaram.length ? `<fieldset class="temas-box"><legend>Não fizeram a somativa (${faltaram.length})</legend><p class="pequeno" style="margin-top:0">Marque se eles também devem fazer a recuperação.</p>
+      ${faltaram.map(a => linhaRec(a, false, "não fez")).join("")}</fieldset>` : ""}
+    <fieldset class="temas-box"><legend>Temas da recuperação</legend>
+      <p class="pequeno" style="margin-top:0">${nenhumEmFalha ? "Nenhum tema ficou abaixo de 50% de acerto: todos vêm marcados." : "Marcados automaticamente: os temas em <b>FALHA</b> (os alunos de recuperação acertaram menos de 50%)."}</p>
+      ${[...temasTodos.entries()].map(([k, x]) => `<label style="display:flex;gap:8px;align-items:center;padding:2px 0"><input type="checkbox" data-rec-tema="${esc(k)}" ${nenhumEmFalha || emFalha(x) ? "checked" : ""}> <span>${bancos.length > 1 ? `<span class="pequeno">${esc(nomeBanco(x.banco))} ›</span> ` : ""}<b>${esc(x.tema)}</b> <span class="pequeno">${pct(x)}</span>${emFalha(x) ? ` <span class="chip warn">em falha</span>` : ""}</span></label>`).join("")}</fieldset>
+    <div class="grade"><div><label for="recNAlt">Questões de alternativa</label><input id="recNAlt" type="number" min="0" value="${cota.nA}"></div>
+      <div><label for="recNDiss">Questões dissertativas</label><input id="recNDiss" type="number" min="0" value="${cota.nD}"></div></div>
+    <p class="pequeno" id="recDisp"></p>`;
+  let novo = null;
+  const salvou = await drawerForm({ titulo: "Gerar recuperação", ok: "Gerar recuperação", conteudo,
+    aoAbrir: corpo => {
+      // quantas questões existem nos temas marcados (para não criar uma prova que não abre)
+      const disp = async () => {
+        const marc = new Set([...corpo.querySelectorAll("[data-rec-tema]:checked")].map(i => i.dataset.recTema));
+        let a = 0, d = 0;
+        for (const b of bancos) (await questoesDoBanco(b)).forEach(q => { if (!marc.has(chaveTema(b, temaDe(q)))) return; q.tipo === "dissertativa" ? d++ : a++; });
+        corpo.querySelector("#recDisp").textContent = `Nos temas marcados há ${a} alternativa(s) e ${d} dissertativa(s).`;
+        return { a, d };
+      };
+      corpo._disp = disp; disp();
+      corpo.querySelectorAll("[data-rec-tema]").forEach(i => i.addEventListener("change", disp));
+    },
+    antesDeConfirmar: async corpo => {
+      const titulo = corpo.querySelector("#recTitulo").value.trim();
+      const emails = [...corpo.querySelectorAll("[data-rec-aluno]:checked")].map(i => i.dataset.recAluno);
+      const marc = [...corpo.querySelectorAll("[data-rec-tema]:checked")].map(i => temasTodos.get(i.dataset.recTema));
+      const nA = Math.max(0, Math.round(Number(corpo.querySelector("#recNAlt").value || 0))), nD = Math.max(0, Math.round(Number(corpo.querySelector("#recNDiss").value || 0)));
+      if (!titulo) { toast("Preencha o título.", "erro"); return false; }
+      if (!emails.length) { toast("Marque pelo menos um aluno.", "erro"); return false; }
+      if (!marc.length) { toast("Marque pelo menos um tema.", "erro"); return false; }
+      if (nA + nD < 1) { toast("A recuperação precisa de pelo menos uma questão.", "erro"); return false; }
+      const { a, d } = await corpo._disp();
+      if (a < nA || d < nD) { toast(`Não há questões suficientes nos temas marcados (${a} alternativas e ${d} dissertativas). Diminua a quantidade ou marque mais temas.`, "erro"); return false; }
+      const temasPorBanco = {};
+      marc.forEach(x => (temasPorBanco[x.banco] ||= []).push(x.tema));
+      const bancoIds = bancos.filter(b => temasPorBanco[b]);
+      bancoIds.forEach(b => temasPorBanco[b] = ordenarTemas(temasPorBanco[b]));
+      const copiar = ["turmaId", "turma", "semestre", "materia", "planoCurso", "permitirVoltar", "tempoMinutos", "modoExibicao", "permitirTrocaAba", "permitirColar",
+        "maxTrocasDeAba", "colarTiraVida", "iaAutomatica", "acaoAoExceder", "materialConsultaUrl", "materiaisConsultaIds", "materialConsultaArquivoId", "materialConsultaTitulo"];
+      const dados = Object.fromEntries(copiar.filter(k => p[k] !== undefined).map(k => [k, p[k]]));
+      Object.assign(dados, { titulo, dataProva: corpo.querySelector("#recData").value || "", codigoAcesso: "",
+        bancoId: bancoIds[0], bancoIds, temasPorBanco, temas: temasPorBanco[bancoIds[0]], nQuestoes: nA + nD, nAlternativas: nA, nDissertativas: nD,
+        recuperacao: true, provaOrigemId: p.id, provaOrigemTitulo: p.titulo || "", notaCorte: NOTA_RECUPERACAO, alunosEmails: emails,
+        liberada: false, resultadosLiberados: false, criadoEm: serverTimestamp(), criadoPor: eu.email,
+        historico: [{ timestamp: new Date().toISOString(), motivo: "recuperacao", origem: p.id, editadoPor: eu.email }] });
+      try {
+        const ref = await addDoc(collection(db, "provas"), dados);
+        await updateDoc(doc(db, "provas", p.id), { recuperacaoIds: [...(p.recuperacaoIds || []), ref.id] });
+        novo = { titulo, n: emails.length, temas: marc.length };
+      } catch (e) { toast("Não foi possível criar a recuperação. " + traduzirErro(e), "erro"); console.error(e); return false; }
+    } });
+  if (salvou && novo) { toast(`Recuperação "${novo.titulo}" criada (fechada) para ${pl(novo.n, "aluno")} com ${pl(novo.temas, "tema")}. Libere quando for aplicar.`, "ok"); carregarProvas(); }
 }
 const semAcento = t => String(t || "").normalize("NFD").replace(/\p{M}+/gu, "").toLowerCase();
 ["#fpBusca", "#fpTurma", "#fpStatus", "#fpOrdem", "#fpSemestre", "#fpMateria"].forEach(id => $(id).addEventListener(id === "#fpBusca" ? "input" : "change", desenharProvas));

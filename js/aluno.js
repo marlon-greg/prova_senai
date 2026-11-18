@@ -335,6 +335,8 @@ let avisoVinculo = "";
 async function alunoNaTurma(p) {
   if (modoTeste) return true;
   if (!p.turmaId) return false;   // prova sem turma não aparece para aluno nenhum: cada prova é de UMA turma
+  // recuperação: só os alunos escolhidos pelo professor (abaixo da nota de corte)
+  if (Array.isArray(p.alunosEmails) && !p.alunosEmails.includes(String(eu.email || "").toLowerCase())) return false;
   if (!(p.turmaId in turmasLidas)) turmasLidas[p.turmaId] = await verificarTurma(p.turmaId);
   return turmasLidas[p.turmaId];
 }

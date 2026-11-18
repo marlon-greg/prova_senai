@@ -363,6 +363,9 @@ service cloud.firestore {
         // (.get com padrão: provas antigas não têm turmaId/codigoAcesso, e campo ausente dá erro nas regras)
         && prova(request.resource.data.provaId).get('turmaId', null) != null
         && email().lower() in get(/databases/$(db)/documents/turmas/$(prova(request.resource.data.provaId).turmaId)).data.emails
+        // recuperação: só os alunos da lista (alunosEmails) podem começar
+        && (prova(request.resource.data.provaId).get('alunosEmails', null) == null
+            || email().lower() in prova(request.resource.data.provaId).alunosEmails)
         // código de acesso: se a prova tiver, o aluno precisa informar igual
         && (prova(request.resource.data.provaId).get('codigoAcesso', '') in [null, '']
             || request.resource.data.get('codigoInformado', '') == prova(request.resource.data.provaId).codigoAcesso))
