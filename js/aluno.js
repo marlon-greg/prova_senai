@@ -1080,13 +1080,13 @@ async function placarDaTentativa(t) {
   const p = placar(itens);
   return { acertos: p.acertos, totalQuestoes: p.totalQuestoes, nota: t.nota ?? p.notaPrevia, pendentes: p.aguardandoCorrecao };
 }
-// recuperação/substitutiva: a prova vale 0–100 e a nota final é convertida para 0–valeAte (o professor define por aluno)
+// recuperação/substitutiva: a prova vale 0–100 e a nota final é a mesma, com teto em valeAte (o professor define por aluno)
 function notaFinalAluno(prova, nota) {
   const v = Number(prova?.valeAte?.[String(eu?.email || "").toLowerCase()]);
   if (!(v > 0) || nota === undefined || nota === null) return null;
   const tipo = prova?.tipoPorAluno?.[String(eu.email).toLowerCase()] === "substitutiva" ? "substitutiva" : "recuperação";
   const br = n => String(n).replace(".", ",");
-  return { texto: `${br(Math.round(Number(nota) * v / 100 * 10) / 10)} de ${br(v)}`, tipo };
+  return { texto: `${br(Math.min(v, Math.round(Number(nota) * 10) / 10))} de ${br(v)}`, tipo };
 }
 function textoPlacarCurto(r, prova = null) {
   const f = notaFinalAluno(prova, r.nota);

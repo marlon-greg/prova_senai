@@ -1138,10 +1138,10 @@ function cartaoProvaHTML(p) {
 // Só aparece com a somativa encerrada e as notas (gabarito) liberadas. A recuperação é uma somativa normal
 // (entra no histórico, nos resultados e nos relatórios), mas só os e-mails de alunosEmails conseguem fazer.
 const NOTA_RECUPERACAO = 50, NOTA_SUBSTITUTIVA = 80;
-// nota convertida do aluno na recuperação/substitutiva (a prova sempre vale 0–100; converte para 0–valeAte). null = prova normal
+// nota final do aluno na recuperação/substitutiva: a prova vale 0–100 e a nota final é a mesma, com TETO em valeAte (ex.: 70 com teto 50 = 50). null = prova normal
 function notaConvertida(prova, email, nota) {
   const v = Number(prova?.valeAte?.[String(email || "").toLowerCase()]);
-  return v > 0 ? Math.round(Number(nota || 0) * v / 100 * 10) / 10 : null;
+  return v > 0 ? Math.min(v, Math.round(Number(nota || 0) * 10) / 10) : null;
 }
 const textoConvertida = (prova, email, nota) => { const c = notaConvertida(prova, email, nota); return c === null ? "" : `${String(c).replace(".", ",")} de ${String(prova.valeAte[String(email).toLowerCase()]).replace(".", ",")}`; };
 const tipoRec = (prova, email) => prova?.tipoPorAluno?.[String(email || "").toLowerCase()] === "substitutiva" ? "substitutiva" : "recuperação";
@@ -1196,14 +1196,14 @@ async function gerarRecuperacao(p) {
   const cota = cotaDaProva(p);
   // cada aluno: marcado ou não, tipo (recuperação ou substitutiva) e quanto a nota vale na conversão (0–100 → 0–vale)
   const linhaRec = (a, marcado, extra, tipo, vale) => `<div style="display:flex;gap:8px;align-items:center;padding:2px 0;flex-wrap:wrap"><label style="display:flex;gap:8px;align-items:center;flex:1 1 260px;margin:0"><input type="checkbox" data-rec-aluno="${esc(a.email)}" data-rec-tipo="${tipo}" ${marcado ? "checked" : ""}> <span><b>${esc(a.nome)}</b> <span class="pequeno">${esc(a.email)} · ${extra}</span></span></label>
-    <label class="pequeno" style="display:flex;gap:6px;align-items:center;margin:0">vale até <input type="number" min="1" max="100" step="1" value="${vale}" data-rec-vale="${esc(a.email)}" style="width:72px" aria-label="Nota máxima de ${esc(a.nome)} na conversão"></label></div>`;
+    <label class="pequeno" style="display:flex;gap:6px;align-items:center;margin:0">vale até <input type="number" min="1" max="100" step="1" value="${vale}" data-rec-vale="${esc(a.email)}" style="width:72px" aria-label="Teto da nota de ${esc(a.nome)} na conversão"></label></div>`;
   const conteudo = `
     <p class="pequeno" style="margin-top:0">Somativa de origem: <b>${esc(p.titulo)}</b>. A recuperação é criada <b>fechada</b>: confira, edite se precisar e clique em <b>Liberar somativa</b> quando for aplicar. Só os alunos marcados abaixo conseguem ver e fazer.</p>
     <div class="grade"><div><label for="recTitulo">Título</label><input id="recTitulo" type="text" value="${esc(`Recuperação — ${p.titulo}`)}"></div>
       <div><label for="recData">Data da recuperação</label><input id="recData" type="date"></div></div>
-    <fieldset class="temas-box"><legend>Recuperação: nota abaixo de ${NOTA_RECUPERACAO} (${abaixo.length})</legend><p class="pequeno" style="margin-top:0">A prova vale 0 a 100 para o aluno; no fim a nota é convertida para 0 a ${NOTA_RECUPERACAO} (ou o valor que você puser).</p>
+    <fieldset class="temas-box"><legend>Recuperação: nota abaixo de ${NOTA_RECUPERACAO} (${abaixo.length})</legend><p class="pequeno" style="margin-top:0">A prova vale 0 a 100 para o aluno; a nota final é a mesma, com <b>teto de ${NOTA_RECUPERACAO}</b> (ou o valor que você puser). Ex.: tirou 40 = 40; tirou 70 = ${NOTA_RECUPERACAO}.</p>
       ${abaixo.length ? abaixo.map(a => linhaRec(a, true, `nota <b>${String(a.nota).replace(".", ",")}</b>`, "recuperacao", NOTA_RECUPERACAO)).join("") : `<p class="pequeno">Ninguém abaixo de ${NOTA_RECUPERACAO}.</p>`}</fieldset>
-    ${faltaram.length ? `<fieldset class="temas-box"><legend>Substitutiva: faltaram (${faltaram.length})</legend><p class="pequeno" style="margin-top:0">Marque quem vai fazer a <b>prova substitutiva</b> junto com a recuperação. A prova vale 0 a 100 e no fim é convertida para 0 a ${NOTA_SUBSTITUTIVA} (padrão, sem atestado). <b>Com atestado, ponha 100.</b></p>
+    ${faltaram.length ? `<fieldset class="temas-box"><legend>Substitutiva: faltaram (${faltaram.length})</legend><p class="pequeno" style="margin-top:0">Marque quem vai fazer a <b>prova substitutiva</b> junto com a recuperação. A prova vale 0 a 100; a nota final é a mesma, com <b>teto de ${NOTA_SUBSTITUTIVA}</b> (padrão, sem atestado). Ex.: tirou 70 = 70; tirou 90 = ${NOTA_SUBSTITUTIVA}. <b>Com atestado, ponha 100.</b></p>
       ${faltaram.map(a => linhaRec(a, false, "faltou", "substitutiva", NOTA_SUBSTITUTIVA)).join("")}</fieldset>` : ""}
     <fieldset class="temas-box"><legend>Temas da recuperação</legend>
       <p class="pequeno" style="margin-top:0">${nenhumEmFalha ? "Nenhum tema ficou abaixo de 50% de acerto: todos vêm marcados." : "Marcados automaticamente: os temas em <b>FALHA</b> (os alunos de recuperação acertaram menos de 50%)."}</p>
@@ -2146,7 +2146,7 @@ function tabelaHTML(lista, prefixo) {
       return `<tr><td><span class="aluno-celula"><span class="avatar-p">${esc(iniciais(l.t.nome || l.t.email))}</span><span class="ac-texto"><b>${esc(l.t.nome || l.t.email)}</b><span>${esc(l.t.email)}</span>${obsAda ? ` <span class="tag nota" title="${obsAda} adaptação(ões) registrada(s)">♿</span>` : ""}</span></span></td>
       <td>${chipSituacao(l)}${extrasSituacao(l)}</td>
       <td class="res-acertos" title="Início: ${esc(dataBR(l.t.iniciadaEm))} · tempo: ${esc(fmtTempo(l.tempo))}">${acertos} de ${l.itens.length}</td>
-      <td><span class="res-nota ${l.nota >= 60 ? "boa" : "baixa"}"${fechada ? ` title="${esc(fechada)}"` : ""}>${String(l.nota).replace(".", ",")}</span>${textoConvertida(resDados.prova, l.t.email, l.nota) ? `<br><span class="pequeno" title="${tipoRec(resDados.prova, l.t.email)}: nota convertida">→ <b>${textoConvertida(resDados.prova, l.t.email, l.nota)}</b> (${tipoRec(resDados.prova, l.t.email)})</span>` : ""}</td>
+      <td><span class="res-nota ${l.nota >= 60 ? "boa" : "baixa"}"${fechada ? ` title="${esc(fechada)}"` : ""}>${String(l.nota).replace(".", ",")}</span>${textoConvertida(resDados.prova, l.t.email, l.nota) ? `<br><span class="pequeno" title="${tipoRec(resDados.prova, l.t.email)}: nota final">→ <b>${textoConvertida(resDados.prova, l.t.email, l.nota)}</b> (${tipoRec(resDados.prova, l.t.email)})</span>` : ""}</td>
       <td class="td-acoes"><button class="leve mini" data-ver="${l.t.id}">${ic("eye", { size: 16 })}Ver</button> ${itens ? menuHTML({ aria: `Mais ações: ${l.t.nome || l.t.email}`, itensHTML: itens }) : ""}</td></tr>`;
     }).join("") + `</tbody></table></div>`;
 }
@@ -2348,7 +2348,7 @@ $("#btnFecharNotas").onclick = async () => {
 $("#btnCSV").onclick = () => {
   if (!resDados) return toast("Carregue uma prova primeiro.", "erro");
   const n = Math.max(resDados.prova.nQuestoes || 0, ...resDados.linhas.map(l => l.itens.length));
-  const cab = ["Nome", "E-mail", "Início", "Fim", "Tempo", "Tempo (segundos)", "Trocas de aba", "Saídas da tela cheia", "Tentativas de colar", `Respostas < ${RAPIDO}s`, "Encerrada por", "Questões perdidas", "Nota", ...(resDados.prova.valeAte ? ["Tipo", "Vale até", "Nota convertida"] : []),
+  const cab = ["Nome", "E-mail", "Início", "Fim", "Tempo", "Tempo (segundos)", "Trocas de aba", "Saídas da tela cheia", "Tentativas de colar", `Respostas < ${RAPIDO}s`, "Encerrada por", "Questões perdidas", "Nota", ...(resDados.prova.valeAte ? ["Tipo", "Vale até", "Nota final"] : []),
                ...Array.from({ length: n }, (_, i) => `Q${i + 1}`)];
   const rows = resDados.linhas.map(l => [l.t.nome || "", l.t.email, dataBR(l.t.iniciadaEm), l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "em andamento",
     fmtTempo(l.tempo), l.tempo ?? "", abasTexto(l.sinais), l.sinais.telaCheia, l.sinais.colar, l.rapidas, l.t.encerradaPor === "trocasDeAba" ? "limite de saídas" : "", l.perdidas, String(l.nota).replace(".", ","),
@@ -2451,7 +2451,7 @@ function boletimHTML(l, quebra = false) {
   const p = resDados.prova;
   const rot = { certa: "✔ certa", errada: "✘ errada", parcial: "parcial", revisar: "◌ em correção", em_branco: "□ em branco", perdida: "⛔ perdida (saiu da prova)" };
   let h = cab(`Boletim — ${p.titulo}`, `${l.t.nome || ""} · ${l.t.email} · ${p.turma || ""} · finalizada em ${l.t.finalizadaEm ? dataBR(l.t.finalizadaEm) : "—"}`);
-  h += `<h2>Nota: ${l.nota} / 100 <span class="peq">(${l.pts} de ${l.max} pontos)</span>${textoConvertida(resDados.prova, l.t.email, l.nota) ? ` → nota convertida: ${textoConvertida(resDados.prova, l.t.email, l.nota)} (${tipoRec(resDados.prova, l.t.email)})` : ""}</h2>`;
+  h += `<h2>Nota: ${l.nota} / 100 <span class="peq">(${l.pts} de ${l.max} pontos)</span>${textoConvertida(resDados.prova, l.t.email, l.nota) ? ` → nota final: ${textoConvertida(resDados.prova, l.t.email, l.nota)} (${tipoRec(resDados.prova, l.t.email)})` : ""}</h2>`;
   if (l.t.encerradaPor === "trocasDeAba") h += `<div class="rapida">⛔ Prova encerrada: limite de saídas da prova atingido.</div>`;
   h += `<div class="peq">Tempo total: ${fmtTempo(l.tempo)} · Trocas de aba: ${abasTexto(l.sinais)} · Saídas da tela cheia: ${l.sinais.telaCheia} · Tentativas de colar: ${l.sinais.colar}</div>`;
   h += l.itens.map(x => {
