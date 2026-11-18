@@ -1090,6 +1090,7 @@ function desenharProvas() {
     await updateDoc(doc(db, "provas", p.id), { [campo]: novo });
     toast("Prova atualizada", "ok"); carregarProvas();
   });
+  box.querySelectorAll("[data-notafinal]").forEach(b => b.onclick = () => ajustarNotaFinal(provasCache.find(x => x.id === b.dataset.notafinal)));
   box.querySelectorAll("[data-recuperacao]").forEach(b => b.onclick = () => gerarRecuperacao(provasCache.find(x => x.id === b.dataset.recuperacao)));
   box.querySelectorAll("[data-editar]").forEach(b => b.onclick = () => editarProva(provasCache.find(x => x.id === b.dataset.editar)));
   box.querySelectorAll("[data-testar]").forEach(b => b.onclick = () => window.open(`index.html?teste=${encodeURIComponent(b.dataset.testar)}`, "_blank"));
@@ -1123,6 +1124,7 @@ function cartaoProvaHTML(p) {
       </div>
       <div class="cp-botoes">
         ${podeEditar() ? `<button class="${p.liberada ? "leve" : "ok"}" data-tg="liberada" data-id="${p.id}">${ic(p.liberada ? "stop" : "play", { size: 16 })}${p.liberada ? "Encerrar" : "Liberar somativa"}</button>` : ""}
+        ${podeEditar() && p.recuperacao ? `<button class="leve" data-notafinal="${p.id}" title="Regra da nota final e quanto vale para cada aluno">${ic("edit", { size: 16 })}Nota final</button>` : ""}
         ${podeEditar() && !p.liberada && p.resultadosLiberados ? `<button class="leve" data-recuperacao="${p.id}" title="Cria uma somativa de recuperação só para quem tirou abaixo de ${NOTA_RECUPERACAO}, com os temas em que a turma falhou">${ic("copy", { size: 16 })}${p.recuperacaoIds?.length ? "Gerar outra recuperação" : "Gerar recuperação"}</button>` : ""}
         <button class="leve" data-alunos="${p.id}" title="Ver aluno por aluno (ao vivo): vidas, progresso e nota">${ic("users", { size: 16 })}Alunos</button>
         ${menuHTML({ aria: `Mais ações: ${p.titulo}`, itensHTML: itens })}
@@ -1139,9 +1141,59 @@ function cartaoProvaHTML(p) {
 // (entra no histórico, nos resultados e nos relatórios), mas só os e-mails de alunosEmails conseguem fazer.
 const NOTA_RECUPERACAO = 50, NOTA_SUBSTITUTIVA = 80;
 // nota final do aluno na recuperação/substitutiva: a prova vale 0–100 e a nota final é a mesma, com TETO em valeAte (ex.: 70 com teto 50 = 50). null = prova normal
+// regra da nota final (por tipo, em prova.regraNota): a prova sempre vale 0–100 para o aluno
+//  teto: nota limitada a "vale até" (padrão) · proporcional: nota × vale ÷ 100 · meta: nota × vale ÷ meta, limitada a vale
+const REGRAS_NOTA = { teto: "Teto (nota limitada ao valor)", proporcional: "Proporcional (nota × valor ÷ 100)", meta: "Proporcional com meta (atingiu a meta = valor)" };
+function regraDoTipo(prova, tipo) { const r = prova?.regraNota?.[tipo] || {}; return { modo: REGRAS_NOTA[r.modo] ? r.modo : "teto", meta: Number(r.meta) > 0 ? Number(r.meta) : 70 }; }
+function calcNotaFinal(nota, vale, regra) {
+  const n = Number(nota || 0), v = Number(vale);
+  const f = regra.modo === "proporcional" ? n * v / 100 : regra.modo === "meta" ? Math.min(v, n * v / regra.meta) : Math.min(v, n);
+  return Math.round(f * 10) / 10;
+}
 function notaConvertida(prova, email, nota) {
   const v = Number(prova?.valeAte?.[String(email || "").toLowerCase()]);
-  return v > 0 ? Math.min(v, Math.round(Number(nota || 0) * 10) / 10) : null;
+  return v > 0 ? calcNotaFinal(nota, v, regraDoTipo(prova, prova?.tipoPorAluno?.[String(email).toLowerCase()] === "substitutiva" ? "substitutiva" : "recuperacao")) : null;
+}
+// escolha da regra (no gerar e no ajustar)
+function htmlRegrasNota(prova) {
+  return `<fieldset class="temas-box"><legend>Regra da nota final</legend><p class="pequeno" style="margin-top:0">O aluno sempre faz a prova de 0 a 100. A regra define como vira a nota final, usando o "vale até" de cada aluno.</p>
+    ${[["recuperacao", "Recuperação"], ["substitutiva", "Substitutiva"]].map(([k, nome]) => { const r = regraDoTipo(prova, k); return `<div class="grade">
+      <div><label for="rgModo_${k}">${nome}</label><select id="rgModo_${k}">${Object.entries(REGRAS_NOTA).map(([m, t]) => `<option value="${m}" ${m === r.modo ? "selected" : ""}>${t}</option>`).join("")}</select></div>
+      <div><label for="rgMeta_${k}">Meta (só na regra com meta)</label><input id="rgMeta_${k}" type="number" min="1" max="100" value="${r.meta}"></div></div>`; }).join("")}
+    <p class="pequeno" id="rgExemplo"></p></fieldset>`;
+}
+function lerRegrasNota(corpo) {
+  const out = {};
+  for (const k of ["recuperacao", "substitutiva"]) {
+    const modo = corpo.querySelector(`#rgModo_${k}`).value, meta = Number(corpo.querySelector(`#rgMeta_${k}`).value);
+    if (modo === "meta" && !(meta > 0 && meta <= 100)) return { erro: "A meta precisa ser de 1 a 100." };
+    out[k] = { modo, meta: meta > 0 ? Math.round(meta) : 70 };
+  }
+  return { regraNota: out };
+}
+function ligarExemploRegras(corpo) {
+  const ex = () => { const r = lerRegrasNota(corpo); if (r.erro) return; const p = { regraNota: r.regraNota };
+    corpo.querySelector("#rgExemplo").innerHTML = `Exemplo com nota 70 — recuperação (vale ${NOTA_RECUPERACAO}): <b>${String(calcNotaFinal(70, NOTA_RECUPERACAO, regraDoTipo(p, "recuperacao"))).replace(".", ",")}</b> · substitutiva (vale ${NOTA_SUBSTITUTIVA}): <b>${String(calcNotaFinal(70, NOTA_SUBSTITUTIVA, regraDoTipo(p, "substitutiva"))).replace(".", ",")}</b>`; };
+  corpo.querySelectorAll("[id^=rgModo_], [id^=rgMeta_]").forEach(i => i.addEventListener("input", ex)); ex();
+}
+// depois de gerada: muda a regra e o "vale até" de cada aluno (as notas finais são recalculadas na hora, em todo lugar)
+async function ajustarNotaFinal(p) {
+  if (!p?.recuperacao || !podeEditar()) return;
+  const emails = p.alunosEmails || [];
+  const conteudo = `<p class="pequeno" style="margin-top:0">Recuperação de <b>${esc(p.provaOrigemTitulo || "")}</b>. Mudar aqui recalcula a nota final de todos (painel e portal do aluno). A nota de 0 a 100 da prova não muda.</p>
+    ${htmlRegrasNota(p)}
+    <fieldset class="temas-box"><legend>"Vale até" por aluno (${emails.length})</legend>
+    ${emails.map(e => `<div style="display:flex;gap:8px;align-items:center;padding:2px 0;flex-wrap:wrap"><span style="flex:1 1 260px">${esc(e)} <span class="chip ${tipoRec(p, e) === "substitutiva" ? "info" : "warn"}">${tipoRec(p, e)}</span></span>
+      <label class="pequeno" style="display:flex;gap:6px;align-items:center;margin:0">vale até <input type="number" min="1" max="100" step="1" value="${p.valeAte?.[e] ?? (tipoRec(p, e) === "substitutiva" ? NOTA_SUBSTITUTIVA : NOTA_RECUPERACAO)}" data-aj-vale="${esc(e)}" style="width:72px"></label></div>`).join("")}</fieldset>`;
+  const salvou = await drawerForm({ titulo: "Nota final da recuperação", ok: "Salvar", conteudo, aoAbrir: ligarExemploRegras,
+    antesDeConfirmar: async corpo => {
+      const r = lerRegrasNota(corpo); if (r.erro) { toast(r.erro, "erro"); return false; }
+      const valeAte = {};
+      for (const i of corpo.querySelectorAll("[data-aj-vale]")) { const v = Number(i.value); if (!(v > 0 && v <= 100)) { toast(`"Vale até" de ${i.dataset.ajVale} precisa ser de 1 a 100.`, "erro"); return false; } valeAte[i.dataset.ajVale] = Math.round(v * 10) / 10; }
+      try { await updateDoc(doc(db, "provas", p.id), { valeAte, regraNota: r.regraNota, historico: [...(p.historico || []), { timestamp: new Date().toISOString(), motivo: "nota_final", editadoPor: eu.email }] }); }
+      catch (e) { toast("Não foi possível salvar. " + traduzirErro(e), "erro"); return false; }
+    } });
+  if (salvou) { toast("Regra da nota final salva.", "ok"); carregarProvas(); }
 }
 const textoConvertida = (prova, email, nota) => { const c = notaConvertida(prova, email, nota); return c === null ? "" : `${String(c).replace(".", ",")} de ${String(prova.valeAte[String(email).toLowerCase()]).replace(".", ",")}`; };
 const tipoRec = (prova, email) => prova?.tipoPorAluno?.[String(email || "").toLowerCase()] === "substitutiva" ? "substitutiva" : "recuperação";
@@ -1208,6 +1260,7 @@ async function gerarRecuperacao(p) {
     <fieldset class="temas-box"><legend>Temas da recuperação</legend>
       <p class="pequeno" style="margin-top:0">${nenhumEmFalha ? "Nenhum tema ficou abaixo de 50% de acerto: todos vêm marcados." : "Marcados automaticamente: os temas em <b>FALHA</b> (os alunos de recuperação acertaram menos de 50%)."}</p>
       ${[...temasTodos.entries()].map(([k, x]) => `<label style="display:flex;gap:8px;align-items:center;padding:2px 0"><input type="checkbox" data-rec-tema="${esc(k)}" ${nenhumEmFalha || emFalha(x) ? "checked" : ""}> <span>${bancos.length > 1 ? `<span class="pequeno">${esc(nomeBanco(x.banco))} ›</span> ` : ""}<b>${esc(x.tema)}</b> <span class="pequeno">${pct(x)}</span>${emFalha(x) ? ` <span class="chip warn">em falha</span>` : ""}</span></label>`).join("")}</fieldset>
+    ${htmlRegrasNota(null)}
     <div class="grade"><div><label for="recNAlt">Questões de alternativa</label><input id="recNAlt" type="number" min="0" value="${cota.nA}"></div>
       <div><label for="recNDiss">Questões dissertativas</label><input id="recNDiss" type="number" min="0" value="${cota.nD}"></div></div>
     <p class="pequeno" id="recDisp"></p>`;
@@ -1222,7 +1275,7 @@ async function gerarRecuperacao(p) {
         corpo.querySelector("#recDisp").textContent = `Nos temas marcados há ${a} alternativa(s) e ${d} dissertativa(s).`;
         return { a, d };
       };
-      corpo._disp = disp; disp();
+      corpo._disp = disp; disp(); ligarExemploRegras(corpo);
       corpo.querySelectorAll("[data-rec-tema]").forEach(i => i.addEventListener("change", disp));
     },
     antesDeConfirmar: async corpo => {
@@ -1237,6 +1290,7 @@ async function gerarRecuperacao(p) {
       const marc = [...corpo.querySelectorAll("[data-rec-tema]:checked")].map(i => temasTodos.get(i.dataset.recTema));
       const nA = Math.max(0, Math.round(Number(corpo.querySelector("#recNAlt").value || 0))), nD = Math.max(0, Math.round(Number(corpo.querySelector("#recNDiss").value || 0)));
       if (!titulo) { toast("Preencha o título.", "erro"); return false; }
+      const rg = lerRegrasNota(corpo); if (rg.erro) { toast(rg.erro, "erro"); return false; }
       if (!emails.length) { toast("Marque pelo menos um aluno.", "erro"); return false; }
       if (!marc.length) { toast("Marque pelo menos um tema.", "erro"); return false; }
       if (nA + nD < 1) { toast("A recuperação precisa de pelo menos uma questão.", "erro"); return false; }
@@ -1251,7 +1305,7 @@ async function gerarRecuperacao(p) {
       const dados = Object.fromEntries(copiar.filter(k => p[k] !== undefined).map(k => [k, p[k]]));
       Object.assign(dados, { titulo, dataProva: corpo.querySelector("#recData").value || "", codigoAcesso: "",
         bancoId: bancoIds[0], bancoIds, temasPorBanco, temas: temasPorBanco[bancoIds[0]], nQuestoes: nA + nD, nAlternativas: nA, nDissertativas: nD,
-        recuperacao: true, provaOrigemId: p.id, provaOrigemTitulo: p.titulo || "", notaCorte: NOTA_RECUPERACAO, alunosEmails: emails, valeAte, tipoPorAluno,
+        recuperacao: true, provaOrigemId: p.id, provaOrigemTitulo: p.titulo || "", notaCorte: NOTA_RECUPERACAO, alunosEmails: emails, valeAte, tipoPorAluno, regraNota: rg.regraNota,
         liberada: false, resultadosLiberados: false, criadoEm: serverTimestamp(), criadoPor: eu.email,
         historico: [{ timestamp: new Date().toISOString(), motivo: "recuperacao", origem: p.id, editadoPor: eu.email }] });
       try {

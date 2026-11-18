@@ -1080,13 +1080,21 @@ async function placarDaTentativa(t) {
   const p = placar(itens);
   return { acertos: p.acertos, totalQuestoes: p.totalQuestoes, nota: t.nota ?? p.notaPrevia, pendentes: p.aguardandoCorrecao };
 }
-// recuperação/substitutiva: a prova vale 0–100 e a nota final é a mesma, com teto em valeAte (o professor define por aluno)
+// regra da nota final (por tipo, em prova.regraNota): a prova sempre vale 0–100 para o aluno
+//  teto: nota limitada a "vale até" (padrão) · proporcional: nota × vale ÷ 100 · meta: nota × vale ÷ meta, limitada a vale
+const REGRAS_NOTA = { teto: "Teto (nota limitada ao valor)", proporcional: "Proporcional (nota × valor ÷ 100)", meta: "Proporcional com meta (atingiu a meta = valor)" };
+function regraDoTipo(prova, tipo) { const r = prova?.regraNota?.[tipo] || {}; return { modo: REGRAS_NOTA[r.modo] ? r.modo : "teto", meta: Number(r.meta) > 0 ? Number(r.meta) : 70 }; }
+function calcNotaFinal(nota, vale, regra) {
+  const n = Number(nota || 0), v = Number(vale);
+  const f = regra.modo === "proporcional" ? n * v / 100 : regra.modo === "meta" ? Math.min(v, n * v / regra.meta) : Math.min(v, n);
+  return Math.round(f * 10) / 10;
+}
 function notaFinalAluno(prova, nota) {
   const v = Number(prova?.valeAte?.[String(eu?.email || "").toLowerCase()]);
   if (!(v > 0) || nota === undefined || nota === null) return null;
-  const tipo = prova?.tipoPorAluno?.[String(eu.email).toLowerCase()] === "substitutiva" ? "substitutiva" : "recuperação";
+  const sub = prova?.tipoPorAluno?.[String(eu.email).toLowerCase()] === "substitutiva", tipo = sub ? "substitutiva" : "recuperação";
   const br = n => String(n).replace(".", ",");
-  return { texto: `${br(Math.min(v, Math.round(Number(nota) * 10) / 10))} de ${br(v)}`, tipo };
+  return { texto: `${br(calcNotaFinal(nota, v, regraDoTipo(prova, sub ? "substitutiva" : "recuperacao")))} de ${br(v)}`, tipo };
 }
 function textoPlacarCurto(r, prova = null) {
   const f = notaFinalAluno(prova, r.nota);
