@@ -1,8 +1,8 @@
 // Página do aluno: login, lista de provas, prova (uma questão por vez ou todas na página), resultado.
 import { ic } from "./icones.js";
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar, sortearAleatorio, esc, $, toast, dataBR, letra,
-         idTentativaTeste, apagarTentativaTeste, confirmar, traduzirErro, iniciais, fecharModais, temaDe, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco, bancoDaQuestao, sortearQuestoes }
-  from "./common.js?v=20261116b";
+         idTentativaTeste, apagarTentativaTeste, confirmar, avisar, traduzirErro, iniciais, fecharModais, temaDe, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco, bancoDaQuestao, sortearQuestoes }
+  from "./common.js?v=20261125a";
 import { baixarMaterial } from "./material.js";
 import { desenharConquistas } from "./aluno-conquistas.js?v=20261118e";
 import { regraDoTipo, calcNotaFinal } from "./nota-final.js";
@@ -12,7 +12,7 @@ import { iniciarAbas, definirAbasVisiveis, irParaAba, abaAtual } from "./aluno-n
 import { desenharTurma } from "./aluno-social.js";
 import { desenharRecompensas } from "./aluno-recompensas.js";
 let simulacao = false;   // equipe vendo a página como aluno (?simular=1): nada é gravado
-import { lerGamificacao, GAMI_PADRAO } from "./common.js?v=20261116b";
+import { lerGamificacao, GAMI_PADRAO } from "./common.js?v=20261125a";
 let gami = { ...GAMI_PADRAO };   // o que está ligado na gamificação (config/gamificacao)
 import { montarFormato, temFormato, FORMATOS, rotuloFormato, textoParaFalar, textoResposta, textoChave } from "./formatos-ui.js";
 const controles = {};   // qid -> controle do formato adaptado (valor, preencher, travar)
@@ -21,10 +21,13 @@ import { topicosDaProva, htmlConhecimentos, rotuloTec, nivelK } from "./plano-cu
 import { criteriosDaProva, NIVEIS_RUBRICA, carregarCriteriosOficiais } from "./plano-ensino.js?v=20261116a";
 import { toolbar, collapsible, vazio, statTiles, chips } from "./ui.js";
 import { completar, aplicarVisual, mesclarQuestao } from "./acessibilidade.js";
+import { textoRespostaSql } from "../servidor/sql-correcao.js";
+import { montarBancada } from "./workbench.js?v=20261125a";
+import { conferirExtensoes, textoExtensoes, vigiarExtensoes, extensoesIA } from "./extensoes.js?v=20261125a";
 import { definirEstilos } from "./mascotes.js";
 import { usarItensCustom } from "./avatar.js";
 import { mascoteLigado, ligarMascote, dadosMascote, htmlMascote, htmlEscolha, ligarEscolha, montarGuia, pararFala } from "./guia.js";
-import { collection, doc, addDoc, getDoc, getDocFromServer, getDocs, setDoc, updateDoc, query, where, serverTimestamp, increment, arrayUnion, onSnapshot }
+import { collection, doc, addDoc, getDoc, getDocFromServer, getDocs, setDoc, updateDoc, query, where, serverTimestamp, increment, arrayUnion, onSnapshot, runTransaction }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 let eu = null;            // { uid, email, nome }
@@ -73,9 +76,10 @@ function mostrar(id) {
   document.body.classList.toggle("em-prova", id === "telaQuestao");   // ativa os bloqueios e avisos da prova
   document.body.classList.toggle("com-abas", id === "telaProvas");    // barra de seções (js/aluno-nav.js): só na lista, nunca na prova
   document.body.classList.toggle("com-consulta", id === "telaQuestao" && temConsulta());
+  document.body.classList.toggle("com-sql", id === "telaQuestao" && !!tentativa?.questoesIds?.some(q => questoes[q]?.tipo === "sql"));   // Bancada SQL: tela mais larga
   if (id !== "telaQuestao") { esconderSobreposicao(); $("#painelConsulta").classList.remove("aberto"); }
   if (id !== "telaFim") pararOuvinteFim();
-  if (id !== "telaQuestao") pararOuvinteProva();
+  if (id !== "telaQuestao") { pararOuvinteProva(); try { pararTimerFora(); foraDaProva = false; if (pararVigia) { pararVigia(); pararVigia = null; } } catch { /* ainda carregando o módulo */ } }
   if (id !== "telaInicio") pararFala();
   atualizarBanner();
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -373,11 +377,18 @@ function regrasDaProva(p) {
     ? "As questões aparecem <b>uma por vez</b>, mas você pode <b>ir e voltar</b> (← Anterior / Próxima → ou os números no topo) e alterar as respostas até clicar em <b>Finalizar prova</b>. Ao trocar de questão, o que você marcou ou escreveu é salvo sozinho."
     : "As questões aparecem <b>uma por vez</b>. Depois de enviar uma resposta, não é possível voltar.");
   r.push("A ordem das questões e das alternativas é diferente para cada aluno.");
+  if (Number(p.dicasMax || 0) > 0) r.push(`💡 Você pode pedir <b>até ${Number(p.dicasMax)} dica(s) para a prova toda</b>, clicando no mascote (ou em 💡 Dica, no topo). É só uma dica, não a resposta, e o professor vê que você pediu.`);
   r.push("No final você vê <b>quantas acertou e a nota</b>. Quais acertou e o gabarito aparecem só quando o professor liberar.");
   const base = !p.permitirTrocaAba && !semLimites() ? Math.max(0, Number(p.maxTrocasDeAba || 0)) : 0;
   const vidas = base ? base + Math.max(0, Number(ap().vidasExtras || 0)) : 0, colarCusta = vidas > 0 && !p.permitirColar && p.colarTiraVida !== false;
   if (!p.permitirColar) r.push(`<b>Colar texto está desativado</b> nos campos de resposta: digite. As tentativas de colar ficam registradas${colarCusta ? " e <b>custam 1 vida</b>" : ""}.`);
-  if (!p.permitirTrocaAba) r.push("A prova abre em <b>tela cheia</b>. Sair da tela cheia e trocar de aba ou de janela <b>ficam registrados</b> para o professor.");
+  if (!p.permitirTrocaAba) {
+    r.push("Use o <b>Google Chrome ou o Microsoft Edge</b> num computador. A prova abre em <b>tela cheia</b> com o teclado travado: <b>Alt, Alt+Tab, tecla Windows, Esc, F1–F12 e os atalhos com Ctrl</b> não funcionam (dentro da resposta continuam valendo Ctrl+Z, Ctrl+A e Ctrl+setas; o AltGr do teclado também). Desligue antes as <b>extensões de IA/escrita</b> e o <b>bloqueador de anúncios</b>.");
+    r.push("Sair da tela da prova <b>conta como saída</b>: sair da tela cheia, trocar de janela, clicar em outro monitor e também <b>recarregar ou fechar a página</b>. O que o navegador não consegue bloquear (Ctrl+Alt+Del, Win+L) é percebido e conta igual. Enquanto você estiver fora, as questões ficam escondidas.");
+    if (!semLimites() && Number(p.maxTrocasDeAba || 0) > 0 && Number(p.segundosVolta ?? 5) > 0) r.push(`<b>Saiu? Volte rápido:</b> fora da prova você perde <b>mais 1 vida a cada ${Number(p.segundosVolta ?? 5)} segundos</b> (conta até com a página fechada).`);
+    r.push("Apertou <b>Shift várias vezes</b> e o Windows abriu a janela das Teclas de Aderência? Clique em <b>Não</b> e volte: na primeira vez é só um aviso.");
+    r.push("A prova só funciona <b>no computador em que você começou</b>. Trocou de computador? Chame o professor para liberar.");
+  }
   if (vidas) r.push(`<b>Você tem ${vidas === 1 ? "1 vida" : `${vidas} vidas`}: ${"❤️".repeat(Math.min(vidas, 10))}</b><br>Perde 1 vida ao trocar de aba ou de janela (Alt+Tab), sair da tela cheia${colarCusta ? " ou tentar colar (Ctrl+V)" : ""}. Se as vidas acabarem, ${textoPena(p)}.<br>Saiu sem querer? Calma: chame o professor, ele pode devolver suas vidas.`);
   r.push("Copiar e selecionar o enunciado, imprimir e atalhos como Ctrl+C e Ctrl+P ficam desativados durante a prova.");
   if (semLimites()) r.push("<b>Sem limite de tempo e sem vidas para você.</b> Faça com calma: sair da tela fica só registrado.");
@@ -395,6 +406,11 @@ async function abrirProva(id, acao) {
   const t = await getDoc(doc(db, "tentativas", idTentativa(id)));
   tentativa = t.exists() ? { id: t.id, ...t.data() } : null;
   if (acao === "resultado") return verResultado();
+  const meuEmail = String(eu.email || "").toLowerCase();
+  if (!modoTeste && !tentativa?.finalizadaEm && (provaAtual.bloqueados || []).includes(meuEmail))
+    return avisoEntrada("🚫 Você não pode fazer esta prova", "O professor bloqueou o seu acesso a esta prova. Se acha que é engano, fale com ele.");
+  if (!tentativa && !modoTeste && entradaFechada(provaAtual) && !(provaAtual.liberadosEntrada || []).includes(meuEmail))
+    return avisoEntrada("🚪 A entrada desta prova já foi fechada", "A prova já começou e o professor fechou a entrada. Se você chegou atrasado, peça para ele deixar você entrar.");
   if (!tentativa) {
     const min = semLimites() ? 0 : Number(provaAtual.tempoMinutos || 0) + (Number(provaAtual.tempoMinutos || 0) > 0 ? Math.max(0, Number(ap().tempoExtraMin || 0)) : 0);
     $("#inicioTitulo").textContent = provaAtual.titulo;
@@ -411,9 +427,59 @@ async function abrirProva(id, acao) {
     $("#inicioCodigoBox").classList.toggle("oculto", !pedeCodigo());
     $("#inicioCodigo").value = ""; $("#inicioCodigoErro").textContent = "";
     $("#btnComecar").disabled = pedeCodigo();   // só habilita depois de digitar o código
-    mostrar("telaInicio"); return;
+    mostrar("telaInicio"); conferirRequisitos(); return;
   }
-  await carregarTentativa();
+  if (!tentativa.finalizadaEm && !(await conferirSessao())) return;
+  await carregarTentativa({ retomando: true });
+}
+
+// ---------- entrada na prova: barrado, entrada fechada, sessão única ----------
+function entradaFechada(p) { return p?.entradaFechada === true || (p?.entradaAte?.toMillis && Date.now() >= p.entradaAte.toMillis()); }
+async function avisoEntrada(titulo, texto) {
+  await avisar(texto, { titulo, ok: "Entendi" }).catch(() => {});
+  listarProvas();
+}
+// cada navegador ganha um código; a tentativa guarda o do computador em que o aluno começou (o professor pode liberar)
+const ID_DISPOSITIVO = (() => {
+  let x = null;
+  try { x = localStorage.getItem("provaDispositivo"); if (!x) { x = (crypto.randomUUID?.() || String(Math.random()).slice(2) + Date.now()); localStorage.setItem("provaDispositivo", x); } }
+  catch { x = "sem-armazenamento"; }
+  return x;
+})();
+async function conferirSessao() {
+  if (modoTeste || simulacao) return true;
+  if (tentativa.sessao && tentativa.sessao !== ID_DISPOSITIVO) {
+    avisoEntrada("💻 Sua prova está aberta em outro computador", "Por segurança, a prova só funciona no computador em que você começou. Se trocou de computador, peça ao professor para clicar em \"Liberar login\" e depois entre de novo.");
+    return false;
+  }
+  try {
+    const ref = doc(db, "tentativas", tentativa.id), antes = Date.now();
+    await updateDoc(ref, { ...(tentativa.sessao ? {} : { sessao: ID_DISPOSITIVO }), vistoEm: serverTimestamp() });
+    const d = await getDocFromServer(ref);
+    const visto = d.data()?.vistoEm?.toMillis?.();
+    if (visto) desvioRelogio = visto - Math.round((antes + Date.now()) / 2);   // relógio do servidor (timer de volta)
+    if (d.data()?.sessao && d.data().sessao !== ID_DISPOSITIVO) { avisoEntrada("💻 Sua prova está aberta em outro computador", "Peça ao professor para clicar em \"Liberar login\"."); return false; }
+    tentativa = { ...tentativa, ...d.data(), id: tentativa.id };
+  } catch (e) { console.warn("sessão da prova", e); }
+  return true;
+}
+
+// ---------- requisitos para começar: Chrome/Edge no computador, sem extensão de IA e sem bloqueador ----------
+let requisitosOk = true;
+async function conferirRequisitos() {
+  let box = $("#inicioRequisitos");
+  if (!box) { $("#btnComecar").insertAdjacentHTML("beforebegin", `<div id="inicioRequisitos" class="inicio-requisitos oculto" role="alert"></div>`); box = $("#inicioRequisitos"); }
+  if (trocaAbaPermitida()) { requisitosOk = true; box.classList.add("oculto"); return true; }
+  const prob = [];
+  if (!suportaModoProva() || !ehComputador()) prob.push("Esta prova precisa do <b>Google Chrome</b> ou do <b>Microsoft Edge</b> num <b>computador</b> (é o que permite travar o teclado em tela cheia). Abra o site por um deles.");
+  const ext = await conferirExtensoes();
+  const tx = textoExtensoes(ext);
+  if (tx) prob.push(tx);
+  requisitosOk = !prob.length || modoTeste;
+  box.classList.toggle("oculto", !prob.length);
+  box.innerHTML = prob.length ? `<b>⚠ Antes de começar:</b><ul>${prob.map(p => `<li>${p}</li>`).join("")}</ul>${modoTeste ? "<p class='pequeno'>(Modo teste da equipe: você pode começar mesmo assim.)</p>" : ""}<button type="button" class="leve" id="btnReconferir">Conferir de novo</button>` : "";
+  if (prob.length) $("#btnReconferir").onclick = () => conferirRequisitos();
+  return requisitosOk;
 }
 
 // o que a prova avalia, do plano de curso: três blocos recolhidos (capacidades técnicas, socioemocionais, conhecimentos)
@@ -483,7 +549,10 @@ $("#btnComecar").onclick = async () => {
   if (codigo && codigo !== normalizarCodigo(provaAtual.codigoAcesso)) {
     $("#inicioCodigoErro").textContent = "Código incorreto. Confira com o professor e digite de novo."; $("#inicioCodigo").select(); return;
   }
-  pedirTelaCheia();   // precisa ser chamado direto no clique, antes de qualquer await
+  if (!requisitosOk || (!trocaAbaPermitida() && !modoTeste && (!suportaModoProva() || extensoesIA().length))) {
+    conferirRequisitos(); $("#inicioRequisitos")?.scrollIntoView({ behavior: "smooth", block: "center" }); return;
+  }
+  pedirTelaCheia();   // precisa ser chamado direto no clique, antes de qualquer await (entra em tela cheia e trava o teclado)
   $("#btnComecar").disabled = true;
   try {
     // sorteia nQuestoes dos bancos da prova (ids) — cada aluno recebe um conjunto diferente.
@@ -496,6 +565,7 @@ $("#btnComecar").onclick = async () => {
       questoesIds: sorteadas, iniciadaEm: serverTimestamp(), finalizadaEm: null, indiceAtual: 0, trocasDeAba: 0, notaPrevia: null, aguardandoCorrecao: 0,
       saidasTelaCheia: 0, tentativasColar: 0
     };
+    if (!modoTeste) dados.sessao = ID_DISPOSITIVO;   // sessão única: este computador
     if (modoTeste) dados.teste = true;
     if (codigo) dados.codigoInformado = codigo;   // as regras conferem com o código da prova
     try { await setDoc(doc(db, "tentativas", tid), dados); }
@@ -514,7 +584,14 @@ $("#btnComecar").onclick = async () => {
   $("#btnComecar").disabled = pedeCodigo() && !normalizarCodigo($("#inicioCodigo").value);
 };
 
-async function carregarTentativa() {
+async function carregarTentativa(opc = {}) {
+  await carregarTentativaBase();
+  if (!tentativa || tentativa.finalizadaEm || !emProvaAtiva()) return;
+  vigiarExtensoesNaProva();
+  if (conferirPunicao()) return;   // as vidas acabaram enquanto a página estava fechada (timer de volta no servidor)
+  if (opc.retomando && !modoTeste) retomarSaida();
+}
+async function carregarTentativaBase() {
   questoes = {}; respostas = {}; tentouEnviar.clear(); rascunhos.clear(); erroEnvio = false;
   const docsQ = await Promise.all(tentativa.questoesIds.map(q => getDoc(doc(db, "bancos", bancoDaQuestao(q, tentativa.bancoId), "questoes", q))));
   docsQ.forEach(d => { if (d.exists()) questoes[d.id] = { id: d.id, ...d.data() }; });
@@ -550,11 +627,23 @@ function ouvirTentativa() {
   ouvinteProva = onSnapshot(doc(db, "tentativas", id), d => {
     if (!d.exists() || tentativa?.id !== id || tentativa.finalizadaEm) return;
     const novo = d.data();
+    if (novo.finalizadaEm) {   // o professor encerrou/barrou ou o servidor encerrou pelas vidas
+      tentativa = { ...tentativa, ...novo, id }; pararTimerFora(); foraDaProva = false; sairTelaCheia(); pararOuvinteProva();
+      toast(novo.encerradaPor === "barrado" ? "O professor encerrou a sua prova." : "Sua prova foi encerrada.", "erro");
+      mostrarFim(); return;
+    }
+    if (!modoTeste && novo.sessao && novo.sessao !== ID_DISPOSITIVO) {   // o professor liberou e outro computador assumiu
+      pararTimerFora(); foraDaProva = false; sairTelaCheia(); pararOuvinteProva(); tentativa = null;
+      avisoEntrada("💻 A prova foi aberta em outro computador", "Este computador deixou de valer para a sua prova."); return;
+    }
+    if (Number(novo.foraCobradas || 0) > foraCobradas && foraDaProva) foraCobradas = Number(novo.foraCobradas);
     const vidasAntes = limiteSaidas() - (tentativa.trocasDeAba || 0), minAntes = Number(tentativa.minutosExtras || 0);
     const restAntes = tentativa.vidasRestauradasEm?.toMillis?.() || 0, restDepois = novo.vidasRestauradasEm?.toMillis?.() || 0;
-    ["trocasDeAba", "trocasDeAbaTotal", "vidasExtras", "minutosExtras", "vidasRestauradasEm"].forEach(k => { tentativa[k] = novo[k]; });
+    ["trocasDeAba", "trocasDeAbaTotal", "vidasExtras", "minutosExtras", "vidasRestauradasEm", "dicas"].forEach(k => { tentativa[k] = novo[k]; });
+    atualizarDica();
     const vidasDepois = limiteSaidas() - (tentativa.trocasDeAba || 0);
     desenharVidas();
+    if (vidasDepois < vidasAntes && conferirPunicao()) return;
     if (Number(novo.minutosExtras || 0) !== minAntes) {
       iniciarCronometro();
       if (Number(novo.minutosExtras || 0) > minAntes) toast(`⏱ O professor deu mais ${Number(novo.minutosExtras) - minAntes} min para você.`, "ok");
@@ -594,7 +683,8 @@ function criarCartaoQuestao(qid, i, unica) {
   card.className = "card questao"; card.dataset.qid = qid;
   if (!unica) card.id = "q_" + qid;
   if (!q) { card.innerHTML = `<p class="pequeno">Questão ${i + 1} indisponível. Avise o professor.</p><div class="acoes-questao"></div>`; return card; }
-  const tipo = temFormato(q) ? FORMATOS[q.formato].nome.toLowerCase() : q.tipo === "alternativa" ? "múltipla escolha" : "resposta escrita", colar = colarPermitido(), voltar = podeVoltar();
+  const tipo = temFormato(q) ? FORMATOS[q.formato].nome.toLowerCase() : q.tipo === "alternativa" ? "múltipla escolha" : q.tipo === "sql" ? "SQL na Bancada" : "resposta escrita", colar = colarPermitido(), voltar = podeVoltar();
+  if (q.tipo === "sql") card.classList.add("questao-sql");
   // cartão em três partes: cabeçalho (número e tipo) · corpo (enunciado e resposta) · rodapé (enviar)
   card.innerHTML = `<div class="q-cab"><span class="q-num">Questão ${i + 1}<small> de ${tentativa.questoesIds.length}</small></span><span class="tag">${tipo}</span>${q.adaptada ? `<span class="tag nota">♿ adaptada</span>` : ""}<span class="tag ok q-enviada oculto">✓ ${voltar ? "salva" : "enviada"}</span>
       ${acess && ap().lerEmVoz !== false && "speechSynthesis" in window ? `<button type="button" class="leve mini b-ouvir">🔊 Ouvir</button>` : ""}</div>
@@ -602,7 +692,7 @@ function criarCartaoQuestao(qid, i, unica) {
       <div class="enunciado">${formatarEnunciado(q.enunciado)}</div>
       ${htmlApoios(q)}
       ${q.formato === "escritaApoio" && q.dados ? `<div class="escrita-apoio">${q.dados.comecoResposta ? `<p><b>✏ Comece assim:</b> ${esc(q.dados.comecoResposta)}…</p>` : ""}${q.dados.checklist?.length ? `<p><b>✅ Não esqueça:</b></p><ul>${q.dados.checklist.map(c => `<li>${esc(c)}</li>`).join("")}</ul>` : ""}</div>` : ""}
-      <div class="q-rotulo">${temFormato(q) ? rotuloFormato(q) : q.tipo === "alternativa" ? "Escolha uma alternativa" : "Sua resposta"}</div>
+      <div class="q-rotulo">${temFormato(q) ? rotuloFormato(q) : q.tipo === "alternativa" ? "Escolha uma alternativa" : q.tipo === "sql" ? "Escreva o SQL de cada tarefa na aba dela e execute (⚡) para conferir. Cada tarefa é corrigida a partir da base original." : "Sua resposta"}</div>
       <div class="q-area"></div>
       <p class="pequeno q-salva oculto" role="status"></p>
     </div>
@@ -626,6 +716,10 @@ function criarCartaoQuestao(qid, i, unica) {
       area.querySelectorAll(".alt").forEach(x => x.classList.toggle("sel", x.contains(inp)));
       marcarAlterada(card, qid);
     }));
+  } else if (q.tipo === "sql") {
+    // Bancada SQL (parecida com o MySQL Workbench): o SQL roda aqui no navegador; o resultado de cada tarefa vai junto da resposta
+    bancadas[qid]?.destruir?.();
+    bancadas[qid] = montarBancada(area, { questao: q, valor: rascunhos.get(qid) || respostas[qid]?.resposta || null, onMudar: () => marcarAlterada(card, qid) });
   } else {
     const idTxt = unica ? "txtResposta" : "txt_" + qid;
     area.innerHTML = `<label for="${idTxt}" class="sr-only">Sua resposta</label>
@@ -650,8 +744,13 @@ function criarCartaoQuestao(qid, i, unica) {
   return card;
 }
 
+// Bancada SQL de cada questão SQL (qid -> { valor(), destruir() })
+const bancadas = {};
+const textosSql = card => { const o = { tarefas: {} }; card.querySelectorAll("textarea[data-tarefa]").forEach(t => { o.tarefas[t.dataset.tarefa] = { sql: t.value }; }); return o; };
+const soTextosSql = v => JSON.stringify(Object.fromEntries(Object.entries(v?.tarefas || {}).map(([k, x]) => [k, String(x?.sql || "")])));
 // coloca a resposta gravada no cartão
 function preencherCartao(card, qid, resposta) {
+  if (questoes[qid]?.tipo === "sql") return;   // a Bancada já abriu com o texto salvo
   if (controles[qid] && temFormato(questoes[qid])) return controles[qid].preencher(resposta);
   if (questoes[qid]?.tipo === "alternativa")
     card.querySelectorAll(".alt input").forEach(inp => { inp.checked = resposta !== null && Number(inp.value) === Number(resposta); inp.closest(".alt").classList.toggle("sel", inp.checked); });
@@ -680,6 +779,7 @@ function marcarAlterada(card, qid) {
 }
 // valor que está no cartão (null = nada escolhido/escrito)
 function valorDoCartao(card, qid) {
+  if (questoes[qid]?.tipo === "sql") { const v = textosSql(card); return Object.values(v.tarefas).some(x => x.sql.trim()) ? v : null; }
   if (controles[qid] && temFormato(questoes[qid])) return controles[qid].valor();
   if (questoes[qid]?.tipo === "alternativa") { const m = card.querySelector(".alt input:checked"); return m ? Number(m.value) : null; }
   const v = (card.querySelector("textarea")?.value || "").trim();
@@ -688,6 +788,7 @@ function valorDoCartao(card, qid) {
 // o cartão tem algo diferente do que está gravado?
 function mudou(card, qid) {
   const v = valorDoCartao(card, qid);
+  if (v !== null && questoes[qid]?.tipo === "sql") return soTextosSql(v) !== soTextosSql(respostas[qid]?.resposta);
   return v !== null && JSON.stringify(v) !== JSON.stringify(respostas[qid]?.resposta ?? null);
 }
 
@@ -744,6 +845,66 @@ function desenharHudMascote() {
   const el = $("#hudMascote");
   el.innerHTML = mascoteLigado() ? htmlMascote(humorHud, { classe: "hud-m", animado: false }) : "";
 }
+// ---------- DICAS (prova.dicasMax > 0): o aluno pede uma dica clicando no mascote (ou no botão 💡) ----------
+// Vale para a prova toda (ex.: 3 dicas). Quem dá é o servidor (confere o limite e grava na tentativa: fica registrado
+// para o professor). A dica é curta e não entrega a resposta (diferente dos apoios da acessibilidade).
+const dicasMax = () => Math.max(0, Math.round(Number(provaAtual?.dicasMax || 0)));
+const dicasUsadas = () => Object.keys(tentativa?.dicas || {}).length;
+function qidEmFoco() {
+  if (!tentativa) return null;
+  if (!modoTodas()) return tentativa.questoesIds[tentativa.indiceAtual] || null;
+  const cards = [...document.querySelectorAll("#qLista .questao[data-qid]")];
+  const foco = document.activeElement?.closest?.(".questao[data-qid]");
+  if (foco) return foco.dataset.qid;
+  return (cards.find(c => c.getBoundingClientRect().bottom > 120) || cards[0])?.dataset.qid || null;
+}
+function atualizarDica() {
+  const b = $("#btnDica"), m = $("#hudMascote"), max = dicasMax(), on = max > 0 && !!tentativa && !tentativa.finalizadaEm;
+  if (b) { b.classList.toggle("oculto", !on); if (on) { const r = Math.max(0, max - dicasUsadas()); b.innerHTML = `💡 Dica <b>${r}</b>`; b.title = `Pedir uma dica para a questão (${r} de ${max} para a prova toda)`; } }
+  if (m) { m.classList.toggle("clicavel", on); m.title = on ? "Clique para pedir uma dica" : ""; m.setAttribute("aria-hidden", on ? "false" : "true"); if (on) { m.setAttribute("role", "button"); m.tabIndex = 0; } else { m.removeAttribute("role"); m.removeAttribute("tabindex"); } }
+  pintarDicas();
+}
+// a dica já recebida aparece dentro da questão (para reler)
+function pintarDicas() {
+  const ds = tentativa?.dicas || {};
+  document.querySelectorAll("#qLista .questao[data-qid]").forEach(card => {
+    const d = ds[card.dataset.qid];
+    let box = card.querySelector(".dica-box");
+    if (!d) { box?.remove(); return; }
+    if (!box) { box = document.createElement("div"); box.className = "dica-box"; (card.querySelector(".q-enunciado") || card.querySelector(".q-cab"))?.after(box); }
+    box.innerHTML = `<span aria-hidden="true">💡</span><div><b>Dica:</b> ${esc(d.texto || "")}</div>`;
+  });
+}
+let pedindoDica = false;
+async function pedirDica() {
+  if (!emProvaAtiva() || pedindoDica) return;
+  const max = dicasMax(), qid = qidEmFoco();
+  if (!max || !qid) return;
+  const n = tentativa.questoesIds.indexOf(qid) + 1, ja = tentativa.dicas?.[qid];
+  if (ja) { falarHud(`💡 ${esc(ja.texto)}`, 12000); pintarDicas(); return; }
+  const restam = max - dicasUsadas();
+  if (restam <= 0) { falarHud(`Você já usou as ${max} dicas desta prova. Agora é com você! 💪`, 6000); toast(`Você já usou as ${max} dicas da prova.`, "erro"); return; }
+  if (!(await confirmar(`Pedir uma dica para a questão ${n}?\n\nVocê tem ${restam} de ${max} dica(s) para a prova TODA. O professor vê que você pediu.`, { titulo: "💡 Pedir dica", ok: "Quero a dica" }))) return;
+  pedindoDica = true;
+  falarHud("Deixa eu pensar numa dica… 🤔", 15000);
+  try {
+    if (urlCorretor === undefined) { const c = await getDoc(doc(db, "config", "geral")).catch(() => null); urlCorretor = String(c?.data()?.urlCorretor || "").trim(); }
+    if (!urlCorretor) throw new Error("as dicas precisam do servidor de correção (avise o professor)");
+    const token = await auth.currentUser.getIdToken();
+    const r = await fetch(urlCorretor, { method: "POST", headers: { authorization: "Bearer " + token, "content-type": "application/json" }, body: JSON.stringify({ acao: "dica", tentativaId: tentativa.id, qid }) });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(d.erro || "erro " + r.status);
+    tentativa.dicas = { ...(tentativa.dicas || {}), [qid]: { texto: d.texto } };
+    reagirMascote("falando");
+    falarHud(`💡 ${esc(d.texto)}`, 15000);
+    atualizarDica();
+  } catch (e) { falarHud("", 1); toast("Não deu para pegar a dica: " + e.message, "erro"); }
+  finally { pedindoDica = false; }
+}
+$("#hudMascote").addEventListener("click", () => { if (dicasMax() > 0) pedirDica(); });
+$("#hudMascote").addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && dicasMax() > 0) { e.preventDefault(); pedirDica(); } });
+$("#btnDica")?.addEventListener("click", pedirDica);
+
 // balão do mascote na barra da prova: dicas curtas (nunca diz se acertou)
 let timerFala = null;
 function falarHud(texto, ms = 5000) {
@@ -822,6 +983,12 @@ function desenharFaixa() {
   });
 }
 
+// relógio da prova: data e hora completas (com segundos), além do tempo restante
+setInterval(() => {
+  const el = $("#hudRelogio"); if (!el || !document.body.classList.contains("em-prova")) return;
+  const d = new Date(agoraServidor());
+  el.textContent = d.toLocaleDateString("pt-BR", { weekday: "short", day: "2-digit", month: "2-digit", year: "numeric" }) + " · " + d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+}, 1000);
 let falouInicio = null, fimFalaInicio = 0;
 function entrarNaTelaDaProva() {
   mostrar("telaQuestao");
@@ -833,6 +1000,7 @@ function entrarNaTelaDaProva() {
     fimFalaInicio = Date.now() + 7000;
   }
   prepararConsulta();
+  atualizarDica();
   marcoTempo = Date.now();
   // entrou na prova sem tela cheia (recarregou a página, modo teste...): pede para entrar, sem registrar como saída
   if (!trocaAbaPermitida() && suportaTelaCheia() && !document.fullscreenElement) mostrarSobreposicao("entrar");
@@ -847,17 +1015,19 @@ function formatarEnunciado(t) {
 
 // campo de resposta: colar/arrastar bloqueado, e cada tentativa fica registrada (e tira uma vida, se a prova tiver vidas)
 let ultimoColar = 0;
+function tentativaDeColar(e) {
+  e.preventDefault();
+  const agora = Date.now();
+  if (agora - ultimoColar < 800) return;   // o mesmo gesto dispara mais de um evento
+  ultimoColar = agora;
+  registrar("tentativasColar");
+  registrarSaida("colar");
+  if (limiteSaidas() && colarTiraVida()) { perderVida("colar"); return; }
+  toast("Colar está desativado nesta prova. A tentativa fica registrada.", "erro");
+}
 function bloquearColar(el) {
-  const tentouColar = e => {
-    e.preventDefault();
-    const agora = Date.now();
-    if (agora - ultimoColar < 800) return;   // o mesmo gesto dispara mais de um evento
-    ultimoColar = agora;
-    registrar("tentativasColar");
-    registrarSaida("colar");
-    if (limiteSaidas() && colarTiraVida()) { perderVida("colar"); return; }
-    toast("Colar está desativado nesta prova. A tentativa fica registrada.", "erro");
-  };
+  const tentouColar = tentativaDeColar;
+  el.setAttribute("data-colar-protegido", "");
   el.addEventListener("paste", tentouColar);
   el.addEventListener("drop", tentouColar);
   el.addEventListener("keydown", e => {
@@ -875,11 +1045,13 @@ async function enviarResposta(qid, card, { silencioso = false } = {}) {
   if (!voltar && respostas[qid]) return true;
   const q = questoes[qid], i = tentativa.questoesIds.indexOf(qid);
   if (!q) return true;
-  const resposta = valorDoCartao(card, qid);
+  let resposta = valorDoCartao(card, qid);
   if (resposta === null) {
     if (silencioso) return true;
-    toast(temFormato(q) ? "Responda a questão antes de enviar." : q.tipo === "alternativa" ? "Escolha uma alternativa." : "Escreva a resposta antes de enviar.", "erro"); return false;
+    toast(temFormato(q) ? "Responda a questão antes de enviar." : q.tipo === "alternativa" ? "Escolha uma alternativa." : q.tipo === "sql" ? "Escreva o SQL de pelo menos uma tarefa antes de enviar." : "Escreva a resposta antes de enviar.", "erro"); return false;
   }
+  // SQL: roda cada tarefa numa cópia nova da base e guarda a "impressão" do resultado (o servidor compara com o gabarito)
+  if (q.tipo === "sql" && bancadas[qid]) { try { resposta = await bancadas[qid].valor(); } catch (e) { console.warn("bancada", e); } }
   if (voltar && !mudou(card, qid)) { if (!silencioso) toast("Esta resposta já está salva.", "ok"); return true; }
   if (!voltar) {
     const pergunta = modoTodas() ? `Enviar a resposta da questão ${i + 1}? Depois não dá para alterar.` : "Enviar esta resposta? Depois não dá para alterar.";
@@ -1331,56 +1503,73 @@ function registrar(campo) {
 let _saidaRef = null, _saidaTs = null;
 function registrarSaida(motivo) {
   if (!tentativa || tentativa.finalizadaEm) return;
-  if (motivo !== "colar" && _saidaTs !== null) return;   // já saiu; evita duplo log (ex.: telaCheia + aba simultâneos)
+  if (!["colar", "extensao"].includes(motivo) && _saidaTs !== null) return;   // já saiu; evita duplo log (ex.: telaCheia + aba simultâneos)
   const i = tentativa.indiceAtual || 0;
   const qid = (tentativa.questoesIds || [])[i] || null;
-  if (motivo !== "colar") { _saidaTs = Date.now(); _saidaRef = null; }
+  if (!["colar", "extensao"].includes(motivo)) { _saidaTs = Date.now(); _saidaRef = null; _voltaPendente = null; }
   addDoc(collection(db, "tentativas", tentativa.id, "saidas"), {
     questaoId: qid, indice: i + 1, motivo, saidaEm: serverTimestamp()
-  }).then(ref => { if (motivo !== "colar") _saidaRef = ref; })
+  }).then(ref => { if (!["colar", "extensao"].includes(motivo)) _depoisDaSaida(ref); })
     .catch(e => console.warn("não registrou saída", e));
 }
-function registrarVolta() {
-  if (!_saidaRef || !_saidaTs) return;
-  const ref = _saidaRef, segundosFora = Math.round((Date.now() - _saidaTs) / 1000);
-  _saidaRef = null; _saidaTs = null;
-  updateDoc(ref, { voltouEm: serverTimestamp(), segundosFora }).catch(() => {});
+function registrarVolta(vidasTimer = 0) {
+  if (!_saidaTs) return;
+  const segundosFora = Math.round((Date.now() - _saidaTs) / 1000), ts = _saidaTs;
+  _saidaTs = null;
+  const gravar = ref => updateDoc(ref, { voltouEm: serverTimestamp(), segundosFora, ...(vidasTimer ? { vidasTimer } : {}) }).catch(() => {});
+  if (_saidaRef) { const r = _saidaRef; _saidaRef = null; gravar(r); }
+  else _voltaPendente = { ts, gravar };   // o registro da saída ainda está a caminho
+}
+let _voltaPendente = null;
+function _depoisDaSaida(ref) {
+  if (_voltaPendente) { const v = _voltaPendente; _voltaPendente = null; v.gravar(ref); return; }
+  _saidaRef = ref;
 }
 
-// ---------- tela cheia (não é pedida quando a prova permite trocar de aba) ----------
+// ---------- MODO PROVA: tela cheia + trava de teclado (Keyboard Lock do Chrome/Edge) ----------
+// Com a trava, Alt+Tab, tecla Windows, Esc e Alt+F4 chegam à página e são bloqueados (não trocam de janela).
+// O que o navegador não deixa bloquear (Ctrl+Alt+Del, Win+L, clicar em outro monitor) é PERCEBIDO e conta como saída.
+// Prova com troca de aba permitida: sem trava e sem tela cheia (como antes).
+const naoTrava = () => trocaAbaPermitida();
 function suportaTelaCheia() { return !!(document.documentElement.requestFullscreen && document.fullscreenEnabled); }
+function suportaModoProva() { return suportaTelaCheia() && !!navigator.keyboard?.lock; }
+function ehComputador() { const mm = window.matchMedia; return !mm || !(mm("(pointer: coarse)").matches && !mm("(any-pointer: fine)").matches); }
+function travarTeclado() { try { navigator.keyboard?.lock?.()?.catch?.(() => {}); } catch { /* sem suporte */ } }
+function destravarTeclado() { try { navigator.keyboard?.unlock?.(); } catch { /* sem suporte */ } }
 function pedirTelaCheia(permitida = trocaAbaPermitida()) {
-  if (!permitida && suportaTelaCheia() && !document.fullscreenElement)
-    document.documentElement.requestFullscreen({ navigationUI: "hide" }).catch(() => {});
+  if (permitida || !suportaTelaCheia()) return;
+  if (document.fullscreenElement) { travarTeclado(); return; }
+  document.documentElement.requestFullscreen({ navigationUI: "hide" }).then(travarTeclado).catch(() => {});
 }
-function sairTelaCheia() { if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); }
-document.addEventListener("fullscreenchange", () => {
-  if (document.fullscreenElement) { if (!sobreposicaoFixa) esconderSobreposicao(); return; }
-  if (!emProvaAtiva() || trocaAbaPermitida()) return;
-  registrar("saidasTelaCheia");                   // só registro
-  registrarSaida("telaCheia");
-  const punido = perderVida("telaCheia");         // conta para o limite (vidas)
-  if (!punido && emProvaAtiva()) mostrarSobreposicao("telaCheia");
-});
+function sairTelaCheia() { destravarTeclado(); if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); }
+
+// relógio do servidor (o timer de volta compara com foraDesde, gravado pelo servidor): desvio medido ao abrir a prova
+let desvioRelogio = 0;
+const agoraServidor = () => Date.now() + desvioRelogio;
 
 // ---------- VIDAS (limite de saídas da prova: maxTrocasDeAba + vidas extras do professor) ----------
-// perde uma vida: trocar de aba/janela, sair da tela cheia ou (se a prova quiser) tentar colar.
+// perde uma vida: sair da prova (aba/janela, tela cheia, recarregar), o timer de volta ou (se a prova quiser) tentar colar.
 // Um único contador (trocasDeAba) para a punição; o professor pode zerar ("restaurar vidas") pelo painel.
 let ultimaSaida = 0;
 function perderVida(motivo = "saida") {
   if (!emProvaAtiva()) return false;
   const agora = Date.now();
-  if (agora - ultimaSaida < 1000) return false;   // o mesmo movimento dispara mais de um evento (ex.: trocar de aba em tela cheia)
+  if (agora - ultimaSaida < 1000) return false;   // o mesmo movimento dispara mais de um evento
   ultimaSaida = agora;
   registrar("trocasDeAba");
   desenharVidas(true);
-  const lim = limiteSaidas();
-  if (lim > 0 && (tentativa.trocasDeAba || 0) >= lim) { aplicarPunicao(); return true; }
-  if (lim > 0 && motivo === "colar") {
-    const restam = lim - (tentativa.trocasDeAba || 0);
+  if (conferirPunicao()) return true;
+  if (limiteSaidas() > 0 && motivo === "colar") {
+    const restam = limiteSaidas() - (tentativa.trocasDeAba || 0);
     reagirMascote("triste");
     toast(`💔 Colar está desativado e custou 1 vida. ${restam === 1 ? "Resta 1 vida" : `Restam ${restam} vidas`}.`, "erro");
   }
+  return false;
+}
+// acabaram as vidas (aqui, pelo timer, pelo painel ou pelo servidor)? aplica a pena
+function conferirPunicao() {
+  const lim = limiteSaidas();
+  if (lim > 0 && emProvaAtiva() && (tentativa.trocasDeAba || 0) >= lim) { pararTimerFora(); aplicarPunicao(); return true; }
   return false;
 }
 const esperarMs = ms => new Promise(res => setTimeout(res, ms));
@@ -1421,10 +1610,13 @@ async function perderQuestao() {
 
 // ---------- sobreposição de aviso ----------
 const AVISOS = {
-  entrar:    ["Prova em tela cheia", "Esta prova é feita em tela cheia. Sair da tela cheia, trocar de aba ou de janela e tentar colar fica registrado para o professor.", "Entrar em tela cheia"],
-  telaCheia: ["Você saiu da tela cheia", "Isso fica registrado para o professor. Clique para voltar.", "Voltar para a prova"],
-  aba:       ["Você saiu da página da prova", "A troca de aba ou de janela fica registrada para o professor. Clique para voltar.", "Voltar para a prova"],
-  reaberta:  ["O professor liberou você de novo", "Suas vidas foram restauradas. Respire fundo e continue com calma. 💪", "Continuar a prova"]
+  entrar:     ["Prova em tela cheia", "Esta prova é feita em tela cheia. Sair da tela cheia, trocar de aba ou de janela e tentar colar fica registrado para o professor.", "Entrar em tela cheia"],
+  telaCheia:  ["Você saiu da tela cheia", "Isso fica registrado para o professor. Clique para voltar.", "Voltar para a prova"],
+  aba:        ["Você saiu da página da prova", "A troca de aba ou de janela fica registrada para o professor. Clique para voltar.", "Voltar para a prova"],
+  recarregou: ["A página da prova foi fechada ou recarregada", "Isso conta como uma saída da prova e fica registrado para o professor. Clique para voltar.", "Voltar para a prova"],
+  sistema:    ["Uma janela do sistema abriu por cima da prova", "Parece a janela das Teclas de Aderência (Shift apertado várias vezes). Desta vez é só um aviso, sem perder vida. Feche a janela do Windows (Não/Cancelar) e clique para voltar.", "Voltar para a prova"],
+  extensao:   ["Extensão do navegador detectada", "", "Já desliguei: conferir de novo"],
+  reaberta:   ["O professor liberou você de novo", "Suas vidas foram restauradas. Respire fundo e continue com calma. 💪", "Continuar a prova"]
 };
 // "💔 Você perdeu 1 vida. Resta 1 de 3: na próxima, a prova é encerrada."
 function textoPlacar() {
@@ -1435,53 +1627,288 @@ function textoPlacar() {
 }
 const coracoes = (restam, lim) => "❤️".repeat(Math.max(0, restam)) + "🖤".repeat(Math.max(0, lim - restam));
 let sobreposicaoFixa = false;   // aviso de questão perdida: só fecha com o clique do aluno
+let tipoSobreposicao = null;
 function mostrarSobreposicao(tipo, texto = null) {
   const [titulo, txt, botao] = tipo === "perdeu" ? ["⛔ Questão perdida", texto, "Continuar na próxima questão"] : AVISOS[tipo];
-  sobreposicaoFixa = tipo === "perdeu";
-  $("#sobreTitulo").textContent = titulo; $("#sobreTexto").textContent = txt; $("#btnVoltarProva").textContent = botao;
-  const placar = textoPlacar();
+  sobreposicaoFixa = tipo === "perdeu"; tipoSobreposicao = tipo;
+  $("#sobreTitulo").textContent = titulo;
+  if (tipo === "extensao") $("#sobreTexto").innerHTML = texto || ""; else $("#sobreTexto").textContent = texto && tipo !== "perdeu" ? texto : txt;
+  $("#btnVoltarProva").textContent = botao;
+  const placar = tipo === "extensao" ? "" : textoPlacar();
   $("#sobrePlacar").textContent = placar; $("#sobrePlacar").classList.toggle("oculto", !placar);
   mostrarMascoteAviso($("#sobreMascote"), $("#sobreIcone"), tipo === "perdeu" ? "triste" : tipo === "entrar" || tipo === "reaberta" ? "falando" : "surpreso");
   $("#sobreposicao").classList.remove("oculto");
+  document.body.classList.add("prova-coberta");   // as questões ficam escondidas por baixo
   $("#btnVoltarProva").focus();
 }
-function esconderSobreposicao() { $("#sobreposicao").classList.add("oculto"); sobreposicaoFixa = false; }
-$("#btnVoltarProva").onclick = () => { pedirTelaCheia(); esconderSobreposicao(); };
+function esconderSobreposicao() { $("#sobreposicao").classList.add("oculto"); sobreposicaoFixa = false; tipoSobreposicao = null; document.body.classList.remove("prova-coberta"); }
+$("#btnVoltarProva").onclick = () => {
+  if (tipoSobreposicao === "extensao") return reconferirExtensoes();
+  pedirTelaCheia();   // no clique (gesto do aluno): volta para a tela cheia e trava o teclado de novo
+  if (foraDaProva && !naoTrava()) { setTimeout(tentarVoltar, 150); return; }   // volta de verdade quando a tela cheia entrar
+  esconderSobreposicao();
+};
 
-// ---------- troca de aba / janela (contada uma vez por saída; com troca permitida, só conta) ----------
+// ---------- SAÍDA DA PROVA: um estado só ("fora") para todos os sinais ----------
+// Sinais: a janela perdeu o foco (conferido ~60 ms depois), aba oculta, saiu da tela cheia, conferência de 1 em 1 s
+// e recarregar/fechar a página. Vários sinais da mesma saída contam UMA vez. Volta = foco + aba visível + tela cheia.
 let foraDaProva = false;
 const focoNoMaterial = () => document.activeElement === $("#consultaFrame");
-function contarSaida() { if (!emProvaAtiva() || foraDaProva) return; foraDaProva = true; registrarSaida("aba"); perderVida("aba"); }
-function saiuDaProva(e) {
-  if (!emProvaAtiva() || foraDaProva) return;
-  // clicar dentro do material de consulta tira o foco da página, mas não é troca de aba
-  if (e?.type === "blur") {
-    setTimeout(() => {
-      if (focoNoMaterial() && !document.hidden) return;
-      contarSaida();
-      if (document.hasFocus() && !document.hidden) voltouParaProva();   // o foco já voltou antes desta conferência
-    }, 0);
-    return;
-  }
-  contarSaida();
+const dentroDaProva = () => document.hasFocus() && !document.hidden && (naoTrava() || !suportaTelaCheia() || !!document.fullscreenElement);
+
+// TECLAS DE ADERÊNCIA (falso positivo da FATEC): Shift 5x abre uma janela do Windows que rouba o foco.
+// Saída logo depois de Shift repetido (4+ em 4 s) ou segurado (6 s+) vira AVISO: registrada, sem perder vida e sem timer.
+// Até 3 avisos por prova; depois conta normal (para não virar desculpa).
+const shiftTempos = []; let shiftDesde = 0;
+function pareceJanelaDoSistema() {
+  const agora = Date.now();
+  const n = shiftTempos.filter(t => agora - t < 4000).length;
+  return n >= 4 || (shiftDesde > 0 && agora - shiftDesde >= 6000);
 }
-function voltouParaProva() {
+const chaveAvisos = () => `avisosSistema_${tentativa?.id}`;
+const avisosSistema = () => Number(localStorage.getItem(chaveAvisos()) || 0);
+
+// a página está fechando/recarregando: a saída da tela cheia que vem junto não conta (ao voltar, conta "recarregou", uma vez só)
+let paginaFechando = false;
+window.addEventListener("pagehide", () => { paginaFechando = true; });
+window.addEventListener("pageshow", e => { if (e.persisted) paginaFechando = false; });
+function saida(motivo, e = null) {
+  if (!emProvaAtiva() || foraDaProva || paginaFechando) return;
+  if (naoTrava()) {   // troca de aba permitida: só conta, como antes
+    if (motivo === "telaCheia") return;
+    foraDaProva = true; registrarSaida("aba"); perderVida("aba"); return;
+  }
+  foraDaProva = true;
+  const sistema = motivo !== "recarregou" && pareceJanelaDoSistema() && avisosSistema() < 3;
+  if (sistema) localStorage.setItem(chaveAvisos(), String(avisosSistema() + 1));
+  if (motivo === "telaCheia") registrar("saidasTelaCheia");
+  registrarSaida(sistema ? "sistema" : motivo);
+  let punido = false;
+  if (!sistema) { punido = perderVida(motivo === "telaCheia" ? "telaCheia" : "aba"); if (!punido) iniciarTimerFora(); }
+  if (!punido && emProvaAtiva()) mostrarSobreposicao(sistema ? "sistema" : motivo === "recarregou" ? "recarregou" : motivo === "telaCheia" ? "telaCheia" : "aba");
+}
+// voltou: só quando está mesmo dentro (com tela cheia); cobra o que o timer deve e fecha a saída
+function tentarVoltar() {
+  if (!foraDaProva || !emProvaAtiva()) return;
+  if (!dentroDaProva()) return;
+  voltouParaProva();
+}
+async function voltouParaProva() {
   if (!foraDaProva) return;
   foraDaProva = false;
-  registrarVolta();
-  if (!emProvaAtiva() || trocaAbaPermitida()) return;
+  const vidasTimer = await fecharTimerFora();
+  registrarVolta(vidasTimer);
+  if (!emProvaAtiva() || naoTrava()) return;
   if (avisoPendente) { mostrarSobreposicao("perdeu", avisoPendente); avisoPendente = null; }   // perdeu a questão enquanto estava fora
-  else if (!punindo) mostrarSobreposicao("aba");
+  else if (!punindo && !["extensao", "recarregou"].includes(tipoSobreposicao)) esconderSobreposicao();   // recarregou: o aviso fica até o clique (o aluno vê por que perdeu a vida)
 }
-document.addEventListener("visibilitychange", () => document.hidden ? saiuDaProva() : voltouParaProva());
-window.addEventListener("blur", saiuDaProva);
-window.addEventListener("focus", voltouParaProva);
-// com o foco dentro do material, a janela não recebe outro "blur" se o aluno trocar de janela: confere o foco a cada segundo
+
+// ---------- TIMER DE VOLTA: fora da prova, perde mais 1 vida a cada prova.segundosVolta s ----------
+// A tentativa guarda foraDesde (hora do servidor) e foraCobradas: a página, o painel do professor e o servidor
+// (de 1 em 1 min) cobram pela mesma conta, em transação, então vale mesmo se o aluno fechar a página.
+const segundosVolta = () => limiteSaidas() > 0 && !naoTrava() ? Math.max(0, Number(provaAtual?.segundosVolta ?? 5)) : 0;
+let timerFora = null, foraInicio = 0, foraCobradas = 0, cobrandoFora = false;
+function iniciarTimerFora(desdeServidor = null, jaCobradas = 0) {
+  pararTimerFora();
+  const n = segundosVolta();
+  if (!n || !tentativa) return;
+  foraInicio = desdeServidor || agoraServidor(); foraCobradas = jaCobradas;
+  if (!desdeServidor) updateDoc(doc(db, "tentativas", tentativa.id), { foraDesde: serverTimestamp(), foraCobradas: 0, fora: true }).catch(e => console.warn("timer de volta", e));
+  timerFora = setInterval(tickFora, 250); tickFora();
+}
+function pararTimerFora() { clearInterval(timerFora); timerFora = null; const c = $("#sobreContagem"); if (c) c.classList.add("oculto"); }
+function tickFora() {
+  const n = segundosVolta(); if (!n || !foraDaProva) return;
+  const passou = Math.max(0, (agoraServidor() - foraInicio) / 1000), devidas = Math.floor(passou / n);
+  const c = $("#sobreContagem");
+  if (c && limiteSaidas() > 0) {
+    c.classList.remove("oculto");
+    c.innerHTML = `<span class="num">${Math.max(1, Math.ceil(n - (passou % n)))}</span><span>segundos para voltar antes de perder mais 1 vida</span>`;
+  }
+  if (devidas > foraCobradas) cobrarFora(devidas);
+}
+async function cobrarFora(devidas) {
+  if (cobrandoFora || !tentativa) return;
+  cobrandoFora = true;
+  try {
+    const ref = doc(db, "tentativas", tentativa.id);
+    const k = await runTransaction(db, async tx => {
+      const d = (await tx.get(ref)).data();
+      if (!d || d.finalizadaEm) return 0;
+      const ja = Number(d.foraCobradas || 0);
+      if (devidas <= ja) { foraCobradas = ja; return 0; }
+      tx.update(ref, { foraCobradas: devidas, trocasDeAba: increment(devidas - ja) });
+      return devidas - ja;
+    });
+    foraCobradas = Math.max(foraCobradas, devidas);
+    if (k > 0) {
+      tentativa.trocasDeAba = (tentativa.trocasDeAba || 0) + k;
+      desenharVidas(true);
+      const p = $("#sobrePlacar"); if (p && tipoSobreposicao) { p.textContent = textoPlacar(); p.classList.toggle("oculto", !p.textContent); }
+      conferirPunicao();
+    }
+  } catch (e) { console.warn("timer de volta: não cobrou", e); }
+  finally { cobrandoFora = false; }
+}
+// ao voltar: cobra o que falta e apaga foraDesde (as regras conferem que nada ficou sem cobrar). Devolve as vidas do timer.
+async function fecharTimerFora() {
+  const tinha = !!timerFora;
+  pararTimerFora();
+  if (!tinha || !tentativa) return 0;
+  const n = segundosVolta(), devidas = n ? Math.floor(Math.max(0, agoraServidor() - foraInicio) / 1000 / n) : 0;
+  if (devidas > foraCobradas) await cobrarFora(devidas);
+  const total = foraCobradas;
+  updateDoc(doc(db, "tentativas", tentativa.id), { foraDesde: null, fora: false, foraCobradas: total }).catch(e => console.warn("timer de volta: não fechou", e));
+  return total;
+}
+
+// recarregou ou fechou a página no meio da prova: conta como saída (ou continua a saída que já estava aberta)
+function retomarSaida() {
+  if (!emProvaAtiva() || naoTrava()) return;
+  const desde = tentativa.foraDesde?.toMillis?.();
+  if (desde) {
+    foraDaProva = true;
+    iniciarTimerFora(desde, Number(tentativa.foraCobradas || 0));
+    mostrarSobreposicao("recarregou");
+  } else saida("recarregou");
+}
+
+document.addEventListener("fullscreenchange", () => {
+  if (document.fullscreenElement) { travarTeclado(); if (foraDaProva) tentarVoltar(); else if (!sobreposicaoFixa && tipoSobreposicao === "entrar") esconderSobreposicao(); return; }
+  destravarTeclado();
+  if (!emProvaAtiva() || naoTrava()) return;
+  saida("telaCheia");
+});
+document.addEventListener("visibilitychange", () => { if (document.hidden) saida("aba"); else tentarVoltarOuContar(); });
+window.addEventListener("blur", () => {
+  if (!emProvaAtiva() || foraDaProva) return;
+  // clicar dentro do material de consulta tira o foco da página, mas não é troca de janela
+  setTimeout(() => {
+    if (focoNoMaterial() && !document.hidden && document.hasFocus()) return;
+    if (!document.hasFocus() || document.hidden) saida("aba");
+  }, 60);
+});
+window.addEventListener("focus", () => tentarVoltarOuContar());
+function tentarVoltarOuContar() { if (naoTrava()) { if (foraDaProva) voltouParaProva(); } else tentarVoltar(); }
+// conferência de 1 em 1 s (o foco no material ou um evento perdido não deixam passar a saída)
 setInterval(() => {
-  if (!emProvaAtiva() || !temConsulta()) return;
-  if (!document.hasFocus()) contarSaida();
-  else if (foraDaProva && focoNoMaterial()) voltouParaProva();
+  if (!emProvaAtiva()) return;
+  if (foraDaProva) { tentarVoltarOuContar(); return; }
+  if (!document.hasFocus() && !focoNoMaterial()) saida("aba");
+  else if (!naoTrava() && suportaTelaCheia() && !document.fullscreenElement && tipoSobreposicao !== "entrar") saida("telaCheia");
 }, 1000);
+
+// ---------- TECLAS ----------
+// Bloqueia (com a trava, até Alt+Tab, Win e Esc): Alt e Alt+tecla, tecla Windows, Esc, F1–F12, menu, Ctrl+qualquer coisa
+// e Shift+Insert. Libera: AltGr do ABNT2 (/ ? ° ª º), e DENTRO do campo de resposta Ctrl+Z/Y, Ctrl+A, Ctrl+setas,
+// Ctrl+Backspace/Delete/Home/End e Ctrl+Enter (Bancada SQL). Cada atalho bloqueado é registrado em silêncio.
+let ultimoAvisoTecla = 0, atalhosPend = 0, atalhosTimer = null, ultimaTeclaDigitada = 0;
+function contarAtalho() {
+  atalhosPend++;
+  if (atalhosTimer || !tentativa || tentativa.finalizadaEm || simulacao) return;
+  atalhosTimer = setTimeout(() => {
+    const n = atalhosPend; atalhosPend = 0; atalhosTimer = null;
+    if (n && tentativa && !tentativa.finalizadaEm) updateDoc(doc(db, "tentativas", tentativa.id), { atalhosBloqueados: increment(n) }).catch(() => {});
+  }, 3000);
+}
+function teclaBloqueada(e, msg, registrarAtalho = true) {
+  e.preventDefault(); e.stopPropagation();
+  if (registrarAtalho) contarAtalho();
+  if (msg && Date.now() - ultimoAvisoTecla > 1500) { ultimoAvisoTecla = Date.now(); toast(msg, "erro"); }
+}
+const CTRL_NO_CAMPO = new Set(["z", "y", "a", "arrowleft", "arrowright", "arrowup", "arrowdown", "backspace", "delete", "home", "end"]);
+document.addEventListener("keydown", e => {
+  const k = e.key || "", kl = k.toLowerCase();
+  if (k === "Shift") { if (!e.repeat) { shiftTempos.push(Date.now()); if (shiftTempos.length > 8) shiftTempos.shift(); } if (!shiftDesde) shiftDesde = Date.now(); }
+  if (k.length === 1 || k === "Enter" || k === "Backspace" || k === "Delete" || k === "Tab" || k === "Process" || k === "Dead") ultimaTeclaDigitada = Date.now();
+  if (!emProvaAtiva()) return;
+  const ctrl = e.ctrlKey || e.metaKey;
+  if (naoTrava()) {   // troca de aba permitida: só os atalhos de copiar/imprimir/devtools, como antes
+    if (k === "F12" || (ctrl && ["c", "a", "p", "s", "u"].includes(kl)) || (ctrl && e.shiftKey && ["i", "j", "c"].includes(kl))) teclaBloqueada(e, "Este atalho está desativado durante a prova.", false);
+    return;
+  }
+  const campo = e.target?.closest?.("textarea, input:not([type=radio]):not([type=checkbox]), [data-campo-resposta]");
+  const altGr = k === "AltGraph" || e.getModifierState?.("AltGraph") || (e.ctrlKey && e.altKey && !e.metaKey);
+  if (altGr && k !== "Delete") return;                                   // AltGr do ABNT2: liberado
+  if (k === "Control" || k === "Shift" || k === "CapsLock") return;       // só a tecla modificadora, sem atalho
+  if (k === "Alt" || e.altKey) return teclaBloqueada(e, "Alt está bloqueado durante a prova (Alt+Tab não troca de janela).");
+  if (["Meta", "OS", "Super", "Hyper"].includes(k) || e.metaKey) return teclaBloqueada(e, "A tecla Windows está bloqueada durante a prova.");
+  if (k === "Escape") return teclaBloqueada(e, "Esc está bloqueado durante a prova.");
+  if (/^F\d{1,2}$/.test(k)) return teclaBloqueada(e, k === "F12" ? "As ferramentas do desenvolvedor estão bloqueadas." : `A tecla ${k} está bloqueada durante a prova.`);
+  if (k === "ContextMenu") return teclaBloqueada(e, "");
+  if (e.ctrlKey) {
+    if (kl === "v") { if (colarPermitido()) return; if (campo) { e.preventDefault(); return; } return teclaBloqueada(e, "Colar está desativado nesta prova.", false); }   // no campo: o próprio campo registra a tentativa
+    if (campo && CTRL_NO_CAMPO.has(kl)) return;
+    if (campo && (kl === "c" || kl === "x") && colarPermitido()) return;
+    if (k === "Enter" && e.target?.closest?.("[data-campo-resposta]")) return;   // Bancada SQL: executar
+    return teclaBloqueada(e, "Atalho bloqueado durante a prova.");
+  }
+  if (e.shiftKey && k === "Insert") { if (colarPermitido()) return; if (campo) { e.preventDefault(); colarFora(e); return; } return teclaBloqueada(e, "Colar está desativado nesta prova.", false); }
+}, true);
+document.addEventListener("keyup", e => { if (e.key === "Shift") shiftDesde = 0; }, true);
+
+// colar/soltar em campos que não passaram por bloquearColar (ex.: editores da Bancada SQL)
+function colarFora(e) { if (e.target?.closest?.("[data-colar-protegido]")) return; tentativaDeColar(e); }
+["paste", "drop"].forEach(ev => document.addEventListener(ev, e => {
+  if (!emProvaAtiva() || colarPermitido()) return;
+  if (!e.target?.closest?.("[data-colar-protegido]")) tentativaDeColar(e);
+}, true));
+
+// TEXTO QUE NÃO FOI DIGITADO (extensão de IA preenchendo o campo, texto "injetado"): desfaz e registra
+const antesDoInput = new WeakMap(), ultimoBom = new WeakMap();   // último valor aceito de cada campo
+document.addEventListener("focusin", e => { const el = e.target; if ((el instanceof HTMLTextAreaElement || el instanceof HTMLInputElement) && !ultimoBom.has(el)) ultimoBom.set(el, el.value); }, true);
+document.addEventListener("beforeinput", e => { if (emProvaAtiva()) antesDoInput.set(e.target, { v: e.target.value, s: e.target.selectionStart, f: e.target.selectionEnd }); }, true);
+document.addEventListener("input", e => {
+  const el = e.target;
+  if (!emProvaAtiva() || colarPermitido() || !(el instanceof HTMLTextAreaElement || el instanceof HTMLInputElement) || el.type === "radio" || el.type === "checkbox") return;
+  const antes = antesDoInput.get(el); antesDoInput.delete(el);
+  if (!antes) { if (!e.isTrusted) bloquearInjetado(el, { v: ultimoBom.get(el) ?? "", s: 0, f: 0 }); else ultimoBom.set(el, el.value); return; }
+  const cresceu = el.value.length - antes.v.length;
+  const semTecla = Date.now() - ultimaTeclaDigitada > 400;
+  if (!e.isTrusted || (cresceu > 3 && semTecla) || (e.inputType === "insertReplacementText" && cresceu > 3)) bloquearInjetado(el, antes);
+  else ultimoBom.set(el, el.value);
+}, true);
+let ultimoInjetado = 0;
+function bloquearInjetado(el, antes) {
+  if (antes) { el.value = antes.v; try { el.setSelectionRange(antes.s, antes.f); } catch { /* campo sem seleção */ } }
+  if (Date.now() - ultimoInjetado < 1500) return;
+  ultimoInjetado = Date.now();
+  registrar("textoInjetado");
+  toast("Apareceu texto que não foi digitado (extensão ou IA). Ele foi apagado e isso fica registrado para o professor.", "erro");
+}
+
+// nada de abrir outra janela, imprimir ou seguir links externos durante a prova
+{
+  const abrir = window.open.bind(window), imprimir = window.print.bind(window);
+  window.open = (...a) => { if (emProvaAtiva()) { toast("Abrir outras janelas está desativado durante a prova.", "erro"); return null; } return abrir(...a); };
+  window.print = () => { if (emProvaAtiva()) return; imprimir(); };
+  document.addEventListener("click", e => {
+    if (!emProvaAtiva()) return;
+    const a = e.target?.closest?.("a[href]"); if (!a) return;
+    const href = a.getAttribute("href") || "";
+    if (a.target === "_blank" || (/^(https?:)?\/\//i.test(href) && a.host !== location.host) || /^(mailto|tel|javascript):/i.test(href)) {
+      e.preventDefault(); e.stopPropagation(); toast("Links externos estão desativados durante a prova.", "erro");
+    }
+  }, true);
+}
+
+// ---------- EXTENSÕES (IA que preenche campos, bloqueador de anúncios) ----------
+let pararVigia = null;
+function vigiarExtensoesNaProva() {
+  if (pararVigia) pararVigia();
+  pararVigia = vigiarExtensoes((todas, novas) => {
+    if (!emProvaAtiva()) return;
+    updateDoc(doc(db, "tentativas", tentativa.id), { extensoes: arrayUnion(...novas.slice(0, 5)) }).catch(() => {});
+    registrarSaida("extensao");
+    mostrarSobreposicao("extensao", textoExtensoes({ bloqueador: false, ia: todas }));
+  });
+}
+async function reconferirExtensoes() {
+  const r = await conferirExtensoes();
+  if (r.ia.length || r.bloqueador) { $("#sobreTexto").innerHTML = textoExtensoes(r); toast("Ainda está ligada. Desligue e confira de novo.", "erro"); return; }
+  esconderSobreposicao();
+  pedirTelaCheia();
+}
 
 // ---------- bloqueios na área da questão ----------
 ["copy", "cut", "contextmenu", "dragstart", "selectstart"].forEach(ev => $("#telaQuestao").addEventListener(ev, e => {
@@ -1490,14 +1917,6 @@ setInterval(() => {
   if (ev === "contextmenu" && colarPermitido() && el?.closest("textarea")) return;   // colar permitido: botão direito → Colar
   e.preventDefault();
 }));
-document.addEventListener("keydown", e => {
-  if (!emProvaAtiva()) return;
-  const k = (e.key || "").toLowerCase(), ctrl = e.ctrlKey || e.metaKey;
-  if (e.key === "F12" || (ctrl && ["c", "a", "p", "s", "u"].includes(k)) || (ctrl && e.shiftKey && ["i", "j", "c"].includes(k))) {
-    e.preventDefault(); e.stopPropagation();
-    toast("Este atalho está desativado durante a prova.", "erro");
-  }
-}, true);
 
 // ---------- cronômetro (prova com tempoMinutos > 0) ----------
 let relogio = null;
@@ -1588,8 +2007,8 @@ async function verResultado() {
     total += c.pontos; if (c.status === "certa" || Number(c.pontos) > peso / 2) certas++;
     const rot = { certa: ["ok", "✅ Certa"], errada: ["erro", "❌ Errada"], parcial: ["aviso", "🟡 Parcial"], revisar: ["aviso", "🟡 Em correção"], em_branco: ["erro", "⬜ Em branco"], perdida: ["erro", "⛔ Perdida (saiu da prova)"] }[c.status];
     const fmt = temFormato(q), bloco = t => `<span class="resp-formato">${esc(t).replace(/\n/g, "<br>")}</span>`;
-    let sua = perdida ? "<i>perdida por sair da prova</i>" : r === undefined ? "<i>não respondida</i>" : fmt ? bloco(textoResposta(q, r)) : q.tipo === "alternativa" ? esc(q.alternativas[r]) : `<span class="mono">${esc(r)}</span>`;
-    let certa = fmt ? (g.chave ? bloco(textoChave(q, g)) : "—") : q.tipo === "alternativa" ? esc(q.alternativas?.[g.correta] ?? "—") : (g.respostasAceitas?.length ? `<span class="mono">${esc(g.respostasAceitas[0])}</span>` : "—");
+    let sua = perdida ? "<i>perdida por sair da prova</i>" : r === undefined ? "<i>não respondida</i>" : q.tipo === "sql" ? bloco(textoRespostaSql(q, r)) : fmt ? bloco(textoResposta(q, r)) : q.tipo === "alternativa" ? esc(q.alternativas[r]) : `<span class="mono">${esc(r)}</span>`;
+    let certa = q.tipo === "sql" ? (g.tarefas ? bloco((q.tarefas || []).map((t, k) => `Tarefa ${k + 1}: ${g.tarefas[t.id]?.sql || "—"}`).join("\n")) : "—") : fmt ? (g.chave ? bloco(textoChave(q, g)) : "—") : q.tipo === "alternativa" ? esc(q.alternativas?.[g.correta] ?? "—") : (g.respostasAceitas?.length ? `<span class="mono">${esc(g.respostasAceitas[0])}</span>` : "—");
     contagem[grupoSt(c.status)]++;
     html += `<details class="card res-q" data-grupo="${grupoSt(c.status)}"${c.status === "certa" ? "" : " open"}><summary class="q-topo"><span class="ch" aria-hidden="true">${ic("chev")}</span><span class="q-numero">Questão ${i + 1}</span><span class="chip ${({ ok: "ok", erro: "err", aviso: "warn" })[rot[0]]}">${rot[1]} · ${c.pontos}/${peso}</span></summary>
       <div class="enunciado">${formatarEnunciado(q.enunciado)}</div>

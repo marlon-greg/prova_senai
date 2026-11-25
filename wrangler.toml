@@ -15,8 +15,8 @@ MODELO = "claude-haiku-5-5"
 STACKTRACE_URL = ""
 
 [triggers]
-# busca as respostas e as pendências do Stacktrace a cada 15 min
-crons = ["*/15 * * * *"]
+# "*/15": busca as respostas e as pendências do Stacktrace · "* * * * *": timer de volta das provas (cobra vidas de quem está fora)
+crons = ["*/15 * * * *", "* * * * *"]
 
 [observability]
 enabled = true            # logs em Observability (para ver erros)

@@ -2,7 +2,7 @@
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, apagarTentativaTeste,
          confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco,
          rotuloDias, nomeTurma, HORARIO_PADRAO, textoHorario, DIAS_SEMANA_LONGO,
-         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261116b";
+         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261125a";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
@@ -24,8 +24,9 @@ import { exportarExcel, exportarPDF } from "./exportar-turmas.js?v=20261110b";
 import { tarefa, ligarMenuLateral } from "./ui.js";
 import { ic } from "./icones.js";
 import { REGRAS_NOTA, regraDoTipo, calcNotaFinal } from "./nota-final.js";
+import { textoRespostaSql } from "../servidor/sql-correcao.js";
 import { drawer, drawerForm, ligarFiltros, atualizarFiltros, ajudasEmPopover, menuHTML, itemMenu, vazio, chips, statTiles, pl, semestreLongo, seta } from "./ui.js";
-import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp, onSnapshot, increment, deleteField }
+import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp, onSnapshot, increment, deleteField, Timestamp, arrayUnion, arrayRemove, runTransaction }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 let eu = null;   // { email, nome, papel }
@@ -203,11 +204,11 @@ async function questoesDoBanco(bancoId, recarregar = false) {
 // { tema: { alternativa: n, dissertativa: n } }, temas em ordem alfabética
 function contarPorTema(questoes) {
   const c = {};
-  for (const tema of ordenarTemas(questoes.map(temaDe))) c[tema] = { alternativa: 0, dissertativa: 0 };
-  questoes.forEach(q => { const k = q.tipo === "dissertativa" ? "dissertativa" : "alternativa"; c[temaDe(q)][k]++; });
+  for (const tema of ordenarTemas(questoes.map(temaDe))) c[tema] = { alternativa: 0, dissertativa: 0, sql: 0 };
+  questoes.forEach(q => { const k = q.tipo === "dissertativa" ? "dissertativa" : q.tipo === "sql" ? "sql" : "alternativa"; c[temaDe(q)][k]++; });
   return c;
 }
-const textoContagem = n => `${n.alternativa} alternativa, ${n.dissertativa} dissertativa`;
+const textoContagem = n => `${n.alternativa} alternativa, ${n.dissertativa} dissertativa${n.sql ? `, ${n.sql} SQL (Bancada)` : ""}`;
 // checkboxes de tema (todos marcados); onMudar é chamado a cada alteração
 function desenharChecksTemas(box, contagem, onMudar) {
   const temas = Object.keys(contagem);
@@ -556,6 +557,7 @@ function formProvaHTML(f) {
     <div><label for="${f}NAlt">Alternativas por aluno</label><input type="number" id="${f}NAlt" value="7" min="0"></div>
     <div><label for="${f}NDiss">Dissertativas por aluno</label><input type="number" id="${f}NDiss" value="3" min="0">
       <p class="pequeno" id="${f}NTotal" style="margin:4px 0 0" aria-live="polite"></p></div>
+    <div><label for="${f}NSql">Questões SQL na Bancada por aluno</label><input type="number" id="${f}NSql" value="0" min="0" title="Questões práticas: o aluno escreve e executa SQL numa bancada parecida com o MySQL Workbench (cada aluno recebe um cenário sorteado)"></div>
   </div>
   <div class="grade">
     <div><label for="${f}Codigo">Código de acesso (opcional)</label>
@@ -578,7 +580,17 @@ function formProvaHTML(f) {
       <div><label for="${f}AcaoExceder">Quando as vidas acabam</label>
         <select id="${f}AcaoExceder"><option value="encerrar">Encerrar a somativa</option><option value="perderQuestao">Perder a questão atual (só em "uma por vez" sem ir e voltar)</option></select></div>
     </div>
+    <div class="grade" style="margin:8px 0 0">
+      <div><label for="${f}SegVolta">⏱ Segundos para voltar após sair (0 = sem timer)</label><input type="number" id="${f}SegVolta" value="5" min="0" max="120" step="1">
+        <span class="pequeno">Fora da prova, perde mais 1 vida a cada tantos segundos (conferido também pelo servidor).</span></div>
+      <div><label for="${f}EntradaAte">🚪 Fechar a entrada às (opcional)</label><input type="datetime-local" id="${f}EntradaAte">
+        <span class="pequeno">Depois deste horário ninguém mais começa (quem já começou continua). Em <b>Resultados</b> você fecha na hora, barra aluno ou deixa um atrasado entrar.</span></div>
+    </div>
     <label class="check"><input type="checkbox" id="${f}ColarVida" checked> <span>Tentar colar (Ctrl+V) também custa 1 vida</span></label>
+    <div class="grade" style="margin:8px 0 0">
+      <label class="check"><input type="checkbox" id="${f}Dicas"> <span>💡 Permitir pedir dicas ao mascote <span class="pequeno">— uma dica curta que não entrega a resposta; fica registrado quem pediu e em qual questão</span></span></label>
+      <div><label for="${f}DicasMax">Dicas por aluno (para a prova toda)</label><input type="number" id="${f}DicasMax" value="3" min="1" max="10" step="1"></div>
+    </div>
     <p class="pequeno" id="${f}LimiteDica">Perde 1 vida: trocar de aba/janela (Alt+Tab) ou sair da tela cheia.</p>
     <p class="pequeno" style="margin:4px 0 0">Aluno perdeu vidas sem querer (ex.: TEA)? Em <b>Resultados</b> você restaura as vidas, dá vida extra ou reabre a somativa dele.</p>
   </fieldset>
@@ -640,8 +652,8 @@ function controleProva(f) {
   const temasDe = b => contagens[b] && contagens[b] !== "erro" ? Object.keys(contagens[b]) : [];
   const bancosMarcados = () => bancosCache.map(b => b.id).filter(b => sel.get(b)?.size && temasDe(b).length);
   const disponiveis = () => {
-    const d = { alternativa: 0, dissertativa: 0 };
-    for (const b of bancosMarcados()) for (const t of sel.get(b)) { const c = contagens[b][t]; if (c) { d.alternativa += c.alternativa; d.dissertativa += c.dissertativa; } }
+    const d = { alternativa: 0, dissertativa: 0, sql: 0 };
+    for (const b of bancosMarcados()) for (const t of sel.get(b)) { const c = contagens[b][t]; if (c) { d.alternativa += c.alternativa; d.dissertativa += c.dissertativa; d.sql += c.sql || 0; } }
     return d;
   };
   const carregado = () => bancosCache.some(b => contagens[b.id]);
@@ -651,13 +663,15 @@ function controleProva(f) {
     if (travado || !carregado()) return "";
     if (!bancosMarcados().length) return "Marque pelo menos um banco (ou um tema de algum banco).";
     if (nAlt > d.alternativa) return `Faltam questões de alternativa: a prova pede ${nAlt}, mas os bancos/temas marcados só têm ${d.alternativa}. Marque mais temas ou diminua as alternativas.`;
+    const nSql = Number($f("NSql").value || 0);
+    if (nSql > d.sql) return `Faltam questões SQL (Bancada): a prova pede ${nSql}, mas os bancos/temas marcados só têm ${d.sql}. Importe o banco da Bancada SQL ou diminua.`;
     if (nDiss > d.dissertativa) return `Faltam dissertativas: a prova pede ${nDiss}, mas os bancos/temas marcados só têm ${d.dissertativa}. Marque mais temas ou diminua as dissertativas.`;
     return "";
   }
   function atualizar() {
     topicosPlano.aoMudarMateria();
     const nAlt = Number($f("NAlt").value || 0), nDiss = Number($f("NDiss").value || 0);
-    $f("NTotal").textContent = `Total: ${nAlt + nDiss} questões por aluno.`;
+    $f("NTotal").textContent = `Total: ${nAlt + nDiss + Number($f("NSql").value || 0)} questões por aluno.`;
     const el = $f("TemasResumo");
     if (!carregado()) { el.textContent = ""; el.classList.remove("erro"); return; }
     const prob = problema(), bs = bancosMarcados();
@@ -818,7 +832,7 @@ function controleProva(f) {
   // limite de saídas: só sem troca de aba permitida; "perder questão" só em "uma por vez"
   function atualizarLimite() {
     const troca = $f("PermitirTrocaAba").checked, todas = $f("Modo").value === "todas", semPerder = todas || $f("Voltar").checked;
-    $f("MaxTrocas").disabled = troca; $f("AcaoExceder").disabled = troca;
+    $f("MaxTrocas").disabled = troca; $f("AcaoExceder").disabled = troca; $f("SegVolta").disabled = troca;
     $f("ColarVida").disabled = troca || $f("PermitirColar").checked;
     $f("AcaoExceder").querySelector("option[value=perderQuestao]").disabled = semPerder;
     if (semPerder && $f("AcaoExceder").value === "perderQuestao") $f("AcaoExceder").value = "encerrar";
@@ -831,7 +845,7 @@ function controleProva(f) {
     $f("TemasBusca").oninput = $f("TemasVisao").onchange = $f("TemasSoMarcados").onchange = desenharTemas;
     $f("TemasMarcar").onclick = () => marcarVisiveis(true);
     $f("TemasDesmarcar").onclick = () => marcarVisiveis(false);
-    $f("NAlt").oninput = $f("NDiss").oninput = atualizar;
+    $f("NAlt").oninput = $f("NDiss").oninput = $f("NSql").oninput = atualizar;
     $f("MatUrl").oninput = previaMaterial;
     // vários de uma vez: cada PDF recebe o nome do arquivo como título e já entra marcado
     $f("MatUpload").onchange = async () => {
@@ -886,7 +900,7 @@ function controleProva(f) {
   // trava bancos, número de questões, dissertativas e temas (prova que já tem tentativas de alunos)
   function travar(motivo) {
     travado = true;
-    ["NAlt", "NDiss", "TemasMarcar", "TemasDesmarcar"].forEach(s => $f(s).disabled = true);
+    ["NAlt", "NDiss", "NSql", "TemasMarcar", "TemasDesmarcar"].forEach(s => $f(s).disabled = true);
     $f("Temas").querySelectorAll("input").forEach(x => x.disabled = true);
     $f("Trava").innerHTML = motivo; $f("Trava").classList.remove("oculto");
     atualizar();
@@ -904,6 +918,7 @@ function controleProva(f) {
     $f("Data").value = p.dataProva || ""; opcoesMateria();
     topicosPlano.definir(p.planoCurso);
     // provas antigas só têm o total (nQuestoes) e as dissertativas
+    $f("NSql").value = p.nSql ?? 0;
     $f("NDiss").value = p.nDissertativas ?? 0; $f("NAlt").value = p.nAlternativas ?? Math.max(0, (p.nQuestoes ?? 10) - (p.nDissertativas ?? 0));
     $f("Tempo").value = p.tempoMinutos || 0;
     $f("Modo").value = p.modoExibicao === "todas" ? "todas" : "uma";
@@ -913,13 +928,16 @@ function controleProva(f) {
     opcoesMaterial(idsConsulta(p));
     $f("MaxTrocas").value = p.maxTrocasDeAba || 0; $f("AcaoExceder").value = p.acaoAoExceder === "perderQuestao" ? "perderQuestao" : "encerrar";
     $f("ColarVida").checked = p.colarTiraVida !== false;
+    $f("SegVolta").value = p.segundosVolta ?? 5;
+    $f("Dicas").checked = Number(p.dicasMax || 0) > 0; $f("DicasMax").value = Number(p.dicasMax || 0) > 0 ? p.dicasMax : 3;
+    $f("EntradaAte").value = p.entradaAte?.toDate ? dataHoraLocal(p.entradaAte.toDate()) : "";
     $f("IaAuto").checked = p.iaAutomatica !== false;
     previaMaterial(); atualizarLimite();
   }
   // lê e valida; devolve { erro } ou { dados }
   async function ler() {
     const titulo = $f("Titulo").value.trim();
-    const nAlt = Math.max(0, Math.round(Number($f("NAlt").value || 0))), nDiss = Math.max(0, Math.round(Number($f("NDiss").value || 0))), n = nAlt + nDiss;
+    const nAlt = Math.max(0, Math.round(Number($f("NAlt").value || 0))), nDiss = Math.max(0, Math.round(Number($f("NDiss").value || 0))), nSql = Math.max(0, Math.round(Number($f("NSql").value || 0))), n = nAlt + nDiss + nSql;
     if (!titulo) return { erro: "Preencha o título." };
     if (!turmaEscolhida().turmaId) return { erro: "Escolha a turma da prova. Só os alunos dessa turma veem a prova." };
     if (!travado && !n) return { erro: "A prova precisa de pelo menos uma questão (alternativas + dissertativas)." };
@@ -943,6 +961,9 @@ function controleProva(f) {
       permitirTrocaAba: $f("PermitirTrocaAba").checked, permitirColar: $f("PermitirColar").checked,
       maxTrocasDeAba: $f("PermitirTrocaAba").checked ? 0 : Math.min(10, Math.max(0, Math.round(Number($f("MaxTrocas").value || 0)))),
       colarTiraVida: $f("ColarVida").checked,
+      dicasMax: $f("Dicas").checked ? Math.min(10, Math.max(1, Math.round(Number($f("DicasMax").value || 3)))) : 0,
+      segundosVolta: Math.min(120, Math.max(0, Math.round(Number($f("SegVolta").value || 0)))),
+      entradaAte: $f("EntradaAte").value ? Timestamp.fromDate(new Date($f("EntradaAte").value)) : null,
       iaAutomatica: $f("IaAuto").checked,
       acaoAoExceder: $f("Modo").value !== "todas" && !$f("Voltar").checked && $f("AcaoExceder").value === "perderQuestao" ? "perderQuestao" : "encerrar",
       // vários PDFs em materiaisConsultaIds; materialConsultaArquivoId (um PDF só) fica para provas antigas
@@ -953,7 +974,7 @@ function controleProva(f) {
     // bancoId = o primeiro (as regras do Firestore e as tentativas antigas usam); temas = os do primeiro banco (compatibilidade)
     if (!travado) {
       const temasPorBanco = Object.fromEntries(bancoIds.map(b => [b, ordenarTemas([...sel.get(b)])]));   // todos marcados = lista completa
-      Object.assign(dados, { bancoId: bancoIds[0], bancoIds, temasPorBanco, temas: temasPorBanco[bancoIds[0]], nQuestoes: n, nAlternativas: nAlt, nDissertativas: nDiss });
+      Object.assign(dados, { bancoId: bancoIds[0], bancoIds, temasPorBanco, temas: temasPorBanco[bancoIds[0]], nQuestoes: n, nAlternativas: nAlt, nDissertativas: nDiss, nSql });
     }
     return { dados };
   }
@@ -1109,7 +1130,7 @@ function desenharProvas() {
 }
 function cartaoProvaHTML(p) {
     const bs = bancosDaProva(p).map(id => bancosCache.find(x => x.id === id) || { id, nome: id });
-    const qtd = p.nAlternativas !== undefined && p.nAlternativas !== null ? `${p.nAlternativas} alt. + ${p.nDissertativas || 0} dissert.` : p.nDissertativas ? `${p.nDissertativas} dissert.` : "";
+    const qtd = (p.nAlternativas !== undefined && p.nAlternativas !== null ? `${p.nAlternativas} alt. + ${p.nDissertativas || 0} dissert.` : p.nDissertativas ? `${p.nDissertativas} dissert.` : "") + (p.nSql ? ` + ${p.nSql} SQL` : "");
     const vidas = !p.permitirTrocaAba && Number(p.maxTrocasDeAba) > 0 ? Number(p.maxTrocasDeAba) : 0;
     const itens = (podeEditar() ? itemMenu({ i: p.resultadosLiberados ? "lock" : "unlock", t: p.resultadosLiberados ? "Ocultar gabarito" : "Liberar gabarito", attrs: `data-tg="resultadosLiberados" data-id="${p.id}" title="O aluno vê quais acertou, o gabarito e baixa o PDF da prova"` })
         + itemMenu({ i: "edit", t: "Editar", attrs: `data-editar="${p.id}"` }) : "")
@@ -1293,7 +1314,7 @@ async function gerarRecuperacao(p) {
       const bancoIds = bancos.filter(b => temasPorBanco[b]);
       bancoIds.forEach(b => temasPorBanco[b] = ordenarTemas(temasPorBanco[b]));
       const copiar = ["turmaId", "turma", "semestre", "materia", "planoCurso", "permitirVoltar", "tempoMinutos", "modoExibicao", "permitirTrocaAba", "permitirColar",
-        "maxTrocasDeAba", "colarTiraVida", "iaAutomatica", "acaoAoExceder", "materialConsultaUrl", "materiaisConsultaIds", "materialConsultaArquivoId", "materialConsultaTitulo"];
+        "maxTrocasDeAba", "colarTiraVida", "segundosVolta", "dicasMax", "iaAutomatica", "acaoAoExceder", "materialConsultaUrl", "materiaisConsultaIds", "materialConsultaArquivoId", "materialConsultaTitulo"];
       const dados = Object.fromEntries(copiar.filter(k => p[k] !== undefined).map(k => [k, p[k]]));
       Object.assign(dados, { titulo, dataProva: corpo.querySelector("#recData").value || "", codigoAcesso: "",
         bancoId: bancoIds[0], bancoIds, temasPorBanco, temas: temasPorBanco[bancoIds[0]], nQuestoes: nA + nD, nAlternativas: nA, nDissertativas: nD,
@@ -1449,12 +1470,15 @@ function validarBanco(txt) {
   if (!Array.isArray(b.questoes) || !b.questoes.length) throw new Error("Falta a lista questoes.");
   b.questoes.forEach((q, i) => {
     const n = i + 1;
-    if (!["alternativa", "dissertativa"].includes(q.tipo)) throw new Error(`Questão ${n}: tipo deve ser alternativa ou dissertativa.`);
+    if (!["alternativa", "dissertativa", "sql"].includes(q.tipo)) throw new Error(`Questão ${n}: tipo deve ser alternativa, dissertativa ou sql.`);
     if (!q.enunciado) throw new Error(`Questão ${n}: falta o enunciado.`);
     if (q.tema !== undefined && q.tema !== null && typeof q.tema !== "string") throw new Error(`Questão ${n}: "tema" deve ser um texto (ex.: "DML - UPDATE").`);
     if (q.tipo === "alternativa") {
       if (!Array.isArray(q.alternativas) || q.alternativas.length < 2) throw new Error(`Questão ${n}: precisa de pelo menos 2 alternativas.`);
       if (!Number.isInteger(q.correta) || q.correta < 0 || q.correta >= q.alternativas.length) throw new Error(`Questão ${n}: "correta" deve ser o índice da alternativa certa (0 = primeira).`);
+    } else if (q.tipo === "sql") {
+      if (!q.banco?.setup || !Array.isArray(q.tarefas) || !q.tarefas.length) throw new Error(`Questão ${n} (sql): precisa de banco.setup e de tarefas.`);
+      q.tarefas.forEach((t, k) => { if (!t.id || !t.texto) throw new Error(`Questão ${n} (sql), tarefa ${k + 1}: precisa de id e texto.`); if (!q.gabarito?.tarefas?.[t.id]?.sql) throw new Error(`Questão ${n} (sql): falta o gabarito da tarefa ${t.id}.`); });
     } else {
       if (!(q.respostasAceitas?.length) && !(q.palavrasChave?.length) && q.correcaoManual !== true) throw new Error(`Questão ${n}: dissertativa precisa de respostasAceitas ou palavrasChave (ou "correcaoManual": true).`);
     }
@@ -1474,6 +1498,17 @@ $("#btnImportarBanco").onclick = async () => {
   let b; try { b = validarBanco($("#txtBanco").value); } catch (e) { $("#msgBanco").innerHTML = `❌ ${esc(e.message)}`; return false; }
   if (!(await confirmar(`Importar o banco "${b.nome}" com ${pl(b.questoes.length, "questão", "questões")}?`, { titulo: "Importar banco", ok: "Importar" }))) return false;
   const temas = ordenarTemas(b.questoes.map(temaDe));
+  // questões SQL: roda o gabarito na Bancada (no navegador) e guarda a "impressão" do resultado de cada tarefa;
+  // o servidor só compara (resultado igual = certa, sem gastar IA)
+  const gabSql = {};
+  if (b.questoes.some(q => q.tipo === "sql")) {
+    $("#msgBanco").textContent = "Rodando os gabaritos das questões SQL…";
+    const { calcularGabarito } = await import("./workbench.js?v=20261125a");
+    for (const [i, q] of b.questoes.entries()) if (q.tipo === "sql") {
+      try { gabSql[i] = await calcularGabarito(q, q.gabarito); }
+      catch (e) { $("#msgBanco").innerHTML = `❌ Questão ${i + 1}: ${esc(e.message)}`; return false; }
+    }
+  }
   const ref = await addDoc(collection(db, "bancos"), { nome: b.nome, materia: $("#bMateria").value.trim() || b.materia || "", semestre: $("#bSemestre").value || semestreDe(),
     nQuestoes: b.questoes.length, temas, criadoEm: serverTimestamp(), criadoPor: eu.email });
   const lote = writeBatch(db);
@@ -1481,9 +1516,11 @@ $("#btnImportarBanco").onclick = async () => {
     const qid = `${ref.id}_q${String(i + 1).padStart(3, "0")}`;
     const pub = { ordem: i + 1, tipo: q.tipo, enunciado: q.enunciado, peso: Number(q.peso || 1), tema: temaDe(q) };
     if (q.tipo === "alternativa") pub.alternativas = q.alternativas;
+    if (q.tipo === "sql") { pub.banco = { nome: String(q.banco.nome || "banco"), setup: q.banco.setup }; pub.tarefas = q.tarefas.map(t => ({ id: t.id, texto: t.texto, tipo: t.tipo === "alteracao" ? "alteracao" : "consulta", ...(t.verificacao ? { verificacao: t.verificacao } : {}) })); }
     lote.set(doc(db, "bancos", ref.id, "questoes", qid), pub);
     const gab = { explicacao: q.explicacao || "" };
-    if (q.tipo === "alternativa") gab.correta = q.correta; else { gab.respostasAceitas = q.respostasAceitas || []; gab.palavrasChave = q.palavrasChave || []; }
+    if (q.dica) gab.dica = String(q.dica).slice(0, 400);   // dica pronta (opcional): sem ela, o servidor pede uma à IA
+    if (q.tipo === "alternativa") gab.correta = q.correta; else if (q.tipo === "sql") gab.tarefas = gabSql[i].tarefas; else { gab.respostasAceitas = q.respostasAceitas || []; gab.palavrasChave = q.palavrasChave || []; }
     lote.set(doc(db, "bancos", ref.id, "gabaritos", qid), gab);
   });
   await lote.commit();
@@ -1691,18 +1728,22 @@ function tempoTotal(t) {
   const i = t.iniciadaEm?.toMillis?.(), f = t.finalizadaEm?.toMillis?.();
   return i && f ? Math.round((f - i) / 1000) : null;
 }
+// "2026-11-25T14:30" para <input type="datetime-local">
+function dataHoraLocal(d) { const z = n => String(n).padStart(2, "0"); return `${d.getFullYear()}-${z(d.getMonth() + 1)}-${z(d.getDate())}T${z(d.getHours())}:${z(d.getMinutes())}`; }
 const RAPIDO = 5;   // resposta enviada em menos de 5 s: destacar
 // sinais de cola; com troca de aba permitida na prova, as trocas aparecem em cinza ("permitido") e não destacam a linha
 function sinaisDe(t, prova) {
   const atual = t.trocasDeAba || 0, acumulado = t.trocasDeAbaTotal || 0;   // "perder questão" zera trocasDeAba e acumula em trocasDeAbaTotal
   const s = { abas: atual + acumulado, abasAtual: atual, abasAcumulado: acumulado, telaCheia: t.saidasTelaCheia || 0, colar: t.tentativasColar || 0, abasPermitido: prova?.permitirTrocaAba === true };
   s.total = (s.abasPermitido ? 0 : s.abas) + s.telaCheia + s.colar;
+  s.dicas = Object.keys(t.dicas || {}).length;
+  s.atalhos = t.atalhosBloqueados || 0; s.extensoes = (t.extensoes || []).join(", ");
   return s;
 }
 function sinaisHTML(s) {
   const item = (ic, n, tit) => `<span class="${n ? "" : "zero"}" title="${tit}">${ic} ${n}</span>`;
   const abas = s.abasPermitido ? `<span class="permitido" title="Troca de aba permitida nesta prova">🔀 ${s.abas} permitido</span>` : item("🔀", s.abas, "Trocas de aba/janela");
-  return `<span class="sinais">${abas}${item("⛶", s.telaCheia, "Saídas da tela cheia")}${item("📋", s.colar, "Tentativas de colar")}</span>`;
+  return `<span class="sinais">${abas}${item("⛶", s.telaCheia, "Saídas da tela cheia")}${item("📋", s.colar, "Tentativas de colar")}${s.dicas ? `<span title="Dicas pedidas ao mascote">💡 ${s.dicas}</span>` : ""}${s.atalhos ? `<span title="Atalhos bloqueados (Alt, Win, Ctrl…) — só registro">⌨ ${s.atalhos}</span>` : ""}${s.extensoes ? `<span title="Extensões detectadas: ${esc(s.extensoes)}">🧩 ${esc(s.extensoes)}</span>` : ""}</span>`;
 }
 const abasTexto = s => `${s.abas}${s.abasPermitido ? " (permitido)" : ""}`;
 function sinaisTexto(s) { return `abas ${abasTexto(s)} · tela cheia ${s.telaCheia} · colar ${s.colar}`; }
@@ -1879,6 +1920,7 @@ function montarResultados() {
   desenharResultados();
   desenharFaixaRevisoes();
   gravarPlacares(todas);
+  cobrarAusentes(todas);
   if ($("#iaAuto").checked && $("#rAoVivo").checked) agendarAutoIA();
 }
 // ⚠ faixa no topo: questões desta prova com erro reportado ainda sem decisão (abre o mesmo cartão da tela Erros e sugestões)
@@ -1947,6 +1989,8 @@ function acoesVidaHTML(l) {
                   `<button class="leve mini" data-vmais="${l.t.id}" title="Reacende um coração perdido; com todos cheios, dá uma vida a mais">${ic("plus", { size: 16 })}1 vida</button>`,
                   `<button class="leve mini" data-vmenos="${l.t.id}" title="${v.restam > 1 ? "Tira uma vida deste aluno" : "Resta só 1 vida: use Encerrar prova"}"${v.restam > 1 ? "" : " disabled"}>− 1 vida</button>`);
     if (Number(resDados.prova.tempoMinutos) > 0) b.push(`<button class="leve mini" data-tempo="${l.t.id}" title="Dá mais minutos só para este aluno (ex.: caiu a internet)">⏱ + tempo</button>`);
+    if (l.t.sessao) b.push(`<button class="leve mini" data-liblogin="${l.t.id}" title="O aluno trocou de computador? Libera para ele abrir a prova em outro (o computador antigo deixa de valer)">🔑 Liberar login</button>`);
+    b.push(`<button class="perigo mini" data-barrar="${l.t.id}" title="Encerra a prova deste aluno e impede que ele abra de novo">🚫 Barrar</button>`);
     b.push(`<button class="perigo mini" data-encerrar="${l.t.id}" title="Encerra a prova só deste aluno, com as respostas já enviadas">⛔ Encerrar prova</button>`);
   } else b.push(`<button class="leve mini" data-reabrir="${l.t.id}" title="Volta a prova para o aluno continuar de onde parou">${ic("unlock", { size: 16 })}Reabrir prova</button>`);
   if (l.sinais.total || l.sinais.abas) b.push(`<button class="leve mini" data-sinais="${l.t.id}" title="Apaga sinais registrados por engano (aba, tela cheia, colar), sem mexer nas respostas">🧹 Apagar sinais</button>`);
@@ -1959,7 +2003,9 @@ function acoesVidaItens(l) {
   const v = vidasDe(l.t);
   if (l.t.finalizadaEm) return itemMenu({ i: "unlock", t: "Reabrir prova", attrs: `data-reabrir="${l.t.id}" title="Volta a prova para o aluno continuar de onde parou"` })
     + itemSinais(l);
-  const encerrar = itemMenu({ i: "lock", t: "Encerrar prova", attrs: `data-encerrar="${l.t.id}" title="Encerra a prova só deste aluno, com as respostas já enviadas"` });
+  const extrasEntrada = (l.t.sessao ? itemMenu({ i: "unlock", t: "Liberar login", attrs: `data-liblogin="${l.t.id}" title="Libera o aluno para abrir a prova em outro computador"` }) : "")
+    + itemMenu({ i: "lock", t: "Barrar aluno", attrs: `data-barrar="${l.t.id}" title="Encerra a prova deste aluno e impede que ele abra de novo"` });
+  const encerrar = extrasEntrada + itemMenu({ i: "lock", t: "Encerrar prova", attrs: `data-encerrar="${l.t.id}" title="Encerra a prova só deste aluno, com as respostas já enviadas"` });
   const tempo = Number(resDados.prova.tempoMinutos) > 0 ? itemMenu({ i: "plus", t: "+ tempo", attrs: `data-tempo="${l.t.id}" title="Dá mais minutos só para este aluno"` }) : "";
   if (!v) return tempo + encerrar + itemSinais(l);
   return itemMenu({ i: "heart", t: "Restaurar vidas", attrs: `data-vrest="${l.t.id}" title="Devolve todas as vidas${l.perdidas ? " e as questões perdidas" : ""}"${v.usadas || l.perdidas ? "" : " disabled"}` })
@@ -1976,6 +2022,8 @@ function ligarAcoesVida(raiz) {
   raiz.querySelectorAll("[data-reabrir]").forEach(b => b.onclick = () => reabrirProva(achar(b.dataset.reabrir)));
   raiz.querySelectorAll("[data-tempo]").forEach(b => b.onclick = () => maisTempo(achar(b.dataset.tempo)));
   raiz.querySelectorAll("[data-sinais]").forEach(b => b.onclick = () => apagarSinais(achar(b.dataset.sinais)));
+  raiz.querySelectorAll("[data-liblogin]").forEach(b => b.onclick = () => liberarLogin(achar(b.dataset.liblogin)));
+  raiz.querySelectorAll("[data-barrar]").forEach(b => b.onclick = () => barrarAluno(achar(b.dataset.barrar)));
 }
 // questões perdidas por sair da prova (respostas com perdida: true): o professor pode devolver
 const perdidasDe = id => Object.entries(cacheTent.get(id)?.resp || {}).filter(([, r]) => r?.perdida === true).map(([q]) => q);
@@ -1988,6 +2036,82 @@ async function recarregarTentativa(id) {
   if (d.exists()) await atualizarCache(d); else cacheTent.delete(id);
   montarResultados();
 }
+// ============================================================ ENTRADA NA PROVA (barrar, fechar, liberar login)
+// sessão única: a tentativa guarda o computador do aluno (sessao). "Liberar login" apaga e ele pode abrir em outro.
+async function liberarLogin(l) {
+  if (!l) return;
+  const nome = l.t.nome || l.t.email;
+  if (!(await confirmar(`Liberar ${nome} para abrir a prova em OUTRO computador?\n\nO computador de agora deixa de valer: o próximo que abrir a prova fica com ela.`, { titulo: "🔑 Liberar login", ok: "Liberar" }))) return;
+  try { await updateDoc(doc(db, "tentativas", l.t.id), { sessao: deleteField() }); toast(`${nome} pode entrar em outro computador.`, "ok"); await recarregarTentativa(l.t.id); }
+  catch (e) { toast("Não foi possível liberar. " + traduzirErro(e), "erro"); console.error(e); }
+}
+// barrar: o e-mail entra em prova.bloqueados (as regras não deixam começar) e, se já começou, a prova dele é encerrada
+async function barrarAluno(l, email = null) {
+  const em = String(email || l?.t?.email || "").toLowerCase(), nome = l?.t?.nome || em;
+  if (!em || !resDados) return;
+  const andando = l && !l.t.finalizadaEm;
+  if (!(await confirmar(`Barrar ${nome} nesta prova?\n\n${andando ? "A prova dele é ENCERRADA agora, com as respostas já enviadas, e " : ""}ele não consegue abrir a prova de novo. Dá para desfazer em "Entrada na prova".`, { titulo: "🚫 Barrar aluno", ok: "Barrar", perigo: true }))) return;
+  try {
+    await updateDoc(doc(db, "provas", resDados.prova.id), { bloqueados: arrayUnion(em) });
+    resDados.prova.bloqueados = [...new Set([...(resDados.prova.bloqueados || []), em])];
+    if (andando) await updateDoc(doc(db, "tentativas", l.t.id), { finalizadaEm: serverTimestamp(), encerradaPor: "barrado" });
+    toast(`${nome} foi barrado nesta prova.`, "ok");
+    if (l) await recarregarTentativa(l.t.id); else desenharResultados();
+  } catch (e) { toast("Não foi possível barrar. " + traduzirErro(e), "erro"); console.error(e); }
+}
+async function mudarEntrada(dados, msg) {
+  try {
+    await updateDoc(doc(db, "provas", resDados.prova.id), dados);
+    const p = (await getDoc(doc(db, "provas", resDados.prova.id))).data();
+    ["bloqueados", "liberadosEntrada", "entradaFechada", "entradaAte"].forEach(k => { resDados.prova[k] = p[k]; });
+    toast(msg, "ok"); desenharResultados();
+  } catch (e) { toast("Não foi possível mudar a entrada. " + traduzirErro(e), "erro"); console.error(e); }
+}
+function entradaFechadaAgora(p) { return p.entradaFechada === true || (p.entradaAte?.toMillis && Date.now() >= p.entradaAte.toMillis()); }
+function entradaHTML() {
+  if (!podeCuidar() || !resDados?.prova || ehInclusao()) return "";
+  const p = resDados.prova, fechada = entradaFechadaAgora(p), blo = p.bloqueados || [], lib = p.liberadosEntrada || [];
+  const nomeDe = em => alunosDaTurma(resDados.turma || { alunos: [] }).find(a => a.email === em)?.nome || em;
+  const ate = p.entradaAte?.toDate ? p.entradaAte.toDate().toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "";
+  return `<div class="card secao-entrada"><h2>🚪 Entrada na prova <span class="meta-txt">${fechada ? "<b>fechada</b>: ninguém mais começa" : "aberta"}${ate ? ` · fecha às ${ate}` : ""}</span></h2>
+    <p class="pequeno">Quem já começou continua normalmente. Barrado não abre a prova; atrasado só entra se você deixar.</p>
+    <div class="linha-botoes">${fechada ? `<button class="leve mini" data-entrada="abrir">🔓 Reabrir entrada</button>` : `<button class="perigo mini" data-entrada="fechar">🔒 Fechar entrada agora</button>`}</div>
+    ${blo.length ? `<p class="pequeno" style="margin-top:8px"><b>Barrados:</b> ${blo.map(em => `${esc(nomeDe(em))} <button class="leve mini" data-desbarrar="${esc(em)}">desfazer</button>`).join(" · ")}</p>` : ""}
+    ${lib.length ? `<p class="pequeno"><b>Podem entrar mesmo com a entrada fechada:</b> ${lib.map(em => `${esc(nomeDe(em))} <button class="leve mini" data-tirarlib="${esc(em)}">tirar</button>`).join(" · ")}</p>` : ""}</div>`;
+}
+function ligarEntrada(raiz) {
+  raiz.querySelectorAll("[data-entrada]").forEach(b => b.onclick = async () => {
+    if (b.dataset.entrada === "fechar") {
+      if (!(await confirmar("Fechar a entrada agora? Quem ainda não começou não consegue mais começar (você pode deixar um atrasado entrar pela lista \"Não fizeram\").", { titulo: "🔒 Fechar entrada", ok: "Fechar entrada" }))) return;
+      mudarEntrada({ entradaFechada: true }, "Entrada fechada 🔒");
+    } else mudarEntrada({ entradaFechada: false, entradaAte: null }, "Entrada reaberta 🔓");
+  });
+  raiz.querySelectorAll("[data-desbarrar]").forEach(b => b.onclick = () => mudarEntrada({ bloqueados: arrayRemove(b.dataset.desbarrar) }, "Aluno liberado de novo."));
+  raiz.querySelectorAll("[data-tirarlib]").forEach(b => b.onclick = () => mudarEntrada({ liberadosEntrada: arrayRemove(b.dataset.tirarlib) }, "Pronto."));
+  raiz.querySelectorAll("[data-barraremail]").forEach(b => b.onclick = () => barrarAluno(null, b.dataset.barraremail));
+  raiz.querySelectorAll("[data-deixarentrar]").forEach(b => b.onclick = () => mudarEntrada({ liberadosEntrada: arrayUnion(b.dataset.deixarentrar), bloqueados: arrayRemove(b.dataset.deixarentrar) }, "Pode entrar ✅"));
+}
+// TIMER DE VOLTA: aluno fora da prova (foraDesde) perde 1 vida a cada prova.segundosVolta s. Quem estiver com o painel
+// aberto cobra também (além da página do aluno e do servidor de 1 em 1 min), sempre pela mesma conta, em transação.
+const cobrando = new Set();
+async function cobrarAusentes(linhas) {
+  const p = resDados?.prova, n = Number(p?.segundosVolta ?? 5);
+  if (!podeCuidar() || !p || !(n > 0) || p.permitirTrocaAba) return;
+  for (const l of linhas) {
+    const t = l.t, ms = t.foraDesde?.toMillis?.();
+    if (t.finalizadaEm || !ms || t.teste || cobrando.has(t.id)) continue;
+    if (Math.floor((Date.now() - ms) / 1000 / n) <= Number(t.foraCobradas || 0)) continue;
+    cobrando.add(t.id);
+    runTransaction(db, async tx => {
+      const ref = doc(db, "tentativas", t.id), d = (await tx.get(ref)).data();
+      const ini = d?.foraDesde?.toMillis?.();
+      if (!d || d.finalizadaEm || !ini) return;
+      const dev = Math.floor((Date.now() - ini) / 1000 / n), ja = Number(d.foraCobradas || 0);
+      if (dev > ja) tx.update(ref, { foraCobradas: dev, trocasDeAba: increment(dev - ja) });
+    }).catch(e => console.warn("timer de volta", e)).finally(() => cobrando.delete(t.id));
+  }
+}
+setInterval(() => { if (resDados && $("#rAoVivo").checked) cobrarAusentes(resDados.linhas); }, 5000);
 async function restaurarVidas(l) {
   if (!l) return;
   const v = vidasDe(l.t), perd = ehAdmin() ? perdidasDe(l.t.id) : [], nome = l.t.nome || l.t.email;
@@ -2196,6 +2320,14 @@ function tabelaHTML(lista, prefixo) {
       <td class="td-acoes"><button class="leve mini" data-ver="${l.t.id}">${ic("eye", { size: 16 })}Ver</button> ${itens ? menuHTML({ aria: `Mais ações: ${l.t.nome || l.t.email}`, itensHTML: itens }) : ""}</td></tr>`;
     }).join("") + `</tbody></table></div>`;
 }
+// em "Não fizeram": barrar quem faltou (não abre a prova) ou deixar um atrasado entrar com a entrada fechada
+function botoesEntrada(email) {
+  const p = resDados.prova, em = String(email).toLowerCase();
+  if ((p.bloqueados || []).includes(em)) return ` <span class="tag erro">🚫 barrado</span> <button class="leve mini" data-desbarrar="${esc(em)}">desfazer</button>`;
+  const lib = (p.liberadosEntrada || []).includes(em);
+  return ` <button class="leve mini" data-barraremail="${esc(em)}" title="Este aluno não consegue abrir a prova">🚫 Barrar</button>` +
+    (entradaFechadaAgora(p) && !lib ? ` <button class="leve mini" data-deixarentrar="${esc(em)}" title="Entrada fechada: deixa só este aluno começar">🚪 Deixar entrar</button>` : lib ? ` <span class="tag ok">pode entrar</span>` : "");
+}
 function desenharResultados() {
   const { linhas, testes } = resDados;
   const fin = linhas.filter(l => l.t.finalizadaEm), comSinal = linhas.filter(l => l.temSinal).length, media = fin.length ? (fin.reduce((s, l) => s + l.nota, 0) / fin.length).toFixed(1) : "—";
@@ -2215,11 +2347,12 @@ function desenharResultados() {
   const vis = filtrarLinhas(linhas);
   const vis0 = vis;
   let html = linhas.length ? `<div class="card sem-padding">${!vis0.length ? vazio({ e: "🔎", texto: "Nenhum aluno com esse filtro." }) : tabelaHTML(vis0, "aluno")}</div>` : `<div class="card">${vazio({ e: "⏳", texto: "Nenhum aluno fez esta prova ainda." })}</div>`;
+  html = entradaHTML() + html;
   if (resDados.turma) {
     const fizeram = new Set(linhas.map(l => String(l.t.email || "").toLowerCase()));
     const todos = alunosDaTurma(resDados.turma), faltam = todos.filter(a => !a.email || !fizeram.has(a.email));
     html += `<div class="card secao-faltam"><h2>Não fizeram <span class="meta-txt">${faltam.length} de ${todos.length} da turma ${esc(resDados.turma.nome)}</span></h2>` +
-      (faltam.length ? `<ul class="lista-faltam">${faltam.map(a => `<li>${esc(a.nome || a.email)}${a.nome && a.email ? ` <span class="pequeno">${esc(a.email)}</span>` : ""}${!a.email ? ` <span class="pequeno">— ainda não entrou no sistema</span>` : ""}</li>`).join("")}</ul>` : `<p class="help">Todos os alunos da turma começaram a prova.</p>`) + `</div>`;
+      (faltam.length ? `<ul class="lista-faltam">${faltam.map(a => `<li>${esc(a.nome || a.email)}${a.nome && a.email ? ` <span class="pequeno">${esc(a.email)}</span>` : ""}${!a.email ? ` <span class="pequeno">— ainda não entrou no sistema</span>` : ""}${a.email && podeCuidar() ? botoesEntrada(a.email) : ""}</li>`).join("")}</ul>` : `<p class="help">Todos os alunos da turma começaram a prova.</p>`) + `</div>`;
   } else if (resDados.prova.turmaId) html += `<div class="card"><p class="pequeno">A turma desta prova não foi encontrada (apagada?). Escolha outra em Provas → Editar.</p></div>`;
   if (mostrarTestes) html += `<div class="card secao-testes"><h2>Testes da equipe <span class="meta-txt">não entram na média, no CSV, nos PDFs nem em "Fechar notas"</span></h2>${testes.length ? tabelaHTML(testes, "teste") : `<p class="pequeno">Nenhuma tentativa de teste nesta prova. Abra <b>Testar como aluno</b> na aba Provas.</p>`}</div>`;
   // preserva o detalhe aberto (e o que o professor estiver digitando nele)
@@ -2233,6 +2366,7 @@ function desenharResultados() {
   }
   document.querySelectorAll("[data-ver]").forEach(b => b.onclick = () => verAluno(b.dataset.ver));
   ligarAcoesVida($("#resTabela"));
+  ligarEntrada($("#resTabela"));
   document.querySelectorAll("[data-reset]").forEach(b => b.onclick = async () => {
     const l = linhas.find(x => x.t.id === b.dataset.reset);
     if (!(await confirmar(`Apagar a tentativa de ${l.t.nome || l.t.email}? A pessoa poderá fazer a prova de novo (com novo sorteio).`, { titulo: "Apagar tentativa", ok: "Apagar", perigo: true }))) return;
@@ -2265,13 +2399,14 @@ function verAluno(id, rolar = true) {
       ${l.t.encerradaPor === "trocasDeAba" ? ` · <span class="tag erro">⛔ encerrada: limite de saídas atingido</span>` : ""}${l.t.encerradaPor === "professor" ? ` · <span class="tag erro">⛔ encerrada pelo professor</span>` : ""}${l.perdidas ? ` · <span class="tag erro">⛔ ${l.perdidas} questão(ões) perdida(s)</span>` : ""}</p>` + l.itens.map(x => {
     const rapida = x.r !== undefined && !x.perdida && typeof x.segundos === "number" && x.segundos < RAPIDO;
     const tempo = typeof x.segundos === "number" ? `<span class="tag ${rapida ? "erro" : ""}" title="Tempo entre a questão aparecer e a resposta ser enviada">⏱ ${fmtTempo(x.segundos)}${rapida ? ` · menos de ${RAPIDO} s` : ""}</span>` : "";
+    const dicaTag = l.t.dicas?.[x.qid] ? ` <span class="tag aviso" title="${esc(l.t.dicas[x.qid].texto || "")}">💡 pediu dica</span>` : "";
     const fmt = temFormato(x.q), bloco = t => `<span class="resp-formato">${esc(t).replace(/\n/g, "<br>")}</span>`;
-    const sua = x.perdida ? "<i>perdida por sair da prova</i>" : x.r === undefined ? "<i>não respondida</i>" : fmt ? bloco(textoResposta(x.q, x.r)) : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
-    const certa = fmt ? (x.g.chave ? bloco(textoChave(x.q, x.g)) + ` <span class="tag nota">${FORMATOS[x.q.formato].icone} ${esc(FORMATOS[x.q.formato].nome)}</span>` : "—") : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.g.correta] ?? "—") : esc((x.g.respostasAceitas || [])[0] || (x.g.palavrasChave || []).join(" + "));
-    const manual = podeEditar() && x.q.tipo === "dissertativa" && !x.perdida ? `<div class="linha" style="margin-top:6px"><div style="flex:0 0 120px"><label>Pontos (0–${x.peso})</label><input type="number" min="0" max="${x.peso}" step="0.25" value="${x.pontos}" id="pt_${x.qid}"></div><div><label>Comentário para o aluno</label><input type="text" id="cm_${x.qid}" value="${esc(x.comentario)}"></div><div style="flex:0 0 120px;align-self:flex-end"><button class="mini" data-corr="${x.qid}">Salvar</button></div></div>` : "";
+    const sua = x.perdida ? "<i>perdida por sair da prova</i>" : x.r === undefined ? "<i>não respondida</i>" : x.q.tipo === "sql" ? bloco(textoRespostaSql(x.q, x.r)) : fmt ? bloco(textoResposta(x.q, x.r)) : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
+    const certa = x.q.tipo === "sql" ? bloco((x.q.tarefas || []).map((t, k) => `Tarefa ${k + 1}: ${x.g.tarefas?.[t.id]?.sql || "—"}`).join("\n")) : fmt ? (x.g.chave ? bloco(textoChave(x.q, x.g)) + ` <span class="tag nota">${FORMATOS[x.q.formato].icone} ${esc(FORMATOS[x.q.formato].nome)}</span>` : "—") : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.g.correta] ?? "—") : esc((x.g.respostasAceitas || [])[0] || (x.g.palavrasChave || []).join(" + "));
+    const manual = podeEditar() && ["dissertativa", "sql"].includes(x.q.tipo) && !x.perdida ? `<div class="linha" style="margin-top:6px"><div style="flex:0 0 120px"><label>Pontos (0–${x.peso})</label><input type="number" min="0" max="${x.peso}" step="0.25" value="${x.pontos}" id="pt_${x.qid}"></div><div><label>Comentário para o aluno</label><input type="text" id="cm_${x.qid}" value="${esc(x.comentario)}"></div><div style="flex:0 0 120px;align-self:flex-end"><button class="mini" data-corr="${x.qid}">Salvar</button></div></div>` : "";
     const rot = ROTULOS[x.status] || ROTULOS.revisar;
     return `<div class="feedback bloco ${x.status === "certa" ? "certa" : ["errada", "perdida", "em_branco"].includes(x.status) ? "errada" : "revisar"}"><div class="linha acoes"><b>Q${x.n}</b> <span class="tag ${rot[0]}">${rot[1]} · ${x.pontos}/${x.peso}${x.manual ? " · manual" : ""}</span>${x.ia ? `<span class="tag nota" title="Corrigida pela IA — confira e ajuste se precisar">🤖 IA</span>` : ""}${errosIA.has(l.t.id + "/" + x.qid) ? `<span class="tag erro ia-erro">⚠ IA: ${esc(errosIA.get(l.t.id + "/" + x.qid))}</span>` : ""}${tempo}</div>
-      <div class="enunciado pequeno">${esc(x.q.enunciado)}</div>${avisoQuestaoHTML(resDados.revMap?.get(x.qid), l.t, x.status !== "certa")}<p><b>Resposta do aluno:</b> ${sua}<br><b>Esperada:</b> ${certa}</p>${manual}</div>`;
+      <div class="enunciado pequeno">${esc(x.q.enunciado)}</div>${avisoQuestaoHTML(resDados.revMap?.get(x.qid), l.t, x.status !== "certa")}<p><b>Resposta do aluno:</b> ${sua}${typeof dicaTag === "string" ? dicaTag : ""}<br><b>Esperada:</b> ${certa}</p>${manual}</div>`;
   }).join("") + `<div id="saidasDetalhe" class="bloco pequeno" style="margin-top:8px"><span class="texto-suave">Carregando saídas…</span></div>${podeEditar() ? obsAcessHTML(l) : ""}</div>`;
   if (rolar) box.scrollIntoView({ behavior: "smooth" });
   ligarRevisar(box);
@@ -2335,7 +2470,8 @@ async function carregarSaidasDetalhe(tentativaId, l) {
   const acertouQuestoes = new Set(l.itens.filter(x => x.status === "certa").map(x => x.qid));
   const fmtTs = ts => ts?.toDate ? ts.toDate().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" }) : "—";
   const fmtSeg = s => typeof s === "number" ? `${s}s` : "—";
-  const MOTIVO = { aba: "troca de aba/janela", telaCheia: "saiu da tela cheia", colar: "tentou colar" };
+  const MOTIVO = { aba: "troca de aba/janela", telaCheia: "saiu da tela cheia", colar: "tentou colar", recarregou: "recarregou/fechou a página", sistema: "janela do sistema (aviso, sem perder vida)", extensao: "extensão do navegador (aviso)" };
+  const custo = s => s.anulada || ["sistema", "extensao"].includes(s.motivo) || (s.motivo === "colar" && (resDados.prova.permitirColar || resDados.prova.colarTiraVida === false)) ? 0 : 1 + Number(s.vidasTimer || 0);
   const rows = saidas.map(s => {
     const suspeita = s.questaoId && acertouQuestoes.has(s.questaoId) && s.motivo !== "colar";
     return `<tr>
@@ -2344,14 +2480,33 @@ async function carregarSaidasDetalhe(tentativaId, l) {
       <td>${fmtTs(s.saidaEm)}</td>
       <td>${s.voltouEm ? fmtTs(s.voltouEm) : "—"}</td>
       <td>${fmtSeg(s.segundosFora)}</td>
-      <td>${suspeita ? '<span class="tag erro" title="O aluno saiu da prova durante esta questão e a acertou">⚠ acerto sob suspeita</span>' : ""}</td>
+      <td>${suspeita ? '<span class="tag erro" title="O aluno saiu da prova durante esta questão e a acertou">⚠ acerto sob suspeita</span>' : ""}${s.vidasTimer ? ` <span class="tag" title="Vidas perdidas pelo timer de volta">+${s.vidasTimer} timer</span>` : ""}</td>
+      <td>${s.anulada ? '<span class="tag ok">anulada</span>' : podeCuidar() && custo(s) && vidasDe(l.t) ? `<button class="leve mini" data-anular="${s.id}" title="Saída por engano (ex.: janela do Windows): devolve ${custo(s)} vida(s)">↩ anular</button>` : ""}</td>
     </tr>`;
   }).join("");
   el.innerHTML = `<details><summary style="cursor:pointer"><b>Saídas durante a prova</b> (${saidas.length})</summary>
     <table class="tabela-saidas" style="width:100%;border-collapse:collapse;margin-top:6px;font-size:12px">
-      <thead><tr style="text-align:left"><th>Questão</th><th>Motivo</th><th>Saiu às</th><th>Voltou às</th><th>Fora</th><th></th></tr></thead>
+      <thead><tr style="text-align:left"><th>Questão</th><th>Motivo</th><th>Saiu às</th><th>Voltou às</th><th>Fora</th><th></th><th></th></tr></thead>
       <tbody>${rows}</tbody>
     </table></details>`;
+  el.querySelectorAll("[data-anular]").forEach(b => b.onclick = async () => {
+    const s = saidas.find(x => x.id === b.dataset.anular), k = custo(s), nome = l.t.nome || l.t.email;
+    if (!s || !k) return;
+    const fim = l.t.finalizadaEm && l.t.encerradaPor === "trocasDeAba";
+    if (!(await confirmar(`Anular esta saída de ${nome} e devolver ${k === 1 ? "1 vida" : `${k} vidas`}?${fim ? "\n\nA prova dele foi encerrada pelas vidas: depois use Reabrir prova." : ""}`, { titulo: "↩ Anular saída", ok: "Anular" }))) return;
+    try {
+      const atual = Number(l.t.trocasDeAba || 0), volta = Math.min(atual, k), extra = k - volta;
+      const lote = writeBatch(db);
+      lote.update(doc(db, "tentativas", l.t.id, "saidas", s.id), { anulada: true, anuladaPor: eu.email, anuladaEm: serverTimestamp() });
+      const upd = {};
+      if (volta) Object.assign(upd, { trocasDeAba: increment(-volta), trocasDeAbaTotal: increment(volta) });
+      if (extra) upd.vidasExtras = increment(extra);
+      lote.update(doc(db, "tentativas", l.t.id), upd);
+      await lote.commit();
+      toast(`Saída anulada: +${k} vida(s) para ${nome} ❤️`, "ok");
+      await recarregarTentativa(l.t.id);
+    } catch (e) { toast("Não foi possível anular. " + traduzirErro(e), "erro"); console.error(e); }
+  });
 }
 // mais tempo para todos que estão fazendo a prova agora (cada um conta do próprio início; quem ainda não começou já terá o tempo inteiro)
 $("#btnTempoTodas").onclick = async () => {
@@ -2502,13 +2657,13 @@ function boletimHTML(l, quebra = false) {
   h += `<div class="peq">Tempo total: ${fmtTempo(l.tempo)} · Trocas de aba: ${abasTexto(l.sinais)} · Saídas da tela cheia: ${l.sinais.telaCheia} · Tentativas de colar: ${l.sinais.colar}</div>`;
   h += l.itens.map(x => {
     const fmt = temFormato(x.q), bloco = t => esc(t).replace(/\n/g, "<br>");
-    const sua = x.perdida ? "<i>perdida por sair da prova</i>" : x.r === undefined ? "<i>não respondida</i>" : fmt ? bloco(textoResposta(x.q, x.r)) : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
+    const sua = x.perdida ? "<i>perdida por sair da prova</i>" : x.r === undefined ? "<i>não respondida</i>" : x.q.tipo === "sql" ? bloco(textoRespostaSql(x.q, x.r)) : fmt ? bloco(textoResposta(x.q, x.r)) : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
     const certa = fmt ? bloco(textoChave(x.q, x.g) || "—") : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.g.correta] ?? "—") : esc((x.g.respostasAceitas || [])[0] || "—");
     const cls = x.status === "certa" ? "certa" : ["errada", "em_branco", "perdida"].includes(x.status) ? "errada" : "outra";
     const rapida = x.r !== undefined && typeof x.segundos === "number" && x.segundos < RAPIDO;
     const tempo = typeof x.segundos === "number" ? ` · <span class="${rapida ? "rapida" : ""}">⏱ ${fmtTempo(x.segundos)}${rapida ? ` (menos de ${RAPIDO} s)` : ""}</span>` : "";
     return `<div class="q ${cls}"><b>Questão ${x.n}</b> — ${rot[x.status]} · ${x.pontos}/${x.peso}${tempo}<div style="white-space:pre-wrap;margin:4px 0">${esc(x.q.enunciado)}</div>
-      <div><b>Resposta do aluno:</b> ${sua}</div>${x.status !== "certa" && certa !== "—" ? `<div><b>Resposta correta:</b> ${certa}</div>` : ""}
+      <div><b>Resposta do aluno:</b> ${sua}${typeof dicaTag === "string" ? dicaTag : ""}</div>${x.status !== "certa" && certa !== "—" ? `<div><b>Resposta correta:</b> ${certa}</div>` : ""}
       ${x.g.explicacao ? `<div class="exp"><b>Por quê:</b> ${esc(x.g.explicacao)}</div>` : ""}${x.comentario ? `<div class="peq"><b>Comentário do professor:</b> ${esc(x.comentario)}</div>` : ""}</div>`;
   }).join("");
   return h + (quebra ? `<div class="quebra"></div>` : "");

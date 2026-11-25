@@ -1,0 +1,807 @@
+{
+  "nome": "SQL na prática — Bancada SQL (consultas, JOIN, GROUP BY, INSERT/UPDATE/DELETE, CREATE/ALTER)",
+  "materia": "Banco de Dados",
+  "contexto": "Questões práticas: o aluno escreve e executa SQL (sintaxe MySQL) na Bancada SQL, dentro da prova. Cada questão tem um cenário e um banco próprios (pet shop, biblioteca, oficina, academia, cinema, hamburgueria, clínica veterinária, escola de idiomas, hotel, loja de games, farmácia, transportadora, estacionamento, floricultura e e-sports), para que alunos vizinhos ou de outras turmas não troquem respostas. Cada tarefa é corrigida separadamente: o SQL do aluno roda numa cópia nova da base e o resultado é comparado com o do gabarito.",
+  "questoes": [
+    {
+      "tipo": "sql",
+      "peso": 3,
+      "enunciado": "O Pet Shop Amigo Fiel guarda seus dados no banco petshop, com as tabelas tutor (os donos), pet e atendimento (serviços feitos em cada pet). Use a Bancada SQL: escreva o SQL de cada tarefa na aba dela e execute para conferir. Cada tarefa é corrigida separadamente, sempre a partir da base original (o botão ↺ Restaurar base volta os dados ao início).",
+      "banco": {
+        "nome": "petshop",
+        "setup": "CREATE TABLE tutor (\n  id_tutor INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(80) NOT NULL,\n  telefone VARCHAR(20),\n  cidade VARCHAR(40)\n) ENGINE=InnoDB;\nCREATE TABLE pet (\n  id_pet INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(40) NOT NULL,\n  especie ENUM('cachorro','gato','ave','roedor') NOT NULL,\n  raca VARCHAR(40),\n  nascimento DATE,\n  peso DECIMAL(5,2),\n  id_tutor INT NOT NULL,\n  FOREIGN KEY (id_tutor) REFERENCES tutor(id_tutor)\n) ENGINE=InnoDB;\nCREATE TABLE atendimento (\n  id_atendimento INT AUTO_INCREMENT PRIMARY KEY,\n  id_pet INT NOT NULL,\n  servico VARCHAR(40) NOT NULL,\n  valor DECIMAL(8,2) NOT NULL,\n  data_atendimento DATE NOT NULL,\n  FOREIGN KEY (id_pet) REFERENCES pet(id_pet)\n) ENGINE=InnoDB;\nINSERT INTO tutor VALUES\n (1,'Ana Paula Ribeiro','(11) 91234-5678','Osasco'),\n (2,'Bruno Carvalho','(11) 92345-6789','Barueri'),\n (3,'Carla Mendes','(11) 93456-7890','Osasco'),\n (4,'Diego Fernandes','(11) 94567-8901','Carapicuíba'),\n (5,'Elisa Tanaka','(11) 95678-9012','Barueri'),\n (6,'Fábio Rocha','(11) 96789-0123','Cotia'),\n (7,'Gabriela Lopes','(11) 97890-1234','Osasco'),\n (8,'Henrique Alves','(11) 98901-2345','Cotia');\nINSERT INTO pet VALUES\n (1,'Thor','cachorro','Labrador','2019-03-10',31.50,1),\n (2,'Mia','gato','Siamês','2021-07-22',4.20,1),\n (3,'Pipoca','roedor','Hamster','2024-01-05',0.12,2),\n (4,'Luna','gato','Persa','2018-11-30',5.10,3),\n (5,'Bob','cachorro','Vira-lata','2020-05-14',12.30,3),\n (6,'Nina','gato','Vira-lata','2022-02-02',3.60,4),\n (7,'Kiwi','ave','Calopsita','2023-08-19',0.09,5),\n (8,'Rex','cachorro','Pastor Alemão','2017-06-25',38.00,6),\n (9,'Frajola','gato','Maine Coon','2019-09-09',7.80,6),\n (10,'Mel','cachorro','Shih-tzu','2021-12-12',6.40,6),\n (11,'Tom','gato','Vira-lata','2020-04-04',4.90,7),\n (12,'Pingo','cachorro','Poodle','2022-10-10',5.50,8);\nINSERT INTO atendimento VALUES\n (1,1,'Banho e tosa',90.00,'2025-03-02'),\n (2,2,'Consulta',120.00,'2025-03-02'),\n (3,5,'Banho e tosa',70.00,'2025-03-05'),\n (4,8,'Banho',60.00,'2025-03-07'),\n (5,10,'Banho e tosa',65.00,'2025-03-08'),\n (6,4,'Tosa higiênica',45.00,'2025-03-10'),\n (7,12,'Banho e tosa',60.00,'2025-03-12'),\n (8,9,'Vacina',85.00,'2025-03-15'),\n (9,3,'Consulta',100.00,'2025-03-18'),\n (10,1,'Banho',55.00,'2025-03-20'),\n (11,11,'Banho e tosa',50.00,'2025-03-22'),\n (12,7,'Corte de unhas',25.00,'2025-03-25');"
+      },
+      "tarefas": [
+        {
+          "id": "t1",
+          "tipo": "consulta",
+          "texto": "Liste o nome e o peso dos GATOS que pesam mais de 4 kg, do mais pesado para o mais leve."
+        },
+        {
+          "id": "t2",
+          "tipo": "consulta",
+          "texto": "Mostre o nome de cada tutor e quantos pets ele tem, apenas para os tutores com 2 pets ou mais."
+        },
+        {
+          "id": "t3",
+          "tipo": "alteracao",
+          "texto": "O serviço 'Banho e tosa' ficou mais caro: aumente em 10% o valor de todos os atendimentos desse serviço.",
+          "verificacao": "SELECT id_atendimento, valor FROM atendimento ORDER BY id_atendimento;"
+        },
+        {
+          "id": "t4",
+          "tipo": "alteracao",
+          "texto": "Cadastre a nova tutora Marina Souza, telefone (11) 98888-1234, da cidade de Osasco.",
+          "verificacao": "SELECT nome, telefone, cidade FROM tutor ORDER BY id_tutor;"
+        }
+      ],
+      "gabarito": {
+        "tarefas": {
+          "t1": {
+            "sql": "SELECT nome, peso FROM pet WHERE especie = 'gato' AND peso > 4 ORDER BY peso DESC;",
+            "ordemImporta": true
+          },
+          "t2": {
+            "sql": "SELECT t.nome, COUNT(p.id_pet) AS qtd_pets\nFROM tutor t JOIN pet p ON p.id_tutor = t.id_tutor\nGROUP BY t.id_tutor, t.nome\nHAVING COUNT(p.id_pet) >= 2;",
+            "ordemImporta": false
+          },
+          "t3": {
+            "sql": "UPDATE atendimento SET valor = valor * 1.10 WHERE servico = 'Banho e tosa';",
+            "ordemImporta": false
+          },
+          "t4": {
+            "sql": "INSERT INTO tutor (nome, telefone, cidade) VALUES ('Marina Souza', '(11) 98888-1234', 'Osasco');",
+            "ordemImporta": false
+          }
+        }
+      },
+      "explicacao": "T1: WHERE com AND (especie = 'gato' AND peso > 4) e ORDER BY peso DESC. T2: JOIN entre tutor e pet, GROUP BY no tutor e HAVING COUNT(...) >= 2 (filtro depois de agrupar). T3: UPDATE ... SET valor = valor * 1.10 WHERE servico = 'Banho e tosa' (no Workbench, com Safe Updates ligado, é preciso SET SQL_SAFE_UPDATES = 0 antes, porque servico não é chave). T4: INSERT INTO tutor (nome, telefone, cidade) VALUES (...); o id é gerado pelo AUTO_INCREMENT."
+    },
+    {
+      "tipo": "sql",
+      "peso": 3,
+      "enunciado": "A biblioteca da escola usa o banco biblioteca, com as tabelas autor, livro e emprestimo. Um empréstimo sem data_devolucao (NULL) ainda não foi devolvido. Use a Bancada SQL: escreva o SQL de cada tarefa na aba dela e execute para conferir. Cada tarefa é corrigida separadamente, sempre a partir da base original (o botão ↺ Restaurar base volta os dados ao início).",
+      "banco": {
+        "nome": "biblioteca",
+        "setup": "CREATE TABLE autor (\n  id_autor INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(80) NOT NULL,\n  pais VARCHAR(40) NOT NULL\n);\nCREATE TABLE livro (\n  id_livro INT AUTO_INCREMENT PRIMARY KEY,\n  titulo VARCHAR(120) NOT NULL,\n  ano_publicacao INT,\n  genero VARCHAR(30),\n  id_autor INT NOT NULL,\n  exemplares INT DEFAULT 1,\n  CONSTRAINT fk_livro_autor FOREIGN KEY (id_autor) REFERENCES autor(id_autor)\n);\nCREATE TABLE emprestimo (\n  id_emprestimo INT AUTO_INCREMENT PRIMARY KEY,\n  id_livro INT NOT NULL,\n  aluno VARCHAR(80) NOT NULL,\n  data_emprestimo DATE NOT NULL,\n  data_devolucao DATE NULL,\n  CONSTRAINT fk_emp_livro FOREIGN KEY (id_livro) REFERENCES livro(id_livro)\n);\nINSERT INTO autor VALUES\n (1,'Machado de Assis','Brasil'),(2,'Clarice Lispector','Brasil'),(3,'J. K. Rowling','Reino Unido'),\n (4,'George Orwell','Reino Unido'),(5,'Gabriel García Márquez','Colômbia'),(6,'Mauricio de Sousa','Brasil'),\n (7,'Rick Riordan','Estados Unidos'),(8,'Suzanne Collins','Estados Unidos');\nINSERT INTO livro VALUES\n (1,'Dom Casmurro',1899,'Romance',1,3),\n (2,'Memórias Póstumas de Brás Cubas',1881,'Romance',1,2),\n (3,'A Hora da Estrela',1977,'Romance',2,2),\n (4,'Harry Potter e a Pedra Filosofal',1997,'Fantasia',3,5),\n (5,'Harry Potter e a Câmara Secreta',1998,'Fantasia',3,4),\n (6,'1984',1949,'Distopia',4,3),\n (7,'A Revolução dos Bichos',1945,'Fábula',4,2),\n (8,'Cem Anos de Solidão',1967,'Romance',5,2),\n (9,'Turma da Mônica Jovem',2008,'Quadrinhos',6,6),\n (10,'Percy Jackson e o Ladrão de Raios',2005,'Fantasia',7,4),\n (11,'Jogos Vorazes',2008,'Distopia',8,5),\n (12,'A Cantiga dos Pássaros e das Serpentes',2020,'Distopia',8,1);\nINSERT INTO emprestimo VALUES\n (1,4,'Lucas Martins','2025-02-03','2025-02-17'),\n (2,9,'Beatriz Souza','2025-02-05','2025-02-12'),\n (3,1,'Pedro Henrique','2025-02-10','2025-02-28'),\n (4,11,'Júlia Castro','2025-02-14',NULL),\n (5,6,'Lucas Martins','2025-02-20','2025-03-06'),\n (6,10,'Rafael Nunes','2025-03-01',NULL),\n (7,4,'Camila Rocha','2025-03-03',NULL),\n (8,3,'Beatriz Souza','2025-03-05','2025-03-19'),\n (9,12,'Pedro Henrique','2025-03-08',NULL),\n (10,8,'Júlia Castro','2025-03-10','2025-03-24'),\n (11,5,'Rafael Nunes','2025-03-12','2025-03-26'),\n (12,9,'Camila Rocha','2025-03-15',NULL);"
+      },
+      "tarefas": [
+        {
+          "id": "t1",
+          "tipo": "consulta",
+          "texto": "Liste os títulos dos livros publicados ANTES do ano 2000, em ordem alfabética de título."
+        },
+        {
+          "id": "t2",
+          "tipo": "consulta",
+          "texto": "Mostre o título do livro e o nome do aluno de todos os empréstimos que ainda NÃO foram devolvidos."
+        },
+        {
+          "id": "t3",
+          "tipo": "alteracao",
+          "texto": "O empréstimo número 7 foi devolvido hoje. Registre a data de devolução 2025-03-20 nesse empréstimo.",
+          "verificacao": "SELECT id_emprestimo, data_devolucao FROM emprestimo ORDER BY id_emprestimo;"
+        },
+        {
+          "id": "t4",
+          "tipo": "consulta",
+          "texto": "Quantos livros (títulos) o acervo tem de autores de cada país? Mostre o país e a quantidade."
+        }
+      ],
+      "gabarito": {
+        "tarefas": {
+          "t1": {
+            "sql": "SELECT titulo FROM livro WHERE ano_publicacao < 2000 ORDER BY titulo;",
+            "ordemImporta": true
+          },
+          "t2": {
+            "sql": "SELECT l.titulo, e.aluno\nFROM emprestimo e JOIN livro l ON l.id_livro = e.id_livro\nWHERE e.data_devolucao IS NULL;",
+            "ordemImporta": false
+          },
+          "t3": {
+            "sql": "UPDATE emprestimo SET data_devolucao = '2025-03-20' WHERE id_emprestimo = 7;",
+            "ordemImporta": false
+          },
+          "t4": {
+            "sql": "SELECT a.pais, COUNT(*) AS qtd_livros\nFROM livro l JOIN autor a ON a.id_autor = l.id_autor\nGROUP BY a.pais;",
+            "ordemImporta": false
+          }
+        }
+      },
+      "explicacao": "T1: WHERE ano_publicacao < 2000 com ORDER BY titulo. T2: JOIN emprestimo × livro e o teste de nulo é IS NULL (nunca = NULL). T3: UPDATE com WHERE na chave primária (id_emprestimo = 7). T4: JOIN livro × autor e GROUP BY a.pais com COUNT(*)."
+    },
+    {
+      "tipo": "sql",
+      "peso": 3,
+      "enunciado": "A Oficina Motor Forte controla os serviços no banco oficina: cliente, veiculo (a placa é a chave primária) e ordem_servico (cada serviço tem valor de peças e de mão de obra separados). Use a Bancada SQL: escreva o SQL de cada tarefa na aba dela e execute para conferir. Cada tarefa é corrigida separadamente, sempre a partir da base original (o botão ↺ Restaurar base volta os dados ao início).",
+      "banco": {
+        "nome": "oficina",
+        "setup": "CREATE TABLE cliente (\n  id_cliente INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(80) NOT NULL,\n  telefone VARCHAR(20)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;\nCREATE TABLE veiculo (\n  placa CHAR(7) PRIMARY KEY,\n  modelo VARCHAR(40) NOT NULL,\n  ano INT NOT NULL,\n  id_cliente INT NOT NULL,\n  FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;\nCREATE TABLE ordem_servico (\n  id_os INT AUTO_INCREMENT PRIMARY KEY,\n  placa CHAR(7) NOT NULL,\n  descricao VARCHAR(100) NOT NULL,\n  valor_pecas DECIMAL(10,2) NOT NULL DEFAULT 0,\n  valor_mao_obra DECIMAL(10,2) NOT NULL DEFAULT 0,\n  status ENUM('aberta','em andamento','concluida') NOT NULL DEFAULT 'aberta',\n  data_entrada DATE NOT NULL,\n  FOREIGN KEY (placa) REFERENCES veiculo(placa)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;\nINSERT INTO cliente VALUES\n (1,'Marcos Pereira','(15) 99111-2233'),(2,'Sandra Lima','(15) 99222-3344'),(3,'João Batista','(15) 99333-4455'),\n (4,'Patrícia Gomes','(15) 99444-5566'),(5,'Ricardo Alves','(15) 99555-6677'),(6,'Tatiane Moraes','(15) 99666-7788'),\n (7,'Vinícius Prado','(15) 99777-8899'),(8,'Wesley Duarte','(15) 99888-9900');\nINSERT INTO veiculo VALUES\n ('ABC1D23','Gol',2015,1),('BRA2E19','Onix',2020,2),('CDE3F45','HB20',2019,3),('DFG4H56','Corolla',2022,4),\n ('EGH5I67','Uno',2012,5),('FHI6J78','Civic',2018,6),('GIJ7K89','Kwid',2021,7),('HJK8L90','Strada',2023,8),\n ('IKL9M01','Sandero',2018,2),('JLM0N12','Fiesta',2016,5);\nINSERT INTO ordem_servico VALUES\n (1,'ABC1D23','Troca de óleo e filtro',85.00,60.00,'concluida','2025-04-01'),\n (2,'BRA2E19','Alinhamento e balanceamento',0.00,120.00,'concluida','2025-04-02'),\n (3,'CDE3F45','Troca de pastilhas de freio',180.00,90.00,'concluida','2025-04-03'),\n (4,'DFG4H56','Revisão de 40 mil km',450.00,250.00,'em andamento','2025-04-05'),\n (5,'EGH5I67','Troca de embreagem',620.00,300.00,'concluida','2025-04-06'),\n (6,'FHI6J78','Troca de bateria',520.00,40.00,'concluida','2025-04-08'),\n (7,'GIJ7K89','Diagnóstico elétrico',0.00,150.00,'aberta','2025-04-10'),\n (8,'HJK8L90','Troca de pneus',1600.00,80.00,'em andamento','2025-04-11'),\n (9,'IKL9M01','Troca de amortecedores',780.00,220.00,'concluida','2025-04-12'),\n (10,'JLM0N12','Limpeza de bicos',60.00,110.00,'concluida','2025-04-14'),\n (11,'ABC1D23','Troca de correia dentada',260.00,180.00,'aberta','2025-04-15'),\n (12,'BRA2E19','Higienização do ar-condicionado',45.00,70.00,'concluida','2025-04-16');"
+      },
+      "tarefas": [
+        {
+          "id": "t1",
+          "tipo": "consulta",
+          "texto": "Mostre a placa, o modelo e o ano dos veículos fabricados de 2018 em diante, do mais novo para o mais antigo. Quando o ano empatar, ordene pela placa."
+        },
+        {
+          "id": "t2",
+          "tipo": "consulta",
+          "texto": "Para cada ordem de serviço com status 'concluida', mostre o id_os e o valor total (peças + mão de obra), do maior total para o menor."
+        },
+        {
+          "id": "t3",
+          "tipo": "alteracao",
+          "texto": "A ordem de serviço número 4 terminou. Mude o status dela para 'concluida'.",
+          "verificacao": "SELECT id_os, status FROM ordem_servico ORDER BY id_os;"
+        },
+        {
+          "id": "t4",
+          "tipo": "alteracao",
+          "texto": "Crie a tabela mecanico com as colunas: id_mecanico (inteiro, chave primária, AUTO_INCREMENT), nome (texto de até 60 caracteres, obrigatório) e especialidade (texto de até 40 caracteres, opcional).",
+          "verificacao": "INSERT INTO mecanico (nome, especialidade) VALUES ('Teste Um', 'Freios');\nINSERT INTO mecanico (nome) VALUES ('Teste Dois');\nSELECT id_mecanico, nome, especialidade FROM mecanico ORDER BY id_mecanico;"
+        }
+      ],
+      "gabarito": {
+        "tarefas": {
+          "t1": {
+            "sql": "SELECT placa, modelo, ano FROM veiculo WHERE ano >= 2018 ORDER BY ano DESC, placa;",
+            "ordemImporta": true
+          },
+          "t2": {
+            "sql": "SELECT id_os, valor_pecas + valor_mao_obra AS total\nFROM ordem_servico\nWHERE status = 'concluida'\nORDER BY total DESC;",
+            "ordemImporta": true
+          },
+          "t3": {
+            "sql": "UPDATE ordem_servico SET status = 'concluida' WHERE id_os = 4;",
+            "ordemImporta": false
+          },
+          "t4": {
+            "sql": "CREATE TABLE mecanico (\n  id_mecanico INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(60) NOT NULL,\n  especialidade VARCHAR(40)\n);",
+            "ordemImporta": false
+          }
+        }
+      },
+      "explicacao": "T1: WHERE ano >= 2018 e ORDER BY com dois critérios (ano DESC, placa). T2: coluna calculada (valor_pecas + valor_mao_obra) com apelido, filtro por status e ORDER BY no apelido. T3: UPDATE pela chave id_os. T4: CREATE TABLE com INT AUTO_INCREMENT PRIMARY KEY, VARCHAR(60) NOT NULL e VARCHAR(40) que aceita nulo."
+    },
+    {
+      "tipo": "sql",
+      "peso": 3,
+      "enunciado": "A academia Corpo em Movimento usa o banco academia: plano (com a mensalidade), aluno (ativo = 1 significa que está ativo; 0, inativo) e checkin (cada entrada do aluno na academia, com data e hora). Use a Bancada SQL: escreva o SQL de cada tarefa na aba dela e execute para conferir. Cada tarefa é corrigida separadamente, sempre a partir da base original (o botão ↺ Restaurar base volta os dados ao início).",
+      "banco": {
+        "nome": "academia",
+        "setup": "CREATE TABLE plano (\n  id_plano INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(30) NOT NULL UNIQUE,\n  mensalidade DECIMAL(8,2) NOT NULL,\n  duracao_meses INT NOT NULL\n);\nCREATE TABLE aluno (\n  id_aluno INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(80) NOT NULL,\n  data_matricula DATE NOT NULL,\n  id_plano INT NOT NULL,\n  ativo TINYINT(1) NOT NULL DEFAULT 1,\n  FOREIGN KEY (id_plano) REFERENCES plano(id_plano)\n);\nCREATE TABLE checkin (\n  id_checkin INT AUTO_INCREMENT PRIMARY KEY,\n  id_aluno INT NOT NULL,\n  data_hora DATETIME NOT NULL,\n  FOREIGN KEY (id_aluno) REFERENCES aluno(id_aluno)\n);\nINSERT INTO plano VALUES (1,'Mensal',119.90,1),(2,'Trimestral',99.90,3),(3,'Semestral',89.90,6),(4,'Anual',79.90,12);\nINSERT INTO aluno VALUES\n (1,'Amanda Costa','2024-08-15',1,1),(2,'Bruno Teixeira','2025-01-10',2,1),(3,'Caio Ramos','2025-02-03',4,1),\n (4,'Daniela Freitas','2024-11-20',3,0),(5,'Eduardo Pires','2025-03-12',1,1),(6,'Fernanda Luz','2025-01-25',4,1),\n (7,'Gustavo Melo','2024-05-30',2,1),(8,'Helena Duarte','2025-04-02',3,1),(9,'Igor Santana','2025-02-18',1,0),\n (10,'Juliana Prado','2025-03-28',4,1),(11,'Kevin Araújo','2024-12-01',2,1),(12,'Larissa Moura','2025-05-06',1,1);\nINSERT INTO checkin VALUES\n (1,1,'2025-02-27 07:10:00'),(2,2,'2025-03-01 18:30:00'),(3,3,'2025-03-01 19:05:00'),(4,1,'2025-03-03 07:15:00'),\n (5,5,'2025-03-05 12:00:00'),(6,2,'2025-03-08 18:20:00'),(7,6,'2025-03-10 06:50:00'),(8,8,'2025-03-15 17:45:00'),\n (9,1,'2025-03-20 07:05:00'),(10,10,'2025-03-31 20:10:00'),(11,3,'2025-04-01 19:00:00'),(12,12,'2025-04-02 08:30:00'),\n (13,5,'2025-04-05 12:10:00'),(14,2,'2025-04-07 18:40:00');"
+      },
+      "tarefas": [
+        {
+          "id": "t1",
+          "tipo": "consulta",
+          "texto": "Liste o nome dos alunos ATIVOS que se matricularam no ano de 2025, em ordem alfabética."
+        },
+        {
+          "id": "t2",
+          "tipo": "consulta",
+          "texto": "Mostre o nome de cada plano e quanto ele arrecada por mês: a soma das mensalidades dos alunos ATIVOS daquele plano. Ordene do maior valor para o menor."
+        },
+        {
+          "id": "t3",
+          "tipo": "alteracao",
+          "texto": "Desative (ativo = 0) todos os alunos que nunca fizeram nenhum check-in.",
+          "verificacao": "SELECT id_aluno, ativo FROM aluno ORDER BY id_aluno;"
+        },
+        {
+          "id": "t4",
+          "tipo": "consulta",
+          "texto": "Quantos check-ins foram feitos no mês de março de 2025? Mostre só o número."
+        }
+      ],
+      "gabarito": {
+        "tarefas": {
+          "t1": {
+            "sql": "SELECT nome FROM aluno WHERE ativo = 1 AND YEAR(data_matricula) = 2025 ORDER BY nome;",
+            "ordemImporta": true
+          },
+          "t2": {
+            "sql": "SELECT p.nome, SUM(p.mensalidade) AS arrecadacao\nFROM plano p JOIN aluno a ON a.id_plano = p.id_plano\nWHERE a.ativo = 1\nGROUP BY p.id_plano, p.nome\nORDER BY arrecadacao DESC;",
+            "ordemImporta": true
+          },
+          "t3": {
+            "sql": "UPDATE aluno SET ativo = 0\nWHERE id_aluno NOT IN (SELECT id_aluno FROM checkin);",
+            "ordemImporta": false
+          },
+          "t4": {
+            "sql": "SELECT COUNT(*) FROM checkin WHERE YEAR(data_hora) = 2025 AND MONTH(data_hora) = 3;",
+            "ordemImporta": false
+          }
+        }
+      },
+      "explicacao": "T1: dois filtros com AND; YEAR(data_matricula) = 2025 (ou BETWEEN '2025-01-01' AND '2025-12-31'). T2: JOIN plano × aluno, WHERE ativo = 1, GROUP BY plano e SUM(mensalidade), ordenado pela soma. T3: UPDATE com subconsulta NOT IN (SELECT id_aluno FROM checkin). T4: COUNT(*) com YEAR/MONTH; cuidado: BETWEEN '2025-03-01' AND '2025-03-31' perde o check-in de 31/03 às 20h10, porque a coluna tem hora."
+    },
+    {
+      "tipo": "sql",
+      "peso": 3,
+      "enunciado": "O Cine Estrela guarda a programação no banco cinema: filme (duração em minutos e classificação indicativa), sala e sessao (cada sessão tem preço do ingresso e quantos ingressos foram vendidos). Use a Bancada SQL: escreva o SQL de cada tarefa na aba dela e execute para conferir. Cada tarefa é corrigida separadamente, sempre a partir da base original (o botão ↺ Restaurar base volta os dados ao início).",
+      "banco": {
+        "nome": "cinema",
+        "setup": "CREATE TABLE filme (\n  id_filme INT AUTO_INCREMENT PRIMARY KEY,\n  titulo VARCHAR(80) NOT NULL,\n  genero VARCHAR(30) NOT NULL,\n  duracao_min INT NOT NULL,\n  classificacao INT NOT NULL\n);\nCREATE TABLE sala (\n  id_sala INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(20) NOT NULL,\n  capacidade INT NOT NULL,\n  tipo ENUM('2D','3D','IMAX') NOT NULL DEFAULT '2D'\n);\nCREATE TABLE sessao (\n  id_sessao INT AUTO_INCREMENT PRIMARY KEY,\n  id_filme INT NOT NULL,\n  id_sala INT NOT NULL,\n  data_hora DATETIME NOT NULL,\n  preco_ingresso DECIMAL(6,2) NOT NULL,\n  ingressos_vendidos INT NOT NULL DEFAULT 0,\n  FOREIGN KEY (id_filme) REFERENCES filme(id_filme),\n  FOREIGN KEY (id_sala) REFERENCES sala(id_sala)\n);\nINSERT INTO filme VALUES\n (1,'Aventura no Espaço','Ficção',128,10),(2,'O Último Samurai do Bairro','Comédia',95,12),\n (3,'Sombras da Noite','Terror',102,18),(4,'Correndo Contra o Tempo','Ação',134,14),\n (5,'Pequenos Heróis','Animação',88,0),(6,'Código Secreto','Suspense',117,16),\n (7,'Lendas do Sertão','Drama',141,12),(8,'A Casa do Lago Escuro','Terror',97,18),\n (9,'Robôs em Festa','Animação',92,0),(10,'Missão Oceano','Aventura',121,10);\nINSERT INTO sala VALUES (1,'Sala 1',120,'2D'),(2,'Sala 2',90,'2D'),(3,'Sala 3',150,'3D'),(4,'Sala 4',200,'IMAX'),(5,'Sala 5',80,'2D');\nINSERT INTO sessao VALUES\n (1,1,4,'2025-06-13 19:00:00',42.00,180),(2,5,1,'2025-06-13 14:00:00',24.00,95),\n (3,3,2,'2025-06-13 22:00:00',28.00,60),(4,4,3,'2025-06-14 16:30:00',34.00,130),\n (5,9,1,'2025-06-14 14:00:00',24.00,110),(6,7,5,'2025-06-14 20:00:00',26.00,45),\n (7,1,4,'2025-06-14 21:00:00',42.00,195),(8,6,2,'2025-06-15 19:30:00',28.00,70),\n (9,2,1,'2025-06-15 17:00:00',24.00,88),(10,10,3,'2025-06-15 15:00:00',34.00,120),\n (11,8,2,'2025-06-15 22:30:00',28.00,85),(12,5,1,'2025-06-15 10:00:00',20.00,100),\n (13,4,4,'2025-06-15 20:30:00',42.00,160),(14,3,5,'2025-06-14 23:00:00',26.00,40);"
+      },
+      "tarefas": [
+        {
+          "id": "t1",
+          "tipo": "consulta",
+          "texto": "Liste o título e a duração dos filmes que têm mais de 120 minutos OU classificação 18, do mais longo para o mais curto."
+        },
+        {
+          "id": "t2",
+          "tipo": "consulta",
+          "texto": "Mostre o título do filme, o nome da sala e a data/hora de todas as sessões do dia 14/06/2025."
+        },
+        {
+          "id": "t3",
+          "tipo": "consulta",
+          "texto": "Quanto cada filme arrecadou no total? (arrecadação = preço do ingresso × ingressos vendidos, somando todas as sessões do filme). Mostre o título e o total."
+        },
+        {
+          "id": "t4",
+          "tipo": "alteracao",
+          "texto": "A sala de id 3 foi reformada: agora ela é do tipo 'IMAX' e tem capacidade para 180 pessoas. Atualize os dois dados.",
+          "verificacao": "SELECT id_sala, nome, capacidade, tipo FROM sala ORDER BY id_sala;"
+        }
+      ],
+      "gabarito": {
+        "tarefas": {
+          "t1": {
+            "sql": "SELECT titulo, duracao_min FROM filme WHERE duracao_min > 120 OR classificacao = 18 ORDER BY duracao_min DESC;",
+            "ordemImporta": true
+          },
+          "t2": {
+            "sql": "SELECT f.titulo, sa.nome, s.data_hora\nFROM sessao s\nJOIN filme f ON f.id_filme = s.id_filme\nJOIN sala sa ON sa.id_sala = s.id_sala\nWHERE DATE(s.data_hora) = '2025-06-14';",
+            "ordemImporta": false
+          },
+          "t3": {
+            "sql": "SELECT f.titulo, SUM(s.preco_ingresso * s.ingressos_vendidos) AS arrecadacao\nFROM filme f JOIN sessao s ON s.id_filme = f.id_filme\nGROUP BY f.id_filme, f.titulo;",
+            "ordemImporta": false
+          },
+          "t4": {
+            "sql": "UPDATE sala SET tipo = 'IMAX', capacidade = 180 WHERE id_sala = 3;",
+            "ordemImporta": false
+          }
+        }
+      },
+      "explicacao": "T1: condição com OR (duracao_min > 120 OR classificacao = 18) e ORDER BY DESC. T2: JOIN de três tabelas (sessao, filme, sala) filtrando DATE(data_hora) = '2025-06-14'. T3: SUM de uma expressão (preco_ingresso * ingressos_vendidos) agrupando por filme. T4: um único UPDATE pode alterar duas colunas: SET tipo = 'IMAX', capacidade = 180 WHERE id_sala = 3."
+    },
+    {
+      "tipo": "sql",
+      "peso": 3,
+      "enunciado": "A hamburgueria Brasa & Pão registra as vendas no banco hamburgueria: produto, pedido e item_pedido (cada linha diz qual produto entrou em qual pedido e em que quantidade). Use a Bancada SQL: escreva o SQL de cada tarefa na aba dela e execute para conferir. Cada tarefa é corrigida separadamente, sempre a partir da base original (o botão ↺ Restaurar base volta os dados ao início).",
+      "banco": {
+        "nome": "hamburgueria",
+        "setup": "CREATE TABLE produto (\n  id_produto INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(60) NOT NULL,\n  categoria ENUM('lanche','bebida','porcao','sobremesa') NOT NULL,\n  preco DECIMAL(6,2) NOT NULL\n) ENGINE=InnoDB;\nCREATE TABLE pedido (\n  id_pedido INT AUTO_INCREMENT PRIMARY KEY,\n  cliente VARCHAR(60) NOT NULL,\n  data_pedido DATE NOT NULL,\n  forma_pagamento VARCHAR(20) NOT NULL\n) ENGINE=InnoDB;\nCREATE TABLE item_pedido (\n  id_item INT AUTO_INCREMENT PRIMARY KEY,\n  id_pedido INT NOT NULL,\n  id_produto INT NOT NULL,\n  quantidade INT NOT NULL DEFAULT 1,\n  FOREIGN KEY (id_pedido) REFERENCES pedido(id_pedido),\n  FOREIGN KEY (id_produto) REFERENCES produto(id_produto)\n) ENGINE=InnoDB;\nINSERT INTO produto VALUES\n (1,'X-Burguer','lanche',22.90),(2,'X-Salada','lanche',24.90),(3,'X-Bacon','lanche',28.50),\n (4,'Smash Duplo','lanche',32.00),(5,'Veggie Burguer','lanche',26.00),(6,'Refrigerante lata','bebida',6.50),\n (7,'Suco natural','bebida',9.00),(8,'Água mineral','bebida',4.00),(9,'Batata frita','porcao',18.00),\n (10,'Nuggets','porcao',21.00),(11,'Brownie','sobremesa',14.00),(12,'Pudim','sobremesa',12.50),\n (13,'Mini Burguer','lanche',19.90),(14,'X-Tudo','lanche',30.00);\nINSERT INTO pedido VALUES\n (1,'Lucas','2025-05-02','pix'),(2,'Marina','2025-05-02','cartao'),(3,'Otávio','2025-05-03','dinheiro'),\n (4,'Paula','2025-05-03','pix'),(5,'Renan','2025-05-04','cartao'),(6,'Sabrina','2025-05-04','pix'),\n (7,'Tiago','2025-05-05','cartao'),(8,'Úrsula','2025-05-05','pix'),(9,'Vitor','2025-05-06','dinheiro'),\n (10,'Yasmin','2025-05-06','cartao');\nINSERT INTO item_pedido VALUES\n (1,1,1,2),(2,1,6,2),(3,2,4,1),(4,2,9,1),(5,3,3,1),(6,3,7,1),(7,4,2,2),(8,5,4,2),\n (9,5,10,1),(10,5,6,3),(11,6,11,2),(12,7,1,1),(13,8,9,2),(14,9,14,1),(15,10,6,1);"
+      },
+      "tarefas": [
+        {
+          "id": "t1",
+          "tipo": "consulta",
+          "texto": "Liste o nome e o preço dos produtos da categoria 'lanche' que custam de R$ 20,00 a R$ 30,00 (incluindo os dois valores), do mais barato para o mais caro."
+        },
+        {
+          "id": "t2",
+          "tipo": "consulta",
+          "texto": "Mostre o nome de cada produto e a quantidade total vendida dele (somando todos os pedidos), apenas para os produtos que venderam 3 unidades ou mais."
+        },
+        {
+          "id": "t3",
+          "tipo": "alteracao",
+          "texto": "Cadastre dois produtos novos: 'Milk-shake de morango' (categoria sobremesa, R$ 18,90) e 'Onion rings' (categoria porcao, R$ 22,50).",
+          "verificacao": "SELECT nome, categoria, preco FROM produto ORDER BY id_produto;"
+        },
+        {
+          "id": "t4",
+          "tipo": "consulta",
+          "texto": "Qual é o valor total do pedido número 5? (some quantidade × preço de cada item do pedido). Mostre só o valor."
+        }
+      ],
+      "gabarito": {
+        "tarefas": {
+          "t1": {
+            "sql": "SELECT nome, preco FROM produto\nWHERE categoria = 'lanche' AND preco BETWEEN 20 AND 30\nORDER BY preco;",
+            "ordemImporta": true
+          },
+          "t2": {
+            "sql": "SELECT p.nome, SUM(i.quantidade) AS total_vendido\nFROM produto p JOIN item_pedido i ON i.id_produto = p.id_produto\nGROUP BY p.id_produto, p.nome\nHAVING SUM(i.quantidade) >= 3;",
+            "ordemImporta": false
+          },
+          "t3": {
+            "sql": "INSERT INTO produto (nome, categoria, preco) VALUES\n ('Milk-shake de morango', 'sobremesa', 18.90),\n ('Onion rings', 'porcao', 22.50);",
+            "ordemImporta": false
+          },
+          "t4": {
+            "sql": "SELECT SUM(i.quantidade * p.preco) AS total\nFROM item_pedido i JOIN produto p ON p.id_produto = i.id_produto\nWHERE i.id_pedido = 5;",
+            "ordemImporta": false
+          }
+        }
+      },
+      "explicacao": "T1: BETWEEN 20 AND 30 inclui os limites; combinado com categoria = 'lanche' e ORDER BY preco. T2: JOIN produto × item_pedido, GROUP BY produto, SUM(quantidade) e HAVING >= 3. T3: um INSERT com duas linhas em VALUES (...), (...). T4: SUM(quantidade * preco) com JOIN e WHERE id_pedido = 5 (resultado 104,50)."
+    },
+    {
+      "tipo": "sql",
+      "peso": 3,
+      "enunciado": "A Clínica Veterinária Bicho Bom usa o banco clinica_vet: veterinario, animal e consulta (cada consulta liga um animal a um veterinário, com data, motivo e valor). Use a Bancada SQL: escreva o SQL de cada tarefa na aba dela e execute para conferir. Cada tarefa é corrigida separadamente, sempre a partir da base original (o botão ↺ Restaurar base volta os dados ao início).",
+      "banco": {
+        "nome": "clinica_vet",
+        "setup": "CREATE TABLE veterinario (\n  id_vet INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(60) NOT NULL,\n  crmv VARCHAR(12) NOT NULL UNIQUE,\n  especialidade VARCHAR(40)\n);\nCREATE TABLE animal (\n  id_animal INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(40) NOT NULL,\n  especie VARCHAR(30) NOT NULL,\n  dono VARCHAR(60) NOT NULL,\n  nascimento DATE\n);\nCREATE TABLE consulta (\n  id_consulta INT AUTO_INCREMENT PRIMARY KEY,\n  id_animal INT NOT NULL,\n  id_vet INT NOT NULL,\n  data_consulta DATE NOT NULL,\n  motivo VARCHAR(60),\n  valor DECIMAL(8,2) NOT NULL,\n  FOREIGN KEY (id_animal) REFERENCES animal(id_animal),\n  FOREIGN KEY (id_vet) REFERENCES veterinario(id_vet)\n);\nINSERT INTO veterinario VALUES\n (1,'Dra. Paula Martins','SP-12345','Clínica geral'),(2,'Dr. Renato Silva','SP-23456','Cirurgia'),\n (3,'Dra. Sofia Nakamura','SP-34567','Dermatologia'),(4,'Dr. Tiago Ferreira','SP-45678','Animais exóticos'),\n (5,'Dra. Úrsula Campos','SP-56789','Cardiologia'),(6,'Dr. Victor Hugo','SP-67890','Ortopedia'),\n (7,'Dra. Wanda Reis','SP-78901','Oftalmologia');\nINSERT INTO animal VALUES\n (1,'Bidu','Cachorro','Ana Lima','2016-04-12'),(2,'Salem','Gato','Bruno Dias','2019-10-31'),\n (3,'Pandora','Gato','Carla Reis','2021-02-14'),(4,'Zeca','Papagaio','Davi Souza','2012-07-07'),\n (5,'Fumaça','Cachorro','Elaine Prado','2020-06-01'),(6,'Nemo','Peixe','Fábio Nunes','2023-01-20'),\n (7,'Spike','Iguana','Gisele Paz','2018-09-15'),(8,'Amora','Coelho','Hugo Lemos','2022-03-03'),\n (9,'Duque','Cachorro','Iara Matos','2019-12-24'),(10,'Lola','Gato','Joana Brito','2024-05-05');\nINSERT INTO consulta VALUES\n (1,1,1,'2025-07-01','Vacina anual',120.00),(2,2,3,'2025-07-03','Alergia de pele',180.00),\n (3,4,4,'2025-07-05','Corte de bico',150.00),(4,5,2,'2025-07-10','Castração',450.00),\n (5,3,1,'2025-07-12','Check-up',130.00),(6,7,4,'2025-07-18','Troca de pele',160.00),\n (7,9,5,'2025-07-22','Sopro no coração',280.00),(8,1,2,'2025-08-02','Retirada de tumor',900.00),\n (9,8,1,'2025-08-15','Dente quebrado',140.00),(10,10,1,'2025-09-02','Primeira consulta',110.00),\n (11,6,4,'2025-09-10','Nadadeira machucada',95.00),(12,2,3,'2025-09-15','Retorno dermatologia',90.00);"
+      },
+      "tarefas": [
+        {
+          "id": "t1",
+          "tipo": "consulta",
+          "texto": "Mostre o nome e a espécie dos animais nascidos a partir de 2020, ordenados pela data de nascimento (o mais velho primeiro)."
+        },
+        {
+          "id": "t2",
+          "tipo": "consulta",
+          "texto": "Para cada veterinário que já atendeu, mostre o nome e o valor MÉDIO das suas consultas, arredondado para 2 casas decimais."
+        },
+        {
+          "id": "t3",
+          "tipo": "alteracao",
+          "texto": "A clínica vai fechar para reforma: apague todas as consultas marcadas para DEPOIS de 31/08/2025.",
+          "verificacao": "SELECT id_consulta FROM consulta ORDER BY id_consulta;"
+        },
+        {
+          "id": "t4",
+          "tipo": "consulta",
+          "texto": "Quais veterinários ainda NÃO atenderam nenhuma consulta? Mostre apenas o nome deles."
+        }
+      ],
+      "gabarito": {
+        "tarefas": {
+          "t1": {
+            "sql": "SELECT nome, especie FROM animal WHERE nascimento >= '2020-01-01' ORDER BY nascimento;",
+            "ordemImporta": true
+          },
+          "t2": {
+            "sql": "SELECT v.nome, ROUND(AVG(c.valor), 2) AS media\nFROM veterinario v JOIN consulta c ON c.id_vet = v.id_vet\nGROUP BY v.id_vet, v.nome;",
+            "ordemImporta": false
+          },
+          "t3": {
+            "sql": "DELETE FROM consulta WHERE data_consulta > '2025-08-31';",
+            "ordemImporta": false
+          },
+          "t4": {
+            "sql": "SELECT v.nome\nFROM veterinario v LEFT JOIN consulta c ON c.id_vet = v.id_vet\nWHERE c.id_consulta IS NULL;",
+            "ordemImporta": false
+          }
+        }
+      },
+      "explicacao": "T1: datas são comparadas como texto 'AAAA-MM-DD' (nascimento >= '2020-01-01') e ORDER BY nascimento. T2: AVG com ROUND(..., 2) e GROUP BY veterinário (JOIN normal deixa de fora quem não atendeu). T3: DELETE com WHERE data_consulta > '2025-08-31' (Safe Updates exige SET SQL_SAFE_UPDATES = 0 no Workbench). T4: LEFT JOIN + WHERE c.id_consulta IS NULL (ou NOT IN com subconsulta)."
+    },
+    {
+      "tipo": "sql",
+      "peso": 3,
+      "enunciado": "A escola de idiomas Fala Mundo usa o banco idiomas: curso (idioma, nível e mensalidade), estudante e matricula (nota_final fica NULL enquanto o curso não termina). Use a Bancada SQL: escreva o SQL de cada tarefa na aba dela e execute para conferir. Cada tarefa é corrigida separadamente, sempre a partir da base original (o botão ↺ Restaurar base volta os dados ao início).",
+      "banco": {
+        "nome": "idiomas",
+        "setup": "CREATE TABLE curso (\n  id_curso INT AUTO_INCREMENT PRIMARY KEY,\n  idioma VARCHAR(20) NOT NULL,\n  nivel ENUM('basico','intermediario','avancado') NOT NULL,\n  carga_horaria INT NOT NULL,\n  mensalidade DECIMAL(8,2) NOT NULL\n);\nCREATE TABLE estudante (\n  id_estudante INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(80) NOT NULL,\n  email VARCHAR(80) NOT NULL UNIQUE,\n  cidade VARCHAR(40) NOT NULL\n);\nCREATE TABLE matricula (\n  id_matricula INT AUTO_INCREMENT PRIMARY KEY,\n  id_estudante INT NOT NULL,\n  id_curso INT NOT NULL,\n  data_matricula DATE NOT NULL,\n  nota_final DECIMAL(4,1) NULL,\n  FOREIGN KEY (id_estudante) REFERENCES estudante(id_estudante),\n  FOREIGN KEY (id_curso) REFERENCES curso(id_curso)\n);\nINSERT INTO curso VALUES\n (1,'Inglês','basico',60,250.00),(2,'Inglês','intermediario',80,290.00),(3,'Inglês','avancado',80,330.00),\n (4,'Espanhol','basico',60,220.00),(5,'Espanhol','avancado',80,300.00),(6,'Japonês','basico',72,310.00),\n (7,'Francês','basico',60,260.00),(8,'Francês','avancado',90,340.00);\nINSERT INTO estudante VALUES\n (1,'Alice Moreira','alice.m@email.com','Campinas'),(2,'Bernardo Lins','bernardo.l@email.com','Sumaré'),\n (3,'Cecília Paiva','cecilia.p@email.com','Campinas'),(4,'Davi Rezende','davi.r@email.com','Valinhos'),\n (5,'Elena Castro','elena.c@email.com','Campinas'),(6,'Felipe Antunes','felipe.a@email.com','Hortolândia'),\n (7,'Giovana Bastos','giovana.b@email.com','Sumaré'),(8,'Heitor Quintana','heitor.q@email.com','Campinas'),\n (9,'Isabela Fontes','isabela.f@email.com','Valinhos'),(10,'Joaquim Serra','joaquim.s@email.com','Campinas');\nINSERT INTO matricula VALUES\n (1,1,1,'2025-02-01',8.5),(2,1,4,'2025-02-01',9.0),(3,2,2,'2025-02-03',7.0),(4,3,6,'2025-02-05',NULL),\n (5,4,3,'2025-02-07',6.5),(6,5,1,'2025-02-10',9.5),(7,6,7,'2025-02-12',NULL),(8,7,5,'2025-02-15',8.0),\n (9,8,2,'2025-02-18',7.5),(10,9,8,'2025-02-20',NULL),(11,10,6,'2025-02-22',8.8),(12,3,1,'2025-03-01',NULL),\n (13,5,4,'2025-03-03',7.2),(14,2,3,'2025-03-05',NULL);"
+      },
+      "tarefas": [
+        {
+          "id": "t1",
+          "tipo": "consulta",
+          "texto": "Liste o nome e o e-mail dos estudantes que moram em Campinas, em ordem alfabética de nome."
+        },
+        {
+          "id": "t2",
+          "tipo": "consulta",
+          "texto": "Quantas matrículas existem em cada idioma? (some todos os níveis do mesmo idioma). Mostre o idioma e a quantidade."
+        },
+        {
+          "id": "t3",
+          "tipo": "alteracao",
+          "texto": "A mensalidade de todos os cursos de nível 'avancado' baixou R$ 30,00. Faça essa atualização.",
+          "verificacao": "SELECT id_curso, mensalidade FROM curso ORDER BY id_curso;"
+        },
+        {
+          "id": "t4",
+          "tipo": "alteracao",
+          "texto": "Adicione à tabela estudante a coluna telefone (VARCHAR(20)). Depois grave o telefone '19 99876-5432' para o estudante de id 2.",
+          "verificacao": "SELECT id_estudante, telefone FROM estudante ORDER BY id_estudante;"
+        }
+      ],
+      "gabarito": {
+        "tarefas": {
+          "t1": {
+            "sql": "SELECT nome, email FROM estudante WHERE cidade = 'Campinas' ORDER BY nome;",
+            "ordemImporta": true
+          },
+          "t2": {
+            "sql": "SELECT c.idioma, COUNT(*) AS matriculas\nFROM matricula m JOIN curso c ON c.id_curso = m.id_curso\nGROUP BY c.idioma;",
+            "ordemImporta": false
+          },
+          "t3": {
+            "sql": "UPDATE curso SET mensalidade = mensalidade - 30 WHERE nivel = 'avancado';",
+            "ordemImporta": false
+          },
+          "t4": {
+            "sql": "ALTER TABLE estudante ADD COLUMN telefone VARCHAR(20);\nUPDATE estudante SET telefone = '19 99876-5432' WHERE id_estudante = 2;",
+            "ordemImporta": false
+          }
+        }
+      },
+      "explicacao": "T1: WHERE cidade = 'Campinas' com ORDER BY nome. T2: JOIN matricula × curso e GROUP BY c.idioma com COUNT(*). T3: UPDATE ... SET mensalidade = mensalidade - 30 WHERE nivel = 'avancado'. T4: ALTER TABLE estudante ADD COLUMN telefone VARCHAR(20); seguido de UPDATE pela chave id_estudante = 2."
+    },
+    {
+      "tipo": "sql",
+      "peso": 3,
+      "enunciado": "O Hotel Bela Vista usa o banco hotel: quarto (o número do quarto é a chave primária; o primeiro dígito é o andar), hospede e reserva. Use a Bancada SQL: escreva o SQL de cada tarefa na aba dela e execute para conferir. Cada tarefa é corrigida separadamente, sempre a partir da base original (o botão ↺ Restaurar base volta os dados ao início).",
+      "banco": {
+        "nome": "hotel",
+        "setup": "CREATE TABLE quarto (\n  numero INT PRIMARY KEY,\n  tipo ENUM('solteiro','casal','suite') NOT NULL,\n  diaria DECIMAL(8,2) NOT NULL,\n  andar INT NOT NULL\n);\nCREATE TABLE hospede (\n  id_hospede INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(80) NOT NULL,\n  documento VARCHAR(20) NOT NULL,\n  cidade_origem VARCHAR(40)\n);\nCREATE TABLE reserva (\n  id_reserva INT AUTO_INCREMENT PRIMARY KEY,\n  id_hospede INT NOT NULL,\n  numero_quarto INT NOT NULL,\n  check_in DATE NOT NULL,\n  check_out DATE NOT NULL,\n  status ENUM('confirmada','finalizada','cancelada') NOT NULL DEFAULT 'confirmada',\n  FOREIGN KEY (id_hospede) REFERENCES hospede(id_hospede),\n  FOREIGN KEY (numero_quarto) REFERENCES quarto(numero)\n);\nINSERT INTO quarto VALUES\n (101,'solteiro',180.00,1),(102,'casal',240.00,1),(103,'casal',250.00,1),(201,'solteiro',190.00,2),\n (202,'casal',260.00,2),(203,'suite',420.00,2),(204,'casal',255.00,2),(301,'suite',480.00,3),\n (302,'suite',450.00,3),(303,'solteiro',200.00,3);\nINSERT INTO hospede VALUES\n (1,'Adriana Vieira','RG 12.345.678-9','Belo Horizonte'),(2,'Bento Farias','RG 23.456.789-0','Recife'),\n (3,'Clara Monteiro','RG 34.567.890-1','Curitiba'),(4,'Diogo Pacheco','RG 45.678.901-2','Salvador'),\n (5,'Estela Barros','RG 56.789.012-3','Manaus'),(6,'Fausto Lemos','RG 67.890.123-4','Porto Alegre'),\n (7,'Glória Neves','RG 78.901.234-5','Fortaleza'),(8,'Hugo Siqueira','RG 89.012.345-6','Goiânia');\nINSERT INTO reserva VALUES\n (1,1,203,'2025-01-10','2025-01-14','finalizada'),(2,2,101,'2025-01-12','2025-01-13','finalizada'),\n (3,3,302,'2025-01-20','2025-01-27','finalizada'),(4,4,202,'2025-02-01','2025-02-03','finalizada'),\n (5,5,102,'2025-02-05','2025-02-10','finalizada'),(6,6,301,'2025-02-14','2025-02-16','cancelada'),\n (7,7,204,'2025-03-01','2025-03-06','finalizada'),(8,1,303,'2025-03-10','2025-03-12','finalizada'),\n (9,8,203,'2025-06-20','2025-06-25','confirmada'),(10,2,103,'2025-06-22','2025-06-24','confirmada'),\n (11,3,201,'2025-07-01','2025-07-04','confirmada'),(12,4,302,'2025-07-10','2025-07-15','confirmada');"
+      },
+      "tarefas": [
+        {
+          "id": "t1",
+          "tipo": "consulta",
+          "texto": "Liste o número, o tipo e a diária dos quartos do 2º andar, da maior diária para a menor."
+        },
+        {
+          "id": "t2",
+          "tipo": "consulta",
+          "texto": "Para cada reserva com status 'finalizada', mostre o nome do hóspede, o número do quarto e quantas noites ele ficou (use DATEDIFF(check_out, check_in))."
+        },
+        {
+          "id": "t3",
+          "tipo": "consulta",
+          "texto": "Qual é a diária média de cada tipo de quarto? Mostre o tipo e a média."
+        },
+        {
+          "id": "t4",
+          "tipo": "alteracao",
+          "texto": "O hóspede da reserva 9 desistiu. Mude o status dessa reserva para 'cancelada'.",
+          "verificacao": "SELECT id_reserva, status FROM reserva ORDER BY id_reserva;"
+        }
+      ],
+      "gabarito": {
+        "tarefas": {
+          "t1": {
+            "sql": "SELECT numero, tipo, diaria FROM quarto WHERE andar = 2 ORDER BY diaria DESC;",
+            "ordemImporta": true
+          },
+          "t2": {
+            "sql": "SELECT h.nome, r.numero_quarto, DATEDIFF(r.check_out, r.check_in) AS noites\nFROM reserva r JOIN hospede h ON h.id_hospede = r.id_hospede\nWHERE r.status = 'finalizada';",
+            "ordemImporta": false
+          },
+          "t3": {
+            "sql": "SELECT tipo, AVG(diaria) AS media FROM quarto GROUP BY tipo;",
+            "ordemImporta": false
+          },
+          "t4": {
+            "sql": "UPDATE reserva SET status = 'cancelada' WHERE id_reserva = 9;",
+            "ordemImporta": false
+          }
+        }
+      },
+      "explicacao": "T1: WHERE andar = 2 e ORDER BY diaria DESC. T2: JOIN reserva × hospede, WHERE status = 'finalizada' e a função DATEDIFF(check_out, check_in) para contar as noites. T3: GROUP BY tipo com AVG(diaria). T4: UPDATE pela chave id_reserva = 9."
+    },
+    {
+      "tipo": "sql",
+      "peso": 3,
+      "enunciado": "A loja Game Point usa o banco gamestore: plataforma, jogo (com preço e estoque) e venda (quantidade vendida de cada jogo em cada data). Use a Bancada SQL: escreva o SQL de cada tarefa na aba dela e execute para conferir. Cada tarefa é corrigida separadamente, sempre a partir da base original (o botão ↺ Restaurar base volta os dados ao início).",
+      "banco": {
+        "nome": "gamestore",
+        "setup": "CREATE TABLE plataforma (\n  id_plataforma INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(40) NOT NULL,\n  fabricante VARCHAR(40) NOT NULL\n) ENGINE=InnoDB;\nCREATE TABLE jogo (\n  id_jogo INT AUTO_INCREMENT PRIMARY KEY,\n  titulo VARCHAR(60) NOT NULL,\n  genero VARCHAR(20) NOT NULL,\n  preco DECIMAL(7,2) NOT NULL,\n  estoque INT UNSIGNED NOT NULL DEFAULT 0,\n  id_plataforma INT NOT NULL,\n  lancamento DATE,\n  FOREIGN KEY (id_plataforma) REFERENCES plataforma(id_plataforma)\n) ENGINE=InnoDB;\nCREATE TABLE venda (\n  id_venda INT AUTO_INCREMENT PRIMARY KEY,\n  id_jogo INT NOT NULL,\n  data_venda DATE NOT NULL,\n  quantidade INT NOT NULL,\n  FOREIGN KEY (id_jogo) REFERENCES jogo(id_jogo)\n) ENGINE=InnoDB;\nINSERT INTO plataforma VALUES\n (1,'PlayStation 5','Sony'),(2,'Xbox Series X','Microsoft'),(3,'Nintendo Switch','Nintendo'),\n (4,'PC','Vários'),(5,'Mega Drive','Sega'),(6,'Steam Deck','Valve');\nINSERT INTO jogo VALUES\n (1,'Reino Perdido','Aventura',249.90,8,1,'2023-03-10'),(2,'Turbo Rally 7','Corrida',199.90,12,1,'2022-11-04'),\n (3,'Galáxia em Guerra','Ação',299.90,5,2,'2024-02-20'),(4,'Fazendinha Feliz','Simulação',149.90,20,3,'2021-06-15'),\n (5,'Kart dos Amigos','Corrida',279.90,15,3,'2023-09-01'),(6,'Zumbis na Escola','Terror',89.90,3,4,'2019-10-31'),\n (7,'Arena de Heróis','Luta',179.90,9,2,'2022-05-12'),(8,'Cidade Construtora','Simulação',129.90,7,4,'2020-08-08'),\n (9,'Velocidade Máxima','Corrida',159.90,10,4,'2021-01-25'),(10,'Dragão de Cristal','RPG',319.90,4,1,'2024-11-15'),\n (11,'Futebol Total 25','Esporte',289.90,18,2,'2024-09-27'),(12,'Pixel Aventura','Plataforma',59.90,25,4,'2018-04-20');\nINSERT INTO venda VALUES\n (1,1,'2025-04-01',2),(2,2,'2025-04-01',1),(3,6,'2025-04-02',1),(4,5,'2025-04-03',3),\n (5,10,'2025-04-04',1),(6,6,'2025-04-05',2),(7,11,'2025-04-06',2),(8,3,'2025-04-07',1),\n (9,9,'2025-04-08',1),(10,4,'2025-04-09',2),(11,12,'2025-04-10',4),(12,7,'2025-04-11',1);"
+      },
+      "tarefas": [
+        {
+          "id": "t1",
+          "tipo": "consulta",
+          "texto": "Mostre o título e o preço dos 3 jogos MAIS CAROS da loja, do mais caro para o mais barato."
+        },
+        {
+          "id": "t2",
+          "tipo": "consulta",
+          "texto": "Mostre o nome de cada plataforma e quantos jogos ela tem cadastrados. As plataformas sem nenhum jogo também devem aparecer, com 0."
+        },
+        {
+          "id": "t3",
+          "tipo": "alteracao",
+          "texto": "Os jogos do gênero 'Corrida' entraram em promoção: diminua 15% do preço deles.",
+          "verificacao": "SELECT id_jogo, preco FROM jogo ORDER BY id_jogo;"
+        },
+        {
+          "id": "t4",
+          "tipo": "alteracao",
+          "texto": "O jogo de id 6 saiu de linha. Apague as vendas desse jogo e depois apague o próprio jogo.",
+          "verificacao": "SELECT j.id_jogo, (SELECT COUNT(*) FROM venda v WHERE v.id_jogo = j.id_jogo) AS vendas FROM jogo j ORDER BY j.id_jogo;"
+        }
+      ],
+      "gabarito": {
+        "tarefas": {
+          "t1": {
+            "sql": "SELECT titulo, preco FROM jogo ORDER BY preco DESC LIMIT 3;",
+            "ordemImporta": true
+          },
+          "t2": {
+            "sql": "SELECT p.nome, COUNT(j.id_jogo) AS qtd_jogos\nFROM plataforma p LEFT JOIN jogo j ON j.id_plataforma = p.id_plataforma\nGROUP BY p.id_plataforma, p.nome;",
+            "ordemImporta": false
+          },
+          "t3": {
+            "sql": "UPDATE jogo SET preco = preco * 0.85 WHERE genero = 'Corrida';",
+            "ordemImporta": false
+          },
+          "t4": {
+            "sql": "DELETE FROM venda WHERE id_jogo = 6;\nDELETE FROM jogo WHERE id_jogo = 6;",
+            "ordemImporta": false
+          }
+        }
+      },
+      "explicacao": "T1: ORDER BY preco DESC com LIMIT 3. T2: LEFT JOIN plataforma → jogo e COUNT(j.id_jogo) (COUNT(*) contaria 1 para plataforma sem jogo). T3: UPDATE ... SET preco = preco * 0.85 WHERE genero = 'Corrida'. T4: por causa da chave estrangeira, primeiro DELETE FROM venda WHERE id_jogo = 6 e só depois DELETE FROM jogo WHERE id_jogo = 6 (na ordem inversa dá Error Code 1451)."
+    },
+    {
+      "tipo": "sql",
+      "peso": 3,
+      "enunciado": "A Farmácia Saúde Já usa o banco farmacia: laboratorio e medicamento (receita_obrigatoria = 1 quando o remédio só é vendido com receita). Use a Bancada SQL: escreva o SQL de cada tarefa na aba dela e execute para conferir. Cada tarefa é corrigida separadamente, sempre a partir da base original (o botão ↺ Restaurar base volta os dados ao início).",
+      "banco": {
+        "nome": "farmacia",
+        "setup": "CREATE TABLE laboratorio (\n  id_lab INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(60) NOT NULL,\n  pais VARCHAR(30) NOT NULL\n);\nCREATE TABLE medicamento (\n  id_med INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(60) NOT NULL,\n  principio_ativo VARCHAR(60) NOT NULL,\n  preco DECIMAL(8,2) NOT NULL,\n  estoque INT NOT NULL DEFAULT 0,\n  receita_obrigatoria TINYINT(1) NOT NULL DEFAULT 0,\n  id_lab INT NOT NULL,\n  validade DATE NOT NULL,\n  FOREIGN KEY (id_lab) REFERENCES laboratorio(id_lab)\n);\nINSERT INTO laboratorio VALUES\n (1,'Vida Farma','Brasil'),(2,'BioSaúde','Brasil'),(3,'Medlab Global','Alemanha'),(4,'Pharma Andina','Chile'),(5,'NovaGen','Índia');\nINSERT INTO medicamento VALUES\n (1,'Dorzin 500mg','Dipirona',8.90,120,0,1,'2026-03-31'),\n (2,'Febrex 750mg','Paracetamol',12.50,80,0,2,'2025-11-30'),\n (3,'Amoxil Plus','Amoxicilina',34.90,15,1,3,'2025-10-15'),\n (4,'Gastrol 20mg','Omeprazol',19.90,60,0,2,'2026-01-20'),\n (5,'Alergon','Loratadina',15.40,45,0,4,'2025-12-10'),\n (6,'Cardiox 50mg','Losartana',22.00,18,1,1,'2026-06-30'),\n (7,'Glicemin 850','Metformina',17.80,30,1,5,'2025-09-05'),\n (8,'Ansiolin 1mg','Clonazepam',28.60,10,1,3,'2026-02-28'),\n (9,'Vitamax C','Vitamina C',24.90,70,0,4,'2027-01-31'),\n (10,'Tossil xarope','Dextrometorfano',21.30,25,0,2,'2025-12-31'),\n (11,'Inflamex 400','Ibuprofeno',13.70,90,0,5,'2026-08-15'),\n (12,'Pressor 5mg','Anlodipino',16.20,12,1,2,'2026-04-30');"
+      },
+      "tarefas": [
+        {
+          "id": "t1",
+          "tipo": "consulta",
+          "texto": "Liste o nome, o estoque e a validade dos medicamentos que vencem até 31/12/2025, do que vence primeiro para o que vence por último."
+        },
+        {
+          "id": "t2",
+          "tipo": "consulta",
+          "texto": "Mostre o nome de cada laboratório e o valor total em estoque dos seus medicamentos (soma de preço × estoque)."
+        },
+        {
+          "id": "t3",
+          "tipo": "consulta",
+          "texto": "Quais medicamentos exigem receita E têm menos de 20 unidades em estoque? Mostre o nome e o estoque."
+        },
+        {
+          "id": "t4",
+          "tipo": "alteracao",
+          "texto": "Chegou um lote novo: some 50 unidades ao estoque de todos os medicamentos do laboratório de id 2.",
+          "verificacao": "SELECT id_med, estoque FROM medicamento ORDER BY id_med;"
+        }
+      ],
+      "gabarito": {
+        "tarefas": {
+          "t1": {
+            "sql": "SELECT nome, estoque, validade FROM medicamento WHERE validade <= '2025-12-31' ORDER BY validade;",
+            "ordemImporta": true
+          },
+          "t2": {
+            "sql": "SELECT l.nome, SUM(m.preco * m.estoque) AS valor_estoque\nFROM laboratorio l JOIN medicamento m ON m.id_lab = l.id_lab\nGROUP BY l.id_lab, l.nome;",
+            "ordemImporta": false
+          },
+          "t3": {
+            "sql": "SELECT nome, estoque FROM medicamento WHERE receita_obrigatoria = 1 AND estoque < 20;",
+            "ordemImporta": false
+          },
+          "t4": {
+            "sql": "UPDATE medicamento SET estoque = estoque + 50 WHERE id_lab = 2;",
+            "ordemImporta": false
+          }
+        }
+      },
+      "explicacao": "T1: comparação de data validade <= '2025-12-31' e ORDER BY validade. T2: JOIN e SUM(preco * estoque) agrupado por laboratório. T3: duas condições com AND (receita_obrigatoria = 1 AND estoque < 20). T4: UPDATE ... SET estoque = estoque + 50 WHERE id_lab = 2 (id_lab é chave estrangeira, então funciona com Safe Updates ligado)."
+    },
+    {
+      "tipo": "sql",
+      "peso": 3,
+      "enunciado": "A Transportadora Rota Certa usa o banco transportadora: motorista, caminhao e entrega (data_entrega fica NULL enquanto a carga está na estrada). Use a Bancada SQL: escreva o SQL de cada tarefa na aba dela e execute para conferir. Cada tarefa é corrigida separadamente, sempre a partir da base original (o botão ↺ Restaurar base volta os dados ao início).",
+      "banco": {
+        "nome": "transportadora",
+        "setup": "CREATE TABLE motorista (\n  id_motorista INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(60) NOT NULL,\n  cnh_categoria CHAR(1) NOT NULL,\n  cidade VARCHAR(40) NOT NULL\n);\nCREATE TABLE caminhao (\n  id_caminhao INT AUTO_INCREMENT PRIMARY KEY,\n  placa CHAR(7) NOT NULL UNIQUE,\n  modelo VARCHAR(40) NOT NULL,\n  capacidade_kg INT NOT NULL\n);\nCREATE TABLE entrega (\n  id_entrega INT AUTO_INCREMENT PRIMARY KEY,\n  id_motorista INT NOT NULL,\n  id_caminhao INT NOT NULL,\n  destino VARCHAR(40) NOT NULL,\n  peso_kg INT NOT NULL,\n  data_saida DATE NOT NULL,\n  data_entrega DATE NULL,\n  frete DECIMAL(10,2) NOT NULL,\n  FOREIGN KEY (id_motorista) REFERENCES motorista(id_motorista),\n  FOREIGN KEY (id_caminhao) REFERENCES caminhao(id_caminhao)\n);\nINSERT INTO motorista VALUES\n (1,'Adalberto Nunes','E','Sorocaba'),(2,'Benedita Rocha','D','Itu'),(3,'Cléber Matos','E','Jundiaí'),\n (4,'Denise Farias','C','Sorocaba'),(5,'Everton Luz','E','Campinas'),(6,'Fernanda Rios','D','Itu'),\n (7,'Gilberto Sales','E','Jundiaí'),(8,'Heloísa Prado','C','Campinas');\nINSERT INTO caminhao VALUES\n (1,'FRT1A11','Pesado 540',30000),(2,'GHT2B22','Pesado 450',25000),(3,'JKL3C33','Extrapesado 2651',28000),\n (4,'MNP4D44','Médio 24.280',14000),(5,'QRS5E55','Leve 11.190',9000);\nINSERT INTO entrega VALUES\n (1,1,1,'São Paulo',12000,'2025-06-02','2025-06-02',1800.00),\n (2,2,4,'Campinas',6500,'2025-06-03','2025-06-03',950.00),\n (3,3,2,'Rio de Janeiro',18000,'2025-06-04','2025-06-05',4200.00),\n (4,5,3,'Belo Horizonte',21000,'2025-06-05','2025-06-07',5100.00),\n (5,4,5,'Sorocaba',3200,'2025-06-06','2025-06-06',480.00),\n (6,1,2,'Curitiba',15500,'2025-06-09','2025-06-10',3900.00),\n (7,7,1,'Ribeirão Preto',9800,'2025-06-10',NULL,1650.00),\n (8,6,4,'Santos',4700,'2025-06-11','2025-06-11',720.00),\n (9,3,3,'Goiânia',24000,'2025-06-12',NULL,6300.00),\n (10,8,5,'Piracicaba',2500,'2025-06-12','2025-06-12',390.00),\n (11,5,1,'Uberlândia',17200,'2025-06-13',NULL,4550.00),\n (12,2,4,'Bauru',5100,'2025-06-14','2025-06-14',860.00);"
+      },
+      "tarefas": [
+        {
+          "id": "t1",
+          "tipo": "consulta",
+          "texto": "Liste o destino e o peso das entregas com MAIS de 5000 kg, da mais pesada para a mais leve."
+        },
+        {
+          "id": "t2",
+          "tipo": "consulta",
+          "texto": "Mostre o nome de cada motorista e o total de frete das entregas que ele fez, do maior total para o menor."
+        },
+        {
+          "id": "t3",
+          "tipo": "consulta",
+          "texto": "Quais entregas ainda estão na estrada (sem data de entrega)? Mostre o id da entrega, o destino e a placa do caminhão."
+        },
+        {
+          "id": "t4",
+          "tipo": "alteracao",
+          "texto": "Cadastre o motorista 'Rogério Lima', CNH categoria 'E', da cidade de Sorocaba. Depois registre uma entrega feita por ELE com o caminhão de id 2: destino 'Curitiba', 3200 kg, saída em 2025-07-10, frete 2100.00 e ainda sem data de entrega.",
+          "verificacao": "SELECT m.nome, m.cnh_categoria, m.cidade, e.id_caminhao, e.destino, e.peso_kg, e.data_saida, e.data_entrega, e.frete\nFROM entrega e JOIN motorista m ON m.id_motorista = e.id_motorista\nORDER BY e.id_entrega;"
+        }
+      ],
+      "gabarito": {
+        "tarefas": {
+          "t1": {
+            "sql": "SELECT destino, peso_kg FROM entrega WHERE peso_kg > 5000 ORDER BY peso_kg DESC;",
+            "ordemImporta": true
+          },
+          "t2": {
+            "sql": "SELECT m.nome, SUM(e.frete) AS total_frete\nFROM motorista m JOIN entrega e ON e.id_motorista = m.id_motorista\nGROUP BY m.id_motorista, m.nome\nORDER BY total_frete DESC;",
+            "ordemImporta": true
+          },
+          "t3": {
+            "sql": "SELECT e.id_entrega, e.destino, c.placa\nFROM entrega e JOIN caminhao c ON c.id_caminhao = e.id_caminhao\nWHERE e.data_entrega IS NULL;",
+            "ordemImporta": false
+          },
+          "t4": {
+            "sql": "INSERT INTO motorista (nome, cnh_categoria, cidade) VALUES ('Rogério Lima', 'E', 'Sorocaba');\nINSERT INTO entrega (id_motorista, id_caminhao, destino, peso_kg, data_saida, data_entrega, frete)\nVALUES (LAST_INSERT_ID(), 2, 'Curitiba', 3200, '2025-07-10', NULL, 2100.00);",
+            "ordemImporta": false
+          }
+        }
+      },
+      "explicacao": "T1: WHERE peso_kg > 5000 e ORDER BY peso_kg DESC. T2: JOIN, GROUP BY motorista, SUM(frete) e ORDER BY pela soma. T3: JOIN entrega × caminhao com WHERE data_entrega IS NULL. T4: dois INSERTs; o id do novo motorista (9) pode ser escrito direto ou obtido com LAST_INSERT_ID()."
+    },
+    {
+      "tipo": "sql",
+      "peso": 3,
+      "enunciado": "O Estacionamento Vaga Certa usa o banco estacionamento: vaga (coberta = 1 para vaga coberta), veiculo (a placa é a chave primária) e ticket (saida e valor_pago ficam NULL enquanto o carro está estacionado). Use a Bancada SQL: escreva o SQL de cada tarefa na aba dela e execute para conferir. Cada tarefa é corrigida separadamente, sempre a partir da base original (o botão ↺ Restaurar base volta os dados ao início).",
+      "banco": {
+        "nome": "estacionamento",
+        "setup": "CREATE TABLE vaga (\n  id_vaga INT AUTO_INCREMENT PRIMARY KEY,\n  codigo CHAR(3) NOT NULL UNIQUE,\n  setor CHAR(1) NOT NULL,\n  coberta TINYINT(1) NOT NULL DEFAULT 0\n);\nCREATE TABLE veiculo (\n  placa CHAR(7) NOT NULL,\n  modelo VARCHAR(40) NOT NULL,\n  cor VARCHAR(20) NOT NULL,\n  mensalista TINYINT(1) NOT NULL DEFAULT 0,\n  PRIMARY KEY (placa)\n);\nCREATE TABLE ticket (\n  id_ticket INT AUTO_INCREMENT PRIMARY KEY,\n  placa CHAR(7) NOT NULL,\n  id_vaga INT NOT NULL,\n  entrada DATETIME NOT NULL,\n  saida DATETIME NULL,\n  valor_pago DECIMAL(6,2) NULL,\n  FOREIGN KEY (placa) REFERENCES veiculo(placa),\n  FOREIGN KEY (id_vaga) REFERENCES vaga(id_vaga)\n);\nINSERT INTO vaga VALUES\n (1,'A01','A',1),(2,'A02','A',1),(3,'A03','A',0),(4,'B01','B',1),(5,'B02','B',1),\n (6,'B03','B',0),(7,'B04','B',1),(8,'C01','C',0),(9,'C02','C',0),(10,'C03','C',1);\nINSERT INTO veiculo VALUES\n ('AAA1B11','Argo','Prata',1),('BBB2C22','Polo','Preto',0),('CCC3D33','Tracker','Branco',0),\n ('DDD4E44','Fit','Prata',1),('EEE5F55','Kwid','Vermelho',0),('FFF6G66','Yaris','Preto',0),\n ('GGG7H77','Creta','Cinza',1),('HHH8I88','Renegade','Preto',0),('III9J99','Kicks','Azul',0),\n ('JJJ0K00','Mobi','Prata',0);\nINSERT INTO ticket VALUES\n (1,'AAA1B11',1,'2025-05-10 08:00:00','2025-05-10 17:30:00',0.00),\n (2,'BBB2C22',4,'2025-05-10 09:15:00','2025-05-10 11:45:00',18.00),\n (3,'CCC3D33',6,'2025-05-10 10:00:00','2025-05-10 10:50:00',10.00),\n (4,'EEE5F55',8,'2025-05-10 13:20:00','2025-05-10 19:00:00',32.00),\n (5,'FFF6G66',5,'2025-05-11 07:40:00','2025-05-11 12:10:00',26.00),\n (6,'HHH8I88',2,'2025-05-11 08:30:00','2025-05-11 09:00:00',8.00),\n (7,'III9J99',9,'2025-05-11 14:00:00','2025-05-11 18:20:00',24.00),\n (8,'JJJ0K00',3,'2025-05-11 15:10:00','2025-05-11 16:00:00',10.00),\n (9,'DDD4E44',10,'2025-05-12 07:55:00',NULL,NULL),\n (10,'GGG7H77',4,'2025-05-12 08:10:00',NULL,NULL),\n (11,'BBB2C22',7,'2025-05-12 09:30:00',NULL,NULL),\n (12,'CCC3D33',6,'2025-05-12 10:05:00',NULL,NULL),\n (13,'EEE5F55',1,'2025-05-12 06:30:00','2025-05-12 08:00:00',12.00);"
+      },
+      "tarefas": [
+        {
+          "id": "t1",
+          "tipo": "consulta",
+          "texto": "Liste a placa e o modelo dos veículos de cor 'Prata' ou 'Preto', em ordem de placa."
+        },
+        {
+          "id": "t2",
+          "tipo": "consulta",
+          "texto": "Quanto o estacionamento recebeu em cada dia? Mostre o dia (use DATE(entrada)) e a soma do valor pago, considerando só os tickets que já saíram."
+        },
+        {
+          "id": "t3",
+          "tipo": "consulta",
+          "texto": "Quais vagas COBERTAS do setor 'B' estão ocupadas agora (ticket sem saída)? Mostre o código da vaga e a placa do veículo."
+        },
+        {
+          "id": "t4",
+          "tipo": "alteracao",
+          "texto": "O carro do ticket 11 saiu em 2025-05-12 às 18:40:00 e pagou R$ 27,00. Registre a saída e o valor pago nesse ticket.",
+          "verificacao": "SELECT id_ticket, saida, valor_pago FROM ticket ORDER BY id_ticket;"
+        }
+      ],
+      "gabarito": {
+        "tarefas": {
+          "t1": {
+            "sql": "SELECT placa, modelo FROM veiculo WHERE cor IN ('Prata', 'Preto') ORDER BY placa;",
+            "ordemImporta": true
+          },
+          "t2": {
+            "sql": "SELECT DATE(entrada) AS dia, SUM(valor_pago) AS total\nFROM ticket\nWHERE saida IS NOT NULL\nGROUP BY DATE(entrada);",
+            "ordemImporta": false
+          },
+          "t3": {
+            "sql": "SELECT v.codigo, t.placa\nFROM ticket t JOIN vaga v ON v.id_vaga = t.id_vaga\nWHERE v.setor = 'B' AND v.coberta = 1 AND t.saida IS NULL;",
+            "ordemImporta": false
+          },
+          "t4": {
+            "sql": "UPDATE ticket SET saida = '2025-05-12 18:40:00', valor_pago = 27.00 WHERE id_ticket = 11;",
+            "ordemImporta": false
+          }
+        }
+      },
+      "explicacao": "T1: IN ('Prata', 'Preto') (ou cor = 'Prata' OR cor = 'Preto') com ORDER BY placa. T2: GROUP BY DATE(entrada) com SUM(valor_pago) e WHERE saida IS NOT NULL. T3: JOIN ticket × vaga com três condições (setor 'B', coberta = 1, saida IS NULL). T4: UPDATE de duas colunas pela chave id_ticket = 11."
+    },
+    {
+      "tipo": "sql",
+      "peso": 3,
+      "enunciado": "A Floricultura Jardim Secreto usa o banco floricultura: arranjo (produtos), cliente e encomenda (entregue = 1 quando a encomenda já foi entregue). Use a Bancada SQL: escreva o SQL de cada tarefa na aba dela e execute para conferir. Cada tarefa é corrigida separadamente, sempre a partir da base original (o botão ↺ Restaurar base volta os dados ao início).",
+      "banco": {
+        "nome": "floricultura",
+        "setup": "CREATE TABLE arranjo (\n  id_arranjo INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(60) NOT NULL,\n  tipo_flor VARCHAR(20) NOT NULL,\n  preco DECIMAL(7,2) NOT NULL,\n  estoque INT NOT NULL DEFAULT 0\n);\nCREATE TABLE cliente (\n  id_cliente INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(60) NOT NULL,\n  bairro VARCHAR(40),\n  telefone VARCHAR(20)\n);\nCREATE TABLE encomenda (\n  id_encomenda INT AUTO_INCREMENT PRIMARY KEY,\n  id_cliente INT NOT NULL,\n  id_arranjo INT NOT NULL,\n  quantidade INT NOT NULL DEFAULT 1,\n  data_entrega DATE NOT NULL,\n  entregue TINYINT(1) NOT NULL DEFAULT 0,\n  FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente),\n  FOREIGN KEY (id_arranjo) REFERENCES arranjo(id_arranjo)\n);\nINSERT INTO arranjo VALUES\n (1,'Buquê de Rosas Vermelhas','Rosa',149.90,6),(2,'Cesta Primavera','Mista',119.90,4),\n (3,'Orquídea Branca no Vaso','Orquídea',89.90,10),(4,'Mini Rosas Coloridas','Rosa',59.90,12),\n (5,'Girassóis Radiantes','Girassol',79.90,8),(6,'Arranjo Tropical','Mista',134.50,3),\n (7,'Lírios do Campo','Lírio',99.00,5),(8,'Rosa Única Embalada','Rosa',24.90,30),\n (9,'Caixa de Tulipas','Tulipa',169.00,2),(10,'Coroa de Rosas Brancas','Rosa',189.90,1);\nINSERT INTO cliente VALUES\n (1,'Aline Castro','Centro','(19) 3333-1001'),(2,'Bruno Saraiva','Jardim Europa','(19) 3333-1002'),\n (3,'Célia Moura','Vila Nova','(19) 3333-1003'),(4,'Danilo Brandão','Centro','(19) 3333-1004'),\n (5,'Érica Teles','Jardim Europa','(19) 3333-1005'),(6,'Flávio Couto','Vila Nova','(19) 3333-1006'),\n (7,'Gisele Amaral','Centro','(19) 3333-1007'),(8,'Haroldo Vaz','Bela Vista','(19) 3333-1008');\nINSERT INTO encomenda VALUES\n (1,1,1,1,'2025-05-08',1),(2,2,5,2,'2025-05-09',1),(3,3,8,5,'2025-05-09',0),(4,1,3,1,'2025-05-10',0),\n (5,4,2,1,'2025-05-10',0),(6,5,4,3,'2025-05-11',0),(7,2,9,1,'2025-05-11',0),(8,6,6,1,'2025-05-12',0),\n (9,1,10,1,'2025-05-13',0),(10,7,7,2,'2025-05-13',0),(11,4,8,10,'2025-05-14',0),(12,2,1,1,'2025-05-15',0);"
+      },
+      "tarefas": [
+        {
+          "id": "t1",
+          "tipo": "consulta",
+          "texto": "Liste o nome e o preço dos arranjos que têm a palavra 'rosa' em qualquer parte do nome, do mais caro para o mais barato."
+        },
+        {
+          "id": "t2",
+          "tipo": "consulta",
+          "texto": "Mostre o nome de TODOS os clientes e quantas encomendas cada um fez (quem não fez nenhuma aparece com 0)."
+        },
+        {
+          "id": "t3",
+          "tipo": "alteracao",
+          "texto": "Marque como entregues (entregue = 1) todas as encomendas com data de entrega até 10/05/2025.",
+          "verificacao": "SELECT id_encomenda, entregue FROM encomenda ORDER BY id_encomenda;"
+        },
+        {
+          "id": "t4",
+          "tipo": "alteracao",
+          "texto": "Crie a tabela fornecedor com: id_fornecedor (inteiro, chave primária, AUTO_INCREMENT), nome (até 80 caracteres, obrigatório) e cidade (até 50 caracteres). Depois cadastre o fornecedor 'Flores do Vale', da cidade de Holambra.",
+          "verificacao": "INSERT INTO fornecedor (nome, cidade) VALUES ('Teste', NULL);\nSELECT id_fornecedor, nome, cidade FROM fornecedor ORDER BY id_fornecedor;"
+        }
+      ],
+      "gabarito": {
+        "tarefas": {
+          "t1": {
+            "sql": "SELECT nome, preco FROM arranjo WHERE nome LIKE '%rosa%' ORDER BY preco DESC;",
+            "ordemImporta": true
+          },
+          "t2": {
+            "sql": "SELECT c.nome, COUNT(e.id_encomenda) AS encomendas\nFROM cliente c LEFT JOIN encomenda e ON e.id_cliente = c.id_cliente\nGROUP BY c.id_cliente, c.nome;",
+            "ordemImporta": false
+          },
+          "t3": {
+            "sql": "UPDATE encomenda SET entregue = 1 WHERE data_entrega <= '2025-05-10';",
+            "ordemImporta": false
+          },
+          "t4": {
+            "sql": "CREATE TABLE fornecedor (\n  id_fornecedor INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(80) NOT NULL,\n  cidade VARCHAR(50)\n);\nINSERT INTO fornecedor (nome, cidade) VALUES ('Flores do Vale', 'Holambra');",
+            "ordemImporta": false
+          }
+        }
+      },
+      "explicacao": "T1: LIKE '%rosa%' (no MySQL a comparação ignora maiúsculas/minúsculas, então pega 'Rosas' e 'Rosa') com ORDER BY preco DESC. T2: LEFT JOIN cliente → encomenda e COUNT(e.id_encomenda) para o cliente sem encomenda ficar com 0. T3: UPDATE com WHERE data_entrega <= '2025-05-10'. T4: CREATE TABLE com AUTO_INCREMENT e depois INSERT do fornecedor."
+    },
+    {
+      "tipo": "sql",
+      "peso": 3,
+      "enunciado": "O campeonato escolar de e-sports usa o banco esports: equipe, jogador (o nick é único) e partida (cada partida tem a equipe da casa, a visitante e o placar de cada uma). Use a Bancada SQL: escreva o SQL de cada tarefa na aba dela e execute para conferir. Cada tarefa é corrigida separadamente, sempre a partir da base original (o botão ↺ Restaurar base volta os dados ao início).",
+      "banco": {
+        "nome": "esports",
+        "setup": "CREATE TABLE equipe (\n  id_equipe INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(40) NOT NULL UNIQUE,\n  cidade VARCHAR(40) NOT NULL\n);\nCREATE TABLE jogador (\n  id_jogador INT AUTO_INCREMENT PRIMARY KEY,\n  nick VARCHAR(20) NOT NULL UNIQUE,\n  nome_real VARCHAR(60) NOT NULL,\n  idade INT NOT NULL,\n  funcao VARCHAR(20) NOT NULL,\n  id_equipe INT NOT NULL,\n  FOREIGN KEY (id_equipe) REFERENCES equipe(id_equipe)\n);\nCREATE TABLE partida (\n  id_partida INT AUTO_INCREMENT PRIMARY KEY,\n  id_equipe_casa INT NOT NULL,\n  id_equipe_visitante INT NOT NULL,\n  placar_casa INT NOT NULL,\n  placar_visitante INT NOT NULL,\n  data_partida DATE NOT NULL,\n  FOREIGN KEY (id_equipe_casa) REFERENCES equipe(id_equipe),\n  FOREIGN KEY (id_equipe_visitante) REFERENCES equipe(id_equipe)\n);\nINSERT INTO equipe VALUES\n (1,'Fúria Azul','São Paulo'),(2,'Lobos de Aço','Curitiba'),(3,'Fênix Dourada','Recife'),\n (4,'Tempestade','Porto Alegre'),(5,'Cometa Verde','Manaus');\nINSERT INTO jogador VALUES\n (1,'Raio','Pedro Alves',19,'Atacante',1),(2,'Muralha','João Costa',22,'Defensor',1),\n (3,'Pixel','Ana Souza',17,'Suporte',1),(4,'Trovão','Lucas Lima',16,'Atacante',2),\n (5,'Sombra','Bia Rocha',20,'Estrategista',2),(6,'Kami','Rafael Ito',17,'Defensor',2),\n (7,'Brasa','Caio Melo',18,'Atacante',3),(8,'Aurora','Lívia Reis',15,'Suporte',3),\n (9,'Faísca','Davi Prado',21,'Estrategista',3),(10,'Zen','Marcos Taki',23,'Defensor',4),\n (11,'Neblina','Clara Dias',16,'Suporte',4),(12,'Vulcão','Igor Nunes',19,'Atacante',5),\n (13,'Coruja','Sara Lemos',17,'Estrategista',5),(14,'Eco','Tiago Paz',24,'Defensor',5);\nINSERT INTO partida VALUES\n (1,1,2,3,1,'2025-08-02'),(2,3,4,2,2,'2025-08-02'),(3,5,1,0,2,'2025-08-09'),(4,2,3,1,3,'2025-08-09'),\n (5,1,4,2,0,'2025-08-16'),(6,5,3,1,1,'2025-08-16'),(7,4,2,2,3,'2025-08-23'),(8,1,5,1,2,'2025-08-23'),\n (9,3,1,0,1,'2025-08-30'),(10,1,3,4,2,'2025-09-06');"
+      },
+      "tarefas": [
+        {
+          "id": "t1",
+          "tipo": "consulta",
+          "texto": "Liste o nick e a idade dos jogadores com MENOS de 18 anos, do mais novo para o mais velho. Quando a idade empatar, ordene pelo nick em ordem alfabética."
+        },
+        {
+          "id": "t2",
+          "tipo": "consulta",
+          "texto": "Mostre o nome de cada equipe e a idade média dos seus jogadores, arredondada para 1 casa decimal."
+        },
+        {
+          "id": "t3",
+          "tipo": "consulta",
+          "texto": "Liste as partidas que a equipe 'Fúria Azul' VENCEU jogando em casa: mostre a data da partida, o placar_casa e o placar_visitante."
+        },
+        {
+          "id": "t4",
+          "tipo": "alteracao",
+          "texto": "O jogador de nick 'Raio' foi transferido para a equipe de id 4. Faça essa atualização.",
+          "verificacao": "SELECT id_jogador, id_equipe FROM jogador ORDER BY id_jogador;"
+        }
+      ],
+      "gabarito": {
+        "tarefas": {
+          "t1": {
+            "sql": "SELECT nick, idade FROM jogador WHERE idade < 18 ORDER BY idade, nick;",
+            "ordemImporta": true
+          },
+          "t2": {
+            "sql": "SELECT e.nome, ROUND(AVG(j.idade), 1) AS idade_media\nFROM equipe e JOIN jogador j ON j.id_equipe = e.id_equipe\nGROUP BY e.id_equipe, e.nome;",
+            "ordemImporta": false
+          },
+          "t3": {
+            "sql": "SELECT p.data_partida, p.placar_casa, p.placar_visitante\nFROM partida p JOIN equipe e ON e.id_equipe = p.id_equipe_casa\nWHERE e.nome = 'Fúria Azul' AND p.placar_casa > p.placar_visitante;",
+            "ordemImporta": false
+          },
+          "t4": {
+            "sql": "UPDATE jogador SET id_equipe = 4 WHERE nick = 'Raio';",
+            "ordemImporta": false
+          }
+        }
+      },
+      "explicacao": "T1: WHERE idade < 18 e ORDER BY com dois critérios (idade, nick). T2: AVG(idade) com ROUND(..., 1), agrupando por equipe. T3: JOIN pela equipe da casa e comparação entre duas colunas (placar_casa > placar_visitante). T4: UPDATE ... WHERE nick = 'Raio' — nick é UNIQUE (tem índice), então o Safe Updates aceita."
+    }
+  ]
+}

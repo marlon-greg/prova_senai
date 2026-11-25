@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=20261116d">
+<link rel="stylesheet" href="css/style.css?v=20261125a">
 <link rel="stylesheet" href="css/aluno-nav.css">
 <link rel="icon" href="img/senai.svg">
 <script src="js/logo.js"></script>
@@ -122,6 +122,8 @@
             <div class="hud-stats">
               <div class="hud-stat" id="hudVidasBox"><span class="hud-rotulo">Vidas</span><span id="hudVidas" class="hud-vidas oculto" role="status" aria-live="polite"></span></div>
               <div class="hud-stat"><span class="hud-rotulo">Respondidas</span><span id="hudXp" class="hud-xp"></span></div>
+              <button type="button" id="btnDica" class="hud-dica oculto"></button>
+              <div class="hud-stat hud-agora"><span class="hud-rotulo">Agora</span><span id="hudRelogio" class="hud-relogio" title="Data e hora atuais"></span></div>
               <div class="hud-stat" id="hudTempoBox"><span class="hud-rotulo">Tempo</span><span id="qTimer" class="timer oculto" title="Tempo restante"></span></div>
             </div>
           </div>
@@ -200,11 +202,12 @@
     <h2 id="sobreTitulo"></h2>
     <p id="sobreTexto"></p>
     <p id="sobrePlacar" class="sobre-placar oculto"></p>
+    <p id="sobreContagem" class="sobre-contagem oculto" role="timer" aria-live="assertive"></p>
     <button id="btnVoltarProva" class="grande">Voltar para a prova</button>
   </div>
 </div>
 <!-- sem conexão / resposta não enviada -->
 <div id="bannerConexao" class="banner-conexao oculto" role="alert"></div>
-<script type="module" src="js/aluno.js?v=20261118e"></script>
+<script type="module" src="js/aluno.js?v=20261125a"></script>
 </body>
 </html>

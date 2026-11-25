@@ -338,6 +338,24 @@ service cloud.firestore {
     }
 
     // ---------- tentativas ----------
+    // TIMER DE VOLTA (aluno): fora da prova, perde 1 vida a cada prova.segundosVolta s (padrão 5).
+    // foraDesde só nasce com a hora do servidor; enquanto está fora, as vidas cobradas (foraCobradas) só sobem, e cada uma
+    // aumenta trocasDeAba; para apagar foraDesde (voltou), tudo o que o tempo fora deve precisa estar cobrado (folga de 1).
+    function timerDeVoltaOk() {
+      let antes = resource.data.get('foraDesde', null);
+      let depois = request.resource.data.get('foraDesde', null);
+      let cobAntes = resource.data.get('foraCobradas', 0);
+      let cobDepois = request.resource.data.get('foraCobradas', 0);
+      let vidasAntes = resource.data.get('trocasDeAba', 0) + resource.data.get('trocasDeAbaTotal', 0);
+      let vidasDepois = request.resource.data.get('trocasDeAba', 0) + request.resource.data.get('trocasDeAbaTotal', 0);
+      let n = prova(resource.data.provaId).get('segundosVolta', 5);
+      return antes == null
+        ? (depois == null || depois == request.time)
+        : ((depois == null || depois == antes)
+           && cobDepois >= cobAntes
+           && vidasDepois - vidasAntes >= cobDepois - cobAntes
+           && (depois != null || n <= 0 || cobDepois >= math.floor((request.time - antes).seconds() / n) - 1));
+    }
     match /tentativas/{t} {
       // aluno: a própria. "resource == null" = ainda não começou (a lista de provas confere se já existe);
       // só vale para o id dele (uid_prova), para não descobrir quem começou
@@ -354,8 +372,13 @@ service cloud.firestore {
                                                  'iniciadaEm', 'finalizadaEm', 'indiceAtual', 'trocasDeAba',
                                                  'notaPrevia', 'aguardandoCorrecao',
                                                  'saidasTelaCheia', 'tentativasColar', 'tempoTotalSegundos',
-                                                 'encerradaPor', 'trocasDeAbaTotal', 'codigoInformado'])
+                                                 'encerradaPor', 'trocasDeAbaTotal', 'codigoInformado', 'sessao'])
         && prova(request.resource.data.provaId).liberada == true
+        // barrado pelo professor não começa; com a entrada fechada (na hora ou pelo horário), só quem ele deixou entrar
+        && !(email().lower() in prova(request.resource.data.provaId).get('bloqueados', []))
+        && ((prova(request.resource.data.provaId).get('entradaFechada', false) != true
+             && (prova(request.resource.data.provaId).get('entradaAte', null) == null || request.time < prova(request.resource.data.provaId).entradaAte))
+            || email().lower() in prova(request.resource.data.provaId).get('liberadosEntrada', []))
         && request.resource.data.bancoId == prova(request.resource.data.provaId).bancoId
         // nº de questões da prova, ou exatamente as questões sorteadas pelo professor na acessibilidade (quantidade livre)
         && (request.resource.data.questoesIds.size() == prova(request.resource.data.provaId).nQuestoes
@@ -389,7 +412,12 @@ service cloud.firestore {
             && request.resource.data.diff(resource.data).affectedKeys().hasOnly(
                  ['finalizadaEm', 'indiceAtual', 'trocasDeAba',
                   'saidasTelaCheia', 'tentativasColar', 'tempoTotalSegundos',
-                  'encerradaPor', 'trocasDeAbaTotal'])
+                  'encerradaPor', 'trocasDeAbaTotal',
+                  'atalhosBloqueados', 'textoInjetado', 'extensoes', 'vistoEm', 'sessao', 'foraDesde', 'foraCobradas', 'fora'])
+            // sessão única: o aluno só grava o computador quando não há nenhum (o professor apaga em "Liberar login")
+            && (!('sessao' in request.resource.data.diff(resource.data).affectedKeys()) || resource.data.get('sessao', null) == null)
+            && (!('vistoEm' in request.resource.data.diff(resource.data).affectedKeys()) || request.resource.data.vistoEm == request.time)
+            && timerDeVoltaOk()
             // vidas: o aluno não "recupera" vidas sozinho (perder a questão zera trocasDeAba, mas soma em trocasDeAbaTotal)
             && request.resource.data.get('trocasDeAba', 0) + request.resource.data.get('trocasDeAbaTotal', 0)
                  >= resource.data.get('trocasDeAba', 0) + resource.data.get('trocasDeAbaTotal', 0))
@@ -397,7 +425,8 @@ service cloud.firestore {
            // e cuida das VIDAS do aluno: restaurar, dar vida extra, reabrir a prova (ex.: aluno com TEA) e apagar sinais registrados por engano
         || (professor()
             && request.resource.data.diff(resource.data).affectedKeys().hasOnly(
-                 ['nota', 'notaMaxima', 'corrigidaEm', 'corrigidaPor',
+                 ['sessao', 'foraDesde', 'foraCobradas', 'fora',
+                  'nota', 'notaMaxima', 'corrigidaEm', 'corrigidaPor',
                   'acertos', 'totalQuestoes', 'notaPrevia', 'aguardandoCorrecao',
                   'trocasDeAba', 'trocasDeAbaTotal', 'vidasExtras', 'vidasRestauradas', 'vidasRestauradasEm',
                   'vidasRestauradasPor', 'finalizadaEm', 'encerradaPor', 'indiceAtual', 'tempoTotalSegundos',
@@ -408,7 +437,7 @@ service cloud.firestore {
                  ['trocasDeAba', 'trocasDeAbaTotal', 'vidasExtras', 'vidasRestauradas', 'vidasRestauradasEm',
                   'vidasRestauradasPor', 'finalizadaEm', 'encerradaPor', 'indiceAtual', 'tempoTotalSegundos',
                   'minutosExtras', 'reabertaEm', 'reabertaPor', 'acertos', 'totalQuestoes', 'nota', 'notaPrevia', 'aguardandoCorrecao',
-                  'saidasTelaCheia', 'tentativasColar']))
+                  'saidasTelaCheia', 'tentativasColar', 'foraDesde', 'foraCobradas', 'fora', 'sessao']))
            // equipe: a própria tentativa de teste
         || (equipe() && resource.data.get('teste', false) == true && resource.data.uid == uid())
         || (professor() && resource.data.get('simulado', false) == true);
@@ -455,15 +484,18 @@ service cloud.firestore {
           && tentativa(t).finalizadaEm == null
           && prova(tentativa(t).provaId).liberada == true
           && request.resource.data.keys().hasOnly(['questaoId', 'indice', 'motivo', 'saidaEm'])
-          && request.resource.data.motivo in ['aba', 'telaCheia', 'colar']
+          && request.resource.data.motivo in ['aba', 'telaCheia', 'colar', 'recarregou', 'sistema', 'extensao']
           && request.resource.data.saidaEm == request.time)
           || meuTeste(t);
         allow update: if (aluno()
           && tentativa(t).uid == uid()
           && resource.data.motivo != 'colar'
-          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['voltouEm', 'segundosFora'])
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['voltouEm', 'segundosFora', 'vidasTimer'])
           && request.resource.data.voltouEm == request.time)
-          || meuTeste(t);
+          || meuTeste(t)
+          // professor/auxiliar: anular uma saída registrada por engano (devolve as vidas dela)
+          || (cuidaDe(tentativa(t).email.lower())
+              && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['anulada', 'anuladaPor', 'anuladaEm']));
       }
     }
     // =====================================================================================
