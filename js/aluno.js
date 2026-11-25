@@ -21,8 +21,8 @@ import { topicosDaProva, htmlConhecimentos, rotuloTec, nivelK } from "./plano-cu
 import { criteriosDaProva, NIVEIS_RUBRICA, carregarCriteriosOficiais } from "./plano-ensino.js?v=20261116a";
 import { toolbar, collapsible, vazio, statTiles, chips } from "./ui.js";
 import { completar, aplicarVisual, mesclarQuestao } from "./acessibilidade.js";
-import { textoRespostaSql } from "../servidor/sql-correcao.js";
-import { montarBancada } from "./workbench.js?v=20261125a";
+import { textoRespostaSql } from "../servidor/sql-correcao.js?v=20261125b";
+import { montarBancada } from "./workbench.js?v=20261125b";
 import { conferirExtensoes, textoExtensoes, vigiarExtensoes, extensoesIA } from "./extensoes.js?v=20261125a";
 import { definirEstilos } from "./mascotes.js";
 import { usarItensCustom } from "./avatar.js";
@@ -788,7 +788,10 @@ function valorDoCartao(card, qid) {
 // o cartão tem algo diferente do que está gravado?
 function mudou(card, qid) {
   const v = valorDoCartao(card, qid);
-  if (v !== null && questoes[qid]?.tipo === "sql") return soTextosSql(v) !== soTextosSql(respostas[qid]?.resposta);
+  if (v !== null && questoes[qid]?.tipo === "sql") {
+    const salvas = Object.values(respostas[qid]?.resposta?.tarefas || {}).reduce((s, x) => s + (x?.execucoes?.length || 0), 0);
+    return soTextosSql(v) !== soTextosSql(respostas[qid]?.resposta) || (bancadas[qid]?.nExecucoes?.() || 0) !== salvas;   // execuções novas também salvam (histórico de erros)
+  }
   return v !== null && JSON.stringify(v) !== JSON.stringify(respostas[qid]?.resposta ?? null);
 }
 

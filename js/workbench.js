@@ -2120,24 +2120,28 @@ const CSS = `
 .bsql-aba{height:27px;padding:0 12px;border:1px solid var(--bsql-borda);border-bottom:none;border-radius:5px 5px 0 0;background:#e8e9ec;cursor:pointer;white-space:nowrap;margin-bottom:-1px}
 .bsql-aba[aria-selected="true"]{background:#fff;border-top:2px solid #1f6feb;font-weight:600}
 .bsql-aba:focus-visible{outline:2px solid #1f6feb;outline-offset:-2px}
-.bsql-tarefa{flex:none;max-height:92px;overflow:auto;padding:6px 10px;background:#fffbea;border-bottom:1px solid #e9dfae;font-size:13px}
+.bsql-tarefa{flex:none;max-height:150px;overflow:auto;padding:8px 12px;background:#fff3c4;border-bottom:1px solid #e3cf7a;border-left:4px solid #e0a800;font-size:15px;line-height:1.45;color:#1f2328}
+.bsql-tarefa .txt{font-weight:600}
+.bsql-tarefa .contexto{display:block;margin-top:4px;font-size:12.5px;color:#4b4f56}
+.bsql-fonte{display:inline-flex;gap:2px;margin-left:6px}
+.bsql-fonte .bsql-btn{padding:0 7px;font-weight:700}
 .bsql-tarefa .rot{font-weight:700;margin-right:6px}
 .bsql-tarefa .tipo{display:inline-block;font-size:11px;padding:0 6px;border-radius:999px;background:#e8effd;color:#1d4fb8;margin-right:6px;vertical-align:1px}
 .bsql-tarefa .tipo.alt{background:#fdecef;color:#a00d25}
-.bsql-tarefa .dica{display:block;color:#6e7781;font-size:11.5px;margin-top:2px}
+.bsql-tarefa .dica{display:block;color:#6e7781;font-size:12px;margin-top:2px}
 .bsql-eds{flex:1 1 46%;min-height:110px;position:relative;background:#fff}
 .bsql-ed{position:absolute;inset:0;display:flex}
 .bsql-ed[hidden]{display:none}
 .bsql-num{flex:none;min-width:38px;overflow:hidden;padding:6px 6px 40px 6px;background:#f3f3f3;border-right:1px solid #e1e3e6;color:#8c959f;text-align:right;
-  font:13px/19px var(--bsql-mono);white-space:pre;user-select:none}
+  font:var(--bsql-fs,13px)/var(--bsql-lh,19px) var(--bsql-mono);white-space:pre;user-select:none}
 .bsql-area{position:relative;flex:1;min-width:0}
-.bsql-area pre,.bsql-area textarea{position:absolute;top:0;left:0;margin:0;padding:6px 10px;border:0;font:13px/19px var(--bsql-mono);letter-spacing:0;
+.bsql-area pre,.bsql-area textarea{position:absolute;top:0;left:0;margin:0;padding:6px 10px;border:0;font:var(--bsql-fs,13px)/var(--bsql-lh,19px) var(--bsql-mono);letter-spacing:0;
   white-space:pre;overflow-wrap:normal;word-wrap:normal;tab-size:2;-moz-tab-size:2;font-variant-ligatures:none;text-rendering:optimizeSpeed}
 .bsql-area pre{right:0;bottom:0;overflow:hidden;pointer-events:none;color:#1f2328;background:transparent}
 .bsql-area textarea{width:100%;height:100%;resize:none;outline:none;overflow:auto;background:transparent;color:transparent;caret-color:#111;-webkit-text-fill-color:transparent}
 .bsql-area textarea::selection{background:rgba(31,111,235,.28);-webkit-text-fill-color:transparent}
 .bsql-area textarea:read-only{caret-color:transparent}
-.bsql-area pre .k{color:#1f3fbf}.bsql-area pre .f{color:#8250df}.bsql-area pre .s{color:#0a7a2f}.bsql-area pre .n{color:#b35900}
+.bsql-area pre .k{color:#1f3fbf;font-weight:700}.bsql-area pre .f{color:#8250df}.bsql-area pre .s{color:#0a7a2f}.bsql-area pre .n{color:#b35900}
 .bsql-area pre .c{color:#8c959f}.bsql-area pre .i{color:#953800}
 .bsql-ed.foco{box-shadow:inset 0 0 0 1px #1f6feb}
 .bsql-res{flex:1 1 34%;min-height:90px;display:flex;flex-direction:column;border-top:1px solid var(--bsql-borda);background:#fff}
@@ -2172,8 +2176,8 @@ const CSS = `
 .bsql button.bsql-aba[aria-selected="true"],.bsql button.bsql-aba[aria-selected="true"]:hover{background:#fff;border-top:2px solid #1f6feb;font-weight:600}
 .bsql button:active{transform:none}
 .bsql .bsql-area textarea,.bsql .bsql-area textarea:focus{width:100%;height:100%;min-height:0;margin:0;padding:6px 10px;border:0;border-radius:0;box-shadow:none;outline:none;
-  background:transparent;background-color:transparent;font:13px/19px var(--bsql-mono);resize:none;transition:none}
-.bsql .bsql-area pre{font:13px/19px var(--bsql-mono);padding:6px 10px;margin:0;border:0;border-radius:0;background:transparent;box-shadow:none}
+  background:transparent;background-color:transparent;font:var(--bsql-fs,13px)/var(--bsql-lh,19px) var(--bsql-mono);resize:none;transition:none}
+.bsql .bsql-area pre{font:var(--bsql-fs,13px)/var(--bsql-lh,19px) var(--bsql-mono);padding:6px 10px;margin:0;border:0;border-radius:0;background:transparent;box-shadow:none}
 .bsql table{width:auto;border-collapse:collapse;border-spacing:0;font-size:12.5px}
 .bsql .bsql-grid table{min-width:100%}
 .bsql .bsql-log table{width:100%;table-layout:fixed}
@@ -2232,6 +2236,7 @@ export function montarBancada(container, opcoes = {}) {
       <button type="button" class="bsql-btn raio" data-acao="tudo" title="Executar tudo (Ctrl+Shift+Enter)" disabled><span class="ico" aria-hidden="true">⚡</span><span>Executar tudo</span></button>
       <button type="button" class="bsql-btn raio" data-acao="atual" title="Executar a seleção ou o comando onde está o cursor (Ctrl+Enter)" disabled><span class="ico" aria-hidden="true">⚡</span><span>Executar seleção<span class="txt-longo">/linha atual</span></span></button>
       <span class="bsql-sep" aria-hidden="true"></span>
+      <span class="bsql-fonte" role="group" aria-label="Tamanho da letra do editor"><button type="button" class="bsql-btn" data-acao="fonteMenos" title="Diminuir a letra do editor">A−</button><button type="button" class="bsql-btn" data-acao="fonteMais" title="Aumentar a letra do editor">A+</button></span>
       <button type="button" class="bsql-btn" data-acao="limpar" title="Limpar o Output e o Result Grid (o seu SQL não é apagado)"><span class="ico" aria-hidden="true">🧹</span><span>Limpar</span></button>
       <button type="button" class="bsql-btn" data-acao="restaurar" title="Recriar o banco do zero, com os dados originais" disabled><span class="ico" aria-hidden="true">↺</span><span>Restaurar base</span></button>
       <div class="bsql-status" aria-live="polite">
@@ -2287,6 +2292,16 @@ export function montarBancada(container, opcoes = {}) {
   }));
 
   let atual = 0, sessao = null, destruido = false, timer = null, nLog = 0;
+  // execuções de cada tarefa: [{ h: "HH:MM:SS", sql, erro? }] (as 40 últimas; vem da resposta salva)
+  const execucoes = Object.fromEntries(tarefas.map(t => [t.id, Array.isArray(salvo?.tarefas?.[t.id]?.execucoes) ? salvo.tarefas[t.id].execucoes.slice(-40) : []]));
+  // tamanho da letra do editor (lembrado neste computador)
+  const FONTES = [12, 13, 14, 16, 18, 20, 22, 24];
+  let iFonte = Math.max(0, FONTES.indexOf(Number(localStorage.getItem("bsqlFonte") || 13)));
+  function aplicarFonte() {
+    const fs = FONTES[iFonte]; raiz.style.setProperty("--bsql-fs", fs + "px"); raiz.style.setProperty("--bsql-lh", Math.round(fs * 1.46) + "px");
+    try { localStorage.setItem("bsqlFonte", String(fs)); } catch { /* sem armazenamento */ }
+    eds.forEach(sincronizar);
+  }
   const cache = new Map();
 
   // ---------- editor ----------
@@ -2355,7 +2370,8 @@ export function montarBancada(container, opcoes = {}) {
     const t = tarefas[atual];
     if (!t) { caixaTarefa.innerHTML = `<span class="dica">Esta questão não tem tarefas.</span>`; return; }
     const alt = t.tipo === "alteracao";
-    caixaTarefa.innerHTML = `<span class="rot">Tarefa ${atual + 1}</span><span class="tipo${alt ? " alt" : ""}">${alt ? "alteração" : "consulta"}</span>${escHtml(t.texto || "")}`
+    caixaTarefa.innerHTML = `<span class="rot">Tarefa ${atual + 1}</span><span class="tipo${alt ? " alt" : ""}">${alt ? "alteração" : "consulta"}</span><span class="txt">${escHtml(t.texto || "")}</span>`
+      + `<span class="contexto">📦 O banco <b>${escHtml(nomeBanco)}</b> já está criado e em uso, com as tabelas e os dados prontos (veja no Navegador, à esquerda). ${alt ? "Faça só o que a tarefa pede em cima dessa base: não precisa criar o banco de novo." : "Aqui é só fazer a consulta: não precisa criar banco nem tabela, nem inserir dados."}</span>`
       + `<span class="dica">${alt ? "Escreva o(s) comando(s) que fazem a alteração pedida." : "O resultado corrigido é o do último SELECT deste editor."} Cada tarefa é corrigida separadamente, sobre a base original.</span>`;
   }
   function trocarAba(i, focar = false) {
@@ -2466,6 +2482,11 @@ export function montarBancada(container, opcoes = {}) {
     const res = sessao.executarScript(texto, { limite: LIMITE_SESSAO });
     let ultimo = null;
     for (const r of res) { registrar(r); if (r.resultado) ultimo = r.resultado; }
+    const erro = res.find(r => !r.ok && !r.info);
+    const lista = execucoes[ed.tarefa.id];
+    lista.push({ h: hora(), sql: texto.trim().slice(0, 600), ...(erro ? { erro: String(erro.mensagem || "").slice(0, 300) } : {}) });
+    if (lista.length > 40) lista.splice(0, lista.length - 40);
+    agendarMudanca();
     if (ultimo) mostrarResultado(ultimo);
     atualizarArvore();
   }
@@ -2481,6 +2502,9 @@ export function montarBancada(container, opcoes = {}) {
   }
 
   botoes.tudo.addEventListener("click", () => executar("tudo"));
+  botoes.fonteMenos.addEventListener("click", () => { iFonte = Math.max(0, iFonte - 1); aplicarFonte(); });
+  botoes.fonteMais.addEventListener("click", () => { iFonte = Math.min(FONTES.length - 1, iFonte + 1); aplicarFonte(); });
+  aplicarFonte();
   botoes.atual.addEventListener("click", () => executar("atual"));
   botoes.limpar.addEventListener("click", () => { logBody.innerHTML = ""; nLog = 0; mostrarResultado(null); });
   botoes.restaurar.addEventListener("click", () => { restaurar(true); eds[atual]?.ta.focus(); });
@@ -2512,6 +2536,8 @@ export function montarBancada(container, opcoes = {}) {
   }
 
   return {
+    // quantas vezes executou (a página da prova usa para saber se precisa salvar de novo)
+    nExecucoes() { return Object.values(execucoes).reduce((s, l) => s + l.length, 0); },
     async valor() {
       const out = { tarefas: {} };
       for (const ed of eds) {
@@ -2519,7 +2545,7 @@ export function montarBancada(container, opcoes = {}) {
         let r;
         try { r = await avaliarComCache(ed.tarefa, sql); }
         catch (e) { r = { impressao: "", conjunto: "", erro: "Não foi possível avaliar: " + (e?.message || e) }; }
-        out.tarefas[ed.tarefa.id] = { sql, impressao: r.impressao, conjunto: r.conjunto, erro: r.erro };
+        out.tarefas[ed.tarefa.id] = { sql, impressao: r.impressao, conjunto: r.conjunto, erro: r.erro, execucoes: execucoes[ed.tarefa.id].slice(-40) };
       }
       return out;
     },

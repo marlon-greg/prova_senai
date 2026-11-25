@@ -47,8 +47,13 @@ export function textoParaIA(questao, gabarito, resposta, peso) {
     }).join("\n\n");
 }
 
-// resposta da questão SQL em texto (telas de resultado, PDF, relatórios)
+// resposta da questão SQL em texto (telas de resultado, PDF, relatórios), com as tentativas que deram erro na Bancada
 export function textoRespostaSql(questao, resposta) {
   const r = resposta?.tarefas || {};
-  return (questao?.tarefas || []).map((t, i) => `Tarefa ${i + 1}: ${t.texto}\n${String(r[t.id]?.sql || "").trim() || "(em branco)"}${r[t.id]?.erro ? `\n⚠ ${r[t.id].erro}` : ""}`).join("\n\n");
+  return (questao?.tarefas || []).map((t, i) => {
+    const a = r[t.id] || {}, ex = Array.isArray(a.execucoes) ? a.execucoes : [], erros = ex.filter(x => x.erro);
+    const hist = ex.length ? `\n▶ Executou ${ex.length} vez(es)${erros.length ? `, ${erros.length} com erro:` : ", sem erros."}` +
+      erros.slice(-8).map(x => `\n   ✖ ${x.h || ""}  ${String(x.sql || "").replace(/\s+/g, " ").slice(0, 160)}\n      → ${x.erro}`).join("") : "";
+    return `Tarefa ${i + 1}: ${t.texto}\n${String(a.sql || "").trim() || "(em branco)"}${a.erro ? `\n⚠ Na versão enviada: ${a.erro}` : ""}${hist}`;
+  }).join("\n\n");
 }

@@ -24,7 +24,7 @@ import { exportarExcel, exportarPDF } from "./exportar-turmas.js?v=20261110b";
 import { tarefa, ligarMenuLateral } from "./ui.js";
 import { ic } from "./icones.js";
 import { REGRAS_NOTA, regraDoTipo, calcNotaFinal } from "./nota-final.js";
-import { textoRespostaSql } from "../servidor/sql-correcao.js";
+import { textoRespostaSql } from "../servidor/sql-correcao.js?v=20261125b";
 import { HUMOR } from "./diario-perguntas.js";
 import { drawer, drawerForm, ligarFiltros, atualizarFiltros, ajudasEmPopover, menuHTML, itemMenu, vazio, chips, statTiles, pl, semestreLongo, seta } from "./ui.js";
 import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp, onSnapshot, increment, deleteField, Timestamp, arrayUnion, arrayRemove, runTransaction }
@@ -1507,7 +1507,7 @@ $("#btnImportarBanco").onclick = async () => {
   const gabSql = {};
   if (b.questoes.some(q => q.tipo === "sql")) {
     $("#msgBanco").textContent = "Rodando os gabaritos das questões SQL…";
-    const { calcularGabarito } = await import("./workbench.js?v=20261125a");
+    const { calcularGabarito } = await import("./workbench.js?v=20261125b");
     for (const [i, q] of b.questoes.entries()) if (q.tipo === "sql") {
       try { gabSql[i] = await calcularGabarito(q, q.gabarito); }
       catch (e) { $("#msgBanco").innerHTML = `❌ Questão ${i + 1}: ${esc(e.message)}`; return false; }
