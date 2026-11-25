@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prévia ao vivo — Bancada Web</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body { display: flex; flex-direction: column; font: 13px/1.4 "Inter", "Segoe UI", system-ui, Arial, sans-serif; background: #e9edf4; color: #1a2233; }
+    #barra { flex: none; display: flex; align-items: center; gap: 10px; height: 40px; padding: 0 14px; background: #14213d; color: #fff; }
+    #ponto { width: 10px; height: 10px; border-radius: 50%; background: #f5a524; }
+    #ponto.ok { background: #2fbf71; box-shadow: 0 0 6px #2fbf71; }
+    #titulo { font-weight: 600; }
+    #estado { color: #9fb0d4; font-size: 12px; }
+    #url { margin-left: auto; padding: 2px 10px; border-radius: 10px; background: rgba(255,255,255,.1); color: #c9d3e6; font-size: 12px; }
+    #quadro { flex: 1; min-height: 0; }
+    #quadro iframe { display: block; width: 100%; height: 100%; border: 0; background: #fff; }
+  </style>
+</head>
+<body>
+  <header id="barra">
+    <span id="ponto" aria-hidden="true"></span>
+    <span id="titulo">Prévia ao vivo</span>
+    <span id="estado">Aguardando a prova…</span>
+    <span id="url"></span>
+  </header>
+  <main id="quadro"><iframe sandbox="allow-same-origin" title="Prévia do site"></iframe></main>
+  <script type="module">
+    // Aba de prévia da Bancada Web: recebe o projeto pela BroadcastChannel (canal no #hash), mostra a página
+    // num iframe SEM scripts e avisa a prova (batimentos) se esta aba está visível e com foco.
+    import { montarDocumentoWeb } from "./js/bancada-web.js";
+    const canalId = decodeURIComponent(location.hash.slice(1));
+    const frame = document.querySelector("iframe"), $ = (s) => document.querySelector(s);
+    let projeto = null, caminho = "", ultimoDoc = "", ultimoContato = 0;
+    const canal = canalId && typeof BroadcastChannel === "function" ? new BroadcastChannel("bancada-web-" + canalId) : null;
+    const enviar = (m) => { try { canal?.postMessage({ ...m, ts: Date.now() }); } catch { /* */ } };
+    const presenca = () => enviar({ tipo: "presenca", visivel: document.visibilityState === "visible", foco: document.hasFocus() });
+
+    function mostrar() {
+      if (!projeto) return;
+      const doc = montarDocumentoWeb(projeto.arquivos || {}, caminho, projeto.base || "");
+      $("#url").textContent = "localhost:5500/" + caminho;
+      if (doc === ultimoDoc) return;
+      let y = 0;
+      try { y = frame.contentWindow.scrollY; } catch { /* */ }
+      frame._rolar = y;
+      ultimoDoc = doc;
+      frame.srcdoc = doc;
+    }
+    frame.addEventListener("load", () => {
+      const d = frame.contentDocument;
+      if (!d) return;
+      if (frame._rolar) frame.contentWindow.scrollTo(0, frame._rolar);
+      d.addEventListener("click", (ev) => {
+        const a = ev.target.closest?.("a[href]");
+        if (!a) return;
+        ev.preventDefault();
+        const href = a.getAttribute("href") || "";
+        if (href.startsWith("#")) {
+          const alvo = href.length > 1 ? d.getElementById(decodeURIComponent(href.slice(1))) : null;
+          if (alvo) alvo.scrollIntoView({ behavior: "smooth" }); else if (href === "#") frame.contentWindow.scrollTo({ top: 0, behavior: "smooth" });
+          return;
+        }
+        if (/^([a-z][a-z0-9+.-]*:|\/\/)/i.test(href)) return;
+        const dir = caminho.includes("/") ? caminho.slice(0, caminho.lastIndexOf("/") + 1) : "";
+        const partes = [];
+        for (const p of (href.startsWith("/") ? href : dir + href).split(/[?#]/)[0].split("/")) { if (!p || p === ".") continue; if (p === "..") partes.pop(); else partes.push(p); }
+        const alvo = partes.join("/");
+        if (projeto?.arquivos?.[alvo] != null && /\.html?$/i.test(alvo)) { caminho = alvo; mostrar(); }
+      }, true);
+      d.addEventListener("submit", (ev) => ev.preventDefault(), true);
+      ["dragstart", "copy", "cut", "contextmenu", "drop"].forEach((t) => d.addEventListener(t, (ev) => ev.preventDefault(), true));
+    });
+
+    if (canal) {
+      canal.onmessage = (ev) => {
+        const m = ev.data || {};
+        ultimoContato = Date.now();
+        if (m.tipo === "projeto") {
+          // a prova manda o HTML que o aluno está vendo; links clicados aqui mudam só esta aba
+          if (!projeto || m.entrada !== projeto.entrada) caminho = m.entrada || "index.html";
+          projeto = m;
+          if (m.titulo) $("#titulo").textContent = "Prévia ao vivo — " + m.titulo;
+          mostrar();
+        }
+        if (m.tipo === "encerrar") $("#estado").textContent = "A prova fechou a bancada. Pode fechar esta aba.";
+        atualizarEstado();
+      };
+      enviar({ tipo: "pronta", visivel: true, foco: document.hasFocus() });
+    } else {
+      $("#estado").textContent = "Abra esta prévia pelo botão da prova.";
+    }
+    function atualizarEstado() {
+      const ok = Date.now() - ultimoContato < 5000;
+      $("#ponto").classList.toggle("ok", ok);
+      if (canal && $("#estado").textContent.indexOf("fechou") < 0) $("#estado").textContent = ok ? "Conectada à prova · atualiza sozinha" : "Sem contato com a prova…";
+    }
+    ["focus", "blur"].forEach((t) => window.addEventListener(t, presenca));
+    document.addEventListener("visibilitychange", presenca);
+    setInterval(() => { presenca(); atualizarEstado(); }, 800);
+    window.addEventListener("pagehide", () => enviar({ tipo: "fechada" }));
+  </script>
+</body>
+</html>

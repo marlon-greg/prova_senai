@@ -32,6 +32,8 @@
 import { temFormato, corrigirFormato, pedidoFormatos, lerRespostaFormatos, contextoDiario } from "./formatos.js";
 import { integracao, buscarEGravar } from "./integracao.js";
 import { corrigirSql, textoParaIA } from "./sql-correcao.js";
+import { corrigirWeb } from "./web-correcao.js";
+const gabWeb = g => g?.web ? (() => { try { return JSON.parse(g.web); } catch { return {}; } })() : g;
 import { montarEvidencia, NIVEIS_PROVA, chaveEmail } from "../js/evidencias.js";
 import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS, pedidoCurso, lerRespostaCurso, pedidoConquistas, lerRespostaConquistas, pedidoPerfil, lerRespostaPerfil, pedidoAnalise, lerRespostaAnalise, contextoPeriodo } from "./organizar.js";
 
@@ -307,7 +309,7 @@ async function corrigirTentativa(env, usuario, tid) {
   const itens = ids.map(qid => {
     const q = docs[`bancos/${bancoDe(qid)}/questoes/${qid}`] || { peso: 1 }, g = docs[`bancos/${bancoDe(qid)}/gabaritos/${qid}`] || {};
     const peso = Number(q.peso || 1), r = resp[qid];
-    let c = r?.perdida === true ? { pontos: 0, status: "perdida" } : temFormato(q) ? corrigirFormato(q, g, r?.resposta, peso) : q.tipo === "sql" ? corrigirSql(q, g, r?.resposta, peso) : corrigirLocal(q, g, r?.resposta, r?.perdida === true);
+    let c = r?.perdida === true ? { pontos: 0, status: "perdida" } : temFormato(q) ? corrigirFormato(q, g, r?.resposta, peso) : q.tipo === "sql" ? corrigirSql(q, g, r?.resposta, peso) : q.tipo === "web" ? corrigirWeb(q, gabWeb(g), r?.resposta, peso) : corrigirLocal(q, g, r?.resposta, r?.perdida === true);
     const m = atuais[qid];
     if (!r?.perdida && m && m.pontos !== undefined) {
       const p = Number(m.pontos);

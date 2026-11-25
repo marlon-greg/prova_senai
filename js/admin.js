@@ -2,7 +2,7 @@
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, apagarTentativaTeste,
          confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco,
          rotuloDias, nomeTurma, HORARIO_PADRAO, textoHorario, DIAS_SEMANA_LONGO,
-         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261125a";
+         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261125b";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
@@ -25,6 +25,7 @@ import { tarefa, ligarMenuLateral } from "./ui.js";
 import { ic } from "./icones.js";
 import { REGRAS_NOTA, regraDoTipo, calcNotaFinal } from "./nota-final.js";
 import { textoRespostaSql } from "../servidor/sql-correcao.js?v=20261125b";
+import { textoRespostaWeb } from "../servidor/web-correcao.js?v=20261125a";
 import { HUMOR } from "./diario-perguntas.js";
 import { drawer, drawerForm, ligarFiltros, atualizarFiltros, ajudasEmPopover, menuHTML, itemMenu, vazio, chips, statTiles, pl, semestreLongo, seta } from "./ui.js";
 import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp, onSnapshot, increment, deleteField, Timestamp, arrayUnion, arrayRemove, runTransaction }
@@ -208,11 +209,11 @@ async function questoesDoBanco(bancoId, recarregar = false) {
 // { tema: { alternativa: n, dissertativa: n } }, temas em ordem alfabética
 function contarPorTema(questoes) {
   const c = {};
-  for (const tema of ordenarTemas(questoes.map(temaDe))) c[tema] = { alternativa: 0, dissertativa: 0, sql: 0 };
-  questoes.forEach(q => { const k = q.tipo === "dissertativa" ? "dissertativa" : q.tipo === "sql" ? "sql" : "alternativa"; c[temaDe(q)][k]++; });
+  for (const tema of ordenarTemas(questoes.map(temaDe))) c[tema] = { alternativa: 0, dissertativa: 0, sql: 0, web: 0 };
+  questoes.forEach(q => { const k = ["dissertativa", "sql", "web"].includes(q.tipo) ? q.tipo : "alternativa"; c[temaDe(q)][k]++; });
   return c;
 }
-const textoContagem = n => `${n.alternativa} alternativa, ${n.dissertativa} dissertativa${n.sql ? `, ${n.sql} SQL (Bancada)` : ""}`;
+const textoContagem = n => `${n.alternativa} alternativa, ${n.dissertativa} dissertativa${n.sql ? `, ${n.sql} SQL (Bancada)` : ""}${n.web ? `, ${n.web} Web (Bancada)` : ""}`;
 // checkboxes de tema (todos marcados); onMudar é chamado a cada alteração
 function desenharChecksTemas(box, contagem, onMudar) {
   const temas = Object.keys(contagem);
@@ -561,6 +562,7 @@ function formProvaHTML(f) {
     <div><label for="${f}NAlt">Alternativas por aluno</label><input type="number" id="${f}NAlt" value="7" min="0"></div>
     <div><label for="${f}NDiss">Dissertativas por aluno</label><input type="number" id="${f}NDiss" value="3" min="0">
       <p class="pequeno" id="${f}NTotal" style="margin:4px 0 0" aria-live="polite"></p></div>
+    <div><label for="${f}NWeb">Projetos web (Bancada Web) por aluno</label><input type="number" id="${f}NWeb" value="0" min="0" title="Prova prática de HTML/CSS num editor parecido com o VS Code, com prévia ao vivo (escolha o tema do projeto nos temas do banco)"></div>
     <div><label for="${f}NSql">Questões SQL na Bancada por aluno</label><input type="number" id="${f}NSql" value="0" min="0" title="Questões práticas: o aluno escreve e executa SQL numa bancada parecida com o MySQL Workbench (cada aluno recebe um cenário sorteado)"></div>
   </div>
   <div class="grade">
@@ -656,8 +658,8 @@ function controleProva(f) {
   const temasDe = b => contagens[b] && contagens[b] !== "erro" ? Object.keys(contagens[b]) : [];
   const bancosMarcados = () => bancosCache.map(b => b.id).filter(b => sel.get(b)?.size && temasDe(b).length);
   const disponiveis = () => {
-    const d = { alternativa: 0, dissertativa: 0, sql: 0 };
-    for (const b of bancosMarcados()) for (const t of sel.get(b)) { const c = contagens[b][t]; if (c) { d.alternativa += c.alternativa; d.dissertativa += c.dissertativa; d.sql += c.sql || 0; } }
+    const d = { alternativa: 0, dissertativa: 0, sql: 0, web: 0 };
+    for (const b of bancosMarcados()) for (const t of sel.get(b)) { const c = contagens[b][t]; if (c) { d.alternativa += c.alternativa; d.dissertativa += c.dissertativa; d.sql += c.sql || 0; d.web += c.web || 0; } }
     return d;
   };
   const carregado = () => bancosCache.some(b => contagens[b.id]);
@@ -667,7 +669,8 @@ function controleProva(f) {
     if (travado || !carregado()) return "";
     if (!bancosMarcados().length) return "Marque pelo menos um banco (ou um tema de algum banco).";
     if (nAlt > d.alternativa) return `Faltam questões de alternativa: a prova pede ${nAlt}, mas os bancos/temas marcados só têm ${d.alternativa}. Marque mais temas ou diminua as alternativas.`;
-    const nSql = Number($f("NSql").value || 0);
+    const nSql = Number($f("NSql").value || 0), nWeb = Number($f("NWeb").value || 0);
+    if (nWeb > d.web) return `Faltam projetos da Bancada Web: a prova pede ${nWeb}, mas os bancos/temas marcados só têm ${d.web}. Importe o banco da Bancada Web ou marque o tema do projeto.`;
     if (nSql > d.sql) return `Faltam questões SQL (Bancada): a prova pede ${nSql}, mas os bancos/temas marcados só têm ${d.sql}. Importe o banco da Bancada SQL ou diminua.`;
     if (nDiss > d.dissertativa) return `Faltam dissertativas: a prova pede ${nDiss}, mas os bancos/temas marcados só têm ${d.dissertativa}. Marque mais temas ou diminua as dissertativas.`;
     return "";
@@ -675,7 +678,7 @@ function controleProva(f) {
   function atualizar() {
     topicosPlano.aoMudarMateria();
     const nAlt = Number($f("NAlt").value || 0), nDiss = Number($f("NDiss").value || 0);
-    $f("NTotal").textContent = `Total: ${nAlt + nDiss + Number($f("NSql").value || 0)} questões por aluno.`;
+    $f("NTotal").textContent = `Total: ${nAlt + nDiss + Number($f("NSql").value || 0) + Number($f("NWeb").value || 0)} questões por aluno.`;
     const el = $f("TemasResumo");
     if (!carregado()) { el.textContent = ""; el.classList.remove("erro"); return; }
     const prob = problema(), bs = bancosMarcados();
@@ -849,7 +852,7 @@ function controleProva(f) {
     $f("TemasBusca").oninput = $f("TemasVisao").onchange = $f("TemasSoMarcados").onchange = desenharTemas;
     $f("TemasMarcar").onclick = () => marcarVisiveis(true);
     $f("TemasDesmarcar").onclick = () => marcarVisiveis(false);
-    $f("NAlt").oninput = $f("NDiss").oninput = $f("NSql").oninput = atualizar;
+    $f("NAlt").oninput = $f("NDiss").oninput = $f("NSql").oninput = $f("NWeb").oninput = atualizar;
     $f("MatUrl").oninput = previaMaterial;
     // vários de uma vez: cada PDF recebe o nome do arquivo como título e já entra marcado
     $f("MatUpload").onchange = async () => {
@@ -904,7 +907,7 @@ function controleProva(f) {
   // trava bancos, número de questões, dissertativas e temas (prova que já tem tentativas de alunos)
   function travar(motivo) {
     travado = true;
-    ["NAlt", "NDiss", "NSql", "TemasMarcar", "TemasDesmarcar"].forEach(s => $f(s).disabled = true);
+    ["NAlt", "NDiss", "NSql", "NWeb", "TemasMarcar", "TemasDesmarcar"].forEach(s => $f(s).disabled = true);
     $f("Temas").querySelectorAll("input").forEach(x => x.disabled = true);
     $f("Trava").innerHTML = motivo; $f("Trava").classList.remove("oculto");
     atualizar();
@@ -922,7 +925,7 @@ function controleProva(f) {
     $f("Data").value = p.dataProva || ""; opcoesMateria();
     topicosPlano.definir(p.planoCurso);
     // provas antigas só têm o total (nQuestoes) e as dissertativas
-    $f("NSql").value = p.nSql ?? 0;
+    $f("NSql").value = p.nSql ?? 0; $f("NWeb").value = p.nWeb ?? 0;
     $f("NDiss").value = p.nDissertativas ?? 0; $f("NAlt").value = p.nAlternativas ?? Math.max(0, (p.nQuestoes ?? 10) - (p.nDissertativas ?? 0));
     $f("Tempo").value = p.tempoMinutos || 0;
     $f("Modo").value = p.modoExibicao === "todas" ? "todas" : "uma";
@@ -941,7 +944,7 @@ function controleProva(f) {
   // lê e valida; devolve { erro } ou { dados }
   async function ler() {
     const titulo = $f("Titulo").value.trim();
-    const nAlt = Math.max(0, Math.round(Number($f("NAlt").value || 0))), nDiss = Math.max(0, Math.round(Number($f("NDiss").value || 0))), nSql = Math.max(0, Math.round(Number($f("NSql").value || 0))), n = nAlt + nDiss + nSql;
+    const nAlt = Math.max(0, Math.round(Number($f("NAlt").value || 0))), nDiss = Math.max(0, Math.round(Number($f("NDiss").value || 0))), nSql = Math.max(0, Math.round(Number($f("NSql").value || 0))), nWeb = Math.max(0, Math.round(Number($f("NWeb").value || 0))), n = nAlt + nDiss + nSql + nWeb;
     if (!titulo) return { erro: "Preencha o título." };
     if (!turmaEscolhida().turmaId) return { erro: "Escolha a turma da prova. Só os alunos dessa turma veem a prova." };
     if (!travado && !n) return { erro: "A prova precisa de pelo menos uma questão (alternativas + dissertativas)." };
@@ -978,7 +981,7 @@ function controleProva(f) {
     // bancoId = o primeiro (as regras do Firestore e as tentativas antigas usam); temas = os do primeiro banco (compatibilidade)
     if (!travado) {
       const temasPorBanco = Object.fromEntries(bancoIds.map(b => [b, ordenarTemas([...sel.get(b)])]));   // todos marcados = lista completa
-      Object.assign(dados, { bancoId: bancoIds[0], bancoIds, temasPorBanco, temas: temasPorBanco[bancoIds[0]], nQuestoes: n, nAlternativas: nAlt, nDissertativas: nDiss, nSql });
+      Object.assign(dados, { bancoId: bancoIds[0], bancoIds, temasPorBanco, temas: temasPorBanco[bancoIds[0]], nQuestoes: n, nAlternativas: nAlt, nDissertativas: nDiss, nSql, nWeb });
     }
     return { dados };
   }
@@ -1143,7 +1146,7 @@ function desenharProvas() {
 }
 function cartaoProvaHTML(p) {
     const bs = bancosDaProva(p).map(id => bancosCache.find(x => x.id === id) || { id, nome: id });
-    const qtd = (p.nAlternativas !== undefined && p.nAlternativas !== null ? `${p.nAlternativas} alt. + ${p.nDissertativas || 0} dissert.` : p.nDissertativas ? `${p.nDissertativas} dissert.` : "") + (p.nSql ? ` + ${p.nSql} SQL` : "");
+    const qtd = (p.nAlternativas !== undefined && p.nAlternativas !== null ? `${p.nAlternativas} alt. + ${p.nDissertativas || 0} dissert.` : p.nDissertativas ? `${p.nDissertativas} dissert.` : "") + (p.nSql ? ` + ${p.nSql} SQL` : "") + (p.nWeb ? ` + ${p.nWeb} web` : "");
     const vidas = !p.permitirTrocaAba && Number(p.maxTrocasDeAba) > 0 ? Number(p.maxTrocasDeAba) : 0;
     const itens = (podeEditar() ? itemMenu({ i: p.resultadosLiberados ? "lock" : "unlock", t: p.resultadosLiberados ? "Ocultar gabarito" : "Liberar gabarito", attrs: `data-tg="resultadosLiberados" data-id="${p.id}" title="O aluno vê quais acertou, o gabarito e baixa o PDF da prova"` })
         + itemMenu({ i: "edit", t: "Editar", attrs: `data-editar="${p.id}"` }) : "")
@@ -1483,12 +1486,14 @@ function validarBanco(txt) {
   if (!Array.isArray(b.questoes) || !b.questoes.length) throw new Error("Falta a lista questoes.");
   b.questoes.forEach((q, i) => {
     const n = i + 1;
-    if (!["alternativa", "dissertativa", "sql"].includes(q.tipo)) throw new Error(`Questão ${n}: tipo deve ser alternativa, dissertativa ou sql.`);
+    if (!["alternativa", "dissertativa", "sql", "web"].includes(q.tipo)) throw new Error(`Questão ${n}: tipo deve ser alternativa, dissertativa, sql ou web.`);
     if (!q.enunciado) throw new Error(`Questão ${n}: falta o enunciado.`);
     if (q.tema !== undefined && q.tema !== null && typeof q.tema !== "string") throw new Error(`Questão ${n}: "tema" deve ser um texto (ex.: "DML - UPDATE").`);
     if (q.tipo === "alternativa") {
       if (!Array.isArray(q.alternativas) || q.alternativas.length < 2) throw new Error(`Questão ${n}: precisa de pelo menos 2 alternativas.`);
       if (!Number.isInteger(q.correta) || q.correta < 0 || q.correta >= q.alternativas.length) throw new Error(`Questão ${n}: "correta" deve ser o índice da alternativa certa (0 = primeira).`);
+    } else if (q.tipo === "web") {
+      if (!Array.isArray(q.etapas) || !q.etapas.length || !q.gabarito) throw new Error(`Questão ${n} (web): precisa de etapas e de gabarito.`);
     } else if (q.tipo === "sql") {
       if (!q.banco?.setup || !Array.isArray(q.tarefas) || !q.tarefas.length) throw new Error(`Questão ${n} (sql): precisa de banco.setup e de tarefas.`);
       q.tarefas.forEach((t, k) => { if (!t.id || !t.texto) throw new Error(`Questão ${n} (sql), tarefa ${k + 1}: precisa de id e texto.`); if (!q.gabarito?.tarefas?.[t.id]?.sql) throw new Error(`Questão ${n} (sql): falta o gabarito da tarefa ${t.id}.`); });
@@ -1514,6 +1519,16 @@ $("#btnImportarBanco").onclick = async () => {
   // questões SQL: roda o gabarito na Bancada (no navegador) e guarda a "impressão" do resultado de cada tarefa;
   // o servidor só compara (resultado igual = certa, sem gastar IA)
   const gabSql = {};
+  const gabWebI = {};
+  if (b.questoes.some(q => q.tipo === "web")) {
+    $("#msgBanco").textContent = "Montando os gabaritos dos projetos web…";
+    const { calcularGabaritoWeb } = await import("./bancada-web.js?v=20261125a");
+    for (const [i, q] of b.questoes.entries()) if (q.tipo === "web") {
+      const { gabarito, ...pub } = q;
+      try { gabWebI[i] = await calcularGabaritoWeb(pub, gabarito); }
+      catch (e) { $("#msgBanco").innerHTML = `❌ Questão ${i + 1}: ${esc(e.message)}`; return false; }
+    }
+  }
   if (b.questoes.some(q => q.tipo === "sql")) {
     $("#msgBanco").textContent = "Rodando os gabaritos das questões SQL…";
     const { calcularGabarito } = await import("./workbench.js?v=20261125b");
@@ -1529,11 +1544,12 @@ $("#btnImportarBanco").onclick = async () => {
     const qid = `${ref.id}_q${String(i + 1).padStart(3, "0")}`;
     const pub = { ordem: i + 1, tipo: q.tipo, enunciado: q.enunciado, peso: Number(q.peso || 1), tema: temaDe(q) };
     if (q.tipo === "alternativa") pub.alternativas = q.alternativas;
+    if (q.tipo === "web") { const { gabarito, tipo, enunciado, peso, tema, ...resto } = q; Object.assign(pub, resto); }
     if (q.tipo === "sql") { pub.banco = { nome: String(q.banco.nome || "banco"), setup: q.banco.setup }; pub.tarefas = q.tarefas.map(t => ({ id: t.id, texto: t.texto, tipo: t.tipo === "alteracao" ? "alteracao" : "consulta", ...(t.verificacao ? { verificacao: t.verificacao } : {}) })); }
     lote.set(doc(db, "bancos", ref.id, "questoes", qid), pub);
     const gab = { explicacao: q.explicacao || "" };
     if (q.dica) gab.dica = String(q.dica).slice(0, 400);   // dica pronta (opcional): sem ela, o servidor pede uma à IA
-    if (q.tipo === "alternativa") gab.correta = q.correta; else if (q.tipo === "sql") gab.tarefas = gabSql[i].tarefas; else { gab.respostasAceitas = q.respostasAceitas || []; gab.palavrasChave = q.palavrasChave || []; }
+    if (q.tipo === "alternativa") gab.correta = q.correta; else if (q.tipo === "sql") gab.tarefas = gabSql[i].tarefas; else if (q.tipo === "web") gab.web = JSON.stringify(gabWebI[i]); else { gab.respostasAceitas = q.respostasAceitas || []; gab.palavrasChave = q.palavrasChave || []; }
     lote.set(doc(db, "bancos", ref.id, "gabaritos", qid), gab);
   });
   await lote.commit();
@@ -1550,6 +1566,12 @@ const BANCOS_PRONTOS = [
       { titulo: "Prática SQL na Bancada (1 cenário sorteado)", nSql: 1, tempoMinutos: 45 },
       { titulo: "Prática SQL na Bancada (2 cenários sorteados)", nSql: 2, tempoMinutos: 90 },
       { titulo: "Prática SQL na Bancada — com 3 dicas do mascote", nSql: 1, tempoMinutos: 45, dicasMax: 3 }
+    ] },
+  { arquivo: "bancos/banco_web_demon_slayer.json", icone: "🧑‍💻", titulo: "Bancada Web: site Demon Slayer + portfólio", desc: "Prova prática de HTML e CSS (Flexbox, Grid) num editor parecido com o VS Code: passo a passo à esquerda, comandos HTML/CSS no lugar do terminal, prévia ao vivo na mesma tela e git simulado (commit e push). Três jeitos: encaixar blocos (padrão), completar digitando e projeto livre com pastas e arquivos.",
+    provas: [
+      { titulo: "Prática Web — Demon Slayer (encaixar os blocos)", nWeb: 1, tempoMinutos: 100, tema: "Demon Slayer — encaixar blocos" },
+      { titulo: "Prática Web — Demon Slayer (completar digitando)", nWeb: 1, tempoMinutos: 100, tema: "Demon Slayer — completar digitando" },
+      { titulo: "Prática Web — Portfólio (projeto livre com pastas e git)", nWeb: 1, tempoMinutos: 100, tema: "Portfólio — projeto livre" }
     ] }
 ];
 function desenharBancosProntos() {
@@ -1576,16 +1598,16 @@ async function importarPronto(item, bt) {
       await updateDoc(doc(db, "bancos", ultimoBancoImportado.id), { arquivoPronto: item.arquivo });
       banco = { id: ultimoBancoImportado.id, ...(await getDoc(doc(db, "bancos", ultimoBancoImportado.id))).data() };
     } else if (!(await confirmar(`Criar de novo as ${item.provas.length} somativas de exemplo do banco "${banco.nome}"?`, { titulo: "Somativas de exemplo", ok: "Criar" }))) { bt.disabled = false; return; }
-    const temas = banco.temas || [];
     for (const p of item.provas) {
-      const n = Number(p.nSql || 0) + Number(p.nAlternativas || 0) + Number(p.nDissertativas || 0);
+      const temas = p.tema ? [p.tema] : (banco.temas || []);
+      const n = Number(p.nSql || 0) + Number(p.nWeb || 0) + Number(p.nAlternativas || 0) + Number(p.nDissertativas || 0);
       await addDoc(collection(db, "provas"), {
-        titulo: p.titulo, turmaId: null, turma: "", codigoAcesso: "", semestre: semestreDe(), materia: banco.materia || "Banco de Dados", dataProva: "", planoCurso: null,
+        titulo: p.titulo, turmaId: null, turma: "", codigoAcesso: "", semestre: semestreDe(), materia: banco.materia || (p.nWeb ? "Desenvolvimento Web" : "Banco de Dados"), dataProva: "", planoCurso: null,
         permitirVoltar: true, tempoMinutos: p.tempoMinutos || 45, modoExibicao: "uma", permitirTrocaAba: false, permitirColar: false,
         maxTrocasDeAba: 3, colarTiraVida: true, dicasMax: p.dicasMax || 0, segundosVolta: 5, entradaAte: null, iaAutomatica: true, acaoAoExceder: "encerrar",
         materialConsultaUrl: "", materiaisConsultaIds: [], materialConsultaArquivoId: null, materialConsultaTitulo: "",
         bancoId: banco.id, bancoIds: [banco.id], temasPorBanco: { [banco.id]: temas }, temas,
-        nQuestoes: n, nAlternativas: Number(p.nAlternativas || 0), nDissertativas: Number(p.nDissertativas || 0), nSql: Number(p.nSql || 0),
+        nQuestoes: n, nAlternativas: Number(p.nAlternativas || 0), nDissertativas: Number(p.nDissertativas || 0), nSql: Number(p.nSql || 0), nWeb: Number(p.nWeb || 0),
         liberada: false, resultadosLiberados: false, criadoEm: serverTimestamp(), criadoPor: eu.email, exemploPronto: item.arquivo
       });
     }
@@ -2468,9 +2490,9 @@ function verAluno(id, rolar = true) {
     const tempo = typeof x.segundos === "number" ? `<span class="tag ${rapida ? "erro" : ""}" title="Tempo entre a questão aparecer e a resposta ser enviada">⏱ ${fmtTempo(x.segundos)}${rapida ? ` · menos de ${RAPIDO} s` : ""}</span>` : "";
     const dicaTag = l.t.dicas?.[x.qid] ? ` <span class="tag aviso" title="${esc(l.t.dicas[x.qid].texto || "")}">💡 pediu dica</span>` : "";
     const fmt = temFormato(x.q), bloco = t => `<span class="resp-formato">${esc(t).replace(/\n/g, "<br>")}</span>`;
-    const sua = x.perdida ? "<i>perdida por sair da prova</i>" : x.r === undefined ? "<i>não respondida</i>" : x.q.tipo === "sql" ? bloco(textoRespostaSql(x.q, x.r)) : fmt ? bloco(textoResposta(x.q, x.r)) : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
+    const sua = x.perdida ? "<i>perdida por sair da prova</i>" : x.r === undefined ? "<i>não respondida</i>" : x.q.tipo === "sql" ? bloco(textoRespostaSql(x.q, x.r)) : x.q.tipo === "web" ? bloco(textoRespostaWeb(x.q, x.r)) : fmt ? bloco(textoResposta(x.q, x.r)) : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
     const certa = x.q.tipo === "sql" ? bloco((x.q.tarefas || []).map((t, k) => `Tarefa ${k + 1}: ${x.g.tarefas?.[t.id]?.sql || "—"}`).join("\n")) : fmt ? (x.g.chave ? bloco(textoChave(x.q, x.g)) + ` <span class="tag nota">${FORMATOS[x.q.formato].icone} ${esc(FORMATOS[x.q.formato].nome)}</span>` : "—") : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.g.correta] ?? "—") : esc((x.g.respostasAceitas || [])[0] || (x.g.palavrasChave || []).join(" + "));
-    const manual = podeEditar() && ["dissertativa", "sql"].includes(x.q.tipo) && !x.perdida ? `<div class="linha" style="margin-top:6px"><div style="flex:0 0 120px"><label>Pontos (0–${x.peso})</label><input type="number" min="0" max="${x.peso}" step="0.25" value="${x.pontos}" id="pt_${x.qid}"></div><div><label>Comentário para o aluno</label><input type="text" id="cm_${x.qid}" value="${esc(x.comentario)}"></div><div style="flex:0 0 120px;align-self:flex-end"><button class="mini" data-corr="${x.qid}">Salvar</button></div></div>` : "";
+    const manual = podeEditar() && ["dissertativa", "sql", "web"].includes(x.q.tipo) && !x.perdida ? `<div class="linha" style="margin-top:6px"><div style="flex:0 0 120px"><label>Pontos (0–${x.peso})</label><input type="number" min="0" max="${x.peso}" step="0.25" value="${x.pontos}" id="pt_${x.qid}"></div><div><label>Comentário para o aluno</label><input type="text" id="cm_${x.qid}" value="${esc(x.comentario)}"></div><div style="flex:0 0 120px;align-self:flex-end"><button class="mini" data-corr="${x.qid}">Salvar</button></div></div>` : "";
     const rot = ROTULOS[x.status] || ROTULOS.revisar;
     return `<div class="feedback bloco ${x.status === "certa" ? "certa" : ["errada", "perdida", "em_branco"].includes(x.status) ? "errada" : "revisar"}"><div class="linha acoes"><b>Q${x.n}</b> <span class="tag ${rot[0]}">${rot[1]} · ${x.pontos}/${x.peso}${x.manual ? " · manual" : ""}</span>${x.ia ? `<span class="tag nota" title="Corrigida pela IA — confira e ajuste se precisar">🤖 IA</span>` : ""}${errosIA.has(l.t.id + "/" + x.qid) ? `<span class="tag erro ia-erro">⚠ IA: ${esc(errosIA.get(l.t.id + "/" + x.qid))}</span>` : ""}${tempo}</div>
       <div class="enunciado pequeno">${esc(x.q.enunciado)}</div>${avisoQuestaoHTML(resDados.revMap?.get(x.qid), l.t, x.status !== "certa")}<p><b>Resposta do aluno:</b> ${sua}${typeof dicaTag === "string" ? dicaTag : ""}<br><b>Esperada:</b> ${certa}</p>${manual}</div>`;
@@ -2752,7 +2774,7 @@ function boletimHTML(l, quebra = false) {
   h += `<div class="peq">Tempo total: ${fmtTempo(l.tempo)} · Trocas de aba: ${abasTexto(l.sinais)} · Saídas da tela cheia: ${l.sinais.telaCheia} · Tentativas de colar: ${l.sinais.colar}</div>`;
   h += l.itens.map(x => {
     const fmt = temFormato(x.q), bloco = t => esc(t).replace(/\n/g, "<br>");
-    const sua = x.perdida ? "<i>perdida por sair da prova</i>" : x.r === undefined ? "<i>não respondida</i>" : x.q.tipo === "sql" ? bloco(textoRespostaSql(x.q, x.r)) : fmt ? bloco(textoResposta(x.q, x.r)) : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
+    const sua = x.perdida ? "<i>perdida por sair da prova</i>" : x.r === undefined ? "<i>não respondida</i>" : x.q.tipo === "sql" ? bloco(textoRespostaSql(x.q, x.r)) : x.q.tipo === "web" ? bloco(textoRespostaWeb(x.q, x.r)) : fmt ? bloco(textoResposta(x.q, x.r)) : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
     const certa = fmt ? bloco(textoChave(x.q, x.g) || "—") : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.g.correta] ?? "—") : esc((x.g.respostasAceitas || [])[0] || "—");
     const cls = x.status === "certa" ? "certa" : ["errada", "em_branco", "perdida"].includes(x.status) ? "errada" : "outra";
     const rapida = x.r !== undefined && typeof x.segundos === "number" && x.segundos < RAPIDO;

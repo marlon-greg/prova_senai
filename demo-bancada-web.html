@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demonstração — Bancada Web (HTML/CSS)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { margin: 0; }
+    main.demo-corpo { max-width: none; margin: 0; }
+    .demo-topo { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 10px 16px; background: #fff; border-bottom: 1px solid var(--borda); }
+    .demo-topo h1 { margin: 0; font-size: 17px; color: var(--marinho); }
+    .demo-topo .esp { flex: 1; }
+    .demo-abas { display: flex; gap: 6px; flex-wrap: wrap; }
+    .demo-abas button[aria-pressed="true"] { background: var(--marinho-2); color: #fff; border-color: var(--marinho-2); }
+    .demo-corpo { padding: 10px 16px 16px; }
+    .demo-enun { margin: 0 0 10px; color: var(--suave); font-size: 13.5px; max-width: 1200px; }
+    .demo-res { margin-top: 12px; }
+    .demo-res pre { margin: 0; max-height: 420px; overflow: auto; background: #1f2430; color: #e6e9ef; padding: 12px; border-radius: 10px; font: 12px/1.45 Consolas, monospace; white-space: pre-wrap; }
+    .demo-nota { display: inline-block; margin: 0 0 8px; padding: 6px 12px; border-radius: 999px; background: var(--marinho-claro); color: var(--marinho-2); font-weight: 700; }
+  </style>
+</head>
+<body>
+  <header class="demo-topo">
+    <h1>Bancada Web · demonstração</h1>
+    <nav class="demo-abas" id="abas" aria-label="Questões"></nav>
+    <span class="esp"></span>
+    <button type="button" class="leve mini" id="btnGabarito" title="Preenche a resposta do professor (só nesta demonstração)">Preencher com o gabarito</button>
+    <button type="button" class="leve mini" id="btnValor">Ver valor()</button>
+    <button type="button" class="ok mini" id="btnCorrigir">Corrigir (local)</button>
+    <label class="check" style="margin:0"><input type="checkbox" id="chkRo"> Somente leitura</label>
+  </header>
+  <main class="demo-corpo">
+    <p class="demo-enun" id="enun"></p>
+    <div id="bancada"></div>
+    <section class="demo-res" id="res" hidden></section>
+  </main>
+  <script type="module">
+    import { montarBancadaWeb, calcularGabaritoWeb } from "./js/bancada-web.js";
+    import { corrigirWeb, textoRespostaWeb } from "./servidor/web-correcao.js";
+
+    const $ = (s) => document.querySelector(s);
+    const banco = await (await fetch("bancos/banco_web_demon_slayer.json", { cache: "no-store" })).json();
+    // como na importação: a parte pública fica na questão, a fonte do gabarito sai dela
+    const questoes = banco.questoes.map((q) => { const { gabarito, ...pub } = q; return { pub, fonte: gabarito }; });
+    const nomes = { blocos: "Demon Slayer — blocos", completar: "Demon Slayer — completar", livre: "Portfólio — livre" };
+    let atual = 0, api = null, valorSalvo = null;
+    const gabaritos = new Map();
+
+    function montar() {
+      api?.destruir();
+      const { pub } = questoes[atual];
+      $("#enun").textContent = pub.enunciado;
+      api = montarBancadaWeb($("#bancada"), {
+        questao: pub, valor: valorSalvo, somenteLeitura: $("#chkRo").checked,
+        onMudar: () => { $("#btnValor").textContent = "Ver valor() •"; },
+        abrirJanela: (u) => window.open(u, "_blank")
+      });
+      window.__bancada = api;
+    }
+    $("#abas").innerHTML = questoes.map((q, i) => `<button type="button" class="leve mini" data-i="${i}" aria-pressed="${i === 0}">${nomes[q.pub.modo] || "Questão " + (i + 1)}</button>`).join("");
+    $("#abas").addEventListener("click", (ev) => {
+      const b = ev.target.closest("[data-i]"); if (!b) return;
+      atual = Number(b.dataset.i); valorSalvo = null;
+      $("#abas").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      $("#res").hidden = true;
+      montar();
+    });
+    $("#chkRo").addEventListener("change", async () => { valorSalvo = await api.valor(); montar(); });
+    async function gabaritoDe(i) {
+      if (!gabaritos.has(i)) gabaritos.set(i, await calcularGabaritoWeb(questoes[i].pub, questoes[i].fonte));
+      return gabaritos.get(i);
+    }
+    function mostrar(html) { $("#res").hidden = false; $("#res").innerHTML = html; $("#res").scrollIntoView({ behavior: "smooth", block: "nearest" }); }
+    const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+    $("#btnValor").addEventListener("click", async () => {
+      $("#btnValor").textContent = "Ver valor()";
+      const v = await api.valor();
+      mostrar(`<pre>${esc(JSON.stringify(v, null, 2))}</pre><p class="pequeno">${(JSON.stringify(v).length / 1024).toFixed(1)} KB</p>`);
+    });
+    $("#btnCorrigir").addEventListener("click", async () => {
+      try {
+        const { pub } = questoes[atual];
+        const g = await gabaritoDe(atual);
+        const v = await api.valor();
+        const r = corrigirWeb(pub, g, v, pub.peso);
+        mostrar(`<span class="demo-nota">Nota: ${r.pontos} / ${pub.peso} · ${r.status}</span><pre>${esc(JSON.stringify(r, null, 2))}\n\n${esc(textoRespostaWeb(pub, v))}</pre>`);
+      } catch (e) { mostrar(`<pre>Erro: ${esc(e.message || e)}</pre>`); }
+    });
+    $("#btnGabarito").addEventListener("click", () => {
+      const { pub, fonte } = questoes[atual];
+      if (pub.modo === "livre") api._teste.definirArquivos({ ...Object.fromEntries((pub.arquivos || []).filter((a) => !a.asset).map((a) => [a.caminho, a.conteudo])), ...fonte.solucao });
+      else api._teste.preencherSlots(Object.fromEntries(Object.entries(fonte.slots).map(([k, v]) => [k, Array.isArray(v) ? v[0] : v])));
+    });
+    montar();
+  </script>
+</body>
+</html>

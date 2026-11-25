@@ -7,6 +7,8 @@ import { getFirestore, connectFirestoreEmulator, doc, getDoc, getDocs, collectio
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { temFormato, corrigirFormato } from "../servidor/formatos.js";
 import { corrigirSql } from "../servidor/sql-correcao.js";
+import { corrigirWeb } from "../servidor/web-correcao.js";
+const gabWeb = g => g?.web ? (() => { try { return JSON.parse(g.web); } catch { return {}; } })() : g;
 import { firebaseConfig, SUPER_ADMIN, DOMINIOS_ALUNOS_PADRAO, USAR_EMULADOR, GOOGLE_CLIENT_ID } from "./firebase-config.js";
 
 export const app  = initializeApp(firebaseConfig);
@@ -124,6 +126,7 @@ export function corrigir(questao, gabarito, resposta, perdida = false) {
     return { pontos: ok ? peso : 0, status: ok ? "certa" : "errada" };
   }
   if (questao.tipo === "sql") return corrigirSql(questao, gabarito, resposta, peso);
+  if (questao.tipo === "web") return corrigirWeb(questao, gabWeb(gabarito), resposta, peso);
   // dissertativa
   const r = normalizar(resposta);
   const aceitas = (gabarito.respostasAceitas || []).map(normalizar);
@@ -198,16 +201,16 @@ export function bancoDaQuestao(qid, padrao) {
 export async function questoesDisponiveis(prova) {
   const bancos = bancosDaProva(prova);
   const lotes = await Promise.all(bancos.map(b => getDocs(collection(db, "bancos", b, "questoes"))));
-  const ids = [], diss = [], alt = [], sql = [], tipo = {}, dados = {};
+  const ids = [], diss = [], alt = [], sql = [], web = [], tipo = {}, dados = {};
   lotes.forEach((qs, i) => {
     const temas = temasDoBanco(prova, bancos[i]);
     qs.forEach(d => {
       if (temas && !temas.has(temaDe(d.data()))) return;
-      const t = d.data().tipo === "dissertativa" ? "dissertativa" : d.data().tipo === "sql" ? "sql" : "alternativa";
-      ids.push(d.id); (t === "dissertativa" ? diss : t === "sql" ? sql : alt).push(d.id); tipo[d.id] = t; dados[d.id] = d.data();
+      const t = ["dissertativa", "sql", "web"].includes(d.data().tipo) ? d.data().tipo : "alternativa";
+      ids.push(d.id); (t === "dissertativa" ? diss : t === "sql" ? sql : t === "web" ? web : alt).push(d.id); tipo[d.id] = t; dados[d.id] = d.data();
     });
   });
-  return { ids, alt, diss, sql, tipo, dados };
+  return { ids, alt, diss, sql, web, tipo, dados };
 }
 // QUESTÕES IRMÃS: a mesma pergunta com outro enunciado (ou a mesma questão em dois bancos).
 // Podem cair para pessoas diferentes, nunca duas na prova da mesma pessoa.
@@ -267,10 +270,11 @@ export function cotaDaProva(p) {
 // sorteia as questões da prova (ids), igual para todo aluno: só temas marcados, respeitando a cota de tipos.
 // cota = { nA, nD } opcional (acessibilidade: o professor escolhe quantas de cada tipo).
 export async function sortearQuestoes(prova, cota = null) {
-  const { ids: todosIds, alt, diss, sql, dados } = await questoesDisponiveis(prova);
-  // questões SQL (Bancada) só entram pela cota nSql; as outras contas seguem como antes, sem elas
-  const ids = todosIds.filter(id => !sql.includes(id));
-  const nS = cota ? 0 : Math.max(0, Number(prova.nSql || 0));
+  const { ids: todosIds, alt, diss, sql, web, dados } = await questoesDisponiveis(prova);
+  // questões práticas (Bancada SQL e Bancada Web) só entram pelas cotas nSql / nWeb; as outras contas seguem como antes, sem elas
+  const ids = todosIds.filter(id => !sql.includes(id) && !web.includes(id));
+  const nW = cota ? 0 : Math.max(0, Number(prova.nWeb || 0));
+  const nS = (cota ? 0 : Math.max(0, Number(prova.nSql || 0))) + nW;
   // no máximo uma questão de cada grupo de irmãs; se o banco não tiver grupos suficientes, completa com as que sobraram
   // (a prova nunca deixa de abrir por causa deste filtro)
   let grupo = {};
@@ -290,8 +294,9 @@ export async function sortearQuestoes(prova, cota = null) {
     if (diss.length < cota.nD || alt.length < cota.nA) throw new Error(`Não há questões suficientes: ${alt.length} alternativas e ${diss.length} dissertativas disponíveis nos temas da prova.`);
     return sortearAleatorio([...pegar(diss, cota.nD), ...pegar(alt, cota.nA)], cota.nA + cota.nD);
   }
-  if (nS > sql.length) throw new Error("O banco não tem questões SQL (Bancada) suficientes nos temas escolhidos. Avise o professor.");
-  const comSql = l => nS ? sortearAleatorio([...l, ...pegar(sql, nS)], l.length + nS) : l;
+  if (nS - nW > sql.length) throw new Error("O banco não tem questões SQL (Bancada) suficientes nos temas escolhidos. Avise o professor.");
+  if (nW > web.length) throw new Error("O banco não tem questões da Bancada Web suficientes nos temas escolhidos. Avise o professor.");
+  const comSql = l => nS ? sortearAleatorio([...l, ...pegar(sql, nS - nW), ...pegar(web, nW)], l.length + nS) : l;
   const nQ = Number(prova.nQuestoes || 0) - nS;
   if (ids.length < nQ) throw new Error("O banco não tem questões suficientes nos temas escolhidos. Avise o professor.");
   const nD = Number(prova.nDissertativas || 0);

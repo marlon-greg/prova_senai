@@ -2,7 +2,7 @@
 import { ic } from "./icones.js";
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar, sortearAleatorio, esc, $, toast, dataBR, letra,
          idTentativaTeste, apagarTentativaTeste, confirmar, avisar, traduzirErro, iniciais, fecharModais, temaDe, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco, bancoDaQuestao, sortearQuestoes }
-  from "./common.js?v=20261125a";
+  from "./common.js?v=20261125b";
 import { baixarMaterial } from "./material.js";
 import { desenharConquistas } from "./aluno-conquistas.js?v=20261118e";
 import { regraDoTipo, calcNotaFinal } from "./nota-final.js";
@@ -12,7 +12,7 @@ import { iniciarAbas, definirAbasVisiveis, irParaAba, abaAtual } from "./aluno-n
 import { desenharTurma } from "./aluno-social.js";
 import { desenharRecompensas } from "./aluno-recompensas.js";
 let simulacao = false;   // equipe vendo a página como aluno (?simular=1): nada é gravado
-import { lerGamificacao, GAMI_PADRAO } from "./common.js?v=20261125a";
+import { lerGamificacao, GAMI_PADRAO } from "./common.js?v=20261125b";
 let gami = { ...GAMI_PADRAO };   // o que está ligado na gamificação (config/gamificacao)
 import { montarFormato, temFormato, FORMATOS, rotuloFormato, textoParaFalar, textoResposta, textoChave } from "./formatos-ui.js";
 const controles = {};   // qid -> controle do formato adaptado (valor, preencher, travar)
@@ -23,6 +23,8 @@ import { toolbar, collapsible, vazio, statTiles, chips } from "./ui.js";
 import { completar, aplicarVisual, mesclarQuestao } from "./acessibilidade.js";
 import { textoRespostaSql } from "../servidor/sql-correcao.js?v=20261125b";
 import { montarBancada } from "./workbench.js?v=20261125b";
+import { montarBancadaWeb } from "./bancada-web.js?v=20261125a";
+import { textoRespostaWeb, respostaEmBranco } from "../servidor/web-correcao.js?v=20261125a";
 import { conferirExtensoes, textoExtensoes, vigiarExtensoes, extensoesIA } from "./extensoes.js?v=20261125a";
 import { definirEstilos } from "./mascotes.js";
 import { usarItensCustom } from "./avatar.js";
@@ -76,7 +78,7 @@ function mostrar(id) {
   document.body.classList.toggle("em-prova", id === "telaQuestao");   // ativa os bloqueios e avisos da prova
   document.body.classList.toggle("com-abas", id === "telaProvas");    // barra de seções (js/aluno-nav.js): só na lista, nunca na prova
   document.body.classList.toggle("com-consulta", id === "telaQuestao" && temConsulta());
-  document.body.classList.toggle("com-sql", id === "telaQuestao" && !!tentativa?.questoesIds?.some(q => questoes[q]?.tipo === "sql"));   // Bancada SQL: tela mais larga
+  document.body.classList.toggle("com-sql", id === "telaQuestao" && !!tentativa?.questoesIds?.some(q => ["sql", "web"].includes(questoes[q]?.tipo)));   // Bancada SQL: tela mais larga
   if (id !== "telaQuestao") { esconderSobreposicao(); $("#painelConsulta").classList.remove("aberto"); }
   if (id !== "telaFim") pararOuvinteFim();
   if (id !== "telaQuestao") { pararOuvinteProva(); try { pararTimerFora(); foraDaProva = false; if (pararVigia) { pararVigia(); pararVigia = null; } } catch { /* ainda carregando o módulo */ } }
@@ -683,8 +685,8 @@ function criarCartaoQuestao(qid, i, unica) {
   card.className = "card questao"; card.dataset.qid = qid;
   if (!unica) card.id = "q_" + qid;
   if (!q) { card.innerHTML = `<p class="pequeno">Questão ${i + 1} indisponível. Avise o professor.</p><div class="acoes-questao"></div>`; return card; }
-  const tipo = temFormato(q) ? FORMATOS[q.formato].nome.toLowerCase() : q.tipo === "alternativa" ? "múltipla escolha" : q.tipo === "sql" ? "SQL na Bancada" : "resposta escrita", colar = colarPermitido(), voltar = podeVoltar();
-  if (q.tipo === "sql") card.classList.add("questao-sql");
+  const tipo = temFormato(q) ? FORMATOS[q.formato].nome.toLowerCase() : q.tipo === "alternativa" ? "múltipla escolha" : q.tipo === "sql" ? "SQL na Bancada" : q.tipo === "web" ? "projeto web" : "resposta escrita", colar = colarPermitido(), voltar = podeVoltar();
+  if (q.tipo === "sql" || q.tipo === "web") card.classList.add("questao-sql");
   // cartão em três partes: cabeçalho (número e tipo) · corpo (enunciado e resposta) · rodapé (enviar)
   card.innerHTML = `<div class="q-cab"><span class="q-num">Questão ${i + 1}<small> de ${tentativa.questoesIds.length}</small></span><span class="tag">${tipo}</span>${q.adaptada ? `<span class="tag nota">♿ adaptada</span>` : ""}<span class="tag ok q-enviada oculto">✓ ${voltar ? "salva" : "enviada"}</span>
       ${acess && ap().lerEmVoz !== false && "speechSynthesis" in window ? `<button type="button" class="leve mini b-ouvir">🔊 Ouvir</button>` : ""}</div>
@@ -692,7 +694,7 @@ function criarCartaoQuestao(qid, i, unica) {
       <div class="enunciado">${formatarEnunciado(q.enunciado)}</div>
       ${htmlApoios(q)}
       ${q.formato === "escritaApoio" && q.dados ? `<div class="escrita-apoio">${q.dados.comecoResposta ? `<p><b>✏ Comece assim:</b> ${esc(q.dados.comecoResposta)}…</p>` : ""}${q.dados.checklist?.length ? `<p><b>✅ Não esqueça:</b></p><ul>${q.dados.checklist.map(c => `<li>${esc(c)}</li>`).join("")}</ul>` : ""}</div>` : ""}
-      <div class="q-rotulo">${temFormato(q) ? rotuloFormato(q) : q.tipo === "alternativa" ? "Escolha uma alternativa" : q.tipo === "sql" ? "Escreva o SQL de cada tarefa na aba dela e execute (⚡) para conferir. Cada tarefa é corrigida a partir da base original." : "Sua resposta"}</div>
+      <div class="q-rotulo">${temFormato(q) ? rotuloFormato(q) : q.tipo === "alternativa" ? "Escolha uma alternativa" : q.tipo === "sql" ? "Escreva o SQL de cada tarefa na aba dela e execute (⚡) para conferir. Cada tarefa é corrigida a partir da base original." : q.tipo === "web" ? "Siga as etapas (à esquerda) e veja o resultado na prévia ao vivo. Use o git para salvar o progresso (commit e push)." : "Sua resposta"}</div>
       <div class="q-area"></div>
       <p class="pequeno q-salva oculto" role="status"></p>
     </div>
@@ -716,6 +718,13 @@ function criarCartaoQuestao(qid, i, unica) {
       area.querySelectorAll(".alt").forEach(x => x.classList.toggle("sel", x.contains(inp)));
       marcarAlterada(card, qid);
     }));
+  } else if (q.tipo === "web") {
+    // Bancada Web (parecida com o VS Code): etapas, explorador, git simulado, comandos HTML/CSS e prévia ao vivo
+    bancadas[qid]?.destruir?.();
+    const ini = rascunhos.get(qid) || respostas[qid]?.resposta || null;
+    valoresWeb[qid] = ini;
+    bancadas[qid] = montarBancadaWeb(area, { questao: q, valor: ini, abrirJanela: abrirPreviaPermitida,
+      onMudar: () => bancadas[qid]?.valor().then(v => { valoresWeb[qid] = respostaEmBranco(q, v) ? null : v; marcarAlterada(card, qid); }).catch(e => console.warn("bancada web", e)) });
   } else if (q.tipo === "sql") {
     // Bancada SQL (parecida com o MySQL Workbench): o SQL roda aqui no navegador; o resultado de cada tarefa vai junto da resposta
     bancadas[qid]?.destruir?.();
@@ -747,10 +756,12 @@ function criarCartaoQuestao(qid, i, unica) {
 // Bancada SQL de cada questão SQL (qid -> { valor(), destruir() })
 const bancadas = {};
 const textosSql = card => { const o = { tarefas: {} }; card.querySelectorAll("textarea[data-tarefa]").forEach(t => { o.tarefas[t.dataset.tarefa] = { sql: t.value }; }); return o; };
+const valoresWeb = {};   // último valor de cada Bancada Web (o valor dela é calculado de forma assíncrona)
+const essencialWeb = v => JSON.stringify(v ? { s: v.slots || null, a: v.arquivos || null, p: v.pastas || null, g: v.git?.commits?.length || 0, u: v.git?.pushes || 0 } : null);
 const soTextosSql = v => JSON.stringify(Object.fromEntries(Object.entries(v?.tarefas || {}).map(([k, x]) => [k, String(x?.sql || "")])));
 // coloca a resposta gravada no cartão
 function preencherCartao(card, qid, resposta) {
-  if (questoes[qid]?.tipo === "sql") return;   // a Bancada já abriu com o texto salvo
+  if (questoes[qid]?.tipo === "sql" || questoes[qid]?.tipo === "web") return;   // a Bancada já abriu com o texto salvo
   if (controles[qid] && temFormato(questoes[qid])) return controles[qid].preencher(resposta);
   if (questoes[qid]?.tipo === "alternativa")
     card.querySelectorAll(".alt input").forEach(inp => { inp.checked = resposta !== null && Number(inp.value) === Number(resposta); inp.closest(".alt").classList.toggle("sel", inp.checked); });
@@ -779,6 +790,7 @@ function marcarAlterada(card, qid) {
 }
 // valor que está no cartão (null = nada escolhido/escrito)
 function valorDoCartao(card, qid) {
+  if (questoes[qid]?.tipo === "web") return valoresWeb[qid] ?? null;
   if (questoes[qid]?.tipo === "sql") { const v = textosSql(card); return Object.values(v.tarefas).some(x => x.sql.trim()) ? v : null; }
   if (controles[qid] && temFormato(questoes[qid])) return controles[qid].valor();
   if (questoes[qid]?.tipo === "alternativa") { const m = card.querySelector(".alt input:checked"); return m ? Number(m.value) : null; }
@@ -788,6 +800,7 @@ function valorDoCartao(card, qid) {
 // o cartão tem algo diferente do que está gravado?
 function mudou(card, qid) {
   const v = valorDoCartao(card, qid);
+  if (v !== null && questoes[qid]?.tipo === "web") return essencialWeb(v) !== essencialWeb(respostas[qid]?.resposta);
   if (v !== null && questoes[qid]?.tipo === "sql") {
     const salvas = Object.values(respostas[qid]?.resposta?.tarefas || {}).reduce((s, x) => s + (x?.execucoes?.length || 0), 0);
     return soTextosSql(v) !== soTextosSql(respostas[qid]?.resposta) || (bancadas[qid]?.nExecucoes?.() || 0) !== salvas;   // execuções novas também salvam (histórico de erros)
@@ -1051,10 +1064,11 @@ async function enviarResposta(qid, card, { silencioso = false } = {}) {
   let resposta = valorDoCartao(card, qid);
   if (resposta === null) {
     if (silencioso) return true;
-    toast(temFormato(q) ? "Responda a questão antes de enviar." : q.tipo === "alternativa" ? "Escolha uma alternativa." : q.tipo === "sql" ? "Escreva o SQL de pelo menos uma tarefa antes de enviar." : "Escreva a resposta antes de enviar.", "erro"); return false;
+    toast(temFormato(q) ? "Responda a questão antes de enviar." : q.tipo === "alternativa" ? "Escolha uma alternativa." : q.tipo === "web" ? "Comece o projeto (preencha pelo menos um espaço) antes de enviar." : q.tipo === "sql" ? "Escreva o SQL de pelo menos uma tarefa antes de enviar." : "Escreva a resposta antes de enviar.", "erro"); return false;
   }
   // SQL: roda cada tarefa numa cópia nova da base e guarda a "impressão" do resultado (o servidor compara com o gabarito)
   if (q.tipo === "sql" && bancadas[qid]) { try { resposta = await bancadas[qid].valor(); } catch (e) { console.warn("bancada", e); } }
+  if (q.tipo === "web" && bancadas[qid]) { try { const v = await bancadas[qid].valor(); if (!respostaEmBranco(q, v)) resposta = valoresWeb[qid] = v; } catch (e) { console.warn("bancada web", e); } }
   if (voltar && !mudou(card, qid)) { if (!silencioso) toast("Esta resposta já está salva.", "ok"); return true; }
   if (!voltar) {
     const pergunta = modoTodas() ? `Enviar a resposta da questão ${i + 1}? Depois não dá para alterar.` : "Enviar esta resposta? Depois não dá para alterar.";
@@ -1675,8 +1689,26 @@ const avisosSistema = () => Number(localStorage.getItem(chaveAvisos()) || 0);
 let paginaFechando = false;
 window.addEventListener("pagehide", () => { paginaFechando = true; });
 window.addEventListener("pageshow", e => { if (e.persisted) paginaFechando = false; });
+let previaAbertaEm = 0, previaFocadaEm = 0;
+window.addEventListener("bancada-web:previa", e => { if (e.detail?.foco) previaFocadaEm = Date.now(); });
+const temPreviaEmAba = () => !!tentativa?.questoesIds?.some(q => questoes[q]?.tipo === "web" && questoes[q]?.previa === "aba");
+const naPrevia = () => temPreviaEmAba() && Date.now() - previaFocadaEm < 2500;
+let conferindoPrevia = null;
 function saida(motivo, e = null) {
   if (!emProvaAtiva() || foraDaProva || paginaFechando) return;
+  // a prova tem prévia em outra aba: espera 1,5 s para saber se o aluno foi para a aba da prévia (aí não é saída)
+  if (temPreviaEmAba() && (motivo === "aba" || motivo === "telaCheia") && !e?.semEspera) {
+    if (conferindoPrevia) return;
+    conferindoPrevia = setTimeout(() => {
+      conferindoPrevia = null;
+      if (naPrevia() || (document.hasFocus() && !document.hidden && motivo === "telaCheia" && Date.now() - previaFocadaEm < 6000)) {
+        if (!document.fullscreenElement && document.hasFocus()) mostrarSobreposicao("entrar");   // voltou da prévia: só pede a tela cheia, sem punir
+        return;
+      }
+      if (!document.hasFocus() || document.hidden || !document.fullscreenElement) saida(motivo, { semEspera: true });
+    }, 1500);
+    return;
+  }
   if (naoTrava()) {   // troca de aba permitida: só conta, como antes
     if (motivo === "telaCheia") return;
     foraDaProva = true; registrarSaida("aba"); perderVida("aba"); return;
@@ -1797,8 +1829,8 @@ function tentarVoltarOuContar() { if (naoTrava()) { if (foraDaProva) voltouParaP
 setInterval(() => {
   if (!emProvaAtiva()) return;
   if (foraDaProva) { tentarVoltarOuContar(); return; }
-  if (!document.hasFocus() && !focoNoMaterial()) saida("aba");
-  else if (!naoTrava() && suportaTelaCheia() && !document.fullscreenElement && tipoSobreposicao !== "entrar") saida("telaCheia");
+  if (!document.hasFocus() && !focoNoMaterial()) { if (!naPrevia()) saida("aba"); }
+  else if (!naoTrava() && suportaTelaCheia() && !document.fullscreenElement && tipoSobreposicao !== "entrar") { if (temPreviaEmAba() && Date.now() - previaFocadaEm < 6000) mostrarSobreposicao("entrar"); else saida("telaCheia"); }
 }, 1000);
 
 // ---------- TECLAS ----------
@@ -1881,8 +1913,10 @@ function bloquearInjetado(el, antes) {
 }
 
 // nada de abrir outra janela, imprimir ou seguir links externos durante a prova
+const abrirJanelaOriginal = window.open.bind(window);
+function abrirPreviaPermitida(url) { if (!/^previa-web\.html/.test(String(url))) return null; previaAbertaEm = Date.now(); return abrirJanelaOriginal(url, "_blank"); }
 {
-  const abrir = window.open.bind(window), imprimir = window.print.bind(window);
+  const abrir = abrirJanelaOriginal, imprimir = window.print.bind(window);
   window.open = (...a) => { if (emProvaAtiva()) { toast("Abrir outras janelas está desativado durante a prova.", "erro"); return null; } return abrir(...a); };
   window.print = () => { if (emProvaAtiva()) return; imprimir(); };
   document.addEventListener("click", e => {
@@ -1916,7 +1950,7 @@ async function reconferirExtensoes() {
 // ---------- bloqueios na área da questão ----------
 ["copy", "cut", "contextmenu", "dragstart", "selectstart"].forEach(ev => $("#telaQuestao").addEventListener(ev, e => {
   const el = e.target.nodeType === 1 ? e.target : e.target.parentElement;
-  if (ev === "selectstart" && el?.closest("textarea")) return;   // no campo de resposta o aluno pode selecionar o próprio texto
+  if (ev === "selectstart" && el?.closest("textarea, input[data-campo-resposta], [data-campo-resposta]")) return;   // no campo de resposta o aluno pode selecionar o próprio texto
   if (ev === "contextmenu" && colarPermitido() && el?.closest("textarea")) return;   // colar permitido: botão direito → Colar
   e.preventDefault();
 }));
@@ -2010,8 +2044,8 @@ async function verResultado() {
     total += c.pontos; if (c.status === "certa" || Number(c.pontos) > peso / 2) certas++;
     const rot = { certa: ["ok", "✅ Certa"], errada: ["erro", "❌ Errada"], parcial: ["aviso", "🟡 Parcial"], revisar: ["aviso", "🟡 Em correção"], em_branco: ["erro", "⬜ Em branco"], perdida: ["erro", "⛔ Perdida (saiu da prova)"] }[c.status];
     const fmt = temFormato(q), bloco = t => `<span class="resp-formato">${esc(t).replace(/\n/g, "<br>")}</span>`;
-    let sua = perdida ? "<i>perdida por sair da prova</i>" : r === undefined ? "<i>não respondida</i>" : q.tipo === "sql" ? bloco(textoRespostaSql(q, r)) : fmt ? bloco(textoResposta(q, r)) : q.tipo === "alternativa" ? esc(q.alternativas[r]) : `<span class="mono">${esc(r)}</span>`;
-    let certa = q.tipo === "sql" ? (g.tarefas ? bloco((q.tarefas || []).map((t, k) => `Tarefa ${k + 1}: ${g.tarefas[t.id]?.sql || "—"}`).join("\n")) : "—") : fmt ? (g.chave ? bloco(textoChave(q, g)) : "—") : q.tipo === "alternativa" ? esc(q.alternativas?.[g.correta] ?? "—") : (g.respostasAceitas?.length ? `<span class="mono">${esc(g.respostasAceitas[0])}</span>` : "—");
+    let sua = perdida ? "<i>perdida por sair da prova</i>" : r === undefined ? "<i>não respondida</i>" : q.tipo === "sql" ? bloco(textoRespostaSql(q, r)) : q.tipo === "web" ? bloco(textoRespostaWeb(q, r)) : fmt ? bloco(textoResposta(q, r)) : q.tipo === "alternativa" ? esc(q.alternativas[r]) : `<span class="mono">${esc(r)}</span>`;
+    let certa = q.tipo === "web" ? "—" : q.tipo === "sql" ? (g.tarefas ? bloco((q.tarefas || []).map((t, k) => `Tarefa ${k + 1}: ${g.tarefas[t.id]?.sql || "—"}`).join("\n")) : "—") : fmt ? (g.chave ? bloco(textoChave(q, g)) : "—") : q.tipo === "alternativa" ? esc(q.alternativas?.[g.correta] ?? "—") : (g.respostasAceitas?.length ? `<span class="mono">${esc(g.respostasAceitas[0])}</span>` : "—");
     contagem[grupoSt(c.status)]++;
     html += `<details class="card res-q" data-grupo="${grupoSt(c.status)}"${c.status === "certa" ? "" : " open"}><summary class="q-topo"><span class="ch" aria-hidden="true">${ic("chev")}</span><span class="q-numero">Questão ${i + 1}</span><span class="chip ${({ ok: "ok", erro: "err", aviso: "warn" })[rot[0]]}">${rot[1]} · ${c.pontos}/${peso}</span></summary>
       <div class="enunciado">${formatarEnunciado(q.enunciado)}</div>
