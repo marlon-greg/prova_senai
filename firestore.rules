@@ -425,7 +425,7 @@ service cloud.firestore {
            // e cuida das VIDAS do aluno: restaurar, dar vida extra, reabrir a prova (ex.: aluno com TEA) e apagar sinais registrados por engano
         || (professor()
             && request.resource.data.diff(resource.data).affectedKeys().hasOnly(
-                 ['sessao', 'foraDesde', 'foraCobradas', 'fora',
+                 ['sessao', 'foraDesde', 'foraCobradas', 'fora', 'obsAcessibilidade',
                   'nota', 'notaMaxima', 'corrigidaEm', 'corrigidaPor',
                   'acertos', 'totalQuestoes', 'notaPrevia', 'aguardandoCorrecao',
                   'trocasDeAba', 'trocasDeAbaTotal', 'vidasExtras', 'vidasRestauradas', 'vidasRestauradasEm',
@@ -437,7 +437,7 @@ service cloud.firestore {
                  ['trocasDeAba', 'trocasDeAbaTotal', 'vidasExtras', 'vidasRestauradas', 'vidasRestauradasEm',
                   'vidasRestauradasPor', 'finalizadaEm', 'encerradaPor', 'indiceAtual', 'tempoTotalSegundos',
                   'minutosExtras', 'reabertaEm', 'reabertaPor', 'acertos', 'totalQuestoes', 'nota', 'notaPrevia', 'aguardandoCorrecao',
-                  'saidasTelaCheia', 'tentativasColar', 'foraDesde', 'foraCobradas', 'fora', 'sessao']))
+                  'saidasTelaCheia', 'tentativasColar', 'foraDesde', 'foraCobradas', 'fora', 'sessao', 'obsAcessibilidade']))
            // equipe: a própria tentativa de teste
         || (equipe() && resource.data.get('teste', false) == true && resource.data.uid == uid())
         || (professor() && resource.data.get('simulado', false) == true);

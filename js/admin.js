@@ -25,6 +25,7 @@ import { tarefa, ligarMenuLateral } from "./ui.js";
 import { ic } from "./icones.js";
 import { REGRAS_NOTA, regraDoTipo, calcNotaFinal } from "./nota-final.js";
 import { textoRespostaSql } from "../servidor/sql-correcao.js";
+import { HUMOR } from "./diario-perguntas.js";
 import { drawer, drawerForm, ligarFiltros, atualizarFiltros, ajudasEmPopover, menuHTML, itemMenu, vazio, chips, statTiles, pl, semestreLongo, seta } from "./ui.js";
 import { collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, serverTimestamp, onSnapshot, increment, deleteField, Timestamp, arrayUnion, arrayRemove, runTransaction }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
@@ -37,7 +38,9 @@ const ehInclusao = () => eu?.papel === "inclusao";
 // pode mexer nas vidas / reabrir: professor, admin e a auxiliar de inclusão (nos alunos dela; as regras conferem)
 const podeCuidar = () => podeEditar() || ehInclusao();
 let urlCorretorCfg = "", horarioCfg = HORARIO_PADRAO;   // servidor de correção/adaptação (config/geral.urlCorretor)
-const ABAS_INCLUSAO = ["diario", "acessibilidade", "historico", "resultados"];
+// o DIÁRIO da auxiliar mudou para o sistema de aulas (mesmos dados): aqui ela só faz o relatório de cada somativa (Resultados)
+const ABAS_INCLUSAO = ["resultados", "acessibilidade", "historico"];
+const URL_AULAS = "https://aulassenai.netlify.app/";
 // administrador principal: o único que vê e usa a chave da IA (as regras também só deixam ele ler config/ia)
 const souDono = () => !!eu && eu.email === SUPER_ADMIN.toLowerCase();
 
@@ -81,7 +84,8 @@ aoMudarLogin(async user => {
   });
   ligarMenuLateral($(".menu-lateral"));
   document.body.classList.toggle("papel-inclusao", ehInclusao());
-  abrirAba(ehInclusao() ? "diario" : "provas");
+  abrirAba(ehInclusao() ? "resultados" : "provas");
+  if (ehInclusao()) toast("📔 O diário agora fica no sistema de aulas (aulassenai.netlify.app). Aqui você faz o relatório de cada somativa em Resultados.", "ok");
 });
 // cabeçalho: primeiro nome na pílula; e-mail completo e papel no menu do usuário
 const ROTULO_PAPEL = { admin: "Administrador", professor: "Professor", auxiliar: "Auxiliar", inclusao: "Auxiliar de inclusão" };
@@ -1509,7 +1513,7 @@ $("#btnImportarBanco").onclick = async () => {
       catch (e) { $("#msgBanco").innerHTML = `❌ Questão ${i + 1}: ${esc(e.message)}`; return false; }
     }
   }
-  const ref = await addDoc(collection(db, "bancos"), { nome: b.nome, materia: $("#bMateria").value.trim() || b.materia || "", semestre: $("#bSemestre").value || semestreDe(),
+  const ref = ultimoBancoImportado = await addDoc(collection(db, "bancos"), { nome: b.nome, materia: $("#bMateria").value.trim() || b.materia || "", semestre: $("#bSemestre").value || semestreDe(),
     nQuestoes: b.questoes.length, temas, criadoEm: serverTimestamp(), criadoPor: eu.email });
   const lote = writeBatch(db);
   b.questoes.forEach((q, i) => {
@@ -1528,12 +1532,66 @@ $("#btnImportarBanco").onclick = async () => {
   carregarBancos();
   return true;
 };
+// ============================================================ BANCOS PRONTOS (vêm no site, importados com um clique)
+// Cada um traz somativas de exemplo já preenchidas (fechadas e sem turma: escolha a turma em Editar e libere).
+let ultimoBancoImportado = null;
+const BANCOS_PRONTOS = [
+  { arquivo: "bancos/banco_sql_workbench.json", icone: "🗄", titulo: "Bancada SQL: 15 cenários práticos", desc: "Pet shop, biblioteca, oficina, academia, cinema, hotel… Cada aluno recebe um cenário diferente (base e tarefas), escreve e executa SQL na Bancada parecida com o MySQL Workbench. Correção automática pelo resultado; a IA só entra nas tarefas que não bateram.",
+    provas: [
+      { titulo: "Prática SQL na Bancada (1 cenário sorteado)", nSql: 1, tempoMinutos: 45 },
+      { titulo: "Prática SQL na Bancada (2 cenários sorteados)", nSql: 2, tempoMinutos: 90 },
+      { titulo: "Prática SQL na Bancada — com 3 dicas do mascote", nSql: 1, tempoMinutos: 45, dicasMax: 3 }
+    ] }
+];
+function desenharBancosProntos() {
+  const box = $("#bancosProntos"); if (!box) return;
+  if (!podeEditar()) { box.innerHTML = ""; return; }
+  box.innerHTML = `<div class="card bancos-prontos"><h3 style="margin:0 0 4px">📦 Bancos prontos</h3><p class="pequeno" style="margin:0 0 10px">Importe com um clique. Já cria somativas de exemplo preenchidas (fechadas e sem turma): é só escolher a turma em <b>Editar</b> e liberar.</p>` +
+    BANCOS_PRONTOS.map((b, i) => {
+      const ja = bancosCache.find(x => x.arquivoPronto === b.arquivo);
+      return `<div class="bp-item"><div><b>${b.icone} ${esc(b.titulo)}</b>${ja ? ` <span class="tag ok">importado</span>` : ""}<p class="pequeno" style="margin:2px 0 0">${esc(b.desc)}</p>
+        <p class="pequeno" style="margin:2px 0 0">Somativas de exemplo: ${b.provas.map(p => esc(p.titulo)).join(" · ")}</p></div>
+        <button class="${ja ? "leve" : "ok"} mini" data-pronto="${i}">${ja ? "Criar as somativas de exemplo de novo" : "Importar e criar as somativas"}</button></div>`;
+    }).join("") + `</div>`;
+  box.querySelectorAll("[data-pronto]").forEach(bt => bt.onclick = () => importarPronto(BANCOS_PRONTOS[Number(bt.dataset.pronto)], bt));
+}
+async function importarPronto(item, bt) {
+  bt.disabled = true;
+  try {
+    let banco = bancosCache.find(x => x.arquivoPronto === item.arquivo);
+    if (!banco) {
+      const txt = await (await fetch(item.arquivo + "?v=" + Date.now())).text();
+      $("#txtBanco").value = txt;
+      ultimoBancoImportado = null;
+      if (!(await $("#btnImportarBanco").onclick()) || !ultimoBancoImportado) { bt.disabled = false; return; }
+      await updateDoc(doc(db, "bancos", ultimoBancoImportado.id), { arquivoPronto: item.arquivo });
+      banco = { id: ultimoBancoImportado.id, ...(await getDoc(doc(db, "bancos", ultimoBancoImportado.id))).data() };
+    } else if (!(await confirmar(`Criar de novo as ${item.provas.length} somativas de exemplo do banco "${banco.nome}"?`, { titulo: "Somativas de exemplo", ok: "Criar" }))) { bt.disabled = false; return; }
+    const temas = banco.temas || [];
+    for (const p of item.provas) {
+      const n = Number(p.nSql || 0) + Number(p.nAlternativas || 0) + Number(p.nDissertativas || 0);
+      await addDoc(collection(db, "provas"), {
+        titulo: p.titulo, turmaId: null, turma: "", codigoAcesso: "", semestre: semestreDe(), materia: banco.materia || "Banco de Dados", dataProva: "", planoCurso: null,
+        permitirVoltar: true, tempoMinutos: p.tempoMinutos || 45, modoExibicao: "uma", permitirTrocaAba: false, permitirColar: false,
+        maxTrocasDeAba: 3, colarTiraVida: true, dicasMax: p.dicasMax || 0, segundosVolta: 5, entradaAte: null, iaAutomatica: true, acaoAoExceder: "encerrar",
+        materialConsultaUrl: "", materiaisConsultaIds: [], materialConsultaArquivoId: null, materialConsultaTitulo: "",
+        bancoId: banco.id, bancoIds: [banco.id], temasPorBanco: { [banco.id]: temas }, temas,
+        nQuestoes: n, nAlternativas: Number(p.nAlternativas || 0), nDissertativas: Number(p.nDissertativas || 0), nSql: Number(p.nSql || 0),
+        liberada: false, resultadosLiberados: false, criadoEm: serverTimestamp(), criadoPor: eu.email, exemploPronto: item.arquivo
+      });
+    }
+    toast(`Pronto: banco importado e ${item.provas.length} somativas de exemplo criadas em Somativas (fechadas, sem turma).`, "ok");
+    await carregarBancos();
+  } catch (e) { toast("Não foi possível importar o banco pronto. " + traduzirErro(e), "erro"); console.error(e); }
+  bt.disabled = false;
+}
 // semestre do banco: o gravado; senão o da criação
 const semestreDoBanco = b => b.semestre || semestreDe(b.criadoEm || new Date());
 let bancosContagem = {};   // bancoId -> { tema: { alternativa, dissertativa } }
 const bancosEstado = new Map();   // grupos que o professor abriu ou fechou (semestre atual e matérias começam abertos; semestres anteriores, fechados)
 async function carregarBancos() {
   await Promise.all([listarBancos(), listarPlanos().catch(() => []), listarCursos().catch(() => [])]);
+  desenharBancosProntos();
   // formulário de importação: semestre e matérias sugeridas
   const sAntes = $("#bSemestre").value, base = semestreDe();
   $("#bSemestre").innerHTML = [-2, -1, 0, 1, 2].map(d => semestreVizinho(base, d)).reverse().map(x => `<option value="${x}">${rotuloSemestre(x)}${x === base ? " (atual)" : ""}</option>`).join("");
@@ -2407,7 +2465,7 @@ function verAluno(id, rolar = true) {
     const rot = ROTULOS[x.status] || ROTULOS.revisar;
     return `<div class="feedback bloco ${x.status === "certa" ? "certa" : ["errada", "perdida", "em_branco"].includes(x.status) ? "errada" : "revisar"}"><div class="linha acoes"><b>Q${x.n}</b> <span class="tag ${rot[0]}">${rot[1]} · ${x.pontos}/${x.peso}${x.manual ? " · manual" : ""}</span>${x.ia ? `<span class="tag nota" title="Corrigida pela IA — confira e ajuste se precisar">🤖 IA</span>` : ""}${errosIA.has(l.t.id + "/" + x.qid) ? `<span class="tag erro ia-erro">⚠ IA: ${esc(errosIA.get(l.t.id + "/" + x.qid))}</span>` : ""}${tempo}</div>
       <div class="enunciado pequeno">${esc(x.q.enunciado)}</div>${avisoQuestaoHTML(resDados.revMap?.get(x.qid), l.t, x.status !== "certa")}<p><b>Resposta do aluno:</b> ${sua}${typeof dicaTag === "string" ? dicaTag : ""}<br><b>Esperada:</b> ${certa}</p>${manual}</div>`;
-  }).join("") + `<div id="saidasDetalhe" class="bloco pequeno" style="margin-top:8px"><span class="texto-suave">Carregando saídas…</span></div>${podeEditar() ? obsAcessHTML(l) : ""}</div>`;
+  }).join("") + `<div id="saidasDetalhe" class="bloco pequeno" style="margin-top:8px"><span class="texto-suave">Carregando saídas…</span></div>${podeCuidar() && (ehInclusao() || resDados.acessEmails?.has(String(l.t.email || "").toLowerCase()) || l.t.obsAcessibilidade) ? obsAcessHTML(l) : ""}</div>`;
   if (rolar) box.scrollIntoView({ behavior: "smooth" });
   ligarRevisar(box);
   $("#btnPDFAluno").onclick = () => abrirImpressao(`Boletim — ${resDados.prova.titulo}`, boletimHTML(l));
@@ -2420,18 +2478,31 @@ function verAluno(id, rolar = true) {
     document.activeElement?.blur?.();
     const d = await getDoc(doc(db, "tentativas", l.t.id)); await atualizarCache(d); montarResultados(); verAluno(id, false);
   });
-  if (podeEditar()) box.querySelector(`[data-salvar-obs]`)?.addEventListener("click", async () => {
+  if (podeCuidar()) box.querySelector(`[data-salvar-obs]`)?.addEventListener("click", async () => {
     const adaptacoes = [...box.querySelectorAll(".obs-ada:checked")].map(x => x.value);
-    const nota = box.querySelector(`#obsNota_${id}`)?.value.trim() || "";
-    const obsAcessibilidade = adaptacoes.length || nota ? { adaptacoes, nota } : null;
+    const dificuldades = [...box.querySelectorAll(".obs-dif:checked")].map(x => x.value);
+    const txt = s => box.querySelector(s)?.value.trim() || "";
+    const nota = txt(`#obsNota_${id}`), funcionou = txt(`#obsFunc_${id}`), sugestao = txt(`#obsSug_${id}`);
+    const radio = c => { const v = box.querySelector(`input[name="rel_${c}_${id}"]:checked`)?.value; return v ? Number(v) : null; };
+    const escalas = Object.fromEntries(["humor", ...REL_PROVA_ESCALAS.map(x => x[0])].map(c => [c, radio(c)]).filter(([, v]) => v));
+    const tem = adaptacoes.length || dificuldades.length || nota || funcionou || sugestao || Object.keys(escalas).length;
+    if (!(await confirmar(`Salvar o relatório desta somativa de ${l.t.nome || l.t.email}?`, { titulo: "♿ Relatório da somativa", ok: "Salvar" }))) return;
+    const obsAcessibilidade = tem ? { adaptacoes, dificuldades, nota, funcionou, sugestao, ...escalas, autor: eu.email, autorNome: eu.nome || eu.email, papel: eu.papel || "", em: serverTimestamp() } : null;
     try {
       await updateDoc(doc(db, "tentativas", id), { obsAcessibilidade });
-      toast("Observação de acessibilidade salva.", "ok");
+      toast("Relatório da somativa salvo.", "ok");
       const d = await getDoc(doc(db, "tentativas", id)); await atualizarCache(d); montarResultados(); verAluno(id, false);
     } catch (e) { toast("Não foi possível salvar. " + traduzirErro(e), "erro"); }
   });
   carregarSaidasDetalhe(id, l);
 }
+// RELATÓRIO DA SOMATIVA (acessibilidade): a auxiliar/professor registra como foi ESTA prova do aluno (não é o diário do dia)
+const REL_PROVA_ESCALAS = [
+  ["autonomia", "🦸 Autonomia na prova", ["Ajuda o tempo todo", "Muita ajuda", "Alguma ajuda", "Pouca ajuda", "Fez sozinha"]],
+  ["compreensao", "🧠 Entendeu os enunciados", ["Não entendeu", "Entendeu pouco", "Com explicação", "Entendeu bem", "Entendeu tudo"]],
+  ["foco", "🎯 Foco durante a prova", ["Muito disperso", "Disperso", "Oscilou", "Focado", "Muito focado"]]
+];
+const REL_PROVA_DIFIC = ["Enunciado longo", "Vocabulário técnico", "Muitas etapas", "Escrever código/comando", "Usar o computador", "Tempo", "Ansiedade com a prova", "Barulho/ambiente", "Nada foi difícil"];
 const OBS_ACESS_OPTS = [
   ["lida_voz", "Questões lidas em voz alta pelo professor/auxiliar"],
   ["tech_assist", "Tecnologia assistiva (leitor de tela, ampliador, etc.)"],
@@ -2442,18 +2513,33 @@ const OBS_ACESS_OPTS = [
   ["outra", "Outra adaptação (descreva no campo abaixo)"],
 ];
 function obsAcessHTML(l) {
-  const obs = l.t.obsAcessibilidade || {}, adas = obs.adaptacoes || [];
-  const temObs = adas.length || obs.nota;
+  const obs = l.t.obsAcessibilidade || {}, adas = obs.adaptacoes || [], dif = obs.dificuldades || [];
+  const temObs = adas.length || obs.nota || obs.humor || obs.funcionou;
+  const id = l.t.id;
+  const radios = (campo, opcoes, atual) => opcoes.map(([v, t]) => `<label class="rel-op${String(atual) === String(v) ? " sel" : ""}"><input type="radio" name="rel_${campo}_${id}" value="${v}"${String(atual) === String(v) ? " checked" : ""}> <span>${t}</span></label>`).join("");
   return `<details class="bloco pequeno obs-acess-bloco" style="margin-top:8px" ${temObs ? "open" : ""}>
-    <summary style="cursor:pointer"><b>♿ Adaptações nesta somativa</b>${adas.length ? ` <span class="tag nota">${adas.length} registrada(s)</span>` : " <span class='meta-txt'>nenhuma registrada</span>"}</summary>
-    <div style="padding:8px 0 0">
-      <p class="pequeno" style="margin:0 0 8px">Adapatações de acessibilidade realizadas para este aluno <em>nesta somativa</em>. Fica anexado ao resultado individual.</p>
+    <summary style="cursor:pointer"><b>♿ Relatório desta somativa</b>${temObs ? ` <span class="tag nota">preenchido${obs.autorNome ? ` por ${esc(obs.autorNome)}` : ""}</span>` : " <span class='meta-txt'>ainda não preenchido</span>"}</summary>
+    <div style="padding:8px 0 0" class="rel-prova">
+      <p class="pequeno" style="margin:0 0 8px">Como foi <em>esta</em> prova para o aluno: fica anexado ao resultado dele e ajuda a adaptar as próximas. (O diário do dia a dia fica no <a href="${URL_AULAS}" target="_blank" rel="noopener">sistema de aulas</a>.)</p>
+      <p class="rel-rot">😊 Como estava durante a prova?</p>
+      <div class="rel-linha">${radios("humor", HUMOR.map(h => [h.v, `<span class="rel-emoji" title="${esc(h.r)}">${h.e}</span>`]), obs.humor)}</div>
+      ${REL_PROVA_ESCALAS.map(([c, rot, rs]) => `<p class="rel-rot">${rot}</p><div class="rel-linha">${radios(c, rs.map((r, i) => [i + 1, esc(r)]), obs[c])}</div>`).join("")}
+      <p class="rel-rot">🧩 Adaptações feitas nesta somativa</p>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:4px">
         ${OBS_ACESS_OPTS.map(([v, t]) => `<label class="check"><input type="checkbox" class="obs-ada" value="${v}"${adas.includes(v) ? " checked" : ""}> <span>${esc(t)}</span></label>`).join("")}
       </div>
-      <div style="margin-top:8px"><label for="obsNota_${l.t.id}">Observação adicional (opcional)</label>
-        <textarea id="obsNota_${l.t.id}" rows="2" style="margin-top:4px">${esc(obs.nota || "")}</textarea></div>
-      <button class="leve mini" data-salvar-obs="${l.t.id}" style="margin-top:8px">Salvar observação</button>
+      <p class="rel-rot">🧗 O que foi difícil nesta prova?</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:4px">
+        ${REL_PROVA_DIFIC.map(v => `<label class="check"><input type="checkbox" class="obs-dif" value="${esc(v)}"${dif.includes(v) ? " checked" : ""}> <span>${esc(v)}</span></label>`).join("")}
+      </div>
+      <div style="margin-top:8px"><label for="obsFunc_${id}">✅ O que funcionou nesta prova?</label>
+        <textarea id="obsFunc_${id}" rows="2" style="margin-top:4px" placeholder="Ex.: ler a questão em voz alta e dividir em partes.">${esc(obs.funcionou || "")}</textarea></div>
+      <div style="margin-top:8px"><label for="obsSug_${id}">📝 Sugestão para as próximas provas</label>
+        <textarea id="obsSug_${id}" rows="2" style="margin-top:4px" placeholder="Ex.: entende melhor com tabela desenhada; trava com texto longo.">${esc(obs.sugestao || "")}</textarea></div>
+      <div style="margin-top:8px"><label for="obsNota_${id}">Observação adicional (opcional)</label>
+        <textarea id="obsNota_${id}" rows="2" style="margin-top:4px">${esc(obs.nota || "")}</textarea></div>
+      ${obs.em ? `<p class="pequeno texto-suave" style="margin:6px 0 0">Última edição: ${esc(obs.autorNome || obs.autor || "")} · ${esc(dataBR(obs.em))}</p>` : ""}
+      <button class="leve mini" data-salvar-obs="${id}" style="margin-top:8px">Salvar relatório da somativa</button>
     </div>
   </details>`;
 }

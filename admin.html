@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=20261116d">
+<link rel="stylesheet" href="css/style.css?v=20261125b">
 <link rel="icon" href="img/senai.svg">
 <script src="js/logo.js"></script>
 
@@ -96,6 +96,11 @@
       <template class="ajuda-aba"><p>A <b>auxiliar de inclusão</b> registra cada dia do aluno em 5 etapas rápidas: humor e energia, atividades (com as matérias e os tópicos do plano de ensino), comportamento, o que funcionou e o fechamento do dia. Leva uns 3 minutos e o rascunho fica salvo enquanto ela preenche.</p>
           <p>Os <b>professores</b> leem e deixam o seu comentário em cada dia (como ela estava na aula, participação, sugestões). Eles não mudam o registro da auxiliar.</p>
           <p>O diário alimenta os relatórios do aluno e as adaptações das provas. O aluno nunca vê o diário.</p></template>
+      <div class="card aviso-migrou" style="margin-bottom:12px;border-left:4px solid var(--azul, #2563eb)">
+        <p style="margin:0"><b>📔 O diário agora é feito no sistema de aulas.</b> Os registros são os mesmos (nada se perdeu): a auxiliar registra o dia e os professores comentam lá.
+          Aqui no sistema de provas a auxiliar faz o <b>relatório de cada somativa</b>, em <b>Resultados</b> → aluno → "♿ Relatório desta somativa".</p>
+        <p style="margin:8px 0 0"><a class="btn" href="https://aulassenai.netlify.app/" target="_blank" rel="noopener">Abrir o Diário no sistema de aulas ↗</a></p>
+      </div>
       <div id="diarioAlunos"></div>
       <div id="diarioPainel"></div>
     </div>
@@ -165,6 +170,7 @@
         <div class="oculto"><button id="btnValidarBanco" class="leve">Validar</button><button id="btnImportarBanco">Importar</button></div>
         <div id="msgBanco" class="pequeno" role="status" aria-live="polite" style="margin-top:12px"></div>
       </div>
+      <div id="bancosProntos"></div>
       <div class="linha-apoio"><p class="help">Organizados em <b>Semestre → Matéria → Banco → Tópicos</b>. O semestre e a matéria de cada banco mudam em <b>Tópicos</b>.</p><span id="fbContagem" class="tb-contagem" aria-live="polite"></span></div>
       <div class="toolbar" role="search">
         <input type="search" id="fbBusca" placeholder="Pesquisar banco, matéria, tópico ou questão…" aria-label="Pesquisar bancos">
@@ -487,6 +493,6 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
   </section>
   <section id="telaAviso" class="card centro oculto"><div id="avisoTexto"></div><button type="button" id="btnSairAviso" class="leve">Sair</button></section>
 </main>
-<script type="module" src="js/admin.js?v=20261125a"></script>
+<script type="module" src="js/admin.js?v=20261125b"></script>
 </body>
 </html>
