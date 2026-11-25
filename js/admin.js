@@ -1085,9 +1085,17 @@ function desenharProvas() {
   const nLib = lista.filter(p => p.liberada).length;
   $("#fpContagem").textContent = `${lista.length} de ${pl(provasCache.length, "somativa")} · ${nLib} ${nLib === 1 ? "liberada" : "liberadas"}`;
   if (!lista.length) { box.innerHTML = vazio({ e: "🔎", texto: "Nenhuma somativa com esses filtros." }); return; }
+  // recuperação/substitutiva fica DENTRO do cartão da somativa de origem (não aparece como outra prova solta)
+  const idsLista = new Set(lista.map(p => p.id)), filhasDe = new Map();
+  lista.forEach(p => { if (p.provaOrigemId && idsLista.has(p.provaOrigemId)) { if (!filhasDe.has(p.provaOrigemId)) filhasDe.set(p.provaOrigemId, []); filhasDe.get(p.provaOrigemId).push(p); } });
+  const cartaoComRec = p => {
+    const fs = filhasDe.get(p.id);
+    if (!fs) return cartaoProvaHTML(p);
+    return `<div class="prova-com-rec">${cartaoProvaHTML(p)}<div class="rec-filhas"><p class="rec-tit">↳ ${fs.length === 1 ? "Recuperação / substitutiva desta somativa" : `${fs.length} recuperações / substitutivas desta somativa`}</p>${fs.map(cartaoProvaHTML).join("")}</div></div>`;
+  };
   // agrupa por turma (na ordem das turmas cadastradas; "sem turma" por último)
   const grupos = new Map();
-  lista.forEach(p => { const k = p.turmaId && turmasCache.some(t => t.id === p.turmaId) ? p.turmaId : "__sem"; if (!grupos.has(k)) grupos.set(k, []); grupos.get(k).push(p); });
+  lista.filter(p => !(p.provaOrigemId && idsLista.has(p.provaOrigemId))).forEach(p => { const k = p.turmaId && turmasCache.some(t => t.id === p.turmaId) ? p.turmaId : "__sem"; if (!grupos.has(k)) grupos.set(k, []); grupos.get(k).push(p); });
   const chaves = [...turmasCache.map(t => t.id).filter(id => grupos.has(id)), ...(grupos.has("__sem") ? ["__sem"] : [])];
   box.innerHTML = chaves.map(k => {
     const ps = grupos.get(k), t = turmasCache.find(x => x.id === k), lib = ps.filter(p => p.liberada).length;
@@ -1096,12 +1104,13 @@ function desenharProvas() {
     const sub = new Map();
     ps.forEach(p => { const sm = semestreDaProva(p), m = materiaDaProva(p, bancosCache) || "Sem matéria", ch = `${sm}|${chaveTexto(m)}`; if (!sub.has(ch)) sub.set(ch, { sm, m, ps: [] }); sub.get(ch).ps.push(p); });
     const subs = [...sub.values()].sort((a, b) => b.sm.localeCompare(a.sm) || a.m.localeCompare(b.m, "pt-BR"));
-    const resumo = [pl(ps.length, "somativa"), lib ? `${lib} ${lib === 1 ? "liberada" : "liberadas"}` : "", t ? pl(alunosDaTurma(t).length, "aluno") : "", subs.length === 1 ? rotuloSemestre(subs[0].sm) : "", subs.length === 1 ? subs[0].m : ""].filter(Boolean).join(" · ");
+    const nRec = ps.reduce((n, p) => n + (filhasDe.get(p.id)?.length || 0), 0);
+    const resumo = [pl(ps.length, "somativa") + (nRec ? ` + ${nRec === 1 ? "1 recuperação" : `${nRec} recuperações`}` : ""), lib ? `${lib} ${lib === 1 ? "liberada" : "liberadas"}` : "", t ? pl(alunosDaTurma(t).length, "aluno") : "", subs.length === 1 ? rotuloSemestre(subs[0].sm) : "", subs.length === 1 ? subs[0].m : ""].filter(Boolean).join(" · ");
     return `<details class="grupo-lista" data-grupo="${k}" ${aberto ? "open" : ""}>
-      <summary class="grupo-cab">${seta()}<h3 class="gc-titulo">${k === "__sem" ? "Sem turma" : `${esc(t.nome || "")}${rotuloDias(t.diasAula) ? `<span class="gc-dias"> · ${esc(rotuloDias(t.diasAula))}</span>` : ""}`}</h3>
+      <summary class="grupo-cab">${seta()}<h3 class="gc-titulo">${k === "__sem" ? "⚠ Sem turma" : `👥 Turma ${esc(t.nome || "")}${rotuloDias(t.diasAula) ? `<span class="gc-dias"> · ${esc(rotuloDias(t.diasAula))}</span>` : ""}`}</h3>
         <span class="gc-resumo">${esc(resumo)}</span>${t ? "" : `<span class="chip warn">nenhum aluno vê estas somativas: use Editar e escolha a turma</span>`}</summary>
       <div class="grupo-corpo">${subs.map(g => `<div class="sub-grupo">${subs.length > 1 ? `<h4 class="sg-titulo">${esc(rotuloSemestre(g.sm))} · ${esc(g.m)} · ${pl(g.ps.length, "somativa")}</h4>` : ""}
-        <div class="cartoes-provas">${g.ps.map(cartaoProvaHTML).join("")}</div></div>`).join("")}</div></details>`;
+        <div class="cartoes-provas">${g.ps.map(cartaoComRec).join("")}</div></div>`).join("")}</div></details>`;
   }).join("");
   box.querySelectorAll("[data-grupo]").forEach(d => d.ontoggle = () => { if (busca || turma || fSem || fMat) return; d.open ? gruposFechados.delete(d.dataset.grupo) : gruposFechados.add(d.dataset.grupo); });
   box.querySelectorAll("[data-alunos]").forEach(b => b.onclick = async () => {
