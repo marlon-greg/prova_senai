@@ -2,7 +2,7 @@
 import { ic } from "./icones.js";
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar, sortearAleatorio, esc, $, toast, dataBR, letra,
          idTentativaTeste, apagarTentativaTeste, confirmar, avisar, traduzirErro, iniciais, fecharModais, temaDe, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco, bancoDaQuestao, sortearQuestoes }
-  from "./common.js?v=20261126h";
+  from "./common.js?v=20261126i";
 import { baixarMaterial } from "./material.js";
 import { desenharConquistas } from "./aluno-conquistas.js?v=20261126a";
 import { regraDoTipo, calcNotaFinal } from "./nota-final.js";
@@ -12,7 +12,7 @@ import { iniciarAbas, definirAbasVisiveis, irParaAba, abaAtual } from "./aluno-n
 import { desenharTurma } from "./aluno-social.js";
 import { desenharRecompensas } from "./aluno-recompensas.js";
 let simulacao = false;   // equipe vendo a página como aluno (?simular=1): nada é gravado
-import { lerGamificacao, GAMI_PADRAO } from "./common.js?v=20261126h";
+import { lerGamificacao, GAMI_PADRAO } from "./common.js?v=20261126i";
 let gami = { ...GAMI_PADRAO };   // o que está ligado na gamificação (config/gamificacao)
 import { montarFormato, temFormato, FORMATOS, rotuloFormato, textoParaFalar, textoResposta, textoChave } from "./formatos-ui.js";
 const controles = {};   // qid -> controle do formato adaptado (valor, preencher, travar)
@@ -569,7 +569,7 @@ $("#btnComecar").onclick = async () => {
       try { contagem = (await comLimiteDeTempo(getDoc(doc(db, "sorteios", provaAtual.id)), 4000))?.data()?.c || {}; } catch (e) { /* sorteia sem a contagem */ }
       if (provaAtual.provaOrigemId) { try { const o = await comLimiteDeTempo(getDoc(doc(db, "tentativas", `${eu.uid}_${provaAtual.provaOrigemId}`)), 4000); if (o?.exists()) evitar = new Set(o.data().questoesIds || []); } catch (e) { /* sem a origem */ } }
     }
-    const sorteadas = Array.isArray(pre) && pre.length ? pre.slice() : await sortearQuestoes(provaAtual, null, { incluirRevisar: modoTeste, contagem, evitar });
+    const sorteadas = Array.isArray(pre) && pre.length ? pre.slice() : await sortearQuestoes(provaAtual, null, { incluirRevisar: modoTeste, contagem, evitar, preferirTemas: provaAtual.temasPorAluno?.[String(eu.email || "").toLowerCase()] || null });
     const tid = idTentativa(provaAtual.id);
     const dados = {
       uid: eu.uid, email: eu.email, nome: eu.nome, provaId: provaAtual.id, bancoId: provaAtual.bancoId,

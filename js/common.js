@@ -306,8 +306,10 @@ export async function sortearQuestoes(prova, cota = null, opc = {}) {
   const pegar = (lista, n) => {
     // espalhar: primeiro as que o aluno NÃO viu na prova de origem (recuperação), depois as que saíram MENOS vezes nesta somativa;
     // entre empatadas continua o sorteio (a ordenação é estável sobre a lista já embaralhada)
-    const cont = opc.contagem || {}, evitar = opc.evitar || null;
-    const ordem = sortearAleatorio(lista, lista.length).sort((a, b) => ((evitar?.has(a) ? 1 : 0) - (evitar?.has(b) ? 1 : 0)) || ((cont[a] || 0) - (cont[b] || 0))), sai = [], resto = [];
+    // recuperação POR ALUNO: primeiro os temas em que ESTE aluno ficou abaixo de 50% (prova.temasPorAluno[email])
+    const cont = opc.contagem || {}, evitar = opc.evitar || null, pref = opc.preferirTemas || null;
+    const ehPref = id => !!pref?.[bancoDaQuestao(id, prova.bancoId)]?.includes(temaDe(dados[id]));
+    const ordem = sortearAleatorio(lista, lista.length).sort((a, b) => ((ehPref(b) ? 1 : 0) - (ehPref(a) ? 1 : 0)) || ((evitar?.has(a) ? 1 : 0) - (evitar?.has(b) ? 1 : 0)) || ((cont[a] || 0) - (cont[b] || 0))), sai = [], resto = [];
     for (const id of ordem) {
       const g = grupo[id] || id;
       if (sai.length < n && !usados.has(g)) { usados.add(g); sai.push(id); } else resto.push(id);

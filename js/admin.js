@@ -2,7 +2,7 @@
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, limparTema, apagarTentativaTeste,
          confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco,
          rotuloDias, nomeTurma, HORARIO_PADRAO, textoHorario, DIAS_SEMANA_LONGO,
-         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, materiaCorrigida, bancosTeoricos, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261126h";
+         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, materiaCorrigida, bancosTeoricos, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261126i";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
@@ -1657,6 +1657,11 @@ async function gerarRecuperacao(p) {
   const nomeBanco = id => bancosCache.find(x => x.id === id)?.nome || id;
   const pct = x => x.max ? `${Math.round(x.pts / x.max * 100)}% de acerto` : "não caiu para eles";
   const cota = cotaDaProva(p);
+  // temas em falha de CADA aluno: os temas da prova dele em que acertou menos de 50%
+  const falhaDoAluno = a => Object.entries(a.porTema || {}).filter(([k, v]) => temasTodos.has(k) && v.max > 0 && v.pts / v.max < 0.5).map(([k]) => k);
+  const temasAlunoHTML = a => { if (!a.porTema) return ""; const f = new Set(falhaDoAluno(a)), seus = Object.keys(a.porTema).filter(k => temasTodos.has(k));
+    return `<details class="rec-temas-aluno" data-rec-ta="${esc(a.email)}"><summary class="pequeno">Temas da prova dele: <b>${f.size}</b> em falha (abaixo de 50%)${f.size ? "" : " — usa os temas gerais"}</summary>
+      ${seus.map(k => { const x = temasTodos.get(k), v = a.porTema[k]; return `<label class="check" style="margin:1px 0 1px 22px"><input type="checkbox" data-rec-at="${esc(a.email)}" value="${esc(k)}"${f.has(k) ? " checked" : ""}> <span class="pequeno">${esc(x.tema)} — ${Math.round(v.pts / v.max * 100)}% de acerto</span></label>`; }).join("")}</details>`; };
   // cada aluno: marcado ou não, tipo (recuperação ou substitutiva) e quanto a nota vale na conversão (0–100 → 0–vale)
   const linhaRec = (a, marcado, extra, tipo, vale) => `<div style="display:flex;gap:8px;align-items:center;padding:2px 0;flex-wrap:wrap"><label style="display:flex;gap:8px;align-items:center;flex:1 1 260px;margin:0"><input type="checkbox" data-rec-aluno="${esc(a.email)}" data-rec-tipo="${tipo}" ${marcado ? "checked" : ""}> <span><b>${esc(a.nome)}</b> <span class="pequeno">${esc(a.email)} · ${extra}</span></span></label>
     <label class="pequeno" style="display:flex;gap:6px;align-items:center;margin:0">vale até <input type="number" min="1" max="100" step="1" value="${vale}" data-rec-vale="${esc(a.email)}" style="width:72px" aria-label="Teto da nota de ${esc(a.nome)} na conversão"></label></div>`;
@@ -1665,7 +1670,7 @@ async function gerarRecuperacao(p) {
     <div class="grade"><div><label for="recTitulo">Título</label><input id="recTitulo" type="text" value="${esc(`Recuperação — ${p.titulo}`)}"></div>
       <div><label for="recData">Data da recuperação</label><input id="recData" type="date"></div></div>
     <fieldset class="temas-box"><legend>Recuperação: nota abaixo de ${NOTA_RECUPERACAO} (${abaixo.length})</legend><p class="pequeno" style="margin-top:0">A prova vale 0 a 100 para o aluno; a nota final é a mesma, com <b>teto de ${NOTA_RECUPERACAO}</b> (ou o valor que você puser). Ex.: tirou 40 = 40; tirou 70 = ${NOTA_RECUPERACAO}.</p>
-      ${abaixo.length ? abaixo.map(a => linhaRec(a, true, `nota <b>${String(a.nota).replace(".", ",")}</b>`, "recuperacao", NOTA_RECUPERACAO)).join("") : `<p class="pequeno">Ninguém abaixo de ${NOTA_RECUPERACAO}.</p>`}</fieldset>
+      ${abaixo.length ? abaixo.map(a => linhaRec(a, true, `nota <b>${String(a.nota).replace(".", ",")}</b>`, "recuperacao", NOTA_RECUPERACAO) + temasAlunoHTML(a)).join("") : `<p class="pequeno">Ninguém abaixo de ${NOTA_RECUPERACAO}.</p>`}</fieldset>
     ${faltaram.length ? `<fieldset class="temas-box"><legend>Substitutiva: faltaram (${faltaram.length})</legend><p class="pequeno" style="margin-top:0">Marque quem vai fazer a <b>prova substitutiva</b> junto com a recuperação. A prova vale 0 a 100; a nota final é a mesma, com <b>teto de ${NOTA_SUBSTITUTIVA}</b> (padrão, sem atestado). Ex.: tirou 70 = 70; tirou 90 = ${NOTA_SUBSTITUTIVA}. <b>Com atestado, ponha 100.</b></p>
       ${faltaram.map(a => linhaRec(a, false, "faltou", "substitutiva", NOTA_SUBSTITUTIVA)).join("")}</fieldset>` : ""}
     ${acima.length ? `<fieldset class="temas-box"><legend>Adicionar outro aluno (à mão)</legend>
@@ -1674,8 +1679,8 @@ async function gerarRecuperacao(p) {
         <button type="button" class="leve mini" id="recAddBtn" style="flex:0 0 auto">+ Adicionar aluno</button></div>
       <div id="recAddLista"></div></fieldset>` : ""}
     <fieldset class="temas-box"><legend>Temas da recuperação</legend>
-      <p class="pequeno" style="margin-top:0">${nenhumEmFalha ? "Nenhum tema ficou abaixo de 50% de acerto: todos vêm marcados." : "Marcados automaticamente: os temas em <b>FALHA</b> (os alunos de recuperação acertaram menos de 50%)."}</p>
-      ${[...temasTodos.entries()].map(([k, x]) => `<label style="display:flex;gap:8px;align-items:center;padding:2px 0"><input type="checkbox" data-rec-tema="${esc(k)}" ${nenhumEmFalha || emFalha(x) ? "checked" : ""}> <span>${bancos.length > 1 ? `<span class="pequeno">${esc(nomeBanco(x.banco))} ›</span> ` : ""}<b>${esc(x.tema)}</b> <span class="pequeno">${pct(x)}</span>${emFalha(x) ? ` <span class="chip warn">em falha</span>` : ""}</span></label>`).join("")}</fieldset>
+      <p class="pequeno" style="margin-top:0"><b>Por aluno:</b> cada aluno recebe primeiro as questões dos temas em que <b>ele</b> acertou menos de 50% (abra "Temas da prova dele" em cada um para conferir). Os temas abaixo valem para quem <b>faltou</b> (substitutiva) e para <b>completar</b> a prova de quem tem poucos temas em falha. ${nenhumEmFalha ? "Nenhum tema ficou abaixo de 50% no geral: todos vêm marcados." : "Já vêm marcados os temas em falha de algum aluno."}</p>
+      ${[...temasTodos.entries()].map(([k, x]) => `<label style="display:flex;gap:8px;align-items:center;padding:2px 0"><input type="checkbox" data-rec-tema="${esc(k)}" ${nenhumEmFalha || emFalha(x) || abaixo.some(a => falhaDoAluno(a).includes(k)) ? "checked" : ""}> <span>${bancos.length > 1 ? `<span class="pequeno">${esc(nomeBanco(x.banco))} ›</span> ` : ""}<b>${esc(x.tema)}</b> <span class="pequeno">${pct(x)}</span>${emFalha(x) ? ` <span class="chip warn">em falha</span>` : ""}</span></label>`).join("")}</fieldset>
     ${htmlRegrasNota(null)}
     <div class="grade"><div><label for="recNAlt">Questões de alternativa</label><input id="recNAlt" type="number" min="0" value="${cota.nA}"></div>
       <div><label for="recNDiss">Questões dissertativas</label><input id="recNDiss" type="number" min="0" value="${cota.nD}"></div></div>
@@ -1695,7 +1700,7 @@ async function gerarRecuperacao(p) {
       corpo.querySelector("#recAddBtn")?.addEventListener("click", () => {
         const sel = corpo.querySelector("#recAddSel"), a = acima.find(x => x.email === sel.value);
         if (!a || corpo.querySelector(`[data-rec-aluno="${CSS.escape(a.email)}"]`)) return;
-        corpo.querySelector("#recAddLista").insertAdjacentHTML("beforeend", linhaRec(a, true, `nota <b>${String(a.nota).replace(".", ",")}</b> · <span class="chip warn">adicionado à mão</span>`, "recuperacao", NOTA_RECUPERACAO).replace("data-rec-aluno=", "data-rec-manual data-rec-aluno="));
+        corpo.querySelector("#recAddLista").insertAdjacentHTML("beforeend", linhaRec(a, true, `nota <b>${String(a.nota).replace(".", ",")}</b> · <span class="chip warn">adicionado à mão</span>`, "recuperacao", NOTA_RECUPERACAO).replace("data-rec-aluno=", "data-rec-manual data-rec-aluno=") + temasAlunoHTML(a));
         sel.querySelector(`option[value="${CSS.escape(a.email)}"]`)?.remove();
       });
       corpo.querySelectorAll("[data-rec-tema]").forEach(i => i.addEventListener("change", disp));
@@ -1709,7 +1714,13 @@ async function gerarRecuperacao(p) {
         if (!(v > 0 && v <= 100)) { toast(`"Vale até" de ${e} precisa ser de 1 a 100.`, "erro"); return false; }
         valeAte[e] = Math.round(v * 10) / 10; tipoPorAluno[e] = i.dataset.recTipo;
       }
-      const marc = [...corpo.querySelectorAll("[data-rec-tema]:checked")].map(i => temasTodos.get(i.dataset.recTema));
+      const temasPorAluno = {}, extras = new Set();
+      for (const i of corpo.querySelectorAll("[data-rec-at]:checked")) {
+        const e = i.dataset.recAt; if (!emails.includes(e)) continue;
+        const x = temasTodos.get(i.value); if (!x) continue;
+        ((temasPorAluno[e] ||= {})[x.banco] ||= []).push(x.tema); extras.add(i.value);
+      }
+      const marc = [...new Set([...[...corpo.querySelectorAll("[data-rec-tema]:checked")].map(i => i.dataset.recTema), ...extras])].map(k => temasTodos.get(k));
       const nA = Math.max(0, Math.round(Number(corpo.querySelector("#recNAlt").value || 0))), nD = Math.max(0, Math.round(Number(corpo.querySelector("#recNDiss").value || 0)));
       if (!titulo) { toast("Preencha o título.", "erro"); return false; }
       const rg = lerRegrasNota(corpo); if (rg.erro) { toast(rg.erro, "erro"); return false; }
@@ -1727,7 +1738,7 @@ async function gerarRecuperacao(p) {
       const dados = Object.fromEntries(copiar.filter(k => p[k] !== undefined).map(k => [k, p[k]]));
       Object.assign(dados, { titulo, dataProva: corpo.querySelector("#recData").value || "", codigoAcesso: "",
         bancoId: bancoIds[0], bancoIds, temasPorBanco, temas: temasPorBanco[bancoIds[0]], nQuestoes: nA + nD, nAlternativas: nA, nDissertativas: nD,
-        recuperacao: true, provaOrigemId: p.id, provaOrigemTitulo: p.titulo || "", notaCorte: NOTA_RECUPERACAO, alunosEmails: emails, valeAte, tipoPorAluno, regraNota: rg.regraNota,
+        temasPorAluno, recuperacao: true, provaOrigemId: p.id, provaOrigemTitulo: p.titulo || "", notaCorte: NOTA_RECUPERACAO, alunosEmails: emails, valeAte, tipoPorAluno, regraNota: rg.regraNota,
         adicionadosMao: Object.fromEntries([...corpo.querySelectorAll("[data-rec-manual]:checked")].map(i => [i.dataset.recAluno, { por: eu.email, em: new Date().toISOString() }])),
         liberada: false, resultadosLiberados: false, criadoEm: serverTimestamp(), criadoPor: eu.email,
         historico: [{ timestamp: new Date().toISOString(), motivo: "recuperacao", origem: p.id, editadoPor: eu.email }] });
