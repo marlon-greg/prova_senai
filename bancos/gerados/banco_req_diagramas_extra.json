@@ -1,0 +1,328 @@
+{
+  "nome": "Levantamento de Requisitos — diagramas extras (a revisar)",
+  "materia": "Levantamento de Requisitos",
+  "revisao": "pendente",
+  "contexto": "Complemento de banco_requisitos_diagramas.json: 4 questões práticas novas (documento de requisitos, Kanban, histórias de usuário e mapa de empatia), para que cada tipo de diagrama tenha pelo menos 2 questões. Cenários diferentes dos já existentes. Entram como 'a revisar'.",
+  "questoes": [
+    {
+      "tipo": "diagrama",
+      "diagrama": "requisitos",
+      "tema": "Documento de requisitos",
+      "capacidade": "req.ct2",
+      "revisao": "pendente",
+      "peso": 1,
+      "gabarito": {
+        "v": 1,
+        "tipo": "requisitos",
+        "cab": {
+          "projeto": "AutoCerto — sistema da oficina mecânica",
+          "versao": "1.0",
+          "data": "2026-11-26",
+          "autor": "Equipe de análise"
+        },
+        "hist": [
+          {
+            "id": "h1",
+            "versao": "1.0",
+            "data": "2026-11-26",
+            "autor": "Equipe de análise",
+            "desc": "Versão inicial do documento."
+          }
+        ],
+        "itens": [
+          {
+            "id": "q1",
+            "cod": "RF01",
+            "tipo": "RF",
+            "cat": "",
+            "desc": "O sistema deve permitir abrir uma ordem de serviço informando a placa do veículo, o cliente e o problema relatado.",
+            "prio": "Alta",
+            "origem": "Recepção"
+          },
+          {
+            "id": "q2",
+            "cod": "RF02",
+            "tipo": "RF",
+            "cat": "",
+            "desc": "O sistema deve enviar uma mensagem ao cliente quando o veículo estiver pronto para retirada.",
+            "prio": "Média",
+            "origem": "Dono da oficina"
+          },
+          {
+            "id": "q3",
+            "cod": "RNF01",
+            "tipo": "RNF",
+            "cat": "Segurança",
+            "desc": "Somente usuários com login e senha podem acessar o sistema; o mecânico não pode ver os valores cobrados.",
+            "prio": "Alta",
+            "origem": "Dono da oficina"
+          },
+          {
+            "id": "q4",
+            "cod": "RNF02",
+            "tipo": "RNF",
+            "cat": "Usabilidade",
+            "desc": "A tela do mecânico deve funcionar em tablet, com botões grandes para uso com luvas.",
+            "prio": "Média",
+            "origem": "Mecânicos"
+          },
+          {
+            "id": "q5",
+            "cod": "RN01",
+            "tipo": "RN",
+            "cat": "",
+            "desc": "O serviço só pode começar depois que o cliente aprovar o orçamento.",
+            "prio": "Alta",
+            "origem": "Dono da oficina"
+          },
+          {
+            "id": "q6",
+            "cod": "RN02",
+            "tipo": "RN",
+            "cat": "",
+            "desc": "Todo serviço tem garantia de 90 dias a partir da data de entrega do veículo.",
+            "prio": "Média",
+            "origem": "Dono da oficina"
+          },
+          {
+            "id": "q7",
+            "cod": "RES01",
+            "tipo": "RES",
+            "cat": "",
+            "desc": "O sistema deve ser entregue em até 4 meses, com orçamento máximo de R$ 15.000,00.",
+            "prio": "Alta",
+            "origem": "Dono da oficina"
+          }
+        ],
+        "obs": ""
+      },
+      "enunciado": "Registre no documento de requisitos do sistema da oficina AutoCerto o que foi levantado nas entrevistas: (1) a recepção quer abrir uma ordem de serviço informando a placa do veículo, o cliente e o problema relatado; (2) o dono quer que o cliente receba uma mensagem quando o carro estiver pronto para retirada; (3) só quem tem login e senha acessa o sistema, e o mecânico não pode ver os valores cobrados; (4) os mecânicos vão usar tablet e pediram botões grandes, porque trabalham de luvas; (5) nenhum serviço começa sem o cliente aprovar o orçamento; (6) todo serviço tem garantia de 90 dias a partir da entrega; (7) o sistema precisa ficar pronto em até 4 meses e custar no máximo R$ 15.000,00. Classifique cada item (RF, RNF com categoria, RN ou Restrição) e preencha o cabeçalho como versão 1.0, com o registro da versão inicial no histórico.",
+      "criterios": "2 RF (abrir ordem de serviço; mensagem de veículo pronto), 2 RNF (segurança: login/senha e valores ocultos ao mecânico; usabilidade: tablet com botões grandes), 2 RN (serviço só após aprovação do orçamento; garantia de 90 dias) e 1 Restrição (prazo de 4 meses e orçamento de R$ 15.000). Cabeçalho com projeto e versão 1.0 e histórico com o registro da versão inicial.",
+      "explicacao": "Funções do sistema são RF; qualidades como segurança e usabilidade são RNF; políticas da oficina (aprovação do orçamento, garantia) são regras de negócio; prazo e orçamento do projeto são restrições."
+    },
+    {
+      "tipo": "diagrama",
+      "diagrama": "kanban",
+      "tema": "Kanban",
+      "capacidade": "req.ct5",
+      "revisao": "pendente",
+      "peso": 1,
+      "gabarito": {
+        "v": 1,
+        "tipo": "kanban",
+        "cols": [
+          {
+            "id": "k1",
+            "nome": "A fazer",
+            "wip": 0
+          },
+          {
+            "id": "k2",
+            "nome": "Desenvolvendo",
+            "wip": 3
+          },
+          {
+            "id": "k3",
+            "nome": "Revisão de código",
+            "wip": 1
+          },
+          {
+            "id": "k4",
+            "nome": "Feito",
+            "wip": 0
+          }
+        ],
+        "cards": [
+          {
+            "id": "t1",
+            "col": "k1",
+            "txt": "Cupom de desconto",
+            "resp": "",
+            "prio": "Baixa"
+          },
+          {
+            "id": "t2",
+            "col": "k1",
+            "txt": "Avaliação do pedido",
+            "resp": "",
+            "prio": "Média"
+          },
+          {
+            "id": "t3",
+            "col": "k2",
+            "txt": "Carrinho de compras",
+            "resp": "Lucas",
+            "prio": "Alta"
+          },
+          {
+            "id": "t4",
+            "col": "k2",
+            "txt": "Pagamento por Pix",
+            "resp": "Marina",
+            "prio": "Alta"
+          },
+          {
+            "id": "t5",
+            "col": "k2",
+            "txt": "Rastreamento do entregador",
+            "resp": "Pedro",
+            "prio": "Média"
+          },
+          {
+            "id": "t6",
+            "col": "k3",
+            "txt": "Cardápio com fotos",
+            "resp": "Lucas",
+            "prio": "Alta"
+          },
+          {
+            "id": "t7",
+            "col": "k4",
+            "txt": "Cadastro de cliente",
+            "resp": "Marina",
+            "prio": "Alta"
+          }
+        ],
+        "obs": ""
+      },
+      "enunciado": "Monte o quadro Kanban da equipe que desenvolve o aplicativo de delivery da lanchonete Mordida Boa. Fluxo: A fazer → Desenvolvendo → Revisão de código → Feito, com limite WIP de 3 cartões em “Desenvolvendo” e de 1 cartão em “Revisão de código”. Situação atual: o Cadastro de cliente (Marina) já está pronto; o Cardápio com fotos (Lucas) está na revisão de código; o Carrinho de compras (Lucas), o Pagamento por Pix (Marina) e o Rastreamento do entregador (Pedro) estão sendo desenvolvidos; a Avaliação do pedido (prioridade média) e o Cupom de desconto (prioridade baixa) ainda não começaram.",
+      "criterios": "Quatro colunas na ordem do fluxo, WIP 3 em Desenvolvendo e WIP 1 em Revisão de código, cada um dos 7 cartões na coluna correta (com responsável quando houver) e nenhuma coluna acima do limite WIP.",
+      "explicacao": "Um WIP baixo na revisão evita que o código fique acumulado esperando revisão; se essa coluna encher, quem termina de desenvolver deve ajudar a revisar em vez de puxar nova tarefa."
+    },
+    {
+      "tipo": "diagrama",
+      "diagrama": "historias",
+      "tema": "Histórias de usuário (Scrum)",
+      "capacidade": "req.ct5",
+      "revisao": "pendente",
+      "peso": 1,
+      "gabarito": {
+        "v": 1,
+        "tipo": "historias",
+        "itens": [
+          {
+            "id": "u1",
+            "cod": "US01",
+            "papel": "instrutor",
+            "acao": "cadastrar um treino personalizado para cada aluno",
+            "beneficio": "acompanhar a evolução de cada um",
+            "criterios": [
+              "Dado que o aluno está cadastrado, quando o instrutor salva exercícios, séries e repetições, então o treino fica vinculado a esse aluno.",
+              "Não é possível salvar um treino sem pelo menos um exercício."
+            ],
+            "prio": "Alta",
+            "pontos": "5"
+          },
+          {
+            "id": "u2",
+            "cod": "US02",
+            "papel": "aluno",
+            "acao": "ver no celular o treino do dia",
+            "beneficio": "não depender da ficha de papel",
+            "criterios": [
+              "Ao abrir o app, o aluno vê os exercícios do dia com séries e repetições.",
+              "Se não houver treino cadastrado, aparece a mensagem “Procure seu instrutor”."
+            ],
+            "prio": "Média",
+            "pontos": "3"
+          },
+          {
+            "id": "u3",
+            "cod": "US03",
+            "papel": "aluno",
+            "acao": "registrar a carga usada em cada exercício",
+            "beneficio": "acompanhar minha evolução",
+            "criterios": [
+              "A carga é salva em kg com a data do treino e aparece no histórico do exercício."
+            ],
+            "prio": "Baixa",
+            "pontos": "2"
+          }
+        ],
+        "obs": ""
+      },
+      "enunciado": "O Product Owner da academia Corpo em Forma quer o backlog do novo aplicativo com três histórias: o instrutor cadastrar um treino personalizado para cada aluno (para acompanhar a evolução de cada um); o aluno ver no celular o treino do dia (para não depender da ficha de papel); e o aluno registrar a carga usada em cada exercício (para acompanhar a própria evolução). A prioridade é nessa ordem (Alta, Média, Baixa) e a equipe estimou 5, 3 e 2 pontos. Escreva as histórias no formato Como… quero… para…, com pelo menos dois critérios de aceitação nas duas primeiras, e deixe o backlog ordenado.",
+      "criterios": "Três histórias no formato completo (papel, ação, benefício), com os papéis corretos (instrutor, aluno, aluno), na ordem cadastrar treino → ver treino do dia → registrar carga, com prioridades Alta/Média/Baixa, pontos estimados e critérios de aceitação verificáveis.",
+      "explicacao": "Cada história mostra quem precisa (papel), o que quer (ação) e por quê (benefício). A ordem do backlog também considera dependências: o aluno só vê o treino depois que o instrutor o cadastra."
+    },
+    {
+      "tipo": "diagrama",
+      "diagrama": "empatia",
+      "tema": "Mapa de empatia (Design Thinking)",
+      "capacidade": "req.ct4",
+      "revisao": "pendente",
+      "peso": 1,
+      "gabarito": {
+        "v": 1,
+        "tipo": "empatia",
+        "persona": "Dona Cida, 52 anos, dona de um mercadinho de bairro que controla o estoque em um caderno",
+        "notas": [
+          {
+            "id": "n1",
+            "area": "pensa",
+            "txt": "Tem medo de faltar produto e perder clientes para o mercado grande"
+          },
+          {
+            "id": "n2",
+            "area": "pensa",
+            "txt": "Acha que sistema de computador é caro e difícil"
+          },
+          {
+            "id": "n3",
+            "area": "escuta",
+            "txt": "O filho diz que dá para controlar o estoque pelo celular"
+          },
+          {
+            "id": "n4",
+            "area": "escuta",
+            "txt": "O fornecedor reclama que os pedidos chegam em cima da hora"
+          },
+          {
+            "id": "n5",
+            "area": "ve",
+            "txt": "Prateleiras vazias no fim do mês"
+          },
+          {
+            "id": "n6",
+            "area": "ve",
+            "txt": "O mercado concorrente usando leitor de código de barras no caixa"
+          },
+          {
+            "id": "n7",
+            "area": "fala",
+            "txt": "Anota as vendas no caderno no fim do dia"
+          },
+          {
+            "id": "n8",
+            "area": "fala",
+            "txt": "Conta o estoque à mão todo domingo"
+          },
+          {
+            "id": "n9",
+            "area": "dores",
+            "txt": "Perde produtos vencidos no fundo da prateleira"
+          },
+          {
+            "id": "n10",
+            "area": "dores",
+            "txt": "Não sabe quanto lucrou no mês"
+          },
+          {
+            "id": "n11",
+            "area": "ganhos",
+            "txt": "Ser avisada quando um produto estiver acabando"
+          },
+          {
+            "id": "n12",
+            "area": "ganhos",
+            "txt": "Ter mais tempo livre aos domingos"
+          }
+        ],
+        "obs": ""
+      },
+      "enunciado": "Na etapa de EMPATIA do Design Thinking, a equipe visitou e entrevistou a Dona Cida (52 anos, dona de um mercadinho de bairro que controla o estoque em um caderno). Organize no mapa de empatia o que foi observado: “perde produtos vencidos no fundo da prateleira”; “o filho diz que dá para controlar o estoque pelo celular”; “tem medo de faltar produto e perder clientes para o mercado grande”; “prateleiras vazias no fim do mês”; “anota as vendas no caderno no fim do dia”; “queria ser avisada quando um produto estiver acabando”; “não sabe quanto lucrou no mês”; “o fornecedor reclama que os pedidos chegam em cima da hora”; “acha que sistema de computador é caro e difícil”; “vê o mercado concorrente usando leitor de código de barras no caixa”; “conta o estoque à mão todo domingo”; “gostaria de ter mais tempo livre aos domingos”.",
+      "criterios": "Persona descrita e as 12 observações nas áreas corretas: pensa e sente (medo de faltar produto; sistema caro e difícil), escuta (filho; fornecedor), vê (prateleiras vazias; concorrente com leitor de código de barras), fala e faz (anota vendas no caderno; conta o estoque aos domingos), dores (produtos vencidos; não sabe o lucro), ganhos (aviso de produto acabando; tempo livre aos domingos).",
+      "explicacao": "O mapa de empatia ajuda a enxergar o problema pelos olhos do usuário. Dores e ganhos viram ideias de requisitos: por exemplo, alerta de estoque mínimo e de validade (RF) e telas simples para quem tem pouca familiaridade com tecnologia (RNF de usabilidade)."
+    }
+  ]
+}

@@ -1,0 +1,608 @@
+{
+  "nome": "Linguagem de Marcação — páginas web, projeto livre (a revisar)",
+  "materia": "Linguagem de Marcação",
+  "revisao": "pendente",
+  "contexto": "Duas questões práticas novas na Bancada Web, modo livre (o aluno escreve o projeto todo; a correção confere a página pronta com verificações automáticas e o git simulado): o cardápio de um restaurante (listas, imagens, links e box model) e uma página de inscrição com formulário (campos, rótulos, seletores CSS e Flexbox). Entram como 'a revisar'.",
+  "questoes": [
+    {
+      "tipo": "web",
+      "tema": "Página web — projeto livre",
+      "capacidade": "marc.ct3",
+      "revisao": "pendente",
+      "peso": 10,
+      "modo": "livre",
+      "previa": "lado",
+      "enunciado": "Projeto livre: crie a página do cardápio da Cantina da Nonna no projeto já aberto, seguindo as 4 etapas. Você escreve todo o código: o index.html fica na raiz, os estilos em css/style.css e as fotos dos pratos já estão prontas em img/. Use listas para organizar o cardápio, imagens com texto alternativo, links e as propriedades do box model (padding, border e margin). Ao terminar cada etapa, faça um commit (Controle de código-fonte) e, no final, envie tudo para o GitHub (push). A correção confere a página pronta (estrutura, textos, atributos e estilos pedidos em cada passo).",
+      "assetsBase": "assets/web/cardapio/",
+      "entrada": "index.html",
+      "arquivos": [
+        {
+          "caminho": "index.html",
+          "conteudo": "<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title></title>\n</head>\n<body>\n\n</body>\n</html>\n"
+        },
+        {
+          "caminho": "css/style.css",
+          "conteudo": "/* Estilos do cardápio */\n"
+        },
+        {
+          "caminho": "LEIAME.md",
+          "conteudo": "# Cardápio — Cantina da Nonna\n\nProjeto da avaliação prática de HTML e CSS.\n\n- index.html: a página do cardápio\n- css/style.css: os estilos\n- img/: fotos dos pratos (já prontas, não precisam ser alteradas)\n\nFaça um commit ao terminar cada etapa e, no final, envie tudo para o GitHub (push).\n"
+        },
+        {
+          "caminho": "img/prato1.svg",
+          "asset": true
+        },
+        {
+          "caminho": "img/prato2.svg",
+          "asset": true
+        },
+        {
+          "caminho": "img/prato3.svg",
+          "asset": true
+        }
+      ],
+      "git": {
+        "ativo": true,
+        "repo": "cardapio-cantina",
+        "exigir": {
+          "commits": 3,
+          "push": true
+        },
+        "pontos": 10
+      },
+      "etapas": [
+        {
+          "id": 1,
+          "titulo": "Estrutura e ligação do CSS",
+          "pontos": 20,
+          "arquivos": [
+            "index.html",
+            "css/style.css"
+          ],
+          "enunciado": "Prepare o documento: idioma, título da aba e a ligação com o arquivo de estilos. Depois zere os espaços padrão e defina a fonte e as cores gerais da página.",
+          "passos": [
+            "No <code>&lt;html&gt;</code>, informe o idioma <strong>português do Brasil</strong> com o atributo <code>lang</code>.",
+            "Escreva o título da aba: <strong>Cantina da Nonna</strong>.",
+            "Ligue o arquivo <code>css/style.css</code> com a tag <code>&lt;link&gt;</code> dentro do <code>&lt;head&gt;</code>.",
+            "No <code>style.css</code>, com o seletor universal: <code>margin</code> e <code>padding</code> zerados e <code>box-sizing: border-box</code>.",
+            "No <code>body</code>: fonte <code>Georgia, serif</code>, fundo <code>#fff8f0</code> e texto <code>#3b2a20</code>."
+          ],
+          "dicas": [
+            "O seletor <code>*</code> pega todos os elementos.",
+            "Se o caminho do link estiver errado, a prévia fica sem estilo nenhum.",
+            "Faça um commit ao terminar a etapa."
+          ],
+          "verificacoes": [
+            {
+              "id": "e1_lang",
+              "tipo": "atributo",
+              "seletor": "html",
+              "atributo": "lang"
+            },
+            {
+              "id": "e1_titulo",
+              "tipo": "texto",
+              "seletor": "title"
+            },
+            {
+              "id": "e1_reset",
+              "tipo": "css",
+              "seletor": "body",
+              "propriedade": "margin-top"
+            },
+            {
+              "id": "e1_fonte",
+              "tipo": "css",
+              "seletor": "body",
+              "propriedade": "font-family"
+            },
+            {
+              "id": "e1_fundo",
+              "tipo": "css",
+              "seletor": "body",
+              "propriedade": "background-color"
+            },
+            {
+              "id": "e1_cor",
+              "tipo": "css",
+              "seletor": "body",
+              "propriedade": "color"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "titulo": "Cabeçalho com menu de links internos",
+          "pontos": 20,
+          "arquivos": [
+            "index.html",
+            "css/style.css"
+          ],
+          "enunciado": "Crie o cabeçalho com o nome do restaurante e um menu que leva às seções da própria página (âncoras).",
+          "passos": [
+            "Crie <code>&lt;header class=\"topo\"&gt;</code> com um <code>&lt;h1&gt;</code> (Cantina da Nonna) e um <code>&lt;nav&gt;</code>.",
+            "Dentro do <code>nav</code>, a lista <code>&lt;ul class=\"menu\"&gt;</code> com 3 itens, cada um com um link: <strong>Pratos</strong> (<code>#pratos</code>), <strong>Bebidas</strong> (<code>#bebidas</code>) e <strong>Contato</strong> (<code>#contato</code>), nessa ordem.",
+            "CSS <code>.topo</code>: fundo <code>#b23a48</code>, texto centralizado e <code>padding</code> de 20px em cima e embaixo e 40px nas laterais.",
+            "CSS <code>.menu</code>: <strong>sem marcadores</strong> de lista. Itens <code>.menu li</code> lado a lado (<code>display: inline-block</code>). Links <code>.menu a</code> brancos e <strong>sem sublinhado</strong>."
+          ],
+          "dicas": [
+            "Link para uma seção da mesma página: <code>href=\"#id-da-secao\"</code>.",
+            "<code>list-style: none</code> tira as bolinhas da lista.",
+            "<code>text-decoration: none</code> tira o sublinhado do link."
+          ],
+          "verificacoes": [
+            {
+              "id": "e2_estr",
+              "tipo": "existe",
+              "seletor": "header.topo nav ul.menu"
+            },
+            {
+              "id": "e2_links",
+              "tipo": "quantidade",
+              "seletor": ".menu li a"
+            },
+            {
+              "id": "e2_href",
+              "tipo": "atributo",
+              "seletor": ".menu li:nth-child(2) a",
+              "atributo": "href"
+            },
+            {
+              "id": "e2_fundo",
+              "tipo": "css",
+              "seletor": ".topo",
+              "propriedade": "background-color"
+            },
+            {
+              "id": "e2_pad",
+              "tipo": "css",
+              "seletor": ".topo",
+              "propriedade": "padding-left"
+            },
+            {
+              "id": "e2_lista",
+              "tipo": "css",
+              "seletor": ".menu",
+              "propriedade": "list-style-type"
+            },
+            {
+              "id": "e2_sublinhado",
+              "tipo": "css",
+              "seletor": ".menu a",
+              "propriedade": "text-decoration-line"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "titulo": "Pratos com fotos e box model",
+          "pontos": 30,
+          "arquivos": [
+            "index.html",
+            "css/style.css",
+            "img/prato1.svg"
+          ],
+          "enunciado": "Abra o conteúdo principal e monte a lista de pratos. Cada prato é um \"cartão\" feito com as propriedades do box model.",
+          "passos": [
+            "Depois do header, crie <code>&lt;main class=\"container\"&gt;</code> e, dentro dele, <code>&lt;section id=\"pratos\"&gt;</code> com o título <code>h2</code> <strong>Pratos principais</strong>.",
+            "Na seção, a lista <code>&lt;ul class=\"pratos\"&gt;</code> com 3 itens <code>&lt;li class=\"prato\"&gt;</code>. Cada item tem a imagem (<code>img/prato1.svg</code>, <code>img/prato2.svg</code> e <code>img/prato3.svg</code>) com texto alternativo (<code>alt</code>) que descreva o prato, um <code>h3</code> com o nome e um parágrafo <code>&lt;p class=\"preco\"&gt;</code> com o preço.",
+            "CSS <code>.pratos</code>: sem marcadores de lista.",
+            "CSS <code>.prato</code> (box model): <code>padding</code> de <strong>16px</strong>, borda <strong>sólida de 2px</strong> na cor <code>#e0c9a6</code>, <code>margin-bottom</code> de <strong>20px</strong> e cantos arredondados de 12px.",
+            "CSS <code>.prato img</code>: largura de 240px."
+          ],
+          "dicas": [
+            "Caminho da imagem a partir do index.html: <code>img/prato1.svg</code> (sem <code>./</code> nem barra no começo).",
+            "<code>border: 2px solid #e0c9a6;</code> define largura, estilo e cor da borda de uma vez.",
+            "padding = espaço de dentro; margin = espaço de fora da borda."
+          ],
+          "verificacoes": [
+            {
+              "id": "e3_qtd",
+              "tipo": "quantidade",
+              "seletor": "main.container #pratos ul.pratos li.prato"
+            },
+            {
+              "id": "e3_imgs",
+              "tipo": "quantidade",
+              "seletor": ".prato img[src^='img/prato']"
+            },
+            {
+              "id": "e3_alt",
+              "tipo": "quantidade",
+              "seletor": "#pratos img[alt]:not([alt=''])"
+            },
+            {
+              "id": "e3_preco",
+              "tipo": "quantidade",
+              "seletor": ".prato h3 + p.preco"
+            },
+            {
+              "id": "e3_lista",
+              "tipo": "css",
+              "seletor": ".pratos",
+              "propriedade": "list-style-type"
+            },
+            {
+              "id": "e3_padding",
+              "tipo": "css",
+              "seletor": ".prato",
+              "propriedade": "padding-top"
+            },
+            {
+              "id": "e3_borda",
+              "tipo": "css",
+              "seletor": ".prato",
+              "propriedade": "border-top-width"
+            },
+            {
+              "id": "e3_estilo",
+              "tipo": "css",
+              "seletor": ".prato",
+              "propriedade": "border-top-style"
+            },
+            {
+              "id": "e3_margem",
+              "tipo": "css",
+              "seletor": ".prato",
+              "propriedade": "margin-bottom"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "titulo": "Bebidas (lista de definição) e rodapé",
+          "pontos": 20,
+          "arquivos": [
+            "index.html",
+            "css/style.css"
+          ],
+          "enunciado": "Mostre as bebidas numa lista de definição (nome + descrição) e feche a página com o rodapé de contato, que tem um link externo.",
+          "passos": [
+            "Ainda no <code>main</code>, crie <code>&lt;section id=\"bebidas\"&gt;</code> com o título <code>h2</code> <strong>Bebidas</strong> e a lista de definição <code>&lt;dl class=\"bebidas\"&gt;</code> com 3 bebidas: o nome em <code>&lt;dt&gt;</code> e a descrição com o preço em <code>&lt;dd&gt;</code>.",
+            "Depois do <code>main</code>, o rodapé <code>&lt;footer id=\"contato\" class=\"rodape\"&gt;</code> com um parágrafo com endereço e telefone e outro com o link <strong>Como chegar</strong> para <code>https://www.google.com/maps</code>, abrindo em <strong>nova aba</strong>.",
+            "CSS <code>.rodape</code>: texto centralizado, fundo <code>#3b2a20</code> e texto branco."
+          ],
+          "dicas": [
+            "Lista de definição: <code>&lt;dl&gt;</code> com pares <code>&lt;dt&gt;</code> (termo) e <code>&lt;dd&gt;</code> (descrição).",
+            "Nova aba: atributo <code>target=\"_blank\"</code> no link.",
+            "Não esqueça do commit e do push no final!"
+          ],
+          "verificacoes": [
+            {
+              "id": "e4_dt",
+              "tipo": "quantidade",
+              "seletor": "#bebidas dl.bebidas dt"
+            },
+            {
+              "id": "e4_dd",
+              "tipo": "quantidade",
+              "seletor": "#bebidas dl.bebidas dd"
+            },
+            {
+              "id": "e4_rodape",
+              "tipo": "existe",
+              "seletor": "footer#contato.rodape p"
+            },
+            {
+              "id": "e4_href",
+              "tipo": "atributo",
+              "seletor": "footer#contato a",
+              "atributo": "href"
+            },
+            {
+              "id": "e4_alvo",
+              "tipo": "atributo",
+              "seletor": "footer#contato a",
+              "atributo": "target"
+            },
+            {
+              "id": "e4_centro",
+              "tipo": "css",
+              "seletor": ".rodape",
+              "propriedade": "text-align"
+            },
+            {
+              "id": "e4_fundo",
+              "tipo": "css",
+              "seletor": ".rodape",
+              "propriedade": "background-color"
+            }
+          ]
+        }
+      ],
+      "gabarito": {
+        "solucao": {
+          "index.html": "<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Cantina da Nonna</title>\n  <link rel=\"stylesheet\" href=\"css/style.css\">\n</head>\n<body>\n  <header class=\"topo\">\n    <h1>Cantina da Nonna</h1>\n    <nav>\n      <ul class=\"menu\">\n        <li><a href=\"#pratos\">Pratos</a></li>\n        <li><a href=\"#bebidas\">Bebidas</a></li>\n        <li><a href=\"#contato\">Contato</a></li>\n      </ul>\n    </nav>\n  </header>\n  <main class=\"container\">\n    <section id=\"pratos\">\n      <h2>Pratos principais</h2>\n      <ul class=\"pratos\">\n        <li class=\"prato\">\n          <img src=\"img/prato1.svg\" alt=\"Prato de espaguete ao molho de tomate\">\n          <h3>Espaguete ao sugo</h3>\n          <p class=\"preco\">R$ 32,00</p>\n        </li>\n        <li class=\"prato\">\n          <img src=\"img/prato2.svg\" alt=\"Fatia de lasanha à bolonhesa\">\n          <h3>Lasanha à bolonhesa</h3>\n          <p class=\"preco\">R$ 38,00</p>\n        </li>\n        <li class=\"prato\">\n          <img src=\"img/prato3.svg\" alt=\"Prato de risoto de cogumelos\">\n          <h3>Risoto de cogumelos</h3>\n          <p class=\"preco\">R$ 41,00</p>\n        </li>\n      </ul>\n    </section>\n    <section id=\"bebidas\">\n      <h2>Bebidas</h2>\n      <dl class=\"bebidas\">\n        <dt>Suco de laranja</dt>\n        <dd>Natural, 400 ml — R$ 9,00</dd>\n        <dt>Refrigerante</dt>\n        <dd>Lata, 350 ml — R$ 6,00</dd>\n        <dt>Água com gás</dt>\n        <dd>Garrafa, 500 ml — R$ 5,00</dd>\n      </dl>\n    </section>\n  </main>\n  <footer id=\"contato\" class=\"rodape\">\n    <p>Rua das Oliveiras, 120 — Centro · Telefone (41) 3333-0000</p>\n    <p><a href=\"https://www.google.com/maps\" target=\"_blank\">Como chegar</a></p>\n  </footer>\n</body>\n</html>\n",
+          "css/style.css": "* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\nbody {\n  font-family: Georgia, serif;\n  background-color: #fff8f0;\n  color: #3b2a20;\n}\n.topo {\n  padding: 20px 40px;\n  text-align: center;\n  background-color: #b23a48;\n}\n.topo h1 {\n  color: #ffffff;\n}\n.menu {\n  list-style: none;\n  margin-top: 10px;\n}\n.menu li {\n  display: inline-block;\n  margin: 0 12px;\n}\n.menu a {\n  color: #ffffff;\n  text-decoration: none;\n  font-weight: bold;\n}\n.container {\n  width: 900px;\n  margin: 0 auto;\n  padding: 30px 0;\n}\nh2 {\n  margin-bottom: 16px;\n  color: #b23a48;\n}\n.pratos {\n  list-style: none;\n}\n.prato {\n  padding: 16px;\n  border: 2px solid #e0c9a6;\n  margin-bottom: 20px;\n  border-radius: 12px;\n  background-color: #ffffff;\n}\n.prato img {\n  width: 240px;\n  display: block;\n  margin-bottom: 10px;\n}\n.preco {\n  font-weight: bold;\n  color: #2e7d32;\n}\n.bebidas dt {\n  font-weight: bold;\n  margin-top: 10px;\n}\n.bebidas dd {\n  margin-left: 20px;\n}\n.rodape {\n  margin-top: 30px;\n  padding: 24px;\n  text-align: center;\n  background-color: #3b2a20;\n  color: #ffffff;\n}\n.rodape a {\n  color: #f5c26b;\n}\n"
+        }
+      }
+    },
+    {
+      "tipo": "web",
+      "tema": "Página web — projeto livre",
+      "capacidade": "marc.ct6",
+      "revisao": "pendente",
+      "peso": 10,
+      "modo": "livre",
+      "previa": "lado",
+      "enunciado": "Projeto livre: crie a página de inscrição da Semana da Tecnologia da escola no projeto já aberto, seguindo as 4 etapas. Você escreve todo o código: o index.html fica na raiz e os estilos em css/style.css. O formulário precisa ter rótulos (label) ligados aos campos, campos obrigatórios, opções de escolha e um botão de envio; no CSS, use seletores de tag, classe, id e pseudo-classe e organize os campos com Flexbox. Ao terminar cada etapa, faça um commit (Controle de código-fonte) e, no final, envie tudo para o GitHub (push). A correção confere a página pronta (estrutura, atributos e estilos pedidos em cada passo).",
+      "entrada": "index.html",
+      "arquivos": [
+        {
+          "caminho": "index.html",
+          "conteudo": "<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title></title>\n</head>\n<body>\n\n</body>\n</html>\n"
+        },
+        {
+          "caminho": "css/style.css",
+          "conteudo": "/* Estilos da página de inscrição */\n"
+        },
+        {
+          "caminho": "LEIAME.md",
+          "conteudo": "# Inscrição — Semana da Tecnologia\n\nProjeto da avaliação prática de HTML e CSS (formulários).\n\n- index.html: a página com o formulário\n- css/style.css: os estilos\n\nO formulário envia para inscricao.php (o back-end não faz parte desta prova).\nFaça um commit ao terminar cada etapa e, no final, envie tudo para o GitHub (push).\n"
+        }
+      ],
+      "git": {
+        "ativo": true,
+        "repo": "inscricao-semana-tec",
+        "exigir": {
+          "commits": 3,
+          "push": true
+        },
+        "pontos": 10
+      },
+      "etapas": [
+        {
+          "id": 1,
+          "titulo": "Estrutura e ligação do CSS",
+          "pontos": 15,
+          "arquivos": [
+            "index.html",
+            "css/style.css"
+          ],
+          "enunciado": "Prepare o documento: idioma, título da aba e a ligação com o arquivo de estilos. Depois zere os espaços padrão e defina as cores gerais.",
+          "passos": [
+            "No <code>&lt;html&gt;</code>, informe o idioma <strong>português do Brasil</strong> com o atributo <code>lang</code>.",
+            "Escreva o título da aba: <strong>Semana da Tecnologia</strong>.",
+            "Ligue o arquivo <code>css/style.css</code> com a tag <code>&lt;link&gt;</code>.",
+            "No <code>style.css</code>, com o seletor universal: <code>margin</code> e <code>padding</code> zerados e <code>box-sizing: border-box</code>.",
+            "No <code>body</code>: fundo <code>#eef2f7</code> e texto <code>#1a2233</code>."
+          ],
+          "dicas": [
+            "O seletor <code>*</code> pega todos os elementos.",
+            "Faça um commit ao terminar a etapa."
+          ],
+          "verificacoes": [
+            {
+              "id": "e1_lang",
+              "tipo": "atributo",
+              "seletor": "html",
+              "atributo": "lang"
+            },
+            {
+              "id": "e1_titulo",
+              "tipo": "texto",
+              "seletor": "title"
+            },
+            {
+              "id": "e1_reset",
+              "tipo": "css",
+              "seletor": "body",
+              "propriedade": "margin-top"
+            },
+            {
+              "id": "e1_fundo",
+              "tipo": "css",
+              "seletor": "body",
+              "propriedade": "background-color"
+            },
+            {
+              "id": "e1_cor",
+              "tipo": "css",
+              "seletor": "body",
+              "propriedade": "color"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "titulo": "Formulário com rótulos e campos obrigatórios",
+          "pontos": 30,
+          "arquivos": [
+            "index.html"
+          ],
+          "enunciado": "Crie a caixa da página e o formulário com os campos de nome, e-mail e a escolha da oficina.",
+          "passos": [
+            "No body, crie <code>&lt;main class=\"caixa\"&gt;</code> com o título <code>h1</code> <strong>Semana da Tecnologia</strong> e um parágrafo de instrução.",
+            "Abaixo, o formulário <code>&lt;form id=\"inscricao\"&gt;</code> que envia para <code>inscricao.php</code> pelo método <strong>POST</strong>.",
+            "Cada campo fica numa <code>&lt;div class=\"campo\"&gt;</code> com um <code>&lt;label&gt;</code> ligado ao campo pelo <code>for</code>/<code>id</code>: <strong>Nome completo</strong> (texto, <code>id=\"nome\"</code>) e <strong>E-mail</strong> (tipo e-mail, <code>id=\"email\"</code>). Os dois são <strong>obrigatórios</strong>.",
+            "Uma terceira <code>div class=\"campo\"</code> com o rótulo <strong>Oficina</strong> e a lista de seleção <code>&lt;select id=\"oficina\"&gt;</code> com exatamente 3 opções: HTML e CSS, JavaScript e Robótica."
+          ],
+          "dicas": [
+            "<code>action</code> = para onde os dados vão; <code>method</code> = como vão (get ou post).",
+            "O valor do <code>for</code> do label tem que ser igual ao <code>id</code> do campo.",
+            "Campo obrigatório: atributo <code>required</code>.",
+            "Para validar o formato de e-mail, use <code>type=\"email\"</code>."
+          ],
+          "verificacoes": [
+            {
+              "id": "e2_caixa",
+              "tipo": "existe",
+              "seletor": "main.caixa form#inscricao"
+            },
+            {
+              "id": "e2_action",
+              "tipo": "atributo",
+              "seletor": "form#inscricao",
+              "atributo": "action"
+            },
+            {
+              "id": "e2_method",
+              "tipo": "atributo",
+              "seletor": "form#inscricao",
+              "atributo": "method"
+            },
+            {
+              "id": "e2_label_nome",
+              "tipo": "existe",
+              "seletor": ".campo label[for='nome']"
+            },
+            {
+              "id": "e2_nome",
+              "tipo": "existe",
+              "seletor": ".campo input#nome[type='text'][required]"
+            },
+            {
+              "id": "e2_label_email",
+              "tipo": "existe",
+              "seletor": ".campo label[for='email']"
+            },
+            {
+              "id": "e2_email",
+              "tipo": "existe",
+              "seletor": ".campo input#email[type='email'][required]"
+            },
+            {
+              "id": "e2_opcoes",
+              "tipo": "quantidade",
+              "seletor": ".campo select#oficina option"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "titulo": "Opções de turno, mensagem, aceite e botão",
+          "pontos": 25,
+          "arquivos": [
+            "index.html"
+          ],
+          "enunciado": "Complete o formulário com a escolha do turno, uma mensagem opcional, a caixa de aceite do regulamento e o botão de envio.",
+          "passos": [
+            "Um <code>&lt;fieldset class=\"turnos\"&gt;</code> com a legenda (<code>&lt;legend&gt;</code>) <strong>Turno</strong> e dois botões de opção (<code>radio</code>) com o mesmo <code>name=\"turno\"</code>: Manhã e Tarde.",
+            "Uma <code>div class=\"campo\"</code> com o rótulo <strong>Mensagem (opcional)</strong> ligado a uma área de texto <code>&lt;textarea id=\"mensagem\"&gt;</code>.",
+            "Uma <code>&lt;div class=\"aceite\"&gt;</code> com a caixa de seleção (<code>checkbox</code>) <strong>obrigatória</strong> <code>id=\"termos\"</code> e o rótulo <strong>Li e aceito o regulamento</strong> ligado a ela.",
+            "No fim do formulário, o botão <code>&lt;button&gt;</code> do tipo <strong>submit</strong> com o texto <strong>Enviar inscrição</strong>."
+          ],
+          "dicas": [
+            "Radios com o mesmo <code>name</code> formam um grupo: só dá para marcar um.",
+            "<code>textarea</code> não é tag vazia: tem abertura e fechamento."
+          ],
+          "verificacoes": [
+            {
+              "id": "e3_legenda",
+              "tipo": "existe",
+              "seletor": "fieldset.turnos legend"
+            },
+            {
+              "id": "e3_radios",
+              "tipo": "quantidade",
+              "seletor": "fieldset.turnos input[type='radio'][name='turno']"
+            },
+            {
+              "id": "e3_textarea",
+              "tipo": "existe",
+              "seletor": ".campo textarea#mensagem"
+            },
+            {
+              "id": "e3_label_msg",
+              "tipo": "existe",
+              "seletor": "label[for='mensagem']"
+            },
+            {
+              "id": "e3_termos",
+              "tipo": "existe",
+              "seletor": ".aceite input#termos[type='checkbox'][required]"
+            },
+            {
+              "id": "e3_label_termos",
+              "tipo": "existe",
+              "seletor": ".aceite label[for='termos']"
+            },
+            {
+              "id": "e3_botao",
+              "tipo": "atributo",
+              "seletor": "form#inscricao button",
+              "atributo": "type"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "titulo": "Estilo: seletores e Flexbox",
+          "pontos": 20,
+          "arquivos": [
+            "css/style.css"
+          ],
+          "enunciado": "Estilize a página usando os diferentes tipos de seletores e organize os campos com Flexbox.",
+          "passos": [
+            "Seletor de classe <code>.caixa</code>: largura de 480px, centralizada (<code>margin: 40px auto</code>), <code>padding</code> de 24px e fundo branco.",
+            "Seletor de classe <code>.campo</code>: Flexbox em <strong>coluna</strong> (rótulo em cima do campo), espaço de <strong>6px</strong> entre eles (<code>gap</code>) e 16px de margem embaixo.",
+            "Seletor de tag <code>label</code>: texto em <strong>negrito</strong>.",
+            "Seletor de classe <code>.turnos</code>: Flexbox, deixando as opções de turno lado a lado.",
+            "Seletor de id com descendente <code>#inscricao button</code>: fundo <code>#2459c7</code> e texto branco. Pseudo-classe <code>button:hover</code> (escreva exatamente esse seletor): fundo <code>#14213d</code>."
+          ],
+          "dicas": [
+            "<code>flex-direction: column</code> empilha os itens.",
+            "Negrito: <code>font-weight: bold</code>.",
+            "Não esqueça do commit e do push no final!"
+          ],
+          "verificacoes": [
+            {
+              "id": "e4_caixa",
+              "tipo": "css",
+              "seletor": ".caixa",
+              "propriedade": "width"
+            },
+            {
+              "id": "e4_flex",
+              "tipo": "css",
+              "seletor": ".campo",
+              "propriedade": "display"
+            },
+            {
+              "id": "e4_coluna",
+              "tipo": "css",
+              "seletor": ".campo",
+              "propriedade": "flex-direction"
+            },
+            {
+              "id": "e4_gap",
+              "tipo": "css",
+              "seletor": ".campo",
+              "propriedade": "row-gap"
+            },
+            {
+              "id": "e4_label",
+              "tipo": "css",
+              "seletor": ".campo label",
+              "propriedade": "font-weight"
+            },
+            {
+              "id": "e4_turnos",
+              "tipo": "css",
+              "seletor": ".turnos",
+              "propriedade": "display"
+            },
+            {
+              "id": "e4_botao",
+              "tipo": "css",
+              "seletor": "#inscricao button",
+              "propriedade": "background-color"
+            },
+            {
+              "id": "e4_hover",
+              "tipo": "regra",
+              "seletor": "button:hover",
+              "propriedade": "background-color"
+            }
+          ]
+        }
+      ],
+      "gabarito": {
+        "solucao": {
+          "index.html": "<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Semana da Tecnologia</title>\n  <link rel=\"stylesheet\" href=\"css/style.css\">\n</head>\n<body>\n  <main class=\"caixa\">\n    <h1>Semana da Tecnologia</h1>\n    <p>Preencha o formulário para garantir sua vaga numa das oficinas.</p>\n    <form id=\"inscricao\" action=\"inscricao.php\" method=\"post\">\n      <div class=\"campo\">\n        <label for=\"nome\">Nome completo</label>\n        <input type=\"text\" id=\"nome\" name=\"nome\" required>\n      </div>\n      <div class=\"campo\">\n        <label for=\"email\">E-mail</label>\n        <input type=\"email\" id=\"email\" name=\"email\" required>\n      </div>\n      <div class=\"campo\">\n        <label for=\"oficina\">Oficina</label>\n        <select id=\"oficina\" name=\"oficina\">\n          <option value=\"html\">HTML e CSS</option>\n          <option value=\"js\">JavaScript</option>\n          <option value=\"robotica\">Robótica</option>\n        </select>\n      </div>\n      <fieldset class=\"turnos\">\n        <legend>Turno</legend>\n        <label><input type=\"radio\" name=\"turno\" value=\"manha\"> Manhã</label>\n        <label><input type=\"radio\" name=\"turno\" value=\"tarde\"> Tarde</label>\n      </fieldset>\n      <div class=\"campo\">\n        <label for=\"mensagem\">Mensagem (opcional)</label>\n        <textarea id=\"mensagem\" name=\"mensagem\" rows=\"4\"></textarea>\n      </div>\n      <div class=\"aceite\">\n        <input type=\"checkbox\" id=\"termos\" name=\"termos\" required>\n        <label for=\"termos\">Li e aceito o regulamento</label>\n      </div>\n      <button type=\"submit\">Enviar inscrição</button>\n    </form>\n  </main>\n</body>\n</html>\n",
+          "css/style.css": "* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\nbody {\n  font-family: Arial, sans-serif;\n  background-color: #eef2f7;\n  color: #1a2233;\n}\n.caixa {\n  width: 480px;\n  margin: 40px auto;\n  padding: 24px;\n  background-color: #ffffff;\n  border-radius: 12px;\n}\nh1 {\n  margin-bottom: 8px;\n}\nform {\n  margin-top: 16px;\n}\n.campo {\n  display: flex;\n  flex-direction: column;\n  gap: 6px;\n  margin-bottom: 16px;\n}\nlabel {\n  font-weight: bold;\n}\ninput, select, textarea {\n  padding: 8px;\n  border: 1px solid #c9d3e6;\n  border-radius: 6px;\n}\n.turnos {\n  display: flex;\n  gap: 16px;\n  border: none;\n  margin-bottom: 16px;\n}\n.turnos label, .aceite label {\n  font-weight: normal;\n}\n.aceite {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  margin-bottom: 16px;\n}\n#inscricao button {\n  width: 100%;\n  padding: 12px;\n  border: none;\n  border-radius: 6px;\n  background-color: #2459c7;\n  color: #ffffff;\n}\nbutton:hover {\n  background-color: #14213d;\n}\n"
+        }
+      }
+    }
+  ]
+}

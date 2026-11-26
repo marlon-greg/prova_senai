@@ -1,0 +1,728 @@
+{
+  "nome": "Arquitetura de Redes com IoT — banco inicial (a revisar)",
+  "materia": "Arquitetura de Redes com IoT",
+  "revisao": "pendente",
+  "contexto": "Banco inicial gerado a partir do plano de curso (Técnico em Desenvolvimento de Sistemas, 1º semestre). Cobre arquitetura e topologias de rede, meios de transmissão, TCP/IP (IPv4, IPv6, portas), MQTT, equipamentos de rede, hardware para IoT e serviços de rede (FTP, HTTP/HTTPS, RDP). Revisar antes de usar em prova.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Arquitetura de redes",
+      "capacidade": "redes.ct1",
+      "enunciado": "Na secretaria de uma escola, um computador central guarda os arquivos e o sistema de matrículas, e os outros computadores apenas acessam esses recursos. Que tipo de rede é essa?",
+      "alternativas": [
+        "Rede cliente-servidor",
+        "Rede peer-to-peer (P2P)",
+        "Rede em anel",
+        "Rede em malha"
+      ],
+      "correta": 0,
+      "explicacao": "Na arquitetura cliente-servidor um computador central (servidor) oferece recursos e serviços aos demais (clientes).",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Arquitetura de redes",
+      "capacidade": "redes.ct1",
+      "enunciado": "Três colegas trocam arquivos diretamente entre seus notebooks, sem nenhum servidor central: cada máquina pode enviar e receber arquivos das outras. Esse funcionamento caracteriza uma rede:",
+      "alternativas": [
+        "Cliente-servidor",
+        "Peer-to-peer (P2P)",
+        "Em árvore (hierárquica)",
+        "Em camadas"
+      ],
+      "correta": 1,
+      "explicacao": "Na rede P2P todos os computadores têm o mesmo papel e compartilham recursos diretamente entre si.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Arquitetura de redes",
+      "capacidade": "redes.ct1",
+      "enunciado": "Em uma fazenda, cada sensor sem fio se comunica com vários sensores vizinhos. Se um deles para de funcionar, os dados seguem por outro caminho até a central. Qual topologia foi usada?",
+      "alternativas": [
+        "Anel (ring)",
+        "Árvore (hierárquica)",
+        "Malha (mesh)",
+        "Cliente-servidor"
+      ],
+      "correta": 2,
+      "explicacao": "Na topologia em malha cada nó se liga a vários outros, criando caminhos alternativos quando um nó ou enlace falha.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Arquitetura de redes",
+      "capacidade": "redes.ct1",
+      "enunciado": "Em uma rede em anel simples (sem anel duplo de proteção), o que normalmente acontece quando um dos computadores ou trechos do cabo falha?",
+      "alternativas": [
+        "Nada acontece, pois cada computador tem ligação direta com todos os outros",
+        "Apenas o servidor central deixa de responder aos clientes",
+        "Os dados passam a ser enviados automaticamente pelo Wi-Fi",
+        "A comunicação do anel é interrompida, porque os dados passam de nó em nó em sequência"
+      ],
+      "correta": 3,
+      "explicacao": "No anel os dados circulam de um nó para o próximo; sem redundância, uma falha quebra o caminho do anel.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Arquitetura de redes",
+      "capacidade": "redes.ct1",
+      "enunciado": "Um prédio de 4 andares tem um switch principal na sala de TI, ligado a um switch em cada andar, e cada switch de andar liga os computadores daquele andar. Essa organização é uma topologia:",
+      "alternativas": [
+        "Em anel",
+        "Peer-to-peer",
+        "Em árvore (hierárquica)",
+        "Em malha completa"
+      ],
+      "correta": 2,
+      "explicacao": "A topologia em árvore organiza os equipamentos em níveis: um ponto central ligado a ramificações, que se ligam aos dispositivos finais.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Arquitetura de redes",
+      "capacidade": "redes.ct3",
+      "enunciado": "Uma empresa precisa ligar dois prédios distantes 2 km, passando ao lado de motores elétricos que geram muita interferência. Qual meio de transmissão é o mais indicado?",
+      "alternativas": [
+        "Cabo de par trançado UTP",
+        "Wi-Fi de 2,4 GHz",
+        "Cabo USB com extensor",
+        "Fibra óptica"
+      ],
+      "correta": 3,
+      "explicacao": "A fibra óptica transmite luz, alcança longas distâncias e não sofre interferência eletromagnética; o UTP é limitado a cerca de 100 m por segmento.",
+      "peso": 1
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Arquitetura de redes",
+      "capacidade": "redes.ct1",
+      "enunciado": "Explique, em até 3 linhas, a diferença entre uma rede cliente-servidor e uma rede peer-to-peer (P2P).",
+      "palavrasChave": [
+        "servidor",
+        "cliente",
+        "compartilh"
+      ],
+      "explicacao": "Na cliente-servidor um servidor central fornece recursos aos clientes; na P2P os computadores têm o mesmo papel e compartilham recursos diretamente.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Arquitetura de redes",
+      "capacidade": "redes.ct1",
+      "enunciado": "O que significa dizer que uma arquitetura de rede é organizada \"em camadas\"? Responda em até 3 linhas.",
+      "palavrasChave": [
+        "camada",
+        "função",
+        "serviço"
+      ],
+      "explicacao": "A comunicação é dividida em camadas, cada uma com uma função específica, e cada camada usa os serviços da camada de baixo e oferece serviços à de cima.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Arquitetura de redes",
+      "capacidade": "redes.ct3",
+      "enunciado": "Cite uma vantagem da rede cabeada e uma vantagem da rede sem fio.",
+      "palavrasChave": [
+        "cabead",
+        "sem fio",
+        "mobilidade"
+      ],
+      "explicacao": "A rede cabeada costuma ser mais estável, rápida e segura; a rede sem fio oferece mobilidade e facilidade de instalação, sem passar cabos.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Arquitetura de redes",
+      "capacidade": "redes.ct1",
+      "enunciado": "Por que a topologia em malha (mesh) é muito usada em redes de sensores IoT espalhados por uma área grande? Responda em até 3 linhas.",
+      "palavrasChave": [
+        "caminho",
+        "falha",
+        "outro"
+      ],
+      "explicacao": "Porque, se um sensor ou enlace falhar, os dados podem seguir por outro caminho, e os nós repassam as mensagens, aumentando alcance e confiabilidade.",
+      "peso": 2
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Modelos e protocolos de rede",
+      "capacidade": "redes.ct2",
+      "enunciado": "No modelo TCP/IP, em qual camada atua o protocolo IP, responsável pelo endereçamento e pelo roteamento dos pacotes?",
+      "alternativas": [
+        "Aplicação",
+        "Internet (rede)",
+        "Transporte",
+        "Acesso à rede (enlace/física)"
+      ],
+      "correta": 1,
+      "explicacao": "O IP pertence à camada de Internet do modelo TCP/IP, que endereça e encaminha os pacotes entre redes.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Modelos e protocolos de rede",
+      "capacidade": "redes.ct2",
+      "enunciado": "Qual dos endereços IPv4 abaixo é um endereço privado, usado dentro de redes locais?",
+      "alternativas": [
+        "192.168.0.10",
+        "8.8.8.8",
+        "200.150.10.5",
+        "172.40.1.1"
+      ],
+      "correta": 0,
+      "explicacao": "As faixas privadas são 10.0.0.0/8, 172.16.0.0 a 172.31.255.255 e 192.168.0.0/16; 172.40.1.1 está fora da faixa 172.16–172.31.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Modelos e protocolos de rede",
+      "capacidade": "redes.ct2",
+      "enunciado": "O laboratório usa a rede 192.168.10.0 com máscara 255.255.255.0 (/24). Quantos endereços podem ser usados por computadores (hosts) nessa rede?",
+      "alternativas": [
+        "256",
+        "254",
+        "255",
+        "24"
+      ],
+      "correta": 1,
+      "explicacao": "Uma rede /24 tem 256 endereços, mas o primeiro identifica a rede e o último é o de broadcast, sobrando 254 para hosts.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Modelos e protocolos de rede",
+      "capacidade": "redes.ct2",
+      "enunciado": "Sobre o endereço IPv6, é correto afirmar que ele:",
+      "alternativas": [
+        "Tem 128 bits e é escrito em grupos hexadecimais separados por dois-pontos",
+        "Tem 32 bits e é escrito em quatro números decimais separados por pontos",
+        "Tem 48 bits e é gravado de fábrica na placa de rede",
+        "Tem 64 bits e só funciona em redes sem fio"
+      ],
+      "correta": 0,
+      "explicacao": "O IPv6 usa 128 bits, escritos em 8 grupos hexadecimais (ex.: 2001:db8::1), o que permite uma quantidade enorme de endereços.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Modelos e protocolos de rede",
+      "capacidade": "redes.ct2",
+      "enunciado": "Um servidor com IP 10.0.0.5 roda ao mesmo tempo um site e um serviço de acesso remoto. Quando chega um pacote, o que indica para qual programa ele deve ser entregue?",
+      "alternativas": [
+        "O endereço MAC de origem",
+        "A máscara de sub-rede",
+        "O endereço do gateway padrão",
+        "O número da porta de destino"
+      ],
+      "correta": 3,
+      "explicacao": "O IP leva o pacote até a máquina; a porta (ex.: 443 para HTTPS, 22 para SSH) identifica a aplicação que vai recebê-lo.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Modelos e protocolos de rede",
+      "capacidade": "redes.ct2",
+      "enunciado": "No protocolo MQTT, qual componente recebe as mensagens publicadas pelos sensores e as repassa para os clientes que assinaram aquele tópico?",
+      "alternativas": [
+        "Publicador (publisher)",
+        "Roteador Wi-Fi",
+        "Broker",
+        "Servidor DNS"
+      ],
+      "correta": 2,
+      "explicacao": "No modelo publish/subscribe do MQTT, o broker é o intermediário que recebe as publicações e entrega aos assinantes de cada tópico.",
+      "peso": 1
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Modelos e protocolos de rede",
+      "capacidade": "redes.ct2",
+      "enunciado": "Explique, em até 3 linhas, o que é um protocolo de rede.",
+      "palavrasChave": [
+        "regra",
+        "comunica",
+        "dispositivo"
+      ],
+      "explicacao": "Protocolo é um conjunto de regras e padrões que define como os dispositivos se comunicam e trocam dados na rede (ex.: TCP, IP, HTTP).",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Modelos e protocolos de rede",
+      "capacidade": "redes.ct2",
+      "enunciado": "Por que o IPv6 foi criado? Responda em até 3 linhas.",
+      "palavrasChave": [
+        "ipv4",
+        "esgot",
+        "endereço"
+      ],
+      "explicacao": "Porque os endereços IPv4 (32 bits, cerca de 4,3 bilhões) se esgotaram com o crescimento da internet e da IoT; o IPv6 oferece muito mais endereços.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Modelos e protocolos de rede",
+      "capacidade": "redes.ct2",
+      "enunciado": "Qual é a porta padrão do MQTT sem criptografia e qual é a porta padrão do MQTT com TLS?",
+      "respostasAceitas": [
+        "1883 e 8883",
+        "1883 sem criptografia e 8883 com TLS"
+      ],
+      "palavrasChave": [
+        "1883",
+        "8883"
+      ],
+      "explicacao": "O MQTT usa a porta 1883 sem criptografia e a porta 8883 quando a conexão é protegida com TLS.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Modelos e protocolos de rede",
+      "capacidade": "redes.ct2",
+      "enunciado": "No MQTT, explique a diferença entre publicar (publish) e assinar (subscribe) um tópico.",
+      "palavrasChave": [
+        "publica",
+        "assina",
+        "broker",
+        "tópico"
+      ],
+      "explicacao": "Publicar é enviar uma mensagem ao broker em um tópico; assinar é avisar ao broker que deseja receber as mensagens publicadas naquele tópico.",
+      "peso": 2
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Equipamentos de rede",
+      "capacidade": "redes.ct3",
+      "enunciado": "Um laboratório tem 30 computadores na mesma rede local. Qual equipamento interliga esses computadores e envia cada quadro apenas para a porta do computador de destino, usando o endereço MAC?",
+      "alternativas": [
+        "Hub",
+        "Modem",
+        "Access point",
+        "Switch"
+      ],
+      "correta": 3,
+      "explicacao": "O switch aprende os endereços MAC ligados a cada porta e encaminha os quadros só para o destino; o hub repete para todas as portas.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Equipamentos de rede",
+      "capacidade": "redes.ct3",
+      "enunciado": "Qual equipamento interliga redes diferentes (por exemplo, a rede da escola e a internet) e escolhe o caminho dos pacotes com base no endereço IP?",
+      "alternativas": [
+        "Switch",
+        "Patch panel",
+        "Roteador",
+        "Access point"
+      ],
+      "correta": 2,
+      "explicacao": "O roteador trabalha com endereços IP e encaminha os pacotes entre redes distintas.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Equipamentos de rede",
+      "capacidade": "redes.ct3",
+      "enunciado": "Uma oficina tem rede cabeada, mas os técnicos precisam usar tablets no galpão. Qual equipamento, ligado ao switch, cria a rede sem fio nesse local?",
+      "alternativas": [
+        "Access point",
+        "Firewall",
+        "Patch panel",
+        "Modem"
+      ],
+      "correta": 0,
+      "explicacao": "O access point (ponto de acesso) conecta dispositivos sem fio à rede cabeada existente.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Equipamentos de rede",
+      "capacidade": "redes.ct3",
+      "enunciado": "A empresa quer impedir que computadores da internet acessem a porta 3389 dos servidores internos, liberando apenas o site. Qual equipamento faz esse controle por meio de regras?",
+      "alternativas": [
+        "Switch",
+        "Firewall",
+        "Access point",
+        "Repetidor"
+      ],
+      "correta": 1,
+      "explicacao": "O firewall filtra o tráfego permitindo ou bloqueando conexões de acordo com regras (IP, porta, protocolo).",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Equipamentos de rede",
+      "capacidade": "redes.ct3",
+      "enunciado": "Em um projeto IoT, sensores Zigbee não falam TCP/IP. Qual equipamento recebe os dados desses sensores, traduz o protocolo e envia as informações para a nuvem pela internet?",
+      "alternativas": [
+        "Switch",
+        "Gateway",
+        "Hub",
+        "Patch panel"
+      ],
+      "correta": 1,
+      "explicacao": "O gateway faz a ponte entre redes com protocolos diferentes, convertendo, por exemplo, Zigbee ou LoRa para TCP/IP.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Equipamentos de rede",
+      "capacidade": "redes.ct3",
+      "enunciado": "Qual dos itens abaixo é um componente PASSIVO de uma rede de computadores?",
+      "alternativas": [
+        "Switch",
+        "Roteador",
+        "Access point",
+        "Patch panel"
+      ],
+      "correta": 3,
+      "explicacao": "Componentes passivos (cabos, conectores, patch panels, tomadas) não processam nem regeneram o sinal; switch, roteador e AP são ativos.",
+      "peso": 1
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Equipamentos de rede",
+      "capacidade": "redes.ct3",
+      "enunciado": "Explique, em até 3 linhas, a diferença entre a função de um switch e a de um roteador.",
+      "palavrasChave": [
+        "switch",
+        "roteador",
+        "local"
+      ],
+      "explicacao": "O switch conecta dispositivos dentro da mesma rede local (usa MAC); o roteador interliga redes diferentes, como a rede local e a internet (usa IP).",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Equipamentos de rede",
+      "capacidade": "redes.ct3",
+      "enunciado": "O que é o gateway padrão configurado em um computador e para que ele serve?",
+      "palavrasChave": [
+        "endereço",
+        "roteador",
+        "rede"
+      ],
+      "explicacao": "É o endereço do roteador da rede local, para onde o computador envia os pacotes destinados a outras redes, como a internet.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Equipamentos de rede",
+      "capacidade": "redes.ct3",
+      "enunciado": "Explique em até 3 linhas qual é a função de um firewall em uma rede.",
+      "palavrasChave": [
+        "tráfego",
+        "regra",
+        "bloque"
+      ],
+      "explicacao": "O firewall analisa o tráfego de entrada e saída e permite ou bloqueia conexões de acordo com regras de segurança definidas.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Equipamentos de rede",
+      "capacidade": "redes.ct3",
+      "enunciado": "Diferencie componente ativo e componente passivo de rede e cite um exemplo de cada.",
+      "palavrasChave": [
+        "ativo",
+        "passivo",
+        "cabo"
+      ],
+      "explicacao": "Ativos processam ou regeneram o sinal e precisam de energia (switch, roteador); passivos só conduzem ou organizam o sinal (cabo, conector, patch panel).",
+      "peso": 2
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Arquitetura de hardware IoT",
+      "capacidade": "redes.ct4",
+      "enunciado": "Qual sequência está em ordem CRESCENTE de tamanho?",
+      "alternativas": [
+        "byte, bit, megabyte, kilobyte, gigabyte",
+        "bit, kilobyte, byte, gigabyte, megabyte",
+        "bit, byte, kilobyte, megabyte, gigabyte",
+        "kilobyte, byte, bit, megabyte, gigabyte"
+      ],
+      "correta": 2,
+      "explicacao": "1 byte = 8 bits; 1 KB = 1024 bytes; 1 MB = 1024 KB; 1 GB = 1024 MB.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Arquitetura de hardware IoT",
+      "capacidade": "redes.ct4",
+      "enunciado": "Em um projeto com ESP32 que mede a temperatura e liga uma lâmpada, qual dos componentes abaixo é um dispositivo de SAÍDA (output)?",
+      "alternativas": [
+        "Relé que aciona a lâmpada",
+        "Sensor de temperatura DHT11",
+        "Botão de liga/desliga",
+        "Sensor de luz LDR"
+      ],
+      "correta": 0,
+      "explicacao": "Saídas executam ações comandadas pelo microcontrolador (relé, LED, motor); sensores e botões são entradas.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Arquitetura de hardware IoT",
+      "capacidade": "redes.ct4",
+      "enunciado": "O Arduino Uno usa o chip ATmega328P, que reúne processador, memória e pinos de entrada e saída em um único circuito. Esse tipo de chip é chamado de:",
+      "alternativas": [
+        "Microprocessador de computador pessoal",
+        "Placa de vídeo (GPU)",
+        "Microcontrolador",
+        "Memória flash externa"
+      ],
+      "correta": 2,
+      "explicacao": "O microcontrolador integra CPU, memórias e periféricos de I/O em um só chip, ideal para sistemas embarcados e IoT.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Arquitetura de hardware IoT",
+      "capacidade": "redes.ct4",
+      "enunciado": "Um projeto de horta automatizada precisa saber quando a terra está seca para ligar a irrigação. Qual sensor é o adequado?",
+      "alternativas": [
+        "Sensor de umidade do solo",
+        "Sensor DHT11 de umidade do ar",
+        "Sensor de luminosidade LDR",
+        "Sensor ultrassônico HC-SR04"
+      ],
+      "correta": 0,
+      "explicacao": "O sensor de umidade do solo mede a água presente na terra; o DHT11 mede a umidade do ar.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Arquitetura de hardware IoT",
+      "capacidade": "redes.ct4",
+      "enunciado": "Um ESP32 conta quantas pessoas entraram na sala usando uma variável. Quando falta energia, o contador volta a zero. Por quê?",
+      "alternativas": [
+        "A memória flash apaga todo o programa quando falta energia",
+        "O processador reinicia e formata o cartão SD",
+        "O sensor guarda o valor e o envia novamente do zero",
+        "A variável fica na memória RAM, que é volátil e perde os dados sem energia"
+      ],
+      "correta": 3,
+      "explicacao": "A RAM guarda os dados em uso e é volátil; para manter valores após desligar é preciso gravar em memória não volátil (flash, EEPROM, SD).",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Arquitetura de hardware IoT",
+      "capacidade": "redes.ct4",
+      "enunciado": "Uma estação meteorológica em área rural precisa guardar as leituras de vários meses, mesmo sem internet. Qual opção de armazenamento é a mais adequada?",
+      "alternativas": [
+        "Memória RAM do microcontrolador",
+        "Cartão microSD ligado ao microcontrolador",
+        "Registradores do processador",
+        "Memória cache do processador"
+      ],
+      "correta": 1,
+      "explicacao": "O cartão microSD é um armazenamento não volátil de grande capacidade, ideal para registrar dados (datalogger).",
+      "peso": 1
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Arquitetura de hardware IoT",
+      "capacidade": "redes.ct4",
+      "enunciado": "Quantos bytes existem em 2 KB (considerando 1 KB = 1024 bytes)?",
+      "respostasAceitas": [
+        "2048",
+        "2048 bytes",
+        "2.048",
+        "2.048 bytes"
+      ],
+      "palavrasChave": [
+        "2048"
+      ],
+      "explicacao": "2 × 1024 = 2048 bytes.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Arquitetura de hardware IoT",
+      "capacidade": "redes.ct4",
+      "enunciado": "Em um microcontrolador, qual a diferença entre a memória RAM e a memória flash?",
+      "palavrasChave": [
+        "ram",
+        "flash",
+        "deslig"
+      ],
+      "explicacao": "A flash guarda o programa e não perde os dados ao desligar; a RAM guarda as variáveis durante a execução e é apagada quando a placa é desligada.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Arquitetura de hardware IoT",
+      "capacidade": "redes.ct4",
+      "enunciado": "Explique o que são entradas (inputs) e saídas (outputs) em um sistema IoT, com um exemplo de cada.",
+      "palavrasChave": [
+        "entrada",
+        "saída",
+        "sensor"
+      ],
+      "explicacao": "Entradas trazem informações para o microcontrolador (sensor, botão); saídas executam ações a partir dele (LED, relé, motor).",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Arquitetura de hardware IoT",
+      "capacidade": "redes.ct4",
+      "enunciado": "Por que, para um sensor instalado no campo, usa-se um microcontrolador como o ESP32 em vez de um computador comum? Responda em até 3 linhas.",
+      "palavrasChave": [
+        "consumo",
+        "energia",
+        "custo"
+      ],
+      "explicacao": "Porque o microcontrolador tem baixo consumo de energia (pode funcionar com bateria), baixo custo e tamanho pequeno, suficientes para ler sensores e enviar dados.",
+      "peso": 2
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Serviços de rede",
+      "capacidade": "redes.ct5",
+      "enunciado": "Qual é a porta padrão do protocolo HTTPS?",
+      "alternativas": [
+        "443",
+        "80",
+        "21",
+        "3389"
+      ],
+      "correta": 0,
+      "explicacao": "O HTTPS usa a porta 443; o HTTP usa a 80, o FTP a 21 e o RDP a 3389.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Serviços de rede",
+      "capacidade": "redes.ct5",
+      "enunciado": "Um desenvolvedor usa o programa FileZilla para enviar os arquivos do site para o servidor de hospedagem. Qual serviço de rede ele está usando?",
+      "alternativas": [
+        "RDP (Remote Desktop Protocol)",
+        "FTP (File Transfer Protocol)",
+        "DNS (Domain Name System)",
+        "DHCP (Dynamic Host Configuration Protocol)"
+      ],
+      "correta": 1,
+      "explicacao": "O FTP é o serviço de transferência de arquivos entre cliente e servidor, e o FileZilla é um cliente FTP.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Serviços de rede",
+      "capacidade": "redes.ct5",
+      "enunciado": "Ao acessar a página de login de um banco, o navegador mostra um cadeado e o endereço começa com https://. O que isso garante?",
+      "alternativas": [
+        "O site não tem nenhum vírus nem golpe",
+        "A conexão não passa pela internet",
+        "Os dados trafegam criptografados entre o navegador e o servidor",
+        "A senha fica salva no navegador"
+      ],
+      "correta": 2,
+      "explicacao": "O HTTPS usa TLS para criptografar a comunicação; ele protege os dados no caminho, mas não garante sozinho que o site é confiável.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Serviços de rede",
+      "capacidade": "redes.ct5",
+      "enunciado": "O técnico precisa usar a área de trabalho de um servidor Windows que está em outra cidade, como se estivesse na frente dele. Qual serviço deve usar?",
+      "alternativas": [
+        "FTP (File Transfer Protocol)",
+        "HTTP (Hypertext Transfer Protocol)",
+        "SMTP (Simple Mail Transfer Protocol)",
+        "RDP (Remote Desktop Protocol)"
+      ],
+      "correta": 3,
+      "explicacao": "O RDP permite acessar e controlar remotamente a área de trabalho de um computador Windows (porta 3389).",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Serviços de rede",
+      "capacidade": "redes.ct5",
+      "enunciado": "Por que é recomendado trocar o FTP tradicional por SFTP ou FTPS?",
+      "alternativas": [
+        "Porque o FTP não consegue enviar arquivos maiores que 1 MB",
+        "Porque o FTP só funciona em redes sem fio",
+        "Porque no FTP o usuário, a senha e os arquivos trafegam sem criptografia",
+        "Porque o FTP não usa portas de rede"
+      ],
+      "correta": 2,
+      "explicacao": "O FTP envia credenciais e dados em texto puro; SFTP e FTPS acrescentam criptografia.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Serviços de rede",
+      "capacidade": "redes.ct5",
+      "enunciado": "Quando o usuário digita o endereço de um site e aperta Enter, o que o navegador (cliente HTTP) faz primeiro?",
+      "alternativas": [
+        "Envia a página pronta para o servidor guardar",
+        "Abre uma conexão RDP com o servidor",
+        "Baixa o site inteiro por FTP",
+        "Envia uma requisição GET ao servidor, que devolve uma resposta com a página"
+      ],
+      "correta": 3,
+      "explicacao": "No HTTP o cliente envia uma requisição (normalmente GET para abrir uma página) e o servidor devolve uma resposta com código de status e conteúdo.",
+      "peso": 1
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Serviços de rede",
+      "capacidade": "redes.ct5",
+      "enunciado": "Explique o que é um serviço de rede e dê um exemplo.",
+      "palavrasChave": [
+        "servidor",
+        "cliente",
+        "rede"
+      ],
+      "explicacao": "É um programa executado em um servidor que oferece uma funcionalidade aos clientes pela rede, como hospedagem de sites (HTTP), transferência de arquivos (FTP) ou acesso remoto (RDP).",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Serviços de rede",
+      "capacidade": "redes.ct5",
+      "enunciado": "Qual a diferença entre HTTP e HTTPS? Responda em até 3 linhas.",
+      "palavrasChave": [
+        "https",
+        "criptograf",
+        "segur"
+      ],
+      "explicacao": "O HTTPS é o HTTP com uma camada de segurança (TLS), que criptografa os dados trocados; no HTTP os dados trafegam sem criptografia.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Serviços de rede",
+      "capacidade": "redes.ct5",
+      "enunciado": "Qual comando, digitado no Executar (Win + R) ou no prompt do Windows, abre o cliente de Conexão de Área de Trabalho Remota?",
+      "respostasAceitas": [
+        "mstsc",
+        "mstsc.exe"
+      ],
+      "palavrasChave": [
+        "mstsc"
+      ],
+      "explicacao": "O comando `mstsc` abre o cliente RDP do Windows.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Serviços de rede",
+      "capacidade": "redes.ct5",
+      "enunciado": "Qual o risco de deixar o RDP (porta 3389) aberto diretamente para a internet, e que medida reduz esse risco?",
+      "palavrasChave": [
+        "ataque",
+        "senha",
+        "acesso"
+      ],
+      "explicacao": "Atacantes podem tentar adivinhar senhas (força bruta) e explorar falhas para ganhar acesso; o ideal é liberar o RDP só pela VPN, com senhas fortes e autenticação em dois fatores.",
+      "peso": 2
+    }
+  ]
+}

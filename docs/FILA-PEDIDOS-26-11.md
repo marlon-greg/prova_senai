@@ -19,7 +19,7 @@ Plano já aprovado para 1–9 (respostas: 8 = trocar "Desenvolvimento Web" e "Pr
 | 11 | Mínimo de 50 questões por tópico (configurável), contador "32 de 50", resumo por matéria, aviso na Nova somativa (só aviso); conta só questões aprovadas | feito (26/11) |
 | 12 | Sorteio que espalha: prefere questões que saíram menos naquela prova; na recuperação evita as da prova de origem; estimativa "cada questão aparece para ~X alunos". EXPLICAR O PLANO ANTES (mexe em prova ao vivo) | feito (contador sorteios/{provaId}, regra publicada) |
 | 13 | Escrever questões até 50 por tópico em Banco de Dados (ler as existentes, não repetir, ligar à capacidade, misturar tipos), status "a revisar" (só turma de TESTE até aprovar) + tela de revisão (aprovar/editar/descartar em lote). AMOSTRA DE 1 TÓPICO PRIMEIRO | base pronta + AMOSTRA "DML — UPDATE" (36, Bancos prontos); falta aprovar o padrão e conferir repetição com o JSON baixado |
-| 14 | Bancos iniciais para as outras matérias: ≥10 por tópico + ≥2 práticas por tipo; mostrar antes a lista de matérias e tópicos; não inventar capacidade | a fazer (depois da amostra do 13) |
+| 14 | Bancos iniciais para as outras matérias: ≥10 por tópico + ≥2 práticas por tipo; mostrar antes a lista de matérias e tópicos; não inventar capacidade | feito: 13 bancos em bancos/gerados (a revisar), em Bancos prontos |
 | 15 | Avisar banco duplicado (mesma matéria, mesmas questões) e perguntar antes de importar banco pronto de novo; verificar se o "SQL misto" está duplicado; nunca apagar sozinho | feito (26/11) |
 
 Ordem combinada: 1, 8, 5 → 2 → 3 → 4 → 6 → 7 → 9 → 15 → 10 → 11 → 12 (plano) → 13 (amostra) → 14.

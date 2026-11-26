@@ -1,0 +1,1444 @@
+{
+  "nome": "Programação Back-End — banco inicial (a revisar)",
+  "materia": "Programação Back-End",
+  "revisao": "pendente",
+  "contexto": "Banco inicial gerado a partir dos conhecimentos do plano de curso (9 tópicos, 10 questões cada: 6 alternativas e 4 dissertativas), ligado às capacidades técnicas back.ct*. Exemplos de código em JavaScript/Node.js (Express), pois o plano não fixa linguagem. Entra como 'a revisar': só cai na Área de testes até ser aprovado.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Ambiente de desenvolvimento web",
+      "capacidade": "back.ct4",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em uma aplicação web de loja virtual, qual tarefa é típica do back-end?",
+      "alternativas": [
+        "Definir as cores e o tamanho dos botões da página de produtos",
+        "Validar o pedido, calcular o frete e gravar a compra no banco de dados",
+        "Animar o carrinho de compras quando o usuário passa o mouse",
+        "Ajustar o leiaute da página para telas de celular"
+      ],
+      "correta": 1,
+      "explicacao": "O back-end roda no servidor: aplica regras de negócio, acessa o banco e devolve respostas. Cores, animações e leiaute responsivo são do front-end."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Ambiente de desenvolvimento web",
+      "capacidade": "back.ct5",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno clonou o projeto Node.js da API da biblioteca, mas a pasta `node_modules` não veio. Qual comando instala as dependências listadas no `package.json`?",
+      "alternativas": [
+        "`node package.json`",
+        "`npm start`",
+        "`npm install`",
+        "`git pull node_modules`"
+      ],
+      "correta": 2,
+      "explicacao": "`npm install` lê o package.json e baixa as dependências para node_modules. `npm start` só roda o script de início; a pasta node_modules normalmente nem vai para o Git."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Ambiente de desenvolvimento web",
+      "capacidade": "back.ct5",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No `package.json` de uma API, qual é a diferença entre `dependencies` e `devDependencies`?",
+      "alternativas": [
+        "`dependencies` são pacotes usados para a aplicação rodar; `devDependencies` só são usados durante o desenvolvimento (testes, nodemon, lint)",
+        "`dependencies` são pacotes pagos; `devDependencies` são pacotes gratuitos",
+        "`devDependencies` são instaladas no servidor de produção e `dependencies` só na máquina do programador",
+        "Não há diferença; são dois nomes para a mesma lista"
+      ],
+      "correta": 0,
+      "explicacao": "Ferramentas como nodemon, jest ou eslint ficam em devDependencies porque não são necessárias para a aplicação funcionar em produção."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Ambiente de desenvolvimento web",
+      "capacidade": "back.ct4",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Sobre a história da web, qual afirmação está correta?",
+      "alternativas": [
+        "As primeiras páginas da web já eram geradas por APIs REST com JSON",
+        "O back-end surgiu só depois dos aplicativos de celular",
+        "O JavaScript foi criado primeiro para servidores e só depois chegou ao navegador",
+        "No início a web tinha principalmente páginas estáticas em HTML; depois surgiram páginas dinâmicas geradas no servidor"
+      ],
+      "correta": 3,
+      "explicacao": "A web começou com documentos HTML estáticos. Com CGI, PHP, ASP e outras tecnologias, o servidor passou a gerar páginas dinâmicas; o Node.js (2009) levou o JavaScript para o servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Ambiente de desenvolvimento web",
+      "capacidade": "back.ct5",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Durante o desenvolvimento da API de um app de delivery, a equipe quer que o servidor reinicie sozinho toda vez que um arquivo `.js` for salvo. Qual ferramenta faz isso?",
+      "alternativas": [
+        "npm audit",
+        "nodemon",
+        "Postman",
+        "Git"
+      ],
+      "correta": 1,
+      "explicacao": "O nodemon observa os arquivos do projeto e reinicia o processo Node automaticamente. npm audit verifica vulnerabilidades, Postman testa requisições e Git versiona código."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Ambiente de desenvolvimento web",
+      "capacidade": "back.ct4",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é uma característica da programação back-end em ambiente web?",
+      "alternativas": [
+        "O código roda no navegador do usuário e pode ser lido por ele",
+        "Depende do sistema operacional do celular do cliente",
+        "O código roda no servidor e atende requisições de vários clientes ao mesmo tempo",
+        "Não precisa de rede, pois funciona só na máquina do usuário"
+      ],
+      "correta": 2,
+      "explicacao": "O back-end fica no servidor, recebe requisições pela rede (HTTP) de vários clientes e devolve respostas; o usuário não vê esse código."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Ambiente de desenvolvimento web",
+      "capacidade": "back.ct5",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Escreva o comando do npm que instala o pacote `express` como dependência do projeto.",
+      "respostasAceitas": [
+        "npm install express",
+        "npm i express",
+        "npm install express --save"
+      ],
+      "palavrasChave": [
+        "npm",
+        "install",
+        "express"
+      ],
+      "explicacao": "`npm install express` (ou `npm i express`) baixa o pacote e o registra em dependencies do package.json."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Ambiente de desenvolvimento web",
+      "capacidade": "back.ct5",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Para que serve o arquivo `package.json` em um projeto Node.js?",
+      "palavrasChave": [
+        "depend",
+        "script",
+        "projeto"
+      ],
+      "explicacao": "O package.json descreve o projeto (nome, versão), lista as dependências e guarda scripts como start e test."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Ambiente de desenvolvimento web",
+      "capacidade": "back.ct5",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Por que a pasta `node_modules` costuma ser colocada no arquivo `.gitignore`?",
+      "palavrasChave": [
+        "npm install",
+        "package.json",
+        "depend"
+      ],
+      "explicacao": "Ela é pesada e pode ser recriada a qualquer momento com npm install a partir do package.json (e do package-lock.json)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Ambiente de desenvolvimento web",
+      "capacidade": "back.ct4",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique, em poucas palavras, a diferença entre front-end e back-end.",
+      "palavrasChave": [
+        "front",
+        "back",
+        "servidor",
+        "navegador"
+      ],
+      "explicacao": "Front-end é a parte que roda no navegador e o usuário vê (interface); back-end roda no servidor, com regras de negócio e acesso a dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é um web service?",
+      "alternativas": [
+        "Um site com muitas imagens e vídeos",
+        "Um banco de dados instalado no navegador",
+        "Um programa que só funciona sem internet",
+        "Um serviço que permite a sistemas diferentes trocarem dados pela rede usando protocolos padrão, como HTTP"
+      ],
+      "correta": 3,
+      "explicacao": "Web services integram plataformas diferentes (app, site, outro sistema) trocando dados em formatos padrão (JSON, XML) pela rede."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API REST de uma biblioteca, qual URL segue melhor a semântica REST para buscar o livro de código 15?",
+      "alternativas": [
+        "`GET /livros/15`",
+        "`GET /buscarLivro?acao=pegar&id=15`",
+        "`POST /getLivro15`",
+        "`GET /livros/buscar/todos/15/agora`"
+      ],
+      "correta": 0,
+      "explicacao": "Em REST, a URL identifica o recurso (substantivo no plural + id) e o método HTTP diz a ação. Verbos na URL, como buscar ou get, fogem do padrão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual dos textos abaixo é um JSON válido?",
+      "alternativas": [
+        "`{ nome: 'Ana', idade: 17 }`",
+        "`{ \"nome\": \"Ana\", \"idade\": 17, }`",
+        "`{ \"nome\": \"Ana\", \"idade\": 17 }`",
+        "`{ \"nome\" = \"Ana\"; \"idade\" = 17 }`"
+      ],
+      "correta": 2,
+      "explicacao": "Em JSON as chaves ficam entre aspas duplas, usa-se dois-pontos entre chave e valor, vírgula entre pares e não pode haver vírgula sobrando no final."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quais são os tipos de dados aceitos como valor em JSON?",
+      "alternativas": [
+        "Somente texto e número",
+        "Texto (string), número, booleano, null, objeto e array",
+        "Texto, número, data, função e classe",
+        "Qualquer tipo do JavaScript, inclusive funções e undefined"
+      ],
+      "correta": 1,
+      "explicacao": "JSON aceita string, number, boolean (true/false), null, objeto {} e array []. Não existe tipo data nem função; datas viram texto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Compare este trecho XML com JSON: `<produto><nome>Caneta</nome><preco>2.5</preco></produto>`. Qual afirmação é correta?",
+      "alternativas": [
+        "XML não pode representar dados de produtos, só páginas web",
+        "XML usa chaves `{}` e colchetes `[]` como o JSON",
+        "Em XML todos os valores são obrigatoriamente números",
+        "XML usa tags de abertura e fechamento; o mesmo dado em JSON seria `{ \"nome\": \"Caneta\", \"preco\": 2.5 }`"
+      ],
+      "correta": 3,
+      "explicacao": "XML organiza dados em elementos com tags (abre e fecha). JSON é mais enxuto, com pares chave-valor. Os dois servem para trocar dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API de uma loja deve devolver a lista de produtos. Qual é a forma mais adequada em JSON?",
+      "alternativas": [
+        "`[ { \"id\": 1, \"nome\": \"Mouse\" }, { \"id\": 2, \"nome\": \"Teclado\" } ]`",
+        "`{ \"id\": 1, \"nome\": \"Mouse\" } { \"id\": 2, \"nome\": \"Teclado\" }`",
+        "`( \"id\": 1, \"nome\": \"Mouse\" ), ( \"id\": 2, \"nome\": \"Teclado\" )`",
+        "`<lista> id 1 Mouse, id 2 Teclado </lista>`"
+      ],
+      "correta": 0,
+      "explicacao": "Uma coleção de objetos em JSON é um array `[ ]` com objetos `{ }` separados por vírgula. Dois objetos soltos, sem array, não formam um JSON válido."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Escreva um objeto JSON que represente um livro com título \"Dom Casmurro\" e ano 1899 (chaves `titulo` e `ano`).",
+      "respostasAceitas": [
+        "{\"titulo\": \"Dom Casmurro\", \"ano\": 1899}",
+        "{\"ano\": 1899, \"titulo\": \"Dom Casmurro\"}"
+      ],
+      "palavrasChave": [
+        "\"titulo\"",
+        "\"dom casmurro\"",
+        "\"ano\"",
+        "1899"
+      ],
+      "explicacao": "Exemplo: `{ \"titulo\": \"Dom Casmurro\", \"ano\": 1899 }` — chaves entre aspas duplas e o ano como número."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Em uma URL REST, o que representa um \"recurso\"? Dê um exemplo.",
+      "palavrasChave": [
+        "recurso",
+        "url",
+        "/"
+      ],
+      "explicacao": "Recurso é a entidade que a API expõe (produto, pedido, cliente), identificada por uma URL, ex.: `/produtos` ou `/produtos/10`."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Cite duas vantagens do JSON em relação ao XML para trocar dados em uma API.",
+      "palavrasChave": [
+        "json",
+        "xml",
+        "leve"
+      ],
+      "explicacao": "JSON é mais leve (menos caracteres), mais fácil de ler e é convertido direto em objeto JavaScript com JSON.parse."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Escreva a URL REST (com o método HTTP) para listar todos os pedidos do cliente de id 7 em uma API de delivery.",
+      "respostasAceitas": [
+        "GET /clientes/7/pedidos"
+      ],
+      "palavrasChave": [
+        "get",
+        "/clientes/7",
+        "/pedidos"
+      ],
+      "explicacao": "Recursos aninhados: `GET /clientes/7/pedidos`. O método GET indica leitura e a URL indica o recurso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct6",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API de uma loja, qual método HTTP deve ser usado para cadastrar um novo produto?",
+      "alternativas": [
+        "GET",
+        "DELETE",
+        "POST",
+        "OPTIONS"
+      ],
+      "correta": 2,
+      "explicacao": "POST cria um novo recurso. GET lê, DELETE remove e OPTIONS informa quais métodos o recurso aceita."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct6",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre PUT e PATCH?",
+      "alternativas": [
+        "PUT apaga o recurso e PATCH cria outro igual",
+        "PUT substitui o recurso inteiro; PATCH altera só alguns campos",
+        "PUT só funciona com XML e PATCH só com JSON",
+        "PATCH é usado para ler dados e PUT para listar"
+      ],
+      "correta": 1,
+      "explicacao": "Com PUT o cliente envia o recurso completo, que substitui o anterior. Com PATCH envia só o que muda (ex.: só o preço)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct6",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na URL `GET /livros?autor=Machado&pagina=2`, como os dados `autor` e `pagina` estão sendo enviados?",
+      "alternativas": [
+        "Como body parameters, no corpo da requisição",
+        "No cabeçalho Authorization",
+        "Como cookies do navegador",
+        "Como query parameters, depois do `?` na URL"
+      ],
+      "correta": 3,
+      "explicacao": "Query parameters vêm depois do `?`, no formato chave=valor separados por `&`. Costumam ser usados em filtros e paginação de GET."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct6",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um cliente tenta acessar `GET /pedidos/999`, mas esse pedido não existe. Qual código de status a API deve devolver?",
+      "alternativas": [
+        "404 Not Found",
+        "200 OK",
+        "500 Internal Server Error",
+        "301 Moved Permanently"
+      ],
+      "correta": 0,
+      "explicacao": "404 indica que o recurso não foi encontrado (erro do lado do cliente, família 4XX). 500 seria uma falha no servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct6",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual cabeçalho HTTP informa ao servidor que o corpo da requisição está em JSON?",
+      "alternativas": [
+        "`Accept-Language: pt-BR`",
+        "`User-Agent: Mozilla/5.0`",
+        "`Content-Type: application/json`",
+        "`Host: api.loja.com`"
+      ],
+      "correta": 2,
+      "explicacao": "Content-Type diz o tipo do conteúdo enviado. Accept-Language indica o idioma preferido, User-Agent identifica o cliente e Host o servidor de destino."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct6",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API de um app de delivery exige que o usuário esteja logado. Em qual cabeçalho o app normalmente envia o token de acesso?",
+      "alternativas": [
+        "Accept",
+        "Authorization",
+        "Content-Length",
+        "Accept-Language"
+      ],
+      "correta": 1,
+      "explicacao": "O cabeçalho Authorization carrega as credenciais, por exemplo `Authorization: Bearer <token>`."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct6",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Quais famílias de códigos de status HTTP indicam erro originado no cliente e erro originado no servidor?",
+      "respostasAceitas": [
+        "4XX cliente e 5XX servidor"
+      ],
+      "palavrasChave": [
+        "4",
+        "5",
+        "cliente",
+        "servidor"
+      ],
+      "explicacao": "4XX = erro do cliente (ex.: 400, 401, 404); 5XX = erro do servidor (ex.: 500, 503)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct6",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na rota POST /clientes (Express), escreva a linha que responde com o código de status de \"criado\" e devolve em JSON o objeto `cliente`.",
+      "respostasAceitas": [
+        "res.status(201).json(cliente);",
+        "return res.status(201).json(cliente);"
+      ],
+      "palavrasChave": [
+        "res.status(201)",
+        ".json(",
+        "cliente"
+      ],
+      "explicacao": "`res.status(201).json(cliente);` — 201 Created é o código certo para recurso criado com sucesso."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct6",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre enviar dados por query parameters e por body parameters.",
+      "palavrasChave": [
+        "query",
+        "body",
+        "url",
+        "corpo"
+      ],
+      "explicacao": "Query parameters vão na URL, depois do `?` (bons para filtros e buscas). Body parameters vão no corpo da requisição (POST/PUT), bons para dados maiores ou sensíveis."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct6",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Escreva o cabeçalho HTTP que informa que a resposta é uma foto de produto no formato PNG.",
+      "respostasAceitas": [
+        "Content-Type: image/png"
+      ],
+      "palavrasChave": [
+        "content-type",
+        "image",
+        "png"
+      ],
+      "explicacao": "`Content-Type: image/png`. O Media Type tem tipo/subtipo (image/png, text/html, application/json)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em um sistema de biblioteca, qual é a relação correta entre classe e objeto?",
+      "alternativas": [
+        "A classe `Livro` é o molde; cada livro cadastrado, como \"Dom Casmurro\", é um objeto dessa classe",
+        "Objeto e classe são a mesma coisa, só muda o nome",
+        "O objeto é o molde e a classe é cada livro cadastrado",
+        "Uma classe só pode gerar um único objeto"
+      ],
+      "correta": 0,
+      "explicacao": "A classe define atributos e métodos; os objetos (instâncias) são criados a partir dela, cada um com seus próprios valores."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o código:\n```js\nclass Conta {\n  #saldo = 0;\n  depositar(v) { if (v > 0) this.#saldo += v; }\n  get saldo() { return this.#saldo; }\n}\n```\nQual princípio da POO o `#saldo` aplica?",
+      "alternativas": [
+        "Herança",
+        "Polimorfismo",
+        "Composição",
+        "Encapsulamento"
+      ],
+      "correta": 3,
+      "explicacao": "O `#` torna o atributo privado: só a própria classe altera o saldo, e o acesso externo passa por métodos. Isso é encapsulamento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "As classes `Cartao` e `Pix` têm, cada uma, o seu próprio método `pagar()`. O sistema da loja chama `pagamento.pagar()` sem saber qual é o tipo. Que conceito é esse?",
+      "alternativas": [
+        "Encapsulamento",
+        "Polimorfismo",
+        "Enumeração",
+        "Agregação"
+      ],
+      "correta": 1,
+      "explicacao": "Polimorfismo: o mesmo método (`pagar`) tem comportamentos diferentes conforme a classe do objeto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a característica de uma classe abstrata?",
+      "alternativas": [
+        "Ela não tem atributos, só métodos",
+        "Ela só pode ter um objeto criado",
+        "Ela não pode ser instanciada diretamente; serve de base para subclasses",
+        "Ela não pode ter subclasses"
+      ],
+      "correta": 2,
+      "explicacao": "A classe abstrata (ex.: `Funcionario`) define o que as filhas têm em comum; cria-se objetos das subclasses (`Garcom`, `Cozinheiro`)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um `Pedido` tem vários `ItemPedido`. Se o pedido é apagado, os itens deixam de existir. Qual relacionamento é esse?",
+      "alternativas": [
+        "Composição",
+        "Agregação",
+        "Herança",
+        "Interface"
+      ],
+      "correta": 0,
+      "explicacao": "Na composição a parte depende do todo: item de pedido não existe sem o pedido. Na agregação a parte vive sozinha (ex.: aluno em uma turma)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para guardar o status de um pedido (AGUARDANDO, PREPARANDO, ENTREGUE), sem permitir valores inventados como \"ENTREGADO\", o mais adequado é usar:",
+      "alternativas": [
+        "Uma variável global de texto livre",
+        "Uma classe anônima",
+        "Um pacote",
+        "Uma enumeração (enum)"
+      ],
+      "correta": 3,
+      "explicacao": "Uma enumeração define um conjunto fixo de valores possíveis, evitando erros de digitação."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Escreva a primeira linha da declaração de uma classe `Gerente` que herda da classe `Funcionario` (JavaScript).",
+      "respostasAceitas": [
+        "class Gerente extends Funcionario {",
+        "class Gerente extends Funcionario"
+      ],
+      "palavrasChave": [
+        "class",
+        "gerente",
+        "extends funcionario"
+      ],
+      "explicacao": "Em JavaScript a herança usa `extends`: `class Gerente extends Funcionario {`."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que é uma interface na programação orientada a objetos?",
+      "palavrasChave": [
+        "método",
+        "implement",
+        "contrato"
+      ],
+      "explicacao": "Interface é um contrato: define quais métodos uma classe deve ter, sem dizer como; a classe que a implementa escreve o código."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre os modificadores de acesso público e privado.",
+      "palavrasChave": [
+        "públic",
+        "privad",
+        "classe"
+      ],
+      "explicacao": "Membro público pode ser acessado de qualquer lugar; privado só dentro da própria classe (protege os dados — encapsulamento)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Escreva, em uma linha de JavaScript, a classe `Produto` com um construtor que recebe `preco` e guarda no atributo `preco` do objeto.",
+      "respostasAceitas": [
+        "class Produto { constructor(preco) { this.preco = preco; } }",
+        "class Produto { constructor(preco) { this.preco = preco } }"
+      ],
+      "palavrasChave": [
+        "class produto",
+        "constructor(preco)",
+        "this.preco=preco"
+      ],
+      "explicacao": "`class Produto { constructor(preco) { this.preco = preco; } }` — o construtor inicializa os atributos do objeto criado com `new`."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No diagrama de classes UML, o que significam os sinais `+` e `-` antes de um atributo?",
+      "alternativas": [
+        "`+` é atributo obrigatório e `-` é opcional",
+        "`+` é público e `-` é privado",
+        "`+` soma valores e `-` subtrai",
+        "`+` é atributo herdado e `-` é atributo novo"
+      ],
+      "correta": 1,
+      "explicacao": "Na UML, `+` = público, `-` = privado, `#` = protegido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No diagrama de classes, uma linha com triângulo vazio apontando de `Aluno` para `Pessoa` indica:",
+      "alternativas": [
+        "Que Aluno é composto por Pessoa",
+        "Que Pessoa depende de Aluno",
+        "Que Aluno herda de Pessoa (generalização)",
+        "Que Aluno e Pessoa são a mesma classe"
+      ],
+      "correta": 2,
+      "explicacao": "O triângulo vazio representa herança (generalização), apontando para a classe-mãe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em um diagrama de classes, como se representa a composição entre `Pedido` e `ItemPedido`?",
+      "alternativas": [
+        "Linha tracejada com seta aberta",
+        "Linha com triângulo vazio",
+        "Linha com losango vazio do lado do ItemPedido",
+        "Linha com losango preenchido do lado do Pedido (o todo)"
+      ],
+      "correta": 3,
+      "explicacao": "Losango preenchido = composição; losango vazio = agregação. O losango fica no lado do todo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual ferramenta gera uma página de documentação interativa da API, a partir de uma especificação OpenAPI, onde dá para testar as rotas?",
+      "alternativas": [
+        "Swagger",
+        "Git",
+        "MySQL Workbench",
+        "npm"
+      ],
+      "correta": 0,
+      "explicacao": "O Swagger (OpenAPI) documenta as rotas, parâmetros e respostas e permite testar pelo navegador."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que a equipe usa Postman ou Insomnia no desenvolvimento de uma API?",
+      "alternativas": [
+        "Para desenhar o leiaute das telas",
+        "Para montar e enviar requisições HTTP, testar rotas e salvar coleções de exemplos",
+        "Para instalar o Node.js",
+        "Para criar o banco de dados automaticamente"
+      ],
+      "correta": 1,
+      "explicacao": "Postman e Insomnia são clientes HTTP: permitem escolher método, URL, cabeçalhos e corpo, ver a resposta e documentar em coleções."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que NÃO pode faltar na documentação de uma rota da API?",
+      "alternativas": [
+        "A cor do botão que chama a rota no app",
+        "O nome do programador que escreveu a rota",
+        "Método, URL, parâmetros/corpo esperados e exemplos de resposta com os códigos de status",
+        "A senha do banco de dados"
+      ],
+      "correta": 2,
+      "explicacao": "Quem consome a API precisa saber como chamar (método, URL, parâmetros) e o que vai receber (formato e códigos de status)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Quais são as três partes (compartimentos) de uma classe no diagrama de classes UML?",
+      "palavrasChave": [
+        "nome",
+        "atributo",
+        "método"
+      ],
+      "explicacao": "Nome da classe (em cima), atributos (meio) e métodos/operações (embaixo)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Como se escreve, na UML, um atributo privado `preco` do tipo decimal? E um método público `calcularTotal()` que devolve decimal?",
+      "respostasAceitas": [
+        "- preco: decimal e + calcularTotal(): decimal"
+      ],
+      "palavrasChave": [
+        "- preco",
+        "decimal",
+        "+ calculartotal()"
+      ],
+      "explicacao": "Atributo: `- preco: decimal`. Método: `+ calcularTotal(): decimal`. Sinal de visibilidade, nome, dois-pontos e tipo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Por que é importante documentar uma API?",
+      "palavrasChave": [
+        "rota",
+        "document",
+        "consum"
+      ],
+      "explicacao": "Para que outras equipes (app, front-end, parceiros) saibam consumir as rotas sem precisar ler o código, reduzindo erros de integração."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre agregação e composição no diagrama de classes.",
+      "palavrasChave": [
+        "agregação",
+        "composição",
+        "losango"
+      ],
+      "explicacao": "Agregação (losango vazio): a parte existe sem o todo. Composição (losango preenchido): a parte não existe sem o todo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No padrão MVC de uma API de biblioteca, qual camada recebe a requisição, chama as regras/dados e decide a resposta?",
+      "alternativas": [
+        "Model",
+        "View",
+        "Controller",
+        "Router do banco de dados"
+      ],
+      "correta": 2,
+      "explicacao": "O Controller faz a ponte: recebe a requisição, usa o Model (dados e regras) e devolve a View ou o JSON de resposta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MVC, onde deve ficar o código que acessa a tabela `livro` do banco de dados e a regra \"um livro emprestado não pode ser emprestado de novo\"?",
+      "alternativas": [
+        "No Model",
+        "Na View",
+        "No arquivo de estilos CSS",
+        "No package.json"
+      ],
+      "correta": 0,
+      "explicacao": "O Model representa os dados e as regras de negócio ligadas a eles; a View só mostra e o Controller coordena."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a principal vantagem de organizar um sistema em MVC?",
+      "alternativas": [
+        "O sistema passa a funcionar sem banco de dados",
+        "Separa responsabilidades, facilitando manutenção, testes e trabalho em equipe",
+        "Elimina a necessidade de testar o código",
+        "Deixa o sistema mais rápido em qualquer situação"
+      ],
+      "correta": 1,
+      "explicacao": "Com as camadas separadas, dá para mudar a tela sem mexer nas regras, testar o Model isolado e dividir o trabalho."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API de uma loja precisa ter uma única instância da conexão com o banco, compartilhada por todo o sistema. Qual design pattern resolve isso?",
+      "alternativas": [
+        "Observer",
+        "Factory",
+        "Adapter",
+        "Singleton"
+      ],
+      "correta": 3,
+      "explicacao": "O Singleton garante uma única instância de uma classe e um ponto de acesso global a ela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de delivery, quando o status do pedido muda, vários módulos precisam ser avisados (notificação ao cliente, painel do restaurante, entregador). Qual pattern se encaixa?",
+      "alternativas": [
+        "Singleton",
+        "Observer",
+        "MVC",
+        "Composição"
+      ],
+      "correta": 1,
+      "explicacao": "No Observer, os interessados se inscrevem em um objeto e são notificados automaticamente quando ele muda."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é um design pattern (padrão de projeto)?",
+      "alternativas": [
+        "Uma biblioteca que precisa ser instalada pelo npm",
+        "Um padrão de cores e fontes para a interface",
+        "Uma solução reutilizável e já testada para um problema comum de projeto de software",
+        "Uma regra obrigatória da linguagem JavaScript"
+      ],
+      "correta": 2,
+      "explicacao": "Design patterns descrevem soluções conhecidas (Singleton, Factory, Observer, Repository…) que podem ser aplicadas em qualquer linguagem."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que significa cada letra da sigla MVC?",
+      "respostasAceitas": [
+        "Model, View, Controller",
+        "Model View Controller"
+      ],
+      "palavrasChave": [
+        "model",
+        "view",
+        "controller"
+      ],
+      "explicacao": "Model (dados e regras), View (apresentação) e Controller (controle do fluxo entre os dois)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Em uma API REST que devolve só JSON, quem faz o papel da View no MVC?",
+      "palavrasChave": [
+        "view",
+        "json",
+        "resposta"
+      ],
+      "explicacao": "A View passa a ser a representação em JSON devolvida na resposta (ou o front-end/app que a exibe)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Para que serve o design pattern Factory?",
+      "palavrasChave": [
+        "cria",
+        "objeto",
+        "classe"
+      ],
+      "explicacao": "Factory centraliza a criação de objetos: o código pede \"um pagamento do tipo pix\" e a fábrica decide qual classe instanciar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na API de uma loja, um colega colocou SQL, regra de desconto e montagem do JSON dentro da rota. Qual organização MVC você sugere?",
+      "palavrasChave": [
+        "model",
+        "controller",
+        "rota"
+      ],
+      "explicacao": "SQL e regra de desconto no Model; a rota só chama o Controller, que usa o Model e monta a resposta. Cada parte com uma responsabilidade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Frameworks",
+      "capacidade": "back.ct8",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é um framework no desenvolvimento back-end?",
+      "alternativas": [
+        "Um banco de dados em memória",
+        "Uma estrutura pronta, com regras e ferramentas, sobre a qual a aplicação é construída",
+        "Um editor de código, como o VS Code",
+        "Um tipo de servidor físico"
+      ],
+      "correta": 1,
+      "explicacao": "O framework fornece a base (rotas, middlewares, organização) e chama o seu código; você preenche as partes específicas do sistema."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Frameworks",
+      "capacidade": "back.ct8",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre biblioteca e framework?",
+      "alternativas": [
+        "Biblioteca é sempre paga e framework é gratuito",
+        "Não há diferença",
+        "Framework só existe para front-end",
+        "Na biblioteca o seu código chama as funções quando quer; no framework é o framework que controla o fluxo e chama o seu código"
+      ],
+      "correta": 3,
+      "explicacao": "Isso é a inversão de controle: o framework define a estrutura e o ciclo; a biblioteca é apenas um conjunto de funções que você usa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Frameworks",
+      "capacidade": "back.ct8",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual dos itens abaixo é um framework back-end para Node.js?",
+      "alternativas": [
+        "React",
+        "Bootstrap",
+        "Express",
+        "MySQL"
+      ],
+      "correta": 2,
+      "explicacao": "Express é um framework web minimalista para Node.js. React é front-end, Bootstrap é CSS e MySQL é um SGBD."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Frameworks",
+      "capacidade": "back.ct8",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o código Express:\n```js\napp.get('/produtos/:id', (req, res) => {\n  res.json({ id: req.params.id });\n});\n```\nAo chamar `GET /produtos/42`, o que a API devolve?",
+      "alternativas": [
+        "`{ \"id\": \"42\" }`",
+        "`{ \"id\": \"produtos\" }`",
+        "Erro 404, pois falta o `?id=42`",
+        "`[ 42 ]`"
+      ],
+      "correta": 0,
+      "explicacao": "`:id` é um parâmetro de rota; `req.params.id` recebe o valor da URL como texto (\"42\")."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Frameworks",
+      "capacidade": "back.ct8",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em uma API Express, a rota `POST /clientes` recebe JSON no corpo, mas `req.body` chega `undefined`. Qual é a causa mais provável?",
+      "alternativas": [
+        "O método deveria ser GET",
+        "Faltou registrar o middleware `app.use(express.json())`",
+        "O Node.js não aceita JSON",
+        "Faltou instalar o MySQL"
+      ],
+      "correta": 1,
+      "explicacao": "O `express.json()` interpreta o corpo JSON e preenche `req.body`. Sem ele, o corpo não é lido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Frameworks",
+      "capacidade": "back.ct8",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao escolher um framework para o back-end de um sistema escolar, qual critério é MAIS relevante?",
+      "alternativas": [
+        "Ter o logotipo mais bonito",
+        "Ser o mais recente lançado, mesmo sem documentação",
+        "Ser usado por apenas uma empresa no mundo",
+        "Compatibilidade com a linguagem da equipe, boa documentação e comunidade ativa"
+      ],
+      "correta": 3,
+      "explicacao": "Documentação, comunidade, manutenção ativa e domínio da equipe reduzem riscos e aceleram o desenvolvimento."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Frameworks",
+      "capacidade": "back.ct8",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Escreva a linha do Express que coloca a aplicação para escutar na porta 3000.",
+      "respostasAceitas": [
+        "app.listen(3000);",
+        "app.listen(3000, () => console.log('rodando'));"
+      ],
+      "palavrasChave": [
+        "app.listen(",
+        "3000",
+        ")"
+      ],
+      "explicacao": "`app.listen(3000)` (opcionalmente com uma função que mostra uma mensagem no console)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Frameworks",
+      "capacidade": "back.ct8",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Escreva a rota Express que responde a `GET /livros` devolvendo em JSON o array `livros`.",
+      "respostasAceitas": [
+        "app.get('/livros', (req, res) => res.json(livros));",
+        "app.get('/livros', (req, res) => { res.json(livros); });"
+      ],
+      "palavrasChave": [
+        "app.get(",
+        "'/livros'",
+        "res.json(livros)"
+      ],
+      "explicacao": "`app.get('/livros', (req, res) => res.json(livros));`"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Frameworks",
+      "capacidade": "back.ct8",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que é um middleware no Express? Dê um exemplo de uso.",
+      "palavrasChave": [
+        "requisição",
+        "next",
+        "antes"
+      ],
+      "explicacao": "É uma função que roda antes da rota, com acesso a req, res e next — ex.: verificar o token de login ou registrar log; chama next() para seguir."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Frameworks",
+      "capacidade": "back.ct8",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Cite duas vantagens de usar um framework em vez de programar o servidor do zero.",
+      "palavrasChave": [
+        "pront",
+        "temp",
+        "framework"
+      ],
+      "explicacao": "Recursos prontos (rotas, segurança, organização) e economia de tempo, além de padrões que facilitam a manutenção em equipe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API de uma biblioteca, qual operação do CRUD corresponde a `DELETE /livros/5`?",
+      "alternativas": [
+        "Create",
+        "Read",
+        "Update",
+        "Delete"
+      ],
+      "correta": 3,
+      "explicacao": "CRUD: Create (POST/INSERT), Read (GET/SELECT), Update (PUT/PATCH/UPDATE), Delete (DELETE/DELETE)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja a consulta montada na API: `\"SELECT * FROM cliente WHERE email = '\" + req.body.email + \"'\"`. Qual é o problema?",
+      "alternativas": [
+        "Está sujeita a SQL Injection; o certo é usar parâmetros (`WHERE email = ?`)",
+        "O SELECT * não funciona em Node.js",
+        "E-mail não pode ser usado em WHERE",
+        "Falta o ORDER BY"
+      ],
+      "correta": 0,
+      "explicacao": "Concatenar dados do usuário no SQL permite injeção de comandos. Consultas parametrizadas tratam o valor como dado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Os dados de conexão com o banco (host, usuário, senha) de uma API devem ficar:",
+      "alternativas": [
+        "Escritos direto no código e enviados ao GitHub público",
+        "Em variáveis de ambiente (arquivo `.env` fora do Git)",
+        "No front-end, para o navegador conectar no banco",
+        "Na URL de cada requisição"
+      ],
+      "correta": 1,
+      "explicacao": "Credenciais em variáveis de ambiente não vazam no repositório e podem mudar entre desenvolvimento e produção."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para enviar a foto de perfil de um usuário do navegador para o servidor, como o formulário/requisição deve ser enviado?",
+      "alternativas": [
+        "Com GET e a imagem na query string",
+        "Com Content-Type `text/plain`",
+        "Com POST e `multipart/form-data`",
+        "Com DELETE e a imagem no cabeçalho"
+      ],
+      "correta": 2,
+      "explicacao": "Upload de arquivos usa `multipart/form-data` em um POST; no Express, uma biblioteca como o multer recebe o arquivo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve um banco de dados em memória (como o H2 ou o SQLite em memória) no back-end?",
+      "alternativas": [
+        "Guardar os dados definitivos de produção para sempre",
+        "Substituir o HD do servidor",
+        "Fazer backup do banco principal",
+        "Rodar testes e protótipos rápidos, pois os dados somem quando a aplicação para"
+      ],
+      "correta": 3,
+      "explicacao": "Ele é rápido e descartável: ótimo para testes automatizados e desenvolvimento, não para dados que precisam durar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A equipe usa migrations (ex.: Knex, Sequelize, Flyway) no projeto. Qual é o objetivo delas?",
+      "alternativas": [
+        "Versionar as mudanças na estrutura do banco, para todos aplicarem as mesmas alterações na ordem certa",
+        "Migrar o servidor de uma cidade para outra",
+        "Deixar as consultas SELECT mais rápidas",
+        "Gerar a documentação Swagger"
+      ],
+      "correta": 0,
+      "explicacao": "Migrations são arquivos versionados com cada alteração de esquema (criar tabela, adicionar coluna), aplicadas igualmente em todos os ambientes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que significa cada letra da sigla CRUD?",
+      "respostasAceitas": [
+        "Create, Read, Update, Delete"
+      ],
+      "palavrasChave": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "explicacao": "Create (criar), Read (ler), Update (atualizar) e Delete (apagar) — as operações básicas sobre os dados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Usando o pacote mysql2 com o objeto `conexao`, escreva a consulta parametrizada que busca o produto de id guardado na variável `id`.",
+      "respostasAceitas": [
+        "conexao.query('SELECT * FROM produto WHERE id = ?', [id]);",
+        "await conexao.query('SELECT * FROM produto WHERE id = ?', [id]);"
+      ],
+      "palavrasChave": [
+        "select",
+        "from produto",
+        "?",
+        "[id]"
+      ],
+      "explicacao": "`conexao.query('SELECT * FROM produto WHERE id = ?', [id])` — o `?` é trocado pelo valor com segurança."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Qual método do JavaScript transforma o texto JSON recebido em objeto, e qual faz o caminho contrário?",
+      "respostasAceitas": [
+        "JSON.parse e JSON.stringify"
+      ],
+      "palavrasChave": [
+        "json.parse",
+        "json.stringify",
+        "objeto"
+      ],
+      "explicacao": "`JSON.parse(texto)` transforma texto em objeto; `JSON.stringify(objeto)` transforma objeto em texto JSON."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct13",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A API da biblioteca vai gerar um relatório de empréstimos em CSV. Escreva a primeira linha (cabeçalho) com as colunas livro, aluno e data.",
+      "respostasAceitas": [
+        "livro,aluno,data"
+      ],
+      "palavrasChave": [
+        "livro",
+        "aluno",
+        "data",
+        ","
+      ],
+      "explicacao": "`livro,aluno,data` — no CSV cada linha é um registro e os campos são separados por vírgula; a primeira linha traz os nomes das colunas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Publicação da aplicação",
+      "capacidade": "back.ct14",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que significa publicar (fazer deploy) de uma API?",
+      "alternativas": [
+        "Enviar o código para o professor por e-mail",
+        "Colocar a aplicação em um servidor acessível pela internet para os usuários",
+        "Rodar `node index.js` no próprio computador",
+        "Apagar o banco de desenvolvimento"
+      ],
+      "correta": 1,
+      "explicacao": "Deploy é colocar a aplicação para funcionar em um ambiente de produção (servidor, nuvem), acessível aos clientes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Publicação da aplicação",
+      "capacidade": "back.ct14",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na hospedagem em nuvem, o servidor define a porta pela variável de ambiente `PORT`. Qual linha está correta?",
+      "alternativas": [
+        "`app.listen(3000)` sempre, independente do servidor",
+        "`app.listen(process.PORT)`",
+        "`app.listen(process.env.PORT || 3000)`",
+        "`app.listen(env.port = 3000)`"
+      ],
+      "correta": 2,
+      "explicacao": "`process.env.PORT` lê a variável do ambiente; o `|| 3000` serve de valor padrão no desenvolvimento local."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Publicação da aplicação",
+      "capacidade": "back.ct14",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Antes de publicar a API da loja, o que deve ser feito com os dados de acesso ao banco de produção?",
+      "alternativas": [
+        "Configurá-los como variáveis de ambiente no servidor de hospedagem",
+        "Deixá-los no código, pois o servidor é seguro",
+        "Mandá-los no README do repositório",
+        "Usar a mesma senha do banco local"
+      ],
+      "correta": 0,
+      "explicacao": "Credenciais de produção ficam nas variáveis de ambiente do provedor, nunca no repositório."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Publicação da aplicação",
+      "capacidade": "back.ct14",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que se usa HTTPS na API publicada de um app de delivery?",
+      "alternativas": [
+        "Para a API responder em XML",
+        "Para não precisar de servidor",
+        "Para dispensar o login do usuário",
+        "Para criptografar os dados trocados (senhas, endereço, pagamento) entre o app e o servidor"
+      ],
+      "correta": 3,
+      "explicacao": "HTTPS usa TLS para criptografar a comunicação, impedindo que terceiros leiam ou alterem os dados no caminho."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Publicação da aplicação",
+      "capacidade": "back.ct14",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A equipe quer que a API rode igual no computador do aluno e no servidor, com as mesmas versões de Node e dependências. Qual tecnologia ajuda nisso?",
+      "alternativas": [
+        "Swagger",
+        "Contêineres (Docker)",
+        "Postman",
+        "Diagrama de classes"
+      ],
+      "correta": 1,
+      "explicacao": "O Docker empacota a aplicação com o ambiente necessário em uma imagem, que roda igual em qualquer máquina com Docker."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Publicação da aplicação",
+      "capacidade": "back.ct14",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual sequência é mais adequada para publicar uma nova versão da API?",
+      "alternativas": [
+        "Editar o código direto no servidor de produção e testar lá",
+        "Publicar primeiro e testar só se algum cliente reclamar",
+        "Testar localmente, versionar no Git, publicar em homologação, validar e então publicar em produção",
+        "Apagar a versão antiga, depois escrever a nova"
+      ],
+      "correta": 2,
+      "explicacao": "Separar ambientes (desenvolvimento, homologação, produção) e testar antes reduz o risco de derrubar o sistema dos usuários."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Publicação da aplicação",
+      "capacidade": "back.ct14",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No `package.json`, escreva o script `start` que inicia a API pelo arquivo `index.js`.",
+      "respostasAceitas": [
+        "\"start\": \"node index.js\""
+      ],
+      "palavrasChave": [
+        "\"start\"",
+        "node",
+        "index.js"
+      ],
+      "explicacao": "`\"start\": \"node index.js\"` dentro de `\"scripts\"`. Os serviços de hospedagem costumam rodar `npm start`."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Publicação da aplicação",
+      "capacidade": "back.ct14",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre o ambiente de desenvolvimento e o ambiente de produção.",
+      "palavrasChave": [
+        "desenvolvimento",
+        "produção",
+        "usuário"
+      ],
+      "explicacao": "Desenvolvimento é onde a equipe programa e testa (dados de teste); produção é o ambiente real usado pelos usuários, com dados reais."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Publicação da aplicação",
+      "capacidade": "back.ct14",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Antes de publicar a API na internet, cite um cuidado com as senhas e um cuidado com os testes.",
+      "palavrasChave": [
+        "senha",
+        "test",
+        "ambiente"
+      ],
+      "explicacao": "Exemplos: tirar senhas do código (variáveis de ambiente), rodar os testes, usar HTTPS, configurar CORS e tratar erros sem expor detalhes internos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Publicação da aplicação",
+      "capacidade": "back.ct14",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que é homologação no processo de publicação?",
+      "palavrasChave": [
+        "teste",
+        "antes",
+        "produção"
+      ],
+      "explicacao": "Ambiente parecido com o de produção onde o cliente/equipe valida a versão antes de ela ir para produção."
+    }
+  ]
+}

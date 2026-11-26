@@ -1,0 +1,1085 @@
+{
+  "nome": "Programação para Dispositivos Móveis — banco inicial (a revisar)",
+  "materia": "Programação para Dispositivos Móveis",
+  "revisao": "pendente",
+  "contexto": "Banco inicial com 70 questões (42 alternativas e 28 dissertativas), 10 por tópico de conhecimento do plano de curso (Dispositivos móveis, Criação de interface, Recursos de hardware, APIs, Persistência de dados, Consumo de web service REST e Publicação do aplicativo), ligadas às capacidades técnicas da unidade. Exemplos de código em JavaScript genérico (fetch/async-await) e conceitos de Android/iOS sem framework específico. Entram como 'a revisar'.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Dispositivos móveis",
+      "capacidade": "mobile.ct1",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual característica diferencia um dispositivo móvel (smartphone, tablet) de um computador de mesa na hora de programar um aplicativo?",
+      "alternativas": [
+        "Tem bateria limitada, tela pequena e conexão de rede que pode cair, então o app precisa economizar recursos",
+        "Tem processador sempre mais rápido que o de um computador, então o desempenho não preocupa",
+        "Só funciona conectado à internet, então o app não precisa guardar nada no aparelho",
+        "Usa sempre o mesmo tamanho de tela, então o leiaute pode ser fixo em pixels"
+      ],
+      "correta": 0,
+      "explicacao": "Bateria, tela, memória e rede variam e são limitadas no celular; o app deve se adaptar a isso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Dispositivos móveis",
+      "capacidade": "mobile.ct1",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na arquitetura do Android, qual camada fica entre o hardware e o restante do sistema, cuidando de drivers, memória e processos?",
+      "alternativas": [
+        "Camada de aplicativos",
+        "Kernel (núcleo) do sistema operacional",
+        "Framework de aplicação",
+        "Loja de aplicativos"
+      ],
+      "correta": 1,
+      "explicacao": "O kernel (baseado em Linux no Android) gerencia drivers, memória e processos; as camadas de cima usam os serviços dele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Dispositivos móveis",
+      "capacidade": "mobile.ct1",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aplicativo nativo é aquele que:",
+      "alternativas": [
+        "Roda só dentro do navegador, a partir de um endereço web",
+        "É escrito uma vez e roda em qualquer sistema sem ser compilado",
+        "É desenvolvido com a linguagem e as ferramentas oficiais da plataforma (ex.: Kotlin no Android, Swift no iOS)",
+        "Precisa estar sempre conectado a um servidor para abrir"
+      ],
+      "correta": 2,
+      "explicacao": "Nativo usa o SDK e a linguagem oficiais da plataforma; híbridos/multiplataforma usam um código para várias."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Dispositivos móveis",
+      "capacidade": "mobile.ct2",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao instalar o ambiente para desenvolver apps Android, o que é o emulador (AVD)?",
+      "alternativas": [
+        "Um programa que converte o app para iOS",
+        "O gerenciador de dependências do projeto",
+        "O servidor que publica o app na loja",
+        "Um celular virtual que roda no computador para testar o app sem aparelho físico"
+      ],
+      "correta": 3,
+      "explicacao": "O emulador simula um dispositivo (tamanho de tela, versão do sistema) para testar o app no PC."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Dispositivos móveis",
+      "capacidade": "mobile.ct2",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A equipe do app de delivery precisa usar uma biblioteca de mapas no projeto. Qual é a forma correta de incluí-la?",
+      "alternativas": [
+        "Copiar o código da biblioteca de um site e colar dentro das telas",
+        "Declarar a biblioteca e a versão no arquivo de dependências do projeto (ex.: build.gradle ou package.json) e sincronizar",
+        "Instalar a biblioteca direto no celular do usuário antes de instalar o app",
+        "Pedir para o usuário baixar a biblioteca na loja de aplicativos"
+      ],
+      "correta": 1,
+      "explicacao": "O gerenciador de dependências (Gradle, npm etc.) baixa a biblioteca na versão declarada e a inclui no build."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Dispositivos móveis",
+      "capacidade": "mobile.ct1",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Sobre a evolução (histórico) dos dispositivos móveis, qual afirmação está correta?",
+      "alternativas": [
+        "Os primeiros celulares já tinham loja de aplicativos e tela sensível ao toque",
+        "O Android e o iOS surgiram antes dos celulares com teclado físico",
+        "Os apps móveis só passaram a existir depois de 2020",
+        "A popularização dos smartphones com tela de toque e lojas de apps aconteceu a partir do fim dos anos 2000 (iPhone em 2007, Android em 2008)"
+      ],
+      "correta": 3,
+      "explicacao": "Os celulares começaram só com voz e SMS; o iPhone (2007) e o Android (2008) popularizaram tela de toque e lojas de apps."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Dispositivos móveis",
+      "capacidade": "mobile.ct1",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Cite duas diferenças entre um app nativo e um app multiplataforma (híbrido).",
+      "palavrasChave": [
+        "nativ",
+        "plataforma",
+        "códig"
+      ],
+      "explicacao": "Nativo: linguagem e SDK de cada plataforma, melhor acesso ao hardware e desempenho. Multiplataforma: um só código para Android e iOS, menos custo, às vezes menos desempenho."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Dispositivos móveis",
+      "capacidade": "mobile.ct2",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Por que é importante testar o app em emuladores com tamanhos de tela e versões de sistema diferentes?",
+      "palavrasChave": [
+        "tela",
+        "vers",
+        "dispositiv"
+      ],
+      "explicacao": "Os usuários têm dispositivos com telas e versões de sistema diferentes; testar vários evita leiaute quebrado e erro em versões antigas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Dispositivos móveis",
+      "capacidade": "mobile.ct1",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que é o SDK (Software Development Kit) no desenvolvimento mobile?",
+      "palavrasChave": [
+        "ferrament",
+        "desenvolv",
+        "bibliotec"
+      ],
+      "explicacao": "O SDK é o kit de ferramentas da plataforma: bibliotecas, APIs, compilador e emulador para desenvolver os apps."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Dispositivos móveis",
+      "capacidade": "mobile.ct2",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de biblioteca usa a versão 2.1 de uma biblioteca de leitura de código de barras. Explique por que o arquivo de dependências deve fixar a versão.",
+      "palavrasChave": [
+        "vers",
+        "compat",
+        "dependênc"
+      ],
+      "explicacao": "Fixar a versão no arquivo de dependências garante que todos da equipe e o build usem a mesma versão, evitando incompatibilidade quando sai uma versão nova."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tela de cadastro de um app de academia, os campos (nome, e-mail, senha e botão) devem ficar um embaixo do outro. Qual gerenciador de leiaute é o mais indicado?",
+      "alternativas": [
+        "Leiaute linear vertical (coluna)",
+        "Leiaute em grade com 4 colunas",
+        "Leiaute absoluto com posições fixas em pixels",
+        "Leiaute em abas (tabs)"
+      ],
+      "correta": 0,
+      "explicacao": "O leiaute linear vertical (LinearLayout vertical / Column) empilha os componentes um embaixo do outro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de delivery precisa perguntar \"Deseja mesmo cancelar o pedido?\" com os botões Sim e Não. Qual componente usar?",
+      "alternativas": [
+        "Barra de ação",
+        "Diálogo de confirmação (alert dialog)",
+        "Lista rolável",
+        "Menu lateral"
+      ],
+      "correta": 1,
+      "explicacao": "Diálogos interrompem o fluxo e pedem uma decisão rápida do usuário, como confirmar um cancelamento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O cardápio de uma lanchonete tem 300 itens. Qual é a melhor forma de exibir essa lista no app?",
+      "alternativas": [
+        "Criar 300 componentes de texto fixos na tela",
+        "Mostrar só os 10 primeiros e esconder o resto",
+        "Usar um componente de lista que recicla as linhas (ex.: RecyclerView/FlatList), criando só os itens visíveis",
+        "Abrir uma tela nova para cada item do cardápio"
+      ],
+      "correta": 2,
+      "explicacao": "Listas recicláveis desenham só o que aparece na tela e reaproveitam as linhas ao rolar, economizando memória."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct4",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tela de login, ao tocar no botão Entrar, o app deve validar os campos. Onde esse código é colocado?",
+      "alternativas": [
+        "No arquivo de dependências do projeto",
+        "No ícone do aplicativo",
+        "Na barra de status do sistema",
+        "No tratador do evento de clique (ex.: onClick/onPress) do botão"
+      ],
+      "correta": 3,
+      "explicacao": "O evento de clique dispara a função que lê os campos (entrada), valida (processamento) e mostra o resultado (saída)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao abrir a tela de detalhes de um livro, o app precisa saber qual livro foi tocado na lista. Como fazer isso?",
+      "alternativas": [
+        "Passar o id do livro como parâmetro na navegação para a tela de detalhes",
+        "Fechar o app e abrir de novo na tela de detalhes",
+        "Criar uma tela de detalhes diferente para cada livro",
+        "Pedir ao usuário para digitar o nome do livro na nova tela"
+      ],
+      "correta": 0,
+      "explicacao": "Na navegação entre telas é comum enviar parâmetros (Intent extras, route params) como o id do item escolhido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de galeria de fotos, o usuário desliza o dedo para o lado para ver a próxima foto e faz \"pinça\" para dar zoom. Isso é:",
+      "alternativas": [
+        "Tratamento de exceções",
+        "Tratamento gestual (swipe e pinch)",
+        "Passagem de parâmetros",
+        "Barra de ação"
+      ],
+      "correta": 1,
+      "explicacao": "Gestos como deslizar (swipe), pinça (pinch) e toque longo são capturados pelo tratamento gestual."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Para que serve a barra de ação (app bar/toolbar) no topo de uma tela?",
+      "palavrasChave": [
+        "títul",
+        "ações",
+        "tela"
+      ],
+      "explicacao": "A barra de ação mostra o título da tela e ações rápidas (buscar, voltar, menu) sempre no mesmo lugar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de calculadora de IMC, o usuário digitou letras no campo peso. O que o app deve fazer para não travar?",
+      "palavrasChave": [
+        "valid",
+        "mensagem",
+        "exce"
+      ],
+      "explicacao": "Validar a entrada e tratar a exceção de conversão (try/catch), mostrando uma mensagem amigável em vez de fechar o app."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct4",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de conversão de temperatura, identifique a entrada, o processamento e a saída.",
+      "palavrasChave": [
+        "entrada",
+        "processamento",
+        "saída"
+      ],
+      "explicacao": "Entrada: valor em °C digitado; processamento: F = C × 1,8 + 32; saída: resultado mostrado na tela."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre a navegação em pilha (stack) e a navegação por abas (tabs).",
+      "palavrasChave": [
+        "pilha",
+        "abas",
+        "voltar"
+      ],
+      "explicacao": "Na pilha cada tela nova fica por cima e o voltar retorna à anterior; nas abas o usuário troca entre seções principais no mesmo nível."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Recursos de hardware",
+      "capacidade": "mobile.ct1",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de corrida precisa registrar o percurso do usuário no mapa. Qual recurso de hardware é essencial?",
+      "alternativas": [
+        "Bluetooth",
+        "Acelerômetro",
+        "GPS",
+        "Microfone"
+      ],
+      "correta": 2,
+      "explicacao": "O GPS fornece latitude e longitude para traçar o percurso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Recursos de hardware",
+      "capacidade": "mobile.ct6",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Antes de usar a câmera no app de leitura de QR Code, o que o app precisa fazer nas versões atuais de Android e iOS?",
+      "alternativas": [
+        "Nada; a câmera é liberada automaticamente",
+        "Reiniciar o aparelho para liberar a câmera",
+        "Desligar o Wi-Fi para a câmera funcionar",
+        "Declarar a permissão e pedir autorização ao usuário em tempo de execução"
+      ],
+      "correta": 3,
+      "explicacao": "Recursos sensíveis (câmera, localização, microfone) exigem permissão declarada e aceita pelo usuário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Recursos de hardware",
+      "capacidade": "mobile.ct3",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app deve pausar o vídeo quando o usuário vira o celular de cabeça para baixo. Qual sensor detecta isso?",
+      "alternativas": [
+        "Acelerômetro",
+        "GPS",
+        "Wi-Fi",
+        "Bluetooth"
+      ],
+      "correta": 0,
+      "explicacao": "O acelerômetro mede a aceleração nos eixos x, y e z e permite saber a orientação e os movimentos do aparelho."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Recursos de hardware",
+      "capacidade": "mobile.ct3",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app precisa se conectar a uma pulseira de batimentos cardíacos a poucos metros, gastando pouca bateria. Qual tecnologia usar?",
+      "alternativas": [
+        "GPS",
+        "Bluetooth Low Energy (BLE)",
+        "Rede 4G",
+        "NFC de longo alcance"
+      ],
+      "correta": 1,
+      "explicacao": "O Bluetooth (especialmente o BLE) conecta acessórios próximos com baixo consumo de energia."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Recursos de hardware",
+      "capacidade": "mobile.ct6",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de podcast, o áudio deve continuar tocando quando o usuário troca de app. Qual é a abordagem correta?",
+      "alternativas": [
+        "Gravar o áudio de novo a cada troca de app",
+        "Usar a câmera para manter o app ativo",
+        "Reproduzir o áudio por meio de um serviço em segundo plano com controle de mídia",
+        "Aumentar o brilho da tela para o sistema não fechar o app"
+      ],
+      "correta": 2,
+      "explicacao": "Reprodução em segundo plano usa serviço de mídia (background/foreground service) com controles na notificação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Recursos de hardware",
+      "capacidade": "mobile.ct1",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Antes de baixar um vídeo grande, o app verifica se o celular está no Wi-Fi ou nos dados móveis. Por que isso é útil?",
+      "alternativas": [
+        "Porque o Wi-Fi impede o uso do GPS",
+        "Porque nos dados móveis o app não consegue abrir telas",
+        "Porque o Wi-Fi deixa a bateria infinita",
+        "Para evitar gastar o pacote de dados do usuário em downloads grandes"
+      ],
+      "correta": 3,
+      "explicacao": "Verificar o tipo de conexão permite baixar conteúdos pesados só no Wi-Fi e respeitar o plano de dados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Recursos de hardware",
+      "capacidade": "mobile.ct6",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Por que um app deve pedir a permissão de localização apenas quando o usuário for usar a função de mapa, e não logo ao abrir?",
+      "palavrasChave": [
+        "permiss",
+        "usuário",
+        "localiz"
+      ],
+      "explicacao": "Pedir a permissão no momento do uso deixa claro ao usuário por que a localização é necessária e aumenta a chance de ele aceitar; também respeita a privacidade."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Recursos de hardware",
+      "capacidade": "mobile.ct3",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Cite dois recursos de hardware que um app de entrega de comida pode usar e para quê.",
+      "palavrasChave": [
+        "gps",
+        "câmera",
+        "entrega"
+      ],
+      "explicacao": "Ex.: GPS para mostrar a posição do entregador; câmera para foto de comprovante de entrega."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Recursos de hardware",
+      "capacidade": "mobile.ct6",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que o app deve fazer se o usuário negar a permissão da câmera?",
+      "palavrasChave": [
+        "negad",
+        "mensagem",
+        "funcion"
+      ],
+      "explicacao": "Tratar a permissão negada sem travar: mostrar mensagem explicando que a função precisa da câmera e deixar o resto do app funcionando."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Recursos de hardware",
+      "capacidade": "mobile.ct1",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Por que o uso contínuo do GPS deve ser controlado em um app?",
+      "palavrasChave": [
+        "bateria",
+        "consum",
+        "gps"
+      ],
+      "explicacao": "O GPS tem alto consumo de bateria; o app deve ativá-lo só quando necessário e com intervalos adequados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é uma push notification?",
+      "alternativas": [
+        "Mensagem enviada por um servidor que aparece no aparelho mesmo com o app fechado",
+        "Um alerta que só aparece enquanto o usuário está com o app aberto na tela",
+        "Um e-mail enviado ao usuário quando ele instala o app",
+        "Um aviso gerado pelo GPS quando o sinal cai"
+      ],
+      "correta": 0,
+      "explicacao": "Push é enviada por um servidor, por meio de um serviço como FCM (Firebase Cloud Messaging) ou APNs, e chega mesmo com o app fechado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de delivery, o mapa deve mostrar um marcador na posição do restaurante. Quais dados a API de mapas precisa receber?",
+      "alternativas": [
+        "O CEP e o nome do bairro apenas",
+        "A latitude e a longitude do restaurante",
+        "O número de telefone do restaurante",
+        "O endereço IP do restaurante"
+      ],
+      "correta": 1,
+      "explicacao": "Marcadores no mapa são posicionados por coordenadas (latitude, longitude)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para enviar push notification a um aparelho específico, o servidor precisa de quê?",
+      "alternativas": [
+        "Do número do chip do usuário",
+        "Da senha do usuário no app",
+        "Do token de registro do dispositivo, gerado pelo serviço de notificação",
+        "Do endereço MAC do Wi-Fi do aparelho"
+      ],
+      "correta": 2,
+      "explicacao": "Cada instalação recebe um token do serviço (FCM/APNs); o servidor envia a mensagem para esse token."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual uso da API de localização é o mais adequado para um app de clima?",
+      "alternativas": [
+        "Ler a localização a cada segundo, sem parar, mesmo com o app fechado",
+        "Pedir a localização exata do usuário e publicá-la no perfil",
+        "Usar a câmera para descobrir a cidade",
+        "Obter a localização aproximada quando o usuário abre o app para buscar a previsão da cidade"
+      ],
+      "correta": 3,
+      "explicacao": "Para clima basta a localização aproximada e pontual; rastrear sem parar gasta bateria e invade a privacidade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao usar a API de mapas de um serviço externo, o app precisa geralmente de uma chave de API. Para que ela serve?",
+      "alternativas": [
+        "Identificar e autorizar o app a usar o serviço, controlando cotas e cobrança",
+        "Criptografar as fotos do usuário",
+        "Desbloquear a tela do celular",
+        "Aumentar a precisão do GPS do aparelho"
+      ],
+      "correta": 0,
+      "explicacao": "A chave de API identifica o projeto no provedor do mapa; por isso não deve ser exposta sem restrições."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de lembretes quer avisar o usuário às 8h, sem precisar de servidor. Qual recurso é o mais adequado?",
+      "alternativas": [
+        "Push notification enviada pelo servidor",
+        "Notificação local agendada no próprio aparelho",
+        "Mensagem SMS",
+        "Diálogo aberto na tela"
+      ],
+      "correta": 1,
+      "explicacao": "Notificações locais são agendadas pelo próprio app; push depende de um servidor externo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre notificação local e push notification.",
+      "palavrasChave": [
+        "local",
+        "servidor",
+        "aparelho"
+      ],
+      "explicacao": "A local é criada e agendada pelo próprio app no aparelho; a push é enviada por um servidor pela internet."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Cite duas informações que uma push notification de um app de delivery poderia levar.",
+      "palavrasChave": [
+        "pedido",
+        "status",
+        "notifica"
+      ],
+      "explicacao": "Ex.: status do pedido (saiu para entrega) e número do pedido; a notificação pode abrir a tela do pedido."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que é geocodificação em APIs de mapa?",
+      "palavrasChave": [
+        "endereço",
+        "coordenada",
+        "latitude"
+      ],
+      "explicacao": "Geocodificação converte um endereço em coordenadas (latitude e longitude); a reversa faz o contrário."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Por que a chave da API de mapas não deve ser publicada no repositório público do projeto?",
+      "palavrasChave": [
+        "chave",
+        "uso",
+        "cobran"
+      ],
+      "explicacao": "Quem pegar a chave pode usar o serviço no nome do projeto, gastar a cota e gerar cobrança; ela deve ficar protegida e restrita."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app precisa lembrar se o usuário escolheu o tema escuro. Qual é a forma mais simples de guardar essa informação?",
+      "alternativas": [
+        "Criar um banco de dados com várias tabelas",
+        "Enviar a preferência por e-mail ao usuário",
+        "Armazenamento chave-valor (ex.: SharedPreferences/AsyncStorage)",
+        "Gravar a escolha em um arquivo no cartão SD de outro aparelho"
+      ],
+      "correta": 2,
+      "explicacao": "Preferências simples cabem em armazenamento chave-valor, como temaEscuro = true."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de controle de gastos precisa guardar centenas de despesas no aparelho e filtrar por mês. Qual opção é a mais adequada?",
+      "alternativas": [
+        "Variáveis comuns na memória da tela",
+        "Uma única preferência chave-valor com tudo em texto",
+        "Guardar tudo na barra de notificações",
+        "Banco de dados interno, como o SQLite"
+      ],
+      "correta": 3,
+      "explicacao": "O SQLite (banco interno) guarda dados estruturados e permite consultas com filtros (WHERE mes = ...)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre armazenamento interno e externo em um dispositivo móvel?",
+      "alternativas": [
+        "O interno é privado do app; o externo é compartilhado e pode ser acessado por outros apps e pelo usuário",
+        "O interno fica na nuvem; o externo fica no aparelho",
+        "O interno só guarda imagens; o externo só guarda texto",
+        "Não há diferença; são dois nomes para a mesma coisa"
+      ],
+      "correta": 0,
+      "explicacao": "Arquivos internos ficam na área privada do app e são apagados ao desinstalar; o externo é compartilhado (ex.: fotos, downloads)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O usuário anotou dados no app e fechou o aplicativo. Ao abrir de novo, as anotações sumiram. Qual é a causa mais provável?",
+      "alternativas": [
+        "O app guardou os dados no banco interno",
+        "Os dados estavam só em variáveis na memória e não foram persistidos",
+        "O app usou armazenamento chave-valor",
+        "O app salvou os dados em arquivo interno"
+      ],
+      "correta": 1,
+      "explicacao": "Variáveis em memória são perdidas quando o app fecha; é preciso persistir em arquivo, preferências ou banco."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando SQL, executado no SQLite do app, busca todas as tarefas não concluídas?",
+      "alternativas": [
+        "SELECT * FROM tarefa WHERE concluida = 0;",
+        "UPDATE tarefa SET concluida = 0;",
+        "DELETE FROM tarefa WHERE concluida = 0;",
+        "INSERT INTO tarefa (concluida) VALUES (0);"
+      ],
+      "correta": 0,
+      "explicacao": "SELECT com WHERE filtra as linhas; UPDATE altera, DELETE apaga e INSERT cria."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de banco precisa manter o usuário logado entre aberturas. Qual é a forma mais segura de guardar essa credencial no aparelho?",
+      "alternativas": [
+        "Guardar a senha em texto puro nas preferências chave-valor",
+        "Gravar a senha em um arquivo no armazenamento externo",
+        "Salvar a senha em uma tabela comum do SQLite",
+        "Guardar só um token de sessão no armazenamento seguro do sistema (Keychain/Keystore)"
+      ],
+      "correta": 3,
+      "explicacao": "Senha em texto puro não deve ser guardada; usa-se um token no armazenamento seguro do sistema, que é criptografado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Cite as três formas de persistir dados em um dispositivo móvel.",
+      "palavrasChave": [
+        "preferênc",
+        "arquiv",
+        "banco"
+      ],
+      "explicacao": "Preferências (chave-valor), arquivos (armazenamento interno/externo) e banco de dados interno (ex.: SQLite)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Escreva o comando SQL que cria, no SQLite do app de biblioteca, a tabela `livro` com id inteiro chave primária e titulo texto.",
+      "respostasAceitas": [
+        "CREATE TABLE livro (id INTEGER PRIMARY KEY, titulo TEXT);",
+        "CREATE TABLE livro (id INTEGER PRIMARY KEY AUTOINCREMENT, titulo TEXT);"
+      ],
+      "palavrasChave": [
+        "create table livro",
+        "primary key",
+        "titulo"
+      ],
+      "explicacao": "CREATE TABLE cria a tabela; o id é INTEGER PRIMARY KEY e titulo TEXT."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Por que um app de lista de compras deve funcionar offline guardando os itens no aparelho?",
+      "palavrasChave": [
+        "offline",
+        "intern",
+        "dados"
+      ],
+      "explicacao": "No mercado a internet pode falhar; guardando os dados no armazenamento interno/banco do aparelho, o app funciona offline e sincroniza depois."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que acontece com os dados do armazenamento interno quando o usuário desinstala o app?",
+      "palavrasChave": [
+        "apagad",
+        "desinstal",
+        "intern"
+      ],
+      "explicacao": "O armazenamento interno é apagado ao desinstalar o app; por isso dados importantes devem ter backup ou sincronização."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app da loja precisa listar os produtos cadastrados no servidor. Qual método HTTP usar em `/produtos`?",
+      "alternativas": [
+        "POST",
+        "DELETE",
+        "GET",
+        "PUT"
+      ],
+      "correta": 2,
+      "explicacao": "GET busca (lê) recursos sem alterá-los."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de cadastro de clientes, qual requisição cria um novo cliente na API?",
+      "alternativas": [
+        "GET /clientes/5",
+        "DELETE /clientes",
+        "PUT /clientes/novo sem corpo",
+        "POST /clientes com os dados do cliente em JSON no corpo"
+      ],
+      "correta": 3,
+      "explicacao": "POST envia os dados no corpo para criar um novo recurso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz o código abaixo?\n```js\nconst r = await fetch('https://api.loja.com/pedidos/7', { method: 'DELETE' });\n```",
+      "alternativas": [
+        "Remove o pedido de id 7 no servidor",
+        "Busca os dados do pedido 7",
+        "Cria um pedido com id 7",
+        "Atualiza todos os pedidos"
+      ],
+      "correta": 0,
+      "explicacao": "DELETE apaga o recurso indicado na URL (/pedidos/7)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que as requisições à API devem ser assíncronas no app?",
+      "alternativas": [
+        "Porque requisições síncronas são mais rápidas",
+        "Para a interface não travar enquanto espera a resposta do servidor",
+        "Porque o JSON só pode ser lido de forma assíncrona",
+        "Para o app não precisar de internet"
+      ],
+      "correta": 1,
+      "explicacao": "Se a requisição bloquear a thread principal (UI), a tela congela; por isso usa-se async/await, callbacks ou threads separadas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct4",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API retornou `{\"id\": 3, \"nome\": \"Pizza\", \"preco\": 39.9}`. Após `const p = await resposta.json();`, como mostrar o preço?",
+      "alternativas": [
+        "p[preco]",
+        "p.nome.preco",
+        "p.preco",
+        "resposta.preco"
+      ],
+      "correta": 2,
+      "explicacao": "resposta.json() converte o JSON em objeto; o campo é acessado com p.preco."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app enviou um PUT para atualizar um produto e recebeu o status 404. O que isso indica?",
+      "alternativas": [
+        "A atualização foi feita com sucesso",
+        "O servidor teve um erro interno",
+        "O usuário precisa atualizar o app",
+        "O recurso (produto) não foi encontrado na URL informada"
+      ],
+      "correta": 3,
+      "explicacao": "404 Not Found: o recurso não existe naquela URL. Sucesso seria 200; erro interno seria 500."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Escreva a linha em JavaScript que faz um GET em `https://api.biblioteca.com/livros` usando fetch com await e guarda a resposta em `resp`.",
+      "respostasAceitas": [
+        "const resp = await fetch('https://api.biblioteca.com/livros');",
+        "const resp = await fetch(\"https://api.biblioteca.com/livros\");",
+        "let resp = await fetch('https://api.biblioteca.com/livros');"
+      ],
+      "palavrasChave": [
+        "await",
+        "fetch(",
+        "/livros"
+      ],
+      "explicacao": "fetch faz GET por padrão; com await o código espera a resposta sem travar a interface."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Qual é a diferença entre PUT e POST ao consumir uma API REST?",
+      "palavrasChave": [
+        "post",
+        "put",
+        "atualiz"
+      ],
+      "explicacao": "POST cria um novo recurso; PUT atualiza (substitui) um recurso que já existe, indicado na URL."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que o app deve fazer quando a requisição falha por falta de internet?",
+      "palavrasChave": [
+        "erro",
+        "mensagem",
+        "tentar"
+      ],
+      "explicacao": "Tratar o erro (try/catch), mostrar uma mensagem ao usuário e permitir tentar novamente, sem fechar o app."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct4",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Ao enviar um POST com JSON, qual cabeçalho informa ao servidor o formato do corpo e qual é o valor?",
+      "respostasAceitas": [
+        "Content-Type: application/json",
+        "Content-Type application/json"
+      ],
+      "palavrasChave": [
+        "content",
+        "type",
+        "application/json"
+      ],
+      "explicacao": "O cabeçalho Content-Type: application/json avisa que o corpo está em JSON."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Publicação do aplicativo",
+      "capacidade": "mobile.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual arquivo é normalmente enviado à Google Play para publicar um app Android?",
+      "alternativas": [
+        "Um arquivo .exe",
+        "Um Android App Bundle (.aab) assinado",
+        "O código-fonte em .zip",
+        "Um arquivo .ipa"
+      ],
+      "correta": 1,
+      "explicacao": "A Play Store recebe o .aab (ou .apk) assinado; .ipa é do iOS e .exe é do Windows."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Publicação do aplicativo",
+      "capacidade": "mobile.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que o app precisa ser assinado digitalmente antes da publicação?",
+      "alternativas": [
+        "Para deixar o app mais leve",
+        "Para liberar o uso do GPS",
+        "Para comprovar o autor e garantir que as atualizações venham do mesmo desenvolvedor",
+        "Para traduzir o app automaticamente"
+      ],
+      "correta": 2,
+      "explicacao": "A assinatura identifica o desenvolvedor; atualizações só são aceitas com a mesma chave."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Publicação do aplicativo",
+      "capacidade": "mobile.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre o build de depuração (debug) e o build de lançamento (release)?",
+      "alternativas": [
+        "O debug é otimizado para a loja; o release serve só para testes",
+        "Não há diferença; só muda o nome",
+        "O release roda só no emulador",
+        "O debug tem ferramentas de depuração e não é otimizado; o release é otimizado e assinado para distribuição"
+      ],
+      "correta": 3,
+      "explicacao": "Release é compilado com otimizações e assinatura para publicar; debug facilita o desenvolvimento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Publicação do aplicativo",
+      "capacidade": "mobile.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Antes de publicar a nova versão do app de delivery, o que deve ser alterado no projeto?",
+      "alternativas": [
+        "Aumentar o número/código da versão (ex.: versionCode e versionName)",
+        "Mudar o nome do pacote do app",
+        "Apagar a chave de assinatura",
+        "Remover todas as permissões do app"
+      ],
+      "correta": 0,
+      "explicacao": "A loja só aceita atualização com código de versão maior; trocar o pacote ou a chave cria outro app."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Publicação do aplicativo",
+      "capacidade": "mobile.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual opção permite distribuir o app para um grupo pequeno de testadores antes do lançamento oficial?",
+      "alternativas": [
+        "Publicar direto para todos os usuários",
+        "Usar as faixas de teste da loja (teste interno/fechado, TestFlight)",
+        "Enviar o código-fonte por mensagem",
+        "Pedir que os testadores compilem o app no celular"
+      ],
+      "correta": 1,
+      "explicacao": "As lojas têm faixas de teste (Play Console e TestFlight) para liberar versões a testadores."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Publicação do aplicativo",
+      "capacidade": "mobile.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual item costuma ser exigido pelas lojas para publicar um app que coleta dados do usuário?",
+      "alternativas": [
+        "Um vídeo de 1 hora sobre o app",
+        "O código-fonte aberto ao público",
+        "Uma política de privacidade explicando quais dados são coletados e como são usados",
+        "Uma versão do app para computador"
+      ],
+      "correta": 2,
+      "explicacao": "As lojas exigem política de privacidade e declaração de uso de dados (também exigido pela LGPD)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Publicação do aplicativo",
+      "capacidade": "mobile.ct10",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Cite três itens da página do app na loja que o desenvolvedor precisa preparar.",
+      "palavrasChave": [
+        "ícone",
+        "descrição",
+        "captur"
+      ],
+      "explicacao": "Ex.: ícone, descrição, capturas de tela (screenshots), categoria e política de privacidade."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Publicação do aplicativo",
+      "capacidade": "mobile.ct10",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que acontece se o desenvolvedor perder a chave usada para assinar o app?",
+      "palavrasChave": [
+        "chave",
+        "atualiz",
+        "assin"
+      ],
+      "explicacao": "Sem a chave de assinatura original não é possível publicar atualizações do mesmo app (salvo recuperação pelo serviço da loja)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Publicação do aplicativo",
+      "capacidade": "mobile.ct10",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que é a compilação (build) de um aplicativo mobile?",
+      "palavrasChave": [
+        "códig",
+        "instal",
+        "arquivo"
+      ],
+      "explicacao": "É o processo que transforma o código-fonte e os recursos em um arquivo instalável (.apk/.aab ou .ipa)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Publicação do aplicativo",
+      "capacidade": "mobile.ct10",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Por que é recomendado lançar uma atualização primeiro para uma porcentagem pequena dos usuários (lançamento gradual)?",
+      "palavrasChave": [
+        "erro",
+        "usuários",
+        "gradual"
+      ],
+      "explicacao": "No lançamento gradual, se aparecer um erro ele atinge poucos usuários e a versão pode ser pausada antes de chegar a todos."
+    }
+  ]
+}

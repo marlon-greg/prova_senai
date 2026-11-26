@@ -2,7 +2,7 @@
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, limparTema, apagarTentativaTeste,
          confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco,
          rotuloDias, nomeTurma, HORARIO_PADRAO, textoHorario, DIAS_SEMANA_LONGO,
-         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, materiaCorrigida, temasDoAlunoNaRec, bancoDaQuestao, bancosTeoricos, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261126j";
+         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, materiaCorrigida, temasDoAlunoNaRec, bancoDaQuestao, bancosTeoricos, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261126k";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
@@ -2007,8 +2007,8 @@ $("#btnImportarBanco").onclick = async () => {
   if (!podeEditar()) return toast("Seu papel não permite importar.", "erro");
   let b; try { b = validarBanco($("#txtBanco").value); } catch (e) { $("#msgBanco").innerHTML = `❌ ${esc(e.message)}`; return false; }
   const igual = bancosCache.find(x => chaveTexto(x.nome) === chaveTexto(b.nome) && Number(x.nQuestoes) === b.questoes.length);
-  if (igual && !(await confirmar(`Já existe um banco "${igual.nome}" com ${pl(b.questoes.length, "questão", "questões")}. Importar outro igual?`, { titulo: "Banco já importado", ok: "Importar mesmo assim", cancelar: "Não importar", perigo: true }))) return false;
-  if (!(await confirmar(`Importar o banco "${b.nome}" com ${pl(b.questoes.length, "questão", "questões")}?`, { titulo: "Importar banco", ok: "Importar" }))) return false;
+  if (igual && !importandoEmLote && !(await confirmar(`Já existe um banco "${igual.nome}" com ${pl(b.questoes.length, "questão", "questões")}. Importar outro igual?`, { titulo: "Banco já importado", ok: "Importar mesmo assim", cancelar: "Não importar", perigo: true }))) return false;
+  if (!importandoEmLote && !(await confirmar(`Importar o banco "${b.nome}" com ${pl(b.questoes.length, "questão", "questões")}?`, { titulo: "Importar banco", ok: "Importar" }))) return false;
   const temas = ordenarTemas(b.questoes.map(temaDe));
   // questões SQL: roda o gabarito na Bancada (no navegador) e guarda a "impressão" do resultado de cada tarefa;
   // o servidor só compara (resultado igual = certa, sem gastar IA)
@@ -2056,8 +2056,21 @@ $("#btnImportarBanco").onclick = async () => {
 };
 // ============================================================ BANCOS PRONTOS (vêm no site, importados com um clique)
 // Cada um traz somativas de exemplo já preenchidas (fechadas e sem turma: escolha a turma em Editar e libere).
-let ultimoBancoImportado = null;
+let ultimoBancoImportado = null, importandoEmLote = false;   // importandoEmLote: "Importar todos os que faltam" (sem perguntar banco por banco)
 const BANCOS_PRONTOS = [
+  { arquivo: "bancos/gerados/banco_lpa.json", icone: "🧮", titulo: "Lógica de Programação e Algoritmos — banco inicial", desc: "70 questões em 7 tópicos. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },
+  { arquivo: "bancos/gerados/banco_req.json", icone: "🗂", titulo: "Levantamento de Requisitos — banco inicial", desc: "70 questões em 7 tópicos. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },
+  { arquivo: "bancos/gerados/banco_req_diagramas_extra.json", icone: "📐", titulo: "Levantamento de Requisitos — mais 4 diagramas", desc: "requisitos, Kanban, histórias de usuário e mapa de empatia. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },
+  { arquivo: "bancos/gerados/banco_redes.json", icone: "🌐", titulo: "Arquitetura de Redes com IoT — banco inicial", desc: "50 questões em 5 tópicos. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },
+  { arquivo: "bancos/gerados/banco_so.json", icone: "💻", titulo: "Sistemas Operacionais — banco inicial", desc: "80 questões em 8 tópicos. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },
+  { arquivo: "bancos/gerados/banco_marc.json", icone: "🏷", titulo: "Linguagem de Marcação — banco inicial", desc: "50 questões em 5 tópicos (HTML, CSS…). Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },
+  { arquivo: "bancos/gerados/banco_marc_web_extra.json", icone: "🧑‍💻", titulo: "Linguagem de Marcação — 2 páginas web (projeto livre)", desc: "cardápio de restaurante e formulário de inscrição, com git. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },
+  { arquivo: "bancos/gerados/banco_back.json", icone: "⚙", titulo: "Programação Back-End — banco inicial", desc: "90 questões em 9 tópicos. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },
+  { arquivo: "bancos/gerados/banco_proj.json", icone: "📋", titulo: "Projetos de Software — banco inicial", desc: "40 questões em 4 tópicos. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },
+  { arquivo: "bancos/gerados/banco_front.json", icone: "🎨", titulo: "Programação Front-End — banco inicial", desc: "70 questões em 7 tópicos. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },
+  { arquivo: "bancos/gerados/banco_mobile.json", icone: "📱", titulo: "Programação para Dispositivos Móveis — banco inicial", desc: "70 questões em 7 tópicos. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },
+  { arquivo: "bancos/gerados/banco_iot.json", icone: "📡", titulo: "Internet das Coisas — banco inicial", desc: "60 questões em 6 tópicos. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },
+  { arquivo: "bancos/gerados/banco_teste.json", icone: "🧪", titulo: "Teste de Software — banco inicial", desc: "30 questões em 3 tópicos. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },
   { arquivo: "bancos/gerados/amostra_dml_update.json", icone: "🧪", titulo: "Amostra do pedido 13: DML — UPDATE (36 questões novas, a revisar)", desc: "20 alternativas, 12 dissertativas e 4 de SQL físico, ligadas à capacidade de DML. Entram como \"a revisar\": só caem na Área de testes até você aprovar em Bancos → tópico → Ver questões.", provas: [] },
   { arquivo: "bancos/banco_sql_workbench.json", icone: "🗄", titulo: "Bancada SQL: 15 cenários práticos", desc: "Pet shop, biblioteca, oficina, academia, cinema, hotel… Cada aluno recebe um cenário diferente (base e tarefas), escreve e executa SQL na Bancada parecida com o MySQL Workbench. Correção automática pelo resultado; a IA só entra nas tarefas que não bateram.",
     provas: [
@@ -2160,7 +2173,7 @@ function desenharBancosProntos() {
   const box = $("#bancosProntos"); if (!box) return;
   if (!podeEditar()) { box.innerHTML = ""; return; }
   const webAntiga = bancosCache.some(b => materiaWebAntiga(b.materia)) || provasCache.some(p => materiaWebAntiga(p.materia));
-  box.innerHTML = `<div class="card bancos-prontos"><h3 style="margin:0 0 4px">📦 Bancos prontos</h3><p class="pequeno" style="margin:0 0 10px">Importe com um clique, ou cole o seu próprio banco (JSON) logo abaixo.</p>` +
+  box.innerHTML = `<div class="card bancos-prontos"><div class="linha" style="justify-content:space-between;align-items:center"><h3 style="margin:0 0 4px">📦 Bancos prontos</h3>${BANCOS_PRONTOS.some(b => !bancosCache.some(x => x.arquivoPronto === b.arquivo)) ? `<button type="button" class="ok mini" id="btnProntosTodos">Importar todos os que faltam</button>` : ""}</div><p class="pequeno" style="margin:0 0 10px">Importe com um clique, ou cole o seu próprio banco (JSON) logo abaixo.</p>` +
     BANCOS_PRONTOS.map((b, i) => {
       const ja = bancosCache.find(x => x.arquivoPronto === b.arquivo);
       return `<div class="bp-item"><div><b>${b.icone} ${esc(b.titulo)}</b>${ja ? ` <span class="tag ok">importado</span>` : ""}<p class="pequeno" style="margin:2px 0 0">${esc(b.desc)}</p>
@@ -2168,6 +2181,14 @@ function desenharBancosProntos() {
         ${ja ? "" : `<button class="ok mini" data-pronto="${i}">Importar banco</button>`}</div>`;
     }).join("") + "" + `</div>`;
   $("#btnMateriaWeb")?.addEventListener("click", corrigirMateriaWeb);
+  $("#btnProntosTodos")?.addEventListener("click", async e => {
+    const faltam = BANCOS_PRONTOS.filter(b => !bancosCache.some(x => x.arquivoPronto === b.arquivo));
+    if (!faltam.length || !(await confirmar(`Importar ${pl(faltam.length, "banco pronto", "bancos prontos")} que ainda faltam?\n\n${faltam.map(b => "• " + b.titulo).join("\n")}`, { titulo: "Importar bancos prontos", ok: "Importar todos" }))) return;
+    const bt = e.currentTarget; bt.disabled = true; importandoEmLote = true;
+    try { for (const [i, b] of faltam.entries()) { bt.textContent = `Importando ${i + 1} de ${faltam.length}…`; await importarPronto(b, { disabled: false }); } }
+    finally { importandoEmLote = false; }
+    toast("Bancos prontos importados.", "ok"); await carregarBancos();
+  });
   box.querySelectorAll("[data-pronto]").forEach(bt => bt.onclick = () => importarPronto(BANCOS_PRONTOS[Number(bt.dataset.pronto)], bt));
 }
 async function importarPronto(item, bt) {

@@ -108,7 +108,7 @@ export async function apagarTentativaTeste(uid, provaId) {
 // Normaliza um comando/texto: minúsculas, espaços únicos, sem espaço perto de ( ) , = ; e sem ; final
 export function normalizar(s) {
   return String(s || "")
-    .toLowerCase()
+    .toLowerCase().normalize("NFD").replace(/\p{M}+/gu, "")   // sem acento: "metodo" = "método"
     .replace(/[‘’“”]/g, "'")
     .replace(/\s+/g, " ")
     .replace(/\s*([(),=;<>])\s*/g, "$1")

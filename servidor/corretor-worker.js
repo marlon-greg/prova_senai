@@ -360,7 +360,7 @@ function ajusteDeslizes(corrs) {
 
 // ---------- mesma correção automática de js/common.js ----------
 function normalizar(s) {
-  return String(s || "").toLowerCase().replace(/[‘’“”]/g, "'").replace(/\s+/g, " ")
+  return String(s || "").toLowerCase().normalize("NFD").replace(/\p{M}+/gu, "").replace(/[‘’“”]/g, "'").replace(/\s+/g, " ")
     .replace(/\s*([(),=;<>])\s*/g, "$1").replace(/;+$/g, "").trim();
 }
 function corrigirLocal(questao, gabarito, resposta, perdida = false) {

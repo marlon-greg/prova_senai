@@ -1,0 +1,1189 @@
+{
+  "nome": "Sistemas Operacionais — banco inicial (a revisar)",
+  "materia": "Sistemas Operacionais",
+  "revisao": "pendente",
+  "contexto": "Banco inicial gerado a partir do plano de curso (Técnico em Desenvolvimento de Sistemas, 1º semestre). Cobre Windows e Linux (instalação em VM, modo texto, modo gráfico, usuários, permissões, inicialização), compartilhamento e mapeamento de pastas em rede, firewall nativo, VPN, segurança cibernética, PSI e legislação (Marco Civil da Internet e LGPD). Revisar antes de usar em prova.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "SO de código fechado (Windows)",
+      "capacidade": "so.ct1",
+      "enunciado": "Um aluno tenta copiar um vídeo de 6 GB para um pendrive formatado em FAT32 e recebe erro, mesmo com 30 GB livres. Qual é a causa?",
+      "alternativas": [
+        "O FAT32 não aceita arquivos maiores que 4 GB",
+        "O FAT32 só funciona em Linux",
+        "O pendrive precisa ser formatado em ext4 para o Windows",
+        "Arquivos de vídeo não podem ser copiados para pendrives"
+      ],
+      "correta": 0,
+      "explicacao": "O FAT32 limita cada arquivo a 4 GB; para arquivos maiores usa-se NTFS ou exFAT.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SO de código fechado (Windows)",
+      "capacidade": "so.ct3",
+      "enunciado": "No prompt de comando do Windows (CMD), qual comando renomeia o arquivo relatorio.txt para final.txt?",
+      "alternativas": [
+        "`mv relatorio.txt final.txt`",
+        "`ren relatorio.txt final.txt`",
+        "`copy relatorio.txt final.txt`",
+        "`rename-file relatorio.txt`"
+      ],
+      "correta": 1,
+      "explicacao": "No CMD, `ren` (ou `rename`) renomeia arquivos; `mv` é do Linux e `copy` cria uma cópia.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SO de código fechado (Windows)",
+      "capacidade": "so.ct3",
+      "enunciado": "No CMD, você precisa apagar a pasta backup, que contém vários arquivos e subpastas. Qual comando faz isso?",
+      "alternativas": [
+        "`del backup`",
+        "`rmdir backup`",
+        "`rmdir /s backup`",
+        "`rm -r backup`"
+      ],
+      "correta": 2,
+      "explicacao": "`rmdir /s` remove a pasta com todo o conteúdo; `rmdir` sem /s só apaga pastas vazias e `del` apaga arquivos.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SO de código fechado (Windows)",
+      "capacidade": "so.ct2",
+      "enunciado": "Para instalar o Windows em uma máquina virtual no VirtualBox, o que deve ser colocado na unidade de CD/DVD virtual da VM?",
+      "alternativas": [
+        "O arquivo executável do VirtualBox",
+        "Um atalho para a área de trabalho do computador real",
+        "O arquivo de paginação (pagefile.sys)",
+        "A imagem ISO de instalação do sistema"
+      ],
+      "correta": 3,
+      "explicacao": "A VM inicializa pela imagem ISO, que funciona como um DVD de instalação virtual.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SO de código fechado (Windows)",
+      "capacidade": "so.ct4",
+      "enunciado": "Depois de instalar o Python, ao digitar `python` no CMD aparece: \"não é reconhecido como um comando interno ou externo\". Qual é a causa mais provável?",
+      "alternativas": [
+        "O computador está sem conexão com a internet",
+        "O usuário não tem conta de e-mail da Microsoft",
+        "A pasta do Python não foi adicionada à variável de ambiente PATH",
+        "O disco está formatado em NTFS"
+      ],
+      "correta": 2,
+      "explicacao": "O PATH lista as pastas onde o sistema procura os programas digitados no terminal; sem a pasta do Python nela, o comando não é encontrado.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SO de código fechado (Windows)",
+      "capacidade": "so.ct3",
+      "enunciado": "Um programa travou e a janela não fecha. Qual ferramenta do Windows permite encerrar esse programa (atalho Ctrl + Shift + Esc)?",
+      "alternativas": [
+        "Painel de Controle > Fontes",
+        "Bloco de Notas",
+        "Limpeza de Disco",
+        "Gerenciador de Tarefas"
+      ],
+      "correta": 3,
+      "explicacao": "O Gerenciador de Tarefas mostra processos, uso de CPU e memória e permite finalizar programas que não respondem.",
+      "peso": 1
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SO de código fechado (Windows)",
+      "capacidade": "so.ct3",
+      "enunciado": "Escreva o comando do CMD que cria uma pasta chamada projetos no diretório atual.",
+      "respostasAceitas": [
+        "mkdir projetos",
+        "md projetos"
+      ],
+      "palavrasChave": [
+        "mkdir projetos"
+      ],
+      "explicacao": "`mkdir` (ou `md`) cria diretórios no CMD.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SO de código fechado (Windows)",
+      "capacidade": "so.ct3",
+      "enunciado": "Escreva o comando do CMD que copia o arquivo notas.txt (que está na pasta atual) para a pasta D:\\backup.",
+      "respostasAceitas": [
+        "copy notas.txt D:\\backup",
+        "copy notas.txt D:\\backup\\",
+        "copy notas.txt D:\\backup\\notas.txt"
+      ],
+      "palavrasChave": [
+        "copy",
+        "notas.txt",
+        "d:\\backup"
+      ],
+      "explicacao": "`copy origem destino` copia arquivos no CMD.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SO de código fechado (Windows)",
+      "capacidade": "so.ct4",
+      "enunciado": "No Windows, qual a diferença entre uma conta de Administrador e uma conta Padrão?",
+      "palavrasChave": [
+        "administrador",
+        "padrão",
+        "permiss"
+      ],
+      "explicacao": "O Administrador tem permissão para instalar programas e alterar configurações do sistema; a conta Padrão usa o computador com permissões limitadas.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SO de código fechado (Windows)",
+      "capacidade": "so.ct3",
+      "enunciado": "O que é o Modo de Segurança do Windows e quando ele é usado? Responda em até 3 linhas.",
+      "palavrasChave": [
+        "driver",
+        "problema",
+        "inicia"
+      ],
+      "explicacao": "É uma forma de iniciar o Windows só com os drivers e serviços essenciais, usada para resolver problemas como drivers com defeito, vírus ou programas que impedem a inicialização normal.",
+      "peso": 2
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SO de código aberto (Linux)",
+      "capacidade": "so.ct1",
+      "enunciado": "O Linux é um sistema operacional de código aberto. Isso significa que:",
+      "alternativas": [
+        "Ele não tem nenhum tipo de licença de uso",
+        "O código-fonte está disponível para ser estudado, modificado e redistribuído conforme a licença",
+        "Ele só pode ser instalado em servidores",
+        "Qualquer pessoa pode alterar o sistema de outro usuário pela internet"
+      ],
+      "correta": 1,
+      "explicacao": "Software de código aberto (como o Linux, sob licença GPL) permite acessar, estudar, modificar e redistribuir o código-fonte.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SO de código aberto (Linux)",
+      "capacidade": "so.ct2",
+      "enunciado": "Você instalou o Ubuntu em uma VM no VirtualBox e quer que ela receba um IP do roteador da sala, aparecendo na rede como mais um computador. Qual modo de rede da VM deve escolher?",
+      "alternativas": [
+        "Placa em modo Bridge (ponte)",
+        "NAT",
+        "Rede interna",
+        "Não conectado"
+      ],
+      "correta": 0,
+      "explicacao": "No modo Bridge a VM se conecta direto à rede física e recebe IP como os outros computadores; no NAT ela fica escondida atrás do host.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SO de código aberto (Linux)",
+      "capacidade": "so.ct3",
+      "enunciado": "No terminal do Linux, qual comando move o arquivo foto.png para a pasta imagens?",
+      "alternativas": [
+        "`cp foto.png imagens/`",
+        "`mv foto.png imagens/`",
+        "`move foto.png imagens/`",
+        "`rm foto.png imagens/`"
+      ],
+      "correta": 1,
+      "explicacao": "`mv` move (ou renomeia) arquivos; `cp` copia, mantendo o original.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SO de código aberto (Linux)",
+      "capacidade": "so.ct4",
+      "enunciado": "Após o comando `chmod 754 script.sh`, quais são as permissões do arquivo?",
+      "alternativas": [
+        "Dono: ler, gravar e executar; grupo: ler e executar; outros: só ler",
+        "Dono: só ler; grupo: ler e gravar; outros: ler, gravar e executar",
+        "Todos podem ler, gravar e executar",
+        "Dono: ler e gravar; grupo: ler; outros: nenhuma"
+      ],
+      "correta": 0,
+      "explicacao": "Cada dígito soma leitura (4), escrita (2) e execução (1): 7 = rwx, 5 = r-x, 4 = r--.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SO de código aberto (Linux)",
+      "capacidade": "so.ct1",
+      "enunciado": "Na estrutura de diretórios do Linux, em qual pasta ficam, normalmente, os arquivos de configuração do sistema?",
+      "alternativas": [
+        "`/home`",
+        "`/tmp`",
+        "`/bin`",
+        "`/etc`"
+      ],
+      "correta": 3,
+      "explicacao": "`/etc` guarda configurações do sistema; `/home` guarda as pastas dos usuários; `/tmp` arquivos temporários; `/bin` programas essenciais.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SO de código aberto (Linux)",
+      "capacidade": "so.ct4",
+      "enunciado": "Em um servidor Linux com systemd, qual comando mostra se o serviço ssh está em execução?",
+      "alternativas": [
+        "`ls ssh`",
+        "`chmod status ssh`",
+        "`systemctl status ssh`",
+        "`ssh --listar`"
+      ],
+      "correta": 2,
+      "explicacao": "O `systemctl` gerencia serviços no systemd: status, start, stop, restart, enable.",
+      "peso": 1
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SO de código aberto (Linux)",
+      "capacidade": "so.ct3",
+      "enunciado": "Escreva o comando do Linux que cria um arquivo vazio chamado notas.txt.",
+      "respostasAceitas": [
+        "touch notas.txt"
+      ],
+      "palavrasChave": [
+        "touch notas.txt"
+      ],
+      "explicacao": "`touch` cria um arquivo vazio (ou atualiza a data de um arquivo existente).",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SO de código aberto (Linux)",
+      "capacidade": "so.ct3",
+      "enunciado": "Escreva o comando do Linux que apaga a pasta antiga com todo o seu conteúdo.",
+      "respostasAceitas": [
+        "rm -r antiga",
+        "rm -rf antiga",
+        "rm -R antiga",
+        "rm -r antiga/",
+        "rm -rf antiga/"
+      ],
+      "palavrasChave": [
+        "rm -r",
+        "antiga"
+      ],
+      "explicacao": "`rm -r` remove diretórios recursivamente (com o conteúdo); `-f` força sem perguntar.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SO de código aberto (Linux)",
+      "capacidade": "so.ct4",
+      "enunciado": "Escreva o comando do Linux (com privilégio de administrador) que cria o usuário maria.",
+      "respostasAceitas": [
+        "sudo adduser maria",
+        "sudo useradd maria",
+        "sudo useradd -m maria"
+      ],
+      "palavrasChave": [
+        "sudo",
+        "add",
+        "maria"
+      ],
+      "explicacao": "`sudo adduser maria` (ou `sudo useradd -m maria`) cria o usuário; o `sudo` dá a permissão de administrador.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SO de código aberto (Linux)",
+      "capacidade": "so.ct3",
+      "enunciado": "Escreva um comando que desliga o computador Linux imediatamente.",
+      "respostasAceitas": [
+        "sudo shutdown now",
+        "sudo shutdown -h now",
+        "shutdown now",
+        "shutdown -h now",
+        "sudo poweroff",
+        "poweroff",
+        "sudo shutdown -P now"
+      ],
+      "palavrasChave": [
+        "shutdown",
+        "now"
+      ],
+      "explicacao": "`sudo shutdown now` (ou `sudo poweroff`) desliga o sistema; `shutdown -r now` reinicia.",
+      "peso": 2
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Unidades e pastas em rede",
+      "capacidade": "so.ct6",
+      "enunciado": "Qual é o formato correto de um caminho de rede (UNC) no Windows para acessar a pasta compartilhada docs do servidor SRV01?",
+      "alternativas": [
+        "`//SRV01:docs`",
+        "`C:\\SRV01\\docs`",
+        "`http:\\SRV01\\docs`",
+        "`\\\\SRV01\\docs`"
+      ],
+      "correta": 3,
+      "explicacao": "O caminho UNC usa duas barras invertidas, o nome (ou IP) do servidor e o nome do compartilhamento.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Unidades e pastas em rede",
+      "capacidade": "so.ct6",
+      "enunciado": "O que faz o comando `net use Z: \\\\srv01\\financeiro`?",
+      "alternativas": [
+        "Cria uma pasta chamada financeiro no disco Z:",
+        "Compartilha o disco Z: com o servidor srv01",
+        "Mapeia a pasta compartilhada financeiro como a unidade Z:",
+        "Apaga a unidade Z: do servidor"
+      ],
+      "correta": 2,
+      "explicacao": "`net use` conecta uma letra de unidade a um compartilhamento de rede (mapeamento).",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Unidades e pastas em rede",
+      "capacidade": "so.ct5",
+      "enunciado": "Qual protocolo o Windows usa para compartilhar pastas e impressoras na rede local?",
+      "alternativas": [
+        "SMB (Server Message Block)",
+        "SMTP (Simple Mail Transfer Protocol)",
+        "DHCP (Dynamic Host Configuration Protocol)",
+        "NTP (Network Time Protocol)"
+      ],
+      "correta": 0,
+      "explicacao": "O compartilhamento de arquivos do Windows usa o protocolo SMB (no Linux, o Samba implementa esse protocolo).",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Unidades e pastas em rede",
+      "capacidade": "so.ct5",
+      "enunciado": "A pasta Relatorios foi compartilhada com a permissão \"Leitura\" para o grupo Todos. Um funcionário abre os arquivos, mas não consegue salvar alterações. Por quê?",
+      "alternativas": [
+        "O compartilhamento só funciona com cabo de rede",
+        "A permissão de leitura permite abrir, mas não alterar os arquivos",
+        "O arquivo precisa ser renomeado antes",
+        "O antivírus bloqueia qualquer arquivo de rede"
+      ],
+      "correta": 1,
+      "explicacao": "Para alterar é preciso permissão de Alteração (ou Gravação); Leitura só permite visualizar e copiar.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Unidades e pastas em rede",
+      "capacidade": "so.ct5",
+      "enunciado": "Qual serviço é instalado no Linux para compartilhar pastas que computadores Windows consigam acessar?",
+      "alternativas": [
+        "Apache",
+        "Samba",
+        "OpenSSH",
+        "Cron"
+      ],
+      "correta": 1,
+      "explicacao": "O Samba implementa o protocolo SMB no Linux, permitindo compartilhar pastas com o Windows.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Unidades e pastas em rede",
+      "capacidade": "so.ct6",
+      "enunciado": "Ao mapear uma unidade pelo Explorador de Arquivos, qual opção faz a unidade continuar disponível depois que o computador é reiniciado?",
+      "alternativas": [
+        "Conectar usando credenciais diferentes",
+        "Mostrar arquivos ocultos",
+        "Compactar unidade para economizar espaço",
+        "Reconectar ao entrar"
+      ],
+      "correta": 3,
+      "explicacao": "\"Reconectar ao entrar\" torna o mapeamento persistente, refazendo a conexão a cada login.",
+      "peso": 1
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Unidades e pastas em rede",
+      "capacidade": "so.ct6",
+      "enunciado": "Escreva o comando do CMD que mapeia a pasta compartilhada setor, do computador servidor, como unidade S:.",
+      "respostasAceitas": [
+        "net use S: \\\\servidor\\setor",
+        "net use S: \\\\servidor\\setor /persistent:yes"
+      ],
+      "palavrasChave": [
+        "net use",
+        "s:",
+        "\\\\servidor\\setor"
+      ],
+      "explicacao": "`net use LETRA: \\\\servidor\\compartilhamento` faz o mapeamento.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Unidades e pastas em rede",
+      "capacidade": "so.ct5",
+      "enunciado": "Explique a diferença entre compartilhar uma pasta e mapear uma pasta em rede.",
+      "palavrasChave": [
+        "compartilh",
+        "mapea",
+        "letra"
+      ],
+      "explicacao": "Compartilhar é disponibilizar a pasta na rede a partir do computador onde ela está; mapear é, no computador do usuário, ligar uma letra de unidade (ex.: Z:) a essa pasta compartilhada.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Unidades e pastas em rede",
+      "capacidade": "so.ct5",
+      "enunciado": "Por que não é recomendado dar permissão de Controle Total ao grupo Todos em uma pasta compartilhada? Responda em até 3 linhas.",
+      "palavrasChave": [
+        "todos",
+        "apag",
+        "permiss"
+      ],
+      "explicacao": "Porque qualquer pessoa da rede poderia alterar, apagar arquivos e mudar permissões; o certo é dar a cada grupo só a permissão necessária.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Unidades e pastas em rede",
+      "capacidade": "so.ct6",
+      "enunciado": "Escreva o comando do CMD que remove o mapeamento da unidade Z:.",
+      "respostasAceitas": [
+        "net use Z: /delete",
+        "net use Z: /del"
+      ],
+      "palavrasChave": [
+        "net use z:",
+        "/del"
+      ],
+      "explicacao": "`net use Z: /delete` desconecta a unidade mapeada.",
+      "peso": 2
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "enunciado": "Qual é a principal função do firewall nativo de um sistema operacional (como o Windows Defender Firewall ou o UFW)?",
+      "alternativas": [
+        "Remover vírus de arquivos já infectados",
+        "Acelerar a velocidade da internet",
+        "Permitir ou bloquear conexões de rede de acordo com regras",
+        "Fazer backup automático dos arquivos"
+      ],
+      "correta": 2,
+      "explicacao": "O firewall filtra o tráfego de rede; remover vírus é tarefa do antivírus.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "enunciado": "Você criou um site de teste no seu computador (porta 80) e quer que os colegas da sala o acessem. Que tipo de regra deve criar no firewall?",
+      "alternativas": [
+        "Regra de entrada liberando a porta TCP 80",
+        "Regra de saída bloqueando a porta TCP 80",
+        "Regra de entrada bloqueando todas as portas",
+        "Nenhuma: o firewall não interfere em sites"
+      ],
+      "correta": 0,
+      "explicacao": "Conexões que chegam ao seu computador são tráfego de entrada, então é preciso uma regra de entrada permitindo a porta do serviço.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "enunciado": "No Linux com UFW, qual comando libera o acesso SSH (porta 22/TCP)?",
+      "alternativas": [
+        "`sudo ufw deny 22/tcp`",
+        "`sudo ufw open ssh`",
+        "`sudo ufw allow 22/tcp`",
+        "`sudo chmod 22 ufw`"
+      ],
+      "correta": 2,
+      "explicacao": "`ufw allow` cria uma regra de permissão; `ufw deny` bloqueia.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "enunciado": "Um notebook vai ser conectado ao Wi-Fi de uma cafeteria. Qual perfil de rede do Windows Defender Firewall deve ser usado, por ser o mais restritivo?",
+      "alternativas": [
+        "Pública",
+        "Privada",
+        "Domínio",
+        "Doméstica sem senha"
+      ],
+      "correta": 0,
+      "explicacao": "O perfil Público bloqueia mais conexões e esconde o computador na rede, ideal para redes que não são confiáveis.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "enunciado": "O técnico criou as regras no UFW, mas `sudo ufw status` mostra \"Status: inactive\". Qual comando ativa o firewall?",
+      "alternativas": [
+        "`sudo ufw start-all`",
+        "`sudo ufw allow all`",
+        "`sudo ufw reset`",
+        "`sudo ufw enable`"
+      ],
+      "correta": 3,
+      "explicacao": "`ufw enable` ativa o firewall e as regras; `ufw reset` apaga as regras.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "enunciado": "Qual política padrão de firewall é a mais segura para um computador de usuário comum?",
+      "alternativas": [
+        "Permitir todas as conexões de entrada e de saída",
+        "Bloquear conexões de entrada e permitir as de saída, liberando só as entradas necessárias",
+        "Bloquear todas as conexões de saída, inclusive navegador",
+        "Desligar o firewall e confiar só no antivírus"
+      ],
+      "correta": 1,
+      "explicacao": "Negar entradas por padrão e abrir só o necessário segue o princípio do menor privilégio.",
+      "peso": 1
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "enunciado": "Escreva o comando do UFW (Linux) que libera a porta 80 para um servidor web.",
+      "respostasAceitas": [
+        "sudo ufw allow 80",
+        "sudo ufw allow 80/tcp",
+        "sudo ufw allow http"
+      ],
+      "palavrasChave": [
+        "sudo ufw allow"
+      ],
+      "explicacao": "`sudo ufw allow 80/tcp` (ou `sudo ufw allow http`) libera o tráfego de entrada na porta 80.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "enunciado": "Um sistema da empresa não conecta e um colega sugere desligar o firewall. Por que isso é errado e qual é a solução correta?",
+      "palavrasChave": [
+        "regra",
+        "porta",
+        "liber"
+      ],
+      "explicacao": "Desligar o firewall deixa o computador inteiro exposto; o correto é criar uma regra liberando apenas a porta ou o programa necessário.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "enunciado": "Explique a diferença entre uma regra de entrada e uma regra de saída no firewall.",
+      "palavrasChave": [
+        "entrada",
+        "saída",
+        "computador"
+      ],
+      "explicacao": "Regra de entrada controla conexões que chegam ao computador vindas da rede; regra de saída controla conexões que o computador inicia para a rede.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "enunciado": "Escreva o comando do UFW que bloqueia a porta 23 (Telnet).",
+      "respostasAceitas": [
+        "sudo ufw deny 23",
+        "sudo ufw deny 23/tcp",
+        "ufw deny 23",
+        "ufw deny 23/tcp"
+      ],
+      "palavrasChave": [
+        "ufw deny",
+        "23"
+      ],
+      "explicacao": "`sudo ufw deny 23` bloqueia as conexões de entrada na porta 23.",
+      "peso": 2
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VPN (Redes Virtuais Privadas)",
+      "capacidade": "so.ct7",
+      "enunciado": "O que uma VPN (Virtual Private Network) faz?",
+      "alternativas": [
+        "Cria um túnel criptografado pela internet, ligando o dispositivo a uma rede privada",
+        "Aumenta a velocidade do plano de internet contratado",
+        "Substitui o roteador da rede local",
+        "Elimina vírus dos arquivos baixados"
+      ],
+      "correta": 0,
+      "explicacao": "A VPN estabelece um túnel seguro (criptografado) sobre uma rede pública, como se o dispositivo estivesse na rede privada.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VPN (Redes Virtuais Privadas)",
+      "capacidade": "so.ct7",
+      "enunciado": "Uma funcionária em home office precisa acessar o sistema interno da empresa, que não fica exposto na internet. Qual é a solução adequada?",
+      "alternativas": [
+        "Liberar o sistema interno para qualquer IP da internet",
+        "Conectar-se à VPN da empresa",
+        "Usar o modo anônimo do navegador",
+        "Enviar a senha do sistema por e-mail ao suporte"
+      ],
+      "correta": 1,
+      "explicacao": "A VPN de acesso remoto permite entrar na rede interna com segurança, sem expor o sistema na internet.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VPN (Redes Virtuais Privadas)",
+      "capacidade": "so.ct7",
+      "enunciado": "Qual das opções abaixo é um protocolo/tecnologia usado para criar VPNs?",
+      "alternativas": [
+        "HTTP",
+        "DHCP",
+        "WireGuard",
+        "SMTP"
+      ],
+      "correta": 2,
+      "explicacao": "OpenVPN, WireGuard e IPsec são tecnologias de VPN; HTTP, DHCP e SMTP têm outras funções.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VPN (Redes Virtuais Privadas)",
+      "capacidade": "so.ct7",
+      "enunciado": "Uma rede de lojas quer ligar permanentemente a rede de cada filial à rede da matriz pela internet. Qual tipo de VPN é o indicado?",
+      "alternativas": [
+        "VPN de acesso remoto instalada em cada celular",
+        "Rede Wi-Fi aberta em cada loja",
+        "Proxy de navegador",
+        "VPN site-to-site (entre redes)"
+      ],
+      "correta": 3,
+      "explicacao": "A VPN site-to-site conecta redes inteiras entre si, normalmente pelos roteadores ou firewalls de cada local.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VPN (Redes Virtuais Privadas)",
+      "capacidade": "so.ct7",
+      "enunciado": "Por que usar VPN ao acessar sistemas da empresa pelo Wi-Fi aberto de um aeroporto?",
+      "alternativas": [
+        "Porque a VPN impede que o notebook pegue vírus por pendrive",
+        "Porque a VPN dispensa o uso de senha no sistema",
+        "Porque os dados passam criptografados e outras pessoas da rede não conseguem lê-los",
+        "Porque a VPN deixa a bateria durar mais"
+      ],
+      "correta": 2,
+      "explicacao": "Em redes abertas o tráfego pode ser interceptado; o túnel criptografado da VPN protege os dados.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VPN (Redes Virtuais Privadas)",
+      "capacidade": "so.ct7",
+      "enunciado": "Após conectar à VPN da empresa, o técnico consegue acessar o servidor de arquivos pelo IP interno 10.0.0.5, o que antes não funcionava. Por quê?",
+      "alternativas": [
+        "A VPN transforma o IP 10.0.0.5 em um endereço público",
+        "A VPN desliga o firewall do servidor",
+        "O servidor foi movido para a casa do técnico",
+        "O computador passa a fazer parte virtualmente da rede interna e recebe rotas para ela"
+      ],
+      "correta": 3,
+      "explicacao": "A VPN cria uma interface virtual com IP e rotas da rede interna, permitindo alcançar endereços privados dela.",
+      "peso": 1
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VPN (Redes Virtuais Privadas)",
+      "capacidade": "so.ct7",
+      "enunciado": "Defina VPN em até 3 linhas.",
+      "palavrasChave": [
+        "túnel",
+        "criptograf",
+        "internet"
+      ],
+      "explicacao": "VPN é uma rede privada virtual: cria um túnel criptografado pela internet para conectar dispositivos ou redes com segurança.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VPN (Redes Virtuais Privadas)",
+      "capacidade": "so.ct7",
+      "enunciado": "Por que é recomendado usar VPN ao se conectar a redes Wi-Fi públicas?",
+      "palavrasChave": [
+        "criptograf",
+        "dados",
+        "públic"
+      ],
+      "explicacao": "Porque em redes públicas outras pessoas podem interceptar o tráfego; a VPN criptografa os dados, protegendo senhas e informações.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VPN (Redes Virtuais Privadas)",
+      "capacidade": "so.ct7",
+      "enunciado": "Explique a diferença entre VPN de acesso remoto e VPN site-to-site.",
+      "palavrasChave": [
+        "remoto",
+        "rede",
+        "usuário"
+      ],
+      "explicacao": "Na VPN de acesso remoto um usuário conecta seu dispositivo à rede da empresa; na site-to-site duas redes inteiras (ex.: matriz e filial) são ligadas permanentemente.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VPN (Redes Virtuais Privadas)",
+      "capacidade": "so.ct7",
+      "enunciado": "Depois de conectar a VPN no Windows, qual comando do CMD mostra os endereços IP de cada adaptador, inclusive o da VPN?",
+      "respostasAceitas": [
+        "ipconfig",
+        "ipconfig /all"
+      ],
+      "palavrasChave": [
+        "ipconfig"
+      ],
+      "explicacao": "`ipconfig` (ou `ipconfig /all`, com mais detalhes) lista os adaptadores de rede e seus IPs.",
+      "peso": 2
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Segurança cibernética",
+      "capacidade": "so.ct8",
+      "enunciado": "Um computador da escola está com o Windows sem atualizações há dois anos. Em segurança da informação, essa situação é um exemplo de:",
+      "alternativas": [
+        "Ameaça",
+        "Vulnerabilidade",
+        "Engenharia social",
+        "Política de segurança"
+      ],
+      "correta": 1,
+      "explicacao": "Vulnerabilidade é uma fraqueza que pode ser explorada; a ameaça é o agente ou evento (como um malware) que pode explorá-la.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Segurança cibernética",
+      "capacidade": "so.ct8",
+      "enunciado": "Os arquivos de uma empresa ficaram ilegíveis e apareceu uma mensagem pedindo pagamento em criptomoeda para liberá-los. Que tipo de ataque é esse?",
+      "alternativas": [
+        "Ransomware",
+        "Phishing",
+        "Spam",
+        "Adware"
+      ],
+      "correta": 0,
+      "explicacao": "Ransomware criptografa os dados da vítima e exige resgate para devolvê-los.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Segurança cibernética",
+      "capacidade": "so.ct8",
+      "enunciado": "A senha de um aluno vazou em um site invadido. Qual medida impede que o invasor entre na conta só com essa senha?",
+      "alternativas": [
+        "Trocar o papel de parede do computador",
+        "Autenticação em dois fatores (2FA)",
+        "Usar a mesma senha em todos os sites",
+        "Salvar a senha em um arquivo senhas.txt"
+      ],
+      "correta": 1,
+      "explicacao": "Com 2FA, além da senha é preciso um segundo fator (código no app, SMS, chave), então a senha sozinha não basta.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Segurança cibernética",
+      "capacidade": "so.ct8",
+      "enunciado": "Alguém liga para a recepção dizendo ser do \"suporte de TI\" e pede a senha do sistema para \"fazer uma manutenção urgente\". Isso é um exemplo de:",
+      "alternativas": [
+        "Engenharia social",
+        "Ataque de negação de serviço (DDoS)",
+        "Falha de hardware",
+        "Atualização do sistema"
+      ],
+      "correta": 0,
+      "explicacao": "Engenharia social é manipular pessoas para obter informações ou acessos, explorando confiança e urgência.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Segurança cibernética",
+      "capacidade": "so.ct8",
+      "enunciado": "Qual medida de prevenção mais ajuda uma empresa a se recuperar de um ataque de ransomware sem pagar o resgate?",
+      "alternativas": [
+        "Deixar todos os usuários como administradores",
+        "Desativar as atualizações automáticas",
+        "Compartilhar todas as pastas com o grupo Todos",
+        "Manter backups atualizados guardados fora da rede principal (offline ou em nuvem isolada)"
+      ],
+      "correta": 3,
+      "explicacao": "Backups isolados permitem restaurar os dados sem negociar com os criminosos.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Segurança cibernética",
+      "capacidade": "so.ct8",
+      "enunciado": "Você recebe um e-mail do \"Banco do Brasill\" dizendo que sua conta será bloqueada em 1 hora se não clicar no link. Qual é o sinal mais claro de phishing?",
+      "alternativas": [
+        "O e-mail ter sido recebido durante a semana",
+        "O e-mail estar escrito em português",
+        "Remetente com nome escrito errado e pressão de urgência para clicar no link",
+        "O e-mail ter um logotipo colorido"
+      ],
+      "correta": 2,
+      "explicacao": "Domínios parecidos com o verdadeiro e urgência artificial são sinais típicos de phishing.",
+      "peso": 1
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Segurança cibernética",
+      "capacidade": "so.ct8",
+      "enunciado": "Explique a diferença entre ameaça e vulnerabilidade.",
+      "palavrasChave": [
+        "ameaça",
+        "vulnerabilidade",
+        "fraqueza"
+      ],
+      "explicacao": "Vulnerabilidade é uma fraqueza no sistema (ex.: software desatualizado); ameaça é o agente ou evento que pode explorar essa fraqueza (ex.: um malware).",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Segurança cibernética",
+      "capacidade": "so.ct8",
+      "enunciado": "Por que é importante manter o sistema operacional e os programas sempre atualizados?",
+      "palavrasChave": [
+        "atualiza",
+        "vulnerabilidade",
+        "corr"
+      ],
+      "explicacao": "Porque as atualizações trazem correções de vulnerabilidades que poderiam ser exploradas por atacantes.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Segurança cibernética",
+      "capacidade": "so.ct8",
+      "enunciado": "O que é engenharia social? Responda em até 3 linhas.",
+      "palavrasChave": [
+        "pessoa",
+        "informa",
+        "engan"
+      ],
+      "explicacao": "É a técnica de enganar ou manipular pessoas para que revelem informações (senhas, dados) ou deem acesso a sistemas.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Segurança cibernética",
+      "capacidade": "so.ct8",
+      "enunciado": "Cite três características de uma senha forte.",
+      "palavrasChave": [
+        "letra",
+        "número",
+        "caracter"
+      ],
+      "explicacao": "Uma senha forte é longa e mistura letras maiúsculas e minúsculas, números e caracteres especiais, sem dados pessoais óbvios.",
+      "peso": 2
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Política de Segurança da Informação (PSI)",
+      "capacidade": "so.ct10",
+      "enunciado": "O que é a Política de Segurança da Informação (PSI) de uma empresa?",
+      "alternativas": [
+        "Um programa antivírus instalado em todos os computadores",
+        "O contrato de internet da empresa",
+        "Uma lista com as senhas de todos os funcionários",
+        "Um documento formal com diretrizes e regras para proteger as informações da organização"
+      ],
+      "correta": 3,
+      "explicacao": "A PSI é o documento que define objetivos, regras e responsabilidades para a proteção das informações.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Política de Segurança da Informação (PSI)",
+      "capacidade": "so.ct10",
+      "enunciado": "O site de vendas de uma loja ficou fora do ar por 6 horas e os clientes não conseguiram comprar. Qual princípio da segurança da informação foi afetado?",
+      "alternativas": [
+        "Confidencialidade",
+        "Integridade",
+        "Disponibilidade",
+        "Autenticidade do remetente"
+      ],
+      "correta": 2,
+      "explicacao": "Disponibilidade é garantir que a informação e os sistemas estejam acessíveis quando necessário.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Política de Segurança da Informação (PSI)",
+      "capacidade": "so.ct10",
+      "enunciado": "Um invasor alterou as notas de alunos no sistema da escola, sem autorização. Qual princípio da segurança da informação foi violado?",
+      "alternativas": [
+        "Integridade",
+        "Disponibilidade",
+        "Confidencialidade",
+        "Legalidade"
+      ],
+      "correta": 0,
+      "explicacao": "Integridade é garantir que a informação não seja alterada indevidamente.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Política de Segurança da Informação (PSI)",
+      "capacidade": "so.ct10",
+      "enunciado": "Na PSI, o item \"escopo\" define:",
+      "alternativas": [
+        "A punição de cada funcionário que errar",
+        "A quem e a quais áreas, sistemas e informações a política se aplica",
+        "A marca dos computadores que a empresa vai comprar",
+        "O horário de almoço da equipe de TI"
+      ],
+      "correta": 1,
+      "explicacao": "O escopo delimita a abrangência da PSI: pessoas, setores, ativos e processos envolvidos.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Política de Segurança da Informação (PSI)",
+      "capacidade": "so.ct10",
+      "enunciado": "Segundo uma PSI bem elaborada, quem tem responsabilidade de cumprir as regras de segurança da informação?",
+      "alternativas": [
+        "Apenas o diretor da empresa",
+        "Os colaboradores, estagiários, terceirizados e gestores que usam os recursos da empresa",
+        "Apenas a equipe de TI",
+        "Apenas os clientes da empresa"
+      ],
+      "correta": 1,
+      "explicacao": "A segurança é responsabilidade de quem usa os recursos de informação; a PSI define os papéis de cada grupo.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Política de Segurança da Informação (PSI)",
+      "capacidade": "so.ct10",
+      "enunciado": "Um estagiário quer instalar no computador da empresa um programa baixado de um site desconhecido para converter vídeos. De acordo com a PSI, qual é a conduta correta?",
+      "alternativas": [
+        "Instalar, pois é só para um uso rápido",
+        "Pedir a senha de administrador a um colega e instalar",
+        "Desligar o antivírus para o programa funcionar",
+        "Não instalar e solicitar o programa à equipe de TI, que avalia se é seguro e permitido"
+      ],
+      "correta": 3,
+      "explicacao": "Instalações devem seguir o procedimento da PSI, passando pela TI, para evitar malware e software sem licença.",
+      "peso": 1
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Política de Segurança da Informação (PSI)",
+      "capacidade": "so.ct10",
+      "enunciado": "O que é uma Política de Segurança da Informação (PSI)?",
+      "palavrasChave": [
+        "documento",
+        "regra",
+        "informaç"
+      ],
+      "explicacao": "É um documento formal que estabelece objetivos, regras e responsabilidades para proteger as informações da organização.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Política de Segurança da Informação (PSI)",
+      "capacidade": "so.ct10",
+      "enunciado": "Quais são os três pilares (tríade) da segurança da informação?",
+      "palavrasChave": [
+        "confidencialidade",
+        "integridade",
+        "disponibilidade"
+      ],
+      "explicacao": "Confidencialidade (só quem pode acessa), integridade (a informação não é alterada indevidamente) e disponibilidade (está acessível quando necessário).",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Política de Segurança da Informação (PSI)",
+      "capacidade": "so.ct10",
+      "enunciado": "Explique o que é o escopo de uma PSI.",
+      "palavrasChave": [
+        "escopo",
+        "aplica",
+        "quem"
+      ],
+      "explicacao": "O escopo define a abrangência da política: a quem ela se aplica e quais setores, sistemas e informações ela cobre.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Política de Segurança da Informação (PSI)",
+      "capacidade": "so.ct10",
+      "enunciado": "Um colaborador percebeu que clicou em um link de phishing e digitou sua senha. Segundo a PSI, o que ele deve fazer?",
+      "palavrasChave": [
+        "comunic",
+        "incidente",
+        "imediat"
+      ],
+      "explicacao": "Deve comunicar imediatamente o incidente à equipe de TI/segurança e trocar a senha, para limitar os danos.",
+      "peso": 2
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Legislação (Marco Civil e LGPD)",
+      "capacidade": "so.ct10",
+      "enunciado": "Qual lei brasileira estabelece princípios, garantias, direitos e deveres para o uso da internet no Brasil?",
+      "alternativas": [
+        "Lei Geral de Proteção de Dados (Lei 13.709/2018)",
+        "Código de Defesa do Consumidor",
+        "Marco Civil da Internet (Lei 12.965/2014)",
+        "Consolidação das Leis do Trabalho (CLT)"
+      ],
+      "correta": 2,
+      "explicacao": "O Marco Civil da Internet regula o uso da internet no Brasil; a LGPD trata do tratamento de dados pessoais.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Legislação (Marco Civil e LGPD)",
+      "capacidade": "so.ct10",
+      "enunciado": "Uma operadora de internet deixa os vídeos de um serviço de streaming mais lentos para favorecer o seu próprio serviço. Qual princípio do Marco Civil da Internet está sendo desrespeitado?",
+      "alternativas": [
+        "Neutralidade da rede",
+        "Consentimento do titular",
+        "Portabilidade dos dados",
+        "Direito ao esquecimento"
+      ],
+      "correta": 0,
+      "explicacao": "A neutralidade da rede exige que os pacotes de dados sejam tratados de forma igual, sem discriminação por conteúdo, origem ou serviço.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Legislação (Marco Civil e LGPD)",
+      "capacidade": "so.ct10",
+      "enunciado": "Pela LGPD, qual dos dados abaixo é considerado dado pessoal SENSÍVEL?",
+      "alternativas": [
+        "O nome da empresa onde a pessoa trabalha",
+        "O CEP de uma loja",
+        "Informações sobre a saúde de uma pessoa",
+        "A cor favorita de um produto no catálogo"
+      ],
+      "correta": 2,
+      "explicacao": "Dados sensíveis incluem saúde, origem racial ou étnica, religião, opinião política, vida sexual, dados genéticos e biométricos.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Legislação (Marco Civil e LGPD)",
+      "capacidade": "so.ct10",
+      "enunciado": "Qual órgão é responsável por fiscalizar o cumprimento da LGPD e aplicar sanções?",
+      "alternativas": [
+        "ANPD (Autoridade Nacional de Proteção de Dados)",
+        "ANATEL (Agência Nacional de Telecomunicações)",
+        "PROCON municipal",
+        "Receita Federal"
+      ],
+      "correta": 0,
+      "explicacao": "A ANPD é a autoridade que regulamenta, fiscaliza e aplica as sanções previstas na LGPD.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Legislação (Marco Civil e LGPD)",
+      "capacidade": "so.ct10",
+      "enunciado": "Um aluno pede à escola uma cópia de todos os dados pessoais que ela guarda sobre ele. Segundo a LGPD:",
+      "alternativas": [
+        "A escola pode recusar, pois os dados pertencem à escola",
+        "Só a polícia pode fazer esse pedido",
+        "O pedido só vale se o aluno pagar uma taxa",
+        "É um direito do titular ter acesso aos seus dados, e a escola deve atender"
+      ],
+      "correta": 3,
+      "explicacao": "A LGPD garante ao titular o direito de acesso, correção e eliminação de seus dados, entre outros.",
+      "peso": 1
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Legislação (Marco Civil e LGPD)",
+      "capacidade": "so.ct10",
+      "enunciado": "Pelo Marco Civil da Internet, por quanto tempo os provedores de conexão devem guardar os registros de conexão (data, hora e IP), em sigilo?",
+      "alternativas": [
+        "1 mês",
+        "1 ano",
+        "10 anos",
+        "Não precisam guardar nenhum registro"
+      ],
+      "correta": 1,
+      "explicacao": "O Marco Civil obriga os provedores de conexão a guardar os registros por 1 ano (e os de aplicação, por 6 meses).",
+      "peso": 1
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Legislação (Marco Civil e LGPD)",
+      "capacidade": "so.ct10",
+      "enunciado": "O que é dado pessoal segundo a LGPD?",
+      "palavrasChave": [
+        "informação",
+        "pessoa",
+        "identific"
+      ],
+      "explicacao": "É qualquer informação relacionada a uma pessoa natural identificada ou identificável, como nome, CPF, e-mail ou localização.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Legislação (Marco Civil e LGPD)",
+      "capacidade": "so.ct10",
+      "enunciado": "Explique o princípio da neutralidade da rede previsto no Marco Civil da Internet.",
+      "palavrasChave": [
+        "igual",
+        "provedor",
+        "dados"
+      ],
+      "explicacao": "Os provedores devem tratar todos os pacotes de dados de forma igual, sem bloquear, priorizar ou deixar mais lento um conteúdo, serviço ou origem.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Legislação (Marco Civil e LGPD)",
+      "capacidade": "so.ct10",
+      "enunciado": "O que é o consentimento na LGPD? Responda em até 3 linhas.",
+      "palavrasChave": [
+        "autoriza",
+        "finalidade",
+        "dados"
+      ],
+      "explicacao": "É a autorização livre, informada e clara do titular para que seus dados pessoais sejam tratados para uma finalidade específica.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Legislação (Marco Civil e LGPD)",
+      "capacidade": "so.ct10",
+      "enunciado": "Qual a diferença de foco entre o Marco Civil da Internet e a LGPD?",
+      "palavrasChave": [
+        "marco civil",
+        "lgpd",
+        "internet",
+        "dados pessoais"
+      ],
+      "explicacao": "O Marco Civil regula o uso da internet (direitos, deveres, neutralidade, registros); a LGPD regula o tratamento de dados pessoais, dentro e fora da internet.",
+      "peso": 2
+    }
+  ]
+}

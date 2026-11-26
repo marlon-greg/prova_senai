@@ -1,0 +1,1111 @@
+{
+  "nome": "Programação Front-End — banco inicial (a revisar)",
+  "materia": "Programação Front-End",
+  "revisao": "pendente",
+  "contexto": "Banco inicial de Programação Front-End (3º e 4º semestres), escrito a partir dos conhecimentos do plano de curso: JavaScript, Design responsivo, Frameworks, Acessibilidade, Web Apps, UX design — experiência do usuário, UI design — interface do usuário. Cada tópico tem 10 questões (6 de alternativa e 4 dissertativas curtas), ligadas às capacidades técnicas front.ct1–ct9. Entram como 'a revisar': só caem na Área de testes até serem aprovadas.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é o resultado de `console.log(7 % 3, \"5\" == 5, \"5\" === 5);`?",
+      "alternativas": [
+        "`1 true false`",
+        "`2 true true`",
+        "`1 false false`",
+        "`2.33 true false`"
+      ],
+      "correta": 0,
+      "explicacao": "% é o resto da divisão (7 ÷ 3 = 2, resto 1). == compara só o valor (converte o texto \"5\" em número); === compara valor e tipo (texto ≠ número)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando seleciona o primeiro elemento da página que tem a classe `card`?",
+      "alternativas": [
+        "`document.getElementById(\".card\")`",
+        "`document.querySelector(\".card\")`",
+        "`document.querySelector(\"card\")`",
+        "`document.getElementsByClassName(\"#card\")`"
+      ],
+      "correta": 1,
+      "explicacao": "querySelector usa seletores CSS, então classe leva ponto. Sem o ponto ele procura uma tag <card>; getElementById procura id e não usa ponto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual expressão sorteia um número inteiro de 1 a 6, como um dado?",
+      "alternativas": [
+        "`Math.random(1, 6)`",
+        "`Math.round(Math.random() * 6)`",
+        "`Math.floor(Math.random() * 6) + 1`",
+        "`Math.floor(Math.random() * 6)`"
+      ],
+      "correta": 2,
+      "explicacao": "Math.random() dá um número de 0 até menos de 1; × 6 vai de 0 a 5,99; Math.floor deixa 0 a 5; + 1 vira 1 a 6. Math.round(…*6) pode dar 0."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct8",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Sobre o código abaixo, qual afirmação está correta?\n```js\nconst resp = await fetch(\"https://api.exemplo.com/produtos\");\nconst dados = await resp.json();\n```",
+      "alternativas": [
+        "O código trava o navegador inteiro até a API responder, por isso precisa do await.",
+        "resp.json() envia os dados em formato JSON para o servidor.",
+        "O fetch só consegue ler arquivos da mesma pasta do computador do usuário.",
+        "O fetch faz uma requisição assíncrona; o await espera a resposta sem travar a página, e resp.json() converte o corpo da resposta em objeto JavaScript."
+      ],
+      "correta": 3,
+      "explicacao": "Requisições assíncronas não bloqueiam a interface. fetch devolve uma Promise da resposta; .json() lê o corpo e transforma o JSON em objeto/array."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual a diferença entre `localStorage` e `sessionStorage`?",
+      "alternativas": [
+        "Os dados do localStorage continuam salvos depois de fechar o navegador; os do sessionStorage somem quando a aba é fechada.",
+        "Os dados do sessionStorage ficam para sempre; os do localStorage somem ao fechar a aba.",
+        "O localStorage guarda no servidor e o sessionStorage guarda no computador do usuário.",
+        "O sessionStorage aceita objetos diretamente e o localStorage aceita só números."
+      ],
+      "correta": 0,
+      "explicacao": "Os dois são Web Storage no navegador e guardam texto (objetos precisam de JSON.stringify). A diferença é a duração: localStorage é permanente, sessionStorage dura a sessão da aba."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na classe abaixo, o que `this.nome` representa?\n```js\nclass Aluno {\n  constructor(nome) { this.nome = nome; }\n  saudar() { return \"Olá, \" + this.nome; }\n}\nconst a = new Aluno(\"Bia\");\n```",
+      "alternativas": [
+        "Uma variável global compartilhada por todos os objetos Aluno.",
+        "Um atributo do objeto criado: cada aluno guarda o próprio nome.",
+        "O nome da classe, que é sempre \"Aluno\".",
+        "Um método que precisa ser chamado com parênteses."
+      ],
+      "correta": 1,
+      "explicacao": "No constructor, this é o objeto que está sendo criado com new; this.nome = nome cria o atributo nome desse objeto. saudar() é o método."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Escreva a linha de JavaScript que troca o texto do elemento com `id=\"placar\"` para `Fim de jogo`.",
+      "respostasAceitas": [
+        "document.getElementById(\"placar\").textContent = \"Fim de jogo\";",
+        "document.getElementById(\"placar\").innerText = \"Fim de jogo\";",
+        "document.querySelector(\"#placar\").textContent = \"Fim de jogo\";",
+        "document.getElementById('placar').textContent = 'Fim de jogo';"
+      ],
+      "palavrasChave": [
+        "placar",
+        "fim de jogo",
+        "document."
+      ],
+      "explicacao": "document.getElementById(\"placar\").textContent = \"Fim de jogo\"; (também vale querySelector(\"#placar\") e innerText)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct8",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Qual objeto e método do navegador obtêm a localização atual do usuário? O que precisa acontecer antes de o site receber a posição?",
+      "palavrasChave": [
+        "navigator.geolocation",
+        "getcurrentposition",
+        "permiss"
+      ],
+      "explicacao": "navigator.geolocation.getCurrentPosition(…); o navegador pede a permissão do usuário antes de entregar a latitude e a longitude."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A variável `tela` guarda um elemento `<canvas>`. Escreva a linha que pega o contexto de desenho 2D dele e guarda em `ctx`.",
+      "respostasAceitas": [
+        "const ctx = tela.getContext(\"2d\");",
+        "const ctx = tela.getContext('2d');",
+        "let ctx = tela.getContext(\"2d\");"
+      ],
+      "palavrasChave": [
+        "ctx",
+        "tela.getcontext(",
+        "2d"
+      ],
+      "explicacao": "const ctx = tela.getContext(\"2d\"); — é pelo ctx que se desenha (fillRect, arc, fillText…)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Para que serve o Webpack num projeto front-end?",
+      "palavrasChave": [
+        "empacot",
+        "módulo",
+        "arquivo"
+      ],
+      "explicacao": "É um empacotador (bundler): junta os módulos JavaScript, CSS e outros arquivos do projeto em poucos arquivos otimizados para o navegador."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Design responsivo",
+      "capacidade": "front.ct4",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é design responsivo?",
+      "alternativas": [
+        "Um site que responde rápido às mensagens enviadas pelos usuários.",
+        "Criar uma versão diferente do site para cada modelo de celular.",
+        "A página se adapta ao tamanho da tela (celular, tablet, computador), reorganizando o leiaute sem precisar de um site separado para cada aparelho.",
+        "Usar só larguras fixas em pixels para a página ficar igual em qualquer tela."
+      ],
+      "correta": 2,
+      "explicacao": "Responsivo = um único site com leiaute fluido, imagens flexíveis e media queries, que se ajusta a cada largura de tela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Design responsivo",
+      "capacidade": "front.ct4",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual tag faz o celular usar a largura real da tela, em vez de mostrar a página de computador \"encolhida\"?",
+      "alternativas": [
+        "`<meta charset=\"UTF-8\">`",
+        "`<meta name=\"responsive\" content=\"true\">`",
+        "`<link rel=\"viewport\" href=\"mobile.css\">`",
+        "`<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">`"
+      ],
+      "correta": 3,
+      "explicacao": "Sem a meta viewport o celular simula uma tela larga (cerca de 980px) e as media queries não funcionam como esperado. charset só define a codificação dos caracteres."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Design responsivo",
+      "capacidade": "front.ct4",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual media query aplica as regras somente em telas de até 600px de largura?",
+      "alternativas": [
+        "`@media (max-width: 600px) { ... }`",
+        "`@media (min-width: 600px) { ... }`",
+        "`@media screen = 600px { ... }`",
+        "`@screen (width < 600) { ... }`"
+      ],
+      "correta": 0,
+      "explicacao": "max-width = \"até\" essa largura; min-width = \"a partir de\" essa largura. As outras duas não são sintaxe válida de CSS."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Design responsivo",
+      "capacidade": "front.ct6",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual unidade de medida faz o tamanho da fonte acompanhar o tamanho definido no elemento raiz (`html`)?",
+      "alternativas": [
+        "`px`",
+        "`rem`",
+        "`em`",
+        "`vh`"
+      ],
+      "correta": 1,
+      "explicacao": "rem é relativo à fonte do html (raiz). em é relativo à fonte do elemento pai, px é fixo e vh é porcentagem da altura da tela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Design responsivo",
+      "capacidade": "front.ct4",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na estratégia mobile first, como as media queries costumam ser escritas?",
+      "alternativas": [
+        "O CSS base é feito para o computador e media queries com `max-width` corrigem tudo para o celular.",
+        "Cria-se um arquivo HTML separado só para o celular.",
+        "O CSS base é feito para o celular e media queries com `min-width` acrescentam regras para telas maiores.",
+        "Não se usa media query: o navegador do celular adapta tudo sozinho."
+      ],
+      "correta": 2,
+      "explicacao": "Mobile first começa pelo menor e vai \"subindo\" com min-width. Começar pelo computador e reduzir com max-width é o desktop first."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Design responsivo",
+      "capacidade": "front.ct6",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual regra impede que uma imagem grande \"estoure\" a largura da tela no celular?",
+      "alternativas": [
+        "`img { width: 1200px; }`",
+        "`img { overflow: responsive; }`",
+        "`img { min-width: 100%; height: 100px; }`",
+        "`img { max-width: 100%; height: auto; }`"
+      ],
+      "correta": 3,
+      "explicacao": "max-width: 100% deixa a imagem no máximo do tamanho do contêiner, e height: auto mantém a proporção. overflow: responsive não existe."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Design responsivo",
+      "capacidade": "front.ct4",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Escreva a media query que muda o `.menu` para `flex-direction: column` em telas de até 768px.",
+      "respostasAceitas": [
+        "@media (max-width: 768px) { .menu { flex-direction: column; } }"
+      ],
+      "palavrasChave": [
+        "@media",
+        "max-width",
+        "768px",
+        ".menu",
+        "column"
+      ],
+      "explicacao": "@media (max-width: 768px) { .menu { flex-direction: column; } }"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Design responsivo",
+      "capacidade": "front.ct4",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que é um breakpoint no design responsivo?",
+      "palavrasChave": [
+        "largura",
+        "tela",
+        "media"
+      ],
+      "explicacao": "É a largura de tela em que o leiaute muda (ex.: 768px), definida por uma media query."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Design responsivo",
+      "capacidade": "front.ct6",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa vitrine de produtos, escreva o valor de `grid-template-columns` que cria quantas colunas couberem na tela, cada uma com no mínimo 200px.",
+      "respostasAceitas": [
+        "repeat(auto-fit, minmax(200px, 1fr))",
+        "repeat(auto-fill, minmax(200px, 1fr))",
+        "grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));"
+      ],
+      "palavrasChave": [
+        "repeat(",
+        "minmax(200px",
+        "1fr)"
+      ],
+      "explicacao": "repeat(auto-fit, minmax(200px, 1fr)) — auto-fit (ou auto-fill) cria as colunas que couberem; minmax garante o mínimo de 200px e divide o espaço que sobra."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Design responsivo",
+      "capacidade": "front.ct4",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Por que usar porcentagem (%) em vez de pixels fixos na largura dos blocos ajuda no design responsivo?",
+      "palavrasChave": [
+        "largura",
+        "tela",
+        "adapt"
+      ],
+      "explicacao": "Porque a porcentagem é relativa à largura do contêiner/tela: o bloco se adapta ao tamanho do aparelho, enquanto um valor fixo em px pode sobrar ou estourar a tela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Frameworks",
+      "capacidade": "front.ct7",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é um framework front-end?",
+      "alternativas": [
+        "Um conjunto de ferramentas, regras e código pronto que dá a estrutura para construir a interface, como React, Angular ou Vue.",
+        "Um servidor de banco de dados para guardar os dados do site.",
+        "Um navegador especial usado apenas por desenvolvedores.",
+        "Uma linguagem que substitui completamente o HTML."
+      ],
+      "correta": 0,
+      "explicacao": "Frameworks dão estrutura, componentes e padrões prontos, acelerando o desenvolvimento e organizando o código."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Frameworks",
+      "capacidade": "front.ct7",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas opções é um framework de ESTILOS (CSS), e não um framework de componentes JavaScript?",
+      "alternativas": [
+        "React",
+        "Tailwind CSS",
+        "Angular",
+        "Vue"
+      ],
+      "correta": 1,
+      "explicacao": "Tailwind CSS (assim como o Bootstrap) é biblioteca/framework de estilos. React, Angular e Vue são para construir a interface com componentes em JavaScript."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Frameworks",
+      "capacidade": "front.ct7",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando cria, pelo terminal, um novo projeto React usando o Vite?",
+      "alternativas": [
+        "`git create react meu-app`",
+        "`npm delete vite meu-app`",
+        "`npm create vite@latest meu-app -- --template react`",
+        "`node install react --project meu-app`"
+      ],
+      "correta": 2,
+      "explicacao": "O npm create vite@latest gera a estrutura do projeto; depois é só entrar na pasta, rodar npm install e npm run dev."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Frameworks",
+      "capacidade": "front.ct7",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num componente React, qual hook executa um código (por exemplo, buscar dados numa API) depois que o componente aparece na tela?",
+      "alternativas": [
+        "`useState`",
+        "`useRef`",
+        "`useContext`",
+        "`useEffect`"
+      ],
+      "correta": 3,
+      "explicacao": "useEffect roda efeitos colaterais depois da renderização e pode limpar ao desmontar — é como o React trata o ciclo de vida. useState guarda estado; useRef guarda referência; useContext lê um contexto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Frameworks",
+      "capacidade": "front.ct7",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em React, o que acontece quando o estado criado com `const [contador, setContador] = useState(0)` é alterado por `setContador(contador + 1)`?",
+      "alternativas": [
+        "O componente é renderizado de novo e a tela mostra o novo valor automaticamente.",
+        "Nada muda na tela até o usuário recarregar a página.",
+        "A página inteira é baixada de novo do servidor.",
+        "O valor é salvo automaticamente num banco de dados."
+      ],
+      "correta": 0,
+      "explicacao": "Essa é a principal funcionalidade dos frameworks reativos: mudou o estado, a interface se atualiza sozinha, sem manipular o DOM na mão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Frameworks",
+      "capacidade": "front.ct7",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Bootstrap, qual classe faz uma coluna ocupar metade da linha em telas médias ou maiores?",
+      "alternativas": [
+        "`col-md-12`",
+        "`col-md-6`",
+        "`col-6-md`",
+        "`row-md-6`"
+      ],
+      "correta": 1,
+      "explicacao": "O grid do Bootstrap tem 12 colunas: 6 de 12 = metade. md é o breakpoint (médio e acima). A ordem certa é col-{breakpoint}-{n}."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Frameworks",
+      "capacidade": "front.ct7",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Escreva o comando npm que instala o Bootstrap no projeto.",
+      "respostasAceitas": [
+        "npm install bootstrap",
+        "npm i bootstrap",
+        "npm install bootstrap --save"
+      ],
+      "palavrasChave": [
+        "npm",
+        "bootstrap"
+      ],
+      "explicacao": "npm install bootstrap (ou npm i bootstrap) — baixa o pacote para node_modules e registra a dependência no package.json."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Frameworks",
+      "capacidade": "front.ct7",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Qual a diferença entre uma biblioteca e um framework?",
+      "palavrasChave": [
+        "biblioteca",
+        "framework",
+        "chama",
+        "estrutura"
+      ],
+      "explicacao": "Na biblioteca é você que chama o código dela quando precisa; o framework define a estrutura e as regras do projeto e é ele que chama o seu código (inversão de controle)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Frameworks",
+      "capacidade": "front.ct7",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que o arquivo `package.json` guarda num projeto front-end? Cite pelo menos duas informações.",
+      "palavrasChave": [
+        "depend",
+        "script",
+        "projeto"
+      ],
+      "explicacao": "Os dados do projeto (nome, versão), as dependências (pacotes e versões) e os scripts (ex.: npm run dev, npm run build)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Frameworks",
+      "capacidade": "front.ct7",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que é um componente em frameworks como React ou Vue?",
+      "palavrasChave": [
+        "parte",
+        "interface",
+        "reutiliz"
+      ],
+      "explicacao": "É uma parte independente e reutilizável da interface (ex.: botão, card, menu), com sua própria estrutura, estilo e comportamento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Acessibilidade",
+      "capacidade": "front.ct1",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é acessibilidade na web?",
+      "alternativas": [
+        "Deixar o site acessível somente para quem tem login e senha.",
+        "Apenas fazer o site abrir mais rápido em internet lenta.",
+        "Garantir que todas as pessoas, inclusive com deficiência (visual, auditiva, motora, cognitiva), consigam perceber, entender e usar o site.",
+        "Permitir que o site seja acessado somente por celulares."
+      ],
+      "correta": 2,
+      "explicacao": "Acessibilidade é sobre incluir pessoas: leitores de tela, navegação por teclado, contraste, legendas etc. No Brasil a LBI (Lei 13.146/2015) exige sites acessíveis."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Acessibilidade",
+      "capacidade": "front.ct1",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para quem usa leitor de tela, qual é a forma correta de colocar a foto de um gato que ilustra uma notícia?",
+      "alternativas": [
+        "`<img src=\"gato.jpg\">`",
+        "`<img src=\"gato.jpg\" alt=\"imagem\">`",
+        "`<img src=\"gato.jpg\" title=\"gato.jpg\">`",
+        "`<img src=\"gato.jpg\" alt=\"Gato laranja dormindo no sofá\">`"
+      ],
+      "correta": 3,
+      "explicacao": "O alt deve descrever o que a imagem mostra. Sem alt o leitor pode ler o nome do arquivo; \"imagem\" não informa nada; title não substitui o alt."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Acessibilidade",
+      "capacidade": "front.ct1",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um botão só com o ícone de lupa, sem texto, deve ser anunciado como \"Pesquisar\" pelo leitor de tela. Qual atributo resolve?",
+      "alternativas": [
+        "`aria-label=\"Pesquisar\"`",
+        "`aria-hidden=\"true\"`",
+        "`role=\"presentation\"`",
+        "`tabindex=\"-1\"`"
+      ],
+      "correta": 0,
+      "explicacao": "aria-label dá um nome acessível ao elemento. aria-hidden esconde do leitor, role=\"presentation\" tira o significado e tabindex=\"-1\" tira o botão da navegação por Tab."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Acessibilidade",
+      "capacidade": "front.ct6",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual combinação de cores tende a ser a mais difícil de ler para pessoas com baixa visão?",
+      "alternativas": [
+        "Texto preto sobre fundo branco",
+        "Texto cinza-claro (#bbbbbb) sobre fundo branco",
+        "Texto branco sobre fundo azul-escuro (#14213d)",
+        "Texto azul-escuro sobre fundo amarelo-claro"
+      ],
+      "correta": 1,
+      "explicacao": "Pouco contraste dificulta a leitura. As WCAG pedem contraste mínimo de 4,5:1 para texto normal; cinza-claro no branco fica bem abaixo disso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Acessibilidade",
+      "capacidade": "front.ct2",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em um formulário, por que não usar só o `placeholder` como rótulo do campo?",
+      "alternativas": [
+        "Porque o placeholder não funciona em campos de texto.",
+        "Porque o placeholder deixa o formulário mais lento para enviar.",
+        "Porque o placeholder some quando a pessoa começa a digitar e nem sempre é lido pelos leitores de tela; o `<label>` continua visível e ligado ao campo.",
+        "Porque o placeholder só aceita números."
+      ],
+      "correta": 2,
+      "explicacao": "O placeholder é só um exemplo de preenchimento. O label ligado pelo for/id é o rótulo acessível e ainda aumenta a área de clique."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Acessibilidade",
+      "capacidade": "front.ct1",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma pessoa que não usa mouse navega pela página com a tecla Tab. Qual escolha atrapalha essa navegação?",
+      "alternativas": [
+        "Usar `<button>` para as ações da página",
+        "Deixar visível o contorno de foco (`:focus`) dos links",
+        "Usar links `<a href>` para ir a outras páginas",
+        "Fazer um botão com `<div onclick=\"enviar()\">` em vez de `<button>`"
+      ],
+      "correta": 3,
+      "explicacao": "Uma div não recebe foco pelo Tab nem é ativada com Enter/Espaço; button e a href já são acessíveis pelo teclado. Esconder o foco também atrapalharia."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Acessibilidade",
+      "capacidade": "front.ct1",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Quais são os 4 princípios de acessibilidade das WCAG?",
+      "palavrasChave": [
+        "percept",
+        "oper",
+        "compreens",
+        "robust"
+      ],
+      "explicacao": "Perceptível, operável, compreensível e robusto."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Acessibilidade",
+      "capacidade": "front.ct1",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Para que serve o atributo `alt` das imagens?",
+      "palavrasChave": [
+        "texto",
+        "leitor",
+        "imagem"
+      ],
+      "explicacao": "Dá um texto alternativo que descreve a imagem: o leitor de tela lê esse texto para quem não enxerga, e ele aparece se a imagem não carregar (também ajuda os buscadores)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Acessibilidade",
+      "capacidade": "front.ct1",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que é ARIA e quando ela deve ser usada?",
+      "palavrasChave": [
+        "atributo",
+        "leitor",
+        "html"
+      ],
+      "explicacao": "ARIA (Accessible Rich Internet Applications) é um conjunto de atributos (role, aria-label, aria-expanded…) que informa papel, nome e estado dos elementos aos leitores de tela. Deve ser usada quando o HTML semântico sozinho não resolve (ex.: componentes feitos com JavaScript)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Acessibilidade",
+      "capacidade": "front.ct2",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Escreva o `<label>` com o texto Nome completo ligado a um campo de texto obrigatório com `id=\"nome\"`.",
+      "respostasAceitas": [
+        "<label for=\"nome\">Nome completo</label> <input type=\"text\" id=\"nome\" required>",
+        "<label for=\"nome\">Nome completo</label><input type=\"text\" id=\"nome\" required>"
+      ],
+      "palavrasChave": [
+        "<label for=\"nome\">",
+        "nome completo",
+        "id=\"nome\"",
+        "required"
+      ],
+      "explicacao": "<label for=\"nome\">Nome completo</label> <input type=\"text\" id=\"nome\" required> — o for do label é igual ao id do input e required torna o campo obrigatório."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é um Service Worker?",
+      "alternativas": [
+        "Um script que o navegador roda em segundo plano, separado da página, que pode interceptar requisições, usar cache e permitir que o app funcione offline.",
+        "Um funcionário da hospedagem que mantém o servidor ligado.",
+        "Um arquivo CSS que deixa a página responsiva.",
+        "Uma tag HTML usada para carregar vídeos."
+      ],
+      "correta": 0,
+      "explicacao": "O service worker é a base das PWAs: fica entre a página e a rede, permitindo cache, modo offline, push e sincronização em segundo plano."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual código registra o service worker do arquivo `sw.js`?",
+      "alternativas": [
+        "`document.serviceWorker.add(\"/sw.js\")`",
+        "`navigator.serviceWorker.register(\"/sw.js\")`",
+        "`<script src=\"/sw.js\" worker></script>`",
+        "`window.cache.register(\"/sw.js\")`"
+      ],
+      "correta": 1,
+      "explicacao": "O registro é feito pelo objeto navigator.serviceWorker, normalmente depois de conferir se o navegador tem suporte ('serviceWorker' in navigator)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na Cache API, o que faz o código abaixo?\n```js\ncaches.open(\"app-v1\").then(c => c.addAll([\"/\", \"/css/style.css\"]));\n```",
+      "alternativas": [
+        "Apaga do servidor os arquivos listados.",
+        "Envia uma notificação push para todos os usuários.",
+        "Abre (ou cria) o cache chamado app-v1 e guarda nele a página inicial e o CSS, para uso offline.",
+        "Baixa os arquivos só quando o usuário clicar num botão de download."
+      ],
+      "correta": 2,
+      "explicacao": "caches.open abre um cache pelo nome; addAll baixa e guarda as respostas das URLs. Costuma ficar no evento install do service worker."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de notícias quer avisar o usuário de uma notícia urgente mesmo com a aba fechada. Quais recursos são usados juntos?",
+      "alternativas": [
+        "localStorage e alert()",
+        "Media queries e Flexbox",
+        "Geolocation API e Canvas",
+        "Push API e Notifications API, recebidas pelo service worker, com permissão do usuário"
+      ],
+      "correta": 3,
+      "explicacao": "O servidor envia a mensagem pela Push API; o service worker acorda e mostra a notificação (showNotification). O usuário precisa permitir as notificações."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que o Background Sync (sincronização em segundo plano) permite fazer?",
+      "alternativas": [
+        "Adiar o envio de dados feito sem internet (ex.: um formulário) e enviar automaticamente quando a conexão voltar.",
+        "Sincronizar as cores do site com o tema do sistema operacional.",
+        "Atualizar o próprio navegador em segundo plano.",
+        "Baixar o site inteiro de novo a cada minuto."
+      ],
+      "correta": 0,
+      "explicacao": "Com o Background Sync, o service worker recebe o evento sync quando a conexão volta e envia o que ficou pendente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual tag pede ao navegador para baixar com prioridade a fonte usada logo no início da página atual?",
+      "alternativas": [
+        "`<link rel=\"prefetch\" href=\"fonte.woff2\">`",
+        "`<link rel=\"preload\" href=\"fonte.woff2\" as=\"font\" type=\"font/woff2\" crossorigin>`",
+        "`<link rel=\"dns-prefetch\" href=\"fonte.woff2\">`",
+        "`<link rel=\"stylesheet\" href=\"fonte.woff2\">`"
+      ],
+      "correta": 1,
+      "explicacao": "preload = recurso importante da página atual, baixado cedo. prefetch = recurso provável da próxima navegação, com baixa prioridade. dns-prefetch só resolve o endereço de um domínio."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Qual a diferença entre `preload` e `prefetch`?",
+      "palavrasChave": [
+        "preload",
+        "prefetch",
+        "atual",
+        "próxima"
+      ],
+      "explicacao": "preload baixa com prioridade um recurso que a página atual vai usar logo; prefetch baixa, com baixa prioridade, um recurso que provavelmente será usado na próxima página."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que é uma PWA (Progressive Web App)?",
+      "palavrasChave": [
+        "instal",
+        "offline",
+        "navegador"
+      ],
+      "explicacao": "É um site/aplicação web que funciona como aplicativo: pode ser instalado na tela inicial, funciona offline (service worker + cache) e pode receber notificações, rodando pelo navegador."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que faz `<link rel=\"dns-prefetch\" href=\"https://api.exemplo.com\">`?",
+      "palavrasChave": [
+        "dns",
+        "antes",
+        "domínio"
+      ],
+      "explicacao": "Pede ao navegador para resolver o DNS (descobrir o IP) do domínio api.exemplo.com antes de ele ser usado, economizando tempo na primeira requisição."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Qual é o papel do evento `install` no service worker?",
+      "palavrasChave": [
+        "cache",
+        "arquivos",
+        "instal"
+      ],
+      "explicacao": "É disparado quando o service worker é instalado; nele normalmente se abre o cache e se guardam os arquivos principais do app (HTML, CSS, JS, imagens) para funcionar offline."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "UX design — experiência do usuário",
+      "capacidade": "front.ct9",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual alternativa descreve UX (User Experience)?",
+      "alternativas": [
+        "Apenas a escolha de cores e fontes das telas.",
+        "O código JavaScript que roda no navegador.",
+        "A experiência completa da pessoa ao usar o produto: se é fácil, rápido e agradável atingir o objetivo dela.",
+        "A velocidade do servidor de hospedagem."
+      ],
+      "correta": 2,
+      "explicacao": "UX olha para a jornada e o sentimento do usuário como um todo; cores e fontes fazem parte da UI, que é só uma das peças da experiência."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "UX design — experiência do usuário",
+      "capacidade": "front.ct9",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa pesquisa de UX, o que é uma persona?",
+      "alternativas": [
+        "O usuário administrador do sistema.",
+        "O ícone de perfil que aparece no canto da tela.",
+        "A pessoa que paga pelo desenvolvimento do projeto.",
+        "Um personagem fictício, baseado em dados de pesquisa, que representa um tipo de usuário com objetivos, dores e hábitos."
+      ],
+      "correta": 3,
+      "explicacao": "A persona ajuda a equipe a decidir pensando em quem vai usar de verdade (ex.: \"Carla, 17 anos, usa o celular no ônibus para estudar\")."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "UX design — experiência do usuário",
+      "capacidade": "front.ct9",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é um fluxo do usuário (user flow)?",
+      "alternativas": [
+        "O caminho de passos e telas que a pessoa percorre para completar uma tarefa, como comprar um produto.",
+        "A quantidade de visitantes por dia no site.",
+        "O fluxo de dados entre o servidor e o banco de dados.",
+        "A ordem em que as propriedades são escritas no CSS."
+      ],
+      "correta": 0,
+      "explicacao": "O user flow mostra entradas, decisões e telas até o objetivo; ajuda a encontrar passos desnecessários ou confusos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "UX design — experiência do usuário",
+      "capacidade": "front.ct9",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual diagrama de UX mostra, etapa por etapa, o que o cliente faz, pensa e sente antes, durante e depois de usar o serviço?",
+      "alternativas": [
+        "Diagrama entidade-relacionamento",
+        "Mapa da jornada do usuário (customer journey map)",
+        "Fluxograma de um algoritmo de ordenação",
+        "Diagrama de topologia de rede"
+      ],
+      "correta": 1,
+      "explicacao": "O mapa de jornada mostra as etapas e os pontos de dor e de satisfação; DER é de banco de dados e topologia é de redes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "UX design — experiência do usuário",
+      "capacidade": "front.ct9",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de delivery tem muitas desistências na hora do pagamento. Qual ação de UX ajuda a descobrir o motivo?",
+      "alternativas": [
+        "Trocar a cor do logotipo do app.",
+        "Aumentar o número de telas do pagamento para ficar mais completo.",
+        "Fazer testes com usuários reais tentando pagar, observando onde eles travam.",
+        "Mudar a hospedagem para um servidor mais caro."
+      ],
+      "correta": 2,
+      "explicacao": "Teste de usabilidade com usuários reais revela os problemas de verdade; a equipe decide com base em evidências, não em achismo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "UX design — experiência do usuário",
+      "capacidade": "front.ct9",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual diagrama mostra a organização hierárquica das páginas de um site (Início > Produtos > Detalhe do produto)?",
+      "alternativas": [
+        "Mapa de empatia",
+        "Diagrama de Gantt",
+        "Diagrama de classes",
+        "Mapa do site (sitemap), da arquitetura da informação"
+      ],
+      "correta": 3,
+      "explicacao": "O sitemap organiza as páginas e a navegação. O mapa de empatia é sobre o usuário; Gantt é cronograma; diagrama de classes é de programação orientada a objetos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "UX design — experiência do usuário",
+      "capacidade": "front.ct9",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre UX e UI.",
+      "palavrasChave": [
+        "experi",
+        "interface",
+        "visual"
+      ],
+      "explicacao": "UX é a experiência do usuário como um todo (facilidade, fluxo, satisfação ao atingir o objetivo); UI é a interface, a parte visual com que ele interage (cores, botões, tipografia, leiaute)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "UX design — experiência do usuário",
+      "capacidade": "front.ct9",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que é o mapa de empatia? Cite três quadrantes que ele costuma ter.",
+      "palavrasChave": [
+        "pensa",
+        "sente",
+        "ouve"
+      ],
+      "explicacao": "É um diagrama para entender o usuário, com quadrantes como: o que ele pensa e sente, o que vê, o que ouve, o que fala e faz, além das dores e ganhos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "UX design — experiência do usuário",
+      "capacidade": "front.ct9",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Escreva, usando setas (→), o fluxo do usuário para recuperar a senha esquecida, com pelo menos 4 passos.",
+      "palavrasChave": [
+        "esqueci",
+        "mail",
+        "nova senha"
+      ],
+      "explicacao": "Ex.: Tela de login → clica em \"Esqueci minha senha\" → informa o e-mail → recebe o link por e-mail → cria a nova senha → volta ao login."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "UX design — experiência do usuário",
+      "capacidade": "front.ct9",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que significa design centrado no usuário?",
+      "palavrasChave": [
+        "necessidade",
+        "usuário",
+        "pesquisa"
+      ],
+      "explicacao": "É projetar a partir das necessidades reais dos usuários, envolvendo-os em pesquisas e testes em todas as etapas, em vez de seguir só a opinião da equipe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "UI design — interface do usuário",
+      "capacidade": "front.ct9",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas tarefas é típica de UI design?",
+      "alternativas": [
+        "Definir cores, tipografia, ícones, espaçamentos e o visual dos botões das telas.",
+        "Entrevistar usuários para entender as dificuldades deles.",
+        "Configurar o servidor onde o site fica hospedado.",
+        "Modelar as tabelas do banco de dados."
+      ],
+      "correta": 0,
+      "explicacao": "UI cuida da aparência e dos elementos da interface. Entrevistar usuários é pesquisa de UX; servidor e banco são infraestrutura e back-end."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "UI design — interface do usuário",
+      "capacidade": "front.ct3",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Figma, qual recurso permite criar um botão uma vez e reutilizá-lo em várias telas, atualizando todas as cópias de uma só vez?",
+      "alternativas": [
+        "Camada de texto",
+        "Componente (component)",
+        "Exportar como PNG",
+        "Comentário"
+      ],
+      "correta": 1,
+      "explicacao": "Componentes (com suas instâncias) mantêm a interface consistente: mudou o principal, mudam todas as cópias."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "UI design — interface do usuário",
+      "capacidade": "front.ct9",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao enviar um formulário aparece a mensagem \"Cadastro realizado com sucesso!\". Qual heurística de usabilidade de Nielsen isso atende?",
+      "alternativas": [
+        "Flexibilidade e eficiência de uso",
+        "Estética e design minimalista",
+        "Visibilidade do status do sistema",
+        "Prevenção de erros"
+      ],
+      "correta": 2,
+      "explicacao": "O sistema deve sempre informar o que está acontecendo, com retorno (feedback) rápido. Prevenção de erros seria, por exemplo, pedir confirmação antes de excluir."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "UI design — interface do usuário",
+      "capacidade": "front.ct6",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para destacar o botão principal (\"Comprar\") em relação ao secundário (\"Voltar\"), qual escolha de UI é mais adequada?",
+      "alternativas": [
+        "Os dois botões exatamente iguais, para não confundir.",
+        "O botão secundário maior e mais colorido que o principal.",
+        "Esconder o botão secundário no meio do texto da página.",
+        "Botão principal preenchido com a cor de destaque e o secundário só com contorno ou mais discreto."
+      ],
+      "correta": 3,
+      "explicacao": "Hierarquia visual: a ação mais importante precisa chamar mais atenção (cor, peso, tamanho), sem esconder as demais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "UI design — interface do usuário",
+      "capacidade": "front.ct9",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é um design system (guia de estilos) numa equipe de UI?",
+      "alternativas": [
+        "Um conjunto documentado de cores, fontes, componentes e regras de uso, para todas as telas ficarem consistentes.",
+        "Um sistema operacional feito para designers.",
+        "O banco de dados com os usuários do site.",
+        "Um tipo de wireframe feito em papel."
+      ],
+      "correta": 0,
+      "explicacao": "Design systems (ex.: Material Design) garantem consistência e agilidade: todos usam os mesmos componentes e padrões."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "UI design — interface do usuário",
+      "capacidade": "front.ct6",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em telas de celular, qual recomendação de UI para botões está correta?",
+      "alternativas": [
+        "Usar botões de 10 px para caber mais opções na tela.",
+        "Ter área de toque confortável (cerca de 44 a 48 px) e espaço entre um botão e outro.",
+        "Colocar os botões colados uns nos outros para economizar espaço.",
+        "Usar apenas ícones, sem texto nem rótulo, em todas as ações importantes."
+      ],
+      "correta": 1,
+      "explicacao": "Dedos são menos precisos que o mouse: alvos pequenos ou colados geram toques errados. Ícones sem rótulo podem não ser entendidos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "UI design — interface do usuário",
+      "capacidade": "front.ct9",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Segundo a norma ISO 9241-11, a usabilidade é medida por três aspectos. Quais são?",
+      "palavrasChave": [
+        "eficácia",
+        "eficiência",
+        "satisfação"
+      ],
+      "explicacao": "Eficácia (consegue atingir o objetivo), eficiência (com quanto esforço/tempo) e satisfação (quão agradável foi usar)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "UI design — interface do usuário",
+      "capacidade": "front.ct6",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que é hierarquia visual numa tela? Cite um recurso usado para criá-la.",
+      "palavrasChave": [
+        "importan",
+        "tamanho",
+        "cor"
+      ],
+      "explicacao": "É organizar os elementos para que o olho veja primeiro o que é mais importante, usando tamanho, cor, contraste, peso da fonte, posição e espaçamento."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "UI design — interface do usuário",
+      "capacidade": "front.ct3",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Para que serve o modo Prototype (protótipo) do Figma?",
+      "palavrasChave": [
+        "telas",
+        "intera",
+        "testar"
+      ],
+      "explicacao": "Para ligar as telas com interações (clicar num botão leva a outra tela, transições), criando um protótipo navegável para testar o fluxo com usuários antes de programar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "UI design — interface do usuário",
+      "capacidade": "front.ct6",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Escreva a regra CSS da classe `btn-primario` com fundo `#2459c7`, texto branco (`#ffffff`) e cantos arredondados de 8px.",
+      "respostasAceitas": [
+        ".btn-primario { background-color: #2459c7; color: #ffffff; border-radius: 8px; }",
+        ".btn-primario { background: #2459c7; color: #ffffff; border-radius: 8px; }"
+      ],
+      "palavrasChave": [
+        ".btn-primario",
+        "background",
+        "#2459c7",
+        "#ffffff",
+        "border-radius"
+      ],
+      "explicacao": ".btn-primario { background-color: #2459c7; color: #ffffff; border-radius: 8px; }"
+    }
+  ]
+}
