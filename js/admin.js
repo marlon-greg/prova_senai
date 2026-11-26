@@ -2,7 +2,7 @@
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, limparTema, apagarTentativaTeste,
          confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco,
          rotuloDias, nomeTurma, HORARIO_PADRAO, textoHorario, DIAS_SEMANA_LONGO,
-         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, materiaCorrigida, bancosTeoricos, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261126f";
+         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, materiaCorrigida, bancosTeoricos, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261126g";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
@@ -10,7 +10,7 @@ import { htmlEditorTopicos, editorTopicos } from "./plano-curso-ui.js?v=20261126
 import { criteriosDaUnidade, codigoCriterio, carregarCriteriosOficiais } from "./plano-ensino.js?v=20261116a";
 import { PLANO_CURSO, unidadeDaMateria, unidadesDoSemestre } from "./plano-curso.js?v=20261113a";
 import { proporCapacidades, capsDoTema } from "./temas-capacidades.js?v=20261126a";
-import { CATEGORIAS_SQL, categoriaSql, subtopicosWeb, coberturaWeb, subtopicosConferiveis, MODELOS_WEB, modeloWeb } from "./praticas-categorias.js?v=20261126a";
+import { CATEGORIAS_SQL, categoriaSql, MODELOS_WEB, modeloWeb, TAGS_WEB, cobreTags } from "./praticas-categorias.js?v=20261126b";
 import { iniciarOrganizacao, carregarOrganizacao, listarPlanos, listarCursos, materiasSugeridas, editarTopicosBanco, editarCriteriosBanco, topicosDaMateria } from "./admin-org.js";
 import { iniciarDiario, carregarDiario } from "./admin-diario.js";
 import { iniciarCriterios, carregarCriterios } from "./admin-criterios.js?v=20261116a";
@@ -568,26 +568,24 @@ function formProvaHTML(f) {
     <div id="${f}Temas" class="lista-bancos" role="group" aria-label="Bancos e temas"><p class="pequeno">Carregando bancos…</p></div>
     <p id="${f}TemasResumo" class="pequeno temas-resumo" role="status" aria-live="polite"></p>
   </fieldset>
-  <fieldset class="temas-box">
+  <fieldset class="temas-box qb">
     <legend>Quantas questões cada aluno recebe</legend>
-    <div class="linha" style="gap:6px;align-items:center;margin:0 0 8px"><button type="button" class="leve mini" id="${f}Sugerir" title="Preenche temas e quantidades pela matéria e pelas capacidades marcadas (sem IA). Você revisa antes de criar.">✨ Sugerir prova</button><button type="button" class="leve mini" id="${f}SugerirPratica" title="Só questões práticas (quando a matéria tiver)">✨ Só prática</button><span class="pequeno" id="${f}SugestaoMsg" aria-live="polite"></span></div>
-    <div class="grade">
-      <div><label for="${f}Total">Total de questões por aluno</label><input type="number" id="${f}Total" value="10" min="1">
-        <label class="check" style="margin:4px 0 0"><input type="checkbox" id="${f}SemLimite"> <span>Não definir limite <span class="pequeno">— o total é a soma do que você colocar</span></span></label></div>
-      <div><label for="${f}NAlt">Alternativas</label><input type="number" id="${f}NAlt" value="6" min="0"></div>
-      <div><label for="${f}NDiss">Dissertativas</label><input type="number" id="${f}NDiss" value="4" min="0">
-        <p class="pequeno" id="${f}NTotal" style="margin:4px 0 0" aria-live="polite"></p></div>
+    <div class="qb-card"><p class="qb-passo">1. Comece por um modelo</p><div class="qb-modelos" id="${f}Modelos"></div></div>
+    <div class="qb-card">
+      <div class="qb-topo"><p class="qb-passo">2. Ajuste se quiser</p>
+        <div class="qb-total"><span>Total por aluno</span><div class="qb-step" data-step="Total"><button type="button" data-d="-1" aria-label="Menos">−</button><input type="number" id="${f}Total" value="10" min="1" aria-label="Total de questões por aluno"><button type="button" data-d="1" aria-label="Mais">+</button></div>
+          <label class="check" style="margin:0"><input type="checkbox" id="${f}SemLimite"> <span>sem limite</span></label></div></div>
+      <div class="qb-barra" id="${f}Barra" aria-live="polite"></div>
+      <div class="qb-teo">
+        <div class="qb-linha"><div><b>Alternativas</b><small>Corrigidas na hora</small></div><div class="qb-step" data-step="NAlt"><button type="button" data-d="-1" aria-label="Menos">−</button><input type="number" id="${f}NAlt" value="6" min="0" aria-label="Alternativas"><button type="button" data-d="1" aria-label="Mais">+</button></div></div>
+        <div class="qb-linha"><div><b>Dissertativas</b><small>Palavras-chave e, se precisar, IA</small></div><div class="qb-step" data-step="NDiss"><button type="button" data-d="-1" aria-label="Menos">−</button><input type="number" id="${f}NDiss" value="4" min="0" aria-label="Dissertativas"><button type="button" data-d="1" aria-label="Mais">+</button></div></div>
+      </div>
+      <p class="pequeno qb-regra" id="${f}NTotal" aria-live="polite"></p>
     </div>
-    <p class="pequeno" style="margin:6px 0 4px"><b>Questões práticas</b> (opcional, de qualquer matéria): ative o tipo e escolha de quais bancos e temas. Pode misturar tipos. Cada cenário prático conta como 1 questão; com total definido, cada uma tira uma teórica (alternativa, dissertativa, alternativa…).</p>
-    <div class="grade">
-      <div id="${f}BoxSql" class="oculto"><label class="check" title="O aluno escreve e executa SQL numa bancada parecida com o MySQL Workbench"><input type="checkbox" id="${f}AtivaSql"> <span><b>SQL físico</b></span></label>
-        <div id="${f}QtdSql" class="oculto"><input type="hidden" id="${f}NSql" value="0"><div id="${f}CatSql" class="pequeno" style="margin-top:4px"></div><div id="${f}BancosSql" class="prat-bancos"></div></div></div>
-      <div id="${f}BoxWeb" class="oculto"><label class="check" title="Página em HTML/CSS num editor parecido com o VS Code, com prévia ao vivo"><input type="checkbox" id="${f}AtivaWeb"> <span><b>Página web</b></span></label>
-        <div id="${f}QtdWeb" class="oculto"><input type="hidden" id="${f}NWeb" value="0"><div id="${f}ModWeb" class="pequeno" style="margin-top:4px"></div><div id="${f}SubWeb" class="pequeno" style="margin-top:6px"></div><div id="${f}BancosWeb" class="prat-bancos"></div></div></div>
-      <div id="${f}BoxDiag" class="oculto"><label class="check"><input type="checkbox" id="${f}AtivaDiag"> <span><b>Diagramas</b></span></label>
-        <div id="${f}QtdDiag" class="oculto"><input type="hidden" id="${f}NDiag" value="0">
-          <div id="${f}TiposDiag" class="pequeno" style="margin-top:4px"></div><div id="${f}BancosDiag" class="prat-bancos"></div></div></div>
-    </div>
+    <p class="qb-passo" id="${f}PratTitulo">3. Questões práticas</p>
+    <div class="qb-praticas" id="${f}Praticas"></div>
+    <p class="pequeno" id="${f}PratNota" style="margin:6px 0 0"></p>
+    <div class="oculto"><input type="checkbox" id="${f}AtivaSql"><input type="checkbox" id="${f}AtivaWeb"><input type="checkbox" id="${f}AtivaDiag"><input type="hidden" id="${f}NSql" value="0"><input type="hidden" id="${f}NWeb" value="0"><input type="hidden" id="${f}NDiag" value="0"></div>
   </fieldset>
   <div class="grade">
     <div><label for="${f}Codigo">Código de acesso (opcional)</label>
@@ -629,20 +627,22 @@ function formProvaHTML(f) {
     <label class="check"><input type="checkbox" id="${f}IaAuto" checked> <span>🤖 Corrigir as dissertativas com IA automaticamente</span></label>
     <p class="pequeno" style="margin:4px 0 0">Ligado: cada somativa é corrigida quando o aluno finaliza (pelo servidor de correção, ou pelo painel aberto em Resultados com o ao vivo). Desligado: você corrige à mão ou clica em Corrigir com IA quando quiser. A nota fica provisória até corrigir.</p>
   </fieldset>
-  <fieldset class="temas-box">
+  <fieldset class="temas-box mat-box">
     <legend>Material de consulta (opcional) <button data-ajuda-item="slides"></button></legend>
-    <div class="grade">
-      <div><label for="${f}MatTitulo">Título do material (topo do painel)</label><input type="text" id="${f}MatTitulo" placeholder="Slides das aulas 6 a 8"></div>
-      <div class="col-2"><span class="rotulo">Slides em PDF — marque um ou vários (o aluno troca entre eles por abas, dentro da prova)</span>
-        <div id="${f}MatLista" class="lista-materiais" role="group" aria-label="PDFs de consulta"></div>
-        <div class="linha" style="margin-top:6px"><label class="botao-arquivo leve mini" style="flex:0 0 auto">⬆ Enviar PDF(s)<input type="file" id="${f}MatUpload" accept="application/pdf,.pdf" multiple hidden></label></div>
-        <p class="pequeno" id="${f}MatEnvio" aria-live="polite" style="margin:4px 0 0"></p></div>
+    <div class="qb-card">
+      <div class="qb-pcab"><div><b id="${f}MatBlocoTit">Slides</b><small>Marque os que o aluno pode abrir durante a prova</small></div>
+        <label class="botao-arquivo leve mini" style="flex:0 0 auto">Enviar PDF<input type="file" id="${f}MatUpload" accept="application/pdf,.pdf" multiple hidden></label></div>
+      <div id="${f}MatLista" class="mat-cartoes" role="group" aria-label="PDFs de consulta"></div>
+      <p class="pequeno" id="${f}MatEnvio" aria-live="polite" style="margin:4px 0 0"></p>
+      <label for="${f}MatTitulo" style="margin-top:8px">Título que o aluno vê (opcional)</label><input type="text" id="${f}MatTitulo" placeholder="Slides das aulas 6 a 8" style="max-width:420px">
+      <div class="mat-extras">
+        <details class="mat-det"><summary>Usar um link do Google Drive</summary><div class="mat-det-corpo"><label for="${f}MatUrl">Link (Google Drive/Slides/Docs)</label><input type="url" id="${f}MatUrl" placeholder="https://drive.google.com/file/d/…/view"><p class="pequeno">${AJUDA_MATERIAL}</p></div></details>
+        <details class="mat-det" id="${f}MatOutrosBox"><summary id="${f}MatOutrosTit">Ver materiais de outras matérias</summary><div class="mat-det-corpo"><div id="${f}MatOutros" class="mat-cartoes"></div></div></details>
+      </div>
+      <p class="pequeno" id="${f}MatPrevia" aria-live="polite"></p>
+      <p class="pequeno" style="margin:4px 0 0">PDF de até ${MAX_MB} MB (PowerPoint: Arquivo → Exportar → PDF · Google Slides: Arquivo → Fazer download → PDF).</p>
     </div>
-    <div class="grade">
-      <div class="col-2"><label for="${f}MatUrl">… ou link externo (Google Drive/Slides/Docs)</label><input type="url" id="${f}MatUrl" placeholder="https://drive.google.com/file/d/…/view"></div>
-    </div>
-    <p class="pequeno">PDF: exporte os slides em PDF (PowerPoint: Arquivo → Exportar → PDF · Google Slides: Arquivo → Fazer download → PDF), até ${MAX_MB} MB. Link: ${AJUDA_MATERIAL}</p>
-    <p class="pequeno" id="${f}MatPrevia" aria-live="polite"></p>
+    <div id="${f}MatSemMateria" class="aviso-box oculto mat-aviso"></div>
   </fieldset>`;
 }
 
@@ -691,175 +691,192 @@ function controleProva(f) {
     return d;
   };
   const carregado = () => bancosCache.some(b => contagens[b.id]);
-  // ---------- quantidades: total fixo e tipos práticos por caixinha ----------
+  // ---------- quantidades: 1) modelo, 2) ajuste (total, alternativas, dissertativas), 3) práticas da matéria ----------
   const PRAT = ["Sql", "Web", "Diag"], TIPO_PRAT = { Sql: "sql", Web: "web", Diag: "diagrama" };
   const nq = k => $f("Ativa" + k).checked ? Math.max(0, Math.round(Number($f("N" + k).value || 0))) : 0;   // prático desligado = 0
   const pratico = () => PRAT.reduce((s, k) => s + nq(k), 0);
   const somaTudo = () => Number($f("NAlt").value || 0) + Number($f("NDiss").value || 0) + pratico();
-  let praticoAntes = 0, tirarDaAlt = true, tiposDiag = null, qtdDiag = {}, qtdSql = {}, qtdWeb = {}, webSub = new Set();   // quantos de cada tipo de diagrama / categoria SQL / modelo de página; subtópicos de HTML e CSS
-  // qtdDiag (ex.: { "er-conceitual": 1 })   // tiposDiag: Set dos tipos de diagrama que podem cair (null = todos)
-  // TEORIA: bancos da matéria escolhida (sem matéria: todos); um banco já marcado continua aparecendo
+  let praticoAntes = 0, tiposDiag = null, qtdDiag = {}, qtdSql = {}, qtdWeb = {}, webSub = new Set();   // quantos de cada tipo de diagrama / categoria SQL / modelo de página; etiquetas da página
+  let modeloSel = "", outrasMat = false;   // outrasMat: o professor pediu prática de outra matéria (link recolhido)
+  // TEORIA: bancos da matéria escolhida; um banco já marcado continua aparecendo
   const bancoVisivel = (b, mat = $f("Materia").value) => (!!mat && chaveTexto(b.materia) === chaveTexto(mat)) || !!sel.get(b.id)?.size;
   const bancosDaMat = () => bancosCache.filter(b => bancoVisivel(b));
-  // PRÁTICAS (à parte, de qualquer matéria): tipo -> Map(bancoId -> Set de temas)
+  // PRÁTICAS: tipo -> Map(bancoId -> Set de temas). Vêm SOZINHAS dos bancos da matéria (ou de todas, com outrasMat) que têm o tipo,
+  // respeitando as capacidades marcadas; "Ver de onde vêm" mostra quais são.
   let praticasSel = { sql: new Map(), web: new Map(), diagrama: new Map() }, praticasPendentes = null;
   const temasDoTipo = (b, tipo) => { const c = contagens[b]; return !c || c === "erro" ? [] : Object.keys(c).filter(t => (c[t][tipo] || 0) > 0); };
   const bancosDoTipo = tipo => bancosCache.filter(b => temasDoTipo(b.id, tipo).length);
-  function tiposGerais() { const t = { sql: 0, web: 0, diagrama: 0 }; for (const k of Object.keys(t)) t[k] = bancosDoTipo(k).length; return t; }
-  // quantas questões práticas do tipo existem nos temas escolhidos (diagramas: só dos tipos marcados)
-  function dispPrat(tipo) {
-    let n = 0;
-    for (const [b, ts] of praticasSel[tipo]) {
-      if (tipo === "diagrama") { for (const q of questoesCache[b] || []) if (q.tipo === "diagrama" && q.revisao !== "pendente" && ts.has(temaDe(q)) && (!tiposDiag || tiposDiag.has(q.diagrama))) n++; }
-      else for (const t of ts) n += contagens[b]?.[t]?.[tipo] || 0;
-    }
-    return n;
+  const daMateria = b => chaveTexto(b.materia) === chaveTexto($f("Materia").value);
+  const fontesDoTipo = tipo => bancosDoTipo(tipo).filter(b => outrasMat || daMateria(b));
+  function montarFontes(tipo) {
+    const m = new Map();
+    for (const b of fontesDoTipo(tipo)) { const ts = temasDoTipo(b.id, tipo).filter(t => tipo === "web" || !foraDasCaps(b.id, t)); if (ts.length) m.set(b.id, new Set(ts)); }
+    praticasSel[tipo] = m;
   }
-  // diagramas de UM tipo disponíveis nos bancos escolhidos
-  function dispDiagTipo(k) {
-    let n = 0;
-    for (const [b, ts] of praticasSel.diagrama) for (const q of questoesCache[b] || []) if (q.tipo === "diagrama" && q.revisao !== "pendente" && ts.has(temaDe(q)) && q.diagrama === k) n++;
-    return n;
-  }
+  const qsPrat = tipo => [...praticasSel[tipo]].flatMap(([b, ts]) => (questoesCache[b] || []).filter(q => q.tipo === tipo && q.revisao !== "pendente" && (tipo === "web" || ts.has(temaDe(q)))));
+  const dispSql = k => qsPrat("sql").filter(q => categoriaSql(q) === k).length;
+  const dispWeb = m => qsPrat("web").filter(q => modeloWeb(q) === m && cobreTags(q, [...webSub])).length;
+  const dispDiagTipo = k => qsPrat("diagrama").filter(q => q.diagrama === k).length;
+  const dispPrat = tipo => tipo === "sql" ? qsPrat("sql").length : tipo === "web" ? qsPrat("web").filter(q => cobreTags(q, [...webSub])).length : qsPrat("diagrama").filter(q => !tiposDiag || tiposDiag.has(q.diagrama)).length;
   const diagDisponiveis = () => dispPrat("diagrama");
-  // tipos de diagrama que existem nos bancos (casos de uso, conceitual…)
-  const kindsDiag = () => [...new Set(bancosDoTipo("diagrama").flatMap(b => (questoesCache[b.id] || []).filter(q => q.tipo === "diagrama").map(q => q.diagrama)))].filter(Boolean);
-  // ao ativar um tipo: já vêm os bancos dele da matéria escolhida (se houver); o resto o professor marca
-  function padraoPratica(tipo) {
-    if (praticasSel[tipo].size) return;
-    const mat = chaveTexto($f("Materia").value);
-    for (const b of bancosDoTipo(tipo)) if (mat && chaveTexto(b.materia) === mat) praticasSel[tipo].set(b.id, new Set(temasDoTipo(b.id, tipo)));
+  const kindsDiag = () => [...new Set(fontesDoTipo("diagrama").flatMap(b => (questoesCache[b.id] || []).filter(q => q.tipo === "diagrama").map(q => q.diagrama)))].filter(Boolean);
+  const padraoPratica = tipo => montarFontes(tipo);
+  // tipos práticos que a matéria tem (pelo plano de curso e pelos bancos dela)
+  const DIAG_DA_UNIDADE = { bd: ["er-conceitual", "er-logico", "er-ambos"], req: ["casos-de-uso", "atividades", "rastreabilidade", "requisitos", "kanban", "historias", "empatia"] };
+  const DESC_DIAG = { "er-conceitual": "Entidades e relacionamentos", "er-logico": "Tabelas, PK e FK", "er-ambos": "Os dois na mesma questão", "casos-de-uso": "Atores, casos de uso, include/extend",
+    atividades: "Fluxo do processo levantado", rastreabilidade: "Requisitos × casos de uso, telas e testes", requisitos: "RF, RNF, regras de negócio e restrições", kanban: "Colunas, cartões e limite WIP",
+    historias: "Como… quero… para… e critérios de aceitação", empatia: "Pensa, ouve, vê, fala, dores e ganhos" };
+  function tiposDaMateria() {
+    const u = unidadeDaMateria($f("Materia").value), out = [];
+    const tem = tipo => fontesDoTipo(tipo).length > 0;
+    if (outrasMat) return ["sql", "web", "diagrama"].filter(tem);
+    if (u?.id === "bd") out.push("sql", "diagrama"); else if (u?.id === "marc") out.push("web"); else if (u?.id === "req") out.push("diagrama");
+    for (const t of ["sql", "web", "diagrama"]) if (!out.includes(t) && tem(t)) out.push(t);
+    return out;
   }
-  function desenharBancosPraticos(k) {
-    const tipo = TIPO_PRAT[k], box = $f("Bancos" + k); if (!box) return;
-    const bs = bancosDoTipo(tipo), porMat = new Map();
-    bs.forEach(b => { const m = b.materia || "Sem matéria"; (porMat.get(m) || porMat.set(m, []).get(m)).push(b); });
-    box.innerHTML = !bs.length ? `<p class="pequeno">Nenhum banco com esse tipo. Importe em Bancos de questões.</p>` :
-      `<p class="pequeno" style="margin:6px 0 2px">De quais bancos (${dispPrat(tipo)} disponíveis nos marcados):</p>` + [...porMat].sort((x, y) => x[0].localeCompare(y[0], "pt-BR")).map(([m, l]) => `<div class="prat-mat"><span class="pequeno prat-mat-nome">${esc(m)}</span>${l.map(b => {
-        const ts = temasDoTipo(b.id, tipo), s = praticasSel[tipo].get(b.id), n = s?.size || 0;
-        return `<div class="prat-banco"><label class="check" style="margin:2px 0"><input type="checkbox" data-pb="${b.id}" data-pt="${tipo}"${n === ts.length && n ? " checked" : ""}${travado ? " disabled" : ""}> <span><b>${esc(b.nome)}</b> <span class="pequeno">${n}/${ts.length} temas</span></span></label>
-          ${ts.length > 1 && tipo !== "web" ? `<details class="prat-temas"${n && n < ts.length ? " open" : ""}><summary class="pequeno">escolher temas</summary>${ts.map(t => `<label class="check" style="margin:1px 0 1px 18px"><input type="checkbox" data-pb="${b.id}" data-pt="${tipo}" data-ptema="${esc(t)}"${s?.has(t) ? " checked" : ""}${travado ? " disabled" : ""}> <span class="pequeno">${esc(t)} (${contagens[b.id][t][tipo]})</span></label>`).join("")}</details>` : ""}</div>`;
-      }).join("")}</div>`).join("");
-    box.querySelectorAll("input[data-pb]").forEach(c => { const s = praticasSel[tipo].get(c.dataset.pb), ts = temasDoTipo(c.dataset.pb, tipo); if (!c.dataset.ptema) c.indeterminate = !!s?.size && s.size < ts.length;
-      c.onchange = () => {
-        const b = c.dataset.pb, ts2 = temasDoTipo(b, tipo), atual = new Set(praticasSel[tipo].get(b) || []);
-        if (c.dataset.ptema) c.checked ? atual.add(c.dataset.ptema) : atual.delete(c.dataset.ptema); else (c.checked ? ts2 : [...atual]).forEach(t => c.checked ? atual.add(t) : atual.delete(t));
-        atual.size ? praticasSel[tipo].set(b, atual) : praticasSel[tipo].delete(b);
-        atualizar();
-      }; });
+  // linhas de cada tipo: [{ k, nome, desc, disp }]
+  function linhasDo(tipo) {
+    if (tipo === "sql") return Object.keys(CATEGORIAS_SQL).map(k => ({ k, nome: CATEGORIAS_SQL[k].nome, desc: ({ DDL: "CREATE, ALTER, DROP", DML: "SELECT, INSERT, UPDATE, DELETE", DCL: "GRANT, REVOKE (usuários e permissões)", misto: "Várias tarefas no mesmo cenário" })[k], disp: dispSql(k) }));
+    if (tipo === "web") return Object.keys(MODELOS_WEB).map(m => ({ k: m, nome: ({ blocos: "Encaixar blocos", completar: "Completar digitando", livre: "Projeto livre" })[m], desc: ({ blocos: "Comandos prontos para arrastar", completar: "O aluno digita o que falta", livre: "Pastas, arquivos e git" })[m], disp: dispWeb(m) }));
+    const u = unidadeDaMateria($f("Materia").value), kinds = !outrasMat && DIAG_DA_UNIDADE[u?.id] ? DIAG_DA_UNIDADE[u.id] : kindsDiag();
+    return kinds.map(k => ({ k, nome: String(NOMES_DIAGRAMA[k] || k).replace(" (brModelo)", ""), desc: DESC_DIAG[k] || "", disp: dispDiagTipo(k) }));
   }
-  // lista "marque e diga quantos": itens [{ k, nome, resumo, disp }], qtd = objeto { k: n }; aoMudar(k, ligado)
-  function listaQtd(box, titulo, itens, qtd, aoMudar) {
-    if (!box) return;
-    const soma = Object.values(qtd).reduce((s, n) => s + n, 0);
-    box.innerHTML = itens.length ? `<span>${titulo} (total: <b>${soma}</b>):</span>` + itens.map(it => `<div class="diag-tipo-linha"><label class="check" style="margin:2px 0;flex:1"><input type="checkbox" data-qk="${esc(it.k)}"${qtd[it.k] ? " checked" : ""}${travado ? " disabled" : ""}> <span><b>${esc(it.nome)}</b>${it.resumo ? ` <span class="pequeno">— ${esc(it.resumo)}</span>` : ""} <span class="pequeno">(${it.disp} nos bancos marcados)</span></span></label><input type="number" min="0" class="diag-qtd" data-qn="${esc(it.k)}" value="${qtd[it.k] || 0}"${travado ? " disabled" : ""} aria-label="Quantas de ${esc(it.nome)}"></div>`).join("") : '<span class="pequeno">Nenhum banco com esse tipo.</span>';
-    box.querySelectorAll("[data-qk]").forEach(c => c.onchange = () => { const k = c.dataset.qk; if (c.checked) qtd[k] = Math.max(1, qtd[k] || 0); else delete qtd[k]; aoMudar(k, c.checked); });
-    box.querySelectorAll("[data-qn]").forEach(i => i.onchange = () => { const k = i.dataset.qn, n = Math.max(0, Math.round(Number(i.value) || 0)); if (n) qtd[k] = n; else delete qtd[k]; aoMudar(k, !!n); });
+  const qtdDe = tipo => tipo === "sql" ? qtdSql : tipo === "web" ? qtdWeb : qtdDiag;
+  const KDE = { sql: "Sql", web: "Web", diagrama: "Diag" };
+  function sincronizarN(tipo) {
+    const k = KDE[tipo], q = qtdDe(tipo), n = Object.values(q).reduce((s, x) => s + x, 0);
+    $f("N" + k).value = n;
+    if (tipo === "diagrama") tiposDiag = Object.keys(q).length ? new Set(Object.keys(q)) : null;
   }
-  function desenharPraticos() {
-    if (praticasPendentes && carregado()) {   // somativa salva: práticas gravadas, ou (antigas) os temas práticos da seleção
-      const p = praticasPendentes; praticasPendentes = null;
-      praticasSel = { sql: new Map(), web: new Map(), diagrama: new Map() };
-      if (p.praticas) for (const [tipo, o] of Object.entries(p.praticas)) for (const [b, ts] of Object.entries(o || {})) praticasSel[tipo]?.set(b, new Set(ts && ts.length ? ts : temasDoTipo(b, tipo)));
-      else for (const tipo of ["sql", "web", "diagrama"]) for (const b of bancosTeoricos(p)) { const ts = temasDoTipo(b, tipo).filter(t => !temasDoBanco(p, b) || temasDoBanco(p, b).has(t)); if (ts.length) praticasSel[tipo].set(b, new Set(ts)); }
-    }
-    const t = tiposGerais();
-    PRAT.forEach(k => {
-      $f("Box" + k).classList.toggle("oculto", !t[TIPO_PRAT[k]] && !$f("Ativa" + k).checked);
-      $f("Qtd" + k).classList.toggle("oculto", !$f("Ativa" + k).checked);
-      if ($f("Ativa" + k).checked) desenharBancosPraticos(k);
-    });
-    const ks = kindsDiag();
-    // SQL físico: DDL / DML / DCL (resumo na frente), quantidade de cada; página web: modelo + subtópicos HTML/CSS
-    const qsDe = tipo => bancosDoTipo(tipo).flatMap(b => (questoesCache[b.id] || []).filter(q => q.tipo === tipo && q.revisao !== "pendente").map(q => ({ q, b: b.id })));
-    const marcadaPrat = (tipo, x) => { const ts = praticasSel[tipo].get(x.b); return !!ts && (tipo === "web" || ts.has(temaDe(x.q))); };
-    const catsSql = Object.keys(CATEGORIAS_SQL).filter(k => qsDe("sql").some(x => categoriaSql(x.q) === k));
-    const dispSql = k => qsDe("sql").filter(x => marcadaPrat("sql", x) && categoriaSql(x.q) === k).length;
-    listaQtd($f("CatSql"), "Quais comandos e quantas questões de cada", catsSql.map(k => ({ k, nome: CATEGORIAS_SQL[k].nome, resumo: CATEGORIAS_SQL[k].resumo, disp: dispSql(k) })), qtdSql, (k, on) => {
-      if (on && !dispSql(k)) for (const x of qsDe("sql")) if (categoriaSql(x.q) === k) praticasSel.sql.set(x.b, new Set([...(praticasSel.sql.get(x.b) || []), temaDe(x.q)]));
-      $f("NSql").value = Object.values(qtdSql).reduce((s, n) => s + n, 0); descontar(); atualizar(); });
-    const subOk = subtopicosConferiveis([...webSub]);
-    const cobre = q => { const c = coberturaWeb(q); return subOk.every(s => c.has(s)); };
-    const modsWeb = Object.keys(MODELOS_WEB).filter(m => qsDe("web").some(x => modeloWeb(x.q) === m));
-    const dispWeb = m => qsDe("web").filter(x => marcadaPrat("web", x) && modeloWeb(x.q) === m && cobre(x.q)).length;
-    listaQtd($f("ModWeb"), "Modelo da prova e quantas páginas de cada", modsWeb.map(m => ({ k: m, nome: MODELOS_WEB[m], disp: dispWeb(m) })), qtdWeb, (m, on) => {
-      if (on && !praticasSel.web.size) for (const b of bancosDoTipo("web")) praticasSel.web.set(b.id, new Set(temasDoTipo(b.id, "web")));
-      $f("NWeb").value = Object.values(qtdWeb).reduce((s, n) => s + n, 0); descontar(); atualizar(); });
-    const st = subtopicosWeb();
-    $f("SubWeb").innerHTML = `<span>Tópicos que a página precisa ter <span class="pequeno">(nenhum marcado = qualquer página)</span>:</span>` + ["HTML", "CSS"].map(g => `<details class="prat-temas"${st[g].some(s => webSub.has(s.id)) ? " open" : ""}><summary><b>${g}</b> <span class="pequeno">(${st[g].filter(s => webSub.has(s.id)).length} marcados)</span></summary>${st[g].map(s => `<label class="check" style="margin:1px 0 1px 18px" title="${esc(s.itens.join(", "))}"><input type="checkbox" data-websub="${s.id}"${webSub.has(s.id) ? " checked" : ""}${travado ? " disabled" : ""}> <span>${esc(s.nome)}${s.itens.length ? ` <span class="pequeno">— ${esc(s.itens.join(", ").slice(0, 110))}${s.itens.join(", ").length > 110 ? "…" : ""}</span>` : ""}${s.automatico ? "" : ' <span class="pequeno">(teórico: não filtra a página)</span>'}</span></label>`).join("")}</details>`).join("") +
-      (subOk.length ? `<p class="pequeno" style="margin:2px 0 0">${qsDe("web").filter(x => marcadaPrat("web", x) && cobre(x.q)).length} página(s) dos bancos marcados têm todos os tópicos marcados.</p>` : "");
-    $f("SubWeb").querySelectorAll("[data-websub]").forEach(c => c.onchange = () => { c.checked ? webSub.add(c.dataset.websub) : webSub.delete(c.dataset.websub); atualizar(); });
-    // cada tipo de diagrama: caixinha (começa desmarcada) + quantidade à direita; o total é a soma
-    const somaD = Object.values(qtdDiag).reduce((s, n) => s + n, 0);
-    $f("TiposDiag").innerHTML = ks.length ? `<span>Quais diagramas e quantos de cada (total: <b>${somaD}</b>):</span>` + ks.map(k => `<div class="diag-tipo-linha"><label class="check" style="margin:2px 0;flex:1"><input type="checkbox" data-tipodiag="${esc(k)}"${qtdDiag[k] ? " checked" : ""}${travado ? " disabled" : ""}> <span>${esc(NOMES_DIAGRAMA[k] || k)} <span class="pequeno">(${dispDiagTipo(k)} nos bancos marcados)</span></span></label><input type="number" min="0" class="diag-qtd" data-qtddiag="${esc(k)}" value="${qtdDiag[k] || 0}"${travado ? " disabled" : ""} aria-label="Quantos diagramas de ${esc(NOMES_DIAGRAMA[k] || k)}"></div>`).join("") : "";
-    const mudarD = () => { tiposDiag = Object.keys(qtdDiag).length ? new Set(Object.keys(qtdDiag)) : null; $f("NDiag").value = Object.values(qtdDiag).reduce((s, n) => s + n, 0); descontar(); atualizar(); };
-    $f("TiposDiag").querySelectorAll("[data-tipodiag]").forEach(c => c.onchange = () => {
-      const k = c.dataset.tipodiag;
-      if (c.checked) {
-        qtdDiag[k] = Math.max(1, qtdDiag[k] || 0);
-        // nenhum banco marcado tem esse tipo: marca os temas que têm (de qualquer matéria)
-        if (!dispDiagTipo(k)) for (const b of bancosDoTipo("diagrama")) { const ts = [...new Set((questoesCache[b.id] || []).filter(q => q.tipo === "diagrama" && q.diagrama === k).map(temaDe))]; if (ts.length) praticasSel.diagrama.set(b.id, new Set([...(praticasSel.diagrama.get(b.id) || []), ...ts])); }
-      } else delete qtdDiag[k];
-      mudarD();
-    });
-    $f("TiposDiag").querySelectorAll("[data-qtddiag]").forEach(i => i.onchange = () => { const k = i.dataset.qtddiag, n = Math.max(0, Math.round(Number(i.value) || 0)); if (n) qtdDiag[k] = n; else delete qtdDiag[k]; mudarD(); });
-  }
-  // cada prática a mais tira uma teórica (alternativa, dissertativa, alternativa…); a menos devolve
+  // ---------- regra do total: cada prática que entra tira uma teórica (alternativa, alternativa, dissertativa, e repete) ----------
+  const ORDEM_TIRAR = ["a", "a", "d"];
   function descontar() {
-    const novo = pratico(), delta = novo - praticoAntes; praticoAntes = novo;
-    if ($f("SemLimite").checked || !delta) return;
-    for (let i = 0; i < Math.abs(delta); i++) {
-      const alvoAlt = delta > 0 ? tirarDaAlt : !tirarDaAlt;
+    const novo = pratico();
+    if ($f("SemLimite").checked) { praticoAntes = novo; return; }
+    while (praticoAntes !== novo) {
       const a = Number($f("NAlt").value || 0), d = Number($f("NDiss").value || 0);
-      if (delta > 0) {
-        if (!a && !d) break;
-        if ((alvoAlt && a) || !d) $f("NAlt").value = a - 1; else $f("NDiss").value = d - 1;
-        tirarDaAlt = !tirarDaAlt;
-      } else {
-        if (alvoAlt) $f("NAlt").value = a + 1; else $f("NDiss").value = d + 1;
-        tirarDaAlt = !tirarDaAlt;
+      if (novo > praticoAntes) {   // a prática nº (praticoAntes+1) tira ORDEM_TIRAR[praticoAntes % 3]
+        const quer = ORDEM_TIRAR[praticoAntes % 3];
+        if ((quer === "a" && a) || !d) { if (a) $f("NAlt").value = a - 1; } else $f("NDiss").value = d - 1;
+        praticoAntes++;
+      } else {                     // tirar a prática nº praticoAntes devolve na ordem inversa
+        praticoAntes--;
+        if (ORDEM_TIRAR[praticoAntes % 3] === "a") $f("NAlt").value = a + 1; else $f("NDiss").value = d + 1;
       }
     }
   }
-  // total novo: as teóricas viram o que sobra (60% alternativas)
+  // total novo: as teóricas viram o que sobra, na mesma proporção (2 alternativas : 1 dissertativa a partir de 6 + 4)
   function aoMudarTotal() {
     if ($f("SemLimite").checked) return;
     const teo = Math.max(0, Math.round(Number($f("Total").value || 0)) - pratico());
-    const alt = Math.ceil(teo * 0.6); $f("NAlt").value = alt; $f("NDiss").value = teo - alt; tirarDaAlt = true;
+    const alt = Math.ceil(teo * 0.6); $f("NAlt").value = alt; $f("NDiss").value = teo - alt;
   }
-  // ✨ SUGESTÃO DE PROVA (sem IA): temas da matéria ligados às capacidades marcadas + quantidades padrão
-  async function sugerir(soPratica = false) {
+  // ---------- 1) MODELOS (sem IA): o plano de práticas de cada modelo ----------
+  function planoPratico(so) {
+    const plano = [];   // [{ tipo, k, n }]
+    const add = (tipo, k, n) => { const l = linhasDo(tipo).find(x => x.k === k); const m = Math.min(n, l?.disp || 0); if (m > 0) plano.push({ tipo, k, n: m }); return m; };
+    const tipo = tiposDaMateria().find(t => fontesDoTipo(t).length);
+    if (!tipo) return plano;
+    if (tipo === "sql") { if (so) { if (!add("sql", "misto", 2)) add("sql", "DML", 2); } else { const d = add("sql", "DDL", 1); add("sql", "DML", 3 - d); } }
+    else if (tipo === "web") { if (so) { if (!add("web", "livre", 1)) add("web", linhasDo("web").find(l => l.disp)?.k, 1); } else if (!add("web", "blocos", 1)) add("web", linhasDo("web").find(l => l.disp)?.k, 1); }
+    else { let n = 0; for (const l of linhasDo("diagrama")) if (n < 2 && add("diagrama", l.k, 1)) n++; }
+    return plano;
+  }
+  const NOME_TIPO = { sql: "SQL físico", web: "página web", diagrama: "diagrama" };
+  function textoPlano(plano) {
+    return plano.map(p => { const l = linhasDo(p.tipo).find(x => x.k === p.k); return p.tipo === "sql" ? `${p.n} ${l.nome}` : p.tipo === "web" ? `${p.n} página web (${l.nome.toLowerCase()})` : `${p.n} ${l.nome.toLowerCase()}`; }).join(" + ");
+  }
+  function composicaoTeoriaPratica(plano) {   // simula a regra do total a partir de 6 + 4
+    let a = 6, d = 4; plano.reduce((s, p) => s + p.n, 0) && [...Array(plano.reduce((s, p) => s + p.n, 0)).keys()].forEach(i => { const quer = ORDEM_TIRAR[i % 3]; if ((quer === "a" && a) || !d) { if (a) a--; } else d--; });
+    return { a, d };
+  }
+  function modelos() {
+    const pTP = planoPratico(false), pSP = planoPratico(true), c = composicaoTeoriaPratica(pTP);
+    const l = [{ k: "teoria", t: "Só teoria", d: "6 alternativas + 4 dissertativas" }];
+    if (pTP.length) l.push({ k: "tp", t: "Teoria + prática", d: `${c.a} alternativas + ${c.d} dissertativas + ${textoPlano(pTP)}` });
+    if (pSP.length) l.push({ k: "pratica", t: "Só prática", d: textoPlano(pSP) });
+    l.push({ k: "zero", t: "Montar do zero", d: "Você define tudo" });
+    return { l, pTP, pSP };
+  }
+  function aplicarModelo(k) {
     if (travado) return;
-    const mat = $f("Materia").value;
-    if (!mat) { $f("SugestaoMsg").textContent = "Escolha a matéria primeiro."; return; }
-    if (!carregando) await carregarTemas(); else await carregando;
-    const bs = bancosDaMat();
-    if (!bs.length) { $f("SugestaoMsg").textContent = `Nenhum banco de ${mat}. Importe um em Bancos de questões.`; return; }
-    const nova = new Map();
-    for (const b of bs) { const ts = temasDe(b.id).filter(t => !foraDasCaps(b.id, t)); if (ts.length) nova.set(b.id, new Set(ts)); }
-    await carregarTemas(nova);
-    // quantos de cada tipo existem nos temas escolhidos
-    const d = { alternativa: 0, dissertativa: 0, sql: 0, web: 0, diagrama: 0 };
-    for (const [b, ts] of nova) for (const t of ts) { const c = contagens[b]?.[t]; if (c) for (const k of Object.keys(d)) d[k] += c[k] || 0; }
-    const quer = { Sql: 2, Web: 1, Diag: 2 };
-    praticasSel = { sql: new Map(), web: new Map(), diagrama: new Map() };
-    PRAT.forEach(k => { const tipo = TIPO_PRAT[k]; if (soPratica) padraoPratica(tipo); const tem = soPratica ? dispPrat(tipo) : 0; $f("Ativa" + k).checked = tem > 0; $f("N" + k).value = tem > 0 ? Math.min(quer[k], tem) : 0; });
-    tiposDiag = null; qtdDiag = {}; qtdSql = {}; qtdWeb = {}; webSub = new Set();
-    const prat = pratico();
-    if (soPratica) {
-      if (!prat) { $f("SugestaoMsg").textContent = `${mat} não tem questões práticas nos temas escolhidos.`; atualizar(); return; }
-      $f("NAlt").value = 0; $f("NDiss").value = 0; $f("SemLimite").checked = false; $f("Total").value = prat;
-    } else {
-      $f("SemLimite").checked = false; $f("Total").value = 10;
-      const teo = Math.max(0, 10 - prat); let alt = Math.ceil(teo * 0.6), diss = teo - alt;
-      if (diss > d.dissertativa) { alt += diss - d.dissertativa; diss = d.dissertativa; }
-      $f("NAlt").value = Math.min(alt, d.alternativa); $f("NDiss").value = diss;
-      if (Number($f("NAlt").value) + diss + prat !== 10) $f("Total").value = Number($f("NAlt").value) + diss + prat;
+    const { pTP, pSP } = modelos();
+    qtdSql = {}; qtdWeb = {}; qtdDiag = {}; webSub = new Set(); tiposDiag = null;
+    PRAT.forEach(x => { $f("Ativa" + x).checked = false; $f("N" + x).value = 0; });
+    $f("SemLimite").checked = false; $f("Total").value = 10; $f("NAlt").value = 6; $f("NDiss").value = 4; praticoAntes = 0;
+    const usar = plano => { for (const p of plano) { $f("Ativa" + KDE[p.tipo]).checked = true; montarFontes(p.tipo); qtdDe(p.tipo)[p.k] = p.n; sincronizarN(p.tipo); } };
+    if (k === "tp") { usar(pTP); descontar(); }
+    else if (k === "pratica") { usar(pSP); $f("NAlt").value = 0; $f("NDiss").value = 0; $f("Total").value = pratico(); praticoAntes = pratico(); }
+    else if (k === "zero") { $f("NAlt").value = 0; $f("NDiss").value = 0; $f("Total").value = 10; }
+    modeloSel = k; atualizar();
+  }
+  // ---------- desenho dos passos 1, 2 e 3 ----------
+  const passo = (campo, v, extra = "") => `<div class="qb-step"${extra}><button type="button" data-d="-1" aria-label="Menos"${travado ? " disabled" : ""}>−</button><input type="number" min="0" value="${v}" ${campo}${travado ? " disabled" : ""}><button type="button" data-d="1" aria-label="Mais"${travado ? " disabled" : ""}>+</button></div>`;
+  function desenharPraticos() {
+    if (praticasPendentes && carregado()) {   // somativa salva: práticas gravadas (outra matéria → abre o link de outras matérias)
+      const p = praticasPendentes; praticasPendentes = null;
+      praticasSel = { sql: new Map(), web: new Map(), diagrama: new Map() };
+      if (p.praticas) for (const [tipo, o] of Object.entries(p.praticas)) for (const [b, ts] of Object.entries(o || {})) {
+        praticasSel[tipo]?.set(b, new Set(ts && ts.length ? ts : temasDoTipo(b, tipo)));
+        const bb = bancosCache.find(x => x.id === b); if (bb && p.materia && chaveTexto(bb.materia) !== chaveTexto(p.materia)) outrasMat = true;
+      }
+      else for (const tipo of ["sql", "web", "diagrama"]) for (const b of bancosTeoricos(p)) { const ts = temasDoTipo(b, tipo).filter(t => !temasDoBanco(p, b) || temasDoBanco(p, b).has(t)); if (ts.length) praticasSel[tipo].set(b, new Set(ts)); }
     }
-    praticoAntes = pratico(); tirarDaAlt = true;
-    const n = [...nova.values()].reduce((s, x) => s + x.size, 0);
-    $f("SugestaoMsg").textContent = `Sugestão: ${n} tema(s) de ${mat}${capsMarcadas.size ? " das capacidades marcadas" : ""}. Revise e ajuste antes de criar.`;
-    atualizar();
+    // tipos ativos: as fontes acompanham a matéria e as capacidades
+    PRAT.forEach(k => { if ($f("Ativa" + k).checked && carregado()) montarFontes(TIPO_PRAT[k]); });
+    const mat = $f("Materia").value, tipos = mat ? tiposDaMateria() : [];
+    // 1) modelos
+    const { l } = modelos();
+    $f("Modelos").innerHTML = !mat ? `<p class="pequeno">Escolha a matéria no topo para ver os modelos.</p>` : l.map(m => `<button type="button" class="qb-modelo${modeloSel === m.k ? " ativo" : ""}" data-modelo="${m.k}"${travado ? " disabled" : ""}><b>${m.t}</b><span>${esc(m.d)}</span></button>`).join("");
+    $f("Modelos").querySelectorAll("[data-modelo]").forEach(b => b.onclick = () => aplicarModelo(b.dataset.modelo));
+    // 2) barra e regra
+    const nA = Number($f("NAlt").value || 0), nD = Number($f("NDiss").value || 0), partes = [["alt", nA, "alternativa", "alternativas"], ["diss", nD, "dissertativa", "dissertativas"], ["sql", nq("Sql"), "SQL físico", "SQL físico"], ["web", nq("Web"), "página web", "páginas web"], ["diag", nq("Diag"), "diagrama", "diagramas"]].filter(p => p[1] > 0);
+    $f("Barra").innerHTML = partes.length ? partes.map(([c, n, um, v]) => `<span class="qb-seg qb-${c}" style="flex:${n}">${n} ${n === 1 ? um : v}</span>`).join("") : `<span class="qb-seg qb-vazio">Nenhuma questão ainda</span>`;
+    const total = Number($f("Total").value || 0), soma = somaTudo();
+    $f("NTotal").innerHTML = $f("SemLimite").checked ? `Sem limite: o total é a soma, <b>${soma}</b> ${soma === 1 ? "questão" : "questões"}.`
+      : `O total fica em ${total}. Cada prática que entra tira uma teórica: duas alternativas, depois uma dissertativa, e repete.${soma !== total ? ` <b class="erro-texto">A soma está em ${soma}.</b>` : ""}`;
+    // 3) práticas da matéria
+    $f("PratTitulo").textContent = mat ? `3. Questões práticas de ${mat}${outrasMat ? " (e de outras matérias)" : ""}` : "3. Questões práticas";
+    const CARD = { sql: ["Sql", "SQL físico", "O aluno escreve e executa SQL na Bancada"], web: ["Web", "Página web", "HTML e CSS num editor parecido com o VS Code, com prévia ao vivo"], diagrama: ["Diag", "Diagramas", tipos.includes("sql") || unidadeDaMateria(mat)?.id === "bd" ? "Modelo conceitual e lógico no editor igual ao brModelo" : "Montados no editor de diagramas da prova"] };
+    $f("Praticas").innerHTML = !mat ? "" : tipos.length ? tipos.map(tipo => {
+      const [k, titulo, desc] = CARD[tipo], ativo = $f("Ativa" + k).checked, fontes = fontesDoTipo(tipo), q = qtdDe(tipo);
+      if (!ativo) return `<div class="qb-pcard"><div class="qb-pcab"><div><b>${titulo}</b><small>${desc}</small></div>${fontes.length ? `<button type="button" class="leve mini" data-padd="${k}"${travado ? " disabled" : ""}>+ Adicionar</button>` : `<span class="pequeno">sem questões ainda</span>`}</div></div>`;
+      const linhas = linhasDo(tipo).map(x => `<div class="qb-linha${x.disp ? "" : " qb-apagada"}"><div><b>${esc(x.nome)}</b><small>${esc(x.desc)} · ${x.disp ? `${x.disp} disponíve${x.disp === 1 ? "l" : "is"}` : "sem questões ainda"}</small></div>${passo(`data-pq="${tipo}|${esc(x.k)}"`, q[x.k] || 0, x.disp ? "" : ' data-sem="1"')}</div>`).join("");
+      const tags = tipo !== "web" ? "" : `<p class="qb-sub">O que a página precisa cobrar</p>` + ["HTML", "CSS"].map(g => `<p class="pequeno" style="margin:6px 0 4px">${g}</p><div class="qb-tags">${TAGS_WEB[g].map(t => `<button type="button" class="qb-tag${webSub.has(t.k) ? " ativo" : ""}" data-tag="${t.k}" aria-pressed="${webSub.has(t.k)}"${travado ? " disabled" : ""}>${esc(t.nome)}</button>`).join("")}</div>`).join("") + `<p class="pequeno" style="margin:6px 0 0">Nada marcado = qualquer página. Só aparecem assuntos que mudam a página sorteada.</p>`;
+      return `<div class="qb-pcard ativo"><div class="qb-pcab"><div><b>${titulo}</b><small>${outrasMat ? `Bancos de ${esc([...new Set(fontes.map(b => b.materia))].join(", "))}` : desc}</small></div><button type="button" class="leve mini" data-prem="${k}"${travado ? " disabled" : ""}>Remover</button></div>
+        ${tipo === "web" ? `<p class="qb-sub">Como o aluno faz</p>` : ""}${linhas}${tags}
+        <p class="pequeno qb-fonte">As questões vêm sozinhas dos bancos${outrasMat ? "" : ` de ${esc(mat)}`} que têm esse tipo${capsMarcadas.size && tipo !== "web" ? ", nas capacidades marcadas" : ""}. <a href="#" data-pfonte="${tipo}">Ver de onde vêm</a></p></div>`;
+    }).join("") : `<p class="pequeno">${esc(mat)} não tem questões práticas nos bancos.</p>`;
+    const faltam = ["sql", "web", "diagrama"].filter(t => !tipos.includes(t) && bancosDoTipo(t).length).map(t => NOME_TIPO[t]);
+    $f("PratNota").innerHTML = !mat ? "" : (faltam.length && !outrasMat ? `${faltam.map(t => t[0].toUpperCase() + t.slice(1)).join(" e ")} não ${faltam.length > 1 ? "aparecem" : "aparece"} aqui porque a matéria é ${esc(mat)}. ` : "") +
+      (outrasMat ? `<a href="#" data-poutras="0">Voltar a usar só as práticas de ${esc(mat)}</a>` : bancosCache.some(b => !daMateria(b) && ["sql", "web", "diagrama"].some(t => temasDoTipo(b.id, t).length)) ? `<a href="#" data-poutras="1">Usar prática de outra matéria</a>` : "");
+    const box = $f("Praticas");
+    box.querySelectorAll("[data-padd]").forEach(b => b.onclick = () => { const k = b.dataset.padd; $f("Ativa" + k).checked = true; montarFontes(TIPO_PRAT[k]); modeloSel = ""; atualizar(); });
+    box.querySelectorAll("[data-prem]").forEach(b => b.onclick = () => { const k = b.dataset.prem, tipo = TIPO_PRAT[k]; $f("Ativa" + k).checked = false; Object.keys(qtdDe(tipo)).forEach(x => delete qtdDe(tipo)[x]); if (tipo === "web") webSub = new Set(); sincronizarN(tipo); $f("N" + k).value = 0; descontar(); modeloSel = ""; atualizar(); });
+    box.querySelectorAll("[data-pq]").forEach(i => {
+      const [tipo, k] = i.dataset.pq.split("|"), st = i.closest(".qb-step"), linha = linhasDo(tipo).find(x => x.k === k);
+      const definir = v => { const n = Math.max(0, Math.min(Math.round(Number(v) || 0), linha?.disp || 0)); if (n) qtdDe(tipo)[k] = n; else delete qtdDe(tipo)[k]; sincronizarN(tipo); descontar(); modeloSel = ""; atualizar(); };
+      i.onchange = () => definir(i.value);
+      st.querySelectorAll("[data-d]").forEach(b => { if (st.dataset.sem && b.dataset.d === "1") b.disabled = true; b.onclick = () => definir((qtdDe(tipo)[k] || 0) + Number(b.dataset.d)); });
+    });
+    box.querySelectorAll("[data-tag]").forEach(b => b.onclick = () => { webSub.has(b.dataset.tag) ? webSub.delete(b.dataset.tag) : webSub.add(b.dataset.tag); atualizar(); });
+    box.querySelectorAll("[data-pfonte]").forEach(a => a.onclick = e => { e.preventDefault(); verFontes(a.dataset.pfonte); });
+    $f("PratNota").querySelectorAll("[data-poutras]").forEach(a => a.onclick = e => { e.preventDefault(); outrasMat = a.dataset.poutras === "1"; atualizar(); });
+  }
+  // "Ver de onde vêm": bancos e temas usados para um tipo prático (só conferência)
+  function verFontes(tipo) {
+    const l = [...praticasSel[tipo]].map(([b, ts]) => { const bb = bancosCache.find(x => x.id === b); return `<li><b>${esc(bb?.nome || b)}</b> <span class="pequeno">(${esc(bb?.materia || "")})</span>${tipo === "web" ? "" : `<br><span class="pequeno">${[...ts].map(esc).join(" · ")}</span>`}</li>`; }).join("");
+    modal({ titulo: `De onde vêm: ${NOME_TIPO[tipo]}`, conteudo: l ? `<ul>${l}</ul><p class="pequeno">O sistema usa sozinho os bancos ${outrasMat ? "" : "da matéria "}que têm esse tipo${capsMarcadas.size && tipo !== "web" ? ", só nos temas das capacidades marcadas" : ""}.</p>` : `<p>Nenhum banco com esse tipo.</p>`, ok: "Fechar" });
+  }
+  // falta questão prática para o que foi pedido?
+  function problemaPraticas() {
+    for (const [k, tipo] of Object.entries(TIPO_PRAT)) {
+      if (!$f("Ativa" + k).checked) continue;
+      const q = qtdDe(tipo), nome = { sql: "SQL físico", web: "Página web", diagrama: "Diagramas" }[tipo];
+      if (!Object.keys(q).length && !nq(k)) return `${nome}: escolha quantas questões de cada (−/+), ou remova.`;
+      for (const [x, n] of Object.entries(q)) { const l = linhasDo(tipo).find(y => y.k === x); if (l && n > l.disp) return `${nome}: "${l.nome}" pede ${n}, mas só há ${l.disp}${tipo === "web" && webSub.size ? " com os assuntos marcados" : ""}.`; }
+    }
+    return "";
   }
   // devolve a mensagem de erro (ou "") para o pedido atual
   function problema() {
@@ -870,16 +887,7 @@ function controleProva(f) {
     const nSql = nq("Sql"), nWeb = nq("Web");
     if (!$f("SemLimite").checked && somaTudo() !== Number($f("Total").value || 0)) return `A soma (${somaTudo()}) não bate com o total (${Number($f("Total").value || 0)}): ajuste os números ou marque "Não definir limite".`;
     if (!somaTudo()) return "A prova precisa de pelo menos uma questão.";
-    if (nWeb > dispPrat("web")) return `Faltam projetos da Bancada Web: a prova pede ${nWeb}, mas os bancos escolhidos em "projeto web" só têm ${dispPrat("web")}. Marque mais bancos/temas ou diminua.`;
-    for (const [k, n] of Object.entries(qtdDiag)) if (nq("Diag") && n > dispDiagTipo(k)) return `Faltam diagramas de "${NOMES_DIAGRAMA[k] || k}": a prova pede ${n}, mas os bancos marcados em "diagramas" só têm ${dispDiagTipo(k)}. Marque mais bancos ou diminua.`;
-    if ($f("AtivaDiag").checked && !nq("Diag")) return "Diagramas: marque pelo menos um tipo e a quantidade.";
-    if ($f("AtivaSql").checked && !nq("Sql")) return "SQL físico: marque DDL, DML ou DCL e a quantidade.";
-    if ($f("AtivaWeb").checked && !nq("Web")) return "Página web: marque o modelo e a quantidade.";
-    { const fora = [...Object.entries(qtdSql).map(([k, n]) => [CATEGORIAS_SQL[k]?.nome || k, n, $f("CatSql").querySelector(`[data-qn="${k}"]`)?.closest(".diag-tipo-linha")?.textContent.match(/\((\d+) nos bancos/)?.[1]]), ...Object.entries(qtdWeb).map(([m, n]) => [MODELOS_WEB[m] || m, n, $f("ModWeb").querySelector(`[data-qn="${m}"]`)?.closest(".diag-tipo-linha")?.textContent.match(/\((\d+) nos bancos/)?.[1]])].find(([, n, d]) => d !== undefined && n > Number(d));
-      if (fora) return `Faltam questões de "${fora[0]}": a prova pede ${fora[1]}, mas os bancos marcados só têm ${fora[2]}. Marque mais bancos/temas ou diminua.`; }
-    const nDiag = nq("Diag"), dDiag = diagDisponiveis();
-    if (nDiag > dDiag) return `Faltam questões de diagrama: a prova pede ${nDiag}, mas os bancos/temas marcados só têm ${dDiag}${tiposDiag ? " dos tipos escolhidos" : ""} nos bancos escolhidos em "diagramas". Marque mais bancos (Bancos prontos) ou diminua.`;
-    if (nSql > dispPrat("sql")) return `Faltam questões SQL (Bancada): a prova pede ${nSql}, mas os bancos escolhidos em "SQL na Bancada" só têm ${dispPrat("sql")}. Marque mais bancos/temas ou diminua.`;
+    const faltaPrat = problemaPraticas(); if (faltaPrat) return faltaPrat;
     if (nDiss > d.dissertativa) return `Faltam dissertativas: a prova pede ${nDiss}, mas os bancos/temas marcados só têm ${d.dissertativa}. Marque mais temas ou diminua as dissertativas.`;
     return "";
   }
@@ -1028,32 +1036,27 @@ function controleProva(f) {
     return usos.sort((a, b) => usos.filter(x => x === b).length - usos.filter(x => x === a).length)[0] || "";
   }
   function desenharMateriais() {
-    const box = $f("MatLista"), todos = [...materiaisCache].sort((a, b) => ordemNatural(a.titulo, b.titulo));
+    const todos = [...materiaisCache].sort((a, b) => ordemNatural(a.titulo, b.titulo));
     const apagados = matMarcados.filter(id => !materiaisCache.some(m => m.id === id));
-    // só os da matéria escolhida no topo (os marcados aparecem sempre); os outros ficam recolhidos
-    const mat = $f("Materia").value, daMat = m => !mat || chaveTexto(materiaDoMaterial(m)) === chaveTexto(mat) || matMarcados.includes(m.id);
-    const lista = todos.filter(daMat), outros = todos.filter(m => !daMat(m));
-    const semMat = lista.concat(outros).filter(m => !m.materia);
-    const opcMat = PLANO_CURSO.unidades.map(u => u.nome).sort((a, b) => a.localeCompare(b, "pt-BR"));
-    const linhaMat = m => `<div class="item-material"><label class="check"><input type="checkbox" value="${m.id}"${matMarcados.includes(m.id) ? " checked" : ""}> <span>${esc(m.titulo)} <span class="pequeno">(${tamanhoTexto(m.tamanho)})</span></span></label>
-        ${m.materia ? "" : `<select class="mini" data-matmateria="${m.id}" aria-label="Matéria de ${esc(m.titulo)}" title="Matéria deste PDF (para aparecer só na matéria certa)"><option value="">matéria?</option>${opcMat.map(o => `<option value="${esc(o)}"${chaveTexto(o) === chaveTexto(materiaDoMaterial(m)) ? " selected" : ""}>${esc(o)}${chaveTexto(o) === chaveTexto(materiaDoMaterial(m)) ? " (sugerida)" : ""}</option>`).join("")}</select>`}
-        <button type="button" class="leve mini" data-vermat="${m.id}" title="Ver como o aluno vai ver" aria-label="Ver ${esc(m.titulo)}">👁</button></div>`;
-    box.innerHTML = !todos.length && !apagados.length ? `<p class="pequeno" style="margin:0">Nenhum PDF enviado ainda. Use <b>⬆ Enviar PDF(s)</b>.</p>` :
-      (semMat.length ? `<p class="pequeno" style="margin:0 0 6px">${semMat.length} PDF(s) ainda sem matéria: escolha no seletor ao lado (a sugestão vem das somativas que já usaram o PDF).</p>` : "") +
-      (mat && !lista.length ? `<p class="pequeno" style="margin:0">Nenhum PDF de <b>${esc(mat)}</b>.</p>` : "") +
-      lista.map(linhaMat).join("") +
-      (outros.length ? `<details class="recolhivel leve" style="margin-top:6px"><summary><span class="rc-titulo">Materiais de outras matérias (${outros.length})</span></summary><div class="rc-corpo">${outros.map(linhaMat).join("")}</div></details>` : "") +
-      apagados.map(id => `<div class="item-material"><label class="check"><input type="checkbox" value="${esc(id)}" checked> <span class="erro-texto">⚠ PDF apagado — desmarque</span></label></div>`).join("");
-    box.querySelectorAll("input[type=checkbox]").forEach(c => c.onchange = () => {
+    // só os PDFs da matéria da prova (marcados aparecem sempre); os outros ficam em "Ver materiais de outras matérias"
+    const mat = $f("Materia").value, daMat = m => (!!mat && chaveTexto(materiaDoMaterial(m)) === chaveTexto(mat)) || matMarcados.includes(m.id);
+    const lista = todos.filter(daMat), outros = todos.filter(m => !daMat(m)), semMat = todos.filter(m => !m.materia);
+    const cartao = m => `<div class="mat-cartao${matMarcados.includes(m.id) ? " ativo" : ""}"><label class="check" style="margin:0;flex:1"><input type="checkbox" value="${m.id}"${matMarcados.includes(m.id) ? " checked" : ""}> <span><b>${esc(m.titulo)}</b><small>PDF · ${tamanhoTexto(m.tamanho)}${m.materia ? "" : materiaDoMaterial(m) ? ` · ${esc(materiaDoMaterial(m))}?` : " · sem matéria"}</small></span></label><button type="button" class="leve mini" data-vermat="${m.id}" title="Ver como o aluno vai ver">Ver</button></div>`;
+    $f("MatBlocoTit").textContent = mat ? `Slides de ${mat}` : "Slides";
+    $f("MatLista").innerHTML = (lista.length ? lista.map(cartao).join("") : `<p class="pequeno" style="margin:0">${mat ? `Nenhum material de <b>${esc(mat)}</b> ainda. Use <b>Enviar PDF</b>.` : "Escolha a matéria no topo para ver os PDFs dela."}</p>`) +
+      apagados.map(id => `<div class="mat-cartao ativo"><label class="check" style="margin:0;flex:1"><input type="checkbox" value="${esc(id)}" checked> <span class="erro-texto">PDF apagado — desmarque</span></label></div>`).join("");
+    $f("MatOutros").innerHTML = outros.map(cartao).join("");
+    $f("MatOutrosTit").textContent = `Ver materiais de outras matérias (${outros.length})`;
+    $f("MatOutrosBox").classList.toggle("oculto", !outros.length);
+    $f("MatSemMateria").classList.toggle("oculto", !semMat.length);
+    $f("MatSemMateria").innerHTML = semMat.length ? `<span>${semMat.length === 1 ? "1 PDF ainda está" : `${semMat.length} PDFs ainda estão`} sem matéria. Isso se resolve uma vez só, numa tela própria, e não dentro de cada prova.</span><button type="button" class="leve mini" data-orgmat>Organizar materiais</button>` : "";
+    const raiz = $f("MatLista").closest("fieldset");
+    raiz.querySelectorAll(".mat-cartao input[type=checkbox]").forEach(c => c.onchange = () => {
       matMarcados = c.checked ? [...matMarcados.filter(x => x !== c.value), c.value] : matMarcados.filter(x => x !== c.value);
-      if (!c.checked && apagados.includes(c.value)) desenharMateriais(); else previaMaterial();
+      desenharMateriais();
     });
-    box.querySelectorAll("[data-vermat]").forEach(b => b.onclick = () => verMaterial(b.dataset.vermat));
-    box.querySelectorAll("[data-matmateria]").forEach(sel => sel.onchange = async () => {
-      if (!sel.value) return;
-      try { await updateDoc(doc(db, "materiais", sel.dataset.matmateria), { materia: sel.value }); const m = materiaisCache.find(x => x.id === sel.dataset.matmateria); if (m) m.materia = sel.value; toast("Matéria do PDF salva.", "ok"); desenharMateriais(); }
-      catch (e) { toast("Não foi possível salvar. " + traduzirErro(e), "erro"); }
-    });
+    raiz.querySelectorAll("[data-vermat]").forEach(b => b.onclick = () => verMaterial(b.dataset.vermat));
+    raiz.querySelectorAll("[data-orgmat]").forEach(b => b.onclick = () => organizarMateriais(desenharMateriais));
     previaMaterial();
   }
   // ids marcados, na ordem em que o aluno vê as abas (título em ordem natural: "Aula 2" antes de "Aula 10")
@@ -1086,11 +1089,18 @@ function controleProva(f) {
     $f("TemasBusca").oninput = $f("TemasVisao").onchange = $f("TemasSoMarcados").onchange = desenharTemas;
     $f("TemasMarcar").onclick = () => marcarVisiveis(true);
     $f("TemasDesmarcar").onclick = () => marcarVisiveis(false);
-    $f("NAlt").oninput = $f("NDiss").oninput = atualizar;
-    PRAT.forEach(k => { $f("N" + k).oninput = () => { descontar(); atualizar(); }; $f("Ativa" + k).onchange = () => { if ($f("Ativa" + k).checked) padraoPratica(TIPO_PRAT[k]); else { if (k === "Diag") { qtdDiag = {}; tiposDiag = null; } if (k === "Sql") qtdSql = {}; if (k === "Web") { qtdWeb = {}; webSub = new Set(); } $f("N" + k).value = 0; } descontar(); atualizar(); }; });
-    $f("Total").oninput = () => { aoMudarTotal(); atualizar(); };
-    $f("Sugerir").onclick = () => sugerir(false); $f("SugerirPratica").onclick = () => sugerir(true);
+    $f("NAlt").oninput = $f("NDiss").oninput = () => { modeloSel = ""; atualizar(); };
+    $f("Total").oninput = () => { modeloSel = ""; aoMudarTotal(); atualizar(); };
     $f("SemLimite").onchange = () => { if (!$f("SemLimite").checked) $f("Total").value = somaTudo(); atualizar(); };
+    // − e + dos campos de número (total, alternativas, dissertativas)
+    $f("Total").closest("fieldset").addEventListener("click", e => {
+      const bt = e.target.closest(".qb-teo [data-d], .qb-total [data-d]"); if (!bt || travado) return;
+      const campo = bt.closest("[data-step]").dataset.step, i = $f(campo), min = campo === "Total" ? 1 : 0;
+      if (i.disabled) return;
+      i.value = Math.max(min, Number(i.value || 0) + Number(bt.dataset.d)); modeloSel = "";
+      if (campo === "Total") aoMudarTotal();
+      atualizar();
+    });
     $f("MatUrl").oninput = previaMaterial;
     // vários de uma vez: cada PDF recebe o nome do arquivo como título e já entra marcado
     $f("MatUpload").onchange = async () => {
@@ -1173,12 +1183,12 @@ function controleProva(f) {
     $f("NSql").value = p.nSql ?? 0; $f("NWeb").value = p.nWeb ?? 0; $f("NDiag").value = p.nDiagramas ?? 0;
     $f("AtivaSql").checked = Number(p.nSql) > 0; $f("AtivaWeb").checked = Number(p.nWeb) > 0; $f("AtivaDiag").checked = Number(p.nDiagramas) > 0;
     tiposDiag = Array.isArray(p.tiposDiagrama) && p.tiposDiagrama.length ? new Set(p.tiposDiagrama) : null;
-    qtdSql = p.sqlPorCategoria && typeof p.sqlPorCategoria === "object" ? { ...p.sqlPorCategoria } : {}; qtdWeb = p.webModelos && typeof p.webModelos === "object" ? { ...p.webModelos } : {}; webSub = new Set(p.webSubtopicos || []);
+    qtdSql = p.sqlPorCategoria && typeof p.sqlPorCategoria === "object" ? { ...p.sqlPorCategoria } : {}; qtdWeb = p.webModelos && typeof p.webModelos === "object" ? { ...p.webModelos } : {}; webSub = new Set(p.webTags || []);
     qtdDiag = p.diagramasPorTipo && typeof p.diagramasPorTipo === "object" ? { ...p.diagramasPorTipo } : (tiposDiag?.size === 1 && Number(p.nDiagramas) ? { [[...tiposDiag][0]]: Number(p.nDiagramas) } : {});
     $f("SemLimite").checked = false; $f("Total").value = p.nQuestoes ?? 10;
     praticasPendentes = p;
     $f("NDiss").value = p.nDissertativas ?? 0; $f("NAlt").value = p.nAlternativas ?? Math.max(0, (p.nQuestoes ?? 10) - (p.nDissertativas ?? 0) - Number(p.nSql || 0) - Number(p.nWeb || 0) - Number(p.nDiagramas || 0));
-    praticoAntes = pratico(); tirarDaAlt = true;
+    praticoAntes = pratico(); modeloSel = ""; outrasMat = false;
     $f("Tempo").value = p.tempoMinutos || 0;
     $f("Modo").value = p.modoExibicao === "todas" ? "todas" : "uma";
     $f("Voltar").checked = p.permitirVoltar === true;
@@ -1239,7 +1249,7 @@ function controleProva(f) {
       // bancoId: o 1º da teoria (prova só prática: o 1º prático), porque as regras do Firestore conferem o banco da tentativa
       const bancoPrincipal = bancoIds[0] || Object.values(praticas).flatMap(o => Object.keys(o))[0] || null;
       Object.assign(dados, { praticas, bancoId: bancoPrincipal, bancoIds, temasPorBanco, temas: temasPorBanco[bancoIds[0]] || null, nQuestoes: n, nAlternativas: nAlt, nDissertativas: nDiss, nSql, nWeb, nDiagramas: nDiag, tiposDiagrama: nDiag && tiposDiag ? [...tiposDiag] : null, diagramasPorTipo: nDiag && Object.keys(qtdDiag).length ? { ...qtdDiag } : null,
-        sqlPorCategoria: nSql && Object.keys(qtdSql).length ? { ...qtdSql } : null, webModelos: nWeb && Object.keys(qtdWeb).length ? { ...qtdWeb } : null, webSubtopicos: nWeb && webSub.size ? [...webSub] : null });
+        sqlPorCategoria: nSql && Object.keys(qtdSql).length ? { ...qtdSql } : null, webModelos: nWeb && Object.keys(qtdWeb).length ? { ...qtdWeb } : null, webSubtopicos: null, webTags: nWeb && webSub.size ? [...webSub] : null });
     }
     return { dados };
   }
@@ -1331,92 +1341,123 @@ async function carregarProvas() {
   preencherSel($("#fpMateria"), "📚 Todas as matérias", [...mats.values()].sort((a, b) => a.localeCompare(b, "pt-BR")));
   // filtro de turma: turmas cadastradas + "sem turma"
   const sel = $("#fpTurma"), antes = filtroTurmaPendente ?? sel.value;
+  if (filtroTurmaPendente) { turmaAba = filtroTurmaPendente; sp.turma = filtroTurmaPendente; }
   filtroTurmaPendente = null;
   sel.innerHTML = `<option value="">👥 Todas as turmas</option>` + turmasCache.map(t => `<option value="${t.id}">${esc(nomeTurma(t))}</option>`).join("") +
     (provasCache.some(p => !p.turmaId) ? `<option value="__sem">⚠ Sem turma</option>` : "");
   sel.value = [...sel.options].some(o => o.value === antes) ? antes : "";
   desenharProvas();
 }
+// ---------- PÁGINA SOMATIVAS: Turmas | Área de testes · Abas por turma | Tabela · busca ----------
+// turma → matéria → provas. A recuperação fica recolhida na linha da somativa de origem.
+const sp = { area: "turmas", busca: "", turma: "", mat: "", sit: "", agrupar: "turma" };
+const ehProvaTeste = p => p.turmaTeste === true || ehTurmaTeste(p.turmaId);
+const plQ = (n, um, v) => `${n} ${n === 1 ? um : v}`;
+function qtdProvaTexto(p) {
+  const nAlt = p.nAlternativas ?? Math.max(0, Number(p.nQuestoes || 0) - Number(p.nDissertativas || 0) - Number(p.nSql || 0) - Number(p.nWeb || 0) - Number(p.nDiagramas || 0));
+  const partes = [[nAlt, "alternativa", "alternativas"], [p.nDissertativas, "dissertativa", "dissertativas"], [p.nSql, "SQL físico", "SQL físico"], [p.nWeb, "página web", "páginas web"], [p.nDiagramas, "diagrama", "diagramas"]]
+    .filter(([n]) => Number(n) > 0).map(([n, um, v]) => plQ(Number(n), um, v));
+  return `${plQ(Number(p.nQuestoes || 0), "questão", "questões")}${partes.length ? " · " + partes.join(" + ") : ""}`;
+}
+const vidasDaProva = p => !p.permitirTrocaAba && Number(p.maxTrocasDeAba) > 0 ? Number(p.maxTrocasDeAba) : 0;
+const metaProva = p => [p.dataProva ? dataCurta(p.dataProva) : "", qtdProvaTexto(p), Number(p.tempoMinutos) > 0 ? `${p.tempoMinutos} min` : "sem limite de tempo", vidasDaProva(p) ? plQ(vidasDaProva(p), "vida", "vidas") : ""].filter(Boolean).join(" · ");
+const chipsProva = p => `<span class="chip ${p.liberada ? "ok" : "off"}">${p.liberada ? "● liberada" : "fechada"}</span>${p.resultadosLiberados ? `<span class="chip info">gabarito liberado</span>` : ""}`;
+// botões sempre na mesma ordem: Liberar · Gerar recuperação (prova já aplicada) · Nota final (recuperação) · Alunos · ···
+function botoesProva(p) {
+  const itens = (podeEditar() ? itemMenu({ i: p.resultadosLiberados ? "lock" : "unlock", t: p.resultadosLiberados ? "Ocultar gabarito" : "Liberar gabarito", attrs: `data-tg="resultadosLiberados" data-id="${p.id}"` })
+      + itemMenu({ i: "edit", t: "Editar", attrs: `data-editar="${p.id}"` }) + (p.recuperacao ? itemMenu({ i: "users", t: "Adicionar aluno", attrs: `data-addrec="${p.id}"` }) : "") : "")
+    + itemMenu({ i: "info", t: "Detalhes (bancos, temas, opções)", attrs: `data-detprova="${p.id}"` })
+    + itemMenu({ i: "simulacao", t: "Testar como aluno", attrs: `data-testar="${p.id}"` })
+    + itemMenu({ i: "refresh", t: "Apagar meu teste", attrs: `data-apagarteste="${p.id}"` })
+    + (podeEditar() && ehAdmin() ? "<hr>" + itemMenu({ i: "trash", t: "Apagar somativa", perigo: true, attrs: `data-del="${p.id}"` }) : "");
+  return (podeEditar() ? `<button class="${p.liberada ? "leve" : "ok"} mini" data-tg="liberada" data-id="${p.id}">${p.liberada ? "Encerrar" : "Liberar"}</button>` : "")
+    + (podeEditar() && !p.recuperacao && !p.liberada && p.resultadosLiberados ? `<button class="leve mini" data-recuperacao="${p.id}" title="Somativa de recuperação para quem tirou abaixo de ${NOTA_RECUPERACAO}">${p.recuperacaoIds?.length ? "Gerar outra recuperação" : "Gerar recuperação"}</button>` : "")
+    + (podeEditar() && p.recuperacao ? `<button class="leve mini" data-notafinal="${p.id}">Nota final</button>` : "")
+    + `<button class="leve mini" data-alunos="${p.id}">Alunos</button>` + menuHTML({ aria: `Mais ações: ${p.titulo}`, itensHTML: itens });
+}
 function desenharProvas() {
   const box = $("#listaProvas");
-  atualizarFiltros($("#aba-provas .toolbar"));
-  if (!provasCache.length) { $("#fpContagem").textContent = ""; box.innerHTML = vazio({ e: "📝", texto: "Nenhuma somativa ainda.", acao: podeEditar() ? `<button type="button" data-nova-prova>+ Criar a primeira somativa</button>` : "" }); box.querySelector("[data-nova-prova]")?.addEventListener("click", abrirFormNovaProva); return; }
-  const busca = semAcento($("#fpBusca").value.trim()), turma = $("#fpTurma").value, status = $("#fpStatus").value, ordem = $("#fpOrdem").value;
-  const fSem = $("#fpSemestre").value, fMat = chaveTexto($("#fpMateria").value);
-  const nomeBanco = id => bancosCache.find(x => x.id === id)?.nome || id;
-  let lista = provasCache.filter(p => {
-    if (turma === "__sem" ? p.turmaId : turma && p.turmaId !== turma) return false;
-    if (status === "liberada" && !p.liberada) return false;
-    if (status === "fechada" && p.liberada) return false;
-    if (status === "gabarito" && !p.resultadosLiberados) return false;
-    if (fSem && semestreDaProva(p) !== fSem) return false;
-    if (fMat && chaveTexto(materiaDaProva(p, bancosCache)) !== fMat) return false;
-    if (busca && !semAcento([p.titulo, p.turma, materiaDaProva(p, bancosCache), ...bancosDaProva(p).map(nomeBanco)].join(" ")).includes(busca)) return false;
-    return true;
-  });
-  const seg = p => p.criadoEm?.seconds || 0;
-  lista.sort(ordem === "titulo" ? (a, b) => (a.titulo || "").localeCompare(b.titulo || "", "pt-BR", { numeric: true })
-           : ordem === "antigas" ? (a, b) => seg(a) - seg(b) : (a, b) => seg(b) - seg(a));
-  const nLib = lista.filter(p => p.liberada).length;
-  $("#fpContagem").textContent = `${lista.length} de ${pl(provasCache.length, "somativa")} · ${nLib} ${nLib === 1 ? "liberada" : "liberadas"}`;
-  if (!lista.length) { box.innerHTML = vazio({ e: "🔎", texto: "Nenhuma somativa com esses filtros." }); return; }
-  // recuperação/substitutiva fica DENTRO do cartão da somativa de origem (não aparece como outra prova solta)
-  const idsLista = new Set(lista.map(p => p.id)), filhasDe = new Map();
-  lista.forEach(p => { if (p.provaOrigemId && idsLista.has(p.provaOrigemId)) { if (!filhasDe.has(p.provaOrigemId)) filhasDe.set(p.provaOrigemId, []); filhasDe.get(p.provaOrigemId).push(p); } });
-  // recuperação recolhida: "1 recuperação · 7 alunos" (abre e fecha no clique)
-  const recHTML = p => {
-    const fs = filhasDe.get(p.id); if (!fs) return "";
-    const nAl = fs.reduce((n, x) => n + (x.alunosEmails?.length || 0), 0);
-    return `<details class="rec-filhas" data-rec-de="${p.id}"${recAbertas.has(p.id) ? " open" : ""}><summary class="rec-tit">↳ ${fs.length === 1 ? "1 recuperação" : `${fs.length} recuperações`} · ${pl(nAl, "aluno")}</summary>${fs.map(cartaoProvaHTML).join("")}</details>`;
-  };
-  const cartaoComRec = p => filhasDe.get(p.id) ? `<div class="prova-com-rec">${cartaoProvaHTML(p)}${recHTML(p)}</div>` : cartaoProvaHTML(p);
-  // agrupa por turma (na ordem das turmas cadastradas; "sem turma" por último) → matéria → provas
-  const grupos = new Map();
-  lista.filter(p => !(p.provaOrigemId && idsLista.has(p.provaOrigemId))).forEach(p => { const k = p.turmaId && turmasCache.some(t => t.id === p.turmaId) ? p.turmaId : "__sem"; if (!grupos.has(k)) grupos.set(k, []); grupos.get(k).push(p); });
-  const chaves = [...turmasCache.map(t => t.id).filter(id => grupos.has(id)), ...(grupos.has("__sem") ? ["__sem"] : [])];
-  const nomeT = k => k === "__sem" ? "⚠ Sem turma" : (turmasCache.find(x => x.id === k)?.nome || "");
-  const matDe = p => materiaDaProva(p, bancosCache) || "Sem matéria";
-  const seletor = `<div class="visao-mini" role="group" aria-label="Como mostrar as somativas">
-    <button type="button" class="${visaoProvas === "abas" ? "ativo" : ""}" data-visao="abas" aria-pressed="${visaoProvas === "abas"}" title="Uma turma por vez, com as matérias">Abas</button><button type="button" class="${visaoProvas === "tabela" ? "ativo" : ""}" data-visao="tabela" aria-pressed="${visaoProvas === "tabela"}" title="Todas as somativas numa tabela">Tabela</button></div>`;
-  if (visaoProvas === "tabela") {
-    // uma linha por somativa (todas as turmas); a recuperação fica recolhida na linha da somativa de origem
-    const linhas = chaves.flatMap(k => grupos.get(k).sort((x, y) => matDe(x).localeCompare(matDe(y), "pt-BR")).map(p => ({ p, k })));
-    const tpl = document.createElement("template");
-    const botoes = p => { tpl.innerHTML = cartaoProvaHTML(p); return tpl.content.querySelector(".cp-botoes")?.innerHTML || ""; };
-    const situ = p => `${p.liberada ? '<span class="chip ok">● liberada</span>' : '<span class="chip">○ fechada</span>'}${p.resultadosLiberados ? ' <span class="chip info">gabarito liberado</span>' : ""}`;
-    const qtdT = p => `${p.nQuestoes || 0} questões${Number(p.tempoMinutos) > 0 ? ` · ${p.tempoMinutos} min` : ""}`;
-    box.innerHTML = `<div class="abas-linha" style="justify-content:flex-end">${seletor}</div><div class="card sem-padding"><div class="tabela"><table class="tabela-provas"><thead><tr><th>Somativa</th><th>Turma</th><th>Matéria</th><th>Questões / tempo</th><th>Situação</th><th>Recuperação</th><th>Ações</th></tr></thead><tbody>${
-      linhas.map(({ p, k }) => `<tr><td><b>${esc(p.titulo || "")}</b>${p.dataProva ? `<br><span class="pequeno">${esc(p.dataProva.split("-").reverse().join("/"))}</span>` : ""}</td><td>${esc(nomeT(k))}</td><td>${esc(matDe(p))}</td><td>${qtdT(p)}</td><td>${situ(p)}</td>
-        <td>${recHTML(p) || '<span class="pequeno">—</span>'}</td><td class="td-acoes"><div class="cp-botoes">${botoes(p)}</div></td></tr>`).join("")}</tbody></table></div></div>`;
-  } else {
-    // abas por turma: uma turma por vez; matérias dessa turma como filtro
-    if (!chaves.includes(turmaAba)) turmaAba = chaves[0];
-    const ps = grupos.get(turmaAba) || [], t = turmasCache.find(x => x.id === turmaAba);
-    const mats = new Map();
-    const sc = semestreCursoAtual(t)?.n || 0;   // semestre do curso em que a turma está: todas as matérias dele aparecem, mesmo sem prova
-    if (sc) unidadesDoSemestre(sc).map(u => u.nome).sort((x, y) => x.localeCompare(y, "pt-BR")).forEach(m => mats.set(m, 0));
-    // + as matérias dos planos de ensino desta turma no semestre atual (Organização)
-    (planosProvas || []).filter(p => p.turmaId === turmaAba && p.semestre === semestreDe()).forEach(p => { const m = materiaCorrigida(p.materia); if (m && ![...mats.keys()].some(x => chaveTexto(x) === chaveTexto(m))) mats.set(m, 0); });
-    ps.forEach(p => { const m = matDe(p); const k = [...mats.keys()].find(x => chaveTexto(x) === chaveTexto(m)) || m; mats.set(k, (mats.get(k) || 0) + 1); });
-    if (materiaAba && !mats.has(materiaAba)) materiaAba = "";
-    const vis = ps.filter(p => !materiaAba || chaveTexto(matDe(p)) === chaveTexto(materiaAba));
-    const abas = chaves.map(k => { const tt = turmasCache.find(x => x.id === k), n = grupos.get(k).length;
-      return `<button type="button" class="aba-turma${k === turmaAba ? " ativa" : ""}" data-aba-turma="${k}" aria-pressed="${k === turmaAba}"><b>${esc(nomeT(k))}</b><span class="pequeno">${tt && rotuloDias(tt.diasAula) ? esc(rotuloDias(tt.diasAula)) + " · " : ""}${tt ? pl(alunosDaTurma(tt).length, "aluno") + " · " : ""}${pl(n, "somativa")}</span></button>`; }).join("");
-    const filtrosMat = mats.size ? `<div class="linha" style="gap:6px;margin:8px 0"><button type="button" class="${materiaAba ? "leve" : ""} mini" data-aba-mat="">Todas (${ps.length})</button>${[...mats].map(([m, n]) => `<button type="button" class="${materiaAba === m ? "" : "leve"} mini${n ? "" : " mat-vazia"}" data-aba-mat="${esc(m)}" title="${n ? pl(n, "somativa") : "Nenhuma somativa ainda nesta matéria"}">${esc(m)} (${n})</button>`).join("")}</div>` : "";
-    const semTurma = t ? `<div class="pequeno sem-turma-linha" style="margin:6px 0 0">Turma no <select data-sem-turma="${t.id}" aria-label="Semestre do curso da turma ${esc(t.nome || "")}" class="mini">${[0, 1, 2, 3, 4].map(n => `<option value="${n}"${n === sc ? " selected" : ""}>${n ? `${n}º semestre` : "semestre ?"}</option>`).join("")}</select> do curso${sc ? "" : " — escolha para ver as matérias certas"}</div>` : "";
-    box.innerHTML = `<div class="abas-linha"><div class="abas-turmas" role="tablist">${abas}</div>${seletor}</div>${semTurma}${t ? "" : turmaAba === "__sem" ? '<p class="chip warn">nenhum aluno vê estas somativas: use Editar e escolha a turma</p>' : ""}${filtrosMat}
-      <div class="cartoes-provas">${vis.length ? vis.map(cartaoComRec).join("") : `<p class="pequeno">Nenhuma somativa${materiaAba ? ` de ${esc(materiaAba)}` : ""} nesta turma ainda.</p>`}</div>`;
-  }
+  $("#aba-provas > .toolbar")?.classList.add("oculto");   // a busca e os filtros agora ficam dentro da lista
+  if (!provasCache.length) { box.innerHTML = vazio({ e: "📝", texto: "Nenhuma somativa ainda.", acao: podeEditar() ? `<button type="button" data-nova-prova>+ Criar a primeira somativa</button>` : "" }); box.querySelector("[data-nova-prova]")?.addEventListener("click", abrirFormNovaProva); return; }
+  const nTeste = provasCache.filter(ehProvaTeste).length;
+  box.innerHTML = `<div class="sp-topo"><div class="visao-mini sp-area" role="group" aria-label="Turmas ou área de testes"><button type="button" data-area="turmas" class="${sp.area === "turmas" ? "ativo" : ""}">Turmas</button><button type="button" data-area="testes" class="${sp.area === "testes" ? "ativo" : ""}">Área de testes${nTeste ? ` (${nTeste})` : ""}</button></div>
+      <div class="visao-mini" role="group" aria-label="Como mostrar as somativas"><button type="button" data-visao="abas" class="${visaoProvas === "abas" ? "ativo" : ""}">Abas</button><button type="button" data-visao="tabela" class="${visaoProvas === "tabela" ? "ativo" : ""}">Tabela</button></div></div>
+    ${sp.area === "testes" ? `<div class="aviso-box" style="margin:0 0 10px">🧪 <b>Área de testes</b>: provas da turma de teste/simulação. Nada aqui vale nota nem entra nos resultados das turmas.</div>` : ""}
+    <div class="sp-filtros" id="spFiltros"></div><div id="spLista"></div>`;
+  box.querySelectorAll("[data-area]").forEach(b => b.onclick = () => { sp.area = b.dataset.area; sp.turma = ""; sp.mat = ""; turmaAba = null; materiaAba = ""; desenharProvas(); });
   box.querySelectorAll("[data-visao]").forEach(b => b.onclick = () => { visaoProvas = b.dataset.visao; salvarPreferencia({ visaoSomativas: visaoProvas }); desenharProvas(); });
-  box.querySelectorAll("[data-aba-turma]").forEach(b => b.onclick = () => { turmaAba = b.dataset.abaTurma; materiaAba = ""; desenharProvas(); });
-  box.querySelectorAll("[data-sem-turma]").forEach(sl => sl.onchange = async () => {
-    if (!podeEditar()) return toast("Seu papel não permite mudar a turma.", "erro");
-    const n = Number(sl.value) || null;
-    try { await updateDoc(doc(db, "turmas", sl.dataset.semTurma), { semestreCurso: n, semestreCursoRef: n ? periodoLetivo() : null }); await listarTurmas(); materiaAba = ""; desenharProvas(); toast(n ? `Turma no ${n}º semestre do curso.` : "Semestre do curso apagado.", "ok"); }
-    catch (e) { toast("Não foi possível salvar. " + traduzirErro(e), "erro"); }
-  });
-  box.querySelectorAll("[data-aba-mat]").forEach(b => b.onclick = () => { materiaAba = b.dataset.abaMat; desenharProvas(); });
-  box.querySelectorAll("[data-rec-de]").forEach(d => d.ontoggle = () => { d.open ? recAbertas.add(d.dataset.recDe) : recAbertas.delete(d.dataset.recDe); });
+  // busca (e, na tabela, os filtros) — desenhados uma vez; a lista redesenha sozinha
+  const buscaHTML = `<label class="sp-busca">${ic("search", { size: 18 })}<input type="search" id="spBusca" placeholder="Pesquisar prova, turma ou matéria" value="${esc(sp.busca)}" aria-label="Pesquisar prova, turma ou matéria"></label>`;
+  const base = provasCache.filter(p => sp.area === "testes" ? ehProvaTeste(p) : !ehProvaTeste(p));
+  const nomeT = id => turmasCache.find(t => t.id === id)?.nome || "Sem turma";
+  if (visaoProvas === "tabela") {
+    const turmas = [...new Set(base.map(p => p.turmaId || ""))], mats = [...new Set(base.map(p => materiaDaProva(p, bancosCache) || "Sem matéria"))].sort((a, b) => a.localeCompare(b, "pt-BR"));
+    const opt = (v, t, at) => `<option value="${esc(v)}"${v === at ? " selected" : ""}>${esc(t)}</option>`;
+    $("#spFiltros").innerHTML = `<div class="sp-linha-filtros">${buscaHTML}
+      <label class="sp-filtro"><span>Turma</span><select id="spTurma">${opt("", "Todas as turmas", sp.turma)}${turmas.map(t => opt(t, nomeT(t), sp.turma)).join("")}</select></label>
+      <label class="sp-filtro"><span>Matéria</span><select id="spMat">${opt("", "Todas as matérias", sp.mat)}${mats.map(m => opt(m, m, sp.mat)).join("")}</select></label>
+      <label class="sp-filtro"><span>Situação</span><select id="spSit">${opt("", "Todas", sp.sit)}${opt("liberada", "Liberadas", sp.sit)}${opt("fechada", "Fechadas", sp.sit)}${opt("gabarito", "Gabarito liberado", sp.sit)}</select></label>
+      <button type="button" class="leve mini" id="spAgrupar">Agrupar por: ${({ turma: "turma", materia: "matéria", nada: "nada" })[sp.agrupar]}</button></div>`;
+    $("#spTurma").onchange = e => { sp.turma = e.target.value; desenharListaProvas(); };
+    $("#spMat").onchange = e => { sp.mat = e.target.value; desenharListaProvas(); };
+    $("#spSit").onchange = e => { sp.sit = e.target.value; desenharListaProvas(); };
+    $("#spAgrupar").onclick = () => { sp.agrupar = ({ turma: "materia", materia: "nada", nada: "turma" })[sp.agrupar]; desenharProvas(); };
+  } else $("#spFiltros").innerHTML = buscaHTML;
+  $("#spBusca").oninput = e => { sp.busca = e.target.value; desenharListaProvas(); };
+  desenharListaProvas();
+}
+function desenharListaProvas() {
+  const box = $("#spLista"); if (!box) return;
+  const busca = semAcento(sp.busca.trim()), nomeT = id => turmasCache.find(t => t.id === id)?.nome || "Sem turma";
+  const base = provasCache.filter(p => sp.area === "testes" ? ehProvaTeste(p) : !ehProvaTeste(p));
+  const ids = new Set(base.map(p => p.id)), filhasDe = new Map();
+  base.forEach(p => { if (p.provaOrigemId && ids.has(p.provaOrigemId)) (filhasDe.get(p.provaOrigemId) || filhasDe.set(p.provaOrigemId, []).get(p.provaOrigemId)).push(p); });
+  const matDe = p => materiaDaProva(p, bancosCache) || "Sem matéria";
+  const casa = p => !busca || semAcento([p.titulo, nomeT(p.turmaId), p.turma, matDe(p)].join(" ")).includes(busca);
+  let raiz = base.filter(p => !(p.provaOrigemId && ids.has(p.provaOrigemId))).filter(p => casa(p) || (filhasDe.get(p.id) || []).some(casa));
+  const seg = p => p.criadoEm?.seconds || 0;
+  raiz.sort((a, b) => seg(b) - seg(a));
+  const recBotao = p => { const fs = filhasDe.get(p.id); if (!fs) return ""; const n = fs.reduce((s, x) => s + (x.alunosEmails?.length || 0), 0);
+    return `<button type="button" class="sp-rec${recAbertas.has(p.id) ? " aberto" : ""}" data-rec-de="${p.id}" aria-expanded="${recAbertas.has(p.id)}">${recAbertas.has(p.id) ? "▾" : "▸"} ${plQ(fs.length, "recuperação", "recuperações")} · ${plQ(n, "aluno", "alunos")}</button>`; };
+  const linhaRec = r => `<div class="sp-linha sp-linha-rec"><div class="sp-info"><div class="sp-l1"><b>${esc(r.titulo)}</b><span class="chip warn">${plQ(r.alunosEmails?.length || 0, "aluno", "alunos")}</span>${chipsProva(r)}</div><div class="sp-l2">${esc(metaProva(r))}</div></div><div class="sp-acoes">${botoesProva(r)}</div></div>`;
+  const recsDe = p => recAbertas.has(p.id) ? (filhasDe.get(p.id) || []).map(linhaRec).join("") : "";
+  if (!raiz.length) { box.innerHTML = vazio({ e: "🔎", texto: sp.area === "testes" ? "Nenhuma prova na área de testes." : "Nenhuma somativa com essa busca." }); return; }
+  if (visaoProvas === "tabela") {
+    raiz = raiz.filter(p => (!sp.turma || (p.turmaId || "") === sp.turma) && (!sp.mat || matDe(p) === sp.mat) && (!sp.sit || (sp.sit === "liberada" ? p.liberada : sp.sit === "fechada" ? !p.liberada : p.resultadosLiberados)));
+    if (sp.agrupar === "turma") raiz.sort((a, b) => nomeT(a.turmaId).localeCompare(nomeT(b.turmaId), "pt-BR") || matDe(a).localeCompare(matDe(b), "pt-BR"));
+    if (sp.agrupar === "materia") raiz.sort((a, b) => matDe(a).localeCompare(matDe(b), "pt-BR") || nomeT(a.turmaId).localeCompare(nomeT(b.turmaId), "pt-BR"));
+    const turmaCurta = p => { const t = turmasCache.find(x => x.id === p.turmaId); return t ? `${esc(t.nome)}${rotuloDias(t.diasAula) ? ` · ${esc(rotuloDias(t.diasAula))}` : ""}` : "Sem turma"; };
+    box.innerHTML = raiz.length ? `<div class="card sem-padding"><div class="tabela"><table class="tabela-provas"><thead><tr><th>Somativa</th><th>Turma</th><th>Matéria</th><th>Questões</th><th>Situação</th><th>Recuperação</th><th class="sp-th-acoes"></th></tr></thead><tbody>${raiz.map(p => `<tr>
+        <td><b>${esc(p.titulo)}</b>${p.dataProva ? `<br><span class="pequeno">${dataCurta(p.dataProva)}</span>` : ""}</td><td>${turmaCurta(p)}</td><td>${esc(matDe(p))}</td>
+        <td>${Number(p.nQuestoes || 0)} · ${Number(p.tempoMinutos) > 0 ? `${p.tempoMinutos} min` : "sem limite"}</td><td>${chipsProva(p)}</td><td>${recBotao(p) || "—"}</td>
+        <td class="sp-td-acoes"><div class="sp-acoes">${botoesProva(p)}</div></td></tr>${recAbertas.has(p.id) ? `<tr class="sp-tr-rec"><td colspan="7">${recsDe(p)}</td></tr>` : ""}`).join("")}</tbody></table></div></div>`
+      : vazio({ e: "🔎", texto: "Nenhuma somativa com esses filtros." });
+  } else {
+    // ABAS: uma turma por vez; matérias com prova como filtro
+    const grupos = new Map(); raiz.forEach(p => { const k = turmasCache.some(t => t.id === p.turmaId) ? p.turmaId : "__sem"; (grupos.get(k) || grupos.set(k, []).get(k)).push(p); });
+    const chaves = [...turmasCache.map(t => t.id).filter(id => grupos.has(id)), ...(grupos.has("__sem") ? ["__sem"] : [])];
+    if (!chaves.includes(turmaAba)) { turmaAba = chaves[0]; materiaAba = ""; }
+    const ps = grupos.get(turmaAba) || [];
+    const mats = new Map(); ps.forEach(p => mats.set(matDe(p), (mats.get(matDe(p)) || 0) + 1));
+    if (materiaAba && !mats.has(materiaAba)) materiaAba = "";
+    const aba = k => { const t = turmasCache.find(x => x.id === k), n = grupos.get(k), nm = new Set(n.map(matDe)).size, sc = semestreCursoAtual(t)?.n;
+      return `<button type="button" class="aba-turma${k === turmaAba ? " ativa" : ""}" data-aba-turma="${k}" aria-pressed="${k === turmaAba}"><b>${k === "__sem" ? "⚠ Sem turma" : esc(t.nome)}</b><span class="pequeno">${[t && ehTurmaTeste(t.id) ? "simulação" : t && rotuloDias(t.diasAula) ? rotuloDias(t.diasAula) : "", t && !ehTurmaTeste(t.id) ? plQ(alunosDaTurma(t).length, "aluno", "alunos") : "", sc && !ehTurmaTeste(t?.id) ? `${sc}º sem.` : "", plQ(nm, "matéria", "matérias")].filter(Boolean).map(esc).join(" · ")}</span></button>`; };
+    const porMat = [...mats.keys()].sort((a, b) => a.localeCompare(b, "pt-BR")).filter(m => !materiaAba || m === materiaAba);
+    const bloco = m => { const l = ps.filter(p => matDe(p) === m), nr = l.reduce((s, p) => s + (filhasDe.get(p.id)?.length || 0), 0);
+      return `<p class="sp-sub">${esc(m)} · ${plQ(l.length, "somativa", "somativas")}${nr ? ` + ${plQ(nr, "recuperação", "recuperações")}` : ""}</p>` + l.map(p => `<div class="sp-linha"><div class="sp-info"><div class="sp-l1"><b>${esc(p.titulo)}</b>${chipsProva(p)}</div><div class="sp-l2">${esc(metaProva(p))}</div></div><div class="sp-acoes">${recBotao(p)}${botoesProva(p)}</div></div>${recsDe(p)}`).join(""); };
+    box.innerHTML = `<div class="abas-turmas" role="tablist">${chaves.map(aba).join("")}</div>
+      ${turmaAba === "__sem" ? `<p class="chip warn">nenhum aluno vê estas somativas: use Editar e escolha a turma</p>` : ""}
+      <div class="sp-mats"><span class="pequeno">Matéria</span>${[...mats].sort((a, b) => a[0].localeCompare(b[0], "pt-BR")).map(([m, n]) => `<button type="button" class="qb-tag${materiaAba === m ? " ativo" : ""}" data-aba-mat="${esc(m)}">${esc(m)} · ${n}</button>`).join("")}<button type="button" class="qb-tag${materiaAba ? "" : " ativo"}" data-aba-mat="">Todas</button></div>
+      ${porMat.map(bloco).join("")}`;
+    box.querySelectorAll("[data-aba-turma]").forEach(b => b.onclick = () => { turmaAba = b.dataset.abaTurma; materiaAba = ""; desenharListaProvas(); });
+    box.querySelectorAll("[data-aba-mat]").forEach(b => b.onclick = () => { materiaAba = b.dataset.abaMat; desenharListaProvas(); });
+  }
+  box.querySelectorAll("[data-rec-de]").forEach(b => b.onclick = () => { recAbertas.has(b.dataset.recDe) ? recAbertas.delete(b.dataset.recDe) : recAbertas.add(b.dataset.recDe); desenharListaProvas(); });
+  box.querySelectorAll("[data-detprova]").forEach(b => b.onclick = () => { const p = provasCache.find(x => x.id === b.dataset.detprova); if (!p) return; const bs = bancosDaProva(p).map(id => bancosCache.find(x => x.id === id) || { id, nome: id });
+    modal({ titulo: `Detalhes — ${p.titulo}`, largo: true, ok: "Fechar", conteudo: `<dl class="cp-detalhes"><div><dt>Turma</dt><dd>${esc(nomeT(p.turmaId))}</dd></div><div><dt>Matéria</dt><dd>${esc(matDe(p))}</dd></div><div><dt>Questões</dt><dd>${esc(metaProva(p))}</dd></div><div><dt>Banco(s)</dt><dd>${bs.map(b => esc(b.nome)).join(" · ")}</dd></div><div><dt>Temas</dt><dd class="pequeno">${temasDaProvaTexto(p, bs)}</dd></div><div><dt>Opções</dt><dd class="td-opcoes">${opcoesDaProvaHTML(p)}</dd></div></dl>` }); });
+  ligarAcoesProvas(box);
+}
+function ligarAcoesProvas(box) {
   box.querySelectorAll("[data-alunos]").forEach(b => b.onclick = async () => {
     abrirAba("resultados"); $("#rTurma").value = ""; await prepararResultados();
     $("#rProva").value = b.dataset.alunos; $("#rAoVivo").checked = true; carregarResultados();
@@ -1946,6 +1987,22 @@ const BANCOS_PRONTOS = [
       { titulo: "Prática Web — Portfólio (projeto livre com pastas e git)", nWeb: 1, tempoMinutos: 100, tema: "Portfólio — projeto livre" }
     ] }
 ];
+// ---------- Organizar materiais: a matéria de cada PDF, uma vez só (com sugestão pelas somativas que já usaram o PDF) ----------
+async function organizarMateriais(aoSalvar = () => {}) {
+  await listarMateriaisCache().catch(() => {});
+  const lista = [...materiaisCache].sort((a, b) => (a.materia ? 1 : 0) - (b.materia ? 1 : 0) || ordemNatural(a.titulo, b.titulo));
+  const sug = m => { const u = provasCache.filter(p => (p.materiaisConsultaIds || []).includes(m.id) && p.materia).map(p => materiaCorrigida(p.materia)); return u.sort((a, b) => u.filter(x => x === b).length - u.filter(x => x === a).length)[0] || ""; };
+  const opc = PLANO_CURSO.unidades.map(u => u.nome).sort((a, b) => a.localeCompare(b, "pt-BR"));
+  const ok = await modal({ titulo: "Organizar materiais", largo: true, ok: "Salvar", cancelar: "Cancelar",
+    conteudo: `<p class="pequeno" style="margin-top:0">Defina a matéria de cada PDF. Na Nova somativa aparecem só os da matéria da prova. Nada é apagado e as somativas que já usam um PDF continuam iguais.</p>
+      <div class="tabela"><table><tr><th>PDF</th><th>Matéria</th></tr>${lista.map(m => { const v = m.materia || sug(m); return `<tr><td><b>${esc(m.titulo)}</b><br><span class="pequeno">PDF · ${tamanhoTexto(m.tamanho)}</span></td><td><select data-orgm="${m.id}"><option value="">— sem matéria —</option>${opc.map(o => `<option value="${esc(o)}"${chaveTexto(o) === chaveTexto(v) ? " selected" : ""}>${esc(o)}${!m.materia && chaveTexto(o) === chaveTexto(v) ? " (sugerida)" : ""}</option>`).join("")}</select></td></tr>`; }).join("") || '<tr><td colspan="2">Nenhum PDF enviado.</td></tr>'}</table></div>`,
+    antesDeConfirmar: async c => {
+      try { for (const s of c.querySelectorAll("[data-orgm]")) { const m = materiaisCache.find(x => x.id === s.dataset.orgm); if (s.value && m && s.value !== m.materia) { await updateDoc(doc(db, "materiais", m.id), { materia: s.value }); m.materia = s.value; } } }
+      catch (er) { toast("Não foi possível salvar. " + traduzirErro(er), "erro"); return false; }
+      return true;
+    } });
+  if (ok) { toast("Matérias dos PDFs salvas.", "ok"); aoSalvar(); }
+}
 // ---------- 🔗 tema → capacidades (bancos/{id}.capacidadesPorTema), com sugestão automática sem IA ----------
 async function editarCapacidadesBanco(bancoId) {
   const b = bancosCache.find(x => x.id === bancoId); if (!b) return;
@@ -2109,7 +2166,7 @@ function linhasTopicos(bs) {
   for (const x of por.values()) x.provas = provasCache.filter(p => bancosDaProva(p).some(b => x.bancos.has(b) && (!temasDoBanco(p, b) || temasDoBanco(p, b).has(x.tema)))).length;
   return { linhas: [...por.values()].sort((a, b) => ordemNatural(a.tema, b.tema)), unidade: u };
 }
-const ROT_TIPO = { alternativa: "alt.", dissertativa: "dissert.", sql: "SQL", diagrama: "diagr.", web: "web" };
+const ROT_TIPO = { alternativa: "alt.", dissertativa: "dissert.", sql: "SQL físico", diagrama: "diagr.", web: "página web" };
 function topicosMateriaHTML(idm, bs) {
   const { linhas, unidade } = linhasTopicos(bs);
   topicosPorMateria.set(idm, { linhas, bs, unidade });
@@ -2118,7 +2175,7 @@ function topicosMateriaHTML(idm, bs) {
     <p class="pequeno" style="margin:8px 12px">${pl(linhas.length, "tópico")} · <b class="${abaixo ? "erro-texto" : ""}">${abaixo} de ${linhas.length} abaixo do mínimo</b> (meta ${minimoTopico} questões aprovadas por tópico, em Configuração)</p>
     <div class="linha filtro-topicos" style="gap:6px;margin:0 12px 8px">
       <input type="search" data-tp-busca placeholder="Buscar no tópico e nas questões…" aria-label="Buscar nos tópicos e nas questões" style="flex:2 1 220px">
-      <select data-tp-tipo aria-label="Tipo de questão"><option value="">Todos os tipos</option>${Object.entries(ROT_TIPO).map(([k]) => `<option value="${k}">${({ alternativa: "Alternativa", dissertativa: "Dissertativa", sql: "SQL na Bancada", diagrama: "Diagrama", web: "Projeto web" })[k]}</option>`).join("")}</select>
+      <select data-tp-tipo aria-label="Tipo de questão"><option value="">Todos os tipos</option>${Object.entries(ROT_TIPO).map(([k]) => `<option value="${k}">${({ alternativa: "Alternativa", dissertativa: "Dissertativa", sql: "SQL físico", diagrama: "Diagrama", web: "Página web" })[k]}</option>`).join("")}</select>
       ${unidade ? `<select data-tp-cap aria-label="Capacidade"><option value="">Todas as capacidades</option>${unidade.tec.map(([id, t]) => `<option value="${id}">${esc(t.slice(0, 60))}</option>`).join("")}<option value="__sem">Sem capacidade definida</option></select>` : ""}
       ${bs.length > 1 ? `<select data-tp-banco aria-label="Banco"><option value="">Todos os bancos</option>${bs.map(b => `<option value="${b.id}">${esc(b.nome)}</option>`).join("")}</select>` : ""}
       <select data-tp-sit aria-label="Situação"><option value="">Todas as situações</option><option value="abaixo">Abaixo do mínimo</option><option value="revisar">Com questões a revisar</option></select>

@@ -10,7 +10,7 @@ import { corrigirSql } from "../servidor/sql-correcao.js";
 import { corrigirWeb } from "../servidor/web-correcao.js";
 import { corrigirDiagrama } from "../servidor/diagrama-correcao.js";
 export { limparTema } from "../servidor/organizar.js";
-import { categoriaSql, coberturaWeb, subtopicosConferiveis, modeloWeb } from "./praticas-categorias.js?v=20261126a";
+import { categoriaSql, coberturaWeb, subtopicosConferiveis, modeloWeb, cobreTags, nTagsCobertas } from "./praticas-categorias.js?v=20261126b";
 const gabWeb = g => g?.web ? (() => { try { return JSON.parse(g.web); } catch { return {}; } })() : g;
 import { firebaseConfig, SUPER_ADMIN, DOMINIOS_ALUNOS_PADRAO, USAR_EMULADOR, GOOGLE_CLIENT_ID } from "./firebase-config.js";
 
@@ -331,6 +331,9 @@ export async function sortearQuestoes(prova, cota = null, opc = {}) {
   // página web: só as que têm os subtópicos marcados (se nenhuma tiver todos, as que têm mais); quantas de cada modelo
   const subW = subtopicosConferiveis(prova.webSubtopicos);
   let webPool = web;
+  // etiquetas ("Tabelas", "Flexbox e Grid"…): só as páginas que têm todas; se nenhuma tiver, as que têm mais
+  const tagsW = Array.isArray(prova.webTags) ? prova.webTags : [];
+  if (tagsW.length) { const todas = web.filter(id => cobreTags(dados[id], tagsW)); webPool = todas.length ? todas : [...web].sort((a, b) => nTagsCobertas(dados[b], tagsW) - nTagsCobertas(dados[a], tagsW)); }
   if (subW.length) { const n = id => { const c = coberturaWeb(dados[id]); return subW.filter(s => c.has(s)).length; }; const todas = web.filter(id => n(id) === subW.length); webPool = todas.length ? todas : [...web].sort((a, b) => n(b) - n(a)); }
   const webMod = prova.webModelos && typeof prova.webModelos === "object" ? Object.entries(prova.webModelos).filter(([, n]) => Number(n) > 0) : null;
   const pegarWeb = () => webMod ? webMod.flatMap(([m, n]) => pegar(webPool.filter(id => modeloWeb(dados[id]) === m), Number(n))) : pegar(webPool, nW);

@@ -2,7 +2,7 @@
 import { ic } from "./icones.js";
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar, sortearAleatorio, esc, $, toast, dataBR, letra,
          idTentativaTeste, apagarTentativaTeste, confirmar, avisar, traduzirErro, iniciais, fecharModais, temaDe, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco, bancoDaQuestao, sortearQuestoes }
-  from "./common.js?v=20261126f";
+  from "./common.js?v=20261126g";
 import { baixarMaterial } from "./material.js";
 import { desenharConquistas } from "./aluno-conquistas.js?v=20261126a";
 import { regraDoTipo, calcNotaFinal } from "./nota-final.js";
@@ -12,7 +12,7 @@ import { iniciarAbas, definirAbasVisiveis, irParaAba, abaAtual } from "./aluno-n
 import { desenharTurma } from "./aluno-social.js";
 import { desenharRecompensas } from "./aluno-recompensas.js";
 let simulacao = false;   // equipe vendo a página como aluno (?simular=1): nada é gravado
-import { lerGamificacao, GAMI_PADRAO } from "./common.js?v=20261126f";
+import { lerGamificacao, GAMI_PADRAO } from "./common.js?v=20261126g";
 let gami = { ...GAMI_PADRAO };   // o que está ligado na gamificação (config/gamificacao)
 import { montarFormato, temFormato, FORMATOS, rotuloFormato, textoParaFalar, textoResposta, textoChave } from "./formatos-ui.js";
 const controles = {};   // qid -> controle do formato adaptado (valor, preencher, travar)

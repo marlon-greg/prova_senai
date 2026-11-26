@@ -54,3 +54,35 @@ export function coberturaWeb(q) {
 export const subtopicosConferiveis = ids => (ids || []).filter(id => PISTAS_WEB[id]);
 export const MODELOS_WEB = { blocos: "Encaixar blocos (comandos prontos)", completar: "Completar digitando", livre: "Projeto livre (pastas e arquivos)" };
 export const modeloWeb = q => MODELOS_WEB[q?.modo] ? q.modo : "blocos";
+
+// "O que a página precisa cobrar": etiquetas (só assuntos que dá para conferir na página) → subtópicos do plano
+const PISTA_FLEXGRID = /display\s*:\s*(inline-)?(flex|grid)|grid-template|flex-(direction|wrap)|justify-content|align-items/i;
+export const TAGS_WEB = {
+  HTML: [
+    { k: "estrutura", nome: "Estrutura da página", ids: ["marc.k4.3", "marc.k4.4"] },
+    { k: "textos", nome: "Textos e listas", ids: ["marc.k4.5", "marc.k4.9"] },
+    { k: "imagens", nome: "Imagens e links", ids: ["marc.k4.6", "marc.k4.8"] },
+    { k: "cores", nome: "Cores (hexadecimal, RGB)", ids: ["marc.k4.7"] },
+    { k: "tabelas", nome: "Tabelas", ids: ["marc.k4.10"] },
+    { k: "formularios", nome: "Formulários", ids: ["marc.k4.11"] }
+  ],
+  CSS: [
+    { k: "seletores", nome: "Seletores", ids: ["marc.k5.4"] },
+    { k: "formatacao", nome: "Formatação de elementos", ids: ["marc.k5.5"] },
+    { k: "menus", nome: "Menus e submenus", ids: ["marc.k5.6"] },
+    { k: "box", nome: "Box model", ids: ["marc.k5.7"] },
+    { k: "posicionamento", nome: "Posicionamento", ids: ["marc.k5.8"] },
+    { k: "pseudo", nome: "Pseudo classes", ids: ["marc.k5.9"] },
+    { k: "efeitos", nome: "Efeitos", ids: ["marc.k5.10"] },
+    { k: "flexgrid", nome: "Flexbox e Grid", ids: [], re: PISTA_FLEXGRID },
+    { k: "svg", nome: "Imagens e SVG", ids: ["marc.k5.11"] }
+  ]
+};
+const TAG_POR_K = Object.fromEntries([...TAGS_WEB.HTML, ...TAGS_WEB.CSS].map(t => [t.k, t]));
+// a página tem TODAS as etiquetas marcadas? (cada etiqueta vale se qualquer subtópico dela aparece)
+export function cobreTags(q, tags) {
+  if (!tags?.length) return true;
+  const c = coberturaWeb(q), txt = JSON.stringify(q || {});
+  return tags.every(k => { const t = TAG_POR_K[k]; return !t || t.ids.some(id => c.has(id)) || (t.re && t.re.test(txt)); });
+}
+export const nTagsCobertas = (q, tags) => (tags || []).filter(k => cobreTags(q, [k])).length;

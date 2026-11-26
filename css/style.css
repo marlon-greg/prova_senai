@@ -2734,3 +2734,72 @@ button.mat-vazia { opacity:.65; }
 
 .diag-tipo-linha { display:flex; align-items:center; gap:8px; }
 .diag-tipo-linha .diag-qtd { width:70px; flex:0 0 70px; padding:4px 6px; }
+
+/* ---- Nova somativa: Quantas questões (1 modelo · 2 ajuste · 3 práticas) ---- */
+.qb .qb-card { background:#fff; border:1px solid var(--borda); border-radius:12px; padding:14px 16px; margin:0 0 12px; }
+.qb .qb-passo { margin:0 0 10px; font-weight:700; color:var(--marinho); }
+.qb-modelos { display:grid; grid-template-columns:repeat(auto-fit, minmax(190px, 1fr)); gap:10px; }
+.qb-modelo { display:flex; flex-direction:column; align-items:flex-start; gap:2px; text-align:left; background:#fff; color:var(--marinho); border:1px solid var(--borda); border-radius:10px; padding:10px 14px; font-weight:400; box-shadow:none; min-height:64px; }
+.qb-modelo b { font-size:15px; } .qb-modelo span { font-size:13px; color:var(--suave); }
+.qb-modelo:hover { border-color:var(--marinho-2); } .qb-modelo.ativo { border:2px solid var(--marinho); background:var(--marinho-claro, #e8eefc); }
+.qb-topo { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:10px; } .qb-topo .qb-passo { margin:0; }
+.qb-total { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.qb-step { display:inline-flex; align-items:stretch; border:1px solid var(--borda); border-radius:8px; overflow:hidden; background:#f6f7fb; flex:0 0 auto; }
+.qb-step button { background:transparent; color:var(--marinho); border:0; border-radius:0; padding:4px 12px; min-height:0; box-shadow:none; font-size:18px; line-height:1; }
+.qb-step button:disabled { opacity:.35; } .qb-step input { width:52px; text-align:center; border:0; border-radius:0; background:#fff; padding:6px 0; margin:0; font-weight:700; -moz-appearance:textfield; }
+.qb-step input::-webkit-outer-spin-button, .qb-step input::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
+.qb-barra { display:flex; border-radius:8px; overflow:hidden; min-height:34px; margin:4px 0 10px; }
+.qb-seg { display:flex; align-items:center; padding:0 12px; font-weight:600; font-size:14px; white-space:nowrap; overflow:hidden; min-width:0; }
+.qb-alt { background:#dfe6fd; color:#1e3a8a; } .qb-diss { background:#e3f3e8; color:#166534; } .qb-sql { background:#fbe9c4; color:#854d0e; } .qb-web { background:#fde2e4; color:#9f1239; } .qb-diag { background:#ece4fb; color:#5b21b6; } .qb-vazio { background:#f1f2f6; color:var(--suave); flex:1; }
+.qb-teo { display:grid; grid-template-columns:1fr 1fr; gap:0 28px; } @media (max-width:700px) { .qb-teo { grid-template-columns:1fr; } }
+.qb-linha { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:8px 0; border-top:1px solid var(--borda); }
+.qb-linha small { display:block; color:var(--suave); font-size:13px; } .qb-linha.qb-apagada { opacity:.5; }
+.qb-regra { margin:8px 0 0; }
+.qb-praticas { display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:12px; align-items:start; }
+.qb-pcard { background:#fff; border:1px solid var(--borda); border-radius:12px; padding:12px 16px; } .qb-pcard.ativo { border:2px solid var(--marinho); }
+.qb-pcab { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:4px; } .qb-pcab small { display:block; color:var(--suave); font-size:13px; }
+.qb-sub { margin:10px 0 2px; font-weight:700; color:var(--marinho); }
+.qb-tags { display:flex; flex-wrap:wrap; gap:6px; }
+.qb-tag { background:#fff; color:var(--marinho); border:1px solid var(--borda); border-radius:999px; padding:5px 12px; font-weight:500; min-height:0; box-shadow:none; font-size:13px; }
+.qb-tag.ativo { background:var(--marinho); color:#fff; border-color:var(--marinho); }
+.qb-fonte { margin:8px 0 0; padding-top:8px; border-top:1px solid var(--borda); }
+
+/* hover dos botões novos: nada de vermelho (o estilo geral de botão não vale aqui) */
+button.aba-turma:hover { background:var(--hover, #f6f7f9); color:var(--marinho); border-color:var(--marinho-2); transform:none; box-shadow:none; }
+button.aba-turma:hover .pequeno { color:var(--suave); }
+button.aba-turma.ativa:hover { background:var(--marinho); color:#fff; border-color:var(--marinho); } button.aba-turma.ativa:hover .pequeno { color:#e5e7eb; }
+button.qb-modelo:hover { background:#f6f7fb; color:var(--marinho); border-color:var(--marinho-2); transform:none; box-shadow:none; } button.qb-modelo.ativo:hover { background:var(--marinho-claro, #e8eefc); }
+button.qb-tag:hover { background:#f6f7fb; color:var(--marinho); border-color:var(--marinho-2); transform:none; box-shadow:none; } button.qb-tag.ativo:hover { background:var(--marinho-2); color:#fff; }
+.qb-step button:hover:not(:disabled) { background:#e9ecf4; color:var(--marinho); transform:none; box-shadow:none; }
+.visao-mini button:hover { background:#f6f7fb; color:var(--marinho); transform:none; box-shadow:none; } .visao-mini button.ativo:hover { background:var(--marinho-claro, #e8eefc); color:var(--marinho-2); }
+.qb-step button:disabled, .qb-step button:disabled:hover { background:transparent; color:var(--marinho); }
+button.qb-modelo:disabled, button.qb-tag:disabled, button.aba-turma:disabled { background:#fff; color:var(--suave); }
+
+/* ---- Nova somativa: material de consulta em cartões ---- */
+.mat-cartoes { display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:10px; margin-top:8px; }
+.mat-cartao { display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid var(--borda); border-radius:10px; background:#fff; }
+.mat-cartao.ativo { border:2px solid var(--marinho); background:var(--marinho-claro, #e8eefc); }
+.mat-cartao small { display:block; color:var(--suave); font-size:13px; }
+.mat-extras { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; align-items:flex-start; }
+.mat-det > summary { display:inline-block; cursor:pointer; padding:6px 12px; border:1px solid var(--borda); border-radius:8px; background:#fff; color:var(--marinho); font-weight:500; list-style:none; }
+.mat-det > summary::-webkit-details-marker { display:none; } .mat-det > summary::before { content:'▸ '; } .mat-det[open] > summary::before { content:'▾ '; }
+.mat-det[open] { flex-basis:100%; } .mat-det-corpo { padding:8px 0 0; }
+.mat-aviso { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:12px; }
+
+/* ---- página Somativas (abas por turma · tabela) ---- */
+.sp-topo { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:0 0 12px; } .sp-topo .visao-mini { margin:0; }
+.sp-busca { display:flex; align-items:center; gap:8px; flex:1 1 320px; background:#fff; border:1px solid var(--borda); border-radius:10px; padding:0 12px; margin:0 0 12px; color:var(--suave); }
+.sp-busca input { border:0; background:transparent; padding:10px 0; margin:0; flex:1; box-shadow:none; outline:none; } .sp-busca:focus-within { border-color:var(--marinho-2); }
+.sp-linha-filtros { display:flex; align-items:flex-end; gap:12px; flex-wrap:wrap; margin:0 0 12px; } .sp-linha-filtros .sp-busca { margin:0; }
+.sp-filtro { display:flex; flex-direction:column; gap:2px; margin:0; font-size:13px; color:var(--suave); } .sp-filtro select { min-width:170px; margin:0; }
+.sp-mats { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:12px 0; }
+.sp-sub { margin:14px 0 6px; font-weight:700; color:var(--suave); font-size:14px; }
+.sp-linha { display:flex; align-items:center; justify-content:space-between; gap:12px; background:#fff; border:1px solid var(--borda); border-radius:12px; padding:12px 16px; margin:0 0 8px; }
+.sp-linha-rec { margin-left:36px; background:#fffaeb; border-color:#f3d48b; }
+.sp-info { min-width:0; } .sp-l1 { display:flex; align-items:center; gap:8px; flex-wrap:wrap; } .sp-l1 b { font-size:16px; color:var(--marinho); } .sp-l2 { color:var(--suave); font-size:14px; margin-top:2px; }
+.sp-acoes { display:flex; align-items:center; gap:8px; flex-wrap:nowrap; flex:0 0 auto; }
+button.sp-rec { background:#fff7e0; color:#7a5200; border:1px solid #f3d48b; border-radius:8px; padding:5px 12px; font-weight:600; min-height:0; box-shadow:none; white-space:nowrap; }
+button.sp-rec:hover { background:#fdefc8; color:#7a5200; transform:none; box-shadow:none; }
+.tabela-provas td { vertical-align:middle; } .sp-td-acoes { width:1%; white-space:nowrap; } .sp-td-acoes .sp-acoes { justify-content:flex-end; }
+.sp-tr-rec td { background:#fffdf5; } .sp-tr-rec .sp-linha-rec { margin:4px 0 4px 24px; }
+@media (max-width:900px) { .sp-linha { flex-direction:column; align-items:stretch; } .sp-acoes { flex-wrap:wrap; } }
