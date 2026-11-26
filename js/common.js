@@ -273,9 +273,12 @@ export function cotaDaProva(p) {
 // sorteia as questões da prova (ids), igual para todo aluno: só temas marcados, respeitando a cota de tipos.
 // cota = { nA, nD } opcional (acessibilidade: o professor escolhe quantas de cada tipo).
 export async function sortearQuestoes(prova, cota = null) {
-  const { ids: todosIds, alt, diss, sql, web, diag, dados } = await questoesDisponiveis(prova);
+  const { ids: todosIds, alt, diss, sql, web, diag: diagTodos, dados } = await questoesDisponiveis(prova);
+  // a somativa pode limitar QUAIS diagramas caem (ex.: só modelo conceitual); sem lista = todos
+  const tiposD = Array.isArray(prova.tiposDiagrama) && prova.tiposDiagrama.length ? new Set(prova.tiposDiagrama) : null;
+  const diag = tiposD ? diagTodos.filter(id => tiposD.has(dados[id]?.diagrama)) : diagTodos;
   // questões práticas (Bancada SQL e Bancada Web) só entram pelas cotas nSql / nWeb; as outras contas seguem como antes, sem elas
-  const ids = todosIds.filter(id => !sql.includes(id) && !web.includes(id) && !diag.includes(id));
+  const ids = todosIds.filter(id => !sql.includes(id) && !web.includes(id) && !diagTodos.includes(id));
   const nW = cota ? 0 : Math.max(0, Number(prova.nWeb || 0));
   const nG = cota ? 0 : Math.max(0, Number(prova.nDiagramas || 0));   // diagramas (casos de uso, brModelo…) também só pela cota
   const nS = (cota ? 0 : Math.max(0, Number(prova.nSql || 0))) + nW + nG;

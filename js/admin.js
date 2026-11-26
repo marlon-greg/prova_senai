@@ -2,11 +2,11 @@
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, limparTema, apagarTentativaTeste,
          confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco,
          rotuloDias, nomeTurma, HORARIO_PADRAO, textoHorario, DIAS_SEMANA_LONGO,
-         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261125b";
+         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261126a";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
-import { htmlEditorTopicos, editorTopicos } from "./plano-curso-ui.js?v=20261113d";
+import { htmlEditorTopicos, editorTopicos } from "./plano-curso-ui.js?v=20261126a";
 import { criteriosDaUnidade, codigoCriterio, carregarCriteriosOficiais } from "./plano-ensino.js?v=20261116a";
 import { PLANO_CURSO, unidadeDaMateria, unidadesDoSemestre } from "./plano-curso.js?v=20261113a";
 import { proporCapacidades, capsDoTema } from "./temas-capacidades.js?v=20261126a";
@@ -15,7 +15,7 @@ import { iniciarDiario, carregarDiario } from "./admin-diario.js";
 import { iniciarCriterios, carregarCriterios } from "./admin-criterios.js?v=20261116a";
 import { ligarAjuda } from "./ajuda.js";
 import { iniciarRelatorios, carregarRelatorios } from "./admin-relatorios.js";
-import { iniciarGamificacao, carregarGamificacao, carregarRetorno } from "./admin-gamificacao.js?v=20261116c";
+import { iniciarGamificacao, carregarGamificacao, carregarRetorno } from "./admin-gamificacao.js?v=20261126a";
 import { lerRevisoes, revisoesDaProva, faixaRevisoesHTML, avisoQuestaoHTML, abrirRevisao } from "./admin-revisoes.js?v=20261116c";
 import { mesclarQuestao } from "./acessibilidade.js";
 import { temFormato, textoResposta, textoChave, FORMATOS } from "./formatos-ui.js";
@@ -25,7 +25,7 @@ import { exportarExcel, exportarPDF } from "./exportar-turmas.js?v=20261110b";
 import { tarefa, ligarMenuLateral } from "./ui.js";
 import { ic } from "./icones.js";
 import { REGRAS_NOTA, regraDoTipo, calcNotaFinal } from "./nota-final.js";
-import { textoRespostaSql } from "../servidor/sql-correcao.js?v=20261125b";
+import { textoRespostaSql } from "../servidor/sql-correcao.js?v=20261126a";
 import { textoRespostaWeb } from "../servidor/web-correcao.js?v=20261125a";
 import { textoRespostaDiagrama, textoGabaritoDiagrama, validarQuestaoDiagrama, NOMES_DIAGRAMA } from "../servidor/diagrama-correcao.js?v=20261126a";
 import { HUMOR } from "./diario-perguntas.js";
@@ -561,14 +561,26 @@ function formProvaHTML(f) {
     <div id="${f}Temas" class="lista-bancos" role="group" aria-label="Bancos e temas"><p class="pequeno">Carregando bancos…</p></div>
     <p id="${f}TemasResumo" class="pequeno temas-resumo" role="status" aria-live="polite"></p>
   </fieldset>
-  <div class="grade">
-    <div><label for="${f}NAlt">Alternativas por aluno</label><input type="number" id="${f}NAlt" value="7" min="0"></div>
-    <div><label for="${f}NDiss">Dissertativas por aluno</label><input type="number" id="${f}NDiss" value="3" min="0">
-      <p class="pequeno" id="${f}NTotal" style="margin:4px 0 0" aria-live="polite"></p></div>
-    <div><label for="${f}NWeb">Projetos web (Bancada Web) por aluno</label><input type="number" id="${f}NWeb" value="0" min="0" title="Prova prática de HTML/CSS num editor parecido com o VS Code, com prévia ao vivo (escolha o tema do projeto nos temas do banco)"></div>
-    <div><label for="${f}NSql">Questões SQL na Bancada por aluno</label><input type="number" id="${f}NSql" value="0" min="0" title="Questões práticas: o aluno escreve e executa SQL numa bancada parecida com o MySQL Workbench (cada aluno recebe um cenário sorteado)"></div>
-    <div><label for="${f}NDiag">Diagramas por aluno</label><input type="number" id="${f}NDiag" value="0" min="0" title="O aluno monta o diagrama na prova: casos de uso, matriz de rastreabilidade, Kanban… (Levantamento de Requisitos) ou modelo conceitual/lógico no estilo brModelo (Banco de Dados)"></div>
-  </div>
+  <fieldset class="temas-box">
+    <legend>Quantas questões cada aluno recebe</legend>
+    <div class="grade">
+      <div><label for="${f}Total">Total de questões por aluno</label><input type="number" id="${f}Total" value="10" min="1">
+        <label class="check" style="margin:4px 0 0"><input type="checkbox" id="${f}SemLimite"> <span>Não definir limite <span class="pequeno">— o total é a soma do que você colocar</span></span></label></div>
+      <div><label for="${f}NAlt">Alternativas</label><input type="number" id="${f}NAlt" value="6" min="0"></div>
+      <div><label for="${f}NDiss">Dissertativas</label><input type="number" id="${f}NDiss" value="4" min="0">
+        <p class="pequeno" id="${f}NTotal" style="margin:4px 0 0" aria-live="polite"></p></div>
+    </div>
+    <p class="pequeno" style="margin:6px 0 4px">Questões práticas (só aparecem as que a matéria tem nos bancos). Cada cenário prático conta como 1 questão; com total definido, cada uma tira uma teórica (alternativa, dissertativa, alternativa…).</p>
+    <div class="grade">
+      <div id="${f}BoxSql" class="oculto"><label class="check"><input type="checkbox" id="${f}AtivaSql"> <span>Vai ter questões SQL na Bancada</span></label>
+        <div id="${f}QtdSql" class="oculto"><label for="${f}NSql">Quantas questões SQL na Bancada</label><input type="number" id="${f}NSql" value="0" min="0" title="O aluno escreve e executa SQL numa bancada parecida com o MySQL Workbench (cada aluno recebe um cenário sorteado)"></div></div>
+      <div id="${f}BoxWeb" class="oculto"><label class="check"><input type="checkbox" id="${f}AtivaWeb"> <span>Vai ter projeto web na Bancada Web</span></label>
+        <div id="${f}QtdWeb" class="oculto"><label for="${f}NWeb">Quantos projetos web</label><input type="number" id="${f}NWeb" value="0" min="0" title="Prova prática de HTML/CSS num editor parecido com o VS Code, com prévia ao vivo"></div></div>
+      <div id="${f}BoxDiag" class="oculto"><label class="check"><input type="checkbox" id="${f}AtivaDiag"> <span>Vai ter diagramas</span></label>
+        <div id="${f}QtdDiag" class="oculto"><label for="${f}NDiag">Quantos diagramas</label><input type="number" id="${f}NDiag" value="0" min="0">
+          <div id="${f}TiposDiag" class="pequeno" style="margin-top:4px"></div></div></div>
+    </div>
+  </fieldset>
   <div class="grade">
     <div><label for="${f}Codigo">Código de acesso (opcional)</label>
       <div class="linha" style="flex-wrap:nowrap"><input type="text" id="${f}Codigo" placeholder="sem código" autocomplete="off" spellcheck="false" style="text-transform:uppercase"><button type="button" class="leve mini" id="${f}GerarCodigo" style="flex:0 0 auto;min-width:0">Gerar</button></div>
@@ -671,16 +683,75 @@ function controleProva(f) {
     return d;
   };
   const carregado = () => bancosCache.some(b => contagens[b.id]);
+  // ---------- quantidades: total fixo e tipos práticos por caixinha ----------
+  const PRAT = ["Sql", "Web", "Diag"], TIPO_PRAT = { Sql: "sql", Web: "web", Diag: "diagrama" };
+  const nq = k => $f("Ativa" + k).checked ? Math.max(0, Math.round(Number($f("N" + k).value || 0))) : 0;   // prático desligado = 0
+  const pratico = () => PRAT.reduce((s, k) => s + nq(k), 0);
+  const somaTudo = () => Number($f("NAlt").value || 0) + Number($f("NDiss").value || 0) + pratico();
+  let praticoAntes = 0, tirarDaAlt = true, tiposDiag = null;   // tiposDiag: Set dos tipos de diagrama que podem cair (null = todos)
+  // bancos da matéria escolhida (sem matéria: todos)
+  const bancosDaMat = () => { const m = $f("Materia").value; return bancosCache.filter(b => !m || chaveTexto(b.materia) === chaveTexto(m)); };
+  function tiposDaMateria() {
+    const t = { sql: 0, web: 0, diagrama: 0 };
+    for (const b of bancosDaMat()) { const c = contagens[b.id]; if (!c || c === "erro") continue; for (const x of Object.values(c)) { t.sql += x.sql || 0; t.web += x.web || 0; t.diagrama += x.diagrama || 0; } }
+    return t;
+  }
+  // tipos de diagrama que existem nos bancos da matéria (casos de uso, conceitual…)
+  const kindsDiag = () => [...new Set(bancosDaMat().flatMap(b => (questoesCache[b.id] || []).filter(q => q.tipo === "diagrama").map(q => q.diagrama)))].filter(Boolean);
+  function desenharPraticos() {
+    const t = tiposDaMateria();
+    PRAT.forEach(k => {
+      $f("Box" + k).classList.toggle("oculto", !t[TIPO_PRAT[k]] && !$f("Ativa" + k).checked);
+      $f("Qtd" + k).classList.toggle("oculto", !$f("Ativa" + k).checked);
+    });
+    const ks = kindsDiag();
+    $f("TiposDiag").innerHTML = ks.length > 1 ? `<span>Quais diagramas podem cair:</span>` + ks.map(k => `<label class="check" style="margin:2px 0"><input type="checkbox" data-tipodiag="${esc(k)}"${!tiposDiag || tiposDiag.has(k) ? " checked" : ""}${travado ? " disabled" : ""}> <span>${esc(NOMES_DIAGRAMA[k] || k)}</span></label>`).join("") : "";
+    $f("TiposDiag").querySelectorAll("[data-tipodiag]").forEach(c => c.onchange = () => {
+      const marc = [...$f("TiposDiag").querySelectorAll("[data-tipodiag]:checked")].map(x => x.dataset.tipodiag);
+      tiposDiag = marc.length === ks.length ? null : new Set(marc); atualizar();
+    });
+  }
+  // cada prática a mais tira uma teórica (alternativa, dissertativa, alternativa…); a menos devolve
+  function descontar() {
+    const novo = pratico(), delta = novo - praticoAntes; praticoAntes = novo;
+    if ($f("SemLimite").checked || !delta) return;
+    for (let i = 0; i < Math.abs(delta); i++) {
+      const alvoAlt = delta > 0 ? tirarDaAlt : !tirarDaAlt;
+      const a = Number($f("NAlt").value || 0), d = Number($f("NDiss").value || 0);
+      if (delta > 0) {
+        if (!a && !d) break;
+        if ((alvoAlt && a) || !d) $f("NAlt").value = a - 1; else $f("NDiss").value = d - 1;
+        tirarDaAlt = !tirarDaAlt;
+      } else {
+        if (alvoAlt) $f("NAlt").value = a + 1; else $f("NDiss").value = d + 1;
+        tirarDaAlt = !tirarDaAlt;
+      }
+    }
+  }
+  // total novo: as teóricas viram o que sobra (60% alternativas)
+  function aoMudarTotal() {
+    if ($f("SemLimite").checked) return;
+    const teo = Math.max(0, Math.round(Number($f("Total").value || 0)) - pratico());
+    const alt = Math.ceil(teo * 0.6); $f("NAlt").value = alt; $f("NDiss").value = teo - alt; tirarDaAlt = true;
+  }
+  // diagramas disponíveis nos temas marcados, respeitando os tipos escolhidos
+  function diagDisponiveis() {
+    let n = 0;
+    for (const b of bancosMarcados()) { const ts = sel.get(b); for (const q of questoesCache[b] || []) if (q.tipo === "diagrama" && ts?.has(temaDe(q)) && (!tiposDiag || tiposDiag.has(q.diagrama))) n++; }
+    return n;
+  }
   // devolve a mensagem de erro (ou "") para o pedido atual
   function problema() {
     const nAlt = Number($f("NAlt").value || 0), nDiss = Number($f("NDiss").value || 0), d = disponiveis();
     if (travado || !carregado()) return "";
     if (!bancosMarcados().length) return "Marque pelo menos um banco (ou um tema de algum banco).";
     if (nAlt > d.alternativa) return `Faltam questões de alternativa: a prova pede ${nAlt}, mas os bancos/temas marcados só têm ${d.alternativa}. Marque mais temas ou diminua as alternativas.`;
-    const nSql = Number($f("NSql").value || 0), nWeb = Number($f("NWeb").value || 0);
+    const nSql = nq("Sql"), nWeb = nq("Web");
+    if (!$f("SemLimite").checked && somaTudo() !== Number($f("Total").value || 0)) return `A soma (${somaTudo()}) não bate com o total (${Number($f("Total").value || 0)}): ajuste os números ou marque "Não definir limite".`;
+    if (!somaTudo()) return "A prova precisa de pelo menos uma questão.";
     if (nWeb > d.web) return `Faltam projetos da Bancada Web: a prova pede ${nWeb}, mas os bancos/temas marcados só têm ${d.web}. Importe o banco da Bancada Web ou marque o tema do projeto.`;
-    const nDiag = Number($f("NDiag").value || 0);
-    if (nDiag > d.diagrama) return `Faltam questões de diagrama: a prova pede ${nDiag}, mas os bancos/temas marcados só têm ${d.diagrama}. Importe um banco de diagramas (Bancos prontos) ou diminua.`;
+    const nDiag = nq("Diag"), dDiag = tiposDiag ? diagDisponiveis() : d.diagrama;
+    if (nDiag > dDiag) return `Faltam questões de diagrama: a prova pede ${nDiag}, mas os bancos/temas marcados só têm ${dDiag}${tiposDiag ? " dos tipos escolhidos" : ""}. Importe um banco de diagramas (Bancos prontos) ou diminua.`;
     if (nSql > d.sql) return `Faltam questões SQL (Bancada): a prova pede ${nSql}, mas os bancos/temas marcados só têm ${d.sql}. Importe o banco da Bancada SQL ou diminua.`;
     if (nDiss > d.dissertativa) return `Faltam dissertativas: a prova pede ${nDiss}, mas os bancos/temas marcados só têm ${d.dissertativa}. Marque mais temas ou diminua as dissertativas.`;
     return "";
@@ -688,7 +759,9 @@ function controleProva(f) {
   function atualizar() {
     topicosPlano.aoMudarMateria();
     const nAlt = Number($f("NAlt").value || 0), nDiss = Number($f("NDiss").value || 0);
-    $f("NTotal").textContent = `Total: ${nAlt + nDiss + Number($f("NSql").value || 0) + Number($f("NWeb").value || 0) + Number($f("NDiag").value || 0)} questões por aluno.`;
+    desenharPraticos();
+    $f("Total").disabled = $f("SemLimite").checked || travado;
+    $f("NTotal").textContent = `Soma: ${somaTudo()} questões por aluno${$f("SemLimite").checked ? "" : ` (total ${Number($f("Total").value || 0)})`}.`;
     const el = $f("TemasResumo");
     if (!carregado()) { el.textContent = ""; el.classList.remove("erro"); return; }
     const prob = problema(), bs = bancosMarcados();
@@ -883,7 +956,10 @@ function controleProva(f) {
     $f("TemasBusca").oninput = $f("TemasVisao").onchange = $f("TemasSoMarcados").onchange = desenharTemas;
     $f("TemasMarcar").onclick = () => marcarVisiveis(true);
     $f("TemasDesmarcar").onclick = () => marcarVisiveis(false);
-    $f("NAlt").oninput = $f("NDiss").oninput = $f("NSql").oninput = $f("NWeb").oninput = $f("NDiag").oninput = atualizar;
+    $f("NAlt").oninput = $f("NDiss").oninput = atualizar;
+    PRAT.forEach(k => { $f("N" + k).oninput = () => { descontar(); atualizar(); }; $f("Ativa" + k).onchange = () => { if ($f("Ativa" + k).checked && !Number($f("N" + k).value)) $f("N" + k).value = 1; descontar(); atualizar(); }; });
+    $f("Total").oninput = () => { aoMudarTotal(); atualizar(); };
+    $f("SemLimite").onchange = () => { if (!$f("SemLimite").checked) $f("Total").value = somaTudo(); atualizar(); };
     $f("MatUrl").oninput = previaMaterial;
     // vários de uma vez: cada PDF recebe o nome do arquivo como título e já entra marcado
     $f("MatUpload").onchange = async () => {
@@ -945,7 +1021,7 @@ function controleProva(f) {
   // trava bancos, número de questões, dissertativas e temas (prova que já tem tentativas de alunos)
   function travar(motivo) {
     travado = true;
-    ["NAlt", "NDiss", "NSql", "NWeb", "NDiag", "TemasMarcar", "TemasDesmarcar"].forEach(s => $f(s).disabled = true);
+    ["NAlt", "NDiss", "NSql", "NWeb", "NDiag", "Total", "SemLimite", "AtivaSql", "AtivaWeb", "AtivaDiag", "TemasMarcar", "TemasDesmarcar"].forEach(s => $f(s).disabled = true);
     $f("Temas").querySelectorAll("input").forEach(x => x.disabled = true);
     $f("Trava").innerHTML = motivo; $f("Trava").classList.remove("oculto");
     atualizar();
@@ -964,7 +1040,11 @@ function controleProva(f) {
     topicosPlano.definir(p.planoCurso);
     // provas antigas só têm o total (nQuestoes) e as dissertativas
     $f("NSql").value = p.nSql ?? 0; $f("NWeb").value = p.nWeb ?? 0; $f("NDiag").value = p.nDiagramas ?? 0;
-    $f("NDiss").value = p.nDissertativas ?? 0; $f("NAlt").value = p.nAlternativas ?? Math.max(0, (p.nQuestoes ?? 10) - (p.nDissertativas ?? 0));
+    $f("AtivaSql").checked = Number(p.nSql) > 0; $f("AtivaWeb").checked = Number(p.nWeb) > 0; $f("AtivaDiag").checked = Number(p.nDiagramas) > 0;
+    tiposDiag = Array.isArray(p.tiposDiagrama) && p.tiposDiagrama.length ? new Set(p.tiposDiagrama) : null;
+    $f("SemLimite").checked = false; $f("Total").value = p.nQuestoes ?? 10;
+    $f("NDiss").value = p.nDissertativas ?? 0; $f("NAlt").value = p.nAlternativas ?? Math.max(0, (p.nQuestoes ?? 10) - (p.nDissertativas ?? 0) - Number(p.nSql || 0) - Number(p.nWeb || 0) - Number(p.nDiagramas || 0));
+    praticoAntes = pratico(); tirarDaAlt = true;
     $f("Tempo").value = p.tempoMinutos || 0;
     $f("Modo").value = p.modoExibicao === "todas" ? "todas" : "uma";
     $f("Voltar").checked = p.permitirVoltar === true;
@@ -982,10 +1062,10 @@ function controleProva(f) {
   // lê e valida; devolve { erro } ou { dados }
   async function ler() {
     const titulo = $f("Titulo").value.trim();
-    const nAlt = Math.max(0, Math.round(Number($f("NAlt").value || 0))), nDiss = Math.max(0, Math.round(Number($f("NDiss").value || 0))), nSql = Math.max(0, Math.round(Number($f("NSql").value || 0))), nWeb = Math.max(0, Math.round(Number($f("NWeb").value || 0))), nDiag = Math.max(0, Math.round(Number($f("NDiag").value || 0))), n = nAlt + nDiss + nSql + nWeb + nDiag;
+    const nAlt = Math.max(0, Math.round(Number($f("NAlt").value || 0))), nDiss = Math.max(0, Math.round(Number($f("NDiss").value || 0))), nSql = nq("Sql"), nWeb = nq("Web"), nDiag = nq("Diag"), n = nAlt + nDiss + nSql + nWeb + nDiag;
     if (!titulo) return { erro: "Preencha o título." };
     if (!turmaEscolhida().turmaId) return { erro: "Escolha a turma da prova. Só os alunos dessa turma veem a prova." };
-    if (!travado && !n) return { erro: "A prova precisa de pelo menos uma questão (alternativas + dissertativas)." };
+    if (!travado && !n) return { erro: "A prova precisa de pelo menos uma questão." };
     if (!travado) { if (!carregando) await carregarTemas(); else await carregando; }   // garante a contagem dos bancos
     const bancoIds = bancosMarcados();
     if (!travado && !bancoIds.length) return { erro: "Marque pelo menos um banco de questões." };
@@ -1019,7 +1099,7 @@ function controleProva(f) {
     // bancoId = o primeiro (as regras do Firestore e as tentativas antigas usam); temas = os do primeiro banco (compatibilidade)
     if (!travado) {
       const temasPorBanco = Object.fromEntries(bancoIds.map(b => [b, ordenarTemas([...sel.get(b)])]));   // todos marcados = lista completa
-      Object.assign(dados, { bancoId: bancoIds[0], bancoIds, temasPorBanco, temas: temasPorBanco[bancoIds[0]], nQuestoes: n, nAlternativas: nAlt, nDissertativas: nDiss, nSql, nWeb, nDiagramas: nDiag });
+      Object.assign(dados, { bancoId: bancoIds[0], bancoIds, temasPorBanco, temas: temasPorBanco[bancoIds[0]], nQuestoes: n, nAlternativas: nAlt, nDissertativas: nDiss, nSql, nWeb, nDiagramas: nDiag, tiposDiagrama: nDiag && tiposDiag ? [...tiposDiag] : null });
     }
     return { dados };
   }
@@ -1619,7 +1699,7 @@ $("#btnImportarBanco").onclick = async () => {
   }
   if (b.questoes.some(q => q.tipo === "sql")) {
     $("#msgBanco").textContent = "Rodando os gabaritos das questões SQL…";
-    const { calcularGabarito } = await import("./workbench.js?v=20261125b");
+    const { calcularGabarito } = await import("./workbench.js?v=20261126a");
     for (const [i, q] of b.questoes.entries()) if (q.tipo === "sql") {
       try { gabSql[i] = await calcularGabarito(q, q.gabarito); }
       catch (e) { $("#msgBanco").innerHTML = `❌ Questão ${i + 1}: ${esc(e.message)}`; return false; }

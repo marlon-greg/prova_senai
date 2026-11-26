@@ -2,9 +2,9 @@
 import { ic } from "./icones.js";
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar, sortearAleatorio, esc, $, toast, dataBR, letra,
          idTentativaTeste, apagarTentativaTeste, confirmar, avisar, traduzirErro, iniciais, fecharModais, temaDe, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco, bancoDaQuestao, sortearQuestoes }
-  from "./common.js?v=20261125b";
+  from "./common.js?v=20261126a";
 import { baixarMaterial } from "./material.js";
-import { desenharConquistas } from "./aluno-conquistas.js?v=20261118e";
+import { desenharConquistas } from "./aluno-conquistas.js?v=20261126a";
 import { regraDoTipo, calcNotaFinal } from "./nota-final.js";
 import { apontar, desenharFaleConosco } from "./aluno-retorno.js?v=20261116c";
 import { desenharPerfil, painelSimulacao, lerSimulacao, provasSimuladas, RESUMO_SIMULADO } from "./aluno-perfil.js";
@@ -12,7 +12,7 @@ import { iniciarAbas, definirAbasVisiveis, irParaAba, abaAtual } from "./aluno-n
 import { desenharTurma } from "./aluno-social.js";
 import { desenharRecompensas } from "./aluno-recompensas.js";
 let simulacao = false;   // equipe vendo a página como aluno (?simular=1): nada é gravado
-import { lerGamificacao, GAMI_PADRAO } from "./common.js?v=20261125b";
+import { lerGamificacao, GAMI_PADRAO } from "./common.js?v=20261126a";
 let gami = { ...GAMI_PADRAO };   // o que está ligado na gamificação (config/gamificacao)
 import { montarFormato, temFormato, FORMATOS, rotuloFormato, textoParaFalar, textoResposta, textoChave } from "./formatos-ui.js";
 const controles = {};   // qid -> controle do formato adaptado (valor, preencher, travar)
@@ -21,8 +21,8 @@ import { topicosDaProva, htmlConhecimentos, rotuloTec, nivelK } from "./plano-cu
 import { criteriosDaProva, NIVEIS_RUBRICA, carregarCriteriosOficiais } from "./plano-ensino.js?v=20261116a";
 import { toolbar, collapsible, vazio, statTiles, chips } from "./ui.js";
 import { completar, aplicarVisual, mesclarQuestao } from "./acessibilidade.js";
-import { textoRespostaSql } from "../servidor/sql-correcao.js?v=20261125b";
-import { montarBancada } from "./workbench.js?v=20261125b";
+import { textoRespostaSql } from "../servidor/sql-correcao.js?v=20261126a";
+import { montarBancada } from "./workbench.js?v=20261126a";
 import { montarBancadaWeb } from "./bancada-web.js?v=20261125a";
 import { textoRespostaWeb, respostaEmBranco } from "../servidor/web-correcao.js?v=20261125a";
 import { textoRespostaDiagrama, textoGabaritoDiagrama, respostaVaziaDiagrama, NOMES_DIAGRAMA } from "../servidor/diagrama-correcao.js?v=20261126a";
