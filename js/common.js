@@ -187,9 +187,14 @@ export function letra(i) { return "ABCDEFGH"[i] || String(i + 1); }
 export function temaDe(q) { return String(q?.tema ?? "").trim() || "Geral"; }
 // ---------- vários bancos por prova ----------
 // bancos da prova: bancoIds (novo) ou só bancoId (provas antigas)
-export function bancosDaProva(p) {
+// bancos da TEORIA (alternativas e dissertativas dos temas marcados da matéria)
+export function bancosTeoricos(p) {
   return Array.isArray(p?.bancoIds) && p.bancoIds.length ? p.bancoIds : (p?.bancoId ? [p.bancoId] : []);
 }
+// prova.praticas = { sql: { bancoId: [temas] }, web: {...}, diagrama: {...} }: as práticas escolhidas à parte, de qualquer matéria
+export const bancosPraticos = p => [...new Set(Object.values(p?.praticas || {}).flatMap(o => Object.keys(o || {})))];
+// todos os bancos que a prova usa (teoria + práticas): para ler questões e gabaritos
+export function bancosDaProva(p) { return [...new Set([...bancosTeoricos(p), ...bancosPraticos(p)])]; }
 // temas marcados de um banco na prova (Set) ou null = todos os temas
 export function temasDoBanco(p, bancoId) {
   const l = p?.temasPorBanco?.[bancoId] ?? (bancoId === p?.bancoId ? p?.temas : null);
@@ -204,15 +209,22 @@ export function bancoDaQuestao(qid, padrao) {
 // questão "a revisar" (revisao: "pendente", escrita pela IA e ainda não aprovada) só entra em teste: "Testar como aluno"
 // (incluirRevisar) ou somativa da turma de TESTE (prova.turmaTeste)
 export async function questoesDisponiveis(prova, { incluirRevisar = false } = {}) {
-  const bancos = bancosDaProva(prova);
+  const bancos = bancosDaProva(prova), teoricos = new Set(bancosTeoricos(prova)), prat = prova.praticas || null;
   const lotes = await Promise.all(bancos.map(b => getDocs(collection(db, "bancos", b, "questoes"))));
   const ids = [], diss = [], alt = [], sql = [], web = [], diag = [], tipo = {}, dados = {};
   lotes.forEach((qs, i) => {
     const temas = temasDoBanco(prova, bancos[i]);
     qs.forEach(d => {
-      if (temas && !temas.has(temaDe(d.data()))) return;
       if (d.data().revisao === "pendente" && !incluirRevisar && prova.turmaTeste !== true) return;
       const t = ["dissertativa", "sql", "web", "diagrama"].includes(d.data().tipo) ? d.data().tipo : "alternativa";
+      if (prat && ["sql", "web", "diagrama"].includes(t)) {   // prática: só a escolhida em prova.praticas
+        const ts = prat[t]?.[bancos[i]];
+        if (!Array.isArray(ts) || (ts.length && !ts.includes(temaDe(d.data())))) return;
+      } else {
+        if (!teoricos.has(bancos[i])) return;
+        if (temas && !temas.has(temaDe(d.data()))) return;
+        if (prat && ["sql", "web", "diagrama"].includes(t)) return;
+      }
       ids.push(d.id); (t === "dissertativa" ? diss : t === "sql" ? sql : t === "web" ? web : t === "diagrama" ? diag : alt).push(d.id); tipo[d.id] = t; dados[d.id] = d.data();
     });
   });
