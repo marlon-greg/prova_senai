@@ -1277,9 +1277,8 @@ function desenharProvas() {
   const chaves = [...turmasCache.map(t => t.id).filter(id => grupos.has(id)), ...(grupos.has("__sem") ? ["__sem"] : [])];
   const nomeT = k => k === "__sem" ? "⚠ Sem turma" : (turmasCache.find(x => x.id === k)?.nome || "");
   const matDe = p => materiaDaProva(p, bancosCache) || "Sem matéria";
-  const seletor = `<div class="linha visao-provas" role="group" aria-label="Como mostrar as somativas" style="justify-content:flex-end;gap:6px;margin:0 0 8px">
-    <button type="button" class="${visaoProvas === "abas" ? "" : "leve"} mini" data-visao="abas" aria-pressed="${visaoProvas === "abas"}">🗂 Abas por turma</button>
-    <button type="button" class="${visaoProvas === "tabela" ? "" : "leve"} mini" data-visao="tabela" aria-pressed="${visaoProvas === "tabela"}">▦ Tabela</button></div>`;
+  const seletor = `<div class="visao-mini" role="group" aria-label="Como mostrar as somativas">
+    <button type="button" class="${visaoProvas === "abas" ? "ativo" : ""}" data-visao="abas" aria-pressed="${visaoProvas === "abas"}" title="Uma turma por vez, com as matérias">Abas</button><button type="button" class="${visaoProvas === "tabela" ? "ativo" : ""}" data-visao="tabela" aria-pressed="${visaoProvas === "tabela"}" title="Todas as somativas numa tabela">Tabela</button></div>`;
   if (visaoProvas === "tabela") {
     // uma linha por somativa (todas as turmas); a recuperação fica recolhida na linha da somativa de origem
     const linhas = chaves.flatMap(k => grupos.get(k).sort((x, y) => matDe(x).localeCompare(matDe(y), "pt-BR")).map(p => ({ p, k })));
@@ -1287,21 +1286,24 @@ function desenharProvas() {
     const botoes = p => { tpl.innerHTML = cartaoProvaHTML(p); return tpl.content.querySelector(".cp-botoes")?.innerHTML || ""; };
     const situ = p => `${p.liberada ? '<span class="chip ok">● liberada</span>' : '<span class="chip">○ fechada</span>'}${p.resultadosLiberados ? ' <span class="chip info">gabarito liberado</span>' : ""}`;
     const qtdT = p => `${p.nQuestoes || 0} questões${Number(p.tempoMinutos) > 0 ? ` · ${p.tempoMinutos} min` : ""}`;
-    box.innerHTML = seletor + `<div class="card sem-padding"><div class="tabela"><table class="tabela-provas"><thead><tr><th>Somativa</th><th>Turma</th><th>Matéria</th><th>Questões / tempo</th><th>Situação</th><th>Recuperação</th><th>Ações</th></tr></thead><tbody>${
+    box.innerHTML = `<div class="abas-linha" style="justify-content:flex-end">${seletor}</div><div class="card sem-padding"><div class="tabela"><table class="tabela-provas"><thead><tr><th>Somativa</th><th>Turma</th><th>Matéria</th><th>Questões / tempo</th><th>Situação</th><th>Recuperação</th><th>Ações</th></tr></thead><tbody>${
       linhas.map(({ p, k }) => `<tr><td><b>${esc(p.titulo || "")}</b>${p.dataProva ? `<br><span class="pequeno">${esc(p.dataProva.split("-").reverse().join("/"))}</span>` : ""}</td><td>${esc(nomeT(k))}</td><td>${esc(matDe(p))}</td><td>${qtdT(p)}</td><td>${situ(p)}</td>
         <td>${recHTML(p) || '<span class="pequeno">—</span>'}</td><td class="td-acoes"><div class="cp-botoes">${botoes(p)}</div></td></tr>`).join("")}</tbody></table></div></div>`;
   } else {
     // abas por turma: uma turma por vez; matérias dessa turma como filtro
     if (!chaves.includes(turmaAba)) turmaAba = chaves[0];
     const ps = grupos.get(turmaAba) || [], t = turmasCache.find(x => x.id === turmaAba);
-    const mats = new Map(); ps.forEach(p => { const m = matDe(p); mats.set(m, (mats.get(m) || 0) + 1); });
+    const mats = new Map();
+    const sc = semestreCursoAtual(t)?.n || 0;   // semestre do curso em que a turma está: todas as matérias dele aparecem, mesmo sem prova
+    if (sc) unidadesDoSemestre(sc).map(u => u.nome).sort((x, y) => x.localeCompare(y, "pt-BR")).forEach(m => mats.set(m, 0));
+    ps.forEach(p => { const m = matDe(p); const k = [...mats.keys()].find(x => chaveTexto(x) === chaveTexto(m)) || m; mats.set(k, (mats.get(k) || 0) + 1); });
     if (materiaAba && !mats.has(materiaAba)) materiaAba = "";
-    const vis = ps.filter(p => !materiaAba || matDe(p) === materiaAba);
+    const vis = ps.filter(p => !materiaAba || chaveTexto(matDe(p)) === chaveTexto(materiaAba));
     const abas = chaves.map(k => { const tt = turmasCache.find(x => x.id === k), n = grupos.get(k).length;
       return `<button type="button" class="aba-turma${k === turmaAba ? " ativa" : ""}" data-aba-turma="${k}" aria-pressed="${k === turmaAba}"><b>${esc(nomeT(k))}</b><span class="pequeno">${tt && rotuloDias(tt.diasAula) ? esc(rotuloDias(tt.diasAula)) + " · " : ""}${tt ? pl(alunosDaTurma(tt).length, "aluno") + " · " : ""}${pl(n, "somativa")}</span></button>`; }).join("");
-    const filtrosMat = mats.size ? `<div class="linha" style="gap:6px;margin:8px 0"><button type="button" class="${materiaAba ? "leve" : ""} mini" data-aba-mat="">Todas (${ps.length})</button>${[...mats].sort((x, y) => x[0].localeCompare(y[0], "pt-BR")).map(([m, n]) => `<button type="button" class="${materiaAba === m ? "" : "leve"} mini" data-aba-mat="${esc(m)}">${esc(m)} (${n})</button>`).join("")}</div>` : "";
-    box.innerHTML = seletor + `<div class="abas-turmas" role="tablist">${abas}</div>${t ? "" : turmaAba === "__sem" ? '<p class="chip warn">nenhum aluno vê estas somativas: use Editar e escolha a turma</p>' : ""}${filtrosMat}
-      <div class="cartoes-provas">${vis.map(cartaoComRec).join("")}</div>`;
+    const filtrosMat = mats.size ? `<div class="linha" style="gap:6px;margin:8px 0"><button type="button" class="${materiaAba ? "leve" : ""} mini" data-aba-mat="">Todas (${ps.length})</button>${[...mats].map(([m, n]) => `<button type="button" class="${materiaAba === m ? "" : "leve"} mini${n ? "" : " mat-vazia"}" data-aba-mat="${esc(m)}" title="${n ? pl(n, "somativa") : "Nenhuma somativa ainda nesta matéria"}">${esc(m)} (${n})</button>`).join("")}</div>` : "";
+    box.innerHTML = `<div class="abas-linha"><div class="abas-turmas" role="tablist">${abas}</div>${seletor}</div>${t ? "" : turmaAba === "__sem" ? '<p class="chip warn">nenhum aluno vê estas somativas: use Editar e escolha a turma</p>' : ""}${filtrosMat}
+      <div class="cartoes-provas">${vis.length ? vis.map(cartaoComRec).join("") : `<p class="pequeno">Nenhuma somativa${materiaAba ? ` de ${esc(materiaAba)}` : ""} nesta turma ainda.</p>`}</div>`;
   }
   box.querySelectorAll("[data-visao]").forEach(b => b.onclick = () => { visaoProvas = b.dataset.visao; salvarPreferencia({ visaoSomativas: visaoProvas }); desenharProvas(); });
   box.querySelectorAll("[data-aba-turma]").forEach(b => b.onclick = () => { turmaAba = b.dataset.abaTurma; materiaAba = ""; desenharProvas(); });
