@@ -2,7 +2,7 @@
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, limparTema, apagarTentativaTeste,
          confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco,
          rotuloDias, nomeTurma, HORARIO_PADRAO, textoHorario, DIAS_SEMANA_LONGO,
-         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, materiaCorrigida, temasDoAlunoNaRec, bancosTeoricos, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261126j";
+         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, materiaCorrigida, temasDoAlunoNaRec, bancoDaQuestao, bancosTeoricos, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261126j";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
@@ -1379,7 +1379,7 @@ function botoesProva(p) {
     + (podeEditar() && ehAdmin() ? "<hr>" + itemMenu({ i: "trash", t: "Apagar somativa", perigo: true, attrs: `data-del="${p.id}"` }) : "");
   return (podeEditar() ? `<button class="${p.liberada ? "leve" : "ok"} mini" data-tg="liberada" data-id="${p.id}" title="${p.liberada ? "Ninguém mais começa nem continua" : jaAplicada(p) ? "Abre de novo para quem ainda não fez; quem já terminou não refaz" : "Os alunos da turma passam a ver e podem começar"}">${p.liberada ? "Encerrar" : jaAplicada(p) ? "Reabrir" : "Abrir"}</button>` : "")
     + (podeEditar() && !p.recuperacao && !p.liberada && p.resultadosLiberados ? `<button class="leve mini" data-recuperacao="${p.id}" title="Somativa de recuperação para quem tirou abaixo de ${NOTA_RECUPERACAO}">${p.recuperacaoIds?.length ? "Gerar outra recuperação" : "Gerar recuperação"}</button>` : "")
-    + (p.recuperacao && p.temasPorAluno && Object.keys(p.temasPorAluno).length ? `<button class="leve mini" data-temasal="${p.id}" title="Os temas que cada aluno recebe nesta recuperação">Temas por aluno</button>` : "")
+    + (p.recuperacao ? `<button class="leve mini" data-temasal="${p.id}" title="Os temas que cada aluno recebe nesta recuperação">Temas por aluno</button>` : "")
     + (podeEditar() && p.recuperacao ? `<button class="leve mini" data-notafinal="${p.id}">Nota final</button>` : "")
     + `<button class="leve mini" data-alunos="${p.id}">Alunos</button>` + menuHTML({ aria: `Mais ações: ${p.titulo}`, itensHTML: itens });
 }
@@ -1466,13 +1466,51 @@ function desenharListaProvas() {
     modal({ titulo: `Detalhes — ${p.titulo}`, largo: true, ok: "Fechar", conteudo: `<dl class="cp-detalhes"><div><dt>Turma</dt><dd>${esc(nomeT(p.turmaId))}</dd></div><div><dt>Matéria</dt><dd>${esc(matDe(p))}</dd></div><div><dt>Questões</dt><dd>${esc(metaProva(p))}</dd></div><div><dt>Banco(s)</dt><dd>${bs.map(b => esc(b.nome)).join(" · ")}</dd></div><div><dt>Temas</dt><dd class="pequeno">${temasDaProvaTexto(p, bs)}</dd></div><div><dt>Opções</dt><dd class="td-opcoes">${opcoesDaProvaHTML(p)}</dd></div></dl>` }); });
   ligarAcoesProvas(box);
 }
+// recuperação: os temas em que cada aluno ficou abaixo de 50% na prova de ORIGEM ({ email: { bancoId: [temas] } }),
+// só entre os temas que esta recuperação usa. Serve para as recuperações geradas antes de existir "temas por aluno".
+async function calcularTemasPorAluno(rec) {
+  const origem = provasCache.find(x => x.id === rec.provaOrigemId) || (rec.provaOrigemId ? { id: rec.provaOrigemId, ...(await getDoc(doc(db, "provas", rec.provaOrigemId))).data() } : null);
+  if (!origem) return {};
+  const quem = new Set((rec.alunosEmails || []).map(e => String(e).toLowerCase()));
+  const { questoes, gabaritos } = await lerBancos(bancosDaProva(origem));
+  const tents = (await getDocs(query(collection(db, "tentativas"), where("provaId", "==", origem.id)))).docs.map(d => ({ id: d.id, ...d.data() }))
+    .filter(t => t.email && quem.has(String(t.email).toLowerCase()) && !t.teste && !t.simulado);
+  const out = {};
+  for (const t of tents) {
+    const [rs, cs] = await Promise.all([getDocs(collection(db, "tentativas", t.id, "respostas")), getDocs(collection(db, "tentativas", t.id, "correcoes"))]);
+    const resp = {}, corr = {}; rs.forEach(x => resp[x.id] = x.data()); cs.forEach(x => corr[x.id] = x.data());
+    const por = {};
+    for (const qid of t.questoesIds || []) {
+      const q = questoes[qid]; if (!q) continue;
+      const b = bancoDaQuestao(qid, origem.bancoId), tema = temaDe(q), usa = temasDoBanco(rec, b);
+      if (!bancosDaProva(rec).includes(b) || (usa && !usa.has(tema))) continue;
+      const peso = Number(q.peso || 1), perdida = resp[qid]?.perdida === true;
+      let pts = corrigir(q, gabaritos[qid] || {}, resp[qid]?.resposta ?? undefined, perdida).pontos || 0;
+      if (!perdida && corr[qid]?.pontos !== undefined) pts = Number(corr[qid].pontos);
+      const k = b + "\u0001" + tema; (por[k] ||= { b, tema, pts: 0, max: 0 }); por[k].pts += pts; por[k].max += peso;
+    }
+    const e = String(t.email).toLowerCase();
+    for (const x of Object.values(por)) if (x.max > 0 && x.pts / x.max < 0.5) ((out[e] ||= {})[x.b] ||= []).push(x.tema);
+  }
+  return out;
+}
 // recuperação por aluno: quem recebe quais temas (lista para o professor)
-function verTemasPorAluno(p) {
+async function verTemasPorAluno(p) {
   if (!p) return;
+  const salvo = p.temasPorAluno && Object.keys(p.temasPorAluno).length;
+  let mapa = p.temasPorAluno || {};
+  if (!salvo) { toast("Calculando os temas de cada aluno pela prova de origem…", "info"); try { mapa = await calcularTemasPorAluno(p); } catch (e) { return toast("Não foi possível calcular. " + traduzirErro(e), "erro"); } }
+  const pp = { ...p, temasPorAluno: mapa };
   const t = turmasCache.find(x => x.id === p.turmaId), nome = e => (t ? alunosDaTurma(t).find(a => String(a.email || "").toLowerCase() === e)?.nome : "") || e;
-  const linhas = (p.alunosEmails || []).map(e => String(e).toLowerCase()).sort((a, b) => nome(a).localeCompare(nome(b), "pt-BR")).map(e => { const ts = temasDoAlunoNaRec(p, e);
-    return `<tr><td><b>${esc(nome(e))}</b><br><span class="pequeno">${esc(e)} · ${p.tipoPorAluno?.[e] === "substitutiva" ? "substitutiva" : "recuperação"}</span></td><td>${ts ? ts.map(x => `<span class="tag">${esc(x)}</span>`).join(" ") : '<span class="pequeno">temas gerais da recuperação</span>'}</td></tr>`; }).join("");
-  modal({ titulo: `Temas por aluno — ${p.titulo}`, largo: true, ok: "Fechar", conteudo: `<p class="pequeno" style="margin-top:0">Cada aluno recebe primeiro as questões dos temas em que ele ficou abaixo de 50% na prova de origem; o resto da prova vem dos temas gerais.</p><div class="tabela"><table><tr><th>Aluno</th><th>Temas dele</th></tr>${linhas}</table></div>` });
+  const linhas = (p.alunosEmails || []).map(e => String(e).toLowerCase()).sort((a, b) => nome(a).localeCompare(nome(b), "pt-BR")).map(e => { const ts = temasDoAlunoNaRec(pp, e);
+    return `<tr><td><b>${esc(nome(e))}</b><br><span class="pequeno">${esc(e)} · ${p.tipoPorAluno?.[e] === "substitutiva" ? "substitutiva" : "recuperação"}</span></td><td>${ts ? ts.map(x => `<span class="tag">${esc(x)}</span>`).join(" ") : `<span class="pequeno">${p.tipoPorAluno?.[e] === "substitutiva" ? "faltou na prova: temas gerais da recuperação" : "nenhum tema abaixo de 50%: temas gerais"}</span>`}</td></tr>`; }).join("");
+  const podeSalvar = !salvo && podeEditar() && Object.keys(mapa).length;
+  const ok = await modal({ titulo: `Temas por aluno — ${p.titulo}`, largo: true, ok: podeSalvar ? "Usar estes temas nesta recuperação" : "Fechar", cancelar: podeSalvar ? "Fechar" : null,
+    conteudo: `<p class="pequeno" style="margin-top:0">Cada aluno recebe primeiro as questões dos temas em que ele ficou abaixo de 50% na prova de origem; o resto da prova vem dos temas gerais.${salvo ? "" : " <b>Esta recuperação foi gerada antes dos temas por aluno:</b> a lista abaixo foi calculada agora. Clique em <b>Usar estes temas</b> para valer no sorteio (para quem ainda não começou), nos Resultados e na tela do aluno."}</p><div class="tabela"><table><tr><th>Aluno</th><th>Temas dele</th></tr>${linhas}</table></div>` });
+  if (ok && podeSalvar) {
+    try { await updateDoc(doc(db, "provas", p.id), { temasPorAluno: mapa, historico: [...(p.historico || []), { timestamp: new Date().toISOString(), motivo: "temas_por_aluno", editadoPor: eu.email }] }); toast("Temas por aluno salvos nesta recuperação.", "ok"); carregarProvas(); }
+    catch (e) { toast("Não foi possível salvar. " + traduzirErro(e), "erro"); }
+  }
 }
 function ligarAcoesProvas(box) {
   box.querySelectorAll("[data-alunos]").forEach(b => b.onclick = async () => {
