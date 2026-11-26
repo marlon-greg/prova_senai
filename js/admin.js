@@ -6,7 +6,7 @@ import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, to
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
-import { htmlEditorTopicos, editorTopicos } from "./plano-curso-ui.js?v=20261126b";
+import { htmlEditorTopicos, editorTopicos } from "./plano-curso-ui.js?v=20261126c";
 import { criteriosDaUnidade, codigoCriterio, carregarCriteriosOficiais } from "./plano-ensino.js?v=20261116a";
 import { PLANO_CURSO, unidadeDaMateria, unidadesDoSemestre } from "./plano-curso.js?v=20261113a";
 import { proporCapacidades, capsDoTema } from "./temas-capacidades.js?v=20261126a";
@@ -556,7 +556,7 @@ function formProvaHTML(f) {
   </div>
   ${htmlEditorTopicos(f)}
   <p id="${f}Trava" class="aviso-box oculto" role="note"></p>
-  <fieldset class="temas-box">
+  <fieldset class="temas-box oculto">
     <legend>Bancos e temas que entram no sorteio</legend>
     <p class="pequeno" style="margin-top:0">Marque um ou vários bancos; o sorteio junta as questões de todos. Dentro de cada banco, desmarque os temas que não entram.</p>
     <div class="filtro-temas">
@@ -566,7 +566,6 @@ function formProvaHTML(f) {
       <span class="filtro-acoes"><button type="button" class="leve mini" id="${f}TemasMarcar">Marcar visíveis</button><button type="button" class="leve mini" id="${f}TemasDesmarcar">Desmarcar visíveis</button></span>
     </div>
     <div id="${f}Temas" class="lista-bancos" role="group" aria-label="Bancos e temas"><p class="pequeno">Carregando bancos…</p></div>
-    <p id="${f}TemasResumo" class="pequeno temas-resumo" role="status" aria-live="polite"></p>
   </fieldset>
   <fieldset class="temas-box qb">
     <legend>Quantas questões cada aluno recebe</legend>
@@ -676,7 +675,32 @@ function controleProva(f) {
   // tópicos do plano de curso: a unidade automática segue a matéria (ou a do 1º banco marcado)
   const topicosPlano = editorTopicos(f, () => $f("Materia").value.trim() || (bancosCache.find(x => x.id === bancosMarcados()[0])?.materia || ""),
     () => ({ turma: turmaEscolhida().turma, titulo: $f("Titulo").value, data: $f("Data").value }),
-    caps => { capsMarcadas = caps; if (Object.keys(contagens).length) desenharTemas(); });
+    caps => { capsMarcadas = caps; selecaoAuto(); },
+    { temasDaCap: id => temasDaCap(id), adicionarBancos: () => adicionarBancos() });
+  // TEMAS AUTOMÁTICOS: os temas dos bancos da matéria ligados às capacidades marcadas (ligação salva em 🔗 Capacidades,
+  // ou a sugestão automática). Sem capacidade marcada = todos os temas da matéria. "Adicionar bancos" põe/tira bancos inteiros.
+  let autoSel = true, bancosExtras = new Set(), bancosFora = new Set();
+  const capsTema = (b, t) => capsDoTema(b, t) ?? proporCapacidades(t, unidadeDaMateria(b.materia));
+  const bancosAuto = () => bancosCache.filter(b => !bancosFora.has(b.id) && ((!!$f("Materia").value && chaveTexto(b.materia) === chaveTexto($f("Materia").value)) || bancosExtras.has(b.id)));
+  function temasDaCap(id) { const out = new Set(); for (const b of bancosAuto()) for (const t of temasDe(b.id)) if ((capsTema(b, t) || []).includes(id)) out.add(t); return [...out].sort((a, c) => a.localeCompare(c, "pt-BR")); }
+  function selecaoAuto() {
+    if (travado || !autoSel || !carregado()) return;
+    const nova = new Map();
+    for (const b of bancosAuto()) {
+      const ts = temasDe(b.id).filter(t => { const c = capsTema(b, t) || []; return bancosExtras.has(b.id) || !capsMarcadas.size || !c.length || c.some(x => capsMarcadas.has(x)); });
+      if (ts.length) nova.set(b.id, new Set(ts));
+    }
+    sel = nova; desenharTemas(); atualizar();
+  }
+  async function adicionarBancos() {
+    if (travado) return toast("Esta somativa já tem alunos: os bancos não mudam mais.", "erro");
+    const porMat = new Map(); bancosCache.forEach(b => { const m = b.materia || "Sem matéria"; (porMat.get(m) || porMat.set(m, []).get(m)).push(b); });
+    const ok = await modal({ titulo: "Bancos desta somativa", ok: "Aplicar", cancelar: "Cancelar",
+      conteudo: `<p class="pequeno" style="margin-top:0">Os temas vêm sozinhos das capacidades marcadas. Marque um banco para usar ele inteiro, ou desmarque para tirar.</p>${[...porMat].sort((a, c) => a[0].localeCompare(c[0], "pt-BR")).map(([m, l]) => `<p class="pequeno" style="margin:8px 0 2px"><b>${esc(m)}</b></p>${l.map(b => `<label class="check" style="margin:2px 0"><input type="checkbox" data-addb="${b.id}"${sel.get(b.id)?.size ? " checked" : ""}> <span>${esc(b.nome)} <span class="pequeno">(${pl(Number(b.nQuestoes) || 0, "questão", "questões")})</span></span></label>`).join("")}`).join("")}`,
+      antesDeConfirmar: c => { c.querySelectorAll("[data-addb]").forEach(i => { const b = i.dataset.addb, daMat = chaveTexto(bancosCache.find(x => x.id === b)?.materia) === chaveTexto($f("Materia").value);
+        if (i.checked) { bancosFora.delete(b); if (!daMat) bancosExtras.add(b); } else { bancosExtras.delete(b); if (daMat) bancosFora.add(b); } }); return true; } });
+    if (ok) { autoSel = true; selecaoAuto(); topicosPlano.redesenhar(); }
+  }
   let capsMarcadas = new Set();
   // tema fora das capacidades marcadas (só some quando o tema JÁ foi ligado a capacidades e nenhuma delas está marcada)
   const foraDasCaps = (b, t) => { if (!capsMarcadas.size) return false; const c = capsDoTema(bancosCache.find(x => x.id === b), t); return !!c?.length && !c.some(x => capsMarcadas.has(x)); };
@@ -842,6 +866,7 @@ function controleProva(f) {
         if (por.length) { const x = Math.max(...por); $f("NTotal").innerHTML += ` <span class="pequeno">Com esta turma (${nAl} alunos), cada questão deve aparecer para cerca de <b>${x < 1.5 ? "1 aluno" : `${Math.round(x)} alunos`}</b>${x >= 8 ? " — poucos temas/questões: marque mais temas ou aumente o banco" : ""}.</span>`; }
       } }
     // 3) práticas da matéria
+    { const so = modeloSel === "teoria" && !pratico(); [$f("PratTitulo"), $f("Praticas"), $f("PratNota")].forEach(el => el.classList.toggle("oculto", so)); }
     $f("PratTitulo").textContent = mat ? `3. Questões práticas de ${mat}${outrasMat ? " (e de outras matérias)" : ""}` : "3. Questões práticas";
     const CARD = { sql: ["Sql", "SQL físico", "O aluno escreve e executa SQL na Bancada"], web: ["Web", "Página web", "HTML e CSS num editor parecido com o VS Code, com prévia ao vivo"], diagrama: ["Diag", "Diagramas", tipos.includes("sql") || unidadeDaMateria(mat)?.id === "bd" ? "Modelo conceitual e lógico no editor igual ao brModelo" : "Montados no editor de diagramas da prova"] };
     $f("Praticas").innerHTML = !mat ? "" : tipos.length ? tipos.map(tipo => {
@@ -888,7 +913,7 @@ function controleProva(f) {
   function problema() {
     const nAlt = Number($f("NAlt").value || 0), nDiss = Number($f("NDiss").value || 0), d = disponiveis();
     if (travado || !carregado()) return "";
-    if (!bancosMarcados().length && nAlt + nDiss > 0) return "Marque pelo menos um banco (ou um tema de algum banco) para as alternativas e dissertativas.";
+    if (!bancosMarcados().length && nAlt + nDiss > 0) return "Nenhum tema com questões para a matéria e as capacidades marcadas. Marque outras capacidades ou use + Adicionar bancos.";
     if (nAlt > d.alternativa) return `Faltam questões de alternativa: a prova pede ${nAlt}, mas os bancos/temas marcados só têm ${d.alternativa}. Marque mais temas ou diminua as alternativas.`;
     const nSql = nq("Sql"), nWeb = nq("Web");
     if (!$f("SemLimite").checked && somaTudo() !== Number($f("Total").value || 0)) return `A soma (${somaTudo()}) não bate com o total (${Number($f("Total").value || 0)}): ajuste os números ou marque "Não definir limite".`;
@@ -902,7 +927,6 @@ function controleProva(f) {
     const nAlt = Number($f("NAlt").value || 0), nDiss = Number($f("NDiss").value || 0);
     desenharPraticos();
     $f("Total").disabled = $f("SemLimite").checked || travado;
-    $f("NTotal").textContent = `Soma: ${somaTudo()} questões por aluno${$f("SemLimite").checked ? "" : ` (total ${Number($f("Total").value || 0)})`}.`;
     const el = $f("TemasResumo");
     if (!carregado()) { el.textContent = ""; el.classList.remove("erro"); return; }
     if (!$f("Materia").value && !bancosMarcados().length) { el.textContent = ""; el.classList.remove("erro"); return; }
@@ -925,7 +949,9 @@ function controleProva(f) {
         // "todos" (null) vira a lista completa de temas do banco
         for (const [b, s] of sel) if (s === null) sel.set(b, new Set(temasDe(b)));
         opcoesMateria();
+        selecaoAuto();
         desenharTemas();
+        topicosPlano.redesenhar();
       });
     return carregando;
   }
@@ -1126,7 +1152,8 @@ function controleProva(f) {
     opcoesSemestre();
     $f("Semestre").onchange = () => { semestreMexido = true; };
     $f("Turma").addEventListener("change", opcoesMateria);
-    $f("Materia").onchange = () => { topicosPlano.aoMudarMateria(); desenharTemas(); desenharMateriais(); };
+    $f("Materia").onchange = () => { autoSel = true; bancosExtras = new Set(); bancosFora = new Set(); topicosPlano.aoMudarMateria(); selecaoAuto(); desenharTemas(); desenharMateriais(); };
+    $f("PcBlocos").addEventListener("change", () => { autoSel = true; });
     topicosPlano.ligar(); topicosPlano.definir();
     $f("Turma").addEventListener("change", topicosPlano.aoMudarMateria);
     $f("Titulo").addEventListener("input", () => topicosPlano.aoMudarDataTitulo());
@@ -1192,7 +1219,7 @@ function controleProva(f) {
     qtdSql = p.sqlPorCategoria && typeof p.sqlPorCategoria === "object" ? { ...p.sqlPorCategoria } : {}; qtdWeb = p.webModelos && typeof p.webModelos === "object" ? { ...p.webModelos } : {}; webSub = new Set(p.webTags || []);
     qtdDiag = p.diagramasPorTipo && typeof p.diagramasPorTipo === "object" ? { ...p.diagramasPorTipo } : (tiposDiag?.size === 1 && Number(p.nDiagramas) ? { [[...tiposDiag][0]]: Number(p.nDiagramas) } : {});
     $f("SemLimite").checked = false; $f("Total").value = p.nQuestoes ?? 10;
-    praticasPendentes = p;
+    praticasPendentes = p; autoSel = false; bancosExtras = new Set(); bancosFora = new Set();
     $f("NDiss").value = p.nDissertativas ?? 0; $f("NAlt").value = p.nAlternativas ?? Math.max(0, (p.nQuestoes ?? 10) - (p.nDissertativas ?? 0) - Number(p.nSql || 0) - Number(p.nWeb || 0) - Number(p.nDiagramas || 0));
     praticoAntes = pratico(); modeloSel = ""; outrasMat = false;
     $f("Tempo").value = p.tempoMinutos || 0;
@@ -1291,7 +1318,7 @@ function controleProva(f) {
 }
 
 $("#formNovaProva").innerHTML = formProvaHTML("p");
-const formNova = controleProva("p");
+let formNova = controleProva("p");
 formNova.ligar();
 
 // resumo das opções de uma prova (tabela "Provas criadas")
@@ -1820,13 +1847,20 @@ async function abrirNovaProva(pre) {
   formNova.preencherOrganizacao(pre);
   abrirFormNovaProva();
 }
+// fechou a Nova somativa (criando ou não): o formulário volta do zero, sem nada marcado
+function zerarFormNova() {
+  $("#formNovaProva").innerHTML = formProvaHTML("p");
+  formNova = controleProva("p");
+  formNova.ligar();
+  formNova.opcoesTurma(); formNova.carregarTemas(new Map()); formNova.opcoesMaterial(); formNova.opcoesMateria();
+}
 // o formulário (#cardNovaProva) é movido para um drawer e volta ao fechar: ids e eventos continuam os mesmos
 let drawerNovaProva = null;
 function abrirFormNovaProva() {
   if (!podeEditar()) return toast("Seu papel não permite criar somativas.", "erro");
   if (drawerNovaProva) return;
   if (!$("#pData").value) $("#pData").value = hojeISO();   // somativa nova: hoje
-  drawerNovaProva = drawer({ titulo: "Nova somativa", corpo: $("#cardNovaProva"), aoFechar: () => { drawerNovaProva = null; $("#cardNovaProva").classList.add("oculto"); },
+  drawerNovaProva = drawer({ titulo: "Nova somativa", corpo: $("#cardNovaProva"), aoFechar: () => { drawerNovaProva = null; $("#cardNovaProva").classList.add("oculto"); zerarFormNova(); },
     acoes: [{ t: "Cancelar", classe: "leve" }, { t: "Criar somativa", onClick: () => criarProva() }] });
   drawerNovaProva.el.classList.add("extra-largo");
 }
@@ -2126,7 +2160,7 @@ function desenharBancosProntos() {
   const box = $("#bancosProntos"); if (!box) return;
   if (!podeEditar()) { box.innerHTML = ""; return; }
   const webAntiga = bancosCache.some(b => materiaWebAntiga(b.materia)) || provasCache.some(p => materiaWebAntiga(p.materia));
-  box.innerHTML = `<div class="card bancos-prontos"><h3 style="margin:0 0 4px">📦 Bancos prontos</h3><p class="pequeno" style="margin:0 0 10px">Importe com um clique. Para montar a prova, use <b>✨ Sugerir prova</b> na Nova somativa.</p>` +
+  box.innerHTML = `<div class="card bancos-prontos"><h3 style="margin:0 0 4px">📦 Bancos prontos</h3><p class="pequeno" style="margin:0 0 10px">Importe com um clique, ou cole o seu próprio banco (JSON) logo abaixo.</p>` +
     BANCOS_PRONTOS.map((b, i) => {
       const ja = bancosCache.find(x => x.arquivoPronto === b.arquivo);
       return `<div class="bp-item"><div><b>${b.icone} ${esc(b.titulo)}</b>${ja ? ` <span class="tag ok">importado</span>` : ""}<p class="pequeno" style="margin:2px 0 0">${esc(b.desc)}</p>

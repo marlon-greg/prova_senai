@@ -28,13 +28,16 @@ export function htmlEditorTopicos(f) {
         <option value="seminario">Seminário (apresentação oral)</option>
       </select></div>
     </div>
-    <p class="pequeno" id="${f}PcResumo" aria-live="polite"></p>
+    <div class="linha" style="justify-content:space-between;align-items:center;gap:8px"><p class="pequeno" id="${f}PcResumo" aria-live="polite" style="margin:0"></p><button type="button" class="leve mini" id="${f}PcAddBancos" title="Os temas vêm sozinhos das capacidades marcadas. Aqui você acrescenta (ou tira) bancos inteiros.">+ Adicionar bancos</button></div>
+    <p class="pequeno" id="${f}TemasResumo" aria-live="polite" style="margin:4px 0 0"></p>
     <div id="${f}PcBlocos"></div>
   </fieldset>`;
 }
 
 // materia(): texto da matéria; ctx(): { turma, titulo, data } do formulário
-export function editorTopicos(f, materia, ctx = () => ({}), aoMudarCaps = () => {}) {
+export function editorTopicos(f, materia, ctx = () => ({}), aoMudarCaps = () => {}, opcoes = {}) {
+  // temas (dos bancos) que cada capacidade pega: aparecem na frente dela, numa coluna
+  const capTemas = id => { const l = opcoes.temasDaCap?.(id) || []; return `<span class="cap-temas">${l.length ? l.map(t => `<span>${esc(t)}</span>`).join("") : `<em>sem tema nos bancos</em>`}</span>`; };
   const $f = s => $("#" + f + s);
   let marcados = new Set(), ultima = null;
   const unidade = () => { const v = $f("PcUnidade").value; return v === NENHUMA ? null : unidadePorId(v) || unidadeDaMateria(materia()); };
@@ -58,7 +61,7 @@ export function editorTopicos(f, materia, ctx = () => ({}), aoMudarCaps = () => 
         const f3 = filhos(u, id2).map(([, t3]) => t3).join(", ");
         return `<div class="pc-k2">${ck(id2, esc(t2))}${f3 ? `<div class="pc-k3" style="margin-left:26px">${esc(f3)}</div>` : ""}</div>`;
       }).join("")).join("");
-    $f("PcBlocos").innerHTML = bloco("tec", sem ? "🗣 Conteúdos a apresentar" : "🛠 " + rotuloTec(u), u.tec.map(([id, t]) => ck(id, esc(t))).join("")) +
+    $f("PcBlocos").innerHTML = bloco("tec", sem ? "🗣 Conteúdos a apresentar" : "🛠 " + rotuloTec(u), `<div class="cap-tabela">${u.tec.map(([id, t]) => `<div class="cap-linha">${ck(id, esc(t))}${capTemas(id)}</div>`).join("")}</div>`) +
       bloco("soc", sem ? "🎤 Postura e comunicação oral" : "🤝 Capacidades socioemocionais", u.soc.map(([id, t]) => ck(id, esc(t))).join("")) +
       bloco("con", "📚 Conhecimentos", con);
     sincronizarPais(u);
@@ -85,7 +88,7 @@ export function editorTopicos(f, materia, ctx = () => ({}), aoMudarCaps = () => 
     const crit = criteriosDaUnidade(u.id);
     const sem = isSeminario();
     const lista = caps => caps.filter(([cid]) => crit.some(c => c[1] === cid)).map(([cid, nome]) =>
-      `<p class="pc-cap">${esc(nome)}</p>` + crit.filter(c => c[1] === cid).map(([id, , t, , x]) =>
+      `<p class="pc-cap cap-linha"><span>${esc(nome)}</span>${capTemas(cid)}</p>` + crit.filter(c => c[1] === cid).map(([id, , t, , x]) =>
         ck(id, `<b>${codigoCriterio(id)}</b> ${esc(t)}${x?.grupo ? ` <span class="pequeno">(trabalho em grupo)</span>` : ""}`, "pc-cr")).join("")).join("");
     const nSoc = crit.filter(c => c[1].includes(".cs")).length;
     $f("PcBlocos").innerHTML = bloco("tec", sem ? "🗣 Conteúdos a apresentar (domínio técnico)" : "🛠 Critérios técnicos", lista(u.tec)) +
@@ -137,6 +140,7 @@ export function editorTopicos(f, materia, ctx = () => ({}), aoMudarCaps = () => 
     if (av?.id) { opcoesAv(u, av.id); aplicarAv(); }
   }
   function ligar() {
+    $f("PcAddBancos").onclick = () => opcoes.adicionarBancos?.();
     $f("PcUnidade").onchange = padrao;
     $f("PcAv").onchange = aplicarAv;
     $f("PcInstrumento").onchange = () => { resumo(); desenhar(); };
@@ -215,5 +219,5 @@ export function editorTopicos(f, materia, ctx = () => ({}), aoMudarCaps = () => 
     if (comCriterios(u)) return new Set(criteriosDaUnidade(u.id).filter(c => marcados.has(c[0]) && c[1].includes(".ct")).map(c => c[1]));
     return new Set([...marcados].filter(id => id.includes(".ct")));
   }
-  return { ligar, definir, ler, aoMudarMateria, aoMudarDataTitulo, capacidades, unidade };
+  return { ligar, definir, ler, aoMudarMateria, aoMudarDataTitulo, capacidades, unidade, redesenhar: () => { if (unidade()) desenhar(); } };
 }

@@ -2804,3 +2804,10 @@ button.sp-rec:hover { background:#fdefc8; color:#7a5200; transform:none; box-sha
 .sp-tr-rec td { background:#fffdf5; } .sp-tr-rec .sp-linha-rec { margin:4px 0 4px 24px; }
 @media (max-width:900px) { .sp-linha { flex-direction:column; align-items:stretch; } .sp-acoes { flex-wrap:wrap; } }
 .rec-temas-aluno { margin:0 0 6px 26px; } .rec-temas-aluno > summary { cursor:pointer; }
+
+/* O que a prova avalia: capacidade | temas que ela pega (tabela) */
+.cap-tabela { display:flex; flex-direction:column; }
+.cap-linha { display:grid; grid-template-columns:minmax(0, 1.2fr) minmax(0, 1fr); gap:12px; align-items:start; padding:6px 0; border-top:1px solid var(--borda); margin:0; }
+.cap-linha:first-child { border-top:0; } .cap-linha .check { margin:0; }
+.cap-temas { display:flex; flex-wrap:wrap; gap:4px; } .cap-temas span { font-size:12px; padding:2px 8px; border-radius:999px; background:var(--marinho-claro, #e8eefc); color:var(--marinho-2); } .cap-temas em { font-size:12px; color:var(--suave); }
+@media (max-width:700px) { .cap-linha { grid-template-columns:1fr; } }
