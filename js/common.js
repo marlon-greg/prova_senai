@@ -443,10 +443,15 @@ export const chaveTexto = s => String(s || "").normalize("NFD").replace(/\p{M}+/
 // semestre da prova: o gravado; senão o da data da prova; senão o da criação
 export const semestreDaProva = p => p?.semestre || semestreDe(p?.dataProva || p?.criadoEm || new Date());
 // matéria da prova: a gravada; senão a do 1º banco
+// nome antigo da matéria de HTML/CSS → o do plano de curso (2º semestre)
+export function materiaCorrigida(m) {
+  const k = String(m || "").normalize("NFD").replace(/\p{M}+/gu, "").toLowerCase().trim();
+  return k === "desenvolvimento web" || k === "programacao web" ? "Linguagem de Marcação" : String(m || "").trim();
+}
 export function materiaDaProva(p, bancos = []) {
-  if (String(p?.materia || "").trim()) return String(p.materia).trim();
+  if (String(p?.materia || "").trim()) return materiaCorrigida(p.materia);
   const b = bancos.find(x => x.id === bancosDaProva(p)[0]);
-  return String(b?.materia || "").trim();
+  return materiaCorrigida(b?.materia);
 }
 // "AAAA-MM-DD" -> "dd/mm/aaaa"
 export const dataCurta = s => /^\d{4}-\d{2}-\d{2}$/.test(String(s || "")) ? `${s.slice(8, 10)}/${s.slice(5, 7)}/${s.slice(0, 4)}` : "";

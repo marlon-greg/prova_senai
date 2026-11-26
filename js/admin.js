@@ -2,7 +2,7 @@
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, limparTema, apagarTentativaTeste,
          confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco,
          rotuloDias, nomeTurma, HORARIO_PADRAO, textoHorario, DIAS_SEMANA_LONGO,
-         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261126b";
+         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, materiaCorrigida, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261126c";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
@@ -66,6 +66,7 @@ aoMudarLogin(async user => {
   }
   eu = id;
   await garantirConfig();
+  if (podeEditar()) corrigirMateriaWeb({ silencioso: true }).catch(e => console.warn("matéria web", e));   // "Desenvolvimento Web" → "Linguagem de Marcação" no Firestore
   await carregarCriteriosOficiais(db, { collection, getDocs });   // critérios de avaliação: vêm do sistema de autoavaliação
   await carregarIA();
   getDoc(doc(db, "config", "geral")).then(c => { urlCorretorCfg = String(c.data()?.urlCorretor || "").trim(); if (Number(c.data()?.minimoPorTopico) > 0) minimoTopico = Number(c.data().minimoPorTopico); if (c.data()?.horario?.inicio) horarioCfg = c.data().horario; $("#tHorario").textContent = textoHorario(horarioCfg); }).catch(() => {});
@@ -531,7 +532,7 @@ let bancosDuplicados = [];   // bancos escondidos por serem cópia de outro (dup
 async function listarBancos() {
   const s = await getDocs(collection(db, "bancos"));
   bancosCache = []; bancosDuplicados = [];
-  s.forEach(d => (d.data().duplicadoDe ? bancosDuplicados : bancosCache).push({ id: d.id, ...d.data() }));
+  s.forEach(d => (d.data().duplicadoDe ? bancosDuplicados : bancosCache).push({ id: d.id, ...d.data(), materia: materiaCorrigida(d.data().materia) }));
   bancosCache.sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
   return bancosCache;
 }
@@ -576,7 +577,8 @@ function formProvaHTML(f) {
       <div><label for="${f}NDiss">Dissertativas</label><input type="number" id="${f}NDiss" value="4" min="0">
         <p class="pequeno" id="${f}NTotal" style="margin:4px 0 0" aria-live="polite"></p></div>
     </div>
-    <p class="pequeno" style="margin:6px 0 4px">Questões práticas (só aparecem as que a matéria tem nos bancos). Cada cenário prático conta como 1 questão; com total definido, cada uma tira uma teórica (alternativa, dissertativa, alternativa…).</p>
+    <label class="check" style="margin:6px 0 2px"><input type="checkbox" id="${f}OutrosTipos"> <span>Usar também questões práticas de <b>outras matérias</b> <span class="pequeno">— ex.: SQL na Bancada ou diagrama numa prova de Back-End ou de Projetos; os bancos práticos das outras matérias aparecem na lista de bancos</span></span></label>
+    <p class="pequeno" style="margin:6px 0 4px">Questões práticas (só aparecem as que a matéria tem nos bancos, ou de todas com a opção acima). Cada cenário prático conta como 1 questão; com total definido, cada uma tira uma teórica (alternativa, dissertativa, alternativa…).</p>
     <div class="grade">
       <div id="${f}BoxSql" class="oculto"><label class="check"><input type="checkbox" id="${f}AtivaSql"> <span>Vai ter questões SQL na Bancada</span></label>
         <div id="${f}QtdSql" class="oculto"><label for="${f}NSql">Quantas questões SQL na Bancada</label><input type="number" id="${f}NSql" value="0" min="0" title="O aluno escreve e executa SQL numa bancada parecida com o MySQL Workbench (cada aluno recebe um cenário sorteado)"></div></div>
@@ -696,7 +698,10 @@ function controleProva(f) {
   const somaTudo = () => Number($f("NAlt").value || 0) + Number($f("NDiss").value || 0) + pratico();
   let praticoAntes = 0, tirarDaAlt = true, tiposDiag = null;   // tiposDiag: Set dos tipos de diagrama que podem cair (null = todos)
   // bancos da matéria escolhida (sem matéria: todos)
-  const bancosDaMat = () => { const m = $f("Materia").value; return bancosCache.filter(b => !m || chaveTexto(b.materia) === chaveTexto(m)); };
+  const temPratica = b => { const c = contagens[b.id]; return !!c && c !== "erro" && Object.values(c).some(x => (x.sql || 0) + (x.web || 0) + (x.diagrama || 0) > 0); };
+  // banco aparece se for da matéria, ou se for prático e "outras matérias" estiver marcado (ou se já estiver marcado na prova)
+  const bancoVisivel = (b, mat = $f("Materia").value) => !mat || chaveTexto(b.materia) === chaveTexto(mat) || ($f("OutrosTipos")?.checked && temPratica(b)) || !!sel.get(b.id)?.size;
+  const bancosDaMat = () => bancosCache.filter(b => bancoVisivel(b));
   function tiposDaMateria() {
     const t = { sql: 0, web: 0, diagrama: 0 };
     for (const b of bancosDaMat()) { const c = contagens[b.id]; if (!c || c === "erro") continue; for (const x of Object.values(c)) { t.sql += x.sql || 0; t.web += x.web || 0; t.diagrama += x.diagrama || 0; } }
@@ -834,7 +839,7 @@ function controleProva(f) {
   function temasVisiveis() {
     const busca = $f("TemasBusca").value.trim().toLocaleLowerCase("pt-BR"), so = $f("TemasSoMarcados").checked, filtroMat = $f("Materia").value, r = [];
     for (const banco of bancosCache) {
-      if (filtroMat && banco.materia !== filtroMat) continue;
+      if (!bancoVisivel(banco, filtroMat)) continue;
       const nomeCasa = casa(banco.nome || "", busca);
       for (const t of temasDe(banco.id)) if ((nomeCasa || casa(t, busca)) && (!so || marcadoTema(banco.id, t)) && (marcadoTema(banco.id, t) || !foraDasCaps(banco.id, t))) r.push({ b: banco.id, t });
     }
@@ -851,7 +856,7 @@ function controleProva(f) {
       h = vis.length ? `<div class="lista-temas">${vis.map(({ b, t }) => checkTema(b, t, ` <span class="tag banco-tag">${esc(nomeBanco(b))}</span>`)).join("")}</div>` : "";
     } else {
       const filtroMat = $f("Materia").value;
-      const bancosFiltrados = bancosCache.filter(b => !filtroMat || b.materia === filtroMat);
+      const bancosFiltrados = bancosCache.filter(b => bancoVisivel(b, filtroMat));
       const bancoPorGrupo = banco => {
         const b = banco.id, c = contagens[b], dele = vis.filter(v => v.b === b);
         if ((busca || so) && c && !dele.length) return "";
@@ -862,7 +867,7 @@ function controleProva(f) {
         return `<div class="grupo-banco${n ? " marcado" : ""}" data-grupo="${b}">
           <div class="banco-cab">
             <label class="check"><input type="checkbox" data-banco="${b}"${todos.length && n === todos.length ? " checked" : ""}${!todos.length || travado ? " disabled" : ""}>
-              <span><b>${esc(banco.nome)}</b>${mostraMat ? "" : ""}</span></label>
+              <span><b>${esc(banco.nome)}</b>${filtroMat && chaveTexto(banco.materia) !== chaveTexto(filtroMat) ? ` <span class="tag nota">de ${esc(banco.materia || "outra matéria")}</span>` : ""}</span></label>
             <span class="pequeno banco-info">${!c ? "carregando…" : c === "erro" ? "⚠ não carregou" : `${n}/${todos.length} temas · ${textoContagem(tot)}`}</span>
             ${todos.length ? `<button type="button" class="leve mini" data-abrir="${b}" aria-expanded="${aberto}" aria-label="${aberto ? "Recolher" : "Mostrar"} temas de ${esc(banco.nome)}">${aberto ? "▾ temas" : "▸ temas"}</button>` : ""}
           </div>
@@ -1001,6 +1006,7 @@ function controleProva(f) {
     PRAT.forEach(k => { $f("N" + k).oninput = () => { descontar(); atualizar(); }; $f("Ativa" + k).onchange = () => { if ($f("Ativa" + k).checked && !Number($f("N" + k).value)) $f("N" + k).value = 1; descontar(); atualizar(); }; });
     $f("Total").oninput = () => { aoMudarTotal(); atualizar(); };
     $f("Sugerir").onclick = () => sugerir(false); $f("SugerirPratica").onclick = () => sugerir(true);
+    $f("OutrosTipos").onchange = () => { desenharTemas(); atualizar(); };
     $f("SemLimite").onchange = () => { if (!$f("SemLimite").checked) $f("Total").value = somaTudo(); atualizar(); };
     $f("MatUrl").oninput = previaMaterial;
     // vários de uma vez: cada PDF recebe o nome do arquivo como título e já entra marcado
@@ -1085,6 +1091,7 @@ function controleProva(f) {
     $f("AtivaSql").checked = Number(p.nSql) > 0; $f("AtivaWeb").checked = Number(p.nWeb) > 0; $f("AtivaDiag").checked = Number(p.nDiagramas) > 0;
     tiposDiag = Array.isArray(p.tiposDiagrama) && p.tiposDiagrama.length ? new Set(p.tiposDiagrama) : null;
     $f("SemLimite").checked = false; $f("Total").value = p.nQuestoes ?? 10;
+    $f("OutrosTipos").checked = bancosDaProva(p).some(id => { const b = bancosCache.find(x => x.id === id); return b && p.materia && chaveTexto(b.materia) !== chaveTexto(p.materia); });
     $f("NDiss").value = p.nDissertativas ?? 0; $f("NAlt").value = p.nAlternativas ?? Math.max(0, (p.nQuestoes ?? 10) - (p.nDissertativas ?? 0) - Number(p.nSql || 0) - Number(p.nWeb || 0) - Number(p.nDiagramas || 0));
     praticoAntes = pratico(); tirarDaAlt = true;
     $f("Tempo").value = p.tempoMinutos || 0;
@@ -1210,9 +1217,10 @@ function salvarPreferencia(dados) {
   if (dados.visaoSomativas) localStorage.setItem("visaoSomativas", dados.visaoSomativas);
   if (eu?.email) setDoc(doc(db, "preferencias", eu.email.toLowerCase()), { ...dados, atualizadoEm: serverTimestamp() }, { merge: true }).catch(e => console.warn("preferência não salva", e));
 }
+let planosProvas = [];   // planos de ensino (turma + semestre + matéria): as matérias que a turma tem neste semestre
 async function carregarProvas() {
   await carregarPreferencias();
-  await Promise.all([listarBancos(), listarTurmas(), listarPlanos().catch(() => [])]);
+  [, , planosProvas] = await Promise.all([listarBancos(), listarTurmas(), listarPlanos().catch(() => [])]);
   const turmaAntes = $("#pTurma").value;
   formNova.opcoesTurma();
   if (turmaAntes && [...$("#pTurma").options].some(o => o.value === turmaAntes)) $("#pTurma").value = turmaAntes;
@@ -1296,17 +1304,26 @@ function desenharProvas() {
     const mats = new Map();
     const sc = semestreCursoAtual(t)?.n || 0;   // semestre do curso em que a turma está: todas as matérias dele aparecem, mesmo sem prova
     if (sc) unidadesDoSemestre(sc).map(u => u.nome).sort((x, y) => x.localeCompare(y, "pt-BR")).forEach(m => mats.set(m, 0));
+    // + as matérias dos planos de ensino desta turma no semestre atual (Organização)
+    (planosProvas || []).filter(p => p.turmaId === turmaAba && p.semestre === semestreDe()).forEach(p => { const m = materiaCorrigida(p.materia); if (m && ![...mats.keys()].some(x => chaveTexto(x) === chaveTexto(m))) mats.set(m, 0); });
     ps.forEach(p => { const m = matDe(p); const k = [...mats.keys()].find(x => chaveTexto(x) === chaveTexto(m)) || m; mats.set(k, (mats.get(k) || 0) + 1); });
     if (materiaAba && !mats.has(materiaAba)) materiaAba = "";
     const vis = ps.filter(p => !materiaAba || chaveTexto(matDe(p)) === chaveTexto(materiaAba));
     const abas = chaves.map(k => { const tt = turmasCache.find(x => x.id === k), n = grupos.get(k).length;
       return `<button type="button" class="aba-turma${k === turmaAba ? " ativa" : ""}" data-aba-turma="${k}" aria-pressed="${k === turmaAba}"><b>${esc(nomeT(k))}</b><span class="pequeno">${tt && rotuloDias(tt.diasAula) ? esc(rotuloDias(tt.diasAula)) + " · " : ""}${tt ? pl(alunosDaTurma(tt).length, "aluno") + " · " : ""}${pl(n, "somativa")}</span></button>`; }).join("");
     const filtrosMat = mats.size ? `<div class="linha" style="gap:6px;margin:8px 0"><button type="button" class="${materiaAba ? "leve" : ""} mini" data-aba-mat="">Todas (${ps.length})</button>${[...mats].map(([m, n]) => `<button type="button" class="${materiaAba === m ? "" : "leve"} mini${n ? "" : " mat-vazia"}" data-aba-mat="${esc(m)}" title="${n ? pl(n, "somativa") : "Nenhuma somativa ainda nesta matéria"}">${esc(m)} (${n})</button>`).join("")}</div>` : "";
-    box.innerHTML = `<div class="abas-linha"><div class="abas-turmas" role="tablist">${abas}</div>${seletor}</div>${t ? "" : turmaAba === "__sem" ? '<p class="chip warn">nenhum aluno vê estas somativas: use Editar e escolha a turma</p>' : ""}${filtrosMat}
+    const semTurma = t ? `<div class="pequeno sem-turma-linha" style="margin:6px 0 0">Turma no <select data-sem-turma="${t.id}" aria-label="Semestre do curso da turma ${esc(t.nome || "")}" class="mini">${[0, 1, 2, 3, 4].map(n => `<option value="${n}"${n === sc ? " selected" : ""}>${n ? `${n}º semestre` : "semestre ?"}</option>`).join("")}</select> do curso${sc ? "" : " — escolha para ver as matérias certas"}</div>` : "";
+    box.innerHTML = `<div class="abas-linha"><div class="abas-turmas" role="tablist">${abas}</div>${seletor}</div>${semTurma}${t ? "" : turmaAba === "__sem" ? '<p class="chip warn">nenhum aluno vê estas somativas: use Editar e escolha a turma</p>' : ""}${filtrosMat}
       <div class="cartoes-provas">${vis.length ? vis.map(cartaoComRec).join("") : `<p class="pequeno">Nenhuma somativa${materiaAba ? ` de ${esc(materiaAba)}` : ""} nesta turma ainda.</p>`}</div>`;
   }
   box.querySelectorAll("[data-visao]").forEach(b => b.onclick = () => { visaoProvas = b.dataset.visao; salvarPreferencia({ visaoSomativas: visaoProvas }); desenharProvas(); });
   box.querySelectorAll("[data-aba-turma]").forEach(b => b.onclick = () => { turmaAba = b.dataset.abaTurma; materiaAba = ""; desenharProvas(); });
+  box.querySelectorAll("[data-sem-turma]").forEach(sl => sl.onchange = async () => {
+    if (!podeEditar()) return toast("Seu papel não permite mudar a turma.", "erro");
+    const n = Number(sl.value) || null;
+    try { await updateDoc(doc(db, "turmas", sl.dataset.semTurma), { semestreCurso: n, semestreCursoRef: n ? periodoLetivo() : null }); await listarTurmas(); materiaAba = ""; desenharProvas(); toast(n ? `Turma no ${n}º semestre do curso.` : "Semestre do curso apagado.", "ok"); }
+    catch (e) { toast("Não foi possível salvar. " + traduzirErro(e), "erro"); }
+  });
   box.querySelectorAll("[data-aba-mat]").forEach(b => b.onclick = () => { materiaAba = b.dataset.abaMat; desenharProvas(); });
   box.querySelectorAll("[data-rec-de]").forEach(d => d.ontoggle = () => { d.open ? recAbertas.add(d.dataset.recDe) : recAbertas.delete(d.dataset.recDe); });
   box.querySelectorAll("[data-alunos]").forEach(b => b.onclick = async () => {
@@ -1866,7 +1883,7 @@ async function editarCapacidadesBanco(bancoId) {
 // Só troca o NOME da matéria em bancos, somativas, planos de ensino e cursos; questões, notas e sorteios não mudam.
 const MATERIA_MARCACAO = "Linguagem de Marcação", MATERIAS_WEB_ANTIGAS = new Set(["desenvolvimento web", "programacao web"]);
 const materiaWebAntiga = m => MATERIAS_WEB_ANTIGAS.has(chaveTexto(m));
-async function corrigirMateriaWeb() {
+async function corrigirMateriaWeb({ silencioso = false } = {}) {
   const [bs, ps, pls, cs] = await Promise.all(["bancos", "provas", "planos", "cursos"].map(c => getDocs(collection(db, c))));
   const ops = [];
   bs.forEach(d => { if (materiaWebAntiga(d.data().materia)) ops.push([d.ref, { materia: MATERIA_MARCACAO }]); });
@@ -1880,13 +1897,13 @@ async function corrigirMateriaWeb() {
       : ms.map(m => materiaWebAntiga(m.nome) ? { ...m, nome: MATERIA_MARCACAO } : m);
     ops.push([d.ref, { materias: out }]);
   });
-  if (!ops.length) return toast(`Nada para corrigir: nenhuma matéria "Desenvolvimento Web" ou "Programação Web".`, "ok");
+  if (!ops.length) return silencioso ? null : toast(`Nada para corrigir: nenhuma matéria "Desenvolvimento Web" ou "Programação Web".`, "ok");
   const n = c => ops.filter(([r]) => r.parent.id === c).length;
-  if (!(await confirmar(`Trocar a matéria "Desenvolvimento Web"/"Programação Web" por "${MATERIA_MARCACAO}" em: ${n("bancos")} banco(s), ${n("provas")} somativa(s), ${n("planos")} plano(s) de ensino e ${n("cursos")} curso(s)?\n\nSó muda o nome da matéria: questões, notas e resultados continuam iguais.`, { titulo: "Corrigir matéria", ok: "Trocar o nome" }))) return;
+  if (!silencioso && !(await confirmar(`Trocar a matéria "Desenvolvimento Web"/"Programação Web" por "${MATERIA_MARCACAO}" em: ${n("bancos")} banco(s), ${n("provas")} somativa(s), ${n("planos")} plano(s) de ensino e ${n("cursos")} curso(s)?\n\nSó muda o nome da matéria: questões, notas e resultados continuam iguais.`, { titulo: "Corrigir matéria", ok: "Trocar o nome" }))) return;
   try {
     for (let i = 0; i < ops.length; i += 400) { const lote = writeBatch(db); ops.slice(i, i + 400).forEach(([r, d]) => lote.update(r, d)); await lote.commit(); }
-    toast(`Matéria corrigida em ${ops.length} lugar(es).`, "ok");
-    await carregarBancos(); carregarProvas();
+    toast(`Matéria "${MATERIA_MARCACAO}" corrigida em ${ops.length} lugar(es) (bancos, somativas, planos, cursos).`, "ok");
+    if (!silencioso) { await carregarBancos(); carregarProvas(); }
   } catch (e) { toast("Não foi possível corrigir. " + traduzirErro(e), "erro"); }
 }
 function desenharBancosProntos() {
@@ -1899,7 +1916,7 @@ function desenharBancosProntos() {
       return `<div class="bp-item"><div><b>${b.icone} ${esc(b.titulo)}</b>${ja ? ` <span class="tag ok">importado</span>` : ""}<p class="pequeno" style="margin:2px 0 0">${esc(b.desc)}</p>
         </div>
         ${ja ? "" : `<button class="ok mini" data-pronto="${i}">Importar banco</button>`}</div>`;
-    }).join("") + (webAntiga ? `<div class="aviso-box" style="margin-top:10px">A Bancada Web está na matéria "Desenvolvimento Web"/"Programação Web"; o nome certo é <b>${MATERIA_MARCACAO}</b>. <button type="button" class="ok mini" id="btnMateriaWeb">Corrigir o nome da matéria</button></div>` : "") + `</div>`;
+    }).join("") + "" + `</div>`;
   $("#btnMateriaWeb")?.addEventListener("click", corrigirMateriaWeb);
   box.querySelectorAll("[data-pronto]").forEach(bt => bt.onclick = () => importarPronto(BANCOS_PRONTOS[Number(bt.dataset.pronto)], bt));
 }

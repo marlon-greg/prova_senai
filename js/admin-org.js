@@ -5,7 +5,7 @@
 // planos/{id}/arquivos/{a} (+ partes) = o PDF do plano (mesmo formato de js/material.js).
 // A prova liga na matéria por turma + semestre + matéria (prova.semestre / prova.materia; provas antigas: data de criação e matéria do banco).
 // O tópico de uma questão é o campo "tema" dela (o mesmo que filtra o sorteio da prova).
-import { db, esc, $, toast, modal, confirmar, traduzirErro, temaDe, ordenarTemas, limparTema, bancosDaProva, temasDoBanco,
+import { db, esc, $, toast, modal, confirmar, traduzirErro, temaDe, ordenarTemas, limparTema, materiaCorrigida, bancosDaProva, temasDoBanco,
          semestreDe, rotuloSemestre, semestreVizinho, chaveTexto, semestreDaProva, materiaDaProva, dataCurta, nomeTurma, semestreCursoAtual } from "./common.js";
 import { criteriosDaUnidade } from "./plano-ensino.js?v=20261116a";
 import { unidadeDaMateria } from "./plano-curso.js?v=20261113a";
@@ -37,12 +37,12 @@ export function iniciarOrganizacao(c) {
 // ---------- dados ----------
 export async function listarPlanos() {
   const s = await getDocs(collection(db, "planos"));
-  planos = s.docs.map(d => ({ id: d.id, ...d.data() }));
+  planos = s.docs.map(d => ({ id: d.id, ...d.data() })).map(p => ({ ...p, materia: materiaCorrigida(p.materia) }));
   return planos;
 }
 export const planosCache = () => planos;
 export async function listarCursos() {
-  cursos = (await getDocs(collection(db, "cursos"))).docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => ordemNatural(a.nome, b.nome));
+  cursos = (await getDocs(collection(db, "cursos"))).docs.map(d => ({ id: d.id, ...d.data() })).map(c => ({ ...c, materias: (c.materias || []).map(m => ({ ...m, nome: materiaCorrigida(m.nome) })) })).sort((a, b) => ordemNatural(a.nome, b.nome));
   return cursos;
 }
 // matéria do plano de curso da turma (ou de qualquer curso, sem turma)
