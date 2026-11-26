@@ -201,7 +201,9 @@ export function bancoDaQuestao(qid, padrao) {
   return i > 0 ? String(qid).slice(0, i) : padrao;
 }
 // questões que podem cair na prova (só temas marcados de cada banco): todas, alternativas e dissertativas
-export async function questoesDisponiveis(prova) {
+// questão "a revisar" (revisao: "pendente", escrita pela IA e ainda não aprovada) só entra em teste: "Testar como aluno"
+// (incluirRevisar) ou somativa da turma de TESTE (prova.turmaTeste)
+export async function questoesDisponiveis(prova, { incluirRevisar = false } = {}) {
   const bancos = bancosDaProva(prova);
   const lotes = await Promise.all(bancos.map(b => getDocs(collection(db, "bancos", b, "questoes"))));
   const ids = [], diss = [], alt = [], sql = [], web = [], diag = [], tipo = {}, dados = {};
@@ -209,6 +211,7 @@ export async function questoesDisponiveis(prova) {
     const temas = temasDoBanco(prova, bancos[i]);
     qs.forEach(d => {
       if (temas && !temas.has(temaDe(d.data()))) return;
+      if (d.data().revisao === "pendente" && !incluirRevisar && prova.turmaTeste !== true) return;
       const t = ["dissertativa", "sql", "web", "diagrama"].includes(d.data().tipo) ? d.data().tipo : "alternativa";
       ids.push(d.id); (t === "dissertativa" ? diss : t === "sql" ? sql : t === "web" ? web : t === "diagrama" ? diag : alt).push(d.id); tipo[d.id] = t; dados[d.id] = d.data();
     });
@@ -272,8 +275,8 @@ export function cotaDaProva(p) {
 }
 // sorteia as questões da prova (ids), igual para todo aluno: só temas marcados, respeitando a cota de tipos.
 // cota = { nA, nD } opcional (acessibilidade: o professor escolhe quantas de cada tipo).
-export async function sortearQuestoes(prova, cota = null) {
-  const { ids: todosIds, alt, diss, sql, web, diag: diagTodos, dados } = await questoesDisponiveis(prova);
+export async function sortearQuestoes(prova, cota = null, opc = {}) {
+  const { ids: todosIds, alt, diss, sql, web, diag: diagTodos, dados } = await questoesDisponiveis(prova, opc);
   // a somativa pode limitar QUAIS diagramas caem (ex.: só modelo conceitual); sem lista = todos
   const tiposD = Array.isArray(prova.tiposDiagrama) && prova.tiposDiagrama.length ? new Set(prova.tiposDiagrama) : null;
   const diag = tiposD ? diagTodos.filter(id => tiposD.has(dados[id]?.diagrama)) : diagTodos;

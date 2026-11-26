@@ -2,7 +2,7 @@
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, limparTema, apagarTentativaTeste,
          confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco,
          rotuloDias, nomeTurma, HORARIO_PADRAO, textoHorario, DIAS_SEMANA_LONGO,
-         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261126a";
+         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261126b";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
@@ -40,7 +40,10 @@ const ehAdmin = () => eu?.papel === "admin";
 const ehInclusao = () => eu?.papel === "inclusao";
 // pode mexer nas vidas / reabrir: professor, admin e a auxiliar de inclusão (nos alunos dela; as regras conferem)
 const podeCuidar = () => podeEditar() || ehInclusao();
-let urlCorretorCfg = "", horarioCfg = HORARIO_PADRAO;   // servidor de correção/adaptação (config/geral.urlCorretor)
+let urlCorretorCfg = "", horarioCfg = HORARIO_PADRAO, minimoTopico = 50;   // minimoTopico: meta de questões por tópico (config/geral.minimoPorTopico)
+const contaNoMinimo = q => q.revisao !== "pendente";
+// turma de TESTE (ambiente de teste ou nome começando com "TESTE"/"🧪"): nela caem também as questões "a revisar"
+const ehTurmaTeste = id => { const t = turmasCache.find(x => x.id === id); return !!t && (t.teste === true || /^\s*(🧪\s*)?teste\b/i.test(t.nome || "")); };   // questão "a revisar" (escrita pela IA, ainda não aprovada) não conta   // servidor de correção/adaptação (config/geral.urlCorretor)
 // o DIÁRIO da auxiliar mudou para o sistema de aulas (mesmos dados): aqui ela só faz o relatório de cada somativa (Resultados)
 const ABAS_INCLUSAO = ["resultados", "acessibilidade", "historico"];
 const URL_AULAS = "https://aulassenai.netlify.app/";
@@ -65,7 +68,7 @@ aoMudarLogin(async user => {
   await garantirConfig();
   await carregarCriteriosOficiais(db, { collection, getDocs });   // critérios de avaliação: vêm do sistema de autoavaliação
   await carregarIA();
-  getDoc(doc(db, "config", "geral")).then(c => { urlCorretorCfg = String(c.data()?.urlCorretor || "").trim(); if (c.data()?.horario?.inicio) horarioCfg = c.data().horario; $("#tHorario").textContent = textoHorario(horarioCfg); }).catch(() => {});
+  getDoc(doc(db, "config", "geral")).then(c => { urlCorretorCfg = String(c.data()?.urlCorretor || "").trim(); if (Number(c.data()?.minimoPorTopico) > 0) minimoTopico = Number(c.data().minimoPorTopico); if (c.data()?.horario?.inicio) horarioCfg = c.data().horario; $("#tHorario").textContent = textoHorario(horarioCfg); }).catch(() => {});
   iniciarAcessibilidade({ eu, podeEditar, souDono, auth, iaCfg: () => iaCfg, urlCorretor: () => urlCorretorCfg,
     alunosDasTurmas: async () => { await listarTurmas().catch(() => {}); return turmasCache.flatMap(t => alunosDaTurma(t).map(a => ({ ...a, turma: t.nome, turmaId: t.id, diasAula: t.diasAula || [] }))); } });
   iniciarDiario({ eu, podeEditar, souDono, horario: () => horarioCfg, auth, iaCfg: () => iaCfg, urlCorretor: () => urlCorretorCfg,
@@ -212,7 +215,7 @@ async function questoesDoBanco(bancoId, recarregar = false) {
 function contarPorTema(questoes) {
   const c = {};
   for (const tema of ordenarTemas(questoes.map(temaDe))) c[tema] = { alternativa: 0, dissertativa: 0, sql: 0, web: 0, diagrama: 0 };
-  questoes.forEach(q => { const k = ["dissertativa", "sql", "web", "diagrama"].includes(q.tipo) ? q.tipo : "alternativa"; c[temaDe(q)][k]++; });
+  questoes.filter(q => q.revisao !== "pendente").forEach(q => { const k = ["dissertativa", "sql", "web", "diagrama"].includes(q.tipo) ? q.tipo : "alternativa"; c[temaDe(q)][k]++; });
   return c;
 }
 const textoContagem = n => `${n.alternativa} alternativa, ${n.dissertativa} dissertativa${n.sql ? `, ${n.sql} SQL (Bancada)` : ""}${n.web ? `, ${n.web} Web (Bancada)` : ""}${n.diagrama ? `, ${n.diagrama} diagrama${n.diagrama > 1 ? "s" : ""}` : ""}`;
@@ -524,9 +527,11 @@ $("#btnEnviarMaterial").onclick = async () => {
 
 // ============================================================ PROVAS
 let bancosCache = [];
+let bancosDuplicados = [];   // bancos escondidos por serem cópia de outro (duplicadoDe)
 async function listarBancos() {
   const s = await getDocs(collection(db, "bancos"));
-  bancosCache = []; s.forEach(d => bancosCache.push({ id: d.id, ...d.data() }));
+  bancosCache = []; bancosDuplicados = [];
+  s.forEach(d => (d.data().duplicadoDe ? bancosDuplicados : bancosCache).push({ id: d.id, ...d.data() }));
   bancosCache.sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
   return bancosCache;
 }
@@ -822,6 +827,8 @@ function controleProva(f) {
     return carregando;
   }
   const marcadoTema = (b, t) => !!sel.get(b)?.has?.(t);
+  // questões do tópico em todos os bancos da mesma matéria (só as aprovadas; duplicados já ficam de fora)
+  const totalDoTema = (b, t) => { const m = chaveTexto(bancosCache.find(x => x.id === b)?.materia); return bancosCache.filter(x => chaveTexto(x.materia) === m).reduce((n, x) => n + (questoesCache[x.id] || []).filter(q => temaDe(q) === t && contaNoMinimo(q)).length, 0); };
   const casa = (txt, busca) => !busca || txt.toLocaleLowerCase("pt-BR").includes(busca);
   // temas visíveis com os filtros atuais: [{ b, t }]
   function temasVisiveis() {
@@ -833,7 +840,7 @@ function controleProva(f) {
     }
     return r;
   }
-  const checkTema = (b, t, extra = "") => `<label class="check"><input type="checkbox" data-b="${b}" value="${esc(t)}"${marcadoTema(b, t) ? " checked" : ""}${travado ? " disabled" : ""}><span><b>${esc(t)}</b>${extra}${capsMarcadas.size && !capsDoTema(bancosCache.find(x => x.id === b), t)?.length ? ` <span class="tag" title="Ligue este tema às capacidades em Bancos de questões → 🔗 Capacidades">sem capacidade definida</span>` : ""} <span class="pequeno">— ${textoContagem(contagens[b][t])}</span></span></label>`;
+  const checkTema = (b, t, extra = "") => `<label class="check"><input type="checkbox" data-b="${b}" value="${esc(t)}"${marcadoTema(b, t) ? " checked" : ""}${travado ? " disabled" : ""}><span><b>${esc(t)}</b>${extra}${marcadoTema(b, t) && totalDoTema(b, t) < minimoTopico ? ` <span class="tag aviso" title="Meta: ${minimoTopico} questões por tópico. Com poucas questões, alunos recebem as mesmas perguntas.">⚠ tópico pequeno: ${totalDoTema(b, t)} de ${minimoTopico}</span>` : ""}${capsMarcadas.size && !capsDoTema(bancosCache.find(x => x.id === b), t)?.length ? ` <span class="tag" title="Ligue este tema às capacidades em Bancos de questões → 🔗 Capacidades">sem capacidade definida</span>` : ""} <span class="pequeno">— ${textoContagem(contagens[b][t])}</span></span></label>`;
   function desenharTemas() {
     const box = $f("Temas"), topo = box.scrollTop;
     const busca = $f("TemasBusca").value.trim(), so = $f("TemasSoMarcados").checked, vis = temasVisiveis();
@@ -1113,7 +1120,7 @@ function controleProva(f) {
     if (tp.erro) return { erro: tp.erro };
     const materia = $f("Materia").value.trim() || (bancosCache.find(x => x.id === (bancoIds[0] || bancosDaProva(dadosAtuais)[0]))?.materia || "").trim();
     const dados = {
-      titulo, ...turmaEscolhida(), codigoAcesso: normalizarCodigo($f("Codigo").value),
+      titulo, ...turmaEscolhida(), turmaTeste: ehTurmaTeste(turmaEscolhida().turmaId), codigoAcesso: normalizarCodigo($f("Codigo").value),
       semestre: $f("Semestre").value || semestreDe(), materia, dataProva: $f("Data").value || "", planoCurso: tp.valor,
       permitirVoltar: $f("Voltar").checked,
       tempoMinutos: Math.max(0, Math.round(Number($f("Tempo").value || 0))),
@@ -1191,7 +1198,20 @@ function opcoesDaProvaHTML(p) {
 // ---------- lista de provas: pesquisa, filtros e agrupada por turma ----------
 let provasCache = [], filtroTurmaPendente = null;
 const gruposFechados = new Set();   // turmas que o professor fechou (fica enquanto a página estiver aberta)
+// visualização da página Somativas: "abas" (padrão) ou "tabela"; fica salva por pessoa (preferencias/{email})
+let visaoProvas = localStorage.getItem("visaoSomativas") || "abas", turmaAba = null, materiaAba = "", prefCarregada = false;
+const recAbertas = new Set();
+async function carregarPreferencias() {
+  if (prefCarregada || !eu?.email) return; prefCarregada = true;
+  try { const d = await getDoc(doc(db, "preferencias", eu.email.toLowerCase())); const v = d.data()?.visaoSomativas; if (v === "abas" || v === "tabela") { visaoProvas = v; localStorage.setItem("visaoSomativas", v); } }
+  catch (e) { /* sem regra publicada ainda: fica a do navegador */ }
+}
+function salvarPreferencia(dados) {
+  if (dados.visaoSomativas) localStorage.setItem("visaoSomativas", dados.visaoSomativas);
+  if (eu?.email) setDoc(doc(db, "preferencias", eu.email.toLowerCase()), { ...dados, atualizadoEm: serverTimestamp() }, { merge: true }).catch(e => console.warn("preferência não salva", e));
+}
 async function carregarProvas() {
+  await carregarPreferencias();
   await Promise.all([listarBancos(), listarTurmas(), listarPlanos().catch(() => [])]);
   const turmaAntes = $("#pTurma").value;
   formNova.opcoesTurma();
@@ -1244,31 +1264,49 @@ function desenharProvas() {
   // recuperação/substitutiva fica DENTRO do cartão da somativa de origem (não aparece como outra prova solta)
   const idsLista = new Set(lista.map(p => p.id)), filhasDe = new Map();
   lista.forEach(p => { if (p.provaOrigemId && idsLista.has(p.provaOrigemId)) { if (!filhasDe.has(p.provaOrigemId)) filhasDe.set(p.provaOrigemId, []); filhasDe.get(p.provaOrigemId).push(p); } });
-  const cartaoComRec = p => {
-    const fs = filhasDe.get(p.id);
-    if (!fs) return cartaoProvaHTML(p);
-    return `<div class="prova-com-rec">${cartaoProvaHTML(p)}<div class="rec-filhas"><p class="rec-tit">↳ ${fs.length === 1 ? "Recuperação / substitutiva desta somativa" : `${fs.length} recuperações / substitutivas desta somativa`}</p>${fs.map(cartaoProvaHTML).join("")}</div></div>`;
+  // recuperação recolhida: "1 recuperação · 7 alunos" (abre e fecha no clique)
+  const recHTML = p => {
+    const fs = filhasDe.get(p.id); if (!fs) return "";
+    const nAl = fs.reduce((n, x) => n + (x.alunosEmails?.length || 0), 0);
+    return `<details class="rec-filhas" data-rec-de="${p.id}"${recAbertas.has(p.id) ? " open" : ""}><summary class="rec-tit">↳ ${fs.length === 1 ? "1 recuperação" : `${fs.length} recuperações`} · ${pl(nAl, "aluno")}</summary>${fs.map(cartaoProvaHTML).join("")}</details>`;
   };
-  // agrupa por turma (na ordem das turmas cadastradas; "sem turma" por último)
+  const cartaoComRec = p => filhasDe.get(p.id) ? `<div class="prova-com-rec">${cartaoProvaHTML(p)}${recHTML(p)}</div>` : cartaoProvaHTML(p);
+  // agrupa por turma (na ordem das turmas cadastradas; "sem turma" por último) → matéria → provas
   const grupos = new Map();
   lista.filter(p => !(p.provaOrigemId && idsLista.has(p.provaOrigemId))).forEach(p => { const k = p.turmaId && turmasCache.some(t => t.id === p.turmaId) ? p.turmaId : "__sem"; if (!grupos.has(k)) grupos.set(k, []); grupos.get(k).push(p); });
   const chaves = [...turmasCache.map(t => t.id).filter(id => grupos.has(id)), ...(grupos.has("__sem") ? ["__sem"] : [])];
-  box.innerHTML = chaves.map(k => {
-    const ps = grupos.get(k), t = turmasCache.find(x => x.id === k), lib = ps.filter(p => p.liberada).length;
-    const aberto = busca || turma || fSem || fMat || !gruposFechados.has(k);
-    // dentro da turma: semestre (mais recente primeiro) → matéria
-    const sub = new Map();
-    ps.forEach(p => { const sm = semestreDaProva(p), m = materiaDaProva(p, bancosCache) || "Sem matéria", ch = `${sm}|${chaveTexto(m)}`; if (!sub.has(ch)) sub.set(ch, { sm, m, ps: [] }); sub.get(ch).ps.push(p); });
-    const subs = [...sub.values()].sort((a, b) => b.sm.localeCompare(a.sm) || a.m.localeCompare(b.m, "pt-BR"));
-    const nRec = ps.reduce((n, p) => n + (filhasDe.get(p.id)?.length || 0), 0);
-    const resumo = [pl(ps.length, "somativa") + (nRec ? ` + ${nRec === 1 ? "1 recuperação" : `${nRec} recuperações`}` : ""), lib ? `${lib} ${lib === 1 ? "liberada" : "liberadas"}` : "", t ? pl(alunosDaTurma(t).length, "aluno") : "", subs.length === 1 ? rotuloSemestre(subs[0].sm) : "", subs.length === 1 ? subs[0].m : ""].filter(Boolean).join(" · ");
-    return `<details class="grupo-lista" data-grupo="${k}" ${aberto ? "open" : ""}>
-      <summary class="grupo-cab">${seta()}<h3 class="gc-titulo">${k === "__sem" ? "⚠ Sem turma" : `👥 Turma ${esc(t.nome || "")}${rotuloDias(t.diasAula) ? `<span class="gc-dias"> · ${esc(rotuloDias(t.diasAula))}</span>` : ""}`}</h3>
-        <span class="gc-resumo">${esc(resumo)}</span>${t ? "" : `<span class="chip warn">nenhum aluno vê estas somativas: use Editar e escolha a turma</span>`}</summary>
-      <div class="grupo-corpo">${subs.map(g => `<div class="sub-grupo">${subs.length > 1 ? `<h4 class="sg-titulo">${esc(rotuloSemestre(g.sm))} · ${esc(g.m)} · ${pl(g.ps.length, "somativa")}</h4>` : ""}
-        <div class="cartoes-provas">${g.ps.map(cartaoComRec).join("")}</div></div>`).join("")}</div></details>`;
-  }).join("");
-  box.querySelectorAll("[data-grupo]").forEach(d => d.ontoggle = () => { if (busca || turma || fSem || fMat) return; d.open ? gruposFechados.delete(d.dataset.grupo) : gruposFechados.add(d.dataset.grupo); });
+  const nomeT = k => k === "__sem" ? "⚠ Sem turma" : (turmasCache.find(x => x.id === k)?.nome || "");
+  const matDe = p => materiaDaProva(p, bancosCache) || "Sem matéria";
+  const seletor = `<div class="linha visao-provas" role="group" aria-label="Como mostrar as somativas" style="justify-content:flex-end;gap:6px;margin:0 0 8px">
+    <button type="button" class="${visaoProvas === "abas" ? "" : "leve"} mini" data-visao="abas" aria-pressed="${visaoProvas === "abas"}">🗂 Abas por turma</button>
+    <button type="button" class="${visaoProvas === "tabela" ? "" : "leve"} mini" data-visao="tabela" aria-pressed="${visaoProvas === "tabela"}">▦ Tabela</button></div>`;
+  if (visaoProvas === "tabela") {
+    // uma linha por somativa (todas as turmas); a recuperação fica recolhida na linha da somativa de origem
+    const linhas = chaves.flatMap(k => grupos.get(k).sort((x, y) => matDe(x).localeCompare(matDe(y), "pt-BR")).map(p => ({ p, k })));
+    const tpl = document.createElement("template");
+    const botoes = p => { tpl.innerHTML = cartaoProvaHTML(p); return tpl.content.querySelector(".cp-botoes")?.innerHTML || ""; };
+    const situ = p => `${p.liberada ? '<span class="chip ok">● liberada</span>' : '<span class="chip">○ fechada</span>'}${p.resultadosLiberados ? ' <span class="chip info">gabarito liberado</span>' : ""}`;
+    const qtdT = p => `${p.nQuestoes || 0} questões${Number(p.tempoMinutos) > 0 ? ` · ${p.tempoMinutos} min` : ""}`;
+    box.innerHTML = seletor + `<div class="card sem-padding"><div class="tabela"><table class="tabela-provas"><thead><tr><th>Somativa</th><th>Turma</th><th>Matéria</th><th>Questões / tempo</th><th>Situação</th><th>Recuperação</th><th>Ações</th></tr></thead><tbody>${
+      linhas.map(({ p, k }) => `<tr><td><b>${esc(p.titulo || "")}</b>${p.dataProva ? `<br><span class="pequeno">${esc(p.dataProva.split("-").reverse().join("/"))}</span>` : ""}</td><td>${esc(nomeT(k))}</td><td>${esc(matDe(p))}</td><td>${qtdT(p)}</td><td>${situ(p)}</td>
+        <td>${recHTML(p) || '<span class="pequeno">—</span>'}</td><td class="td-acoes"><div class="cp-botoes">${botoes(p)}</div></td></tr>`).join("")}</tbody></table></div></div>`;
+  } else {
+    // abas por turma: uma turma por vez; matérias dessa turma como filtro
+    if (!chaves.includes(turmaAba)) turmaAba = chaves[0];
+    const ps = grupos.get(turmaAba) || [], t = turmasCache.find(x => x.id === turmaAba);
+    const mats = new Map(); ps.forEach(p => { const m = matDe(p); mats.set(m, (mats.get(m) || 0) + 1); });
+    if (materiaAba && !mats.has(materiaAba)) materiaAba = "";
+    const vis = ps.filter(p => !materiaAba || matDe(p) === materiaAba);
+    const abas = chaves.map(k => { const tt = turmasCache.find(x => x.id === k), n = grupos.get(k).length;
+      return `<button type="button" class="aba-turma${k === turmaAba ? " ativa" : ""}" data-aba-turma="${k}" aria-pressed="${k === turmaAba}"><b>${esc(nomeT(k))}</b><span class="pequeno">${tt && rotuloDias(tt.diasAula) ? esc(rotuloDias(tt.diasAula)) + " · " : ""}${tt ? pl(alunosDaTurma(tt).length, "aluno") + " · " : ""}${pl(n, "somativa")}</span></button>`; }).join("");
+    const filtrosMat = mats.size ? `<div class="linha" style="gap:6px;margin:8px 0"><button type="button" class="${materiaAba ? "leve" : ""} mini" data-aba-mat="">Todas (${ps.length})</button>${[...mats].sort((x, y) => x[0].localeCompare(y[0], "pt-BR")).map(([m, n]) => `<button type="button" class="${materiaAba === m ? "" : "leve"} mini" data-aba-mat="${esc(m)}">${esc(m)} (${n})</button>`).join("")}</div>` : "";
+    box.innerHTML = seletor + `<div class="abas-turmas" role="tablist">${abas}</div>${t ? "" : turmaAba === "__sem" ? '<p class="chip warn">nenhum aluno vê estas somativas: use Editar e escolha a turma</p>' : ""}${filtrosMat}
+      <div class="cartoes-provas">${vis.map(cartaoComRec).join("")}</div>`;
+  }
+  box.querySelectorAll("[data-visao]").forEach(b => b.onclick = () => { visaoProvas = b.dataset.visao; salvarPreferencia({ visaoSomativas: visaoProvas }); desenharProvas(); });
+  box.querySelectorAll("[data-aba-turma]").forEach(b => b.onclick = () => { turmaAba = b.dataset.abaTurma; materiaAba = ""; desenharProvas(); });
+  box.querySelectorAll("[data-aba-mat]").forEach(b => b.onclick = () => { materiaAba = b.dataset.abaMat; desenharProvas(); });
+  box.querySelectorAll("[data-rec-de]").forEach(d => d.ontoggle = () => { d.open ? recAbertas.add(d.dataset.recDe) : recAbertas.delete(d.dataset.recDe); });
   box.querySelectorAll("[data-alunos]").forEach(b => b.onclick = async () => {
     abrirAba("resultados"); $("#rTurma").value = ""; await prepararResultados();
     $("#rProva").value = b.dataset.alunos; $("#rAoVivo").checked = true; carregarResultados();
@@ -1717,6 +1755,8 @@ $("#btnValidarBanco").onclick = () => {
 $("#btnImportarBanco").onclick = async () => {
   if (!podeEditar()) return toast("Seu papel não permite importar.", "erro");
   let b; try { b = validarBanco($("#txtBanco").value); } catch (e) { $("#msgBanco").innerHTML = `❌ ${esc(e.message)}`; return false; }
+  const igual = bancosCache.find(x => chaveTexto(x.nome) === chaveTexto(b.nome) && Number(x.nQuestoes) === b.questoes.length);
+  if (igual && !(await confirmar(`Já existe um banco "${igual.nome}" com ${pl(b.questoes.length, "questão", "questões")}. Importar outro igual?`, { titulo: "Banco já importado", ok: "Importar mesmo assim", cancelar: "Não importar", perigo: true }))) return false;
   if (!(await confirmar(`Importar o banco "${b.nome}" com ${pl(b.questoes.length, "questão", "questões")}?`, { titulo: "Importar banco", ok: "Importar" }))) return false;
   const temas = ordenarTemas(b.questoes.map(temaDe));
   // questões SQL: roda o gabarito na Bancada (no navegador) e guarda a "impressão" do resultado de cada tarefa;
@@ -1746,6 +1786,8 @@ $("#btnImportarBanco").onclick = async () => {
   b.questoes.forEach((q, i) => {
     const qid = `${ref.id}_q${String(i + 1).padStart(3, "0")}`;
     const pub = { ordem: i + 1, tipo: q.tipo, enunciado: q.enunciado, peso: Number(q.peso || 1), tema: temaDe(q) };
+    if (q.revisao === "pendente" || b.revisao === "pendente") pub.revisao = "pendente";   // escrita pela IA: só entra em prova real depois de aprovada
+    if (q.capacidade) pub.capacidade = String(q.capacidade);
     if (q.tipo === "alternativa") pub.alternativas = q.alternativas;
     if (q.tipo === "diagrama") { pub.diagrama = q.diagrama; if (q.conversao === false) pub.conversao = false; if (q.inicial) pub.inicial = typeof q.inicial === "string" ? q.inicial : JSON.stringify(q.inicial); }
     if (q.tipo === "web") { const { gabarito, tipo, enunciado, peso, tema, ...resto } = q; Object.assign(pub, resto); }
@@ -1880,6 +1922,46 @@ async function importarPronto(item, bt) {
 const semestreDoBanco = b => b.semestre || semestreDe(b.criadoEm || new Date());
 let bancosContagem = {};   // bancoId -> { tema: { alternativa, dissertativa } }
 const bancosEstado = new Map();   // grupos que o professor abriu ou fechou (semestre atual e matérias começam abertos; semestres anteriores, fechados)
+// ---------- bancos duplicados: mesma matéria e as mesmas questões (pelo enunciado) ----------
+const assinaturaBanco = b => (questoesCache[b.id] || []).map(q => semAcento(String(q.enunciado || "")).replace(/\s+/g, " ").trim()).sort().join("\u0001");
+function gruposDuplicados() {
+  const por = new Map();
+  for (const b of bancosCache) { if (!questoesCache[b.id]?.length) continue; const k = chaveTexto(b.materia) + "\u0002" + assinaturaBanco(b); (por.get(k) || por.set(k, []).get(k)).push(b); }
+  return [...por.values()].filter(g => g.length > 1);
+}
+function avisarDuplicados() {
+  const box = $("#bancosDuplicados") || (() => { const d = document.createElement("div"); d.id = "bancosDuplicados"; $("#listaBancos").before(d); return d; })();
+  const gs = podeEditar() ? gruposDuplicados() : [];
+  box.innerHTML = gs.map((g, i) => `<div class="aviso-box" style="margin:0 0 10px">⚠ <b>${g.length} bancos parecem iguais</b>: ${esc(g[0].nome)} (${esc(g[0].materia || "sem matéria")}, ${pl(questoesCache[g[0].id].length, "questão", "questões")} cada). <button type="button" class="leve mini" data-dup="${i}">Escolher qual manter</button></div>`).join("");
+  box.querySelectorAll("[data-dup]").forEach(b => b.onclick = () => resolverDuplicado(gs[Number(b.dataset.dup)]));
+}
+async function resolverDuplicado(g) {
+  const usos = b => provasCache.filter(p => bancosDaProva(p).includes(b.id));
+  const dt = b => b.criadoEm?.toDate ? b.criadoEm.toDate().toLocaleString("pt-BR") : "—";
+  let manter = null;
+  const ok = await modal({ titulo: "Bancos iguais: qual manter?", largo: true, ok: "Manter o escolhido", cancelar: "Cancelar",
+    conteudo: `<p class="pequeno" style="margin-top:0">Os outros saem das listas e do sorteio de provas novas. <b>Nada é apagado</b>: as provas e notas que já usaram um deles continuam funcionando (as somativas ainda não aplicadas passam a usar o banco mantido).</p>
+      ${g.map((b, i) => `<label class="check" style="margin:6px 0"><input type="radio" name="dupManter" value="${b.id}"${i === 0 ? " checked" : ""}> <span><b>${esc(b.nome)}</b> <span class="pequeno">importado em ${esc(dt(b))} · usado em ${pl(usos(b).length, "somativa")}</span></span></label>`).join("")}`,
+    antesDeConfirmar: c => { manter = c.querySelector("input[name=dupManter]:checked")?.value; return !!manter; } });
+  if (!ok || !manter) return;
+  try {
+    const lote = writeBatch(db);
+    for (const b of g.filter(x => x.id !== manter)) {
+      lote.update(doc(db, "bancos", b.id), { duplicadoDe: manter, duplicadoEm: serverTimestamp(), duplicadoPor: eu.email });
+      // somativas que ainda ninguém fez trocam para o banco mantido (as questões são as mesmas, com outros ids)
+      for (const p of usos(b)) {
+        const comTentativa = !(await getDocs(query(collection(db, "tentativas"), where("provaId", "==", p.id)))).empty;
+        if (comTentativa) continue;
+        const ids = bancosDaProva(p).map(x => x === b.id ? manter : x).filter((x, i, l) => l.indexOf(x) === i);
+        const tpb = { ...(p.temasPorBanco || {}) }; if (tpb[b.id] && !tpb[manter]) tpb[manter] = tpb[b.id]; delete tpb[b.id];
+        lote.update(doc(db, "provas", p.id), { bancoId: ids[0], bancoIds: ids, temasPorBanco: tpb, temas: tpb[ids[0]] || null });
+      }
+    }
+    await lote.commit();
+    toast("Pronto: ficou um banco só. Nada foi apagado.", "ok");
+    await carregarBancos(); carregarProvas();
+  } catch (e) { toast("Não foi possível resolver. " + traduzirErro(e), "erro"); }
+}
 async function carregarBancos() {
   await Promise.all([listarBancos(), listarPlanos().catch(() => []), listarCursos().catch(() => [])]);
   desenharBancosProntos();
@@ -1893,12 +1975,147 @@ async function carregarBancos() {
   box.innerHTML = `<p class="pequeno">Carregando…</p>`;
   const cs = await Promise.all(bancosCache.map(b => questoesDoBanco(b.id).then(contarPorTema).catch(() => null)));
   bancosContagem = Object.fromEntries(bancosCache.map((b, i) => [b.id, cs[i]]));
+  avisarDuplicados();
   if (!provasCache.length) provasCache = (await getDocs(collection(db, "provas")).catch(() => null))?.docs.map(d => ({ id: d.id, ...d.data() })) || [];
   const sel = (el, primeira, vals, rot = v => v) => { const a = el.value; el.innerHTML = `<option value="">${primeira}</option>` + vals.map(v => `<option value="${esc(v)}">${esc(rot(v))}</option>`).join(""); el.value = vals.includes(a) ? a : ""; };
   sel($("#fbSemestre"), "📅 Todos os semestres", [...new Set(bancosCache.map(semestreDoBanco))].sort().reverse(), rotuloSemestre);
   const mats = new Map(); bancosCache.forEach(b => mats.set(chaveTexto(b.materia) || "~", String(b.materia || "").trim() || "Sem matéria"));
   sel($("#fbMateria"), "📚 Todas as matérias", [...mats.values()].sort((a, b) => a.localeCompare(b, "pt-BR")));
   desenharBancos();
+}
+// ---------- Bancos: lista de TÓPICOS da matéria (o banco vira filtro) ----------
+const topicosPorMateria = new Map();   // idm -> { linhas, bs }
+function linhasTopicos(bs) {
+  const por = new Map(), u = unidadeDaMateria(bs[0]?.materia);
+  for (const b of bs) for (const q of questoesCache[b.id] || []) {
+    const t = temaDe(q);
+    if (!por.has(t)) por.set(t, { tema: t, n: { alternativa: 0, dissertativa: 0, sql: 0, diagrama: 0, web: 0 }, aprovadas: 0, revisar: 0, bancos: new Set(), caps: new Set(), qs: [] });
+    const x = por.get(t), tipo = ["dissertativa", "sql", "web", "diagrama"].includes(q.tipo) ? q.tipo : "alternativa";
+    x.n[tipo]++; x.bancos.add(b.id); x.qs.push({ ...q, _banco: b.id });
+    if (contaNoMinimo(q)) x.aprovadas++; else x.revisar++;
+    (capsDoTema(b, t) || []).forEach(c => x.caps.add(c));
+  }
+  for (const x of por.values()) x.provas = provasCache.filter(p => bancosDaProva(p).some(b => x.bancos.has(b) && (!temasDoBanco(p, b) || temasDoBanco(p, b).has(x.tema)))).length;
+  return { linhas: [...por.values()].sort((a, b) => ordemNatural(a.tema, b.tema)), unidade: u };
+}
+const ROT_TIPO = { alternativa: "alt.", dissertativa: "dissert.", sql: "SQL", diagrama: "diagr.", web: "web" };
+function topicosMateriaHTML(idm, bs) {
+  const { linhas, unidade } = linhasTopicos(bs);
+  topicosPorMateria.set(idm, { linhas, bs, unidade });
+  const abaixo = linhas.filter(x => x.aprovadas < minimoTopico).length;
+  return `<div class="topicos-materia" data-tpm="${esc(idm)}">
+    <p class="pequeno" style="margin:8px 12px">${pl(linhas.length, "tópico")} · <b class="${abaixo ? "erro-texto" : ""}">${abaixo} de ${linhas.length} abaixo do mínimo</b> (meta ${minimoTopico} questões aprovadas por tópico, em Configuração)</p>
+    <div class="linha filtro-topicos" style="gap:6px;margin:0 12px 8px">
+      <input type="search" data-tp-busca placeholder="Buscar no tópico e nas questões…" aria-label="Buscar nos tópicos e nas questões" style="flex:2 1 220px">
+      <select data-tp-tipo aria-label="Tipo de questão"><option value="">Todos os tipos</option>${Object.entries(ROT_TIPO).map(([k]) => `<option value="${k}">${({ alternativa: "Alternativa", dissertativa: "Dissertativa", sql: "SQL na Bancada", diagrama: "Diagrama", web: "Projeto web" })[k]}</option>`).join("")}</select>
+      ${unidade ? `<select data-tp-cap aria-label="Capacidade"><option value="">Todas as capacidades</option>${unidade.tec.map(([id, t]) => `<option value="${id}">${esc(t.slice(0, 60))}</option>`).join("")}<option value="__sem">Sem capacidade definida</option></select>` : ""}
+      ${bs.length > 1 ? `<select data-tp-banco aria-label="Banco"><option value="">Todos os bancos</option>${bs.map(b => `<option value="${b.id}">${esc(b.nome)}</option>`).join("")}</select>` : ""}
+      <select data-tp-sit aria-label="Situação"><option value="">Todas as situações</option><option value="abaixo">Abaixo do mínimo</option><option value="revisar">Com questões a revisar</option></select>
+    </div>
+    <div class="tabela"><table class="tabela-topicos"><thead><tr><th>Tópico</th><th>Questões por tipo</th><th>Mínimo</th><th>Banco(s)</th><th>Provas</th><th></th></tr></thead><tbody data-tp-corpo></tbody></table></div></div>`;
+}
+function desenharLinhasTopicos(el) {
+  const d = topicosPorMateria.get(el.dataset.tpm); if (!d) return;
+  const busca = semAcento(el.querySelector("[data-tp-busca]").value.trim()), tipo = el.querySelector("[data-tp-tipo]").value;
+  const cap = el.querySelector("[data-tp-cap]")?.value || "", banco = el.querySelector("[data-tp-banco]")?.value || "", sit = el.querySelector("[data-tp-sit]").value;
+  const nomeB = id => bancosCache.find(b => b.id === id)?.nome || id;
+  const vis = d.linhas.map(x => {
+    let qs = x.qs.filter(q => (!tipo || (q.tipo === tipo || (tipo === "alternativa" && !["dissertativa", "sql", "web", "diagrama"].includes(q.tipo)))) && (!banco || q._banco === banco));
+    const casaTema = !busca || semAcento(x.tema).includes(busca);
+    if (busca && !casaTema) qs = qs.filter(q => semAcento(q.enunciado).includes(busca));
+    return { x, qs, casaTema };
+  }).filter(({ x, qs }) => qs.length && (!cap || (cap === "__sem" ? !x.caps.size : x.caps.has(cap))) && (!sit || (sit === "abaixo" ? x.aprovadas < minimoTopico : x.revisar > 0)));
+  el.querySelector("[data-tp-corpo]").innerHTML = vis.length ? vis.map(({ x, qs, casaTema }) => `<tr class="${x.aprovadas < minimoTopico ? "tp-abaixo" : ""}">
+      <td><b>${esc(x.tema)}</b>${busca && !casaTema ? `<br><span class="pequeno">${pl(qs.length, "questão", "questões")} com "${esc(el.querySelector("[data-tp-busca]").value.trim())}"</span>` : ""}${x.revisar ? ` <span class="chip warn">${x.revisar} a revisar</span>` : ""}</td>
+      <td class="pequeno">${Object.entries(x.n).filter(([, n]) => n).map(([k, n]) => `${n} ${ROT_TIPO[k]}`).join(" · ")}</td>
+      <td><span class="chip ${x.aprovadas < minimoTopico ? "err" : "ok"}" title="Questões aprovadas / meta">${x.aprovadas} de ${minimoTopico}</span></td>
+      <td class="pequeno">${[...x.bancos].map(nomeB).map(esc).join("<br>")}</td>
+      <td class="pequeno">${x.provas ? pl(x.provas, "prova") : "—"}</td>
+      <td><button type="button" class="leve mini" data-tp-abrir="${esc(x.tema)}">Ver questões</button></td></tr>`).join("")
+    : `<tr><td colspan="6" class="pequeno">Nenhum tópico com esses filtros.</td></tr>`;
+  el.querySelectorAll("[data-tp-abrir]").forEach(b => b.onclick = () => abrirTopico(d, b.dataset.tpAbrir, el.querySelector("[data-tp-busca]").value.trim()));
+}
+function ligarTopicosMateria(box) {
+  box.querySelectorAll("[data-tpm]").forEach(el => {
+    el.querySelectorAll("input, select").forEach(c => c.addEventListener(c.tagName === "INPUT" ? "input" : "change", () => desenharLinhasTopicos(el)));
+    desenharLinhasTopicos(el);
+  });
+}
+// questões de um tópico (todos os bancos da matéria), com busca própria e REVISÃO das "a revisar" (aprovar, editar, descartar)
+function abrirTopico(d, tema, buscaIni = "") {
+  const x = d.linhas.find(l => l.tema === tema); if (!x) return;
+  const nomeB = id => bancosCache.find(b => b.id === id)?.nome || id;
+  const rot = q => ({ dissertativa: "✍ dissertativa", sql: "🛢 SQL", web: "🌐 web", diagrama: "📐 diagrama" })[q.tipo] || "🔘 alternativa";
+  const chave = q => `${q._banco}|${q.id}`;
+  const nRev = x.qs.filter(q => q.revisao === "pendente").length;
+  const lista = busca => x.qs.filter(q => !busca || semAcento(q.enunciado).includes(semAcento(busca))).map(q => {
+    const pend = q.revisao === "pendente" && podeEditar();
+    return `<li style="margin:8px 0">${pend ? `<input type="checkbox" data-rev-sel="${esc(chave(q))}" aria-label="Selecionar"> ` : ""}<span class="tag">${rot(q)}</span>${q.revisao === "pendente" ? ' <span class="chip warn">a revisar</span>' : ""} <span class="pequeno">${esc(nomeB(q._banco))}</span>
+      ${pend ? ` <button type="button" class="ok mini" data-rev-ok="${esc(chave(q))}">Aprovar</button> <button type="button" class="leve mini" data-rev-ed="${esc(chave(q))}">Editar</button> <button type="button" class="leve mini" data-rev-del="${esc(chave(q))}">Descartar</button>` : ""}
+      <br>${esc(String(q.enunciado || "").replace(/\s+/g, " ").slice(0, 400))}${String(q.enunciado || "").length > 400 ? "…" : ""}
+      ${q.tipo === "alternativa" && Array.isArray(q.alternativas) ? `<ol type="A" class="pequeno" style="margin:2px 0 0">${q.alternativas.map(t => `<li>${esc(t)}</li>`).join("")}</ol>` : ""}</li>`;
+  }).join("") || "<li class='pequeno'>Nenhuma questão com essa busca.</li>";
+  const achar = k => x.qs.find(q => chave(q) === k);
+  const recarregar = async bancos => { bancos.forEach(b => delete questoesCache[b]); await carregarBancos(); };
+  async function aprovar(ks) {
+    const lote = writeBatch(db);
+    ks.map(achar).filter(Boolean).forEach(q => lote.update(doc(db, "bancos", q._banco, "questoes", q.id), { revisao: deleteField(), aprovadaPor: eu.email, aprovadaEm: serverTimestamp() }));
+    await lote.commit(); toast(`${pl(ks.length, "questão aprovada", "questões aprovadas")}.`, "ok");
+    await recarregar([...new Set(ks.map(k => k.split("|")[0]))]);
+  }
+  async function descartar(ks) {
+    const qs = ks.map(achar).filter(q => q && q.revisao === "pendente");   // só as "a revisar"; questão aprovada nunca é apagada aqui
+    if (!qs.length || !(await confirmar(`Descartar ${pl(qs.length, "questão", "questões")} a revisar? Elas são apagadas do banco.`, { titulo: "Descartar questões", ok: "Descartar", perigo: true }))) return;
+    const lote = writeBatch(db);
+    qs.forEach(q => { lote.delete(doc(db, "bancos", q._banco, "questoes", q.id)); lote.delete(doc(db, "bancos", q._banco, "gabaritos", q.id)); });
+    await lote.commit(); toast("Descartadas.", "ok");
+    await recarregar([...new Set(qs.map(q => q._banco))]);
+  }
+  async function editar(k) {
+    const q = achar(k); if (!q) return;
+    const g = (await getDoc(doc(db, "bancos", q._banco, "gabaritos", q.id))).data() || {};
+    const alt = q.tipo === "alternativa" && Array.isArray(q.alternativas);
+    const ok = await modal({ titulo: "Editar questão a revisar", largo: true, ok: "Salvar e aprovar", cancelar: "Cancelar",
+      conteudo: `<label for="rvEnun">Enunciado</label><textarea id="rvEnun" style="min-height:120px">${esc(q.enunciado || "")}</textarea>
+        ${alt ? `<label for="rvAlts">Alternativas (uma por linha)</label><textarea id="rvAlts" style="min-height:110px">${esc(q.alternativas.join("\n"))}</textarea>
+          <label for="rvCerta">Número da certa (1 = primeira)</label><input id="rvCerta" type="number" min="1" value="${Number(g.correta ?? 0) + 1}" style="max-width:100px">` : ""}
+        ${q.tipo === "dissertativa" ? `<label for="rvAceitas">Respostas aceitas (uma por linha)</label><textarea id="rvAceitas">${esc((g.respostasAceitas || []).join("\n"))}</textarea><label for="rvChaves">Palavras-chave (separadas por vírgula)</label><input id="rvChaves" value="${esc((g.palavrasChave || []).join(", "))}">` : ""}
+        <label for="rvExpl">Explicação (o aluno lê depois)</label><textarea id="rvExpl">${esc(g.explicacao || "")}</textarea>
+        ${["sql", "web", "diagrama"].includes(q.tipo) ? '<p class="pequeno">Questões práticas: aqui só muda o texto. O gabarito prático fica como foi gerado.</p>' : ""}`,
+      antesDeConfirmar: async c => {
+        const enun = c.querySelector("#rvEnun").value.trim(); if (!enun) { toast("O enunciado não pode ficar vazio.", "erro"); return false; }
+        const pub = { enunciado: enun, revisao: deleteField(), aprovadaPor: eu.email, aprovadaEm: serverTimestamp() }, gab = { explicacao: c.querySelector("#rvExpl").value.trim() };
+        if (alt) {
+          const alts = c.querySelector("#rvAlts").value.split("\n").map(t => t.trim()).filter(Boolean), certa = Number(c.querySelector("#rvCerta").value) - 1;
+          if (alts.length < 2 || !(certa >= 0 && certa < alts.length)) { toast("Precisa de 2 ou mais alternativas e o número da certa.", "erro"); return false; }
+          pub.alternativas = alts; gab.correta = certa;
+        }
+        if (q.tipo === "dissertativa") { gab.respostasAceitas = c.querySelector("#rvAceitas").value.split("\n").map(t => t.trim()).filter(Boolean); gab.palavrasChave = c.querySelector("#rvChaves").value.split(",").map(t => t.trim()).filter(Boolean); }
+        try { const lote = writeBatch(db); lote.update(doc(db, "bancos", q._banco, "questoes", q.id), pub); lote.set(doc(db, "bancos", q._banco, "gabaritos", q.id), gab, { merge: true }); await lote.commit(); }
+        catch (e) { toast("Não foi possível salvar. " + traduzirErro(e), "erro"); return false; }
+        return true;
+      } });
+    if (ok) { toast("Questão editada e aprovada.", "ok"); await recarregar([q._banco]); }
+  }
+  const ligar = c => {
+    c.querySelectorAll("[data-rev-ok]").forEach(b => b.onclick = async () => { await aprovar([b.dataset.revOk]); fechar(); });
+    c.querySelectorAll("[data-rev-del]").forEach(b => b.onclick = async () => { await descartar([b.dataset.revDel]); fechar(); });
+    c.querySelectorAll("[data-rev-ed]").forEach(b => b.onclick = () => { fechar(); editar(b.dataset.revEd); });
+  };
+  let fechar = () => {};
+  modal({ titulo: `${tema} — ${pl(x.qs.length, "questão", "questões")}${nRev ? ` (${nRev} a revisar)` : ""}`, largo: true, ok: "Fechar",
+    conteudo: `<input type="search" id="tpBuscaQ" placeholder="Buscar nas questões deste tópico…" value="${esc(buscaIni)}" style="width:100%;margin-bottom:8px">
+      ${nRev && podeEditar() ? `<div class="linha" style="gap:6px;margin-bottom:6px"><button type="button" class="leve mini" id="rvTodas">Selecionar todas a revisar</button><button type="button" class="ok mini" id="rvAprovarSel">Aprovar selecionadas</button><button type="button" class="leve mini" id="rvDescartarSel">Descartar selecionadas</button><span class="pequeno">Questão "a revisar" só cai em prova da turma de TESTE até ser aprovada.</span></div>` : ""}
+      <ol id="tpListaQ" style="padding-left:20px">${lista(buscaIni)}</ol>`,
+    aoAbrir: c => {
+      fechar = () => c.closest(".modal-fundo")?.querySelector("[data-r='1'], .modal-acoes button:last-child")?.click();
+      c.querySelector("#tpBuscaQ").oninput = e => { c.querySelector("#tpListaQ").innerHTML = lista(e.target.value.trim()); ligar(c); };
+      const sel = () => [...c.querySelectorAll("[data-rev-sel]:checked")].map(i => i.dataset.revSel);
+      c.querySelector("#rvTodas")?.addEventListener("click", () => c.querySelectorAll("[data-rev-sel]").forEach(i => i.checked = true));
+      c.querySelector("#rvAprovarSel")?.addEventListener("click", async () => { const ks = sel(); if (!ks.length) return toast("Marque as questões.", "erro"); await aprovar(ks); fechar(); });
+      c.querySelector("#rvDescartarSel")?.addEventListener("click", async () => { const ks = sel(); if (!ks.length) return toast("Marque as questões.", "erro"); await descartar(ks); fechar(); });
+      ligar(c);
+    } });
 }
 function desenharBancos() {
   const box = $("#listaBancos");
@@ -1939,7 +2156,8 @@ function desenharBancos() {
         return `<details class="card sem-padding" data-gb="${idm}" ${aberto(idm, true) ? "open" : ""}>
           <summary class="sub-cab"><span class="sc-tile">${ic("book", { size: 20 })}</span><span class="sc-texto"><span class="sc-titulo">${esc(m)}</span><span class="sc-resumo">${pl(bs.length, "banco")} · ${pl(somaQ(bs), "questão", "questões")}</span></span>
             ${podeEditar() ? `<span class="sc-fim"><button type="button" class="leve mini" data-banco-sem="${esc(s)}" data-banco-mat="${m === "Sem matéria" ? "" : esc(m)}">${ic("plus", { size: 16 })}Banco nesta matéria</button></span>` : ""}${seta()}</summary>
-          <div class="bancos-grade">${bs.map(b => {
+          ${topicosMateriaHTML(idm, bs)}
+          <details class="recolhivel leve bancos-da-materia"><summary><span class="rc-titulo">Bancos desta matéria (${bs.length})</span><span class="rc-resumo pequeno">Tópicos, Capacidades, Critérios, Gabarito e ···</span></summary><div class="rc-corpo"><div class="bancos-grade">${bs.map(b => {
             const c = bancosContagem[b.id], tot = c ? Object.values(c).reduce((x, y) => ({ alternativa: x.alternativa + y.alternativa, dissertativa: x.dissertativa + y.dissertativa }), { alternativa: 0, dissertativa: 0 }) : null;
             const u = usos(b.id), geral = c?.Geral ? (c.Geral.alternativa + c.Geral.dissertativa) : 0;
             const nTop = c ? Object.keys(c).length : 0;
@@ -1955,10 +2173,11 @@ function desenharBancos() {
                   ${podeEditar() ? `<button class="leve mini" data-criterios="${b.id}" title="Liga cada questão a um critério do plano de ensino (para gerar evidência da prova)">${ic("star", { size: 16 })}Critérios</button>` : ""}
                   ${menuHTML({ aria: `Mais ações: ${b.nome}`, itensHTML: itemMenu({ i: "copy", t: "Gabarito para o Classroom", attrs: `data-gab="${b.id}"` }) + (ehAdmin() ? "<hr>" + itemMenu({ i: "trash", t: "Apagar banco", perigo: true, attrs: `data-delb="${b.id}"` }) : "") })}</div>
               </div></article>`;
-          }).join("")}</div></details>`;
+          }).join("")}</div></div></details></details>`;
       }).join("")}</div></details>`;
   }).join("");
   box.querySelectorAll("[data-gb]").forEach(d => d.ontoggle = () => { if (!filtrando) bancosEstado.set(d.dataset.gb, d.open); });
+  ligarTopicosMateria(box);
   box.querySelectorAll("[data-banco-sem]").forEach(x => x.onclick = () => abrirImportarBanco({ semestre: x.dataset.bancoSem, materia: x.dataset.bancoMat }));
   box.querySelectorAll("[data-gab]").forEach(x => x.onclick = () => gerarGabarito(x.dataset.gab));
   box.querySelectorAll("[data-capac]").forEach(x => x.onclick = () => editarCapacidadesBanco(x.dataset.capac));
@@ -3001,6 +3220,7 @@ $("#btnAddEquipe").onclick = async () => {
 async function carregarConfig() {
   const c = await getDoc(doc(db, "config", "geral"));
   $("#cDominios").value = (c.exists() ? c.data().dominiosAlunos || [] : []).join(", ");
+  $("#cMinimo").value = Number(c.data()?.minimoPorTopico) > 0 ? c.data().minimoPorTopico : 50;
   $("#cCorretor").value = c.exists() ? c.data().urlCorretor || "" : "";
   const h = c.data()?.horario?.inicio ? c.data().horario : HORARIO_PADRAO;
   $("#cHIni").value = h.inicio; $("#cHFim").value = h.fim; $("#cHInt").value = (h.intervalos || []).map(i => `${i.nome} | ${i.inicio} | ${i.fim}`).join("\n");
@@ -3025,7 +3245,9 @@ $("#btnSalvarConfig").onclick = async () => {
   if (!hora($("#cHIni").value) || !hora($("#cHFim").value) || intervalos.some(i => !i.inicio || !i.fim)) return toast("Horário inválido: use HH:MM (ex.: Almoço | 11:00 | 12:00).", "erro");
   const horario = { inicio: $("#cHIni").value, fim: $("#cHFim").value, intervalos };
   if (!(await confirmar("Salvar as alterações na configuração? Domínios dos alunos, servidor da IA e horário valem para todo o sistema.", { titulo: "Salvar configuração", ok: "Salvar" }))) return;
-  await setDoc(doc(db, "config", "geral"), { dominiosAlunos: dominios, urlCorretor: url, horario }, { merge: true });
+  const minimo = Math.max(1, Math.round(Number($("#cMinimo").value) || 50));
+  await setDoc(doc(db, "config", "geral"), { dominiosAlunos: dominios, urlCorretor: url, horario, minimoPorTopico: minimo }, { merge: true });
+  minimoTopico = minimo;
   horarioCfg = horario;
   $("#msgConfig").textContent = "Salvo: " + dominios.join(", ") + (url ? ` · servidor de correção: ${url}` : " · sem servidor de correção");
 };

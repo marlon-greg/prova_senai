@@ -460,7 +460,9 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
       <details class="card sem-padding bloco-linha"  data-chave="cfg-dominios"><summary class="sub-cab"><span class="ch ch-esq" aria-hidden="true" data-ic="chev"></span><span class="sc-tile sc-navy" data-ic="users" data-ic-size="20" aria-hidden="true"></span><span class="sc-texto"><span class="sc-titulo">Domínios de login</span><span class="sc-resumo">e-mails aceitos para alunos</span></span></summary>
         <div class="bloco-linha-corpo">
           <label for="cDominios">Domínios de e-mail aceitos para alunos (separados por vírgula)</label>
-          <input type="text" id="cDominios" placeholder="edu.senai.br, aluno.senai.br"><div class="rodape-card"><button id="btnSalvarConfig">Salvar</button></div></div></details>
+          <input type="text" id="cDominios" placeholder="edu.senai.br, aluno.senai.br">
+          <label for="cMinimo" style="margin-top:10px">Mínimo de questões por tópico (meta)</label><input type="number" id="cMinimo" min="1" value="50" style="max-width:140px">
+          <p class="pequeno" style="margin:4px 0 0">Bancos de questões mostram "32 de 50" em cada tópico; a Nova somativa avisa quando um tópico marcado está abaixo (só aviso). Só contam as questões aprovadas.</p><div class="rodape-card"><button id="btnSalvarConfig">Salvar</button></div></div></details>
       <details class="card sem-padding bloco-linha" id="cardIA" data-chave="cfg-ia"><summary class="sub-cab"><span class="ch ch-esq" aria-hidden="true" data-ic="chev"></span><span class="sc-tile sc-navy" data-ic="bot" data-ic-size="20" aria-hidden="true"></span><span class="sc-texto"><span class="sc-titulo">Chave e modelo da IA</span><span class="sc-resumo">correção por IA · só você vê este bloco</span></span><span class="sc-fim"><span class="ajuda-pop"><button type="button" class="btn-ajuda" data-popover aria-haspopup="dialog" aria-expanded="false" aria-label="Como funciona" title="Como funciona">i</button><template><p>A chave fica num documento do Firestore que as regras deixam ler <b>somente</b> com a sua conta de administrador principal. Ela não vai para o GitHub, nem para a página do aluno, nem para os outros membros da equipe. Crie a chave em <b>console.anthropic.com → API Keys</b> e defina um limite de gasto mensal em <b>Settings → Limits</b>.</p></template></span></span></summary>
         <div class="bloco-linha-corpo"><div class="grade">
           <div><label for="iaChave">Chave da API Anthropic</label><input type="password" id="iaChave" autocomplete="off" spellcheck="false" placeholder="sk-ant-… (deixe vazio para manter a salva)"></div>
@@ -494,6 +496,6 @@ Um aluno por linha: só o nome completo, nome + e-mail, ou só o e-mail. Dá par
   </section>
   <section id="telaAviso" class="card centro oculto"><div id="avisoTexto"></div><button type="button" id="btnSairAviso" class="leve">Sair</button></section>
 </main>
-<script type="module" src="js/admin.js?v=20261126b"></script>
+<script type="module" src="js/admin.js?v=20261126c"></script>
 </body>
 </html>
