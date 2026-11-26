@@ -2017,6 +2017,33 @@ export async function avaliarTarefa(questao, tarefa, sql) {
   } finally { s.fechar(); }
 }
 
+// Outras respostas possíveis da tarefa (sem IA): cada SELECT do script do editor (consulta) e cada comando que o aluno
+// EXECUTOU sem erro, rodado numa base nova. Só vão as "impressões" (hashes) dos resultados; o servidor compara com o gabarito.
+export async function candidatosDaTarefa(questao, tarefa, sql, executados = []) {
+  const out = new Map();
+  const add = (h, de) => { if (h?.impressao && !out.has(h.impressao)) out.set(h.impressao, { impressao: h.impressao, conjunto: h.conjunto, de }); };
+  if (tarefa?.tipo !== "alteracao" && temComando(sql)) {
+    let s = null;
+    try {
+      s = await novaBase(questao);
+      for (const r of s.executarScript(sql, { limite: LIMITE_AVALIACAO })) {
+        if (!r.ok) break;
+        if (r.resultado && r.consulta) add(await impressoes(r.resultado.linhas), "editor");
+      }
+    } catch (e) { /* base não montou: fica sem candidatos do editor */ }
+    finally { s?.fechar(); }
+  }
+  const vistos = new Set();
+  for (const x of [...executados].reverse()) {
+    const t = String(x?.sql || "").trim();
+    if (x?.erro || !temComando(t) || vistos.has(t)) continue;
+    vistos.add(t);
+    if (vistos.size > 12) break;
+    try { const r = await avaliarTarefa(questao, tarefa, t); if (!r.erro) add(r, "executado"); } catch (e) { /* ignora */ }
+  }
+  return [...out.values()].slice(0, 12);
+}
+
 export async function calcularGabarito(questao, gabarito) {
   const tarefas = questao?.tarefas || [];
   const saida = { ...(gabarito || {}), tarefas: {} };
@@ -2535,6 +2562,18 @@ export function montarBancada(container, opcoes = {}) {
     return cache.get(chave);
   }
 
+  const cacheCand = new Map();
+  function candidatosComCache(t, sql, execs) {
+    const chave = t.id + "\u0000" + sql + "\u0000" + execs.map(x => (x.erro ? "!" : "") + x.sql).join("\u0001");
+    if (!cacheCand.has(chave)) {
+      const p = candidatosDaTarefa(questao, t, sql, execs);
+      cacheCand.set(chave, p);
+      p.catch(() => cacheCand.delete(chave));
+      if (cacheCand.size > 30) cacheCand.delete(cacheCand.keys().next().value);
+    }
+    return cacheCand.get(chave);
+  }
+
   return {
     // quantas vezes executou (a página da prova usa para saber se precisa salvar de novo)
     nExecucoes() { return Object.values(execucoes).reduce((s, l) => s + l.length, 0); },
@@ -2545,7 +2584,10 @@ export function montarBancada(container, opcoes = {}) {
         let r;
         try { r = await avaliarComCache(ed.tarefa, sql); }
         catch (e) { r = { impressao: "", conjunto: "", erro: "Não foi possível avaliar: " + (e?.message || e) }; }
-        out.tarefas[ed.tarefa.id] = { sql, impressao: r.impressao, conjunto: r.conjunto, erro: r.erro, execucoes: execucoes[ed.tarefa.id].slice(-40) };
+        let candidatos = [];
+        try { candidatos = await candidatosComCache(ed.tarefa, sql, execucoes[ed.tarefa.id]); } catch (e) { /* sem candidatos */ }
+        out.tarefas[ed.tarefa.id] = { sql, impressao: r.impressao, conjunto: r.conjunto, erro: r.erro, execucoes: execucoes[ed.tarefa.id].slice(-40),
+          ...(candidatos.length ? { candidatos: candidatos.filter(c => c.impressao !== r.impressao) } : {}) };
       }
       return out;
     },

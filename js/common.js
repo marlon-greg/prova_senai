@@ -8,6 +8,7 @@ import { getFirestore, connectFirestoreEmulator, doc, getDoc, getDocs, collectio
 import { temFormato, corrigirFormato } from "../servidor/formatos.js";
 import { corrigirSql } from "../servidor/sql-correcao.js";
 import { corrigirWeb } from "../servidor/web-correcao.js";
+export { limparTema } from "../servidor/organizar.js";
 const gabWeb = g => g?.web ? (() => { try { return JSON.parse(g.web); } catch { return {}; } })() : g;
 import { firebaseConfig, SUPER_ADMIN, DOMINIOS_ALUNOS_PADRAO, USAR_EMULADOR, GOOGLE_CLIENT_ID } from "./firebase-config.js";
 

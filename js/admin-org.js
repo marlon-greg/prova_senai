@@ -5,7 +5,7 @@
 // planos/{id}/arquivos/{a} (+ partes) = o PDF do plano (mesmo formato de js/material.js).
 // A prova liga na matéria por turma + semestre + matéria (prova.semestre / prova.materia; provas antigas: data de criação e matéria do banco).
 // O tópico de uma questão é o campo "tema" dela (o mesmo que filtra o sorteio da prova).
-import { db, esc, $, toast, modal, confirmar, traduzirErro, temaDe, ordenarTemas, bancosDaProva, temasDoBanco,
+import { db, esc, $, toast, modal, confirmar, traduzirErro, temaDe, ordenarTemas, limparTema, bancosDaProva, temasDoBanco,
          semestreDe, rotuloSemestre, semestreVizinho, chaveTexto, semestreDaProva, materiaDaProva, dataCurta, nomeTurma, semestreCursoAtual } from "./common.js";
 import { criteriosDaUnidade } from "./plano-ensino.js?v=20261116a";
 import { unidadeDaMateria } from "./plano-curso.js?v=20261113a";
@@ -432,7 +432,7 @@ export async function editarTopicosBanco(bancoId, aoSalvar = () => {}) {
   const banco = bancos.find(b => b.id === bancoId);
   const qs = [...await ctx.questoesDoBanco(bancoId, true)].sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
   await listarCursos().catch(() => {});
-  const topicosPlano = m => topicosDaMateria(m);
+  const topicosPlano = m => [...new Set(topicosDaMateria(m).map(limparTema).filter(Boolean))];
   const html = `
     <div class="grade">
       <div><label for="tbSemestre">Semestre do banco</label><select id="tbSemestre">${[...new Set([-2, -1, 0, 1, 2].map(d => semestreVizinho(semestreDe(), d)).concat(banco?.semestre || semestreDe(banco?.criadoEm || new Date())))].sort().reverse()
@@ -445,11 +445,12 @@ export async function editarTopicosBanco(bancoId, aoSalvar = () => {}) {
     <div id="tbChips" class="cm-extra"></div>
     <div class="linha acoes" style="align-items:center;margin:8px 0">
       ${temIA() ? `<button type="button" class="leve mini" id="tbIA">🤖 Sugerir tópicos com IA</button><label class="check" style="margin:0"><input type="checkbox" id="tbIASo" checked> <span>só as sem tópico ("Geral")</span></label>` : `<span class="pequeno">IA não configurada: escreva os tópicos à mão.</span>`}
+      <button type="button" class="leve mini" id="tbLimpar" title="Tira &quot;MS4 - &quot;, &quot;MS5:&quot;, &quot;(MS4)&quot;… do nome dos tópicos: o tópico fica só com o assunto">🧹 Tirar MS4/MS5 dos tópicos</button>
       <span id="tbMsg" class="pequeno" aria-live="polite"></span>
     </div>
     <datalist id="tbLista"></datalist>
     <div class="tabela tb-questoes"><table><tr><th><input type="checkbox" id="tbTodas" aria-label="Marcar todas"></th><th>#</th><th>Questão</th><th style="min-width:220px">Tópico</th></tr>
-      ${qs.map(q => `<tr data-q="${q.id}"><td><input type="checkbox" data-marca="${q.id}" aria-label="Marcar a questão ${q.ordem}"></td><td class="pequeno">${q.ordem || ""}<br>${q.tipo === "dissertativa" ? "✍" : "🔘"}</td>
+      ${qs.map(q => `<tr data-q="${q.id}"><td><input type="checkbox" data-marca="${q.id}" aria-label="Marcar a questão ${q.ordem}"></td><td class="pequeno">${q.ordem || ""}<br>${({ dissertativa: "✍", sql: "🛢", web: "🌐", diagrama: "📐" })[q.tipo] || "🔘"}</td>
         <td class="pequeno tb-enun">${esc(String(q.enunciado || "").replace(/\s+/g, " ").slice(0, 180))}${String(q.enunciado || "").length > 180 ? "…" : ""}</td>
         <td><input type="text" data-tema="${q.id}" list="tbLista" value="${esc(String(q.tema || "").trim())}" placeholder="Geral"></td></tr>`).join("")}</table></div>
     <p class="pequeno">Mudar o tópico de questões que já estão em provas atualiza também o filtro de temas dessas provas, para o sorteio continuar com as mesmas questões. As tentativas já feitas não mudam.</p>`;
@@ -473,6 +474,12 @@ export async function editarTopicosBanco(bancoId, aoSalvar = () => {}) {
         atualizarLista();
       };
       caixa.querySelectorAll("[data-tema]").forEach(i => i.oninput = () => i.classList.add("mudou"));
+      $("#tbLimpar", caixa).onclick = () => {
+        let n = 0;
+        caixa.querySelectorAll("[data-tema]").forEach(i => { const v = limparTema(i.value); if (v !== i.value.trim()) { i.value = v; i.classList.add("mudou"); n++; } });
+        $("#tbMsg", caixa).textContent = n ? `🧹 ${n} tópico(s) arrumado(s). Os que ficaram vazios viram "Geral": use a IA ou escolha o assunto. Revise e salve.` : "Nenhum tópico com MS4/MS5 no nome.";
+        atualizarLista();
+      };
       const btn = $("#tbIA", caixa);
       if (btn) btn.onclick = async () => {
         const so = $("#tbIASo", caixa).checked, materia = $("#tbMateria", caixa).value.trim();
@@ -710,7 +717,7 @@ export async function editarCriteriosBanco(bancoId, aoSalvar = () => {}) {
     <div class="tabela tb-questoes"><table>
       <tr><th><input type="checkbox" id="cbTodas" aria-label="Marcar todas"></th><th>#</th><th>Questão</th><th style="min-width:260px">Critério</th></tr>
       ${qs.map(q => `<tr data-q="${q.id}"><td><input type="checkbox" data-marca="${q.id}" aria-label="Marcar questão ${q.ordem}"></td>
-        <td class="pequeno">${q.ordem || ""}<br>${q.tipo === "dissertativa" ? "✍" : "🔘"}</td>
+        <td class="pequeno">${q.ordem || ""}<br>${({ dissertativa: "✍", sql: "🛢", web: "🌐", diagrama: "📐" })[q.tipo] || "🔘"}</td>
         <td class="pequeno tb-enun">${esc(String(q.enunciado || "").replace(/\s+/g, " ").slice(0, 160))}${String(q.enunciado || "").length > 160 ? "…" : ""}</td>
         <td><select data-criterio="${q.id}">${optsHTML}</select></td></tr>`).join("")}
     </table></div>

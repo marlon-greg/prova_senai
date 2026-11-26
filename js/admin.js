@@ -1,5 +1,5 @@
 // Painel do professor: provas, bancos (import JSON), resultados/correção, equipe, configuração.
-import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, apagarTentativaTeste,
+import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, limparTema, apagarTentativaTeste,
          confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco,
          rotuloDias, nomeTurma, HORARIO_PADRAO, textoHorario, DIAS_SEMANA_LONGO,
          semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261125b";
@@ -1489,6 +1489,7 @@ function validarBanco(txt) {
     if (!["alternativa", "dissertativa", "sql", "web"].includes(q.tipo)) throw new Error(`Questão ${n}: tipo deve ser alternativa, dissertativa, sql ou web.`);
     if (!q.enunciado) throw new Error(`Questão ${n}: falta o enunciado.`);
     if (q.tema !== undefined && q.tema !== null && typeof q.tema !== "string") throw new Error(`Questão ${n}: "tema" deve ser um texto (ex.: "DML - UPDATE").`);
+    if (typeof q.tema === "string") q.tema = limparTema(q.tema);   // o tema é o assunto: "MS4 - DDL" vira "DDL"
     if (q.tipo === "alternativa") {
       if (!Array.isArray(q.alternativas) || q.alternativas.length < 2) throw new Error(`Questão ${n}: precisa de pelo menos 2 alternativas.`);
       if (!Number.isInteger(q.correta) || q.correta < 0 || q.correta >= q.alternativas.length) throw new Error(`Questão ${n}: "correta" deve ser o índice da alternativa certa (0 = primeira).`);
@@ -1567,6 +1568,12 @@ const BANCOS_PRONTOS = [
       { titulo: "Prática SQL na Bancada (2 cenários sorteados)", nSql: 2, tempoMinutos: 90 },
       { titulo: "Prática SQL na Bancada — com 3 dicas do mascote", nSql: 1, tempoMinutos: 45, dicasMax: 3 }
     ] },
+  { arquivo: "bancos/banco_sql_misto.json", icone: "🧮", titulo: "SQL misto: alternativas + dissertativas + Bancada (1 tarefa)", desc: "108 questões em 11 temas (consultas, JOIN, GROUP BY, INSERT, UPDATE, DELETE, DDL, DCL, backup). Cada tema mistura múltipla escolha, dissertativas de escrever o comando e questões na Bancada SQL com UMA tarefa só. Na somativa você escolhe quantas de cada tipo.",
+    provas: [
+      { titulo: "SQL misto — 6 alternativas + 2 dissertativas + 2 na Bancada", nAlternativas: 6, nDissertativas: 2, nSql: 2, tempoMinutos: 60 },
+      { titulo: "SQL misto — Consultas e DML (4 + 2 + 3 na Bancada)", nAlternativas: 4, nDissertativas: 2, nSql: 3, tempoMinutos: 60,
+        temas: ["Consultas (SELECT, WHERE e ORDER BY)", "Consultas com JOIN", "Agrupamento (GROUP BY e HAVING)", "DML — INSERT", "DML — UPDATE", "DML — DELETE"] }
+    ] },
   { arquivo: "bancos/banco_web_demon_slayer.json", icone: "🧑‍💻", titulo: "Bancada Web: site Demon Slayer + portfólio", desc: "Prova prática de HTML e CSS (Flexbox, Grid) num editor parecido com o VS Code: passo a passo à esquerda, comandos HTML/CSS no lugar do terminal, prévia ao vivo na mesma tela e git simulado (commit e push). Três jeitos: encaixar blocos (padrão), completar digitando e projeto livre com pastas e arquivos.",
     provas: [
       { titulo: "Prática Web — Demon Slayer (encaixar os blocos)", nWeb: 1, tempoMinutos: 100, tema: "Demon Slayer — encaixar blocos" },
@@ -1599,7 +1606,7 @@ async function importarPronto(item, bt) {
       banco = { id: ultimoBancoImportado.id, ...(await getDoc(doc(db, "bancos", ultimoBancoImportado.id))).data() };
     } else if (!(await confirmar(`Criar de novo as ${item.provas.length} somativas de exemplo do banco "${banco.nome}"?`, { titulo: "Somativas de exemplo", ok: "Criar" }))) { bt.disabled = false; return; }
     for (const p of item.provas) {
-      const temas = p.tema ? [p.tema] : (banco.temas || []);
+      const temas = p.temas || (p.tema ? [p.tema] : (banco.temas || []));
       const n = Number(p.nSql || 0) + Number(p.nWeb || 0) + Number(p.nAlternativas || 0) + Number(p.nDissertativas || 0);
       await addDoc(collection(db, "provas"), {
         titulo: p.titulo, turmaId: null, turma: "", codigoAcesso: "", semestre: semestreDe(), materia: banco.materia || (p.nWeb ? "Desenvolvimento Web" : "Banco de Dados"), dataProva: "", planoCurso: null,
@@ -1726,7 +1733,7 @@ function giDesenharTopicos() {
   box.querySelectorAll("input").forEach(c => c.onchange = () => { c.checked ? giDesmarcados.delete(c.value) : giDesmarcados.add(c.value); giMontar(); });
   giMontar();
 }
-const MODELO_JSON = { nome: "MS5 — DML", materia: "Banco de Dados", questoes: [
+const MODELO_JSON = { nome: "DML — INSERT, UPDATE, DELETE e SELECT", materia: "Banco de Dados", questoes: [
   { tipo: "alternativa", tema: "DML - UPDATE", enunciado: "Qual comando altera o e-mail do cliente de id 3?", alternativas: ["UPDATE cliente SET email = 'novo@x.com' WHERE id_cliente = 3;", "UPDATE cliente SET email = 'novo@x.com';", "ALTER TABLE cliente SET email = 'novo@x.com' WHERE id_cliente = 3;", "INSERT INTO cliente (email) VALUES ('novo@x.com');"], correta: 0, explicacao: "UPDATE com WHERE altera só a linha do id 3. Sem WHERE mudaria todos; ALTER muda a estrutura; INSERT cria linha nova.", peso: 1 },
   { tipo: "dissertativa", tema: "DML - SELECT", enunciado: "Escreva o comando que conta quantos clientes existem na tabela cliente.", respostasAceitas: ["SELECT COUNT(*) FROM cliente;", "SELECT COUNT(id_cliente) FROM cliente;"], palavrasChave: ["select count(", "from cliente"], explicacao: "COUNT(*) conta as linhas da tabela.", peso: 2 },
   { tipo: "dissertativa", tema: "Modelagem", enunciado: "Explique, em 2 linhas, para que serve a chave estrangeira.", correcaoManual: true, explicacao: "Ela liga uma tabela a outra e garante que o valor exista na tabela de origem.", peso: 2 }] };
@@ -1736,7 +1743,7 @@ function giMontar() {
   const nome = $("#giNome").value.trim() || `${materia} — banco gerado`, extra = $("#giContexto").value.trim(), total = tops.length * (nA + nD);
   $("#giPrompt").value = `Você é professor de ${materia} em um curso técnico do SENAI. Crie um banco de questões de prova, nível ${$("#giNivel").value}, em português do Brasil.
 
-TÓPICOS (use exatamente estes nomes no campo "tema"):
+TÓPICOS (use exatamente estes nomes no campo "tema"; o tema é o ASSUNTO, nunca o nome da avaliação como "MS4"/"MS5"):
 ${tops.length ? tops.map(t => `- ${t}`).join("\n") : "- (escolha os tópicos no sistema)"}
 
 QUANTIDADE: para CADA tópico, ${nA} questão(ões) de múltipla escolha e ${nD} dissertativa(s) — ${total} questões no total.
@@ -2343,7 +2350,8 @@ async function reabrirProva(l) {
   if (!l) return;
   const p = resDados.prova, nome = l.t.nome || l.t.email, perd = ehAdmin() ? perdidasDe(l.t.id) : [], temTempo = Number(p.tempoMinutos) > 0;
   const motivo = l.t.encerradaPor === "trocasDeAba" ? "A prova foi encerrada porque as vidas acabaram."
-    : l.t.encerradaPor === "professor" ? "A prova foi encerrada pelo professor." : "O aluno já tinha finalizado a prova (ou o tempo acabou).";
+    : l.t.encerradaPor === "professor" ? "A prova foi encerrada pelo professor."
+    : l.t.encerradaPor === "aluno" ? "O próprio aluno encerrou a prova com questões em branco." : "O aluno já tinha finalizado a prova (ou o tempo acabou).";
   let devolver = true, min = 10;
   const ok = await modal({
     titulo: `↩ Reabrir a prova de ${nome}`, ok: "Reabrir prova", cancelar: "Cancelar",
@@ -2485,7 +2493,7 @@ function verAluno(id, rolar = true) {
   box.innerHTML = `<div class="card"><div class="linha"><h2 style="flex:3">${l.t.teste ? "🧪 " : ""}${esc(l.t.nome || l.t.email)} — ${l.nota}/100 (${l.pts} de ${l.max} pontos)${textoConvertida(resDados.prova, l.t.email, l.nota) ? ` → ${textoConvertida(resDados.prova, l.t.email, l.nota)} (${tipoRec(resDados.prova, l.t.email)})` : ""}</h2><button class="leve mini" id="btnPDFAluno" style="flex:0 0 auto">PDF deste aluno</button></div>
     ${vidasDe(l.t) || podeEditar() ? `<div class="linha acoes detalhe-vidas">${vidasDe(l.t) ? `<span>Vidas: ${coracoesHTML(vidasDe(l.t))}</span>` : ""}${acoesVidaHTML(l)}</div>` : ""}
     <p class="pequeno">Tempo total: <b>${fmtTempo(l.tempo)}</b> · ${sinaisHTML(l.sinais)}${lim ? ` · vidas perdidas <b>${l.sinais.abas}</b>${l.t.vidasRestauradas ? ` · restauradas ${l.t.vidasRestauradas}×` : ""}` : ""}${l.t.reabertaEm ? ` · <span class="tag nota">↩ reaberta por ${esc(l.t.reabertaPor || "professor")}</span>` : ""}
-      ${l.t.encerradaPor === "trocasDeAba" ? ` · <span class="tag erro">⛔ encerrada: limite de saídas atingido</span>` : ""}${l.t.encerradaPor === "professor" ? ` · <span class="tag erro">⛔ encerrada pelo professor</span>` : ""}${l.perdidas ? ` · <span class="tag erro">⛔ ${l.perdidas} questão(ões) perdida(s)</span>` : ""}</p>` + l.itens.map(x => {
+      ${l.t.encerradaPor === "trocasDeAba" ? ` · <span class="tag erro">⛔ encerrada: limite de saídas atingido</span>` : ""}${l.t.encerradaPor === "professor" ? ` · <span class="tag erro">⛔ encerrada pelo professor</span>` : ""}${l.t.encerradaPor === "aluno" ? ` · <span class="tag aviso">⏹ o aluno encerrou com questões em branco</span>` : ""}${l.perdidas ? ` · <span class="tag erro">⛔ ${l.perdidas} questão(ões) perdida(s)</span>` : ""}</p>` + l.itens.map(x => {
     const rapida = x.r !== undefined && !x.perdida && typeof x.segundos === "number" && x.segundos < RAPIDO;
     const tempo = typeof x.segundos === "number" ? `<span class="tag ${rapida ? "erro" : ""}" title="Tempo entre a questão aparecer e a resposta ser enviada">⏱ ${fmtTempo(x.segundos)}${rapida ? ` · menos de ${RAPIDO} s` : ""}</span>` : "";
     const dicaTag = l.t.dicas?.[x.qid] ? ` <span class="tag aviso" title="${esc(l.t.dicas[x.qid].texto || "")}">💡 pediu dica</span>` : "";

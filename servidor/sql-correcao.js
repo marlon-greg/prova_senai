@@ -27,10 +27,20 @@ export function corrigirSql(questao, gabarito, resposta, peso = Number(questao?.
   return { pontos, status, porTarefa };
 }
 
-// mesmo resultado do gabarito: com ORDER BY pedido compara a ordem; senão, só o conjunto de linhas
-export function tarefaCerta(a, g) {
-  if (!g || !(g.impressao || g.conjunto) || a?.erro) return false;
-  return g.ordemImporta ? !!a.impressao && a.impressao === g.impressao : !!a.conjunto && a.conjunto === g.conjunto;
+// mesmo resultado do gabarito: com ORDER BY pedido compara a ordem; senão, só o conjunto de linhas.
+// Não vale só o último comando: a.candidatos traz o resultado de CADA SELECT do editor e de cada comando que o aluno
+// EXECUTOU sem erro na Bancada (ex.: rodou a consulta certa e depois um SELECT * só para conferir). Se algum bater, está certa.
+// Com muitos resultados diferentes (chute em massa) não vale automático: vai para a IA/professor.
+export const MAX_CANDIDATOS = 6;
+export function tarefaCerta(a, g) { return !!comoAcertou(a, g); }
+// "final" (o script do editor), "editor" (outro SELECT do editor), "executado" (comando executado) ou "" (não bateu)
+export function comoAcertou(a, g) {
+  if (!g || !(g.impressao || g.conjunto)) return "";
+  const bate = x => g.ordemImporta ? !!x?.impressao && x.impressao === g.impressao : !!x?.conjunto && x.conjunto === g.conjunto;
+  if (!a?.erro && bate(a)) return "final";
+  const c = Array.isArray(a?.candidatos) ? a.candidatos : [];
+  if (!c.length || c.length > MAX_CANDIDATOS) return "";
+  return c.find(bate)?.de || "";
 }
 
 // texto para a IA corrigir as tarefas que não bateram com o gabarito
@@ -42,8 +52,11 @@ export function textoParaIA(questao, gabarito, resposta, peso) {
     `<banco_inicial>\n${String(questao.banco?.setup || "").slice(0, 6000)}\n</banco_inicial>\n\n` +
     tarefas.map((t, i) => {
       const a = r[t.id] || {}, g = gt[t.id] || {};
+      const muitos = (a.candidatos?.length || 0) > MAX_CANDIDATOS ? ` (o aluno executou/escreveu ${a.candidatos.length} consultas com resultados diferentes: confira se não foi chute)` : "";
       const st = !String(a.sql || "").trim() ? "EM BRANCO (vale 0)" : tarefaCerta(a, g) ? "RESULTADO IGUAL AO DO GABARITO (já vale a nota cheia)" : a.erro ? `DEU ERRO AO RODAR: ${a.erro}` : "RODOU, MAS O RESULTADO FICOU DIFERENTE DO GABARITO";
-      return `### Tarefa ${t.id} (${i + 1})\n${t.texto}\nGabarito do professor:\n${g.sql || "(sem gabarito)"}\nSituação: ${st}\n<sql_do_aluno>\n${limpa(a.sql)}\n</sql_do_aluno>`;
+      const exec = (Array.isArray(a.execucoes) ? a.execucoes : []).filter(x => !x.erro && String(x.sql || "").trim()).slice(-8);
+      const execTxt = exec.length ? `\nComandos que o aluno EXECUTOU sem erro na Bancada (também valem como resposta se algum resolver a tarefa):\n<sql_do_aluno>\n${exec.map(x => limpa(x.sql)).join("\n---\n")}\n</sql_do_aluno>` : "";
+      return `### Tarefa ${t.id} (${i + 1})\n${t.texto}\nGabarito do professor:\n${g.sql || "(sem gabarito)"}\nSituação: ${st}${muitos}\n<sql_do_aluno>\n${limpa(a.sql)}\n</sql_do_aluno>${execTxt}`;
     }).join("\n\n");
 }
 

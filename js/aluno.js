@@ -1204,6 +1204,24 @@ $("#btnFinalizar").onclick = async () => {
   finalizar();
 };
 
+// Encerrar a prova a qualquer momento (em qualquer modo): o que não foi respondido fica em branco e vale zero
+$("#btnEncerrar").onclick = async () => {
+  if (!tentativa || tentativa.finalizadaEm) return;
+  if (podeVoltar()) await salvarTudo();   // salva o que der; o que não salvar fica em branco
+  if (tentativa.finalizadaEm) return;
+  const faltam = tentativa.questoesIds.map((q, i) => respostas[q] ? null : i + 1).filter(Boolean);
+  const total = tentativa.questoesIds.length;
+  const msg = !faltam.length
+    ? "Todas as questões já foram respondidas. Encerrar a prova agora? Depois disso nada pode ser alterado."
+    : (faltam.length === total ? `Você ainda não respondeu nenhuma das ${total} questões.` : `${faltam.length === 1 ? "A questão" : "As questões"} ${listaHumana(faltam)} ${faltam.length === 1 ? "está" : "estão"} sem resposta.`) +
+      `\n\n${faltam.length === 1 ? "Ela fica" : "Elas ficam"} EM BRANCO e ${faltam.length === 1 ? "vale" : "valem"} zero.` +
+      (podeVoltar() ? "" : " O que está na tela e ainda não foi enviado também não conta.") +
+      "\n\nEncerrar a prova mesmo assim? Não dá para voltar depois.";
+  const ok = await confirmar(msg, { titulo: "Encerrar a prova", ok: "Encerrar a prova", cancelar: "Continuar fazendo", perigo: true });
+  if (!ok || tentativa.finalizadaEm) return;
+  finalizar({ encerradaPor: faltam.length ? "aluno" : undefined });
+};
+
 let finalizando = false;
 async function finalizar(opc = {}) {
   if (finalizando || !tentativa || tentativa.finalizadaEm) return;
