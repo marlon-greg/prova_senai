@@ -2155,6 +2155,10 @@ async function importarPronto(item, bt) {
 }
 // semestre do banco: o gravado; senão o da criação
 const semestreDoBanco = b => b.semestre || semestreDe(b.criadoEm || new Date());
+// Bancos de questões: agrupados pelo SEMESTRE DO CURSO da matéria (plano de curso: Requisitos = 1º, Banco de Dados = 2º…);
+// matéria que atravessa semestres (Back-End 2º e 3º) fica no primeiro; fora do plano = "Outras matérias"
+const semCursoDoBanco = b => { const u = unidadeDaMateria(b.materia); const ns = u ? Object.keys(u.semestres).map(Number).sort((x, y) => x - y) : []; return ns.length ? String(ns[0]) : "9"; };
+const rotuloSemCurso = s => s === "9" ? "Outras matérias" : `${s}º semestre do curso`;
 let bancosContagem = {};   // bancoId -> { tema: { alternativa, dissertativa } }
 const bancosEstado = new Map();   // grupos que o professor abriu ou fechou (semestre atual e matérias começam abertos; semestres anteriores, fechados)
 // ---------- bancos duplicados: mesma matéria e as mesmas questões (pelo enunciado) ----------
@@ -2213,7 +2217,7 @@ async function carregarBancos() {
   avisarDuplicados();
   if (!provasCache.length) provasCache = (await getDocs(collection(db, "provas")).catch(() => null))?.docs.map(d => ({ id: d.id, ...d.data() })) || [];
   const sel = (el, primeira, vals, rot = v => v) => { const a = el.value; el.innerHTML = `<option value="">${primeira}</option>` + vals.map(v => `<option value="${esc(v)}">${esc(rot(v))}</option>`).join(""); el.value = vals.includes(a) ? a : ""; };
-  sel($("#fbSemestre"), "📅 Todos os semestres", [...new Set(bancosCache.map(semestreDoBanco))].sort().reverse(), rotuloSemestre);
+  sel($("#fbSemestre"), "📅 Todos os semestres", [...new Set(bancosCache.map(semCursoDoBanco))].sort(), rotuloSemCurso);
   const mats = new Map(); bancosCache.forEach(b => mats.set(chaveTexto(b.materia) || "~", String(b.materia || "").trim() || "Sem matéria"));
   sel($("#fbMateria"), "📚 Todas as matérias", [...mats.values()].sort((a, b) => a.localeCompare(b, "pt-BR")));
   desenharBancos();
@@ -2371,7 +2375,7 @@ function desenharBancos() {
   // busca também no enunciado das questões: mostra quantas bateram
   const achados = {};
   const lista = bancosCache.filter(b => {
-    if (fS && semestreDoBanco(b) !== fS) return false;
+    if (fS && semCursoDoBanco(b) !== fS) return false;
     if (fM && chaveTexto(matDe(b)) !== fM) return false;
     if (!busca) return true;
     if (semAcento([b.nome, matDe(b), ...Object.keys(bancosContagem[b.id] || {})].join(" ")).includes(busca)) return true;
@@ -2384,7 +2388,7 @@ function desenharBancos() {
   if (!lista.length) { box.innerHTML = vazio({ e: "🔎", texto: "Nenhum banco com esses filtros." }); return; }
   const arv = new Map();
   for (const b of lista) {
-    const s = semestreDoBanco(b), m = matDe(b);
+    const s = semCursoDoBanco(b), m = matDe(b);
     if (!arv.has(s)) arv.set(s, new Map());
     const mm = arv.get(s), k = chaveTexto(m); if (!mm.has(k)) mm.set(k, { m, bs: [] }); mm.get(k).bs.push(b);
   }
@@ -2392,17 +2396,17 @@ function desenharBancos() {
   const usos = id => provasCache.filter(p => bancosDaProva(p).includes(id));
   const aberto = (id, padrao) => filtrando || (bancosEstado.has(id) ? bancosEstado.get(id) : padrao);
   const somaQ = bs => bs.reduce((n, b) => n + Number(b.nQuestoes || 0), 0);
-  box.innerHTML = [...arv.keys()].sort().reverse().map(s => {
+  box.innerHTML = [...arv.keys()].sort().map(s => {
     const mats = [...arv.get(s).values()].sort((a, b) => a.m.localeCompare(b.m, "pt-BR")), ids = `bs:${s}`;
     const todos = mats.flatMap(x => x.bs);
-    return `<details class="faixa" data-gb="${ids}" ${aberto(ids, s === atual) ? "open" : ""}>
-      <summary class="secao-faixa"><span class="sf-tile">${ic("cal", { size: 20 })}</span><h3 class="sf-titulo">${esc(semestreLongo(s))}</h3>${s === atual ? `<span class="chip ok">atual</span>` : ""}
+    return `<details class="faixa" data-gb="${ids}" ${aberto(ids, true) ? "open" : ""}>
+      <summary class="secao-faixa"><span class="sf-tile">${ic("cal", { size: 20 })}</span><h3 class="sf-titulo">${esc(rotuloSemCurso(s))}</h3>
         <span class="sf-resumo">${pl(mats.length, "matéria")} · ${pl(todos.length, "banco")} · ${pl(somaQ(todos), "questão", "questões")}</span><span class="sf-fim sf-tile">${seta()}</span></summary>
       <div class="faixa-corpo">${mats.map(({ m, bs }) => {
         const idm = `bm:${s}:${chaveTexto(m)}`;
         return `<details class="card sem-padding" data-gb="${idm}" ${aberto(idm, true) ? "open" : ""}>
           <summary class="sub-cab"><span class="sc-tile">${ic("book", { size: 20 })}</span><span class="sc-texto"><span class="sc-titulo">${esc(m)}</span><span class="sc-resumo">${pl(bs.length, "banco")} · ${pl(somaQ(bs), "questão", "questões")}</span></span>
-            ${podeEditar() ? `<span class="sc-fim"><button type="button" class="leve mini" data-banco-sem="${esc(s)}" data-banco-mat="${m === "Sem matéria" ? "" : esc(m)}">${ic("plus", { size: 16 })}Banco nesta matéria</button></span>` : ""}${seta()}</summary>
+            ${podeEditar() ? `<span class="sc-fim"><button type="button" class="leve mini" data-banco-sem="${esc(semestreDe())}" data-banco-mat="${m === "Sem matéria" ? "" : esc(m)}">${ic("plus", { size: 16 })}Banco nesta matéria</button></span>` : ""}${seta()}</summary>
           ${topicosMateriaHTML(idm, bs)}
           <details class="recolhivel leve bancos-da-materia"><summary><span class="rc-titulo">Bancos desta matéria (${bs.length})</span><span class="rc-resumo pequeno">Tópicos, Capacidades, Critérios, Gabarito e ···</span></summary><div class="rc-corpo"><div class="bancos-grade">${bs.map(b => {
             const c = bancosContagem[b.id], tot = c ? Object.values(c).reduce((x, y) => ({ alternativa: x.alternativa + y.alternativa, dissertativa: x.dissertativa + y.dissertativa }), { alternativa: 0, dissertativa: 0 }) : null;
