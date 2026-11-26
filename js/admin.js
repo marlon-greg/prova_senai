@@ -1358,6 +1358,7 @@ async function carregarProvas() {
 // turma → matéria → provas. A recuperação fica recolhida na linha da somativa de origem.
 const sp = { area: "turmas", busca: "", turma: "", mat: "", sit: "", agrupar: "turma" };
 const ehProvaTeste = p => p.turmaTeste === true || ehTurmaTeste(p.turmaId);
+const jaAplicada = p => !!(p.encerradaEm || p.resultadosLiberados || p.recuperacaoIds?.length);
 const plQ = (n, um, v) => `${n} ${n === 1 ? um : v}`;
 function qtdProvaTexto(p) {
   const nAlt = p.nAlternativas ?? Math.max(0, Number(p.nQuestoes || 0) - Number(p.nDissertativas || 0) - Number(p.nSql || 0) - Number(p.nWeb || 0) - Number(p.nDiagramas || 0));
@@ -1376,7 +1377,7 @@ function botoesProva(p) {
     + itemMenu({ i: "simulacao", t: "Testar como aluno", attrs: `data-testar="${p.id}"` })
     + itemMenu({ i: "refresh", t: "Apagar meu teste", attrs: `data-apagarteste="${p.id}"` })
     + (podeEditar() && ehAdmin() ? "<hr>" + itemMenu({ i: "trash", t: "Apagar somativa", perigo: true, attrs: `data-del="${p.id}"` }) : "");
-  return (podeEditar() ? `<button class="${p.liberada ? "leve" : "ok"} mini" data-tg="liberada" data-id="${p.id}">${p.liberada ? "Encerrar" : "Liberar"}</button>` : "")
+  return (podeEditar() ? `<button class="${p.liberada ? "leve" : "ok"} mini" data-tg="liberada" data-id="${p.id}" title="${p.liberada ? "Ninguém mais começa nem continua" : jaAplicada(p) ? "Abre de novo para quem ainda não fez; quem já terminou não refaz" : "Os alunos da turma passam a ver e podem começar"}">${p.liberada ? "Encerrar" : jaAplicada(p) ? "Reabrir" : "Abrir"}</button>` : "")
     + (podeEditar() && !p.recuperacao && !p.liberada && p.resultadosLiberados ? `<button class="leve mini" data-recuperacao="${p.id}" title="Somativa de recuperação para quem tirou abaixo de ${NOTA_RECUPERACAO}">${p.recuperacaoIds?.length ? "Gerar outra recuperação" : "Gerar recuperação"}</button>` : "")
     + (podeEditar() && p.recuperacao ? `<button class="leve mini" data-notafinal="${p.id}">Nota final</button>` : "")
     + `<button class="leve mini" data-alunos="${p.id}">Alunos</button>` + menuHTML({ aria: `Mais ações: ${p.titulo}`, itensHTML: itens });
@@ -1470,10 +1471,10 @@ function ligarAcoesProvas(box) {
   });
   box.querySelectorAll("[data-tg]").forEach(b => b.onclick = async () => {
     const p = provasCache.find(x => x.id === b.dataset.id), campo = b.dataset.tg, novo = !p[campo];
-    const txt = campo === "liberada" ? (novo ? [`Liberar a somativa "${p.titulo}"? Os alunos da turma passam a ver e podem começar.`, "Liberar somativa"] : [`Encerrar a somativa "${p.titulo}"? Os alunos não conseguem mais começar nem continuar.`, "Encerrar somativa"])
+    const txt = campo === "liberada" ? (novo ? (jaAplicada(p) ? [`Reabrir a somativa "${p.titulo}"?\n\nQuem já terminou NÃO faz de novo (a nota continua a mesma). Só entra quem ainda não começou ou não terminou.`, "Reabrir somativa"] : [`Abrir a somativa "${p.titulo}"? Os alunos da turma passam a ver e podem começar.`, "Abrir somativa"]) : [`Encerrar a somativa "${p.titulo}"? Os alunos não conseguem mais começar nem continuar.`, "Encerrar somativa"])
       : (novo ? [`Liberar o gabarito de "${p.titulo}"? Os alunos passam a ver quais acertaram, a resposta certa e o PDF da somativa.`, "Liberar gabarito"] : [`Ocultar o gabarito de "${p.titulo}"? Os alunos deixam de ver o resultado detalhado.`, "Ocultar gabarito"]);
     if (!(await confirmar(txt[0], { titulo: txt[1], ok: txt[1] }))) return;
-    await updateDoc(doc(db, "provas", p.id), { [campo]: novo });
+    await updateDoc(doc(db, "provas", p.id), { [campo]: novo, ...(campo === "liberada" && !novo ? { encerradaEm: serverTimestamp() } : {}) });
     toast("Prova atualizada", "ok"); carregarProvas();
   });
   box.querySelectorAll("[data-addrec]").forEach(b => b.onclick = () => adicionarAlunoRecuperacao(provasCache.find(x => x.id === b.dataset.addrec)));
