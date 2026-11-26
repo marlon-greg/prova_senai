@@ -12,7 +12,7 @@ Plano já aprovado para 1–9 (respostas: 8 = trocar "Desenvolvimento Web" e "Pr
 | 2 | Adicionar aluno à recuperação (ao gerar e depois de gerada), registrado como "adicionado à mão" | feito (bloco 2) |
 | 3 | Nova somativa: turma → semestre automático; matéria só no topo (sem "Unidade curricular"); temas ligados a capacidades (tela para revisar a ligação); material de consulta por matéria | feito (bloco 3) — falta o professor revisar a ligação em Bancos → 🔗 Capacidades |
 | 4 | Total de questões fixo (padrão 10, 6 alt + 4 diss), tipos práticos por caixinha só se a matéria tiver, escolher quais diagramas, desconto alternado | feito (bloco 4) |
-| 6 | "Sugerir prova" dentro da Nova somativa (sem IA); tirar "criar somativas de exemplo" da tela de Bancos | a fazer (depende de 3 e 4) |
+| 6 | "Sugerir prova" dentro da Nova somativa (sem IA); tirar "criar somativas de exemplo" da tela de Bancos | feito (bloco 5) |
 | 7 | Somativas: visualização "Abas por turma" ou "Tabela", turma → matéria → provas, recuperação recolhida; preferência por professor (regras do Firebase) | a fazer |
 | 9 | Acessibilidade: matérias do semestre em caixas de seleção; tirar daqui relatórios que não são de prova (confirmar a tela com o professor antes) | a fazer — confirmar |
 | 10 | Bancos de questões: semestre → matéria → TÓPICOS (linha por tópico, contagem por tipo, banco vira filtro), busca e filtros | a fazer |

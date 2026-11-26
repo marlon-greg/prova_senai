@@ -563,6 +563,7 @@ function formProvaHTML(f) {
   </fieldset>
   <fieldset class="temas-box">
     <legend>Quantas questões cada aluno recebe</legend>
+    <div class="linha" style="gap:6px;align-items:center;margin:0 0 8px"><button type="button" class="leve mini" id="${f}Sugerir" title="Preenche temas e quantidades pela matéria e pelas capacidades marcadas (sem IA). Você revisa antes de criar.">✨ Sugerir prova</button><button type="button" class="leve mini" id="${f}SugerirPratica" title="Só questões práticas (quando a matéria tiver)">✨ Só prática</button><span class="pequeno" id="${f}SugestaoMsg" aria-live="polite"></span></div>
     <div class="grade">
       <div><label for="${f}Total">Total de questões por aluno</label><input type="number" id="${f}Total" value="10" min="1">
         <label class="check" style="margin:4px 0 0"><input type="checkbox" id="${f}SemLimite"> <span>Não definir limite <span class="pequeno">— o total é a soma do que você colocar</span></span></label></div>
@@ -733,6 +734,39 @@ function controleProva(f) {
     if ($f("SemLimite").checked) return;
     const teo = Math.max(0, Math.round(Number($f("Total").value || 0)) - pratico());
     const alt = Math.ceil(teo * 0.6); $f("NAlt").value = alt; $f("NDiss").value = teo - alt; tirarDaAlt = true;
+  }
+  // ✨ SUGESTÃO DE PROVA (sem IA): temas da matéria ligados às capacidades marcadas + quantidades padrão
+  async function sugerir(soPratica = false) {
+    if (travado) return;
+    const mat = $f("Materia").value;
+    if (!mat) { $f("SugestaoMsg").textContent = "Escolha a matéria primeiro."; return; }
+    if (!carregando) await carregarTemas(); else await carregando;
+    const bs = bancosDaMat();
+    if (!bs.length) { $f("SugestaoMsg").textContent = `Nenhum banco de ${mat}. Importe um em Bancos de questões.`; return; }
+    const nova = new Map();
+    for (const b of bs) { const ts = temasDe(b.id).filter(t => !foraDasCaps(b.id, t)); if (ts.length) nova.set(b.id, new Set(ts)); }
+    await carregarTemas(nova);
+    // quantos de cada tipo existem nos temas escolhidos
+    const d = { alternativa: 0, dissertativa: 0, sql: 0, web: 0, diagrama: 0 };
+    for (const [b, ts] of nova) for (const t of ts) { const c = contagens[b]?.[t]; if (c) for (const k of Object.keys(d)) d[k] += c[k] || 0; }
+    const quer = soPratica ? { Sql: 2, Web: 1, Diag: 2 } : { Sql: 3, Web: 1, Diag: 2 };
+    PRAT.forEach(k => { const tem = d[TIPO_PRAT[k]]; $f("Ativa" + k).checked = tem > 0; $f("N" + k).value = tem > 0 ? Math.min(quer[k], tem) : 0; });
+    tiposDiag = null;
+    const prat = pratico();
+    if (soPratica) {
+      if (!prat) { $f("SugestaoMsg").textContent = `${mat} não tem questões práticas nos temas escolhidos.`; atualizar(); return; }
+      $f("NAlt").value = 0; $f("NDiss").value = 0; $f("SemLimite").checked = false; $f("Total").value = prat;
+    } else {
+      $f("SemLimite").checked = false; $f("Total").value = 10;
+      const teo = Math.max(0, 10 - prat); let alt = Math.ceil(teo * 0.6), diss = teo - alt;
+      if (diss > d.dissertativa) { alt += diss - d.dissertativa; diss = d.dissertativa; }
+      $f("NAlt").value = Math.min(alt, d.alternativa); $f("NDiss").value = diss;
+      if (Number($f("NAlt").value) + diss + prat !== 10) $f("Total").value = Number($f("NAlt").value) + diss + prat;
+    }
+    praticoAntes = pratico(); tirarDaAlt = true;
+    const n = [...nova.values()].reduce((s, x) => s + x.size, 0);
+    $f("SugestaoMsg").textContent = `Sugestão: ${n} tema(s) de ${mat}${capsMarcadas.size ? " das capacidades marcadas" : ""}. Revise e ajuste antes de criar.`;
+    atualizar();
   }
   // diagramas disponíveis nos temas marcados, respeitando os tipos escolhidos
   function diagDisponiveis() {
@@ -959,6 +993,7 @@ function controleProva(f) {
     $f("NAlt").oninput = $f("NDiss").oninput = atualizar;
     PRAT.forEach(k => { $f("N" + k).oninput = () => { descontar(); atualizar(); }; $f("Ativa" + k).onchange = () => { if ($f("Ativa" + k).checked && !Number($f("N" + k).value)) $f("N" + k).value = 1; descontar(); atualizar(); }; });
     $f("Total").oninput = () => { aoMudarTotal(); atualizar(); };
+    $f("Sugerir").onclick = () => sugerir(false); $f("SugerirPratica").onclick = () => sugerir(true);
     $f("SemLimite").onchange = () => { if (!$f("SemLimite").checked) $f("Total").value = somaTudo(); atualizar(); };
     $f("MatUrl").oninput = previaMaterial;
     // vários de uma vez: cada PDF recebe o nome do arquivo como título e já entra marcado
@@ -1814,12 +1849,12 @@ function desenharBancosProntos() {
   const box = $("#bancosProntos"); if (!box) return;
   if (!podeEditar()) { box.innerHTML = ""; return; }
   const webAntiga = bancosCache.some(b => materiaWebAntiga(b.materia)) || provasCache.some(p => materiaWebAntiga(p.materia));
-  box.innerHTML = `<div class="card bancos-prontos"><h3 style="margin:0 0 4px">📦 Bancos prontos</h3><p class="pequeno" style="margin:0 0 10px">Importe com um clique. Já cria somativas de exemplo preenchidas (fechadas e sem turma): é só escolher a turma em <b>Editar</b> e liberar.</p>` +
+  box.innerHTML = `<div class="card bancos-prontos"><h3 style="margin:0 0 4px">📦 Bancos prontos</h3><p class="pequeno" style="margin:0 0 10px">Importe com um clique. Para montar a prova, use <b>✨ Sugerir prova</b> na Nova somativa.</p>` +
     BANCOS_PRONTOS.map((b, i) => {
       const ja = bancosCache.find(x => x.arquivoPronto === b.arquivo);
       return `<div class="bp-item"><div><b>${b.icone} ${esc(b.titulo)}</b>${ja ? ` <span class="tag ok">importado</span>` : ""}<p class="pequeno" style="margin:2px 0 0">${esc(b.desc)}</p>
-        <p class="pequeno" style="margin:2px 0 0">Somativas de exemplo: ${b.provas.map(p => esc(p.titulo)).join(" · ")}</p></div>
-        <button class="${ja ? "leve" : "ok"} mini" data-pronto="${i}">${ja ? "Criar as somativas de exemplo de novo" : "Importar e criar as somativas"}</button></div>`;
+        </div>
+        ${ja ? "" : `<button class="ok mini" data-pronto="${i}">Importar banco</button>`}</div>`;
     }).join("") + (webAntiga ? `<div class="aviso-box" style="margin-top:10px">A Bancada Web está na matéria "Desenvolvimento Web"/"Programação Web"; o nome certo é <b>${MATERIA_MARCACAO}</b>. <button type="button" class="ok mini" id="btnMateriaWeb">Corrigir o nome da matéria</button></div>` : "") + `</div>`;
   $("#btnMateriaWeb")?.addEventListener("click", corrigirMateriaWeb);
   box.querySelectorAll("[data-pronto]").forEach(bt => bt.onclick = () => importarPronto(BANCOS_PRONTOS[Number(bt.dataset.pronto)], bt));
@@ -1835,21 +1870,8 @@ async function importarPronto(item, bt) {
       if (!(await $("#btnImportarBanco").onclick()) || !ultimoBancoImportado) { bt.disabled = false; return; }
       await updateDoc(doc(db, "bancos", ultimoBancoImportado.id), { arquivoPronto: item.arquivo });
       banco = { id: ultimoBancoImportado.id, ...(await getDoc(doc(db, "bancos", ultimoBancoImportado.id))).data() };
-    } else if (!(await confirmar(`Criar de novo as ${item.provas.length} somativas de exemplo do banco "${banco.nome}"?`, { titulo: "Somativas de exemplo", ok: "Criar" }))) { bt.disabled = false; return; }
-    for (const p of item.provas) {
-      const temas = p.temas || (p.tema ? [p.tema] : (banco.temas || []));
-      const n = Number(p.nSql || 0) + Number(p.nWeb || 0) + Number(p.nDiagramas || 0) + Number(p.nAlternativas || 0) + Number(p.nDissertativas || 0);
-      await addDoc(collection(db, "provas"), {
-        titulo: p.titulo, turmaId: null, turma: "", codigoAcesso: "", semestre: semestreDe(), materia: banco.materia || (p.nWeb ? "Linguagem de Marcação" : p.nDiagramas ? "Levantamento de Requisitos" : "Banco de Dados"), dataProva: "", planoCurso: null,
-        permitirVoltar: true, tempoMinutos: p.tempoMinutos || 45, modoExibicao: "uma", permitirTrocaAba: false, permitirColar: false,
-        maxTrocasDeAba: 3, colarTiraVida: true, dicasMax: p.dicasMax || 0, segundosVolta: 5, entradaAte: null, iaAutomatica: true, acaoAoExceder: "encerrar",
-        materialConsultaUrl: "", materiaisConsultaIds: [], materialConsultaArquivoId: null, materialConsultaTitulo: "",
-        bancoId: banco.id, bancoIds: [banco.id], temasPorBanco: { [banco.id]: temas }, temas,
-        nQuestoes: n, nAlternativas: Number(p.nAlternativas || 0), nDissertativas: Number(p.nDissertativas || 0), nSql: Number(p.nSql || 0), nWeb: Number(p.nWeb || 0), nDiagramas: Number(p.nDiagramas || 0),
-        liberada: false, resultadosLiberados: false, criadoEm: serverTimestamp(), criadoPor: eu.email, exemploPronto: item.arquivo
-      });
-    }
-    toast(`Pronto: banco importado e ${item.provas.length} somativas de exemplo criadas em Somativas (fechadas, sem turma).`, "ok");
+    } else { toast(`O banco "${banco.nome}" já foi importado.`, "info"); bt.disabled = false; return; }
+    toast(`Banco "${banco.nome}" importado. Para montar a prova: Somativas → Criar nova somativa → ✨ Sugerir prova.`, "ok");
     await carregarBancos();
   } catch (e) { toast("Não foi possível importar o banco pronto. " + traduzirErro(e), "erro"); console.error(e); }
   bt.disabled = false;
