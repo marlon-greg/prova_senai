@@ -1,0 +1,645 @@
+{
+  "nome": "Amostra — DML — UPDATE (questões novas, a revisar)",
+  "materia": "Banco de Dados",
+  "revisao": "pendente",
+  "contexto": "Amostra do pedido 13: 36 questões novas do tópico DML — UPDATE (20 alternativas, 12 dissertativas e 4 de SQL físico), ligadas à capacidade bd.ct10. Entram como 'a revisar': só caem na Área de testes até serem aprovadas.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na loja Bom Preço, a tabela `produto` tem as colunas id_produto, nome e preco. Qual comando muda o preço do produto de id 8 para 19.90?",
+      "alternativas": [
+        "UPDATE produto preco = 19.90 WHERE id_produto = 8;",
+        "ALTER TABLE produto SET preco = 19.90 WHERE id_produto = 8;",
+        "UPDATE produto SET preco = 19.90 WHERE id_produto = 8;",
+        "INSERT INTO produto (preco) VALUES (19.90) WHERE id_produto = 8;"
+      ],
+      "correta": 2,
+      "explicacao": "UPDATE tabela SET coluna = valor WHERE condição. ALTER TABLE muda a estrutura, não os dados; INSERT cria linha nova."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que acontece ao rodar `UPDATE cliente SET cidade = 'Santos';` sem WHERE (com o Safe Updates desligado)?",
+      "alternativas": [
+        "Todos os clientes da tabela passam a ter cidade 'Santos'",
+        "Só o último cliente cadastrado muda de cidade",
+        "O MySQL pede uma confirmação antes de alterar",
+        "Nenhum cliente muda, porque falta o WHERE"
+      ],
+      "correta": 0,
+      "explicacao": "Sem WHERE, o UPDATE vale para todas as linhas da tabela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na biblioteca, cada livro tem a coluna `quantidade`. Um exemplar do livro de id 3 foi emprestado. Qual comando diminui 1 da quantidade atual?",
+      "alternativas": [
+        "UPDATE livro SET quantidade = 1 WHERE id_livro = 3;",
+        "UPDATE livro SET quantidade - 1 WHERE id_livro = 3;",
+        "UPDATE livro quantidade = quantidade - 1 WHERE id_livro = 3;",
+        "UPDATE livro SET quantidade = quantidade - 1 WHERE id_livro = 3;"
+      ],
+      "correta": 3,
+      "explicacao": "Para usar o valor atual, a coluna aparece dos dois lados: SET quantidade = quantidade - 1."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando altera DUAS colunas de uma vez, o telefone e o e-mail do aluno de id 12?",
+      "alternativas": [
+        "UPDATE aluno SET telefone = '11 99999-0000' AND email = 'ana@escola.com' WHERE id_aluno = 12;",
+        "UPDATE aluno SET telefone = '11 99999-0000', email = 'ana@escola.com' WHERE id_aluno = 12;",
+        "UPDATE aluno SET (telefone, email) = ('11 99999-0000', 'ana@escola.com') WHERE id_aluno = 12;",
+        "UPDATE aluno SET telefone = '11 99999-0000' WHERE id_aluno = 12 SET email = 'ana@escola.com';"
+      ],
+      "correta": 1,
+      "explicacao": "As colunas do SET são separadas por vírgula. Com AND, o MySQL entende uma comparação lógica e grava 0/1."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A oficina quer aumentar em 15% o valor de todos os serviços da categoria 'Freios'. Qual comando faz isso?",
+      "alternativas": [
+        "UPDATE servico SET valor = 15% WHERE categoria = 'Freios';",
+        "UPDATE servico SET valor = valor + 15 WHERE categoria = 'Freios';",
+        "UPDATE servico SET valor = valor * 1.15 WHERE categoria = 'Freios';",
+        "UPDATE servico SET valor * 1.15 WHERE categoria = 'Freios';"
+      ],
+      "correta": 2,
+      "explicacao": "Aumentar 15% é multiplicar por 1,15. Somar 15 aumenta 15 reais, não 15%."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O Workbench mostrou o erro 1175 ao rodar `UPDATE pedido SET status = 'enviado' WHERE cliente = 'Lia';`. O que significa?",
+      "alternativas": [
+        "O Safe Updates bloqueou um UPDATE cujo WHERE não usa uma coluna de chave",
+        "A tabela pedido não existe",
+        "O valor 'enviado' é grande demais para a coluna",
+        "Faltou o ponto e vírgula"
+      ],
+      "correta": 0,
+      "explicacao": "Com Safe Updates ligado, o Workbench só permite UPDATE/DELETE com WHERE em coluna de chave (ou LIMIT)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Antes de rodar um UPDATE com WHERE, qual é a boa prática para conferir quais linhas serão alteradas?",
+      "alternativas": [
+        "Rodar um DELETE com o mesmo WHERE",
+        "Desligar o Safe Updates",
+        "Fazer um ALTER TABLE",
+        "Rodar um SELECT com o mesmo WHERE"
+      ],
+      "correta": 3,
+      "explicacao": "O SELECT com o mesmo WHERE mostra exatamente as linhas que o UPDATE vai alterar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `funcionario` tem a coluna `salario`. Qual comando dá um aumento de 200 reais só para quem ganha menos de 2000?",
+      "alternativas": [
+        "UPDATE funcionario SET salario = 200 WHERE salario < 2000;",
+        "UPDATE funcionario SET salario = salario + 200 WHERE salario < 2000;",
+        "UPDATE funcionario SET salario = salario + 200;",
+        "UPDATE funcionario WHERE salario < 2000 SET salario = salario + 200;"
+      ],
+      "correta": 1,
+      "explicacao": "O WHERE filtra quem recebe o aumento; o SET soma 200 ao valor atual. A ordem é UPDATE … SET … WHERE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para apagar o valor do campo `observacao` (deixar sem valor) do pedido 5, qual comando é correto?",
+      "alternativas": [
+        "UPDATE pedido SET observacao = 'NULL' WHERE id_pedido = 5;",
+        "DELETE observacao FROM pedido WHERE id_pedido = 5;",
+        "UPDATE pedido SET observacao = NULL WHERE id_pedido = 5;",
+        "UPDATE pedido DROP observacao WHERE id_pedido = 5;"
+      ],
+      "correta": 2,
+      "explicacao": "NULL sem aspas significa \"sem valor\". Com aspas vira o texto 'NULL'. DELETE apaga a linha inteira."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual WHERE altera os pets das espécies 'gato' OU 'coelho'?",
+      "alternativas": [
+        "WHERE especie IN ('gato', 'coelho')",
+        "WHERE especie = 'gato' AND especie = 'coelho'",
+        "WHERE especie = 'gato, coelho'",
+        "WHERE especie LIKE 'gato' + 'coelho'"
+      ],
+      "correta": 0,
+      "explicacao": "IN (lista) equivale a especie = 'gato' OR especie = 'coelho'. Com AND nenhuma linha atende, porque a espécie não pode ser as duas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de `START TRANSACTION;` você rodou um UPDATE e percebeu que errou o WHERE. Qual comando desfaz a alteração?",
+      "alternativas": [
+        "COMMIT;",
+        "UNDO;",
+        "REVOKE;",
+        "ROLLBACK;"
+      ],
+      "correta": 3,
+      "explicacao": "ROLLBACK desfaz o que foi feito desde o START TRANSACTION. COMMIT confirma."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O cinema quer marcar como 'esgotada' toda sessão que tem 0 lugares livres. Qual comando faz isso?",
+      "alternativas": [
+        "UPDATE sessao SET lugares_livres = 'esgotada' WHERE situacao = 0;",
+        "UPDATE sessao SET situacao = 'esgotada' WHERE lugares_livres = 0;",
+        "UPDATE sessao SET situacao = 'esgotada' WHERE lugares_livres = '0 lugares';",
+        "UPDATE sessao SET situacao = esgotada WHERE lugares_livres = 0;"
+      ],
+      "correta": 1,
+      "explicacao": "Texto vai entre aspas e o WHERE usa a coluna numérica lugares_livres = 0."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A coluna `email` do cliente é UNIQUE. O que acontece ao rodar um UPDATE que coloca num cliente um e-mail que outro cliente já usa?",
+      "alternativas": [
+        "O MySQL troca os e-mails dos dois",
+        "O e-mail é gravado com um número no final",
+        "O comando falha com erro de entrada duplicada e nada muda nessa linha",
+        "O outro cliente é apagado"
+      ],
+      "correta": 2,
+      "explicacao": "Uma restrição UNIQUE impede valores repetidos: o UPDATE é recusado (erro 1062)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando corrige o nome da cidade 'Sao Paulo' para 'São Paulo' em todos os endereços que estão escritos sem acento?",
+      "alternativas": [
+        "UPDATE endereco SET cidade = 'São Paulo' WHERE cidade = 'Sao Paulo';",
+        "UPDATE endereco SET cidade = 'Sao Paulo' WHERE cidade = 'São Paulo';",
+        "UPDATE endereco SET 'Sao Paulo' = 'São Paulo';",
+        "UPDATE endereco REPLACE cidade 'Sao Paulo' 'São Paulo';"
+      ],
+      "correta": 0,
+      "explicacao": "O WHERE encontra as linhas com o valor errado, e o SET grava o certo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na academia, a coluna `ativo` vale 1 (ativo) ou 0 (inativo). Qual comando desativa os alunos cujo último pagamento foi antes de 2025-01-01?",
+      "alternativas": [
+        "UPDATE aluno SET ativo = 0 WHERE ultimo_pagamento > '2025-01-01';",
+        "UPDATE aluno SET ultimo_pagamento = 0 WHERE ativo < '2025-01-01';",
+        "UPDATE aluno SET ativo = '0' WHERE ultimo_pagamento < 2025-01-01;",
+        "UPDATE aluno SET ativo = 0 WHERE ultimo_pagamento < '2025-01-01';"
+      ],
+      "correta": 3,
+      "explicacao": "Datas vão entre aspas no formato AAAA-MM-DD; \"antes de\" é menor que (<)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve o `LIMIT 1` em `UPDATE fila SET chamado = 1 WHERE chamado = 0 ORDER BY senha LIMIT 1;`?",
+      "alternativas": [
+        "Para alterar no máximo 1 coluna",
+        "Para alterar só a primeira linha (a de menor senha) que atende ao WHERE",
+        "Para rodar o comando só uma vez por dia",
+        "Não tem efeito em UPDATE"
+      ],
+      "correta": 1,
+      "explicacao": "No MySQL, UPDATE aceita ORDER BY e LIMIT: aqui só a próxima senha da fila é chamada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre UPDATE e ALTER TABLE?",
+      "alternativas": [
+        "UPDATE muda a estrutura; ALTER TABLE muda os dados",
+        "Os dois fazem a mesma coisa",
+        "UPDATE muda os dados das linhas; ALTER TABLE muda a estrutura da tabela (colunas, tipos, chaves)",
+        "UPDATE só funciona com WHERE; ALTER TABLE nunca"
+      ],
+      "correta": 2,
+      "explicacao": "UPDATE é DML (dados); ALTER TABLE é DDL (estrutura)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O pedido 30 tem `id_cliente` como chave estrangeira para a tabela cliente. O que acontece em `UPDATE pedido SET id_cliente = 999 WHERE id_pedido = 30;` se não existe cliente 999?",
+      "alternativas": [
+        "O UPDATE é recusado pela chave estrangeira (erro 1452)",
+        "O MySQL cria o cliente 999 sozinho",
+        "O id_cliente vira NULL",
+        "O pedido é apagado"
+      ],
+      "correta": 0,
+      "explicacao": "A chave estrangeira só aceita valores que existem na tabela de origem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em `UPDATE produto SET estoque = estoque - 5 WHERE id_produto = 2;`, se o estoque era 12, quanto fica?",
+      "alternativas": [
+        "5",
+        "17",
+        "-5",
+        "7"
+      ],
+      "correta": 3,
+      "explicacao": "O SET usa o valor atual: 12 - 5 = 7."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas situações pede um UPDATE (e não um INSERT)?",
+      "alternativas": [
+        "Cadastrar um cliente novo",
+        "Corrigir o telefone de um cliente que já está cadastrado",
+        "Registrar uma venda nova",
+        "Criar a tabela de vendas"
+      ],
+      "correta": 1,
+      "explicacao": "UPDATE altera linhas que já existem; INSERT cria linhas novas; CREATE TABLE cria a estrutura."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A tabela `curso` tem id_curso, nome e mensalidade. Escreva o comando que muda a mensalidade do curso de id 4 para 350.",
+      "respostasAceitas": [
+        "UPDATE curso SET mensalidade = 350 WHERE id_curso = 4;"
+      ],
+      "palavrasChave": [
+        "update curso",
+        "set mensalidade=350",
+        "where id_curso=4"
+      ],
+      "explicacao": "UPDATE curso SET mensalidade = 350 WHERE id_curso = 4;"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O hotel aumentou 10% a diária de todos os quartos do tipo 'luxo'. Escreva o UPDATE (tabela `quarto`, colunas `tipo` e `diaria`).",
+      "respostasAceitas": [
+        "UPDATE quarto SET diaria = diaria * 1.10 WHERE tipo = 'luxo';",
+        "UPDATE quarto SET diaria = diaria * 1.1 WHERE tipo = 'luxo';",
+        "UPDATE quarto SET diaria = diaria + diaria * 0.10 WHERE tipo = 'luxo';"
+      ],
+      "palavrasChave": [
+        "update quarto",
+        "diaria=diaria*1.1",
+        "where tipo='luxo'"
+      ],
+      "explicacao": "Multiplicar por 1,10 aumenta 10% sobre o valor atual de cada quarto."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Chegaram 30 unidades do produto de id 15. Escreva o comando que soma 30 ao estoque atual dele (tabela `produto`, coluna `estoque`).",
+      "respostasAceitas": [
+        "UPDATE produto SET estoque = estoque + 30 WHERE id_produto = 15;"
+      ],
+      "palavrasChave": [
+        "update produto",
+        "estoque=estoque+30",
+        "where id_produto=15"
+      ],
+      "explicacao": "A coluna aparece dos dois lados para usar o valor atual."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Escreva o comando que troca, de uma vez, o nome para 'Marina Lopes' e a cidade para 'Osasco' do cliente de id 21 (tabela `cliente`).",
+      "respostasAceitas": [
+        "UPDATE cliente SET nome = 'Marina Lopes', cidade = 'Osasco' WHERE id_cliente = 21;",
+        "UPDATE cliente SET cidade = 'Osasco', nome = 'Marina Lopes' WHERE id_cliente = 21;"
+      ],
+      "palavrasChave": [
+        "update cliente",
+        "nome='marina lopes'",
+        "cidade='osasco'",
+        "where id_cliente=21"
+      ],
+      "explicacao": "Colunas do SET separadas por vírgula."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique, em até duas linhas, por que um UPDATE sem WHERE é perigoso.",
+      "respostasAceitas": [],
+      "palavrasChave": [
+        "todas as linhas",
+        "where"
+      ],
+      "explicacao": "Sem WHERE, o UPDATE altera todas as linhas da tabela, e não só a que se queria mudar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A transportadora quer marcar como 'entregue' (coluna `status`) a entrega de id 77. Escreva o UPDATE na tabela `entrega`.",
+      "respostasAceitas": [
+        "UPDATE entrega SET status = 'entregue' WHERE id_entrega = 77;"
+      ],
+      "palavrasChave": [
+        "update entrega",
+        "status='entregue'",
+        "where id_entrega=77"
+      ],
+      "explicacao": "Texto entre aspas simples; o WHERE usa a chave primária."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No Workbench, o UPDATE abaixo deu erro 1175. Explique em até duas linhas o motivo e uma forma correta de resolver.\n\n`UPDATE aluno SET turma = 'B' WHERE nome = 'Caio';`",
+      "respostasAceitas": [],
+      "palavrasChave": [
+        "safe updates",
+        "chave"
+      ],
+      "explicacao": "O Safe Updates exige WHERE em coluna de chave. Use a chave (WHERE id_aluno = …) ou desligue com SET SQL_SAFE_UPDATES = 0 antes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Escreva o comando que zera (0) o desconto de todos os pedidos com status 'cancelado' (tabela `pedido`, colunas `desconto` e `status`).",
+      "respostasAceitas": [
+        "UPDATE pedido SET desconto = 0 WHERE status = 'cancelado';"
+      ],
+      "palavrasChave": [
+        "update pedido",
+        "desconto=0",
+        "where status='cancelado'"
+      ],
+      "explicacao": "UPDATE com WHERE em texto (entre aspas)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Escreva o comando que apaga o valor (deixa NULL) da coluna `data_devolucao` do empréstimo de id 9 (tabela `emprestimo`).",
+      "respostasAceitas": [
+        "UPDATE emprestimo SET data_devolucao = NULL WHERE id_emprestimo = 9;"
+      ],
+      "palavrasChave": [
+        "update emprestimo",
+        "data_devolucao=null",
+        "where id_emprestimo=9"
+      ],
+      "explicacao": "NULL sem aspas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique em até duas linhas a diferença entre `SET preco = 10` e `SET preco = preco + 10`.",
+      "respostasAceitas": [],
+      "palavrasChave": [
+        "valor atual",
+        "soma"
+      ],
+      "explicacao": "SET preco = 10 grava 10 em todas as linhas filtradas; preco = preco + 10 soma 10 ao valor que cada linha já tem."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A academia mudou o plano de todos os alunos do plano 2 para o plano 5. Escreva o UPDATE (tabela `aluno`, coluna `id_plano`).",
+      "respostasAceitas": [
+        "UPDATE aluno SET id_plano = 5 WHERE id_plano = 2;"
+      ],
+      "palavrasChave": [
+        "update aluno",
+        "id_plano=5",
+        "where id_plano=2"
+      ],
+      "explicacao": "O WHERE escolhe quem está no plano 2; o SET grava o plano 5."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Escreva os comandos que abrem uma transação, diminuem 1 da coluna `vagas` da turma de id 3 (tabela `turma`) e confirmam a alteração.",
+      "respostasAceitas": [
+        "START TRANSACTION; UPDATE turma SET vagas = vagas - 1 WHERE id_turma = 3; COMMIT;",
+        "BEGIN; UPDATE turma SET vagas = vagas - 1 WHERE id_turma = 3; COMMIT;"
+      ],
+      "palavrasChave": [
+        "update turma",
+        "vagas=vagas-1",
+        "where id_turma=3",
+        "commit"
+      ],
+      "explicacao": "START TRANSACTION (ou BEGIN), o UPDATE e COMMIT para confirmar."
+    },
+    {
+      "tipo": "sql",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A Papelaria Ponto Final usa o banco papelaria, com a tabela produto. Use a Bancada SQL: escreva o comando e execute para conferir.",
+      "banco": {
+        "nome": "papelaria",
+        "setup": "CREATE TABLE produto (\n  id_produto INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(60) NOT NULL,\n  categoria VARCHAR(30) NOT NULL,\n  preco DECIMAL(8,2) NOT NULL\n);\nINSERT INTO produto (nome, categoria, preco) VALUES\n('Caderno 96 fls','cadernos',18.50),('Caderno 200 fls','cadernos',29.90),('Caneta azul','escrita',2.50),\n('Lápis HB','escrita',1.20),('Mochila','mochilas',149.00),('Agenda 2027','cadernos',35.00);"
+      },
+      "tarefas": [
+        {
+          "id": "t1",
+          "tipo": "alteracao",
+          "texto": "Os produtos da categoria 'cadernos' ficaram 8% mais caros. Atualize o preço deles.",
+          "verificacao": "SELECT id_produto, ROUND(preco, 2) FROM produto ORDER BY id_produto;"
+        }
+      ],
+      "gabarito": {
+        "tarefas": {
+          "t1": {
+            "sql": "UPDATE produto SET preco = preco * 1.08 WHERE categoria = 'cadernos';",
+            "ordemImporta": false
+          }
+        }
+      },
+      "explicacao": "UPDATE produto SET preco = preco * 1.08 WHERE categoria = 'cadernos';"
+    },
+    {
+      "tipo": "sql",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A Clínica Bem-Estar usa o banco clinica, com a tabela consulta. Use a Bancada SQL: escreva o comando e execute para conferir.",
+      "banco": {
+        "nome": "clinica",
+        "setup": "CREATE TABLE consulta (\n  id_consulta INT AUTO_INCREMENT PRIMARY KEY,\n  paciente VARCHAR(60) NOT NULL,\n  data_consulta DATE NOT NULL,\n  status VARCHAR(20) NOT NULL DEFAULT 'agendada'\n);\nINSERT INTO consulta (paciente, data_consulta, status) VALUES\n('Rita Alves','2026-11-03','agendada'),('João Pedro','2026-11-03','agendada'),('Bia Costa','2026-11-04','agendada'),\n('Leo Dias','2026-11-05','realizada'),('Ana Reis','2026-11-03','agendada');"
+      },
+      "tarefas": [
+        {
+          "id": "t1",
+          "tipo": "alteracao",
+          "texto": "O médico faltou no dia 2026-11-03. Mude para 'remarcar' o status de todas as consultas AGENDADAS desse dia.",
+          "verificacao": "SELECT id_consulta, status FROM consulta ORDER BY id_consulta;"
+        }
+      ],
+      "gabarito": {
+        "tarefas": {
+          "t1": {
+            "sql": "UPDATE consulta SET status = 'remarcar' WHERE data_consulta = '2026-11-03' AND status = 'agendada';",
+            "ordemImporta": false
+          }
+        }
+      },
+      "explicacao": "UPDATE consulta SET status = 'remarcar' WHERE data_consulta = '2026-11-03' AND status = 'agendada';"
+    },
+    {
+      "tipo": "sql",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A Oficina Roda Viva controla o estoque no banco estoque, tabela peca. Use a Bancada SQL: escreva o comando e execute para conferir.",
+      "banco": {
+        "nome": "estoque",
+        "setup": "CREATE TABLE peca (\n  id_peca INT AUTO_INCREMENT PRIMARY KEY,\n  descricao VARCHAR(60) NOT NULL,\n  estoque INT NOT NULL,\n  minimo INT NOT NULL\n);\nINSERT INTO peca (descricao, estoque, minimo) VALUES\n('Pastilha de freio',4,10),('Filtro de óleo',25,10),('Vela de ignição',6,8),('Correia dentada',12,5),('Lâmpada farol',2,6);"
+      },
+      "tarefas": [
+        {
+          "id": "t1",
+          "tipo": "alteracao",
+          "texto": "Chegou reposição: some 20 unidades ao estoque de todas as peças que estão ABAIXO do estoque mínimo.",
+          "verificacao": "SELECT id_peca, estoque FROM peca ORDER BY id_peca;"
+        }
+      ],
+      "gabarito": {
+        "tarefas": {
+          "t1": {
+            "sql": "UPDATE peca SET estoque = estoque + 20 WHERE estoque < minimo;",
+            "ordemImporta": false
+          }
+        }
+      },
+      "explicacao": "UPDATE peca SET estoque = estoque + 20 WHERE estoque < minimo;"
+    },
+    {
+      "tipo": "sql",
+      "tema": "DML — UPDATE",
+      "capacidade": "bd.ct10",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A Escola Saber usa o banco escola, com a tabela aluno. Use a Bancada SQL: escreva o comando e execute para conferir.",
+      "banco": {
+        "nome": "escola",
+        "setup": "CREATE TABLE aluno (\n  id_aluno INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(60) NOT NULL,\n  email VARCHAR(80),\n  telefone VARCHAR(20)\n);\nINSERT INTO aluno (nome, email, telefone) VALUES\n('Davi Souza','davi@escola.com','11 90000-1111'),('Lara Melo',NULL,'11 90000-2222'),('Igor Lima','igor@escola.com',NULL),('Nina Rocha','nina@escola.com','11 90000-4444');"
+      },
+      "tarefas": [
+        {
+          "id": "t1",
+          "tipo": "alteracao",
+          "texto": "A aluna Lara Melo (id 2) informou o e-mail 'lara@escola.com' e trocou o telefone para '11 98888-2222'. Atualize os dois campos com um único comando.",
+          "verificacao": "SELECT id_aluno, email, telefone FROM aluno ORDER BY id_aluno;"
+        }
+      ],
+      "gabarito": {
+        "tarefas": {
+          "t1": {
+            "sql": "UPDATE aluno SET email = 'lara@escola.com', telefone = '11 98888-2222' WHERE id_aluno = 2;",
+            "ordemImporta": false
+          }
+        }
+      },
+      "explicacao": "UPDATE aluno SET email = 'lara@escola.com', telefone = '11 98888-2222' WHERE id_aluno = 2;"
+    }
+  ]
+}

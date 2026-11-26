@@ -1958,6 +1958,7 @@ $("#btnImportarBanco").onclick = async () => {
 // Cada um traz somativas de exemplo já preenchidas (fechadas e sem turma: escolha a turma em Editar e libere).
 let ultimoBancoImportado = null;
 const BANCOS_PRONTOS = [
+  { arquivo: "bancos/gerados/amostra_dml_update.json", icone: "🧪", titulo: "Amostra do pedido 13: DML — UPDATE (36 questões novas, a revisar)", desc: "20 alternativas, 12 dissertativas e 4 de SQL físico, ligadas à capacidade de DML. Entram como \"a revisar\": só caem na Área de testes até você aprovar em Bancos → tópico → Ver questões.", provas: [] },
   { arquivo: "bancos/banco_sql_workbench.json", icone: "🗄", titulo: "Bancada SQL: 15 cenários práticos", desc: "Pet shop, biblioteca, oficina, academia, cinema, hotel… Cada aluno recebe um cenário diferente (base e tarefas), escreve e executa SQL na Bancada parecida com o MySQL Workbench. Correção automática pelo resultado; a IA só entra nas tarefas que não bateram.",
     provas: [
       { titulo: "Prática SQL na Bancada (1 cenário sorteado)", nSql: 1, tempoMinutos: 45 },
