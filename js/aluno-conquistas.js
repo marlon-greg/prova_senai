@@ -32,8 +32,8 @@ export async function desenharConquistas(box, eu, resumoDiario = null, opc = {})
   const c = conquistasNotas(provas, cfgLista);
   const diario = resumoDiario ? medalhasDiario(resumoDiario, cfgLista) : [];
   const emGrupo = conquistasGrupo(opc.trabalhos || [], cfgLista);   // provas em dupla e seminários: ainda sem dados (ficam travadas)
-  if (opc.forcar?.size) [...c.gerais, ...emGrupo, ...c.materias.flatMap(m => m.conquistas), ...diario].forEach(m => { if (opc.forcar.has(m.t) && !m.ok) { const u = m.niveis.length - 1; Object.assign(m, { ok: true, nivelAtual: u, nivelNome: String(m.niveis[u].nome || m.t).replaceAll("{materia}", String(m.id).split(":")[1] || ""), proximo: null, maximo: true }); } });
-  const todas = [...c.gerais, ...emGrupo, ...c.materias.flatMap(m => m.conquistas), ...diario];
+  if (opc.forcar?.size) [...c.gerais, ...c.selos, ...emGrupo, ...c.materias.flatMap(m => m.conquistas), ...diario].forEach(m => { if (opc.forcar.has(m.t) && !m.ok) { const u = m.niveis.length - 1; Object.assign(m, { ok: true, nivelAtual: u, nivelNome: String(m.niveis[u].nome || m.t).replaceAll("{materia}", String(m.id).split(":")[1] || ""), proximo: null, maximo: true }); } });
+  const todas = [...c.gerais, ...c.selos, ...emGrupo, ...c.materias.flatMap(m => m.conquistas), ...diario];
   const ganhas = todas.filter(m => m.ok);
   // medalha nova ou nível novo desde a última visita: comemora
   const chave = `conquistas-niveis:${opc.simulacao ? "sim:" : ""}${eu.uid}`, marca = m => `${m.id}#${m.nivelAtual}`;
@@ -50,6 +50,7 @@ export async function desenharConquistas(box, eu, resumoDiario = null, opc = {})
     <details class="recolhivel leve conq-todas" data-chave="aluno:conquistas">
     <summary><span class="rc-titulo">Ver todas as conquistas</span>${novas.length && vistas.size ? `<span class="rc-resumo"><span class="chip ok">✨ ${novas.length} nova(s)</span></span>` : ""}</summary><div class="rc-corpo conq-grupos">
     ${grupo("🌟 Gerais", c.gerais)}
+    ${c.selos.length ? grupo("🏛 Selos dos pioneiros da TI", c.selos, `<span class="meta-txt">quem fez a história da computação</span>`) : ""}
     ${emGrupo.length ? grupo("👥 Em dupla ou grupo", emGrupo, `<span class="meta-txt">provas em dupla e seminários</span>`) : ""}
     ${c.materias.length ? c.materias.map(m => grupo(`📚 ${esc(m.materia)}`, m.conquistas, `<span class="meta-txt">média ${Math.round(m.media)} · ${m.provas.length} prova(s)</span>`)).join("") : `<p class="help">Faça a sua primeira prova para começar a ganhar conquistas por matéria.</p>`}
     ${diario.length ? grupo("📔 Na sala de aula", diario, `<span class="meta-txt">registradas pela sua auxiliar</span>`) : ""}

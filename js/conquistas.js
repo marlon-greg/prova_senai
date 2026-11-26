@@ -14,6 +14,8 @@ export const REGRAS = {
   evolucao:        { grupo: "geral", nome: "Melhorou a nota N vezes", campos: ["n"] },
   semVidas:        { grupo: "geral", nome: "N provas sem perder vida", campos: ["n"] },
   materiasMin:     { grupo: "geral", nome: "Nota ≥ mínimo em N matérias diferentes", campos: ["n", "min"] },
+  todasMaterias:   { grupo: "geral", nome: "Nota ≥ mínimo pelo menos 1 vez em TODAS as matérias que fez (mín. N matérias)", campos: ["n", "min"] },
+  mediaGeral:      { grupo: "geral", nome: "Média geral ≥ mínimo com pelo menos N provas", campos: ["n", "min"] },
   materiaNota:     { grupo: "materia", nome: "Na matéria: uma nota ≥ mínimo", campos: ["min"] },
   materiaMedia:    { grupo: "materia", nome: "Na matéria: média ≥ mínimo com N provas", campos: ["n", "min"] },
   materiaEvolucao: { grupo: "materia", nome: "Na matéria: melhorou N vezes", campos: ["n"] },
@@ -45,13 +47,28 @@ export const CONQUISTAS_PADRAO = [
   { id: "exploradora", e: "📚", t: "Exploradora", d: "Trabalhe 8 tópicos diferentes", grupo: "diario", regra: "diario", campo: "topicos", n: 8 },
   { id: "colecionadora", e: "🏆", t: "Colecionadora de vitórias", d: "10 vitórias do dia", grupo: "diario", regra: "diario", campo: "vitorias", n: 10 },
   { id: "diario-de-ouro", e: "📒", t: "Diário de ouro", d: "30 aulas registradas", grupo: "diario", regra: "diario", campo: "aulas", n: 30 },
+  // SELOS DOS PIONEIROS DA TI (selo: true → grupo "Selos"): homenagem a quem fez a história da computação e da programação.
+  // chaves = só as provas de matérias cujo nome contém um destes trechos (sem acento, minúsculas)
+  { id: "selo-turing", selo: true, e: "🧠", t: "Selo Alan Turing", d: "Tirou 100 pelo menos uma vez em TODAS as matérias que fez (mínimo 2). Turing criou a base teórica do computador e ajudou a decifrar a Enigma na 2ª Guerra.", grupo: "selos", regra: "todasMaterias", niveis: [{ n: 2, min: 100, nome: "Selo Alan Turing" }] },
+  { id: "selo-ada", selo: true, e: "📜", t: "Selo Ada Lovelace", d: "Nota 80 ou mais em Lógica de Programação/Algoritmos. Ada escreveu o primeiro algoritmo para uma máquina, em 1843: a primeira programadora da história.", grupo: "selos", regra: "nota", chaves: ["logica", "algoritmo"], niveis: [{ min: 80, nome: "Selo Ada Lovelace" }] },
+  { id: "selo-codd", selo: true, e: "🗄", t: "Selo Edgar F. Codd", d: "Nota 100 em Banco de Dados. Codd criou o modelo relacional (tabelas, chaves), a base do SQL.", grupo: "selos", regra: "nota", chaves: ["banco de dados", "sql"], niveis: [{ min: 100, nome: "Selo Edgar F. Codd" }] },
+  { id: "selo-chen", selo: true, e: "🔷", t: "Selo Peter Chen", d: "Média 80 ou mais em Banco de Dados, com pelo menos 2 provas. Chen criou o Modelo Entidade-Relacionamento (MER), o desenho do brModelo.", grupo: "selos", regra: "mediaGeral", chaves: ["banco de dados", "sql"], niveis: [{ n: 2, min: 80, nome: "Selo Peter Chen" }] },
+  { id: "selo-berners-lee", selo: true, e: "🌐", t: "Selo Tim Berners-Lee", d: "Nota 100 em Web/Front-End. Berners-Lee inventou a World Wide Web e o HTML em 1989.", grupo: "selos", regra: "nota", chaves: ["web", "front", "html"], niveis: [{ min: 100, nome: "Selo Tim Berners-Lee" }] },
+  { id: "selo-jacobson", selo: true, e: "🧍", t: "Selo Ivar Jacobson", d: "Nota 80 ou mais em Levantamento de Requisitos. Jacobson criou os casos de uso e ajudou a criar a UML.", grupo: "selos", regra: "nota", chaves: ["requisito"], niveis: [{ min: 80, nome: "Selo Ivar Jacobson" }] },
+  { id: "selo-hopper", selo: true, e: "🐞", t: "Selo Grace Hopper", d: "Melhorou a nota 3 vezes de uma prova para a seguinte. Grace Hopper criou o primeiro compilador e registrou o primeiro \"bug\" (uma mariposa!): corrigir faz parte.", grupo: "selos", regra: "evolucao", niveis: [{ n: 3, nome: "Selo Grace Hopper" }] },
+  { id: "selo-hamilton", selo: true, e: "🚀", t: "Selo Margaret Hamilton", d: "5 provas sem perder nenhuma vida. Hamilton liderou o software da Apollo 11, que levou o homem à Lua sem falhar.", grupo: "selos", regra: "semVidas", niveis: [{ n: 5, nome: "Selo Margaret Hamilton" }] },
+  { id: "selo-katherine", selo: true, e: "✨", t: "Selo Katherine Johnson", d: "Nota 90 ou mais em 3 matérias diferentes. Katherine Johnson fez os cálculos das rotas da NASA (filme Estrelas Além do Tempo).", grupo: "selos", regra: "materiasMin", niveis: [{ n: 3, min: 90, nome: "Selo Katherine Johnson" }] },
+  { id: "selo-ritchie", selo: true, e: "🔤", t: "Selo Dennis Ritchie", d: "5 notas seguidas de 70 ou mais. Ritchie criou a linguagem C e o Unix: base sólida para quase tudo que veio depois.", grupo: "selos", regra: "notasSeguidas", niveis: [{ n: 5, min: 70, nome: "Selo Dennis Ritchie" }] },
+  { id: "selo-knuth", selo: true, e: "📚", t: "Selo Donald Knuth", d: "Média geral 85 ou mais com pelo menos 6 provas. Knuth escreveu \"A Arte de Programar Computadores\" e é o pai da análise de algoritmos.", grupo: "selos", regra: "mediaGeral", niveis: [{ n: 6, min: 85, nome: "Selo Donald Knuth" }] },
+  { id: "selo-torvalds", selo: true, e: "🐧", t: "Selo Linus Torvalds", d: "Fez 10 provas. Torvalds criou o Linux e o Git: projetos gigantes feitos com persistência, um commit por vez.", grupo: "selos", regra: "provas", niveis: [{ n: 10, nome: "Selo Linus Torvalds" }] },
   { id: "dupla-afinada", e: "🤝", t: "Dupla afinada", d: "Na prova em dupla, você e a sua dupla passam acima da média", grupo: "grupo", regra: "duplaAcima", niveis: [{ n: 1, nome: "Dupla afinada" }] },
   { id: "equipe-completa", e: "🎤", t: "Equipe completa", d: "No seminário, todos da equipe apresentam a sua parte", grupo: "grupo", regra: "seminarioTodos", niveis: [{ n: 1, nome: "Equipe completa" }] },
   { id: "ninguem-fica", e: "🙌", t: "Ninguém fica para trás", d: "A equipe inteira chega ao Satisfatório", grupo: "grupo", regra: "equipeSatisf", niveis: [{ n: 1, nome: "Ninguém fica para trás" }] },
   { id: "parceria-que-rende", e: "🔗", t: "Parceria que rende", d: "A mesma dupla melhora junta de uma prova para a outra", grupo: "grupo", regra: "duplaMelhora", niveis: [{ n: 1, nome: "Parceria que rende" }] }
 ];
 // conquistas novas do padrão que entram mesmo em listas já salvas pelo admin (config/conquistas); o admin pode desligá-las
-const NOVAS_DO_PADRAO = ["dupla-afinada", "equipe-completa", "ninguem-fica", "parceria-que-rende"];
+const NOVAS_DO_PADRAO = ["dupla-afinada", "equipe-completa", "ninguem-fica", "parceria-que-rende", "selo-turing", "selo-ada", "selo-codd", "selo-chen", "selo-berners-lee", "selo-jacobson", "selo-hopper", "selo-hamilton", "selo-katherine", "selo-ritchie", "selo-knuth", "selo-torvalds"];
+export const ehSelo = c => c?.selo === true || c?.grupo === "selos";
 export function completarComNovas(lista) {
   if (!Array.isArray(lista) || !lista.length) return lista;
   const ids = new Set(lista.map(c => c?.id));
@@ -145,6 +162,11 @@ export function conquistasNotas(provas, lista = null) {
     if (c.regra === "evolucao" || c.regra === "materiaEvolucao") { const s = subidas(l); return { ...base, ok: s.length >= n, detalhe: s.slice(0, 3), prog: [Math.min(s.length, n), n] }; }
     if (c.regra === "semVidas") { const x = l.filter(p => p.vidasPerdidas === 0); return { ...base, ok: x.length >= n, detalhe: x.slice(-n).map(p => p.titulo), prog: [Math.min(x.length, n), n] }; }
     if (c.regra === "materiasMin") { const ms = [...new Set(l.filter(p => p.nota >= min).map(p => p.materia || "Outras"))]; return { ...base, ok: ms.length >= n, detalhe: ms, prog: [Math.min(ms.length, n), n] }; }
+    if (c.regra === "todasMaterias") {
+      const todas = [...new Set(l.map(p => p.materia || "Outras"))], ok = [...new Set(l.filter(p => p.nota >= min).map(p => p.materia || "Outras"))];
+      return { ...base, ok: todas.length >= n && ok.length === todas.length, detalhe: ok, prog: [ok.length, Math.max(n, todas.length)] };
+    }
+    if (c.regra === "mediaGeral") { const media = l.length ? l.reduce((s, p) => s + p.nota, 0) / l.length : 0; return { ...base, ok: l.length >= n && media >= min, detalhe: l.slice(-3).map(fmt), prog: [l.length >= n ? Math.min(min, Math.round(media)) : Math.min(l.length, n), l.length >= n ? min : n] }; }
     if (c.regra === "materiaMedia") { const media = l.length ? l.reduce((s, p) => s + p.nota, 0) / l.length : 0; return { ...base, ok: l.length >= n && media >= min, detalhe: l.map(fmt), prog: [l.length >= n ? Math.min(min, Math.round(media)) : Math.min(l.length, n), l.length >= n ? min : n] }; }
     return { ...base, ok: false, prog: [0, 1] };
   };
@@ -159,12 +181,15 @@ export function conquistasNotas(provas, lista = null) {
   const lst = listaAtiva(lista);
   // conquista com matéria definida vale só nela (as geradas do plano de ensino)
   const daMateria = (c, m) => !c.materia || String(c.materia).toLowerCase() === String(m).toLowerCase();
-  const gerais = lst.filter(c => c.grupo === "geral").map(c => avaliarNiveis(c, c.materia ? ps.filter(p => daMateria(c, p.materia || "Outras")) : ps));
+  const semAc = s => String(s || "").normalize("NFD").replace(/\p{M}+/gu, "").toLowerCase();
+  const dasChaves = (c, l) => Array.isArray(c.chaves) && c.chaves.length ? l.filter(p => c.chaves.some(k => semAc(p.materia).includes(semAc(k)))) : l;
+  const gerais = lst.filter(c => c.grupo === "geral" && !ehSelo(c)).map(c => avaliarNiveis(c, dasChaves(c, c.materia ? ps.filter(p => daMateria(c, p.materia || "Outras")) : ps)));
+  const selos = lst.filter(ehSelo).map(c => avaliarNiveis(c, dasChaves(c, ps)));
   const porMateria = new Map();
   ps.forEach(p => { const m = p.materia || "Outras"; if (!porMateria.has(m)) porMateria.set(m, []); porMateria.get(m).push(p); });
   const materias = [...porMateria].map(([m, l]) => ({ materia: m, media: l.reduce((s, p) => s + p.nota, 0) / l.length, provas: l,
     conquistas: lst.filter(c => c.grupo === "materia" && daMateria(c, m)).map(c => ({ ...avaliarNiveis(c, l, m), id: `${c.id}:${m}` })) })).sort((a, b) => a.materia.localeCompare(b.materia, "pt-BR"));
-  return { gerais, materias };
+  return { gerais, selos, materias };
 }
 
 // ---------- em dupla ou grupo (provas em dupla e seminários) ----------

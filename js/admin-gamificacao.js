@@ -153,8 +153,8 @@ function desenharRetorno() {
 // ---------- 🏅 editor das conquistas (config/conquistas.lista): lista + painel de edição ao lado (quadro 6) ----------
 let conqLista = [], conqSel = -1, conqRasc = null, conqAlt = 0, conqFiltro = { busca: "", aba: "todas" }, drawerConq = null;
 const grupoEstado = {};   // grupos abertos ou fechados pelo professor
-const GRUPOS = { geral: { e: "🌟", t: "Gerais", aberto: true }, grupo: { e: "👥", t: "Em dupla ou grupo", aberto: false }, materia: { e: "📚", t: "Por matéria", aberto: true }, diario: { e: "📔", t: "Sala de aula (diário)", aberto: false } };
-const grupoDe = c => REGRAS[c.regra]?.grupo || c.grupo || "geral";
+const GRUPOS = { geral: { e: "🌟", t: "Gerais", aberto: true }, selos: { e: "🏛", t: "Selos dos pioneiros da TI", aberto: true }, grupo: { e: "👥", t: "Em dupla ou grupo", aberto: false }, materia: { e: "📚", t: "Por matéria", aberto: true }, diario: { e: "📔", t: "Sala de aula (diário)", aberto: false } };
+const grupoDe = c => c.selo === true || c.grupo === "selos" ? "selos" : REGRAS[c.regra]?.grupo || c.grupo || "geral";
 const normC = s => String(s || "").toLowerCase().normalize("NFD").replace(/\p{M}+/gu, "");
 const skinsDe = id => Object.values(CATALOGO).flat().filter(i => i.trava?.medalha && (i.trava.medalha === id || ALIASES[i.trava.medalha]?.id === id)).map(i => i.nome);
 const usaN = c => (REGRAS[c.regra]?.campos || []).includes("n"), usaMin = c => (REGRAS[c.regra]?.campos || []).includes("min");
