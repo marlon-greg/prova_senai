@@ -2,7 +2,7 @@
 import { ic } from "./icones.js";
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar, sortearAleatorio, esc, $, toast, dataBR, letra,
          idTentativaTeste, apagarTentativaTeste, confirmar, avisar, traduzirErro, iniciais, fecharModais, temaDe, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco, bancoDaQuestao, sortearQuestoes }
-  from "./common.js?v=20261126g";
+  from "./common.js?v=20261126h";
 import { baixarMaterial } from "./material.js";
 import { desenharConquistas } from "./aluno-conquistas.js?v=20261126a";
 import { regraDoTipo, calcNotaFinal } from "./nota-final.js";
@@ -12,7 +12,7 @@ import { iniciarAbas, definirAbasVisiveis, irParaAba, abaAtual } from "./aluno-n
 import { desenharTurma } from "./aluno-social.js";
 import { desenharRecompensas } from "./aluno-recompensas.js";
 let simulacao = false;   // equipe vendo a página como aluno (?simular=1): nada é gravado
-import { lerGamificacao, GAMI_PADRAO } from "./common.js?v=20261126g";
+import { lerGamificacao, GAMI_PADRAO } from "./common.js?v=20261126h";
 let gami = { ...GAMI_PADRAO };   // o que está ligado na gamificação (config/gamificacao)
 import { montarFormato, temFormato, FORMATOS, rotuloFormato, textoParaFalar, textoResposta, textoChave } from "./formatos-ui.js";
 const controles = {};   // qid -> controle do formato adaptado (valor, preencher, travar)
@@ -562,7 +562,14 @@ $("#btnComecar").onclick = async () => {
     // sorteia nQuestoes dos bancos da prova (ids) — cada aluno recebe um conjunto diferente.
     // Acessibilidade: se o professor já sorteou as questões deste aluno no painel (para adaptar só essas), usa as mesmas.
     const pre = acess?.sorteios?.[provaAtual.id]?.ids;
-    const sorteadas = Array.isArray(pre) && pre.length ? pre.slice() : await sortearQuestoes(provaAtual, null, { incluirRevisar: modoTeste });
+    // espalhar entre os alunos: quantas vezes cada questão já saiu nesta somativa (sorteios/{provaId}) e, na recuperação,
+    // as questões que o aluno recebeu na prova de origem (evita repetir). Se não conseguir ler, sorteia como antes.
+    let contagem = {}, evitar = null;
+    if (!modoTeste && !(Array.isArray(pre) && pre.length)) {
+      try { contagem = (await comLimiteDeTempo(getDoc(doc(db, "sorteios", provaAtual.id)), 4000))?.data()?.c || {}; } catch (e) { /* sorteia sem a contagem */ }
+      if (provaAtual.provaOrigemId) { try { const o = await comLimiteDeTempo(getDoc(doc(db, "tentativas", `${eu.uid}_${provaAtual.provaOrigemId}`)), 4000); if (o?.exists()) evitar = new Set(o.data().questoesIds || []); } catch (e) { /* sem a origem */ } }
+    }
+    const sorteadas = Array.isArray(pre) && pre.length ? pre.slice() : await sortearQuestoes(provaAtual, null, { incluirRevisar: modoTeste, contagem, evitar });
     const tid = idTentativa(provaAtual.id);
     const dados = {
       uid: eu.uid, email: eu.email, nome: eu.nome, provaId: provaAtual.id, bancoId: provaAtual.bancoId,
@@ -577,6 +584,8 @@ $("#btnComecar").onclick = async () => {
       if (codigo && e?.code === "permission-denied") throw Object.assign(new Error("Código incorreto. Confira com o professor e digite de novo."), { codigoErrado: true });
       throw e;
     }
+    // +1 em cada questão sorteada (não bloqueia a entrada se falhar)
+    if (!modoTeste) setDoc(doc(db, "sorteios", provaAtual.id), { c: Object.fromEntries(sorteadas.map(q => [q, increment(1)])) }, { merge: true }).catch(e => console.warn("contagem do sorteio", e));
     const t = await getDoc(doc(db, "tentativas", tid));
     tentativa = { id: tid, ...t.data() };
     await carregarTentativa();

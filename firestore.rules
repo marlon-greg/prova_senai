@@ -329,6 +329,18 @@ service cloud.firestore {
     }
 
     // ---------- provas ----------
+    // SORTEIO QUE ESPALHA: quantas vezes cada questão já saiu numa somativa ({ c: { qid: n } }). O aluno lê e soma
+    // só nas questões da própria tentativa (que já existe: é criada antes); a equipe lê.
+    match /sorteios/{p} {
+      allow read: if equipe() || logado();
+      allow create: if logado() && exists(/databases/$(db)/documents/tentativas/$(uid() + '_' + p))
+        && request.resource.data.keys().hasOnly(['c'])
+        && request.resource.data.c.keys().hasOnly(get(/databases/$(db)/documents/tentativas/$(uid() + '_' + p)).data.questoesIds);
+      allow update: if logado() && exists(/databases/$(db)/documents/tentativas/$(uid() + '_' + p))
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['c'])
+        && request.resource.data.c.diff(resource.data.c).affectedKeys().hasOnly(get(/databases/$(db)/documents/tentativas/$(uid() + '_' + p)).data.questoesIds);
+    }
+
     // preferências de tela de cada pessoa da equipe (ex.: visualização da página Somativas); só ela lê e grava
     match /preferencias/{em} {
       allow read, write: if logado() && em == email().lower();

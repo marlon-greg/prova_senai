@@ -2,7 +2,7 @@
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, limparTema, apagarTentativaTeste,
          confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco,
          rotuloDias, nomeTurma, HORARIO_PADRAO, textoHorario, DIAS_SEMANA_LONGO,
-         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, materiaCorrigida, bancosTeoricos, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261126g";
+         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, materiaCorrigida, bancosTeoricos, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261126h";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
@@ -835,6 +835,12 @@ function controleProva(f) {
     const total = Number($f("Total").value || 0), soma = somaTudo();
     $f("NTotal").innerHTML = $f("SemLimite").checked ? `Sem limite: o total é a soma, <b>${soma}</b> ${soma === 1 ? "questão" : "questões"}.`
       : `O total fica em ${total}. Cada prática que entra tira uma teórica: duas alternativas, depois uma dissertativa, e repete.${soma !== total ? ` <b class="erro-texto">A soma está em ${soma}.</b>` : ""}`;
+    // estimativa: com esta turma, cada questão aparece para ~X alunos (o sorteio espalha: prefere as que saíram menos)
+    { const t = turmasCache.find(x => x.id === $f("Turma").value), nAl = t ? alunosDaTurma(t).length : 0;
+      if (nAl && carregado() && bancosMarcados().length) {
+        const d = disponiveis(), por = [[nA, d.alternativa], [nD, d.dissertativa]].filter(([n, disp]) => n > 0 && disp > 0).map(([n, disp]) => nAl * n / disp);
+        if (por.length) { const x = Math.max(...por); $f("NTotal").innerHTML += ` <span class="pequeno">Com esta turma (${nAl} alunos), cada questão deve aparecer para cerca de <b>${x < 1.5 ? "1 aluno" : `${Math.round(x)} alunos`}</b>${x >= 8 ? " — poucos temas/questões: marque mais temas ou aumente o banco" : ""}.</span>`; }
+      } }
     // 3) práticas da matéria
     $f("PratTitulo").textContent = mat ? `3. Questões práticas de ${mat}${outrasMat ? " (e de outras matérias)" : ""}` : "3. Questões práticas";
     const CARD = { sql: ["Sql", "SQL físico", "O aluno escreve e executa SQL na Bancada"], web: ["Web", "Página web", "HTML e CSS num editor parecido com o VS Code, com prévia ao vivo"], diagrama: ["Diag", "Diagramas", tipos.includes("sql") || unidadeDaMateria(mat)?.id === "bd" ? "Modelo conceitual e lógico no editor igual ao brModelo" : "Montados no editor de diagramas da prova"] };

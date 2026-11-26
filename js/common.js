@@ -304,7 +304,10 @@ export async function sortearQuestoes(prova, cota = null, opc = {}) {
   try { grupo = gruposDeIrmas(dados); } catch (e) { console.warn("grupos de questões irmãs", e); }
   const usados = new Set();
   const pegar = (lista, n) => {
-    const ordem = sortearAleatorio(lista, lista.length), sai = [], resto = [];
+    // espalhar: primeiro as que o aluno NÃO viu na prova de origem (recuperação), depois as que saíram MENOS vezes nesta somativa;
+    // entre empatadas continua o sorteio (a ordenação é estável sobre a lista já embaralhada)
+    const cont = opc.contagem || {}, evitar = opc.evitar || null;
+    const ordem = sortearAleatorio(lista, lista.length).sort((a, b) => ((evitar?.has(a) ? 1 : 0) - (evitar?.has(b) ? 1 : 0)) || ((cont[a] || 0) - (cont[b] || 0))), sai = [], resto = [];
     for (const id of ordem) {
       const g = grupo[id] || id;
       if (sai.length < n && !usados.has(g)) { usados.add(g); sai.push(id); } else resto.push(id);
