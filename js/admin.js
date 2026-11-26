@@ -573,7 +573,7 @@ function formProvaHTML(f) {
       <p class="pequeno" style="margin:4px 0 0">O aluno digita o código antes de começar. Informe na sala.</p></div>
   </div>
   <div class="grade">
-    <div><label for="${f}Tempo">Tempo limite (min, 0 = sem limite)</label><input type="number" id="${f}Tempo" value="0" min="0" step="5"></div>
+    <div><label for="${f}Tempo">Tempo limite (min, 0 = sem limite)</label><input type="number" id="${f}Tempo" value="60" min="0" step="5"></div>
     <div><label for="${f}Modo">Exibição das questões</label>
       <select id="${f}Modo"><option value="uma">Uma por vez</option><option value="todas">Todas na mesma página (cada uma com seu botão Enviar)</option></select></div>
   </div>
@@ -584,17 +584,17 @@ function formProvaHTML(f) {
     <label class="check"><input type="checkbox" id="${f}PermitirTrocaAba"> <span>Permitir trocar de aba/janela <span class="pequeno">— sem tela cheia e sem aviso; as trocas continuam contadas, marcadas como "permitido"</span></span></label>
     <label class="check"><input type="checkbox" id="${f}PermitirColar"> <span>Permitir colar nos campos de resposta <span class="pequeno">— colar e arrastar liberados, sem registro</span></span></label>
     <div class="grade" style="margin:12px 0 0">
-      <div><label for="${f}MaxTrocas">❤️ Vidas do aluno (0 = sem vidas)</label><input type="number" id="${f}MaxTrocas" value="0" min="0" max="10" step="1"></div>
+      <div><label for="${f}MaxTrocas">❤️ Vidas do aluno (0 = sem vidas)</label><input type="number" id="${f}MaxTrocas" value="3" min="0" max="10" step="1"></div>
       <div><label for="${f}AcaoExceder">Quando as vidas acabam</label>
         <select id="${f}AcaoExceder"><option value="encerrar">Encerrar a somativa</option><option value="perderQuestao">Perder a questão atual (só em "uma por vez" sem ir e voltar)</option></select></div>
     </div>
     <div class="grade" style="margin:8px 0 0">
       <div><label for="${f}SegVolta">⏱ Segundos para voltar após sair (0 = sem timer)</label><input type="number" id="${f}SegVolta" value="5" min="0" max="120" step="1">
         <span class="pequeno">Fora da prova, perde mais 1 vida a cada tantos segundos (conferido também pelo servidor).</span></div>
-      <div><label for="${f}EntradaAte">🚪 Fechar a entrada às (opcional)</label><input type="datetime-local" id="${f}EntradaAte">
+      <div><label for="${f}EntradaAteData">🚪 Fechar a entrada às (opcional)</label><div class="linha" style="flex-wrap:nowrap;gap:6px"><input type="date" id="${f}EntradaAteData" aria-label="Dia em que a entrada fecha"><input type="time" id="${f}EntradaAteHora" aria-label="Hora em que a entrada fecha"></div>
         <span class="pequeno">Depois deste horário ninguém mais começa (quem já começou continua). Em <b>Resultados</b> você fecha na hora, barra aluno ou deixa um atrasado entrar.</span></div>
     </div>
-    <label class="check"><input type="checkbox" id="${f}ColarVida" checked> <span>Tentar colar (Ctrl+V) também custa 1 vida</span></label>
+    <label class="check"><input type="checkbox" id="${f}ColarVida"> <span>Tentar colar (Ctrl+V) também custa 1 vida</span></label>
     <div class="grade" style="margin:8px 0 0">
       <label class="check"><input type="checkbox" id="${f}Dicas"> <span>💡 Permitir pedir dicas ao mascote <span class="pequeno">— uma dica curta que não entrega a resposta; fica registrado quem pediu e em qual questão</span></span></label>
       <div><label for="${f}DicasMax">Dicas por aluno (para a prova toda)</label><input type="number" id="${f}DicasMax" value="3" min="1" max="10" step="1"></div>
@@ -941,7 +941,7 @@ function controleProva(f) {
     $f("ColarVida").checked = p.colarTiraVida !== false;
     $f("SegVolta").value = p.segundosVolta ?? 5;
     $f("Dicas").checked = Number(p.dicasMax || 0) > 0; $f("DicasMax").value = Number(p.dicasMax || 0) > 0 ? p.dicasMax : 3;
-    $f("EntradaAte").value = p.entradaAte?.toDate ? dataHoraLocal(p.entradaAte.toDate()) : "";
+    { const v = p.entradaAte?.toDate ? dataHoraLocal(p.entradaAte.toDate()) : ""; $f("EntradaAteData").value = v.slice(0, 10); $f("EntradaAteHora").value = v.slice(11, 16); }
     $f("IaAuto").checked = p.iaAutomatica !== false;
     previaMaterial(); atualizarLimite();
   }
@@ -974,7 +974,7 @@ function controleProva(f) {
       colarTiraVida: $f("ColarVida").checked,
       dicasMax: $f("Dicas").checked ? Math.min(10, Math.max(1, Math.round(Number($f("DicasMax").value || 3)))) : 0,
       segundosVolta: Math.min(120, Math.max(0, Math.round(Number($f("SegVolta").value || 0)))),
-      entradaAte: $f("EntradaAte").value ? Timestamp.fromDate(new Date($f("EntradaAte").value)) : null,
+      entradaAte: $f("EntradaAteHora").value ? Timestamp.fromDate(new Date(`${$f("EntradaAteData").value || $f("Data").value || hojeISO()}T${$f("EntradaAteHora").value}`)) : null,
       iaAutomatica: $f("IaAuto").checked,
       acaoAoExceder: $f("Modo").value !== "todas" && !$f("Voltar").checked && $f("AcaoExceder").value === "perderQuestao" ? "perderQuestao" : "encerrar",
       // vários PDFs em materiaisConsultaIds; materialConsultaArquivoId (um PDF só) fica para provas antigas
@@ -1002,7 +1002,7 @@ function controleProva(f) {
   async function preencherOrganizacao({ turmaId, semestre, materia, titulo, data, topicos = [] }) {
     if (turmaId) $f("Turma").value = turmaId;
     opcoesSemestre(semestre || semestreDe()); semestreMexido = !!semestre;
-    $f("Materia").value = materia || ""; if (titulo) $f("Titulo").value = titulo; $f("Data").value = data || "";
+    $f("Materia").value = materia || ""; if (titulo) $f("Titulo").value = titulo; $f("Data").value = data || hojeISO();
     opcoesMateria(); topicosPlano.definir();
     // marca só os bancos dessa matéria
     const daMateria = bancosCache.filter(b => materia && chaveTexto(b.materia) === chaveTexto(materia)).map(b => b.id);
@@ -1375,6 +1375,7 @@ let drawerNovaProva = null;
 function abrirFormNovaProva() {
   if (!podeEditar()) return toast("Seu papel não permite criar somativas.", "erro");
   if (drawerNovaProva) return;
+  if (!$("#pData").value) $("#pData").value = hojeISO();   // somativa nova: hoje
   drawerNovaProva = drawer({ titulo: "Nova somativa", corpo: $("#cardNovaProva"), aoFechar: () => { drawerNovaProva = null; $("#cardNovaProva").classList.add("oculto"); },
     acoes: [{ t: "Cancelar", classe: "leve" }, { t: "Criar somativa", onClick: () => criarProva() }] });
   drawerNovaProva.el.classList.add("extra-largo");
@@ -1598,16 +1599,45 @@ const BANCOS_PRONTOS = [
       { titulo: "Prática Web — Portfólio (projeto livre com pastas e git)", nWeb: 1, tempoMinutos: 100, tema: "Portfólio — projeto livre" }
     ] }
 ];
+// ---------- matéria da Bancada Web: "Desenvolvimento Web"/"Programação Web" → "Linguagem de Marcação" (nome do plano de curso) ----------
+// Só troca o NOME da matéria em bancos, somativas, planos de ensino e cursos; questões, notas e sorteios não mudam.
+const MATERIA_MARCACAO = "Linguagem de Marcação", MATERIAS_WEB_ANTIGAS = new Set(["desenvolvimento web", "programacao web"]);
+const materiaWebAntiga = m => MATERIAS_WEB_ANTIGAS.has(chaveTexto(m));
+async function corrigirMateriaWeb() {
+  const [bs, ps, pls, cs] = await Promise.all(["bancos", "provas", "planos", "cursos"].map(c => getDocs(collection(db, c))));
+  const ops = [];
+  bs.forEach(d => { if (materiaWebAntiga(d.data().materia)) ops.push([d.ref, { materia: MATERIA_MARCACAO }]); });
+  ps.forEach(d => { if (materiaWebAntiga(d.data().materia)) ops.push([d.ref, { materia: MATERIA_MARCACAO }]); });
+  pls.forEach(d => { if (materiaWebAntiga(d.data().materia)) ops.push([d.ref, { materia: MATERIA_MARCACAO }]); });
+  cs.forEach(d => {   // curso: renomeia a matéria; se o curso já tiver "Linguagem de Marcação", junta os tópicos nela (sem duplicar)
+    const ms = d.data().materias || [];
+    if (!ms.some(m => materiaWebAntiga(m.nome))) return;
+    const nova = ms.find(m => chaveTexto(m.nome) === chaveTexto(MATERIA_MARCACAO));
+    const out = nova ? ms.filter(m => !materiaWebAntiga(m.nome)).map(m => m === nova ? { ...m, topicos: [...new Set([...(m.topicos || []), ...ms.filter(x => materiaWebAntiga(x.nome)).flatMap(x => x.topicos || [])])] } : m)
+      : ms.map(m => materiaWebAntiga(m.nome) ? { ...m, nome: MATERIA_MARCACAO } : m);
+    ops.push([d.ref, { materias: out }]);
+  });
+  if (!ops.length) return toast(`Nada para corrigir: nenhuma matéria "Desenvolvimento Web" ou "Programação Web".`, "ok");
+  const n = c => ops.filter(([r]) => r.parent.id === c).length;
+  if (!(await confirmar(`Trocar a matéria "Desenvolvimento Web"/"Programação Web" por "${MATERIA_MARCACAO}" em: ${n("bancos")} banco(s), ${n("provas")} somativa(s), ${n("planos")} plano(s) de ensino e ${n("cursos")} curso(s)?\n\nSó muda o nome da matéria: questões, notas e resultados continuam iguais.`, { titulo: "Corrigir matéria", ok: "Trocar o nome" }))) return;
+  try {
+    for (let i = 0; i < ops.length; i += 400) { const lote = writeBatch(db); ops.slice(i, i + 400).forEach(([r, d]) => lote.update(r, d)); await lote.commit(); }
+    toast(`Matéria corrigida em ${ops.length} lugar(es).`, "ok");
+    await carregarBancos(); carregarProvas();
+  } catch (e) { toast("Não foi possível corrigir. " + traduzirErro(e), "erro"); }
+}
 function desenharBancosProntos() {
   const box = $("#bancosProntos"); if (!box) return;
   if (!podeEditar()) { box.innerHTML = ""; return; }
+  const webAntiga = bancosCache.some(b => materiaWebAntiga(b.materia)) || provasCache.some(p => materiaWebAntiga(p.materia));
   box.innerHTML = `<div class="card bancos-prontos"><h3 style="margin:0 0 4px">📦 Bancos prontos</h3><p class="pequeno" style="margin:0 0 10px">Importe com um clique. Já cria somativas de exemplo preenchidas (fechadas e sem turma): é só escolher a turma em <b>Editar</b> e liberar.</p>` +
     BANCOS_PRONTOS.map((b, i) => {
       const ja = bancosCache.find(x => x.arquivoPronto === b.arquivo);
       return `<div class="bp-item"><div><b>${b.icone} ${esc(b.titulo)}</b>${ja ? ` <span class="tag ok">importado</span>` : ""}<p class="pequeno" style="margin:2px 0 0">${esc(b.desc)}</p>
         <p class="pequeno" style="margin:2px 0 0">Somativas de exemplo: ${b.provas.map(p => esc(p.titulo)).join(" · ")}</p></div>
         <button class="${ja ? "leve" : "ok"} mini" data-pronto="${i}">${ja ? "Criar as somativas de exemplo de novo" : "Importar e criar as somativas"}</button></div>`;
-    }).join("") + `</div>`;
+    }).join("") + (webAntiga ? `<div class="aviso-box" style="margin-top:10px">A Bancada Web está na matéria "Desenvolvimento Web"/"Programação Web"; o nome certo é <b>${MATERIA_MARCACAO}</b>. <button type="button" class="ok mini" id="btnMateriaWeb">Corrigir o nome da matéria</button></div>` : "") + `</div>`;
+  $("#btnMateriaWeb")?.addEventListener("click", corrigirMateriaWeb);
   box.querySelectorAll("[data-pronto]").forEach(bt => bt.onclick = () => importarPronto(BANCOS_PRONTOS[Number(bt.dataset.pronto)], bt));
 }
 async function importarPronto(item, bt) {
@@ -1626,7 +1656,7 @@ async function importarPronto(item, bt) {
       const temas = p.temas || (p.tema ? [p.tema] : (banco.temas || []));
       const n = Number(p.nSql || 0) + Number(p.nWeb || 0) + Number(p.nDiagramas || 0) + Number(p.nAlternativas || 0) + Number(p.nDissertativas || 0);
       await addDoc(collection(db, "provas"), {
-        titulo: p.titulo, turmaId: null, turma: "", codigoAcesso: "", semestre: semestreDe(), materia: banco.materia || (p.nWeb ? "Desenvolvimento Web" : p.nDiagramas ? "Levantamento de Requisitos" : "Banco de Dados"), dataProva: "", planoCurso: null,
+        titulo: p.titulo, turmaId: null, turma: "", codigoAcesso: "", semestre: semestreDe(), materia: banco.materia || (p.nWeb ? "Linguagem de Marcação" : p.nDiagramas ? "Levantamento de Requisitos" : "Banco de Dados"), dataProva: "", planoCurso: null,
         permitirVoltar: true, tempoMinutos: p.tempoMinutos || 45, modoExibicao: "uma", permitirTrocaAba: false, permitirColar: false,
         maxTrocasDeAba: 3, colarTiraVida: true, dicasMax: p.dicasMax || 0, segundosVolta: 5, entradaAte: null, iaAutomatica: true, acaoAoExceder: "encerrar",
         materialConsultaUrl: "", materiaisConsultaIds: [], materialConsultaArquivoId: null, materialConsultaTitulo: "",
@@ -1842,6 +1872,7 @@ function tempoTotal(t) {
   return i && f ? Math.round((f - i) / 1000) : null;
 }
 // "2026-11-25T14:30" para <input type="datetime-local">
+const hojeISO = () => dataHoraLocal(new Date()).slice(0, 10);
 function dataHoraLocal(d) { const z = n => String(n).padStart(2, "0"); return `${d.getFullYear()}-${z(d.getMonth() + 1)}-${z(d.getDate())}T${z(d.getHours())}:${z(d.getMinutes())}`; }
 const RAPIDO = 5;   // resposta enviada em menos de 5 s: destacar
 // sinais de cola; com troca de aba permitida na prova, as trocas aparecem em cinza ("permitido") e não destacam a linha
@@ -2464,9 +2495,13 @@ function desenharResultados() {
   html = entradaHTML() + html;
   if (resDados.turma) {
     const fizeram = new Set(linhas.map(l => String(l.t.email || "").toLowerCase()));
-    const todos = alunosDaTurma(resDados.turma), faltam = todos.filter(a => !a.email || !fizeram.has(a.email));
-    html += `<div class="card secao-faltam"><h2>Não fizeram <span class="meta-txt">${faltam.length} de ${todos.length} da turma ${esc(resDados.turma.nome)}</span></h2>` +
-      (faltam.length ? `<ul class="lista-faltam">${faltam.map(a => `<li>${esc(a.nome || a.email)}${a.nome && a.email ? ` <span class="pequeno">${esc(a.email)}</span>` : ""}${!a.email ? ` <span class="pequeno">— ainda não entrou no sistema</span>` : ""}${a.email && podeCuidar() ? botoesEntrada(a.email) : ""}</li>`).join("")}</ul>` : `<p class="help">Todos os alunos da turma começaram a prova.</p>`) + `</div>`;
+    // recuperação/substitutiva: só quem foi colocado nela (alunosEmails); somativa normal: a turma toda
+    const daRec = Array.isArray(resDados.prova.alunosEmails) ? new Set(resDados.prova.alunosEmails.map(e => String(e).toLowerCase())) : null;
+    const daTurma = alunosDaTurma(resDados.turma);
+    const todos = daRec ? [...daRec].map(e => ({ ...(daTurma.find(a => String(a.email || "").toLowerCase() === e) || { nome: "" }), email: e })) : daTurma;
+    const faltam = todos.filter(a => !a.email || !fizeram.has(a.email));
+    html += `<div class="card secao-faltam"><h2>Não fizeram <span class="meta-txt">${faltam.length} de ${todos.length} ${daRec ? "em recuperação" : `da turma ${esc(resDados.turma.nome)}`}</span></h2>` +
+      (faltam.length ? `<ul class="lista-faltam">${faltam.map(a => `<li>${esc(a.nome || a.email)}${a.nome && a.email ? ` <span class="pequeno">${esc(a.email)}</span>` : ""}${!a.email ? ` <span class="pequeno">— ainda não entrou no sistema</span>` : ""}${a.email && podeCuidar() ? botoesEntrada(a.email) : ""}</li>`).join("")}</ul>` : `<p class="help">${daRec ? "Todos os alunos da recuperação começaram a prova." : "Todos os alunos da turma começaram a prova."}</p>`) + `</div>`;
   } else if (resDados.prova.turmaId) html += `<div class="card"><p class="pequeno">A turma desta prova não foi encontrada (apagada?). Escolha outra em Provas → Editar.</p></div>`;
   if (mostrarTestes) html += `<div class="card secao-testes"><h2>Testes da equipe <span class="meta-txt">não entram na média, no CSV, nos PDFs nem em "Fechar notas"</span></h2>${testes.length ? tabelaHTML(testes, "teste") : `<p class="pequeno">Nenhuma tentativa de teste nesta prova. Abra <b>Testar como aluno</b> na aba Provas.</p>`}</div>`;
   // preserva o detalhe aberto (e o que o professor estiver digitando nele)
