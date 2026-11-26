@@ -1984,6 +1984,14 @@ async function reconferirExtensoes() {
   if (ev === "contextmenu" && colarPermitido() && el?.closest("textarea")) return;   // colar permitido: botão direito → Colar
   e.preventDefault();
 }));
+// botão direito em QUALQUER lugar da página durante a prova (cabeçalho, margens, material de consulta):
+// o menu do navegador tem "Pesquisar com o Google Lens"/Gemini, que abre um painel de IA ao lado da prova
+document.addEventListener("contextmenu", e => {
+  if (!emProvaAtiva()) return;
+  const el = e.target?.nodeType === 1 ? e.target : e.target?.parentElement;
+  if (colarPermitido() && el?.closest?.("textarea")) return;
+  e.preventDefault();
+}, true);
 
 // ---------- cronômetro (prova com tempoMinutos > 0) ----------
 let relogio = null;
