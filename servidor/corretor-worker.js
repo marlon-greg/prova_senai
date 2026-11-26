@@ -661,14 +661,23 @@ async function analisarDiario(env, usuario, corpo) {
   const de = String(corpo.de || ""), ate = String(corpo.ate || "");
   if (!/^[^\s@/]+@[^\s@/]+$/.test(email) || !/^\d{4}-\d{2}-\d{2}$/.test(de) || !/^\d{4}-\d{2}-\d{2}$/.test(ate)) throw falha("dados inválidos.", 400);
   const fs = await firestore(env), acess = await fs.ler(`acessibilidade/${email}`);
-  let ok = quem === SUPER_ADMIN;
-  if (!ok) { const papel = (await fs.ler(`equipe/${quem}`))?.papel; ok = papel === "admin" || papel === "professor" || (papel === "inclusao" && (acess?.auxiliares || []).map(x => String(x).toLowerCase()).includes(quem)); }
+  let ok = quem === SUPER_ADMIN, papel = "";
+  if (!ok) { papel = (await fs.ler(`equipe/${quem}`))?.papel; ok = papel === "admin" || papel === "professor" || (papel === "inclusao" && (acess?.auxiliares || []).map(x => String(x).toLowerCase()).includes(quem)); }
   if (!ok) throw falha("Sem permissão para este aluno.", 403);
+  // auxiliar de inclusão: no máximo LIMITE_ANALISE_INCLUSAO análises por dia, contando os dois sistemas (decisão do professor, 26/11/2026).
+  // A contagem fica em usoIA/{email}__{dia}: as regras não deixam ninguém ler nem gravar pelo navegador, e ela não vê o limite.
+  const limitada = papel === "inclusao", hoje = new Date().toLocaleDateString("en-CA", { timeZone: "America/Sao_Paulo" });
+  const caminhoUso = `usoIA/${quem}__${hoje}`, uso = limitada ? Number((await fs.ler(caminhoUso))?.analiseDiario || 0) : 0;
+  if (limitada && uso >= LIMITE_ANALISE_INCLUSAO) throw falha("A análise com IA não está disponível agora. Tente de novo amanhã.", 429);
   const diario = Object.entries((await fs.listar(`acessibilidadePrivado/${email}/diario`)) || {}).map(([id, r]) => ({ id, ...r })).filter(r => r.data >= de && r.data <= ate);
   const comentarios = (await Promise.all(diario.filter(r => r.nComentarios > 0).slice(0, 15).map(r => fs.listar(`acessibilidadePrivado/${email}/diario/${r.id}/comentarios`).catch(() => ({}))))).flatMap(o => Object.values(o));
   const r = await chamarClaude(env, { model: env.MODELO_ADAPTACAO || "claude-sonnet-5-5", ...pedidoAnalise({ periodo: `${de} a ${ate}`, contexto: contextoPeriodo(diario, comentarios) }) });
-  return { ok: true, analise: lerRespostaAnalise(r) };
+  const analise = lerRespostaAnalise(r);
+  // só conta a análise que deu certo (erro da IA não gasta)
+  if (limitada) await fs.mesclar(caminhoUso, { email: quem, dia: hoje, analiseDiario: uso + 1 }, ["email", "dia", "analiseDiario"], "em").catch(e => console.log("usoIA:", e.message));
+  return { ok: true, analise };
 }
+const LIMITE_ANALISE_INCLUSAO = 3;
 async function montarPerfil(env, usuario, corpo) {
   const quem = String(usuario.email || "").toLowerCase(), email = String(corpo.email || "").trim().toLowerCase();
   if (!/^[^\s@/]+@[^\s@/]+$/.test(email)) throw falha("email inválido.", 400);
