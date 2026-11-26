@@ -17,7 +17,7 @@ export function htmlEditorTopicos(f) {
     <legend>O que a prova avalia</legend>
     <p class="pequeno" style="margin-top:0">Os critérios vêm do sistema de autoavaliação (plano de ensino). Os da avaliação prevista já vêm marcados: aqui você só tira ou põe. O aluno vê os critérios antes de começar, cada um explicado.</p>
     <div class="grade">
-      <div><label for="${f}PcUnidade">Unidade curricular</label><select id="${f}PcUnidade">
+      <div id="${f}PcUnidadeBox"><label for="${f}PcUnidade">Unidade curricular</label><select id="${f}PcUnidade">
         <option value="">Automática, pela matéria</option>
         ${grupos.map(g => `<optgroup label="Módulo ${esc(g)}">${PLANO_CURSO.unidades.filter(u => u.modulo === g).map(u => `<option value="${u.id}">${esc(u.nome)} (${semTxt(u)})${criteriosDaUnidade(u.id).length ? "" : " · sem critérios ainda"}</option>`).join("")}</optgroup>`).join("")}
         <option value="${NENHUMA}">Nenhuma (não mostrar nada ao aluno)</option>
@@ -34,7 +34,7 @@ export function htmlEditorTopicos(f) {
 }
 
 // materia(): texto da matéria; ctx(): { turma, titulo, data } do formulário
-export function editorTopicos(f, materia, ctx = () => ({})) {
+export function editorTopicos(f, materia, ctx = () => ({}), aoMudarCaps = () => {}) {
   const $f = s => $("#" + f + s);
   let marcados = new Set(), ultima = null;
   const unidade = () => { const v = $f("PcUnidade").value; return v === NENHUMA ? null : unidadePorId(v) || unidadeDaMateria(materia()); };
@@ -107,6 +107,9 @@ export function editorTopicos(f, materia, ctx = () => ({})) {
   }
   function desenhar() {
     const u = unidade(), ab = abertos();
+    // a matéria é escolhida no topo: a unidade só aparece para escolher quando a matéria não bate com nenhuma (ou "Nenhuma")
+    $f("PcUnidadeBox").classList.toggle("oculto", !!unidadeDaMateria(materia()) && $f("PcUnidade").value !== NENHUMA && (!$f("PcUnidade").value || $f("PcUnidade").value === unidadeDaMateria(materia())?.id));
+    setTimeout(() => aoMudarCaps(capacidades()), 0);
     $f("PcAvBox").classList.toggle("oculto", !comCriterios(u));
     if (!u) $f("PcBlocos").innerHTML = "";
     else if (comCriterios(u)) desenharCriterios(u); else desenharCapacidades(u);
@@ -143,7 +146,7 @@ export function editorTopicos(f, materia, ctx = () => ({})) {
       const id = x.value;
       x.checked ? marcados.add(id) : marcados.delete(id);
       if (!comCriterios(u) && id.includes(".k") && nivelK(id) === 1) for (const [c] of filhos(u, id)) { x.checked ? marcados.add(c) : marcados.delete(c); const el = $f("PcBlocos").querySelector(`input[value="${c}"]`); if (el) el.checked = x.checked; }
-      if (comCriterios(u)) desenhar(); else { sincronizarPais(u); resumo(); }
+      if (comCriterios(u)) desenhar(); else { sincronizarPais(u); resumo(); aoMudarCaps(capacidades()); }
     });
     $f("PcBlocos").addEventListener("click", e => {
       const u = unidade();
@@ -206,5 +209,11 @@ export function editorTopicos(f, materia, ctx = () => ({})) {
     }
     return { valor: { unidade: u.id, itens, instrumento } };
   }
-  return { ligar, definir, ler, aoMudarMateria, aoMudarDataTitulo };
+  // capacidades técnicas marcadas (ids "bd.ct9"); no modo critérios, as capacidades dos critérios marcados
+  function capacidades() {
+    const u = unidade(); if (!u) return new Set();
+    if (comCriterios(u)) return new Set(criteriosDaUnidade(u.id).filter(c => marcados.has(c[0]) && c[1].includes(".ct")).map(c => c[1]));
+    return new Set([...marcados].filter(id => id.includes(".ct")));
+  }
+  return { ligar, definir, ler, aoMudarMateria, aoMudarDataTitulo, capacidades, unidade };
 }

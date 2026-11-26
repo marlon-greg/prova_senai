@@ -8,7 +8,8 @@ import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA,
 import { abrirLeitorPdf } from "./leitor-pdf.js";
 import { htmlEditorTopicos, editorTopicos } from "./plano-curso-ui.js?v=20261113d";
 import { criteriosDaUnidade, codigoCriterio, carregarCriteriosOficiais } from "./plano-ensino.js?v=20261116a";
-import { PLANO_CURSO } from "./plano-curso.js?v=20261113a";
+import { PLANO_CURSO, unidadeDaMateria, unidadesDoSemestre } from "./plano-curso.js?v=20261113a";
+import { proporCapacidades, capsDoTema } from "./temas-capacidades.js?v=20261126a";
 import { iniciarOrganizacao, carregarOrganizacao, listarPlanos, listarCursos, materiasSugeridas, editarTopicosBanco, editarCriteriosBanco, topicosDaMateria } from "./admin-org.js";
 import { iniciarDiario, carregarDiario } from "./admin-diario.js";
 import { iniciarCriterios, carregarCriterios } from "./admin-criterios.js?v=20261116a";
@@ -464,7 +465,7 @@ function abrirStatusTurma(t) {
 let materiaisCache = [];
 async function listarMateriaisCache() { materiaisCache = await listarMateriais(); return materiaisCache; }
 // envia o PDF mostrando o andamento em `el`; devolve o material ou null
-async function enviarPdf(file, titulo, el) {
+async function enviarPdf(file, titulo, el, materia = "") {
   if (!podeEditar()) { toast("Seu papel não permite enviar material.", "erro"); return null; }
   el.textContent = "Preparando o envio…";
   try {
@@ -472,6 +473,7 @@ async function enviarPdf(file, titulo, el) {
       const pct = n ? Math.round(i / n * 100) : 0;
       el.innerHTML = `<progress class="barra" max="100" value="${pct}"></progress> Enviando ${esc(file.name)}: ${pct}% (${i} de ${n} partes)`;
     });
+    if (materia) { try { await updateDoc(doc(db, "materiais", m.id), { materia }); } catch (e) { /* fica sem matéria; dá para definir na lista */ } }
     el.textContent = `✅ ${m.titulo} enviado (${tamanhoTexto(m.tamanho)}).`;
     await listarMateriaisCache();
     return m;
@@ -542,7 +544,7 @@ function formProvaHTML(f) {
   <div class="grade">
     <div><label for="${f}Semestre">Semestre</label><select id="${f}Semestre"></select></div>
     <div><label for="${f}Materia">Matéria</label><select id="${f}Materia" aria-label="Matéria da prova"><option value="">— Todas as matérias —</option></select>
-      <p class="pequeno" style="margin:4px 0 0">Filtra os bancos abaixo; sem seleção, o campo é detectado do primeiro banco marcado.</p></div>
+      <p class="pequeno" style="margin:4px 0 0">Define as capacidades e os bancos abaixo. <span id="${f}SemTurma"></span></p></div>
     <div><label for="${f}Data">Data da somativa</label><input type="date" id="${f}Data"></div>
   </div>
   ${htmlEditorTopicos(f)}
@@ -653,7 +655,11 @@ function controleProva(f) {
   let travado = false, turmaLegada = "", matMarcados = [];
   // tópicos do plano de curso: a unidade automática segue a matéria (ou a do 1º banco marcado)
   const topicosPlano = editorTopicos(f, () => $f("Materia").value.trim() || (bancosCache.find(x => x.id === bancosMarcados()[0])?.materia || ""),
-    () => ({ turma: turmaEscolhida().turma, titulo: $f("Titulo").value, data: $f("Data").value }));
+    () => ({ turma: turmaEscolhida().turma, titulo: $f("Titulo").value, data: $f("Data").value }),
+    caps => { capsMarcadas = caps; if (Object.keys(contagens).length) desenharTemas(); });
+  let capsMarcadas = new Set();
+  // tema fora das capacidades marcadas (só some quando o tema JÁ foi ligado a capacidades e nenhuma delas está marcada)
+  const foraDasCaps = (b, t) => { if (!capsMarcadas.size) return false; const c = capsDoTema(bancosCache.find(x => x.id === b), t); return !!c?.length && !c.some(x => capsMarcadas.has(x)); };
   // sel: bancoId -> Set de temas marcados (null = "todos", resolvido quando os temas do banco carregam)
   // contagens: bancoId -> { tema: {alternativa, dissertativa} } ou "erro"; abertos: bancos expandidos na visão por banco
   let sel = new Map(), contagens = {}, abertos = new Set(), carregando = null;
@@ -716,11 +722,11 @@ function controleProva(f) {
     for (const banco of bancosCache) {
       if (filtroMat && banco.materia !== filtroMat) continue;
       const nomeCasa = casa(banco.nome || "", busca);
-      for (const t of temasDe(banco.id)) if ((nomeCasa || casa(t, busca)) && (!so || marcadoTema(banco.id, t))) r.push({ b: banco.id, t });
+      for (const t of temasDe(banco.id)) if ((nomeCasa || casa(t, busca)) && (!so || marcadoTema(banco.id, t)) && (marcadoTema(banco.id, t) || !foraDasCaps(banco.id, t))) r.push({ b: banco.id, t });
     }
     return r;
   }
-  const checkTema = (b, t, extra = "") => `<label class="check"><input type="checkbox" data-b="${b}" value="${esc(t)}"${marcadoTema(b, t) ? " checked" : ""}${travado ? " disabled" : ""}><span><b>${esc(t)}</b>${extra} <span class="pequeno">— ${textoContagem(contagens[b][t])}</span></span></label>`;
+  const checkTema = (b, t, extra = "") => `<label class="check"><input type="checkbox" data-b="${b}" value="${esc(t)}"${marcadoTema(b, t) ? " checked" : ""}${travado ? " disabled" : ""}><span><b>${esc(t)}</b>${extra}${capsMarcadas.size && !capsDoTema(bancosCache.find(x => x.id === b), t)?.length ? ` <span class="tag" title="Ligue este tema às capacidades em Bancos de questões → 🔗 Capacidades">sem capacidade definida</span>` : ""} <span class="pequeno">— ${textoContagem(contagens[b][t])}</span></span></label>`;
   function desenharTemas() {
     const box = $f("Temas"), topo = box.scrollTop;
     const busca = $f("TemasBusca").value.trim(), so = $f("TemasSoMarcados").checked, vis = temasVisiveis();
@@ -812,18 +818,39 @@ function controleProva(f) {
     try { await listarMateriaisCache(); } catch (e) { /* sem materiais */ }
     desenharMateriais();
   }
+  // matéria do material: a gravada; senão, a das somativas que já usaram o PDF (palpite)
+  function materiaDoMaterial(m) {
+    if (m.materia) return m.materia;
+    const usos = provasCache.filter(p => (p.materiaisConsultaIds || []).includes(m.id) && p.materia).map(p => p.materia);
+    return usos.sort((a, b) => usos.filter(x => x === b).length - usos.filter(x => x === a).length)[0] || "";
+  }
   function desenharMateriais() {
-    const box = $f("MatLista"), lista = [...materiaisCache].sort((a, b) => ordemNatural(a.titulo, b.titulo));
+    const box = $f("MatLista"), todos = [...materiaisCache].sort((a, b) => ordemNatural(a.titulo, b.titulo));
     const apagados = matMarcados.filter(id => !materiaisCache.some(m => m.id === id));
-    box.innerHTML = !lista.length && !apagados.length ? `<p class="pequeno" style="margin:0">Nenhum PDF enviado ainda. Use <b>⬆ Enviar PDF(s)</b>.</p>` :
-      lista.map(m => `<div class="item-material"><label class="check"><input type="checkbox" value="${m.id}"${matMarcados.includes(m.id) ? " checked" : ""}> <span>${esc(m.titulo)} <span class="pequeno">(${tamanhoTexto(m.tamanho)})</span></span></label>
-        <button type="button" class="leve mini" data-vermat="${m.id}" title="Ver como o aluno vai ver" aria-label="Ver ${esc(m.titulo)}">👁</button></div>`).join("") +
+    // só os da matéria escolhida no topo (os marcados aparecem sempre); os outros ficam recolhidos
+    const mat = $f("Materia").value, daMat = m => !mat || chaveTexto(materiaDoMaterial(m)) === chaveTexto(mat) || matMarcados.includes(m.id);
+    const lista = todos.filter(daMat), outros = todos.filter(m => !daMat(m));
+    const semMat = lista.concat(outros).filter(m => !m.materia);
+    const opcMat = PLANO_CURSO.unidades.map(u => u.nome).sort((a, b) => a.localeCompare(b, "pt-BR"));
+    const linhaMat = m => `<div class="item-material"><label class="check"><input type="checkbox" value="${m.id}"${matMarcados.includes(m.id) ? " checked" : ""}> <span>${esc(m.titulo)} <span class="pequeno">(${tamanhoTexto(m.tamanho)})</span></span></label>
+        ${m.materia ? "" : `<select class="mini" data-matmateria="${m.id}" aria-label="Matéria de ${esc(m.titulo)}" title="Matéria deste PDF (para aparecer só na matéria certa)"><option value="">matéria?</option>${opcMat.map(o => `<option value="${esc(o)}"${chaveTexto(o) === chaveTexto(materiaDoMaterial(m)) ? " selected" : ""}>${esc(o)}${chaveTexto(o) === chaveTexto(materiaDoMaterial(m)) ? " (sugerida)" : ""}</option>`).join("")}</select>`}
+        <button type="button" class="leve mini" data-vermat="${m.id}" title="Ver como o aluno vai ver" aria-label="Ver ${esc(m.titulo)}">👁</button></div>`;
+    box.innerHTML = !todos.length && !apagados.length ? `<p class="pequeno" style="margin:0">Nenhum PDF enviado ainda. Use <b>⬆ Enviar PDF(s)</b>.</p>` :
+      (semMat.length ? `<p class="pequeno" style="margin:0 0 6px">${semMat.length} PDF(s) ainda sem matéria: escolha no seletor ao lado (a sugestão vem das somativas que já usaram o PDF).</p>` : "") +
+      (mat && !lista.length ? `<p class="pequeno" style="margin:0">Nenhum PDF de <b>${esc(mat)}</b>.</p>` : "") +
+      lista.map(linhaMat).join("") +
+      (outros.length ? `<details class="recolhivel leve" style="margin-top:6px"><summary><span class="rc-titulo">Materiais de outras matérias (${outros.length})</span></summary><div class="rc-corpo">${outros.map(linhaMat).join("")}</div></details>` : "") +
       apagados.map(id => `<div class="item-material"><label class="check"><input type="checkbox" value="${esc(id)}" checked> <span class="erro-texto">⚠ PDF apagado — desmarque</span></label></div>`).join("");
     box.querySelectorAll("input[type=checkbox]").forEach(c => c.onchange = () => {
       matMarcados = c.checked ? [...matMarcados.filter(x => x !== c.value), c.value] : matMarcados.filter(x => x !== c.value);
       if (!c.checked && apagados.includes(c.value)) desenharMateriais(); else previaMaterial();
     });
     box.querySelectorAll("[data-vermat]").forEach(b => b.onclick = () => verMaterial(b.dataset.vermat));
+    box.querySelectorAll("[data-matmateria]").forEach(sel => sel.onchange = async () => {
+      if (!sel.value) return;
+      try { await updateDoc(doc(db, "materiais", sel.dataset.matmateria), { materia: sel.value }); const m = materiaisCache.find(x => x.id === sel.dataset.matmateria); if (m) m.materia = sel.value; toast("Matéria do PDF salva.", "ok"); desenharMateriais(); }
+      catch (e) { toast("Não foi possível salvar. " + traduzirErro(e), "erro"); }
+    });
     previaMaterial();
   }
   // ids marcados, na ordem em que o aluno vê as abas (título em ordem natural: "Aula 2" antes de "Aula 10")
@@ -863,7 +890,7 @@ function controleProva(f) {
       const files = [...$f("MatUpload").files]; $f("MatUpload").value = "";
       let ok = 0;
       for (const file of files) {
-        const r = await enviarPdf(file, "", $f("MatEnvio"));
+        const r = await enviarPdf(file, "", $f("MatEnvio"), $f("Materia").value);
         if (r) { ok++; matMarcados = [...matMarcados.filter(x => x !== r.id), r.id]; }
       }
       if (files.length > 1) $f("MatEnvio").textContent = `✅ ${ok} de ${files.length} PDFs enviados.`;
@@ -876,7 +903,7 @@ function controleProva(f) {
     opcoesSemestre();
     $f("Semestre").onchange = () => { semestreMexido = true; };
     $f("Turma").addEventListener("change", opcoesMateria);
-    $f("Materia").onchange = () => { topicosPlano.aoMudarMateria(); desenharTemas(); };
+    $f("Materia").onchange = () => { topicosPlano.aoMudarMateria(); desenharTemas(); desenharMateriais(); };
     topicosPlano.ligar(); topicosPlano.definir();
     $f("Turma").addEventListener("change", topicosPlano.aoMudarMateria);
     $f("Titulo").addEventListener("input", () => topicosPlano.aoMudarDataTitulo());
@@ -897,7 +924,14 @@ function controleProva(f) {
     const extras = dosBancos.filter(m => !vistas.has(chave(m)));
     const materias = [...doCurso, ...extras].sort((a, b) => a.localeCompare(b, "pt-BR"));
     const atual = $f("Materia").value;
-    $f("Materia").innerHTML = `<option value="">— Todas as matérias —</option>` + materias.map(m => `<option value="${esc(m)}">${esc(m)}</option>`).join("");
+    // matérias do semestre do curso em que a turma está vêm primeiro
+    const sc = semestreCursoAtual(turmasCache.find(x => x.id === $f("Turma").value))?.n || 0;
+    const daTurma = sc ? new Set(unidadesDoSemestre(sc).map(u => u.nome)) : new Set();
+    const opt = m => `<option value="${esc(m)}">${esc(m)}</option>`;
+    $f("Materia").innerHTML = `<option value="">— Escolha a matéria —</option>` + (daTurma.size
+      ? `<optgroup label="Matérias do ${sc}º semestre da turma">${materias.filter(m => daTurma.has(m)).map(opt).join("")}</optgroup><optgroup label="Outras matérias">${materias.filter(m => !daTurma.has(m)).map(opt).join("")}</optgroup>`
+      : materias.map(opt).join(""));
+    $f("SemTurma").textContent = sc ? `Turma no ${sc}º semestre do curso.` : "";
     if (materias.some(m => m === atual)) $f("Materia").value = atual;
   }
   // select de turmas; prova antiga com turma em texto livre ganha uma opção própria para não perder o nome
@@ -1645,6 +1679,30 @@ const BANCOS_PRONTOS = [
       { titulo: "Prática Web — Portfólio (projeto livre com pastas e git)", nWeb: 1, tempoMinutos: 100, tema: "Portfólio — projeto livre" }
     ] }
 ];
+// ---------- 🔗 tema → capacidades (bancos/{id}.capacidadesPorTema), com sugestão automática sem IA ----------
+async function editarCapacidadesBanco(bancoId) {
+  const b = bancosCache.find(x => x.id === bancoId); if (!b) return;
+  const u = unidadeDaMateria(b.materia);
+  if (!u) return toast(`A matéria do banco ("${b.materia || "sem matéria"}") não bate com nenhuma unidade do plano de curso. Ajuste a matéria em 🏷 Tópicos.`, "erro");
+  const temas = ordenarTemas((await questoesDoBanco(bancoId)).map(temaDe));
+  let sugeridos = 0;
+  const linhas = temas.map(t => {
+    const salvo = capsDoTema(b, t), marc = new Set(salvo || proporCapacidades(t, u));
+    if (!salvo && marc.size) sugeridos++;
+    return `<fieldset class="temas-box" data-cap-tema="${esc(t)}"><legend>${esc(t)} ${salvo ? "" : marc.size ? '<span class="tag nota">sugestão</span>' : '<span class="tag">sem sugestão</span>'}</legend>
+      ${u.tec.map(([id, txt]) => `<label class="check" style="margin:2px 0"><input type="checkbox" value="${id}"${marc.has(id) ? " checked" : ""}> <span class="pequeno">${esc(txt)}</span></label>`).join("")}</fieldset>`;
+  }).join("");
+  const ok = await modal({ titulo: `🔗 Capacidades — ${b.nome}`, largo: true, ok: "Salvar ligação", cancelar: "Cancelar",
+    conteudo: `<p class="pequeno" style="margin-top:0">Unidade: <b>${esc(u.nome)}</b>. Marque, em cada tema, as capacidades que ele avalia. Na <b>Nova somativa</b>, ao marcar capacidades em "O que a prova avalia", aparecem só os temas ligados a elas (tema sem ligação continua aparecendo, marcado "sem capacidade definida").${sugeridos ? ` <b>${sugeridos} tema(s) com sugestão automática</b> (por palavras-chave): confira.` : ""} Só muda a tela de criação: provas já criadas não mudam.</p>${linhas || "<p>Banco sem questões.</p>"}`,
+    antesDeConfirmar: async caixa => {
+      const mapa = {};
+      caixa.querySelectorAll("[data-cap-tema]").forEach(fsx => { mapa[fsx.dataset.capTema] = [...fsx.querySelectorAll("input:checked")].map(i => i.value); });
+      try { await updateDoc(doc(db, "bancos", bancoId), { capacidadesPorTema: mapa }); b.capacidadesPorTema = mapa; }
+      catch (e) { toast("Não foi possível salvar. " + traduzirErro(e), "erro"); return false; }
+      return true;
+    } });
+  if (ok) toast("Ligação dos temas às capacidades salva.", "ok");
+}
 // ---------- matéria da Bancada Web: "Desenvolvimento Web"/"Programação Web" → "Linguagem de Marcação" (nome do plano de curso) ----------
 // Só troca o NOME da matéria em bancos, somativas, planos de ensino e cursos; questões, notas e sorteios não mudam.
 const MATERIA_MARCACAO = "Linguagem de Marcação", MATERIAS_WEB_ANTIGAS = new Set(["desenvolvimento web", "programacao web"]);
@@ -1791,7 +1849,7 @@ function desenharBancos() {
                 ${c ? `<details class="bb-topicos"><summary>${seta(16)}${ic("tag", { size: 15 })}${pl(nTop, "tópico")}${geral ? `<span class="chip warn">${geral} sem tópico</span>` : ""}</summary>
                   <ul class="lista-topicos lista-topicos-banco">${Object.entries(c).map(([t, n]) => `<li class="topico${t === "Geral" ? " e-geral" : ""}"><span class="tp-nome">${esc(t)}</span><span class="meta-txt">${n.alternativa} alt. · ${n.dissertativa} dissert.</span></li>`).join("")}</ul>
                   ${geral ? `<p class="help">${pl(geral, "questão", "questões")} sem tópico ("Geral"): use Tópicos.</p>` : ""}</details>` : `<p class="help">Não foi possível ler as questões.</p>`}
-                <div class="bb-acoes">${podeEditar() ? `<button class="leve mini" data-topicos="${b.id}" title="Tópico de cada questão, matéria e semestre do banco (com sugestão da IA)">${ic("tag", { size: 16 })}Tópicos</button>` : ""}
+                <div class="bb-acoes">${podeEditar() ? `<button class="leve mini" data-capac="${b.id}" title="Ligar cada tema deste banco às capacidades do plano de curso (a Nova somativa mostra os temas das capacidades marcadas)">🔗 Capacidades</button>` : ""}${podeEditar() ? `<button class="leve mini" data-topicos="${b.id}" title="Tópico de cada questão, matéria e semestre do banco (com sugestão da IA)">${ic("tag", { size: 16 })}Tópicos</button>` : ""}
                   ${podeEditar() ? `<button class="leve mini" data-criterios="${b.id}" title="Liga cada questão a um critério do plano de ensino (para gerar evidência da prova)">${ic("star", { size: 16 })}Critérios</button>` : ""}
                   ${menuHTML({ aria: `Mais ações: ${b.nome}`, itensHTML: itemMenu({ i: "copy", t: "Gabarito para o Classroom", attrs: `data-gab="${b.id}"` }) + (ehAdmin() ? "<hr>" + itemMenu({ i: "trash", t: "Apagar banco", perigo: true, attrs: `data-delb="${b.id}"` }) : "") })}</div>
               </div></article>`;
@@ -1801,6 +1859,7 @@ function desenharBancos() {
   box.querySelectorAll("[data-gb]").forEach(d => d.ontoggle = () => { if (!filtrando) bancosEstado.set(d.dataset.gb, d.open); });
   box.querySelectorAll("[data-banco-sem]").forEach(x => x.onclick = () => abrirImportarBanco({ semestre: x.dataset.bancoSem, materia: x.dataset.bancoMat }));
   box.querySelectorAll("[data-gab]").forEach(x => x.onclick = () => gerarGabarito(x.dataset.gab));
+  box.querySelectorAll("[data-capac]").forEach(x => x.onclick = () => editarCapacidadesBanco(x.dataset.capac));
   box.querySelectorAll("[data-topicos]").forEach(x => x.onclick = () => editarTopicosBanco(x.dataset.topicos, carregarBancos));
   box.querySelectorAll("[data-criterios]").forEach(x => x.onclick = () => editarCriteriosBanco(x.dataset.criterios, carregarBancos));
   box.querySelectorAll("[data-delb]").forEach(x => x.onclick = async () => {
