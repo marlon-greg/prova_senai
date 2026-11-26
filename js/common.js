@@ -319,7 +319,11 @@ export async function sortearQuestoes(prova, cota = null, opc = {}) {
   if (nG > diag.length) throw new Error("O banco não tem questões de diagrama suficientes nos temas escolhidos. Avise o professor.");
   if (nS - nW - nG > sql.length) throw new Error("O banco não tem questões SQL (Bancada) suficientes nos temas escolhidos. Avise o professor.");
   if (nW > web.length) throw new Error("O banco não tem questões da Bancada Web suficientes nos temas escolhidos. Avise o professor.");
-  const comSql = l => nS ? sortearAleatorio([...l, ...pegar(sql, nS - nW - nG), ...pegar(web, nW), ...pegar(diag, nG)], l.length + nS) : l;
+  // diagramas: quantos de cada tipo (prova.diagramasPorTipo); sem isso, nG entre todos os permitidos
+  const porTipo = prova.diagramasPorTipo && typeof prova.diagramasPorTipo === "object" ? Object.entries(prova.diagramasPorTipo).filter(([, n]) => Number(n) > 0) : null;
+  const pegarDiag = () => porTipo ? porTipo.flatMap(([k, n]) => pegar(diag.filter(id => dados[id]?.diagrama === k), Number(n))) : pegar(diag, nG);
+  if (porTipo) for (const [k, n] of porTipo) if (diag.filter(id => dados[id]?.diagrama === k).length < Number(n)) throw new Error("O banco não tem diagramas suficientes de um dos tipos escolhidos. Avise o professor.");
+  const comSql = l => nS ? sortearAleatorio([...l, ...pegar(sql, nS - nW - nG), ...pegar(web, nW), ...pegarDiag()], l.length + nS) : l;
   const nQ = Number(prova.nQuestoes || 0) - nS;
   if (ids.length < nQ) throw new Error("O banco não tem questões suficientes nos temas escolhidos. Avise o professor.");
   const nD = Number(prova.nDissertativas || 0);
