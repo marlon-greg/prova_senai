@@ -1132,6 +1132,7 @@ function desenharProvas() {
     await updateDoc(doc(db, "provas", p.id), { [campo]: novo });
     toast("Prova atualizada", "ok"); carregarProvas();
   });
+  box.querySelectorAll("[data-addrec]").forEach(b => b.onclick = () => adicionarAlunoRecuperacao(provasCache.find(x => x.id === b.dataset.addrec)));
   box.querySelectorAll("[data-notafinal]").forEach(b => b.onclick = () => ajustarNotaFinal(provasCache.find(x => x.id === b.dataset.notafinal)));
   box.querySelectorAll("[data-recuperacao]").forEach(b => b.onclick = () => gerarRecuperacao(provasCache.find(x => x.id === b.dataset.recuperacao)));
   box.querySelectorAll("[data-editar]").forEach(b => b.onclick = () => editarProva(provasCache.find(x => x.id === b.dataset.editar)));
@@ -1166,6 +1167,7 @@ function cartaoProvaHTML(p) {
       </div>
       <div class="cp-botoes">
         ${podeEditar() ? `<button class="${p.liberada ? "leve" : "ok"}" data-tg="liberada" data-id="${p.id}">${ic(p.liberada ? "stop" : "play", { size: 16 })}${p.liberada ? "Encerrar" : "Liberar somativa"}</button>` : ""}
+        ${podeEditar() && p.recuperacao ? `<button class="leve" data-addrec="${p.id}" title="Coloca mais um aluno da turma nesta recuperação">${ic("users", { size: 16 })}Adicionar aluno</button>` : ""}
         ${podeEditar() && p.recuperacao ? `<button class="leve" data-notafinal="${p.id}" title="Regra da nota final e quanto vale para cada aluno">${ic("edit", { size: 16 })}Nota final</button>` : ""}
         ${podeEditar() && !p.liberada && p.resultadosLiberados ? `<button class="leve" data-recuperacao="${p.id}" title="Cria uma somativa de recuperação só para quem tirou abaixo de ${NOTA_RECUPERACAO}, com os temas em que a turma falhou">${ic("copy", { size: 16 })}${p.recuperacaoIds?.length ? "Gerar outra recuperação" : "Gerar recuperação"}</button>` : ""}
         <button class="leve" data-alunos="${p.id}" title="Ver aluno por aluno (ao vivo): vidas, progresso e nota">${ic("users", { size: 16 })}Alunos</button>
@@ -1208,6 +1210,37 @@ function ligarExemploRegras(corpo) {
   const ex = () => { const r = lerRegrasNota(corpo); if (r.erro) return; const p = { regraNota: r.regraNota };
     corpo.querySelector("#rgExemplo").innerHTML = `Exemplo com nota 70 — recuperação (vale ${NOTA_RECUPERACAO}): <b>${String(calcNotaFinal(70, NOTA_RECUPERACAO, regraDoTipo(p, "recuperacao"))).replace(".", ",")}</b> · substitutiva (vale ${NOTA_SUBSTITUTIVA}): <b>${String(calcNotaFinal(70, NOTA_SUBSTITUTIVA, regraDoTipo(p, "substitutiva"))).replace(".", ",")}</b>`; };
   corpo.querySelectorAll("[id^=rgModo_], [id^=rgMeta_]").forEach(i => i.addEventListener("input", ex)); ex();
+}
+// depois de gerada: coloca mais um aluno da turma (quem ainda não está nela). Fica registrado em adicionadosMao.
+async function adicionarAlunoRecuperacao(p) {
+  if (!p?.recuperacao || !podeEditar()) return;
+  const ja = new Set((p.alunosEmails || []).map(e => String(e).toLowerCase()));
+  let turma = null, notas = {};
+  try {
+    if (p.turmaId) { const td = await getDoc(doc(db, "turmas", p.turmaId)); if (td.exists()) turma = td.data(); }
+    if (p.provaOrigemId) (await getDocs(query(collection(db, "tentativas"), where("provaId", "==", p.provaOrigemId)))).forEach(d => { const t = d.data(); if (t.email && !t.teste && !t.simulado && typeof t.nota === "number") notas[String(t.email).toLowerCase()] = t.nota; });
+  } catch (e) { return toast("Não foi possível ler a turma. " + traduzirErro(e), "erro"); }
+  const cand = (turma ? alunosDaTurma(turma) : []).filter(a => a.email && !ja.has(String(a.email).toLowerCase())).map(a => ({ email: String(a.email).toLowerCase(), nome: a.nome || a.email }))
+    .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+  if (!cand.length) return toast("Todos os alunos da turma (com e-mail) já estão nesta recuperação.", "info");
+  const conteudo = `<p class="pequeno" style="margin-top:0">Recuperação <b>${esc(p.titulo)}</b>. O aluno passa a ver e poder fazer esta recuperação. A nota final dele segue a <b>regra de nota final</b> escolhida para ela. Fica registrado que foi adicionado à mão.</p>
+    <div class="grade"><div><label for="arAluno">Aluno</label><select id="arAluno">${cand.map(a => `<option value="${esc(a.email)}">${esc(a.nome)}${notas[a.email] !== undefined ? ` — nota ${String(notas[a.email]).replace(".", ",")} na origem` : " — não fez a de origem"}</option>`).join("")}</select></div>
+      <div><label for="arTipo">Tipo</label><select id="arTipo"><option value="recuperacao">Recuperação (vale até ${NOTA_RECUPERACAO})</option><option value="substitutiva">Substitutiva (vale até ${NOTA_SUBSTITUTIVA})</option></select></div>
+      <div><label for="arVale">Vale até</label><input id="arVale" type="number" min="1" max="100" value="${NOTA_RECUPERACAO}"></div></div>`;
+  const salvou = await drawerForm({ titulo: "Adicionar aluno à recuperação", ok: "Adicionar", conteudo,
+    aoAbrir: corpo => { const ajustar = () => { const a = corpo.querySelector("#arAluno").value, sub = notas[a] === undefined; corpo.querySelector("#arTipo").value = sub ? "substitutiva" : "recuperacao"; corpo.querySelector("#arVale").value = sub ? NOTA_SUBSTITUTIVA : NOTA_RECUPERACAO; };
+      corpo.querySelector("#arAluno").onchange = ajustar; ajustar();
+      corpo.querySelector("#arTipo").onchange = e => { corpo.querySelector("#arVale").value = e.target.value === "substitutiva" ? NOTA_SUBSTITUTIVA : NOTA_RECUPERACAO; }; },
+    antesDeConfirmar: async corpo => {
+      const em = corpo.querySelector("#arAluno").value, tipo = corpo.querySelector("#arTipo").value, vale = Number(corpo.querySelector("#arVale").value);
+      if (!(vale > 0 && vale <= 100)) { toast('"Vale até" precisa ser de 1 a 100.', "erro"); return false; }
+      try {
+        await updateDoc(doc(db, "provas", p.id), { alunosEmails: [...(p.alunosEmails || []), em], valeAte: { ...(p.valeAte || {}), [em]: vale }, tipoPorAluno: { ...(p.tipoPorAluno || {}), [em]: tipo },
+          adicionadosMao: { ...(p.adicionadosMao || {}), [em]: { por: eu.email, em: new Date().toISOString() } },
+          historico: [...(p.historico || []), { timestamp: new Date().toISOString(), motivo: "aluno_adicionado", aluno: em, editadoPor: eu.email }] });
+      } catch (e) { toast("Não foi possível adicionar. " + traduzirErro(e), "erro"); return false; }
+    } });
+  if (salvou) { toast("Aluno adicionado à recuperação.", "ok"); carregarProvas(); }
 }
 // depois de gerada: muda a regra e o "vale até" de cada aluno (as notas finais são recalculadas na hora, em todo lugar)
 async function ajustarNotaFinal(p) {
@@ -1266,7 +1299,8 @@ async function gerarRecuperacao(p) {
   const fizeram = new Set(alunos.map(a => a.email));
   const faltaram = (turma ? alunosDaTurma(turma) : []).filter(a => a.email && !fizeram.has(String(a.email).toLowerCase()))
     .map(a => ({ email: String(a.email).toLowerCase(), nome: a.nome || String(a.email).replace(/@.*/, "") }));
-  if (!abaixo.length && !faltaram.length) return toast(`Ninguém tirou abaixo de ${NOTA_RECUPERACAO} nesta somativa: não há recuperação para gerar.`, "ok");
+  const acima = alunos.filter(a => a.nota >= NOTA_RECUPERACAO);   // podem ser colocados à mão (ex.: nota revisada depois)
+  if (!abaixo.length && !faltaram.length && !acima.length) return toast("Ninguém fez esta somativa: não há recuperação para gerar.", "ok");
   // temas em FALHA: os que os alunos de recuperação acertaram menos da metade (soma dos pontos deles no tema)
   const temasTodos = new Map();   // chave -> { banco, tema, pts, max }
   for (const b of bancos) {
@@ -1290,6 +1324,11 @@ async function gerarRecuperacao(p) {
       ${abaixo.length ? abaixo.map(a => linhaRec(a, true, `nota <b>${String(a.nota).replace(".", ",")}</b>`, "recuperacao", NOTA_RECUPERACAO)).join("") : `<p class="pequeno">Ninguém abaixo de ${NOTA_RECUPERACAO}.</p>`}</fieldset>
     ${faltaram.length ? `<fieldset class="temas-box"><legend>Substitutiva: faltaram (${faltaram.length})</legend><p class="pequeno" style="margin-top:0">Marque quem vai fazer a <b>prova substitutiva</b> junto com a recuperação. A prova vale 0 a 100; a nota final é a mesma, com <b>teto de ${NOTA_SUBSTITUTIVA}</b> (padrão, sem atestado). Ex.: tirou 70 = 70; tirou 90 = ${NOTA_SUBSTITUTIVA}. <b>Com atestado, ponha 100.</b></p>
       ${faltaram.map(a => linhaRec(a, false, "faltou", "substitutiva", NOTA_SUBSTITUTIVA)).join("")}</fieldset>` : ""}
+    ${acima.length ? `<fieldset class="temas-box"><legend>Adicionar outro aluno (à mão)</legend>
+      <p class="pequeno" style="margin-top:0">Para quem não entrou pela regra (ex.: nota revisada depois). A nota final dele passa a seguir a <b>regra de nota final</b> desta recuperação. Fica registrado que foi adicionado à mão.</p>
+      <div class="linha" style="flex-wrap:nowrap;gap:6px"><select id="recAddSel" aria-label="Aluno para adicionar">${acima.map(a => `<option value="${esc(a.email)}">${esc(a.nome)} — nota ${String(a.nota).replace(".", ",")}</option>`).join("")}</select>
+        <button type="button" class="leve mini" id="recAddBtn" style="flex:0 0 auto">+ Adicionar aluno</button></div>
+      <div id="recAddLista"></div></fieldset>` : ""}
     <fieldset class="temas-box"><legend>Temas da recuperação</legend>
       <p class="pequeno" style="margin-top:0">${nenhumEmFalha ? "Nenhum tema ficou abaixo de 50% de acerto: todos vêm marcados." : "Marcados automaticamente: os temas em <b>FALHA</b> (os alunos de recuperação acertaram menos de 50%)."}</p>
       ${[...temasTodos.entries()].map(([k, x]) => `<label style="display:flex;gap:8px;align-items:center;padding:2px 0"><input type="checkbox" data-rec-tema="${esc(k)}" ${nenhumEmFalha || emFalha(x) ? "checked" : ""}> <span>${bancos.length > 1 ? `<span class="pequeno">${esc(nomeBanco(x.banco))} ›</span> ` : ""}<b>${esc(x.tema)}</b> <span class="pequeno">${pct(x)}</span>${emFalha(x) ? ` <span class="chip warn">em falha</span>` : ""}</span></label>`).join("")}</fieldset>
@@ -1309,6 +1348,12 @@ async function gerarRecuperacao(p) {
         return { a, d };
       };
       corpo._disp = disp; disp(); ligarExemploRegras(corpo);
+      corpo.querySelector("#recAddBtn")?.addEventListener("click", () => {
+        const sel = corpo.querySelector("#recAddSel"), a = acima.find(x => x.email === sel.value);
+        if (!a || corpo.querySelector(`[data-rec-aluno="${CSS.escape(a.email)}"]`)) return;
+        corpo.querySelector("#recAddLista").insertAdjacentHTML("beforeend", linhaRec(a, true, `nota <b>${String(a.nota).replace(".", ",")}</b> · <span class="chip warn">adicionado à mão</span>`, "recuperacao", NOTA_RECUPERACAO).replace("data-rec-aluno=", "data-rec-manual data-rec-aluno="));
+        sel.querySelector(`option[value="${CSS.escape(a.email)}"]`)?.remove();
+      });
       corpo.querySelectorAll("[data-rec-tema]").forEach(i => i.addEventListener("change", disp));
     },
     antesDeConfirmar: async corpo => {
@@ -1339,6 +1384,7 @@ async function gerarRecuperacao(p) {
       Object.assign(dados, { titulo, dataProva: corpo.querySelector("#recData").value || "", codigoAcesso: "",
         bancoId: bancoIds[0], bancoIds, temasPorBanco, temas: temasPorBanco[bancoIds[0]], nQuestoes: nA + nD, nAlternativas: nA, nDissertativas: nD,
         recuperacao: true, provaOrigemId: p.id, provaOrigemTitulo: p.titulo || "", notaCorte: NOTA_RECUPERACAO, alunosEmails: emails, valeAte, tipoPorAluno, regraNota: rg.regraNota,
+        adicionadosMao: Object.fromEntries([...corpo.querySelectorAll("[data-rec-manual]:checked")].map(i => [i.dataset.recAluno, { por: eu.email, em: new Date().toISOString() }])),
         liberada: false, resultadosLiberados: false, criadoEm: serverTimestamp(), criadoPor: eu.email,
         historico: [{ timestamp: new Date().toISOString(), motivo: "recuperacao", origem: p.id, editadoPor: eu.email }] });
       try {
@@ -2448,6 +2494,8 @@ function extrasSituacao(l) {
   if (v && !l.t.finalizadaEm) x.push(coracoesHTML(v));
   if (l.temSinal) x.push(sinaisHTML(l.sinais));
   if (l.perdidas) x.push(`<span>${pl(l.perdidas, "perdida")}</span>`);
+  const mao = resDados?.prova?.adicionadosMao?.[String(l.t.email || "").toLowerCase()];
+  if (mao) x.push(`<span class="chip warn" title="Adicionado à mão por ${esc(mao.por || "")}">adicionado à mão</span>`);
   if (l.rapidas) x.push(`<span title="Respostas enviadas em menos de ${RAPIDO} segundos">${pl(l.rapidas, "rápida")}</span>`);
   if (l.t.vidasRestauradas) x.push(`<span title="Vezes que o professor restaurou as vidas">${pl(l.t.vidasRestauradas, "restauração", "restaurações")}</span>`);
   return x.length ? `<div class="res-extra">${x.join("")}</div>` : "";

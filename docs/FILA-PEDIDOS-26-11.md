@@ -9,7 +9,7 @@ Plano já aprovado para 1–9 (respostas: 8 = trocar "Desenvolvimento Web" e "Pr
 | 1 | "Não fizeram" da recuperação só com os alunos da recuperação | feito (bloco 1) |
 | 8 | Matéria da Bancada Web → "Linguagem de Marcação" (banco pronto + botão "Corrigir o nome da matéria" em Bancos prontos) | feito (bloco 1) |
 | 5 | Nova somativa: hoje, 60 min, uma por vez, 3 vidas, 5 s, encerrar, colar sem custar vida, dicas desmarcadas; "Fechar a entrada" = data + hora | feito (bloco 1) |
-| 2 | Adicionar aluno à recuperação (ao gerar e depois de gerada), registrado como "adicionado à mão" | a fazer |
+| 2 | Adicionar aluno à recuperação (ao gerar e depois de gerada), registrado como "adicionado à mão" | feito (bloco 2) |
 | 3 | Nova somativa: turma → semestre automático; matéria só no topo (sem "Unidade curricular"); temas ligados a capacidades (tela para revisar a ligação); material de consulta por matéria | a fazer |
 | 4 | Total de questões fixo (padrão 10, 6 alt + 4 diss), tipos práticos por caixinha só se a matéria tiver, escolher quais diagramas, desconto alternado | a fazer |
 | 6 | "Sugerir prova" dentro da Nova somativa (sem IA); tirar "criar somativas de exemplo" da tela de Bancos | a fazer (depende de 3 e 4) |
