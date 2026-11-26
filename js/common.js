@@ -483,6 +483,13 @@ export function materiaCorrigida(m) {
   const k = String(m || "").normalize("NFD").replace(/\p{M}+/gu, "").toLowerCase().trim();
   return k === "desenvolvimento web" || k === "programacao web" ? "Linguagem de Marcação" : String(m || "").trim();
 }
+// recuperação por aluno: os temas em que ESTE aluno ficou abaixo de 50% (prova.temasPorAluno[email]); null = temas gerais
+export function temasDoAlunoNaRec(p, email) {
+  const m = p?.temasPorAluno?.[String(email || "").toLowerCase()];
+  if (!m || typeof m !== "object") return null;
+  const l = [...new Set(Object.values(m).flat().filter(Boolean))].sort((a, b) => a.localeCompare(b, "pt-BR"));
+  return l.length ? l : null;
+}
 export function materiaDaProva(p, bancos = []) {
   if (String(p?.materia || "").trim()) return materiaCorrigida(p.materia);
   const b = bancos.find(x => x.id === bancosDaProva(p)[0]);

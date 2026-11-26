@@ -1,8 +1,8 @@
 // Página do aluno: login, lista de provas, prova (uma questão por vez ou todas na página), resultado.
 import { ic } from "./icones.js";
-import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar, sortearAleatorio, esc, $, toast, dataBR, letra,
+import { temasDoAlunoNaRec, db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar, sortearAleatorio, esc, $, toast, dataBR, letra,
          idTentativaTeste, apagarTentativaTeste, confirmar, avisar, traduzirErro, iniciais, fecharModais, temaDe, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco, bancoDaQuestao, sortearQuestoes }
-  from "./common.js?v=20261126i";
+  from "./common.js?v=20261126j";
 import { baixarMaterial } from "./material.js";
 import { desenharConquistas } from "./aluno-conquistas.js?v=20261126a";
 import { regraDoTipo, calcNotaFinal } from "./nota-final.js";
@@ -12,7 +12,7 @@ import { iniciarAbas, definirAbasVisiveis, irParaAba, abaAtual } from "./aluno-n
 import { desenharTurma } from "./aluno-social.js";
 import { desenharRecompensas } from "./aluno-recompensas.js";
 let simulacao = false;   // equipe vendo a página como aluno (?simular=1): nada é gravado
-import { lerGamificacao, GAMI_PADRAO } from "./common.js?v=20261126i";
+import { lerGamificacao, GAMI_PADRAO } from "./common.js?v=20261126j";
 let gami = { ...GAMI_PADRAO };   // o que está ligado na gamificação (config/gamificacao)
 import { montarFormato, temFormato, FORMATOS, rotuloFormato, textoParaFalar, textoResposta, textoChave } from "./formatos-ui.js";
 const controles = {};   // qid -> controle do formato adaptado (valor, preencher, travar)
@@ -419,7 +419,8 @@ async function abrirProva(id, acao) {
     const min = semLimites() ? 0 : Number(provaAtual.tempoMinutos || 0) + (Number(provaAtual.tempoMinutos || 0) > 0 ? Math.max(0, Number(ap().tempoExtraMin || 0)) : 0);
     $("#inicioTitulo").textContent = provaAtual.titulo;
     const vidas = limiteSaidas();
-    $("#inicioInfo").innerHTML = `<span class="chip">📝 ${nQ(provaAtual)} questões</span>` +
+    const temasRec = temasDoAlunoNaRec(provaAtual, eu.email);
+    $("#inicioInfo").innerHTML = (temasRec ? `<div class="aviso-box" style="width:100%;margin:0 0 8px"><b>Os temas da sua recuperação</b> (onde você teve mais dificuldade na prova): ${temasRec.map(esc).join(" · ")}</div>` : "") + `<span class="chip">📝 ${nQ(provaAtual)} questões</span>` +
       (provaAtual.turma ? `<span class="chip">👥 ${esc(provaAtual.turma)}</span>` : "") +
       (min > 0 ? `<span class="chip aviso">⏱ ${min} min</span>` : `<span class="chip">⏱ sem limite de tempo</span>`) +
       (vidas ? `<span class="chip vidas" title="Vidas">${"❤️".repeat(Math.min(vidas, 10))} ${vidas} ${vidas === 1 ? "vida" : "vidas"}</span>` : "") +

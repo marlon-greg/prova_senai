@@ -2,7 +2,7 @@
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, limparTema, apagarTentativaTeste,
          confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco,
          rotuloDias, nomeTurma, HORARIO_PADRAO, textoHorario, DIAS_SEMANA_LONGO,
-         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, materiaCorrigida, bancosTeoricos, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261126i";
+         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, materiaCorrigida, temasDoAlunoNaRec, bancosTeoricos, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261126j";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
@@ -1379,6 +1379,7 @@ function botoesProva(p) {
     + (podeEditar() && ehAdmin() ? "<hr>" + itemMenu({ i: "trash", t: "Apagar somativa", perigo: true, attrs: `data-del="${p.id}"` }) : "");
   return (podeEditar() ? `<button class="${p.liberada ? "leve" : "ok"} mini" data-tg="liberada" data-id="${p.id}" title="${p.liberada ? "Ninguém mais começa nem continua" : jaAplicada(p) ? "Abre de novo para quem ainda não fez; quem já terminou não refaz" : "Os alunos da turma passam a ver e podem começar"}">${p.liberada ? "Encerrar" : jaAplicada(p) ? "Reabrir" : "Abrir"}</button>` : "")
     + (podeEditar() && !p.recuperacao && !p.liberada && p.resultadosLiberados ? `<button class="leve mini" data-recuperacao="${p.id}" title="Somativa de recuperação para quem tirou abaixo de ${NOTA_RECUPERACAO}">${p.recuperacaoIds?.length ? "Gerar outra recuperação" : "Gerar recuperação"}</button>` : "")
+    + (p.recuperacao && p.temasPorAluno && Object.keys(p.temasPorAluno).length ? `<button class="leve mini" data-temasal="${p.id}" title="Os temas que cada aluno recebe nesta recuperação">Temas por aluno</button>` : "")
     + (podeEditar() && p.recuperacao ? `<button class="leve mini" data-notafinal="${p.id}">Nota final</button>` : "")
     + `<button class="leve mini" data-alunos="${p.id}">Alunos</button>` + menuHTML({ aria: `Mais ações: ${p.titulo}`, itensHTML: itens });
 }
@@ -1460,9 +1461,18 @@ function desenharListaProvas() {
     box.querySelectorAll("[data-aba-mat]").forEach(b => b.onclick = () => { materiaAba = b.dataset.abaMat; desenharListaProvas(); });
   }
   box.querySelectorAll("[data-rec-de]").forEach(b => b.onclick = () => { recAbertas.has(b.dataset.recDe) ? recAbertas.delete(b.dataset.recDe) : recAbertas.add(b.dataset.recDe); desenharListaProvas(); });
+  box.querySelectorAll("[data-temasal]").forEach(b => b.onclick = () => verTemasPorAluno(provasCache.find(x => x.id === b.dataset.temasal)));
   box.querySelectorAll("[data-detprova]").forEach(b => b.onclick = () => { const p = provasCache.find(x => x.id === b.dataset.detprova); if (!p) return; const bs = bancosDaProva(p).map(id => bancosCache.find(x => x.id === id) || { id, nome: id });
     modal({ titulo: `Detalhes — ${p.titulo}`, largo: true, ok: "Fechar", conteudo: `<dl class="cp-detalhes"><div><dt>Turma</dt><dd>${esc(nomeT(p.turmaId))}</dd></div><div><dt>Matéria</dt><dd>${esc(matDe(p))}</dd></div><div><dt>Questões</dt><dd>${esc(metaProva(p))}</dd></div><div><dt>Banco(s)</dt><dd>${bs.map(b => esc(b.nome)).join(" · ")}</dd></div><div><dt>Temas</dt><dd class="pequeno">${temasDaProvaTexto(p, bs)}</dd></div><div><dt>Opções</dt><dd class="td-opcoes">${opcoesDaProvaHTML(p)}</dd></div></dl>` }); });
   ligarAcoesProvas(box);
+}
+// recuperação por aluno: quem recebe quais temas (lista para o professor)
+function verTemasPorAluno(p) {
+  if (!p) return;
+  const t = turmasCache.find(x => x.id === p.turmaId), nome = e => (t ? alunosDaTurma(t).find(a => String(a.email || "").toLowerCase() === e)?.nome : "") || e;
+  const linhas = (p.alunosEmails || []).map(e => String(e).toLowerCase()).sort((a, b) => nome(a).localeCompare(nome(b), "pt-BR")).map(e => { const ts = temasDoAlunoNaRec(p, e);
+    return `<tr><td><b>${esc(nome(e))}</b><br><span class="pequeno">${esc(e)} · ${p.tipoPorAluno?.[e] === "substitutiva" ? "substitutiva" : "recuperação"}</span></td><td>${ts ? ts.map(x => `<span class="tag">${esc(x)}</span>`).join(" ") : '<span class="pequeno">temas gerais da recuperação</span>'}</td></tr>`; }).join("");
+  modal({ titulo: `Temas por aluno — ${p.titulo}`, largo: true, ok: "Fechar", conteudo: `<p class="pequeno" style="margin-top:0">Cada aluno recebe primeiro as questões dos temas em que ele ficou abaixo de 50% na prova de origem; o resto da prova vem dos temas gerais.</p><div class="tabela"><table><tr><th>Aluno</th><th>Temas dele</th></tr>${linhas}</table></div>` });
 }
 function ligarAcoesProvas(box) {
   box.querySelectorAll("[data-alunos]").forEach(b => b.onclick = async () => {
@@ -3073,6 +3083,8 @@ function extrasSituacao(l) {
   if (v && !l.t.finalizadaEm) x.push(coracoesHTML(v));
   if (l.temSinal) x.push(sinaisHTML(l.sinais));
   if (l.perdidas) x.push(`<span>${pl(l.perdidas, "perdida")}</span>`);
+  const temasRec = temasDoAlunoNaRec(resDados?.prova, l.t.email);
+  if (temasRec) x.push(`<span class="chip info" title="Temas da recuperação dele: ${esc(temasRec.join(" · "))}">${temasRec.length === 1 ? "1 tema dele" : `${temasRec.length} temas dele`}</span>`);
   const mao = resDados?.prova?.adicionadosMao?.[String(l.t.email || "").toLowerCase()];
   if (mao) x.push(`<span class="chip warn" title="Adicionado à mão por ${esc(mao.por || "")}">adicionado à mão</span>`);
   if (l.rapidas) x.push(`<span title="Respostas enviadas em menos de ${RAPIDO} segundos">${pl(l.rapidas, "rápida")}</span>`);
@@ -3171,7 +3183,7 @@ function verAluno(id, rolar = true) {
   const lim = limiteSaidas(resDados.prova);
   box.innerHTML = `<div class="card"><div class="linha"><h2 style="flex:3">${l.t.teste ? "🧪 " : ""}${esc(l.t.nome || l.t.email)} — ${l.nota}/100 (${l.pts} de ${l.max} pontos)${textoConvertida(resDados.prova, l.t.email, l.nota) ? ` → ${textoConvertida(resDados.prova, l.t.email, l.nota)} (${tipoRec(resDados.prova, l.t.email)})` : ""}</h2><button class="leve mini" id="btnPDFAluno" style="flex:0 0 auto">PDF deste aluno</button></div>
     ${vidasDe(l.t) || podeEditar() ? `<div class="linha acoes detalhe-vidas">${vidasDe(l.t) ? `<span>Vidas: ${coracoesHTML(vidasDe(l.t))}</span>` : ""}${acoesVidaHTML(l)}</div>` : ""}
-    <p class="pequeno">Tempo total: <b>${fmtTempo(l.tempo)}</b> · ${sinaisHTML(l.sinais)}${lim ? ` · vidas perdidas <b>${l.sinais.abas}</b>${l.t.vidasRestauradas ? ` · restauradas ${l.t.vidasRestauradas}×` : ""}` : ""}${l.t.reabertaEm ? ` · <span class="tag nota">↩ reaberta por ${esc(l.t.reabertaPor || "professor")}</span>` : ""}
+    ${temasDoAlunoNaRec(resDados.prova, l.t.email) ? `<p class="pequeno"><b>Temas da recuperação dele:</b> ${temasDoAlunoNaRec(resDados.prova, l.t.email).map(esc).join(" · ")}</p>` : ""}<p class="pequeno">Tempo total: <b>${fmtTempo(l.tempo)}</b> · ${sinaisHTML(l.sinais)}${lim ? ` · vidas perdidas <b>${l.sinais.abas}</b>${l.t.vidasRestauradas ? ` · restauradas ${l.t.vidasRestauradas}×` : ""}` : ""}${l.t.reabertaEm ? ` · <span class="tag nota">↩ reaberta por ${esc(l.t.reabertaPor || "professor")}</span>` : ""}
       ${l.t.encerradaPor === "trocasDeAba" ? ` · <span class="tag erro">⛔ encerrada: limite de saídas atingido</span>` : ""}${l.t.encerradaPor === "professor" ? ` · <span class="tag erro">⛔ encerrada pelo professor</span>` : ""}${l.t.encerradaPor === "aluno" ? ` · <span class="tag aviso">⏹ o aluno encerrou com questões em branco</span>` : ""}${l.perdidas ? ` · <span class="tag erro">⛔ ${l.perdidas} questão(ões) perdida(s)</span>` : ""}</p>` + l.itens.map(x => {
     const rapida = x.r !== undefined && !x.perdida && typeof x.segundos === "number" && x.segundos < RAPIDO;
     const tempo = typeof x.segundos === "number" ? `<span class="tag ${rapida ? "erro" : ""}" title="Tempo entre a questão aparecer e a resposta ser enviada">⏱ ${fmtTempo(x.segundos)}${rapida ? ` · menos de ${RAPIDO} s` : ""}</span>` : "";
