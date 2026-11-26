@@ -2172,7 +2172,7 @@ function topicosMateriaHTML(idm, bs) {
   topicosPorMateria.set(idm, { linhas, bs, unidade });
   const abaixo = linhas.filter(x => x.aprovadas < minimoTopico).length;
   return `<div class="topicos-materia" data-tpm="${esc(idm)}">
-    <p class="pequeno" style="margin:8px 12px">${pl(linhas.length, "tópico")} · <b class="${abaixo ? "erro-texto" : ""}">${abaixo} de ${linhas.length} abaixo do mínimo</b> (meta ${minimoTopico} questões aprovadas por tópico, em Configuração)</p>
+    <div class="linha" style="margin:8px 12px;justify-content:space-between;align-items:center;gap:8px"><p class="pequeno" style="margin:0">${pl(linhas.length, "tópico")} · <b class="${abaixo ? "erro-texto" : ""}">${abaixo} de ${linhas.length} abaixo do mínimo</b> (meta ${minimoTopico} questões aprovadas por tópico, em Configuração)</p>${podeEditar() ? `<button type="button" class="leve mini" data-tp-baixar title="Arquivo com todas as questões e gabaritos desta matéria (para conferir ou para a IA escrever questões novas sem repetir)">⬇ Baixar questões (JSON)</button>` : ""}</div>
     <div class="linha filtro-topicos" style="gap:6px;margin:0 12px 8px">
       <input type="search" data-tp-busca placeholder="Buscar no tópico e nas questões…" aria-label="Buscar nos tópicos e nas questões" style="flex:2 1 220px">
       <select data-tp-tipo aria-label="Tipo de questão"><option value="">Todos os tipos</option>${Object.entries(ROT_TIPO).map(([k]) => `<option value="${k}">${({ alternativa: "Alternativa", dissertativa: "Dissertativa", sql: "SQL físico", diagrama: "Diagrama", web: "Página web" })[k]}</option>`).join("")}</select>
@@ -2205,9 +2205,21 @@ function desenharLinhasTopicos(el) {
 }
 function ligarTopicosMateria(box) {
   box.querySelectorAll("[data-tpm]").forEach(el => {
+    el.querySelector("[data-tp-baixar]")?.addEventListener("click", () => baixarQuestoesMateria(topicosPorMateria.get(el.dataset.tpm)));
     el.querySelectorAll("input, select").forEach(c => c.addEventListener(c.tagName === "INPUT" ? "input" : "change", () => desenharLinhasTopicos(el)));
     desenharLinhasTopicos(el);
   });
+}
+// ⬇ todas as questões (com gabarito) dos bancos de uma matéria, num arquivo JSON
+async function baixarQuestoesMateria(d) {
+  if (!d) return;
+  try {
+    const bancos = [];
+    for (const b of d.bs) { const { questoes, gabaritos } = await lerBanco(b.id); bancos.push({ id: b.id, nome: b.nome, materia: b.materia, questoes: Object.values(questoes).sort((a, c) => (a.ordem || 0) - (c.ordem || 0)).map(q => ({ ...q, gabarito: gabaritos[q.id] || null })) }); }
+    const mat = String(d.bs[0]?.materia || "materia").normalize("NFD").replace(/\p{M}+/gu, "").replace(/\W+/g, "_").toLowerCase();
+    baixar(`questoes_${mat}.json`, JSON.stringify({ exportadoEm: new Date().toISOString(), bancos }, null, 2));
+    toast("Arquivo baixado (pasta Downloads).", "ok");
+  } catch (e) { toast("Não foi possível baixar. " + traduzirErro(e), "erro"); }
 }
 // questões de um tópico (todos os bancos da matéria), com busca própria e REVISÃO das "a revisar" (aprovar, editar, descartar)
 function abrirTopico(d, tema, buscaIni = "") {
