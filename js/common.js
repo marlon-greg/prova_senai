@@ -10,6 +10,7 @@ import { corrigirSql } from "../servidor/sql-correcao.js";
 import { corrigirWeb } from "../servidor/web-correcao.js";
 import { corrigirDiagrama } from "../servidor/diagrama-correcao.js";
 export { limparTema } from "../servidor/organizar.js";
+import { categoriaSql, coberturaWeb, subtopicosConferiveis, modeloWeb } from "./praticas-categorias.js?v=20261126a";
 const gabWeb = g => g?.web ? (() => { try { return JSON.parse(g.web); } catch { return {}; } })() : g;
 import { firebaseConfig, SUPER_ADMIN, DOMINIOS_ALUNOS_PADRAO, USAR_EMULADOR, GOOGLE_CLIENT_ID } from "./firebase-config.js";
 
@@ -323,7 +324,17 @@ export async function sortearQuestoes(prova, cota = null, opc = {}) {
   const porTipo = prova.diagramasPorTipo && typeof prova.diagramasPorTipo === "object" ? Object.entries(prova.diagramasPorTipo).filter(([, n]) => Number(n) > 0) : null;
   const pegarDiag = () => porTipo ? porTipo.flatMap(([k, n]) => pegar(diag.filter(id => dados[id]?.diagrama === k), Number(n))) : pegar(diag, nG);
   if (porTipo) for (const [k, n] of porTipo) if (diag.filter(id => dados[id]?.diagrama === k).length < Number(n)) throw new Error("O banco não tem diagramas suficientes de um dos tipos escolhidos. Avise o professor.");
-  const comSql = l => nS ? sortearAleatorio([...l, ...pegar(sql, nS - nW - nG), ...pegar(web, nW), ...pegarDiag()], l.length + nS) : l;
+  // SQL físico: quantos de cada categoria (DDL/DML/DCL) — prova.sqlPorCategoria; sem isso, entre todas
+  const sqlCat = prova.sqlPorCategoria && typeof prova.sqlPorCategoria === "object" ? Object.entries(prova.sqlPorCategoria).filter(([, n]) => Number(n) > 0) : null;
+  if (sqlCat) for (const [k, n] of sqlCat) if (sql.filter(id => categoriaSql(dados[id]) === k).length < Number(n)) throw new Error("O banco não tem questões de SQL suficientes de uma das categorias escolhidas. Avise o professor.");
+  const pegarSql = () => sqlCat ? sqlCat.flatMap(([k, n]) => pegar(sql.filter(id => categoriaSql(dados[id]) === k), Number(n))) : pegar(sql, nS - nW - nG);
+  // página web: só as que têm os subtópicos marcados (se nenhuma tiver todos, as que têm mais); quantas de cada modelo
+  const subW = subtopicosConferiveis(prova.webSubtopicos);
+  let webPool = web;
+  if (subW.length) { const n = id => { const c = coberturaWeb(dados[id]); return subW.filter(s => c.has(s)).length; }; const todas = web.filter(id => n(id) === subW.length); webPool = todas.length ? todas : [...web].sort((a, b) => n(b) - n(a)); }
+  const webMod = prova.webModelos && typeof prova.webModelos === "object" ? Object.entries(prova.webModelos).filter(([, n]) => Number(n) > 0) : null;
+  const pegarWeb = () => webMod ? webMod.flatMap(([m, n]) => pegar(webPool.filter(id => modeloWeb(dados[id]) === m), Number(n))) : pegar(webPool, nW);
+  const comSql = l => nS ? sortearAleatorio([...l, ...pegarSql(), ...pegarWeb(), ...pegarDiag()], l.length + nS) : l;
   const nQ = Number(prova.nQuestoes || 0) - nS;
   if (ids.length < nQ) throw new Error("O banco não tem questões suficientes nos temas escolhidos. Avise o professor.");
   const nD = Number(prova.nDissertativas || 0);

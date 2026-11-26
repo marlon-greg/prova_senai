@@ -2,7 +2,7 @@
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, limparTema, apagarTentativaTeste,
          confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco,
          rotuloDias, nomeTurma, HORARIO_PADRAO, textoHorario, DIAS_SEMANA_LONGO,
-         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, materiaCorrigida, bancosTeoricos, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261126e";
+         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, materiaCorrigida, bancosTeoricos, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261126f";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
@@ -10,6 +10,7 @@ import { htmlEditorTopicos, editorTopicos } from "./plano-curso-ui.js?v=20261126
 import { criteriosDaUnidade, codigoCriterio, carregarCriteriosOficiais } from "./plano-ensino.js?v=20261116a";
 import { PLANO_CURSO, unidadeDaMateria, unidadesDoSemestre } from "./plano-curso.js?v=20261113a";
 import { proporCapacidades, capsDoTema } from "./temas-capacidades.js?v=20261126a";
+import { CATEGORIAS_SQL, categoriaSql, subtopicosWeb, coberturaWeb, subtopicosConferiveis, MODELOS_WEB, modeloWeb } from "./praticas-categorias.js?v=20261126a";
 import { iniciarOrganizacao, carregarOrganizacao, listarPlanos, listarCursos, materiasSugeridas, editarTopicosBanco, editarCriteriosBanco, topicosDaMateria } from "./admin-org.js";
 import { iniciarDiario, carregarDiario } from "./admin-diario.js";
 import { iniciarCriterios, carregarCriterios } from "./admin-criterios.js?v=20261116a";
@@ -532,7 +533,7 @@ let bancosDuplicados = [];   // bancos escondidos por serem cópia de outro (dup
 async function listarBancos() {
   const s = await getDocs(collection(db, "bancos"));
   bancosCache = []; bancosDuplicados = [];
-  s.forEach(d => (d.data().duplicadoDe ? bancosDuplicados : bancosCache).push({ id: d.id, ...d.data(), materia: materiaCorrigida(d.data().materia) }));
+  s.forEach(d => (d.data().duplicadoDe ? bancosDuplicados : bancosCache).push({ id: d.id, ...d.data(), materia: materiaCorrigida(d.data().materia), nome: String(d.data().nome || "").replace(/desenvolvimento web|programa[cç][aã]o web/gi, "Linguagem de Marcação") }));
   bancosCache.sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
   return bancosCache;
 }
@@ -579,11 +580,11 @@ function formProvaHTML(f) {
     </div>
     <p class="pequeno" style="margin:6px 0 4px"><b>Questões práticas</b> (opcional, de qualquer matéria): ative o tipo e escolha de quais bancos e temas. Pode misturar tipos. Cada cenário prático conta como 1 questão; com total definido, cada uma tira uma teórica (alternativa, dissertativa, alternativa…).</p>
     <div class="grade">
-      <div id="${f}BoxSql" class="oculto"><label class="check"><input type="checkbox" id="${f}AtivaSql"> <span>Vai ter questões SQL na Bancada</span></label>
-        <div id="${f}QtdSql" class="oculto"><label for="${f}NSql">Quantas questões SQL na Bancada</label><input type="number" id="${f}NSql" value="0" min="0" title="O aluno escreve e executa SQL numa bancada parecida com o MySQL Workbench (cada aluno recebe um cenário sorteado)"><div id="${f}BancosSql" class="prat-bancos"></div></div></div>
-      <div id="${f}BoxWeb" class="oculto"><label class="check"><input type="checkbox" id="${f}AtivaWeb"> <span>Vai ter projeto web na Bancada Web</span></label>
-        <div id="${f}QtdWeb" class="oculto"><label for="${f}NWeb">Quantos projetos web</label><input type="number" id="${f}NWeb" value="0" min="0" title="Prova prática de HTML/CSS num editor parecido com o VS Code, com prévia ao vivo"><div id="${f}BancosWeb" class="prat-bancos"></div></div></div>
-      <div id="${f}BoxDiag" class="oculto"><label class="check"><input type="checkbox" id="${f}AtivaDiag"> <span>Vai ter diagramas</span></label>
+      <div id="${f}BoxSql" class="oculto"><label class="check" title="O aluno escreve e executa SQL numa bancada parecida com o MySQL Workbench"><input type="checkbox" id="${f}AtivaSql"> <span><b>SQL físico</b></span></label>
+        <div id="${f}QtdSql" class="oculto"><input type="hidden" id="${f}NSql" value="0"><div id="${f}CatSql" class="pequeno" style="margin-top:4px"></div><div id="${f}BancosSql" class="prat-bancos"></div></div></div>
+      <div id="${f}BoxWeb" class="oculto"><label class="check" title="Página em HTML/CSS num editor parecido com o VS Code, com prévia ao vivo"><input type="checkbox" id="${f}AtivaWeb"> <span><b>Página web</b></span></label>
+        <div id="${f}QtdWeb" class="oculto"><input type="hidden" id="${f}NWeb" value="0"><div id="${f}ModWeb" class="pequeno" style="margin-top:4px"></div><div id="${f}SubWeb" class="pequeno" style="margin-top:6px"></div><div id="${f}BancosWeb" class="prat-bancos"></div></div></div>
+      <div id="${f}BoxDiag" class="oculto"><label class="check"><input type="checkbox" id="${f}AtivaDiag"> <span><b>Diagramas</b></span></label>
         <div id="${f}QtdDiag" class="oculto"><input type="hidden" id="${f}NDiag" value="0">
           <div id="${f}TiposDiag" class="pequeno" style="margin-top:4px"></div><div id="${f}BancosDiag" class="prat-bancos"></div></div></div>
     </div>
@@ -695,7 +696,8 @@ function controleProva(f) {
   const nq = k => $f("Ativa" + k).checked ? Math.max(0, Math.round(Number($f("N" + k).value || 0))) : 0;   // prático desligado = 0
   const pratico = () => PRAT.reduce((s, k) => s + nq(k), 0);
   const somaTudo = () => Number($f("NAlt").value || 0) + Number($f("NDiss").value || 0) + pratico();
-  let praticoAntes = 0, tirarDaAlt = true, tiposDiag = null, qtdDiag = {};   // qtdDiag: quantos de cada tipo de diagrama (ex.: { "er-conceitual": 1 })   // tiposDiag: Set dos tipos de diagrama que podem cair (null = todos)
+  let praticoAntes = 0, tirarDaAlt = true, tiposDiag = null, qtdDiag = {}, qtdSql = {}, qtdWeb = {}, webSub = new Set();   // quantos de cada tipo de diagrama / categoria SQL / modelo de página; subtópicos de HTML e CSS
+  // qtdDiag (ex.: { "er-conceitual": 1 })   // tiposDiag: Set dos tipos de diagrama que podem cair (null = todos)
   // TEORIA: bancos da matéria escolhida (sem matéria: todos); um banco já marcado continua aparecendo
   const bancoVisivel = (b, mat = $f("Materia").value) => (!!mat && chaveTexto(b.materia) === chaveTexto(mat)) || !!sel.get(b.id)?.size;
   const bancosDaMat = () => bancosCache.filter(b => bancoVisivel(b));
@@ -736,7 +738,7 @@ function controleProva(f) {
       `<p class="pequeno" style="margin:6px 0 2px">De quais bancos (${dispPrat(tipo)} disponíveis nos marcados):</p>` + [...porMat].sort((x, y) => x[0].localeCompare(y[0], "pt-BR")).map(([m, l]) => `<div class="prat-mat"><span class="pequeno prat-mat-nome">${esc(m)}</span>${l.map(b => {
         const ts = temasDoTipo(b.id, tipo), s = praticasSel[tipo].get(b.id), n = s?.size || 0;
         return `<div class="prat-banco"><label class="check" style="margin:2px 0"><input type="checkbox" data-pb="${b.id}" data-pt="${tipo}"${n === ts.length && n ? " checked" : ""}${travado ? " disabled" : ""}> <span><b>${esc(b.nome)}</b> <span class="pequeno">${n}/${ts.length} temas</span></span></label>
-          ${ts.length > 1 ? `<details class="prat-temas"${n && n < ts.length ? " open" : ""}><summary class="pequeno">escolher temas</summary>${ts.map(t => `<label class="check" style="margin:1px 0 1px 18px"><input type="checkbox" data-pb="${b.id}" data-pt="${tipo}" data-ptema="${esc(t)}"${s?.has(t) ? " checked" : ""}${travado ? " disabled" : ""}> <span class="pequeno">${esc(t)} (${contagens[b.id][t][tipo]})</span></label>`).join("")}</details>` : ""}</div>`;
+          ${ts.length > 1 && tipo !== "web" ? `<details class="prat-temas"${n && n < ts.length ? " open" : ""}><summary class="pequeno">escolher temas</summary>${ts.map(t => `<label class="check" style="margin:1px 0 1px 18px"><input type="checkbox" data-pb="${b.id}" data-pt="${tipo}" data-ptema="${esc(t)}"${s?.has(t) ? " checked" : ""}${travado ? " disabled" : ""}> <span class="pequeno">${esc(t)} (${contagens[b.id][t][tipo]})</span></label>`).join("")}</details>` : ""}</div>`;
       }).join("")}</div>`).join("");
     box.querySelectorAll("input[data-pb]").forEach(c => { const s = praticasSel[tipo].get(c.dataset.pb), ts = temasDoTipo(c.dataset.pb, tipo); if (!c.dataset.ptema) c.indeterminate = !!s?.size && s.size < ts.length;
       c.onchange = () => {
@@ -745,6 +747,14 @@ function controleProva(f) {
         atual.size ? praticasSel[tipo].set(b, atual) : praticasSel[tipo].delete(b);
         atualizar();
       }; });
+  }
+  // lista "marque e diga quantos": itens [{ k, nome, resumo, disp }], qtd = objeto { k: n }; aoMudar(k, ligado)
+  function listaQtd(box, titulo, itens, qtd, aoMudar) {
+    if (!box) return;
+    const soma = Object.values(qtd).reduce((s, n) => s + n, 0);
+    box.innerHTML = itens.length ? `<span>${titulo} (total: <b>${soma}</b>):</span>` + itens.map(it => `<div class="diag-tipo-linha"><label class="check" style="margin:2px 0;flex:1"><input type="checkbox" data-qk="${esc(it.k)}"${qtd[it.k] ? " checked" : ""}${travado ? " disabled" : ""}> <span><b>${esc(it.nome)}</b>${it.resumo ? ` <span class="pequeno">— ${esc(it.resumo)}</span>` : ""} <span class="pequeno">(${it.disp} nos bancos marcados)</span></span></label><input type="number" min="0" class="diag-qtd" data-qn="${esc(it.k)}" value="${qtd[it.k] || 0}"${travado ? " disabled" : ""} aria-label="Quantas de ${esc(it.nome)}"></div>`).join("") : '<span class="pequeno">Nenhum banco com esse tipo.</span>';
+    box.querySelectorAll("[data-qk]").forEach(c => c.onchange = () => { const k = c.dataset.qk; if (c.checked) qtd[k] = Math.max(1, qtd[k] || 0); else delete qtd[k]; aoMudar(k, c.checked); });
+    box.querySelectorAll("[data-qn]").forEach(i => i.onchange = () => { const k = i.dataset.qn, n = Math.max(0, Math.round(Number(i.value) || 0)); if (n) qtd[k] = n; else delete qtd[k]; aoMudar(k, !!n); });
   }
   function desenharPraticos() {
     if (praticasPendentes && carregado()) {   // somativa salva: práticas gravadas, ou (antigas) os temas práticos da seleção
@@ -760,6 +770,25 @@ function controleProva(f) {
       if ($f("Ativa" + k).checked) desenharBancosPraticos(k);
     });
     const ks = kindsDiag();
+    // SQL físico: DDL / DML / DCL (resumo na frente), quantidade de cada; página web: modelo + subtópicos HTML/CSS
+    const qsDe = tipo => bancosDoTipo(tipo).flatMap(b => (questoesCache[b.id] || []).filter(q => q.tipo === tipo && q.revisao !== "pendente").map(q => ({ q, b: b.id })));
+    const marcadaPrat = (tipo, x) => { const ts = praticasSel[tipo].get(x.b); return !!ts && (tipo === "web" || ts.has(temaDe(x.q))); };
+    const catsSql = Object.keys(CATEGORIAS_SQL).filter(k => qsDe("sql").some(x => categoriaSql(x.q) === k));
+    const dispSql = k => qsDe("sql").filter(x => marcadaPrat("sql", x) && categoriaSql(x.q) === k).length;
+    listaQtd($f("CatSql"), "Quais comandos e quantas questões de cada", catsSql.map(k => ({ k, nome: CATEGORIAS_SQL[k].nome, resumo: CATEGORIAS_SQL[k].resumo, disp: dispSql(k) })), qtdSql, (k, on) => {
+      if (on && !dispSql(k)) for (const x of qsDe("sql")) if (categoriaSql(x.q) === k) praticasSel.sql.set(x.b, new Set([...(praticasSel.sql.get(x.b) || []), temaDe(x.q)]));
+      $f("NSql").value = Object.values(qtdSql).reduce((s, n) => s + n, 0); descontar(); atualizar(); });
+    const subOk = subtopicosConferiveis([...webSub]);
+    const cobre = q => { const c = coberturaWeb(q); return subOk.every(s => c.has(s)); };
+    const modsWeb = Object.keys(MODELOS_WEB).filter(m => qsDe("web").some(x => modeloWeb(x.q) === m));
+    const dispWeb = m => qsDe("web").filter(x => marcadaPrat("web", x) && modeloWeb(x.q) === m && cobre(x.q)).length;
+    listaQtd($f("ModWeb"), "Modelo da prova e quantas páginas de cada", modsWeb.map(m => ({ k: m, nome: MODELOS_WEB[m], disp: dispWeb(m) })), qtdWeb, (m, on) => {
+      if (on && !praticasSel.web.size) for (const b of bancosDoTipo("web")) praticasSel.web.set(b.id, new Set(temasDoTipo(b.id, "web")));
+      $f("NWeb").value = Object.values(qtdWeb).reduce((s, n) => s + n, 0); descontar(); atualizar(); });
+    const st = subtopicosWeb();
+    $f("SubWeb").innerHTML = `<span>Tópicos que a página precisa ter <span class="pequeno">(nenhum marcado = qualquer página)</span>:</span>` + ["HTML", "CSS"].map(g => `<details class="prat-temas"${st[g].some(s => webSub.has(s.id)) ? " open" : ""}><summary><b>${g}</b> <span class="pequeno">(${st[g].filter(s => webSub.has(s.id)).length} marcados)</span></summary>${st[g].map(s => `<label class="check" style="margin:1px 0 1px 18px" title="${esc(s.itens.join(", "))}"><input type="checkbox" data-websub="${s.id}"${webSub.has(s.id) ? " checked" : ""}${travado ? " disabled" : ""}> <span>${esc(s.nome)}${s.itens.length ? ` <span class="pequeno">— ${esc(s.itens.join(", ").slice(0, 110))}${s.itens.join(", ").length > 110 ? "…" : ""}</span>` : ""}${s.automatico ? "" : ' <span class="pequeno">(teórico: não filtra a página)</span>'}</span></label>`).join("")}</details>`).join("") +
+      (subOk.length ? `<p class="pequeno" style="margin:2px 0 0">${qsDe("web").filter(x => marcadaPrat("web", x) && cobre(x.q)).length} página(s) dos bancos marcados têm todos os tópicos marcados.</p>` : "");
+    $f("SubWeb").querySelectorAll("[data-websub]").forEach(c => c.onchange = () => { c.checked ? webSub.add(c.dataset.websub) : webSub.delete(c.dataset.websub); atualizar(); });
     // cada tipo de diagrama: caixinha (começa desmarcada) + quantidade à direita; o total é a soma
     const somaD = Object.values(qtdDiag).reduce((s, n) => s + n, 0);
     $f("TiposDiag").innerHTML = ks.length ? `<span>Quais diagramas e quantos de cada (total: <b>${somaD}</b>):</span>` + ks.map(k => `<div class="diag-tipo-linha"><label class="check" style="margin:2px 0;flex:1"><input type="checkbox" data-tipodiag="${esc(k)}"${qtdDiag[k] ? " checked" : ""}${travado ? " disabled" : ""}> <span>${esc(NOMES_DIAGRAMA[k] || k)} <span class="pequeno">(${dispDiagTipo(k)} nos bancos marcados)</span></span></label><input type="number" min="0" class="diag-qtd" data-qtddiag="${esc(k)}" value="${qtdDiag[k] || 0}"${travado ? " disabled" : ""} aria-label="Quantos diagramas de ${esc(NOMES_DIAGRAMA[k] || k)}"></div>`).join("") : "";
@@ -815,7 +844,7 @@ function controleProva(f) {
     const quer = { Sql: 2, Web: 1, Diag: 2 };
     praticasSel = { sql: new Map(), web: new Map(), diagrama: new Map() };
     PRAT.forEach(k => { const tipo = TIPO_PRAT[k]; if (soPratica) padraoPratica(tipo); const tem = soPratica ? dispPrat(tipo) : 0; $f("Ativa" + k).checked = tem > 0; $f("N" + k).value = tem > 0 ? Math.min(quer[k], tem) : 0; });
-    tiposDiag = null; qtdDiag = {};
+    tiposDiag = null; qtdDiag = {}; qtdSql = {}; qtdWeb = {}; webSub = new Set();
     const prat = pratico();
     if (soPratica) {
       if (!prat) { $f("SugestaoMsg").textContent = `${mat} não tem questões práticas nos temas escolhidos.`; atualizar(); return; }
@@ -844,6 +873,10 @@ function controleProva(f) {
     if (nWeb > dispPrat("web")) return `Faltam projetos da Bancada Web: a prova pede ${nWeb}, mas os bancos escolhidos em "projeto web" só têm ${dispPrat("web")}. Marque mais bancos/temas ou diminua.`;
     for (const [k, n] of Object.entries(qtdDiag)) if (nq("Diag") && n > dispDiagTipo(k)) return `Faltam diagramas de "${NOMES_DIAGRAMA[k] || k}": a prova pede ${n}, mas os bancos marcados em "diagramas" só têm ${dispDiagTipo(k)}. Marque mais bancos ou diminua.`;
     if ($f("AtivaDiag").checked && !nq("Diag")) return "Diagramas: marque pelo menos um tipo e a quantidade.";
+    if ($f("AtivaSql").checked && !nq("Sql")) return "SQL físico: marque DDL, DML ou DCL e a quantidade.";
+    if ($f("AtivaWeb").checked && !nq("Web")) return "Página web: marque o modelo e a quantidade.";
+    { const fora = [...Object.entries(qtdSql).map(([k, n]) => [CATEGORIAS_SQL[k]?.nome || k, n, $f("CatSql").querySelector(`[data-qn="${k}"]`)?.closest(".diag-tipo-linha")?.textContent.match(/\((\d+) nos bancos/)?.[1]]), ...Object.entries(qtdWeb).map(([m, n]) => [MODELOS_WEB[m] || m, n, $f("ModWeb").querySelector(`[data-qn="${m}"]`)?.closest(".diag-tipo-linha")?.textContent.match(/\((\d+) nos bancos/)?.[1]])].find(([, n, d]) => d !== undefined && n > Number(d));
+      if (fora) return `Faltam questões de "${fora[0]}": a prova pede ${fora[1]}, mas os bancos marcados só têm ${fora[2]}. Marque mais bancos/temas ou diminua.`; }
     const nDiag = nq("Diag"), dDiag = diagDisponiveis();
     if (nDiag > dDiag) return `Faltam questões de diagrama: a prova pede ${nDiag}, mas os bancos/temas marcados só têm ${dDiag}${tiposDiag ? " dos tipos escolhidos" : ""} nos bancos escolhidos em "diagramas". Marque mais bancos (Bancos prontos) ou diminua.`;
     if (nSql > dispPrat("sql")) return `Faltam questões SQL (Bancada): a prova pede ${nSql}, mas os bancos escolhidos em "SQL na Bancada" só têm ${dispPrat("sql")}. Marque mais bancos/temas ou diminua.`;
@@ -1054,7 +1087,7 @@ function controleProva(f) {
     $f("TemasMarcar").onclick = () => marcarVisiveis(true);
     $f("TemasDesmarcar").onclick = () => marcarVisiveis(false);
     $f("NAlt").oninput = $f("NDiss").oninput = atualizar;
-    PRAT.forEach(k => { $f("N" + k).oninput = () => { descontar(); atualizar(); }; $f("Ativa" + k).onchange = () => { if ($f("Ativa" + k).checked) { if (k !== "Diag" && !Number($f("N" + k).value)) $f("N" + k).value = 1; padraoPratica(TIPO_PRAT[k]); } else if (k === "Diag") { qtdDiag = {}; tiposDiag = null; $f("NDiag").value = 0; } descontar(); atualizar(); }; });
+    PRAT.forEach(k => { $f("N" + k).oninput = () => { descontar(); atualizar(); }; $f("Ativa" + k).onchange = () => { if ($f("Ativa" + k).checked) padraoPratica(TIPO_PRAT[k]); else { if (k === "Diag") { qtdDiag = {}; tiposDiag = null; } if (k === "Sql") qtdSql = {}; if (k === "Web") { qtdWeb = {}; webSub = new Set(); } $f("N" + k).value = 0; } descontar(); atualizar(); }; });
     $f("Total").oninput = () => { aoMudarTotal(); atualizar(); };
     $f("Sugerir").onclick = () => sugerir(false); $f("SugerirPratica").onclick = () => sugerir(true);
     $f("SemLimite").onchange = () => { if (!$f("SemLimite").checked) $f("Total").value = somaTudo(); atualizar(); };
@@ -1140,6 +1173,7 @@ function controleProva(f) {
     $f("NSql").value = p.nSql ?? 0; $f("NWeb").value = p.nWeb ?? 0; $f("NDiag").value = p.nDiagramas ?? 0;
     $f("AtivaSql").checked = Number(p.nSql) > 0; $f("AtivaWeb").checked = Number(p.nWeb) > 0; $f("AtivaDiag").checked = Number(p.nDiagramas) > 0;
     tiposDiag = Array.isArray(p.tiposDiagrama) && p.tiposDiagrama.length ? new Set(p.tiposDiagrama) : null;
+    qtdSql = p.sqlPorCategoria && typeof p.sqlPorCategoria === "object" ? { ...p.sqlPorCategoria } : {}; qtdWeb = p.webModelos && typeof p.webModelos === "object" ? { ...p.webModelos } : {}; webSub = new Set(p.webSubtopicos || []);
     qtdDiag = p.diagramasPorTipo && typeof p.diagramasPorTipo === "object" ? { ...p.diagramasPorTipo } : (tiposDiag?.size === 1 && Number(p.nDiagramas) ? { [[...tiposDiag][0]]: Number(p.nDiagramas) } : {});
     $f("SemLimite").checked = false; $f("Total").value = p.nQuestoes ?? 10;
     praticasPendentes = p;
@@ -1204,7 +1238,8 @@ function controleProva(f) {
       for (const [k, tipo] of Object.entries(TIPO_PRAT)) if (nq(k) && praticasSel[tipo].size) praticas[tipo] = Object.fromEntries([...praticasSel[tipo]].map(([b, ts]) => [b, ordenarTemas([...ts])]));
       // bancoId: o 1º da teoria (prova só prática: o 1º prático), porque as regras do Firestore conferem o banco da tentativa
       const bancoPrincipal = bancoIds[0] || Object.values(praticas).flatMap(o => Object.keys(o))[0] || null;
-      Object.assign(dados, { praticas, bancoId: bancoPrincipal, bancoIds, temasPorBanco, temas: temasPorBanco[bancoIds[0]] || null, nQuestoes: n, nAlternativas: nAlt, nDissertativas: nDiss, nSql, nWeb, nDiagramas: nDiag, tiposDiagrama: nDiag && tiposDiag ? [...tiposDiag] : null, diagramasPorTipo: nDiag && Object.keys(qtdDiag).length ? { ...qtdDiag } : null });
+      Object.assign(dados, { praticas, bancoId: bancoPrincipal, bancoIds, temasPorBanco, temas: temasPorBanco[bancoIds[0]] || null, nQuestoes: n, nAlternativas: nAlt, nDissertativas: nDiss, nSql, nWeb, nDiagramas: nDiag, tiposDiagrama: nDiag && tiposDiag ? [...tiposDiag] : null, diagramasPorTipo: nDiag && Object.keys(qtdDiag).length ? { ...qtdDiag } : null,
+        sqlPorCategoria: nSql && Object.keys(qtdSql).length ? { ...qtdSql } : null, webModelos: nWeb && Object.keys(qtdWeb).length ? { ...qtdWeb } : null, webSubtopicos: nWeb && webSub.size ? [...webSub] : null });
     }
     return { dados };
   }
@@ -1942,7 +1977,8 @@ const materiaWebAntiga = m => MATERIAS_WEB_ANTIGAS.has(chaveTexto(m));
 async function corrigirMateriaWeb({ silencioso = false } = {}) {
   const [bs, ps, pls, cs] = await Promise.all(["bancos", "provas", "planos", "cursos"].map(c => getDocs(collection(db, c))));
   const ops = [];
-  bs.forEach(d => { if (materiaWebAntiga(d.data().materia)) ops.push([d.ref, { materia: MATERIA_MARCACAO }]); });
+  bs.forEach(d => { const nome = String(d.data().nome || ""), novoNome = nome.replace(/desenvolvimento web|programa[cç][aã]o web/gi, MATERIA_MARCACAO);
+    if (materiaWebAntiga(d.data().materia) || novoNome !== nome) ops.push([d.ref, { materia: materiaWebAntiga(d.data().materia) ? MATERIA_MARCACAO : d.data().materia, nome: novoNome }]); });
   ps.forEach(d => { if (materiaWebAntiga(d.data().materia)) ops.push([d.ref, { materia: MATERIA_MARCACAO }]); });
   pls.forEach(d => { if (materiaWebAntiga(d.data().materia)) ops.push([d.ref, { materia: MATERIA_MARCACAO }]); });
   cs.forEach(d => {   // curso: renomeia a matéria; se o curso já tiver "Linguagem de Marcação", junta os tópicos nela (sem duplicar)
