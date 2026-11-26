@@ -1,0 +1,1605 @@
+{
+  "nome": "Modelagem de dados no brModelo (MER e modelo lógico)",
+  "materia": "Banco de Dados",
+  "questoes": [
+    {
+      "tipo": "diagrama",
+      "diagrama": "er-conceitual",
+      "tema": "Modelo conceitual (MER)",
+      "peso": 1,
+      "enunciado": "Biblioteca municipal. Faça o modelo conceitual (MER) no brModelo:\n• Cada LIVRO tem ISBN (identificador), título e ano de publicação.\n• Cada AUTOR tem um código (identificador), nome e nacionalidade.\n• Um livro é escrito por um ou mais autores, e cada autor cadastrado escreveu pelo menos um livro (pode ter vários).\n• Cada livro é publicado por exatamente uma EDITORA (código, nome e cidade); uma editora pode ter nenhum ou vários livros cadastrados.",
+      "gabarito": {
+        "v": 1,
+        "conceitual": {
+          "el": [
+            {
+              "id": "e1",
+              "t": "entidade",
+              "nome": "Autor",
+              "x": 120,
+              "y": 120
+            },
+            {
+              "id": "e2",
+              "t": "entidade",
+              "nome": "Livro",
+              "x": 480,
+              "y": 120
+            },
+            {
+              "id": "e3",
+              "t": "entidade",
+              "nome": "Editora",
+              "x": 480,
+              "y": 400
+            },
+            {
+              "id": "a4",
+              "t": "atributo",
+              "nome": "id_autor",
+              "x": 86,
+              "y": 142,
+              "dono": "e1",
+              "chave": true
+            },
+            {
+              "id": "a5",
+              "t": "atributo",
+              "nome": "nome",
+              "x": 86,
+              "y": 124,
+              "dono": "e1"
+            },
+            {
+              "id": "a6",
+              "t": "atributo",
+              "nome": "nacionalidade",
+              "x": 86,
+              "y": 160,
+              "dono": "e1"
+            },
+            {
+              "id": "a7",
+              "t": "atributo",
+              "nome": "isbn",
+              "x": 532,
+              "y": 86,
+              "dono": "e2",
+              "chave": true
+            },
+            {
+              "id": "a8",
+              "t": "atributo",
+              "nome": "titulo",
+              "x": 593,
+              "y": 86,
+              "dono": "e2"
+            },
+            {
+              "id": "a9",
+              "t": "atributo",
+              "nome": "ano_publicacao",
+              "x": 668,
+              "y": 86,
+              "dono": "e2"
+            },
+            {
+              "id": "a10",
+              "t": "atributo",
+              "nome": "id_editora",
+              "x": 614,
+              "y": 422,
+              "dono": "e3",
+              "chave": true
+            },
+            {
+              "id": "a11",
+              "t": "atributo",
+              "nome": "nome",
+              "x": 614,
+              "y": 404,
+              "dono": "e3"
+            },
+            {
+              "id": "a12",
+              "t": "atributo",
+              "nome": "cidade",
+              "x": 614,
+              "y": 440,
+              "dono": "e3"
+            },
+            {
+              "id": "r13",
+              "t": "relacionamento",
+              "nome": "Escreve",
+              "x": 290,
+              "y": 113
+            },
+            {
+              "id": "r16",
+              "t": "relacionamento",
+              "nome": "Publica",
+              "x": 478,
+              "y": 250
+            }
+          ],
+          "li": [
+            {
+              "id": "l14",
+              "a": "e1",
+              "b": "r13",
+              "card": "(1,n)"
+            },
+            {
+              "id": "l15",
+              "a": "e2",
+              "b": "r13",
+              "card": "(1,n)"
+            },
+            {
+              "id": "l17",
+              "a": "e3",
+              "b": "r16",
+              "card": "(1,1)"
+            },
+            {
+              "id": "l18",
+              "a": "e2",
+              "b": "r16",
+              "card": "(0,n)"
+            }
+          ]
+        }
+      },
+      "criterios": "Entidades Livro, Autor e Editora com seus identificadores (bolinha preta) e atributos. Relacionamento N:N entre Autor e Livro com (1,n) dos dois lados. Relacionamento 1:N entre Editora e Livro: (1,1) junto de Editora e (0,n) junto de Livro.",
+      "explicacao": "Autor–Livro é N:N (um livro tem vários autores e um autor tem vários livros). Editora–Livro é 1:N: junto da Editora vai (1,1) porque cada livro tem exatamente uma editora; junto do Livro vai (0,n) porque a editora pode ter zero ou muitos livros."
+    },
+    {
+      "tipo": "diagrama",
+      "diagrama": "er-conceitual",
+      "tema": "Modelo conceitual (MER)",
+      "peso": 1,
+      "enunciado": "Clínica médica. Modele no brModelo (modelo conceitual):\n• PACIENTE: CPF (identificador), nome, data de nascimento e um ou mais telefones.\n• MÉDICO: CRM (identificador), nome e especialidade.\n• Um paciente pode se consultar com vários médicos e um médico atende vários pacientes (ambos podem ainda não ter nenhuma consulta). Cada consulta guarda a data/hora e o valor.",
+      "gabarito": {
+        "v": 1,
+        "conceitual": {
+          "el": [
+            {
+              "id": "e1",
+              "t": "entidade",
+              "nome": "Paciente",
+              "x": 120,
+              "y": 140
+            },
+            {
+              "id": "e2",
+              "t": "entidade",
+              "nome": "Medico",
+              "x": 520,
+              "y": 140
+            },
+            {
+              "id": "a3",
+              "t": "atributo",
+              "nome": "cpf",
+              "x": 86,
+              "y": 162,
+              "dono": "e1",
+              "chave": true
+            },
+            {
+              "id": "a4",
+              "t": "atributo",
+              "nome": "nome",
+              "x": 86,
+              "y": 144,
+              "dono": "e1"
+            },
+            {
+              "id": "a5",
+              "t": "atributo",
+              "nome": "data_nascimento",
+              "x": 86,
+              "y": 180,
+              "dono": "e1"
+            },
+            {
+              "id": "a6",
+              "t": "atributo",
+              "nome": "telefone",
+              "x": 86,
+              "y": 126,
+              "dono": "e1",
+              "card": "(1,n)"
+            },
+            {
+              "id": "a7",
+              "t": "atributo",
+              "nome": "crm",
+              "x": 654,
+              "y": 162,
+              "dono": "e2",
+              "chave": true
+            },
+            {
+              "id": "a8",
+              "t": "atributo",
+              "nome": "nome",
+              "x": 654,
+              "y": 144,
+              "dono": "e2"
+            },
+            {
+              "id": "a9",
+              "t": "atributo",
+              "nome": "especialidade",
+              "x": 654,
+              "y": 180,
+              "dono": "e2"
+            },
+            {
+              "id": "r10",
+              "t": "relacionamento",
+              "nome": "Consulta",
+              "x": 300,
+              "y": 133
+            },
+            {
+              "id": "a13",
+              "t": "atributo",
+              "nome": "data_hora",
+              "x": 362,
+              "y": 99,
+              "dono": "r10"
+            },
+            {
+              "id": "a14",
+              "t": "atributo",
+              "nome": "valor",
+              "x": 459,
+              "y": 99,
+              "dono": "r10"
+            }
+          ],
+          "li": [
+            {
+              "id": "l11",
+              "a": "e1",
+              "b": "r10",
+              "card": "(0,n)"
+            },
+            {
+              "id": "l12",
+              "a": "e2",
+              "b": "r10",
+              "card": "(0,n)"
+            }
+          ]
+        }
+      },
+      "criterios": "Paciente (cpf identificador, telefone multivalorado (1,n)) e Medico (crm identificador). Relacionamento N:N Consulta com (0,n) dos dois lados e os atributos data_hora e valor NO relacionamento.",
+      "explicacao": "Telefone é multivalorado (1,n). Data/hora e valor pertencem à consulta, não ao paciente nem ao médico: por isso são atributos do relacionamento N:N."
+    },
+    {
+      "tipo": "diagrama",
+      "diagrama": "er-conceitual",
+      "tema": "Modelo conceitual (MER)",
+      "peso": 1,
+      "enunciado": "Loja de games online. Faça o MER:\n• CLIENTE: código (identificador), nome, e-mail e endereço (rua, número e cidade — atributo composto).\n• PEDIDO: número (identificador) e data. Cada pedido é de um único cliente; um cliente pode ter feito nenhum ou vários pedidos.\n• JOGO: código (identificador), título, plataforma e preço.\n• Um pedido tem um ou mais jogos e um jogo pode estar em nenhum ou vários pedidos; guarde a quantidade de cada jogo no pedido.",
+      "gabarito": {
+        "v": 1,
+        "conceitual": {
+          "el": [
+            {
+              "id": "e1",
+              "t": "entidade",
+              "nome": "Cliente",
+              "x": 120,
+              "y": 120
+            },
+            {
+              "id": "e2",
+              "t": "entidade",
+              "nome": "Pedido",
+              "x": 480,
+              "y": 120
+            },
+            {
+              "id": "e3",
+              "t": "entidade",
+              "nome": "Jogo",
+              "x": 480,
+              "y": 400
+            },
+            {
+              "id": "a4",
+              "t": "atributo",
+              "nome": "id_cliente",
+              "x": 86,
+              "y": 142,
+              "dono": "e1",
+              "chave": true
+            },
+            {
+              "id": "a5",
+              "t": "atributo",
+              "nome": "nome",
+              "x": 86,
+              "y": 124,
+              "dono": "e1"
+            },
+            {
+              "id": "a6",
+              "t": "atributo",
+              "nome": "email",
+              "x": 86,
+              "y": 160,
+              "dono": "e1"
+            },
+            {
+              "id": "a7",
+              "t": "atributo",
+              "nome": "endereco",
+              "x": 172,
+              "y": 198,
+              "dono": "e1"
+            },
+            {
+              "id": "a8",
+              "t": "atributo",
+              "nome": "rua",
+              "x": 216,
+              "y": 198,
+              "dono": "a7"
+            },
+            {
+              "id": "a9",
+              "t": "atributo",
+              "nome": "numero",
+              "x": 216,
+              "y": 182,
+              "dono": "a7"
+            },
+            {
+              "id": "a10",
+              "t": "atributo",
+              "nome": "cidade",
+              "x": 216,
+              "y": 214,
+              "dono": "a7"
+            },
+            {
+              "id": "a11",
+              "t": "atributo",
+              "nome": "id_pedido",
+              "x": 532,
+              "y": 86,
+              "dono": "e2",
+              "chave": true
+            },
+            {
+              "id": "a12",
+              "t": "atributo",
+              "nome": "data_pedido",
+              "x": 629,
+              "y": 86,
+              "dono": "e2"
+            },
+            {
+              "id": "a13",
+              "t": "atributo",
+              "nome": "id_jogo",
+              "x": 614,
+              "y": 422,
+              "dono": "e3",
+              "chave": true
+            },
+            {
+              "id": "a14",
+              "t": "atributo",
+              "nome": "titulo",
+              "x": 614,
+              "y": 404,
+              "dono": "e3"
+            },
+            {
+              "id": "a15",
+              "t": "atributo",
+              "nome": "plataforma",
+              "x": 614,
+              "y": 440,
+              "dono": "e3"
+            },
+            {
+              "id": "a16",
+              "t": "atributo",
+              "nome": "preco",
+              "x": 614,
+              "y": 386,
+              "dono": "e3"
+            },
+            {
+              "id": "r17",
+              "t": "relacionamento",
+              "nome": "Faz",
+              "x": 300,
+              "y": 113
+            },
+            {
+              "id": "r20",
+              "t": "relacionamento",
+              "nome": "Contem",
+              "x": 478,
+              "y": 250
+            },
+            {
+              "id": "a23",
+              "t": "atributo",
+              "nome": "quantidade",
+              "x": 616,
+              "y": 279,
+              "dono": "r20"
+            }
+          ],
+          "li": [
+            {
+              "id": "l18",
+              "a": "e1",
+              "b": "r17",
+              "card": "(1,1)"
+            },
+            {
+              "id": "l19",
+              "a": "e2",
+              "b": "r17",
+              "card": "(0,n)"
+            },
+            {
+              "id": "l21",
+              "a": "e2",
+              "b": "r20",
+              "card": "(0,n)"
+            },
+            {
+              "id": "l22",
+              "a": "e3",
+              "b": "r20",
+              "card": "(1,n)"
+            }
+          ]
+        }
+      },
+      "criterios": "Endereço como atributo composto (rua, numero, cidade). Faz 1:N: (1,1) junto de Cliente e (0,n) junto de Pedido. Contem N:N: (0,n) junto de Pedido, (1,n) junto de Jogo, com o atributo quantidade no relacionamento.",
+      "explicacao": "No brModelo a cardinalidade fica junto da entidade que 'conta': cada pedido tem 1 cliente → (1,1) ao lado de Cliente. Quantidade depende do par pedido+jogo, então é atributo do relacionamento Contem."
+    },
+    {
+      "tipo": "diagrama",
+      "diagrama": "er-conceitual",
+      "tema": "Especialização e auto-relacionamento",
+      "peso": 1,
+      "enunciado": "Software house. Modele no brModelo:\n• FUNCIONÁRIO: matrícula (identificador), nome e salário.\n• Todo funcionário é OU Desenvolvedor (guarda a linguagem principal) OU Designer (guarda a ferramenta que usa) — nunca os dois, e não existe funcionário que não seja um deles.\n• Um funcionário pode ser gerenciado por no máximo um outro funcionário (o gerente); um gerente pode gerenciar vários funcionários.",
+      "gabarito": {
+        "v": 1,
+        "conceitual": {
+          "el": [
+            {
+              "id": "e1",
+              "t": "entidade",
+              "nome": "Funcionario",
+              "x": 300,
+              "y": 100
+            },
+            {
+              "id": "e2",
+              "t": "entidade",
+              "nome": "Desenvolvedor",
+              "x": 140,
+              "y": 300
+            },
+            {
+              "id": "e3",
+              "t": "entidade",
+              "nome": "Designer",
+              "x": 460,
+              "y": 300
+            },
+            {
+              "id": "a4",
+              "t": "atributo",
+              "nome": "matricula",
+              "x": 445,
+              "y": 122,
+              "dono": "e1",
+              "chave": true
+            },
+            {
+              "id": "a5",
+              "t": "atributo",
+              "nome": "nome",
+              "x": 445,
+              "y": 104,
+              "dono": "e1"
+            },
+            {
+              "id": "a6",
+              "t": "atributo",
+              "nome": "salario",
+              "x": 445,
+              "y": 140,
+              "dono": "e1"
+            },
+            {
+              "id": "a7",
+              "t": "atributo",
+              "nome": "linguagem_principal",
+              "x": 106,
+              "y": 322,
+              "dono": "e2"
+            },
+            {
+              "id": "a8",
+              "t": "atributo",
+              "nome": "ferramenta",
+              "x": 594,
+              "y": 322,
+              "dono": "e3"
+            },
+            {
+              "id": "r9",
+              "t": "relacionamento",
+              "nome": "Gerencia",
+              "x": 40,
+              "y": 93
+            },
+            {
+              "id": "h12",
+              "t": "especializacao",
+              "x": 333,
+              "y": 180,
+              "pai": "e1",
+              "total": true,
+              "exclusiva": true
+            }
+          ],
+          "li": [
+            {
+              "id": "l10",
+              "a": "e1",
+              "b": "r9",
+              "card": "(0,1)",
+              "papel": "gerente"
+            },
+            {
+              "id": "l11",
+              "a": "e1",
+              "b": "r9",
+              "card": "(0,n)",
+              "papel": "gerenciado"
+            },
+            {
+              "id": "l13",
+              "a": "h12",
+              "b": "e2"
+            },
+            {
+              "id": "l14",
+              "a": "h12",
+              "b": "e3"
+            }
+          ]
+        }
+      },
+      "criterios": "Especialização de Funcionario em Desenvolvedor e Designer, TOTAL (t) e EXCLUSIVA (x), com os atributos próprios nas filhas. Auto-relacionamento Gerencia em Funcionario 1:N com papéis (gerente (0,1) e gerenciado (0,n)).",
+      "explicacao": "'Nunca os dois' = exclusiva; 'não existe funcionário que não seja um deles' = total. O auto-relacionamento liga Funcionario duas vezes ao mesmo losango, cada ligação com seu papel."
+    },
+    {
+      "tipo": "diagrama",
+      "diagrama": "er-ambos",
+      "tema": "Modelo lógico (relacional)",
+      "peso": 1,
+      "conversao": false,
+      "enunciado": "O modelo conceitual da escola já está pronto na aba Conceitual (Aluno N:N Curso pelo relacionamento Matricula). Na aba LÓGICO, desenhe você mesmo o modelo lógico correspondente: tabelas, colunas, chaves primárias (PK) e estrangeiras (FK).",
+      "inicial": {
+        "v": 1,
+        "conceitual": {
+          "el": [
+            {
+              "id": "e1",
+              "t": "entidade",
+              "nome": "Aluno",
+              "x": 120,
+              "y": 140
+            },
+            {
+              "id": "e2",
+              "t": "entidade",
+              "nome": "Curso",
+              "x": 520,
+              "y": 140
+            },
+            {
+              "id": "a3",
+              "t": "atributo",
+              "nome": "matricula",
+              "x": 86,
+              "y": 162,
+              "dono": "e1",
+              "chave": true
+            },
+            {
+              "id": "a4",
+              "t": "atributo",
+              "nome": "nome",
+              "x": 86,
+              "y": 144,
+              "dono": "e1"
+            },
+            {
+              "id": "a5",
+              "t": "atributo",
+              "nome": "data_nascimento",
+              "x": 86,
+              "y": 180,
+              "dono": "e1"
+            },
+            {
+              "id": "a6",
+              "t": "atributo",
+              "nome": "id_curso",
+              "x": 654,
+              "y": 162,
+              "dono": "e2",
+              "chave": true
+            },
+            {
+              "id": "a7",
+              "t": "atributo",
+              "nome": "nome",
+              "x": 654,
+              "y": 144,
+              "dono": "e2"
+            },
+            {
+              "id": "a8",
+              "t": "atributo",
+              "nome": "carga_horaria",
+              "x": 654,
+              "y": 180,
+              "dono": "e2"
+            },
+            {
+              "id": "r9",
+              "t": "relacionamento",
+              "nome": "Matricula",
+              "x": 300,
+              "y": 133
+            },
+            {
+              "id": "a12",
+              "t": "atributo",
+              "nome": "data_matricula",
+              "x": 365,
+              "y": 99,
+              "dono": "r9"
+            }
+          ],
+          "li": [
+            {
+              "id": "l10",
+              "a": "e1",
+              "b": "r9",
+              "card": "(0,n)"
+            },
+            {
+              "id": "l11",
+              "a": "e2",
+              "b": "r9",
+              "card": "(1,n)"
+            }
+          ]
+        }
+      },
+      "gabarito": {
+        "v": 1,
+        "logico": {
+          "el": [
+            {
+              "id": "t1",
+              "t": "tabela",
+              "nome": "Aluno",
+              "x": 597,
+              "y": 52,
+              "cols": [
+                {
+                  "nome": "matricula",
+                  "tipo": "INT",
+                  "pk": true,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                },
+                {
+                  "nome": "nome",
+                  "tipo": "VARCHAR(100)",
+                  "pk": false,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                },
+                {
+                  "nome": "data_nascimento",
+                  "tipo": "DATE",
+                  "pk": false,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                }
+              ]
+            },
+            {
+              "id": "t2",
+              "t": "tabela",
+              "nome": "Curso",
+              "x": 891,
+              "y": 52,
+              "cols": [
+                {
+                  "nome": "id_curso",
+                  "tipo": "INT",
+                  "pk": true,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                },
+                {
+                  "nome": "nome",
+                  "tipo": "VARCHAR(100)",
+                  "pk": false,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                },
+                {
+                  "nome": "carga_horaria",
+                  "tipo": "INT",
+                  "pk": false,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                }
+              ]
+            },
+            {
+              "id": "t3",
+              "t": "tabela",
+              "nome": "Matricula",
+              "x": 310,
+              "y": 40,
+              "cols": [
+                {
+                  "nome": "matricula",
+                  "tipo": "INT",
+                  "pk": true,
+                  "fk": "t1",
+                  "ref": "matricula",
+                  "nn": true
+                },
+                {
+                  "nome": "id_curso",
+                  "tipo": "INT",
+                  "pk": true,
+                  "fk": "t2",
+                  "ref": "id_curso",
+                  "nn": true
+                },
+                {
+                  "nome": "data_matricula",
+                  "tipo": "DATE",
+                  "pk": false,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                }
+              ]
+            }
+          ],
+          "li": [
+            {
+              "id": "l4",
+              "a": "t3",
+              "b": "t1",
+              "ca": "(1,n)",
+              "cb": "(1,1)"
+            },
+            {
+              "id": "l5",
+              "a": "t3",
+              "b": "t2",
+              "ca": "(0,n)",
+              "cb": "(1,1)"
+            }
+          ]
+        }
+      },
+      "criterios": "Tabelas Aluno (PK matricula) e Curso (PK id_curso). Tabela Matricula (associativa) com FK para Aluno e FK para Curso, PK composta pelas duas FKs, e a coluna data_matricula.",
+      "explicacao": "Relacionamento N:N vira uma tabela própria. A PK dela é composta pelas FKs das duas tabelas (matricula + id_curso) e os atributos do relacionamento viram colunas dela."
+    },
+    {
+      "tipo": "diagrama",
+      "diagrama": "er-logico",
+      "tema": "Modelo lógico (relacional)",
+      "peso": 1,
+      "enunciado": "Academia. Faça o MODELO LÓGICO (tabelas) no brModelo:\n• PLANO: id_plano, nome, valor_mensal.\n• ALUNO: id_aluno, nome, cpf. Cada aluno assina exatamente um plano; um plano pode ter vários alunos.\n• INSTRUTOR: id_instrutor, nome.\n• TREINO: id_treino, data_inicio, objetivo. Cada treino é de um aluno e foi montado por um instrutor.\nMarque as PKs, crie as FKs no lado certo e ligue as tabelas.",
+      "gabarito": {
+        "v": 1,
+        "logico": {
+          "el": [
+            {
+              "id": "t1",
+              "t": "tabela",
+              "nome": "Plano",
+              "x": 40,
+              "y": 40,
+              "cols": [
+                {
+                  "nome": "id_plano",
+                  "tipo": "INT",
+                  "pk": true,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                },
+                {
+                  "nome": "nome",
+                  "tipo": "VARCHAR(100)",
+                  "pk": false,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                },
+                {
+                  "nome": "valor_mensal",
+                  "tipo": "DECIMAL(10,2)",
+                  "pk": false,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                }
+              ]
+            },
+            {
+              "id": "t2",
+              "t": "tabela",
+              "nome": "Aluno",
+              "x": 40,
+              "y": 414,
+              "cols": [
+                {
+                  "nome": "id_aluno",
+                  "tipo": "INT",
+                  "pk": true,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                },
+                {
+                  "nome": "nome",
+                  "tipo": "VARCHAR(100)",
+                  "pk": false,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                },
+                {
+                  "nome": "cpf",
+                  "tipo": "CHAR(11)",
+                  "pk": false,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                },
+                {
+                  "nome": "id_plano",
+                  "tipo": "INT",
+                  "pk": false,
+                  "fk": "t1",
+                  "ref": "id_plano",
+                  "nn": true
+                }
+              ]
+            },
+            {
+              "id": "t3",
+              "t": "tabela",
+              "nome": "Instrutor",
+              "x": 700,
+              "y": 414,
+              "cols": [
+                {
+                  "nome": "id_instrutor",
+                  "tipo": "INT",
+                  "pk": true,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                },
+                {
+                  "nome": "nome",
+                  "tipo": "VARCHAR(100)",
+                  "pk": false,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                }
+              ]
+            },
+            {
+              "id": "t4",
+              "t": "tabela",
+              "nome": "Treino",
+              "x": 370,
+              "y": 720,
+              "cols": [
+                {
+                  "nome": "id_treino",
+                  "tipo": "INT",
+                  "pk": true,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                },
+                {
+                  "nome": "data_inicio",
+                  "tipo": "DATE",
+                  "pk": false,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                },
+                {
+                  "nome": "objetivo",
+                  "tipo": "VARCHAR(100)",
+                  "pk": false,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                },
+                {
+                  "nome": "id_aluno",
+                  "tipo": "INT",
+                  "pk": false,
+                  "fk": "t2",
+                  "ref": "id_aluno",
+                  "nn": true
+                },
+                {
+                  "nome": "id_instrutor",
+                  "tipo": "INT",
+                  "pk": false,
+                  "fk": "t3",
+                  "ref": "id_instrutor",
+                  "nn": true
+                }
+              ]
+            }
+          ],
+          "li": [
+            {
+              "id": "l5",
+              "a": "t2",
+              "b": "t1",
+              "ca": "(0,n)",
+              "cb": "(1,1)"
+            },
+            {
+              "id": "l6",
+              "a": "t4",
+              "b": "t2",
+              "ca": "(0,n)",
+              "cb": "(1,1)"
+            },
+            {
+              "id": "l7",
+              "a": "t4",
+              "b": "t3",
+              "ca": "(0,n)",
+              "cb": "(1,1)"
+            }
+          ]
+        }
+      },
+      "criterios": "Quatro tabelas com PK id_*. Aluno com FK id_plano → Plano. Treino com FK id_aluno → Aluno e FK id_instrutor → Instrutor. As FKs ficam do lado N (Aluno e Treino).",
+      "explicacao": "Em relacionamento 1:N a chave estrangeira vai para a tabela do lado N: o aluno guarda o plano dele; o treino guarda o aluno e o instrutor."
+    },
+    {
+      "tipo": "diagrama",
+      "diagrama": "er-ambos",
+      "tema": "Modelagem conceitual e lógica",
+      "peso": 2,
+      "enunciado": "Pet shop. Faça os DOIS modelos no brModelo (abas Conceitual e Lógico):\n• DONO: CPF (identificador), nome, telefone. Todo dono cadastrado tem pelo menos um animal.\n• ANIMAL: código (identificador), nome, espécie. Cada animal tem exatamente um dono.\n• SERVIÇO: código (identificador), descrição, preço.\n• Um animal pode receber vários serviços e um serviço pode ser feito em vários animais (ou em nenhum). Cada atendimento guarda a data e o valor cobrado.\nDepois de terminar o conceitual, monte o lógico com PKs e FKs.",
+      "gabarito": {
+        "v": 1,
+        "conceitual": {
+          "el": [
+            {
+              "id": "e1",
+              "t": "entidade",
+              "nome": "Dono",
+              "x": 120,
+              "y": 120
+            },
+            {
+              "id": "e2",
+              "t": "entidade",
+              "nome": "Animal",
+              "x": 480,
+              "y": 120
+            },
+            {
+              "id": "e3",
+              "t": "entidade",
+              "nome": "Servico",
+              "x": 480,
+              "y": 400
+            },
+            {
+              "id": "a4",
+              "t": "atributo",
+              "nome": "cpf",
+              "x": 86,
+              "y": 142,
+              "dono": "e1",
+              "chave": true
+            },
+            {
+              "id": "a5",
+              "t": "atributo",
+              "nome": "nome",
+              "x": 86,
+              "y": 124,
+              "dono": "e1"
+            },
+            {
+              "id": "a6",
+              "t": "atributo",
+              "nome": "telefone",
+              "x": 86,
+              "y": 160,
+              "dono": "e1"
+            },
+            {
+              "id": "a7",
+              "t": "atributo",
+              "nome": "id_animal",
+              "x": 532,
+              "y": 86,
+              "dono": "e2",
+              "chave": true
+            },
+            {
+              "id": "a8",
+              "t": "atributo",
+              "nome": "nome",
+              "x": 629,
+              "y": 86,
+              "dono": "e2"
+            },
+            {
+              "id": "a9",
+              "t": "atributo",
+              "nome": "especie",
+              "x": 690,
+              "y": 86,
+              "dono": "e2"
+            },
+            {
+              "id": "a10",
+              "t": "atributo",
+              "nome": "id_servico",
+              "x": 614,
+              "y": 422,
+              "dono": "e3",
+              "chave": true
+            },
+            {
+              "id": "a11",
+              "t": "atributo",
+              "nome": "descricao",
+              "x": 614,
+              "y": 404,
+              "dono": "e3"
+            },
+            {
+              "id": "a12",
+              "t": "atributo",
+              "nome": "preco",
+              "x": 614,
+              "y": 440,
+              "dono": "e3"
+            },
+            {
+              "id": "r13",
+              "t": "relacionamento",
+              "nome": "Possui",
+              "x": 300,
+              "y": 113
+            },
+            {
+              "id": "r16",
+              "t": "relacionamento",
+              "nome": "Atendimento",
+              "x": 470,
+              "y": 250
+            },
+            {
+              "id": "a19",
+              "t": "atributo",
+              "nome": "data",
+              "x": 645,
+              "y": 279,
+              "dono": "r16"
+            },
+            {
+              "id": "a20",
+              "t": "atributo",
+              "nome": "valor_cobrado",
+              "x": 645,
+              "y": 261,
+              "dono": "r16"
+            }
+          ],
+          "li": [
+            {
+              "id": "l14",
+              "a": "e1",
+              "b": "r13",
+              "card": "(1,1)"
+            },
+            {
+              "id": "l15",
+              "a": "e2",
+              "b": "r13",
+              "card": "(1,n)"
+            },
+            {
+              "id": "l17",
+              "a": "e2",
+              "b": "r16",
+              "card": "(0,n)"
+            },
+            {
+              "id": "l18",
+              "a": "e3",
+              "b": "r16",
+              "card": "(0,n)"
+            }
+          ]
+        },
+        "logico": {
+          "el": [
+            {
+              "id": "t1",
+              "t": "tabela",
+              "nome": "Dono",
+              "x": 40,
+              "y": 40,
+              "cols": [
+                {
+                  "nome": "cpf",
+                  "tipo": "CHAR(11)",
+                  "pk": true,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                },
+                {
+                  "nome": "nome",
+                  "tipo": "VARCHAR(100)",
+                  "pk": false,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                },
+                {
+                  "nome": "telefone",
+                  "tipo": "VARCHAR(20)",
+                  "pk": false,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                }
+              ]
+            },
+            {
+              "id": "t2",
+              "t": "tabela",
+              "nome": "Animal",
+              "x": 580,
+              "y": 40,
+              "cols": [
+                {
+                  "nome": "id_animal",
+                  "tipo": "INT",
+                  "pk": true,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                },
+                {
+                  "nome": "nome",
+                  "tipo": "VARCHAR(100)",
+                  "pk": false,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                },
+                {
+                  "nome": "especie",
+                  "tipo": "VARCHAR(100)",
+                  "pk": false,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                },
+                {
+                  "nome": "cpf",
+                  "tipo": "CHAR(11)",
+                  "pk": false,
+                  "fk": "t1",
+                  "ref": "cpf",
+                  "nn": true
+                }
+              ]
+            },
+            {
+              "id": "t3",
+              "t": "tabela",
+              "nome": "Servico",
+              "x": 580,
+              "y": 516,
+              "cols": [
+                {
+                  "nome": "id_servico",
+                  "tipo": "INT",
+                  "pk": true,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                },
+                {
+                  "nome": "descricao",
+                  "tipo": "TEXT",
+                  "pk": false,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                },
+                {
+                  "nome": "preco",
+                  "tipo": "DECIMAL(10,2)",
+                  "pk": false,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                }
+              ]
+            },
+            {
+              "id": "t5",
+              "t": "tabela",
+              "nome": "Atendimento",
+              "x": 565,
+              "y": 261,
+              "cols": [
+                {
+                  "nome": "id_animal",
+                  "tipo": "INT",
+                  "pk": true,
+                  "fk": "t2",
+                  "ref": "id_animal",
+                  "nn": true
+                },
+                {
+                  "nome": "id_servico",
+                  "tipo": "INT",
+                  "pk": true,
+                  "fk": "t3",
+                  "ref": "id_servico",
+                  "nn": true
+                },
+                {
+                  "nome": "data",
+                  "tipo": "DATE",
+                  "pk": false,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                },
+                {
+                  "nome": "valor_cobrado",
+                  "tipo": "DECIMAL(10,2)",
+                  "pk": false,
+                  "fk": "",
+                  "ref": "",
+                  "nn": true
+                }
+              ]
+            }
+          ],
+          "li": [
+            {
+              "id": "l4",
+              "a": "t2",
+              "b": "t1",
+              "ca": "(1,n)",
+              "cb": "(1,1)"
+            },
+            {
+              "id": "l6",
+              "a": "t5",
+              "b": "t2",
+              "ca": "(0,n)",
+              "cb": "(1,1)"
+            },
+            {
+              "id": "l7",
+              "a": "t5",
+              "b": "t3",
+              "ca": "(0,n)",
+              "cb": "(1,1)"
+            }
+          ]
+        }
+      },
+      "criterios": "Conceitual: Dono 1:N Animal ((1,1) junto de Dono, (1,n) junto de Animal); Animal N:N Servico com data e valor_cobrado no relacionamento. Lógico: Animal com FK cpf → Dono; tabela Atendimento com FKs para Animal e Servico (PK composta) e as colunas data e valor_cobrado.",
+      "explicacao": "1:N → FK no lado N (Animal recebe o cpf do dono). N:N → tabela Atendimento com as duas FKs formando a PK e os atributos do relacionamento."
+    },
+    {
+      "tipo": "diagrama",
+      "diagrama": "er-conceitual",
+      "tema": "Cardinalidade e tipos de atributo",
+      "peso": 1,
+      "enunciado": "Vestiário da fábrica. Faça o MER:\n• FUNCIONÁRIO: matrícula (identificador), nome, e-mail (nem todos têm — opcional) e um ou mais telefones.\n• ARMÁRIO: número (identificador) e andar.\n• Cada funcionário usa no máximo um armário e cada armário é de no máximo um funcionário (pode haver armário vazio e funcionário sem armário).",
+      "gabarito": {
+        "v": 1,
+        "conceitual": {
+          "el": [
+            {
+              "id": "e1",
+              "t": "entidade",
+              "nome": "Funcionario",
+              "x": 120,
+              "y": 140
+            },
+            {
+              "id": "e2",
+              "t": "entidade",
+              "nome": "Armario",
+              "x": 520,
+              "y": 140
+            },
+            {
+              "id": "a3",
+              "t": "atributo",
+              "nome": "matricula",
+              "x": 86,
+              "y": 162,
+              "dono": "e1",
+              "chave": true
+            },
+            {
+              "id": "a4",
+              "t": "atributo",
+              "nome": "nome",
+              "x": 86,
+              "y": 144,
+              "dono": "e1"
+            },
+            {
+              "id": "a5",
+              "t": "atributo",
+              "nome": "email",
+              "x": 86,
+              "y": 180,
+              "dono": "e1",
+              "card": "(0,1)"
+            },
+            {
+              "id": "a6",
+              "t": "atributo",
+              "nome": "telefone",
+              "x": 86,
+              "y": 126,
+              "dono": "e1",
+              "card": "(1,n)"
+            },
+            {
+              "id": "a7",
+              "t": "atributo",
+              "nome": "numero",
+              "x": 654,
+              "y": 162,
+              "dono": "e2",
+              "chave": true
+            },
+            {
+              "id": "a8",
+              "t": "atributo",
+              "nome": "andar",
+              "x": 654,
+              "y": 144,
+              "dono": "e2"
+            },
+            {
+              "id": "r9",
+              "t": "relacionamento",
+              "nome": "Usa",
+              "x": 320,
+              "y": 133
+            }
+          ],
+          "li": [
+            {
+              "id": "l10",
+              "a": "e1",
+              "b": "r9",
+              "card": "(0,1)"
+            },
+            {
+              "id": "l11",
+              "a": "e2",
+              "b": "r9",
+              "card": "(0,1)"
+            }
+          ]
+        }
+      },
+      "criterios": "Relacionamento 1:1 Usa com (0,1) dos dois lados. email como atributo opcional (0,1) e telefone multivalorado (1,n). Identificadores matricula e numero.",
+      "explicacao": "1:1 com participação opcional dos dois lados: (0,1) e (0,1). Atributo opcional leva (0,1) ao lado do nome; multivalorado leva (1,n)."
+    },
+    {
+      "tipo": "diagrama",
+      "diagrama": "er-conceitual",
+      "tema": "Entidade associativa",
+      "peso": 1,
+      "enunciado": "Pronto atendimento. Paciente (CPF, nome) consulta Médico (CRM, nome): relação N:N com a data/hora da consulta. Em cada CONSULTA o médico pode prescrever vários medicamentos (código, nome), informando a dosagem de cada um. Como a consulta precisa se relacionar com Medicamento, use uma ENTIDADE ASSOCIATIVA.",
+      "gabarito": {
+        "v": 1,
+        "conceitual": {
+          "el": [
+            {
+              "id": "e1",
+              "t": "entidade",
+              "nome": "Paciente",
+              "x": 60,
+              "y": 160
+            },
+            {
+              "id": "e2",
+              "t": "entidade",
+              "nome": "Medico",
+              "x": 640,
+              "y": 160
+            },
+            {
+              "id": "e3",
+              "t": "entidade",
+              "nome": "Medicamento",
+              "x": 320,
+              "y": 440
+            },
+            {
+              "id": "s4",
+              "t": "associativa",
+              "nome": "Consulta",
+              "x": 300,
+              "y": 140
+            },
+            {
+              "id": "a5",
+              "t": "atributo",
+              "nome": "cpf",
+              "x": 26,
+              "y": 182,
+              "dono": "e1",
+              "chave": true
+            },
+            {
+              "id": "a6",
+              "t": "atributo",
+              "nome": "nome",
+              "x": 26,
+              "y": 164,
+              "dono": "e1"
+            },
+            {
+              "id": "a7",
+              "t": "atributo",
+              "nome": "crm",
+              "x": 774,
+              "y": 182,
+              "dono": "e2",
+              "chave": true
+            },
+            {
+              "id": "a8",
+              "t": "atributo",
+              "nome": "nome",
+              "x": 774,
+              "y": 164,
+              "dono": "e2"
+            },
+            {
+              "id": "a9",
+              "t": "atributo",
+              "nome": "id_medicamento",
+              "x": 465,
+              "y": 462,
+              "dono": "e3",
+              "chave": true
+            },
+            {
+              "id": "a10",
+              "t": "atributo",
+              "nome": "nome",
+              "x": 465,
+              "y": 444,
+              "dono": "e3"
+            },
+            {
+              "id": "a13",
+              "t": "atributo",
+              "nome": "data_hora",
+              "x": 387,
+              "y": 106,
+              "dono": "s4"
+            },
+            {
+              "id": "r14",
+              "t": "relacionamento",
+              "nome": "Prescreve",
+              "x": 325,
+              "y": 320
+            },
+            {
+              "id": "a17",
+              "t": "atributo",
+              "nome": "dosagem",
+              "x": 486,
+              "y": 349,
+              "dono": "r14"
+            }
+          ],
+          "li": [
+            {
+              "id": "l11",
+              "a": "e1",
+              "b": "s4",
+              "card": "(0,n)"
+            },
+            {
+              "id": "l12",
+              "a": "e2",
+              "b": "s4",
+              "card": "(0,n)"
+            },
+            {
+              "id": "l15",
+              "a": "s4",
+              "b": "r14",
+              "card": "(0,n)"
+            },
+            {
+              "id": "l16",
+              "a": "e3",
+              "b": "r14",
+              "card": "(0,n)"
+            }
+          ]
+        }
+      },
+      "criterios": "Consulta como entidade associativa (retângulo em volta do losango) entre Paciente e Medico, com data_hora. Relacionamento Prescreve entre Consulta e Medicamento (N:N) com o atributo dosagem.",
+      "explicacao": "Relacionamento não se liga a relacionamento; por isso a Consulta vira entidade associativa e aí pode participar do relacionamento Prescreve."
+    }
+  ]
+}

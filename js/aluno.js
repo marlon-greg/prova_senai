@@ -25,6 +25,8 @@ import { textoRespostaSql } from "../servidor/sql-correcao.js?v=20261125b";
 import { montarBancada } from "./workbench.js?v=20261125b";
 import { montarBancadaWeb } from "./bancada-web.js?v=20261125a";
 import { textoRespostaWeb, respostaEmBranco } from "../servidor/web-correcao.js?v=20261125a";
+import { textoRespostaDiagrama, textoGabaritoDiagrama, respostaVaziaDiagrama, NOMES_DIAGRAMA } from "../servidor/diagrama-correcao.js?v=20261126a";
+import { montarDiagramaProva } from "./diagrama-prova.js?v=20261126a";
 import { conferirExtensoes, textoExtensoes, vigiarExtensoes, extensoesIA } from "./extensoes.js?v=20261125a";
 import { definirEstilos } from "./mascotes.js";
 import { usarItensCustom } from "./avatar.js";
@@ -78,7 +80,7 @@ function mostrar(id) {
   document.body.classList.toggle("em-prova", id === "telaQuestao");   // ativa os bloqueios e avisos da prova
   document.body.classList.toggle("com-abas", id === "telaProvas");    // barra de seções (js/aluno-nav.js): só na lista, nunca na prova
   document.body.classList.toggle("com-consulta", id === "telaQuestao" && temConsulta());
-  document.body.classList.toggle("com-sql", id === "telaQuestao" && !!tentativa?.questoesIds?.some(q => ["sql", "web"].includes(questoes[q]?.tipo)));   // Bancada SQL: tela mais larga
+  document.body.classList.toggle("com-sql", id === "telaQuestao" && !!tentativa?.questoesIds?.some(q => ["sql", "web", "diagrama"].includes(questoes[q]?.tipo)));   // Bancada SQL e diagramas: tela mais larga
   if (id !== "telaQuestao") { esconderSobreposicao(); $("#painelConsulta").classList.remove("aberto"); }
   if (id !== "telaFim") pararOuvinteFim();
   if (id !== "telaQuestao") { pararOuvinteProva(); try { pararTimerFora(); foraDaProva = false; if (pararVigia) { pararVigia(); pararVigia = null; } } catch { /* ainda carregando o módulo */ } }
@@ -685,8 +687,8 @@ function criarCartaoQuestao(qid, i, unica) {
   card.className = "card questao"; card.dataset.qid = qid;
   if (!unica) card.id = "q_" + qid;
   if (!q) { card.innerHTML = `<p class="pequeno">Questão ${i + 1} indisponível. Avise o professor.</p><div class="acoes-questao"></div>`; return card; }
-  const tipo = temFormato(q) ? FORMATOS[q.formato].nome.toLowerCase() : q.tipo === "alternativa" ? "múltipla escolha" : q.tipo === "sql" ? "SQL na Bancada" : q.tipo === "web" ? "projeto web" : "resposta escrita", colar = colarPermitido(), voltar = podeVoltar();
-  if (q.tipo === "sql" || q.tipo === "web") card.classList.add("questao-sql");
+  const tipo = temFormato(q) ? FORMATOS[q.formato].nome.toLowerCase() : q.tipo === "alternativa" ? "múltipla escolha" : q.tipo === "sql" ? "SQL na Bancada" : q.tipo === "web" ? "projeto web" : q.tipo === "diagrama" ? (NOMES_DIAGRAMA[q.diagrama] || "diagrama").toLowerCase() : "resposta escrita", colar = colarPermitido(), voltar = podeVoltar();
+  if (q.tipo === "sql" || q.tipo === "web" || q.tipo === "diagrama") card.classList.add("questao-sql");
   // cartão em três partes: cabeçalho (número e tipo) · corpo (enunciado e resposta) · rodapé (enviar)
   card.innerHTML = `<div class="q-cab"><span class="q-num">Questão ${i + 1}<small> de ${tentativa.questoesIds.length}</small></span><span class="tag">${tipo}</span>${q.adaptada ? `<span class="tag nota">♿ adaptada</span>` : ""}<span class="tag ok q-enviada oculto">✓ ${voltar ? "salva" : "enviada"}</span>
       ${acess && ap().lerEmVoz !== false && "speechSynthesis" in window ? `<button type="button" class="leve mini b-ouvir">🔊 Ouvir</button>` : ""}</div>
@@ -694,7 +696,7 @@ function criarCartaoQuestao(qid, i, unica) {
       <div class="enunciado">${formatarEnunciado(q.enunciado)}</div>
       ${htmlApoios(q)}
       ${q.formato === "escritaApoio" && q.dados ? `<div class="escrita-apoio">${q.dados.comecoResposta ? `<p><b>✏ Comece assim:</b> ${esc(q.dados.comecoResposta)}…</p>` : ""}${q.dados.checklist?.length ? `<p><b>✅ Não esqueça:</b></p><ul>${q.dados.checklist.map(c => `<li>${esc(c)}</li>`).join("")}</ul>` : ""}</div>` : ""}
-      <div class="q-rotulo">${temFormato(q) ? rotuloFormato(q) : q.tipo === "alternativa" ? "Escolha uma alternativa" : q.tipo === "sql" ? "Escreva o SQL de cada tarefa na aba dela e execute (⚡) para conferir. Cada tarefa é corrigida a partir da base original." : q.tipo === "web" ? "Siga as etapas (à esquerda) e veja o resultado na prévia ao vivo. Use o git para salvar o progresso (commit e push)." : "Sua resposta"}</div>
+      <div class="q-rotulo">${temFormato(q) ? rotuloFormato(q) : q.tipo === "alternativa" ? "Escolha uma alternativa" : q.tipo === "diagrama" ? "Monte a resposta no editor abaixo: adicione as peças pela barra, ligue-as e dê dois cliques para escrever os nomes. Ctrl+Z desfaz." : q.tipo === "sql" ? "Escreva o SQL de cada tarefa na aba dela e execute (⚡) para conferir. Cada tarefa é corrigida a partir da base original." : q.tipo === "web" ? "Siga as etapas (à esquerda) e veja o resultado na prévia ao vivo. Use o git para salvar o progresso (commit e push)." : "Sua resposta"}</div>
       <div class="q-area"></div>
       <p class="pequeno q-salva oculto" role="status"></p>
     </div>
@@ -725,6 +727,13 @@ function criarCartaoQuestao(qid, i, unica) {
     valoresWeb[qid] = ini;
     bancadas[qid] = montarBancadaWeb(area, { questao: q, valor: ini, abrirJanela: abrirPreviaPermitida,
       onMudar: () => bancadas[qid]?.valor().then(v => { valoresWeb[qid] = respostaEmBranco(q, v) ? null : v; marcarAlterada(card, qid); }).catch(e => console.warn("bancada web", e)) });
+  } else if (q.tipo === "diagrama") {
+    // editor de diagramas: casos de uso, matriz de rastreabilidade, Kanban… ou modelo conceitual/lógico (brModelo)
+    bancadas[qid]?.destruir?.();
+    const ini = rascunhos.get(qid) || respostas[qid]?.resposta || q.inicial || null;
+    valoresDiag[qid] = respostaVaziaDiagrama(q, ini) ? null : ini;
+    bancadas[qid] = montarDiagramaProva(area, { questao: q, valor: ini,
+      onMudar: v => { valoresDiag[qid] = respostaVaziaDiagrama(q, v) ? null : v; marcarAlterada(card, qid); } });
   } else if (q.tipo === "sql") {
     // Bancada SQL (parecida com o MySQL Workbench): o SQL roda aqui no navegador; o resultado de cada tarefa vai junto da resposta
     bancadas[qid]?.destruir?.();
@@ -756,12 +765,13 @@ function criarCartaoQuestao(qid, i, unica) {
 // Bancada SQL de cada questão SQL (qid -> { valor(), destruir() })
 const bancadas = {};
 const textosSql = card => { const o = { tarefas: {} }; card.querySelectorAll("textarea[data-tarefa]").forEach(t => { o.tarefas[t.dataset.tarefa] = { sql: t.value }; }); return o; };
+const valoresDiag = {};   // último valor (JSON) de cada editor de diagrama
 const valoresWeb = {};   // último valor de cada Bancada Web (o valor dela é calculado de forma assíncrona)
 const essencialWeb = v => JSON.stringify(v ? { s: v.slots || null, a: v.arquivos || null, p: v.pastas || null, g: v.git?.commits?.length || 0, u: v.git?.pushes || 0 } : null);
 const soTextosSql = v => JSON.stringify(Object.fromEntries(Object.entries(v?.tarefas || {}).map(([k, x]) => [k, String(x?.sql || "")])));
 // coloca a resposta gravada no cartão
 function preencherCartao(card, qid, resposta) {
-  if (questoes[qid]?.tipo === "sql" || questoes[qid]?.tipo === "web") return;   // a Bancada já abriu com o texto salvo
+  if (["sql", "web", "diagrama"].includes(questoes[qid]?.tipo)) return;   // a Bancada/editor já abriu com o texto salvo
   if (controles[qid] && temFormato(questoes[qid])) return controles[qid].preencher(resposta);
   if (questoes[qid]?.tipo === "alternativa")
     card.querySelectorAll(".alt input").forEach(inp => { inp.checked = resposta !== null && Number(inp.value) === Number(resposta); inp.closest(".alt").classList.toggle("sel", inp.checked); });
@@ -770,6 +780,7 @@ function preencherCartao(card, qid, resposta) {
 // sem voltar: trava o cartão depois de enviado
 function travarCartao(card) {
   controles[card.dataset.qid]?.travar?.();
+  if (questoes[card.dataset.qid]?.tipo === "diagrama") bancadas[card.dataset.qid]?.travar?.();
   card.querySelectorAll(".q-area input, .q-area textarea, .q-area select, .q-area button").forEach(c => c.disabled = true);
   card.querySelector(".b-enviar")?.classList.add("oculto"); card.querySelector(".q-dica")?.classList.add("oculto");
   card.querySelector(".q-enviada")?.classList.remove("oculto");
@@ -791,6 +802,7 @@ function marcarAlterada(card, qid) {
 // valor que está no cartão (null = nada escolhido/escrito)
 function valorDoCartao(card, qid) {
   if (questoes[qid]?.tipo === "web") return valoresWeb[qid] ?? null;
+  if (questoes[qid]?.tipo === "diagrama") return valoresDiag[qid] ?? null;
   if (questoes[qid]?.tipo === "sql") { const v = textosSql(card); return Object.values(v.tarefas).some(x => x.sql.trim()) ? v : null; }
   if (controles[qid] && temFormato(questoes[qid])) return controles[qid].valor();
   if (questoes[qid]?.tipo === "alternativa") { const m = card.querySelector(".alt input:checked"); return m ? Number(m.value) : null; }
@@ -1064,7 +1076,7 @@ async function enviarResposta(qid, card, { silencioso = false } = {}) {
   let resposta = valorDoCartao(card, qid);
   if (resposta === null) {
     if (silencioso) return true;
-    toast(temFormato(q) ? "Responda a questão antes de enviar." : q.tipo === "alternativa" ? "Escolha uma alternativa." : q.tipo === "web" ? "Comece o projeto (preencha pelo menos um espaço) antes de enviar." : q.tipo === "sql" ? "Escreva o SQL de pelo menos uma tarefa antes de enviar." : "Escreva a resposta antes de enviar.", "erro"); return false;
+    toast(temFormato(q) ? "Responda a questão antes de enviar." : q.tipo === "alternativa" ? "Escolha uma alternativa." : q.tipo === "web" ? "Comece o projeto (preencha pelo menos um espaço) antes de enviar." : q.tipo === "diagrama" ? "Monte o diagrama antes de enviar." : q.tipo === "sql" ? "Escreva o SQL de pelo menos uma tarefa antes de enviar." : "Escreva a resposta antes de enviar.", "erro"); return false;
   }
   // SQL: roda cada tarefa numa cópia nova da base e guarda a "impressão" do resultado (o servidor compara com o gabarito)
   if (q.tipo === "sql" && bancadas[qid]) { try { resposta = await bancadas[qid].valor(); } catch (e) { console.warn("bancada", e); } }
@@ -2062,8 +2074,8 @@ async function verResultado() {
     total += c.pontos; if (c.status === "certa" || Number(c.pontos) > peso / 2) certas++;
     const rot = { certa: ["ok", "✅ Certa"], errada: ["erro", "❌ Errada"], parcial: ["aviso", "🟡 Parcial"], revisar: ["aviso", "🟡 Em correção"], em_branco: ["erro", "⬜ Em branco"], perdida: ["erro", "⛔ Perdida (saiu da prova)"] }[c.status];
     const fmt = temFormato(q), bloco = t => `<span class="resp-formato">${esc(t).replace(/\n/g, "<br>")}</span>`;
-    let sua = perdida ? "<i>perdida por sair da prova</i>" : r === undefined ? "<i>não respondida</i>" : q.tipo === "sql" ? bloco(textoRespostaSql(q, r)) : q.tipo === "web" ? bloco(textoRespostaWeb(q, r)) : fmt ? bloco(textoResposta(q, r)) : q.tipo === "alternativa" ? esc(q.alternativas[r]) : `<span class="mono">${esc(r)}</span>`;
-    let certa = q.tipo === "web" ? "—" : q.tipo === "sql" ? (g.tarefas ? bloco((q.tarefas || []).map((t, k) => `Tarefa ${k + 1}: ${g.tarefas[t.id]?.sql || "—"}`).join("\n")) : "—") : fmt ? (g.chave ? bloco(textoChave(q, g)) : "—") : q.tipo === "alternativa" ? esc(q.alternativas?.[g.correta] ?? "—") : (g.respostasAceitas?.length ? `<span class="mono">${esc(g.respostasAceitas[0])}</span>` : "—");
+    let sua = perdida ? "<i>perdida por sair da prova</i>" : r === undefined ? "<i>não respondida</i>" : q.tipo === "sql" ? bloco(textoRespostaSql(q, r)) : q.tipo === "web" ? bloco(textoRespostaWeb(q, r)) : q.tipo === "diagrama" ? bloco(textoRespostaDiagrama(q, r)) : fmt ? bloco(textoResposta(q, r)) : q.tipo === "alternativa" ? esc(q.alternativas[r]) : `<span class="mono">${esc(r)}</span>`;
+    let certa = q.tipo === "web" ? "—" : q.tipo === "diagrama" ? (g.diagrama ? bloco(textoGabaritoDiagrama(q, g)) : "—") : q.tipo === "sql" ? (g.tarefas ? bloco((q.tarefas || []).map((t, k) => `Tarefa ${k + 1}: ${g.tarefas[t.id]?.sql || "—"}`).join("\n")) : "—") : fmt ? (g.chave ? bloco(textoChave(q, g)) : "—") : q.tipo === "alternativa" ? esc(q.alternativas?.[g.correta] ?? "—") : (g.respostasAceitas?.length ? `<span class="mono">${esc(g.respostasAceitas[0])}</span>` : "—");
     contagem[grupoSt(c.status)]++;
     html += `<details class="card res-q" data-grupo="${grupoSt(c.status)}"${c.status === "certa" ? "" : " open"}><summary class="q-topo"><span class="ch" aria-hidden="true">${ic("chev")}</span><span class="q-numero">Questão ${i + 1}</span><span class="chip ${({ ok: "ok", erro: "err", aviso: "warn" })[rot[0]]}">${rot[1]} · ${c.pontos}/${peso}</span></summary>
       <div class="enunciado">${formatarEnunciado(q.enunciado)}</div>

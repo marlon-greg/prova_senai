@@ -1,0 +1,1333 @@
+{
+  "nome": "Levantamento de Requisitos — diagramas e documentos",
+  "materia": "Levantamento de Requisitos",
+  "questoes": [
+    {
+      "tipo": "diagrama",
+      "diagrama": "casos-de-uso",
+      "tema": "Diagrama de casos de uso",
+      "peso": 1,
+      "gabarito": {
+        "v": 1,
+        "tipo": "casos-de-uso",
+        "el": [
+          {
+            "id": "s",
+            "t": "sistema",
+            "x": 220,
+            "y": 20,
+            "w": 470,
+            "h": 500,
+            "txt": "Sistema da Clínica Vida+"
+          },
+          {
+            "id": "a1",
+            "t": "ator",
+            "x": 70,
+            "y": 60,
+            "w": 70,
+            "h": 96,
+            "txt": "Paciente"
+          },
+          {
+            "id": "a2",
+            "t": "ator",
+            "x": 70,
+            "y": 320,
+            "w": 70,
+            "h": 96,
+            "txt": "Recepcionista"
+          },
+          {
+            "id": "a3",
+            "t": "ator",
+            "x": 790,
+            "y": 290,
+            "w": 70,
+            "h": 96,
+            "txt": "Médico"
+          },
+          {
+            "id": "c1",
+            "t": "caso",
+            "x": 250,
+            "y": 80,
+            "w": 190,
+            "h": 64,
+            "txt": "Agendar consulta"
+          },
+          {
+            "id": "c2",
+            "t": "caso",
+            "x": 250,
+            "y": 200,
+            "w": 190,
+            "h": 64,
+            "txt": "Cancelar consulta"
+          },
+          {
+            "id": "c3",
+            "t": "caso",
+            "x": 480,
+            "y": 140,
+            "w": 190,
+            "h": 64,
+            "txt": "Verificar disponibilidade"
+          },
+          {
+            "id": "c4",
+            "t": "caso",
+            "x": 470,
+            "y": 300,
+            "w": 190,
+            "h": 64,
+            "txt": "Registrar atendimento"
+          },
+          {
+            "id": "c5",
+            "t": "caso",
+            "x": 470,
+            "y": 420,
+            "w": 190,
+            "h": 64,
+            "txt": "Emitir receita"
+          }
+        ],
+        "li": [
+          {
+            "id": "l1",
+            "t": "assoc",
+            "de": "a1",
+            "para": "c1",
+            "txt": ""
+          },
+          {
+            "id": "l2",
+            "t": "assoc",
+            "de": "a1",
+            "para": "c2",
+            "txt": ""
+          },
+          {
+            "id": "l3",
+            "t": "assoc",
+            "de": "a2",
+            "para": "c1",
+            "txt": ""
+          },
+          {
+            "id": "l4",
+            "t": "assoc",
+            "de": "a2",
+            "para": "c2",
+            "txt": ""
+          },
+          {
+            "id": "l5",
+            "t": "assoc",
+            "de": "a3",
+            "para": "c4",
+            "txt": ""
+          },
+          {
+            "id": "l6",
+            "t": "include",
+            "de": "c1",
+            "para": "c3",
+            "txt": ""
+          },
+          {
+            "id": "l7",
+            "t": "extend",
+            "de": "c5",
+            "para": "c4",
+            "txt": ""
+          }
+        ],
+        "obs": ""
+      },
+      "enunciado": "A Clínica Vida+ quer um sistema de agendamento. Na entrevista de levantamento, a gerente explicou: o PACIENTE agenda e cancela suas consultas; a RECEPCIONISTA também agenda e cancela consultas para quem liga por telefone. Todo agendamento SEMPRE verifica a disponibilidade da agenda do médico. O MÉDICO registra o atendimento e, SE necessário, emite uma receita durante o atendimento. Monte o diagrama de casos de uso: limite do sistema, atores, casos de uso e os relacionamentos (associação, «include», «extend»).",
+      "criterios": "Limite do sistema com os 5 casos de uso dentro e os 3 atores fora. Associações: Paciente e Recepcionista com Agendar e Cancelar consulta; Médico com Registrar atendimento. «include» de Agendar consulta para Verificar disponibilidade (sempre executado). «extend» de Emitir receita para Registrar atendimento (opcional). Sem associações a mais.",
+      "explicacao": "«include» indica comportamento obrigatório reaproveitado (a seta sai do caso base e aponta para o incluído). «extend» indica comportamento opcional/condicional (a seta sai do caso que estende e aponta para o caso base). Atores ficam sempre fora do limite do sistema."
+    },
+    {
+      "tipo": "diagrama",
+      "diagrama": "casos-de-uso",
+      "tema": "Diagrama de casos de uso",
+      "peso": 1,
+      "gabarito": {
+        "v": 1,
+        "tipo": "casos-de-uso",
+        "el": [
+          {
+            "id": "s",
+            "t": "sistema",
+            "x": 230,
+            "y": 20,
+            "w": 480,
+            "h": 520,
+            "txt": "Sistema da Biblioteca Escolar"
+          },
+          {
+            "id": "u",
+            "t": "ator",
+            "x": 80,
+            "y": 40,
+            "w": 70,
+            "h": 96,
+            "txt": "Usuário"
+          },
+          {
+            "id": "al",
+            "t": "ator",
+            "x": 20,
+            "y": 250,
+            "w": 70,
+            "h": 96,
+            "txt": "Aluno"
+          },
+          {
+            "id": "pr",
+            "t": "ator",
+            "x": 130,
+            "y": 250,
+            "w": 70,
+            "h": 96,
+            "txt": "Professor"
+          },
+          {
+            "id": "b",
+            "t": "ator",
+            "x": 790,
+            "y": 250,
+            "w": 70,
+            "h": 96,
+            "txt": "Bibliotecário"
+          },
+          {
+            "id": "c1",
+            "t": "caso",
+            "x": 260,
+            "y": 60,
+            "w": 190,
+            "h": 64,
+            "txt": "Consultar acervo"
+          },
+          {
+            "id": "c2",
+            "t": "caso",
+            "x": 260,
+            "y": 160,
+            "w": 190,
+            "h": 64,
+            "txt": "Reservar livro"
+          },
+          {
+            "id": "c3",
+            "t": "caso",
+            "x": 490,
+            "y": 210,
+            "w": 190,
+            "h": 64,
+            "txt": "Realizar empréstimo"
+          },
+          {
+            "id": "c4",
+            "t": "caso",
+            "x": 260,
+            "y": 300,
+            "w": 190,
+            "h": 64,
+            "txt": "Verificar pendências"
+          },
+          {
+            "id": "c5",
+            "t": "caso",
+            "x": 490,
+            "y": 370,
+            "w": 190,
+            "h": 64,
+            "txt": "Registrar devolução"
+          },
+          {
+            "id": "c6",
+            "t": "caso",
+            "x": 260,
+            "y": 440,
+            "w": 190,
+            "h": 64,
+            "txt": "Calcular multa"
+          }
+        ],
+        "li": [
+          {
+            "id": "l8",
+            "t": "gen",
+            "de": "al",
+            "para": "u",
+            "txt": ""
+          },
+          {
+            "id": "l9",
+            "t": "gen",
+            "de": "pr",
+            "para": "u",
+            "txt": ""
+          },
+          {
+            "id": "l10",
+            "t": "assoc",
+            "de": "u",
+            "para": "c1",
+            "txt": ""
+          },
+          {
+            "id": "l11",
+            "t": "assoc",
+            "de": "u",
+            "para": "c2",
+            "txt": ""
+          },
+          {
+            "id": "l12",
+            "t": "assoc",
+            "de": "b",
+            "para": "c3",
+            "txt": ""
+          },
+          {
+            "id": "l13",
+            "t": "assoc",
+            "de": "b",
+            "para": "c5",
+            "txt": ""
+          },
+          {
+            "id": "l14",
+            "t": "include",
+            "de": "c3",
+            "para": "c4",
+            "txt": ""
+          },
+          {
+            "id": "l15",
+            "t": "extend",
+            "de": "c6",
+            "para": "c5",
+            "txt": ""
+          }
+        ],
+        "obs": ""
+      },
+      "enunciado": "Na biblioteca da escola, ALUNOS e PROFESSORES são USUÁRIOS da biblioteca: ambos podem consultar o acervo e reservar livros (modele isso com generalização de atores). O BIBLIOTECÁRIO realiza empréstimos e registra devoluções. Todo empréstimo SEMPRE verifica se o usuário tem pendências. Na devolução, SE houver atraso, o sistema calcula a multa. Desenhe o diagrama de casos de uso.",
+      "criterios": "Atores Usuário, Aluno, Professor e Bibliotecário fora do limite. Generalização Aluno → Usuário e Professor → Usuário (triângulo no Usuário). Usuário associado a Consultar acervo e Reservar livro; Bibliotecário a Realizar empréstimo e Registrar devolução. Realizar empréstimo «include» Verificar pendências; Calcular multa «extend» Registrar devolução.",
+      "explicacao": "A generalização evita repetir as mesmas associações para Aluno e Professor: o que vale para Usuário vale para os filhos. A multa só acontece em caso de atraso, por isso é «extend»; a verificação de pendências é obrigatória, por isso é «include»."
+    },
+    {
+      "tipo": "diagrama",
+      "diagrama": "atividades",
+      "tema": "Diagrama de atividades",
+      "peso": 1,
+      "gabarito": {
+        "v": 1,
+        "tipo": "atividades",
+        "el": [
+          {
+            "id": "r1",
+            "t": "raia",
+            "x": 20,
+            "y": 20,
+            "w": 260,
+            "h": 640,
+            "txt": "Cliente"
+          },
+          {
+            "id": "r2",
+            "t": "raia",
+            "x": 280,
+            "y": 20,
+            "w": 260,
+            "h": 640,
+            "txt": "Restaurante"
+          },
+          {
+            "id": "r3",
+            "t": "raia",
+            "x": 540,
+            "y": 20,
+            "w": 260,
+            "h": 640,
+            "txt": "Entregador"
+          },
+          {
+            "id": "i",
+            "t": "inicio",
+            "x": 135,
+            "y": 75,
+            "w": 30,
+            "h": 30,
+            "txt": ""
+          },
+          {
+            "id": "a1",
+            "t": "acao",
+            "x": 65,
+            "y": 130,
+            "w": 170,
+            "h": 54,
+            "txt": "Escolher itens do cardápio"
+          },
+          {
+            "id": "a2",
+            "t": "acao",
+            "x": 65,
+            "y": 230,
+            "w": 170,
+            "h": 54,
+            "txt": "Realizar pagamento"
+          },
+          {
+            "id": "d1",
+            "t": "decisao",
+            "x": 118,
+            "y": 330,
+            "w": 64,
+            "h": 64,
+            "txt": "pagamento aprovado?"
+          },
+          {
+            "id": "a3",
+            "t": "acao",
+            "x": 325,
+            "y": 330,
+            "w": 170,
+            "h": 54,
+            "txt": "Confirmar pedido"
+          },
+          {
+            "id": "a4",
+            "t": "acao",
+            "x": 325,
+            "y": 440,
+            "w": 170,
+            "h": 54,
+            "txt": "Preparar pedido"
+          },
+          {
+            "id": "a5",
+            "t": "acao",
+            "x": 585,
+            "y": 440,
+            "w": 170,
+            "h": 54,
+            "txt": "Entregar pedido"
+          },
+          {
+            "id": "f",
+            "t": "fim",
+            "x": 654,
+            "y": 560,
+            "w": 32,
+            "h": 32,
+            "txt": ""
+          }
+        ],
+        "li": [
+          {
+            "id": "l16",
+            "t": "fluxo",
+            "de": "i",
+            "para": "a1",
+            "txt": ""
+          },
+          {
+            "id": "l17",
+            "t": "fluxo",
+            "de": "a1",
+            "para": "a2",
+            "txt": ""
+          },
+          {
+            "id": "l18",
+            "t": "fluxo",
+            "de": "a2",
+            "para": "d1",
+            "txt": ""
+          },
+          {
+            "id": "l19",
+            "t": "fluxo",
+            "de": "d1",
+            "para": "a3",
+            "txt": "[aprovado]"
+          },
+          {
+            "id": "l20",
+            "t": "fluxo",
+            "de": "d1",
+            "para": "a2",
+            "txt": "[recusado]"
+          },
+          {
+            "id": "l21",
+            "t": "fluxo",
+            "de": "a3",
+            "para": "a4",
+            "txt": ""
+          },
+          {
+            "id": "l22",
+            "t": "fluxo",
+            "de": "a4",
+            "para": "a5",
+            "txt": ""
+          },
+          {
+            "id": "l23",
+            "t": "fluxo",
+            "de": "a5",
+            "para": "f",
+            "txt": ""
+          }
+        ],
+        "obs": ""
+      },
+      "enunciado": "Levantamento do processo de pedido do restaurante SaborJá: o CLIENTE escolhe os itens do cardápio e realiza o pagamento. Se o pagamento for recusado, o cliente tenta pagar novamente; se for aprovado, o RESTAURANTE confirma o pedido e o prepara. Depois o ENTREGADOR entrega o pedido e o processo termina. Modele o fluxo em um diagrama de atividades com uma raia para cada responsável.",
+      "criterios": "Raias Cliente, Restaurante e Entregador. Nó inicial → Escolher itens → Realizar pagamento → decisão com guardas [aprovado] → Confirmar pedido e [recusado] → volta para Realizar pagamento. Confirmar → Preparar pedido → Entregar pedido → nó final. Cada ação na raia do seu responsável.",
+      "explicacao": "A decisão (losango) precisa de guardas nas saídas. O laço de volta para o pagamento representa a nova tentativa. As raias mostram QUEM executa cada ação — informação levantada na entrevista."
+    },
+    {
+      "tipo": "diagrama",
+      "diagrama": "rastreabilidade",
+      "tema": "Matriz de rastreabilidade",
+      "peso": 1,
+      "gabarito": {
+        "v": 1,
+        "tipo": "rastreabilidade",
+        "req": [
+          {
+            "id": "r1",
+            "cod": "RF01",
+            "desc": "O sistema deve permitir cadastrar alunos com nome, CPF e plano contratado.",
+            "tipo": "RF",
+            "prio": "Alta",
+            "origem": "Gerente",
+            "status": "Aprovado"
+          },
+          {
+            "id": "r2",
+            "cod": "RF02",
+            "desc": "O sistema deve registrar o check-in do aluno na catraca.",
+            "tipo": "RF",
+            "prio": "Alta",
+            "origem": "Recepção",
+            "status": "Aprovado"
+          },
+          {
+            "id": "r3",
+            "cod": "RF03",
+            "desc": "O instrutor deve poder montar a ficha de treino do aluno.",
+            "tipo": "RF",
+            "prio": "Média",
+            "origem": "Instrutores",
+            "status": "Aprovado"
+          },
+          {
+            "id": "r4",
+            "cod": "RNF01",
+            "desc": "O check-in deve ser respondido em até 2 segundos.",
+            "tipo": "RNF",
+            "prio": "Alta",
+            "origem": "Gerente",
+            "status": "Aprovado"
+          },
+          {
+            "id": "r5",
+            "cod": "RN01",
+            "desc": "Aluno com mensalidade atrasada não pode fazer check-in.",
+            "tipo": "RN",
+            "prio": "Alta",
+            "origem": "Financeiro",
+            "status": "Aprovado"
+          }
+        ],
+        "col": [
+          {
+            "id": "c1",
+            "cod": "UC01",
+            "nome": "Cadastrar aluno",
+            "tipo": "UC"
+          },
+          {
+            "id": "c2",
+            "cod": "UC02",
+            "nome": "Registrar check-in",
+            "tipo": "UC"
+          },
+          {
+            "id": "c3",
+            "cod": "UC03",
+            "nome": "Montar treino",
+            "tipo": "UC"
+          },
+          {
+            "id": "c4",
+            "cod": "TL01",
+            "nome": "Tela da catraca",
+            "tipo": "TL"
+          },
+          {
+            "id": "c5",
+            "cod": "CT01",
+            "nome": "Check-in com mensalidade atrasada",
+            "tipo": "CT"
+          },
+          {
+            "id": "c6",
+            "cod": "CT02",
+            "nome": "Tempo de resposta do check-in",
+            "tipo": "CT"
+          }
+        ],
+        "x": [
+          [
+            "r1",
+            "c1"
+          ],
+          [
+            "r2",
+            "c2"
+          ],
+          [
+            "r2",
+            "c4"
+          ],
+          [
+            "r3",
+            "c3"
+          ],
+          [
+            "r4",
+            "c4"
+          ],
+          [
+            "r4",
+            "c6"
+          ],
+          [
+            "r5",
+            "c2"
+          ],
+          [
+            "r5",
+            "c5"
+          ]
+        ],
+        "dep": [],
+        "obs": ""
+      },
+      "inicial": {
+        "v": 1,
+        "tipo": "rastreabilidade",
+        "req": [
+          {
+            "id": "r1",
+            "cod": "RF01",
+            "desc": "O sistema deve permitir cadastrar alunos com nome, CPF e plano contratado.",
+            "tipo": "RF",
+            "prio": "Alta",
+            "origem": "Gerente",
+            "status": "Aprovado"
+          },
+          {
+            "id": "r2",
+            "cod": "RF02",
+            "desc": "O sistema deve registrar o check-in do aluno na catraca.",
+            "tipo": "RF",
+            "prio": "Alta",
+            "origem": "Recepção",
+            "status": "Aprovado"
+          },
+          {
+            "id": "r3",
+            "cod": "RF03",
+            "desc": "O instrutor deve poder montar a ficha de treino do aluno.",
+            "tipo": "RF",
+            "prio": "Média",
+            "origem": "Instrutores",
+            "status": "Aprovado"
+          },
+          {
+            "id": "r4",
+            "cod": "RNF01",
+            "desc": "O check-in deve ser respondido em até 2 segundos.",
+            "tipo": "RNF",
+            "prio": "Alta",
+            "origem": "Gerente",
+            "status": "Aprovado"
+          },
+          {
+            "id": "r5",
+            "cod": "RN01",
+            "desc": "Aluno com mensalidade atrasada não pode fazer check-in.",
+            "tipo": "RN",
+            "prio": "Alta",
+            "origem": "Financeiro",
+            "status": "Aprovado"
+          }
+        ],
+        "col": [
+          {
+            "id": "c1",
+            "cod": "UC01",
+            "nome": "Cadastrar aluno",
+            "tipo": "UC"
+          },
+          {
+            "id": "c2",
+            "cod": "UC02",
+            "nome": "Registrar check-in",
+            "tipo": "UC"
+          },
+          {
+            "id": "c3",
+            "cod": "UC03",
+            "nome": "Montar treino",
+            "tipo": "UC"
+          },
+          {
+            "id": "c4",
+            "cod": "TL01",
+            "nome": "Tela da catraca",
+            "tipo": "TL"
+          },
+          {
+            "id": "c5",
+            "cod": "CT01",
+            "nome": "Check-in com mensalidade atrasada",
+            "tipo": "CT"
+          },
+          {
+            "id": "c6",
+            "cod": "CT02",
+            "nome": "Tempo de resposta do check-in",
+            "tipo": "CT"
+          }
+        ],
+        "x": [],
+        "dep": [],
+        "obs": ""
+      },
+      "enunciado": "O sistema da Academia Força Total já tem requisitos e artefatos levantados (veja a matriz). O caso de uso UC02 (Registrar check-in) inclui a validação da mensalidade; a tela TL01 (catraca) é onde o check-in acontece e precisa ser rápida; o caso de teste CT01 verifica o bloqueio de quem está com a mensalidade atrasada e o CT02 mede o tempo de resposta do check-in. Marque com ✕ na matriz quais artefatos atendem ou verificam cada requisito.",
+      "criterios": "RF01 → UC01; RF02 → UC02 e TL01; RF03 → UC03; RNF01 → TL01 e CT02; RN01 → UC02 e CT01. Nenhum requisito sem rastreio e nenhuma marca a mais.",
+      "explicacao": "A matriz de rastreabilidade liga cada requisito aos artefatos que o implementam (casos de uso, telas) e que o verificam (casos de teste). Assim, numa gestão de mudança, sabe-se o que precisa ser revisto quando um requisito muda."
+    },
+    {
+      "tipo": "diagrama",
+      "diagrama": "rastreabilidade",
+      "tema": "Matriz de rastreabilidade (dependências)",
+      "peso": 1,
+      "gabarito": {
+        "v": 1,
+        "tipo": "rastreabilidade",
+        "modo": "dep",
+        "req": [
+          {
+            "id": "r1",
+            "cod": "RF01",
+            "desc": "Cadastrar usuário (aluno ou professor).",
+            "tipo": "RF",
+            "prio": "Alta",
+            "origem": "Bibliotecária",
+            "status": ""
+          },
+          {
+            "id": "r2",
+            "cod": "RF02",
+            "desc": "Realizar empréstimo de livro para um usuário cadastrado.",
+            "tipo": "RF",
+            "prio": "Alta",
+            "origem": "Bibliotecária",
+            "status": ""
+          },
+          {
+            "id": "r3",
+            "cod": "RF03",
+            "desc": "Registrar a devolução de um livro emprestado.",
+            "tipo": "RF",
+            "prio": "Alta",
+            "origem": "Bibliotecária",
+            "status": ""
+          },
+          {
+            "id": "r4",
+            "cod": "RF04",
+            "desc": "Calcular a multa por atraso na devolução.",
+            "tipo": "RF",
+            "prio": "Média",
+            "origem": "Direção",
+            "status": ""
+          },
+          {
+            "id": "r5",
+            "cod": "RN01",
+            "desc": "A multa é de R$ 2,00 por dia de atraso.",
+            "tipo": "RN",
+            "prio": "Média",
+            "origem": "Direção",
+            "status": ""
+          },
+          {
+            "id": "r6",
+            "cod": "RNF01",
+            "desc": "A tela de empréstimo deve funcionar em tablets.",
+            "tipo": "RNF",
+            "prio": "Baixa",
+            "origem": "Bibliotecária",
+            "status": ""
+          }
+        ],
+        "col": [],
+        "x": [],
+        "dep": [
+          [
+            "r2",
+            "r1"
+          ],
+          [
+            "r3",
+            "r2"
+          ],
+          [
+            "r4",
+            "r3"
+          ],
+          [
+            "r4",
+            "r5"
+          ]
+        ],
+        "obs": ""
+      },
+      "inicial": {
+        "v": 1,
+        "tipo": "rastreabilidade",
+        "modo": "dep",
+        "req": [
+          {
+            "id": "r1",
+            "cod": "RF01",
+            "desc": "Cadastrar usuário (aluno ou professor).",
+            "tipo": "RF",
+            "prio": "Alta",
+            "origem": "Bibliotecária",
+            "status": ""
+          },
+          {
+            "id": "r2",
+            "cod": "RF02",
+            "desc": "Realizar empréstimo de livro para um usuário cadastrado.",
+            "tipo": "RF",
+            "prio": "Alta",
+            "origem": "Bibliotecária",
+            "status": ""
+          },
+          {
+            "id": "r3",
+            "cod": "RF03",
+            "desc": "Registrar a devolução de um livro emprestado.",
+            "tipo": "RF",
+            "prio": "Alta",
+            "origem": "Bibliotecária",
+            "status": ""
+          },
+          {
+            "id": "r4",
+            "cod": "RF04",
+            "desc": "Calcular a multa por atraso na devolução.",
+            "tipo": "RF",
+            "prio": "Média",
+            "origem": "Direção",
+            "status": ""
+          },
+          {
+            "id": "r5",
+            "cod": "RN01",
+            "desc": "A multa é de R$ 2,00 por dia de atraso.",
+            "tipo": "RN",
+            "prio": "Média",
+            "origem": "Direção",
+            "status": ""
+          },
+          {
+            "id": "r6",
+            "cod": "RNF01",
+            "desc": "A tela de empréstimo deve funcionar em tablets.",
+            "tipo": "RNF",
+            "prio": "Baixa",
+            "origem": "Bibliotecária",
+            "status": ""
+          }
+        ],
+        "col": [],
+        "x": [],
+        "dep": [],
+        "obs": ""
+      },
+      "enunciado": "Na biblioteca, a diretora pediu para mudar o valor da multa. Para analisar o impacto dessa mudança, preencha a matriz requisito × requisito marcando ✕ quando o requisito da LINHA depende do requisito da COLUNA. Considere: só é possível emprestar para usuário cadastrado; só se devolve o que foi emprestado; a multa é calculada na devolução e usa o valor definido pela regra de negócio.",
+      "criterios": "RF02 depende de RF01; RF03 depende de RF02; RF04 depende de RF03 e de RN01. RNF01 sem dependências. Nenhuma marca a mais.",
+      "explicacao": "Com as dependências registradas, a mudança em RN01 (valor da multa) mostra impacto direto em RF04 — é a gestão de mudanças apoiada pela rastreabilidade."
+    },
+    {
+      "tipo": "diagrama",
+      "diagrama": "requisitos",
+      "tema": "Documento de requisitos",
+      "peso": 1,
+      "gabarito": {
+        "v": 1,
+        "tipo": "requisitos",
+        "cab": {
+          "projeto": "SaborJá — aplicativo de delivery",
+          "versao": "1.1",
+          "data": "2026-11-20",
+          "autor": "Equipe de análise"
+        },
+        "hist": [
+          {
+            "id": "h1",
+            "versao": "1.0",
+            "data": "2026-10-30",
+            "autor": "Equipe de análise",
+            "desc": "Versão inicial do documento."
+          },
+          {
+            "id": "h2",
+            "versao": "1.1",
+            "data": "2026-11-20",
+            "autor": "Equipe de análise",
+            "desc": "Inclusão do pagamento por Pix."
+          }
+        ],
+        "itens": [
+          {
+            "id": "q1",
+            "cod": "RF01",
+            "tipo": "RF",
+            "cat": "",
+            "desc": "O sistema deve permitir que o cliente acompanhe o status do pedido em tempo real.",
+            "prio": "Alta",
+            "origem": "Clientes"
+          },
+          {
+            "id": "q2",
+            "cod": "RF02",
+            "tipo": "RF",
+            "cat": "",
+            "desc": "O sistema deve permitir o pagamento por Pix ou cartão de crédito.",
+            "prio": "Alta",
+            "origem": "Dono do restaurante"
+          },
+          {
+            "id": "q3",
+            "cod": "RNF01",
+            "tipo": "RNF",
+            "cat": "Desempenho",
+            "desc": "O cardápio deve carregar em até 3 segundos em conexão 4G.",
+            "prio": "Média",
+            "origem": "Dono do restaurante"
+          },
+          {
+            "id": "q4",
+            "cod": "RNF02",
+            "tipo": "RNF",
+            "cat": "Segurança",
+            "desc": "Os dados do cartão não devem ser armazenados pelo aplicativo; o pagamento é processado por um gateway certificado.",
+            "prio": "Alta",
+            "origem": "Contador"
+          },
+          {
+            "id": "q5",
+            "cod": "RNF03",
+            "tipo": "RNF",
+            "cat": "Usabilidade",
+            "desc": "O cliente deve conseguir concluir um pedido em no máximo 5 telas.",
+            "prio": "Média",
+            "origem": "Clientes"
+          },
+          {
+            "id": "q6",
+            "cod": "RN01",
+            "tipo": "RN",
+            "cat": "",
+            "desc": "Pedidos abaixo de R$ 20,00 não podem ser finalizados para entrega.",
+            "prio": "Alta",
+            "origem": "Dono do restaurante"
+          },
+          {
+            "id": "q7",
+            "cod": "RN02",
+            "tipo": "RN",
+            "cat": "",
+            "desc": "O cancelamento só é permitido antes de o restaurante confirmar o pedido.",
+            "prio": "Média",
+            "origem": "Dono do restaurante"
+          },
+          {
+            "id": "q8",
+            "cod": "RES01",
+            "tipo": "RES",
+            "cat": "",
+            "desc": "O aplicativo deve ser desenvolvido em Flutter para Android e iOS.",
+            "prio": "Alta",
+            "origem": "Sócio investidor"
+          }
+        ],
+        "obs": ""
+      },
+      "enunciado": "Registre no documento de requisitos do aplicativo SaborJá o que foi levantado: (1) o cliente quer acompanhar o status do pedido em tempo real; (2) o pagamento poderá ser por Pix ou cartão de crédito; (3) o cardápio deve carregar em até 3 segundos no 4G; (4) os dados do cartão não podem ficar guardados no app — o pagamento passa por um gateway certificado; (5) o cliente deve concluir um pedido em no máximo 5 telas; (6) pedidos abaixo de R$ 20,00 não podem ser entregues; (7) só é possível cancelar antes de o restaurante confirmar; (8) o investidor exige que o app seja feito em Flutter para Android e iOS. Classifique cada item (RF, RNF com categoria, RN ou Restrição) e preencha o cabeçalho como versão 1.1, registrando no histórico que a 1.0 foi a versão inicial e a 1.1 incluiu o pagamento por Pix.",
+      "criterios": "2 RF (status do pedido; pagamento Pix/cartão), 3 RNF (desempenho: 3 s no 4G; segurança: cartão/gateway; usabilidade: 5 telas), 2 RN (pedido mínimo R$ 20; cancelamento antes da confirmação) e 1 Restrição (Flutter). Cabeçalho com projeto e versão 1.1 e histórico com as versões 1.0 e 1.1.",
+      "explicacao": "RF descreve o que o sistema faz; RNF descreve qualidades (como faz) e recebe uma categoria; regra de negócio é política do negócio que o sistema deve respeitar; restrição limita as escolhas do projeto (tecnologia, prazo). O histórico de revisões é o controle de versões do documento."
+    },
+    {
+      "tipo": "diagrama",
+      "diagrama": "kanban",
+      "tema": "Kanban",
+      "peso": 1,
+      "gabarito": {
+        "v": 1,
+        "tipo": "kanban",
+        "cols": [
+          {
+            "id": "k1",
+            "nome": "A fazer",
+            "wip": 0
+          },
+          {
+            "id": "k2",
+            "nome": "Fazendo",
+            "wip": 2
+          },
+          {
+            "id": "k3",
+            "nome": "Em teste",
+            "wip": 2
+          },
+          {
+            "id": "k4",
+            "nome": "Feito",
+            "wip": 0
+          }
+        ],
+        "cards": [
+          {
+            "id": "t1",
+            "col": "k1",
+            "txt": "Relatório de frequência",
+            "resp": "",
+            "prio": "Baixa"
+          },
+          {
+            "id": "t2",
+            "col": "k1",
+            "txt": "Notificação de mensalidade",
+            "resp": "",
+            "prio": "Média"
+          },
+          {
+            "id": "t3",
+            "col": "k2",
+            "txt": "Check-in por QR Code",
+            "resp": "Bruna",
+            "prio": "Alta"
+          },
+          {
+            "id": "t4",
+            "col": "k2",
+            "txt": "Montagem de treino",
+            "resp": "Diego",
+            "prio": "Média"
+          },
+          {
+            "id": "t5",
+            "col": "k3",
+            "txt": "Cadastro de aluno",
+            "resp": "Carla",
+            "prio": "Alta"
+          },
+          {
+            "id": "t6",
+            "col": "k4",
+            "txt": "Tela de login",
+            "resp": "Diego",
+            "prio": "Alta"
+          }
+        ],
+        "obs": ""
+      },
+      "enunciado": "Monte o quadro Kanban da equipe que desenvolve o app da academia. Fluxo: A fazer → Fazendo → Em teste → Feito, com limite WIP de 2 cartões em “Fazendo” e em “Em teste”. Situação atual: a Tela de login (Diego) está pronta; o Cadastro de aluno (Carla) está sendo testado; o Check-in por QR Code (Bruna) e a Montagem de treino (Diego) estão em desenvolvimento; o Relatório de frequência e a Notificação de mensalidade ainda não começaram.",
+      "criterios": "Quatro colunas na ordem do fluxo, WIP 2 em Fazendo e Em teste, cada um dos 6 cartões na coluna correta e nenhuma coluna acima do limite WIP.",
+      "explicacao": "O limite WIP (trabalho em andamento) evita que a equipe comece tarefas demais ao mesmo tempo; o quadro torna o fluxo visível e mostra gargalos."
+    },
+    {
+      "tipo": "diagrama",
+      "diagrama": "historias",
+      "tema": "Histórias de usuário (Scrum)",
+      "peso": 1,
+      "gabarito": {
+        "v": 1,
+        "tipo": "historias",
+        "itens": [
+          {
+            "id": "u1",
+            "cod": "US01",
+            "papel": "paciente",
+            "acao": "agendar uma consulta pelo aplicativo",
+            "beneficio": "não precisar ligar para a clínica",
+            "criterios": [
+              "Dado que há horário livre, quando o paciente escolhe médico, data e hora, então a consulta fica agendada e aparece em “Minhas consultas”.",
+              "Horários já ocupados não aparecem para escolha."
+            ],
+            "prio": "Alta",
+            "pontos": "5"
+          },
+          {
+            "id": "u2",
+            "cod": "US02",
+            "papel": "paciente",
+            "acao": "receber um lembrete 24 horas antes da consulta",
+            "beneficio": "não esquecer o atendimento",
+            "criterios": [
+              "O lembrete é enviado por notificação 24 h antes do horário.",
+              "Consultas canceladas não geram lembrete."
+            ],
+            "prio": "Média",
+            "pontos": "3"
+          },
+          {
+            "id": "u3",
+            "cod": "US03",
+            "papel": "paciente",
+            "acao": "ver o histórico das minhas consultas",
+            "beneficio": "acompanhar meus atendimentos anteriores",
+            "criterios": [
+              "A lista mostra data, médico e especialidade, da mais recente para a mais antiga."
+            ],
+            "prio": "Baixa",
+            "pontos": "2"
+          }
+        ],
+        "obs": ""
+      },
+      "enunciado": "O Product Owner da Clínica Vida+ quer o backlog do aplicativo do paciente com três histórias: agendar consulta pelo app (para não precisar ligar), receber um lembrete 24 horas antes da consulta (para não esquecer) e ver o histórico das consultas (para acompanhar os atendimentos). A prioridade é nessa ordem (Alta, Média, Baixa) e a equipe estimou 5, 3 e 2 pontos. Escreva as histórias no formato Como… quero… para…, com pelo menos dois critérios de aceitação nas duas primeiras, e deixe o backlog ordenado.",
+      "criterios": "Três histórias no formato completo (papel, ação, benefício), na ordem agendar → lembrete → histórico, com prioridades Alta/Média/Baixa, pontos estimados e critérios de aceitação verificáveis.",
+      "explicacao": "No Scrum, o Product Backlog é uma lista ordenada pelo PO. Critérios de aceitação deixam claro quando a história está pronta (Definition of Done da história)."
+    },
+    {
+      "tipo": "diagrama",
+      "diagrama": "empatia",
+      "tema": "Mapa de empatia (Design Thinking)",
+      "peso": 1,
+      "gabarito": {
+        "v": 1,
+        "tipo": "empatia",
+        "persona": "Seu Antônio, 68 anos, aposentado, paciente da Clínica Vida+ há 10 anos",
+        "notas": [
+          {
+            "id": "n1",
+            "area": "pensa",
+            "txt": "Tem medo de perder a consulta e ficar meses sem médico"
+          },
+          {
+            "id": "n2",
+            "area": "pensa",
+            "txt": "Acha que tecnologia não é para ele"
+          },
+          {
+            "id": "n3",
+            "area": "escuta",
+            "txt": "A filha diz que dá para marcar consulta pelo celular"
+          },
+          {
+            "id": "n4",
+            "area": "escuta",
+            "txt": "Os amigos reclamam da demora no telefone da clínica"
+          },
+          {
+            "id": "n5",
+            "area": "ve",
+            "txt": "Fila grande na recepção às 7h da manhã"
+          },
+          {
+            "id": "n6",
+            "area": "ve",
+            "txt": "Cartazes da clínica com QR Code que ele não sabe usar"
+          },
+          {
+            "id": "n7",
+            "area": "fala",
+            "txt": "Liga várias vezes até conseguir ser atendido"
+          },
+          {
+            "id": "n8",
+            "area": "fala",
+            "txt": "Pede ajuda ao neto para ler as mensagens"
+          },
+          {
+            "id": "n9",
+            "area": "dores",
+            "txt": "A ligação cai ou ninguém atende"
+          },
+          {
+            "id": "n10",
+            "area": "dores",
+            "txt": "Letras pequenas na tela do celular"
+          },
+          {
+            "id": "n11",
+            "area": "ganhos",
+            "txt": "Marcar consulta sem sair de casa"
+          },
+          {
+            "id": "n12",
+            "area": "ganhos",
+            "txt": "Receber lembrete da consulta"
+          }
+        ],
+        "obs": ""
+      },
+      "enunciado": "Na etapa de EMPATIA do Design Thinking, a equipe entrevistou o Seu Antônio (68 anos, aposentado, paciente da Clínica Vida+ há 10 anos). Organize no mapa de empatia o que foi observado: “a ligação cai ou ninguém atende”; “a filha diz que dá para marcar consulta pelo celular”; “tem medo de perder a consulta e ficar meses sem médico”; “fila grande na recepção às 7h da manhã”; “liga várias vezes até conseguir ser atendido”; “queria marcar consulta sem sair de casa”; “letras pequenas na tela do celular”; “os amigos reclamam da demora no telefone da clínica”; “acha que tecnologia não é para ele”; “cartazes da clínica com QR Code que ele não sabe usar”; “pede ajuda ao neto para ler as mensagens”; “gostaria de receber lembrete da consulta”.",
+      "criterios": "Persona descrita e as 12 observações nas áreas corretas: pensa e sente (medo de perder a consulta; tecnologia não é para ele), escuta (filha; amigos), vê (fila; cartazes com QR Code), fala e faz (liga várias vezes; pede ajuda ao neto), dores (ligação cai; letras pequenas), ganhos (marcar sem sair de casa; lembrete).",
+      "explicacao": "O mapa de empatia organiza o que se sabe do usuário para gerar ideias centradas nele. Dores e ganhos costumam virar requisitos: por exemplo, fonte ampliada (RNF de usabilidade) e lembrete de consulta (RF)."
+    },
+    {
+      "tipo": "diagrama",
+      "diagrama": "atividades",
+      "tema": "Diagrama de atividades",
+      "peso": 1,
+      "gabarito": {
+        "v": 1,
+        "tipo": "atividades",
+        "el": [
+          {
+            "id": "i",
+            "t": "inicio",
+            "x": 235,
+            "y": 20,
+            "w": 30,
+            "h": 30,
+            "txt": ""
+          },
+          {
+            "id": "a1",
+            "t": "acao",
+            "x": 165,
+            "y": 80,
+            "w": 170,
+            "h": 54,
+            "txt": "Consultar cadastro do usuário"
+          },
+          {
+            "id": "d1",
+            "t": "decisao",
+            "x": 218,
+            "y": 175,
+            "w": 64,
+            "h": 64,
+            "txt": "possui pendência?"
+          },
+          {
+            "id": "a2",
+            "t": "acao",
+            "x": 20,
+            "y": 290,
+            "w": 170,
+            "h": 54,
+            "txt": "Informar pendência ao usuário"
+          },
+          {
+            "id": "a3",
+            "t": "acao",
+            "x": 320,
+            "y": 290,
+            "w": 170,
+            "h": 54,
+            "txt": "Registrar empréstimo"
+          },
+          {
+            "id": "a4",
+            "t": "acao",
+            "x": 320,
+            "y": 390,
+            "w": 170,
+            "h": 54,
+            "txt": "Imprimir comprovante"
+          },
+          {
+            "id": "f",
+            "t": "fim",
+            "x": 234,
+            "y": 500,
+            "w": 32,
+            "h": 32,
+            "txt": ""
+          }
+        ],
+        "li": [
+          {
+            "id": "l24",
+            "t": "fluxo",
+            "de": "i",
+            "para": "a1",
+            "txt": ""
+          },
+          {
+            "id": "l25",
+            "t": "fluxo",
+            "de": "a1",
+            "para": "d1",
+            "txt": ""
+          },
+          {
+            "id": "l26",
+            "t": "fluxo",
+            "de": "d1",
+            "para": "a2",
+            "txt": "[sim]"
+          },
+          {
+            "id": "l27",
+            "t": "fluxo",
+            "de": "d1",
+            "para": "a3",
+            "txt": "[não]"
+          },
+          {
+            "id": "l28",
+            "t": "fluxo",
+            "de": "a3",
+            "para": "a4",
+            "txt": ""
+          },
+          {
+            "id": "l29",
+            "t": "fluxo",
+            "de": "a2",
+            "para": "f",
+            "txt": ""
+          },
+          {
+            "id": "l30",
+            "t": "fluxo",
+            "de": "a4",
+            "para": "f",
+            "txt": ""
+          }
+        ],
+        "obs": ""
+      },
+      "enunciado": "Observando o balcão da biblioteca (etnografia), a equipe levantou o processo de empréstimo: o bibliotecário consulta o cadastro do usuário. Se o usuário possui pendência, ele informa a pendência e o atendimento termina. Se não possui, registra o empréstimo, imprime o comprovante e o atendimento termina. Desenhe o diagrama de atividades (sem raias).",
+      "criterios": "Início → Consultar cadastro → decisão com guardas [sim] → Informar pendência → fim e [não] → Registrar empréstimo → Imprimir comprovante → fim.",
+      "explicacao": "Cada saída da decisão leva uma guarda entre colchetes. Os dois caminhos podem terminar no mesmo nó final ou em nós finais separados."
+    }
+  ]
+}

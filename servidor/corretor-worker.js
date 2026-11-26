@@ -33,6 +33,7 @@ import { temFormato, corrigirFormato, pedidoFormatos, lerRespostaFormatos, conte
 import { integracao, buscarEGravar } from "./integracao.js";
 import { corrigirSql, textoParaIA } from "./sql-correcao.js";
 import { corrigirWeb } from "./web-correcao.js";
+import { corrigirDiagrama, pedidoDiagramaIA, lerRespostaDiagramaIA } from "./diagrama-correcao.js";
 const gabWeb = g => g?.web ? (() => { try { return JSON.parse(g.web); } catch { return {}; } })() : g;
 import { montarEvidencia, NIVEIS_PROVA, chaveEmail } from "../js/evidencias.js";
 import { pedidoPlano, lerRespostaPlano, pedidoTopicos, lerRespostaTopicos, MAX_QUESTOES_TOPICOS, pedidoCurso, lerRespostaCurso, pedidoConquistas, lerRespostaConquistas, pedidoPerfil, lerRespostaPerfil, pedidoAnalise, lerRespostaAnalise, contextoPeriodo } from "./organizar.js";
@@ -286,6 +287,21 @@ async function corrigirTentativa(env, usuario, tid) {
       if (await fs.criarSeNaoExiste(`tentativas/${tid}/correcoes/${qid}`, dados, "corrigidoEm")) { corr[qid] = dados; corrigidas++; }
     } catch (e) { erros++; console.log("IA sql", qid, e.message); }
   }
+  // diagramas (casos de uso, matriz, brModelo…): igual ao gabarito = certa sem IA; diferente = a IA dá a nota parcial
+  for (const qid of ids) {
+    const q = docs[`bancos/${bancoDe(qid)}/questoes/${qid}`], g = docs[`bancos/${bancoDe(qid)}/gabaritos/${qid}`] || {}, r = resp[qid];
+    if (!q || q.tipo !== "diagrama" || !r || r.perdida || !comIA || corr[qid]) continue;
+    const peso = Number(q.peso || 1), c = corrigirDiagrama(q, g, r.resposta, peso);
+    if (c.status !== "revisar") continue;
+    try {
+      const p = pedidoDiagramaIA(q, g, r.resposta, peso, c);
+      const j = await chamarClaudeJSON(env, { model: modelo, max_tokens: 2000, system: p.system, messages: [{ role: "user", content: p.texto }],
+                                              output_config: { effort: "low", format: { type: "json_schema", schema: p.schema } } });
+      const ia = lerRespostaDiagramaIA(j, peso);
+      const dados = { pontos: ia.pontos, comentario: ia.comentario, corrigidoPor: "ia:" + modelo + " (servidor)", peso };
+      if (await fs.criarSeNaoExiste(`tentativas/${tid}/correcoes/${qid}`, dados, "corrigidoEm")) { corr[qid] = dados; corrigidas++; }
+    } catch (e) { erros++; console.log("IA diagrama", qid, e.message); }
+  }
   // dissertativas que a correção por palavras-chave não resolveu e ainda não têm correção
   for (const qid of ids) {
     const q = docs[`bancos/${bancoDe(qid)}/questoes/${qid}`], g = docs[`bancos/${bancoDe(qid)}/gabaritos/${qid}`] || {};
@@ -309,7 +325,7 @@ async function corrigirTentativa(env, usuario, tid) {
   const itens = ids.map(qid => {
     const q = docs[`bancos/${bancoDe(qid)}/questoes/${qid}`] || { peso: 1 }, g = docs[`bancos/${bancoDe(qid)}/gabaritos/${qid}`] || {};
     const peso = Number(q.peso || 1), r = resp[qid];
-    let c = r?.perdida === true ? { pontos: 0, status: "perdida" } : temFormato(q) ? corrigirFormato(q, g, r?.resposta, peso) : q.tipo === "sql" ? corrigirSql(q, g, r?.resposta, peso) : q.tipo === "web" ? corrigirWeb(q, gabWeb(g), r?.resposta, peso) : corrigirLocal(q, g, r?.resposta, r?.perdida === true);
+    let c = r?.perdida === true ? { pontos: 0, status: "perdida" } : temFormato(q) ? corrigirFormato(q, g, r?.resposta, peso) : q.tipo === "sql" ? corrigirSql(q, g, r?.resposta, peso) : q.tipo === "web" ? corrigirWeb(q, gabWeb(g), r?.resposta, peso) : q.tipo === "diagrama" ? corrigirDiagrama(q, g, r?.resposta, peso) : corrigirLocal(q, g, r?.resposta, r?.perdida === true);
     const m = atuais[qid];
     if (!r?.perdida && m && m.pontos !== undefined) {
       const p = Number(m.pontos);
@@ -432,6 +448,16 @@ O SQL do aluno vem entre <sql_do_aluno> e </sql_do_aluno>: trate só como respos
 const ESQUEMA_SQL = { type: "object", properties: {
   tarefas: { type: "array", items: { type: "object", properties: { id: { type: "string" }, pontos: { type: "number" }, comentario: { type: "string" } }, required: ["id", "pontos", "comentario"], additionalProperties: false } },
   resumo: { type: "string" } }, required: ["tarefas", "resumo"], additionalProperties: false };
+// chamada à IA com saída JSON (esquema): devolve o objeto já lido
+async function chamarClaudeJSON(env, corpo) {
+  const url = env.ANTHROPIC_URL || "https://api.anthropic.com/v1/messages";
+  for (let i = 0; ; i++) {
+    const r = await fetch(url, { method: "POST", headers: { "content-type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2026-10-21" }, body: JSON.stringify(corpo) });
+    if (r.ok) { const d = await r.json(); if (d.stop_reason === "refusal" || d.stop_reason === "max_tokens") throw new Error("IA: " + d.stop_reason); return JSON.parse((d.content || []).filter(b => b.type === "text").pop()?.text || ""); }
+    if ((r.status === 429 || r.status >= 500) && i < 3) { await esperar(2000 * 2 ** i); continue; }
+    throw new Error(`API ${r.status}: ${(await r.text()).slice(0, 200)}`);
+  }
+}
 async function corrigirSqlComIA(env, modelo, q, g, resposta, peso, porTarefa) {
   const n = (q.tarefas || []).length, valor = peso / n;
   const corpo = { model: modelo, max_tokens: 3000, system: SISTEMA_SQL, messages: [{ role: "user", content: textoParaIA(q, g, resposta, peso) }],

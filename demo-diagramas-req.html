@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demonstração — Diagramas de Levantamento de Requisitos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { margin: 0; }
+    main.demo-corpo { max-width: none; margin: 0; }
+    .demo-topo { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 10px 16px; background: #fff; border-bottom: 1px solid var(--borda); }
+    .demo-topo h1 { margin: 0; font-size: 17px; color: var(--marinho); }
+    .demo-topo .esp { flex: 1; }
+    .demo-abas { display: flex; gap: 6px; flex-wrap: wrap; padding: 8px 16px 0; }
+    .demo-abas button[aria-pressed="true"] { background: var(--marinho-2); color: #fff; border-color: var(--marinho-2); }
+    .demo-corpo { padding: 10px 16px 16px; }
+    .demo-enun { margin: 0 0 10px; color: var(--suave); font-size: 13.5px; max-width: 1200px; }
+    .demo-enun b { color: var(--marinho); }
+    #editor { height: 640px; }
+    .demo-res { margin-top: 12px; }
+    .demo-res pre { margin: 0; max-height: 460px; overflow: auto; background: #1f2430; color: #e6e9ef; padding: 12px; border-radius: 10px; font: 12px/1.45 Consolas, monospace; white-space: pre-wrap; }
+    .demo-nota { display: inline-block; margin: 0 0 8px; padding: 6px 12px; border-radius: 999px; background: var(--marinho-claro); color: var(--marinho-2); font-weight: 700; }
+    .demo-itens { list-style: none; margin: 0; padding: 0; font-size: 13.5px; }
+    .demo-itens li { padding: 3px 0; }
+    .demo-itens .ok { color: var(--ok-texto); } .demo-itens .nok { color: var(--erro-texto); }
+  </style>
+</head>
+<body>
+  <header class="demo-topo">
+    <h1>Levantamento de Requisitos · editores</h1>
+    <span class="esp"></span>
+    <button type="button" class="leve mini" id="btnGabarito" title="Carrega a resposta do professor no editor (só nesta demonstração)">Preencher com o gabarito</button>
+    <button type="button" class="leve mini" id="btnLimpar">Recomeçar</button>
+    <button type="button" class="leve mini" id="btnValor">Ver valor()</button>
+    <button type="button" class="leve mini" id="btnTexto">Texto p/ IA</button>
+    <button type="button" class="leve mini" id="btnVerGab">Ver gabarito</button>
+    <button type="button" class="ok mini" id="btnComparar">Comparar com gabarito</button>
+    <label class="check" style="margin:0"><input type="checkbox" id="chkRo"> Somente leitura</label>
+  </header>
+  <nav class="demo-abas" id="abas" aria-label="Questões"></nav>
+  <main class="demo-corpo">
+    <p class="demo-enun" id="enun"></p>
+    <div id="editor"></div>
+    <section class="demo-res" id="res" hidden></section>
+  </main>
+  <script type="module">
+    import { montarDiagramaReq, htmlDiagramaReq } from "./js/diagramas-req.js";
+    import { textoDiagrama, compararDiagramas, TIPOS } from "./servidor/diagramas-req.js";
+
+    const $ = (s) => document.querySelector(s);
+    const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+    const banco = await (await fetch("bancos/banco_requisitos_diagramas.json", { cache: "no-store" })).json();
+    // uma aba por questão do banco + abas em branco para cada tipo
+    const abas = [
+      ...banco.questoes.map((q, i) => ({ rot: (i + 1) + ". " + q.tema, q })),
+      ...Object.keys(TIPOS).map((t) => ({ rot: "Em branco: " + TIPOS[t].nome, q: { diagrama: t, tema: TIPOS[t].nome, enunciado: TIPOS[t].descricao } }))
+    ];
+    let atual = 0, api = null;
+    const valores = new Map(); // o que foi feito em cada aba
+
+    function montar() {
+      api?.destruir();
+      const { q } = abas[atual];
+      $("#enun").innerHTML = `<b>${esc(q.tema)}</b> — ${esc(q.enunciado)}`;
+      const valor = valores.has(atual) ? valores.get(atual) : q.inicial ? JSON.stringify(q.inicial) : "";
+      api = montarDiagramaReq($("#editor"), {
+        tipo: q.diagrama, valor, somenteLeitura: $("#chkRo").checked,
+        onMudar: (v) => { valores.set(atual, v); $("#btnValor").textContent = "Ver valor() •"; }
+      });
+      window.__dreq = api;
+    }
+    $("#abas").innerHTML = abas.map((a, i) => `<button type="button" class="leve mini" data-i="${i}" aria-pressed="${i === 0}">${esc(a.rot)}</button>`).join("");
+    $("#abas").addEventListener("click", (ev) => {
+      const b = ev.target.closest("[data-i]"); if (!b) return;
+      atual = Number(b.dataset.i);
+      $("#abas").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      $("#res").hidden = true;
+      montar();
+    });
+    function mostrar(html) { $("#res").hidden = false; $("#res").innerHTML = html; $("#res").scrollIntoView({ behavior: "smooth", block: "nearest" }); }
+    $("#chkRo").addEventListener("change", () => { valores.set(atual, api.valor()); montar(); });
+    $("#btnGabarito").addEventListener("click", () => {
+      const { q } = abas[atual]; if (!q.gabarito) return mostrar("<pre>Esta aba não tem gabarito.</pre>");
+      valores.set(atual, JSON.stringify(q.gabarito)); montar();
+    });
+    $("#btnLimpar").addEventListener("click", () => { valores.delete(atual); $("#res").hidden = true; montar(); });
+    $("#btnValor").addEventListener("click", () => {
+      $("#btnValor").textContent = "Ver valor()";
+      const v = api.valor();
+      mostrar(`<pre>${esc(v ? JSON.stringify(JSON.parse(v), null, 2) : "'' (vazio)")}</pre><p class="pequeno">${(v.length / 1024).toFixed(1)} KB</p>`);
+    });
+    $("#btnTexto").addEventListener("click", () => mostrar(`<pre>${esc(textoDiagrama(api.valor()) || "(vazio)")}</pre>`));
+    $("#btnVerGab").addEventListener("click", () => {
+      const { q } = abas[atual]; if (!q.gabarito) return mostrar("<pre>Esta aba não tem gabarito.</pre>");
+      mostrar(htmlDiagramaReq(q.gabarito) + `<p class="pequeno"><b>Critérios:</b> ${esc(q.criterios || "")}</p>`);
+    });
+    $("#btnComparar").addEventListener("click", () => {
+      const { q } = abas[atual]; if (!q.gabarito) return mostrar("<pre>Esta aba não tem gabarito.</pre>");
+      const r = compararDiagramas(q.gabarito, api.valor(), q.inicial);
+      mostrar(`<span class="demo-nota">Prévia local: ${(r.nota * 100).toFixed(0)}% · ${r.itens.filter((i) => i.ok).length}/${r.itens.length} itens</span>` +
+        `<ul class="demo-itens">${r.itens.map((i) => `<li class="${i.ok ? "ok" : "nok"}">${i.ok ? "✔" : "✘"} ${esc(i.texto)}</li>`).join("")}</ul>`);
+    });
+    montar();
+  </script>
+</body>
+</html>

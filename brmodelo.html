@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>brModelo — modelagem de banco de dados</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/brmodelo.css" data-brm-css="1">
+  <style>
+    html, body { height: 100%; margin: 0; }
+    body { display: flex; flex-direction: column; background: var(--fundo); }
+    .bm-topo { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 8px 14px; background: #fff; border-bottom: 1px solid var(--borda); }
+    .bm-topo h1 { margin: 0; font: 600 17px var(--fonte-titulo); color: var(--marinho); }
+    .bm-topo h1 small { font: 400 12.5px var(--fonte-texto); color: var(--suave); margin-left: 6px; }
+    .bm-topo .esp { flex: 1; }
+    .bm-topo label { display: inline-flex; align-items: center; gap: 6px; margin: 0; font-size: 13px; color: var(--suave); }
+    .bm-topo select { height: 32px; padding: 0 8px; border: 1px solid var(--borda-campo); border-radius: 8px; font: inherit; background: #fff; }
+    .bm-salvo { font-size: 12px; color: var(--apoio); min-width: 110px; text-align: right; }
+    .bm-palco { flex: 1; min-height: 0; padding: 10px 14px 14px; }
+    #editor { height: 100%; }
+  </style>
+</head>
+<body>
+  <header class="bm-topo">
+    <h1>brModelo <small>MER, DER, modelo lógico e script SQL</small></h1>
+    <span class="esp"></span>
+    <label>Exemplos
+      <select id="exemplos">
+        <option value="">Escolha…</option>
+        <option value="escola">Escola: Aluno, Matrícula, Curso (N:N)</option>
+        <option value="loja">Loja: Cliente 1:N Pedido N:N Produto</option>
+        <option value="funcionario">Empresa: especialização de Funcionário</option>
+        <option value="biblioteca">Biblioteca: atributos composto e multivalorado</option>
+      </select>
+    </label>
+    <span class="bm-salvo" id="salvo" aria-live="polite"></span>
+  </header>
+  <div class="bm-palco"><div id="editor"></div></div>
+
+  <!-- janelinha própria para confirmar a troca por um exemplo (sem confirm()) -->
+  <div id="confirma" style="position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;background:rgba(20,33,61,.35)">
+    <div style="background:#fff;border-radius:12px;padding:16px 18px;max-width:420px;box-shadow:var(--sombra-flutuante)">
+      <p style="margin:0 0 12px">Abrir o exemplo no lugar do diagrama atual? O que está na tela será substituído.</p>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button type="button" class="leve" id="confNao">Cancelar</button>
+        <button type="button" id="confSim">Abrir exemplo</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { montarBRModelo } from "./js/brmodelo.js";
+    import { montarExemplo, gerarLogico, modeloVazio, lerModelo } from "./servidor/brmodelo-modelo.js";
+
+    const CHAVE = "brmodelo:diagrama";
+    const $ = (s) => document.querySelector(s);
+
+    // exemplos montados a partir de uma descrição curta ("*" = identificador; "(1,n)" = multivalorado)
+    const EXEMPLOS = {
+      escola: {
+        entidades: [
+          { nome: "Aluno", x: 60, y: 140, lado: "e", atributos: ["*matricula", "nome", "data_nascimento"] },
+          { nome: "Curso", x: 520, y: 140, atributos: ["*id_curso", "nome", "carga_horaria"] }
+        ],
+        relacionamentos: [{ nome: "Matricula", x: 280, y: 133, liga: [["Aluno", "(0,n)"], ["Curso", "(1,n)"]], atributos: ["data_matricula"] }],
+        textos: [{ nome: "Cada aluno faz 1 ou mais cursos;\ncada curso tem 0 ou mais alunos.", x: 220, y: 260 }]
+      },
+      loja: {
+        entidades: [
+          { nome: "Cliente", x: 60, y: 120, lado: "e", atributos: ["*id_cliente", "nome", "email", "telefone(1,n)"] },
+          { nome: "Pedido", x: 420, y: 120, lado: "c", atributos: ["*id_pedido", "data_pedido"] },
+          { nome: "Produto", x: 420, y: 380, atributos: ["*id_produto", "descricao", "preco"] }
+        ],
+        relacionamentos: [
+          { nome: "Faz", x: 240, y: 113, liga: [["Cliente", "(1,1)"], ["Pedido", "(0,n)"]] },
+          { nome: "Contem", x: 418, y: 250, lado: "d", liga: [["Pedido", "(0,n)"], ["Produto", "(1,n)"]], atributos: ["quantidade"] }
+        ]
+      },
+      funcionario: {
+        entidades: [
+          { nome: "Funcionario", x: 300, y: 80, atributos: ["*matricula", "nome", "salario"] },
+          { nome: "Professor", x: 160, y: 280, lado: "e", atributos: ["titulacao"] },
+          { nome: "Tecnico", x: 440, y: 280, atributos: ["area"] }
+        ],
+        relacionamentos: [{ nome: "Chefia", x: 40, y: 73, liga: [["Funcionario", "(0,1)", "chefe"], ["Funcionario", "(0,n)", "subordinado"]] }],
+        especializacoes: [{ pai: "Funcionario", filhas: ["Professor", "Tecnico"], total: true, exclusiva: true }]
+      },
+      biblioteca: {
+        entidades: [
+          { nome: "Leitor", x: 80, y: 140, lado: "e", atributos: ["*cpf", "nome", { nome: "endereco", lado: "b", filhos: ["rua", "numero", "cidade"] }, "telefone(1,n)", "email(0,1)"] },
+          { nome: "Exemplar", x: 520, y: 140, atributos: ["*codigo", "titulo", "ano"] }
+        ],
+        relacionamentos: [{ nome: "Empresta", x: 300, y: 133, liga: [["Leitor", "(0,1)"], ["Exemplar", "(0,n)"]], atributos: ["data_emprestimo"] }]
+      }
+    };
+
+    let salvo = null;
+    try { salvo = localStorage.getItem(CHAVE); } catch { /* sem localStorage */ }
+    let api = null, tempo = 0;
+    function montar(valor) {
+      api?.destruir();
+      api = montarBRModelo($("#editor"), {
+        valor, modelo: "ambos", ferramentas: true,
+        onMudar(v) {
+          clearTimeout(tempo);
+          $("#salvo").textContent = "salvando…";
+          tempo = setTimeout(() => {
+            try { if (v) localStorage.setItem(CHAVE, v); else localStorage.removeItem(CHAVE); $("#salvo").textContent = "salvo neste navegador"; }
+            catch { $("#salvo").textContent = "não deu para salvar"; }
+          }, 400);
+        }
+      });
+      window.__brm = api;
+    }
+    montar(salvo || "");
+    if (salvo) $("#salvo").textContent = "diagrama recuperado";
+
+    let pendente = "";
+    function abrirExemplo(nome) {
+      const conceitual = montarExemplo(EXEMPLOS[nome]);
+      const v = JSON.stringify({ v: 1, conceitual, logico: gerarLogico(conceitual) });
+      montar(v);
+      try { localStorage.setItem(CHAVE, v); } catch { /* ok */ }
+      $("#salvo").textContent = "exemplo aberto";
+    }
+    $("#exemplos").addEventListener("change", (ev) => {
+      const nome = ev.target.value;
+      ev.target.value = "";
+      if (!nome) return;
+      if (lerModelo(api.valor()) && !modeloVazio(lerModelo(api.valor()))) { pendente = nome; $("#confirma").style.display = "flex"; $("#confSim").focus(); }
+      else abrirExemplo(nome);
+    });
+    $("#confNao").addEventListener("click", () => { $("#confirma").style.display = "none"; });
+    $("#confSim").addEventListener("click", () => { $("#confirma").style.display = "none"; abrirExemplo(pendente); });
+  </script>
+</body>
+</html>
