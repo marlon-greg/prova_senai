@@ -6,7 +6,7 @@ import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, to
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
-import { htmlEditorTopicos, editorTopicos } from "./plano-curso-ui.js?v=20261126a";
+import { htmlEditorTopicos, editorTopicos } from "./plano-curso-ui.js?v=20261126b";
 import { criteriosDaUnidade, codigoCriterio, carregarCriteriosOficiais } from "./plano-ensino.js?v=20261116a";
 import { PLANO_CURSO, unidadeDaMateria, unidadesDoSemestre } from "./plano-curso.js?v=20261113a";
 import { proporCapacidades, capsDoTema } from "./temas-capacidades.js?v=20261126a";
@@ -697,7 +697,7 @@ function controleProva(f) {
   const somaTudo = () => Number($f("NAlt").value || 0) + Number($f("NDiss").value || 0) + pratico();
   let praticoAntes = 0, tirarDaAlt = true, tiposDiag = null;   // tiposDiag: Set dos tipos de diagrama que podem cair (null = todos)
   // TEORIA: bancos da matéria escolhida (sem matéria: todos); um banco já marcado continua aparecendo
-  const bancoVisivel = (b, mat = $f("Materia").value) => !mat || chaveTexto(b.materia) === chaveTexto(mat) || !!sel.get(b.id)?.size;
+  const bancoVisivel = (b, mat = $f("Materia").value) => (!!mat && chaveTexto(b.materia) === chaveTexto(mat)) || !!sel.get(b.id)?.size;
   const bancosDaMat = () => bancosCache.filter(b => bancoVisivel(b));
   // PRÁTICAS (à parte, de qualquer matéria): tipo -> Map(bancoId -> Set de temas)
   let praticasSel = { sql: new Map(), web: new Map(), diagrama: new Map() }, praticasPendentes = null;
@@ -841,6 +841,7 @@ function controleProva(f) {
     $f("NTotal").textContent = `Soma: ${somaTudo()} questões por aluno${$f("SemLimite").checked ? "" : ` (total ${Number($f("Total").value || 0)})`}.`;
     const el = $f("TemasResumo");
     if (!carregado()) { el.textContent = ""; el.classList.remove("erro"); return; }
+    if (!$f("Materia").value && !bancosMarcados().length) { el.textContent = ""; el.classList.remove("erro"); return; }
     const prob = problema(), bs = bancosMarcados();
     const nomes = bs.map(b => bancosCache.find(x => x.id === b)?.nome || b);
     el.textContent = (bs.length ? `${bs.length === 1 ? "1 banco" : `${bs.length} bancos`} (${nomes.join(" + ")}) · disponíveis: ${textoContagem(disponiveis())}.` : "Nenhum banco marcado.") + (prob ? " ⚠ " + prob : "");
@@ -920,7 +921,7 @@ function controleProva(f) {
         h += bancosFiltrados.map(bancoPorGrupo).join("");
       }
     }
-    box.innerHTML = h || `<p class="pequeno">Nada encontrado com esse filtro.</p>`;
+    box.innerHTML = h || ($f("Materia").value ? `<p class="pequeno">Nenhum banco de ${esc($f("Materia").value)}${busca || so ? " com esse filtro" : ""}. Importe em Bancos de questões.</p>` : `<p class="pequeno">Escolha a <b>matéria</b> no topo para ver os bancos dela.</p>`);
     box.scrollTop = topo;
     box.querySelectorAll("input[data-banco]").forEach(x => {
       const n = sel.get(x.dataset.banco)?.size || 0;
@@ -1084,10 +1085,10 @@ function controleProva(f) {
     const sc = semestreCursoAtual(turmasCache.find(x => x.id === $f("Turma").value))?.n || 0;
     const daTurma = sc ? new Set(unidadesDoSemestre(sc).map(u => u.nome)) : new Set();
     const opt = m => `<option value="${esc(m)}">${esc(m)}</option>`;
-    $f("Materia").innerHTML = `<option value="">— Escolha a matéria —</option>` + (daTurma.size
-      ? `<optgroup label="Matérias do ${sc}º semestre da turma">${materias.filter(m => daTurma.has(m)).map(opt).join("")}</optgroup><optgroup label="Outras matérias">${materias.filter(m => !daTurma.has(m)).map(opt).join("")}</optgroup>`
-      : materias.map(opt).join(""));
-    $f("SemTurma").textContent = sc ? `Turma no ${sc}º semestre do curso.` : "";
+    // turma com semestre: SÓ as matérias desse semestre (a matéria já salva na prova continua, para não perder)
+    const lista = daTurma.size ? materias.filter(m => daTurma.has(m) || (atual && chaveTexto(m) === chaveTexto(atual))) : materias;
+    $f("Materia").innerHTML = `<option value="">— Escolha a matéria —</option>` + lista.map(opt).join("");
+    $f("SemTurma").textContent = sc ? `Matérias do ${sc}º semestre (turma).` : $f("Turma").value ? "Turma sem semestre do curso definido: aparecem todas (defina em Somativas, na aba da turma)." : "Escolha a turma para ver só as matérias do semestre dela.";
     if (materias.some(m => m === atual)) $f("Materia").value = atual;
   }
   // select de turmas; prova antiga com turma em texto livre ganha uma opção própria para não perder o nome
@@ -1145,6 +1146,7 @@ function controleProva(f) {
     const titulo = $f("Titulo").value.trim();
     const nAlt = Math.max(0, Math.round(Number($f("NAlt").value || 0))), nDiss = Math.max(0, Math.round(Number($f("NDiss").value || 0))), nSql = nq("Sql"), nWeb = nq("Web"), nDiag = nq("Diag"), n = nAlt + nDiss + nSql + nWeb + nDiag;
     if (!titulo) return { erro: "Preencha o título." };
+    if (!travado && !$f("Materia").value) return { erro: "Escolha a matéria." };
     if (!turmaEscolhida().turmaId) return { erro: "Escolha a turma da prova. Só os alunos dessa turma veem a prova." };
     if (!travado && !n) return { erro: "A prova precisa de pelo menos uma questão." };
     if (!travado) { if (!carregando) await carregarTemas(); else await carregando; }   // garante a contagem dos bancos

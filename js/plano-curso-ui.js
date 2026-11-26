@@ -17,7 +17,7 @@ export function htmlEditorTopicos(f) {
     <legend>O que a prova avalia</legend>
     <p class="pequeno" style="margin-top:0">Os critérios vêm do sistema de autoavaliação (plano de ensino). Os da avaliação prevista já vêm marcados: aqui você só tira ou põe. O aluno vê os critérios antes de começar, cada um explicado.</p>
     <div class="grade">
-      <div id="${f}PcUnidadeBox"><label for="${f}PcUnidade">Unidade curricular</label><select id="${f}PcUnidade">
+      <div id="${f}PcUnidadeBox" class="oculto"><label for="${f}PcUnidade">Unidade curricular</label><select id="${f}PcUnidade">
         <option value="">Automática, pela matéria</option>
         ${grupos.map(g => `<optgroup label="Módulo ${esc(g)}">${PLANO_CURSO.unidades.filter(u => u.modulo === g).map(u => `<option value="${u.id}">${esc(u.nome)} (${semTxt(u)})${criteriosDaUnidade(u.id).length ? "" : " · sem critérios ainda"}</option>`).join("")}</optgroup>`).join("")}
         <option value="${NENHUMA}">Nenhuma (não mostrar nada ao aluno)</option>
@@ -96,7 +96,7 @@ export function editorTopicos(f, materia, ctx = () => ({}), aoMudarCaps = () => 
   function resumo() {
     const v = $f("PcUnidade").value, u = unidade();
     if (v === NENHUMA) return $f("PcResumo").textContent = "O aluno não vê o que a prova avalia.";
-    if (!u) return $f("PcResumo").innerHTML = `Nenhuma unidade do plano bate com a matéria <b>${esc(materia() || "(vazia)")}</b>. Escolha a unidade acima.`;
+    if (!u) return $f("PcResumo").innerHTML = materia() ? `A matéria <b>${esc(materia())}</b> não está no plano de curso.` : "Escolha a <b>matéria</b> no topo: as capacidades dela aparecem aqui.";
     if (comCriterios(u)) {
       const crit = criteriosDaUnidade(u.id), nT = crit.filter(c => c[1].includes(".ct") && marcados.has(c[0])).length, nS = crit.filter(c => c[1].includes(".cs") && marcados.has(c[0])).length;
       const p = plano(u);
@@ -108,7 +108,7 @@ export function editorTopicos(f, materia, ctx = () => ({}), aoMudarCaps = () => 
   function desenhar() {
     const u = unidade(), ab = abertos();
     // a matéria é escolhida no topo: a unidade só aparece para escolher quando a matéria não bate com nenhuma (ou "Nenhuma")
-    $f("PcUnidadeBox").classList.toggle("oculto", !!unidadeDaMateria(materia()) && $f("PcUnidade").value !== NENHUMA && (!$f("PcUnidade").value || $f("PcUnidade").value === unidadeDaMateria(materia())?.id));
+    $f("PcUnidadeBox").classList.add("oculto");
     setTimeout(() => aoMudarCaps(capacidades()), 0);
     $f("PcAvBox").classList.toggle("oculto", !comCriterios(u));
     if (!u) $f("PcBlocos").innerHTML = "";
