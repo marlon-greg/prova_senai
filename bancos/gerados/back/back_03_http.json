@@ -1,0 +1,2470 @@
+{
+  "nome": "Programação Back-End — Protocolo HTTP (a revisar)",
+  "materia": "Programação Back-End",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é o HTTP?",
+      "alternativas": [
+        "Uma linguagem de marcação usada para montar a estrutura das páginas",
+        "Um banco de dados que guarda as páginas dos sites na internet",
+        "Um protocolo que define como cliente e servidor trocam mensagens na web",
+        "Um programa que o navegador instala para abrir arquivos de imagem"
+      ],
+      "correta": 2,
+      "explicacao": "HTTP é um protocolo: um conjunto de regras para a troca de mensagens (requisição e resposta) entre cliente e servidor. Quem monta a estrutura da página é o HTML."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na comunicação HTTP entre o navegador de um aluno e o site da escola, quem envia a requisição e quem envia a resposta?",
+      "alternativas": [
+        "O navegador envia a requisição e o servidor devolve a resposta",
+        "O servidor envia a requisição e o navegador devolve a resposta",
+        "Os dois enviam requisições ao mesmo tempo, sem nenhuma resposta",
+        "O banco de dados envia a requisição e o navegador devolve a resposta"
+      ],
+      "correta": 0,
+      "explicacao": "No HTTP o cliente (aqui, o navegador) sempre inicia com uma requisição; o servidor responde."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um colega disse que \"HTTP e HTML são a mesma coisa\". Qual é a correção certa?",
+      "alternativas": [
+        "HTML leva as mensagens; HTTP é o conteúdo que descreve a página",
+        "Os dois são linguagens de marcação, só mudam de versão",
+        "HTTP é usado só no banco de dados e HTML só no servidor",
+        "HTTP leva as mensagens; HTML é o conteúdo que descreve a página"
+      ],
+      "correta": 3,
+      "explicacao": "HTTP é o protocolo que transporta as mensagens. HTML é um dos conteúdos que podem ir no corpo da resposta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Dizer que o HTTP é \"sem estado\" (stateless) significa que:",
+      "alternativas": [
+        "o servidor guarda sozinho tudo o que o cliente já pediu antes de cada nova",
+        "cada requisição é independente; o servidor não lembra das anteriores sozinho",
+        "as requisições só funcionam se o cliente estiver no mesmo estado do país",
+        "a resposta nunca pode trazer dados, só o código de status da operação"
+      ],
+      "correta": 1,
+      "explicacao": "Stateless: cada requisição é tratada sozinha. Para o servidor reconhecer o usuário, o cliente precisa mandar algo (token, cookie) em toda requisição."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quais são as partes principais de uma requisição HTTP?",
+      "alternativas": [
+        "Título, parágrafos e rodapé, como numa página da web",
+        "Método e caminho, cabeçalhos e, quando necessário, corpo",
+        "Tabela, colunas e chave primária, como num banco",
+        "Código de status, mensagem de erro e senha do usuário"
+      ],
+      "correta": 1,
+      "explicacao": "A requisição tem a linha inicial (método, caminho e versão), os cabeçalhos e, se precisar, o corpo. Código de status é da resposta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa resposta HTTP, onde aparece o número que diz se deu certo (como 200 ou 404)?",
+      "alternativas": [
+        "No corpo da requisição enviada pelo cliente",
+        "No nome do domínio do site acessado",
+        "No cabeçalho User-Agent da requisição",
+        "Na linha de status, no início da resposta"
+      ],
+      "correta": 3,
+      "explicacao": "A primeira linha da resposta é a linha de status, por exemplo `HTTP/1.1 200 OK`."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja a requisição de um app de cinema:\n```\nGET /filmes?genero=terror HTTP/1.1\nHost: cinema.exemplo.com\nAccept: application/json\n```\nQual é o caminho (recurso) pedido?",
+      "alternativas": [
+        "/filmes",
+        "cinema.exemplo.com",
+        "genero=terror",
+        "application/json"
+      ],
+      "correta": 0,
+      "explicacao": "O caminho vem logo depois do método: /filmes. genero=terror é a query string, o Host é o domínio e application/json é o formato que o cliente aceita."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na URL `https://hotel.exemplo.com:8443/quartos/12?vista=mar`, qual parte é a porta?",
+      "alternativas": [
+        "443",
+        "12",
+        "8443",
+        "hotel.exemplo.com"
+      ],
+      "correta": 2,
+      "explicacao": "A porta vem depois do domínio, separada por dois-pontos: 8443. O 12 faz parte do caminho e hotel.exemplo.com é o domínio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quando a URL não informa a porta, quais portas são usadas por padrão no HTTP e no HTTPS?",
+      "alternativas": [
+        "443 no HTTP e 80 no HTTPS",
+        "3000 no HTTP e 8080 no HTTPS",
+        "21 no HTTP e 22 no HTTPS",
+        "80 no HTTP e 443 no HTTPS"
+      ],
+      "correta": 3,
+      "explicacao": "Por padrão, HTTP usa a porta 80 e HTTPS usa a 443. A 3000 é só uma porta comum em projetos Node de desenvolvimento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API de uma biblioteca, qual método é usado para apenas consultar a lista de livros, sem alterar nada?",
+      "alternativas": [
+        "POST",
+        "GET",
+        "DELETE",
+        "PATCH"
+      ],
+      "correta": 1,
+      "explicacao": "GET serve para buscar/consultar. POST cadastra, PATCH altera parte e DELETE remove."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de uma academia quer remover o aluno de id 15 pela API. Qual requisição é a mais adequada?",
+      "alternativas": [
+        "GET /alunos/15/remover",
+        "POST /alunos?id=15",
+        "DELETE /alunos/15",
+        "PUT /alunos/15"
+      ],
+      "correta": 2,
+      "explicacao": "Para remover um recurso usa-se o método DELETE no endereço dele: DELETE /alunos/15."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API de um pet shop, o cliente quer mudar só o telefone do tutor de id 4, enviando apenas `{ \"telefone\": \"11 98888-0000\" }`. Qual método combina melhor?",
+      "alternativas": [
+        "PATCH",
+        "PUT",
+        "POST",
+        "GET"
+      ],
+      "correta": 0,
+      "explicacao": "PATCH altera só os campos enviados. PUT, pela regra, substitui o recurso inteiro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a ideia do método PUT numa API REST?",
+      "alternativas": [
+        "Enviar o recurso completo, substituindo o que existe no endereço",
+        "Enviar só um campo para alterar uma parte pequena do recurso",
+        "Buscar o recurso pelo endereço sem alterar nada no servidor",
+        "Apagar o recurso e devolver a lista inteira já atualizada"
+      ],
+      "correta": 0,
+      "explicacao": "PUT substitui o recurso pelo que foi enviado. Para alterar só uma parte, o método indicado é PATCH."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um método HTTP é chamado de idempotente quando:",
+      "alternativas": [
+        "a requisição sempre responde mais rápido do que os outros métodos",
+        "o servidor devolve sempre o código 200, mesmo quando dá erro",
+        "repetir a mesma requisição deixa o servidor igual a fazê-la uma vez",
+        "a requisição não pode levar cabeçalhos nem corpo de nenhum tipo"
+      ],
+      "correta": 2,
+      "explicacao": "Idempotente: fazer 1 vez ou 10 vezes dá o mesmo resultado final no servidor. GET, PUT e DELETE são; POST não."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-idempotencia",
+      "enunciado": "Dos métodos abaixo, qual NÃO é idempotente (repetir pode gerar um efeito novo a cada vez)?",
+      "alternativas": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "correta": 1,
+      "explicacao": "Cada POST pode cadastrar um registro novo. GET só consulta; PUT repetido grava a mesma coisa; DELETE repetido não apaga mais nada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-idempotencia",
+      "enunciado": "Na loja de games, o botão \"Finalizar compra\" envia `POST /pedidos`. O cliente clicou duas vezes bem rápido. O que pode acontecer?",
+      "alternativas": [
+        "Nada, porque o HTTP ignora sozinho requisições repetidas",
+        "O segundo clique apaga o primeiro pedido que foi cadastrado",
+        "O servidor transforma o segundo POST em GET automaticamente",
+        "Dois pedidos podem ser cadastrados, pois POST não é idempotente"
+      ],
+      "correta": 3,
+      "explicacao": "Cada POST é uma nova requisição de cadastro. Por isso o front costuma desabilitar o botão e a API pode checar duplicidade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-idempotencia",
+      "enunciado": "Na API da clínica, `DELETE /consultas/30` foi enviada duas vezes. Por que DELETE é considerado idempotente mesmo assim?",
+      "alternativas": [
+        "Porque a segunda requisição cadastra de novo a consulta que foi apagada",
+        "Porque o DELETE sempre responde com o mesmo código, que é o 200",
+        "Depois da primeira vez a consulta já não existe; repetir não muda mais nada",
+        "Porque o servidor bloqueia qualquer DELETE repetido no mesmo dia"
+      ],
+      "correta": 2,
+      "explicacao": "Idempotência fala do estado do servidor, não do código: a segunda vez pode até responder 404, mas o resultado final é o mesmo (consulta apagada)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-get-seguro",
+      "enunciado": "Por que uma rota GET não deveria apagar nem alterar dados?",
+      "alternativas": [
+        "Porque GET é para consultar; navegadores e robôs podem repeti-lo sem aviso",
+        "Porque o GET não consegue acessar o banco de dados que fica no servidor",
+        "Porque o GET só funciona em páginas HTML, e nunca em APIs REST",
+        "Porque o GET só pode devolver o código de status 404"
+      ],
+      "correta": 0,
+      "explicacao": "GET é um método \"seguro\": só lê. Navegadores, pré-carregamento e robôs de busca disparam GET à vontade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API de uma biblioteca, qual dupla \"método + caminho\" é a mais adequada para atualizar todos os dados do livro de id 8?",
+      "alternativas": [
+        "GET /livros/8",
+        "POST /livros",
+        "DELETE /livros/8",
+        "PUT /livros/8"
+      ],
+      "correta": 3,
+      "explicacao": "Atualizar o recurso inteiro que já existe: PUT no endereço dele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na comunicação HTTP, o navegador é um exemplo de quê?",
+      "alternativas": [
+        "Servidor",
+        "Cliente",
+        "Banco de dados",
+        "Protocolo"
+      ],
+      "correta": 1,
+      "explicacao": "O navegador faz as requisições, então é o cliente. O servidor é quem responde."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja a resposta da API de um pet shop:\n```\nHTTP/1.1 200 OK\nContent-Type: application/json\n\n{ \"nome\": \"Rex\", \"raca\": \"vira-lata\" }\n```\nPara que serve a linha em branco no meio?",
+      "alternativas": [
+        "Indicar um erro do servidor que deve ser corrigido",
+        "Separar os cabeçalhos do corpo da resposta",
+        "Marcar o lugar onde o token de acesso deveria ir",
+        "Encerrar a resposta, fazendo o JSON ser ignorado"
+      ],
+      "correta": 1,
+      "explicacao": "Na mensagem HTTP, a linha em branco separa os cabeçalhos do corpo. Depois dela vem o conteúdo (aqui, o JSON)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa comunicação HTTP comum, quantas respostas o servidor envia para cada requisição?",
+      "alternativas": [
+        "Nenhuma; o servidor só responde se houver erro",
+        "Duas: uma de recebido e outra com os dados",
+        "Quantas quiser, mesmo sem nova requisição",
+        "Uma resposta para cada requisição"
+      ],
+      "correta": 3,
+      "explicacao": "O ciclo do HTTP é sempre: uma requisição, uma resposta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-servidor-nao-inicia",
+      "enunciado": "No app de um cinema, a tela de assentos precisa saber na hora quando outra pessoa comprou um lugar. Por que o HTTP comum, sozinho, não resolve isso de forma automática?",
+      "alternativas": [
+        "No HTTP o servidor só responde quando o cliente pede algo",
+        "O HTTP não permite que a resposta venha em JSON",
+        "O HTTP só funciona quando o método usado é POST",
+        "O servidor HTTP não consegue consultar o banco de dados"
+      ],
+      "correta": 0,
+      "explicacao": "No HTTP quem inicia é sempre o cliente. Para avisos em tempo real usa-se consulta periódica (polling) ou outra tecnologia, como WebSocket."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual método HTTP o navegador usa quando o usuário digita o endereço de um site na barra e aperta Enter?",
+      "alternativas": [
+        "POST",
+        "PUT",
+        "GET",
+        "DELETE"
+      ],
+      "correta": 2,
+      "explicacao": "Abrir uma página é uma consulta: o navegador faz um GET."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-senha-url",
+      "enunciado": "Um formulário HTML de login da biblioteca usa `method=\"post\"`. Por que POST é preferível a GET aqui?",
+      "alternativas": [
+        "Com POST a senha é criptografada sozinha, mesmo sem usar HTTPS",
+        "Com GET o servidor não consegue ler os campos de um formulário",
+        "Com POST o login fica mais rápido porque não existe resposta",
+        "Com POST a senha vai no corpo e não aparece na URL nem no histórico"
+      ],
+      "correta": 3,
+      "explicacao": "No GET os campos vão na query string (aparecem na URL, histórico e logs). POST leva no corpo. A criptografia vem do HTTPS, não do POST."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma requisição chega com a linha `PATCH /quartos/5 HTTP/1.1` e o corpo `{ \"limpo\": true }`. O que o cliente está pedindo?",
+      "alternativas": [
+        "Trocar o quarto 5 inteiro por um objeto só com limpo",
+        "Alterar só o campo limpo do quarto 5",
+        "Cadastrar um novo quarto com o número 5",
+        "Consultar se o quarto 5 já está limpo"
+      ],
+      "correta": 1,
+      "explicacao": "PATCH faz alteração parcial: muda só o que foi enviado (limpo) no recurso /quartos/5."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API da oficina, `PUT /veiculos/3` foi enviada só com `{ \"cor\": \"azul\" }`. Se a API seguir à risca o significado de PUT, qual é o risco?",
+      "alternativas": [
+        "Nenhum, pois o PUT sempre altera apenas os campos que foram enviados",
+        "O veículo 3 é apagado e outro é cadastrado com um id novo no lugar",
+        "Os outros campos podem ficar vazios, pois o PUT troca o recurso todo",
+        "A API devolve 404, porque o método PUT não aceita corpo em JSON"
+      ],
+      "correta": 2,
+      "explicacao": "PUT significa substituir. Mandando só a cor, o resto (placa, modelo…) pode se perder. Para mudar só a cor, use PATCH."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes métodos é idempotente E também não altera os dados do servidor?",
+      "alternativas": [
+        "GET",
+        "PUT",
+        "DELETE",
+        "POST"
+      ],
+      "correta": 0,
+      "explicacao": "PUT e DELETE são idempotentes, mas alteram dados. POST nem é idempotente. Só o GET apenas consulta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que significa a sigla HTTP?",
+      "alternativas": [
+        "Protocolo de Transferência de Hipertexto",
+        "Linguagem de Marcação de Hipertexto",
+        "Protocolo de Transferência de Arquivos",
+        "Sistema de Nomes de Domínio"
+      ],
+      "correta": 0,
+      "explicacao": "HTTP = HyperText Transfer Protocol. As outras são HTML, FTP e DNS."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na aba Rede (Network) do DevTools, ao abrir o site da escola aparecem dezenas de requisições. Por que uma única página gera várias requisições?",
+      "alternativas": [
+        "O navegador repete a mesma requisição até receber um 200 OK",
+        "Cada letra do texto da página é pedida separadamente ao servidor",
+        "Cada arquivo da página (HTML, CSS, imagens, scripts) é pedido à parte",
+        "O servidor manda sozinho várias requisições para o navegador"
+      ],
+      "correta": 2,
+      "explicacao": "O navegador recebe o HTML e, ao ler, pede cada arquivo ligado a ele (CSS, JS, imagens) numa requisição própria."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja a requisição:\n```\nPOST /agendamentos HTTP/1.1\nHost: petshop.exemplo.com\nContent-Type: application/json\n\n{ \"pet\": \"Mel\", \"servico\": \"banho\" }\n```\nQual afirmação está correta?",
+      "alternativas": [
+        "Ela consulta os agendamentos da pet Mel sem alterar nada",
+        "Ela envia um agendamento novo, em JSON, no corpo da requisição",
+        "Ela envia os dados pela query string, porque há um Host",
+        "Ela apaga o agendamento de banho que a pet Mel já tinha"
+      ],
+      "correta": 1,
+      "explicacao": "POST com corpo JSON em /agendamentos: pedido para cadastrar um agendamento novo. Os dados estão no corpo, não na URL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API de um cinema, `GET /sessoes/10` devolve os dados da sessão. O que deve acontecer no servidor se a mesma requisição for feita 5 vezes?",
+      "alternativas": [
+        "São cadastradas 5 sessões novas no banco",
+        "A sessão 10 é apagada na quinta vez",
+        "Os dados da sessão 10 mudam a cada vez",
+        "Nada muda; ela só devolve os dados 5 vezes"
+      ],
+      "correta": 3,
+      "explicacao": "GET só consulta. Repetir não altera nada no servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-get-seguro",
+      "enunciado": "Uma API usa `GET /produtos/7/excluir` para apagar produtos. Qual é o problema dessa escolha?",
+      "alternativas": [
+        "Nenhum, pois o método não importa quando o caminho já diz excluir",
+        "O GET não aceita parâmetros de rota, como o número 7 do caminho",
+        "GET deveria só consultar; um robô ou pré-carregamento pode apagar sem querer",
+        "O problema é só de aparência, porque a URL fica comprida e difícil de ler"
+      ],
+      "correta": 2,
+      "explicacao": "Quem apaga deve ser DELETE /produtos/7. Links GET são seguidos por robôs, pré-carregamento e histórico, o que pode apagar dados sem querer."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual cabeçalho é obrigatório no HTTP/1.1 e diz para qual site (domínio) a requisição vai?",
+      "alternativas": [
+        "Host",
+        "Accept",
+        "Content-Type",
+        "User-Agent"
+      ],
+      "correta": 0,
+      "explicacao": "Host informa o domínio. Um mesmo servidor pode hospedar vários sites e usa o Host para saber qual foi pedido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API de uma academia, qual sequência de métodos representa: listar treinos, cadastrar um treino, alterar só a carga de um treino e remover um treino?",
+      "alternativas": [
+        "POST, GET, PUT, DELETE",
+        "GET, PUT, POST, DELETE",
+        "GET, POST, DELETE, PATCH",
+        "GET, POST, PATCH, DELETE"
+      ],
+      "correta": 3,
+      "explicacao": "Listar = GET; cadastrar = POST; alterar parte = PATCH; remover = DELETE."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique o que é o protocolo HTTP e qual o papel de cada lado da comunicação.\n\nNa sua resposta:\n1. explique o que é o HTTP;\n2. diga o papel do cliente;\n3. diga o papel do servidor.",
+      "respostasAceitas": [
+        "HTTP é o protocolo (conjunto de regras) da troca de mensagens na web. O cliente (navegador/app) envia a requisição; o servidor processa e devolve a resposta."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) protocolo de comunicação da web, por requisição e resposta; 2) cliente pede; 3) servidor responde."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Ao abrir o cardápio no site de uma padaria, o navegador faz uma requisição e recebe uma resposta. Explique esse ciclo.\n\nNa sua resposta:\n1. diga o que vai na requisição;\n2. diga o que vem na resposta.",
+      "respostasAceitas": [
+        "A requisição leva o método (GET), o caminho, cabeçalhos e às vezes um corpo. A resposta traz o código de status, cabeçalhos e o corpo com o conteúdo (por exemplo, o HTML do cardápio)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) método, caminho/URL, cabeçalhos (corpo opcional); 2) código de status, cabeçalhos e conteúdo. Basta citar o essencial."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "http-stateless-login",
+      "enunciado": "O HTTP é um protocolo \"sem estado\" (stateless). Mesmo assim, o site da loja de games continua sabendo que o cliente está logado ao trocar de página. Explique como isso é possível.\n\nNa sua resposta:\n1. explique o que significa o HTTP ser sem estado;\n2. diga o que o cliente envia para o servidor reconhecê-lo.",
+      "respostasAceitas": [
+        "Sem estado: cada requisição é independente e o servidor não lembra das anteriores. Para reconhecer o usuário, o cliente manda em toda requisição um identificador, como um token (cabeçalho Authorization) ou um cookie de sessão."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cada requisição é tratada sozinha; 2) token ou cookie enviado em cada requisição."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre os métodos PUT e PATCH numa API.\n\nNa sua resposta:\n1. diga o que o PUT faz com o recurso;\n2. diga o que o PATCH faz com o recurso;\n3. dê um exemplo de quando usar o PATCH.",
+      "respostasAceitas": [
+        "PUT substitui o recurso inteiro pelos dados enviados. PATCH altera só os campos enviados. Exemplo: mudar só o telefone de um cliente com PATCH /clientes/3."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) PUT = substituição completa; 2) PATCH = alteração parcial; 3) qualquer exemplo de alterar um campo só."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "http-idempotencia-d",
+      "enunciado": "Explique, com palavras simples, o que é um método HTTP idempotente.\n\nNa sua resposta:\n1. explique o que significa ser idempotente;\n2. cite um método idempotente e um que não é.",
+      "respostasAceitas": [
+        "Idempotente é quando repetir a mesma requisição várias vezes deixa o servidor igual a fazê-la uma vez. GET, PUT e DELETE são idempotentes; POST não é."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) repetir não muda o resultado final; 2) ex.: GET/PUT/DELETE são, POST não é."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No sistema de um hotel, o app enviou a requisição `DELETE /reservas/21`. O que essa requisição pede?\n\nNa sua resposta:\n1. diga o que o método DELETE indica;\n2. diga o que o 21 representa.",
+      "respostasAceitas": [
+        "Pede para remover um recurso. O 21 é o identificador (id) da reserva que deve ser apagada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) remover/excluir; 2) id da reserva."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja a requisição enviada pelo app de uma escola:\n```\nPOST /matriculas HTTP/1.1\nHost: escola.exemplo.com\nContent-Type: application/json\n\n{ \"aluno\": \"Bia\", \"curso\": \"DS\" }\n```\nIdentifique as partes dessa requisição.\n\nNa sua resposta:\n1. diga qual é o método e o caminho;\n2. diga quais são os cabeçalhos;\n3. diga o que está no corpo.",
+      "respostasAceitas": [
+        "Método POST e caminho /matriculas. Cabeçalhos: Host e Content-Type. Corpo: o JSON com aluno Bia e curso DS (os dados da nova matrícula)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) POST /matriculas; 2) Host e Content-Type; 3) o JSON com os dados da matrícula."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre HTTP e HTML.\n\nNa sua resposta:\n1. diga o que é o HTTP;\n2. diga o que é o HTML;\n3. diga como os dois se relacionam ao abrir uma página.",
+      "respostasAceitas": [
+        "HTTP é o protocolo que transporta as mensagens entre cliente e servidor. HTML é a linguagem que descreve a estrutura da página. Ao abrir uma página, o HTML chega dentro da resposta HTTP."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) protocolo de comunicação; 2) linguagem de marcação; 3) o HTML vai no corpo da resposta HTTP."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Depois de enviar um formulário de cadastro por POST, o aluno apertou F5 e o navegador perguntou se queria \"reenviar o formulário\". Por que o navegador avisa isso?\n\nNa sua resposta:\n1. diga o que aconteceria se reenviasse;\n2. relacione o aviso com o método POST.",
+      "respostasAceitas": [
+        "Reenviar faria um novo POST, podendo cadastrar tudo de novo (registro duplicado). O navegador avisa porque POST não é idempotente: repetir pode ter efeito novo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) os dados seriam enviados de novo e poderia duplicar o cadastro; 2) POST não é idempotente / altera dados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Interprete a URL `https://biblioteca.exemplo.com/livros/12?formato=digital`.\n\nNa sua resposta:\n1. diga qual é o protocolo e o domínio;\n2. diga qual é o caminho;\n3. diga o que é a parte depois do ?.",
+      "respostasAceitas": [
+        "Protocolo HTTPS e domínio biblioteca.exemplo.com. Caminho /livros/12 (o livro de id 12). Depois do ? vem a query string: formato=digital, um parâmetro de filtro/opção."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) https e biblioteca.exemplo.com; 2) /livros/12; 3) query string com o parâmetro formato=digital."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na API de um cinema, o mesmo caminho `/ingressos` atende `GET /ingressos` e `POST /ingressos`. Como o servidor sabe o que fazer em cada caso?\n\nNa sua resposta:\n1. diga o que diferencia as duas requisições;\n2. diga o que cada uma faz.",
+      "respostasAceitas": [
+        "O que muda é o método. GET /ingressos lista os ingressos; POST /ingressos cadastra um ingresso novo com os dados do corpo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o método HTTP; 2) GET consulta/lista, POST cadastra."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "http-servidor-nao-inicia",
+      "enunciado": "O painel da cozinha de um restaurante precisa mostrar os novos pedidos assim que chegam, usando uma API HTTP comum.\n\nNa sua resposta:\n1. explique por que o HTTP comum tem limitação nesse caso;\n2. cite uma forma de contornar essa limitação.",
+      "respostasAceitas": [
+        "No HTTP o servidor só responde quando o cliente pede; ele não manda avisos sozinho. Dá para o painel consultar a API de tempos em tempos (polling) ou usar uma conexão aberta, como WebSocket."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) quem inicia é sempre o cliente; 2) polling (consultar a cada X segundos) ou WebSocket/SSE. Qualquer uma vale."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Para que serve a aba Rede (Network) do DevTools do navegador quando se estuda HTTP?\n\nNa sua resposta:\n1. diga o que ela mostra;\n2. cite duas informações que dá para ver em cada requisição.",
+      "respostasAceitas": [
+        "Ela mostra as requisições que a página fez e as respostas recebidas. Dá para ver, por exemplo, o método, a URL, o código de status, os cabeçalhos e o corpo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) lista as requisições/respostas; 2) quaisquer duas: método, URL, status, cabeçalhos, corpo, tempo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja a resposta recebida pelo app de uma academia:\n```\nHTTP/1.1 200 OK\nContent-Type: application/json\n\n[ { \"id\": 1, \"treino\": \"Pernas\" }, { \"id\": 2, \"treino\": \"Costas\" } ]\n```\nInterprete essa resposta.\n\nNa sua resposta:\n1. diga o que o status informa;\n2. diga o que o Content-Type informa;\n3. diga o que o corpo representa.",
+      "respostasAceitas": [
+        "200 OK: a requisição deu certo. O Content-Type diz que o corpo está em JSON. O corpo é uma lista com dois treinos (id e nome)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sucesso; 2) corpo em JSON; 3) lista de treinos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "http-idempotencia-d",
+      "enunciado": "Quando a internet falha, o app da loja de games repete a última requisição. Por que repetir `PUT /carrinho/3` é menos perigoso do que repetir `POST /pagamentos`?\n\nNa sua resposta:\n1. diga o que acontece ao repetir o PUT;\n2. diga o que pode acontecer ao repetir o POST;\n3. relacione com idempotência.",
+      "respostasAceitas": [
+        "Repetir o PUT grava de novo o mesmo carrinho, e o resultado final fica igual. Repetir o POST pode registrar um segundo pagamento (cobrança dupla). PUT é idempotente; POST não é."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) resultado igual; 2) pagamento duplicado; 3) PUT idempotente, POST não."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API de uma padaria permite buscar produtos pelo nome. Qual forma de enviar o termo \"pao\" é a mais comum?",
+      "alternativas": [
+        "`DELETE /produtos/pao`",
+        "`GET /produtos?busca=pao`",
+        "`PUT /produtos?busca=pao`",
+        "`POST /produtos/buscar/pao`"
+      ],
+      "correta": 1,
+      "explicacao": "Busca e filtros são consultas: GET com o termo na query string."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-params-texto",
+      "enunciado": "Na rota Express `app.get('/clientes/:idCliente/pets/:idPet', ...)`, ao chamar `/clientes/3/pets/9`, quanto vale `req.params`?",
+      "alternativas": [
+        "`{ idCliente: 3, idPet: 9 }`",
+        "`{ idCliente: '3', idPet: '9' }`",
+        "`{ id: '9' }`",
+        "`{ clientes: '3', pets: '9' }`"
+      ],
+      "correta": 1,
+      "explicacao": "Cada :nome vira uma propriedade de req.params, e os valores chegam como texto (string), não como número."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-params-texto",
+      "enunciado": "Na rota `/quartos/:numero`, o código faz `if (req.params.numero === 12)` e nunca entra no if ao chamar `/quartos/12`. Por quê?",
+      "alternativas": [
+        "O Express não lê parâmetros de rota que sejam números",
+        "O número 12 deveria ir no corpo da requisição, não na rota",
+        "A comparação certa seria com um só =, não com ===",
+        "req.params traz o texto '12', e === compara também o tipo"
+      ],
+      "correta": 3,
+      "explicacao": "Parâmetros de rota chegam como string. '12' === 12 é falso. Converta com Number(req.params.numero)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na URL `/consultas?medico=Ana&data=2026-05-10`, qual sinal separa um parâmetro do outro?",
+      "alternativas": [
+        "&",
+        "?",
+        "/",
+        "="
+      ],
+      "correta": 0,
+      "explicacao": "O ? começa a query string, o = liga nome e valor e o & separa um parâmetro do outro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na URL `/filmes?genero=comedia`, o que o sinal `?` indica?",
+      "alternativas": [
+        "O fim do domínio do site",
+        "Que o parâmetro é opcional no banco",
+        "O início da query string",
+        "Que a requisição é do tipo POST"
+      ],
+      "correta": 2,
+      "explicacao": "Tudo o que vem depois do ? é a query string (parâmetros nome=valor)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na rota Express `app.get('/servicos', ...)` de um pet shop, ao chamar `/servicos?tipo=tosa`, como o código lê o tipo?",
+      "alternativas": [
+        "`req.params.tipo`",
+        "`req.body.tipo`",
+        "`req.headers.tipo`",
+        "`req.query.tipo`"
+      ],
+      "correta": 3,
+      "explicacao": "Parâmetros da query string ficam em req.query. req.params é para :parametros da rota."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na rota `/produtos`, o código usa `req.query.pagina`. Se o cliente chamar só `/produtos`, sem query string, qual é o valor de `req.query.pagina`?",
+      "alternativas": [
+        "`0`",
+        "`undefined`",
+        "`''` (texto vazio)",
+        "`null`"
+      ],
+      "correta": 1,
+      "explicacao": "Parâmetro que não veio não existe no objeto req.query, então o valor é undefined. Por isso se usa um valor padrão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa API REST de uma escola, ao cadastrar um aluno com nome, e-mail e data de nascimento, onde esses dados costumam ir?",
+      "alternativas": [
+        "Na query string de um GET",
+        "No cabeçalho User-Agent",
+        "No corpo da requisição, em JSON",
+        "No código de status da requisição"
+      ],
+      "correta": 2,
+      "explicacao": "Dados de cadastro vão no corpo de um POST, normalmente em JSON."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um formulário HTML comum (sem arquivos) envia os campos com POST. Qual Content-Type o navegador usa por padrão?",
+      "alternativas": [
+        "`application/x-www-form-urlencoded`",
+        "`application/json`",
+        "`multipart/form-data`",
+        "`text/html`"
+      ],
+      "correta": 0,
+      "explicacao": "Formulário sem arquivo vai como nome=valor&nome2=valor2, no tipo application/x-www-form-urlencoded. multipart/form-data é para quando há arquivo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API Express de uma biblioteca recebe um formulário HTML comum e `req.body` chega vazio, mesmo com `app.use(express.json())`. O que falta?",
+      "alternativas": [
+        "`app.use(express.urlencoded({ extended: true }))`",
+        "`app.use(express.text({ type: 'text/plain' }))`",
+        "`app.listen(3000)`",
+        "`res.status(200)`"
+      ],
+      "correta": 0,
+      "explicacao": "express.json() só lê corpo JSON. Formulário comum vem em x-www-form-urlencoded e precisa de express.urlencoded()."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para enviar a foto de um pet junto com o nome dele num formulário, qual media type é usado?",
+      "alternativas": [
+        "`application/json`",
+        "`text/html`",
+        "`multipart/form-data`",
+        "`text/plain`"
+      ],
+      "correta": 2,
+      "explicacao": "multipart/form-data divide o corpo em partes, permitindo arquivos e campos de texto juntos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma resposta com `Content-Type: text/html` indica que o corpo é:",
+      "alternativas": [
+        "um objeto JSON para o app do celular ler",
+        "uma página HTML para o navegador exibir",
+        "uma imagem no formato PNG para baixar",
+        "um arquivo de planilha"
+      ],
+      "correta": 1,
+      "explicacao": "text/html = conteúdo HTML. JSON seria application/json; PNG seria image/png."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-accept-ct",
+      "enunciado": "Na requisição do app de uma academia aparece o cabeçalho `Accept: application/json`. O que ele informa?",
+      "alternativas": [
+        "O formato do corpo que o cliente está enviando",
+        "Que o usuário aceitou os termos de uso do app",
+        "Que a requisição já foi aceita pelo servidor",
+        "O formato de resposta que o cliente prefere receber"
+      ],
+      "correta": 3,
+      "explicacao": "Accept diz o que o cliente aceita receber. O formato do que está sendo enviado é o Content-Type."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-accept-ct",
+      "enunciado": "Uma requisição POST tem os cabeçalhos `Content-Type: application/json` e `Accept: text/html`. O que isso quer dizer?",
+      "alternativas": [
+        "O cliente envia HTML e prefere receber JSON de volta",
+        "O servidor envia JSON e o cliente envia HTML",
+        "O cliente envia JSON e prefere receber HTML de volta",
+        "Os dois dizem a mesma coisa e um anula o outro"
+      ],
+      "correta": 2,
+      "explicacao": "Content-Type descreve o corpo enviado nesta mensagem (JSON). Accept diz o formato desejado na resposta (HTML)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve o cabeçalho User-Agent numa requisição?",
+      "alternativas": [
+        "Identificar o programa (navegador ou app) que fez a requisição",
+        "Guardar o login e a senha do usuário que está acessando o site",
+        "Dizer em que formato o corpo da resposta deve ser enviado",
+        "Informar o código de status que o servidor deve devolver"
+      ],
+      "correta": 0,
+      "explicacao": "User-Agent identifica o cliente: navegador, versão, sistema, ou o nome do app."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa requisição aparece `Authorization: Bearer eyJhbGciOi...`. O que vem depois da palavra Bearer?",
+      "alternativas": [
+        "O nome do servidor que hospeda a API",
+        "O formato do corpo da requisição",
+        "O código de status esperado na resposta",
+        "O token que identifica o usuário logado"
+      ],
+      "correta": 3,
+      "explicacao": "Bearer (\"portador\") indica que em seguida vem um token de acesso, recebido no login."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-cors",
+      "enunciado": "O front-end da escola, em `http://localhost:5173`, chama a API em `http://localhost:3000`, e o navegador bloqueia com um erro de CORS. O que é CORS, em linguagem simples?",
+      "alternativas": [
+        "Erro de sintaxe no JSON que a API devolveu para o front-end da escola",
+        "Regra do navegador que só libera outra origem se o servidor permitir",
+        "Falta de conexão com a internet no computador em que o aluno está",
+        "Bloqueio do banco de dados quando a senha do usuário está errada"
+      ],
+      "correta": 1,
+      "explicacao": "CORS é o controle do navegador para chamadas entre origens diferentes: só deixa o site ler a resposta se a API disser que permite."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-cors",
+      "enunciado": "Num erro de CORS entre o site de uma loja e a API dela, onde o problema é resolvido?",
+      "alternativas": [
+        "No navegador de cada usuário, desligando o antivírus do computador",
+        "Na API, enviando Access-Control-Allow-Origin com a origem do site",
+        "No banco de dados, liberando o acesso do usuário root",
+        "No front-end, trocando o fetch por outra função de envio"
+      ],
+      "correta": 1,
+      "explicacao": "Quem libera é o servidor, com o cabeçalho Access-Control-Allow-Origin (no Express, o pacote cors faz isso)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-cors",
+      "enunciado": "Numa API Express aparece `app.use(cors({ origin: 'https://loja.exemplo.com' }))`. O que essa linha faz?",
+      "alternativas": [
+        "Bloqueia todas as requisições que vierem desse site",
+        "Redireciona todas as rotas da API para esse endereço",
+        "Obriga o uso de HTTPS em todas as rotas da API",
+        "Libera só esse site a ler as respostas da API no navegador"
+      ],
+      "correta": 3,
+      "explicacao": "O middleware cors adiciona o cabeçalho Access-Control-Allow-Origin com essa origem, permitindo que esse site use a API."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para o navegador, qual destes pares tem ORIGENS DIFERENTES?",
+      "alternativas": [
+        "`http://localhost:3000` e `http://localhost:5173`",
+        "`http://localhost:3000/a` e `http://localhost:3000/b`",
+        "`https://escola.exemplo.com/` e `https://escola.exemplo.com/login`",
+        "`http://site.exemplo.com/?x=1` e `http://site.exemplo.com/?x=2`"
+      ],
+      "correta": 0,
+      "explicacao": "Origem = protocolo + domínio + porta. Mudar a porta (3000 x 5173) muda a origem; mudar caminho ou query não muda."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença principal entre HTTP e HTTPS?",
+      "alternativas": [
+        "O HTTPS é mais antigo e quase não é mais usado na internet",
+        "O HTTPS só funciona para páginas que não têm imagens",
+        "No HTTPS a comunicação vai criptografada entre cliente e servidor",
+        "No HTTPS não existem métodos nem cabeçalhos nas mensagens"
+      ],
+      "correta": 2,
+      "explicacao": "HTTPS é o HTTP com uma camada de segurança (TLS) que criptografa as mensagens. Métodos, cabeçalhos e status continuam iguais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que o certificado digital de um site com HTTPS ajuda a garantir?",
+      "alternativas": [
+        "Que o site não tem nenhum erro de programação nas suas páginas",
+        "Que o servidor do site nunca vai ficar fora do ar em nenhum dia",
+        "Que as senhas são guardadas criptografadas no banco de dados",
+        "Que o site é mesmo do domínio que diz ser, permitindo a criptografia"
+      ],
+      "correta": 3,
+      "explicacao": "O certificado comprova a identidade do domínio e é usado para estabelecer a conexão criptografada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API da clínica usa HTTPS. Isso protege contra SQL Injection numa rota mal feita?",
+      "alternativas": [
+        "Sim; com HTTPS nenhum tipo de ataque chega até o servidor",
+        "Não; o HTTPS protege o caminho, mas não corrige falhas do código",
+        "Sim; o HTTPS filtra sozinho os comandos SQL perigosos",
+        "Não; o HTTPS só protege imagens, e nunca os dados de texto"
+      ],
+      "correta": 1,
+      "explicacao": "HTTPS impede que alguém leia ou altere a mensagem no caminho. O conteúdo malicioso chega criptografado do mesmo jeito; quem protege contra SQL Injection é o código (consultas parametrizadas)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que o navegador costuma mostrar quando o site usa HTTPS com um certificado válido?",
+      "alternativas": [
+        "Um aviso de vírus na página",
+        "O código 404 na barra",
+        "Um cadeado perto do endereço",
+        "Um botão para baixar o HTML"
+      ],
+      "correta": 2,
+      "explicacao": "O cadeado indica conexão HTTPS com certificado válido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-senha-url",
+      "enunciado": "Por que não se deve enviar senha na query string, como em `/login?senha=1234`, mesmo usando HTTPS?",
+      "alternativas": [
+        "A URL fica gravada no histórico do navegador e nos logs do servidor",
+        "A query string não aceita números, só letras sem acento",
+        "O HTTPS deixa de funcionar quando a URL tem uma query string",
+        "O servidor não consegue ler a query string de uma requisição"
+      ],
+      "correta": 0,
+      "explicacao": "O HTTPS protege no caminho, mas a URL completa fica gravada em histórico, logs e favoritos. Senha vai no corpo de um POST."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API de um cinema devolve a lista de sessões para o app do celular. Qual Content-Type é o mais comum nessa resposta?",
+      "alternativas": [
+        "`application/json`",
+        "`text/html`",
+        "`multipart/form-data`",
+        "`image/png`"
+      ],
+      "correta": 0,
+      "explicacao": "APIs que conversam com apps costumam responder em JSON: application/json."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-res-json-ct",
+      "enunciado": "No Express, ao usar `res.json({ ok: true })`, o que acontece com o cabeçalho Content-Type da resposta?",
+      "alternativas": [
+        "Fica vazio; é preciso defini-lo à mão sempre",
+        "É definido automaticamente como text/html",
+        "É definido automaticamente como application/json",
+        "É definido como multipart/form-data"
+      ],
+      "correta": 2,
+      "explicacao": "res.json() converte o objeto em texto JSON e já coloca Content-Type: application/json."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app envia JSON no corpo, mas esquece o cabeçalho `Content-Type: application/json`. Na API com `app.use(express.json())`, o que tende a acontecer?",
+      "alternativas": [
+        "O Express adivinha o formato pelo conteúdo e lê o corpo normalmente",
+        "O Express não reconhece o corpo como JSON e req.body fica vazio",
+        "A requisição vira um GET automaticamente no servidor",
+        "O servidor responde 301 e redireciona para outra rota"
+      ],
+      "correta": 1,
+      "explicacao": "express.json() só lê o corpo quando o Content-Type indica JSON. Sem o cabeçalho, o corpo é ignorado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que são os cabeçalhos (headers) de uma mensagem HTTP?",
+      "alternativas": [
+        "O título da página, que aparece na aba do navegador web",
+        "As primeiras linhas de código do arquivo HTML",
+        "Os nomes das colunas usados no banco de dados",
+        "Pares nome: valor com informações extras sobre a mensagem"
+      ],
+      "correta": 3,
+      "explicacao": "Cabeçalhos são linhas no formato Nome: valor, como Content-Type: application/json ou Authorization: Bearer ...."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Express, como ler o cabeçalho Authorization que veio na requisição?",
+      "alternativas": [
+        "`req.params.authorization`",
+        "`req.query.Authorization`",
+        "`req.headers.authorization`",
+        "`res.headers.authorization`"
+      ],
+      "correta": 2,
+      "explicacao": "Os cabeçalhos recebidos ficam em req.headers, com os nomes em minúsculas (também dá para usar req.get('Authorization'))."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para identificar UM pedido específico numa API REST, o mais comum é:",
+      "alternativas": [
+        "colocar o id no caminho, como em /pedidos/40",
+        "colocar o id no cabeçalho User-Agent da requisição",
+        "colocar o id no código de status",
+        "colocar o id no Content-Type"
+      ],
+      "correta": 0,
+      "explicacao": "O id de um recurso específico vai no caminho: /pedidos/40."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API de um hotel, quais URLs seguem melhor a convenção para: buscar o quarto 7; e listar os quartos com vista para o mar?",
+      "alternativas": [
+        "`/quartos?id=7` e `/quartos/vista/mar/listar`",
+        "`/quartos/7` e `/quartos/mar/vista/7`",
+        "`/buscarQuarto/7` e `/listarQuartosVistaMar`",
+        "`/quartos/7` e `/quartos?vista=mar`"
+      ],
+      "correta": 3,
+      "explicacao": "Recurso específico: id no caminho. Filtro de lista: query string."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na URL `/livros?titulo=Dom%20Casmurro`, o que significa `%20`?",
+      "alternativas": [
+        "O número 20, que é a página pedida na busca",
+        "Um espaço, codificado para poder ir na URL",
+        "Um erro de digitação no título",
+        "O limite de 20 resultados"
+      ],
+      "correta": 1,
+      "explicacao": "Alguns caracteres não podem ir direto na URL e são codificados. %20 representa o espaço."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que o envio de um arquivo, como o PDF de um exame numa clínica, costuma usar multipart/form-data?",
+      "alternativas": [
+        "Porque é o único formato que o HTTPS aceita para enviar dados",
+        "Porque permite mandar arquivos e campos de texto juntos, em partes",
+        "Porque transforma o arquivo PDF em uma página HTML comum",
+        "Porque não precisa de nenhum método HTTP para ser enviado"
+      ],
+      "correta": 1,
+      "explicacao": "multipart/form-data divide o corpo em partes, cada uma com seu tipo: o arquivo e os campos do formulário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma rota Express recebe `POST /contato` de um formulário com o campo `nome`. Com o middleware certo configurado, onde está o valor digitado?",
+      "alternativas": [
+        "`req.query.nome`",
+        "`req.params.nome`",
+        "`req.headers.nome`",
+        "`req.body.nome`"
+      ],
+      "correta": 3,
+      "explicacao": "Campos enviados no corpo (formulário com POST ou JSON) ficam em req.body."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre parâmetro de rota (como em `/alunos/:id`) e query string (como em `/alunos?turma=2A`).\n\nNa sua resposta:\n1. diga para que se usa o parâmetro de rota;\n2. diga para que se usa a query string;\n3. dê um exemplo de cada numa API de escola.",
+      "respostasAceitas": [
+        "Parâmetro de rota identifica um recurso específico (o aluno de id 5: /alunos/5). Query string traz filtros, buscas e opções (alunos da turma 2A: /alunos?turma=2A)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) identificar um item; 2) filtrar/buscar/ordenar/paginar; 3) exemplos coerentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na API de uma clínica, o app chamou `GET /consultas/88?incluir=exames`. Interprete essa requisição.\n\nNa sua resposta:\n1. diga o que o 88 representa;\n2. diga o papel de incluir=exames.",
+      "respostasAceitas": [
+        "88 é o id da consulta pedida (parâmetro de rota). incluir=exames é um parâmetro de query string pedindo que a resposta traga também os exames."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) id da consulta; 2) opção/filtro na query string para incluir os exames."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "http-express-origem",
+      "enunciado": "Veja a rota Express de uma escola:\n```js\napp.put('/turmas/:id', (req, res) => {\n  console.log(req.params.id, req.query.avisar, req.body.nome);\n  res.sendStatus(204);\n});\n```\nO app chamou `PUT /turmas/4?avisar=sim` com o corpo `{ \"nome\": \"2B\" }`.\n\nNa sua resposta:\n1. diga o que o console.log imprime;\n2. diga de qual parte da requisição veio cada valor.",
+      "respostasAceitas": [
+        "Imprime `4 sim 2B`. O 4 veio do caminho (req.params), sim veio da query string (req.query) e 2B veio do corpo JSON (req.body)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 4 sim 2B; 2) rota, query string e corpo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique para que servem os cabeçalhos Content-Type e Accept.\n\nNa sua resposta:\n1. diga o que o Content-Type informa;\n2. diga o que o Accept informa.",
+      "respostasAceitas": [
+        "Content-Type diz o formato do corpo da mensagem que está sendo enviada (ex.: application/json). Accept diz quais formatos o cliente quer receber na resposta."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) formato do corpo enviado; 2) formato desejado na resposta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Nos registros da API de uma loja aparece, numa requisição, o cabeçalho `User-Agent: AppLoja/3.2 (Android 14)`.\n\nNa sua resposta:\n1. diga o que esse cabeçalho informa;\n2. diga um uso que a loja pode fazer dessa informação.",
+      "respostasAceitas": [
+        "Informa qual programa fez a requisição: o app da loja, versão 3.2, num Android 14. A loja pode saber quais versões e aparelhos são usados, ou investigar um erro que só acontece numa versão."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) identifica o cliente (app, versão, sistema); 2) estatística, suporte, achar erro de uma versão etc."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O front-end da biblioteca chama a API e o console do navegador mostra erro de CORS. No Postman, a mesma requisição funciona.\n\nNa sua resposta:\n1. explique o que é CORS;\n2. explique por que no Postman funciona;\n3. diga onde o problema deve ser resolvido.",
+      "respostasAceitas": [
+        "CORS é a regra do navegador que só deixa um site ler respostas de outra origem se o servidor permitir. O Postman não é navegador e não aplica essa regra. Resolve-se na API, enviando o cabeçalho Access-Control-Allow-Origin (no Express, com o pacote cors)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) controle do navegador entre origens; 2) Postman não faz essa checagem; 3) no servidor/API, liberando a origem."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique o que o HTTPS acrescenta ao HTTP.\n\nNa sua resposta:\n1. diga o que significa o S;\n2. diga o que ele protege;\n3. diga como o usuário percebe que o site usa HTTPS.",
+      "respostasAceitas": [
+        "O S vem de seguro: a comunicação vai criptografada (TLS) e o certificado confirma o site. Protege senhas e dados de serem lidos ou alterados no caminho. O usuário vê https:// e o cadeado no navegador."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) seguro/criptografia; 2) dados no caminho; 3) cadeado ou https na barra."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na API de uma loja, o cadastro de produto COM foto usa `multipart/form-data`, mas o cadastro sem foto usa `application/json`. Explique o motivo.\n\nNa sua resposta:\n1. diga por que o multipart serve para a foto;\n2. diga por que o JSON é usado quando não há arquivo.",
+      "respostasAceitas": [
+        "O multipart divide o corpo em partes e consegue levar arquivos (a foto) junto com os campos. Sem arquivo, o JSON é mais simples e organizado para enviar só dados de texto e números."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) multipart carrega arquivo + campos; 2) JSON é texto estruturado, ideal só para dados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "http-senha-url",
+      "enunciado": "Um colega fez o login da API assim: `GET /login?usuario=ana&senha=1234`.\n\nNa sua resposta:\n1. explique o problema de usar o método GET aqui;\n2. explique o problema de a senha estar na URL;\n3. diga como a requisição deveria ser enviada.",
+      "respostasAceitas": [
+        "Login não é só consulta e o GET põe os dados na URL. A URL fica no histórico, nos logs e pode ser compartilhada, expondo a senha. O certo é POST /login com usuário e senha no corpo, usando HTTPS."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) GET leva dados na URL / é para consulta; 2) senha fica exposta em histórico e logs; 3) POST com corpo e HTTPS."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre os dados que chegam de um formulário HTML comum e os que chegam em JSON no corpo.\n\nNa sua resposta:\n1. diga como os dados do formulário vêm no corpo;\n2. diga como os dados vêm em JSON;\n3. diga qual middleware do Express lê cada um.",
+      "respostasAceitas": [
+        "O formulário comum envia nome=valor&nome2=valor2 (application/x-www-form-urlencoded). O JSON envia um objeto como { \"nome\": \"valor\" } (application/json). No Express, express.urlencoded() lê o formulário e express.json() lê o JSON."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nome=valor separados por &; 2) objeto JSON; 3) express.urlencoded e express.json."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "http-stateless-login",
+      "enunciado": "No app de uma academia, depois do login, o app manda o cabeçalho `Authorization: Bearer <token>` em TODA requisição a rotas protegidas, e não só no login. Explique por quê.\n\nNa sua resposta:\n1. relacione com o fato de o HTTP ser sem estado;\n2. diga o que acontece se o cabeçalho faltar.",
+      "respostasAceitas": [
+        "Como o HTTP é sem estado, o servidor não lembra do login anterior; o token é a prova de quem está pedindo, em cada requisição. Sem o cabeçalho, a rota protegida recusa com 401."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) servidor não lembra das requisições anteriores; 2) acesso negado (401)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que é um media type (tipo de mídia) no HTTP?\n\nNa sua resposta:\n1. explique o que ele indica;\n2. cite dois exemplos e o que cada um representa.",
+      "respostasAceitas": [
+        "É o nome padrão que diz o formato de um conteúdo, usado no Content-Type e no Accept. Ex.: application/json (dados JSON), text/html (página HTML), multipart/form-data (formulário com arquivos), image/png (imagem)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) formato do conteúdo; 2) quaisquer dois exemplos corretos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Por que a API deve conferir o Content-Type e os dados do corpo, em vez de confiar que o front-end sempre manda tudo certo?\n\nNa sua resposta:\n1. diga quem mais, além do front-end oficial, pode chamar a API;\n2. diga o que pode chegar no corpo;\n3. diga o que a API deve responder quando os dados estão errados.",
+      "respostasAceitas": [
+        "Qualquer um pode chamar a API direto (Postman, scripts, outro site). Pode chegar corpo vazio, campos faltando, tipo errado ou dados maliciosos. A API deve validar e responder com erro do cliente (400 ou 422), sem gravar nada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) qualquer cliente/ferramenta; 2) dados faltando, errados ou maliciosos; 3) recusar com 400/422 e mensagem."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno usa o Wi-Fi aberto de uma lanchonete para entrar no sistema da escola. Explique a diferença entre o site usar HTTP ou HTTPS nessa situação.\n\nNa sua resposta:\n1. diga o que alguém na mesma rede consegue ver com HTTP;\n2. diga o que muda com HTTPS.",
+      "respostasAceitas": [
+        "Com HTTP as mensagens vão em texto aberto: alguém na rede pode ler a senha e os dados. Com HTTPS tudo vai criptografado; a pessoa vê, no máximo, que houve conexão com aquele site, mas não o conteúdo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) senha/dados legíveis; 2) conteúdo criptografado, ilegível para terceiros."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Interprete os cabeçalhos desta requisição:\n```\nHost: academia.exemplo.com\nAccept: application/json\nUser-Agent: AppAcademia/2.1\n```\n\nNa sua resposta:\n1. diga o que o Host informa;\n2. diga o que o Accept informa;\n3. diga o que o User-Agent informa.",
+      "respostasAceitas": [
+        "Host: o site/domínio para onde a requisição vai. Accept: o cliente quer a resposta em JSON. User-Agent: a requisição veio do app AppAcademia, versão 2.1."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) domínio de destino; 2) formato desejado na resposta; 3) programa cliente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que significa o código de status 200 numa resposta HTTP?",
+      "alternativas": [
+        "A requisição deu certo (OK)",
+        "Um recurso novo foi criado",
+        "O recurso não foi encontrado",
+        "Houve erro interno no servidor"
+      ],
+      "correta": 0,
+      "explicacao": "200 = OK, sucesso. Criado é 201, não encontrado é 404 e erro interno é 500."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de cadastrar com sucesso uma nova matrícula pela API da escola, qual código de status é o mais adequado?",
+      "alternativas": [
+        "204",
+        "400",
+        "201",
+        "404"
+      ],
+      "correta": 2,
+      "explicacao": "201 (Created) informa que um recurso novo foi criado. 204 é sucesso sem corpo; 400 e 404 são erros."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API da biblioteca apagou um livro e não tem nada para devolver no corpo da resposta. Qual código combina?",
+      "alternativas": [
+        "201",
+        "404",
+        "409",
+        "204"
+      ],
+      "correta": 3,
+      "explicacao": "204 (No Content): deu certo e não há corpo. É comum em DELETE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-409",
+      "enunciado": "No cadastro de usuários de um cinema, o e-mail é único e o e-mail informado já está cadastrado. Qual código é o mais adequado?",
+      "alternativas": [
+        "404",
+        "409",
+        "500",
+        "201"
+      ],
+      "correta": 1,
+      "explicacao": "409 (Conflict): o pedido conflita com algo que já existe no servidor, como um e-mail repetido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-422",
+      "enunciado": "A API de uma academia recebe um JSON bem formado, mas com `\"idade\": -5`. Muitas APIs respondem com qual código, por ser um dado que não passa nas regras de validação?",
+      "alternativas": [
+        "201",
+        "301",
+        "422",
+        "500"
+      ],
+      "correta": 2,
+      "explicacao": "422 (Unprocessable Entity): o formato está certo, mas o conteúdo é inválido. Algumas APIs usam 400 nesse caso; 500 seria culpar o servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de um pet shop enviou um corpo com JSON quebrado, que não dá para ler: `{ \"nome\": \"Rex\", `. Qual código a API deve devolver?",
+      "alternativas": [
+        "400",
+        "201",
+        "204",
+        "403"
+      ],
+      "correta": 0,
+      "explicacao": "400 (Bad Request): a requisição está malformada, é erro do cliente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-401-403",
+      "enunciado": "Na API de uma clínica, um usuário logado como recepcionista, com token válido, tenta acessar uma rota só para administradores. Qual código é o mais adequado?",
+      "alternativas": [
+        "403",
+        "401",
+        "404",
+        "409"
+      ],
+      "correta": 0,
+      "explicacao": "403 (Forbidden): o servidor sabe quem é o usuário, mas ele não tem permissão. 401 é quando falta login ou o token é inválido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-401",
+      "enunciado": "Um app chama uma rota protegida da API sem enviar nenhum token. Qual código a API deve devolver?",
+      "alternativas": [
+        "201",
+        "409",
+        "401",
+        "500"
+      ],
+      "correta": 2,
+      "explicacao": "401 (Unauthorized): falta autenticação (login/token) ou ela é inválida."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma rota tentou consultar o banco, mas o servidor MySQL caiu e o código lançou um erro. Qual código a API devolve?",
+      "alternativas": [
+        "400",
+        "500",
+        "404",
+        "422"
+      ],
+      "correta": 1,
+      "explicacao": "500 (Internal Server Error): a falha é do lado do servidor, não da requisição do cliente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O site de uma padaria mudou de endereço para sempre. Qual código o endereço antigo deve devolver para levar o cliente ao novo?",
+      "alternativas": [
+        "404",
+        "204",
+        "403",
+        "301"
+      ],
+      "correta": 3,
+      "explicacao": "301 (Moved Permanently): o recurso mudou de endereço de vez. O navegador segue para o novo endereço."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-301",
+      "enunciado": "Junto com o status 301, qual cabeçalho da resposta diz para onde o cliente deve ir?",
+      "alternativas": [
+        "Accept",
+        "User-Agent",
+        "Location",
+        "Authorization"
+      ],
+      "correta": 2,
+      "explicacao": "O cabeçalho Location traz o novo endereço; o navegador faz a nova requisição para ele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Os códigos de status que começam com 2 (2xx) indicam:",
+      "alternativas": [
+        "Sucesso",
+        "Redirecionamento",
+        "Erro do cliente",
+        "Erro do servidor"
+      ],
+      "correta": 0,
+      "explicacao": "2xx = sucesso; 3xx = redirecionamento; 4xx = erro do cliente; 5xx = erro do servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-404-express",
+      "enunciado": "Veja a rota Express de um pet shop:\n```js\napp.get('/pets/:id', async (req, res) => {\n  const pet = await buscarPet(req.params.id);\n  if (!pet) return res.status(404).json({ erro: 'Pet não encontrado' });\n  res.json(pet);\n});\n```\nAo chamar `GET /pets/50` e o pet não existir, o que o cliente recebe?",
+      "alternativas": [
+        "Status 200 com um JSON do pet vazio",
+        "Status 404 e, logo depois, o JSON do pet",
+        "Status 500, porque a variável pet é undefined",
+        "Status 404 com o JSON { erro: 'Pet não encontrado' }"
+      ],
+      "correta": 3,
+      "explicacao": "buscarPet não acha nada, então o if responde 404 com a mensagem de erro e o return encerra a função."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-return-res",
+      "enunciado": "Na rota abaixo, o `return` da linha do if foi apagado:\n```js\napp.get('/pets/:id', async (req, res) => {\n  const pet = await buscarPet(req.params.id);\n  if (!pet) res.status(404).json({ erro: 'Pet não encontrado' });\n  res.json(pet);\n});\n```\nO que acontece quando o pet não existe?",
+      "alternativas": [
+        "Nada muda, porque o return era só uma questão de estilo de código",
+        "O código segue e responde de novo, gerando erro de resposta já enviada",
+        "O Express ignora o 404 e devolve 200 com o JSON do pet vazio",
+        "A rota entra em loop infinito e o servidor para de responder a todos"
+      ],
+      "correta": 1,
+      "explicacao": "Sem return, a função continua e chama res.json(pet) depois de já ter respondido. O Express acusa erro (cabeçalhos já enviados). Cada requisição só pode ter uma resposta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao usar só `res.json(lista)`, sem chamar `res.status(...)`, qual código de status o Express devolve?",
+      "alternativas": [
+        "201",
+        "200",
+        "204",
+        "500"
+      ],
+      "correta": 1,
+      "explicacao": "Se nenhum status for definido, o Express responde 200."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz `res.status(204).send();` numa rota DELETE?",
+      "alternativas": [
+        "Responde que o recurso não foi encontrado no banco",
+        "Responde que um recurso novo acabou de ser criado",
+        "Responde que houve um erro interno no servidor",
+        "Responde que deu certo e que não há conteúdo no corpo"
+      ],
+      "correta": 3,
+      "explicacao": "204 = sucesso sem conteúdo. Também dá para usar res.sendStatus(204)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-200-erro",
+      "enunciado": "Uma API sempre responde assim quando não acha o aluno: `res.status(200).json({ erro: 'Aluno não encontrado' })`. Qual é o problema?",
+      "alternativas": [
+        "O status diz sucesso, e o app pode tratar o erro como se desse certo",
+        "Nenhum, porque o código de status é só informativo e ninguém o lê",
+        "O JSON de uma resposta não pode ter uma propriedade chamada erro",
+        "O status 200 não permite que a resposta leve nenhum corpo"
+      ],
+      "correta": 0,
+      "explicacao": "Apps e bibliotecas decidem pelo código de status. Para recurso inexistente o certo é 404."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja a rota de um hotel:\n```js\napp.post('/reservas', async (req, res) => {\n  try {\n    const r = await salvarReserva(req.body);\n    res.status(201).json(r);\n  } catch (e) {\n    res.status(500).json({ erro: 'Erro ao salvar' });\n  }\n});\n```\nSe o banco falhar ao salvar, o que o cliente recebe?",
+      "alternativas": [
+        "Status 201 com uma reserva vazia",
+        "Status 400, porque o erro foi do cliente",
+        "Status 500 com { erro: 'Erro ao salvar' }",
+        "Nenhuma resposta; a requisição fica parada"
+      ],
+      "correta": 2,
+      "explicacao": "O erro do banco faz o código pular para o catch, que responde 500 com a mensagem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa rota de cadastro aparece:\n```js\nif (!req.body.nome) return res.status(400).json({ erro: 'nome é obrigatório' });\n```\nPor que esse caso devolve 400 e não 500?",
+      "alternativas": [
+        "Porque o código 500 só pode ser usado em respostas com páginas HTML",
+        "Porque o 400 é o código de sucesso parcial, quando falta um campo",
+        "Porque o Express proíbe usar o código 500 em rotas do tipo POST",
+        "O erro está nos dados enviados pelo cliente, não numa falha do servidor"
+      ],
+      "correta": 3,
+      "explicacao": "4xx = o cliente mandou algo errado (aqui, sem nome). 5xx = o servidor falhou."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app chamou `GET /produtoss` (com erro de digitação) e essa rota não existe na API Express. Qual código o Express devolve por padrão?",
+      "alternativas": [
+        "400",
+        "404",
+        "500",
+        "301"
+      ],
+      "correta": 1,
+      "explicacao": "Quando nenhuma rota combina com o método e o caminho, o Express responde 404 (Cannot GET /produtoss)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API de uma oficina, quais códigos combinam, nesta ordem, com: cadastro de veículo com sucesso; exclusão de veículo sem corpo na resposta; placa que já estava cadastrada?",
+      "alternativas": [
+        "200, 404, 500",
+        "204, 201, 409",
+        "201, 204, 409",
+        "201, 204, 404"
+      ],
+      "correta": 2,
+      "explicacao": "Criado = 201; sucesso sem corpo = 204; conflito com registro existente = 409."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-express-origem",
+      "enunciado": "Na rota `app.patch('/alunos/:id', ...)`, o app envia `PATCH /alunos/3` com o corpo `{ \"telefone\": \"11 97777-0000\" }`. Onde o código encontra o 3 e o telefone?",
+      "alternativas": [
+        "3 em req.params.id e telefone em req.body.telefone",
+        "3 em req.body.id e telefone em req.params.telefone",
+        "3 em req.query.id e telefone em req.query.telefone",
+        "3 em req.headers.id e telefone em req.body.telefone"
+      ],
+      "correta": 0,
+      "explicacao": "O que está no caminho (:id) fica em req.params; o que vem no corpo fica em req.body."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual linha registra no Express uma rota para remover um filme pelo id?",
+      "alternativas": [
+        "`app.delete('/filmes/:id', ...)`",
+        "`app.get('/filmes/:id/delete', ...)`",
+        "`app.remove('/filmes/:id', ...)`",
+        "`app.post('/filmes?id', ...)`"
+      ],
+      "correta": 0,
+      "explicacao": "O Express tem um método para cada verbo HTTP: app.get, app.post, app.put, app.patch, app.delete."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-301",
+      "enunciado": "O que faz `res.redirect(301, '/novo-cardapio')` numa rota Express?",
+      "alternativas": [
+        "Responde 404 e apaga a rota antiga do servidor para sempre, sem aviso",
+        "Busca o novo cardápio no banco de dados e devolve com 200",
+        "Responde 301 com o cabeçalho Location apontando para /novo-cardapio",
+        "Manda o cliente para a tela de login com o código 401"
+      ],
+      "correta": 2,
+      "explicacao": "res.redirect define o status (301) e o cabeçalho Location; o navegador então pede o novo endereço."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-401-403",
+      "enunciado": "O que o código de status 403 (Forbidden) indica?",
+      "alternativas": [
+        "O usuário não enviou nenhum login ou token",
+        "O usuário foi identificado, mas não tem permissão",
+        "A rota pedida não existe no servidor",
+        "O servidor caiu e não conseguiu responder"
+      ],
+      "correta": 1,
+      "explicacao": "403 = proibido: sabe-se quem é, mas não pode. Sem login seria 401; rota inexistente, 404; falha do servidor, 5xx."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa rota Express, o que faz `res.status(201)` sozinho, sem `.json()` nem `.send()` depois?",
+      "alternativas": [
+        "Envia na hora a resposta 201 com o corpo vazio",
+        "Cadastra o recurso no banco de dados automaticamente",
+        "Encerra o servidor depois de registrar o código",
+        "Só define o código; a resposta ainda não foi enviada"
+      ],
+      "correta": 3,
+      "explicacao": "res.status() só guarda o código. Quem envia é .json(), .send() ou .end(). Sem eles, o cliente fica esperando."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-params-texto",
+      "enunciado": "Numa rota de listagem aparece `const pagina = Number(req.query.pagina) || 1;`. Por que usar `Number()` aqui?",
+      "alternativas": [
+        "Porque o req.query só aceita receber valores numéricos",
+        "Porque Number() confere o token do usuário",
+        "Porque os valores de req.query chegam como texto",
+        "Porque sem ele a rota vira um POST"
+      ],
+      "correta": 2,
+      "explicacao": "Tudo que vem na URL chega como string. Number() converte; o || 1 dá o valor padrão quando não veio nada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-res-json-ct",
+      "enunciado": "Qual a diferença entre `res.send('<h1>Olá</h1>')` e `res.json({ msg: 'Olá' })` no Express?",
+      "alternativas": [
+        "O primeiro manda HTML/texto; o segundo manda JSON como application/json",
+        "Os dois mandam exatamente a mesma coisa, com o mesmo Content-Type",
+        "O primeiro só funciona em rotas POST; o segundo, só em rotas GET",
+        "O segundo sempre devolve o código 201; o primeiro, o código 200"
+      ],
+      "correta": 0,
+      "explicacao": "res.send com texto define Content-Type text/html; res.json transforma o objeto em JSON com application/json. Os dois respondem 200 por padrão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na rota Express `app.post('/alunos', ...)`, qual método HTTP ela atende?",
+      "alternativas": [
+        "GET",
+        "PUT",
+        "Qualquer método",
+        "POST"
+      ],
+      "correta": 3,
+      "explicacao": "app.post registra a rota só para o método POST. Um GET /alunos precisaria de app.get."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-401",
+      "enunciado": "Na API de uma loja de games, o cliente tentou fazer login com a senha errada. Qual código é o mais usado nessa resposta?",
+      "alternativas": [
+        "403",
+        "401",
+        "404",
+        "500"
+      ],
+      "correta": 1,
+      "explicacao": "Login inválido = falha de autenticação, 401. 403 é para quem está identificado, mas sem permissão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na função `(req, res) => { ... }` de uma rota Express, o que são `req` e `res`?",
+      "alternativas": [
+        "req é a resposta que será enviada; res é a requisição que chegou",
+        "req é a requisição que chegou; res é a resposta que será enviada",
+        "req é a conexão com o banco; res é o resultado do SELECT",
+        "req é o roteador da aplicação; res é o servidor do Express"
+      ],
+      "correta": 1,
+      "explicacao": "req (request) traz params, query, body e headers; res (response) tem status(), json(), send()."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API de uma escola, `PUT /professores/2` atualizou o professor e devolve o professor atualizado no corpo. Qual código é o mais adequado?",
+      "alternativas": [
+        "201",
+        "301",
+        "409",
+        "200"
+      ],
+      "correta": 3,
+      "explicacao": "Atualização com sucesso e com corpo: 200. 201 é para recurso criado; 204 seria sem corpo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-422",
+      "enunciado": "No cadastro de produtos de uma padaria, o preço veio negativo. Um colega quer responder 409. Qual código seria mais adequado e por quê?",
+      "alternativas": [
+        "422 (ou 400): é dado inválido, não conflito com outro registro",
+        "409 mesmo, pois todo erro nos dados enviados é um conflito",
+        "500, pois foi o servidor que não aceitou o preço negativo",
+        "404, pois um preço negativo não existe no banco de dados"
+      ],
+      "correta": 0,
+      "explicacao": "409 é para conflito com o estado atual (ex.: registro duplicado). Dado fora da regra é 422 (ou 400)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para avisar ao app que o cadastro do pet deu certo e devolver o pet cadastrado, qual linha é a mais adequada?",
+      "alternativas": [
+        "`res.status(404).json(pet)`",
+        "`res.status(500).send(pet)`",
+        "`res.status(201).json(pet)`",
+        "`req.status(201).json(pet)`"
+      ],
+      "correta": 2,
+      "explicacao": "201 = criado, e o pet vai no corpo em JSON. Quem responde é o res, não o req."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que, no catch, a API costuma devolver 500 com uma mensagem genérica, em vez da mensagem completa do erro do banco?",
+      "alternativas": [
+        "Porque o JSON não consegue levar mensagens de erro muito longas",
+        "Porque uma resposta com o código 500 não pode levar corpo nenhum junto",
+        "Porque a mensagem de erro do banco sempre vem escrita em inglês",
+        "Para não revelar detalhes internos (tabelas, SQL) a quem chama a API"
+      ],
+      "correta": 3,
+      "explicacao": "Detalhes do erro ajudam um atacante. O erro completo vai para o log do servidor; o cliente recebe só uma mensagem simples."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre os códigos de status 200 e 201.\n\nNa sua resposta:\n1. diga o que o 200 indica;\n2. diga o que o 201 indica e em que situação se usa.",
+      "respostasAceitas": [
+        "200 indica sucesso geral (ex.: consulta ou atualização deu certo). 201 indica que um recurso novo foi criado, usado após um cadastro com POST."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) OK/sucesso; 2) criado, depois de um cadastro."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "http-401-403",
+      "enunciado": "Explique a diferença entre os códigos 401 e 403.\n\nNa sua resposta:\n1. diga quando se usa o 401;\n2. diga quando se usa o 403;\n3. dê um exemplo de cada num sistema de clínica.",
+      "respostasAceitas": [
+        "401: o cliente não está autenticado (sem token, token inválido, senha errada). 403: está autenticado, mas não tem permissão. Ex.: sem login ao ver a agenda = 401; recepcionista tentando abrir a área do administrador = 403."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) falta/erro de autenticação; 2) sem permissão; 3) exemplos coerentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "http-422",
+      "enunciado": "Muitas APIs diferenciam os códigos 400 e 422. Explique essa diferença.\n\nNa sua resposta:\n1. diga quando se usa o 400;\n2. diga quando se usa o 422;\n3. dê um exemplo de cada.",
+      "respostasAceitas": [
+        "400: a requisição está malformada e nem dá para ler direito (JSON quebrado, campo com tipo errado). 422: a requisição está bem formada, mas os dados não passam nas regras (idade negativa, e-mail sem @)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) requisição malformada; 2) dados válidos no formato mas inválidos na regra; 3) exemplos. Aceitar se disser que algumas APIs usam 400 para os dois."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique o que significa o código de status 204 e em que situação ele é usado.\n\nNa sua resposta:\n1. diga o que o 204 informa;\n2. dê um exemplo de rota que costuma devolvê-lo.",
+      "respostasAceitas": [
+        "204 (No Content) indica sucesso sem nada no corpo da resposta. Ex.: DELETE /livros/5, que apaga e não precisa devolver dados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sucesso sem conteúdo; 2) normalmente DELETE (ou atualização sem retorno)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "http-409",
+      "enunciado": "Veja um trecho da rota de cadastro de clientes de uma academia:\n```js\nconst existe = await buscarPorEmail(req.body.email);\nif (existe) return res.status(409).json({ erro: 'E-mail já cadastrado' });\n```\n\nNa sua resposta:\n1. diga o que o trecho faz;\n2. explique por que o código usado é 409.",
+      "respostasAceitas": [
+        "Procura um cliente com o e-mail enviado; se já existir, encerra a rota respondendo 409 com a mensagem. 409 (Conflict) porque o pedido conflita com um registro que já existe."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) verifica e-mail repetido e recusa o cadastro; 2) conflito com dado já existente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na API de uma clínica, a rota `GET /pacientes/:id` devolve os dados de qualquer paciente. Um paciente logado percebeu que, trocando o número na URL, vê os dados de outras pessoas.\n\nNa sua resposta:\n1. explique por que trocar o número funciona;\n2. diga o que a API deveria conferir antes de responder;\n3. diga qual código usar quando o acesso não é permitido.",
+      "respostasAceitas": [
+        "A rota só usa o id da URL e não confere quem está pedindo. A API deveria ler o token (Authorization), ver quem é o usuário e checar se ele pode ver aquele paciente. Se não puder, responde 403."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) não há checagem de permissão, só o id; 2) conferir o usuário do token e se o dado é dele; 3) 403 (aceitar 404 se justificar esconder a existência)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique o que indicam as famílias de códigos 2xx e 3xx.\n\nNa sua resposta:\n1. diga o que indica a família 2xx, com um exemplo;\n2. diga o que indica a família 3xx, com um exemplo.",
+      "respostasAceitas": [
+        "2xx indica sucesso (ex.: 200 OK, 201 Created). 3xx indica redirecionamento, o recurso está em outro lugar (ex.: 301 Moved Permanently)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sucesso, ex. 200/201/204; 2) redirecionamento, ex. 301/302/304."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja a rota de um hotel:\n```js\napp.post('/reservas', async (req, res) => {\n  if (!req.body.quarto) return res.status(400).json({ erro: 'quarto é obrigatório' });\n  try {\n    const r = await salvarReserva(req.body);\n    res.status(201).json(r);\n  } catch (e) {\n    res.status(500).json({ erro: 'Erro ao salvar' });\n  }\n});\n```\n\nNa sua resposta:\n1. diga o que o cliente recebe se não mandar o quarto;\n2. diga o que recebe se tudo der certo;\n3. diga o que recebe se o banco falhar.",
+      "respostasAceitas": [
+        "Sem quarto: 400 com { erro: 'quarto é obrigatório' }. Tudo certo: 201 com a reserva salva. Banco falhou: 500 com { erro: 'Erro ao salvar' }."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 400 e a mensagem; 2) 201 e a reserva; 3) 500 e a mensagem genérica."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "http-200-erro",
+      "enunciado": "Uma API de biblioteca responde tudo com o código 200 e, quando dá errado, manda `{ \"sucesso\": false, \"motivo\": \"Livro não encontrado\" }`.\n\nNa sua resposta:\n1. explique por que isso atrapalha quem usa a API;\n2. diga qual código deveria ser usado nesse caso.",
+      "respostasAceitas": [
+        "Os clientes (apps, fetch, ferramentas, monitoramento) decidem pelo código de status. Com 200 o erro parece sucesso, e cada app precisa ler o corpo para descobrir que falhou. O certo seria 404."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o status diz sucesso e engana o cliente/ferramentas; 2) 404."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "http-404-express",
+      "enunciado": "Numa API de biblioteca aparece a linha `res.status(404).json({ erro: 'Livro não encontrado' });`.\n\nNa sua resposta:\n1. diga o que o código 404 informa;\n2. diga o que vai no corpo da resposta;\n3. diga em que situação essa linha deve rodar.",
+      "respostasAceitas": [
+        "404 informa que o recurso pedido não foi encontrado. O corpo é um JSON com a mensagem de erro. Roda quando o livro pedido (pelo id) não existe."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) não encontrado; 2) JSON com a mensagem; 3) quando o livro não existe."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "http-express-origem",
+      "enunciado": "Numa API Express, os dados da requisição podem estar em `req.params`, `req.query` ou `req.body`. Explique a diferença entre eles.\n\nNa sua resposta:\n1. diga o que fica em req.params;\n2. diga o que fica em req.query;\n3. diga o que fica em req.body.",
+      "respostasAceitas": [
+        "req.params: os parâmetros do caminho da rota (como o :id de /alunos/:id). req.query: os parâmetros depois do ? na URL. req.body: os dados enviados no corpo (JSON ou formulário)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) parâmetros de rota; 2) query string; 3) corpo da requisição."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "http-301",
+      "enunciado": "O endereço antigo do site de um cinema responde com `301 Moved Permanently` e o cabeçalho `Location: https://cinema.exemplo.com/programacao`.\n\nNa sua resposta:\n1. diga o que o 301 informa;\n2. diga para que serve o cabeçalho Location;\n3. diga o que o navegador faz ao receber essa resposta.",
+      "respostasAceitas": [
+        "301 informa que o recurso mudou de endereço para sempre. Location diz qual é o novo endereço. O navegador faz sozinho uma nova requisição para o endereço do Location."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mudança permanente; 2) novo endereço; 3) segue/redireciona automaticamente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "http-return-res",
+      "enunciado": "Veja a rota de uma loja:\n```js\napp.get('/produtos/:id', async (req, res) => {\n  const p = await buscarProduto(req.params.id);\n  if (!p) res.status(404).json({ erro: 'Não encontrado' });\n  res.json(p);\n});\n```\nQuando o produto não existe, o servidor mostra um erro dizendo que a resposta já tinha sido enviada.\n\nNa sua resposta:\n1. explique por que o erro acontece;\n2. explique o papel do return nesse tipo de if.",
+      "respostasAceitas": [
+        "Falta o return no if: depois de responder 404, a função continua e chama res.json(p), tentando responder de novo. Cada requisição só pode ter uma resposta. O return encerra a função logo após a resposta de erro."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) duas respostas para a mesma requisição; 2) o return para a execução depois de responder."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique o que significa o código de status 500.\n\nNa sua resposta:\n1. diga de quem é a falha;\n2. dê um exemplo de situação que gera 500.",
+      "respostasAceitas": [
+        "500 (Internal Server Error) indica que a falha foi no servidor, não na requisição do cliente. Ex.: o banco de dados caiu ou houve um erro não tratado no código."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) do servidor; 2) banco fora do ar, erro no código, exceção não tratada etc."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolo HTTP",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Descreva o caminho de uma requisição `POST /alunos` com corpo JSON numa API Express, desde a chegada até a resposta 201.\n\nNa sua resposta:\n1. diga como o Express consegue ler o corpo JSON;\n2. diga o que a rota faz com os dados;\n3. diga o que o cliente recebe no fim.",
+      "respostasAceitas": [
+        "O middleware express.json() lê o corpo JSON e coloca em req.body. A rota app.post('/alunos') valida e salva os dados do aluno. No fim responde res.status(201).json(aluno): status 201 com o aluno cadastrado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) express.json() preenche req.body; 2) valida e salva no banco; 3) 201 com o aluno em JSON."
+    }
+  ]
+}
