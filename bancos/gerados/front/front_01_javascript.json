@@ -1,0 +1,2426 @@
+{
+  "nome": "Programação Front-End — JavaScript (a revisar)",
+  "materia": "Programação Front-End",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na calculadora de troco da cantina, o programador testou a linha abaixo. O que aparece no console?\n```js\nconsole.log(10 + 5 * 2);\n```",
+      "alternativas": [
+        "`30`",
+        "`25`",
+        "`20`",
+        "`17`"
+      ],
+      "correta": 2,
+      "explicacao": "A multiplicação é feita antes da soma: 5 * 2 = 10 e depois 10 + 10 = 20. Para dar 30 seria preciso escrever (10 + 5) * 2."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site da papelaria, o campo de quantidade chega como texto. O que o código abaixo mostra no console?\n```js\nlet total = \"10\" + 5;\nconsole.log(total);\n```",
+      "alternativas": [
+        "`105`, porque o + junta o texto com o número",
+        "`15`, porque o + sempre soma os valores",
+        "Dá erro, porque não dá para somar texto e número",
+        "`NaN`, porque \"10\" não é um número"
+      ],
+      "correta": 0,
+      "explicacao": "Quando um dos lados do + é texto (string), o JavaScript concatena: \"10\" + 5 vira o texto \"105\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que o código abaixo mostra no console?\n```js\nconsole.log(\"10\" - 4, \"3\" * \"2\");\n```",
+      "alternativas": [
+        "`104 32`",
+        "`6 32`",
+        "`NaN NaN`",
+        "`6 6`"
+      ],
+      "correta": 3,
+      "explicacao": "Só o + concatena textos. Os operadores -, * e / convertem os textos em números: \"10\" - 4 = 6 e \"3\" * \"2\" = 6."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na padaria, os pães são embalados de 2 em 2 e o sistema precisa saber se a quantidade `qtd` é par. Qual expressão dá `true` quando `qtd` é par?",
+      "alternativas": [
+        "`qtd / 2 === 0`",
+        "`qtd % 2 === 0`",
+        "`qtd % 2 === 1`",
+        "`qtd * 2 === 0`"
+      ],
+      "correta": 1,
+      "explicacao": "O operador % devolve o resto da divisão. Número par dividido por 2 tem resto 0. qtd / 2 === 0 só seria verdade para qtd igual a 0."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na fila de atendimento da clínica, o contador muda assim. O que aparece no console?\n```js\nlet fila = 5;\nfila++;\nfila += 3;\nconsole.log(fila);\n```",
+      "alternativas": [
+        "`8`",
+        "`9`",
+        "`6`",
+        "`53`"
+      ],
+      "correta": 1,
+      "explicacao": "fila++ soma 1 (fica 6) e fila += 3 soma mais 3 (fica 9)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No cadastro da academia, a variável `idade` vale 18. O que mostra `console.log(idade >= 18);`?",
+      "alternativas": [
+        "`false`",
+        "`18`",
+        "`undefined`",
+        "`true`"
+      ],
+      "correta": 3,
+      "explicacao": "O operador >= (maior ou igual) compara e devolve um valor lógico. 18 é igual a 18, então o resultado é true."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que o código abaixo mostra no console?\n```js\nconsole.log(\"7\" != 7, \"7\" !== 7);\n```",
+      "alternativas": [
+        "`false true`",
+        "`true false`",
+        "`true true`",
+        "`false false`"
+      ],
+      "correta": 0,
+      "explicacao": "!= compara só o valor (converte \"7\" em 7, então eles são iguais e != dá false). !== compara valor e tipo: texto e número são tipos diferentes, então dá true."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No cinema, só entra quem tem ingresso E é maior de idade. O que aparece no console?\n```js\nconst temIngresso = true;\nconst maiorDeIdade = false;\nconsole.log(temIngresso && maiorDeIdade);\n```",
+      "alternativas": [
+        "`true`",
+        "`undefined`",
+        "`false`",
+        "`truefalse`"
+      ],
+      "correta": 2,
+      "explicacao": "O operador && (E) só dá true quando os dois lados são true. Como maiorDeIdade é false, o resultado é false."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na academia, a entrada é liberada se o aluno pagou a mensalidade OU tem cortesia. O que aparece no console?\n```js\nconst pago = false;\nconst cortesia = true;\nconsole.log(pago || cortesia, !pago);\n```",
+      "alternativas": [
+        "`true true`",
+        "`false true`",
+        "`true false`",
+        "`false false`"
+      ],
+      "correta": 0,
+      "explicacao": "|| (OU) dá true se pelo menos um lado for true: false || true = true. O ! inverte o valor: !false = true."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que o código abaixo mostra no console?\n```js\nconsole.log(true || false && false);\n```",
+      "alternativas": [
+        "`false`, porque a expressão é lida da esquerda para a direita",
+        "`false`, porque basta um false para tudo virar false",
+        "`true`, porque o && é resolvido antes do ||",
+        "Dá erro, porque faltam parênteses na expressão"
+      ],
+      "correta": 2,
+      "explicacao": "O && tem prioridade sobre o ||. Primeiro false && false = false; depois true || false = true."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No contador de visitas do site, o programador testou o pós-incremento. O que aparece no console?\n```js\nlet x = 5;\nconsole.log(x++ + 2, x);\n```",
+      "alternativas": [
+        "`8 6`",
+        "`7 6`",
+        "`7 5`",
+        "`8 5`"
+      ],
+      "correta": 1,
+      "explicacao": "x++ (pós-incremento) usa o valor atual (5) na conta e só depois soma 1. Então x++ + 2 = 7, e em seguida x vale 6."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num sistema da escola, as turmas foram guardadas como texto. O que mostra `console.log(\"10\" < \"9\");`?",
+      "alternativas": [
+        "`false`, porque 10 é maior que 9",
+        "`false`, porque textos não podem ser comparados com <",
+        "Dá erro, porque < só funciona com números",
+        "`true`, porque textos são comparados caractere por caractere"
+      ],
+      "correta": 3,
+      "explicacao": "Quando os dois lados são texto, a comparação é feita letra por letra, como no dicionário. O caractere \"1\" vem antes de \"9\", então \"10\" < \"9\" dá true. Com números (10 < 9) daria false."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que mostra `console.log(2 ** 3);`?",
+      "alternativas": [
+        "`6`",
+        "`5`",
+        "`9`",
+        "`8`"
+      ],
+      "correta": 3,
+      "explicacao": "** é o operador de potência: 2 elevado a 3 = 2 × 2 × 2 = 8."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No boletim da escola, a média mínima para aprovação é 7. O que aparece no console?\n```js\nconst nota = 6.5;\nconst situacao = nota >= 7 ? \"Aprovado\" : \"Recuperação\";\nconsole.log(situacao);\n```",
+      "alternativas": [
+        "`Aprovado`",
+        "`Recuperação`",
+        "`true`",
+        "`6.5`"
+      ],
+      "correta": 1,
+      "explicacao": "O operador ternário (condição ? valorSeVerdadeiro : valorSeFalso) devolve o primeiro valor se a condição for true. 6.5 >= 7 é false, então devolve \"Recuperação\"."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega escreveu três linhas parecidas no sistema da biblioteca:\n```js\nlet codigo = 5;\nconsole.log(codigo == \"5\");\nconsole.log(codigo === \"5\");\n```\nExplique a diferença entre `=`, `==` e `===` neste código.\n\nNa sua resposta:\n1. diga o que o `=` faz na primeira linha;\n2. diga o que cada `console.log` mostra e por quê.",
+      "respostasAceitas": [
+        "1) O = atribui: guarda 5 na variável codigo. 2) codigo == \"5\" mostra true, porque == compara só o valor (converte o texto); codigo === \"5\" mostra false, porque === compara valor e tipo (número ≠ texto)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) = é atribuição, não comparação; 2) == dá true (só valor) e === dá false (valor e tipo diferentes)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No pet shop, o desconto é calculado assim:\n```js\nif (valor > 100 && clienteFiel) {\n  desconto = valor * 0.1;\n}\n```\nExplique quando o desconto é aplicado.\n\nNa sua resposta:\n1. diga em que situação o desconto acontece;\n2. explique o que mudaria se o `&&` fosse trocado por `||`.",
+      "respostasAceitas": [
+        "1) Só quando a compra passa de R$ 100 e o cliente é fiel ao mesmo tempo; o desconto é 10% do valor. 2) Com || bastaria uma das condições: qualquer cliente fiel ou qualquer compra acima de R$ 100 ganharia desconto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) as duas condições verdadeiras (&& = E), desconto de 10%; 2) com || (OU) basta uma condição, então mais clientes ganham desconto."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno calculou a média de duas notas assim, com n1 = 6 e n2 = 8:\n```js\nconst mediaA = n1 + n2 / 2;\nconst mediaB = (n1 + n2) / 2;\n```\nOs resultados foram diferentes.\n\nNa sua resposta:\n1. diga quanto vale cada variável;\n2. explique por que os resultados são diferentes e qual está certo.",
+      "respostasAceitas": [
+        "1) mediaA = 10 e mediaB = 7. 2) Sem parênteses a divisão é feita antes da soma (6 + 4); com parênteses soma primeiro e depois divide. A certa é mediaB."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 10 e 7; 2) precedência: / antes de +; os parênteses forçam a soma primeiro; mediaB é a média correta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O professor de Educação Física tem 23 alunos e quer formar grupos de 4. O sistema usa:\n```js\nconst grupos = Math.floor(23 / 4);\nconst sobra = 23 % 4;\n```\nNa sua resposta:\n1. diga quanto vale `grupos` e quanto vale `sobra`;\n2. explique o que o operador `%` calcula.",
+      "respostasAceitas": [
+        "1) grupos vale 5 e sobra vale 3. 2) O % dá o resto da divisão: 23 dividido por 4 dá 5 grupos completos e sobram 3 alunos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 5 e 3; 2) % é o resto da divisão inteira."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na loja de games, o campo de quantidade é lido assim e o cliente digitou 3:\n```js\nconst qtd = document.querySelector(\"#qtd\").value;\nconst total = qtd + 2;\n```\nO programador esperava 5, mas `total` ficou `\"32\"`.\n\nNa sua resposta:\n1. explique por que o resultado foi \"32\";\n2. diga que conversão resolveria o problema e por quê.",
+      "respostasAceitas": [
+        "1) O value de um campo sempre vem como texto; texto + número faz concatenação (\"3\" + 2 = \"32\"). 2) Converter para número antes, com Number(qtd) ou parseInt(qtd); aí o + soma e dá 5."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) value é string e o + junta textos; 2) Number/parseInt/parseFloat transformam em número e o + passa a somar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site da escola, aparece um aviso conforme o código:\n```js\nif (!usuarioLogado) {\n  aviso.textContent = \"Faça login para ver suas notas\";\n}\n```\nNa sua resposta:\n1. diga o que o operador `!` faz;\n2. explique em que situação o aviso aparece.",
+      "respostasAceitas": [
+        "1) O ! é o NÃO lógico: inverte true para false e false para true. 2) O aviso aparece quando usuarioLogado é false, ou seja, quando a pessoa não está logada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) negação; 2) aparece quando usuarioLogado é false (usuário não logado)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que aparece no console?\n```js\nfunction dobro(n) {\n  return n * 2;\n}\nconsole.log(dobro(4));\n```",
+      "alternativas": [
+        "`4`",
+        "`n * 2`",
+        "`8`",
+        "`undefined`"
+      ],
+      "correta": 2,
+      "explicacao": "A função recebe 4 no parâmetro n e devolve (return) 4 * 2 = 8, que é mostrado pelo console.log."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual arrow function faz o mesmo que `function somar(a, b) { return a + b; }`?",
+      "alternativas": [
+        "`const somar = (a, b) => a + b;`",
+        "`const somar = (a, b) => { a + b };`",
+        "`const somar => (a, b) a + b;`",
+        "`const somar = (a, b) = a + b;`"
+      ],
+      "correta": 0,
+      "explicacao": "Na arrow function sem chaves, o valor depois de => é devolvido automaticamente. Com chaves, é preciso escrever return; sem ele a função devolve undefined."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que aparece no console quando o código abaixo roda?\n```js\nfunction saudar(nome) {\n  console.log(\"Oi, \" + nome);\n}\nconst r = saudar(\"Ana\");\nconsole.log(r);\n```",
+      "alternativas": [
+        "Só `Oi, Ana`",
+        "`Oi, Ana` e depois `undefined`",
+        "`Oi, Ana` duas vezes",
+        "`undefined` e depois `Oi, Ana`"
+      ],
+      "correta": 1,
+      "explicacao": "A função mostra \"Oi, Ana\", mas não tem return. Função sem return devolve undefined, que é o que fica em r e aparece no segundo console.log."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que aparece no console?\n```js\nconst triplo = n => { n * 3 };\nconsole.log(triplo(2));\n```",
+      "alternativas": [
+        "`undefined`",
+        "`6`",
+        "`n * 3`",
+        "`NaN`"
+      ],
+      "correta": 0,
+      "explicacao": "Com chaves, a arrow function vira um bloco comum e precisa de return. Sem return, ela faz a conta e descarta, devolvendo undefined."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No sistema de entregas da pizzaria, o frete tem um valor padrão. O que aparece no console?\n```js\nfunction frete(valor, taxa = 10) {\n  return valor + taxa;\n}\nconsole.log(frete(50), frete(50, 0));\n```",
+      "alternativas": [
+        "`60 60`",
+        "`50 50`",
+        "`NaN 50`",
+        "`60 50`"
+      ],
+      "correta": 3,
+      "explicacao": "Se o argumento taxa não for passado, ele usa o valor padrão 10 (50 + 10 = 60). Na segunda chamada foi passado 0, então 50 + 0 = 50."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que acontece quando o código abaixo roda?\n```js\nfunction preparar() {\n  let x = 1;\n}\npreparar();\nconsole.log(x);\n```",
+      "alternativas": [
+        "Mostra `1`, porque a função já foi chamada",
+        "Mostra `undefined`, porque `x` não tem return",
+        "Dá erro, porque `x` só existe dentro da função",
+        "Mostra `x`, porque a variável não tem valor fora"
+      ],
+      "correta": 2,
+      "explicacao": "Variável criada com let dentro da função só existe ali (escopo local). Fora dela, x não existe e o JavaScript gera ReferenceError: x is not defined."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que aparece no console?\n```js\nconsole.log(Math.round(2.5), Math.floor(2.9), Math.ceil(2.1));\n```",
+      "alternativas": [
+        "`3 3 2`",
+        "`2 2 3`",
+        "`3 2 3`",
+        "`3 2 2`"
+      ],
+      "correta": 2,
+      "explicacao": "Math.round arredonda para o inteiro mais próximo (2.5 vai para 3), Math.floor sempre arredonda para baixo (2) e Math.ceil sempre para cima (3)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No placar do campeonato da escola, as pontuações são 3, 9 e 4. O que mostra `console.log(Math.max(3, 9, 4));`?",
+      "alternativas": [
+        "`3`",
+        "`16`",
+        "`4`",
+        "`9`"
+      ],
+      "correta": 3,
+      "explicacao": "Math.max devolve o maior dos valores recebidos. Math.min devolveria o menor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na lanchonete, o preço precisa aparecer com duas casas decimais. O que aparece no console?\n```js\nconst preco = 12.5;\nconsole.log(\"R$ \" + preco.toFixed(2));\n```",
+      "alternativas": [
+        "`R$ 12.50`",
+        "`R$ 12,50`",
+        "`R$ 12.5`",
+        "`R$ 13`"
+      ],
+      "correta": 0,
+      "explicacao": "toFixed(2) transforma o número em texto com 2 casas decimais, usando ponto: \"12.50\". Para vírgula seria preciso outro recurso, como toLocaleString."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que mostra `console.log(Math.pow(3, 2) + Math.sqrt(16));`?",
+      "alternativas": [
+        "`10`",
+        "`13`",
+        "`22`",
+        "`17`"
+      ],
+      "correta": 1,
+      "explicacao": "Math.pow(3, 2) é 3 elevado a 2 = 9 e Math.sqrt(16) é a raiz quadrada de 16 = 4. 9 + 4 = 13."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que mostra o código abaixo?\n```js\nconst nome = \"Biblioteca\";\nconsole.log(nome.length);\n```",
+      "alternativas": [
+        "`9`",
+        "`11`",
+        "`10`",
+        "`Biblioteca`"
+      ],
+      "correta": 2,
+      "explicacao": "length conta os caracteres do texto: B-i-b-l-i-o-t-e-c-a = 10."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No cartaz do pet shop, o texto `\"pet shop\"` precisa ficar todo em letras maiúsculas. Qual expressão faz isso?",
+      "alternativas": [
+        "`\"pet shop\".toUpperCase()`",
+        "`\"pet shop\".upperCase()`",
+        "`\"pet shop\".toUpper()`",
+        "`toUpperCase(\"pet shop\")`"
+      ],
+      "correta": 0,
+      "explicacao": "O método de texto é toUpperCase(), chamado a partir do próprio texto (texto.toUpperCase()). upperCase e toUpper não existem em JavaScript, e toUpperCase não é uma função solta. toLowerCase faria o contrário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que aparece no console?\n```js\nconst p = \"Pizza\";\nconsole.log(p[0], p[p.length - 1]);\n```",
+      "alternativas": [
+        "`P z`",
+        "`i a`",
+        "`P undefined`",
+        "`P a`"
+      ],
+      "correta": 3,
+      "explicacao": "As posições começam em 0: p[0] é \"P\". p.length é 5, então p[4] é a última letra, \"a\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No cardápio da lanchonete, só cabem 4 letras na etiqueta. O que mostra `console.log(\"Hamburguer\".slice(0, 4));`?",
+      "alternativas": [
+        "`Hamba`",
+        "`Hamb`",
+        "`amb`",
+        "`Hambu`"
+      ],
+      "correta": 1,
+      "explicacao": "slice(0, 4) pega do índice 0 até antes do índice 4, ou seja, as posições 0, 1, 2 e 3: \"Hamb\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No cadastro da escola, o sistema confere o e-mail. O que aparece no console?\n```js\nconst email = \"ana@escola.com\";\nconsole.log(email.includes(\"@\"), email.indexOf(\"@\"));\n```",
+      "alternativas": [
+        "`true 4`",
+        "`true 3`",
+        "`3 true`",
+        "`false -1`"
+      ],
+      "correta": 1,
+      "explicacao": "includes diz se o texto contém o trecho (true). indexOf dá a posição da primeira ocorrência, contando a partir de 0: a(0) n(1) a(2) @(3)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No sistema da clínica, a data do agendamento foi tratada assim. O que aparece no console?\n```js\nconsole.log(\"12/05/2026\".replace(\"/\", \"-\"));\n```",
+      "alternativas": [
+        "`12-05-2026`",
+        "`12/05/2026`",
+        "`12-05-2026-`",
+        "`12-05/2026`"
+      ],
+      "correta": 3,
+      "explicacao": "Com um texto como primeiro argumento, replace troca só a primeira ocorrência. Para trocar todas, usa-se replaceAll(\"/\", \"-\")."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na lista de compras do mercadinho, os itens vêm num texto separado por vírgulas. O que aparece no console?\n```js\nconst itens = \"arroz,feijao,ovo\".split(\",\");\nconsole.log(itens[1], itens.length);\n```",
+      "alternativas": [
+        "`feijao 3`",
+        "`arroz 3`",
+        "`feijao 2`",
+        "`arroz,feijao 3`"
+      ],
+      "correta": 0,
+      "explicacao": "split(\",\") quebra o texto num array: [\"arroz\", \"feijao\", \"ovo\"]. O índice 1 é \"feijao\" e o array tem 3 itens."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que aparece no console?\n```js\nconst nome = \"Leo\";\nconst idade = 16;\nconsole.log(`${nome} tem ${idade} anos`);\n```",
+      "alternativas": [
+        "${nome} tem ${idade} anos",
+        "nome tem idade anos",
+        "Leo tem 16 anos",
+        "Leo tem idade anos"
+      ],
+      "correta": 2,
+      "explicacao": "Template string (texto entre crases) troca cada ${...} pelo valor da variável ou expressão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No sistema de consultas da clínica, a data foi criada assim. O que aparece no console?\n```js\nconst d = new Date(2026, 0, 15);\nconsole.log(d.getMonth(), d.getDate());\n```",
+      "alternativas": [
+        "`0 15`",
+        "`1 15`",
+        "`0 4`",
+        "`1 4`"
+      ],
+      "correta": 0,
+      "explicacao": "Em new Date(ano, mês, dia) os meses começam em 0 (janeiro = 0). getMonth() devolve 0 e getDate() devolve o dia do mês, 15. getDay() é que daria o dia da semana."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O rodapé do site da academia deve mostrar o ano atual automaticamente. Qual expressão devolve o ano com 4 dígitos?",
+      "alternativas": [
+        "`new Date().getDay()`",
+        "`new Date().getDate()`",
+        "`new Date().getFullYear()`",
+        "`new Date().getMonth()`"
+      ],
+      "correta": 2,
+      "explicacao": "getFullYear devolve o ano (ex.: 2026). getDay é o dia da semana (0 a 6), getDate é o dia do mês e getMonth é o mês (0 a 11)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A clínica não abre aos domingos. O site mostra um aviso com o código abaixo. Quando o aviso aparece?\n```js\nconst hoje = new Date();\nif (hoje.getDay() === 0) {\n  aviso.textContent = \"Hoje estamos fechados\";\n}\n```",
+      "alternativas": [
+        "No dia 1º de cada mês, porque o dia começa em 0",
+        "Aos domingos, porque getDay() devolve 0 para domingo",
+        "Em janeiro, porque os meses começam em 0",
+        "Nunca, porque getDay() começa em 1"
+      ],
+      "correta": 1,
+      "explicacao": "getDay() devolve o dia da semana de 0 a 6, começando no domingo (0) e terminando no sábado (6)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Duas formas de calcular a área de um quadrado aparecem no projeto da oficina:\n```js\nfunction area(lado) { return lado * lado; }\nconst area2 = lado => lado * lado;\n```\nNa sua resposta:\n1. diga o que as duas funções devolvem para `lado = 3`;\n2. explique a diferença de escrita entre elas.",
+      "respostasAceitas": [
+        "1) As duas devolvem 9. 2) A primeira é uma função declarada com function e return; a segunda é uma arrow function, mais curta, que devolve automaticamente a expressão depois de => (sem chaves e sem return)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 9 nas duas; 2) function + return vs arrow (=>) com retorno implícito; fazem a mesma coisa."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na sorveteria, a função abaixo deveria calcular o total, mas `t` ficou `undefined`:\n```js\nfunction calcular(preco, qtd) {\n  console.log(preco * qtd);\n}\nconst t = calcular(8, 3);\n```\nNa sua resposta:\n1. diga o que aparece no console e o que fica guardado em `t`;\n2. explique a diferença entre mostrar com `console.log` e devolver com `return`.",
+      "respostasAceitas": [
+        "1) Aparece 24 no console, mas t fica undefined. 2) console.log só mostra o valor na tela do console; return devolve o valor para quem chamou a função, e só assim ele pode ser guardado numa variável."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 24 no console, t = undefined; 2) return devolve o resultado para uso no resto do código; console.log apenas exibe."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No sistema da escola:\n```js\nfunction boasVindas(nome, turma) {\n  return \"Olá, \" + nome + \" da turma \" + turma;\n}\nboasVindas(\"Rafa\", \"2B\");\nboasVindas(\"Lia\");\n```\nNa sua resposta:\n1. explique o que são parâmetros e o que são argumentos neste código;\n2. diga o que a segunda chamada devolve e por quê.",
+      "respostasAceitas": [
+        "1) Parâmetros são nome e turma (as \"variáveis\" da função); argumentos são os valores passados na chamada, como \"Rafa\" e \"2B\". 2) Devolve \"Olá, Lia da turma undefined\", porque o argumento de turma não foi passado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) parâmetro = nome na definição; argumento = valor na chamada; 2) turma fica undefined e aparece no texto."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Para sortear um aluno para apresentar o trabalho, o professor usa:\n```js\nconst nomes = [\"Ana\", \"Bruno\", \"Caio\", \"Duda\"];\nconst sorteado = nomes[Math.floor(Math.random() * nomes.length)];\n```\nNa sua resposta:\n1. explique por que o `Math.random()` é multiplicado por `nomes.length`;\n2. explique por que é usado `Math.floor` e não `Math.round`.",
+      "respostasAceitas": [
+        "1) Math.random() dá um número de 0 até menos de 1; vezes 4 (o tamanho da lista) vai de 0 até menos de 4. 2) Math.floor arredonda para baixo, dando 0, 1, 2 ou 3, que são índices válidos. Math.round poderia dar 4, que não existe na lista, e ainda deixaria as pontas com menos chance."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) para a faixa ir até o tamanho da lista; 2) floor gera índices 0 a length−1; round pode gerar índice inválido (undefined) e distribui mal."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No cadastro da academia, o código confere os campos assim:\n```js\nif (nome.trim() === \"\") {\n  msg.textContent = \"Preencha o nome\";\n} else if (senha.length < 8) {\n  msg.textContent = \"A senha precisa de 8 caracteres\";\n}\n```\nNa sua resposta:\n1. explique por que foi usado `trim()` antes de comparar o nome;\n2. diga o que `senha.length < 8` verifica.",
+      "respostasAceitas": [
+        "1) trim() tira os espaços do começo e do fim; assim, um nome só com espaços conta como vazio. 2) Verifica se a senha tem menos de 8 caracteres; se tiver, mostra o aviso."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) evitar que espaços em branco passem como nome; 2) length conta os caracteres; menos de 8 gera a mensagem."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O site da padaria mostra uma saudação:\n```js\nconst hora = new Date().getHours();\nif (hora < 12) saudacao.textContent = \"Bom dia!\";\nelse if (hora < 18) saudacao.textContent = \"Boa tarde!\";\nelse saudacao.textContent = \"Boa noite!\";\n```\nNa sua resposta:\n1. diga o que aparece para quem abre o site às 14h;\n2. explique de onde vem o horário usado pelo código.",
+      "respostasAceitas": [
+        "1) Aparece \"Boa tarde!\", porque 14 não é menor que 12, mas é menor que 18. 2) new Date() pega a data e a hora do relógio do computador ou celular de quem está acessando, e getHours() devolve só a hora (0 a 23)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Boa tarde; 2) do relógio do dispositivo do usuário (o código roda no navegador)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No jogo de cliques, o contador sempre mostra 1, não importa quantas vezes se clique:\n```js\nfunction contar() {\n  let cliques = 0;\n  cliques++;\n  placar.textContent = cliques;\n}\nbotao.addEventListener(\"click\", contar);\n```\nNa sua resposta:\n1. explique por que o placar fica sempre em 1;\n2. diga onde a variável deveria ser declarada para o contador funcionar e por quê.",
+      "respostasAceitas": [
+        "1) A cada clique a função roda de novo e cria cliques = 0 outra vez; soma 1 e mostra 1. 2) A variável deve ser declarada fora da função (let cliques = 0 antes dela), para que o valor seja guardado entre um clique e outro."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) variável local é recriada a cada chamada; 2) declarar fora (escopo externo) para manter o valor."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site da oficina, o cálculo do valor da mão de obra aparece em três páginas diferentes. Um colega sugeriu colocar o cálculo numa função `calcularMaoDeObra(horas)` e chamá-la nas três páginas.\n\nNa sua resposta:\n1. explique uma vantagem de usar a função em vez de repetir o cálculo;\n2. diga o que acontece se o valor da hora mudar.",
+      "respostasAceitas": [
+        "1) O código não fica repetido: escreve uma vez e reaproveita, fica mais organizado e fácil de ler. 2) Basta mudar dentro da função e as três páginas passam a usar o valor novo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) reaproveitamento/organização; 2) manutenção num único lugar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na loja, o total de 3 camisetas de R$ 19,90 foi calculado assim:\n```js\nconst conta = 19.9 * 3;           // 59.699999999999996\nconst total = conta.toFixed(2);   // \"59.70\"\n```\nNa sua resposta:\n1. explique por que a conta não deu exatamente 59.7;\n2. diga o que o `toFixed(2)` faz e de que tipo é o resultado.",
+      "respostasAceitas": [
+        "1) O computador guarda números com casas decimais de forma aproximada (em binário), então às vezes aparecem pequenas sobras. 2) toFixed(2) arredonda para 2 casas decimais e devolve um texto (string), \"59.70\"."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) imprecisão dos números decimais (ponto flutuante); 2) arredonda para 2 casas e o resultado é string, não número."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A página da academia tem o elemento `<h1 id=\"titulo\">Treinos</h1>`. Qual linha seleciona esse elemento?",
+      "alternativas": [
+        "`document.querySelector(\"titulo\")`",
+        "`document.querySelector(\".titulo\")`",
+        "`document.getElementById(\"#titulo\")`",
+        "`document.querySelector(\"#titulo\")`"
+      ],
+      "correta": 3,
+      "explicacao": "querySelector usa seletores CSS: id leva #. Sem o # ele procura uma tag <titulo>; com ponto procura classe. getElementById recebe só o nome do id, sem #."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A página da biblioteca tem o HTML abaixo. O que mostra o `console.log`?\n```html\n<ul>\n  <li>Dom Casmurro</li>\n  <li>O Cortiço</li>\n  <li>Iracema</li>\n</ul>\n```\n```js\nconsole.log(document.querySelectorAll(\"li\").length);\n```",
+      "alternativas": [
+        "`1`",
+        "`0`",
+        "`undefined`",
+        "`3`"
+      ],
+      "correta": 3,
+      "explicacao": "querySelectorAll devolve uma lista (NodeList) com todos os elementos que combinam com o seletor. Há 3 <li>, então length é 3."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na página do hotel, há dois avisos:\n```html\n<p class=\"aviso\">Café das 6h às 10h</p>\n<p class=\"aviso\">Piscina fechada hoje</p>\n```\nO que mostra `console.log(document.querySelector(\".aviso\").textContent);`?",
+      "alternativas": [
+        "`Piscina fechada hoje`",
+        "`Café das 6h às 10h`",
+        "Os dois textos, um em cada linha",
+        "`null`, porque há mais de um elemento"
+      ],
+      "correta": 1,
+      "explicacao": "querySelector devolve só o PRIMEIRO elemento que combina com o seletor. Para pegar todos, usa-se querySelectorAll."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dom-text-html",
+      "enunciado": "Na loja de games, o programador rodou a linha abaixo no elemento `<p id=\"destaque\"></p>`. O que aparece na página?\n```js\ndocument.querySelector(\"#destaque\").textContent = \"<b>Promoção</b>\";\n```",
+      "alternativas": [
+        "A palavra Promoção em negrito",
+        "A palavra Promoção sem negrito e sem tags",
+        "O texto `<b>Promoção</b>`, com as tags aparecendo",
+        "Nada, porque textContent não aceita tags"
+      ],
+      "correta": 2,
+      "explicacao": "textContent coloca o conteúdo como texto puro: as tags não são interpretadas e aparecem escritas na tela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dom-text-html",
+      "enunciado": "Na loja de games, o programador rodou a linha abaixo no elemento `<p id=\"destaque\"></p>`. O que aparece na página?\n```js\ndocument.querySelector(\"#destaque\").innerHTML = \"<b>Promoção</b>\";\n```",
+      "alternativas": [
+        "A palavra Promoção em negrito",
+        "O texto `<b>Promoção</b>`, com as tags aparecendo",
+        "A palavra Promoção sem negrito",
+        "Nada, porque innerHTML só lê o conteúdo"
+      ],
+      "correta": 0,
+      "explicacao": "innerHTML interpreta o texto como HTML: a tag <b> vira negrito de verdade e não aparece escrita."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O menu do site é `<nav id=\"menu\" class=\"menu\">`. Depois de rodar `document.querySelector(\"#menu\").classList.add(\"aberto\");`, como fica o atributo class?",
+      "alternativas": [
+        "`class=\"aberto\"`",
+        "`class=\"menu aberto\"`",
+        "`class=\"menu\"`",
+        "`class=\"menu.aberto\"`"
+      ],
+      "correta": 1,
+      "explicacao": "classList.add acrescenta a classe sem apagar as que já existem. As classes ficam separadas por espaço."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site do cinema, há um botão de modo escuro:\n```js\nbotao.addEventListener(\"click\", () => {\n  document.body.classList.toggle(\"escuro\");\n});\n```\nA página começa sem a classe `escuro`. Depois de 3 cliques, como está o `body`?",
+      "alternativas": [
+        "Com a classe `escuro`",
+        "Sem a classe `escuro`",
+        "Com a classe `escuro` repetida 3 vezes",
+        "Com a classe `escuro3`"
+      ],
+      "correta": 0,
+      "explicacao": "toggle liga a classe se ela não existe e desliga se existe. 1º clique: liga; 2º: desliga; 3º: liga de novo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que acontece na página com o código abaixo?\n```js\nconst btn = document.querySelector(\"#enviar\");\nbtn.addEventListener(\"click\", () => {\n  alert(\"Pedido enviado!\");\n});\n```",
+      "alternativas": [
+        "A mensagem aparece uma vez, assim que a página carrega",
+        "A mensagem aparece só no primeiro clique",
+        "O botão some depois do clique",
+        "A mensagem aparece cada vez que o botão é clicado"
+      ],
+      "correta": 3,
+      "explicacao": "addEventListener registra uma função que roda toda vez que o evento acontece; aqui, o evento é o clique no botão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno escreveu o código abaixo para a página da pizzaria. O que acontece?\n```js\nfunction mostrar() {\n  alert(\"Cardápio do dia\");\n}\nbotao.addEventListener(\"click\", mostrar());\n```",
+      "alternativas": [
+        "O alerta aparece a cada clique no botão, normalmente",
+        "O alerta aparece duas vezes a cada clique no botão",
+        "O alerta aparece ao carregar a página, e o clique não faz nada",
+        "Nada acontece, nem ao carregar nem ao clicar"
+      ],
+      "correta": 2,
+      "explicacao": "Com parênteses, mostrar() é EXECUTADA na hora e o que vai para o addEventListener é o retorno dela (undefined). O certo é passar a função sem parênteses: addEventListener(\"click\", mostrar)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No campo de busca da biblioteca, a lista deve ser filtrada a cada letra digitada. Qual evento do campo deve ser usado?",
+      "alternativas": [
+        "`submit`",
+        "`load`",
+        "`input`",
+        "`dblclick`"
+      ],
+      "correta": 2,
+      "explicacao": "O evento input dispara a cada mudança no valor do campo (cada letra). submit é do formulário, load é do carregamento e dblclick é duplo clique."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O formulário de contato do pet shop tem o código abaixo. O que acontece quando o usuário clica em Enviar?\n```js\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  msg.textContent = \"Mensagem recebida!\";\n});\n```",
+      "alternativas": [
+        "A página recarrega e depois o texto aparece em `msg`",
+        "O formulário é enviado e o texto não aparece",
+        "Os campos do formulário são apagados e a página fecha",
+        "A página não recarrega e o texto aparece em `msg`"
+      ],
+      "correta": 3,
+      "explicacao": "preventDefault cancela o comportamento padrão do envio (recarregar/ir para outra página). Assim, o próprio JavaScript trata os dados e mostra a mensagem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na lista de tarefas da oficina, o código abaixo roda uma vez. O que acontece na página?\n```js\nconst item = document.createElement(\"li\");\nitem.textContent = \"Trocar óleo\";\ndocument.querySelector(\"#tarefas\").appendChild(item);\n```",
+      "alternativas": [
+        "Um novo item \"Trocar óleo\" aparece no fim da lista",
+        "Um novo item \"Trocar óleo\" aparece no começo da lista",
+        "A lista é apagada e fica só \"Trocar óleo\"",
+        "Nada, porque o item não foi colocado no HTML"
+      ],
+      "correta": 0,
+      "explicacao": "createElement cria o elemento na memória; appendChild o coloca como último filho da lista, e aí ele aparece na página."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na página do hotel, qual linha muda a cor de fundo do elemento guardado em `caixa` para amarelo?",
+      "alternativas": [
+        "`caixa.style.background-color = \"yellow\";`",
+        "`caixa.style.backgroundColor = \"yellow\";`",
+        "`caixa.backgroundColor = \"yellow\";`",
+        "`caixa.style = backgroundColor(\"yellow\");`"
+      ],
+      "correta": 1,
+      "explicacao": "No JavaScript, as propriedades CSS com hífen viram camelCase dentro de style: background-color vira backgroundColor. O hífen seria lido como subtração."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No cadastro da escola, o campo é `<input id=\"nome\">` e o aluno digitou \"Bia\". O que fica em `n` depois da linha `const n = document.querySelector(\"#nome\").value;`?",
+      "alternativas": [
+        "O elemento `<input>` inteiro",
+        "O texto `\"nome\"`",
+        "O texto `\"Bia\"`",
+        "`undefined`, porque input não tem conteúdo"
+      ],
+      "correta": 2,
+      "explicacao": "A propriedade value de um campo guarda o que o usuário digitou, sempre como texto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A página da padaria tem o código abaixo. O que acontece ao abrir a página?\n```html\n<head>\n  <script>\n    document.querySelector(\"#msg\").textContent = \"Pão quentinho!\";\n  </script>\n</head>\n<body>\n  <p id=\"msg\"></p>\n</body>\n```",
+      "alternativas": [
+        "Dá erro no console, porque o `<p>` ainda não existe quando o script roda",
+        "O texto \"Pão quentinho!\" aparece normalmente no parágrafo",
+        "O texto aparece no topo da página, fora do parágrafo",
+        "O texto aparece só depois que o usuário clica na página"
+      ],
+      "correta": 0,
+      "explicacao": "O navegador lê o HTML de cima para baixo. O script no <head> roda antes de o <p> existir, então querySelector devolve null e dá erro ao mudar textContent. Soluções: colocar o script no fim do body ou usar defer."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No jogo da escola, o código abaixo controla o contador. O que aparece em `contador` depois de 4 cliques no botão?\n```js\nlet cliques = 0;\nbotao.addEventListener(\"click\", () => {\n  cliques++;\n  contador.textContent = cliques;\n});\n```",
+      "alternativas": [
+        "`1`",
+        "`0`",
+        "`5`",
+        "`4`"
+      ],
+      "correta": 3,
+      "explicacao": "A variável fica fora da função, então guarda o valor entre os cliques: a cada clique soma 1 e mostra o novo valor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A lista de sabores da sorveteria tem um único evento na `<ul>`:\n```js\nlista.addEventListener(\"click\", (e) => {\n  escolhido.textContent = e.target.textContent;\n});\n```\nO usuário clica no `<li>Morango</li>`. O que aparece em `escolhido`?",
+      "alternativas": [
+        "O texto de todos os sabores, porque o evento está na `<ul>`",
+        "`Morango`, porque `e.target` é o elemento que recebeu o clique",
+        "Nada, porque o evento não foi colocado em cada `<li>`",
+        "`UL`, porque `e.target` é sempre quem tem o evento"
+      ],
+      "correta": 1,
+      "explicacao": "O clique no <li> \"sobe\" até a <ul> (propagação). e.target aponta para o elemento clicado de fato, o <li> Morango. Quem tem o evento seria e.currentTarget."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site da clínica, o aviso de manutenção deve sumir da página. Qual linha faz isso com o elemento guardado em `aviso`?",
+      "alternativas": [
+        "`aviso.textContent = \"remove\";`",
+        "`aviso.remove();`",
+        "`aviso.classList.add(\"remove\");`",
+        "`document.remove(aviso.id);`"
+      ],
+      "correta": 1,
+      "explicacao": "remove() tira o elemento do DOM. Mudar textContent troca o texto, e classList.add só acrescenta uma classe (que nem existe no CSS)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No catálogo do pet shop, o código abaixo roda ao abrir a página. O card é `<div class=\"card favorito\">`. O que aparece no console?\n```js\nif (card.classList.contains(\"favorito\")) {\n  console.log(\"É favorito\");\n} else {\n  console.log(\"Não é favorito\");\n}\n```",
+      "alternativas": [
+        "`Não é favorito`",
+        "`true`",
+        "`card favorito`",
+        "`É favorito`"
+      ],
+      "correta": 3,
+      "explicacao": "classList.contains devolve true se o elemento tem a classe. O card tem a classe favorito, então entra no if."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na loja de roupas, a foto é `<img id=\"foto\" src=\"camisa-branca.jpg\">`. O que acontece ao clicar no botão?\n```js\nbtnAzul.addEventListener(\"click\", () => {\n  document.querySelector(\"#foto\").src = \"camisa-azul.jpg\";\n});\n```",
+      "alternativas": [
+        "A imagem da página muda para a camisa azul",
+        "Uma segunda imagem aparece ao lado da primeira",
+        "A imagem some e aparece o texto camisa-azul.jpg",
+        "Nada muda, porque src só pode ser trocado no HTML"
+      ],
+      "correta": 0,
+      "explicacao": "Mudar a propriedade src de uma imagem faz o navegador carregar e mostrar o novo arquivo no mesmo lugar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No chat de atendimento da loja, há o código:\n```js\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.key === \"Enter\") enviar();\n});\n```\nQuando a função `enviar` roda?",
+      "alternativas": [
+        "A cada tecla apertada, qualquer que seja",
+        "Quando o usuário clica em qualquer lugar da página",
+        "Só quando o usuário aperta a tecla Enter",
+        "Uma vez, quando a página termina de carregar"
+      ],
+      "correta": 2,
+      "explicacao": "keydown dispara a cada tecla, mas o if confere e.key: só chama enviar() quando a tecla é Enter."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno ouviu o professor dizer que \"o JavaScript mexe na página pelo DOM\".\n\nNa sua resposta:\n1. explique o que é o DOM;\n2. dê um exemplo do que o JavaScript pode fazer com a página por meio dele.",
+      "respostasAceitas": [
+        "1) DOM é a representação da página que o navegador monta na memória, como uma árvore de elementos (html, body, p, etc.). 2) Pelo DOM o JavaScript pode selecionar um elemento e mudar o texto, a classe, o estilo, criar ou remover elementos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) modelo/árvore de objetos da página criado pelo navegador; 2) qualquer exemplo de leitura ou mudança (texto, classe, criar/remover)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O site do cinema mostra os comentários dos clientes assim:\n```js\ncaixa.innerHTML = comentarioDigitado;\n```\nUm professor disse que é melhor usar `caixa.textContent = comentarioDigitado;`.\n\nNa sua resposta:\n1. explique o risco de usar innerHTML com texto digitado pelo usuário;\n2. explique por que textContent é mais seguro neste caso.",
+      "respostasAceitas": [
+        "1) Com innerHTML, se o usuário digitar tags HTML ou código malicioso, o navegador interpreta e pode bagunçar a página ou executar algo perigoso. 2) textContent trata tudo como texto puro, então as tags só aparecem escritas e não são executadas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) injeção de HTML/script (XSS); 2) textContent não interpreta HTML."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No celular, o menu do site da academia abre e fecha com o botão de \"hambúrguer\":\n```css\n.menu { display: none; }\n.menu.ativo { display: block; }\n```\n```js\nbtnMenu.addEventListener(\"click\", () => menu.classList.toggle(\"ativo\"));\n```\nNa sua resposta:\n1. explique o que acontece no 1º e no 2º clique;\n2. explique por que o JavaScript só troca a classe e não muda o display diretamente.",
+      "respostasAceitas": [
+        "1) No 1º clique a classe ativo é adicionada e o menu aparece; no 2º ela é removida e o menu some. 2) O visual fica no CSS e o JavaScript só liga/desliga a classe; o código fica mais organizado e fácil de mudar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) toggle alterna (abre/fecha); 2) separar comportamento (JS) de aparência (CSS)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O formulário de inscrição da gincana tem este código:\n```js\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const idade = Number(campoIdade.value);\n  if (idade < 14) {\n    erro.textContent = \"Idade mínima: 14 anos\";\n    return;\n  }\n  erro.textContent = \"\";\n  enviarInscricao();\n});\n```\nNa sua resposta:\n1. explique o que acontece quando alguém de 12 anos tenta enviar;\n2. explique o que faz o `return` dentro do if.",
+      "respostasAceitas": [
+        "1) O envio padrão é cancelado, a idade é convertida em número e, como 12 < 14, aparece \"Idade mínima: 14 anos\" e a inscrição não é enviada. 2) O return encerra a função ali mesmo, então as linhas de baixo (limpar erro e enviar) não rodam."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) preventDefault + validação mostra a mensagem e não envia; 2) return interrompe a função."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na página da biblioteca, o `<script src=\"app.js\">` estava no `<head>` e o código dava erro de \"null\". O professor sugeriu duas soluções: mover o script para o fim do `<body>` ou usar `<script src=\"app.js\" defer>`.\n\nNa sua resposta:\n1. explique por que o erro acontecia;\n2. explique por que as duas soluções resolvem.",
+      "respostasAceitas": [
+        "1) O script rodava antes de o navegador ler o body, então os elementos ainda não existiam e o querySelector devolvia null. 2) No fim do body os elementos já foram criados; com defer o navegador baixa o script mas só executa depois de montar todo o HTML."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) elementos ainda não carregados; 2) as duas fazem o script rodar depois que o HTML está pronto."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No catálogo da loja, o aluno quis destacar todos os produtos:\n```js\ndocument.querySelectorAll(\".produto\").classList.add(\"destaque\");\n```\nO console mostrou erro.\n\nNa sua resposta:\n1. explique o que querySelectorAll devolve e por que deu erro;\n2. explique como a ideia deve funcionar para todos os produtos ficarem destacados.",
+      "respostasAceitas": [
+        "1) querySelectorAll devolve uma lista (NodeList) de elementos, e a lista não tem classList, por isso dá erro. 2) É preciso percorrer a lista (com forEach ou um laço) e adicionar a classe em cada elemento."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) NodeList não tem classList (só cada elemento tem); 2) percorrer a lista aplicando em cada um."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Para mostrar um produto esgotado, um colega usou várias linhas:\n```js\ncard.style.opacity = \"0.5\";\ncard.style.border = \"2px solid red\";\ncard.style.cursor = \"not-allowed\";\n```\nOutro colega preferiu `card.classList.add(\"esgotado\");` com as regras no CSS.\n\nNa sua resposta:\n1. diga o que as duas formas fazem na página;\n2. explique uma vantagem de usar a classe.",
+      "respostasAceitas": [
+        "1) As duas deixam o card meio apagado, com borda vermelha e cursor de proibido. 2) Com a classe o estilo fica no CSS, dá para reaproveitar em outros cards e mudar o visual num lugar só; para desfazer, basta remover a classe."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mesmo efeito visual; 2) organização/reaproveitamento/fácil de desfazer."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site do pet shop, cada card de animal tem o código:\n```js\ncard.addEventListener(\"mouseover\", () => detalhes.classList.add(\"visivel\"));\ncard.addEventListener(\"mouseout\", () => detalhes.classList.remove(\"visivel\"));\n```\nNa sua resposta:\n1. explique o que acontece quando o mouse passa por cima do card;\n2. explique o que acontece quando o mouse sai do card.",
+      "respostasAceitas": [
+        "1) Ao entrar com o mouse, a classe visivel é adicionada e os detalhes aparecem. 2) Ao sair, a classe é removida e os detalhes somem de novo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mouseover adiciona a classe (mostra); 2) mouseout remove (esconde)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na lista de compras do mercadinho, o botão \"Adicionar\" roda o código:\n```js\nbtnAdd.addEventListener(\"click\", () => {\n  const li = document.createElement(\"li\");\n  li.textContent = campo.value;\n  lista.appendChild(li);\n  campo.value = \"\";\n});\n```\nO usuário digita \"Arroz\" e clica no botão.\n\nNa sua resposta:\n1. explique o que acontece na lista da página;\n2. explique para que serve a última linha.",
+      "respostasAceitas": [
+        "1) Um novo item <li> com o texto \"Arroz\" é feito pelo createElement e colocado no fim da lista pelo appendChild, aparecendo na página. 2) campo.value = \"\" limpa o campo para o usuário digitar o próximo item."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) novo item \"Arroz\" no fim da lista; 2) esvaziar o campo de texto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que aparece no console?\n```js\nclass Produto {\n  constructor(nome, preco) {\n    this.nome = nome;\n    this.preco = preco;\n  }\n}\nconst p = new Produto(\"Bolo\", 25);\nconsole.log(p.preco);\n```",
+      "alternativas": [
+        "`25`",
+        "`Bolo`",
+        "`preco`",
+        "`undefined`"
+      ],
+      "correta": 0,
+      "explicacao": "new Produto(\"Bolo\", 25) cria um objeto e o constructor guarda os valores em this.nome e this.preco. p.preco é 25."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na linha `const livro = new Livro(\"Iracema\");`, o que o `new` faz?",
+      "alternativas": [
+        "Cria uma cópia da classe com outro nome",
+        "Apaga o objeto livro anterior, se existir",
+        "Cria um objeto novo a partir da classe Livro",
+        "Transforma a classe Livro numa função comum"
+      ],
+      "correta": 2,
+      "explicacao": "new cria uma instância (objeto) da classe e chama o constructor para preencher seus atributos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No sistema da cantina, o saldo do aluno é controlado por uma classe. O que aparece no console?\n```js\nclass Conta {\n  constructor() { this.saldo = 0; }\n  depositar(v) { this.saldo += v; }\n}\nconst c = new Conta();\nc.depositar(50);\nc.depositar(30);\nconsole.log(c.saldo);\n```",
+      "alternativas": [
+        "`30`",
+        "`80`",
+        "`50`",
+        "`0`"
+      ],
+      "correta": 1,
+      "explicacao": "O saldo começa em 0 e cada chamada do método depositar soma o valor ao atributo saldo do mesmo objeto: 0 + 50 + 30 = 80."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que aparece no console?\n```js\nconst pet = { nome: \"Thor\", idade: 3 };\nconsole.log(pet.nome, pet[\"idade\"]);\n```",
+      "alternativas": [
+        "`nome idade`",
+        "`Thor undefined`",
+        "Dá erro por causa dos colchetes",
+        "`Thor 3`"
+      ],
+      "correta": 3,
+      "explicacao": "As propriedades de um objeto podem ser lidas com ponto (pet.nome) ou com colchetes e o nome entre aspas (pet[\"idade\"])."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que aparece no console?\n```js\nclass Contador {\n  constructor() { this.valor = 0; }\n  somar() { this.valor++; }\n}\nconst a = new Contador();\nconst b = new Contador();\na.somar();\na.somar();\nb.somar();\nconsole.log(a.valor, b.valor);\n```",
+      "alternativas": [
+        "`3 3`",
+        "`1 1`",
+        "`2 2`",
+        "`2 1`"
+      ],
+      "correta": 3,
+      "explicacao": "Cada objeto criado com new tem os seus próprios atributos. a foi somado duas vezes (2) e b uma vez (1)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno escreveu a classe abaixo para a locadora de carros. O que aparece no console?\n```js\nclass Carro {\n  constructor(modelo) {\n    modelo = modelo;\n  }\n}\nconst c = new Carro(\"Sedan Azul\");\nconsole.log(c.modelo);\n```",
+      "alternativas": [
+        "`Sedan Azul`, porque o constructor guardou o valor",
+        "`undefined`, porque faltou o `this` no constructor",
+        "`modelo`, porque é o nome do parâmetro",
+        "Dá erro, porque o parâmetro tem o mesmo nome"
+      ],
+      "correta": 1,
+      "explicacao": "Sem this, a linha só atribui o parâmetro a ele mesmo. O objeto não ganha o atributo modelo, então c.modelo é undefined. O certo é this.modelo = modelo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que aparece no console?\n```js\nclass Animal {\n  falar() { return \"...\"; }\n}\nclass Cachorro extends Animal {\n  falar() { return \"Au au\"; }\n}\nconsole.log(new Cachorro().falar());\n```",
+      "alternativas": [
+        "`...`",
+        "`... Au au`",
+        "`Au au`",
+        "`undefined`"
+      ],
+      "correta": 2,
+      "explicacao": "Cachorro herda de Animal (extends), mas tem o seu próprio método falar, que substitui o da classe mãe. Por isso devolve \"Au au\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na Orientação a Objetos, qual frase descreve melhor a relação entre classe e objeto?",
+      "alternativas": [
+        "A classe é o molde e o objeto é algo criado a partir dele",
+        "O objeto é o molde e a classe é algo criado a partir dele",
+        "Classe e objeto são dois nomes para a mesma coisa",
+        "A classe guarda só funções e o objeto guarda só valores"
+      ],
+      "correta": 0,
+      "explicacao": "A classe define atributos e métodos (o molde, como a \"planta\" de uma casa). Cada objeto (instância) é uma \"casa\" construída com aquele molde, com seus próprios valores."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No sistema da escola, o que aparece no console?\n```js\nclass Aluno {\n  constructor(nome, n1, n2) {\n    this.nome = nome;\n    this.n1 = n1;\n    this.n2 = n2;\n  }\n  media() { return (this.n1 + this.n2) / 2; }\n}\nconst al = new Aluno(\"Davi\", 6, 9);\nconsole.log(al.media());\n```",
+      "alternativas": [
+        "`15`",
+        "`7.5`",
+        "`10.5`",
+        "`undefined`"
+      ],
+      "correta": 1,
+      "explicacao": "O método media usa os atributos do próprio objeto: (6 + 9) / 2 = 7.5."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que aparece no console?\n```js\nconst cliente = { nome: \"Ana\" };\ncliente.nome = \"Bia\";\nconsole.log(cliente.nome);\n```",
+      "alternativas": [
+        "`Bia`, porque const impede só trocar o objeto inteiro",
+        "`Ana`, porque const não deixa mudar nada no objeto",
+        "Dá erro, porque não se altera um objeto com const",
+        "`undefined`, porque o nome foi apagado"
+      ],
+      "correta": 0,
+      "explicacao": "const impede que a variável aponte para outro objeto (cliente = {...} daria erro), mas as propriedades do objeto podem ser alteradas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No sistema da biblioteca existe:\n```js\nclass Livro {\n  constructor(titulo, autor) {\n    this.titulo = titulo;\n    this.autor = autor;\n  }\n}\nconst l1 = new Livro(\"Iracema\", \"José de Alencar\");\nconst l2 = new Livro(\"O Cortiço\", \"Aluísio Azevedo\");\n```\nNa sua resposta:\n1. diga o que é a classe e o que são os objetos neste código;\n2. explique por que l1 e l2 têm títulos diferentes.",
+      "respostasAceitas": [
+        "1) Livro é a classe (o molde); l1 e l2 são objetos (instâncias) criados com new a partir dela. 2) Cada objeto guarda seus próprios valores: o constructor recebe valores diferentes em cada new."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) classe = molde, objetos = instâncias; 2) cada instância tem seus atributos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No constructor abaixo aparece várias vezes a palavra `this`:\n```js\nclass Paciente {\n  constructor(nome, idade) {\n    this.nome = nome;\n    this.idade = idade;\n  }\n}\n```\nNa sua resposta:\n1. explique o que o `this` representa;\n2. explique a diferença entre `this.nome` e `nome` na mesma linha.",
+      "respostasAceitas": [
+        "1) this é o próprio objeto que está sendo criado (o paciente). 2) this.nome é o atributo que fica guardado no objeto; nome é só o parâmetro, que existe enquanto o constructor roda."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) this = o objeto atual; 2) atributo do objeto x parâmetro recebido."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na pizzaria, um sistema antigo guardava os pedidos em variáveis soltas: `pedido1Sabor`, `pedido1Valor`, `pedido2Sabor`, `pedido2Valor`… O novo sistema usa a classe `Pedido` com os atributos sabor e valor e o método `total()`.\n\nNa sua resposta:\n1. explique o problema das variáveis soltas;\n2. explique uma vantagem de usar a classe.",
+      "respostasAceitas": [
+        "1) Com muitos pedidos, o número de variáveis cresce sem parar, fica difícil organizar e é fácil confundir. 2) A classe junta os dados e as ações do pedido num só lugar; cada pedido vira um objeto e dá para guardar vários numa lista."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) desorganização/repetição; 2) organização, reaproveitamento, dados + métodos juntos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No sistema da loja:\n```js\nclass Funcionario {\n  constructor(nome) { this.nome = nome; }\n  apresentar() { return \"Sou \" + this.nome; }\n}\nclass Gerente extends Funcionario {\n  constructor(nome, setor) {\n    super(nome);\n    this.setor = setor;\n  }\n}\nconst g = new Gerente(\"Carla\", \"Vendas\");\n```\nNa sua resposta:\n1. explique o que o `extends` faz;\n2. explique o que o `super(nome)` faz e o que `g.apresentar()` devolve.",
+      "respostasAceitas": [
+        "1) extends faz Gerente herdar os atributos e métodos de Funcionario. 2) super(nome) chama o constructor da classe mãe, que guarda o nome. g.apresentar() devolve \"Sou Carla\"."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) herança; 2) super chama o constructor da classe mãe; \"Sou Carla\"."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O sistema da casa inteligente tem a classe:\n```js\nclass Lampada {\n  constructor() { this.ligada = false; }\n  alternar() { this.ligada = !this.ligada; }\n}\nconst sala = new Lampada();\nsala.alternar();\nsala.alternar();\n```\nNa sua resposta:\n1. diga qual é o atributo e qual é o método da classe;\n2. diga como fica `sala.ligada` no final e por quê.",
+      "respostasAceitas": [
+        "1) O atributo é ligada (guarda o estado) e o método é alternar (a ação). 2) Fica false: começa false, o 1º alternar deixa true e o 2º volta para false, porque o ! inverte o valor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ligada = atributo, alternar = método; 2) false (duas inversões)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve a tag `<canvas>` numa página com JavaScript?",
+      "alternativas": [
+        "Guardar dados do usuário no navegador",
+        "Mostrar um vídeo da câmera sem JavaScript",
+        "Organizar o texto em colunas, como uma tabela",
+        "Ser uma área onde o JavaScript desenha formas e imagens"
+      ],
+      "correta": 3,
+      "explicacao": "<canvas> é uma área de desenho. Sozinha ela fica vazia: o JavaScript desenha nela usando o contexto 2d (retângulos, linhas, textos, imagens)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No jogo da escola, `ctx` é o contexto 2d do canvas. O que o código desenha?\n```js\nctx.fillStyle = \"red\";\nctx.fillRect(10, 20, 100, 50);\n```",
+      "alternativas": [
+        "Um retângulo só com borda vermelha, de 10 por 20, na posição 100, 50",
+        "Um retângulo vermelho preenchido, a 100 px da esquerda e 50 px do topo, com 10 de largura e 20 de altura",
+        "Um retângulo vermelho preenchido, a 10 px da esquerda e 20 px do topo, com 100 de largura e 50 de altura",
+        "Uma linha vermelha que vai do ponto (10, 20) até o ponto (100, 50)"
+      ],
+      "correta": 2,
+      "explicacao": "fillRect(x, y, largura, altura): os dois primeiros números são a posição do canto superior esquerdo e os dois últimos, o tamanho. fillStyle define a cor do preenchimento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No canvas do jogo, onde fica o ponto (0, 0) e para onde o y cresce?",
+      "alternativas": [
+        "No canto inferior esquerdo, e o y cresce para cima",
+        "No centro do canvas, e o y cresce para cima",
+        "No canto superior esquerdo, e o y cresce para baixo",
+        "No canto superior direito, e o y cresce para baixo"
+      ],
+      "correta": 2,
+      "explicacao": "No canvas, a origem é o canto superior esquerdo. O x cresce para a direita e o y cresce para BAIXO (diferente do gráfico da matemática)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O aluno queria um quadrado azul, mas o código abaixo desenhou um quadrado preto. Por quê?\n```js\nctx.fillRect(0, 0, 50, 50);\nctx.fillStyle = \"blue\";\n```",
+      "alternativas": [
+        "O fillStyle não aceita nomes de cores, só códigos",
+        "O fillRect sempre desenha em preto, qualquer que seja a cor",
+        "Faltou chamar ctx.stroke() para aplicar a cor",
+        "A cor foi definida depois do desenho e só vale para os próximos"
+      ],
+      "correta": 3,
+      "explicacao": "O canvas desenha na hora em que o comando roda. Quando fillRect rodou, a cor ainda era a padrão (preto). O fillStyle precisa vir antes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No jogo da escola, uma bolinha se move pelo canvas. A cada quadro o código faz:\n```js\nfunction quadro() {\n  ctx.clearRect(0, 0, tela.width, tela.height);\n  x += 2;\n  ctx.beginPath();\n  ctx.arc(x, 100, 10, 0, 2 * Math.PI);\n  ctx.fill();\n  requestAnimationFrame(quadro);\n}\n```\nNa sua resposta:\n1. explique o que o `clearRect` faz e o que aconteceria sem ele;\n2. explique como a bolinha parece se mover.",
+      "respostasAceitas": [
+        "1) clearRect apaga o canvas inteiro antes de desenhar de novo; sem ele, as bolinhas antigas continuariam na tela e formariam um rastro. 2) A cada quadro o x aumenta 2 e a bolinha é desenhada um pouco mais à direita; como isso se repete muitas vezes por segundo (requestAnimationFrame), parece movimento."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) limpar o quadro anterior (sem ele fica rastro); 2) redesenhar em nova posição várias vezes por segundo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O site da lanchonete roda `navigator.geolocation.getCurrentPosition(sucesso, erro);`. O que acontece primeiro para o usuário?",
+      "alternativas": [
+        "O navegador pergunta se ele permite compartilhar a localização",
+        "A localização é enviada sem perguntar nada",
+        "O mapa da cidade abre numa nova aba",
+        "O site pede o CEP num campo de texto"
+      ],
+      "correta": 0,
+      "explicacao": "Por privacidade, o navegador pede permissão antes de entregar a localização. Se o usuário aceitar, a função sucesso é chamada; se negar, a função erro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de entregas, a função abaixo recebe a posição do usuário. Qual expressão dá a latitude?\n```js\nfunction sucesso(pos) {\n  // ...\n}\nnavigator.geolocation.getCurrentPosition(sucesso);\n```",
+      "alternativas": [
+        "`pos.latitude.coords`",
+        "`pos.coords.latitude`",
+        "`navigator.latitude`",
+        "`pos.getLatitude()`"
+      ],
+      "correta": 1,
+      "explicacao": "A função de sucesso recebe um objeto de posição; as coordenadas ficam em pos.coords, com latitude e longitude."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O site de entregas da padaria foi publicado com endereço `http://` (sem o S) e a localização não funciona em nenhum navegador moderno. Qual é o motivo mais provável?",
+      "alternativas": [
+        "A geolocalização só funciona em aplicativos de celular",
+        "É preciso instalar um programa de GPS no computador",
+        "Os navegadores só liberam a localização em páginas seguras (HTTPS)",
+        "O site precisa pedir a localização dentro de um formulário"
+      ],
+      "correta": 2,
+      "explicacao": "A Geolocation API é um recurso sensível e só funciona em contexto seguro: HTTPS (ou localhost, durante o desenvolvimento)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No quadro de tarefas da oficina, os cards devem poder ser arrastados com o mouse. Qual atributo HTML deixa um elemento arrastável?",
+      "alternativas": [
+        "`draggable=\"true\"`",
+        "`drop=\"true\"`",
+        "`movable=\"yes\"`",
+        "`drag=\"on\"`"
+      ],
+      "correta": 0,
+      "explicacao": "O atributo draggable=\"true\" diz ao navegador que o elemento pode ser arrastado, disparando eventos como dragstart."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No quadro de tarefas, o card é arrastado, mas o navegador não deixa soltá-lo na coluna \"Feito\". O código da coluna é:\n```js\ncoluna.addEventListener(\"drop\", (e) => {\n  coluna.appendChild(cardArrastado);\n});\n```\nO que está faltando?",
+      "alternativas": [
+        "Trocar o evento `drop` por `click`",
+        "Colocar `draggable=\"true\"` também na coluna",
+        "Usar `innerHTML` em vez de `appendChild`",
+        "Chamar `e.preventDefault()` no evento `dragover` da coluna"
+      ],
+      "correta": 3,
+      "explicacao": "Por padrão, os elementos não aceitam que algo seja solto neles. É no dragover que se cancela esse padrão com e.preventDefault(); só assim o evento drop acontece."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No arrastar e soltar do quadro de tarefas, o código usa:\n```js\ncard.addEventListener(\"dragstart\", (e) => {\n  e.dataTransfer.setData(\"text\", card.id);\n});\ncoluna.addEventListener(\"drop\", (e) => {\n  const id = e.dataTransfer.getData(\"text\");\n  coluna.appendChild(document.getElementById(id));\n});\n```\nPara que serve o `dataTransfer`?",
+      "alternativas": [
+        "Salvar o card no localStorage para não perder a tarefa",
+        "Levar uma informação (o id do card) do início do arraste até a soltura",
+        "Enviar o card para o servidor da oficina",
+        "Copiar o texto do card para a área de transferência"
+      ],
+      "correta": 1,
+      "explicacao": "dataTransfer guarda dados durante o arraste: setData no dragstart e getData no drop. Aqui, ele leva o id para a coluna saber qual card mover."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de fotos da escola, o código chama `navigator.mediaDevices.getUserMedia({ video: true })`. O que essa linha faz?",
+      "alternativas": [
+        "Abre a galeria de fotos do celular",
+        "Pede permissão e acessa a câmera do dispositivo",
+        "Grava um vídeo e salva no computador",
+        "Mostra o vídeo de um arquivo da página"
+      ],
+      "correta": 1,
+      "explicacao": "getUserMedia pede acesso à câmera (video) e/ou ao microfone (audio). Ele devolve uma Promise com o fluxo (stream) da câmera se o usuário permitir."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de fotos, depois de pegar o fluxo da câmera, o código faz:\n```js\nconst stream = await navigator.mediaDevices.getUserMedia({ video: true });\nvideo.srcObject = stream;\nvideo.play();\n```\nO que acontece na página, sendo `video` um elemento `<video>`?",
+      "alternativas": [
+        "Uma foto é tirada e mostrada no `<video>`",
+        "O vídeo é baixado para a pasta do usuário",
+        "O `<video>` toca um arquivo chamado stream",
+        "A imagem ao vivo da câmera aparece no `<video>`"
+      ],
+      "correta": 3,
+      "explicacao": "srcObject liga o elemento <video> ao fluxo da câmera, e play() começa a exibir a imagem ao vivo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um site de lanchonete pede acesso à localização e outro pede acesso à câmera. Nos dois casos o navegador mostra uma pergunta ao usuário.\n\nNa sua resposta:\n1. explique por que o navegador pede permissão;\n2. explique o que o site deve fazer se o usuário negar.",
+      "respostasAceitas": [
+        "1) Localização e câmera são dados pessoais e sensíveis; o navegador protege a privacidade e só libera com a autorização da pessoa. 2) O site deve tratar o erro (a função de erro ou o catch) e seguir funcionando, por exemplo pedindo o endereço digitado ou mostrando um aviso."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) privacidade/segurança; 2) tratar a recusa com uma alternativa ou aviso, sem quebrar a página."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O quadro de tarefas da oficina usa arrastar e soltar com três eventos: `dragstart` no card, `dragover` e `drop` na coluna.\n\nNa sua resposta:\n1. explique quando cada evento acontece;\n2. explique o que normalmente se faz no `drop`.",
+      "respostasAceitas": [
+        "1) dragstart acontece quando o usuário começa a arrastar o card; dragover acontece enquanto ele passa por cima da coluna; drop acontece quando ele solta o card na coluna. 2) No drop pega-se qual card foi arrastado e ele é colocado na coluna (por exemplo com appendChild)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) início do arraste, passando por cima, soltar; 2) mover o elemento para a coluna (e, se for o caso, salvar a mudança)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site da academia, o botão \"Onde estou?\" roda:\n```js\nnavigator.geolocation.getCurrentPosition((pos) => {\n  local.textContent = pos.coords.latitude + \", \" + pos.coords.longitude;\n});\n```\nNa sua resposta:\n1. explique o que aparece na página se o usuário permitir;\n2. diga de onde vêm esses números.",
+      "respostasAceitas": [
+        "1) Aparecem a latitude e a longitude do usuário, separadas por vírgula, no elemento local. 2) Vêm da API de geolocalização do navegador, que usa GPS, Wi-Fi ou a rede do dispositivo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) coordenadas na página; 2) o navegador obtém a posição do dispositivo (GPS/rede)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app da carteirinha da escola tira a foto do aluno assim:\n```js\nconst ctx = tela.getContext(\"2d\");\nctx.drawImage(video, 0, 0, tela.width, tela.height);\nconst foto = tela.toDataURL(\"image/png\");\n```\nAqui `video` mostra a câmera ao vivo e `tela` é um `<canvas>`.\n\nNa sua resposta:\n1. explique o que o `drawImage` faz neste código;\n2. explique o que fica guardado em `foto`.",
+      "respostasAceitas": [
+        "1) drawImage copia o quadro atual do vídeo da câmera para o canvas, como se congelasse a imagem (tira a foto). 2) foto guarda a imagem do canvas em forma de texto (data URL em PNG), que pode ser mostrada num <img> ou enviada ao servidor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) copia o quadro do vídeo para o canvas; 2) a imagem codificada como texto (data URL)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No jogo do pet shop, `ctx` é o contexto 2d do canvas. O que o código desenha?\n```js\nctx.beginPath();\nctx.arc(100, 100, 40, 0, 2 * Math.PI);\nctx.fill();\n```",
+      "alternativas": [
+        "Um círculo preenchido com centro em (100, 100) e raio 40",
+        "Um quadrado de 40 de lado na posição (100, 100)",
+        "Meio círculo só com a borda, de raio 100",
+        "Um círculo com centro em (40, 40) e raio 100"
+      ],
+      "correta": 0,
+      "explicacao": "arc(x, y, raio, ânguloInicial, ânguloFinal) desenha um arco. De 0 até 2π é a volta inteira (círculo), e fill() preenche."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que o código abaixo desenha no canvas?\n```js\nctx.moveTo(0, 0);\nctx.lineTo(200, 100);\nctx.stroke();\n```",
+      "alternativas": [
+        "Um retângulo de 200 por 100",
+        "Um triângulo com um vértice em (0, 0)",
+        "Uma linha reta do ponto (0, 0) até o ponto (200, 100)",
+        "Nada, porque faltou fillStyle"
+      ],
+      "correta": 2,
+      "explicacao": "moveTo posiciona a \"caneta\", lineTo marca uma linha até o novo ponto e stroke() traça a linha na tela (com a cor padrão, preta)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No jogo da escola, o placar é desenhado dentro do canvas:\n```js\nctx.font = \"20px Arial\";\nctx.fillText(\"Pontos: 10\", 10, 30);\n```\nNa sua resposta:\n1. explique o que aparece no canvas;\n2. explique uma diferença entre esse texto e um texto num `<p>` da página.",
+      "respostasAceitas": [
+        "1) Aparece o texto \"Pontos: 10\" com 20 px, perto do canto superior esquerdo (x = 10, y = 30). 2) No canvas o texto vira desenho (pixels): não é elemento do DOM, não dá para selecionar, e para mudar é preciso apagar e desenhar de novo; no <p> é só trocar o textContent."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) texto desenhado na posição indicada; 2) canvas = pixels, não é elemento HTML (não selecionável, redesenhar para mudar)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é JSON?",
+      "alternativas": [
+        "Um formato de texto para guardar e trocar dados entre sistemas",
+        "Uma linguagem de programação que substitui o JavaScript",
+        "Um tipo de banco de dados que fica no navegador",
+        "Um programa que junta os arquivos do projeto"
+      ],
+      "correta": 0,
+      "explicacao": "JSON (JavaScript Object Notation) é um formato de texto, parecido com objetos JS, muito usado nas respostas das APIs."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que aparece no console?\n```js\nconst texto = '{\"nome\":\"Lia\",\"idade\":17}';\nconst obj = JSON.parse(texto);\nconsole.log(obj.idade);\n```",
+      "alternativas": [
+        "`\"idade\":17`",
+        "`undefined`",
+        "`17`",
+        "`Lia`"
+      ],
+      "correta": 2,
+      "explicacao": "JSON.parse transforma o texto JSON num objeto JavaScript. Depois disso dá para ler obj.idade normalmente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No sistema da padaria, o pedido é preparado para ser enviado. O que mostra o console?\n```js\nconsole.log(JSON.stringify({ item: \"pao\", qtd: 2 }));\n```",
+      "alternativas": [
+        "`{ item: \"pao\", qtd: 2 }`",
+        "`{\"item\":\"pao\",\"qtd\":2}`",
+        "`[object Object]`",
+        "`item,pao,qtd,2`"
+      ],
+      "correta": 1,
+      "explicacao": "JSON.stringify transforma o objeto em texto no formato JSON: os nomes das propriedades ficam entre aspas duplas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que aparece no console, nesta ordem?\n```js\nconsole.log(\"A\");\nsetTimeout(() => console.log(\"B\"), 0);\nconsole.log(\"C\");\n```",
+      "alternativas": [
+        "`A`, `B`, `C`",
+        "`B`, `A`, `C`",
+        "`A`, `C` (o B não aparece)",
+        "`A`, `C`, `B`"
+      ],
+      "correta": 3,
+      "explicacao": "setTimeout agenda a função para depois, mesmo com tempo 0. O código síncrono (A e C) roda primeiro; só então a função agendada mostra B."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que aparece no console logo depois desta linha?\n```js\nconst r = fetch(\"https://api.exemplo.com/filmes\");\nconsole.log(r);\n```",
+      "alternativas": [
+        "A lista de filmes em JSON",
+        "O texto da resposta do servidor",
+        "`undefined`, porque fetch não devolve nada",
+        "Uma Promise ainda pendente"
+      ],
+      "correta": 3,
+      "explicacao": "fetch é assíncrono: devolve na hora uma Promise (promessa de resposta). A resposta só fica disponível depois, com then ou await."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O site do cinema busca os filmes em cartaz. A API devolve um array com 12 filmes. O que aparece no console?\n```js\nfetch(\"/api/filmes\")\n  .then(resp => resp.json())\n  .then(filmes => console.log(filmes.length));\n```",
+      "alternativas": [
+        "`1`",
+        "`12`",
+        "A Promise pendente",
+        "O texto da resposta sem converter"
+      ],
+      "correta": 1,
+      "explicacao": "O primeiro then recebe a resposta e converte o corpo em objeto com json(); o segundo then recebe o array já pronto, e length é 12."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Onde a palavra `await` pode ser usada, num script comum de página?",
+      "alternativas": [
+        "Em qualquer linha, dentro ou fora de funções",
+        "Só dentro de um `if`",
+        "Dentro de uma função marcada com `async`",
+        "Só dentro de um `addEventListener`"
+      ],
+      "correta": 2,
+      "explicacao": "await pausa a função até a Promise terminar, por isso só pode ser usado dentro de funções async (ou no nível de cima de um módulo)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O site da clínica busca um paciente que não existe e o servidor responde com status 404. O que acontece no código abaixo?\n```js\nconst resp = await fetch(\"/api/pacientes/999\");\nconsole.log(resp.ok, resp.status);\n```",
+      "alternativas": [
+        "Mostra `false 404`, porque o fetch não dá erro com 404",
+        "Cai num erro automático, porque 404 é falha",
+        "Mostra `true 404`, porque a requisição chegou ao servidor",
+        "Mostra `undefined undefined`, porque não houve resposta"
+      ],
+      "correta": 0,
+      "explicacao": "fetch só rejeita a Promise em falha de rede. Com 404 a resposta chega normalmente; resp.ok fica false (só é true para status 200–299) e resp.status é 404."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app da biblioteca, o código abaixo busca os livros. Em que situação o bloco `catch` roda?\n```js\ntry {\n  const resp = await fetch(\"/api/livros\");\n  const livros = await resp.json();\n  mostrar(livros);\n} catch (erro) {\n  aviso.textContent = \"Não foi possível carregar\";\n}\n```",
+      "alternativas": [
+        "Sempre que a lista de livros vier vazia",
+        "Quando a requisição falha, por exemplo sem internet",
+        "Toda vez, depois que o bloco try termina",
+        "Só quando o usuário clica num livro"
+      ],
+      "correta": 1,
+      "explicacao": "O catch roda quando algo dentro do try gera erro, como falha de rede no fetch ou resposta que não é JSON válido. Lista vazia não é erro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que aparece no console?\n```js\nasync function soma() {\n  return 2 + 3;\n}\nconsole.log(soma());\n```",
+      "alternativas": [
+        "Uma Promise, e não o número 5",
+        "`5`",
+        "`undefined`",
+        "`2 + 3`"
+      ],
+      "correta": 0,
+      "explicacao": "Toda função async devolve uma Promise. Para pegar o 5 é preciso usar await soma() (dentro de outra função async) ou soma().then(...)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No cadastro da academia, os dados são enviados assim:\n```js\nfetch(\"/api/alunos\", {\n  method: \"POST\",\n  headers: { \"Content-Type\": \"application/json\" },\n  body: JSON.stringify({ nome: \"Caio\", plano: \"mensal\" })\n});\n```\nQual é o papel do `body`?",
+      "alternativas": [
+        "Mostrar os dados do aluno no corpo da página",
+        "Dizer ao servidor que o envio é do tipo POST",
+        "Guardar os dados do aluno no navegador",
+        "Levar ao servidor os dados do aluno em texto JSON"
+      ],
+      "correta": 3,
+      "explicacao": "body é o conteúdo da requisição. Como o servidor espera JSON, o objeto é convertido com JSON.stringify; o method diz que é POST e o header avisa o formato."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O site da loja busca o estoque com `fetch` e, enquanto espera, o usuário continua rolando a página e clicando nos botões. Por que a página não trava?",
+      "alternativas": [
+        "Porque o fetch só roda quando a página está parada",
+        "Porque o navegador abre uma nova aba para a requisição",
+        "Porque a requisição é assíncrona e não bloqueia o resto do código",
+        "Porque o estoque já estava salvo dentro da página"
+      ],
+      "correta": 2,
+      "explicacao": "Requisições assíncronas rodam \"em segundo plano\": o navegador continua respondendo e, quando a resposta chega, o código que trata a resposta é executado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que aparece no console, nesta ordem?\n```js\nasync function carregar() {\n  console.log(\"1\");\n  await fetch(\"/api/produtos\");\n  console.log(\"3\");\n}\ncarregar();\nconsole.log(\"2\");\n```",
+      "alternativas": [
+        "`1`, `3`, `2`",
+        "`2`, `1`, `3`",
+        "`1`, `2`, `3`",
+        "`1`, `2` (o 3 não aparece)"
+      ],
+      "correta": 2,
+      "explicacao": "A função começa e mostra 1. No await ela pausa e devolve o controle; o código de fora mostra 2. Quando o fetch termina, a função continua e mostra 3."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O site do cinema carrega a lista de filmes com uma requisição assíncrona. Enquanto os filmes não chegam, aparece \"Carregando...\" e o usuário pode mexer no menu.\n\nNa sua resposta:\n1. explique o que é uma requisição assíncrona;\n2. explique a vantagem dela para quem usa o site.",
+      "respostasAceitas": [
+        "1) É um pedido ao servidor em que o código não fica parado esperando: ele continua rodando e trata a resposta quando ela chega. 2) A página não trava; o usuário continua usando o site enquanto os dados carregam."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) não bloqueia, resposta tratada depois; 2) página responsiva durante o carregamento."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O site da hamburgueria mostra o cardápio com o código:\n```js\nasync function carregarCardapio() {\n  const resp = await fetch(\"/api/cardapio\");\n  const itens = await resp.json();\n  itens.forEach(item => {\n    lista.innerHTML += `<li>${item.nome} - R$ ${item.preco}</li>`;\n  });\n}\n```\nNa sua resposta:\n1. explique o que fazem as duas linhas com `await`;\n2. explique o que acontece na página no final.",
+      "respostasAceitas": [
+        "1) A primeira pede os dados ao servidor e espera a resposta; a segunda converte o corpo da resposta de JSON para um array de objetos. 2) Para cada item, um <li> com o nome e o preço é acrescentado à lista na página."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) fetch espera a resposta; json() converte; 2) a lista é preenchida com um item por produto."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na loja de games, um aluno perguntou por que o pedido é enviado com `JSON.stringify(pedido)` e a resposta é lida com `resp.json()`.\n\nNa sua resposta:\n1. explique a diferença entre um objeto JavaScript e um texto JSON;\n2. explique por que é preciso converter na ida e na volta.",
+      "respostasAceitas": [
+        "1) O objeto existe na memória do programa e pode ser usado direto (pedido.total); o JSON é um texto que segue um formato padrão. 2) Pela rede só trafega texto: na ida o objeto vira texto (stringify) e na volta o texto vira objeto (json/parse) para ser usado no código."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) objeto x texto; 2) a comunicação HTTP usa texto, então converte-se nos dois sentidos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O aluno escreveu a linha abaixo e o console mostrou o erro \"fetch(...).json is not a function\":\n```js\nconst dados = fetch(\"/api/turmas\").json();\n```\nNa sua resposta:\n1. explique o que o `fetch` devolve e por que deu erro;\n2. explique como a ideia deve funcionar para pegar os dados.",
+      "respostasAceitas": [
+        "1) fetch devolve uma Promise, não a resposta; a Promise não tem o método json, por isso o erro. 2) É preciso esperar a resposta (await fetch ou .then) e só depois chamar json() na resposta, esperando também por ele."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) fetch devolve Promise; 2) aguardar (await/then) a resposta e depois o json()."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O site da clínica busca os horários livres assim:\n```js\ntry {\n  const resp = await fetch(\"/api/horarios\");\n  if (!resp.ok) throw new Error(\"Erro \" + resp.status);\n  mostrar(await resp.json());\n} catch (e) {\n  aviso.textContent = \"Não foi possível carregar os horários.\";\n}\n```\nNa sua resposta:\n1. explique por que o código confere `resp.ok`;\n2. explique o que o usuário veria se não houvesse esse tratamento de erro.",
+      "respostasAceitas": [
+        "1) Porque o fetch não dá erro quando o servidor responde com falha (404, 500); resp.ok fica false e o código força o erro para ir ao catch. 2) Sem tratamento, a página poderia ficar em branco ou travada em \"carregando\", sem explicação, e o erro só apareceria no console."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) fetch não rejeita em 404/500; 2) usuário sem aviso, página quebrada/vazia."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site da biblioteca, o usuário escolheu o tema escuro e o código rodou `localStorage.setItem(\"tema\", \"escuro\");`. O que acontece com essa informação?",
+      "alternativas": [
+        "Some assim que a aba é fechada",
+        "É enviada para o servidor da biblioteca",
+        "Fica salva só até a página ser recarregada",
+        "Fica salva no navegador, mesmo depois de fechar e abrir de novo"
+      ],
+      "correta": 3,
+      "explicacao": "localStorage guarda pares chave/valor no navegador sem prazo de validade: os dados continuam lá até o site ou o usuário apagarem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que aparece no console, se nunca foi salvo nada com a chave `\"cupom\"`?\n```js\nconsole.log(localStorage.getItem(\"cupom\"));\n```",
+      "alternativas": [
+        "`null`",
+        "`undefined`",
+        "`\"\"` (texto vazio)",
+        "Dá erro, porque a chave não existe"
+      ],
+      "correta": 0,
+      "explicacao": "getItem devolve null quando a chave não existe. Por isso é comum testar if (valor === null) ou usar um valor padrão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No carrinho da loja, o aluno salvou um objeto direto, sem converter. O que aparece no console?\n```js\nlocalStorage.setItem(\"carrinho\", { item: \"bola\" });\nconsole.log(localStorage.getItem(\"carrinho\"));\n```",
+      "alternativas": [
+        "`{\"item\":\"bola\"}`",
+        "`[object Object]`",
+        "`{ item: \"bola\" }`",
+        "`bola`"
+      ],
+      "correta": 1,
+      "explicacao": "O localStorage só guarda texto. O objeto é convertido do jeito padrão e vira \"[object Object]\", perdendo os dados. O certo é usar JSON.stringify ao salvar e JSON.parse ao ler."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No jogo da escola, a pontuação foi salva e lida assim. O que aparece no console?\n```js\nlocalStorage.setItem(\"pontos\", 10);\nconst p = localStorage.getItem(\"pontos\");\nconsole.log(p + 5);\n```",
+      "alternativas": [
+        "`15`",
+        "`null`",
+        "`105`",
+        "`NaN`"
+      ],
+      "correta": 2,
+      "explicacao": "O valor é guardado como texto (\"10\"). Ao ler, getItem devolve \"10\", e \"10\" + 5 concatena, dando \"105\". É preciso converter com Number(p)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site do hotel, o usuário quer limpar só o filtro salvo com a chave `\"filtro\"`, sem apagar as outras preferências. Qual linha faz isso?",
+      "alternativas": [
+        "`localStorage.removeItem(\"filtro\");`",
+        "`localStorage.clear();`",
+        "`localStorage.setItem(\"filtro\");`",
+        "`localStorage.getItem(\"filtro\") = null;`"
+      ],
+      "correta": 0,
+      "explicacao": "removeItem apaga só a chave indicada. clear() apagaria tudo o que o site guardou no localStorage."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site da escola, um formulário de matrícula tem 3 etapas. Os dados devem ficar guardados enquanto o aluno passa de uma etapa para outra, mas devem sumir quando ele fechar a aba. Qual recurso é o mais indicado?",
+      "alternativas": [
+        "`localStorage`",
+        "Uma variável `const` no script",
+        "Um cookie sem data de expiração",
+        "`sessionStorage`"
+      ],
+      "correta": 3,
+      "explicacao": "sessionStorage mantém os dados enquanto a aba está aberta (inclusive ao recarregar ou mudar de página do mesmo site) e apaga quando ela é fechada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas informações NÃO deve ser guardada no localStorage?",
+      "alternativas": [
+        "O tema claro ou escuro escolhido",
+        "A senha do usuário",
+        "O idioma preferido do site",
+        "O último filtro usado na busca"
+      ],
+      "correta": 1,
+      "explicacao": "O localStorage não é protegido: qualquer script da página e qualquer pessoa com acesso ao navegador pode ler. Dados sensíveis, como senhas, não devem ficar lá."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O carrinho da loja de games é salvo e lido assim:\n```js\nlocalStorage.setItem(\"carrinho\", JSON.stringify(carrinho));\n// ...ao abrir a página:\nconst salvo = JSON.parse(localStorage.getItem(\"carrinho\")) || [];\n```\nNa sua resposta:\n1. explique por que são usados `JSON.stringify` e `JSON.parse`;\n2. explique para que serve o `|| []` na segunda linha.",
+      "respostasAceitas": [
+        "1) O localStorage só guarda texto: stringify transforma o array/objeto em texto para salvar e parse transforma o texto de volta em array para usar. 2) Se não houver nada salvo, getItem dá null, o parse dá null e o || [] faz o carrinho começar como lista vazia."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) converter objeto ↔ texto; 2) valor padrão (lista vazia) quando não há carrinho salvo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site da academia, o aluno escolhe o tema escuro. No dia seguinte, ao abrir o site, o tema escuro continua lá. O código usa `localStorage`.\n\nNa sua resposta:\n1. explique por que o site \"lembra\" da escolha;\n2. diga o que faria o site esquecer essa escolha.",
+      "respostasAceitas": [
+        "1) A escolha foi salva no localStorage do navegador, que guarda os dados mesmo depois de fechar; ao abrir, o site lê o valor e aplica o tema. 2) O usuário limpar os dados do navegador, o site apagar a chave (removeItem/clear) ou o acesso ser por outro navegador ou aparelho."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dado salvo e lido ao carregar; 2) limpar dados, remover a chave ou usar outro navegador/dispositivo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega sugeriu guardar todos os pedidos da pizzaria só no localStorage, sem servidor nem banco de dados.\n\nNa sua resposta:\n1. explique por que essa ideia não funciona para o dono da pizzaria ver os pedidos;\n2. cite outro problema de usar o localStorage como único lugar dos dados.",
+      "respostasAceitas": [
+        "1) O localStorage fica só no navegador de cada cliente; o dono, no computador dele, não tem acesso a esses dados. 2) O usuário pode apagar os dados a qualquer momento, ninguém mais consegue ver, não é seguro e tem pouco espaço."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dado local a um navegador/dispositivo; 2) pode ser apagado, sem segurança, espaço limitado, não compartilhado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num projeto front-end, o que faz uma ferramenta como o Webpack (um \"bundler\")?",
+      "alternativas": [
+        "Guarda os dados do site no navegador do usuário",
+        "Junta os vários arquivos do projeto em poucos arquivos prontos para publicar",
+        "Desenha as telas do site a partir de um protótipo",
+        "Hospeda o site num servidor da internet"
+      ],
+      "correta": 1,
+      "explicacao": "Bundler significa \"empacotador\": ele lê os arquivos JS (e CSS, imagens…) e seus imports e gera um pacote (bundle) otimizado para o navegador."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No arquivo `webpack.config.js` do projeto da escola aparece `entry: \"./src/index.js\"`. O que essa linha indica?",
+      "alternativas": [
+        "O arquivo final gerado para colocar no HTML",
+        "A pasta onde ficam as imagens do site",
+        "O endereço do servidor onde o site será publicado",
+        "O arquivo por onde o Webpack começa a ler o projeto"
+      ],
+      "correta": 3,
+      "explicacao": "entry é o ponto de entrada: a partir dele o Webpack segue os imports e descobre todos os arquivos de que o projeto precisa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No `webpack.config.js` aparece `output: { filename: \"bundle.js\" }`. O que é o `bundle.js`?",
+      "alternativas": [
+        "O arquivo gerado pelo Webpack com o código do projeto empacotado",
+        "O arquivo principal que o programador edita no dia a dia",
+        "Uma biblioteca baixada da internet pelo npm",
+        "O arquivo de configuração do servidor"
+      ],
+      "correta": 0,
+      "explicacao": "output diz onde e com que nome o Webpack grava o resultado. O HTML passa a carregar esse arquivo gerado, e o programador continua editando os arquivos da pasta src."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No projeto da lanchonete existem os dois arquivos abaixo. O que o `import` permite?\n```js\n// util.js\nexport function precoComTaxa(v) { return v * 1.1; }\n\n// index.js\nimport { precoComTaxa } from \"./util.js\";\nconsole.log(precoComTaxa(100));\n```",
+      "alternativas": [
+        "Copiar o arquivo util.js para dentro da pasta do index.js",
+        "Baixar o util.js da internet antes de rodar",
+        "Usar no index.js a função criada no util.js",
+        "Esconder a função para outros arquivos não a usarem"
+      ],
+      "correta": 2,
+      "explicacao": "export deixa a função disponível para outros arquivos e import a traz para o arquivo atual. O Webpack segue esses imports para montar o pacote."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No projeto com Webpack, o aluno colocou `import \"./estilo.css\";` no `index.js` e o build deu erro dizendo que não sabe tratar esse tipo de arquivo. O que falta?",
+      "alternativas": [
+        "Configurar um loader para CSS, como css-loader e style-loader",
+        "Trocar o nome do arquivo para estilo.js",
+        "Colocar o CSS dentro de uma tag `<script>`",
+        "Apagar o webpack.config.js para usar a configuração padrão"
+      ],
+      "correta": 0,
+      "explicacao": "Sozinho, o Webpack entende JavaScript (e JSON). Para outros tipos de arquivo, como CSS e imagens, é preciso configurar loaders nas regras (module.rules)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Antes, o site da academia tinha 8 tags `<script>` no HTML, e a ordem errada gerava erros. Depois de usar o Webpack, o HTML tem só `<script src=\"dist/bundle.js\"></script>`.\n\nNa sua resposta:\n1. explique por que agora há só um script no HTML;\n2. explique uma vantagem disso para o site.",
+      "respostasAceitas": [
+        "1) O Webpack seguiu os imports, juntou todos os arquivos na ordem certa e gerou um único bundle.js. 2) Menos arquivos para o navegador baixar (carrega mais rápido) e sem erro de ordem dos scripts, porque as dependências são resolvidas pelo Webpack."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) empacotamento num único arquivo; 2) menos requisições e ordem/dependências resolvidas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No `package.json` do projeto da loja há dois comandos: `\"dev\": \"webpack --mode development\"` e `\"build\": \"webpack --mode production\"`.\n\nNa sua resposta:\n1. explique para que serve cada modo;\n2. explique por que o arquivo gerado no modo production costuma ser menor.",
+      "respostasAceitas": [
+        "1) O development é para programar: gera rápido e fácil de depurar. O production é para publicar: gera o arquivo otimizado. 2) No production o código é minificado (tira espaços, comentários, encurta nomes) e partes não usadas são removidas, então o arquivo fica menor e carrega mais rápido."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dev = desenvolvimento/depuração; production = publicação; 2) minificação e otimização."
+    }
+  ]
+}
