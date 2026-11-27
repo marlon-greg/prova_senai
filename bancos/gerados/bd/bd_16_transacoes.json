@@ -1,0 +1,2477 @@
+{
+  "nome": "Banco de Dados — Transações: COMMIT, ROLLBACK e SAVEPOINT (a revisar)",
+  "materia": "Banco de Dados",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "o-que-e-transacao",
+      "enunciado": "No MySQL, o que é uma transação?",
+      "alternativas": [
+        "Uma cópia de segurança do banco que o servidor faz sozinho toda noite",
+        "Uma tabela especial que guarda o histórico de vendas de uma loja",
+        "Um grupo de comandos tratado como unidade: ou todos valem, ou nenhum",
+        "Um tipo de chave que liga uma tabela a outra tabela do banco"
+      ],
+      "correta": 2,
+      "explicacao": "Transação é um conjunto de comandos que o banco trata como um bloco só: confirma tudo (COMMIT) ou desfaz tudo (ROLLBACK)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Os comandos COMMIT, ROLLBACK e SAVEPOINT pertencem a qual grupo de comandos do SQL?",
+      "alternativas": [
+        "DDL, que define a estrutura das tabelas",
+        "TCL, que controla as transações",
+        "DCL, que dá e tira permissões",
+        "DQL, que só consulta os dados"
+      ],
+      "correta": 1,
+      "explicacao": "TCL (Transaction Control Language) reúne os comandos que controlam transações: COMMIT, ROLLBACK e SAVEPOINT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes grupos reúne apenas comandos de controle de transação (TCL)?",
+      "alternativas": [
+        "SELECT, INSERT e UPDATE",
+        "CREATE, ALTER e DROP",
+        "COMMIT, ROLLBACK e SAVEPOINT",
+        "GRANT, REVOKE e CREATE USER"
+      ],
+      "correta": 2,
+      "explicacao": "SELECT/INSERT/UPDATE são DQL/DML; CREATE/ALTER/DROP são DDL; GRANT/REVOKE são DCL. Os de transação são COMMIT, ROLLBACK e SAVEPOINT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, o técnico abriu uma transação e cadastrou três livros novos. Qual comando torna essas alterações definitivas no banco?",
+      "alternativas": [
+        "ROLLBACK;",
+        "SAVEPOINT;",
+        "COMMIT;",
+        "START TRANSACTION;"
+      ],
+      "correta": 2,
+      "explicacao": "COMMIT confirma a transação: as alterações passam a valer de vez e os outros usuários passam a vê-las."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando encerra a transação aberta DESCARTANDO tudo o que foi feito nela desde o início?",
+      "alternativas": [
+        "COMMIT;",
+        "RELEASE SAVEPOINT;",
+        "SET autocommit = 1;",
+        "ROLLBACK;"
+      ],
+      "correta": 3,
+      "explicacao": "ROLLBACK desfaz todas as alterações ainda não confirmadas e encerra a transação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL, quais são as duas formas de começar uma transação de forma explícita?",
+      "alternativas": [
+        "OPEN TRANSACTION; ou INIT;",
+        "COMMIT; ou SAVEPOINT;",
+        "NEW TRANSACTION; ou GO;",
+        "START TRANSACTION; ou BEGIN;"
+      ],
+      "correta": 3,
+      "explicacao": "START TRANSACTION e BEGIN fazem a mesma coisa no MySQL: abrem uma transação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No ACID, a Atomicidade significa, em palavras simples:",
+      "alternativas": [
+        "Cada transação só pode alterar uma única tabela de cada vez",
+        "Tudo ou nada: ou todos os comandos valem, ou nenhum vale",
+        "Os dados são guardados em pedaços bem pequenos dentro do disco",
+        "Uma transação precisa terminar em poucos segundos para valer"
+      ],
+      "correta": 1,
+      "explicacao": "Atômico = indivisível. A transação não pode ficar pela metade: ou vai inteira, ou é toda desfeita."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No ACID, o que a Durabilidade garante?",
+      "alternativas": [
+        "Depois do COMMIT, a alteração não se perde, nem se o servidor cair",
+        "A transação pode ficar aberta por no máximo uma hora seguida",
+        "Os dados antigos são apagados sozinhos depois de alguns dias",
+        "Só as alterações desfeitas com ROLLBACK ficam guardadas no disco"
+      ],
+      "correta": 0,
+      "explicacao": "Durabilidade: o que foi confirmado não se perde, nem com queda de energia ou reinício do servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No ACID, o Isolamento quer dizer que:",
+      "alternativas": [
+        "Cada usuário do banco precisa ter um computador separado para trabalhar",
+        "Uma transação em andamento não vê o trabalho pela metade de outra",
+        "As tabelas de uma transação ficam em um banco de dados separado",
+        "Só um usuário por vez pode se conectar ao servidor MySQL"
+      ],
+      "correta": 1,
+      "explicacao": "Isolamento: transações que rodam ao mesmo tempo não veem as alterações ainda não confirmadas umas das outras."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No ACID, a Consistência garante que:",
+      "alternativas": [
+        "O banco sai de um estado válido e vai para outro, sem quebrar as regras",
+        "Todos os usuários veem sempre a mesma tela no Workbench, ao mesmo tempo",
+        "As consultas sempre devolvem as linhas em ordem alfabética, de A a Z",
+        "O banco faz uma cópia de cada tabela antes de qualquer comando"
+      ],
+      "correta": 0,
+      "explicacao": "Consistência: no fim da transação, as regras do banco continuam valendo. Se uma regra for quebrada, o comando é recusado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que significam as letras da sigla ACID, usada para falar das garantias de uma transação?",
+      "alternativas": [
+        "Acesso, Controle, Integração e Dados",
+        "Atualização, Cópia, Inserção e Deleção",
+        "Armazenamento, Conexão, Integridade e Desempenho",
+        "Atomicidade, Consistência, Isolamento e Durabilidade"
+      ],
+      "correta": 3,
+      "explicacao": "ACID = Atomicidade, Consistência, Isolamento e Durabilidade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Como o autocommit vem configurado por padrão no MySQL?",
+      "alternativas": [
+        "Desligado: nada é gravado até alguém digitar COMMIT no final",
+        "Ligado só para SELECT e desligado para INSERT, UPDATE e DELETE",
+        "Ligado: cada comando é confirmado sozinho logo que termina sem erro",
+        "Ele não existe no MySQL, só em outros gerenciadores de banco"
+      ],
+      "correta": 2,
+      "explicacao": "No MySQL o autocommit vem ligado (1): cada comando fora de uma transação explícita é confirmado automaticamente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando desliga o autocommit apenas na sessão (conexão) atual do MySQL?",
+      "alternativas": [
+        "SET autocommit = 0;",
+        "STOP COMMIT;",
+        "DISABLE AUTOCOMMIT;",
+        "SET commit = OFF;"
+      ],
+      "correta": 0,
+      "explicacao": "SET autocommit = 0; desliga o autocommit da sessão. A partir daí, as alterações só ficam gravadas com COMMIT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em qual destas situações o uso de uma transação é MAIS importante?",
+      "alternativas": [
+        "Listar o nome de todos os clientes em ordem alfabética",
+        "Contar quantos livros a biblioteca tem cadastrados",
+        "Transferir dinheiro de uma conta para outra",
+        "Mostrar o preço de um pão na tela do caixa da padaria"
+      ],
+      "correta": 2,
+      "explicacao": "A transferência tem duas alterações que precisam acontecer juntas. As outras opções só leem dados, não alteram nada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop, a tabela `servico` tem id_servico, nome e preco. O técnico rodou:\n`START TRANSACTION;`\n`UPDATE servico SET preco = preco * 2;`\n`ROLLBACK;`\nComo fica a tabela no final?",
+      "alternativas": [
+        "Com todos os preços dobrados",
+        "Com só o primeiro preço dobrado",
+        "Vazia, porque o ROLLBACK apaga as linhas",
+        "Igual a antes: o ROLLBACK desfez o UPDATE"
+      ],
+      "correta": 3,
+      "explicacao": "O UPDATE foi feito dentro da transação e não foi confirmado. O ROLLBACK desfaz tudo e a tabela volta ao que era."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, o técnico rodou `SET autocommit = 0;` e depois `DELETE FROM recado WHERE id_recado = 9;` (tabela `recado` com id_recado, texto e data). Em seguida rodou `ROLLBACK;`. O que acontece?",
+      "alternativas": [
+        "O recado 9 volta, pois o DELETE ainda não estava confirmado",
+        "Nada volta, pois o DELETE já tinha sido gravado assim que terminou",
+        "Dá erro, porque não houve START TRANSACTION antes do DELETE",
+        "O recado 9 volta, mas todos os outros recados da tabela são apagados"
+      ],
+      "correta": 0,
+      "explicacao": "Com autocommit = 0, toda alteração fica pendente até um COMMIT. O ROLLBACK descarta o DELETE pendente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de games, a sessão A rodou `START TRANSACTION;` e `UPDATE jogo SET preco = 99 WHERE id_jogo = 4;` (tabela `jogo` com id_jogo, titulo e preco), sem COMMIT. Ao mesmo tempo, a sessão B consulta o jogo 4. Qual preço B vê?",
+      "alternativas": [
+        "O preço 99, porque o UPDATE já terminou na sessão A",
+        "O preço antigo, porque a alteração de A ainda não foi confirmada",
+        "Nenhum, porque a linha some até a sessão A dar COMMIT",
+        "Um erro, porque duas sessões não podem usar a mesma tabela"
+      ],
+      "correta": 1,
+      "explicacao": "Isolamento: outras sessões não enxergam alterações ainda não confirmadas. B vê o valor antigo até A dar COMMIT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa oficina, o técnico rodou `START TRANSACTION;` e depois `UPDATE peca SET qtd = 0 WHERE id_peca = 3;` (tabela `peca` com id_peca, nome e qtd). Antes de confirmar, rodou na MESMA sessão `SELECT qtd FROM peca WHERE id_peca = 3;`. O que aparece?",
+      "alternativas": [
+        "O valor antigo, pois ainda não houve COMMIT",
+        "Nada, pois SELECT não funciona dentro de transação",
+        "Um erro, pois é preciso dar COMMIT antes de um SELECT",
+        "0, pois a transação enxerga as próprias alterações"
+      ],
+      "correta": 3,
+      "explicacao": "A sessão que fez a alteração já vê o valor novo dentro da própria transação; as outras sessões ainda não."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa transferência entre contas, o sistema tirou R$ 200 da conta de Ana e, antes de colocar na conta de Beto, o servidor caiu. Como estava tudo numa transação, nada foi gravado. Qual propriedade do ACID garantiu isso?",
+      "alternativas": [
+        "Durabilidade",
+        "Isolamento",
+        "Atomicidade",
+        "Consistência"
+      ],
+      "correta": 2,
+      "explicacao": "Atomicidade (tudo ou nada): a transação não pode ficar pela metade; sem o COMMIT, a retirada é desfeita."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "durab-clinica",
+      "enunciado": "Numa clínica, a recepcionista marcou uma consulta e o sistema deu COMMIT. Um segundo depois faltou luz. Quando o servidor voltou, a consulta estava lá. Qual propriedade do ACID explica isso?",
+      "alternativas": [
+        "Atomicidade",
+        "Isolamento",
+        "Durabilidade",
+        "Consistência"
+      ],
+      "correta": 2,
+      "explicacao": "Durabilidade: depois do COMMIT, a alteração está gravada de forma permanente e sobrevive a quedas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cinema, dois caixas vendem ingressos ao mesmo tempo. Um caixa não enxerga a venda do outro enquanto ela não for confirmada. Qual propriedade do ACID é essa?",
+      "alternativas": [
+        "Atomicidade",
+        "Isolamento",
+        "Durabilidade",
+        "Consistência"
+      ],
+      "correta": 1,
+      "explicacao": "Isolamento: cada transação trabalha como se estivesse sozinha; alterações pendentes de uma não aparecem para a outra."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa padaria, a tabela `produto` tem a regra CHECK (estoque >= 0). Uma transação tentou deixar o estoque do sonho em -3 e o comando foi recusado. Qual propriedade do ACID está sendo protegida?",
+      "alternativas": [
+        "Durabilidade",
+        "Isolamento",
+        "Atomicidade",
+        "Consistência"
+      ],
+      "correta": 3,
+      "explicacao": "Consistência: o banco não aceita sair de um estado válido para um estado que quebra suas regras (como estoque negativo)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel, o técnico rodou `SET autocommit = 0;`, fez dois INSERTs na tabela `reserva` e deu `COMMIT;`. Logo depois, fez um UPDATE na mesma tabela. O que vale para esse UPDATE?",
+      "alternativas": [
+        "Ele é gravado na hora, porque o COMMIT religou o autocommit",
+        "Ele dá erro, porque é preciso rodar START TRANSACTION de novo",
+        "Ele é desfeito sozinho, porque a transação já terminou",
+        "Ele faz parte de uma nova transação e também vai precisar de COMMIT"
+      ],
+      "correta": 3,
+      "explicacao": "Com autocommit = 0, depois de cada COMMIT/ROLLBACK começa outra transação automaticamente. O autocommit continua desligado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual a diferença entre `BEGIN;` e `START TRANSACTION;` no MySQL (fora de procedimentos)?",
+      "alternativas": [
+        "BEGIN confirma e START TRANSACTION desfaz",
+        "Nenhuma: os dois abrem uma transação",
+        "BEGIN só funciona com o autocommit desligado",
+        "START TRANSACTION só vale para comandos SELECT"
+      ],
+      "correta": 1,
+      "explicacao": "Fora de procedures, BEGIN é um sinônimo de START TRANSACTION."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, a técnica só fez consultas: `SELECT nome FROM aluno;` (tabela `aluno` com id_aluno, nome e plano). Ela precisa dar COMMIT depois disso?",
+      "alternativas": [
+        "Não: SELECT só lê; COMMIT confirma alterações",
+        "Sim: sem COMMIT o resultado do SELECT some da tela depois",
+        "Sim: todo comando precisa de COMMIT, até o SELECT",
+        "Não: SELECT já faz um ROLLBACK automático no final"
+      ],
+      "correta": 0,
+      "explicacao": "SELECT não altera dados, então não há o que confirmar. COMMIT importa para INSERT, UPDATE e DELETE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "trava",
+      "enunciado": "Numa loja, a sessão A abriu uma transação e alterou a linha do produto 5, sem COMMIT. A sessão B tenta fazer um UPDATE nessa MESMA linha. O que acontece com B?",
+      "alternativas": [
+        "Grava por cima na hora e apaga a alteração que a sessão A tinha feito",
+        "Fica esperando até A dar COMMIT ou ROLLBACK (ou até o tempo acabar)",
+        "Recebe a linha já com a alteração de A e grava as duas juntas",
+        "Faz a sessão A perder a conexão com o servidor"
+      ],
+      "correta": 1,
+      "explicacao": "A linha alterada fica travada (lock) pela transação de A. B espera a liberação; se demorar demais, recebe erro de tempo de espera."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "commit-depois-rollback",
+      "enunciado": "Num sistema de escola, a tabela `aluno` tem id_aluno, nome e turma. O técnico rodou, com autocommit ligado:\n`START TRANSACTION;`\n`UPDATE aluno SET turma = '3A' WHERE id_aluno = 12;`\n`COMMIT;`\n`ROLLBACK;`\nQual a turma do aluno 12 no final?",
+      "alternativas": [
+        "A turma antiga, porque o ROLLBACK desfaz o último UPDATE",
+        "Fica vazia, porque o ROLLBACK apaga o valor da coluna",
+        "Dá erro e a tabela fica travada até reiniciar o servidor",
+        "3A, pois depois do COMMIT não há nada para desfazer"
+      ],
+      "correta": 3,
+      "explicacao": "O COMMIT encerrou e confirmou a transação. O ROLLBACK seguinte não tem nenhuma alteração pendente para desfazer."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Dentro de uma transação aberta com START TRANSACTION numa tabela InnoDB, quais comandos o ROLLBACK consegue desfazer?",
+      "alternativas": [
+        "Só os comandos SELECT rodados dentro da transação",
+        "Os INSERT, UPDATE e DELETE feitos nela",
+        "Os comandos já confirmados por COMMIT antes dela",
+        "Os CREATE TABLE e DROP TABLE feitos dentro dela"
+      ],
+      "correta": 1,
+      "explicacao": "ROLLBACK desfaz as alterações de dados (DML) ainda não confirmadas. O que já teve COMMIT não volta, e DDL faz commit implícito."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "erro-meio",
+      "enunciado": "Numa loja, a tabela `venda` tem id_venda (chave primária) e valor; já existe a venda 10. O técnico rodou:\n`START TRANSACTION;`\n`UPDATE produto SET estoque = estoque - 1 WHERE id_produto = 2;`\n`INSERT INTO venda (id_venda, valor) VALUES (10, 50);`\n`COMMIT;`\nO INSERT deu erro de chave duplicada. O que fica gravado?",
+      "alternativas": [
+        "Nada: o erro no INSERT desfaz sozinho a transação inteira",
+        "O UPDATE e o INSERT, pois o COMMIT ignora o erro",
+        "Fica o UPDATE do estoque; só o INSERT com erro não entra",
+        "Nada, porque o COMMIT não roda depois de um erro"
+      ],
+      "correta": 2,
+      "explicacao": "No MySQL, um comando com erro é cancelado sozinho, mas a transação continua aberta. O COMMIT confirma o que deu certo (o UPDATE). Ao ver o erro, o certo seria dar ROLLBACK."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na sessão do técnico de uma clínica, rodou-se:\n`SET autocommit = 0;`\n`INSERT INTO paciente (nome) VALUES ('Rita');`\n`SET autocommit = 1;`\n`ROLLBACK;`\nA paciente Rita fica gravada?",
+      "alternativas": [
+        "Não: o ROLLBACK desfaz o INSERT que estava pendente",
+        "Não: o INSERT é descartado assim que o autocommit muda",
+        "Sim, mas só aparece depois que o servidor for reiniciado",
+        "Sim: religar o autocommit confirma a transação aberta"
+      ],
+      "correta": 3,
+      "explicacao": "Quando o autocommit passa de 0 para 1, o MySQL faz um COMMIT automático da transação aberta. O ROLLBACK depois não tem o que desfazer."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "start-implicito",
+      "enunciado": "Na biblioteca, o técnico rodou:\n`START TRANSACTION;`\n`UPDATE livro SET disponivel = 0 WHERE id_livro = 8;`\n`START TRANSACTION;`\n`ROLLBACK;`\nComo fica o livro 8?",
+      "alternativas": [
+        "Indisponível: o 2º START TRANSACTION confirmou a primeira",
+        "Disponível: o ROLLBACK desfaz o UPDATE das duas transações",
+        "Dá erro, pois não se pode abrir transação dentro de outra",
+        "Disponível: o segundo START TRANSACTION desfez o UPDATE"
+      ],
+      "correta": 0,
+      "explicacao": "No MySQL não existe transação dentro de transação. Um novo START TRANSACTION faz commit implícito da transação aberta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "autoinc",
+      "enunciado": "Na tabela `pedido` (id_pedido com AUTO_INCREMENT, cliente), o último id gravado é 40. O técnico rodou `START TRANSACTION;`, um INSERT (que recebeu o id 41) e `ROLLBACK;`. Depois rodou outro INSERT com autocommit ligado. Que id esse pedido recebe?",
+      "alternativas": [
+        "41: o ROLLBACK devolve o número para ser usado de novo",
+        "42: o número 41 foi gasto, mesmo com o ROLLBACK",
+        "40: o ROLLBACK faz o contador voltar uma casa a mais",
+        "1: o ROLLBACK zera o contador do AUTO_INCREMENT"
+      ],
+      "correta": 1,
+      "explicacao": "No InnoDB, o ROLLBACK desfaz a linha, mas não devolve o valor do AUTO_INCREMENT. Por isso aparecem \"buracos\" na numeração."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que deixar uma transação aberta por muito tempo (por exemplo, o técnico abre, faz um UPDATE e vai almoçar) pode atrapalhar os outros usuários?",
+      "alternativas": [
+        "A transação aberta apaga sozinha as linhas depois de alguns minutos",
+        "As linhas alteradas ficam travadas e os outros esperam",
+        "O servidor desliga o banco para todos até sair o COMMIT",
+        "Os outros usuários passam a ver os dados alterados pela metade"
+      ],
+      "correta": 1,
+      "explicacao": "Enquanto não há COMMIT/ROLLBACK, as linhas alteradas ficam bloqueadas. Outras sessões que querem alterá-las ficam esperando ou recebem erro de tempo esgotado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `conta` (id_conta, saldo), qual destas sequências deixa a alteração do saldo GRAVADA de forma definitiva?",
+      "alternativas": [
+        "SET autocommit = 0; UPDATE conta SET saldo = 10 WHERE id_conta = 1; COMMIT;",
+        "START TRANSACTION; UPDATE conta SET saldo = 10 WHERE id_conta = 1; ROLLBACK;",
+        "SET autocommit = 0; UPDATE conta SET saldo = 10 WHERE id_conta = 1; e a conexão é fechada",
+        "START TRANSACTION; UPDATE conta SET saldo = 10 WHERE id_conta = 1; ROLLBACK; COMMIT;"
+      ],
+      "correta": 0,
+      "explicacao": "Só a primeira termina com COMMIT logo após o UPDATE. Fechar a conexão sem COMMIT descarta; ROLLBACK desfaz; e o COMMIT depois do ROLLBACK não tem nada para confirmar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `conta` (id_conta, saldo), a conta 1 tem 300 e não existe conta 99. O técnico rodou:\n`START TRANSACTION;`\n`UPDATE conta SET saldo = saldo - 100 WHERE id_conta = 1;`\n`UPDATE conta SET saldo = saldo + 100 WHERE id_conta = 99;`\n`COMMIT;`\nO que acontece?",
+      "alternativas": [
+        "Nada é gravado: a transação percebe que a conta 99 não existe",
+        "A conta 99 é criada sozinha com saldo de 100",
+        "A conta 1 fica com 200, pois o COMMIT confirmou a retirada",
+        "O COMMIT dá erro e a conta 1 continua com 300"
+      ],
+      "correta": 2,
+      "explicacao": "Um UPDATE que não encontra linhas não gera erro (0 linhas afetadas). A transação não confere a lógica: quem precisa conferir e dar ROLLBACK é o programa ou o técnico."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "o-que-e-transacao",
+      "enunciado": "Em banco de dados, fala-se muito em transação.\n\nNa sua resposta:\n1. explique o que é uma transação;\n2. dê um exemplo de situação do dia a dia de um sistema em que ela é necessária.",
+      "respostasAceitas": [
+        "Transação é um grupo de comandos que o banco trata como uma unidade: ou todos são confirmados, ou nenhum. Ex.: numa venda, registrar a venda e baixar o estoque juntos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) conjunto de comandos tratado como unidade (tudo ou nada); 2) qualquer exemplo com mais de uma alteração ligada (transferência, venda com estoque, matrícula etc.)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno ficou em dúvida sobre os comandos `COMMIT;` e `ROLLBACK;`.\n\nNa sua resposta:\n1. explique o que o COMMIT faz;\n2. explique o que o ROLLBACK faz;\n3. diga quando usar cada um.",
+      "respostasAceitas": [
+        "COMMIT confirma de vez as alterações da transação. ROLLBACK desfaz as alterações ainda não confirmadas. Usa-se COMMIT quando tudo deu certo e ROLLBACK quando algo deu errado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) COMMIT grava/confirma; 2) ROLLBACK desfaz o que não foi confirmado; 3) COMMIT quando deu certo, ROLLBACK quando houve erro ou engano."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No MySQL, o autocommit vem ligado por padrão.\n\nNa sua resposta:\n1. explique o que acontece com cada INSERT, UPDATE ou DELETE quando o autocommit está ligado;\n2. explique que cuidado isso exige de quem altera os dados.",
+      "respostasAceitas": [
+        "Com o autocommit ligado, cada comando é confirmado sozinho assim que termina. Por isso é preciso cuidado: um comando errado já fica gravado e o ROLLBACK não desfaz."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cada comando vira uma transação confirmada na hora; 2) conferir antes de rodar (WHERE etc.) ou abrir uma transação antes, porque depois não dá para desfazer."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "As transações seguem as propriedades ACID.\n\nNa sua resposta:\n1. diga o que é a Atomicidade;\n2. diga o que é a Consistência;\n3. diga o que é o Isolamento;\n4. diga o que é a Durabilidade.",
+      "respostasAceitas": [
+        "Atomicidade: tudo ou nada. Consistência: o banco continua respeitando suas regras. Isolamento: uma transação não vê o trabalho pela metade da outra. Durabilidade: o que teve COMMIT não se perde."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se uma frase simples para cada letra; não precisa de definição formal."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "durab-clinica",
+      "enunciado": "Numa clínica, a recepcionista marcou uma consulta, o sistema deu `COMMIT;` e, logo depois, faltou energia. Quando o servidor voltou, alguém perguntou se a consulta ainda estaria lá.\n\nNa sua resposta:\n1. responda se a consulta continua gravada;\n2. diga qual propriedade do ACID garante isso e explique-a.",
+      "respostasAceitas": [
+        "Sim, a consulta continua gravada. A Durabilidade garante que, depois do COMMIT, a alteração é permanente, mesmo com queda de energia."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sim; 2) Durabilidade: confirmado com COMMIT não se perde."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa biblioteca, a tabela `livro` tem id_livro, titulo e ano. Observe a sequência:\n`START TRANSACTION;`\n`DELETE FROM livro WHERE ano < 1990;`\n`ROLLBACK;`\n\nNa sua resposta:\n1. explique o que cada um dos três comandos faz;\n2. diga o que fica na tabela no final.",
+      "respostasAceitas": [
+        "START TRANSACTION abre a transação; o DELETE apaga (de forma pendente) os livros de antes de 1990; o ROLLBACK desfaz tudo. No final a tabela fica igual a antes, com todos os livros."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) abre, apaga provisoriamente, desfaz; 2) nenhum livro é perdido."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num cinema, a atendente A abriu uma transação e marcou a poltrona F7 como vendida, mas ainda não deu COMMIT. Na mesma hora, a própria atendente A e o atendente B consultam a poltrona F7.\n\nNa sua resposta:\n1. diga o que A vê e o que B vê;\n2. explique por que o banco se comporta assim e qual propriedade do ACID está envolvida.",
+      "respostasAceitas": [
+        "A vê a poltrona já vendida, pois a transação enxerga suas próprias alterações. B ainda a vê livre, pois a venda não foi confirmada. Isso é o Isolamento."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) A vê o novo valor, B vê o antigo; 2) alteração sem COMMIT só é visível para quem a fez (Isolamento)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa padaria, a tabela `produto` (id_produto, nome, estoque) tem a regra `CHECK (estoque >= 0)`. O pão de queijo tem estoque 4 e alguém rodou `UPDATE produto SET estoque = estoque - 6 WHERE id_produto = 2;`.\n\nNa sua resposta:\n1. diga o que acontece com esse comando;\n2. explique a relação disso com a Consistência do ACID.",
+      "respostasAceitas": [
+        "O comando é recusado com erro, porque deixaria o estoque em -2, quebrando o CHECK. A Consistência garante que o banco só passa de um estado válido para outro válido."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) erro, o estoque continua 4; 2) as regras do banco não podem ser quebradas (Consistência)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, o técnico rodou `SET autocommit = 0;`, lançou 30 notas com INSERT na tabela `nota` (id_nota, id_aluno, valor) e fechou o Workbench sem rodar mais nada.\n\nNa sua resposta:\n1. diga o que acontece com as 30 notas;\n2. explique por que isso acontece.",
+      "respostasAceitas": [
+        "As notas são perdidas. Com o autocommit desligado, as alterações ficam pendentes até um COMMIT; ao fechar a conexão sem COMMIT, o MySQL desfaz a transação."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) as notas não ficam gravadas; 2) faltou COMMIT, e sessão encerrada sem COMMIT faz ROLLBACK."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Duas técnicas trabalham de jeitos diferentes: uma usa `START TRANSACTION;` antes das alterações, a outra rodou `SET autocommit = 0;` no começo do dia.\n\nNa sua resposta:\n1. explique o que cada um desses comandos faz;\n2. explique o que acontece com o autocommit depois do primeiro COMMIT em cada caso.",
+      "respostasAceitas": [
+        "START TRANSACTION abre uma transação só até o próximo COMMIT/ROLLBACK; depois o autocommit volta ao que era (ligado). SET autocommit = 0 desliga o autocommit da sessão: depois de cada COMMIT começa outra transação e tudo continua precisando de COMMIT."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) um abre uma transação, o outro desliga o autocommit da sessão; 2) com START TRANSACTION o autocommit volta a valer; com autocommit = 0 continua desligado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "sem-transacao-queda",
+      "enunciado": "Num sistema de loja SEM transação, o programa grava a venda com um INSERT e depois baixa o estoque com um UPDATE. Um dia o servidor caiu entre os dois comandos.\n\nNa sua resposta:\n1. diga como ficaram os dados depois da queda;\n2. diga qual propriedade do ACID faltou e como a transação resolveria o problema.",
+      "respostasAceitas": [
+        "A venda ficou registrada, mas o estoque não baixou. Faltou a Atomicidade: com os dois comandos numa transação, sem o COMMIT nada seria gravado, e a venda não ficaria pela metade."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) venda gravada e estoque errado; 2) Atomicidade (tudo ou nada); com START TRANSACTION...COMMIT, a queda desfaria a venda."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega diz: \"transação só serve para banco de dinheiro, com conta corrente e saldo\".\n\nNa sua resposta:\n1. diga se você concorda e por quê;\n2. dê dois exemplos de sistemas fora de bancos financeiros em que a transação é útil.",
+      "respostasAceitas": [
+        "Não concordo: transação serve sempre que várias alterações precisam acontecer juntas. Ex.: venda que baixa estoque numa loja; empréstimo na biblioteca que registra o empréstimo e marca o livro como indisponível."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) não, vale para qualquer grupo de alterações ligadas; 2) dois exemplos coerentes (venda/estoque, matrícula, reserva de hotel, ingresso de cinema etc.)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "erro-meio",
+      "enunciado": "Numa loja, a tabela `venda` tem id_venda como chave primária e já existe a venda 20. O técnico rodou:\n`START TRANSACTION;`\n`UPDATE produto SET estoque = estoque - 2 WHERE id_produto = 7;`\n`INSERT INTO venda (id_venda, valor) VALUES (20, 80);`\n`COMMIT;`\nO INSERT deu erro de chave duplicada, mas o técnico não percebeu.\n\nNa sua resposta:\n1. diga o que ficou gravado no final;\n2. explique por que o erro não desfez a transação sozinho;\n3. diga o que o técnico deveria ter feito ao ver o erro.",
+      "respostasAceitas": [
+        "Ficou gravada a baixa de 2 no estoque, sem a venda. No MySQL, o erro cancela só o comando que falhou e a transação continua aberta; o COMMIT confirmou o UPDATE. Ao ver o erro, deveria ter dado ROLLBACK."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) estoque baixado sem venda registrada; 2) erro desfaz só o comando, não a transação; 3) ROLLBACK em vez de COMMIT."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "autoinc",
+      "enunciado": "Na tabela `pedido` (id_pedido com AUTO_INCREMENT), o dono de uma pizzaria viu os ids 1, 2, 3 e 5, sem o 4, e jura que ninguém apagou pedido nenhum.\n\nNa sua resposta:\n1. explique como um ROLLBACK pode ter causado esse \"buraco\";\n2. diga se isso é um problema para o banco.",
+      "respostasAceitas": [
+        "Algum INSERT dentro de uma transação recebeu o id 4 e depois houve ROLLBACK. O ROLLBACK desfaz a linha, mas o número do AUTO_INCREMENT não é devolvido. Não é problema: o id só precisa ser único, não sequencial."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o número foi gasto num INSERT desfeito; 2) não é problema, a chave continua única."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa academia, a técnica abriu uma transação, fez um UPDATE em vários planos de alunos e saiu para almoçar sem COMMIT nem ROLLBACK. Os outros funcionários reclamaram que o sistema \"travou\" ao tentar alterar esses alunos.\n\nNa sua resposta:\n1. explique por que os outros ficaram travados;\n2. diga o que acontece com os UPDATEs se a conexão dela for encerrada;\n3. dê uma boa prática para evitar isso.",
+      "respostasAceitas": [
+        "As linhas alteradas ficaram bloqueadas pela transação aberta, então quem tentou alterá-las ficou esperando. Se a conexão for encerrada, a transação é desfeita (ROLLBACK). Boa prática: transações curtas, terminando logo com COMMIT ou ROLLBACK."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) linhas travadas (lock) até o fim da transação; 2) são desfeitas; 3) manter transações curtas / encerrar antes de sair."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "savepoint-serve",
+      "enunciado": "Para que serve o comando SAVEPOINT dentro de uma transação?",
+      "alternativas": [
+        "Marca um ponto da transação para onde dá para voltar depois",
+        "Confirma a transação e grava tudo de forma definitiva",
+        "Faz uma cópia de segurança completa do banco de dados",
+        "Abre uma nova transação dentro da transação atual"
+      ],
+      "correta": 0,
+      "explicacao": "SAVEPOINT cria uma marca. Com ROLLBACK TO SAVEPOINT, dá para desfazer só o que veio depois dela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando desfaz apenas o que foi feito DEPOIS do savepoint chamado `antes_desconto`?",
+      "alternativas": [
+        "COMMIT TO SAVEPOINT antes_desconto;",
+        "RETURN SAVEPOINT antes_desconto;",
+        "UNDO antes_desconto;",
+        "ROLLBACK TO SAVEPOINT antes_desconto;"
+      ],
+      "correta": 3,
+      "explicacao": "A forma é ROLLBACK TO SAVEPOINT nome; (também aceita ROLLBACK TO nome;)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "release-def",
+      "enunciado": "O que faz o comando `RELEASE SAVEPOINT etapa1;`?",
+      "alternativas": [
+        "Confirma de vez tudo o que foi feito até a marca etapa1",
+        "Desfaz tudo o que foi feito depois da marca etapa1",
+        "Encerra a transação e libera a conexão com o servidor",
+        "Apaga a marca etapa1, sem desfazer nem confirmar nada"
+      ],
+      "correta": 3,
+      "explicacao": "RELEASE SAVEPOINT só remove o savepoint. Os dados continuam pendentes, esperando COMMIT ou ROLLBACK."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL 8, qual é o motor de armazenamento (ENGINE) padrão das tabelas, que aceita transações?",
+      "alternativas": [
+        "InnoDB",
+        "MyISAM",
+        "CSV",
+        "MEMORY"
+      ],
+      "correta": 0,
+      "explicacao": "Desde o MySQL 5.5 o padrão é InnoDB, que tem COMMIT, ROLLBACK, SAVEPOINT e chaves estrangeiras."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "innodb-myisam",
+      "enunciado": "Uma tabela antiga de um pet shop usa o motor MyISAM. Sobre transações, é correto dizer que:",
+      "alternativas": [
+        "MyISAM aceita transações melhor que o InnoDB",
+        "MyISAM não aceita transações, então o ROLLBACK não a afeta",
+        "MyISAM só aceita transações com o autocommit desligado",
+        "MyISAM desfaz as alterações sozinho a cada minuto"
+      ],
+      "correta": 1,
+      "explicacao": "MyISAM não é transacional: cada alteração é gravada na hora e não há como desfazê-la com ROLLBACK."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "commit-implicito",
+      "enunciado": "O que é um commit implícito no MySQL?",
+      "alternativas": [
+        "Um COMMIT que o MySQL faz sozinho, sem você digitar",
+        "Um COMMIT que só vale para os comandos SELECT da sessão",
+        "Um ROLLBACK feito pelo servidor quando a conexão cai",
+        "Um COMMIT digitado dentro de um SAVEPOINT"
+      ],
+      "correta": 0,
+      "explicacao": "Alguns comandos (como os de DDL) fazem o MySQL confirmar a transação aberta automaticamente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes comandos causa um commit implícito se for rodado no meio de uma transação?",
+      "alternativas": [
+        "INSERT",
+        "UPDATE",
+        "CREATE TABLE",
+        "SELECT"
+      ],
+      "correta": 2,
+      "explicacao": "Comandos DDL (CREATE, ALTER, DROP, TRUNCATE...) fazem commit implícito. INSERT, UPDATE e SELECT não."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em que momento faz sentido usar SAVEPOINT?",
+      "alternativas": [
+        "Antes de rodar o START TRANSACTION da sessão",
+        "Depois do COMMIT, para guardar o resultado",
+        "Só na hora de criar o banco de dados",
+        "Dentro de uma transação que ainda está aberta"
+      ],
+      "correta": 3,
+      "explicacao": "O savepoint é uma marca dentro de uma transação aberta. Quando a transação termina, os savepoints deixam de existir."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a forma certa de criar um savepoint chamado `antes_brinde`?",
+      "alternativas": [
+        "CREATE SAVEPOINT antes_brinde;",
+        "SET SAVEPOINT = antes_brinde;",
+        "SAVEPOINT antes_brinde;",
+        "START SAVEPOINT antes_brinde;"
+      ],
+      "correta": 2,
+      "explicacao": "A sintaxe é simplesmente SAVEPOINT nome;"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de um `ROLLBACK TO SAVEPOINT s1;`, a transação:",
+      "alternativas": [
+        "Continua aberta, com o que veio antes de s1 pendente",
+        "É encerrada e tudo o que foi feito nela é gravado",
+        "É encerrada e tudo o que foi feito nela é desfeito na hora",
+        "Fica travada até o servidor ser reiniciado"
+      ],
+      "correta": 0,
+      "explicacao": "ROLLBACK TO SAVEPOINT não encerra a transação: ainda é preciso COMMIT ou ROLLBACK no final."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "rb-vs-rbto",
+      "enunciado": "Qual a diferença entre `ROLLBACK;` e `ROLLBACK TO SAVEPOINT x;`?",
+      "alternativas": [
+        "ROLLBACK desfaz a transação inteira; o outro desfaz só o que veio depois de x",
+        "ROLLBACK desfaz só o último comando; o outro desfaz a transação inteira",
+        "Os dois fazem a mesma coisa, só muda o jeito de escrever",
+        "ROLLBACK confirma a transação; o outro desfaz só até a marca x"
+      ],
+      "correta": 0,
+      "explicacao": "ROLLBACK volta ao início e encerra a transação. ROLLBACK TO volta só até a marca e mantém a transação aberta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um técnico rodou `START TRANSACTION;` e depois `TRUNCATE TABLE log_acesso;`. Ele consegue desfazer o TRUNCATE com ROLLBACK?",
+      "alternativas": [
+        "Não: TRUNCATE faz commit implícito e não pode ser desfeito",
+        "Sim: tudo que está depois do START TRANSACTION pode ser desfeito",
+        "Sim, mas só se ele rodar ROLLBACK duas vezes seguidas",
+        "Não, porque TRUNCATE só funciona com o autocommit desligado"
+      ],
+      "correta": 0,
+      "explicacao": "TRUNCATE TABLE é DDL: confirma a transação aberta e esvazia a tabela de forma definitiva."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa tabela criada com `CREATE TABLE venda (...) ENGINE = InnoDB;`, o que o trecho `ENGINE = InnoDB` define?",
+      "alternativas": [
+        "O nome do usuário dono da tabela no servidor",
+        "O motor da tabela; o InnoDB aceita transações",
+        "A codificação de caracteres usada nos textos",
+        "Que a tabela não pode ser apagada com DROP"
+      ],
+      "correta": 1,
+      "explicacao": "ENGINE escolhe o motor de armazenamento. InnoDB é transacional e aceita FOREIGN KEY."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que acontece com os savepoints de uma transação depois do COMMIT?",
+      "alternativas": [
+        "Deixam de existir, pois a transação terminou",
+        "Ficam guardados para a próxima transação",
+        "Viram tabelas novas no banco de dados",
+        "Continuam valendo até o servidor ser desligado"
+      ],
+      "correta": 0,
+      "explicacao": "COMMIT e ROLLBACK encerram a transação e apagam todos os savepoints dela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa sorveteria, a tabela `sabor` tem id_sabor e nome. O técnico rodou:\n`START TRANSACTION;`\n`INSERT INTO sabor (nome) VALUES ('Açaí');`\n`SAVEPOINT s1;`\n`INSERT INTO sabor (nome) VALUES ('Pistache');`\n`ROLLBACK TO SAVEPOINT s1;`\n`COMMIT;`\nQual sabor novo fica gravado?",
+      "alternativas": [
+        "Só Pistache",
+        "Só Açaí",
+        "Açaí e Pistache",
+        "Nenhum dos dois"
+      ],
+      "correta": 1,
+      "explicacao": "ROLLBACK TO s1 desfaz o que veio depois da marca (Pistache). O COMMIT confirma o que sobrou (Açaí)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa oficina, o técnico rodou:\n`START TRANSACTION;`\n`UPDATE servico SET preco = 120 WHERE id_servico = 1;`\n`SAVEPOINT s1;`\n`DELETE FROM servico WHERE id_servico = 9;`\n`RELEASE SAVEPOINT s1;`\n`COMMIT;`\nO que fica gravado? (tabela `servico` com id_servico, nome e preco)",
+      "alternativas": [
+        "Só o UPDATE",
+        "O UPDATE e o DELETE",
+        "Só o DELETE",
+        "Nada, o RELEASE desfez tudo"
+      ],
+      "correta": 1,
+      "explicacao": "RELEASE SAVEPOINT apenas apaga a marca, sem desfazer nada. O COMMIT confirma o UPDATE e o DELETE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "ddl-meio",
+      "enunciado": "Numa escola, o técnico rodou:\n`START TRANSACTION;`\n`INSERT INTO aviso (texto) VALUES ('Prova sexta');`\n`CREATE TABLE rascunho (id INT);`\n`ROLLBACK;`\nO aviso fica gravado?",
+      "alternativas": [
+        "Sim: o CREATE TABLE fez commit implícito antes do ROLLBACK",
+        "Não: o ROLLBACK desfaz o INSERT e o CREATE TABLE",
+        "Não: o CREATE TABLE apaga o INSERT que estava pendente",
+        "Sim, mas a tabela rascunho é desfeita pelo ROLLBACK"
+      ],
+      "correta": 0,
+      "explicacao": "O CREATE TABLE confirmou a transação (commit implícito). O ROLLBACK depois não tem nada pendente: o aviso e a tabela rascunho ficam."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "myisam-rollback",
+      "enunciado": "A tabela `movimento` de uma loja usa ENGINE = MyISAM. O técnico rodou `START TRANSACTION;`, depois `DELETE FROM movimento WHERE ano = 2020;` e, em seguida, `ROLLBACK;`. O que acontece?",
+      "alternativas": [
+        "As linhas voltam, pois houve START TRANSACTION antes",
+        "O DELETE dá erro, pois MyISAM não aceita DELETE",
+        "As linhas continuam apagadas: MyISAM não desfaz alterações",
+        "As linhas voltam, mas só depois de reiniciar o servidor"
+      ],
+      "correta": 2,
+      "explicacao": "MyISAM não é transacional: o DELETE é gravado na hora. O MySQL só avisa que algumas tabelas não puderam ser desfeitas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, o técnico rodou:\n`START TRANSACTION;`\n`INSERT INTO autor (nome) VALUES ('Ana');`\n`SAVEPOINT s1;`\n`INSERT INTO autor (nome) VALUES ('Bia');`\n`SAVEPOINT s2;`\n`INSERT INTO autor (nome) VALUES ('Caio');`\n`ROLLBACK TO SAVEPOINT s1;`\n`COMMIT;`\nQuais autores ficam gravados?",
+      "alternativas": [
+        "Ana e Bia",
+        "Ana, Bia e Caio",
+        "Nenhum deles",
+        "Só Ana"
+      ],
+      "correta": 3,
+      "explicacao": "Voltar para s1 desfaz tudo o que veio depois dele (Bia e Caio), mesmo passando por s2."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "s2-apagado",
+      "enunciado": "Numa transação, o técnico criou os savepoints s1 e, depois, s2. Em seguida rodou `ROLLBACK TO SAVEPOINT s1;`. Depois disso, ele ainda pode rodar `ROLLBACK TO SAVEPOINT s2;`?",
+      "alternativas": [
+        "Sim: os savepoints só somem depois do COMMIT",
+        "Sim: voltar para s1 recria o s2 automaticamente",
+        "Não: ROLLBACK TO encerra a transação e apaga tudo",
+        "Não: s2 foi apagado ao voltar para s1"
+      ],
+      "correta": 3,
+      "explicacao": "Ao voltar para um savepoint, os savepoints criados depois dele são apagados. Tentar voltar para s2 dá erro de savepoint inexistente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que é perigoso rodar `ALTER TABLE` no meio de uma transação que já fez vários UPDATEs?",
+      "alternativas": [
+        "Porque o ALTER desfaz sozinho os UPDATEs feitos antes dele",
+        "Porque o ALTER confirma os UPDATEs e o ROLLBACK não os desfaz",
+        "Porque o ALTER não funciona enquanto há transação aberta",
+        "Porque o ALTER apaga todos os savepoints e os dados da tabela"
+      ],
+      "correta": 1,
+      "explicacao": "ALTER TABLE é DDL e faz commit implícito: tudo que estava pendente fica gravado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando mostra, entre outras coisas, o motor (ENGINE) usado pela tabela `produto`?",
+      "alternativas": [
+        "SHOW ENGINE produto;",
+        "DESCRIBE ENGINE produto;",
+        "SHOW CREATE TABLE produto;",
+        "SELECT ENGINE FROM produto;"
+      ],
+      "correta": 2,
+      "explicacao": "SHOW CREATE TABLE mostra o comando de criação completo, incluindo o trecho ENGINE=..."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma loja percebeu que a tabela `venda` está em MyISAM e quer que ela aceite transações. Qual comando faz essa troca?",
+      "alternativas": [
+        "UPDATE venda SET ENGINE = 'InnoDB';",
+        "SET ENGINE venda = InnoDB;",
+        "ALTER TABLE venda ENGINE = InnoDB;",
+        "CONVERT TABLE venda TO InnoDB;"
+      ],
+      "correta": 2,
+      "explicacao": "ALTER TABLE ... ENGINE = InnoDB; converte a tabela para o motor InnoDB."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, o técnico rodou:\n`START TRANSACTION;`\n`UPDATE plano SET valor = 90 WHERE id_plano = 1;`\n`SAVEPOINT a;`\n`UPDATE plano SET valor = 150 WHERE id_plano = 2;`\n`ROLLBACK;`\nO que fica gravado na tabela `plano` (id_plano, nome, valor)?",
+      "alternativas": [
+        "Nada: o ROLLBACK desfaz a transação inteira",
+        "Só o valor 90 do plano 1, que veio antes do savepoint",
+        "Só o valor 150 do plano 2, que veio depois do savepoint",
+        "Os dois valores, pois o savepoint protege as alterações"
+      ],
+      "correta": 0,
+      "explicacao": "ROLLBACK sem TO volta ao começo da transação. O savepoint não \"salva\" nada; ele só marca um ponto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes comandos NÃO causa commit implícito quando rodado no meio de uma transação?",
+      "alternativas": [
+        "DROP TABLE",
+        "DELETE",
+        "ALTER TABLE",
+        "TRUNCATE TABLE"
+      ],
+      "correta": 1,
+      "explicacao": "DELETE é DML e fica pendente na transação. DROP, ALTER e TRUNCATE são DDL e confirmam a transação aberta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que o InnoDB é o motor mais indicado para as tabelas de uma loja virtual?",
+      "alternativas": [
+        "Porque ocupa menos espaço por não guardar o histórico das tabelas",
+        "Porque grava cada alteração na hora, sem precisar de COMMIT",
+        "Porque não deixa duas pessoas acessarem a loja ao mesmo tempo",
+        "Porque aceita transações e chaves estrangeiras"
+      ],
+      "correta": 3,
+      "explicacao": "Com InnoDB há COMMIT/ROLLBACK e FOREIGN KEY: a venda e a baixa do estoque podem ser feitas como uma unidade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "savepoint-parte",
+      "enunciado": "Num carrinho com vários itens, o sistema cria um SAVEPOINT antes de cada item. O 3º item deu problema. Qual a vantagem do savepoint aqui?",
+      "alternativas": [
+        "Desfazer o carrinho inteiro de uma só vez",
+        "Desfazer só o 3º item, mantendo os outros na transação",
+        "Confirmar os itens 1 e 2 antes de terminar a compra",
+        "Pular o 3º item sem precisar de nenhum comando"
+      ],
+      "correta": 1,
+      "explicacao": "Com ROLLBACK TO SAVEPOINT volta-se até a marca antes do item 3, sem perder os itens anteriores. Nada é confirmado até o COMMIT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa transação, o técnico rodou `DROP TABLE cupom;` por engano e logo depois `ROLLBACK;`. O que acontece com a tabela `cupom`?",
+      "alternativas": [
+        "Volta com todos os dados, pois estava dentro da transação",
+        "Volta vazia, só com a estrutura das colunas",
+        "Continua apagada: DROP TABLE não pode ser desfeito com ROLLBACK",
+        "Volta só se o autocommit estiver desligado"
+      ],
+      "correta": 2,
+      "explicacao": "DROP TABLE é DDL: faz commit implícito e não volta com ROLLBACK. Só um backup recuperaria a tabela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa padaria, o técnico rodou:\n`START TRANSACTION;`\n`INSERT INTO pao (nome) VALUES ('Francês');`\n`SAVEPOINT p;`\n`INSERT INTO pao (nome) VALUES ('Integral');`\n`SAVEPOINT p;`\n`INSERT INTO pao (nome) VALUES ('Doce');`\n`ROLLBACK TO SAVEPOINT p;`\n`COMMIT;`\nQuais pães ficam gravados?",
+      "alternativas": [
+        "Francês e Integral",
+        "Só Francês",
+        "Francês, Integral e Doce",
+        "Nenhum, o nome repetido dá erro"
+      ],
+      "correta": 0,
+      "explicacao": "Criar um savepoint com nome que já existe substitui o antigo: a marca p passa a ficar depois do Integral. Só o Doce é desfeito."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, o técnico rodou:\n`START TRANSACTION;`\n`UPDATE exame SET valor = 80 WHERE id_exame = 3;`\n`SAVEPOINT s1;`\n`RELEASE SAVEPOINT s1;`\n`ROLLBACK TO SAVEPOINT s1;`\nO que acontece no último comando?",
+      "alternativas": [
+        "Desfaz o UPDATE, pois ele veio antes de s1",
+        "Dá erro, pois s1 não existe mais; a transação segue aberta",
+        "Não faz nada e confirma o UPDATE de forma automática e definitiva",
+        "Recria o s1 e desfaz tudo o que veio depois dele"
+      ],
+      "correta": 1,
+      "explicacao": "Depois do RELEASE, o savepoint s1 deixa de existir. O ROLLBACK TO dá erro (savepoint não existe), mas o UPDATE continua pendente na transação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "motor-misto",
+      "enunciado": "Uma transação altera a tabela `conta` (InnoDB) e a tabela `extrato` (MyISAM) e depois roda `ROLLBACK;`. Qual o resultado?",
+      "alternativas": [
+        "Só a tabela conta volta; a tabela extrato continua alterada",
+        "As duas tabelas voltam, pois estão na mesma transação",
+        "Nenhuma volta, pois as duas tabelas viram MyISAM",
+        "Só a tabela extrato volta, pois MyISAM é mais rápido"
+      ],
+      "correta": 0,
+      "explicacao": "ROLLBACK só desfaz tabelas transacionais (InnoDB). A alteração na MyISAM já foi gravada: os dados ficam inconsistentes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, o técnico rodou:\n`START TRANSACTION;`\n`INSERT INTO cliente (nome) VALUES ('Davi');`\n`SAVEPOINT s;`\n`TRUNCATE TABLE log_acesso;`\n`ROLLBACK TO SAVEPOINT s;`\nO que acontece no último comando?",
+      "alternativas": [
+        "Desfaz o TRUNCATE e a tabela log_acesso volta com os dados",
+        "Desfaz o INSERT do cliente Davi e mantém o TRUNCATE",
+        "Desfaz o TRUNCATE e o INSERT ao mesmo tempo",
+        "Dá erro: o TRUNCATE encerrou a transação e o savepoint sumiu"
+      ],
+      "correta": 3,
+      "explicacao": "O TRUNCATE confirmou a transação (com o Davi). Com a transação encerrada, o savepoint s não existe mais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel, o técnico rodou:\n`START TRANSACTION;`\n`SAVEPOINT s1;`\n`INSERT INTO hospede (nome) VALUES ('Lia');`\n`ROLLBACK TO SAVEPOINT s1;`\n`INSERT INTO hospede (nome) VALUES ('Rui');`\n`ROLLBACK TO SAVEPOINT s1;`\n`COMMIT;`\nQuais hóspedes ficam gravados?",
+      "alternativas": [
+        "Só o Rui, porque o s1 já tinha sido usado uma vez",
+        "Só a Lia, porque o primeiro ROLLBACK TO foi confirmado",
+        "Nenhum: o s1 continua existindo e desfaz o Rui",
+        "Os dois, porque o COMMIT confirma tudo que foi digitado"
+      ],
+      "correta": 2,
+      "explicacao": "ROLLBACK TO s1 mantém o próprio s1 (só apaga os savepoints posteriores). Por isso dá para voltar a ele de novo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `produto` (id_produto, nome, preco), o técnico queria poder desfazer só o UPDATE do produto 2, mas rodou:\n`START TRANSACTION;`\n`UPDATE produto SET preco = 10 WHERE id_produto = 1;`\n`UPDATE produto SET preco = 20 WHERE id_produto = 2;`\n`SAVEPOINT s;`\n`ROLLBACK TO SAVEPOINT s;`\n`COMMIT;`\nO que fica gravado?",
+      "alternativas": [
+        "Só o UPDATE do produto 1, pois o do produto 2 foi desfeito",
+        "Nenhum, pois o ROLLBACK TO desfaz a transação inteira",
+        "Só o UPDATE do produto 2, pois foi o último antes do savepoint",
+        "Os dois: o savepoint veio depois deles e nada foi desfeito"
+      ],
+      "correta": 3,
+      "explicacao": "ROLLBACK TO desfaz só o que vem DEPOIS da marca. Para desfazer o UPDATE do produto 2, o SAVEPOINT deveria vir antes dele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "ddl-meio",
+      "enunciado": "Na tabela `cliente` (id_cliente, nome), com autocommit ligado, o técnico rodou:\n`START TRANSACTION;`\n`INSERT INTO cliente (nome) VALUES ('A');`\n`ALTER TABLE cliente ADD telefone VARCHAR(20);`\n`INSERT INTO cliente (nome) VALUES ('B');`\n`ROLLBACK;`\nO que fica gravado?",
+      "alternativas": [
+        "Só A: o ALTER confirmou A e o ROLLBACK desfez B",
+        "Só B: o ALTER desfez A e o autocommit gravou B",
+        "Nenhum: o ROLLBACK desfaz tudo desde o START TRANSACTION",
+        "A e B: o ALTER encerrou a transação e B caiu no autocommit"
+      ],
+      "correta": 3,
+      "explicacao": "O ALTER faz commit implícito e encerra a transação aberta por START TRANSACTION. Como o autocommit está ligado, o INSERT de B é confirmado na hora. O ROLLBACK não tem nada para desfazer."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "savepoint-serve",
+      "enunciado": "Numa loja online, o sistema registra os itens de um carrinho dentro de uma transação e usa SAVEPOINT.\n\nNa sua resposta:\n1. explique para que serve um SAVEPOINT;\n2. dê um exemplo de como ele ajudaria nesse carrinho.",
+      "respostasAceitas": [
+        "SAVEPOINT marca um ponto dentro da transação para onde se pode voltar. Ex.: marca antes de cada item; se um item não tiver estoque, volta só até a marca dele e mantém os outros."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) marca para voltar parte da transação; 2) exemplo coerente de desfazer só uma parte."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "rb-vs-rbto",
+      "enunciado": "Um aluno confundiu `ROLLBACK;` com `ROLLBACK TO SAVEPOINT etapa2;`.\n\nNa sua resposta:\n1. explique o que cada um desfaz;\n2. diga em qual dos dois a transação continua aberta.",
+      "respostasAceitas": [
+        "ROLLBACK desfaz a transação inteira e a encerra. ROLLBACK TO SAVEPOINT etapa2 desfaz só o que veio depois da marca etapa2, e a transação continua aberta."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) tudo x só depois da marca; 2) continua aberta com ROLLBACK TO."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "commit-implicito",
+      "enunciado": "No MySQL, alguns comandos fazem um commit implícito.\n\nNa sua resposta:\n1. explique o que é um commit implícito;\n2. cite dois comandos que causam commit implícito.",
+      "respostasAceitas": [
+        "É quando o MySQL confirma sozinho a transação aberta, sem ninguém digitar COMMIT. Exemplos: CREATE TABLE, ALTER TABLE, DROP TABLE, TRUNCATE TABLE."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) confirmação automática da transação; 2) dois comandos DDL (CREATE, ALTER, DROP, TRUNCATE, RENAME…)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "innodb-myisam",
+      "enunciado": "Os motores InnoDB e MyISAM tratam as transações de jeitos diferentes.\n\nNa sua resposta:\n1. explique qual deles aceita transações;\n2. diga o que acontece ao dar ROLLBACK numa tabela MyISAM.",
+      "respostasAceitas": [
+        "O InnoDB aceita transações (COMMIT, ROLLBACK, SAVEPOINT). No MyISAM cada alteração é gravada na hora, então o ROLLBACK não desfaz nada nela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) InnoDB; 2) as alterações continuam, MyISAM não desfaz."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "release-def",
+      "enunciado": "Numa transação, o técnico rodou `RELEASE SAVEPOINT etapa1;`.\n\nNa sua resposta:\n1. explique o que esse comando faz;\n2. diga se ele desfaz ou confirma alguma alteração.",
+      "respostasAceitas": [
+        "Ele apaga a marca etapa1. Não desfaz nem confirma nada: as alterações continuam pendentes até o COMMIT ou ROLLBACK."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) remove o savepoint; 2) não desfaz nem confirma."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa sorveteria, a tabela `pedido` tem id_pedido e status. Observe:\n`START TRANSACTION;`\n`UPDATE pedido SET status = 'pago' WHERE id_pedido = 1;`\n`SAVEPOINT depois_pagamento;`\n`UPDATE pedido SET status = 'cancelado' WHERE id_pedido = 1;`\n`ROLLBACK TO SAVEPOINT depois_pagamento;`\n`COMMIT;`\n\nNa sua resposta:\n1. explique o que o SAVEPOINT e o ROLLBACK TO fazem nessa sequência;\n2. diga qual status fica gravado no pedido 1.",
+      "respostasAceitas": [
+        "O SAVEPOINT marca o ponto depois do pagamento; o ROLLBACK TO volta até ele, desfazendo o 'cancelado'. O COMMIT grava o status 'pago'."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) marca e volta até a marca; 2) 'pago'."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "ddl-meio",
+      "enunciado": "Numa oficina, o técnico rodou:\n`START TRANSACTION;`\n`DELETE FROM orcamento WHERE id_orcamento = 15;`\n`DROP TABLE tmp_relatorio;`\n`ROLLBACK;`\nEle esperava que o orçamento 15 voltasse, mas não voltou.\n\nNa sua resposta:\n1. explique por que o orçamento não voltou;\n2. diga o que aconteceu com a tabela tmp_relatorio.",
+      "respostasAceitas": [
+        "O DROP TABLE fez commit implícito: confirmou o DELETE antes do ROLLBACK, que não tinha mais nada para desfazer. A tabela tmp_relatorio foi apagada e também não volta."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) DDL confirmou a transação; 2) a tabela continua apagada."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "myisam-rollback",
+      "enunciado": "Numa loja antiga, a tabela `caixa` está em MyISAM. Uma técnica abriu uma transação, fez UPDATEs errados no caixa e deu ROLLBACK, mas nada voltou.\n\nNa sua resposta:\n1. explique por que o ROLLBACK não funcionou;\n2. diga o que a loja pode fazer para que isso não aconteça de novo.",
+      "respostasAceitas": [
+        "MyISAM não aceita transações: cada alteração é gravada na hora. A loja deve converter a tabela para InnoDB (ALTER TABLE caixa ENGINE = InnoDB) para poder usar ROLLBACK."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) MyISAM não é transacional; 2) trocar o motor para InnoDB."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "savepoint-parte",
+      "enunciado": "Numa oficina, o orçamento de um carro tem várias peças. O sistema abre uma transação e cria um SAVEPOINT antes de cada peça. A peça 3 está em falta.\n\nNa sua resposta:\n1. explique a vantagem de usar savepoint nesse caso;\n2. diga o que aconteceria se, sem savepoint, o sistema desse ROLLBACK.",
+      "respostasAceitas": [
+        "Com o savepoint, dá para voltar só até a marca da peça 3 e seguir com as outras. Sem ele, o ROLLBACK desfaria o orçamento inteiro, e todas as peças teriam de ser lançadas de novo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) desfazer só a parte com problema; 2) perderia tudo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "s2-apagado",
+      "enunciado": "Numa escola, o técnico criou os savepoints s1 e s2 (nessa ordem) durante uma transação e depois rodou `ROLLBACK TO SAVEPOINT s1;`.\n\nNa sua resposta:\n1. diga o que acontece com as alterações feitas depois de s1;\n2. explique o que acontece com o savepoint s2.",
+      "respostasAceitas": [
+        "As alterações feitas depois de s1 são desfeitas, inclusive as que vieram depois de s2. O savepoint s2 é apagado, pois foi criado depois de s1."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) desfeitas; 2) s2 deixa de existir (s1 continua)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um script de uma papelaria faz, nesta ordem, dentro de uma transação: INSERTs de produtos, um `CREATE INDEX` numa tabela e mais UPDATEs; no fim, ele dá ROLLBACK se algo der errado.\n\nNa sua resposta:\n1. explique o problema de ter o CREATE INDEX no meio da transação;\n2. diga uma forma melhor de organizar o script.",
+      "respostasAceitas": [
+        "O CREATE INDEX faz commit implícito: os INSERTs anteriores ficam gravados e o ROLLBACK do fim só desfaz o que veio depois. O melhor é rodar os comandos de estrutura (DDL) antes ou depois da transação, deixando nela só INSERT/UPDATE/DELETE."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) commit implícito quebra o tudo-ou-nada; 2) separar DDL da transação."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No MySQL 8, toda tabela criada sem informar ENGINE fica com InnoDB.\n\nNa sua resposta:\n1. cite duas vantagens do InnoDB para um sistema de vendas;\n2. explique o risco de manter a tabela de vendas em MyISAM.",
+      "respostasAceitas": [
+        "O InnoDB aceita transações (COMMIT/ROLLBACK) e chaves estrangeiras, além de se recuperar melhor de quedas. Em MyISAM, uma venda pode ficar pela metade, pois não dá para desfazer as alterações."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) transações e FK (ou recuperação após falha, trava por linha); 2) sem ROLLBACK, dados pela metade."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, com autocommit ligado, o técnico rodou:\n`START TRANSACTION;`\n`UPDATE produto SET estoque = estoque - 1 WHERE id_produto = 4;`\n`TRUNCATE TABLE log_venda;`\n`UPDATE produto SET preco = 0 WHERE id_produto = 4;`\n`ROLLBACK;`\n\nNa sua resposta:\n1. diga o que fica gravado no final;\n2. explique por que o ROLLBACK não desfez nada.",
+      "respostasAceitas": [
+        "Fica tudo gravado: a baixa do estoque, a tabela log_venda vazia e o preço 0. O TRUNCATE fez commit implícito e encerrou a transação; o UPDATE do preço rodou com autocommit e foi gravado na hora. O ROLLBACK não tinha nada pendente."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) os três efeitos ficam; 2) commit implícito encerra a transação e o comando seguinte cai no autocommit."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num sistema de matrícula, o aluno escolhe 5 disciplinas. Dentro de uma transação, o sistema cria um SAVEPOINT antes de inserir cada disciplina. A 4ª disciplina está lotada.\n\nNa sua resposta:\n1. explique o que o sistema deve fazer quando a 4ª disciplina falhar;\n2. diga quais disciplinas ficam gravadas no COMMIT final e por quê.",
+      "respostasAceitas": [
+        "O sistema deve voltar para o savepoint criado antes da 4ª disciplina (ROLLBACK TO SAVEPOINT) e seguir com a 5ª. No COMMIT ficam a 1ª, 2ª, 3ª e 5ª, pois só a 4ª foi desfeita."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ROLLBACK TO o savepoint da 4ª e continuar; 2) 1, 2, 3 e 5."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "motor-misto",
+      "enunciado": "Uma transferência altera a tabela `conta` (InnoDB) e grava a linha do extrato na tabela `extrato` (MyISAM). No meio, deu erro e o sistema rodou ROLLBACK.\n\nNa sua resposta:\n1. diga como ficam as duas tabelas depois do ROLLBACK;\n2. explique por que isso quebra a Atomicidade da transferência.",
+      "respostasAceitas": [
+        "A tabela conta volta ao que era, mas o extrato continua com a linha nova, porque MyISAM não desfaz. Assim a transferência ficou pela metade: existe extrato de algo que não aconteceu, o que quebra o tudo-ou-nada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) conta desfeita, extrato não; 2) parte ficou gravada, então não foi tudo ou nada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa transferência de R$ 100 da conta 1 para a conta 2 (tabela `conta` com id_conta e saldo), quantos UPDATEs são feitos dentro da transação?",
+      "alternativas": [
+        "Dois: um tira da conta 1 e outro põe na conta 2",
+        "Um só, que muda as duas contas ao mesmo tempo",
+        "Nenhum: transferência se faz só com INSERT",
+        "Três: um em cada conta e outro para o COMMIT"
+      ],
+      "correta": 0,
+      "explicacao": "Uma transferência mexe em duas linhas: tira de uma conta e soma na outra. Por isso os dois UPDATEs precisam estar na mesma transação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "venda-estoque",
+      "enunciado": "Numa loja, uma venda precisa ser registrada e o estoque do produto precisa baixar. Quais comandos devem ficar juntos na mesma transação?",
+      "alternativas": [
+        "Um INSERT da venda e um UPDATE no estoque",
+        "Um SELECT do produto e um SELECT da venda",
+        "Um DROP TABLE da venda e um CREATE TABLE da venda",
+        "Um GRANT para o caixa e um REVOKE para o gerente"
+      ],
+      "correta": 0,
+      "explicacao": "A venda é um INSERT; a baixa do estoque é um UPDATE. Os dois juntos garantem que não haja venda sem baixa nem baixa sem venda."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa transferência entre contas, o primeiro UPDATE (que tira o dinheiro) deu certo, mas o segundo (que coloca na outra conta) falhou. O que se deve fazer?",
+      "alternativas": [
+        "Dar COMMIT, para garantir pelo menos a primeira parte",
+        "Rodar o primeiro UPDATE de novo para compensar",
+        "Fechar o Workbench sem rodar mais nenhum comando",
+        "Dar ROLLBACK, para devolver o dinheiro à primeira conta"
+      ],
+      "correta": 3,
+      "explicacao": "Se uma parte falhou, a transferência inteira deve ser desfeita com ROLLBACK (tudo ou nada)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, o técnico rodou:\n`START TRANSACTION;`\n`INSERT INTO livro (titulo) VALUES ('Dom Casmurro');`\n`COMMIT;`\nO que acontece com o livro?",
+      "alternativas": [
+        "É desfeito, pois a transação acabou",
+        "Fica pendente até o próximo COMMIT",
+        "Fica gravado de forma definitiva",
+        "Só aparece para quem fez o INSERT"
+      ],
+      "correta": 2,
+      "explicacao": "O COMMIT confirma o INSERT. A partir daí o livro está gravado e todos o veem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop, o técnico rodou:\n`START TRANSACTION;`\n`INSERT INTO pet (nome) VALUES ('Thor');`\n`INSERT INTO pet (nome) VALUES ('Mel');`\n`ROLLBACK;`\nQuais pets ficam gravados?",
+      "alternativas": [
+        "Só o Thor",
+        "Só a Mel",
+        "Nenhum dos dois",
+        "Os dois"
+      ],
+      "correta": 2,
+      "explicacao": "O ROLLBACK desfaz todos os comandos da transação ainda não confirmados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a ordem certa para fazer várias alterações como uma única transação?",
+      "alternativas": [
+        "COMMIT → alterações → START TRANSACTION",
+        "alterações → START TRANSACTION → COMMIT",
+        "START TRANSACTION → COMMIT → alterações",
+        "START TRANSACTION → alterações → COMMIT"
+      ],
+      "correta": 3,
+      "explicacao": "Primeiro abre a transação, depois faz as alterações e no fim confirma (ou desfaz)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de roupas, durante a transação de uma venda, o sistema descobre que não há estoque suficiente da camiseta. Qual comando deve encerrar essa transação?",
+      "alternativas": [
+        "COMMIT",
+        "ROLLBACK",
+        "SAVEPOINT",
+        "START TRANSACTION"
+      ],
+      "correta": 1,
+      "explicacao": "Sem estoque, a venda não pode acontecer: tudo o que foi feito nela deve ser desfeito com ROLLBACK."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de `START TRANSACTION;` e de alguns UPDATEs, o técnico ainda não rodou COMMIT nem ROLLBACK. Como está a transação?",
+      "alternativas": [
+        "Aberta: as alterações ainda estão pendentes",
+        "Encerrada: as alterações já estão gravadas",
+        "Encerrada: as alterações já foram desfeitas",
+        "Cancelada: o UPDATE não funciona em transação"
+      ],
+      "correta": 0,
+      "explicacao": "Enquanto não houver COMMIT ou ROLLBACK, a transação continua aberta e as alterações ficam pendentes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "pet-banho",
+      "enunciado": "Num pet shop, agendar um banho grava o agendamento e o pagamento. Por que usar uma transação nesse caso?",
+      "alternativas": [
+        "Para não haver banho sem pagamento, nem pagamento sem banho",
+        "Para o agendamento aparecer em ordem alfabética na tela",
+        "Para o banco criar sozinho a tabela de pagamentos",
+        "Para que só o gerente possa ver os agendamentos"
+      ],
+      "correta": 0,
+      "explicacao": "As duas gravações estão ligadas: a transação garante que as duas aconteçam juntas ou nenhuma aconteça."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "cinema-poltrona",
+      "enunciado": "Num cinema, a venda do ingresso marca a poltrona como ocupada e grava o ingresso. Se a gravação do ingresso falhar, o que deve acontecer com a poltrona?",
+      "alternativas": [
+        "Continuar ocupada, mesmo sem ingresso vendido",
+        "Ser apagada da tabela de poltronas do cinema",
+        "Voltar a ficar livre, com um ROLLBACK da transação",
+        "Ficar ocupada até o fim da sessão do filme"
+      ],
+      "correta": 2,
+      "explicacao": "Como as duas alterações fazem parte da mesma transação, o ROLLBACK desfaz a marcação da poltrona."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "commit-depois-rollback",
+      "enunciado": "Num hotel, o técnico rodou:\n`START TRANSACTION;`\n`DELETE FROM reserva WHERE id_reserva = 8;`\n`COMMIT;`\n`ROLLBACK;`\nO que acontece com a reserva 8?",
+      "alternativas": [
+        "Volta, por causa do ROLLBACK",
+        "Volta, mas sem os dados do hóspede",
+        "Fica pendente até o próximo COMMIT",
+        "Continua apagada"
+      ],
+      "correta": 3,
+      "explicacao": "Depois do COMMIT o DELETE está confirmado; o ROLLBACK seguinte não tem nada para desfazer."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes comandos NÃO é usado para controlar transações?",
+      "alternativas": [
+        "COMMIT",
+        "ROLLBACK",
+        "SELECT",
+        "SAVEPOINT"
+      ],
+      "correta": 2,
+      "explicacao": "SELECT só consulta dados. COMMIT, ROLLBACK e SAVEPOINT são comandos TCL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de um `ROLLBACK;`, o que acontece com a transação?",
+      "alternativas": [
+        "Termina, e as alterações dela são gravadas",
+        "Termina, e as alterações dela são descartadas",
+        "Continua aberta, esperando um COMMIT",
+        "Recomeça do zero com os mesmos comandos"
+      ],
+      "correta": 1,
+      "explicacao": "ROLLBACK encerra a transação desfazendo tudo o que não tinha sido confirmado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa transferência entre contas, um técnico colocou um COMMIT logo depois do primeiro UPDATE (o que tira o dinheiro) e antes do segundo (o que coloca na outra conta). Qual o risco?",
+      "alternativas": [
+        "Se o 2º UPDATE falhar, o dinheiro já saiu e não volta",
+        "Nenhum: o COMMIT no meio deixa a transferência mais rápida",
+        "O segundo UPDATE passa a ser desfeito sozinho pelo banco",
+        "O primeiro UPDATE é desfeito assim que o segundo começa"
+      ],
+      "correta": 0,
+      "explicacao": "O COMMIT no meio grava metade da transferência. Se a segunda parte falhar, o ROLLBACK não traz o dinheiro de volta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "transf-seq",
+      "enunciado": "Na tabela `conta` (id_conta, saldo), a conta 1 tem 500 e a conta 2 tem 200. O técnico rodou:\n`START TRANSACTION;`\n`UPDATE conta SET saldo = saldo - 150 WHERE id_conta = 1;`\n`UPDATE conta SET saldo = saldo + 150 WHERE id_conta = 2;`\n`ROLLBACK;`\nQuais são os saldos no final?",
+      "alternativas": [
+        "350 e 350",
+        "350 e 200",
+        "500 e 350",
+        "500 e 200"
+      ],
+      "correta": 3,
+      "explicacao": "O ROLLBACK desfaz os dois UPDATEs: os saldos voltam a ser os de antes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "transf-seq",
+      "enunciado": "Na tabela `conta` (id_conta, saldo), a conta 1 tem 800 e a conta 2 tem 100. O técnico rodou:\n`START TRANSACTION;`\n`UPDATE conta SET saldo = saldo - 300 WHERE id_conta = 1;`\n`UPDATE conta SET saldo = saldo + 300 WHERE id_conta = 2;`\n`COMMIT;`\nQuais são os saldos no final?",
+      "alternativas": [
+        "500 e 400",
+        "800 e 100",
+        "500 e 100",
+        "800 e 400"
+      ],
+      "correta": 0,
+      "explicacao": "Os dois UPDATEs foram confirmados pelo COMMIT: 800 - 300 = 500 e 100 + 300 = 400."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, o produto 3 tem estoque 10 (tabela `produto` com id_produto, nome e estoque). O técnico rodou:\n`START TRANSACTION;`\n`UPDATE produto SET estoque = estoque - 3 WHERE id_produto = 3;`\n`SAVEPOINT s;`\n`UPDATE produto SET estoque = estoque - 2 WHERE id_produto = 3;`\n`ROLLBACK TO SAVEPOINT s;`\n`COMMIT;`\nQual o estoque final?",
+      "alternativas": [
+        "5",
+        "7",
+        "10",
+        "8"
+      ],
+      "correta": 1,
+      "explicacao": "A baixa de 3 veio antes do savepoint e foi confirmada. A baixa de 2 foi desfeita pelo ROLLBACK TO. 10 - 3 = 7."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "sem-transacao-queda",
+      "enunciado": "Numa loja SEM transação, o sistema grava a venda (INSERT) e depois baixa o estoque (UPDATE). O servidor caiu entre os dois comandos. Como ficam os dados?",
+      "alternativas": [
+        "A venda está registrada, mas o estoque não baixou",
+        "Nem a venda nem a baixa ficaram gravadas",
+        "O estoque baixou, mas a venda não foi registrada",
+        "A venda e a baixa ficaram gravadas normalmente"
+      ],
+      "correta": 0,
+      "explicacao": "Sem transação, cada comando é confirmado sozinho (autocommit). O INSERT foi gravado e o UPDATE nem chegou a rodar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num script de venda dentro de uma transação, em que ponto deve ficar o COMMIT?",
+      "alternativas": [
+        "Logo depois do START TRANSACTION, antes das alterações",
+        "Entre o INSERT da venda e o UPDATE do estoque",
+        "Antes de cada comando, para gravar um de cada vez",
+        "Depois do último comando da venda, quando tudo deu certo"
+      ],
+      "correta": 3,
+      "explicacao": "O COMMIT vem no fim, quando todas as partes deram certo. Colocá-lo no meio quebraria o tudo-ou-nada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, a matrícula grava o aluno (INSERT em `aluno`) e o primeiro pagamento (INSERT em `pagamento`), na mesma transação. O pagamento deu erro e o técnico deu ROLLBACK. O que acontece com o aluno?",
+      "alternativas": [
+        "Fica gravado, pois o INSERT dele deu certo",
+        "Também é desfeito, pois estava na mesma transação",
+        "Fica gravado, mas sem nome e sem plano",
+        "É movido para uma tabela de alunos pendentes"
+      ],
+      "correta": 1,
+      "explicacao": "O ROLLBACK desfaz todas as alterações da transação, inclusive as que deram certo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "transf-savepoint",
+      "enunciado": "Na tabela `conta` (id_conta, saldo), o técnico rodou:\n`START TRANSACTION;`\n`UPDATE conta SET saldo = saldo - 100 WHERE id_conta = 1;`\n`SAVEPOINT s;`\n`UPDATE conta SET saldo = saldo + 100 WHERE id_conta = 2;`\n`ROLLBACK TO SAVEPOINT s;`\n`COMMIT;`\nQual o resultado?",
+      "alternativas": [
+        "As duas contas ficam como estavam antes de começar a transação",
+        "A conta 1 perde 100 e a conta 2 não recebe: o dinheiro some",
+        "A conta 1 perde 100 e a conta 2 recebe 100",
+        "A conta 2 recebe 100 e a conta 1 não perde nada"
+      ],
+      "correta": 1,
+      "explicacao": "O ROLLBACK TO desfez só o crédito na conta 2. O débito da conta 1, anterior ao savepoint, foi confirmado. Savepoint no meio de uma transferência é um erro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num mercadinho, uma venda dá um brinde ao cliente. O técnico quer registrar a venda, mas poder desfazer só o brinde. Qual sequência faz isso? (Todas começam com START TRANSACTION.)",
+      "alternativas": [
+        "SAVEPOINT b; INSERT venda; UPDATE estoque do brinde; ROLLBACK TO SAVEPOINT b; COMMIT;",
+        "INSERT venda; UPDATE estoque do brinde; SAVEPOINT b; ROLLBACK TO SAVEPOINT b; COMMIT;",
+        "INSERT venda; SAVEPOINT b; UPDATE estoque do brinde; ROLLBACK TO SAVEPOINT b; COMMIT;",
+        "INSERT venda; SAVEPOINT b; UPDATE estoque do brinde; ROLLBACK; COMMIT;"
+      ],
+      "correta": 2,
+      "explicacao": "O savepoint precisa ficar entre a venda e o brinde. Voltar para ele desfaz só o brinde; o COMMIT grava a venda."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa cantina escolar, a compra de um lanche faz UPDATE no saldo do aluno e INSERT na tabela `compra`. O UPDATE foi recusado pela regra CHECK (saldo >= 0). O que o programa deve fazer em seguida?",
+      "alternativas": [
+        "Fazer o INSERT da compra e dar COMMIT mesmo assim",
+        "Dar COMMIT, pois o erro já desfez a transação inteira",
+        "Rodar o UPDATE de novo até ele funcionar",
+        "Dar ROLLBACK, para não registrar a compra"
+      ],
+      "correta": 3,
+      "explicacao": "Se uma parte falhou, a compra não pode ser registrada. O erro cancela só o comando, então o programa deve encerrar com ROLLBACK."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num empréstimo da biblioteca, a transação tem três comandos: INSERT no empréstimo, UPDATE do livro para indisponível e UPDATE no total de empréstimos do aluno. O terceiro deu erro e o técnico deu ROLLBACK. O que fica gravado?",
+      "alternativas": [
+        "Só o INSERT do empréstimo",
+        "O INSERT e o primeiro UPDATE, que deram certo",
+        "Nada: os três são desfeitos",
+        "Só o UPDATE que deu erro"
+      ],
+      "correta": 2,
+      "explicacao": "ROLLBACK desfaz tudo o que foi feito na transação, inclusive os comandos que deram certo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "release-rollback",
+      "enunciado": "Numa loja, o técnico rodou:\n`START TRANSACTION;`\n`UPDATE produto SET preco = 30 WHERE id_produto = 1;`\n`SAVEPOINT x;`\n`UPDATE produto SET preco = 40 WHERE id_produto = 2;`\n`RELEASE SAVEPOINT x;`\n`ROLLBACK;`\nO que fica gravado na tabela `produto` (id_produto, nome, preco)?",
+      "alternativas": [
+        "Só o preço 30 do produto 1, confirmado pelo RELEASE",
+        "Só o preço 40 do produto 2, que veio depois do x",
+        "Os dois preços, pois o RELEASE gravou a transação",
+        "Nada: o RELEASE não confirma, e o ROLLBACK desfaz tudo"
+      ],
+      "correta": 3,
+      "explicacao": "RELEASE SAVEPOINT só apaga a marca. O ROLLBACK final desfaz a transação inteira."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa oficina, a peça 5 tem 10 unidades (tabela `peca` com id_peca, nome e qtd). O técnico rodou sem querer o mesmo UPDATE duas vezes:\n`START TRANSACTION;`\n`UPDATE peca SET qtd = qtd - 2 WHERE id_peca = 5;`\n`UPDATE peca SET qtd = qtd - 2 WHERE id_peca = 5;`\n`COMMIT;`\nQual a quantidade final?",
+      "alternativas": [
+        "8",
+        "10",
+        "6",
+        "4"
+      ],
+      "correta": 2,
+      "explicacao": "Os dois UPDATEs rodaram e foram confirmados: 10 - 2 - 2 = 6. A transação não percebe repetição; quem confere é o técnico."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa lanchonete, com autocommit ligado, o técnico rodou:\n`START TRANSACTION;`\n`INSERT INTO pedido (id_pedido, status) VALUES (30, 'aberto');`\n`COMMIT;`\n`START TRANSACTION;`\n`UPDATE pedido SET status = 'entregue' WHERE id_pedido = 30;`\n`ROLLBACK;`\nComo fica o pedido 30?",
+      "alternativas": [
+        "Gravado, com status 'entregue'",
+        "Não existe, o ROLLBACK apagou o pedido",
+        "Gravado, com status 'aberto'",
+        "Gravado, mas com o status vazio"
+      ],
+      "correta": 2,
+      "explicacao": "A primeira transação foi confirmada (pedido criado). A segunda foi desfeita (o status não mudou)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num sistema escolar, com autocommit desligado (`SET autocommit = 0;`), o técnico rodou um UPDATE, outro UPDATE, `COMMIT;`, um terceiro UPDATE e `ROLLBACK;`. O que fica gravado?",
+      "alternativas": [
+        "Só o terceiro UPDATE, que foi o último",
+        "Os dois primeiros; o terceiro é desfeito",
+        "Nenhum, pois o ROLLBACK desfaz os três",
+        "Os três, pois o COMMIT já gravou tudo"
+      ],
+      "correta": 1,
+      "explicacao": "O COMMIT confirmou os dois primeiros. O terceiro ficou numa nova transação, desfeita pelo ROLLBACK."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "check-transf",
+      "enunciado": "Na tabela `conta` (id_conta, saldo) há a regra CHECK (saldo >= 0). A conta 1 tem 100 e a conta 2 tem 50. O técnico rodou:\n`START TRANSACTION;`\n`UPDATE conta SET saldo = saldo - 300 WHERE id_conta = 1;`\n`UPDATE conta SET saldo = saldo + 300 WHERE id_conta = 2;`\n`COMMIT;`\nO primeiro UPDATE deu erro por causa do CHECK. Quais são os saldos no final?",
+      "alternativas": [
+        "100 e 50",
+        "100 e 350",
+        "-200 e 350",
+        "-200 e 50"
+      ],
+      "correta": 1,
+      "explicacao": "O erro cancela só o primeiro UPDATE; a transação continua. O segundo UPDATE roda e o COMMIT o confirma: o dinheiro \"aparece\" na conta 2."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, com autocommit ligado, o técnico rodou:\n`START TRANSACTION;`\n`INSERT INTO venda (valor) VALUES (90);`\n`UPDATE produto SET estoque = estoque - 1 WHERE id_produto = 6;`\n`CREATE INDEX idx_valor ON venda (valor);`\n`ROLLBACK;`\nO que fica gravado?",
+      "alternativas": [
+        "A venda, a baixa do estoque e o índice",
+        "Só o índice criado na tabela venda",
+        "Nada, o ROLLBACK desfaz tudo",
+        "A venda e a baixa, mas não o índice"
+      ],
+      "correta": 0,
+      "explicacao": "CREATE INDEX é DDL e faz commit implícito: confirma a venda e a baixa. O índice também fica. O ROLLBACK não tem nada pendente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "start-implicito",
+      "enunciado": "Numa clínica, o técnico rodou:\n`SET autocommit = 0;`\n`INSERT INTO exame (nome) VALUES ('Raio X');`\n`START TRANSACTION;`\n`INSERT INTO exame (nome) VALUES ('Ultrassom');`\n`ROLLBACK;`\nQuais exames ficam gravados?",
+      "alternativas": [
+        "Só Raio X",
+        "Só Ultrassom",
+        "Os dois",
+        "Nenhum"
+      ],
+      "correta": 0,
+      "explicacao": "O START TRANSACTION faz commit implícito da transação que estava aberta (Raio X). O ROLLBACK desfaz só o Ultrassom."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `conta` (id_conta, saldo), as contas 1, 2 e 3 têm 500, 100 e 0. O técnico rodou:\n`START TRANSACTION;`\n`UPDATE conta SET saldo = saldo - 50 WHERE id_conta = 1;`\n`SAVEPOINT a;`\n`UPDATE conta SET saldo = saldo + 50 WHERE id_conta = 2;`\n`SAVEPOINT b;`\n`UPDATE conta SET saldo = saldo + 10 WHERE id_conta = 3;`\n`ROLLBACK TO SAVEPOINT a;`\n`UPDATE conta SET saldo = saldo + 50 WHERE id_conta = 3;`\n`COMMIT;`\nQuais os saldos finais das contas 1, 2 e 3?",
+      "alternativas": [
+        "450, 150 e 60",
+        "500, 100 e 50",
+        "450, 100 e 50",
+        "450, 150 e 50"
+      ],
+      "correta": 2,
+      "explicacao": "Voltar para a desfaz o +50 da conta 2 e o +10 da conta 3. Ficam o -50 da conta 1 e o +50 da conta 3 feito depois."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "trava",
+      "enunciado": "O produto 9 tem estoque 5. A sessão A rodou `START TRANSACTION;` e `UPDATE produto SET estoque = estoque - 1 WHERE id_produto = 9;`. A sessão B (autocommit ligado) rodou o mesmo UPDATE e ficou esperando. Então A deu `COMMIT;`. Qual o estoque final?",
+      "alternativas": [
+        "4: o UPDATE de B foi descartado por estar esperando",
+        "3: B esperou a liberação e baixou 1 a partir do valor 4",
+        "4: B usou o valor antigo 5 e gravou por cima de A",
+        "5: o COMMIT de A cancela o UPDATE das duas sessões"
+      ],
+      "correta": 1,
+      "explicacao": "B fica travada enquanto A não termina. Depois do COMMIT de A (estoque 4), o UPDATE de B roda sobre o valor novo: 4 - 1 = 3."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cinema, o técnico rodou:\n`SET autocommit = 0;`\n`INSERT INTO filme (titulo) VALUES ('Aventura');`\n`SAVEPOINT s;`\n`INSERT INTO filme (titulo) VALUES ('Comédia');`\n`ROLLBACK TO SAVEPOINT s;`\n`COMMIT;`\nO que fica gravado?",
+      "alternativas": [
+        "Só Comédia",
+        "Os dois filmes",
+        "Só Aventura",
+        "Nada: sem START TRANSACTION o SAVEPOINT dá erro"
+      ],
+      "correta": 2,
+      "explicacao": "Com autocommit = 0 já existe uma transação aberta, então o SAVEPOINT funciona. Volta-se até s (desfaz Comédia) e o COMMIT grava Aventura."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, com autocommit ligado, o técnico rodou:\n`START TRANSACTION;`\n`INSERT INTO marca (nome) VALUES ('A');`\n`SAVEPOINT s;`\n`INSERT INTO marca (nome) VALUES ('B');`\n`ROLLBACK TO SAVEPOINT s;`\n`INSERT INTO marca (nome) VALUES ('C');`\n`COMMIT;`\n`INSERT INTO marca (nome) VALUES ('D');`\n`ROLLBACK;`\nQuais marcas ficam gravadas?",
+      "alternativas": [
+        "A e C",
+        "A, B, C e D",
+        "Só A",
+        "A, C e D"
+      ],
+      "correta": 3,
+      "explicacao": "B foi desfeita pelo ROLLBACK TO; A e C foram confirmadas pelo COMMIT. D foi inserida depois, com autocommit ligado, e foi gravada na hora: o ROLLBACK final não a desfaz."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "venda-estoque",
+      "enunciado": "Numa padaria, cada venda é registrada na tabela `venda` e baixa o estoque na tabela `produto`.\n\nNa sua resposta:\n1. diga quais são as duas alterações feitas numa venda;\n2. explique o que pode dar errado se só uma delas for gravada.",
+      "respostasAceitas": [
+        "A venda grava uma linha em venda (INSERT) e diminui o estoque em produto (UPDATE). Se só uma for gravada, o estoque fica errado: venda sem baixa ou baixa sem venda."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) INSERT da venda e UPDATE do estoque; 2) dados inconsistentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "cinema-poltrona",
+      "enunciado": "Num cinema, a compra de um ingresso marca a poltrona como ocupada e grava o ingresso, tudo numa transação. No fim, o pagamento do cliente foi recusado.\n\nNa sua resposta:\n1. diga qual comando deve encerrar a transação;\n2. explique o que acontece com a poltrona.",
+      "respostasAceitas": [
+        "Deve ser ROLLBACK. Ele desfaz a marcação da poltrona e o ingresso, então a poltrona volta a ficar livre para outra pessoa."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ROLLBACK; 2) a poltrona volta a ficar livre."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "pet-banho",
+      "enunciado": "Num pet shop, o atendente registra o banho, o pagamento e a baixa do shampoo no estoque, numa transação.\n\nNa sua resposta:\n1. diga quando o sistema deve usar COMMIT;\n2. diga quando deve usar ROLLBACK.",
+      "respostasAceitas": [
+        "COMMIT quando as três gravações deram certo. ROLLBACK quando qualquer uma delas falhar, para não ficar nada pela metade."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) tudo certo = COMMIT; 2) algum erro = ROLLBACK."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa biblioteca, um empréstimo grava uma linha na tabela `emprestimo` e marca o livro como indisponível na tabela `livro`.\n\nNa sua resposta:\n1. explique por que essas duas alterações devem ficar numa transação;\n2. diga o que acontece com as duas se for dado ROLLBACK.",
+      "respostasAceitas": [
+        "Porque precisam acontecer juntas: não pode haver empréstimo com livro disponível nem livro indisponível sem empréstimo. Com ROLLBACK, as duas alterações são desfeitas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) tudo ou nada / evitar dados incoerentes; 2) as duas são desfeitas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "commit-depois-rollback",
+      "enunciado": "Num hotel, o técnico rodou:\n`START TRANSACTION;`\n`UPDATE quarto SET situacao = 'livre' WHERE numero = 12;`\n`COMMIT;`\n`ROLLBACK;`\n\nNa sua resposta:\n1. diga qual a situação do quarto 12 no final;\n2. explique por que o ROLLBACK não fez nada.",
+      "respostasAceitas": [
+        "O quarto 12 fica 'livre'. O COMMIT confirmou o UPDATE e encerrou a transação; o ROLLBACK não tinha nada pendente para desfazer."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) livre; 2) o que teve COMMIT não volta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Costuma-se dizer que, com o autocommit ligado, cada comando é uma transação sozinho.\n\nNa sua resposta:\n1. explique o que isso significa;\n2. explique como fazer vários comandos valerem como uma única transação.",
+      "respostasAceitas": [
+        "Significa que cada INSERT/UPDATE/DELETE é confirmado assim que termina. Para juntar vários, abre-se uma transação com START TRANSACTION (ou BEGIN) e termina-se com COMMIT ou ROLLBACK."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cada comando é confirmado na hora; 2) usar START TRANSACTION/BEGIN … COMMIT."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "transf-savepoint",
+      "enunciado": "Na tabela `conta` (id_conta, saldo), um estagiário rodou:\n`START TRANSACTION;`\n`UPDATE conta SET saldo = saldo - 200 WHERE id_conta = 1;`\n`SAVEPOINT s;`\n`UPDATE conta SET saldo = saldo + 200 WHERE id_conta = 2;`\n`ROLLBACK TO SAVEPOINT s;`\n`COMMIT;`\n\nNa sua resposta:\n1. diga como ficam as duas contas;\n2. explique por que usar savepoint no meio de uma transferência foi um erro.",
+      "respostasAceitas": [
+        "A conta 1 perde 200 e a conta 2 não recebe nada. A transferência é uma coisa só (tudo ou nada); voltar ao savepoint desfez só metade e o COMMIT gravou a outra metade."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) conta 1 com -200, conta 2 igual; 2) a transferência não pode ser dividida."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na tabela `conta` (id_conta, saldo), a conta 1 tem 300 e a conta 2 tem 100. Observe:\n`START TRANSACTION;`\n`UPDATE conta SET saldo = saldo - 80 WHERE id_conta = 1;`\n`UPDATE conta SET saldo = saldo + 80 WHERE id_conta = 2;`\n`SAVEPOINT s;`\n`UPDATE conta SET saldo = saldo - 20 WHERE id_conta = 2;`\n`ROLLBACK TO SAVEPOINT s;`\n`COMMIT;`\n\nNa sua resposta:\n1. diga os saldos finais das duas contas;\n2. explique o papel do savepoint nessa sequência.",
+      "respostasAceitas": [
+        "Conta 1 = 220 e conta 2 = 180. O savepoint marcou o fim da transferência; o ROLLBACK TO desfez só a taxa de 20, e o COMMIT gravou a transferência."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 220 e 180; 2) permitiu desfazer só a taxa sem perder a transferência."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, dentro da transação de uma venda, o sistema consultou o estoque do produto e viu 2 unidades, mas o cliente quer 5.\n\nNa sua resposta:\n1. explique por que o sistema não deve dar COMMIT;\n2. diga qual comando usar e o que ele faz.",
+      "respostasAceitas": [
+        "Porque a venda não pode ser atendida; confirmar deixaria uma venda impossível (ou estoque negativo). Deve-se usar ROLLBACK, que desfaz tudo o que a transação já tinha feito."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a venda é inválida; 2) ROLLBACK desfaz o que foi feito."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "trava",
+      "enunciado": "Numa loja, dois caixas tentam vender ao mesmo tempo a última unidade de um produto. O caixa 1 já fez o UPDATE do estoque dentro de uma transação, mas ainda não deu COMMIT.\n\nNa sua resposta:\n1. explique o que acontece com o caixa 2 quando ele tenta fazer o UPDATE da mesma linha;\n2. explique por que isso ajuda a não vender o mesmo item duas vezes.",
+      "respostasAceitas": [
+        "O caixa 2 fica esperando, porque a linha está travada pela transação do caixa 1. Quando o caixa 1 termina, o caixa 2 continua já com o estoque atualizado (0), e o sistema pode recusar a venda."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) espera (trava/lock); 2) o segundo trabalha sobre o valor já atualizado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma técnica precisa gravar dois INSERTs ligados (um pedido e o item do pedido). Ela pensa em duas formas: rodar os dois com o autocommit ligado, sem nada antes, ou colocá-los entre `START TRANSACTION;` e `COMMIT;`.\n\nNa sua resposta:\n1. explique a diferença de quando cada INSERT fica gravado nas duas formas;\n2. diga qual forma é mais segura se o segundo INSERT falhar e por quê.",
+      "respostasAceitas": [
+        "Sem transação, cada INSERT é gravado logo que termina. Na transação, os dois só ficam gravados no COMMIT. A transação é mais segura: se o segundo falhar, dá para dar ROLLBACK e não fica pedido sem item."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) na hora x só no COMMIT; 2) transação, pois permite desfazer tudo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "release-rollback",
+      "enunciado": "Numa academia, o técnico rodou:\n`START TRANSACTION;`\n`UPDATE aluno SET plano = 'anual' WHERE id_aluno = 4;`\n`SAVEPOINT p;`\n`UPDATE aluno SET plano = 'mensal' WHERE id_aluno = 5;`\n`RELEASE SAVEPOINT p;`\n`ROLLBACK;`\n\nNa sua resposta:\n1. diga o que fica gravado no final;\n2. explique o que o RELEASE SAVEPOINT fez (e o que não fez).",
+      "respostasAceitas": [
+        "Nada fica gravado: o ROLLBACK desfaz os dois UPDATEs. O RELEASE só apagou a marca p; ele não confirma nem desfaz alterações."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nada; 2) só removeu o savepoint."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "check-transf",
+      "enunciado": "Na tabela `conta` (id_conta, saldo) existe a regra `CHECK (saldo >= 0)`. A conta 1 tem 50. Um programa rodou:\n`START TRANSACTION;`\n`UPDATE conta SET saldo = saldo - 200 WHERE id_conta = 1;`\n`UPDATE conta SET saldo = saldo + 200 WHERE id_conta = 2;`\n`COMMIT;`\nO primeiro UPDATE deu erro, mas o programa seguiu em frente.\n\nNa sua resposta:\n1. diga o que ficou gravado;\n2. explique por que a transação, sozinha, não impediu o problema;\n3. diga o que o programa deveria ter feito.",
+      "respostasAceitas": [
+        "A conta 2 ganhou 200 e a conta 1 continuou com 50: o dinheiro apareceu do nada. No MySQL o erro cancela só o comando, a transação segue e o COMMIT confirmou o segundo UPDATE. O programa deveria checar o erro e dar ROLLBACK."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só o crédito na conta 2; 2) erro não desfaz a transação inteira; 3) ROLLBACK ao detectar erro."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, o técnico rodou:\n`SET autocommit = 0;`\n`INSERT INTO venda (valor) VALUES (40);`\n`ALTER TABLE venda ADD obs VARCHAR(100);`\n`INSERT INTO venda (valor) VALUES (70);`\n`ROLLBACK;`\n\nNa sua resposta:\n1. diga quais vendas ficam gravadas;\n2. explique o papel do ALTER TABLE e do autocommit desligado nesse resultado.",
+      "respostasAceitas": [
+        "Fica só a venda de 40. O ALTER TABLE fez commit implícito e confirmou a venda de 40. Como o autocommit continua desligado, a venda de 70 entrou numa nova transação, desfeita pelo ROLLBACK."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só a de 40; 2) DDL confirma o que estava pendente; com autocommit 0, o comando seguinte fica pendente e o ROLLBACK o desfaz."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Transações (TCL: COMMIT, ROLLBACK e SAVEPOINT)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num hotel, uma excursão reserva 10 quartos de uma vez. O sistema grava as reservas numa transação, mas um dos quartos já estava ocupado. Há duas opções: dar ROLLBACK em tudo ou usar um SAVEPOINT antes de cada quarto e desfazer só o quarto ocupado.\n\nNa sua resposta:\n1. explique o que acontece em cada opção;\n2. diga qual você escolheria e justifique pensando no cliente.",
+      "respostasAceitas": [
+        "Com ROLLBACK, nenhuma reserva fica gravada e a excursão precisa tentar de novo. Com savepoint, só o quarto ocupado é desfeito e os outros 9 são confirmados. A escolha depende da regra: se o grupo só aceita ficar junto, ROLLBACK; se aceita 9 quartos, savepoint."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) tudo desfeito x só um desfeito; 2) qualquer escolha bem justificada (nota cheia se coerente)."
+    }
+  ]
+}

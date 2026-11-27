@@ -10,8 +10,8 @@ Pedidos do professor (mensagem própria + prompt sobre o que a FATEC ganhou na P
 | B | Correção SQL com tabela fixa (90/80/75/50/25/0), IA vê as tentativas com erro, nota em 0,05; limite de tempo nas chamadas; pente fino nunca baixa nota | feito (6aa0788) |
 | C | DESCRIBE igual ao MySQL; usuários e permissões na Bancada (CREATE USER, GRANT, REVOKE, SHOW GRANTS) | feito (b5df1b9); cenários com banco de tarefas: a fazer |
 | D | Diagramas: arrasto e zoom (Ctrl+rodinha, Ver tudo) já funcionavam; aqui não há diagrama de sequência; botões ilegíveis no tema escuro: corrigido | feito |
-| E | Dissertativas sem pedir comando/desenho ("o que faz", "explique", lista do que se espera) em todos os bancos; dificuldade balanceada; cenários SQL viram bancos de ~10 tarefas | a fazer |
-| E | 150 questões por tema, matéria por matéria (Banco de Dados → Linguagem de Marcação → demais do plano) | a fazer |
+| E | Dissertativas sem pedir comando/desenho (86 reescritas), dificuldade em todas e sorteio balanceado; 15 cenários da Bancada com 10 tarefas | feito; 25 cenários fis da FATEC: em andamento |
+| E | 150 questões por tema: Banco de Dados com os 18 temas prontos (2.700 questões, bancos/gerados/bd); próximas: Linguagem de Marcação e demais do plano | em andamento |
 
 ## Como ficou o modelo das perguntas de SQL (bloco A)
 - Cenário SQL = banco pronto + várias tarefas independentes (cada uma corrigida a partir da base original).
