@@ -1,0 +1,2432 @@
+{
+  "nome": "Programação para Dispositivos Móveis — Criação de interface (a revisar)",
+  "materia": "Programação para Dispositivos Móveis",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11. Exemplos de código em React Native (mostrados prontos).",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em React Native, qual componente funciona como uma \"caixa\" que agrupa outros componentes na tela, parecido com a `div` do HTML?",
+      "alternativas": [
+        "`Text`",
+        "`Image`",
+        "`View`",
+        "`Button`"
+      ],
+      "correta": 2,
+      "explicacao": "`View` é o contêiner básico: agrupa e organiza outros componentes. `Text` mostra texto, `Image` mostra imagem e `Button` é um botão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No React Native, se você não muda o `flexDirection` de uma `View`, como os componentes de dentro dela ficam organizados?",
+      "alternativas": [
+        "Um embaixo do outro (coluna)",
+        "Um ao lado do outro (linha)",
+        "Todos sobrepostos no mesmo ponto",
+        "Espalhados em grade de duas colunas"
+      ],
+      "correta": 0,
+      "explicacao": "No React Native o padrão de `flexDirection` é `'column'`, ao contrário do CSS da web, em que o padrão é `row`."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de uma pizzaria quer mostrar os botões \"−\", a quantidade e \"+\" lado a lado, numa linha. Qual estilo colocar na `View` que envolve os três?",
+      "alternativas": [
+        "`flexDirection: 'column'`",
+        "`position: 'absolute'`",
+        "`flexWrap: 'nowrap'`",
+        "`flexDirection: 'row'`"
+      ],
+      "correta": 3,
+      "explicacao": "`flexDirection: 'row'` coloca os filhos lado a lado. `column` empilharia; `absolute` tira o item do fluxo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa tela, o estilo `flex: 1` aplicado à `View` principal serve para:",
+      "alternativas": [
+        "Deixar a `View` com exatamente 1 pixel de altura",
+        "Ocupar todo o espaço livre dentro do componente pai",
+        "Mostrar só o primeiro componente que está dentro dela",
+        "Esconder a `View` até o usuário tocar nela uma vez"
+      ],
+      "correta": 1,
+      "explicacao": "`flex: 1` faz o componente crescer e ocupar o espaço livre do pai. Na tela principal, ocupa a tela inteira."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que, em apps, as medidas de leiaute não devem ser pensadas em pixels físicos da tela?",
+      "alternativas": [
+        "Porque o celular não tem pixels, a tela é medida apenas em polegadas",
+        "Porque a densidade muda de um celular para outro, mudando o tamanho real do pixel",
+        "Porque pixels só existem em monitores de computador, não em celulares",
+        "Porque o sistema proíbe usar números para medir componentes do leiaute"
+      ],
+      "correta": 1,
+      "explicacao": "Numa tela mais densa, 100 pixels físicos ficam menores. Por isso se usam unidades independentes de densidade (dp no Android, pt no iOS)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Android, a unidade \"dp\" (density-independent pixel) serve para:",
+      "alternativas": [
+        "Medir o tamanho em bytes do arquivo de uma imagem do app",
+        "Medir a velocidade da animação de um botão na tela",
+        "Indicar quantas cores diferentes a tela consegue mostrar",
+        "Manter o mesmo tamanho visual em telas de densidades diferentes"
+      ],
+      "correta": 3,
+      "explicacao": "1 dp equivale a 1 pixel numa tela de 160 dpi; o sistema converte para pixels reais conforme a densidade, mantendo o tamanho visual."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é a orientação \"retrato\" (portrait) de um celular?",
+      "alternativas": [
+        "O aparelho em pé, com a tela mais alta do que larga",
+        "O aparelho deitado, com a tela mais larga do que alta",
+        "O modo em que a tela fica em preto e branco",
+        "O modo em que o app ocupa só metade da tela"
+      ],
+      "correta": 0,
+      "explicacao": "Retrato = em pé (altura maior). Paisagem (landscape) = deitado (largura maior)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num celular com \"notch\" (recorte da câmera no topo), o título do app de uma academia ficou escondido atrás do recorte. Qual recurso resolve isso?",
+      "alternativas": [
+        "Diminuir a fonte do título para 8, para ele caber ao lado do recorte",
+        "Colocar o título dentro de uma imagem de fundo que cubra o recorte",
+        "Usar uma área segura (ex.: `SafeAreaView`), que afasta o conteúdo do recorte",
+        "Mudar a cor do título para branco, para combinar com o recorte"
+      ],
+      "correta": 2,
+      "explicacao": "A área segura é a parte da tela sem recortes, cantos arredondados, barra de status e indicador de início. `SafeAreaView` (ou a biblioteca react-native-safe-area-context) aplica esse espaçamento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual componente do React Native permite rolar a tela quando o conteúdo (por exemplo, um texto de regulamento de um sorteio da escola) é maior do que a altura do celular?",
+      "alternativas": [
+        "`View`",
+        "`SafeAreaView`",
+        "`StatusBar`",
+        "`ScrollView`"
+      ],
+      "correta": 3,
+      "explicacao": "`ScrollView` cria uma área rolável. Uma `View` comum corta o que passa do tamanho da tela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No estilo de uma `View`, o `padding` serve para:",
+      "alternativas": [
+        "Criar espaço externo, entre a `View` e os componentes vizinhos",
+        "Mudar a cor de fundo da `View` quando ela é tocada",
+        "Criar espaço interno, entre a borda e o conteúdo da `View`",
+        "Definir quantos componentes filhos a `View` pode ter"
+      ],
+      "correta": 2,
+      "explicacao": "`padding` é o espaço interno; `margin` é o espaço externo, entre o componente e os vizinhos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na estrutura de uma tela em React Native, a ideia de \"árvore de componentes\" significa que:",
+      "alternativas": [
+        "Cada componente precisa ser salvo em um arquivo separado",
+        "Componentes ficam dentro de outros, em níveis (pai e filhos)",
+        "A tela só pode mostrar um componente de cada vez",
+        "Os componentes são desenhados na tela em ordem alfabética"
+      ],
+      "correta": 1,
+      "explicacao": "Uma tela é montada aninhando componentes: uma `View` (pai) contém `Text`, `Image`, outras `View` (filhos) e assim por diante."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de cinema, a imagem do cartaz deve ter versões `cartaz.png`, `cartaz@2x.png` e `cartaz@3x.png`. Para que servem essas versões?",
+      "alternativas": [
+        "Para o app usar a resolução certa para a densidade de cada tela",
+        "Para mostrar três cartazes diferentes, um depois do outro",
+        "Para o app conseguir mostrar o cartaz mesmo sem internet",
+        "Para ter cópias de segurança caso uma das imagens se perca"
+      ],
+      "correta": 0,
+      "explicacao": "O React Native escolhe @2x ou @3x conforme a densidade da tela, deixando a imagem nítida sem desperdiçar memória em telas simples."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que acontece com a largura e a altura disponíveis para o app quando o usuário gira o celular de retrato para paisagem?",
+      "alternativas": [
+        "Elas se invertem: a largura passa a ser maior que a altura",
+        "Elas continuam iguais; só o texto gira junto com o celular",
+        "As duas diminuem pela metade para caber a barra do sistema",
+        "O app fecha e abre de novo, sempre com o mesmo tamanho"
+      ],
+      "correta": 0,
+      "explicacao": "Ao girar, a largura passa a ser o lado maior. O leiaute precisa se adaptar a essa nova medida."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app, a \"barra de status\" é:",
+      "alternativas": [
+        "A barra de botões que o app cria no rodapé",
+        "A faixa no topo da tela que mostra hora, bateria e sinal",
+        "A barra que mostra o progresso de um download dentro do app",
+        "A faixa de propaganda que a loja coloca no app"
+      ],
+      "correta": 1,
+      "explicacao": "A barra de status é do sistema. O app deve deixar espaço para ela (área segura) e pode ajustar sua cor com o componente `StatusBar`."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa `View` com `flexDirection: 'column'`, qual propriedade centraliza os filhos na VERTICAL (de cima para baixo)?",
+      "alternativas": [
+        "`alignItems: 'center'`",
+        "`textAlign: 'center'`",
+        "`alignSelf: 'stretch'`",
+        "`justifyContent: 'center'`"
+      ],
+      "correta": 3,
+      "explicacao": "`justifyContent` age no eixo principal. Em coluna, o eixo principal é o vertical. `alignItems` age no eixo cruzado (horizontal, neste caso).",
+      "grupo": "eixos-flex"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa `View` com `flexDirection: 'row'`, qual propriedade alinha os filhos no centro da VERTICAL?",
+      "alternativas": [
+        "`justifyContent: 'center'`",
+        "`flexWrap: 'wrap'`",
+        "`alignItems: 'center'`",
+        "`alignContent: 'flex-start'`"
+      ],
+      "correta": 2,
+      "explicacao": "Em linha, o eixo principal é o horizontal (`justifyContent`) e o eixo cruzado é o vertical (`alignItems`).",
+      "grupo": "eixos-flex"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o estilo da barra de baixo de um app de padaria:\n```jsx\n<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>\n  <Text>Total: R$ 18,00</Text>\n  <Button title=\"Pagar\" onPress={pagar} />\n</View>\n```\nComo os dois itens aparecem?",
+      "alternativas": [
+        "Os dois juntos, lado a lado, centralizados no meio da barra",
+        "O total na linha de cima e o botão na linha de baixo",
+        "O total encostado à esquerda e o botão encostado à direita",
+        "O botão encostado à esquerda e o total encostado à direita"
+      ],
+      "correta": 2,
+      "explicacao": "`space-between` põe o primeiro item no início, o último no fim e distribui o espaço restante entre eles."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa tela de app de academia, a `View` de cima tem `flex: 1` e a de baixo tem `flex: 2`, ambas dentro de uma coluna que ocupa a tela toda. Como a altura é dividida?",
+      "alternativas": [
+        "A de cima fica com 1 pixel e a de baixo com 2 pixels",
+        "As duas ficam com metade da altura, pois flex ignora números",
+        "A de cima fica com 2/3 da altura e a de baixo com 1/3",
+        "A de cima fica com 1/3 da altura e a de baixo com 2/3"
+      ],
+      "correta": 3,
+      "explicacao": "Os valores de `flex` são proporções do espaço livre: 1 + 2 = 3 partes; a primeira pega 1 e a segunda pega 2."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A galeria de produtos de um pet shop mostra cartões lado a lado. Quando não cabem na largura da tela, devem pular para a linha de baixo. Qual estilo ativa isso na `View` que contém os cartões (já em `row`)?",
+      "alternativas": [
+        "`flexWrap: 'wrap'`",
+        "`flex: 1`",
+        "`alignItems: 'stretch'`",
+        "`overflow: 'hidden'`"
+      ],
+      "correta": 0,
+      "explicacao": "`flexWrap: 'wrap'` deixa os itens quebrarem para a próxima linha. `overflow: 'hidden'` apenas cortaria o que sobra."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma clínica, um botão \"Agendar\" redondo deve ficar flutuando no canto inferior direito, por cima da lista. Qual estilo é usado para isso?",
+      "alternativas": [
+        "`flexDirection: 'row-reverse'` no botão e na lista",
+        "`position: 'absolute'` com `right` e `bottom`",
+        "`justifyContent: 'flex-end'` aplicado só na lista",
+        "`margin: 'auto'` no botão, sem mudar a posição"
+      ],
+      "correta": 1,
+      "explicacao": "`position: 'absolute'` tira o botão do fluxo normal e o posiciona em relação ao pai, usando `right`/`bottom`. É o jeito comum de fazer o botão flutuante."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No React Native, o estilo `{ width: 120 }` significa uma largura de 120:",
+      "alternativas": [
+        "Pixels físicos, iguais em qualquer celular",
+        "Unidades independentes de densidade (dp/pt)",
+        "Por cento da largura total da tela",
+        "Milímetros medidos na superfície da tela"
+      ],
+      "correta": 1,
+      "explicacao": "Números sem unidade no React Native são medidas independentes de densidade (dp/pt). Para porcentagem usa-se texto, ex.: `'50%'`."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um celular tem densidade de tela 3x (xxhdpi). Um botão com 48 dp de altura ocupa quantos pixels físicos?",
+      "alternativas": [
+        "144 pixels",
+        "48 pixels",
+        "16 pixels",
+        "51 pixels"
+      ],
+      "correta": 0,
+      "explicacao": "pixels = dp × fator de densidade → 48 × 3 = 144."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de uma loja de games quer mostrar 2 colunas de jogos em retrato e 4 colunas em paisagem, atualizando quando o celular gira. Qual recurso do React Native ajuda a ler a largura atual da janela e reagir à mudança?",
+      "alternativas": [
+        "O componente `StatusBar`",
+        "A propriedade `secureTextEntry`",
+        "O hook `useWindowDimensions()`",
+        "O método `Alert.alert()`"
+      ],
+      "correta": 2,
+      "explicacao": "`useWindowDimensions()` devolve largura e altura atuais e faz o componente redesenhar quando elas mudam (por exemplo, ao girar)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de leitura de cardápio só faz sentido em pé, e a equipe quer travar a orientação em retrato. Onde isso costuma ser configurado num projeto Expo?",
+      "alternativas": [
+        "No estilo de cada `View`, com `rotate: 0`",
+        "No `package.json`, junto das dependências",
+        "Dentro do `onPress` do primeiro botão da tela",
+        "No `app.json`, na opção `orientation`"
+      ],
+      "correta": 3,
+      "explicacao": "A orientação permitida é configuração do app (`\"orientation\": \"portrait\"` no app.json do Expo, ou no AndroidManifest/Info.plist em projetos nativos)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num iPhone sem botão físico, o botão \"Finalizar compra\" fixo no rodapé ficou em cima da barrinha de \"voltar ao início\" do sistema. Qual é a correção adequada?",
+      "alternativas": [
+        "Mover o botão para o meio da tela, longe do rodapé",
+        "Deixar o botão transparente para a barrinha aparecer",
+        "Diminuir a altura do botão para 10, para caber embaixo",
+        "Aplicar ao rodapé o espaçamento inferior da área segura"
+      ],
+      "correta": 3,
+      "explicacao": "A área segura também tem margem embaixo (indicador de início). Usar `SafeAreaView` ou `useSafeAreaInsets().bottom` afasta o botão dessa área."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre `ScrollView` e uma `View` comum quando o conteúdo é maior do que a tela?",
+      "alternativas": [
+        "A `View` rola sozinha; a `ScrollView` só funciona com imagens",
+        "A `ScrollView` deixa rolar; a `View` comum corta o que passar",
+        "Não há diferença; as duas rolam automaticamente quando preciso",
+        "A `ScrollView` encolhe o conteúdo até ele caber na tela toda"
+      ],
+      "correta": 1,
+      "explicacao": "Uma `View` não rola. Para conteúdo longo usa-se `ScrollView` (ou `FlatList`, no caso de listas grandes)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No leiaute de uma tela, qual é a vantagem de dividir a tela em blocos (cabeçalho, conteúdo, rodapé), cada um numa `View`?",
+      "alternativas": [
+        "O app passa a ocupar menos espaço de armazenamento na loja",
+        "O app deixa de precisar de qualquer estilo nos componentes",
+        "Fica mais fácil organizar, estilizar e reaproveitar cada parte",
+        "Os blocos passam a funcionar mesmo sem o React Native instalado"
+      ],
+      "correta": 2,
+      "explicacao": "Dividir a tela em blocos dá estrutura: cada parte tem seu estilo, pode virar um componente próprio e ser reaproveitada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de uma escola, o cartão de aviso tem `margin: 16` e `padding: 12`. O que acontece com o texto de dentro do cartão?",
+      "alternativas": [
+        "Fica a 12 unidades da borda do cartão, e o cartão fica a 16 dos vizinhos",
+        "Fica a 16 unidades da borda do cartão, e o cartão fica a 12 dos vizinhos",
+        "Fica a 28 unidades da borda, somando a margem com o espaçamento interno",
+        "Fica colado na borda do cartão, pois margin e padding se anulam"
+      ],
+      "correta": 0,
+      "explicacao": "`padding` (12) é o espaço interno, entre borda e conteúdo. `margin` (16) é o espaço externo, entre o cartão e os outros componentes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja a tela de boas-vindas de um app de hotel:\n```jsx\n<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>\n  <Image source={logo} style={{ width: 120, height: 120 }} />\n  <Text>Bem-vindo ao Hotel Serra Azul</Text>\n</View>\n```\nOnde o logo e o texto aparecem?",
+      "alternativas": [
+        "No topo da tela, o logo à esquerda do texto",
+        "No centro da tela, o logo à esquerda do texto",
+        "No centro da tela, o logo em cima do texto",
+        "No canto inferior, o texto em cima do logo"
+      ],
+      "correta": 2,
+      "explicacao": "Sem `flexDirection`, a direção é coluna (um embaixo do outro). `justifyContent: 'center'` centraliza na vertical e `alignItems: 'center'` na horizontal."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um botão de um app de oficina tem `style={{ width: 300 }}`. Num celular pequeno, com 320 de largura, ficou bom. Num tablet, com 800 de largura, ficou estreito e torto. Qual é a melhor correção?",
+      "alternativas": [
+        "Usar largura relativa (ex.: `'90%'` ou `flex`), em vez de valor fixo",
+        "Trocar 300 por 800, para o botão caber certinho no tablet",
+        "Usar pixels físicos em vez de dp, para a medida ficar exata",
+        "Criar um segundo app, separado, feito só para os tablets"
+      ],
+      "correta": 0,
+      "explicacao": "Medidas fixas não acompanham o tamanho da tela. Larguras relativas (porcentagem, flex, stretch) se adaptam a celulares e tablets."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tela de detalhes de um filme no app de um cinema tem, em coluna: cartaz (altura 300), sinopse longa e o botão \"Comprar ingresso\". Em paisagem, o botão some para fora da tela e não dá para rolar. Qual é a causa mais provável?",
+      "alternativas": [
+        "Em paisagem, o React Native desativa os botões automaticamente para economizar",
+        "A imagem do cartaz não tem versão @3x, e isso esconde os componentes de baixo",
+        "Faltou `flexDirection: 'row'` no botão, então ele foi para fora da tela",
+        "O conteúdo está numa `View` comum, sem rolagem; em paisagem o resto é cortado"
+      ],
+      "correta": 3,
+      "explicacao": "Em paisagem a altura disponível é menor. Sem área rolável, o que passar da altura fica inacessível. Envolver o conteúdo em `ScrollView` (ou reorganizar o leiaute) resolve."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O desenvolvedor do app de uma biblioteca colocou só `cartao.png` (pensada para densidade 1x) com `width: 100, height: 100`. Num celular 3x a imagem aparece borrada. Por quê?",
+      "alternativas": [
+        "Imagens PNG não são aceitas em celulares com densidade 3x",
+        "São precisos 300×300 pixels físicos, e a imagem de 100×100 é esticada",
+        "O valor 100 é em pixels físicos, então a imagem fica pequena e borrada",
+        "A imagem só fica nítida quando o celular está em paisagem"
+      ],
+      "correta": 1,
+      "explicacao": "100 dp × 3 = 300 pixels físicos. Uma imagem de 100 px esticada para 300 perde nitidez; por isso se fornecem as versões @2x e @3x."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o leiaute do cabeçalho de um app de delivery:\n```jsx\n<View style={{ flexDirection: 'row', alignItems: 'center' }}>\n  <Image source={logo} style={{ width: 40, height: 40 }} />\n  <Text style={{ flex: 1 }}>Lanchonete do Bairro</Text>\n  <Button title=\"Sair\" onPress={sair} />\n</View>\n```\nPor que o texto tem `flex: 1`?",
+      "alternativas": [
+        "Para o texto ter exatamente uma letra de largura na barra",
+        "Para ocupar o espaço que sobra, empurrando o botão para a direita",
+        "Para o texto ficar posicionado acima do logo, em outra linha",
+        "Para o texto aparecer só depois de um toque no botão Sair"
+      ],
+      "correta": 1,
+      "explicacao": "Em linha, o filho com `flex: 1` cresce e ocupa o espaço livre. Assim o logo fica à esquerda, o botão vai para a ponta direita e o texto preenche o meio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tela de login de um app foi feita só para retrato. Ao girar o celular, os campos ficaram cortados. A equipe tem duas opções: travar o app em retrato ou adaptar o leiaute para paisagem. Para um app de leitura de livros, que o usuário usa deitado no sofá, qual decisão é mais adequada e por quê?",
+      "alternativas": [
+        "Travar em retrato, pois apps de leitura nunca são usados deitados",
+        "Travar em paisagem, pois as páginas de livro são mais largas que altas",
+        "Não fazer nada, pois com o tempo o usuário aprende a não girar",
+        "Adaptar o leiaute, pois ler deitado em paisagem é um uso real do app"
+      ],
+      "correta": 3,
+      "explicacao": "Travar a orientação só é aceitável quando o outro modo não faz sentido. Num app de leitura, paisagem é uso comum, então o leiaute deve se adaptar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na lista de mensagens de um app, o desenvolvedor usou `SafeAreaView` do próprio React Native. No iPhone ficou certo, mas num Android com câmera no topo o título continuou atrás do recorte. Qual é a explicação mais provável?",
+      "alternativas": [
+        "O `SafeAreaView` do React Native só age no iOS; no Android é preciso outra solução",
+        "O Android não tem barra de status, então o recorte da câmera é proposital",
+        "O título precisa estar em negrito para que a área segura seja respeitada",
+        "O `SafeAreaView` só funciona no Android quando o celular está em paisagem"
+      ],
+      "correta": 0,
+      "explicacao": "O `SafeAreaView` nativo do React Native é aplicado só no iOS. A biblioteca react-native-safe-area-context fornece `SafeAreaView` e `useSafeAreaInsets` que funcionam nas duas plataformas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Celulares têm tamanhos de tela muito diferentes, de aparelhos pequenos a tablets.\n\nNa sua resposta:\n1. explique por que um leiaute com medidas fixas pode dar problema;\n2. diga uma forma de deixar o leiaute adaptável.",
+      "respostasAceitas": [
+        "Medidas fixas podem cortar conteúdo em telas pequenas ou sobrar espaço em telas grandes. Usar medidas relativas (flex, porcentagem) e testar em vários tamanhos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o mesmo valor fixo não serve para todas as telas (corta ou sobra); 2) flex, porcentagem, leiaute que se ajusta, ler a largura da tela."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique o que é a \"área segura\" (safe area) da tela de um celular.\n\nNa sua resposta:\n1. diga o que fica fora da área segura;\n2. diga o que acontece se o app ignorar essa área.",
+      "respostasAceitas": [
+        "É a parte da tela livre de recortes da câmera, cantos arredondados, barra de status e barra/indicador do sistema. Se o app ignorar, textos e botões podem ficar escondidos ou difíceis de tocar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) notch/recorte, cantos, barra de status, indicador de início; 2) conteúdo coberto ou botão difícil de tocar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Observe a estrutura de uma tela de um app de biblioteca:\n```jsx\n<View style={{ flex: 1 }}>\n  <View style={estilos.cabecalho}><Text>Biblioteca da Escola</Text></View>\n  <View style={estilos.conteudo}>{/* lista de livros */}</View>\n  <View style={estilos.rodape}><Text>Versão 1.0</Text></View>\n</View>\n```\nNa sua resposta:\n1. diga quantas partes a tela tem e quais são;\n2. explique por que a `View` de fora tem `flex: 1`.",
+      "respostasAceitas": [
+        "Tem três partes dentro de uma View principal: cabeçalho, conteúdo e rodapé. A View de fora tem flex: 1 para ocupar a tela inteira."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cabeçalho, conteúdo (lista) e rodapé, empilhados em coluna; 2) ocupar todo o espaço disponível da tela."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre as orientações retrato e paisagem num app.\n\nNa sua resposta:\n1. explique cada orientação;\n2. dê um exemplo de app que aproveita bem a paisagem.",
+      "respostasAceitas": [
+        "Retrato é o celular em pé, mais alto que largo; paisagem é deitado, mais largo que alto. Ex.: player de vídeo ou jogo de corrida aproveitam a paisagem."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) em pé x deitado (altura x largura); 2) vídeo, jogo, câmera, gráficos, leitura etc."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Por que, no desenvolvimento mobile, se usa dp (Android) ou pt (iOS) em vez de pixels físicos para medir botões e textos?\n\nNa sua resposta:\n1. explique o que é densidade de tela;\n2. explique o que a unidade independente de densidade garante.",
+      "respostasAceitas": [
+        "Densidade é quantos pixels cabem em uma polegada da tela. dp/pt fazem o elemento ter o mesmo tamanho visual em telas de densidades diferentes, pois o sistema converte para pixels reais."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) pixels por polegada (dpi); 2) mesmo tamanho físico/visual em qualquer tela."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No estilo de um cartão de produto de uma loja, foram usados `margin` e `padding`.\n\nNa sua resposta:\n1. explique para que serve o `margin`;\n2. explique para que serve o `padding`.",
+      "respostasAceitas": [
+        "margin é o espaço de fora, entre o cartão e os outros componentes. padding é o espaço de dentro, entre a borda do cartão e o conteúdo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) espaço externo; 2) espaço interno."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No Flexbox do React Native existem dois eixos: o principal e o cruzado.\n\nNa sua resposta:\n1. explique qual é o eixo principal quando `flexDirection` é `'column'` e quando é `'row'`;\n2. diga qual propriedade age em cada eixo (`justifyContent` e `alignItems`).",
+      "respostasAceitas": [
+        "Em column o eixo principal é o vertical; em row é o horizontal. justifyContent alinha no eixo principal e alignItems no eixo cruzado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) column → vertical, row → horizontal; 2) justifyContent = principal, alignItems = cruzado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja o estilo de uma tela de app de academia:\n```jsx\n<View style={{ flex: 1 }}>\n  <View style={{ flex: 1, backgroundColor: 'orange' }} />\n  <View style={{ flex: 3, backgroundColor: 'white' }} />\n</View>\n```\nNa sua resposta:\n1. diga como a altura da tela é dividida entre as duas partes;\n2. explique por que esse leiaute se adapta a celulares de alturas diferentes.",
+      "respostasAceitas": [
+        "A parte laranja fica com 1/4 da altura e a branca com 3/4. Como são proporções e não medidas fixas, a divisão se mantém em qualquer altura de tela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 1 + 3 = 4 partes → 25% e 75%; 2) flex é proporcional ao espaço disponível, não um valor fixo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de cinema mostra cartazes com as versões `filme.png`, `filme@2x.png` e `filme@3x.png`.\n\nNa sua resposta:\n1. explique por que existem essas três versões;\n2. diga o que acontece se só existir a versão menor e o app rodar num celular 3x.",
+      "respostasAceitas": [
+        "Cada versão atende uma densidade de tela; o app escolhe a mais adequada para ficar nítida. Com só a menor, num celular 3x ela é esticada e fica borrada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) densidades diferentes (1x, 2x, 3x) e escolha automática; 2) imagem ampliada perde nitidez."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de pet shop mostra uma grade de produtos com 2 colunas. Quando o celular é girado para paisagem, sobra muito espaço dos lados.\n\nNa sua resposta:\n1. explique por que isso acontece;\n2. sugira como o leiaute pode se adaptar à paisagem.",
+      "respostasAceitas": [
+        "Em paisagem a largura aumenta, mas a grade continua com 2 colunas, então sobra espaço. O app pode ler a largura atual (useWindowDimensions) e usar mais colunas em paisagem."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) largura maior com leiaute fixo; 2) calcular colunas pela largura, reorganizar o leiaute, usar medidas relativas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de uma padaria, o botão \"Fazer pedido\" fica fixo no rodapé. Num celular sem botões físicos, ele ficou por cima da barrinha do sistema que volta à tela inicial.\n\nNa sua resposta:\n1. explique o problema que isso causa;\n2. explique como a área segura resolve.",
+      "respostasAceitas": [
+        "O usuário pode tocar no gesto do sistema em vez do botão, ou ver o botão cortado. Respeitando a área segura, o rodapé ganha um espaçamento inferior e fica acima da barrinha."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) conflito de toque/conteúdo coberto; 2) inset inferior (SafeAreaView/useSafeAreaInsets) afasta o botão da borda."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Compare `ScrollView` e uma `View` comum para mostrar o regulamento de um campeonato da escola, que é um texto longo.\n\nNa sua resposta:\n1. diga o que acontece com o texto longo em cada uma;\n2. diga qual escolher e por quê.",
+      "respostasAceitas": [
+        "Na View o texto que passa da tela é cortado e não dá para ver; na ScrollView o usuário rola para ler tudo. Escolher a ScrollView, pois o texto é maior que a tela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) View corta / ScrollView rola; 2) ScrollView para conteúdo longo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma equipe vai fazer o app de uma clínica e discute duas formas de posicionar os componentes: posição absoluta com coordenadas fixas (ex.: `top: 200, left: 40`) ou Flexbox (coluna/linha com `flex` e alinhamentos).\n\nNa sua resposta:\n1. explique um problema da posição absoluta em telas de tamanhos diferentes;\n2. explique por que o Flexbox se adapta melhor;\n3. cite um caso em que a posição absoluta ainda é útil.",
+      "respostasAceitas": [
+        "Com coordenadas fixas os componentes podem sair da tela ou se sobrepor em telas menores. O Flexbox distribui os itens conforme o espaço disponível. A posição absoluta é útil para algo que flutua, como um botão flutuante ou um selo sobre uma imagem."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) corta/sobrepõe em telas diferentes; 2) distribuição proporcional ao espaço; 3) botão flutuante, selo, sobreposição."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja o trecho de um app de loja de games:\n```jsx\nconst { width } = useWindowDimensions();\nconst colunas = width > 600 ? 4 : 2;\n```\nNa sua resposta:\n1. explique o que o código decide;\n2. explique por que ele funciona quando o celular é girado;\n3. diga uma vantagem disso para tablets.",
+      "respostasAceitas": [
+        "Usa 4 colunas quando a largura é maior que 600 e 2 quando é menor. useWindowDimensions atualiza a largura ao girar, então o número de colunas muda sozinho. Em tablets, aproveita a tela grande mostrando mais itens."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) escolha do número de colunas pela largura; 2) o hook redesenha com a nova largura; 3) melhor uso do espaço em telas grandes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um celular A tem densidade 2x e um celular B tem densidade 3x. Nos dois, um botão foi definido com 48 dp de altura.\n\nNa sua resposta:\n1. calcule quantos pixels físicos o botão ocupa em cada celular;\n2. explique se o botão parece maior, menor ou igual para o usuário nos dois aparelhos e por quê.",
+      "respostasAceitas": [
+        "A: 48 × 2 = 96 pixels; B: 48 × 3 = 144 pixels. O botão parece do mesmo tamanho, porque a tela B tem pixels menores (mais densos); o dp compensa isso."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 96 px e 144 px; 2) mesmo tamanho visual, pois dp converte conforme a densidade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tela de cadastro de um app de pet shop, o usuário precisa digitar o nome do animal. Qual componente do React Native recebe esse texto?",
+      "alternativas": [
+        "`Text`",
+        "`ImageBackground`",
+        "`TextInput`",
+        "`Switch`"
+      ],
+      "correta": 2,
+      "explicacao": "`TextInput` é o campo de digitação. `Text` só mostra texto, sem deixar o usuário digitar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma academia, o aluno liga ou desliga a opção \"Receber lembretes de treino\". Qual componente é o mais indicado?",
+      "alternativas": [
+        "`TextInput` para digitar sim ou não",
+        "`Image` com o desenho de um sino",
+        "`ScrollView` com duas opções escritas",
+        "`Switch` (chave liga/desliga)"
+      ],
+      "correta": 3,
+      "explicacao": "`Switch` representa uma opção de dois estados (ligado/desligado), exatamente o caso de ativar ou não os lembretes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Enquanto o app de uma biblioteca busca os livros na internet, a tela deve mostrar que algo está carregando. Qual componente do React Native mostra esse indicador giratório?",
+      "alternativas": [
+        "`StatusBar`",
+        "`KeyboardAvoidingView`",
+        "`ActivityIndicator`",
+        "`TouchableOpacity`"
+      ],
+      "correta": 2,
+      "explicacao": "`ActivityIndicator` mostra o \"rodinha girando\", avisando que o app está trabalhando."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app com as seções Início, Pedidos e Perfil, a forma de navegação mais comum, recomendada tanto pelo Material Design quanto pelas diretrizes da Apple, é:",
+      "alternativas": [
+        "Um texto longo explicando onde fica cada seção",
+        "Uma barra de abas na parte de baixo da tela",
+        "Um único botão que sorteia uma seção ao tocar",
+        "Três aplicativos separados, um por seção"
+      ],
+      "correta": 1,
+      "explicacao": "Para poucas seções principais (cerca de 3 a 5), a barra de abas inferior (bottom tabs / tab bar) deixa tudo a um toque de distância."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é o Material Design?",
+      "alternativas": [
+        "Um guia do Google com regras e componentes visuais para interfaces",
+        "Uma linguagem de programação criada para fazer apps de Android",
+        "Um banco de dados interno usado pelos aplicativos Android",
+        "Um emulador para testar apps de celular no computador"
+      ],
+      "correta": 0,
+      "explicacao": "Material Design é um guia de design (cores, espaços, componentes, movimentos). Não é linguagem nem ferramenta de execução."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "As \"Human Interface Guidelines\" (HIG) são:",
+      "alternativas": [
+        "As recomendações da Apple para interfaces de apps no iPhone e iPad",
+        "O manual de instalação do Android Studio no computador da equipe",
+        "As regras da loja do Google para cobrar pelos aplicativos",
+        "Um conjunto de ícones gratuitos para usar em qualquer site"
+      ],
+      "correta": 0,
+      "explicacao": "As HIG são o guia de design da Apple, assim como o Material Design é o guia do Google."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de um cinema, a barra no topo da tela de detalhes mostra o nome do filme e uma seta à esquerda. Para que serve essa seta?",
+      "alternativas": [
+        "Fechar o aplicativo de vez",
+        "Voltar para a tela anterior",
+        "Abrir a câmera traseira do celular",
+        "Aumentar o tamanho do texto"
+      ],
+      "correta": 1,
+      "explicacao": "Na barra de ação (cabeçalho), a seta à esquerda é o botão de voltar, que retorna à tela anterior da navegação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app, o \"menu lateral\" (drawer) é:",
+      "alternativas": [
+        "Uma janela que pergunta se o usuário quer mesmo sair do app",
+        "A barra do sistema, no topo, que mostra a hora e a bateria",
+        "Uma lista de contatos que o app lê da agenda do celular",
+        "Um painel que desliza da lateral com links para as seções do app"
+      ],
+      "correta": 3,
+      "explicacao": "O drawer abre pela lateral (com o ícone ☰ ou gesto) e mostra as opções de navegação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Segundo o Material Design (Android), qual é o tamanho mínimo recomendado para a área de toque de um botão?",
+      "alternativas": [
+        "10 × 10 dp",
+        "20 × 20 dp",
+        "48 × 48 dp",
+        "200 × 200 dp"
+      ],
+      "correta": 2,
+      "explicacao": "O Material Design recomenda áreas de toque de pelo menos 48 × 48 dp, para o dedo acertar com facilidade.",
+      "grupo": "area-toque"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Segundo as diretrizes da Apple (HIG), qual é o tamanho mínimo recomendado para a área de toque de um controle no iPhone?",
+      "alternativas": [
+        "12 × 12 pontos",
+        "24 × 24 pontos",
+        "44 × 44 pontos",
+        "150 × 150 pontos"
+      ],
+      "correta": 2,
+      "explicacao": "A Apple recomenda áreas de toque de pelo menos 44 × 44 pt.",
+      "grupo": "area-toque"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é um leitor de tela, como o TalkBack (Android) ou o VoiceOver (iOS)?",
+      "alternativas": [
+        "Um aplicativo que tira foto da tela e salva na galeria",
+        "Uma ferramenta que mede e ajusta o brilho da tela do celular",
+        "Um teclado especial que só aceita números e símbolos",
+        "Um recurso que lê a tela em voz alta, usado por pessoas cegas"
+      ],
+      "correta": 3,
+      "explicacao": "Leitores de tela falam o conteúdo e os controles. Para funcionar bem, os componentes precisam de nomes (rótulos) acessíveis."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma clínica, o ícone de lixeira (sem texto) apaga uma consulta. O que o desenvolvedor deve adicionar para o leitor de tela anunciar corretamente esse botão?",
+      "alternativas": [
+        "Um rótulo acessível, como `accessibilityLabel=\"Excluir consulta\"`",
+        "Uma cor vermelha mais forte no ícone, para chamar atenção",
+        "Um ícone menor, para sobrar espaço para outros botões",
+        "Uma animação piscando sobre o ícone da lixeira"
+      ],
+      "correta": 0,
+      "explicacao": "Sem texto, o leitor de tela não sabe o que o ícone faz. `accessibilityLabel` informa o nome que será falado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Android, o \"snackbar\" é:",
+      "alternativas": [
+        "Um menu de lanches que já vem pronto no Android",
+        "Uma mensagem curta que aparece por alguns segundos embaixo",
+        "Uma janela que trava o app até o usuário digitar a senha",
+        "A barra de abas que fica no topo de alguns apps"
+      ],
+      "correta": 1,
+      "explicacao": "O snackbar (Material Design) dá um aviso rápido, ex.: \"Item removido\", às vezes com uma ação como \"Desfazer\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma loja, qual componente do React Native é usado para mostrar a foto de um produto?",
+      "alternativas": [
+        "`TextInput`",
+        "`Image`",
+        "`Switch`",
+        "`ActivityIndicator`"
+      ],
+      "correta": 1,
+      "explicacao": "`Image` exibe imagens locais ou da internet, com `source` e tamanho definidos no estilo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma oficina, o usuário toca em \"Excluir orçamento\". O código mostra:\n```jsx\nAlert.alert('Excluir orçamento', 'Tem certeza? Isso não pode ser desfeito.', [\n  { text: 'Cancelar', style: 'cancel' },\n  { text: 'Excluir', style: 'destructive', onPress: excluir },\n]);\n```\nO que acontece?",
+      "alternativas": [
+        "Abre um diálogo; só o botão Excluir chama a função `excluir`",
+        "O orçamento é excluído na hora e depois aparece um aviso",
+        "A função `excluir` roda duas vezes, uma vez para cada botão",
+        "Aparece um campo para o usuário digitar a palavra \"Excluir\""
+      ],
+      "correta": 0,
+      "explicacao": "`Alert.alert` abre um diálogo nativo com título, mensagem e botões. A função do `onPress` só roda no botão em que foi colocada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de hotel, o hóspede escolhe as datas numa janela por cima da tela, com calendário e botões \"Confirmar\" e \"Fechar\". O componente do React Native mais adequado para essa janela personalizada é:",
+      "alternativas": [
+        "`Alert.alert`",
+        "`StatusBar`",
+        "`Modal`",
+        "`Switch`"
+      ],
+      "correta": 2,
+      "explicacao": "`Alert.alert` só aceita título, mensagem e botões. Para conteúdo próprio (calendário, campos) usa-se `Modal`, controlado por `visible`."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o trecho de um app de academia:\n```jsx\n<Modal visible={aberto} onRequestClose={() => setAberto(false)}>\n  ...\n</Modal>\n```\nPara que serve `onRequestClose` no Android?",
+      "alternativas": [
+        "Abrir o modal assim que o app inicia, sem precisar de toque",
+        "Impedir que o modal seja fechado de qualquer jeito",
+        "Salvar os dados digitados no modal no banco do aparelho",
+        "Fechar o modal quando o usuário usa o voltar do sistema"
+      ],
+      "correta": 3,
+      "explicacao": "No Android, o voltar do sistema dispara `onRequestClose`. Ali o app muda o estado para esconder o modal."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tela de um app de receitas, a ação principal é \"Nova receita\". Pelo Material Design, que componente costuma destacar essa ação?",
+      "alternativas": [
+        "Um item escondido no fim do menu lateral, depois de Ajuda",
+        "Um texto pequeno no rodapé da tela, sem formato de botão",
+        "Uma opção dentro de um diálogo de confirmação de saída",
+        "O botão de ação flutuante (FAB), no canto inferior direito"
+      ],
+      "correta": 3,
+      "explicacao": "O FAB (Floating Action Button) é o padrão do Material Design para a ação mais importante da tela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um botão de \"favoritar\" no app de uma biblioteca tem um ícone de 20 × 20 e os alunos erram o toque com frequência. Sem aumentar o desenho do ícone, como aumentar a área que recebe o toque?",
+      "alternativas": [
+        "Diminuir o ícone para 10 × 10, deixando mais espaço em volta",
+        "Usar `hitSlop` ou `padding` no componente tocável",
+        "Trocar a cor do ícone por uma cor mais forte e brilhante",
+        "Pedir para o usuário tocar com a ponta da unha"
+      ],
+      "correta": 1,
+      "explicacao": "`hitSlop` estende a área sensível ao toque além do desenho; `padding` aumenta o componente tocável. Assim se chega aos 44–48 mínimos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma escola, as notas abaixo da média aparecem só em vermelho e as aprovadas só em verde, sem nenhum texto. Qual problema de acessibilidade isso causa?",
+      "alternativas": [
+        "Cores deixam o app mais lento em celulares mais antigos",
+        "O vermelho e o verde são proibidos pelas lojas de aplicativos",
+        "Quem é daltônico pode não saber o resultado; a cor não pode ser o único sinal",
+        "O leitor de tela lê o nome das cores em voz alta e confunde o aluno"
+      ],
+      "correta": 2,
+      "explicacao": "A informação deve vir também em texto ou ícone (ex.: \"Aprovado\"/\"Reprovado\"), não só pela cor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um usuário com baixa visão aumentou o tamanho da fonte nas configurações do celular. No app de uma farmácia, o texto não mudou de tamanho. O que provavelmente o desenvolvedor fez?",
+      "alternativas": [
+        "Desativou o ajuste de fonte (ex.: `allowFontScaling={false}`)",
+        "Usou o componente `Text` em vez do componente `TextInput`",
+        "Colocou todos os textos dentro de uma `ScrollView`",
+        "Usou texto preto sobre fundo branco em todas as telas"
+      ],
+      "correta": 0,
+      "explicacao": "Por padrão o `Text` do React Native respeita o tamanho de fonte do sistema. Desligar esse ajuste prejudica quem precisa de letras maiores."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No React Native, para que serve `accessibilityRole=\"button\"` num `Pressable` que só tem um ícone?",
+      "alternativas": [
+        "Transformar o ícone em texto para quem enxerga a tela",
+        "Dar ao elemento o visual padrão de botão do Android",
+        "Avisar ao leitor de tela que o elemento é um botão acionável",
+        "Impedir que o elemento seja tocado sem digitar a senha"
+      ],
+      "correta": 2,
+      "explicacao": "`accessibilityRole` informa o tipo do elemento (botão, link, cabeçalho...). O leitor de tela fala \"botão\" e a pessoa sabe que pode tocar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de delivery, a tela de carrinho precisa da ação \"Limpar carrinho\", que é pouco usada. Onde ela fica melhor, seguindo as boas práticas de barra de ação?",
+      "alternativas": [
+        "Num menu de opções (três pontos) na barra de ação",
+        "Num botão grande no centro da tela, acima dos itens",
+        "Na primeira aba da barra de navegação inferior",
+        "No botão flutuante principal, no canto da tela"
+      ],
+      "correta": 0,
+      "explicacao": "Ações principais ficam visíveis; ações pouco usadas ou perigosas vão para o menu de opções (overflow), para não poluir a tela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de academia usa abas na parte de baixo com 9 itens. O que as diretrizes de design dizem sobre isso?",
+      "alternativas": [
+        "Está correto; quanto mais abas, mais fácil achar tudo no app",
+        "Abas devem ficar sempre no topo da tela, nunca embaixo",
+        "O certo seria ter só 1 aba e esconder as outras 8 num botão",
+        "É demais; o recomendado é cerca de 3 a 5 destinos principais"
+      ],
+      "correta": 3,
+      "explicacao": "Com muitas abas os itens ficam pequenos e confusos. Material Design e HIG recomendam poucas seções principais; o resto vai para outra tela ou menu."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja um trecho de um app de cinema que usa React Navigation:\n```jsx\n<Stack.Screen name=\"Detalhes\" component={Detalhes}\n  options={{ title: 'Detalhes do filme' }} />\n```\nO que a opção `title` define?",
+      "alternativas": [
+        "O nome do arquivo onde o componente Detalhes foi salvo",
+        "O texto mostrado no cabeçalho (barra de ação) da tela",
+        "O texto que aparece embaixo do ícone do app no celular",
+        "O nome usado para abrir essa tela com `navigate`"
+      ],
+      "correta": 1,
+      "explicacao": "`title` é o texto mostrado no cabeçalho. O nome usado no `navigate` é o `name` (`\"Detalhes\"`)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que os botões de \"Confirmar\" e \"Cancelar\" de um app de banco devem ter um espaço entre eles, além de terem tamanho mínimo de toque?",
+      "alternativas": [
+        "Para o app gastar menos bateria ao desenhar os dois botões",
+        "Para evitar que o usuário toque no botão errado sem querer",
+        "Porque o sistema não permite dois botões encostados na tela",
+        "Para os botões aparecerem melhor quando o celular está deitado"
+      ],
+      "correta": 1,
+      "explicacao": "Botões colados aumentam toques acidentais, ainda mais em ações importantes. Espaço entre alvos é recomendação do Material Design e da HIG."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de clínica, o texto cinza-claro sobre fundo branco é difícil de ler no sol. Qual princípio de acessibilidade está sendo desrespeitado?",
+      "alternativas": [
+        "Tamanho mínimo da área de toque dos botões",
+        "Uso de rótulos acessíveis nos ícones da tela",
+        "Navegação em pilha entre as telas do app",
+        "Contraste suficiente entre texto e fundo"
+      ],
+      "correta": 3,
+      "explicacao": "Textos precisam de contraste suficiente com o fundo (a WCAG pede pelo menos 4,5:1 para texto normal)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas situações é melhor resolvida com um diálogo (Alert) do que com um snackbar?",
+      "alternativas": [
+        "Confirmar a exclusão definitiva da conta do usuário",
+        "Avisar que uma mensagem foi enviada com sucesso",
+        "Informar que um item foi adicionado ao carrinho",
+        "Mostrar que as configurações foram salvas"
+      ],
+      "correta": 0,
+      "explicacao": "O diálogo interrompe e exige decisão; serve para ações importantes ou irreversíveis. Avisos rápidos e sem decisão ficam melhor num snackbar/toast."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o botão de um app de pet shop:\n```jsx\n<Pressable onPress={adicionar} style={{ width: 24, height: 24 }}>\n  <Image source={iconeMais} style={{ width: 24, height: 24 }} />\n</Pressable>\n```\nUm revisor de acessibilidade apontou dois problemas. Quais?",
+      "alternativas": [
+        "Uso de `Pressable` em vez de `Button` e falta de uma cor de fundo",
+        "Uso de `Image` em vez de `Text` e falta de uma `ScrollView` em volta",
+        "Área de toque abaixo do mínimo (44–48) e ícone sem rótulo acessível",
+        "Medida em dp em vez de pixels e falta de `flex: 1` no botão"
+      ],
+      "correta": 2,
+      "explicacao": "24 × 24 é pequeno para o dedo, e o ícone sem `accessibilityLabel` não é anunciado pelo leitor de tela. `Pressable` com ícone é válido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma equipe quer que o app de uma loja tenha a mesma cara no Android e no iPhone. Outra parte da equipe diz que alguns detalhes devem seguir cada plataforma. Qual exemplo mostra uma diferença real entre Material Design e HIG que vale respeitar?",
+      "alternativas": [
+        "No iOS os botões não podem ter texto; no Android eles só podem ter ícones",
+        "No Android não se usa barra de abas; no iOS ela é obrigatória em todo app",
+        "No Android os textos ficam sempre em maiúsculas; no iOS sempre em minúsculas",
+        "No iOS é comum voltar com gesto na borda esquerda; no Android há o voltar do sistema"
+      ],
+      "correta": 3,
+      "explicacao": "O jeito de voltar é diferente: gesto de borda / botão no cabeçalho no iOS e o voltar do sistema (botão ou gesto) no Android. O app deve funcionar bem com os dois."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma padaria, o desenvolvedor colocou `accessibilityLabel=\"botão\"` em todos os botões de ícone (carrinho, favorito, compartilhar). Qual é o problema?",
+      "alternativas": [
+        "`accessibilityLabel` só pode ser usado em textos, nunca em ícones",
+        "O app fica mais lento, porque cada rótulo ocupa muita memória",
+        "O leitor de tela fala só \"botão\", sem dizer o que cada um faz",
+        "O rótulo deixa os ícones invisíveis para quem enxerga a tela"
+      ],
+      "correta": 2,
+      "explicacao": "O rótulo deve descrever a ação (\"Adicionar ao carrinho\", \"Favoritar\"). O papel de botão já é informado por `accessibilityRole`."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de banco mostra, ao tocar em \"Transferir\", um `Modal` com os dados da transferência e um botão \"Confirmar\". O código é:\n```jsx\nconst [aberto, setAberto] = useState(false);\n...\n<Button title=\"Transferir\" onPress={() => setAberto(true)} />\n<Modal visible={aberto}>\n  <Button title=\"Confirmar\" onPress={confirmar} />\n</Modal>\n```\nNo Android, o usuário aperta o voltar do sistema e o modal não fecha. O que falta?",
+      "alternativas": [
+        "Trocar `useState(false)` por `useState(true)` no começo",
+        "Uma função em `onRequestClose` que faça `setAberto(false)`",
+        "Colocar o `Modal` antes do botão \"Transferir\" no código",
+        "Trocar o `Button` \"Confirmar\" por um `Text` simples"
+      ],
+      "correta": 1,
+      "explicacao": "O modal só some quando `visible` vira `false`. No Android, o voltar chama `onRequestClose`; sem ele mudar o estado, nada acontece."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de hotel, o hóspede escolhe entre \"Café incluso\" e \"Sem café\". O desenvolvedor usou dois `Switch`, um para cada opção. Por que isso é uma escolha ruim de componente?",
+      "alternativas": [
+        "As opções são exclusivas; dois Switch deixam ligar as duas ou nenhuma",
+        "O Switch só funciona em paisagem, e o app é usado em retrato",
+        "O Switch não pode ficar dentro de uma `View` com outros itens",
+        "O Switch só aceita números, e as opções do hotel são textos"
+      ],
+      "correta": 0,
+      "explicacao": "Para escolher uma entre opções exclusivas usa-se botões de opção (radio) ou um seletor segmentado. Dois `Switch` permitem estados que não fazem sentido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de escola mostra o boletim em uma tabela com 8 colunas e letras pequenas. Em celulares, os alunos precisam dar zoom e arrastar. Qual mudança de leiaute segue melhor as boas práticas mobile?",
+      "alternativas": [
+        "Mostrar uma lista de cartões, um por matéria, com as notas dentro",
+        "Diminuir ainda mais a fonte, para as 8 colunas caberem na tela",
+        "Travar o app em paisagem e manter a mesma tabela de 8 colunas",
+        "Transformar a tabela numa imagem para o aluno ampliar com zoom"
+      ],
+      "correta": 0,
+      "explicacao": "Em tela pequena, conteúdo em cartões/lista vertical é mais legível que tabelas largas. Diminuir a fonte piora a leitura e a imagem perde acessibilidade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma loja de games, o desenvolvedor colocou o logo, um campo de busca, três ícones e um botão \"Entrar\" na barra de ação. Em celulares pequenos, a barra ficou espremida. Qual é a melhor decisão?",
+      "alternativas": [
+        "Diminuir todos os ícones para 16 × 16, para todos caberem na barra",
+        "Deixar só o título e 1 ou 2 ações, levando o resto a um menu de opções",
+        "Criar uma segunda barra de ação, abaixo da primeira, só com os ícones",
+        "Remover o botão de voltar da barra, para sobrar espaço para os ícones"
+      ],
+      "correta": 1,
+      "explicacao": "A barra de ação deve ter poucas ações visíveis. O excesso vai para o menu de opções (três pontos). Encolher ícones fere a área de toque mínima."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique o que é a área de toque mínima de um botão num app.\n\nNa sua resposta:\n1. diga um valor recomendado (Android ou iPhone);\n2. explique por que botões muito pequenos atrapalham.",
+      "respostasAceitas": [
+        "É o tamanho mínimo da área que recebe o toque: 48 × 48 dp no Android (Material) ou 44 × 44 pt no iPhone (HIG). Botões pequenos fazem o usuário errar o toque ou acertar o botão vizinho."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 48 dp ou 44 pt; 2) erro de toque, frustração, toque no lugar errado, dificuldade para quem tem pouca coordenação."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Material Design (Google) e Human Interface Guidelines (Apple) são guias de design.\n\nNa sua resposta:\n1. explique, em linguagem simples, o que esses guias oferecem;\n2. diga por que vale a pena segui-los.",
+      "respostasAceitas": [
+        "São conjuntos de recomendações e componentes (cores, espaços, botões, navegação) para criar telas. Segui-los deixa o app familiar para o usuário, consistente e mais fácil de usar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) regras/padrões/componentes visuais e de comportamento; 2) usuário já conhece os padrões, consistência, usabilidade."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa tela de app aparecem: um campo para digitar o e-mail, um botão \"Enviar\", uma lista de mensagens e abas embaixo (Início, Mensagens, Perfil).\n\nNa sua resposta:\n1. diga para que serve o campo e para que serve o botão;\n2. diga para que servem a lista e as abas.",
+      "respostasAceitas": [
+        "O campo recebe o texto digitado e o botão dispara a ação de enviar. A lista mostra vários itens roláveis e as abas trocam entre as seções principais do app."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) entrada de texto / acionar ação; 2) exibir vários itens / navegar entre seções."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Por que é importante pensar em acessibilidade ao projetar a interface de um app?\n\nNa sua resposta:\n1. cite um grupo de pessoas beneficiado;\n2. cite duas práticas de acessibilidade em app.",
+      "respostasAceitas": [
+        "Para que todos consigam usar o app, como pessoas cegas ou com baixa visão. Práticas: rótulos acessíveis nos ícones para o leitor de tela e bom contraste entre texto e fundo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cegos, baixa visão, daltônicos, idosos, dificuldade motora; 2) rótulos, contraste, fonte ajustável, toque grande, não depender só da cor."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre um diálogo (alerta) e um snackbar (aviso rápido) num app.\n\nNa sua resposta:\n1. diga como cada um aparece para o usuário;\n2. dê um exemplo de uso de cada.",
+      "respostasAceitas": [
+        "O diálogo abre por cima da tela e exige que o usuário escolha um botão; o snackbar aparece embaixo por alguns segundos e some sozinho. Diálogo: confirmar exclusão. Snackbar: \"Mensagem enviada\"."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) diálogo interrompe e pede decisão; snackbar é curto e não bloqueia; 2) exemplos coerentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num app de uma lanchonete, a tela de cardápio tem no topo uma barra com o título \"Cardápio\", uma seta de voltar e um ícone de busca.\n\nNa sua resposta:\n1. diga o nome desse elemento da interface;\n2. explique por que é útil ele aparecer em todas as telas no mesmo lugar.",
+      "respostasAceitas": [
+        "É a barra de ação (app bar/cabeçalho). Em lugar fixo, o usuário sempre sabe em que tela está e onde encontrar voltar e buscar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) barra de ação/app bar/toolbar/cabeçalho; 2) orientação e consistência, ações sempre no mesmo lugar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja o trecho de um app de clínica:\n```jsx\n<Pressable onPress={ligar} accessibilityRole=\"button\"\n  accessibilityLabel=\"Ligar para a clínica\" hitSlop={10}>\n  <Image source={iconeTelefone} style={{ width: 28, height: 28 }} />\n</Pressable>\n```\nNa sua resposta:\n1. explique o que `accessibilityLabel` e `accessibilityRole` fazem para quem usa leitor de tela;\n2. explique para que serve o `hitSlop` neste botão.",
+      "respostasAceitas": [
+        "O leitor de tela anuncia \"Ligar para a clínica, botão\", dizendo o que é e o que faz. O hitSlop aumenta a área de toque em 10 para cada lado, já que o ícone é pequeno."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) rótulo = o que o elemento faz; papel = que é um botão; 2) aumentar a área sensível ao toque sem aumentar o desenho."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num app de controle de gastos, o saldo negativo aparece apenas em vermelho e o positivo apenas em verde, sem sinal nem texto.\n\nNa sua resposta:\n1. explique o problema de acessibilidade;\n2. sugira uma forma de corrigir.",
+      "respostasAceitas": [
+        "Quem tem daltonismo ou usa leitor de tela pode não perceber a diferença, pois a informação está só na cor. Corrigir mostrando também o sinal (−/+) ou um texto/ícone, como \"negativo\"."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) informação só pela cor; 2) texto, sinal, ícone além da cor."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja o trecho de um app de oficina:\n```jsx\nAlert.alert('Cancelar serviço', 'Deseja cancelar o serviço do carro ABC-1234?', [\n  { text: 'Não', style: 'cancel' },\n  { text: 'Sim, cancelar', onPress: cancelarServico },\n]);\n```\nNa sua resposta:\n1. explique o que o usuário vê quando esse código roda;\n2. explique o que acontece em cada botão.",
+      "respostasAceitas": [
+        "Aparece um diálogo com o título \"Cancelar serviço\", a pergunta e dois botões. \"Não\" só fecha o diálogo; \"Sim, cancelar\" fecha e chama a função cancelarServico."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) diálogo/alerta com título, mensagem e dois botões; 2) Não fecha sem fazer nada; Sim chama cancelarServico."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de academia precisa mostrar: Treinos, Agenda, Pagamentos, Perfil, Configurações, Ajuda, Sobre e Sair.\n\nNa sua resposta:\n1. diga quais itens você colocaria numa barra de abas inferior e por quê;\n2. diga onde ficariam os outros itens.",
+      "respostasAceitas": [
+        "Nas abas, os mais usados: Treinos, Agenda, Pagamentos e Perfil, pois as abas devem ter de 3 a 5 destinos principais. Configurações, Ajuda, Sobre e Sair ficam num menu (lateral ou dentro do Perfil)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 3–5 itens principais/frequentes; 2) itens secundários em menu lateral, menu de opções ou tela de perfil. Aceitar escolhas coerentes justificadas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Compare o componente `Alert.alert` e o componente `Modal` do React Native.\n\nNa sua resposta:\n1. diga o que cada um permite mostrar;\n2. dê um exemplo de quando usar cada um.",
+      "respostasAceitas": [
+        "Alert.alert mostra um diálogo do sistema só com título, mensagem e botões. Modal mostra uma janela com qualquer conteúdo (campos, imagens, listas). Alert: confirmar exclusão; Modal: escolher data num calendário ou um formulário."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Alert simples e nativo; Modal personalizado; 2) exemplos coerentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um usuário idoso aumentou a fonte do celular, mas, ao abrir o app de uma farmácia, os textos dos botões ficaram cortados pela metade.\n\nNa sua resposta:\n1. explique por que isso acontece;\n2. diga o que o desenvolvedor deve fazer, sem tirar do usuário a fonte maior.",
+      "respostasAceitas": [
+        "Os botões têm altura/largura fixas e o texto maior não cabe. O desenvolvedor deve deixar os botões crescerem com o conteúdo (sem altura fixa, usando padding) e testar com fontes grandes."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) tamanhos fixos não acompanham a fonte ampliada; 2) leiaute flexível, padding, quebra de linha, testar com fonte grande — sem desativar o ajuste de fonte."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma equipe vai lançar o app de uma rede de cinemas no Android e no iPhone. Um colega quer uma interface 100% igual nas duas plataformas; outro quer seguir Material Design no Android e HIG no iPhone.\n\nNa sua resposta:\n1. explique uma vantagem de cada proposta;\n2. cite uma diferença real entre as plataformas que precisa ser respeitada;\n3. diga qual caminho você escolheria e justifique.",
+      "respostasAceitas": [
+        "Interface igual: marca única e menos trabalho. Seguir cada guia: o usuário encontra o comportamento a que está acostumado. Diferença: o voltar (botão/gesto do sistema no Android, gesto de borda e seta no cabeçalho no iOS). Escolheria visual de marca igual, mas respeitando a navegação e os controles de cada plataforma."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) consistência de marca/menos esforço x familiaridade; 2) voltar, posição de títulos, estilo de diálogos/seletores; 3) escolha justificada (aceitar qualquer lado bem argumentado)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de pedidos de uma padaria foi testado por uma pessoa cega com o leitor de tela ligado. Ela relatou: \"Ouço 'botão, botão, botão, imagem' e não sei o que fazer\".\n\nNa sua resposta:\n1. explique o que provavelmente está faltando na interface;\n2. explique como corrigir;\n3. diga outra verificação de acessibilidade que a equipe deveria fazer.",
+      "respostasAceitas": [
+        "Os botões de ícone e as imagens não têm rótulos acessíveis, então o leitor só fala o tipo. Corrigir com accessibilityLabel descrevendo cada ação (\"Adicionar pão ao carrinho\") e descrevendo imagens importantes. Verificar também contraste, tamanho de toque e fonte ampliada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) falta de rótulos (accessibilityLabel); 2) rótulos descritivos da ação; 3) contraste, área de toque, fonte, ordem de leitura, não depender de cor."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de um hotel, a tela \"Minha reserva\" tem as ações: Ver detalhes, Cancelar reserva, Compartilhar e Fazer check-in (a mais usada).\n\nNa sua resposta:\n1. diga qual ação merece mais destaque e onde colocá-la;\n2. diga onde colocar a ação \"Cancelar reserva\" e que cuidado tomar antes de executá-la;\n3. justifique as escolhas com base nas boas práticas de interface.",
+      "respostasAceitas": [
+        "Fazer check-in deve ser o botão principal, grande e visível (ou botão flutuante). Cancelar fica menos destacado, num menu de opções, e pede confirmação num diálogo. A ação principal deve ser fácil; ações destrutivas devem ser difíceis de acionar por engano."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) check-in em destaque; 2) cancelar em menu/área secundária com diálogo de confirmação; 3) hierarquia de ações, evitar erros, padrões Material/HIG."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No React Native, qual propriedade de um `Button` recebe a função que roda quando o usuário toca nele?",
+      "alternativas": [
+        "`onChange`",
+        "`title`",
+        "`style`",
+        "`onPress`"
+      ],
+      "correta": 3,
+      "explicacao": "`onPress` é o evento de toque. `title` é o texto do botão e `style` não existe no `Button` básico."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma galeria de fotos, segurar o dedo sobre uma foto deve abrir as opções \"Excluir\" e \"Compartilhar\". Qual evento do `Pressable` captura esse toque demorado?",
+      "alternativas": [
+        "`onPress`",
+        "`onChangeText`",
+        "`onLongPress`",
+        "`onEndReached`"
+      ],
+      "correta": 2,
+      "explicacao": "`onLongPress` dispara quando o dedo fica pressionado por um tempo; `onPress` é o toque rápido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de contador de copos de água, o número na tela deve aumentar a cada toque. No React Native, onde se guarda esse número para a tela atualizar quando ele muda?",
+      "alternativas": [
+        "Numa variável comum declarada com `let`",
+        "No texto do título do botão",
+        "Num estado criado com `useState`",
+        "No arquivo `package.json`"
+      ],
+      "correta": 2,
+      "explicacao": "Mudar o estado (com a função `set...`) faz o componente ser desenhado de novo. Uma variável comum muda, mas a tela não é atualizada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja: `const [nome, setNome] = useState('');`. Para que serve `setNome`?",
+      "alternativas": [
+        "Para apagar o componente inteiro da tela do app",
+        "Para mostrar o valor de `nome` num alerta",
+        "Para enviar o valor de `nome` ao servidor",
+        "Para trocar o valor de `nome` e atualizar a tela"
+      ],
+      "correta": 3,
+      "explicacao": "`useState` devolve o valor atual (`nome`) e a função que altera esse valor (`setNome`), o que redesenha o componente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No campo \"Telefone\" do cadastro de uma clínica, o celular deve abrir o teclado só com números. Qual propriedade do `TextInput` faz isso?",
+      "alternativas": [
+        "`keyboardType=\"phone-pad\"`",
+        "`secureTextEntry={true}`",
+        "`autoCapitalize=\"words\"`",
+        "`multiline={true}`"
+      ],
+      "correta": 0,
+      "explicacao": "`keyboardType` escolhe o tipo de teclado virtual (`phone-pad`, `numeric`, `email-address`...)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No campo de senha de um app, os caracteres digitados devem aparecer como pontinhos. Qual propriedade do `TextInput` faz isso?",
+      "alternativas": [
+        "`keyboardType=\"numeric\"`",
+        "`secureTextEntry`",
+        "`placeholder`",
+        "`maxLength`"
+      ],
+      "correta": 1,
+      "explicacao": "`secureTextEntry` esconde o texto digitado. `placeholder` é só a dica cinza que aparece com o campo vazio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app com navegação em pilha, o usuário está na tela \"Detalhes do produto\", que foi aberta a partir da lista. O que acontece quando ele toca em voltar?",
+      "alternativas": [
+        "O app abre uma nova tela de lista por cima dos detalhes",
+        "A tela de detalhes sai da pilha e a lista aparece de novo",
+        "O app fecha completamente e volta para a tela inicial",
+        "A tela de detalhes é recarregada desde o começo"
+      ],
+      "correta": 1,
+      "explicacao": "Na pilha, cada tela aberta fica por cima. Voltar remove a tela do topo e mostra a anterior."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No React Navigation, qual comando abre a tela chamada \"Carrinho\"?",
+      "alternativas": [
+        "`navigation.navigate('Carrinho')`",
+        "`navigation.goBack('Carrinho')`",
+        "`Alert.alert('Abrir', 'Carrinho')`",
+        "`setTelaAtual('Carrinho')`"
+      ],
+      "correta": 0,
+      "explicacao": "`navigate` leva para a tela com aquele nome. `goBack` volta para a tela anterior."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num formulário de cadastro de uma academia, o que é \"validação de formulário\"?",
+      "alternativas": [
+        "Mudar a cor de todos os campos quando o app abre",
+        "Apagar os campos automaticamente depois de alguns segundos",
+        "Conferir se os campos estão corretos antes de enviar",
+        "Mostrar a lista de alunos que já foram cadastrados"
+      ],
+      "correta": 2,
+      "explicacao": "Validar é checar regras (campo obrigatório, formato do e-mail, idade mínima) e avisar o usuário antes de enviar os dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na lista de tarefas de um app escolar, a `FlatList` recebe os dados em qual propriedade?",
+      "alternativas": [
+        "`title`",
+        "`onPress`",
+        "`source`",
+        "`data`"
+      ],
+      "correta": 3,
+      "explicacao": "`data` recebe o array de itens; `renderItem` diz como desenhar cada item."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O teclado virtual apareceu e cobriu o botão \"Entrar\" na tela de login. Qual componente do React Native ajuda a \"empurrar\" o conteúdo para cima quando o teclado abre?",
+      "alternativas": [
+        "`ActivityIndicator`",
+        "`TouchableOpacity`",
+        "`SafeAreaView`",
+        "`KeyboardAvoidingView`"
+      ],
+      "correta": 3,
+      "explicacao": "`KeyboardAvoidingView` ajusta o leiaute (com `behavior` como `padding` ou `height`) para o conteúdo não ficar atrás do teclado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de mapas, o usuário \"afasta dois dedos\" para aproximar o mapa. Esse gesto se chama:",
+      "alternativas": [
+        "Toque duplo (double tap)",
+        "Pinça (pinch) para zoom",
+        "Toque longo (long press)",
+        "Arrastar para atualizar (pull to refresh)"
+      ],
+      "correta": 1,
+      "explicacao": "Pinch é o gesto com dois dedos, aproximando ou afastando, usado para zoom."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na lista de notícias de um app da escola, o usuário puxa a lista para baixo, no topo, para carregar as novidades. Como se chama esse gesto?",
+      "alternativas": [
+        "Pinça para dar zoom (pinch)",
+        "Toque longo sobre a lista (long press)",
+        "Puxar para atualizar (pull to refresh)",
+        "Deslizar para apagar (swipe to delete)"
+      ],
+      "correta": 2,
+      "explicacao": "Puxar para atualizar é o padrão para recarregar listas. Na `FlatList` usa-se `refreshing` e `onRefresh`."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app que calcula a média de um aluno, o usuário digita as duas notas e toca em \"Calcular\". As notas digitadas são:",
+      "alternativas": [
+        "A entrada de dados",
+        "O processamento",
+        "A saída de dados",
+        "A navegação entre telas"
+      ],
+      "correta": 0,
+      "explicacao": "Entrada: notas digitadas. Processamento: o cálculo da média. Saída: o resultado mostrado na tela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o trecho de um app de contador:\n```jsx\nlet total = 0;\n<Button title=\"+1\" onPress={() => { total = total + 1; }} />\n<Text>{total}</Text>\n```\nO usuário toca no botão várias vezes, mas o número continua 0 na tela. Por quê?",
+      "alternativas": [
+        "O `Button` não aceita funções no `onPress`, só textos fixos entre aspas",
+        "O `Text` só consegue mostrar textos, nunca valores numéricos",
+        "`total` é variável comum; mudar ela não redesenha a tela, precisa de estado",
+        "Falta chamar `Alert.alert` depois da soma para atualizar o número"
+      ],
+      "correta": 2,
+      "explicacao": "A tela só é redesenhada quando o estado muda (via função `set...`). Variável comum não avisa o React Native."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o campo de um app de pet shop:\n```jsx\nconst [nome, setNome] = useState('');\n<TextInput value={nome} onChangeText={setNome} placeholder=\"Nome do pet\" />\n```\nO que acontece quando o usuário digita \"Rex\"?",
+      "alternativas": [
+        "A cada letra, `setNome` guarda o texto, e `nome` termina valendo \"Rex\"",
+        "O texto só é guardado no estado quando o usuário toca num botão Salvar",
+        "`nome` continua vazio, pois o `placeholder` toma o lugar do valor",
+        "O app mostra um alerta com o texto digitado a cada letra"
+      ],
+      "correta": 0,
+      "explicacao": "`onChangeText` chama `setNome` com o texto atual a cada mudança. Isso é um campo controlado: o valor fica sempre no estado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma livraria, a tela de lista abre os detalhes assim: `navigation.navigate('Detalhes', { id: 42 })`. Na tela Detalhes, como o código lê o número 42?",
+      "alternativas": [
+        "`navigation.params`",
+        "`props.title.id`",
+        "`useState(id)`",
+        "`route.params.id`"
+      ],
+      "correta": 3,
+      "explicacao": "Parâmetros enviados no `navigate` chegam na tela de destino em `route.params`.",
+      "grupo": "params"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois que o usuário faz login, o app de um banco abre a tela Início. O usuário não deve conseguir voltar para a tela de login pelo botão voltar. Qual comando é o mais adequado?",
+      "alternativas": [
+        "`navigation.navigate('Inicio')`, que empilha a tela Início sobre o login",
+        "`navigation.replace('Inicio')`, que troca a tela atual em vez de empilhar",
+        "`navigation.goBack()`, que volta para a tela anterior da pilha",
+        "`navigation.push('Login')`, que abre mais uma tela de login"
+      ],
+      "correta": 1,
+      "explicacao": "`replace` substitui a tela atual (login) pela nova, então não há login na pilha para voltar. `reset` também serve."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja a lista de produtos de uma loja:\n```jsx\n<FlatList data={produtos}\n  keyExtractor={(item) => String(item.id)}\n  renderItem={({ item }) => <Text>{item.nome}</Text>} />\n```\nPara que serve `keyExtractor`?",
+      "alternativas": [
+        "Ordenar os produtos pelo id, do menor para o maior",
+        "Dar uma chave única a cada item, para a lista identificar cada linha",
+        "Converter o preço de cada produto de número para texto",
+        "Mostrar o id do produto na tela, ao lado do nome dele"
+      ],
+      "correta": 1,
+      "explicacao": "A chave única ajuda o React Native a identificar cada linha e atualizar só o que mudou."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de tarefas de um estudante, o usuário apaga uma tarefa. Qual código atualiza a lista do jeito correto, com estado?",
+      "alternativas": [
+        "`tarefas.splice(indice, 1)`, sem chamar o `setTarefas`",
+        "`tarefas = []` e depois pedir para recarregar o app",
+        "`setTarefas(tarefas)` depois de apagar com `splice`",
+        "`setTarefas(tarefas.filter(t => t.id !== idApagado))`"
+      ],
+      "correta": 3,
+      "explicacao": "É preciso passar um NOVO array para o `set...`. O `filter` cria um array sem o item. Alterar o array antigo (splice) e passar o mesmo array pode não redesenhar a tela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No cadastro de clientes de uma oficina, o e-mail \"joao.com\" foi aceito. Qual validação faltou?",
+      "alternativas": [
+        "Conferir o formato do e-mail (ter \"@\" e domínio)",
+        "Conferir se o campo tem menos de 5 letras digitadas",
+        "Conferir se o e-mail foi digitado em letras maiúsculas",
+        "Conferir se o e-mail tem pelo menos um número"
+      ],
+      "correta": 0,
+      "explicacao": "Validar formato verifica se o texto parece um e-mail (algo@dominio). Só checar se está preenchido não basta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num formulário de agendamento de uma clínica, qual é a forma de mostrar erros de validação que mais ajuda o usuário?",
+      "alternativas": [
+        "Uma única mensagem \"Erro no formulário\" depois de enviar",
+        "Apagar todos os campos para o usuário preencher de novo",
+        "Uma mensagem perto do campo errado, dizendo como corrigir",
+        "Fechar o app para o usuário tentar outra vez mais tarde"
+      ],
+      "correta": 2,
+      "explicacao": "Mensagem específica e próxima do campo mostra onde está o problema e como resolver, sem perder o que já foi digitado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tela de cadastro de uma academia, o botão \"Cadastrar\" fica cinza e não funciona enquanto o campo nome está vazio. Que recurso foi usado?",
+      "alternativas": [
+        "A propriedade `secureTextEntry` aplicada no botão",
+        "Um `ActivityIndicator` colocado no lugar do botão",
+        "A propriedade `keyboardType` do campo de nome",
+        "A propriedade `disabled` do botão, ligada ao estado"
+      ],
+      "correta": 3,
+      "explicacao": "Ex.: `<Button disabled={nome.trim() === ''} ... />`. O botão só fica ativo quando o estado do campo é válido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tela de busca de uma biblioteca, quando o usuário toca fora do campo, o teclado virtual deve fechar. Qual chamada fecha o teclado?",
+      "alternativas": [
+        "`navigation.goBack()`",
+        "`setTeclado(null)`",
+        "`Keyboard.dismiss()`",
+        "`Alert.alert('Fechar')`"
+      ],
+      "correta": 2,
+      "explicacao": "`Keyboard.dismiss()` (do react-native) esconde o teclado; costuma ficar num toque na área fora do campo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre a navegação em abas e a navegação em pilha?",
+      "alternativas": [
+        "Nas abas as telas ficam empilhadas; na pilha elas ficam lado a lado no rodapé",
+        "Abas trocam entre seções do mesmo nível; na pilha, voltar retorna à tela anterior",
+        "As abas só funcionam no iPhone; a pilha só funciona nos celulares Android",
+        "Nas abas não é possível passar parâmetros; na pilha é proibido ter cabeçalho"
+      ],
+      "correta": 1,
+      "explicacao": "Abas = seções paralelas (Início, Pedidos, Perfil). Pilha = caminho de ida e volta (lista → detalhes → editar).",
+      "grupo": "abas-pilha"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de um restaurante, o usuário fez este caminho: Cardápio → Prato → Adicionais. Como fica a pilha de navegação, do fundo para o topo?",
+      "alternativas": [
+        "Cardápio, Prato, Adicionais (Adicionais no topo, visível)",
+        "Adicionais, Prato, Cardápio (Cardápio no topo, visível)",
+        "Só Adicionais, pois as anteriores foram apagadas",
+        "Cardápio e Adicionais, pois Prato saiu ao abrir Adicionais"
+      ],
+      "correta": 0,
+      "explicacao": "Cada `navigate` empilha uma tela. A visível é a do topo, a última aberta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No campo \"Quantidade\" de um app de pedidos, o usuário digitou \"3\". No código, `quantidade` vem do `TextInput`. O que o código precisa fazer antes de multiplicar pelo preço?",
+      "alternativas": [
+        "Converter o texto em número (ex.: `Number(quantidade)`) e checar se é válido",
+        "Nada, pois com teclado numérico o `TextInput` já devolve um número pronto",
+        "Converter o preço em texto, para ficar do mesmo tipo que a quantidade",
+        "Mostrar a quantidade num `Alert` para o usuário confirmar o valor"
+      ],
+      "correta": 0,
+      "explicacao": "O `TextInput` sempre entrega texto, mesmo com teclado numérico. É preciso converter e tratar o caso de `NaN`."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de e-mails, o usuário desliza uma mensagem para a esquerda e ela é arquivada. Esse recurso é um exemplo de:",
+      "alternativas": [
+        "Passagem de parâmetros entre duas telas",
+        "Tratamento gestual (swipe) ligado a uma ação",
+        "Validação dos campos de um formulário",
+        "Navegação por abas na parte de baixo"
+      ],
+      "correta": 1,
+      "explicacao": "Deslizar (swipe) sobre um item é um gesto. Bibliotecas como a react-native-gesture-handler ajudam a capturá-lo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o botão de um app de placar de futsal:\n```jsx\nconst [gols, setGols] = useState(0);\nconst marcarDois = () => { setGols(gols + 1); setGols(gols + 1); };\n```\nCom `gols` valendo 0, o usuário toca em \"Marcar 2\". Quanto `gols` passa a valer?",
+      "alternativas": [
+        "2, porque cada chamada de `setGols` soma 1 ao placar",
+        "0, porque duas chamadas seguidas se anulam no final",
+        "Dá erro, porque `setGols` não pode ser chamado duas vezes",
+        "1, porque as duas chamadas usam o valor antigo de `gols` (0)"
+      ],
+      "correta": 3,
+      "explicacao": "Dentro da mesma função, `gols` ainda vale 0 nas duas linhas: as duas pedem \"0 + 1\". Para somar com o valor mais novo usa-se `setGols(g => g + 1)`."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o botão de um app de loja:\n```jsx\n<Button title=\"Comprar\" onPress={comprar()} />\n```\nO que acontece de errado?",
+      "alternativas": [
+        "Nada de errado; os parênteses só deixam a resposta do botão mais rápida",
+        "O botão não aparece, porque `title` precisa vir depois de `onPress`",
+        "`comprar()` roda ao desenhar a tela, não no toque; o certo é `onPress={comprar}`",
+        "A função só é executada a partir do segundo toque, nunca no primeiro"
+      ],
+      "correta": 2,
+      "explicacao": "Com parênteses, a função é chamada na hora e o `onPress` recebe o resultado dela. Deve-se passar a função (`comprar`) ou `() => comprar()`."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de cinema, a tela Detalhes tem um botão \"Ver outro filme\" que abre Detalhes de novo, para outro filme. Com `navigation.navigate('Detalhes', { id: 7 })` o app só atualizou a tela atual. Com `navigation.push('Detalhes', { id: 7 })`, abriu uma nova tela por cima. Por que essa diferença?",
+      "alternativas": [
+        "`push` só aceita parâmetros numéricos e `navigate` só aceita textos",
+        "`navigate` apaga a pilha inteira; `push` volta para a tela anterior",
+        "`navigate` reaproveita a tela atual de mesmo nome; `push` sempre empilha uma nova",
+        "Não há diferença real; o resultado depende só do modelo do celular"
+      ],
+      "correta": 2,
+      "explicacao": "No stack do React Navigation, `navigate` para a tela que já está no topo com o mesmo nome só atualiza os parâmetros dela, enquanto `push` adiciona sempre uma nova entrada na pilha.",
+      "grupo": "params"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja a validação de um app de academia:\n```jsx\nconst salvar = () => {\n  const idade = Number(textoIdade);\n  if (textoIdade.trim() === '' || isNaN(idade)) { setErro('Informe a idade em números'); return; }\n  if (idade < 14) { setErro('Idade mínima: 14 anos'); return; }\n  setErro('');\n  enviar({ nome, idade });\n};\n```\nO usuário digita \"12\" e toca em Salvar. O que acontece?",
+      "alternativas": [
+        "Aparece \"Informe a idade em números\" e nada é enviado",
+        "Os dados são enviados e a mensagem fica vazia",
+        "O app trava, pois \"12\" é texto e não número",
+        "Aparece \"Idade mínima: 14 anos\" e nada é enviado"
+      ],
+      "correta": 3,
+      "explicacao": "\"12\" vira 12 (número válido), passa na primeira regra e cai na segunda (12 < 14). O `return` impede o `enviar`."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de lembretes tem duas abas (Lembretes e Ajustes). O usuário digita um texto na aba Lembretes, vai para Ajustes e volta: o texto continua lá. Num app com pilha, ao voltar de uma tela de cadastro e abrir de novo, os campos aparecem vazios. Por quê?",
+      "alternativas": [
+        "Abas costumam manter as telas montadas; na pilha, voltar desmonta a tela e perde o estado",
+        "As abas salvam tudo no servidor sozinhas; a navegação em pilha não usa internet",
+        "Na pilha, o teclado virtual apaga o conteúdo dos campos sempre que é fechado",
+        "As abas não usam estado nenhum; por isso o texto digitado nunca some delas"
+      ],
+      "correta": 0,
+      "explicacao": "Ao voltar na pilha, a tela do topo é removida (desmontada) e seu `useState` some. Para manter os dados, guarde-os fora da tela (tela anterior, contexto ou armazenamento).",
+      "grupo": "abas-pilha"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o cálculo de um app de conversão de moedas:\n```jsx\nconst converter = () => {\n  try {\n    const valor = Number(texto.replace(',', '.'));\n    if (isNaN(valor)) throw new Error('Valor inválido');\n    setResultado((valor / cotacao).toFixed(2));\n  } catch (e) {\n    setResultado('Digite um valor válido');\n  }\n};\n```\nO usuário digita \"abc\". O que aparece?",
+      "alternativas": [
+        "\"NaN\", pois o `toFixed` transforma qualquer valor em texto",
+        "\"Digite um valor válido\", pois o erro do `try` é tratado no `catch`",
+        "O app fecha, pois o `throw` encerra o aplicativo na hora",
+        "\"0.00\", pois letras viram zero quando convertidas em número"
+      ],
+      "correta": 1,
+      "explicacao": "`Number('abc')` dá `NaN`; o `throw` desvia para o `catch`, que mostra a mensagem amigável sem fechar o app."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de chat, o campo de mensagem fica no rodapé. Ao tocar no campo, o teclado sobe e cobre o campo no iPhone, mas no Android funciona. O desenvolvedor usou `KeyboardAvoidingView` sem `behavior`. Qual é o ajuste mais adequado?",
+      "alternativas": [
+        "Trocar o `TextInput` por um `Text`, que não abre teclado",
+        "Definir `behavior` por plataforma (ex.: `'padding'` no iOS)",
+        "Mover o campo para o topo da tela, só quando for iPhone",
+        "Usar `secureTextEntry` para o teclado aparecer menor"
+      ],
+      "correta": 1,
+      "explicacao": "Sem `behavior`, o componente não faz ajuste no iOS. O padrão comum é `padding` no iOS; no Android o sistema já costuma redimensionar a janela ou se usa `height`."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique o que é o \"estado\" (state) de um componente no React Native.\n\nNa sua resposta:\n1. diga o que o estado guarda;\n2. diga o que acontece com a tela quando o estado muda.",
+      "respostasAceitas": [
+        "O estado guarda dados que podem mudar durante o uso da tela, como o texto digitado ou um contador. Quando o estado muda (pela função set), o componente é desenhado de novo com o valor novo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dados que mudam com a interação; 2) a tela é atualizada (re-renderiza)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique como funciona a navegação em pilha (stack) num app.\n\nNa sua resposta:\n1. diga o que acontece quando uma tela nova é aberta;\n2. diga o que acontece quando o usuário toca em voltar.",
+      "respostasAceitas": [
+        "Cada tela nova é colocada por cima das outras, no topo da pilha. Ao voltar, a tela do topo é removida e a anterior aparece de novo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) empilha no topo; 2) desempilha e mostra a anterior."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Por que um formulário de cadastro num app deve ser validado antes de enviar os dados?\n\nNa sua resposta:\n1. cite dois exemplos de regras de validação;\n2. explique o que o usuário deve ver quando um campo está errado.",
+      "respostasAceitas": [
+        "Para evitar dados errados ou incompletos. Exemplos: campo obrigatório preenchido e e-mail com formato válido. O usuário deve ver uma mensagem clara, perto do campo, dizendo como corrigir."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) obrigatório, formato de e-mail, tamanho mínimo da senha, idade mínima etc.; 2) mensagem clara junto ao campo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num app de uma loja, cada campo do cadastro abre um tipo de teclado virtual diferente: e-mail, telefone e CEP.\n\nNa sua resposta:\n1. explique por que trocar o tipo de teclado ajuda o usuário;\n2. diga que tipo de teclado combina com o campo telefone.",
+      "respostasAceitas": [
+        "O teclado certo mostra só as teclas úteis (números, @), deixando a digitação mais rápida e com menos erros. Para telefone, o teclado numérico de telefone (phone-pad)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) agilidade e menos erros; 2) numérico/phone-pad."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num app de galeria, o usuário pode tocar, segurar o dedo, deslizar e fazer pinça na foto.\n\nNa sua resposta:\n1. explique a diferença entre um toque simples e um toque longo;\n2. diga para que costuma servir o gesto de pinça.",
+      "respostasAceitas": [
+        "O toque simples é rápido e faz a ação principal (abrir a foto); o toque longo mantém o dedo e costuma abrir opções extras. A pinça serve para dar ou tirar zoom."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) duração e tipo de ação (principal x opções); 2) zoom."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na tela de login de um app, o teclado virtual subiu e cobriu o botão \"Entrar\".\n\nNa sua resposta:\n1. explique por que isso atrapalha o usuário;\n2. cite uma forma de resolver.",
+      "respostasAceitas": [
+        "O usuário não consegue ver nem tocar no botão sem fechar o teclado. Resolve com KeyboardAvoidingView, ScrollView ou fechando o teclado com Keyboard.dismiss."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) botão inacessível/escondido; 2) KeyboardAvoidingView, ScrollView, mover o leiaute, fechar o teclado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja o trecho da tela de lista de um app de biblioteca:\n```jsx\n<FlatList data={livros} keyExtractor={(l) => String(l.id)}\n  renderItem={({ item }) => (\n    <Pressable onPress={() => navigation.navigate('Livro', { id: item.id })}>\n      <Text>{item.titulo}</Text>\n    </Pressable>\n  )} />\n```\nNa sua resposta:\n1. explique o que aparece na tela;\n2. explique o que acontece quando o usuário toca num título.",
+      "respostasAceitas": [
+        "Aparece uma lista rolável com o título de cada livro. Ao tocar, o app abre a tela Livro e envia o id do livro tocado como parâmetro."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) lista com os títulos (FlatList, um item por livro); 2) navegação para \"Livro\" com o id em route.params."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na tela de detalhes de um app de pet shop está o código:\n```jsx\nfunction Detalhes({ route }) {\n  const { nome, preco } = route.params;\n  return <Text>{nome} — R$ {preco}</Text>;\n}\n```\nNa sua resposta:\n1. explique de onde vêm `nome` e `preco`;\n2. explique por que é útil passar esses dados como parâmetro.",
+      "respostasAceitas": [
+        "Vêm dos parâmetros enviados pela tela anterior no navigate (route.params). Assim uma só tela de detalhes serve para qualquer produto, mostrando os dados do item escolhido."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) parâmetros da navegação (route.params) enviados pela tela anterior; 2) reaproveitar a mesma tela para itens diferentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Compare duas formas de guardar o número de curtidas num app de fotos: uma variável comum (`let curtidas = 0`) e um estado (`const [curtidas, setCurtidas] = useState(0)`).\n\nNa sua resposta:\n1. diga o que acontece na tela ao mudar cada uma;\n2. diga qual usar e por quê.",
+      "respostasAceitas": [
+        "Mudar a variável comum não atualiza a tela (e o valor pode voltar a 0 ao redesenhar). Mudar o estado com setCurtidas redesenha a tela com o valor novo. Usar o estado, pois o número precisa aparecer atualizado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) variável não re-renderiza; estado re-renderiza; 2) useState."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja o trecho do login de um app de banco:\n```jsx\nif (loginOk) {\n  navigation.replace('Inicio');\n}\n```\nNa sua resposta:\n1. explique o que `replace` faz com a pilha;\n2. explique por que ele foi usado aqui em vez de `navigate`.",
+      "respostasAceitas": [
+        "replace troca a tela atual (Login) pela tela Início, sem empilhar. Assim o usuário não volta para o login ao tocar em voltar depois de entrar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) substitui a tela do topo; 2) impedir voltar ao login."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num app de pedidos de uma lanchonete, o usuário digita a quantidade e toca em \"Calcular\", e o app mostra o total.\n\nNa sua resposta:\n1. identifique a entrada, o processamento e a saída;\n2. explique um erro de entrada que o app deve tratar.",
+      "respostasAceitas": [
+        "Entrada: a quantidade digitada. Processamento: total = quantidade × preço. Saída: o total mostrado na tela. Deve tratar texto vazio, letras ou número negativo, mostrando uma mensagem em vez de calcular."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) entrada/processamento/saída corretos; 2) vazio, não numérico, negativo/zero."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num formulário de inscrição de um campeonato escolar, a equipe discute dois momentos para validar: enquanto o usuário digita ou só quando ele toca em \"Enviar\".\n\nNa sua resposta:\n1. explique uma vantagem de cada momento;\n2. diga um cuidado para a validação enquanto digita não incomodar.",
+      "respostasAceitas": [
+        "Ao digitar, o usuário corrige na hora; ao enviar, ele não é interrompido e todos os campos são checados de uma vez. Cuidado: só mostrar o erro depois que o usuário sair do campo ou terminar de digitar, não a cada letra."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) retorno imediato x menos interrupção/checagem completa; 2) não acusar erro antes de terminar (ao sair do campo), mensagens discretas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja o trecho de um app de tarefas:\n```jsx\nconst apagar = (id) => {\n  const i = tarefas.findIndex(t => t.id === id);\n  tarefas.splice(i, 1);\n  setTarefas(tarefas);\n};\n```\nO usuário toca em apagar e a tarefa continua aparecendo na lista.\n\nNa sua resposta:\n1. explique por que a tela não atualiza;\n2. explique qual é a forma correta de atualizar a lista com estado.",
+      "respostasAceitas": [
+        "O splice altera o mesmo array, e setTarefas recebe o mesmo array; o React Native vê que é o mesmo e não redesenha. O certo é criar um array novo, por exemplo setTarefas(tarefas.filter(t => t.id !== id))."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mesmo array (referência igual), estado não muda; 2) novo array com filter/cópia."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de loja tem três abas (Início, Busca, Carrinho). Dentro da aba Início, o usuário abre Produto e depois Avaliações. Em seguida toca na aba Carrinho e volta para a aba Início.\n\nNa sua resposta:\n1. explique o que é cada aba ter sua própria pilha;\n2. diga qual tela o usuário vê ao voltar para a aba Início;\n3. explique por que esse comportamento é bom para o usuário.",
+      "respostasAceitas": [
+        "Cada aba guarda seu próprio caminho de telas. Ao voltar para Início, ele vê Avaliações, a última tela que tinha aberto ali. Assim ele não perde o lugar onde estava ao consultar outra aba."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) pilhas independentes por aba; 2) Avaliações (topo da pilha da aba Início); 3) continuidade, não perder o progresso."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Criação de interface",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja a validação da tela de cadastro de um app de clínica:\n```jsx\nconst enviar = () => {\n  const erros = {};\n  if (!nome.trim()) erros.nome = 'Informe o nome';\n  if (!email.includes('@')) erros.email = 'E-mail inválido';\n  if (senha.length < 8) erros.senha = 'Mínimo de 8 caracteres';\n  setErros(erros);\n  if (Object.keys(erros).length === 0) cadastrar();\n};\n```\nNa sua resposta:\n1. explique o que o código faz com cada campo;\n2. explique quando `cadastrar()` é chamado;\n3. aponte uma limitação da regra do e-mail.",
+      "respostasAceitas": [
+        "Confere se o nome foi preenchido, se o e-mail tem @ e se a senha tem pelo menos 8 caracteres, guardando uma mensagem para cada erro no estado. cadastrar() só roda se não houver nenhum erro. A regra do e-mail é fraca: aceita \"a@\" ou \"@@\", pois só procura o @."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) três regras e mensagens por campo; 2) só sem erros; 3) \"@\" sozinho não garante formato válido (falta domínio, ponto etc.)."
+    }
+  ]
+}
