@@ -13,7 +13,7 @@ const erros = [], avisos = [];
 const d = JSON.parse(fs.readFileSync(arq, "utf8"));
 if (!d.nome || !d.materia || !Array.isArray(d.questoes)) erros.push("o arquivo precisa de nome, materia e questoes[]");
 const qs = d.questoes || [];
-const norm = t => String(t || "").normalize("NFD").replace(/\p{M}+/gu, "").toLowerCase().replace(/`[^`]*`/g, " ").replace(/[^a-z0-9]+/g, " ").trim();
+const norm = t => String(t || "").normalize("NFD").replace(/\p{M}+/gu, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 const palavras = t => new Set(norm(t).split(" ").filter(p => p.length > 3));
 const parecido = (a, b) => { if (!a.size || !b.size) return 0; let n = 0; a.forEach(x => b.has(x) && n++); return n / Math.max(a.size, b.size); };
 const PROIBIDO = /\b(escreva|escrever|crie|criar|monte|montar|desenhe|desenhar|elabore|construa|fa[cç]a o (comando|c[oó]digo|diagrama|select|script)|digite|reescreva o c[oó]digo|implemente|codifique)\b/i;

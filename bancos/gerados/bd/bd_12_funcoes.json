@@ -1,0 +1,2426 @@
+{
+  "nome": "Banco de Dados — Funções nativas (a revisar)",
+  "materia": "Banco de Dados",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na recepção de uma clínica, o atendente quer ver a data e a hora exatas do momento da consulta. Qual função do MySQL devolve a data E a hora atuais juntas?",
+      "alternativas": [
+        "NOW()",
+        "CURDATE()",
+        "CURTIME()",
+        "YEAR()"
+      ],
+      "correta": 0,
+      "explicacao": "NOW() devolve data e hora (ex.: 2026-11-27 14:35:10). CURDATE() traz só a data e CURTIME() só a hora."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa padaria, o sistema precisa gravar apenas o dia da venda, sem o horário. Qual função devolve só a data atual?",
+      "alternativas": [
+        "NOW()",
+        "CURDATE()",
+        "CURTIME()",
+        "DAY()"
+      ],
+      "correta": 1,
+      "explicacao": "CURDATE() devolve só a data (AAAA-MM-DD). NOW() inclui a hora; CURTIME() traz só a hora; DAY() extrai o dia de uma data que você passa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na portaria de uma academia, o sistema registra a hora de entrada do aluno, sem a data. Qual função devolve só a hora atual?",
+      "alternativas": [
+        "NOW()",
+        "CURDATE()",
+        "CURTIME()",
+        "MONTH()"
+      ],
+      "correta": 2,
+      "explicacao": "CURTIME() devolve a hora atual (HH:MM:SS). CURDATE() é só a data e NOW() é data e hora."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No relatório anual de uma escola, a função YEAR é usada para separar as matrículas por ano. Qual é o resultado de `SELECT YEAR('2026-11-27');`?",
+      "alternativas": [
+        "2026-11",
+        "11",
+        "27",
+        "2026"
+      ],
+      "correta": 3,
+      "explicacao": "YEAR() extrai o ano de uma data. MONTH() daria 11 e DAY() daria 27."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa sorveteria, o dono quer saber o mês de cada venda. Qual é o resultado de `SELECT MONTH('2026-03-15');`?",
+      "alternativas": [
+        "2026",
+        "15",
+        "3",
+        "03-15"
+      ],
+      "correta": 2,
+      "explicacao": "MONTH() extrai o número do mês: 3 (março). O dia seria 15, obtido com DAY()."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, a tabela `emprestimo` tem as colunas id_emprestimo, id_livro e data_emprestimo (DATE). Qual função extrai só o dia do mês da coluna data_emprestimo?",
+      "alternativas": [
+        "DAY(data_emprestimo)",
+        "MONTH(data_emprestimo)",
+        "CURDATE(data_emprestimo)",
+        "DATE_FORMAT(data_emprestimo)"
+      ],
+      "correta": 0,
+      "explicacao": "DAY() devolve o dia (1 a 31). MONTH() devolve o mês. CURDATE() não recebe coluna, e DATE_FORMAT precisa também do formato."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma loja de presentes conta quantos dias faltam para o Natal. Qual é o resultado de `SELECT DATEDIFF('2026-12-25', '2026-12-20');`?",
+      "alternativas": [
+        "20",
+        "-5",
+        "25",
+        "5"
+      ],
+      "correta": 3,
+      "explicacao": "DATEDIFF(a, b) devolve a quantidade de dias de a menos b: 25 − 20 = 5."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No cinema, a tabela `sessao` tem as colunas id_sessao, filme e data_sessao (DATE). Qual expressão mostra a data no formato brasileiro, como 27/11/2026?",
+      "alternativas": [
+        "DATE_FORMAT(data_sessao, '%Y/%m/%d')",
+        "DATE_FORMAT(data_sessao, '%d/%m/%Y')",
+        "DATE_FORMAT(data_sessao, '%m/%d/%Y')",
+        "DATE_FORMAT(data_sessao, '%d-%m-%y')"
+      ],
+      "correta": 1,
+      "explicacao": "%d é o dia, %m o mês e %Y o ano com 4 dígitos, separados por barra. As outras ordens ou separadores não dão 27/11/2026."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No caixa de uma lanchonete, o valor é arredondado para uma casa decimal. Qual é o resultado de `SELECT ROUND(15.678, 1);`?",
+      "alternativas": [
+        "15.6",
+        "15.7",
+        "16",
+        "15.68"
+      ],
+      "correta": 1,
+      "explicacao": "ROUND arredonda para 1 casa decimal: 15.678 vira 15.7 (o 7 seguinte faz subir). 15.6 seria o TRUNCATE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num posto de combustível, o painel corta as casas decimais sem arredondar. Qual é o resultado de `SELECT TRUNCATE(15.678, 1);`?",
+      "alternativas": [
+        "16",
+        "15.7",
+        "15",
+        "15.6"
+      ],
+      "correta": 3,
+      "explicacao": "TRUNCATE corta as casas que sobram, sem arredondar: fica 15.6."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa gráfica, cada caixa leva 1 resma inteira, mesmo que sobre papel. Qual é o resultado de `SELECT CEIL(4.1);`?",
+      "alternativas": [
+        "5",
+        "4",
+        "4.1",
+        "4.0"
+      ],
+      "correta": 0,
+      "explicacao": "CEIL (ou CEILING) arredonda sempre para cima, para o próximo inteiro: 5."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num aplicativo de corrida, só as voltas completas contam. Qual é o resultado de `SELECT FLOOR(4.9);`?",
+      "alternativas": [
+        "4.9",
+        "5",
+        "4",
+        "5.0"
+      ],
+      "correta": 2,
+      "explicacao": "FLOOR arredonda sempre para baixo, para o inteiro anterior: 4."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No controle de estoque de uma papelaria, a diferença entre dois inventários deu negativa. Qual é o resultado de `SELECT ABS(-12);`?",
+      "alternativas": [
+        "1",
+        "-12",
+        "0",
+        "12"
+      ],
+      "correta": 3,
+      "explicacao": "ABS devolve o valor absoluto, ou seja, o número sem sinal: 12."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa gincana, 17 alunos são divididos em equipes de 5 e quer-se saber quantos sobram. Qual é o resultado de `SELECT MOD(17, 5);`?",
+      "alternativas": [
+        "3.4",
+        "3",
+        "2",
+        "5"
+      ],
+      "correta": 2,
+      "explicacao": "MOD devolve o resto da divisão: 17 dividido por 5 dá 3 e sobra 2."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa aula de matemática aplicada ao banco, o professor testou uma potência. Qual é o resultado de `SELECT POW(2, 3);`?",
+      "alternativas": [
+        "6",
+        "8",
+        "9",
+        "5"
+      ],
+      "correta": 1,
+      "explicacao": "POW(2, 3) é 2 elevado a 3: 2 × 2 × 2 = 8. 6 seria 2 × 3."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um jardineiro quer saber o lado de um canteiro quadrado de 81 m². Qual é o resultado de `SELECT SQRT(81);`?",
+      "alternativas": [
+        "9",
+        "40.5",
+        "6561",
+        "8.1"
+      ],
+      "correta": 0,
+      "explicacao": "SQRT devolve a raiz quadrada: 9 × 9 = 81."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de games, a tabela `cliente` tem as colunas id_cliente, nome e sobrenome. Qual expressão junta nome e sobrenome com um espaço no meio?",
+      "alternativas": [
+        "CONCAT(nome, ' ', sobrenome)",
+        "CONCAT(nome + sobrenome)",
+        "UPPER(nome, sobrenome)",
+        "LENGTH(nome, ' ', sobrenome)"
+      ],
+      "correta": 0,
+      "explicacao": "CONCAT junta os textos na ordem dada; o ' ' é o espaço. No MySQL o + é soma numérica, não junta texto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No letreiro de um pet shop, o nome precisa aparecer em caixa alta. Qual é o resultado de `SELECT UPPER('pet shop');`?",
+      "alternativas": [
+        "Pet Shop (só as iniciais maiúsculas)",
+        "PET SHOP (tudo em maiúsculas)",
+        "pet shop (sem nenhuma mudança)",
+        "PET shop (só a primeira palavra)"
+      ],
+      "correta": 1,
+      "explicacao": "UPPER transforma todas as letras em maiúsculas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel, os e-mails dos hóspedes foram digitados com letras maiúsculas e minúsculas misturadas. Qual função deixa todo o texto em minúsculas?",
+      "alternativas": [
+        "TRIM()",
+        "UPPER()",
+        "LOWER()",
+        "LEFT()"
+      ],
+      "correta": 2,
+      "explicacao": "LOWER converte tudo para minúsculas. UPPER faz o contrário; TRIM tira espaços; LEFT pega caracteres do começo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cadastro de comércios, o sistema mostra uma sigla com as primeiras letras. Qual é o resultado de `SELECT LEFT('Padaria', 3);`?",
+      "alternativas": [
+        "P",
+        "ria",
+        "Padaria",
+        "Pad"
+      ],
+      "correta": 3,
+      "explicacao": "LEFT pega a quantidade pedida de caracteres a partir do começo (esquerda): 'Pad'. RIGHT pegaria 'ria'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na oficina, a tabela `servico` tem as colunas id_servico, descricao, valor e desconto. O desconto está NULL em vários serviços. Qual expressão mostra 0 no lugar do NULL?",
+      "alternativas": [
+        "ROUND(desconto, 0)",
+        "IF(desconto, 0)",
+        "IFNULL(desconto, 0)",
+        "ABS(desconto)"
+      ],
+      "correta": 2,
+      "explicacao": "IFNULL(valor, substituto) devolve o substituto quando o valor é NULL. ROUND e ABS de NULL continuam NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No cadastro de uma clínica, aparecem só os últimos dígitos do celular por privacidade. Qual é o resultado de `SELECT RIGHT('11987654321', 4);`?",
+      "alternativas": [
+        "4321",
+        "1198",
+        "8765",
+        "11987"
+      ],
+      "correta": 0,
+      "explicacao": "RIGHT pega os caracteres do final (direita): os 4 últimos são 4321."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num material de estudo, o professor recorta o começo de um texto. Qual é o resultado de `SELECT SUBSTRING('Banco de Dados', 1, 5);`?",
+      "alternativas": [
+        "Banco de",
+        "anco ",
+        "Dados",
+        "Banco"
+      ],
+      "correta": 3,
+      "explicacao": "SUBSTRING(texto, início, quantidade): começa na posição 1 (no MySQL a contagem começa em 1) e pega 5 caracteres: 'Banco'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num sistema de agendamento, a data foi gravada como texto e é preciso pegar só o mês. Qual é o resultado de `SELECT SUBSTRING('2026-11-27', 6, 2);`?",
+      "alternativas": [
+        "26",
+        "11",
+        "-1",
+        "27"
+      ],
+      "correta": 1,
+      "explicacao": "A posição 6 é o primeiro dígito do mês (2026- ocupa as posições 1 a 5). Pegando 2 caracteres: '11'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa brincadeira com a turma, o professor troca letras de uma palavra. Qual é o resultado de `SELECT REPLACE('banana', 'a', 'o');`?",
+      "alternativas": [
+        "bonana",
+        "bonono",
+        "banano",
+        "obnono"
+      ],
+      "correta": 1,
+      "explicacao": "REPLACE troca TODAS as ocorrências do texto procurado: cada 'a' vira 'o', resultando em 'bonono'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na escola, a matrícula dos alunos precisa aparecer sempre com 5 dígitos, com zeros à esquerda (ex.: 7 vira 00007). Qual expressão faz isso?",
+      "alternativas": [
+        "CONCAT('0', matricula)",
+        "RPAD(matricula, 5, '0')",
+        "LEFT(matricula, 5)",
+        "LPAD(matricula, 5, '0')"
+      ],
+      "correta": 3,
+      "explicacao": "LPAD completa à esquerda até o tamanho pedido. RPAD completaria à direita (70000); CONCAT('0', …) põe só um zero."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cadastro de hotel, o nome do hóspede veio com espaços sobrando. Qual é o resultado de `SELECT TRIM('   Ana Souza   ');`?",
+      "alternativas": [
+        "'Ana Souza'",
+        "'AnaSouza'",
+        "'   Ana Souza'",
+        "'Ana Souza   '"
+      ],
+      "correta": 0,
+      "explicacao": "TRIM remove os espaços do começo e do fim, mas mantém os espaços do meio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, o prazo de devolução é de 10 dias a partir de 27/11/2026. Qual é o resultado de `SELECT DATE_ADD('2026-11-27', INTERVAL 10 DAY);`?",
+      "alternativas": [
+        "2026-12-10",
+        "2026-11-37",
+        "2026-12-07",
+        "2026-11-17"
+      ],
+      "correta": 2,
+      "explicacao": "Somando 10 dias a 27/11: novembro tem 30 dias, então chega a 7 de dezembro. DATE_ADD trata a virada de mês sozinho."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num controle de validade, o sistema calcula a véspera de 1º de março de 2026. Qual é o resultado de `SELECT DATE_SUB('2026-03-01', INTERVAL 1 DAY);`?",
+      "alternativas": [
+        "2026-02-30",
+        "2026-02-29",
+        "2026-03-00",
+        "2026-02-28"
+      ],
+      "correta": 3,
+      "explicacao": "Um dia antes de 1º de março de 2026 é 28 de fevereiro (2026 não é ano bissexto)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop, a tabela `vacina` tem as colunas id_vacina, id_animal e data_aplicacao (DATE). O reforço é dado 1 ano depois. Qual expressão calcula a data do reforço?",
+      "alternativas": [
+        "DATEDIFF(data_aplicacao, INTERVAL 1 YEAR)",
+        "DATE_ADD(data_aplicacao, 1)",
+        "DATE_ADD(data_aplicacao, INTERVAL 1 YEAR)",
+        "YEAR(data_aplicacao) + 1"
+      ],
+      "correta": 2,
+      "explicacao": "DATE_ADD com INTERVAL 1 YEAR devolve a data completa um ano depois. YEAR(...) + 1 dá só o número do ano, e DATEDIFF calcula diferença, não soma."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, a tabela `aluno` tem as colunas id_aluno, nome e data_nascimento (DATE). Qual expressão calcula a idade em anos completos?",
+      "alternativas": [
+        "DATEDIFF(CURDATE(), data_nascimento)",
+        "TIMESTAMPDIFF(YEAR, data_nascimento, CURDATE())",
+        "YEAR(data_nascimento) - CURDATE()",
+        "TIMESTAMPDIFF(YEAR, CURDATE(), data_nascimento)"
+      ],
+      "correta": 1,
+      "explicacao": "TIMESTAMPDIFF(unidade, início, fim) conta unidades completas de início até fim. DATEDIFF dá dias; inverter as datas dá idade negativa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa etiqueta de entrega, os dados do endereço são separados por hífen. Qual é o resultado de `SELECT CONCAT_WS(' - ', 'São Paulo', 'SP', 'Brasil');`?",
+      "alternativas": [
+        "São Paulo - SP - Brasil",
+        "São Paulo SP Brasil",
+        " - São Paulo - SP - Brasil",
+        "São Paulo - SP - Brasil - "
+      ],
+      "correta": 0,
+      "explicacao": "CONCAT_WS (com separador) coloca o separador do primeiro argumento ENTRE os demais valores, sem pôr no começo nem no fim."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No resumo de um pedido de restaurante, uma das partes do texto veio vazia (NULL). Qual é o resultado de `SELECT CONCAT('Pedido ', NULL, ' pago');`?",
+      "alternativas": [
+        "NULL",
+        "'Pedido  pago' (com dois espaços)",
+        "'Pedido pago' (com um espaço)",
+        "'Pedido NULL pago'"
+      ],
+      "correta": 0,
+      "explicacao": "No MySQL, se qualquer argumento do CONCAT for NULL, o resultado inteiro é NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na loja de games, a tabela `jogo` tem as colunas id_jogo, titulo, preco e estoque. Qual expressão mostra 'Esgotado' quando o estoque é 0 e 'Disponível' nos outros casos?",
+      "alternativas": [
+        "IF(estoque = 0, 'Disponível', 'Esgotado')",
+        "IF(estoque = 0, 'Esgotado', 'Disponível')",
+        "IFNULL(estoque, 'Esgotado')",
+        "IF('Esgotado', estoque = 0, 'Disponível')"
+      ],
+      "correta": 1,
+      "explicacao": "IF(condição, valor_se_verdadeiro, valor_se_falso). Estoque 0 torna a condição verdadeira e mostra 'Esgotado'. IFNULL só trata NULL, não o zero."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cadastro de contatos, o sistema procura o primeiro valor preenchido. Qual é o resultado de `SELECT COALESCE(NULL, NULL, 'sem contato', 'x');`?",
+      "alternativas": [
+        "x",
+        "NULL",
+        "sem contato",
+        "sem contato, x"
+      ],
+      "correta": 2,
+      "explicacao": "COALESCE devolve o PRIMEIRO valor que não é NULL, olhando da esquerda para a direita."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel, a tabela `reserva` tem as colunas id_reserva, hospede, data_entrada e data_saida (DATE). Qual expressão calcula quantas diárias a reserva tem?",
+      "alternativas": [
+        "DATE_SUB(data_saida, data_entrada)",
+        "DATEDIFF(data_entrada, data_saida)",
+        "DAY(data_saida) - DAY(data_entrada)",
+        "DATEDIFF(data_saida, data_entrada)"
+      ],
+      "correta": 3,
+      "explicacao": "DATEDIFF(fim, início) devolve os dias entre as datas. Invertido dá negativo; subtrair só os dias falha quando muda o mês."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na escola, a tabela `aluno` tem as colunas id_aluno, nome e data_nascimento (DATE). Qual WHERE lista os alunos que fazem aniversário no mês atual?",
+      "alternativas": [
+        "WHERE MONTH(data_nascimento) = CURDATE()",
+        "WHERE data_nascimento = CURDATE()",
+        "WHERE MONTH(data_nascimento) = MONTH(CURDATE())",
+        "WHERE DAY(data_nascimento) = MONTH(CURDATE())"
+      ],
+      "correta": 2,
+      "explicacao": "Compara o mês do nascimento com o mês de hoje. Comparar a data inteira com CURDATE() só pegaria quem nasceu hoje (ano incluído)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na biblioteca, a tabela `livro` tem as colunas id_livro, titulo e autor. Qual WHERE encontra os títulos com mais de 30 caracteres?",
+      "alternativas": [
+        "WHERE CHAR_LENGTH(titulo) > 30",
+        "WHERE titulo > 30",
+        "WHERE LEFT(titulo, 30)",
+        "WHERE SUBSTRING(titulo) > 30"
+      ],
+      "correta": 0,
+      "explicacao": "CHAR_LENGTH conta os caracteres do texto. Comparar o texto direto com 30 não mede o tamanho."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num termômetro de câmara fria, a temperatura registrada foi negativa e o painel usa CEIL. Qual é o resultado de `SELECT CEIL(-4.7);`?",
+      "alternativas": [
+        "5",
+        "-5",
+        "4",
+        "-4"
+      ],
+      "correta": 3,
+      "explicacao": "CEIL vai para o próximo inteiro MAIOR. Na reta numérica, o inteiro maior que -4.7 mais próximo é -4."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num freezer de sorveteria, a leitura negativa passa pela função FLOOR. Qual é o resultado de `SELECT FLOOR(-4.2);`?",
+      "alternativas": [
+        "-4",
+        "-5",
+        "4",
+        "-4.2"
+      ],
+      "correta": 1,
+      "explicacao": "FLOOR vai para o inteiro MENOR. Abaixo de -4.2 o próximo inteiro é -5."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cadastro de palavras com acento, o professor compara duas funções de tamanho. Qual é o resultado de `SELECT LENGTH('ação'), CHAR_LENGTH('ação');` num banco com utf8mb4?",
+      "alternativas": [
+        "4 e 4",
+        "6 e 4",
+        "4 e 6",
+        "6 e 6"
+      ],
+      "correta": 1,
+      "explicacao": "CHAR_LENGTH conta caracteres (4). LENGTH conta bytes: ç e ã ocupam 2 bytes cada em utf8mb4, totalizando 6."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa etiqueta de correio, o complemento do endereço está vazio (NULL). Qual é o resultado de `SELECT CONCAT_WS(', ', 'Rua A', NULL, 'Centro');`?",
+      "alternativas": [
+        "Rua A, NULL, Centro",
+        "NULL",
+        "Rua A, , Centro",
+        "Rua A, Centro"
+      ],
+      "correta": 3,
+      "explicacao": "Diferente do CONCAT, o CONCAT_WS pula os argumentos NULL (que vêm depois do separador) e não devolve NULL por causa deles."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num sistema de senhas de atendimento, o código foi completado com zeros. Qual é o resultado de `SELECT LPAD('12345', 3, '0');`?",
+      "alternativas": [
+        "123",
+        "12345",
+        "00012345",
+        "345"
+      ],
+      "correta": 0,
+      "explicacao": "Se o texto já é maior que o tamanho pedido, LPAD CORTA o texto, mantendo os primeiros caracteres: '123'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, a mensalidade de quem entrou em 31/01/2026 vence um mês depois. Qual é o resultado de `SELECT DATE_ADD('2026-01-31', INTERVAL 1 MONTH);`?",
+      "alternativas": [
+        "2026-02-31",
+        "2026-03-03",
+        "2026-02-28",
+        "2026-03-01"
+      ],
+      "correta": 2,
+      "explicacao": "Fevereiro de 2026 não tem dia 31; o MySQL ajusta para o último dia válido do mês: 28/02/2026."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na academia, a tabela `frequencia` tem as colunas id_frequencia, id_aluno e data_hora_entrada (DATETIME). O comando `SELECT * FROM frequencia WHERE data_hora_entrada = CURDATE();` quase nunca traz linhas. Por quê?",
+      "alternativas": [
+        "CURDATE() devolve a data de ontem por causa do fuso",
+        "CURDATE() não pode ser usado no WHERE, só no SELECT",
+        "DATETIME não pode ser comparado com funções de data",
+        "Contra DATETIME, CURDATE() vale 'hoje às 00:00:00'"
+      ],
+      "correta": 3,
+      "explicacao": "Ao comparar com DATETIME, CURDATE() é tratado como 'hoje 00:00:00'. O certo seria WHERE DATE(data_hora_entrada) = CURDATE() ou um intervalo de horários."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na escola, a tabela `aluno` tem as colunas id_aluno, nome e nota. Considere: `CASE WHEN nota >= 5 THEN 'Aprovado' WHEN nota >= 8 THEN 'Ótimo' ELSE 'Reprovado' END`. O que aparece para um aluno com nota 9?",
+      "alternativas": [
+        "Reprovado",
+        "Ótimo",
+        "Aprovado",
+        "Aprovado e Ótimo"
+      ],
+      "correta": 2,
+      "explicacao": "O CASE para no PRIMEIRO WHEN verdadeiro. 9 >= 5 já é verdadeiro, então nunca chega no 'Ótimo'. A ordem dos WHEN importa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na clínica, a tabela `paciente` tem as colunas id_paciente, nome e convenio. Na expressão `CASE convenio WHEN 'A' THEN 'Plano Ouro' WHEN 'B' THEN 'Plano Prata' END`, o que aparece para um paciente com convenio 'C'?",
+      "alternativas": [
+        "Plano Prata",
+        "NULL",
+        "Um erro de execução",
+        "Um texto vazio"
+      ],
+      "correta": 1,
+      "explicacao": "Quando nenhum WHEN é atendido e não há ELSE, o CASE devolve NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na padaria, a tabela `produto` tem as colunas id_produto, nome e preco. O comando `SELECT nome, preco * 0.9 AS promocao FROM produto WHERE promocao < 5;` dá erro. Por quê?",
+      "alternativas": [
+        "O apelido criado no SELECT não pode ser usado no WHERE",
+        "Não é permitido multiplicar colunas dentro do SELECT",
+        "O AS só funciona com funções nativas, não com contas",
+        "O WHERE só aceita comparações com texto"
+      ],
+      "correta": 0,
+      "explicacao": "O WHERE é avaliado antes do SELECT montar os apelidos, então 'promocao' não existe ali (Unknown column). Repete-se a expressão: WHERE preco * 0.9 < 5."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No cadastro de um clube, a idade de um sócio é calculada em 27/11/2026. Qual é o resultado de `SELECT TIMESTAMPDIFF(YEAR, '2010-12-01', '2026-11-27');`?",
+      "alternativas": [
+        "15",
+        "16",
+        "-16",
+        "5840"
+      ],
+      "correta": 0,
+      "explicacao": "TIMESTAMPDIFF conta anos COMPLETOS. Em 27/11/2026 a pessoa nascida em 01/12/2010 ainda não fez 16 anos (faz em dezembro): 15."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num jogo de palavras, o professor tenta trocar uma letra minúscula. Qual é o resultado de `SELECT REPLACE('Banana', 'b', 'p');`?",
+      "alternativas": [
+        "Panana",
+        "Banana (nada muda)",
+        "Papana",
+        "banana (tudo minúsculo)"
+      ],
+      "correta": 1,
+      "explicacao": "REPLACE diferencia maiúsculas de minúsculas. O texto não tem 'b' minúsculo (só 'B'), então nada é trocado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa feira de ciências, a nota média de um projeto é arredondada para inteiro. Qual é o resultado de `SELECT ROUND(7.5);` (sem informar casas decimais)?",
+      "alternativas": [
+        "7.5",
+        "7",
+        "8",
+        "7.0"
+      ],
+      "correta": 2,
+      "explicacao": "Sem o segundo argumento, ROUND arredonda para inteiro. Com .5 o MySQL arredonda para longe do zero: 8."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL, qual comando mostra a data e a hora do servidor sem consultar nenhuma tabela?",
+      "alternativas": [
+        "DESCRIBE NOW();",
+        "SELECT NOW() FROM tabela;",
+        "SHOW NOW();",
+        "SELECT NOW();"
+      ],
+      "correta": 3,
+      "explicacao": "No MySQL dá para usar SELECT sem FROM para calcular expressões e chamar funções, como SELECT NOW();."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual função devolve um número decimal aleatório maior ou igual a 0 e menor que 1?",
+      "alternativas": [
+        "ABS()",
+        "ROUND()",
+        "RAND()",
+        "MOD()"
+      ],
+      "correta": 2,
+      "explicacao": "RAND() sorteia um número entre 0 (incluído) e 1 (não incluído). ROUND arredonda, ABS tira o sinal e MOD dá o resto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num formulário de inscrição, o sistema confere o tamanho da sigla da escola. Qual é o resultado de `SELECT CHAR_LENGTH('SENAI');`?",
+      "alternativas": [
+        "5",
+        "4",
+        "6",
+        "1"
+      ],
+      "correta": 0,
+      "explicacao": "CHAR_LENGTH conta quantos caracteres o texto tem: S-E-N-A-I = 5."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, o nome do setor é padronizado em minúsculas. Qual é o resultado de `SELECT LOWER('BIBLIOTECA Central');`?",
+      "alternativas": [
+        "biblioteca Central (só a 1ª palavra muda)",
+        "BIBLIOTECA CENTRAL (tudo maiúsculo)",
+        "Biblioteca Central (iniciais maiúsculas)",
+        "biblioteca central (tudo minúsculo)"
+      ],
+      "correta": 3,
+      "explicacao": "LOWER coloca todas as letras em minúsculas, inclusive as que já estavam assim."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num restaurante, o número da mesa vira parte de um texto. Qual é o resultado de `SELECT CONCAT('Mesa ', 12);`?",
+      "alternativas": [
+        "Mesa12",
+        "Mesa 12",
+        "12",
+        "Um erro, pois 12 é número"
+      ],
+      "correta": 1,
+      "explicacao": "CONCAT converte o número para texto e junta: 'Mesa ' (com espaço) + '12' = 'Mesa 12'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num catálogo de lugares, o professor pega o final de uma palavra. Qual é o resultado de `SELECT RIGHT('Cinema', 2);`?",
+      "alternativas": [
+        "Ci",
+        "ma",
+        "em",
+        "ne"
+      ],
+      "correta": 1,
+      "explicacao": "RIGHT pega os caracteres do final do texto: os 2 últimos de 'Cinema' são 'ma'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual função troca um trecho de texto por outro em todas as ocorrências, como trocar '.' por ',' num valor escrito como texto?",
+      "alternativas": [
+        "SUBSTRING()",
+        "TRIM()",
+        "LPAD()",
+        "REPLACE()"
+      ],
+      "correta": 3,
+      "explicacao": "REPLACE(texto, procurado, novo) troca todas as ocorrências. TRIM tira espaços, LPAD completa e SUBSTRING recorta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num controle de entregas, o sistema extrai o dia de uma data. Qual é o resultado de `SELECT DAY('2026-11-27');`?",
+      "alternativas": [
+        "27",
+        "11",
+        "2026",
+        "5"
+      ],
+      "correta": 0,
+      "explicacao": "DAY() devolve o dia do mês da data: 27."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa planilha de pontos de um campeonato, a diferença entre dois times é calculada sem sinal. Qual é o resultado de `SELECT ABS(3 - 10);`?",
+      "alternativas": [
+        "13",
+        "-7",
+        "7",
+        "-13"
+      ],
+      "correta": 2,
+      "explicacao": "3 − 10 = −7. ABS tira o sinal: 7."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No cadastro de uma loja, um campo opcional veio vazio (NULL). Qual é o resultado de `SELECT IFNULL(NULL, 'Não informado');`?",
+      "alternativas": [
+        "0",
+        "NULL",
+        "Um texto vazio",
+        "Não informado"
+      ],
+      "correta": 3,
+      "explicacao": "IFNULL devolve o segundo argumento quando o primeiro é NULL.",
+      "grupo": "funcoes-ifnull-resultado"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No cadastro de uma loja, um campo opcional veio preenchido. Qual é o resultado de `SELECT IFNULL('Maria', 'Não informado');`?",
+      "alternativas": [
+        "NULL",
+        "Não informado",
+        "Maria",
+        "Maria Não informado"
+      ],
+      "correta": 2,
+      "explicacao": "Como o primeiro valor NÃO é NULL, o IFNULL devolve ele mesmo: 'Maria'.",
+      "grupo": "funcoes-ifnull-resultado"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num teste rápido de condição feito pela turma, compara-se 10 com 3. Qual é o resultado de `SELECT IF(10 > 3, 'sim', 'não');`?",
+      "alternativas": [
+        "não",
+        "sim",
+        "1",
+        "10"
+      ],
+      "correta": 1,
+      "explicacao": "A condição 10 > 3 é verdadeira, então o IF devolve o segundo argumento: 'sim'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No formato do DATE_FORMAT, o que significa `%Y`?",
+      "alternativas": [
+        "Ano com 4 dígitos",
+        "Ano com 2 dígitos",
+        "Nome do mês",
+        "Dia do ano"
+      ],
+      "correta": 0,
+      "explicacao": "%Y mostra o ano com 4 dígitos (2026). %y mostra só 2 dígitos (26)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma função nativa usada num SELECT, como `SELECT UPPER(nome) FROM cliente;`, altera os dados gravados na tabela?",
+      "alternativas": [
+        "Não, só muda o que aparece no resultado da consulta",
+        "Sim, grava o nome em maiúsculas na tabela",
+        "Sim, mas só na primeira linha",
+        "Não, porque UPPER só funciona em números"
+      ],
+      "correta": 0,
+      "explicacao": "No SELECT a função transforma apenas o resultado exibido. Para gravar seria preciso um UPDATE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num caixa eletrônico de brinquedo, verifica-se se 20 notas cabem em pacotes de 4. Qual é o resultado de `SELECT MOD(20, 4);`?",
+      "alternativas": [
+        "5",
+        "0",
+        "4",
+        "20"
+      ],
+      "correta": 1,
+      "explicacao": "20 dividido por 4 dá exatamente 5, sem sobra. O resto é 0."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa aula de matemática com SQL, duas funções foram somadas. Qual é o resultado de `SELECT SQRT(25) + POW(3, 2);`?",
+      "alternativas": [
+        "34",
+        "11",
+        "14",
+        "16"
+      ],
+      "correta": 2,
+      "explicacao": "SQRT(25) = 5 e POW(3, 2) = 9. A soma é 14."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cadastro de serviços, o professor recorta um nome a partir da 3ª letra. Qual é o resultado de `SELECT SUBSTRING('Oficina', 3);` (sem informar a quantidade)?",
+      "alternativas": [
+        "ici",
+        "Of",
+        "Oficina",
+        "icina"
+      ],
+      "correta": 3,
+      "explicacao": "Sem a quantidade, SUBSTRING pega do ponto inicial até o final: a partir da 3ª letra (i), fica 'icina'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel de um cinema, só o horário da sessão é exibido. Qual é o resultado de `SELECT DATE_FORMAT('2026-11-27 14:05:00', '%H:%i');`?",
+      "alternativas": [
+        "14:00",
+        "05:14",
+        "14:05",
+        "2:05"
+      ],
+      "correta": 2,
+      "explicacao": "%H é a hora no formato 24h e %i são os minutos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve a função COALESCE?",
+      "alternativas": [
+        "Devolver o primeiro valor que não é NULL de uma lista",
+        "Juntar vários textos em um só, com um separador",
+        "Contar quantos valores da lista são NULL",
+        "Arredondar um número para o inteiro mais próximo"
+      ],
+      "correta": 0,
+      "explicacao": "COALESCE(v1, v2, v3, …) olha da esquerda para a direita e devolve o primeiro que não for NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cadastro de animais, o sistema pega a inicial do tipo do animal. Qual é o resultado de `SELECT UPPER(LEFT('cachorro', 1));`?",
+      "alternativas": [
+        "Cachorro (só a inicial)",
+        "c (minúsculo)",
+        "CACHORRO (palavra toda)",
+        "C (maiúsculo)"
+      ],
+      "correta": 3,
+      "explicacao": "Primeiro roda a função de dentro: LEFT pega 'c'. Depois UPPER deixa maiúscula: 'C'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num relatório de fechamento, o sistema mostra o ano atual. Qual é o resultado de `SELECT YEAR(CURDATE());` se hoje é 27/11/2026?",
+      "alternativas": [
+        "27",
+        "2026",
+        "11",
+        "2026-11-27"
+      ],
+      "correta": 1,
+      "explicacao": "CURDATE() devolve 2026-11-27 e YEAR() extrai o ano: 2026."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num controle de matrículas, uma data anterior é comparada com uma posterior. Qual é o resultado de `SELECT DATEDIFF('2026-11-20', '2026-11-27');`?",
+      "alternativas": [
+        "7",
+        "-7",
+        "0",
+        "27"
+      ],
+      "correta": 1,
+      "explicacao": "DATEDIFF faz primeira data menos a segunda. Como a primeira é anterior, o resultado é negativo: −7."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na loja de games, a tabela `venda` tem as colunas id_venda, id_jogo e data_venda (DATE). Qual WHERE traz as vendas de 2025?",
+      "alternativas": [
+        "WHERE DATEDIFF(data_venda, 2025)",
+        "WHERE data_venda = 2025",
+        "WHERE DAY(data_venda) = 2025",
+        "WHERE YEAR(data_venda) = 2025"
+      ],
+      "correta": 3,
+      "explicacao": "YEAR() extrai o ano para comparar com 2025. Comparar a data inteira com 2025 não funciona."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na biblioteca, a tabela `emprestimo` tem as colunas id_emprestimo, id_livro, data_emprestimo e data_devolucao_prevista (DATE). Qual WHERE lista os empréstimos com devolução já vencida?",
+      "alternativas": [
+        "WHERE data_devolucao_prevista < CURDATE()",
+        "WHERE data_devolucao_prevista > CURDATE()",
+        "WHERE CURDATE() < data_emprestimo",
+        "WHERE DAY(data_devolucao_prevista) < 0"
+      ],
+      "correta": 0,
+      "explicacao": "Vencido é quando a data prevista ficou para trás, ou seja, é menor que a data de hoje."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na clínica, a tabela `consulta` tem as colunas id_consulta, paciente e data_consulta (DATE). Qual WHERE traz as consultas dos últimos 7 dias (incluindo hoje)?",
+      "alternativas": [
+        "WHERE DAY(data_consulta) >= 7",
+        "WHERE data_consulta >= DATE_ADD(CURDATE(), INTERVAL 7 DAY)",
+        "WHERE data_consulta >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)",
+        "WHERE data_consulta = CURDATE() - 7"
+      ],
+      "correta": 2,
+      "explicacao": "DATE_SUB(CURDATE(), INTERVAL 7 DAY) dá a data de 7 dias atrás; as consultas a partir dela estão no período. DATE_ADD apontaria para o futuro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No cinema, a tabela `ingresso` tem as colunas id_ingresso, sessao e valor (DECIMAL). Qual expressão mostra o valor com 15% de taxa, arredondado para 2 casas?",
+      "alternativas": [
+        "ROUND(valor, 1.15)",
+        "ROUND(valor + 15, 2)",
+        "TRUNCATE(valor * 15, 2)",
+        "ROUND(valor * 1.15, 2)"
+      ],
+      "correta": 3,
+      "explicacao": "Multiplicar por 1.15 acrescenta 15%. ROUND(…, 2) deixa 2 casas decimais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na escola, a tabela `aluno` tem as colunas id_aluno, nome e numero_chamada (INT). Qual WHERE traz só os alunos com número de chamada par?",
+      "alternativas": [
+        "WHERE numero_chamada / 2 = 0",
+        "WHERE MOD(numero_chamada, 2) = 1",
+        "WHERE MOD(numero_chamada, 2) = 0",
+        "WHERE ABS(numero_chamada) = 2"
+      ],
+      "correta": 2,
+      "explicacao": "Número par tem resto 0 na divisão por 2. Resto 1 seria ímpar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num relatório de faturamento, os valores são mostrados arredondados para a centena. Qual é o resultado de `SELECT ROUND(1234.567, -2);`?",
+      "alternativas": [
+        "1234.57",
+        "1200",
+        "1300",
+        "1234.56"
+      ],
+      "correta": 1,
+      "explicacao": "Casas negativas arredondam à esquerda da vírgula: -2 arredonda para a centena. 1234 está mais perto de 1200."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop, a tabela `cliente` tem as colunas id_cliente, nome, celular e telefone_fixo, e os dois telefones podem estar vazios (NULL). Qual expressão mostra o celular; se não houver, o fixo; se não houver nenhum, 'sem telefone'?",
+      "alternativas": [
+        "COALESCE(celular, telefone_fixo, 'sem telefone')",
+        "IFNULL(celular, telefone_fixo, 'sem telefone')",
+        "CONCAT(celular, telefone_fixo, 'sem telefone')",
+        "COALESCE('sem telefone', celular, telefone_fixo)"
+      ],
+      "correta": 0,
+      "explicacao": "COALESCE aceita vários valores e devolve o primeiro não nulo, na ordem dada. IFNULL só aceita 2 argumentos; pôr o texto primeiro faria sempre aparecer 'sem telefone'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na oficina, a tabela `os` tem as colunas id_os, valor_pecas e valor_mao_obra, e valor_pecas é NULL quando não houve peças. O que mostra `SELECT valor_pecas + valor_mao_obra FROM os;` para uma OS com valor_pecas NULL e mão de obra 150?",
+      "alternativas": [
+        "NULL",
+        "150",
+        "0",
+        "Um erro de tipo"
+      ],
+      "correta": 0,
+      "explicacao": "Qualquer conta com NULL dá NULL. Para dar 150 seria preciso IFNULL(valor_pecas, 0) + valor_mao_obra."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No hotel, a tabela `hospede` tem as colunas id_hospede, nome e cpf (VARCHAR com 11 dígitos). Qual expressão mostra só os 3 primeiros dígitos do CPF?",
+      "alternativas": [
+        "RIGHT(cpf, 3)",
+        "LEFT(cpf, 3)",
+        "SUBSTRING(cpf, 3)",
+        "LPAD(cpf, 3, '0')"
+      ],
+      "correta": 1,
+      "explicacao": "LEFT(cpf, 3) pega os 3 primeiros. SUBSTRING(cpf, 3) começaria na 3ª posição e iria até o fim."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num jogo de adivinhação, a palavra é completada com asteriscos. Qual é o resultado de `SELECT RPAD('Ana', 6, '*');`?",
+      "alternativas": [
+        "Ana*",
+        "***Ana",
+        "Ana***",
+        "Ana******"
+      ],
+      "correta": 2,
+      "explicacao": "RPAD completa à DIREITA até o tamanho total de 6 caracteres: 'Ana' + 3 asteriscos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cadastro de academia, o nome foi digitado com espaços nas pontas. Qual é o resultado de `SELECT CHAR_LENGTH(TRIM('  Leo  '));`?",
+      "alternativas": [
+        "4",
+        "7",
+        "5",
+        "3"
+      ],
+      "correta": 3,
+      "explicacao": "Primeiro o TRIM tira os espaços das pontas, sobrando 'Leo'. Depois CHAR_LENGTH conta 3 caracteres."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num controle de ponto de uma oficina, conta-se quanto tempo um funcionário ficou. Qual é o resultado de `SELECT TIMESTAMPDIFF(HOUR, '2026-11-27 08:00:00', '2026-11-27 17:30:00');`?",
+      "alternativas": [
+        "10",
+        "9.5",
+        "9",
+        "-9"
+      ],
+      "correta": 2,
+      "explicacao": "Passaram 9 horas e 30 minutos. TIMESTAMPDIFF conta só unidades completas, então devolve 9."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num controle de assinaturas, conta-se quantos meses se passaram. Qual é o resultado de `SELECT TIMESTAMPDIFF(MONTH, '2026-01-10', '2026-04-15');`?",
+      "alternativas": [
+        "3",
+        "4",
+        "95",
+        "-3"
+      ],
+      "correta": 0,
+      "explicacao": "De 10/01 a 10/04 são 3 meses completos; até 15/04 ainda não completa o 4º mês."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cupom fiscal de padaria, a data é impressa com o ano abreviado. Qual é o resultado de `SELECT DATE_FORMAT('2026-07-05', '%d/%m/%y');`?",
+      "alternativas": [
+        "07/05/26",
+        "5/7/2026",
+        "05/07/2026",
+        "05/07/26"
+      ],
+      "correta": 3,
+      "explicacao": "%d e %m mostram dia e mês com 2 dígitos; %y minúsculo mostra o ano com 2 dígitos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre `DATEDIFF` e `TIMESTAMPDIFF` no MySQL?",
+      "alternativas": [
+        "DATEDIFF só trabalha com horas; TIMESTAMPDIFF só com dias",
+        "DATEDIFF dá sempre dias; TIMESTAMPDIFF deixa escolher a unidade",
+        "As duas fazem o mesmo cálculo, só muda o nome",
+        "DATEDIFF soma duas datas; TIMESTAMPDIFF subtrai as datas"
+      ],
+      "correta": 1,
+      "explicacao": "DATEDIFF(fim, início) é sempre em dias. TIMESTAMPDIFF(unidade, início, fim) aceita YEAR, MONTH, DAY, HOUR, MINUTE…; repare que a ordem das datas é invertida entre as duas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na padaria, a tabela `produto` tem as colunas id_produto, nome e preco. Qual expressão mostra o preço como 'R$ 4.50' (texto com o símbolo na frente)?",
+      "alternativas": [
+        "CONCAT_WS(preco, 'R$ ')",
+        "CONCAT('R$ ', preco)",
+        "LPAD(preco, 'R$ ')",
+        "REPLACE(preco, 'R$ ')"
+      ],
+      "correta": 1,
+      "explicacao": "CONCAT junta o texto 'R$ ' com o preço convertido em texto. CONCAT_WS usaria o preço como separador."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na academia, a tabela `aluno` tem as colunas id_aluno, nome e email. Qual consulta mostra o e-mail sem espaços sobrando nas pontas e todo em minúsculas?",
+      "alternativas": [
+        "SELECT UPPER(TRIM(email)) FROM aluno;",
+        "SELECT TRIM(email, LOWER) FROM aluno;",
+        "SELECT LOWER(email) + TRIM(email) FROM aluno;",
+        "SELECT LOWER(TRIM(email)) FROM aluno;"
+      ],
+      "correta": 3,
+      "explicacao": "Funções podem ser aninhadas: TRIM limpa as pontas e LOWER converte o resultado para minúsculas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cadastro de hotéis, o sistema pega o final do nome com posição negativa. Qual é o resultado de `SELECT SUBSTRING('Hotel Mar Azul', -4);`?",
+      "alternativas": [
+        "Azul",
+        "Hote",
+        "l Ma",
+        "Mar "
+      ],
+      "correta": 0,
+      "explicacao": "Posição negativa conta a partir do final: -4 começa 4 caracteres antes do fim, resultando em 'Azul'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num placar eletrônico, a parte decimal é descartada. Qual é o resultado de `SELECT TRUNCATE(9.99, 0);`?",
+      "alternativas": [
+        "9.9",
+        "10",
+        "9",
+        "9.99"
+      ],
+      "correta": 2,
+      "explicacao": "TRUNCATE com 0 casas corta toda a parte decimal, sem arredondar: 9."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num jogo de tabuleiro feito pela turma, qual expressão sorteia um número inteiro de 1 a 6, como um dado?",
+      "alternativas": [
+        "CEIL(RAND() * 7)",
+        "ROUND(RAND() * 6)",
+        "RAND(1, 6)",
+        "FLOOR(1 + RAND() * 6)"
+      ],
+      "correta": 3,
+      "explicacao": "RAND()*6 vai de 0 até quase 6; somando 1 fica de 1 até quase 7 e o FLOOR deixa 1 a 6. ROUND(RAND()*6) pode dar 0, e RAND(1, 6) não sorteia entre 1 e 6."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na loja de games, a tabela `jogo` tem as colunas id_jogo, titulo e preco. Qual consulta lista os jogos em ordem aleatória (para uma vitrine de sugestões)?",
+      "alternativas": [
+        "SELECT titulo FROM jogo WHERE RAND();",
+        "SELECT RAND(titulo) FROM jogo;",
+        "SELECT titulo FROM jogo ORDER BY RAND();",
+        "SELECT titulo FROM jogo ORDER BY titulo RAND;"
+      ],
+      "correta": 2,
+      "explicacao": "ORDER BY RAND() gera um número aleatório por linha e ordena por ele, embaralhando o resultado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa consulta de estoque, um valor desconhecido (NULL) entra numa condição. Qual é o resultado de `SELECT IF(NULL > 5, 'maior', 'não maior');`?",
+      "alternativas": [
+        "maior",
+        "não maior",
+        "NULL",
+        "Um erro de execução"
+      ],
+      "correta": 1,
+      "explicacao": "NULL > 5 dá NULL (desconhecido), e o IF trata NULL como falso, devolvendo o terceiro argumento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num teste de limites das funções, o professor mostra dois casos especiais. Qual é o resultado de `SELECT MOD(10, 0), SQRT(-9);` no MySQL 8 (com as configurações padrão)?",
+      "alternativas": [
+        "NULL e NULL",
+        "0 e -3",
+        "Erro e 3",
+        "10 e 3"
+      ],
+      "correta": 0,
+      "explicacao": "Divisão por zero no MOD devolve NULL, e não existe raiz quadrada real de número negativo: SQRT(-9) também devolve NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num teste com números negativos, comparam-se ROUND e TRUNCATE. Qual é o resultado de `SELECT ROUND(-2.5), TRUNCATE(-2.7, 0);`?",
+      "alternativas": [
+        "-3 e -2",
+        "-2 e -3",
+        "-3 e -3",
+        "-2 e -2"
+      ],
+      "correta": 0,
+      "explicacao": "ROUND com .5 vai para longe do zero: −3. TRUNCATE só corta a parte decimal: −2.7 vira −2."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel, um hóspede chegou às 23h e saiu à 1h do dia seguinte. Qual é o resultado de `SELECT DATEDIFF('2026-11-28 01:00:00', '2026-11-27 23:00:00');`?",
+      "alternativas": [
+        "0",
+        "1",
+        "2",
+        "-1"
+      ],
+      "correta": 1,
+      "explicacao": "DATEDIFF considera só a parte da data e ignora as horas: 28 − 27 = 1, mesmo tendo passado só 2 horas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na loja de games, a tabela `venda` tem as colunas id_venda, valor e data_venda (DATE), com índice em data_venda. Por que `WHERE YEAR(data_venda) = 2026` pode ficar mais lento que `WHERE data_venda BETWEEN '2026-01-01' AND '2026-12-31'`?",
+      "alternativas": [
+        "BETWEEN consulta uma tabela auxiliar que já guarda os anos prontos",
+        "YEAR() devolve texto e a comparação de texto com número é lenta",
+        "A função na coluna é calculada linha a linha e o índice não é bem usado",
+        "YEAR() grava o ano calculado em cada linha antes de comparar"
+      ],
+      "correta": 2,
+      "explicacao": "Quando a coluna está 'embrulhada' numa função no WHERE, o índice da coluna não é usado de forma direta. Comparar a coluna pura com um intervalo permite usar o índice."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Com a collation padrão do MySQL 8 (utf8mb4_0900_ai_ci), a tabela `cliente` (id_cliente, nome) tem o nome 'Ana'. O que acontece com `SELECT * FROM cliente WHERE nome = 'ana';`?",
+      "alternativas": [
+        "Encontra apenas se a coluna for gravada com LOWER",
+        "Não encontra nada; seria obrigatório usar UPPER nos dois lados",
+        "Dá erro, pois texto só é comparado com LIKE",
+        "Encontra 'Ana', pois essa collation não diferencia maiúsculas de minúsculas"
+      ],
+      "correta": 3,
+      "explicacao": "A sigla 'ci' (case insensitive) indica que a comparação ignora maiúsculas e minúsculas. UPPER/LOWER no WHERE só são necessários em collations que diferenciam (cs ou bin)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num sistema de notas fiscais, o número veio com zeros à esquerda. Qual é o resultado de `SELECT TRIM(LEADING '0' FROM '000450');`?",
+      "alternativas": [
+        "000450",
+        "45",
+        "450",
+        "4500"
+      ],
+      "correta": 2,
+      "explicacao": "LEADING remove só os zeros do começo. O zero do final fica. Com BOTH (padrão) também sairia o zero do fim e daria '45'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cadastro de clientes, o nome foi digitado com maiúsculas trocadas. Qual é o resultado de `SELECT CONCAT(UPPER(LEFT('mARIA', 1)), LOWER(SUBSTRING('mARIA', 2)));`?",
+      "alternativas": [
+        "Maria (só a inicial maiúscula)",
+        "MARIA (tudo maiúsculo)",
+        "maria (tudo minúsculo)",
+        "mARIA (sem mudança)"
+      ],
+      "correta": 0,
+      "explicacao": "LEFT pega 'm' e UPPER faz 'M'; SUBSTRING a partir da 2ª posição pega 'ARIA' e LOWER faz 'aria'. Juntando: 'Maria'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa aula sobre resto da divisão, aparece um dividendo negativo. Qual é o resultado de `SELECT MOD(-7, 3);` no MySQL?",
+      "alternativas": [
+        "-2",
+        "2",
+        "1",
+        "-1"
+      ],
+      "correta": 3,
+      "explicacao": "No MySQL o resto fica com o sinal do dividendo: −7 = 3 × (−2) − 1, então o resto é −1."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num controle de validade, calcula-se a véspera de 1º de março de 2024. Qual é o resultado de `SELECT DATE_SUB('2024-03-01', INTERVAL 1 DAY);`?",
+      "alternativas": [
+        "2024-02-28",
+        "2024-02-29",
+        "2024-02-30",
+        "2024-03-00"
+      ],
+      "correta": 1,
+      "explicacao": "2024 é ano bissexto, então fevereiro tem 29 dias. O MySQL considera isso automaticamente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na escola, a tabela `aluno` tem as colunas id_aluno, nome e apelido (que pode ser NULL). O que mostra `SELECT CONCAT(nome, ' (', apelido, ')') FROM aluno;` para um aluno sem apelido?",
+      "alternativas": [
+        "O nome seguido de ' ()'",
+        "NULL",
+        "Só o nome",
+        "O nome seguido de '(NULL)'"
+      ],
+      "correta": 1,
+      "explicacao": "Basta um argumento NULL para o CONCAT inteiro virar NULL. Usar IFNULL(apelido, '') ou COALESCE resolve."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na recepção de uma clínica, o sistema usa às vezes `NOW()` e às vezes `CURDATE()`.\n\nNa sua resposta:\n1. diga o que cada função devolve;\n2. dê um exemplo de situação em que CURDATE() é a mais adequada.",
+      "respostasAceitas": [
+        "NOW() devolve data e hora atuais; CURDATE() devolve só a data. CURDATE() serve, por exemplo, para listar as consultas marcadas para hoje (data sem hora)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) NOW = data + hora, CURDATE = só data; 2) qualquer exemplo coerente em que a hora não importa (consultas do dia, vencimentos, aniversários)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa padaria, a tabela `produto` tem as colunas id_produto, nome e preco. Considere a consulta `SELECT UPPER(nome) FROM produto;`.\n\nNa sua resposta:\n1. diga o que aparece no resultado;\n2. diga se os nomes gravados na tabela mudam.",
+      "respostasAceitas": [
+        "Mostra os nomes dos produtos todos em maiúsculas. A tabela não muda: a função só altera o que aparece na consulta."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nomes em maiúsculas; 2) os dados gravados continuam iguais (SELECT não altera dados)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre as funções `ROUND` e `TRUNCATE`, usando como exemplo o valor 8.76 com 1 casa decimal.\n\nNa sua resposta:\n1. diga o resultado de cada uma para 8.76 com 1 casa;\n2. explique por que os resultados são diferentes.",
+      "respostasAceitas": [
+        "ROUND(8.76, 1) = 8.8 e TRUNCATE(8.76, 1) = 8.7. ROUND arredonda olhando o dígito seguinte; TRUNCATE só corta o que sobra, sem arredondar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 8.8 e 8.7; 2) ROUND arredonda, TRUNCATE apenas corta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre `CEIL` e `FLOOR`, usando o número 3.2 como exemplo.\n\nNa sua resposta:\n1. diga o resultado de cada uma para 3.2;\n2. explique a regra de cada função.",
+      "respostasAceitas": [
+        "CEIL(3.2) = 4 e FLOOR(3.2) = 3. CEIL sempre arredonda para cima (próximo inteiro maior) e FLOOR sempre para baixo (inteiro menor)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 4 e 3; 2) CEIL para cima, FLOOR para baixo, independentemente da casa decimal."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de games, a tabela `cliente` tem as colunas id_cliente, nome e sobrenome. Considere a consulta `SELECT CONCAT(nome, ' ', sobrenome) AS nome_completo FROM cliente;`.\n\nNa sua resposta:\n1. diga o que a consulta mostra;\n2. explique para que serve o ' ' no meio.",
+      "respostasAceitas": [
+        "Mostra o nome completo de cada cliente, juntando nome e sobrenome numa coluna chamada nome_completo. O ' ' coloca um espaço entre eles; sem ele os dois ficariam grudados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) junta nome e sobrenome numa coluna com apelido nome_completo; 2) o espaço separa as palavras."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa biblioteca, a tabela `emprestimo` tem as colunas id_emprestimo, id_livro e data_emprestimo (DATE). Considere `SELECT id_emprestimo, DATE_FORMAT(data_emprestimo, '%d/%m/%Y') FROM emprestimo;`.\n\nNa sua resposta:\n1. diga o que a consulta mostra;\n2. explique o que significam %d, %m e %Y.",
+      "respostasAceitas": [
+        "Mostra cada empréstimo com a data no formato brasileiro (ex.: 27/11/2026). %d é o dia, %m o mês e %Y o ano com 4 dígitos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a data formatada dia/mês/ano; 2) significado dos três códigos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num hotel, a tabela `reserva` tem as colunas id_reserva, data_entrada e data_saida (DATE). Considere `SELECT id_reserva, DATEDIFF(data_saida, data_entrada) AS diarias FROM reserva;`.\n\nNa sua resposta:\n1. diga o que a coluna diarias mostra;\n2. diga o resultado para entrada em 10/12/2026 e saída em 14/12/2026.",
+      "respostasAceitas": [
+        "Mostra quantos dias há entre a entrada e a saída, ou seja, o número de diárias. Para 10/12 a 14/12 o resultado é 4."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) diferença em dias (diárias); 2) 4."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num pet shop, a tabela `animal` tem as colunas id_animal, nome e peso, e o peso está NULL em alguns animais. Considere `SELECT nome, IFNULL(peso, 0) FROM animal;`.\n\nNa sua resposta:\n1. diga o que aparece para um animal com peso NULL;\n2. diga o que aparece para um animal com peso 12.5.",
+      "respostasAceitas": [
+        "Para o animal com peso NULL aparece 0. Para o animal com peso 12.5 aparece o próprio 12.5, porque o IFNULL só troca quando o valor é NULL."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 0; 2) 12.5, sem alteração."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na escola, a tabela `aluno` tem as colunas id_aluno, nome e nota. Considere `SELECT nome, IF(nota >= 6, 'Aprovado', 'Recuperação') FROM aluno;`.\n\nNa sua resposta:\n1. explique como o IF decide o que mostrar;\n2. diga o que aparece para um aluno com nota 6 e para um com nota 4.5.",
+      "respostasAceitas": [
+        "O IF testa a condição nota >= 6: se for verdadeira mostra 'Aprovado', senão 'Recuperação'. Nota 6 mostra Aprovado; nota 4.5 mostra Recuperação."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) condição, valor se verdadeiro, valor se falso; 2) 6 → Aprovado (>= inclui o 6), 4.5 → Recuperação."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Considere `SELECT MOD(23, 4);`.\n\nNa sua resposta:\n1. diga o resultado;\n2. explique o que a função MOD calcula.",
+      "respostasAceitas": [
+        "O resultado é 3. MOD devolve o resto da divisão: 23 dividido por 4 dá 5 e sobram 3."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 3; 2) resto da divisão inteira."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa oficina, a tabela `cliente` tem as colunas id_cliente, nome e placa. Considere `SELECT nome, LEFT(placa, 3) FROM cliente;`.\n\nNa sua resposta:\n1. diga o que a segunda coluna mostra;\n2. diga o resultado para a placa 'ABC1D23'.",
+      "respostasAceitas": [
+        "Mostra os 3 primeiros caracteres da placa (as letras iniciais). Para 'ABC1D23' o resultado é 'ABC'."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) os 3 primeiros caracteres; 2) ABC."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No cadastro de uma academia, alguns nomes foram gravados com espaços sobrando, como '  Carla  '. Considere `SELECT TRIM(nome) FROM aluno;` (tabela `aluno` com id_aluno e nome).\n\nNa sua resposta:\n1. diga o que o TRIM faz;\n2. diga se os espaços entre as palavras de 'Carla Dias' são removidos.",
+      "respostasAceitas": [
+        "TRIM remove os espaços do começo e do fim do texto. Os espaços do meio, como entre 'Carla' e 'Dias', continuam."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) tira espaços das pontas; 2) não, o espaço interno fica."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num cinema, a tabela `filme` tem as colunas id_filme, titulo e duracao_min. Considere `SELECT titulo, CHAR_LENGTH(titulo) FROM filme;`.\n\nNa sua resposta:\n1. diga o que a segunda coluna mostra;\n2. diga o valor para o título 'Sol Alto'.",
+      "respostasAceitas": [
+        "Mostra a quantidade de caracteres de cada título. 'Sol Alto' tem 8 caracteres (o espaço também conta)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) número de caracteres do título; 2) 8, contando o espaço."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Considere `SELECT YEAR('2026-11-27'), MONTH('2026-11-27'), DAY('2026-11-27');`.\n\nNa sua resposta:\n1. diga os três valores devolvidos;\n2. explique para que servem essas funções.",
+      "respostasAceitas": [
+        "Devolve 2026, 11 e 27. Elas extraem uma parte da data (ano, mês e dia), por exemplo para filtrar ou agrupar por ano ou mês."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 2026, 11, 27; 2) extrair partes de uma data."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa clínica, a tabela `paciente` tem as colunas id_paciente, nome e email. Considere `SELECT LOWER(email) FROM paciente;`.\n\nNa sua resposta:\n1. diga o que a consulta mostra;\n2. explique por que padronizar e-mails em minúsculas é útil.",
+      "respostasAceitas": [
+        "Mostra os e-mails em letras minúsculas. Padronizar ajuda a comparar e evitar duplicados como 'Ana@x.com' e 'ana@x.com', que são o mesmo endereço."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) e-mails em minúsculas; 2) padronização/comparação/evitar duplicidade."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Considere `SELECT ABS(-35), SQRT(49), POW(5, 2);`.\n\nNa sua resposta:\n1. diga os três resultados;\n2. explique o que cada função faz.",
+      "respostasAceitas": [
+        "Resultados: 35, 7 e 25. ABS tira o sinal (valor absoluto), SQRT calcula a raiz quadrada e POW eleva o número a uma potência."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 35, 7, 25; 2) valor absoluto, raiz quadrada, potência."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de games, a tabela `pedido` tem as colunas id_pedido, data_pedido (DATE) e valor. Considere `SELECT * FROM pedido WHERE data_pedido = CURDATE();`.\n\nNa sua resposta:\n1. diga quais pedidos a consulta traz;\n2. explique por que é melhor usar CURDATE() em vez de digitar a data no comando.",
+      "respostasAceitas": [
+        "Traz os pedidos feitos hoje. Com CURDATE() a consulta serve para qualquer dia, sem precisar trocar a data no comando todo dia."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) pedidos de hoje; 2) a data é automática, a consulta é reaproveitável."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre `LEFT` e `RIGHT`, usando o texto 'Biblioteca' e a quantidade 4.\n\nNa sua resposta:\n1. diga o resultado de LEFT('Biblioteca', 4) e de RIGHT('Biblioteca', 4);\n2. explique de onde cada uma começa a contar.",
+      "respostasAceitas": [
+        "LEFT('Biblioteca', 4) = 'Bibl' e RIGHT('Biblioteca', 4) = 'teca'. LEFT pega do começo (esquerda) e RIGHT pega do final (direita)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Bibl e teca; 2) começo × final."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre `CONCAT` e `CONCAT_WS` quando um dos valores é NULL, usando `CONCAT('Rua A', NULL, 'Centro')` e `CONCAT_WS(', ', 'Rua A', NULL, 'Centro')`.\n\nNa sua resposta:\n1. diga o resultado de cada uma;\n2. explique por que os resultados são diferentes.",
+      "respostasAceitas": [
+        "CONCAT devolve NULL; CONCAT_WS devolve 'Rua A, Centro'. No CONCAT um NULL anula tudo; o CONCAT_WS ignora os valores NULL e usa o primeiro argumento como separador."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) NULL e 'Rua A, Centro'; 2) CONCAT propaga o NULL, CONCAT_WS pula NULLs."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre `LENGTH` e `CHAR_LENGTH` no MySQL, usando a palavra 'café' num banco utf8mb4.\n\nNa sua resposta:\n1. diga o que cada função conta;\n2. diga o resultado de cada uma para 'café' e por que são diferentes.",
+      "respostasAceitas": [
+        "LENGTH conta bytes e CHAR_LENGTH conta caracteres. Para 'café': CHAR_LENGTH = 4 e LENGTH = 5, porque o 'é' ocupa 2 bytes em utf8mb4."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) bytes × caracteres; 2) 5 e 4, por causa do acento ocupar 2 bytes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na academia, a tabela `aluno` tem as colunas id_aluno, nome e data_nascimento (DATE). Considere `SELECT nome, TIMESTAMPDIFF(YEAR, data_nascimento, CURDATE()) AS idade FROM aluno;`.\n\nNa sua resposta:\n1. diga o que a coluna idade mostra;\n2. explique por que essa forma é melhor que `YEAR(CURDATE()) - YEAR(data_nascimento)`.",
+      "respostasAceitas": [
+        "Mostra a idade em anos completos. Subtrair só os anos ignora se a pessoa já fez aniversário neste ano e pode dar um ano a mais; TIMESTAMPDIFF conta apenas anos completos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) idade em anos completos; 2) a subtração de anos erra para quem ainda não fez aniversário no ano."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num pet shop, a tabela `vacina` tem as colunas id_vacina, id_animal e data_aplicacao (DATE). Considere `SELECT id_animal, DATE_ADD(data_aplicacao, INTERVAL 30 DAY) AS reforco FROM vacina;`.\n\nNa sua resposta:\n1. diga o que a coluna reforco mostra;\n2. explique por que não basta somar 30 ao dia da data.",
+      "respostasAceitas": [
+        "Mostra a data 30 dias depois da aplicação, ou seja, a data do reforço. Somar 30 ao dia daria datas inválidas (como dia 45); o DATE_ADD trata a virada de mês e de ano."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) data da aplicação + 30 dias; 2) DATE_ADD ajusta mês/ano automaticamente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na biblioteca, a tabela `emprestimo` tem as colunas id_emprestimo, id_livro e data_emprestimo (DATE). Considere `SELECT id_emprestimo FROM emprestimo WHERE DATEDIFF(CURDATE(), data_emprestimo) > 14;`.\n\nNa sua resposta:\n1. diga quais empréstimos a consulta traz;\n2. explique o que aconteceria se as datas dentro do DATEDIFF fossem invertidas.",
+      "respostasAceitas": [
+        "Traz os empréstimos feitos há mais de 14 dias. Invertendo, o resultado do DATEDIFF ficaria negativo para empréstimos antigos e a condição > 14 não traria nenhum deles."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) empréstimos com mais de 14 dias; 2) invertido dá negativo e a consulta falha em achar os atrasados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na oficina, a tabela `os` tem as colunas id_os, valor_pecas (pode ser NULL) e valor_mao_obra. Compare `SELECT valor_pecas + valor_mao_obra FROM os;` com `SELECT IFNULL(valor_pecas, 0) + valor_mao_obra FROM os;`.\n\nNa sua resposta:\n1. diga o que cada consulta mostra para uma OS sem peças (NULL) e mão de obra 200;\n2. explique por que o IFNULL faz diferença.",
+      "respostasAceitas": [
+        "A primeira mostra NULL; a segunda mostra 200. Conta com NULL dá NULL, e o IFNULL troca o NULL por 0 antes da soma."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) NULL × 200; 2) NULL contamina a conta; IFNULL substitui por 0."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre `IFNULL` e `COALESCE`, usando o caso de um cliente com as colunas celular, telefone e email, todas podendo ser NULL.\n\nNa sua resposta:\n1. diga quantos valores cada função aceita;\n2. explique o que `COALESCE(celular, telefone, email)` mostra.",
+      "respostasAceitas": [
+        "IFNULL aceita só 2 valores; COALESCE aceita vários. COALESCE(celular, telefone, email) mostra o celular; se for NULL, o telefone; se também for NULL, o e-mail."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) IFNULL 2, COALESCE vários; 2) primeiro contato não nulo, na ordem."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na escola, a matrícula é um número (7, 123…), mas o boletim precisa mostrar sempre 6 dígitos. Considere `SELECT LPAD(matricula, 6, '0') FROM aluno;` (tabela `aluno` com id_aluno, nome e matricula).\n\nNa sua resposta:\n1. diga o que aparece para as matrículas 7 e 123;\n2. explique o que cada argumento do LPAD significa.",
+      "respostasAceitas": [
+        "Aparece 000007 e 000123. O primeiro argumento é o valor, o segundo é o tamanho final (6) e o terceiro é o caractere usado para completar à esquerda ('0')."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 000007 e 000123; 2) valor, tamanho total, caractere de preenchimento."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No cinema, a tabela `sessao` tem as colunas id_sessao, filme e inicio (DATETIME). Considere `SELECT filme, DATE_FORMAT(inicio, '%d/%m às %H:%i') FROM sessao;`.\n\nNa sua resposta:\n1. diga como aparece uma sessão que começa em 2026-12-05 19:30:00;\n2. explique por que é melhor formatar na consulta em vez de gravar a data como texto.",
+      "respostasAceitas": [
+        "Aparece '05/12 às 19:30'. Gravando como DATETIME, o banco consegue ordenar, comparar e calcular com as datas; o formato fica só na exibição."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 05/12 às 19:30; 2) tipo de data permite cálculos e ordenação; texto não."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na loja de games, a tabela `venda` tem as colunas id_venda, valor e data_venda (DATE). Considere `SELECT * FROM venda WHERE YEAR(data_venda) = 2026 AND MONTH(data_venda) = 11;`.\n\nNa sua resposta:\n1. diga quais vendas a consulta traz;\n2. explique por que usar só `MONTH(data_venda) = 11` não bastaria.",
+      "respostasAceitas": [
+        "Traz as vendas de novembro de 2026. Só com MONTH = 11 viriam as vendas de novembro de todos os anos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) vendas de nov/2026; 2) sem o ano mistura novembros de anos diferentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na clínica, a tabela `paciente` tem as colunas id_paciente, nome e telefone (texto como '(11) 98765-4321'). Considere `SELECT REPLACE(REPLACE(REPLACE(REPLACE(telefone, '(', ''), ')', ''), '-', ''), ' ', '') FROM paciente;`.\n\nNa sua resposta:\n1. diga o que aparece para '(11) 98765-4321';\n2. explique como as funções aninhadas são executadas.",
+      "respostasAceitas": [
+        "Aparece '11987654321'. A função mais de dentro roda primeiro (tira o '('), e cada REPLACE de fora recebe o resultado da anterior e tira mais um caractere: ')', '-' e o espaço."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só os dígitos; 2) execução de dentro para fora, cada uma sobre o resultado da anterior."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No hotel, a tabela `reserva` tem as colunas id_reserva, hospede e status ('C', 'P' ou 'X'). Considere:\n`SELECT hospede, CASE status WHEN 'C' THEN 'Confirmada' WHEN 'P' THEN 'Pendente' ELSE 'Cancelada' END AS situacao FROM reserva;`\n\nNa sua resposta:\n1. diga o que aparece para cada código de status;\n2. explique para que serve o ELSE.",
+      "respostasAceitas": [
+        "'C' mostra Confirmada, 'P' mostra Pendente e qualquer outro (como 'X') mostra Cancelada. O ELSE define o valor quando nenhum WHEN combina; sem ELSE apareceria NULL."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) C → Confirmada, P → Pendente, X → Cancelada; 2) ELSE cobre os demais casos (sem ele, NULL)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na padaria, a tabela `produto` tem as colunas id_produto, nome e preco (DECIMAL). Considere `SELECT nome, ROUND(preco * 0.85, 2) AS preco_promocional FROM produto;`.\n\nNa sua resposta:\n1. diga o que a conta preco * 0.85 representa;\n2. explique por que o ROUND com 2 é usado.",
+      "respostasAceitas": [
+        "preco * 0.85 é o preço com 15% de desconto. O ROUND(…, 2) deixa o valor com 2 casas decimais, como dinheiro (centavos)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) desconto de 15%; 2) arredondar para centavos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Considere `SELECT SUBSTRING('Desenvolvimento', 4, 6);`.\n\nNa sua resposta:\n1. diga o resultado;\n2. explique o que significam os números 4 e 6.",
+      "respostasAceitas": [
+        "O resultado é 'envolv'. O 4 é a posição inicial (a contagem começa em 1) e o 6 é a quantidade de caracteres pegos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) envolv; 2) posição inicial (base 1) e quantidade."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na academia, a tabela `aluno` tem as colunas id_aluno, nome e data_nascimento (DATE). Considere `SELECT nome FROM aluno WHERE MONTH(data_nascimento) = MONTH(CURDATE()) AND DAY(data_nascimento) = DAY(CURDATE());`.\n\nNa sua resposta:\n1. diga quais alunos a consulta traz;\n2. explique por que não se usa `data_nascimento = CURDATE()`.",
+      "respostasAceitas": [
+        "Traz os alunos que fazem aniversário hoje. data_nascimento = CURDATE() compararia também o ano, e só acharia quem nasceu hoje."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) aniversariantes do dia; 2) a comparação direta inclui o ano."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Considere `SELECT CEIL(23 / 5);` usado para saber quantas vans de 5 lugares são precisas para levar 23 alunos numa excursão da escola.\n\nNa sua resposta:\n1. diga o resultado;\n2. explique por que CEIL é a função certa aqui, e não ROUND ou FLOOR.",
+      "respostasAceitas": [
+        "O resultado é 5. 23 / 5 = 4.6 e não dá para usar parte de uma van: com 4 vans sobrariam 3 alunos. CEIL arredonda sempre para cima; FLOOR daria 4, e ROUND acerta aqui por acaso, mas com 21 alunos (4.2) daria 4 e faltaria lugar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 5; 2) é preciso arredondar sempre para cima para caber todos; FLOOR dá 4 e ROUND falha quando a parte decimal é menor que .5."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de games, o sorteio de brindes usa `SELECT nome FROM cliente ORDER BY RAND() LIMIT 1;` (tabela `cliente` com id_cliente e nome).\n\nNa sua resposta:\n1. diga o que a consulta faz;\n2. diga se o resultado é sempre o mesmo ao rodar várias vezes e por quê.",
+      "respostasAceitas": [
+        "Embaralha os clientes em ordem aleatória e mostra só o primeiro: sorteia um cliente. O resultado muda a cada execução, porque RAND() gera números novos toda vez."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sorteia um cliente; 2) não, RAND muda a cada execução."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na biblioteca, a tabela `livro` tem as colunas id_livro, titulo e autor. Considere `SELECT CONCAT(UPPER(LEFT(autor, 1)), '. ', titulo) FROM livro;`.\n\nNa sua resposta:\n1. diga o que aparece para o autor 'machado' e o título 'Contos';\n2. explique em que ordem as funções são executadas.",
+      "respostasAceitas": [
+        "Aparece 'M. Contos'. Primeiro LEFT pega 'm', depois UPPER deixa 'M', e por fim o CONCAT junta com '. ' e o título."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) M. Contos; 2) de dentro para fora: LEFT, UPPER, CONCAT."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na academia, a tabela `frequencia` tem as colunas id_frequencia, id_aluno e entrada (DATETIME). Compare `WHERE entrada = CURDATE()` com `WHERE DATE(entrada) = CURDATE()`.\n\nNa sua resposta:\n1. explique por que a primeira quase não traz linhas;\n2. explique o que a segunda faz de diferente.",
+      "respostasAceitas": [
+        "Na primeira, CURDATE() é comparado como hoje 00:00:00, então só bate com entradas exatamente à meia-noite. Na segunda, DATE() tira a hora da coluna e compara só a data, trazendo todas as entradas de hoje."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) CURDATE vira meia-noite ao comparar com DATETIME; 2) DATE() descarta a hora."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na padaria, a consulta `SELECT nome, preco * 0.9 AS promo FROM produto WHERE promo < 5;` (tabela `produto` com id_produto, nome e preco) dá o erro 'Unknown column promo'.\n\nNa sua resposta:\n1. explique por que o MySQL não reconhece promo no WHERE;\n2. diga como resolver sem mudar o resultado esperado.",
+      "respostasAceitas": [
+        "O WHERE é processado antes do SELECT dar os apelidos, então promo ainda não existe. Resolve repetindo a expressão no WHERE (preco * 0.9 < 5)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ordem de execução: WHERE antes do apelido; 2) repetir a expressão no WHERE (ou outra solução válida, como HAVING ou subconsulta)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na escola, a tabela `aluno` tem as colunas id_aluno, nome e media. Considere:\n`CASE WHEN media >= 5 THEN 'Aprovado' WHEN media >= 9 THEN 'Destaque' ELSE 'Reprovado' END`\n\nNa sua resposta:\n1. diga o que aparece para um aluno com média 9.5 e explique por quê;\n2. explique como a ordem dos WHEN deveria ficar para 'Destaque' funcionar.",
+      "respostasAceitas": [
+        "Aparece 'Aprovado', porque o CASE para no primeiro WHEN verdadeiro e 9.5 >= 5 já é verdadeiro. O WHEN media >= 9 precisa vir antes do media >= 5."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Aprovado, CASE para no primeiro verdadeiro; 2) condição mais restrita primeiro."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na loja de games, a tabela `venda` (id_venda, valor, data_venda DATE) tem um índice em data_venda e milhões de linhas. Compare `WHERE YEAR(data_venda) = 2026` com `WHERE data_venda BETWEEN '2026-01-01' AND '2026-12-31'`.\n\nNa sua resposta:\n1. diga se as duas trazem as mesmas vendas;\n2. explique por que a segunda costuma ser mais rápida.",
+      "respostasAceitas": [
+        "Sim, as duas trazem as vendas de 2026. Na primeira o MySQL precisa calcular YEAR() em cada linha e não usa bem o índice; na segunda a coluna é comparada direto e o índice pode ser usado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mesmo resultado; 2) função na coluna impede o uso direto do índice."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No cadastro de uma clínica, a coluna `nome` (tabela `paciente`, com id_paciente e nome) tem valores como '  joão DA silva '. Considere `SELECT CONCAT(UPPER(LEFT(TRIM(nome), 1)), LOWER(SUBSTRING(TRIM(nome), 2))) FROM paciente;`.\n\nNa sua resposta:\n1. diga o que aparece para '  joão DA silva ';\n2. explique por que o TRIM precisa estar dentro do LEFT e do SUBSTRING.",
+      "respostasAceitas": [
+        "Aparece 'João da silva'. Sem o TRIM, o LEFT pegaria um espaço como primeira letra e o SUBSTRING começaria errado; por isso os espaços são tirados antes de recortar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 'João da silva' (só a 1ª letra maiúscula); 2) os espaços iniciais atrapalhariam o recorte."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num hotel, o sistema compara duas formas de medir a estadia. Considere `SELECT DATEDIFF('2026-12-11 10:00:00', '2026-12-10 22:00:00'), TIMESTAMPDIFF(HOUR, '2026-12-10 22:00:00', '2026-12-11 10:00:00');`.\n\nNa sua resposta:\n1. diga os dois resultados;\n2. explique por que um mostra 1 e o outro um número bem maior, e qual usar para cobrar por hora.",
+      "respostasAceitas": [
+        "DATEDIFF dá 1 e TIMESTAMPDIFF dá 12. DATEDIFF ignora as horas e conta só a troca de data; TIMESTAMPDIFF com HOUR conta as horas completas. Para cobrar por hora usa-se TIMESTAMPDIFF."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 1 e 12; 2) DATEDIFF só olha as datas; TIMESTAMPDIFF considera o horário na unidade pedida."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma pessoa nasceu em 15/12/2010. Hoje é 27/11/2026. Compare `TIMESTAMPDIFF(YEAR, '2010-12-15', CURDATE())` com `YEAR(CURDATE()) - YEAR('2010-12-15')`.\n\nNa sua resposta:\n1. diga o resultado de cada expressão;\n2. explique qual está certa para a idade e por quê.",
+      "respostasAceitas": [
+        "TIMESTAMPDIFF dá 15 e a subtração de anos dá 16. A certa é 15: a pessoa só completa 16 em 15/12, e TIMESTAMPDIFF conta apenas anos completos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 15 e 16; 2) TIMESTAMPDIFF, pois considera se o aniversário já passou."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, um sistema mostra `LPAD(codigo, 4, '0')` para códigos de turma (tabela `turma` com id_turma e codigo). Um dia apareceu o código 12345 e a tela mostrou '1234'.\n\nNa sua resposta:\n1. explique por que o LPAD mostrou '1234';\n2. diga que risco isso traz para quem consulta a turma.",
+      "respostasAceitas": [
+        "Quando o valor é maior que o tamanho pedido, o LPAD corta o texto e fica só com os primeiros caracteres. O risco é mostrar um código errado, que pode ser confundido com outra turma (a 1234)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) LPAD trunca quando o texto é maior que o tamanho; 2) código exibido errado/confusão com outro registro."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Funções nativas (data, matemáticas e texto)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No pet shop, a tabela `cliente` tem as colunas id_cliente, nome e cidade. Considere `SELECT CONCAT_WS(' - ', nome, cidade), CONCAT(nome, ' - ', cidade) FROM cliente;` para um cliente com cidade NULL.\n\nNa sua resposta:\n1. diga o que cada coluna mostra para esse cliente;\n2. explique qual das duas é mais segura para montar etiquetas e por quê.",
+      "respostasAceitas": [
+        "CONCAT_WS mostra só o nome (sem o separador sobrando); CONCAT mostra NULL. CONCAT_WS é mais segura, porque ignora os NULL e a etiqueta não fica em branco."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só o nome × NULL; 2) CONCAT_WS, pois pula valores NULL."
+    }
+  ]
+}
