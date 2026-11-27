@@ -1,0 +1,2437 @@
+{
+  "nome": "Banco de Dados — Normalização e dicionário de dados (a revisar)",
+  "materia": "Banco de Dados",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No estudo de banco de dados, o que significa redundância de dados?",
+      "alternativas": [
+        "O mesmo dado guardado repetidas vezes sem necessidade",
+        "Uma cópia de segurança do banco feita todos os dias",
+        "Uma ligação entre duas tabelas por chave estrangeira",
+        "Um campo que pode ficar vazio no cadastro"
+      ],
+      "correta": 0,
+      "explicacao": "Redundância é repetir a mesma informação em vários lugares. Backup não é redundância indesejada; FK e campo opcional são outros assuntos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é o principal objetivo de normalizar as tabelas de um banco de dados?",
+      "alternativas": [
+        "Deixar todas as consultas sempre mais rápidas",
+        "Organizar os dados para diminuir repetições e evitar anomalias",
+        "Juntar todas as informações numa única tabela grande",
+        "Trocar todos os tipos de dados por texto"
+      ],
+      "correta": 1,
+      "explicacao": "A normalização separa os dados em tabelas bem organizadas para reduzir redundância e evitar anomalias de inserção, atualização e exclusão. Ela não garante que toda consulta fique mais rápida."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa papelaria, a tabela `venda` tem as colunas id_venda, data_venda, nome_cliente, telefone_cliente e valor. A cliente Ana já fez 30 compras, então o telefone dela aparece em 30 linhas. Ana trocou de número. Qual problema essa estrutura causa?",
+      "alternativas": [
+        "Não é possível alterar o telefone de quem já comprou",
+        "O banco apaga automaticamente as compras antigas da cliente",
+        "É preciso alterar 30 linhas e, se faltar uma, a cliente fica com telefones diferentes",
+        "O valor das vendas antigas muda junto com o telefone"
+      ],
+      "correta": 2,
+      "explicacao": "Como o telefone está repetido em cada venda, a troca exige alterar todas as linhas. Se alguma ficar de fora, o banco passa a ter informações contraditórias (anomalia de atualização)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "nome-anomalia",
+      "enunciado": "Numa escola de música, a tabela `aula` guarda id_aula, data, nome_professor e telefone_professor. Ao trocar o telefone de um professor, a secretaria mudou só algumas linhas e o professor ficou com dois números diferentes no banco. Como se chama esse problema?",
+      "alternativas": [
+        "Erro de chave primária",
+        "Anomalia de inserção",
+        "Anomalia de exclusão",
+        "Anomalia de atualização"
+      ],
+      "correta": 3,
+      "explicacao": "Quando uma alteração precisa ser feita em várias linhas e fica pela metade, gerando dados contraditórios, temos anomalia de atualização."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "nome-anomalia",
+      "enunciado": "Num curso livre, a tabela `matricula` tem as colunas id_matricula, nome_aluno, nome_curso e carga_horaria_curso. A escola criou o curso de Robótica, mas ele só pode ser cadastrado quando algum aluno se matricular. Como se chama esse problema?",
+      "alternativas": [
+        "Anomalia de atualização",
+        "Anomalia de inserção",
+        "Anomalia de exclusão",
+        "Dependência transitiva"
+      ],
+      "correta": 1,
+      "explicacao": "Não conseguir cadastrar um dado (o curso) sem precisar de outro (um aluno) é anomalia de inserção."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "nome-anomalia",
+      "enunciado": "Numa biblioteca, a tabela `emprestimo` tem id_emprestimo, data, nome_leitor, titulo_livro e autor_livro. O único empréstimo de um livro raro foi apagado e, com ele, o banco perdeu o título e o autor desse livro. Como se chama esse problema?",
+      "alternativas": [
+        "Anomalia de atualização",
+        "Anomalia de inserção",
+        "Anomalia de exclusão",
+        "Valor não atômico"
+      ],
+      "correta": 2,
+      "explicacao": "Ao apagar uma linha, perdeu-se uma informação que deveria continuar existindo (os dados do livro): é anomalia de exclusão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma pet shop guarda tudo na tabela `atendimento` (id_atendimento, data, nome_dono, telefone_dono, nome_pet, servico, valor). Qual mudança resolve melhor a repetição dos dados do dono?",
+      "alternativas": [
+        "Transformar telefone_dono em um campo opcional",
+        "Criar mais colunas para guardar um segundo telefone do dono",
+        "Apagar os atendimentos antigos de cada dono",
+        "Criar a tabela `dono` e guardar em `atendimento` só o id do dono"
+      ],
+      "correta": 3,
+      "explicacao": "Separando o dono numa tabela própria, nome e telefone ficam num lugar só; o atendimento referencia o dono por chave estrangeira."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma loja de roupas tem a tabela `produto_estoque` (id_produto, nome_produto, nome_fornecedor, cnpj_fornecedor). Um fornecedor ainda não entregou nenhum produto, mas a loja quer deixá-lo cadastrado. Por que isso é difícil nessa estrutura?",
+      "alternativas": [
+        "Os dados do fornecedor só existem dentro de uma linha de produto",
+        "A tabela não aceita CNPJ com mais de 11 dígitos",
+        "O fornecedor precisa ter pelo menos dez produtos",
+        "A chave primária deveria ser o nome do fornecedor"
+      ],
+      "correta": 0,
+      "explicacao": "Como fornecedor não tem tabela própria, para cadastrá-lo seria preciso inventar um produto: é a anomalia de inserção."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `consulta` de uma clínica (id_consulta, data, nome_medico, especialidade_medico, nome_paciente), o Dr. Paulo atendeu uma única consulta. Se essa consulta for apagada, o que acontece?",
+      "alternativas": [
+        "O banco recusa a exclusão porque o médico ficaria sem consulta",
+        "Perde-se a informação de que o Dr. Paulo existe e qual é a especialidade dele",
+        "A especialidade do médico passa para outra consulta",
+        "Nada se perde, pois a consulta não guarda dados do médico"
+      ],
+      "correta": 1,
+      "explicacao": "Os dados do médico só estão na linha da consulta. Apagando-a, perde-se o cadastro do médico: anomalia de exclusão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em linguagem simples, o que quer dizer \"a coluna nome depende funcionalmente da coluna cpf\"?",
+      "alternativas": [
+        "A coluna nome tem de ser chave estrangeira",
+        "Sabendo o nome, dá para descobrir o CPF de qualquer pessoa",
+        "As duas colunas precisam ter o mesmo tamanho",
+        "Sabendo o CPF, dá para saber qual é o nome"
+      ],
+      "correta": 3,
+      "explicacao": "Dependência funcional cpf → nome: cada CPF corresponde a um único nome. O contrário não vale, pois pode haver nomes iguais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `livro` (isbn, titulo, editora, ano), cada ISBN identifica um único livro. Qual afirmação descreve corretamente uma dependência funcional dessa tabela?",
+      "alternativas": [
+        "O título depende do ISBN, pois cada ISBN tem um único título",
+        "O ISBN depende do ano, pois cada ano tem um único ISBN",
+        "A editora determina o título, pois cada editora tem um livro",
+        "O ano determina a editora, pois cada ano tem uma editora"
+      ],
+      "correta": 0,
+      "explicacao": "isbn → titulo: conhecido o ISBN, o título é único. As outras afirmações são falsas: num mesmo ano e numa mesma editora existem vários livros."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa tabela `aluno` com as colunas matricula, nome, data_nascimento e cidade, existem dois alunos chamados \"Lucas Souza\" de cidades diferentes. O que isso mostra?",
+      "alternativas": [
+        "A tabela está errada, pois nomes não podem se repetir",
+        "A coluna cidade deveria ser a chave primária da tabela",
+        "A coluna nome não determina a cidade, então nome → cidade não é dependência funcional",
+        "Matrícula não determina o nome do aluno"
+      ],
+      "correta": 2,
+      "explicacao": "Se o mesmo nome aparece com cidades diferentes, o nome não determina a cidade. Já a matrícula continua determinando nome e cidade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `entrega` de uma transportadora (id_entrega, cep_destino, cidade_destino, peso), sempre que o CEP se repete a cidade também é a mesma. Qual dependência funcional aparece e entre quais colunas?",
+      "alternativas": [
+        "peso → cidade_destino, pois o peso muda conforme a cidade",
+        "id_entrega → cep_destino, a única dependência que existe",
+        "cidade_destino → cep_destino, pois cada cidade tem um único CEP",
+        "cep_destino → cidade_destino, entre duas colunas que não são a chave"
+      ],
+      "correta": 3,
+      "explicacao": "O CEP determina a cidade, mas a cidade não determina o CEP (uma cidade tem muitos CEPs). Como nenhum dos dois é a chave, essa dependência é transitiva (id_entrega → cep → cidade)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual regra define a Primeira Forma Normal (1FN)?",
+      "alternativas": [
+        "Nenhuma coluna pode depender de outra coluna que não é chave",
+        "Toda tabela precisa ter pelo menos uma chave estrangeira",
+        "Cada campo guarda um único valor e não há grupos repetidos",
+        "As colunas devem depender da chave composta inteira"
+      ],
+      "correta": 2,
+      "explicacao": "1FN: valores atômicos (indivisíveis) e sem grupos repetidos. As outras frases lembram a 3FN e a 2FN."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `cliente` de uma farmácia, a coluna telefones tem valores como \"11 98888-1111, 11 3222-4444\". Qual forma normal está sendo violada?",
+      "alternativas": [
+        "1FN",
+        "2FN",
+        "3FN",
+        "Nenhuma, a tabela está correta"
+      ],
+      "correta": 0,
+      "explicacao": "Guardar vários telefones numa mesma célula quebra a regra do valor atômico da 1FN."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `aluno` de uma academia tem as colunas id_aluno, nome, modalidade1, modalidade2 e modalidade3. Qual o problema dessa estrutura?",
+      "alternativas": [
+        "A tabela tem colunas demais para a 3FN",
+        "É um grupo repetido, o que viola a 1FN",
+        "Os nomes das colunas usam números, o que o MySQL proíbe",
+        "Falta uma chave composta para a 2FN"
+      ],
+      "correta": 1,
+      "explicacao": "modalidade1, modalidade2, modalidade3 são o mesmo dado repetido em colunas: grupo repetido, que a 1FN proíbe. E se o aluno fizer quatro modalidades?"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma escola de idiomas guarda na tabela `aluno` (id_aluno, nome, idiomas) valores como \"inglês; espanhol\". Qual é a correção mais adequada para atender à 1FN?",
+      "alternativas": [
+        "Criar as colunas idioma1, idioma2 e idioma3 na tabela aluno",
+        "Criar uma tabela à parte com uma linha para cada idioma de cada aluno",
+        "Trocar o separador \";\" por vírgula na coluna idiomas",
+        "Aumentar o tamanho do campo idiomas para caber mais texto"
+      ],
+      "correta": 1,
+      "explicacao": "Cada idioma deve virar uma linha numa tabela própria (ex.: aluno_idioma com id_aluno e idioma). Criar idioma1, idioma2… troca um problema por outro (grupo repetido)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `pedido` de uma lanchonete, a coluna itens guarda \"2 X-burguer, 1 suco, 1 batata\". Qual dificuldade essa estrutura traz?",
+      "alternativas": [
+        "Fica difícil somar quantos sucos foram vendidos no mês",
+        "O pedido não pode ter valor total calculado",
+        "O MySQL não deixa guardar vírgulas em VARCHAR",
+        "Cada pedido só pode ter um cliente"
+      ],
+      "correta": 0,
+      "explicacao": "Com vários itens numa célula (fora da 1FN), contar ou filtrar por produto exige separar texto. Com uma linha por item, basta somar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `funcionario` de uma oficina, a coluna endereco guarda \"Rua das Flores, 120, Centro, Campinas\". A gerência precisa listar os funcionários por bairro. O que a normalização recomenda?",
+      "alternativas": [
+        "Guardar o endereço na tabela de serviços da oficina",
+        "Manter tudo junto e usar letras maiúsculas",
+        "Criar uma coluna endereco2 para um segundo endereço",
+        "Separar o endereço em campos como rua, número, bairro e cidade"
+      ],
+      "correta": 3,
+      "explicacao": "Para buscar por bairro, o endereço precisa ser dividido em partes atômicas. Assim cada campo guarda um único dado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `turma` (id_turma, nome_turma, alunos) guarda na coluna alunos uma lista de nomes. Um analista propôs trocar por alunos_1 até alunos_40. Por que a proposta continua fora da 1FN?",
+      "alternativas": [
+        "Porque as colunas novas precisariam ser chaves primárias",
+        "Porque 40 colunas ultrapassam o limite do MySQL",
+        "Continua sendo um grupo repetido, só que espalhado em várias colunas",
+        "Porque nomes de alunos nunca podem ser guardados em turma"
+      ],
+      "correta": 2,
+      "explicacao": "Colunas numeradas do mesmo dado são grupo repetido. O certo é uma tabela de matrícula com uma linha por aluno da turma."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual das tabelas abaixo está em desacordo com a 1FN?",
+      "alternativas": [
+        "`veiculo` (placa, modelo, acessorios) com acessorios = \"ar, som, alarme\"",
+        "`veiculo` (placa, modelo, ano) com ano = 2020",
+        "`cliente` (id_cliente, nome, cpf) com cpf = \"12345678900\"",
+        "`peca` (id_peca, nome, preco) com preco = 89.90"
+      ],
+      "correta": 0,
+      "explicacao": "A coluna acessorios guarda três valores numa célula. As demais guardam um valor só por campo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em que ordem as formas normais costumam ser aplicadas?",
+      "alternativas": [
+        "2FN, depois 1FN, depois 3FN",
+        "3FN, depois 2FN, depois 1FN",
+        "1FN, depois 2FN, depois 3FN",
+        "Qualquer ordem, pois são independentes"
+      ],
+      "correta": 2,
+      "explicacao": "Cada forma normal exige a anterior: para estar na 2FN a tabela precisa estar na 1FN, e para a 3FN, na 2FN."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma tabela está na 3FN. O que se pode afirmar sobre ela?",
+      "alternativas": [
+        "Ela não pode ter colunas do tipo texto",
+        "Ela não pode ter chave estrangeira",
+        "Ela tem obrigatoriamente uma chave composta",
+        "Ela também está na 1FN e na 2FN"
+      ],
+      "correta": 3,
+      "explicacao": "As formas normais são cumulativas: estar na 3FN significa já atender 1FN e 2FN."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que a normalização ajuda a manter os dados consistentes (sem contradições)?",
+      "alternativas": [
+        "Porque o banco passa a ter menos tabelas",
+        "Porque cada informação passa a ser guardada em um só lugar",
+        "Porque proíbe o uso de chaves estrangeiras",
+        "Porque obriga todos os campos a serem de texto"
+      ],
+      "correta": 1,
+      "explicacao": "Com cada dado num só lugar, uma alteração é feita uma vez e não há cópias divergentes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma sorveteria registra vendas na tabela `venda` (id_venda, data, sabor, preco_sabor). O preço de um sabor foi reajustado e o dono quer mudar o preço em todas as linhas antigas também. Qual o risco disso, além do trabalho de alterar muitas linhas?",
+      "alternativas": [
+        "Perder o preço que realmente foi cobrado nas vendas antigas",
+        "O banco passar a aceitar sabores repetidos",
+        "As vendas antigas serem apagadas automaticamente",
+        "O sabor deixar de ser atômico na tabela"
+      ],
+      "correta": 0,
+      "explicacao": "Aqui o preço da venda é um dado histórico. Separar o sabor numa tabela é bom, mas a venda pode guardar o preço cobrado naquele dia; reescrevê-lo apaga o histórico."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas situações é um exemplo de redundância de dados?",
+      "alternativas": [
+        "O id do cliente guardado no pedido como chave estrangeira",
+        "O nome da cidade do cliente repetido em cada pedido que ele faz",
+        "Cada pedido ter um número de identificação diferente",
+        "A tabela de produtos ter uma coluna de preço"
+      ],
+      "correta": 1,
+      "explicacao": "Repetir o nome da cidade em cada pedido é guardar o mesmo dado várias vezes. Guardar só o id (FK) é a forma normal de ligar tabelas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de normalizar, uma loja passou a guardar no pedido apenas o id_cliente, ligado à tabela `cliente`. Isso também é uma repetição, já que o id aparece em vários pedidos?",
+      "alternativas": [
+        "Não, porque o MySQL apaga as cópias da chave estrangeira",
+        "Sim, e por isso o id_cliente deveria ser removido do pedido",
+        "Sim, o certo seria repetir também o nome do cliente",
+        "Não é problema: a FK é pequena e não muda, e os dados do cliente ficam num lugar só"
+      ],
+      "correta": 3,
+      "explicacao": "A chave estrangeira repete só o identificador, que serve de ligação. Os dados descritivos (nome, telefone) ficam numa única linha da tabela cliente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma oficina tem `servico` (id_servico, placa, modelo_carro, nome_dono, descricao, valor). Dois atendentes digitaram o modelo do mesmo carro como \"Gol\" e \"gol 1.0\". Qual é a causa principal dessa inconsistência?",
+      "alternativas": [
+        "A placa deveria ser guardada em letras minúsculas",
+        "A coluna valor deveria ser do tipo INT",
+        "Os dados do carro são repetidos em cada serviço em vez de ficarem numa tabela própria",
+        "Falta um índice na coluna descricao"
+      ],
+      "correta": 2,
+      "explicacao": "Repetindo o modelo em cada serviço, cada digitação pode sair diferente. Com uma tabela `veiculo`, o modelo é digitado uma vez só."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa tabela `contato` (id_contato, nome, email), um mesmo e-mail nunca pertence a duas pessoas e cada pessoa tem um único e-mail. Qual conclusão está correta?",
+      "alternativas": [
+        "O e-mail determina o contato, podendo até servir como chave candidata",
+        "O e-mail precisa ser separado em outra tabela para cumprir a 1FN",
+        "O nome determina o e-mail, pois nomes não se repetem",
+        "A tabela tem um grupo repetido na coluna email"
+      ],
+      "correta": 0,
+      "explicacao": "Se o e-mail é único, conhecê-lo identifica o contato (email → id, nome). Por isso ele é chave candidata (pode receber UNIQUE)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `ingresso` de um cinema (id_ingresso, id_sessao, filme, horario, sala, poltrona), o mesmo id_sessao sempre aparece com o mesmo filme, horário e sala. O que isso indica?",
+      "alternativas": [
+        "A tabela está na 3FN, pois todas as colunas têm valor atômico",
+        "A poltrona depende do filme e deveria ir para a tabela `filme`",
+        "O id_ingresso depende da sala e deveria ser chave estrangeira",
+        "Filme, horário e sala dependem de id_sessao e deveriam ficar numa tabela `sessao`"
+      ],
+      "correta": 3,
+      "explicacao": "id_sessao → filme, horario, sala, e id_sessao não é a chave: é dependência transitiva. Esses dados vão para a tabela sessao."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma tabela que guarda, em cada linha, dados de assuntos diferentes (cliente, produto e pagamento juntos) tende a ter qual problema?",
+      "alternativas": [
+        "Poucas linhas, o que deixa o banco sem informação",
+        "Muita repetição de dados e anomalias ao inserir, alterar e excluir",
+        "Impossibilidade de usar chave primária",
+        "Proibição de usar o tipo DECIMAL nas colunas"
+      ],
+      "correta": 1,
+      "explicacao": "Misturar vários assuntos numa tabela faz os dados se repetirem e causa anomalias. A normalização separa cada assunto em sua tabela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `cadastro` de uma ONG tem a coluna nome_completo. A coordenação quer ordenar os voluntários pelo sobrenome com frequência. Qual decisão faz mais sentido?",
+      "alternativas": [
+        "Guardar o nome completo em outra tabela com chave composta",
+        "Manter nome_completo e criar nome_completo2 para o sobrenome",
+        "Separar em nome e sobrenome, pois o dado é usado em partes",
+        "Transformar nome_completo em chave primária"
+      ],
+      "correta": 2,
+      "explicacao": "Atomicidade depende do uso: se o sobrenome é usado sozinho, vale separar em dois campos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas tabelas tem apenas valores atômicos?",
+      "alternativas": [
+        "`produto` (id_produto, nome, fotos) com fotos = \"f1.jpg; f2.jpg\"",
+        "`produto` (id_produto, nome, cores) com cores = \"azul/verde\"",
+        "`produto` (id_produto, nome, tamanhos) com tamanhos = \"P, M, G\"",
+        "`produto` (id_produto, nome, preco, estoque)"
+      ],
+      "correta": 3,
+      "explicacao": "Na primeira cada campo tem um único valor. As outras guardam listas numa célula."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num salão de beleza, a tabela `agendamento` tem (id_agendamento, data, nome_cliente, servicos, valor_total), com servicos = \"corte; escova\". A dona quer saber quanto cada serviço rendeu no mês. Qual é a raiz do problema para obter esse número?",
+      "alternativas": [
+        "A coluna data deveria ser do tipo VARCHAR",
+        "Vários serviços na mesma célula, sem o valor de cada serviço separado",
+        "O valor_total deveria estar em outra tabela de clientes",
+        "Falta chave estrangeira para a tabela de datas"
+      ],
+      "correta": 1,
+      "explicacao": "Sem uma linha por serviço (com o seu valor), não dá para somar por serviço. Uma tabela item_agendamento resolve e deixa a estrutura na 1FN."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é uma desvantagem possível de normalizar demais um banco de dados?",
+      "alternativas": [
+        "Consultas passam a precisar juntar mais tabelas (mais JOINs)",
+        "Os dados passam a ficar repetidos em vários lugares",
+        "O banco não consegue mais usar chave primária",
+        "As anomalias de atualização aumentam"
+      ],
+      "correta": 0,
+      "explicacao": "Com muitas tabelas, montar uma informação completa exige mais JOINs. As outras opções são o contrário do que a normalização faz."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma loja de bicicletas guarda tudo numa tabela `venda` com as colunas id_venda, data, nome_cliente, telefone_cliente, modelo_bike e valor. Um cliente frequente aparece em dezenas de linhas.\n\nNa sua resposta:\n1. explique o que é redundância usando esse exemplo;\n2. cite um problema que essa redundância pode causar.",
+      "respostasAceitas": [
+        "Redundância é o mesmo dado repetido: nome e telefone do cliente aparecem em cada venda. Problema: ao trocar o telefone é preciso mudar várias linhas e, se faltar uma, o cliente fica com dados diferentes."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dados do cliente repetidos em cada venda; 2) um problema, como inconsistência ao atualizar, desperdício de espaço ou perda de dados ao excluir."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Fala-se em três tipos de anomalia numa tabela mal estruturada: de inserção, de atualização e de exclusão.\n\nNa sua resposta:\n1. explique, com suas palavras, cada uma das três anomalias;\n2. diga o que elas têm em comum (de onde elas vêm).",
+      "respostasAceitas": [
+        "Inserção: não dá para cadastrar um dado sem ter outro (ex.: curso sem aluno). Atualização: é preciso mudar o mesmo dado em várias linhas e pode ficar contraditório. Exclusão: apagar uma linha apaga junto informação que deveria ficar. As três vêm de dados repetidos/assuntos misturados na mesma tabela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) definição simples de cada anomalia; 2) a causa comum é a redundância, assuntos diferentes misturados numa tabela."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num clube, a tabela `inscricao` tem (id_inscricao, nome_socio, cpf_socio, nome_atividade, valor_atividade). A natação tem só um sócio inscrito, e esse sócio vai cancelar a inscrição (a linha será apagada).\n\nNa sua resposta:\n1. diga qual anomalia acontece e o que se perde;\n2. explique como uma estrutura com tabelas separadas evitaria isso.",
+      "respostasAceitas": [
+        "Anomalia de exclusão: ao apagar a única inscrição, perde-se que a natação existe e qual é o valor dela. Com tabelas socio, atividade e inscricao, apagar a inscrição não apaga a atividade."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) anomalia de exclusão, perda dos dados da atividade; 2) separar atividade numa tabela própria, inscrição só liga sócio e atividade."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega afirma: \"se a coluna nome_produto depende da coluna id_produto, então id_produto depende de nome_produto também\".\n\nNa sua resposta:\n1. explique o que é dependência funcional em linguagem simples;\n2. diga se o colega está certo e justifique com um exemplo.",
+      "respostasAceitas": [
+        "Dependência funcional A → B: sabendo A, sei qual é B. O colega está errado: o id determina o nome, mas pode haver dois produtos com o mesmo nome (ex.: \"Caderno\" de marcas diferentes), então o nome não determina o id."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) A determina B (cada valor de A leva a um único B); 2) não é obrigatoriamente recíproca, com exemplo de nome repetido."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma papelaria tem a tabela `cliente` (id_cliente, nome, telefones), em que telefones guarda \"11 99999-0000 / 11 4002-1234\".\n\nNa sua resposta:\n1. diga qual forma normal está sendo violada e por quê;\n2. explique como organizar os telefones para corrigir (sem escrever comandos).",
+      "respostasAceitas": [
+        "Viola a 1FN, porque a coluna telefones guarda mais de um valor na mesma célula (não é atômica). Correção: criar uma tabela de telefones do cliente (id_cliente, telefone), com uma linha para cada número."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 1FN, valor não atômico; 2) tabela separada com uma linha por telefone, ligada ao cliente por chave estrangeira."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Para resolver a coluna telefones (com vários números juntos), um aluno propôs acrescentar as colunas telefone1, telefone2 e telefone3 na própria tabela `cliente`.\n\nNa sua resposta:\n1. diga se a proposta atende bem à 1FN e por quê;\n2. cite dois problemas práticos dessa solução.",
+      "respostasAceitas": [
+        "Não atende bem: telefone1, 2 e 3 são um grupo repetido. Problemas: cliente com 4 telefones não cabe; muitos campos vazios; para procurar um número é preciso olhar três colunas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) grupo repetido, ainda fora do espírito da 1FN; 2) dois problemas: limite fixo, colunas vazias, busca em várias colunas, mudança de estrutura para aumentar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A professora disse que \"um valor atômico é um valor que não se divide\" e que isso depende de como o dado é usado.\n\nNa sua resposta:\n1. explique o que é um valor atômico;\n2. dê um exemplo de campo que normalmente precisa ser dividido e diga por quê.",
+      "respostasAceitas": [
+        "Valor atômico é um único dado por campo, que não precisa ser quebrado para ser usado. Exemplo: endereço completo, que costuma virar rua, número, bairro e cidade, pois o sistema busca ou agrupa por bairro e cidade."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) um só valor indivisível por campo; 2) exemplo coerente (endereço, nome completo quando se usa sobrenome, lista de itens) com o motivo de uso."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma lanchonete registra pedidos na tabela `pedido` (id_pedido, data, nome_cliente, itens, total), em que itens guarda \"2 pastel, 1 caldo de cana\". O dono quer saber qual item mais vende.\n\nNa sua resposta:\n1. explique por que essa estrutura dificulta a resposta do dono;\n2. descreva quais tabelas a estrutura normalizada teria e o que cada uma guarda.",
+      "respostasAceitas": [
+        "Os itens estão juntos num texto (fora da 1FN), então não dá para contar por item sem separar o texto. Normalizado: cliente (dados do cliente), produto (nome e preço), pedido (id, data, cliente) e item_pedido (pedido, produto, quantidade), com uma linha por item."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) lista numa célula impede somar/contar por item; 2) tabelas pedido, produto, item_pedido (e cliente), com o papel de cada uma."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma escola de dança tem a tabela `aula` (id_aula, data, nome_professor, telefone_professor, estilo). A escola contratou uma professora nova que ainda não tem aulas marcadas.\n\nNa sua resposta:\n1. diga qual anomalia impede cadastrar a professora agora e explique;\n2. diga o que mudar na estrutura para resolver.",
+      "respostasAceitas": [
+        "Anomalia de inserção: os dados do professor só existem dentro de uma aula, então não dá para cadastrá-la sem inventar uma aula. Solução: criar a tabela professor e guardar em aula só o id do professor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) anomalia de inserção com a explicação; 2) tabela professor separada, ligada à aula por chave estrangeira."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega diz que normalizar é só \"dividir tabelas por dividir\" e que isso só complica o banco.\n\nNa sua resposta:\n1. explique para que serve a normalização;\n2. cite uma vantagem e uma desvantagem de normalizar.",
+      "respostasAceitas": [
+        "Normalizar organiza as tabelas para que cada dado fique num lugar só, reduzindo repetição e anomalias. Vantagem: dados consistentes e fáceis de atualizar. Desvantagem: mais tabelas e consultas com mais JOINs."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) reduzir redundância e evitar anomalias; 2) uma vantagem (consistência, menos espaço, manutenção) e uma desvantagem (mais JOINs, mais tabelas)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa locadora de fantasias, a tabela `aluguel` tem (id_aluguel, data, cpf_cliente, nome_cliente, codigo_fantasia, descricao_fantasia, tamanho_fantasia). Observando os dados, sempre que o cpf_cliente se repete, o nome também se repete; e o mesmo vale para codigo_fantasia com descrição e tamanho.\n\nNa sua resposta:\n1. aponte as dependências funcionais que você encontra;\n2. explique o que elas indicam sobre como separar as tabelas.",
+      "respostasAceitas": [
+        "cpf_cliente → nome_cliente; codigo_fantasia → descricao_fantasia e tamanho_fantasia (e id_aluguel → as demais). Indicam que cliente e fantasia são assuntos próprios: viram tabelas cliente e fantasia, e o aluguel guarda só cpf e código."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) as duas dependências (cpf → nome; código → descrição, tamanho); 2) separar cliente e fantasia em tabelas e referenciá-las no aluguel."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um sistema de academia tem a tabela `ficha` (id_ficha, nome_aluno, exercicios), com exercicios = \"supino 3x12; agachamento 4x10; remada 3x12\".\n\nNa sua resposta:\n1. explique quais regras da 1FN essa coluna desrespeita;\n2. descreva como ficaria a nova organização, dizendo que informação cada linha guardaria.",
+      "respostasAceitas": [
+        "A coluna guarda vários exercícios numa célula e, dentro de cada um, séries e repetições juntas (não atômico). Nova organização: tabela item_ficha com id_ficha, exercício, séries e repetições, uma linha por exercício (de preferência ligando a uma tabela exercicio)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) lista de valores numa célula e dados compostos (3x12); 2) uma linha por exercício com campos separados para séries e repetições."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma tabela pode estar na 3FN sem estar na 1FN?\n\nNa sua resposta:\n1. responda sim ou não;\n2. explique a relação entre 1FN, 2FN e 3FN.",
+      "respostasAceitas": [
+        "Não. As formas normais são cumulativas: para estar na 2FN precisa estar na 1FN, e para estar na 3FN precisa estar na 2FN."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) não; 2) cada forma normal exige a anterior."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num mercadinho, o caixa registra na tabela `venda` (id_venda, data, id_produto, nome_produto, preco_cobrado, quantidade). Um aluno sugeriu tirar preco_cobrado da venda e usar sempre o preço atual que está na tabela `produto`.\n\nNa sua resposta:\n1. diga se isso é uma boa ideia e explique o que aconteceria com as vendas antigas;\n2. diga qual coluna de `venda` realmente é repetição desnecessária.",
+      "respostasAceitas": [
+        "Não é boa ideia: o preço muda com o tempo e as vendas antigas mostrariam o preço novo, errando o histórico. preco_cobrado é dado da venda. O que é repetição desnecessária é nome_produto, que já está em produto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) preço cobrado é dado histórico da venda, trocar pelo atual distorce o passado; 2) nome_produto é redundante (depende de id_produto)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "def-2fn",
+      "enunciado": "Qual regra define a Segunda Forma Normal (2FN)?",
+      "alternativas": [
+        "Ter todos os campos com valor atômico, sem grupos repetidos",
+        "Estar na 1FN e não ter nenhuma chave estrangeira",
+        "Estar na 1FN e cada coluna não chave depender da chave primária inteira",
+        "Não ter coluna que dependa de outra coluna que não é chave"
+      ],
+      "correta": 2,
+      "explicacao": "2FN: estar na 1FN e não ter dependência parcial, ou seja, cada coluna não chave depende da chave toda. A terceira frase é a 1FN e a quarta, a 3FN."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A 2FN só pode ser desrespeitada em tabelas que têm qual característica?",
+      "alternativas": [
+        "Chave primária do tipo AUTO_INCREMENT",
+        "Chave primária composta (formada por mais de uma coluna)",
+        "Colunas do tipo DATE",
+        "Mais de dez colunas"
+      ],
+      "correta": 1,
+      "explicacao": "Dependência parcial é depender de só uma parte da chave. Se a chave tem uma coluna só, não existe \"parte\" da chave."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `cliente` (id_cliente, nome, cidade) está na 1FN e tem como chave primária apenas id_cliente. O que se pode afirmar sobre a 2FN?",
+      "alternativas": [
+        "Não dá para saber sem olhar a 3FN",
+        "Ela não está na 2FN, pois falta chave composta",
+        "Ela só fica na 2FN se cidade virar chave estrangeira",
+        "Ela já está na 2FN, pois a chave é de uma coluna só"
+      ],
+      "correta": 3,
+      "explicacao": "Com chave simples não há dependência parcial. Uma tabela na 1FN com chave de uma coluna já está na 2FN."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "parcial-item",
+      "enunciado": "Na tabela `item_pedido` (id_pedido, id_produto, quantidade, nome_produto), a chave primária é (id_pedido, id_produto). Qual coluna depende de só uma parte da chave?",
+      "alternativas": [
+        "nome_produto",
+        "quantidade",
+        "id_pedido",
+        "id_produto"
+      ],
+      "correta": 0,
+      "explicacao": "O nome do produto depende só de id_produto. Já a quantidade depende do pedido e do produto juntos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "parcial-item",
+      "enunciado": "Numa escola, a tabela `nota` tem (id_aluno, id_disciplina, nota_final, nome_disciplina), com chave (id_aluno, id_disciplina). Qual coluna está no lugar certo e qual deveria sair?",
+      "alternativas": [
+        "As duas devem sair, pois tabela com chave composta não tem colunas extras",
+        "nome_disciplina fica; nota_final deve ir para a tabela aluno",
+        "nota_final fica; nome_disciplina deve ir para a tabela disciplina",
+        "As duas ficam, pois a tabela já está na 1FN"
+      ],
+      "correta": 2,
+      "explicacao": "nota_final depende do aluno e da disciplina juntos. nome_disciplina depende só de id_disciplina (dependência parcial) e vai para a tabela disciplina."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "parcial-item",
+      "enunciado": "Numa clínica veterinária, a tabela `vacinacao` tem (id_animal, id_vacina, data_aplicacao, nome_animal, fabricante_vacina), com chave (id_animal, id_vacina). Quais colunas causam dependência parcial?",
+      "alternativas": [
+        "apenas data_aplicacao",
+        "data_aplicacao e nome_animal",
+        "nome_animal e fabricante_vacina",
+        "nenhuma, a tabela está na 2FN"
+      ],
+      "correta": 2,
+      "explicacao": "nome_animal depende só de id_animal e fabricante_vacina só de id_vacina. A data da aplicação depende dos dois juntos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é uma dependência parcial?",
+      "alternativas": [
+        "Uma coluna que pode ficar vazia em algumas linhas",
+        "Uma coluna que depende de só uma parte da chave composta",
+        "Uma coluna que depende de outra coluna que não é chave",
+        "Uma chave estrangeira que aponta para duas tabelas"
+      ],
+      "correta": 1,
+      "explicacao": "Dependência parcial: a coluna é determinada por parte da chave composta, não pela chave inteira. A terceira frase é dependência transitiva."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para levar à 2FN a tabela `participacao` (id_evento, cpf_participante, data_inscricao, nome_participante, nome_evento), com chave (id_evento, cpf_participante), o que fazer?",
+      "alternativas": [
+        "Apagar a chave composta e usar só cpf_participante",
+        "Levar data_inscricao para `evento` e manter os nomes",
+        "Juntar id_evento e cpf_participante numa única coluna de texto",
+        "Levar nome_participante para `participante` e nome_evento para `evento`"
+      ],
+      "correta": 3,
+      "explicacao": "Os nomes dependem de parte da chave. A data da inscrição depende do evento e do participante juntos e fica na tabela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa oficina, a tabela `servico_peca` tem (id_servico, id_peca, qtd_usada, descricao_peca, data_servico), com chave (id_servico, id_peca). Depois de corrigir a 2FN, onde deve ficar data_servico?",
+      "alternativas": [
+        "Na tabela `servico`, pois depende só de id_servico",
+        "Na tabela `peca`, pois toda data vem da peça",
+        "Em `servico_peca`, pois depende da peça e do serviço juntos",
+        "Numa tabela nova só com datas"
+      ],
+      "correta": 0,
+      "explicacao": "A data é do serviço: o mesmo serviço tem a mesma data para todas as peças. Logo depende só de id_servico e vai para `servico`."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `escala` de um hospital (id_enfermeiro, data_plantao, turno, setor, nome_enfermeiro), a chave é (id_enfermeiro, data_plantao). Turno e setor variam a cada plantão. Qual análise está correta?",
+      "alternativas": [
+        "Nenhuma coluna tem dependência parcial, pois todas são atômicas",
+        "Turno e setor têm dependência parcial e devem sair da tabela",
+        "Só nome_enfermeiro tem dependência parcial; turno e setor dependem da chave inteira",
+        "data_plantao deve ir para a tabela enfermeiro"
+      ],
+      "correta": 2,
+      "explicacao": "O nome depende só do enfermeiro. Turno e setor mudam a cada plantão, então dependem do enfermeiro e da data juntos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual regra define a Terceira Forma Normal (3FN)?",
+      "alternativas": [
+        "Estar na 2FN e nenhuma coluna não chave depender de outra coluna não chave",
+        "Estar na 2FN e ter pelo menos três tabelas",
+        "Estar na 1FN e ter chave primária composta",
+        "Ter todas as colunas com o mesmo tipo de dado"
+      ],
+      "correta": 0,
+      "explicacao": "3FN: estar na 2FN e não ter dependência transitiva (coluna comum que depende de outra coluna comum)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é uma dependência transitiva?",
+      "alternativas": [
+        "Quando um campo guarda uma lista de valores",
+        "Quando uma coluna depende de só uma parte da chave composta",
+        "Quando uma tabela tem duas chaves estrangeiras",
+        "Quando uma coluna depende da chave por meio de outra coluna que não é chave"
+      ],
+      "correta": 3,
+      "explicacao": "Transitiva: chave → coluna A → coluna B. A coluna B depende da chave \"passando\" por A. A segunda frase é dependência parcial."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "transitiva-setor",
+      "enunciado": "A tabela `funcionario` (id_funcionario, nome, id_setor, nome_setor) tem chave id_funcionario. O nome do setor depende de qual coluna?",
+      "alternativas": [
+        "nome",
+        "id_setor",
+        "id_funcionario apenas, sem relação com id_setor",
+        "de nenhuma coluna"
+      ],
+      "correta": 1,
+      "explicacao": "Cada id_setor tem um único nome_setor. Como id_setor não é a chave da tabela, isso é dependência transitiva (fere a 3FN)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "transitiva-setor",
+      "enunciado": "Numa escola, a tabela `aluno` tem (matricula, nome, id_turma, sala_turma, turno_turma), com chave matricula. Para deixá-la na 3FN, o que fazer?",
+      "alternativas": [
+        "Levar nome para a tabela `turma`",
+        "Levar sala_turma e turno_turma para a tabela `turma`, mantendo id_turma em aluno",
+        "Criar as colunas sala_turma2 e turno_turma2",
+        "Usar (matricula, id_turma) como chave composta"
+      ],
+      "correta": 1,
+      "explicacao": "Sala e turno dependem de id_turma, que não é a chave: dependência transitiva. Vão para `turma`; aluno fica só com id_turma (FK)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "transitiva-setor",
+      "enunciado": "A tabela `jogador` de uma liga escolar tem (id_jogador, nome, id_time, nome_time, cidade_time). Qual forma normal ela desrespeita?",
+      "alternativas": [
+        "2FN",
+        "1FN",
+        "3FN",
+        "Nenhuma"
+      ],
+      "correta": 2,
+      "explicacao": "A chave é simples (então está na 2FN) e os valores são atômicos. Mas nome_time e cidade_time dependem de id_time, que não é a chave: dependência transitiva."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `pedido` de uma floricultura tem (id_pedido, data, id_cliente, cep_entrega, cidade_entrega, valor). A cidade é sempre a mesma para o mesmo CEP. Qual dependência impede a 3FN?",
+      "alternativas": [
+        "id_cliente → id_pedido",
+        "id_pedido → data",
+        "id_pedido → valor",
+        "cep_entrega → cidade_entrega"
+      ],
+      "correta": 3,
+      "explicacao": "O CEP não é chave e determina a cidade: id_pedido → cep → cidade é transitiva. As outras dependem direto da chave (ou nem existem, como a última)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `produto` (id_produto, nome, id_categoria, nome_categoria) fere a 3FN. Que anomalia ela pode causar?",
+      "alternativas": [
+        "Ao renomear uma categoria, é preciso alterar todos os produtos dela",
+        "Não é possível cadastrar produto com preço",
+        "O produto não pode mudar de categoria",
+        "Cada categoria só pode ter um produto"
+      ],
+      "correta": 0,
+      "explicacao": "nome_categoria repete em cada produto da categoria. Renomear exige mudar várias linhas (anomalia de atualização)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `item_venda` (id_venda, id_produto, quantidade, preco_unitario, subtotal), subtotal = quantidade × preco_unitario. Do ponto de vista da normalização, o que se diz de subtotal?",
+      "alternativas": [
+        "É uma dependência parcial, pois depende só de id_produto",
+        "É um dado derivado: pode ser calculado e, guardado, corre risco de ficar desatualizado",
+        "É um grupo repetido e fere a 1FN",
+        "É obrigatório para a tabela ficar na 2FN"
+      ],
+      "correta": 1,
+      "explicacao": "subtotal depende de outras colunas não chave (quantidade e preço). É derivado: se um valor mudar e o subtotal não, os dados ficam contraditórios. Costuma-se calcular na consulta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "def-2fn",
+      "enunciado": "Uma tabela está na 2FN quando…",
+      "alternativas": [
+        "não tem nenhuma chave estrangeira",
+        "está na 3FN e tem chave composta",
+        "está na 1FN e não tem dependência parcial",
+        "tem pelo menos duas colunas na chave"
+      ],
+      "correta": 2,
+      "explicacao": "Definição: 1FN + sem dependência parcial."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Analise a tabela `inscricao_curso` (id_inscricao, nome_aluno, cursos), com cursos = \"Excel, Python\". Em qual forma normal ela está?",
+      "alternativas": [
+        "Em nenhuma, pois já fere a 1FN",
+        "Na 1FN, mas não na 2FN",
+        "Na 2FN, mas não na 3FN",
+        "Na 3FN"
+      ],
+      "correta": 0,
+      "explicacao": "A coluna cursos guarda dois valores na mesma célula, então nem a 1FN é atendida."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `paciente` (id_paciente, nome, data_nascimento, telefone) tem chave id_paciente, valores atômicos e nenhuma coluna depende de outra coluna comum. Em qual forma normal ela está?",
+      "alternativas": [
+        "Em nenhuma",
+        "Apenas 1FN",
+        "Apenas 2FN",
+        "3FN"
+      ],
+      "correta": 3,
+      "explicacao": "Valores atômicos (1FN), chave simples (2FN) e sem dependência transitiva (3FN)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `matricula` (id_aluno, id_curso, data_matricula, nome_curso, id_coordenador, nome_coordenador) tem chave (id_aluno, id_curso). Cada curso tem um coordenador. Qual é a situação dela?",
+      "alternativas": [
+        "Fere só a 1FN, pois tem nomes de pessoas",
+        "Está na 3FN, pois a chave composta já resolve tudo",
+        "Está na 1FN; nome_curso e id_coordenador dependem só de id_curso, e nome_coordenador depende de id_coordenador",
+        "Está na 2FN; só falta tirar data_matricula"
+      ],
+      "correta": 2,
+      "explicacao": "Dependência parcial (id_curso → nome_curso, id_coordenador) fere a 2FN; e id_coordenador → nome_coordenador é transitiva. Normalizando: curso, coordenador e matricula (com data_matricula)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao separar uma tabela durante a normalização, como as tabelas novas continuam ligadas?",
+      "alternativas": [
+        "Por colunas com o mesmo nome e tipo TEXT",
+        "Por chaves estrangeiras que apontam para a chave primária da outra tabela",
+        "Copiando todos os dados para as duas tabelas",
+        "Pelo número da linha em que o dado está"
+      ],
+      "correta": 1,
+      "explicacao": "A tabela que perdeu os dados guarda a chave da nova tabela como chave estrangeira; assim é possível juntá-las com JOIN."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `reserva` de uma pousada (id_reserva, data_entrada, num_quarto, tipo_quarto, valor_diaria_quarto), cada quarto tem um tipo e uma diária fixos. Qual separação leva à 3FN?",
+      "alternativas": [
+        "Transformar (id_reserva, num_quarto) em chave composta",
+        "Criar `entrada` (data_entrada) e ligar por chave estrangeira",
+        "Juntar num_quarto e tipo_quarto num único campo",
+        "Criar `quarto` (num_quarto, tipo_quarto, valor_diaria_quarto) e manter num_quarto em reserva"
+      ],
+      "correta": 3,
+      "explicacao": "tipo e diária dependem de num_quarto, que não é a chave da reserva. Vão para a tabela quarto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `nota_fiscal` (num_nota, data, cnpj_emitente, razao_social_emitente, valor_total), a chave é num_nota. Qual coluna cria dependência transitiva?",
+      "alternativas": [
+        "razao_social_emitente",
+        "data",
+        "valor_total",
+        "cnpj_emitente"
+      ],
+      "correta": 0,
+      "explicacao": "A razão social depende do CNPJ (num_nota → cnpj → razão social). O CNPJ em si fica como chave estrangeira."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "frase-chave",
+      "enunciado": "Uma frase usada para lembrar as formas normais é: \"cada coluna deve depender da chave, da chave inteira e de nada além da chave\". O trecho \"de nada além da chave\" corresponde a qual forma normal?",
+      "alternativas": [
+        "2FN",
+        "1FN",
+        "3FN",
+        "Nenhuma forma normal"
+      ],
+      "correta": 2,
+      "explicacao": "\"A chave\" lembra a 1FN, \"a chave inteira\" a 2FN e \"nada além da chave\" a 3FN (sem dependência transitiva)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "frase-chave",
+      "enunciado": "No trecho \"cada coluna deve depender da chave inteira\", qual forma normal está sendo lembrada?",
+      "alternativas": [
+        "1FN",
+        "2FN",
+        "3FN",
+        "Nenhuma, é regra de chave estrangeira"
+      ],
+      "correta": 1,
+      "explicacao": "Depender da chave inteira é não ter dependência parcial: 2FN."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma equipe juntou as tabelas `cliente` e `cidade` em uma só (id_cliente, nome, id_cidade, nome_cidade, uf) porque o relatório principal precisa sempre dos dois. Como se chama essa decisão e qual o custo dela?",
+      "alternativas": [
+        "Desnormalização; volta a repetir dados da cidade e o risco de inconsistência",
+        "Normalização; elimina a dependência transitiva",
+        "Indexação; deixa a tabela menor",
+        "Particionamento; separa os dados por estado"
+      ],
+      "correta": 0,
+      "explicacao": "Juntar tabelas de propósito para ganhar desempenho é desnormalizar. O custo é voltar a ter redundância e anomalias."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa tabela com chave composta (id_turma, id_aluno), a coluna frequencia guarda a porcentagem de presença do aluno naquela turma. Onde ela deve ficar?",
+      "alternativas": [
+        "Numa tabela separada só para frequência, sem ligação",
+        "Na tabela aluno, pois depende só do aluno",
+        "Na tabela turma, pois depende só da turma",
+        "Na própria tabela, pois depende do aluno e da turma juntos"
+      ],
+      "correta": 3,
+      "explicacao": "A frequência é do aluno naquela turma: depende da chave inteira. Está certa na tabela associativa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `vendedor` (id_vendedor, nome, id_loja, endereco_loja, meta_mensal) tem chave id_vendedor. Cada vendedor tem sua própria meta. Qual coluna fere a 3FN?",
+      "alternativas": [
+        "id_loja",
+        "meta_mensal",
+        "nome",
+        "endereco_loja"
+      ],
+      "correta": 3,
+      "explicacao": "O endereço é da loja (depende de id_loja). A meta é de cada vendedor e depende direto da chave."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma tabela `aluno_curso` está na 2FN e tem chave composta. Ao verificar a 3FN, o que você precisa procurar?",
+      "alternativas": [
+        "Colunas não chave que determinam outras colunas não chave",
+        "Colunas que dependem de só uma parte da chave",
+        "Células com mais de um valor",
+        "Colunas sem valor padrão definido"
+      ],
+      "correta": 0,
+      "explicacao": "Na 3FN busca-se dependência transitiva (não chave → não chave). As outras opções são verificações da 2FN e da 1FN, já feitas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de normalizar até a 3FN, o que geralmente acontece com o número de tabelas do banco?",
+      "alternativas": [
+        "Diminui, pois tudo é juntado numa tabela",
+        "Aumenta, pois os assuntos são separados em tabelas próprias",
+        "Fica igual, pois só os tipos mudam",
+        "Vai a zero, pois os dados viram arquivos"
+      ],
+      "correta": 1,
+      "explicacao": "Normalizar separa os dados repetidos em novas tabelas, ligadas por chaves estrangeiras."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno disse que a tabela `onibus` (placa, modelo, ano, capacidade) fere a 3FN porque \"o modelo determina a capacidade\". Em quais condições ele estaria certo?",
+      "alternativas": [
+        "Se o ano for guardado como texto",
+        "Se a placa tiver letras e números",
+        "Se todo ônibus do mesmo modelo tiver sempre a mesma capacidade",
+        "Se a tabela tiver mais de cem ônibus"
+      ],
+      "correta": 2,
+      "explicacao": "Só há dependência transitiva se modelo → capacidade valer sempre. Se a capacidade varia por ônibus, ela depende da placa e a tabela está na 3FN. Depende da regra do negócio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `aula_particular` (id_aula, data, id_professor, materia, valor_hora_professor), cada professor cobra o mesmo valor por hora em qualquer aula. Ao normalizar, o valor_hora deve ir para `professor`. Se a escola quiser guardar quanto foi cobrado em cada aula mesmo após reajustes, o que fazer?",
+      "alternativas": [
+        "Criar as colunas valor_hora1 e valor_hora2 no professor",
+        "Apagar as aulas antigas a cada reajuste",
+        "Guardar o valor só na aula e nunca no professor",
+        "Guardar o valor cobrado também na aula, como dado histórico daquela aula"
+      ],
+      "correta": 3,
+      "explicacao": "O valor atual é do professor; o valor cobrado naquele dia é um fato da aula. Guardar os dois não é redundância, são informações diferentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, a tabela `nota` tem (id_aluno, id_disciplina, nota, nome_aluno), com chave (id_aluno, id_disciplina).\n\nNa sua resposta:\n1. explique por que essa tabela não está na 2FN;\n2. diga para onde deve ir a coluna que causa o problema.",
+      "respostasAceitas": [
+        "nome_aluno depende só de id_aluno, que é parte da chave (dependência parcial). Ele deve ir para a tabela aluno; a tabela nota fica com id_aluno, id_disciplina e nota."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dependência parcial do nome em relação a id_aluno; 2) nome_aluno vai para a tabela aluno."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Por que uma tabela que já está na 1FN e tem chave primária de uma única coluna está automaticamente na 2FN?\n\nNa sua resposta:\n1. explique o que a 2FN proíbe;\n2. relacione isso com a chave de uma coluna só.",
+      "respostasAceitas": [
+        "A 2FN proíbe dependência parcial, isto é, coluna que depende só de parte da chave composta. Se a chave tem uma coluna só, não existe parte da chave, então não há como ter dependência parcial."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) proíbe dependência parcial; 2) chave simples não tem partes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma loja tem a tabela `funcionario` (id_funcionario, nome, id_loja, cidade_loja, gerente_loja), com chave id_funcionario.\n\nNa sua resposta:\n1. diga qual forma normal a tabela desrespeita e qual é a dependência que causa isso;\n2. explique como separar as tabelas (sem escrever comandos).",
+      "respostasAceitas": [
+        "Desrespeita a 3FN: cidade_loja e gerente_loja dependem de id_loja, que não é a chave (dependência transitiva). Separar: tabela loja (id_loja, cidade, gerente) e funcionario com id_funcionario, nome e id_loja como chave estrangeira."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 3FN, id_loja → cidade, gerente; 2) tabela loja e FK em funcionario."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre dependência parcial e dependência transitiva.\n\nNa sua resposta:\n1. defina cada uma em linguagem simples;\n2. diga qual forma normal elimina cada uma.",
+      "respostasAceitas": [
+        "Parcial: coluna que depende de só uma parte da chave composta (eliminada na 2FN). Transitiva: coluna que depende de outra coluna que não é chave (eliminada na 3FN)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) as duas definições; 2) parcial → 2FN, transitiva → 3FN."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma escola de natação usa a tabela `turma_aluno` (id_turma, id_aluno, data_inicio, nome_aluno, horario_turma, id_professor, nome_professor), com chave (id_turma, id_aluno). Cada turma tem um horário e um professor.\n\nNa sua resposta:\n1. aponte as dependências parciais e a dependência transitiva;\n2. descreva as tabelas que existiriam depois de normalizar até a 3FN.",
+      "respostasAceitas": [
+        "Parciais: id_aluno → nome_aluno; id_turma → horario_turma, id_professor. Transitiva: id_professor → nome_professor. Tabelas: aluno (id_aluno, nome), professor (id_professor, nome), turma (id_turma, horario, id_professor) e turma_aluno (id_turma, id_aluno, data_inicio)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) parciais de nome_aluno e de horário/professor; transitiva de nome_professor; 2) quatro tabelas com data_inicio na associativa."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma distribuidora tem `item_nota` (num_nota, id_produto, quantidade, descricao_produto, unidade_produto), com chave (num_nota, id_produto).\n\nNa sua resposta:\n1. diga se a tabela está na 2FN e justifique;\n2. explique qual coluna deve permanecer em item_nota e por quê.",
+      "respostasAceitas": [
+        "Não está: descricao_produto e unidade_produto dependem só de id_produto (parcial) e vão para produto. Deve ficar quantidade, pois depende da nota e do produto juntos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) não, por dependência parcial; 2) quantidade fica, pois depende da chave inteira."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A tabela `consulta` de uma clínica tem (id_consulta, data, id_paciente, nome_paciente, id_medico, crm_medico, nome_medico, valor), com chave id_consulta.\n\nNa sua resposta:\n1. diga em qual forma normal ela está e justifique;\n2. explique o que fazer para chegar à 3FN e o que cada tabela guardaria.",
+      "respostasAceitas": [
+        "Está na 2FN (valores atômicos e chave simples), mas não na 3FN: nome_paciente depende de id_paciente e crm/nome_medico dependem de id_medico. Separar paciente (id, nome), medico (id, crm, nome) e consulta (id, data, id_paciente, id_medico, valor)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 2FN, com a dependência transitiva apontada; 2) três tabelas com as FKs em consulta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma tabela `produto` (id_produto, nome, preco, estoque) tem chave id_produto, valores atômicos e nenhuma coluna depende de outra coluna comum.\n\nNa sua resposta:\n1. diga em qual forma normal ela está;\n2. justifique passando pela 1FN, 2FN e 3FN.",
+      "respostasAceitas": [
+        "Está na 3FN. 1FN: valores atômicos. 2FN: chave simples, sem dependência parcial. 3FN: nome, preço e estoque dependem só do id, sem dependência transitiva."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 3FN; 2) a justificativa de cada etapa."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega diz: \"o modelo normalizado é sempre melhor, nunca se deve juntar tabelas de novo\".\n\nNa sua resposta:\n1. explique o que é desnormalizar;\n2. diga em que situação pode fazer sentido e qual risco existe.",
+      "respostasAceitas": [
+        "Desnormalizar é juntar tabelas ou repetir dados de propósito. Pode fazer sentido em relatórios muito consultados, para evitar muitos JOINs e ganhar velocidade. Risco: voltar a ter redundância e dados inconsistentes."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) juntar/repetir de propósito; 2) desempenho em consultas pesadas, com risco de redundância e anomalias."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na tabela `item_pedido` (id_pedido, id_produto, quantidade, preco_unitario, total_item), total_item é sempre quantidade × preco_unitario.\n\nNa sua resposta:\n1. explique por que guardar total_item pode gerar inconsistência;\n2. diga como obter esse valor sem guardá-lo.",
+      "respostasAceitas": [
+        "total_item depende de outras colunas não chave; se alguém alterar a quantidade e esquecer o total, os dados ficam contraditórios. Pode ser calculado na hora da consulta (quantidade vezes preço)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dado derivado que pode ficar desatualizado; 2) calcular na consulta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Ao normalizar, uma tabela grande vira várias tabelas menores.\n\nNa sua resposta:\n1. explique como as tabelas novas continuam ligadas;\n2. diga como é possível juntar de novo as informações numa consulta.",
+      "respostasAceitas": [
+        "Ligam-se por chave estrangeira: a tabela guarda a chave primária da outra. Numa consulta, junta-se com JOIN usando essas chaves."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) chave estrangeira referenciando a chave primária; 2) JOIN pelas chaves."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num sistema de transporte escolar, a tabela `rota` tem (id_rota, motorista, cnh_motorista, placa_van, capacidade_van). Hoje cada motorista dirige sempre a mesma van, mas a empresa pretende trocar motoristas de van com frequência.\n\nNa sua resposta:\n1. aponte as dependências transitivas da tabela;\n2. explique como a mudança de regra da empresa afeta a forma de separar as tabelas.",
+      "respostasAceitas": [
+        "motorista → cnh_motorista e placa_van → capacidade_van (dependências de colunas não chave). Como motorista e van vão variar de forma independente, eles devem ser tabelas separadas (motorista e van), e a rota guarda as duas chaves, sem amarrar um ao outro."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) motorista → cnh, placa → capacidade; 2) a regra do negócio define as dependências: motorista e van independentes, ambos referenciados pela rota."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na tabela `aluno` de um cursinho (matricula, nome, cep, rua, bairro, cidade), um analista disse que há dependência transitiva.\n\nNa sua resposta:\n1. explique qual dependência ele provavelmente viu;\n2. diga uma vantagem e uma desvantagem de separar esses dados em outra tabela.",
+      "respostasAceitas": [
+        "O CEP determina rua, bairro e cidade, e o CEP não é a chave: dependência transitiva. Vantagem: endereço digitado uma vez, sem grafias diferentes. Desvantagem: mais uma tabela e mais JOIN, e é preciso manter a base de CEPs."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cep → rua, bairro, cidade; 2) uma vantagem e uma desvantagem coerentes. Aceitar também a opinião de manter junto, se justificada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é um dicionário de dados?",
+      "alternativas": [
+        "Um programa que traduz os comandos SQL para o português",
+        "Um documento que descreve cada tabela e cada campo do banco: tipo, tamanho, regras e significado",
+        "A lista de todos os registros já cadastrados no banco",
+        "Um backup do banco guardado em outro computador"
+      ],
+      "correta": 1,
+      "explicacao": "O dicionário de dados documenta a estrutura do banco: tabelas, campos, tipos, tamanhos, chaves, se é obrigatório e o que cada campo significa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas informações NÃO costuma fazer parte de um dicionário de dados?",
+      "alternativas": [
+        "Os nomes e telefones dos clientes já cadastrados",
+        "O tipo de dado de cada campo",
+        "Se o campo é chave primária ou estrangeira",
+        "A descrição do que cada campo guarda"
+      ],
+      "correta": 0,
+      "explicacao": "O dicionário descreve a estrutura (metadados), não os dados guardados nas linhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No dicionário de dados da tabela `aluno`, a coluna \"Obrigatório\" do campo email está marcada como \"Sim\". O que isso informa?",
+      "alternativas": [
+        "Que o e-mail é a chave primária da tabela",
+        "Que o e-mail não pode se repetir entre alunos",
+        "Que o campo não pode ficar vazio (não aceita NULL)",
+        "Que o e-mail é preenchido automaticamente pelo banco"
+      ],
+      "correta": 2,
+      "explicacao": "Obrigatório indica se o campo aceita ficar vazio. Não repetir é UNIQUE, outra informação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve a coluna \"Descrição\" num dicionário de dados?",
+      "alternativas": [
+        "Guardar o comando que criou a tabela",
+        "Mostrar quantas linhas a tabela tem no momento",
+        "Explicar em palavras o que o campo guarda e como deve ser entendido",
+        "Indicar qual usuário pode acessar o campo"
+      ],
+      "correta": 2,
+      "explicacao": "A descrição tira dúvidas sobre o significado do campo (ex.: \"dt_venc: data de vencimento da mensalidade\")."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No dicionário da tabela `pedido`, o campo id_cliente aparece com \"FK\" na coluna \"Chave\". O que isso significa?",
+      "alternativas": [
+        "É um campo calculado a partir de outros",
+        "É a chave primária da tabela pedido",
+        "É um campo que aceita qualquer texto",
+        "É uma chave estrangeira que aponta para a tabela de clientes"
+      ],
+      "correta": 3,
+      "explicacao": "FK (foreign key) é chave estrangeira: liga o pedido ao cliente cadastrado na tabela cliente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O campo status da tabela `pedido` só pode valer \"aberto\", \"pago\", \"enviado\" ou \"cancelado\". Em que parte do dicionário de dados essa regra deve ser registrada?",
+      "alternativas": [
+        "Na coluna de domínio (valores permitidos)",
+        "Na coluna de tamanho do campo",
+        "Na coluna de chave",
+        "No nome da tabela"
+      ],
+      "correta": 0,
+      "explicacao": "Domínio ou valores permitidos é onde se documenta o conjunto de valores aceitos pelo campo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a principal utilidade de manter um dicionário de dados num projeto?",
+      "alternativas": [
+        "Deixar o banco de dados mais rápido nas consultas",
+        "Fazer toda a equipe entender o banco do mesmo jeito e facilitar a manutenção",
+        "Substituir a criação das tabelas no MySQL",
+        "Proteger o banco contra acessos sem senha"
+      ],
+      "correta": 1,
+      "explicacao": "O dicionário é documentação: ajuda quem desenvolve, mantém ou chega depois a entender cada campo, sem adivinhar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No dicionário de dados de uma clínica, o campo cpf foi definido como VARCHAR(11), e não como INT. Qual é a melhor justificativa?",
+      "alternativas": [
+        "VARCHAR deixa o campo obrigatório automaticamente",
+        "CPF tem letras misturadas aos números",
+        "INT não aceita números com mais de três dígitos",
+        "CPF pode começar com zero e não é usado em contas, então é tratado como texto"
+      ],
+      "correta": 3,
+      "explicacao": "Como número, um CPF como 01234567890 perderia o zero inicial. Além disso, não se faz conta com CPF. CHAR(11) também seria adequado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No dicionário, o campo preco da tabela `produto` aparece como DECIMAL(8,2). O que isso indica?",
+      "alternativas": [
+        "Até 8 dígitos no total, sendo 2 depois da vírgula",
+        "Até 8 caracteres de texto e 2 espaços",
+        "Valores entre 8 e 2 reais",
+        "Um número inteiro com 8 dígitos e 2 casas negativas"
+      ],
+      "correta": 0,
+      "explicacao": "DECIMAL(8,2) guarda até 8 dígitos, 2 deles na parte decimal: o maior valor é 999999.99."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual tipo de dado é o mais adequado para registrar a data de nascimento no dicionário de dados?",
+      "alternativas": [
+        "VARCHAR(10)",
+        "DATE",
+        "INT",
+        "DECIMAL(8,2)"
+      ],
+      "correta": 1,
+      "explicacao": "DATE guarda datas válidas e permite calcular idade e ordenar corretamente. Como texto, \"31/02\" seria aceito."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No dicionário da tabela `matricula`, o campo id_curso está marcado como FK. Que informação a mais é importante registrar sobre esse campo?",
+      "alternativas": [
+        "A cor que o campo terá na tela do sistema",
+        "A quantidade de alunos de cada curso",
+        "A tabela e o campo que ele referencia, como curso.id_curso",
+        "O nome do professor que criou o campo"
+      ],
+      "correta": 2,
+      "explicacao": "Para uma FK, o dicionário deve dizer para onde ela aponta (tabela e campo de referência)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre o DER (diagrama entidade-relacionamento) e o dicionário de dados?",
+      "alternativas": [
+        "O DER é feito depois do banco pronto; o dicionário, antes da análise",
+        "O DER guarda os dados; o dicionário guarda os comandos SQL",
+        "Os dois são a mesma coisa com nomes diferentes",
+        "O DER mostra entidades e relacionamentos em desenho; o dicionário detalha cada campo por escrito"
+      ],
+      "correta": 3,
+      "explicacao": "Eles se completam: o DER dá a visão geral das ligações, o dicionário dá os detalhes de tipo, tamanho, regras e significado de cada campo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quando o dicionário de dados deve ser atualizado?",
+      "alternativas": [
+        "Sempre que a estrutura do banco mudar, como ao criar ou alterar um campo",
+        "Só no primeiro dia do projeto",
+        "Toda vez que um cliente novo for cadastrado",
+        "Somente quando o banco for apagado"
+      ],
+      "correta": 0,
+      "explicacao": "O dicionário acompanha a estrutura. Se um campo é criado ou alterado, a documentação precisa refletir isso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa empresa, o dicionário diz que o campo situacao da tabela `aluno` aceita \"A\" (ativo) e \"I\" (inativo), mas o banco foi alterado para aceitar também \"T\" (trancado) e ninguém atualizou o documento. Qual é o risco?",
+      "alternativas": [
+        "O MySQL apagar sozinho os alunos com \"T\"",
+        "Programadores e relatórios ignorarem ou tratarem errado os alunos trancados",
+        "O campo situacao virar chave primária",
+        "O banco deixar de aceitar alunos ativos"
+      ],
+      "correta": 1,
+      "explicacao": "Dicionário desatualizado leva a decisões erradas: quem consulta o documento não sabe que \"T\" existe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No dicionário de dados da tabela `usuario`, o campo email tem na coluna de regras: \"não pode repetir\". Que restrição o banco deve ter nesse campo?",
+      "alternativas": [
+        "AUTO_INCREMENT",
+        "DEFAULT",
+        "UNIQUE",
+        "NULL"
+      ],
+      "correta": 2,
+      "explicacao": "\"Não pode repetir\" corresponde a UNIQUE. O dicionário documenta a regra; a restrição a garante no banco."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No dicionário, o campo nome da tabela `cliente` aparece como VARCHAR com tamanho 60. O que esse tamanho significa?",
+      "alternativas": [
+        "A tabela pode ter até 60 clientes",
+        "O nome precisa ter exatamente 60 letras",
+        "O nome pode ter até 60 caracteres",
+        "O campo ocupa 60 colunas da tabela"
+      ],
+      "correta": 2,
+      "explicacao": "Em VARCHAR, o tamanho é o máximo de caracteres aceitos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No dicionário de uma escola, o campo turno tem domínio \"M, T, N\". O que o programador deve entender com isso?",
+      "alternativas": [
+        "M, T e N são os nomes das tabelas ligadas ao turno",
+        "O campo aceita qualquer letra do alfabeto",
+        "O campo guarda três turnos ao mesmo tempo",
+        "Só são aceitos os valores M (manhã), T (tarde) e N (noite)"
+      ],
+      "correta": 3,
+      "explicacao": "Domínio é o conjunto de valores permitidos. Qualquer outro valor é inválido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O dicionário de dados de um mercado diz: qtd_estoque, INT, obrigatório, domínio \"maior ou igual a zero\". Numa conferência, aparece um produto com qtd_estoque = -3. O que se conclui?",
+      "alternativas": [
+        "O dicionário está errado, pois estoque negativo é normal",
+        "O dado fere a regra documentada; falta validação no sistema ou restrição no banco",
+        "O campo deveria ser VARCHAR para aceitar o sinal",
+        "O produto deve ser apagado da tabela"
+      ],
+      "correta": 1,
+      "explicacao": "O dicionário define a regra; o dado a desrespeita. O certo é garantir a regra (validação na aplicação ou CHECK) e corrigir o dado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No dicionário de dados, o campo data_cadastro tem \"Valor padrão: data atual\". O que isso significa?",
+      "alternativas": [
+        "Se nenhuma data for informada, o banco grava a data do dia",
+        "O campo só aceita a data de hoje, nunca outra",
+        "A data é apagada no dia seguinte",
+        "O campo é chave primária e não se repete"
+      ],
+      "correta": 0,
+      "explicacao": "Valor padrão (DEFAULT) é usado quando o campo não é informado no cadastro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao revisar um dicionário de dados, você vê: telefone, INT, tamanho 11, \"celular com DDD\". Qual é o problema dessa definição?",
+      "alternativas": [
+        "O tamanho de um telefone deveria ser 2",
+        "INT guarda só números negativos",
+        "Telefone nunca deve aparecer em dicionário de dados",
+        "INT não guarda números de 11 dígitos e o telefone não é usado em contas"
+      ],
+      "correta": 3,
+      "explicacao": "O INT vai até cerca de 2,1 bilhões (10 dígitos): 11999998888 não cabe. Telefone é texto com dígitos, então VARCHAR é o adequado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No dicionário da tabela `produto`, o campo valor está como VARCHAR(20) com a descrição \"preço de venda\". Qual problema isso pode trazer?",
+      "alternativas": [
+        "O campo não pode ser mostrado na tela",
+        "O preço não pode ter mais de dois dígitos",
+        "Somar e ordenar preços fica errado, pois o valor é tratado como texto",
+        "O preço vira automaticamente uma chave estrangeira"
+      ],
+      "correta": 2,
+      "explicacao": "Como texto, \"100\" vem antes de \"9\" na ordenação e contas exigem conversão. Preço deve ser DECIMAL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um programador novo entrou no projeto de uma escola. Como o dicionário de dados ajuda esse programador?",
+      "alternativas": [
+        "Mostra o que cada campo guarda sem ele precisar adivinhar ou perguntar a todo momento",
+        "Cria as telas do sistema automaticamente",
+        "Dá a ele acesso de administrador ao banco",
+        "Faz backup do banco antes de cada alteração"
+      ],
+      "correta": 0,
+      "explicacao": "O dicionário é a referência da estrutura do banco: reduz dúvidas e erros de quem chega."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um dicionário de dados recomenda nomes de campos padronizados, como data_nascimento, em vez de dtNasc, data_nasc e nascimento misturados. Qual é a vantagem?",
+      "alternativas": [
+        "Faz o banco ocupar menos espaço em disco",
+        "Evita confusão e deixa o banco mais fácil de entender e manter",
+        "É exigência do MySQL, que recusa nomes curtos",
+        "Impede que o campo fique vazio"
+      ],
+      "correta": 1,
+      "explicacao": "Padronizar nomes é questão de clareza e manutenção, não de regra do MySQL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `mensalidade` de uma academia, qual descrição de dicionário é a mais útil para o campo valor?",
+      "alternativas": [
+        "Valor da tabela mensalidade",
+        "Valor",
+        "Campo numérico",
+        "Valor cobrado no mês, em reais, já com o desconto do plano"
+      ],
+      "correta": 3,
+      "explicacao": "Uma boa descrição diz o significado, a unidade e a regra (com ou sem desconto). As outras não tiram dúvida nenhuma."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No dicionário de dados de uma loja, o campo email da tabela `cliente` aparece com \"Obrigatório: Não\". O que isso permite?",
+      "alternativas": [
+        "Que o e-mail seja apagado a cada venda",
+        "Cadastrar dois clientes com o mesmo e-mail obrigatoriamente",
+        "Cadastrar o cliente sem informar o e-mail",
+        "Que o e-mail seja usado como chave primária"
+      ],
+      "correta": 2,
+      "explicacao": "Não obrigatório quer dizer que o campo aceita ficar vazio (NULL)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No dicionário da tabela `matricula`, os campos id_aluno e id_curso aparecem, os dois, com \"PK, FK\" na coluna \"Chave\". O que isso significa?",
+      "alternativas": [
+        "Juntos formam a chave primária, e cada um aponta para outra tabela",
+        "A tabela tem duas chaves primárias separadas",
+        "Os dois campos guardam o mesmo valor",
+        "Houve um erro, pois um campo não pode ser PK e FK"
+      ],
+      "correta": 0,
+      "explicacao": "É uma chave composta (id_aluno, id_curso) numa tabela associativa; cada parte também é FK para aluno e curso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em que momento do projeto a normalização costuma ser feita?",
+      "alternativas": [
+        "Depois que o sistema já tem milhares de clientes",
+        "Na modelagem, antes de criar as tabelas no MySQL",
+        "Só quando o banco apresenta erro de conexão",
+        "Durante o backup do banco"
+      ],
+      "correta": 1,
+      "explicacao": "Normalizar no modelo é mais barato do que mudar tabelas já cheias de dados e com sistema em uso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `evento` de uma escola tem (id_evento, nome, data, id_local, nome_local, endereco_local). Qual mudança deixa a tabela na 3FN?",
+      "alternativas": [
+        "Criar a tabela `local` com nome e endereço, e manter só id_local em evento",
+        "Criar as colunas local2 e endereco_local2 em evento",
+        "Juntar nome e data num único campo",
+        "Tornar (id_evento, id_local) chave composta"
+      ],
+      "correta": 0,
+      "explicacao": "nome_local e endereco_local dependem de id_local, que não é a chave do evento: dependência transitiva."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `boletim` tem (id_aluno, bimestre, nota, nome_aluno), com chave (id_aluno, bimestre). Que forma normal ela desrespeita?",
+      "alternativas": [
+        "3FN",
+        "1FN",
+        "2FN",
+        "Nenhuma"
+      ],
+      "correta": 2,
+      "explicacao": "nome_aluno depende só de id_aluno, parte da chave composta: dependência parcial (2FN)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a venda de vários produtos usa a tabela associativa `item_venda` (id_venda, id_produto). Qual informação deve ficar nela?",
+      "alternativas": [
+        "O telefone do cliente",
+        "O nome do produto",
+        "A data da venda",
+        "A quantidade daquele produto naquela venda"
+      ],
+      "correta": 3,
+      "explicacao": "A quantidade depende da venda e do produto juntos. Nome do produto é do produto; data é da venda; telefone é do cliente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `projeto_func` (id_projeto, id_funcionario, horas, nome_projeto, prazo_projeto, nome_funcionario) tem chave (id_projeto, id_funcionario). Normalizando até a 3FN, quantas tabelas ficam?",
+      "alternativas": [
+        "2: projeto e funcionario, sem guardar as horas",
+        "3: projeto, funcionario e projeto_func com as horas",
+        "1: a mesma tabela, que já está normalizada",
+        "4: projeto, prazo, funcionario e horas"
+      ],
+      "correta": 1,
+      "explicacao": "Nome e prazo dependem de id_projeto; nome_funcionario de id_funcionario; horas dependem dos dois e ficam na associativa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de normalizar um banco e criar duas tabelas novas, o que deve acontecer com o dicionário de dados?",
+      "alternativas": [
+        "Copiar os registros das tabelas novas para o documento",
+        "Nada, pois o dicionário só descreve a primeira versão",
+        "Apagar o dicionário e fazer um novo só no fim do projeto",
+        "Incluir as tabelas novas e indicar as chaves estrangeiras criadas"
+      ],
+      "correta": 3,
+      "explicacao": "A estrutura mudou, então o dicionário é atualizado com tabelas, campos e as ligações (FKs)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes é um sinal de que uma tabela precisa ser normalizada?",
+      "alternativas": [
+        "Os campos de data usam o tipo DATE",
+        "Cada linha tem uma chave primária diferente",
+        "A mesma informação aparece repetida em muitas linhas",
+        "A tabela tem chave estrangeira para outra tabela"
+      ],
+      "correta": 2,
+      "explicacao": "Repetição de dados é o principal sinal de redundância. Os outros itens são características de um bom projeto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `pessoa` de um clube guarda data_nascimento e idade. Por que guardar a idade é um problema?",
+      "alternativas": [
+        "A idade muda com o tempo e pode ser calculada pela data de nascimento",
+        "A idade fere a 1FN, pois tem dois dígitos",
+        "Data de nascimento não pode ficar na mesma tabela",
+        "A idade deveria ser a chave primária"
+      ],
+      "correta": 0,
+      "explicacao": "Idade é dado derivado: fica desatualizada a cada aniversário. Basta calculá-la a partir da data."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma tabela na 3FN ainda pode ter valores iguais em várias linhas, como o mesmo id_cidade em muitos clientes?",
+      "alternativas": [
+        "Não; na 3FN nenhum valor pode se repetir em duas linhas",
+        "Sim; repetir a chave estrangeira não é redundância, pois os dados da cidade estão em um lugar só",
+        "Sim, mas isso mostra que a tabela voltou para a 1FN",
+        "Não; o id_cidade deveria ser apagado depois da 3FN"
+      ],
+      "correta": 1,
+      "explicacao": "Normalizar não proíbe valores iguais; evita guardar a mesma informação descritiva em vários lugares."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num sistema, o campo cidade aparece como texto livre nas tabelas `cliente`, `fornecedor` e `funcionario`, com grafias como \"Sao Paulo\", \"São Paulo\" e \"S. Paulo\". Qual proposta resolve melhor?",
+      "alternativas": [
+        "Aumentar o tamanho do campo cidade nas três tabelas",
+        "Criar a tabela `cidade` e usar id_cidade como chave estrangeira nas três tabelas",
+        "Juntar cliente, fornecedor e funcionario numa única tabela",
+        "Pedir que os usuários digitem com mais atenção"
+      ],
+      "correta": 1,
+      "explicacao": "Com uma tabela de cidades, o nome é digitado uma vez e as três tabelas apontam para ele. Acaba a divergência de grafias."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma equipe vai começar o banco de dados de uma biblioteca escolar e o professor pediu um dicionário de dados.\n\nNa sua resposta:\n1. explique o que é um dicionário de dados;\n2. diga para que ele serve no projeto.",
+      "respostasAceitas": [
+        "É um documento que descreve as tabelas e campos do banco: nome, tipo, tamanho, se é obrigatório, chave e o que significa. Serve para a equipe entender o banco do mesmo jeito, padronizar e facilitar a manutenção."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) documento que descreve a estrutura (tabelas e campos); 2) comunicação, padronização, manutenção, ajuda a quem chega."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um dicionário de dados costuma ser uma tabela com várias colunas para cada campo do banco.\n\nNa sua resposta:\n1. cite quatro colunas típicas de um dicionário de dados;\n2. explique em poucas palavras o que cada uma informa.",
+      "respostasAceitas": [
+        "Nome do campo (como ele se chama), tipo (INT, VARCHAR, DATE…), tamanho (quantos caracteres/dígitos), obrigatório (se aceita vazio), chave (PK/FK), descrição (o que significa), domínio (valores permitidos)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) quatro colunas entre nome, tipo, tamanho, obrigatório, chave, descrição, domínio, valor padrão; 2) explicação curta de cada uma."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, a tabela `pedido` tem o campo status com valores 1, 2, 3 e 4. Um programador novo achou que 4 era \"entregue\", mas na verdade é \"cancelado\", e o relatório saiu errado.\n\nNa sua resposta:\n1. explique como o dicionário de dados teria evitado esse erro;\n2. diga em qual coluna do dicionário essa informação deveria estar.",
+      "respostasAceitas": [
+        "O dicionário traria o significado de cada código (1 = aberto, 2 = pago, 3 = entregue, 4 = cancelado), então o programador não precisaria adivinhar. A informação fica no domínio/valores permitidos (e na descrição)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) documentar o significado dos códigos evita interpretação errada; 2) domínio ou valores permitidos (aceitar descrição)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No dicionário de dados de uma clínica aparece a linha: cpf | INT | 11 | Sim | — | CPF do paciente.\n\nNa sua resposta:\n1. avalie se o tipo escolhido é adequado;\n2. justifique e sugira uma alternativa.",
+      "respostasAceitas": [
+        "Não é adequado: CPF pode começar com zero (que some no número), tem 11 dígitos (maior que o limite do INT) e não é usado em contas. Melhor CHAR(11) ou VARCHAR(11), e de preferência marcado como único."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) inadequado; 2) zero à esquerda/limite do INT/não é número de cálculo, sugerindo CHAR ou VARCHAR(11)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega acha que, como o projeto já tem o DER, não precisa de dicionário de dados.\n\nNa sua resposta:\n1. explique a diferença entre DER e dicionário de dados;\n2. diga por que os dois se completam.",
+      "respostasAceitas": [
+        "O DER é um desenho que mostra entidades, atributos e relacionamentos. O dicionário é um documento escrito que detalha cada campo: tipo, tamanho, obrigatório, regras e significado. O DER dá a visão geral e o dicionário os detalhes."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) desenho geral × detalhamento escrito dos campos; 2) um mostra as ligações, o outro as regras de cada campo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No dicionário da tabela `aluno`, o campo data_matricula está com \"Obrigatório: Sim\" e \"Valor padrão: data atual\"; o campo apelido está com \"Obrigatório: Não\".\n\nNa sua resposta:\n1. explique o que significam \"obrigatório\" e \"valor padrão\";\n2. diga o que acontece com cada campo se a secretaria não preencher nada.",
+      "respostasAceitas": [
+        "Obrigatório indica se o campo pode ficar vazio; valor padrão é o valor gravado quando nada é informado. data_matricula recebe a data do dia; apelido fica vazio (NULL)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) as duas definições; 2) data_matricula = data atual, apelido = vazio/NULL."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Ao revisar o dicionário de dados da tabela `pedido` de uma papelaria, você encontra: data_pedido | VARCHAR | 10 | Sim | — | data; valor_total | VARCHAR | 15 | Sim | — | valor; forma_pagto | VARCHAR | 20 | Não | — | forma de pagamento (sem valores definidos).\n\nNa sua resposta:\n1. aponte dois problemas nessa documentação;\n2. explique a consequência de cada um e como corrigir.",
+      "respostasAceitas": [
+        "data_pedido e valor_total como texto: datas inválidas são aceitas, ordenar e somar fica errado; usar DATE e DECIMAL. forma_pagto sem domínio: cada um digita de um jeito (\"pix\", \"PIX\", \"Pix\"); definir valores permitidos. Descrições vagas (\"data\", \"valor\") também devem ser explicadas melhor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dois entre tipos errados de data/valor, falta de domínio, descrições vagas; 2) consequência e correção de cada um."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O banco de uma academia ganhou o campo plano na tabela `aluno`, mas o dicionário de dados não foi alterado.\n\nNa sua resposta:\n1. explique por que o dicionário deve ser atualizado sempre que o banco muda;\n2. cite um problema causado por um dicionário desatualizado.",
+      "respostasAceitas": [
+        "O dicionário só é útil se mostra a estrutura real do banco. Desatualizado, as pessoas confiam numa informação errada: não sabem que o campo plano existe nem quais valores aceita, e erram consultas ou cadastros."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o documento precisa refletir o banco real; 2) um problema concreto (erro de programação, relatório errado, dúvida da equipe)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na tabela `aula` de uma escola técnica, o campo turno aceita só \"manhã\", \"tarde\" e \"noite\".\n\nNa sua resposta:\n1. explique o que é o domínio de um campo;\n2. diga por que é importante registrar esse domínio no dicionário de dados.",
+      "respostasAceitas": [
+        "Domínio é o conjunto de valores permitidos para o campo. Registrar evita valores inválidos ou escritos de formas diferentes, orienta quem programa as telas e as validações e mantém os relatórios corretos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) valores permitidos; 2) evitar dados inválidos/diferentes, orientar a equipe e as validações."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A tabela `venda` (id_venda, data, nome_cliente, telefone_cliente, valor) de uma loja foi normalizada e virou as tabelas `cliente` (id_cliente, nome, telefone) e `venda` (id_venda, data, id_cliente, valor).\n\nNa sua resposta:\n1. diga o que precisa mudar no dicionário de dados;\n2. explique como o campo id_cliente da tabela venda deve ser documentado.",
+      "respostasAceitas": [
+        "Incluir a tabela cliente com seus campos, tirar nome_cliente e telefone_cliente da documentação de venda e incluir id_cliente. id_cliente em venda: tipo igual ao da PK de cliente (ex.: INT), obrigatório, chave FK referenciando cliente.id_cliente, com descrição \"cliente que fez a compra\"."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nova tabela documentada, campos removidos e novo campo; 2) FK com referência à tabela cliente, tipo compatível, obrigatório e descrição."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No banco de uma biblioteca há um campo chamado dt_dev na tabela `emprestimo`, sem nenhuma descrição no dicionário.\n\nNa sua resposta:\n1. explique por que a coluna \"descrição\" do dicionário é importante;\n2. dê um exemplo de boa descrição para esse campo.",
+      "respostasAceitas": [
+        "Sem descrição, cada pessoa interpreta o nome do seu jeito. Exemplo: \"Data em que o livro foi devolvido; fica vazia enquanto o livro não volta\" (ou \"data prevista para devolução\", deixando claro qual das duas)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) evitar interpretações diferentes de nomes abreviados; 2) descrição clara do significado (aceitar devolução prevista ou realizada, desde que fique claro)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O dono de uma pequena pet shop diz que documentar o banco é perda de tempo, porque \"só um programador mexe nele\".\n\nNa sua resposta:\n1. dê dois motivos para documentar o banco mesmo em projeto pequeno;\n2. explique o que pode acontecer se esse programador sair da empresa sem deixar documentação.",
+      "respostasAceitas": [
+        "Motivos: o próprio programador esquece detalhes com o tempo; facilita mudanças e correções; ajuda quem vier depois. Se ele sair, o novo programador terá que adivinhar o que cada campo significa, com risco de erros e retrabalho."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dois motivos (memória, manutenção, novos membros, padronização); 2) dificuldade e risco de erro para quem assume."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Você recebeu uma tabela antiga de um sistema e precisa decidir se ela deve ser normalizada.\n\nNa sua resposta:\n1. cite dois sinais de que a tabela precisa de normalização;\n2. explique por que cada sinal é um problema.",
+      "respostasAceitas": [
+        "Sinais: dados repetidos em muitas linhas (ex.: nome do cliente em cada venda), campos com listas de valores, colunas numeradas (tel1, tel2), dados de assuntos diferentes misturados. Problemas: inconsistência ao alterar, dificuldade de buscar e contar, perda de dados ao excluir."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dois sinais (repetição, listas, colunas numeradas, assuntos misturados, anomalias); 2) o problema de cada um."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A tabela `socio` de um clube guarda data_nascimento e idade.\n\nNa sua resposta:\n1. explique por que guardar a idade é um problema;\n2. diga como o sistema pode saber a idade sem guardar esse campo.",
+      "respostasAceitas": [
+        "A idade é derivada e muda a cada aniversário, então fica desatualizada e pode contradizer a data de nascimento. O sistema calcula a idade na hora, a partir da data de nascimento e da data atual."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dado derivado que desatualiza; 2) calcular a partir da data de nascimento."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O grêmio de uma escola controla os eventos numa planilha que virou a tabela `inscricao` (id_inscricao, nome_aluno, turma_aluno, nome_evento, data_evento, local_evento, valor_evento, valor_pago).\n\nNa sua resposta:\n1. aponte os problemas de redundância dessa tabela;\n2. descreva as tabelas de uma versão normalizada e o que cada uma guarda (sem escrever comandos).",
+      "respostasAceitas": [
+        "Dados do aluno (nome, turma) e do evento (nome, data, local, valor) se repetem em cada inscrição, causando anomalias. Normalizado: aluno (id, nome, turma), evento (id, nome, data, local, valor) e inscricao (id, id_aluno, id_evento, valor_pago). O valor_pago fica na inscrição, pois pode variar por aluno."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) repetição de aluno e evento, com alguma anomalia; 2) aluno, evento e inscricao com FKs e valor_pago na inscrição."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um grupo criou direto no MySQL as tabelas do sistema de uma oficina e só depois pensou em normalizar.\n\nNa sua resposta:\n1. explique em qual etapa a normalização deveria ter sido feita;\n2. diga por que normalizar depois de o sistema estar em uso é mais trabalhoso.",
+      "respostasAceitas": [
+        "Na modelagem (modelo lógico), antes de criar as tabelas. Depois, as tabelas já têm dados e o sistema já usa a estrutura: é preciso migrar dados, corrigir inconsistências e alterar consultas e telas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) na modelagem, antes de criar as tabelas; 2) migrar dados, corrigir repetições, mudar o sistema."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No dicionário de dados de uma biblioteca aparece a linha: isbn | CHAR | 13 | Sim | PK | Código ISBN do livro | só dígitos, 13 posições.\n\nNa sua resposta:\n1. explique o que cada informação da linha diz sobre o campo isbn;\n2. diga por que esse campo pode ser chave primária.",
+      "respostasAceitas": [
+        "Nome isbn; tipo texto de tamanho fixo (CHAR) com 13 caracteres; obrigatório; chave primária; guarda o código ISBN; domínio: só dígitos com 13 posições. Pode ser PK porque cada livro tem um ISBN único e ele sempre existe."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) leitura de nome, tipo, tamanho, obrigatório, chave, descrição e domínio; 2) é único e obrigatório para cada livro."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Normalização e dicionário de dados",
+      "capacidade": "bd.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um campeonato de futsal da escola usa a tabela `partida` (id_partida, data, id_time_casa, nome_time_casa, id_time_visitante, nome_time_visitante, gols_casa, gols_visitante).\n\nNa sua resposta:\n1. explique qual problema de normalização existe e por quê;\n2. diga por que uma única tabela `time` basta para os dois papéis (casa e visitante).",
+      "respostasAceitas": [
+        "nome_time_casa depende de id_time_casa e nome_time_visitante de id_time_visitante, que não são a chave: dependência transitiva (3FN), com nome repetido em cada jogo. Uma tabela time guarda cada time uma vez; a partida guarda duas FKs para ela, uma para o time da casa e outra para o visitante."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dependência transitiva/repetição dos nomes; 2) a mesma tabela time é referenciada duas vezes pela partida."
+    }
+  ]
+}

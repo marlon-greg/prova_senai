@@ -1481,6 +1481,9 @@ body.acess.grande { font-size:calc(1.25rem * var(--a-escala, 1)); }
 .tema-contraste .alt.sel { background:#333; }
 .tema-contraste pre.codigo { background:#111; color:#fff200; border:1px solid #fff200; }
 body:is(.tema-creme, .tema-azul, .tema-contraste, .tema-escuro) { background-image:none; }
+/* editores de diagrama (requisitos e brModelo) são sempre claros: no tema escuro/contraste as variáveis voltam às claras lá dentro
+   (antes os botões da barra ficavam com texto claro em fundo branco, ilegíveis) */
+:is(.tema-creme, .tema-azul, .tema-contraste, .tema-escuro) :is(.dreq, .brm) { --marinho:#14213d; --marinho-2:#1f3160; --marinho-claro:#e9eef8; --borda:#e8ecf3; --borda-forte:#d7dde8; --suave:#5d6b82; --texto:#1a2233; --cartao:#fff; --cartao-2:#f4f6fb; --fundo:#f4f6fb; --info:#2459c7; --ok:#12805c; --erro:#c8102e; --ambar-texto:#8a5600; --hover:#eef2f8; --borda-campo:#d7dde8; --chip-fundo:#eef2f8; --chip-texto:#1a2233; --rotulo:#5d6b82; --icone:#5d6b82; color-scheme:light; color:#1a2233; }
 
 /* régua de leitura */
 .regua-leitura { position:fixed; inset:0; pointer-events:none; z-index:330; --y:-200px; }

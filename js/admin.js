@@ -2118,7 +2118,9 @@ $("#btnImportarBanco").onclick = async () => {
 let ultimoBancoImportado = null, importandoEmLote = false;   // importandoEmLote: "Importar todos os que faltam" (sem perguntar banco por banco)
 // Banco de Dados: 150 questões por tema (27/11), a revisar. Cada arquivo = um tema; a lista cresce conforme os temas ficam prontos.
 const BANCOS_BD_150 = [
-  ["bd_01_sgbd_tipos", "SGBD, modelo relacional e tipos de dados"]
+  ["bd_01_sgbd_tipos", "SGBD, modelo relacional e tipos de dados"],
+  ["bd_02_mer_der", "Modelagem: MER e DER (conceitual e lógico)"],
+  ["bd_03_normalizacao", "Normalização e dicionário de dados"]
 ].map(([arq, tema]) => ({ arquivo: `bancos/gerados/bd/${arq}.json`, icone: "🗃", titulo: `Banco de Dados — ${tema} (150 questões)`,
   desc: "105 alternativas + 45 dissertativas (sem pedir comando), dificuldade balanceada. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] }));
 const BANCOS_PRONTOS = [
