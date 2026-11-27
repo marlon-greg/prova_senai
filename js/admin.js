@@ -2202,6 +2202,7 @@ const TEMAS_150 = [   // [unidade, arquivo, tema]
   ["so", "so_01_windows", "SO de código fechado (Windows)"],
   ["front", "front_07_ui", "UI design — interface do usuário"],
   ["so", "so_08_legislacao", "Legislação (Marco Civil e LGPD)"],
+  ["front", "front_06_ux", "UX design — experiência do usuário"],
 ];
 const BANCOS_OUTROS_150 = TEMAS_150.map(([u, arq, tema]) => ({ arquivo: `bancos/gerados/${u}/${arq}.json`, icone: MATERIAS_150[u][1],
   titulo: `${MATERIAS_150[u][0]} — ${tema} (150 questões)`, desc: "105 alternativas + 45 dissertativas (sem pedir código), dificuldade balanceada. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] }));
