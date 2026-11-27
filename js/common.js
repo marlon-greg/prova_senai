@@ -488,8 +488,27 @@ export const rotuloSemestre = s => /^\d{4}-[12]$/.test(String(s || "")) ? `${s.s
 export const SEMESTRES_CURSO = 4;
 export function periodoLetivo(d = new Date()) { return `${d.getFullYear()}-${d.getMonth() <= 6 ? 1 : 2}`; }
 const indicePeriodo = p => { const [a, n] = String(p || "").split("-").map(Number); return a * 2 + (n - 1); };
+// Sigla da turma (padrão SENAI Salto): DETS-I-1A-26CT-S = Desenvolvimento de Sistemas · Itinerário · 1º ano, turma A ·
+// 2026 · Curso Técnico · Salto. A turma muda de nome todo ano (1A-26 → 2A-27). Semestre do curso pela sigla:
+// (ano da turma − 1) × 2 + período letivo de agora (+ 2 por ano que passou, se o nome ainda não foi atualizado).
+// 1A-26 em 2026/2 = 2º; 2A-27 em 2027/1 = 3º. A sigla vale MAIS que o semestre digitado no cadastro.
+export function siglaTurma(nome) {
+  const m = /-(\d)([A-Z])-(\d{2})[A-Z]*-?[A-Z]*$/i.exec(String(nome || "").trim());
+  return m ? { ano: Number(m[1]), letra: m[2].toUpperCase(), anoCal: 2000 + Number(m[3]) } : null;
+}
+// nome que a turma deve ter no ano de "hoje" (ex.: DETS-I-1A-26CT-S em 2027 → DETS-I-2A-27CT-S); null se já está certo
+export function nomeTurmaNoAno(nome, hoje = new Date()) {
+  const s = siglaTurma(nome); if (!s) return null;
+  const passou = hoje.getFullYear() - s.anoCal; if (passou <= 0) return null;
+  return String(nome).replace(/-(\d)([A-Z])-(\d{2})/i, (_, a, l) => `-${Number(a) + passou}${l.toUpperCase()}-${String(hoje.getFullYear()).slice(2)}`);
+}
 // devolve { n, concluida, rotulo } ou null (turma sem semestre informado)
 export function semestreCursoAtual(t, hoje = new Date()) {
+  const s = siglaTurma(t?.nome);
+  if (s && hoje.getFullYear() >= s.anoCal) {
+    const n = (s.ano - 1) * 2 + (hoje.getFullYear() - s.anoCal) * 2 + Number(periodoLetivo(hoje).slice(5));
+    return { n, concluida: n > SEMESTRES_CURSO, rotulo: n > SEMESTRES_CURSO ? "Curso concluído" : `${n}º semestre`, pelaSigla: true };
+  }
   const base = Number(t?.semestreCurso);
   if (!base) return null;
   const ref = /^\d{4}-[12]$/.test(t.semestreCursoRef || "") ? t.semestreCursoRef : periodoLetivo(hoje);
