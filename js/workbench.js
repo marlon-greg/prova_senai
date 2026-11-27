@@ -478,6 +478,13 @@ function tipoExibicao(tipo, args, unsigned, zerofill) {
 // =====================================================================================
 // Sessão: um banco SQLite + o "estado MySQL" (bancos virtuais, banco ativo, safe updates)
 // =====================================================================================
+// privilégios do MySQL na ordem em que o SHOW GRANTS mostra; "ALL" vira a lista do nível (global, banco, tabela)
+const PRIVS_MYSQL = ["SELECT", "INSERT", "UPDATE", "DELETE", "CREATE", "DROP", "RELOAD", "SHUTDOWN", "PROCESS", "FILE", "REFERENCES", "INDEX", "ALTER", "SHOW DATABASES", "SUPER",
+  "CREATE TEMPORARY TABLES", "LOCK TABLES", "EXECUTE", "REPLICATION SLAVE", "REPLICATION CLIENT", "CREATE VIEW", "SHOW VIEW", "CREATE ROUTINE", "ALTER ROUTINE", "CREATE USER", "EVENT", "TRIGGER", "CREATE TABLESPACE", "CREATE ROLE", "DROP ROLE"];
+const PRIVS_GLOBAL = PRIVS_MYSQL;
+const PRIVS_BANCO = ["SELECT", "INSERT", "UPDATE", "DELETE", "CREATE", "DROP", "REFERENCES", "INDEX", "ALTER", "CREATE TEMPORARY TABLES", "LOCK TABLES", "EXECUTE", "CREATE VIEW", "SHOW VIEW", "CREATE ROUTINE", "ALTER ROUTINE", "EVENT", "TRIGGER"];
+const PRIVS_TABELA = ["SELECT", "INSERT", "UPDATE", "DELETE", "CREATE", "DROP", "REFERENCES", "INDEX", "ALTER", "CREATE VIEW", "SHOW VIEW", "TRIGGER"];
+
 class Sessao {
   constructor(SQL, nomeBanco, { leniente = false } = {}) {
     this.SQL = SQL;
@@ -496,6 +503,7 @@ class Sessao {
     this.ativo = this.principal;
     this.seguro = true;
     this.tipos = {};      // tabela(minúsc.) → { coluna(minúsc.): "tipo como no MySQL" }
+    this.usuarios = new Map();   // "usuario@host" → { u, h, privs: Map(nível → Set), opcao: Set(níveis com GRANT OPTION) }
   }
 
   fechar() { try { this.db?.close(); } catch { /* ok */ } this.db = null; }
@@ -547,8 +555,9 @@ class Sessao {
       case "DESCRIBE": case "DESC": case "EXPLAIN": return this.descreverCmd(c);
       case "SET": return this.definir(c);
       case "START": case "BEGIN": case "COMMIT": case "ROLLBACK": case "SAVEPOINT": case "RELEASE": return this.transacao(c);
-      case "GRANT": case "REVOKE": case "FLUSH":
-        throw this.naoSuportado("usuários e permissões (GRANT, REVOKE, CREATE USER)");
+      case "GRANT": return this.conceder(c);
+      case "REVOKE": return this.revogar(c);
+      case "FLUSH": c.pega(); if (!c.aceita("PRIVILEGES")) throw this.naoSuportado("FLUSH " + (c.u() || "")); return { mensagem: "0 row(s) affected" };
       case "CALL": case "DELIMITER": case "LOAD": case "SOURCE": case "LOCK": case "UNLOCK": case "HANDLER": case "DO":
       case "PREPARE": case "EXECUTE": case "DEALLOCATE": case "OPTIMIZE": case "ANALYZE": case "CHECK": case "REPAIR": case "KILL":
         throw this.naoSuportado(c.u());
@@ -912,7 +921,8 @@ class Sessao {
     if (c.aceita("INDEX")) return this.criarIndice(c, false);
     while (["ALGORITHM", "DEFINER", "SQL"].includes(c.u())) { c.pega(); if (c.op("=")) { c.pega(); c.pega(); } else c.pega(); }
     if (c.aceita("VIEW")) return this.criarView(c, false, true);
-    if (["USER", "ROLE"].includes(c.u())) throw this.naoSuportado("usuários e permissões (CREATE USER, GRANT, REVOKE)");
+    if (c.aceita("USER")) return this.criarUsuario(c);
+    if (c.u() === "ROLE") throw this.naoSuportado("CREATE ROLE");
     if (["PROCEDURE", "FUNCTION", "TRIGGER", "EVENT"].includes(c.u())) throw this.naoSuportado(`CREATE ${c.u()}`);
     throw new ErroSintaxe(c.ver() || null);
   }
@@ -1221,6 +1231,7 @@ class Sessao {
   // ---------- DROP ----------
   derrubar(c) {
     c.pega();
+    if (c.aceita("USER")) return this.derrubarUsuario(c);
     if (c.u() === "DATABASE" || c.u() === "SCHEMA") {
       c.pega();
       const se = c.aceita("IF", "EXISTS");
@@ -1349,6 +1360,7 @@ class Sessao {
       if (c.aceita("LIKE")) { const s = c.pega(); if (!s || s.t !== "str") throw new ErroSintaxe(s || null); return likeRegex(s.n); }
       return null;
     };
+    if (c.aceita("GRANTS")) return this.mostrarPermissoes(c);
     if (c.aceita("DATABASES") || c.aceita("SCHEMAS")) {
       const f = filtro();
       const linhas = [...this.bancos].sort((a, b) => minusc(a) < minusc(b) ? -1 : 1).filter(b => !f || f.test(b)).map(b => [b]);
@@ -1452,6 +1464,11 @@ class Sessao {
       if (typeof padrao === "string" && /^'.*'$/s.test(padrao)) padrao = padrao.slice(1, -1).replace(/''/g, "'");
       else if (padrao !== null && padrao !== undefined) padrao = String(padrao);
       if (padrao === "NULL") padrao = null;
+      // DECIMAL(p,s): o MySQL mostra o padrão com as casas da coluna (DEFAULT 0 e DEFAULT 0.00 aparecem os dois como 0.00)
+      // TRUE/FALSE: o MySQL guarda e mostra 1/0
+      if (padrao !== null && /^(true|false)$/i.test(String(padrao).trim())) padrao = /^true$/i.test(String(padrao).trim()) ? "1" : "0";
+      const decCasas = /^decimal\(\d+,(\d+)\)/i.exec(tipo);
+      if (decCasas && padrao !== null && /^-?\d+(\.\d+)?$/.test(String(padrao).trim())) padrao = Number(padrao).toFixed(Number(decCasas[1]));
       const chave = col.pk > 0 ? "PRI" : uni.has(n) ? "UNI" : mul.has(n) ? "MUL" : "";
       let extra = "";
       if (col.pk > 0 && auto && minusc(col.type) === "integer") extra = "auto_increment";
@@ -1542,7 +1559,8 @@ class Sessao {
   alterar(c) {
     c.pega();
     if (c.u() === "DATABASE" || c.u() === "SCHEMA") return { mensagem: "1 row(s) affected" };
-    if (["USER", "VIEW", "PROCEDURE", "FUNCTION", "EVENT"].includes(c.u())) throw this.naoSuportado(`ALTER ${c.u()}`);
+    if (c.aceita("USER")) return this.alterarUsuario(c);
+    if (["VIEW", "PROCEDURE", "FUNCTION", "EVENT"].includes(c.u())) throw this.naoSuportado(`ALTER ${c.u()}`);
     if (!c.aceita("TABLE")) throw new ErroSintaxe(c.ver() || null);
     let t = this.exigirTabela(this.nomeQualificado(c));
     const clausulas = dividirVirgulas(c.resto());
@@ -1828,9 +1846,148 @@ class Sessao {
     for (const s of indices) { try { this.rodar(s); } catch { /* índice de coluna removida */ } }
   }
 
+  // ---------- usuários e permissões (DCL), simulados: CREATE/ALTER/DROP USER, GRANT, REVOKE, SHOW GRANTS ----------
+  // 'usuario'@'host' (host padrão '%'); nível: *.* | banco.* | banco.tabela | tabela (do banco ativo)
+  lerConta(c) {
+    const t = c.pega();
+    if (!t) throw new ErroSintaxe(null);
+    let u, h = "%";
+    if (t.t === "str" || t.t === "id") u = t.n;
+    else if (t.t === "pal") { const [a, b] = t.v.split("@"); u = a; if (b !== undefined) { if (b) h = b; else { const x = c.pega(); if (!x) throw new ErroSintaxe(null); h = x.t === "str" || x.t === "id" ? x.n : x.v; } } }
+    else throw new ErroSintaxe(t);
+    const nx = c.ver();
+    if (nx && nx.t === "pal" && nx.v.startsWith("@")) {
+      c.pega();
+      if (nx.v.length > 1) h = nx.v.slice(1);
+      else { const x = c.pega(); if (!x) throw new ErroSintaxe(null); h = x.t === "str" || x.t === "id" ? x.n : x.v; }
+    }
+    if (!u) throw new ErroSintaxe(t);
+    return { u, h, k: u + "@" + minusc(h) };
+  }
+  lerContas(c) { const l = [this.lerConta(c)]; while (c.op(",")) { c.pega(); l.push(this.lerConta(c)); } return l; }
+  contaTxt(x) { return `'${x.u}'@'${x.h}'`; }
+  pularSenha(c) {   // IDENTIFIED [WITH plugin] BY 'senha' (a senha não é guardada)
+    if (!c.aceita("IDENTIFIED")) return;
+    if (c.aceita("WITH")) c.pega();
+    if (c.aceita("BY")) { c.aceita("RANDOM", "PASSWORD") || c.pega(); }
+  }
+  criarUsuario(c) {
+    const se = c.aceita("IF", "NOT", "EXISTS");
+    const contas = [];
+    do { const x = this.lerConta(c); this.pularSenha(c); contas.push(x); } while (c.op(",") && c.pega());
+    const ja = contas.filter(x => this.usuarios.has(x.k));
+    if (ja.length && !se) throw new ErroMy(1396, `Operation CREATE USER failed for ${ja.map(x => this.contaTxt(x)).join(",")}`);
+    for (const x of contas) if (!this.usuarios.has(x.k)) this.usuarios.set(x.k, { u: x.u, h: x.h, privs: new Map(), opcao: new Set() });
+    return { mensagem: ja.length ? `0 row(s) affected, ${ja.length} warning(s): 3163 Authorization ID ${this.contaTxt(ja[0])} already exists.` : "0 row(s) affected" };
+  }
+  alterarUsuario(c) {
+    const se = c.aceita("IF", "EXISTS");
+    const x = this.lerConta(c);
+    if (!this.usuarios.has(x.k)) { if (se) return { mensagem: "0 row(s) affected, 1 warning(s)" }; throw new ErroMy(1396, `Operation ALTER USER failed for ${this.contaTxt(x)}`); }
+    this.pularSenha(c);
+    return { mensagem: "0 row(s) affected" };
+  }
+  derrubarUsuario(c) {
+    const se = c.aceita("IF", "EXISTS");
+    const contas = this.lerContas(c);
+    const faltam = contas.filter(x => !this.usuarios.has(x.k));
+    if (faltam.length && !se) throw new ErroMy(1396, `Operation DROP USER failed for ${faltam.map(x => this.contaTxt(x)).join(",")}`);
+    contas.forEach(x => this.usuarios.delete(x.k));
+    return { mensagem: "0 row(s) affected" };
+  }
+  lerPrivilegios(c) {   // até o ON; ALL [PRIVILEGES]; colunas entre parênteses são ignoradas
+    const out = new Set();
+    for (;;) {
+      if (c.fim) throw new ErroSintaxe(null);
+      const ps = [];
+      while (c.ver() && c.ver().t === "pal" && c.u() !== "ON" && c.u() !== "FROM" && c.u() !== "TO") ps.push(c.pega().u);
+      if (!ps.length) throw new ErroSintaxe(c.ver() || null);
+      let p = ps.join(" ");
+      if (p === "ALL" || p === "ALL PRIVILEGES") p = "ALL";
+      if (!PRIVS_MYSQL.includes(p) && p !== "ALL" && p !== "GRANT OPTION" && p !== "USAGE") throw new ErroSintaxe(c.ver() || null);
+      out.add(p);
+      if (c.op("(")) c.parenteses();
+      if (c.op(",")) { c.pega(); continue; }
+      break;
+    }
+    return out;
+  }
+  lerNivel(c) {   // devolve "banco.*", "banco.tabela" ou "*.*" (nomes do banco em minúsculas para comparar)
+    const parte = () => { if (c.op("*")) { c.pega(); return "*"; } const t = c.ver(); const n = c.nome(); if (!n) throw new ErroSintaxe(t || null); return n; };
+    c.aceita("TABLE");
+    const a = parte();
+    if (c.op(".")) { c.pega(); const b = parte(); if (a === "*" && b !== "*") throw new ErroSintaxe(null); return { bd: a, tb: b }; }
+    if (a === "*") { this.exigirBanco(); return { bd: this.ativo, tb: "*" }; }
+    this.exigirBanco();
+    return { bd: this.ativo, tb: a };
+  }
+  chaveNivel(n) {
+    if (n.bd === "*") return "*.*";
+    if (n.bd !== "*" && !this.ehBanco(n.bd) && n.tb !== "*") throw new ErroMy(1146, `Table '${n.bd}.${n.tb}' doesn't exist`);
+    const bd = this.bancos.find(x => minusc(x) === minusc(n.bd)) || n.bd;
+    if (n.tb === "*") return `${bd}.*`;
+    const real = minusc(bd) === minusc(this.ativo || "") ? this.listarTabelas().find(t => minusc(t.nome) === minusc(n.tb))?.nome : null;
+    if (!real) throw new ErroMy(1146, `Table '${bd}.${n.tb}' doesn't exist`);
+    return `${bd}.${real}`;
+  }
+  todosDoNivel(nivel) { return nivel === "*.*" ? PRIVS_GLOBAL : nivel.endsWith(".*") ? PRIVS_BANCO : PRIVS_TABELA; }
+  conceder(c) {
+    c.pega();
+    const ps = this.lerPrivilegios(c);
+    if (!c.aceita("ON")) throw new ErroSintaxe(c.ver() || null);
+    const nivel = this.chaveNivel(this.lerNivel(c));
+    if (!c.aceita("TO")) throw new ErroSintaxe(c.ver() || null);
+    const contas = this.lerContas(c);
+    const opcao = c.aceita("WITH", "GRANT", "OPTION");
+    for (const x of contas) if (!this.usuarios.has(x.k)) throw new ErroMy(1410, "You are not allowed to create a user with GRANT");
+    const todos = this.todosDoNivel(nivel);
+    for (const x of contas) {
+      const us = this.usuarios.get(x.k), atual = us.privs.get(nivel) || new Set();
+      for (const p of ps) { if (p === "ALL") todos.forEach(q => atual.add(q)); else if (p === "GRANT OPTION") us.opcao.add(nivel); else if (p !== "USAGE") { if (!todos.includes(p)) throw new ErroMy(1144, "Illegal GRANT/REVOKE command; please consult the manual to see which privileges can be used"); atual.add(p); } }
+      if (atual.size) us.privs.set(nivel, atual);
+      if (opcao) us.opcao.add(nivel);
+    }
+    return { mensagem: "0 row(s) affected" };
+  }
+  revogar(c) {
+    c.pega();
+    // REVOKE ALL [PRIVILEGES], GRANT OPTION FROM conta
+    const ini = c.i;
+    if (c.aceita("ALL")) { c.aceita("PRIVILEGES"); if (c.op(",")) { c.pega(); if (c.aceita("GRANT", "OPTION") && c.aceita("FROM")) { const contas = this.lerContas(c); for (const x of contas) { const us = this.usuarios.get(x.k); if (!us) throw new ErroMy(1141, `There is no such grant defined for user '${x.u}' on host '${x.h}'`); us.privs.clear(); us.opcao.clear(); } return { mensagem: "0 row(s) affected" }; } } }
+    c.i = ini;
+    const ps = this.lerPrivilegios(c);
+    if (!c.aceita("ON")) throw new ErroSintaxe(c.ver() || null);
+    const nivel = this.chaveNivel(this.lerNivel(c));
+    if (!c.aceita("FROM")) throw new ErroSintaxe(c.ver() || null);
+    const contas = this.lerContas(c);
+    for (const x of contas) {
+      const us = this.usuarios.get(x.k);
+      const tem = us && (us.privs.has(nivel) || us.opcao.has(nivel));
+      if (!tem) throw new ErroMy(1141, `There is no such grant defined for user '${x.u}' on host '${x.h}'`);
+      const atual = us.privs.get(nivel) || new Set();
+      for (const p of ps) { if (p === "ALL") atual.clear(); else if (p === "GRANT OPTION") us.opcao.delete(nivel); else atual.delete(p); }
+      if (atual.size) us.privs.set(nivel, atual); else us.privs.delete(nivel);
+    }
+    return { mensagem: "0 row(s) affected" };
+  }
+  mostrarPermissoes(c) {
+    if (!c.aceita("FOR")) return { mensagem: "1 row(s) returned", resultado: { colunas: ["Grants for root@localhost"], linhas: [["GRANT ALL PRIVILEGES ON *.* TO `root`@`localhost` WITH GRANT OPTION"]] } };
+    if (c.aceita("CURRENT_USER")) { if (c.op("(")) c.parenteses(); return this.mostrarPermissoes({ aceita: () => false }); }
+    const x = this.lerConta(c), us = this.usuarios.get(x.k);
+    if (!us) throw new ErroMy(1141, `There is no such grant defined for user '${x.u}' on host '${x.h}'`);
+    const quem = `\`${us.u}\`@\`${us.h}\``;
+    const alvo = n => n === "*.*" ? "*.*" : n.endsWith(".*") ? `\`${n.slice(0, -2)}\`.*` : `\`${n.slice(0, n.indexOf("."))}\`.\`${n.slice(n.indexOf(".") + 1)}\``;
+    const texto = (n, set) => { const todos = this.todosDoNivel(n); const tudo = todos.every(p => set.has(p)); return tudo ? "ALL PRIVILEGES" : PRIVS_MYSQL.filter(p => set.has(p)).join(", "); };
+    const niveis = [...new Set([...us.privs.keys(), ...us.opcao])].sort((a, b) => (a === "*.*" ? 0 : a.endsWith(".*") ? 1 : 2) - (b === "*.*" ? 0 : b.endsWith(".*") ? 1 : 2) || (a < b ? -1 : a > b ? 1 : 0));
+    const linhas = [];
+    if (!us.privs.has("*.*")) linhas.push([`GRANT USAGE ON *.* TO ${quem}${us.opcao.has("*.*") ? " WITH GRANT OPTION" : ""}`]);
+    for (const n of niveis) { const set = us.privs.get(n); if (!set?.size) { if (n !== "*.*") linhas.push([`GRANT USAGE ON ${alvo(n)} TO ${quem} WITH GRANT OPTION`]); continue; } linhas.push([`GRANT ${texto(n, set)} ON ${alvo(n)} TO ${quem}${us.opcao.has(n) ? " WITH GRANT OPTION" : ""}`]); }
+    return { mensagem: `${linhas.length} row(s) returned`, resultado: { colunas: [`Grants for ${us.u}@${us.h}`], linhas } };
+  }
+
   // ---------- erros ----------
   naoSuportado(oque) {
-    return new ErroMy(1235, `A Bancada SQL não simula ${oque}. Ela executa comandos de tabelas e dados: CREATE/ALTER/DROP TABLE, INSERT, UPDATE, DELETE, SELECT, SHOW e DESCRIBE.`);
+    return new ErroMy(1235, `A Bancada SQL não simula ${oque}. Ela executa comandos de tabelas, dados e permissões: CREATE/ALTER/DROP TABLE, INSERT, UPDATE, DELETE, SELECT, SHOW, DESCRIBE, CREATE USER, GRANT e REVOKE.`);
   }
 
   erroSintaxe(e) {

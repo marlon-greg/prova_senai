@@ -6,6 +6,7 @@
     {
       "tipo": "alternativa",
       "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "dificuldade": "facil",
       "enunciado": "Qual comando cria um banco de dados novo SEM dar erro caso ele já exista?",
       "alternativas": [
         "CREATE DATABASE pf_suporte;",
@@ -20,6 +21,7 @@
     {
       "tipo": "alternativa",
       "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "dificuldade": "facil",
       "enunciado": "Para que serve o comando `USE pf_suporte;`?",
       "alternativas": [
         "Cria o banco pf_suporte",
@@ -34,6 +36,7 @@
     {
       "tipo": "alternativa",
       "tema": "DDL — CREATE TABLE e restrições",
+      "dificuldade": "facil",
       "enunciado": "Na tabela cliente, qual restrição impede que dois registros tenham o mesmo e-mail?",
       "alternativas": [
         "NOT NULL",
@@ -48,6 +51,7 @@
     {
       "tipo": "alternativa",
       "tema": "DDL — CREATE TABLE e restrições",
+      "dificuldade": "media",
       "enunciado": "Qual é a diferença entre PRIMARY KEY e UNIQUE?",
       "alternativas": [
         "Nenhuma, são sinônimos",
@@ -62,6 +66,7 @@
     {
       "tipo": "alternativa",
       "tema": "DDL — CREATE TABLE e restrições",
+      "dificuldade": "media",
       "enunciado": "Você tentou criar a tabela chamado antes da tabela cliente e o MySQL recusou (erro 1824). Por quê?",
       "alternativas": [
         "Porque a FOREIGN KEY aponta para uma tabela que ainda não existe",
@@ -76,6 +81,7 @@
     {
       "tipo": "alternativa",
       "tema": "DDL — ALTER TABLE, índices e DROP",
+      "dificuldade": "facil",
       "enunciado": "Qual comando acrescenta a coluna data_abertura (DATE) à tabela chamado, que já existe e já tem dados?",
       "alternativas": [
         "CREATE COLUMN data_abertura DATE ON chamado;",
@@ -90,6 +96,7 @@
     {
       "tipo": "alternativa",
       "tema": "DDL — ALTER TABLE, índices e DROP",
+      "dificuldade": "media",
       "enunciado": "Para que serve um índice (INDEX) numa coluna?",
       "alternativas": [
         "Para impedir valores repetidos na coluna",
@@ -104,6 +111,7 @@
     {
       "tipo": "alternativa",
       "tema": "DDL — ALTER TABLE, índices e DROP",
+      "dificuldade": "media",
       "enunciado": "Qual é a diferença entre `DROP TABLE chamado` e `DELETE FROM chamado`?",
       "alternativas": [
         "Não há diferença: os dois apagam a tabela",
@@ -118,6 +126,7 @@
     {
       "tipo": "alternativa",
       "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "dificuldade": "facil",
       "enunciado": "O que `DROP DATABASE pf_suporte;` faz?",
       "alternativas": [
         "Apaga só as tabelas vazias",
@@ -132,6 +141,7 @@
     {
       "tipo": "alternativa",
       "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "dificuldade": "media",
       "enunciado": "Você rodou `CREATE USER 'ana_suporte'@'localhost' IDENTIFIED BY 'Ana@2026';`. O que esse usuário já pode fazer no banco pf_suporte?",
       "alternativas": [
         "Consultar todas as tabelas",
@@ -146,6 +156,7 @@
     {
       "tipo": "alternativa",
       "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "dificuldade": "facil",
       "enunciado": "O que significa 'localhost' em `'ana_suporte'@'localhost'`?",
       "alternativas": [
         "O nome do banco de dados",
@@ -160,6 +171,7 @@
     {
       "tipo": "alternativa",
       "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "dificuldade": "media",
       "enunciado": "Seguindo o princípio do menor privilégio, qual GRANT é o mais adequado para quem só precisa consultar a tabela chamado?",
       "alternativas": [
         "GRANT ALL PRIVILEGES ON *.* TO ...",
@@ -174,6 +186,7 @@
     {
       "tipo": "alternativa",
       "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "dificuldade": "media",
       "enunciado": "Sobre o REVOKE, assinale a alternativa correta:",
       "alternativas": [
         "Usa a palavra TO, igual ao GRANT",
@@ -188,6 +201,7 @@
     {
       "tipo": "alternativa",
       "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "dificuldade": "facil",
       "enunciado": "O usuário tentou `INSERT INTO chamado ...` e recebeu `ERROR 1142: INSERT command denied`. O que isso significa?",
       "alternativas": [
         "A senha está errada",
@@ -202,6 +216,7 @@
     {
       "tipo": "alternativa",
       "tema": "Importação, exportação e backup",
+      "dificuldade": "dificil",
       "enunciado": "Um dump gerado com mysqldump usando `--databases` contém também CREATE DATABASE e USE. Qual é a consequência ao importar esse arquivo?",
       "alternativas": [
         "O arquivo não pode ser importado pelo Workbench",
@@ -216,6 +231,7 @@
     {
       "tipo": "alternativa",
       "tema": "Importação, exportação e backup",
+      "dificuldade": "media",
       "enunciado": "Qual opção do mysqldump exporta só a estrutura das tabelas, sem os dados?",
       "alternativas": [
         "--no-data",
@@ -230,6 +246,7 @@
     {
       "tipo": "alternativa",
       "tema": "Importação, exportação e backup",
+      "dificuldade": "facil",
       "enunciado": "No MySQL Workbench, onde fica a exportação do banco inteiro para um arquivo .sql?",
       "alternativas": [
         "File → Save Script",
@@ -244,6 +261,7 @@
     {
       "tipo": "alternativa",
       "tema": "Importação, exportação e backup",
+      "dificuldade": "dificil",
       "enunciado": "O comando `source C:/dumps/backup.sql;` funciona onde?",
       "alternativas": [
         "Na aba SQL do Workbench",
@@ -258,6 +276,7 @@
     {
       "tipo": "alternativa",
       "tema": "Importação, exportação e backup",
+      "dificuldade": "media",
       "enunciado": "Qual é a vantagem do backup incremental em relação ao backup full?",
       "alternativas": [
         "É mais simples de restaurar",
@@ -272,6 +291,7 @@
     {
       "tipo": "alternativa",
       "tema": "Importação, exportação e backup",
+      "dificuldade": "dificil",
       "enunciado": "O que o SELECT ... INTO OUTFILE exige para funcionar?",
       "alternativas": [
         "Que o arquivo já exista",
@@ -286,172 +306,146 @@
     {
       "tipo": "dissertativa",
       "tema": "DDL — CREATE TABLE e restrições",
-      "enunciado": "Contexto: a Pixel Forge Suporte está montando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nEscreva o comando completo que cria a tabela cliente no banco pf_suporte, com id_cliente como chave primária numérica e automática, nome (texto, obrigatório) e email (texto, obrigatório e sem repetir).",
+      "dificuldade": "media",
+      "enunciado": "Contexto: a Pixel Forge Suporte está organizando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nObserve o comando:\n`CREATE TABLE cliente (id_cliente INT PRIMARY KEY AUTO_INCREMENT, nome VARCHAR(80) NOT NULL, email VARCHAR(120) NOT NULL UNIQUE);`\nO que cada restrição garante na tabela cliente?\n\nNa sua resposta:\n1. explique o que PRIMARY KEY e AUTO_INCREMENT fazem no id_cliente;\n2. explique a diferença entre NOT NULL e UNIQUE no email.",
       "respostasAceitas": [
-        "CREATE TABLE cliente (id_cliente INT PRIMARY KEY AUTO_INCREMENT, nome VARCHAR(80) NOT NULL, email VARCHAR(120) NOT NULL UNIQUE);",
-        "CREATE TABLE cliente (id_cliente INT AUTO_INCREMENT PRIMARY KEY, nome VARCHAR(80) NOT NULL, email VARCHAR(120) NOT NULL UNIQUE);"
+        "PRIMARY KEY identifica cada cliente de forma única e AUTO_INCREMENT gera o número sozinho. NOT NULL obriga a preencher; UNIQUE impede dois clientes com o mesmo e-mail."
       ],
-      "palavrasChave": [
-        "create table cliente(",
-        "id_cliente int",
-        "primary key",
-        "auto_increment",
-        "nome varchar",
-        "not null",
-        "email varchar",
-        "unique"
-      ],
-      "explicacao": "CREATE TABLE cliente (id_cliente INT PRIMARY KEY AUTO_INCREMENT, nome VARCHAR(80) NOT NULL, email VARCHAR(120) NOT NULL UNIQUE); — PK + AUTO_INCREMENT no id, NOT NULL nas duas colunas e UNIQUE no e-mail.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) PK identifica unicamente o registro e AUTO_INCREMENT numera automaticamente; 2) NOT NULL = obrigatório, UNIQUE = sem repetir.",
       "peso": 2
     },
     {
       "tipo": "dissertativa",
       "tema": "DDL — CREATE TABLE e restrições",
-      "enunciado": "Contexto: a Pixel Forge Suporte está montando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nEscreva o comando completo que cria a tabela chamado, com id_chamado como chave primária numérica e automática, titulo (texto, obrigatório), prioridade (número inteiro, padrão 3) e a chave estrangeira id_cliente apontando para a tabela cliente.",
+      "dificuldade": "dificil",
+      "enunciado": "Contexto: a Pixel Forge Suporte está organizando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nA tabela chamado foi criada com:\n`CREATE TABLE chamado (id_chamado INT PRIMARY KEY AUTO_INCREMENT, titulo VARCHAR(100) NOT NULL, prioridade INT DEFAULT 3, id_cliente INT NOT NULL, FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente));`\nO que acontece se alguém inserir um chamado sem informar a prioridade? E se informar um id_cliente que não existe?\n\nNa sua resposta:\n1. diga o que o DEFAULT 3 faz;\n2. explique o que a FOREIGN KEY faz com um id_cliente inexistente;\n3. diga por que a tabela cliente precisa existir antes de chamado.",
       "respostasAceitas": [
-        "CREATE TABLE chamado (id_chamado INT PRIMARY KEY AUTO_INCREMENT, titulo VARCHAR(100) NOT NULL, prioridade INT DEFAULT 3, id_cliente INT NOT NULL, FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente));"
+        "Sem prioridade, o chamado fica com prioridade 3 (DEFAULT). Com id_cliente inexistente o MySQL recusa o INSERT, porque a FOREIGN KEY exige que o cliente exista. Por isso cliente tem que ser criada antes."
       ],
-      "palavrasChave": [
-        "create table chamado(",
-        "id_chamado int",
-        "primary key",
-        "auto_increment",
-        "titulo varchar",
-        "not null",
-        "prioridade int default 3",
-        "foreign key(id_cliente)references cliente(id_cliente)"
-      ],
-      "explicacao": "CREATE TABLE chamado (id_chamado INT PRIMARY KEY AUTO_INCREMENT, titulo VARCHAR(100) NOT NULL, prioridade INT DEFAULT 3, id_cliente INT NOT NULL, FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente)); — a FK precisa da coluna E da cláusula FOREIGN KEY ... REFERENCES.",
-      "peso": 2
-    },
-    {
-      "tipo": "dissertativa",
-      "tema": "DDL — ALTER TABLE, índices e DROP",
-      "enunciado": "Contexto: a Pixel Forge Suporte está montando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nA tabela chamado precisa evoluir. Escreva o comando que acrescenta a coluna data_abertura do tipo DATE.",
-      "respostasAceitas": [
-        "ALTER TABLE chamado ADD COLUMN data_abertura DATE;",
-        "ALTER TABLE chamado ADD data_abertura DATE;"
-      ],
-      "palavrasChave": [
-        "alter table chamado add",
-        "data_abertura date"
-      ],
-      "explicacao": "ALTER TABLE chamado ADD COLUMN data_abertura DATE; — ALTER muda a estrutura sem perder os dados que já existem.",
-      "peso": 2
-    },
-    {
-      "tipo": "dissertativa",
-      "tema": "DDL — ALTER TABLE, índices e DROP",
-      "enunciado": "Contexto: a Pixel Forge Suporte está montando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nEscreva o comando que cria um índice chamado idx_chamado_titulo na coluna titulo da tabela chamado.",
-      "respostasAceitas": [
-        "CREATE INDEX idx_chamado_titulo ON chamado(titulo);",
-        "CREATE INDEX idx_chamado_titulo ON chamado (titulo);"
-      ],
-      "palavrasChave": [
-        "create index idx_chamado_titulo on chamado(titulo)"
-      ],
-      "explicacao": "CREATE INDEX idx_chamado_titulo ON chamado(titulo); — também vale ALTER TABLE chamado ADD INDEX idx_chamado_titulo (titulo).",
-      "peso": 2
-    },
-    {
-      "tipo": "dissertativa",
-      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
-      "enunciado": "Escreva o comando que cria o usuário ana_suporte, que só acessa de localhost, com a senha Ana@2026.",
-      "respostasAceitas": [
-        "CREATE USER 'ana_suporte'@'localhost' IDENTIFIED BY 'Ana@2026';"
-      ],
-      "palavrasChave": [
-        "create user 'ana_suporte'@'localhost'",
-        "identified by 'ana@2026'"
-      ],
-      "explicacao": "CREATE USER 'ana_suporte'@'localhost' IDENTIFIED BY 'Ana@2026'; — usuário e host entre aspas simples, separados por @.",
-      "peso": 2
-    },
-    {
-      "tipo": "dissertativa",
-      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
-      "enunciado": "Contexto: a Pixel Forge Suporte está montando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nA usuária ana_suporte só pode consultar (ler) a tabela chamado do banco pf_suporte. Escreva o GRANT mais adequado.",
-      "respostasAceitas": [
-        "GRANT SELECT ON pf_suporte.chamado TO 'ana_suporte'@'localhost';"
-      ],
-      "palavrasChave": [
-        "grant select on pf_suporte.chamado to 'ana_suporte'@'localhost'"
-      ],
-      "explicacao": "GRANT SELECT ON pf_suporte.chamado TO 'ana_suporte'@'localhost'; — nível da tabela, só leitura (menor privilégio). GRANT em pf_suporte.* daria mais do que o pedido.",
-      "peso": 2
-    },
-    {
-      "tipo": "dissertativa",
-      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
-      "enunciado": "Contexto: a Pixel Forge Suporte está montando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nA usuária ana_suporte tinha INSERT e UPDATE na tabela cliente do banco pf_suporte. Escreva o comando que retira SOMENTE o UPDATE.",
-      "respostasAceitas": [
-        "REVOKE UPDATE ON pf_suporte.cliente FROM 'ana_suporte'@'localhost';"
-      ],
-      "palavrasChave": [
-        "revoke update on pf_suporte.cliente from 'ana_suporte'@'localhost'"
-      ],
-      "explicacao": "REVOKE UPDATE ON pf_suporte.cliente FROM 'ana_suporte'@'localhost'; — REVOKE usa FROM e tem que ser no mesmo nível (tabela) em que a permissão foi dada.",
-      "peso": 2
-    },
-    {
-      "tipo": "dissertativa",
-      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
-      "enunciado": "Escreva o comando que mostra todas as permissões da usuária ana_suporte para você conferir.",
-      "respostasAceitas": [
-        "SHOW GRANTS FOR 'ana_suporte'@'localhost';"
-      ],
-      "palavrasChave": [
-        "show grants for 'ana_suporte'@'localhost'"
-      ],
-      "explicacao": "SHOW GRANTS FOR 'ana_suporte'@'localhost'; — a linha GRANT USAGE ON *.* significa 'só pode conectar'.",
-      "peso": 2
-    },
-    {
-      "tipo": "dissertativa",
-      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
-      "enunciado": "Escreva o comando que apaga a usuária ana_suporte do servidor.",
-      "respostasAceitas": [
-        "DROP USER 'ana_suporte'@'localhost';"
-      ],
-      "palavrasChave": [
-        "drop user 'ana_suporte'@'localhost'"
-      ],
-      "explicacao": "DROP USER 'ana_suporte'@'localhost'; — apaga o crachá e todas as permissões dele.",
-      "peso": 2
-    },
-    {
-      "tipo": "dissertativa",
-      "tema": "Importação, exportação e backup",
-      "enunciado": "Contexto: a Pixel Forge Suporte está montando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nNo terminal (cmd), escreva o comando mysqldump que exporta o banco pf_suporte inteiro (estrutura e dados) para o arquivo backup.sql, usando o usuário root.",
-      "respostasAceitas": [
-        "mysqldump -u root -p pf_suporte > backup.sql",
-        "mysqldump -u root -p --databases pf_suporte > backup.sql"
-      ],
-      "palavrasChave": [
-        "mysqldump",
-        "-u root",
-        "pf_suporte>backup.sql"
-      ],
-      "explicacao": "mysqldump -u root -p pf_suporte > backup.sql — o > manda a saída para o arquivo. Com --databases o dump inclui CREATE DATABASE (cuidado ao importar por cima do original).",
-      "peso": 2
-    },
-    {
-      "tipo": "dissertativa",
-      "tema": "Importação, exportação e backup",
-      "enunciado": "Explique, em até três linhas, a diferença entre backup full e backup incremental, dizendo uma vantagem de cada um.",
-      "respostasAceitas": [],
       "palavrasChave": [],
-      "explicacao": "Full copia o banco inteiro: mais lento e pesado, mas a restauração é simples (um arquivo). Incremental copia só o que mudou desde o último backup: rápido e leve, mas a restauração precisa do full mais os incrementais em ordem. (Correção manual: aceite qualquer resposta com essas duas ideias.)",
+      "explicacao": "Espera-se: 1) DEFAULT preenche 3 quando o valor não é informado; 2) a FK recusa id_cliente que não existe em cliente (integridade referencial); 3) a tabela referenciada precisa existir antes.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "dificuldade": "facil",
+      "enunciado": "Contexto: a Pixel Forge Suporte está organizando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nA tabela chamado já tem vários registros. O que faz o comando `ALTER TABLE chamado ADD COLUMN data_abertura DATE;`?\n\nNa sua resposta:\n1. diga o que muda na tabela;\n2. explique o que acontece com os chamados que já estavam cadastrados.",
+      "respostasAceitas": [
+        "Acrescenta a coluna data_abertura (tipo data) na tabela chamado. Os chamados antigos continuam lá, com data_abertura vazia (NULL)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) adiciona uma nova coluna DATE à estrutura; 2) os dados existentes não são perdidos e a nova coluna fica NULL neles.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "dificuldade": "media",
+      "enunciado": "Contexto: a Pixel Forge Suporte está organizando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nO que faz o comando `CREATE INDEX idx_chamado_titulo ON chamado(titulo);` e para que ele serve?\n\nNa sua resposta:\n1. diga o que o comando cria;\n2. explique em que tipo de consulta ele ajuda.",
+      "respostasAceitas": [
+        "Cria um índice chamado idx_chamado_titulo na coluna titulo. Ele deixa mais rápidas as buscas e filtros pelo título (WHERE titulo = ...), como um índice de livro."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cria um índice na coluna titulo; 2) acelera consultas que buscam/filtram/ordenam por titulo.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "dificuldade": "facil",
+      "enunciado": "O que faz o comando `CREATE USER 'ana_suporte'@'localhost' IDENTIFIED BY 'Ana@2026';`?\n\nNa sua resposta:\n1. diga o que o comando cria;\n2. explique o que significam 'localhost' e IDENTIFIED BY.",
+      "respostasAceitas": [
+        "Cria a usuária ana_suporte no MySQL. 'localhost' quer dizer que ela só conecta da própria máquina do servidor, e IDENTIFIED BY define a senha Ana@2026."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cria um usuário (login) no servidor, ainda sem permissões nas tabelas; 2) localhost = só acessa da própria máquina; IDENTIFIED BY = senha.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "dificuldade": "media",
+      "enunciado": "Contexto: a Pixel Forge Suporte está organizando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nA usuária ana_suporte só precisa consultar a tabela chamado. O DBA tinha duas opções:\nA) `GRANT SELECT ON pf_suporte.chamado TO 'ana_suporte'@'localhost';`\nB) `GRANT ALL ON pf_suporte.* TO 'ana_suporte'@'localhost';`\nQual é a mais adequada e por quê?\n\nNa sua resposta:\n1. diga qual opção escolher;\n2. explique o princípio do menor privilégio.",
+      "respostasAceitas": [
+        "A opção A, porque dá só a leitura (SELECT) e só na tabela chamado. Pelo menor privilégio, cada usuário recebe apenas o que precisa; a B deixaria ela alterar e apagar tudo do banco."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) opção A; 2) menor privilégio: dar só a permissão necessária, reduzindo o risco de erro ou abuso (B dá todas as permissões em todas as tabelas).",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "dificuldade": "dificil",
+      "enunciado": "Contexto: a Pixel Forge Suporte está organizando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nA usuária ana_suporte tinha INSERT e UPDATE na tabela cliente. O DBA rodou `REVOKE UPDATE ON pf_suporte.cliente FROM 'ana_suporte'@'localhost';`. O que ela ainda pode fazer na tabela cliente depois disso?\n\nNa sua resposta:\n1. diga o que o REVOKE retirou e o que ficou;\n2. explique por que se usa FROM no REVOKE e TO no GRANT.",
+      "respostasAceitas": [
+        "O REVOKE tirou só o UPDATE; ela continua podendo fazer INSERT em cliente. No GRANT a permissão vai PARA (TO) o usuário; no REVOKE ela é tirada DE (FROM) o usuário."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) perde só o UPDATE, mantém o INSERT; 2) GRANT ... TO dá a permissão ao usuário, REVOKE ... FROM retira do usuário.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "dificuldade": "facil",
+      "enunciado": "O DBA rodou `SHOW GRANTS FOR 'ana_suporte'@'localhost';` e uma das linhas foi `GRANT USAGE ON *.* TO 'ana_suporte'@'localhost'`. O que esse comando mostra e o que significa essa linha?\n\nNa sua resposta:\n1. diga para que serve o SHOW GRANTS;\n2. explique o que significa GRANT USAGE.",
+      "respostasAceitas": [
+        "SHOW GRANTS lista todas as permissões da usuária. GRANT USAGE ON *.* quer dizer que ela só pode conectar no servidor, sem permissão nas tabelas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) lista as permissões do usuário para conferir; 2) USAGE = só conectar, nenhuma permissão de dados.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "dificuldade": "facil",
+      "enunciado": "O que faz o comando `DROP USER 'ana_suporte'@'localhost';`?\n\nNa sua resposta:\n1. diga o que acontece com a usuária;\n2. explique o que acontece com as permissões que ela tinha.",
+      "respostasAceitas": [
+        "Apaga a usuária ana_suporte do servidor; ela não consegue mais entrar. Todas as permissões dela são removidas junto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) remove o usuário (login) do servidor; 2) as permissões dele também somem.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "dificuldade": "media",
+      "enunciado": "Contexto: a Pixel Forge Suporte está organizando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nNo terminal (cmd), o técnico rodou `mysqldump -u root -p pf_suporte > backup.sql`. O que esse comando faz?\n\nNa sua resposta:\n1. diga o que vai para o arquivo backup.sql;\n2. explique para que servem o -p e o >.",
+      "respostasAceitas": [
+        "Exporta o banco pf_suporte inteiro (estrutura e dados, em comandos SQL) para o arquivo backup.sql. O -p pede a senha do root e o > manda a saída para o arquivo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) gera um backup .sql com CREATE TABLE e INSERT do banco; 2) -p pede a senha; > redireciona a saída para o arquivo.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "dificuldade": "media",
+      "enunciado": "Explique a diferença entre backup full e backup incremental.\n\nNa sua resposta:\n1. diga o que cada um copia;\n2. dê uma vantagem de cada um.",
+      "respostasAceitas": [
+        "Full copia o banco inteiro: é mais pesado, mas restaura fácil. Incremental copia só o que mudou desde o último backup: é rápido e leve, mas a restauração precisa do full e de todos os incrementais."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) full = tudo, incremental = só o que mudou; 2) full restaura simples; incremental é rápido e ocupa pouco espaço.",
       "peso": 2,
       "correcaoManual": true
     },
     {
       "tipo": "dissertativa",
       "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
-      "enunciado": "Contexto: a Pixel Forge Suporte está montando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nA usuária recebeu `GRANT SELECT ON pf_suporte.* TO 'ana_suporte'@'localhost';`. Depois o professor rodou `REVOKE SELECT ON pf_suporte.chamado FROM 'ana_suporte'@'localhost';` e deu o erro 1147. Explique em até duas linhas por que o REVOKE falhou e como deveria ser feito.",
-      "respostasAceitas": [],
+      "dificuldade": "dificil",
+      "enunciado": "Contexto: a Pixel Forge Suporte está organizando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nA usuária recebeu `GRANT SELECT ON pf_suporte.* TO 'ana_suporte'@'localhost';`. Depois o professor rodou `REVOKE SELECT ON pf_suporte.chamado FROM 'ana_suporte'@'localhost';` e deu o erro 1147. Por que o REVOKE falhou?\n\nNa sua resposta:\n1. explique o motivo do erro;\n2. diga em que nível (banco ou tabela) o REVOKE deveria ser feito.",
+      "respostasAceitas": [
+        "O REVOKE tem que ser no mesmo nível do GRANT. A permissão foi dada no banco inteiro (pf_suporte.*), não na tabela chamado, então não havia o que retirar nesse nível. O REVOKE deveria ser em pf_suporte.*."
+      ],
       "palavrasChave": [],
-      "explicacao": "O REVOKE precisa ser no MESMO nível do GRANT. A permissão foi dada no banco inteiro (pf_suporte.*), então não existe um grant só na tabela chamado para retirar. O certo: REVOKE SELECT ON pf_suporte.* FROM ... e, se precisar, dar GRANT só nas tabelas que ela deve ver. (Correção manual.)",
+      "explicacao": "Espera-se: 1) GRANT e REVOKE precisam estar no mesmo nível; não existe grant só na tabela chamado; 2) revogar no nível do banco (pf_suporte.*).",
       "peso": 2,
       "correcaoManual": true
     }

@@ -8,6 +8,7 @@
       "tipo": "alternativa",
       "tema": "JavaScript",
       "capacidade": "front.ct5",
+      "dificuldade": "dificil",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Qual é o resultado de `console.log(7 % 3, \"5\" == 5, \"5\" === 5);`?",
@@ -24,6 +25,7 @@
       "tipo": "alternativa",
       "tema": "JavaScript",
       "capacidade": "front.ct5",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Qual comando seleciona o primeiro elemento da página que tem a classe `card`?",
@@ -40,6 +42,7 @@
       "tipo": "alternativa",
       "tema": "JavaScript",
       "capacidade": "front.ct5",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Qual expressão sorteia um número inteiro de 1 a 6, como um dado?",
@@ -56,6 +59,7 @@
       "tipo": "alternativa",
       "tema": "JavaScript",
       "capacidade": "front.ct8",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Sobre o código abaixo, qual afirmação está correta?\n```js\nconst resp = await fetch(\"https://api.exemplo.com/produtos\");\nconst dados = await resp.json();\n```",
@@ -72,6 +76,7 @@
       "tipo": "alternativa",
       "tema": "JavaScript",
       "capacidade": "front.ct5",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Qual a diferença entre `localStorage` e `sessionStorage`?",
@@ -88,6 +93,7 @@
       "tipo": "alternativa",
       "tema": "JavaScript",
       "capacidade": "front.ct5",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Na classe abaixo, o que `this.nome` representa?\n```js\nclass Aluno {\n  constructor(nome) { this.nome = nome; }\n  saudar() { return \"Olá, \" + this.nome; }\n}\nconst a = new Aluno(\"Bia\");\n```",
@@ -104,73 +110,63 @@
       "tipo": "dissertativa",
       "tema": "JavaScript",
       "capacidade": "front.ct5",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "Escreva a linha de JavaScript que troca o texto do elemento com `id=\"placar\"` para `Fim de jogo`.",
+      "enunciado": "Numa página do jogo existe o elemento `<p id=\"placar\">0 pontos</p>`. O que faz a linha `document.getElementById(\"placar\").textContent = \"Fim de jogo\";`?\n\nNa sua resposta:\n1. diga o que `getElementById(\"placar\")` encontra na página;\n2. explique o que acontece com o texto do parágrafo na tela.",
       "respostasAceitas": [
-        "document.getElementById(\"placar\").textContent = \"Fim de jogo\";",
-        "document.getElementById(\"placar\").innerText = \"Fim de jogo\";",
-        "document.querySelector(\"#placar\").textContent = \"Fim de jogo\";",
-        "document.getElementById('placar').textContent = 'Fim de jogo';"
+        "getElementById pega o elemento que tem id=\"placar\"; textContent troca o texto dele, e a tela passa a mostrar \"Fim de jogo\" no lugar de \"0 pontos\"."
       ],
-      "palavrasChave": [
-        "placar",
-        "fim de jogo",
-        "document."
-      ],
-      "explicacao": "document.getElementById(\"placar\").textContent = \"Fim de jogo\"; (também vale querySelector(\"#placar\") e innerText)."
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) busca o elemento de id \"placar\"; 2) substitui o texto dele por \"Fim de jogo\", que aparece na tela."
     },
     {
       "tipo": "dissertativa",
       "tema": "JavaScript",
       "capacidade": "front.ct8",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "Qual objeto e método do navegador obtêm a localização atual do usuário? O que precisa acontecer antes de o site receber a posição?",
-      "palavrasChave": [
-        "navigator.geolocation",
-        "getcurrentposition",
-        "permiss"
-      ],
-      "explicacao": "navigator.geolocation.getCurrentPosition(…); o navegador pede a permissão do usuário antes de entregar a latitude e a longitude."
-    },
-    {
-      "tipo": "dissertativa",
-      "tema": "JavaScript",
-      "capacidade": "front.ct5",
-      "revisao": "pendente",
-      "peso": 2,
-      "enunciado": "A variável `tela` guarda um elemento `<canvas>`. Escreva a linha que pega o contexto de desenho 2D dele e guarda em `ctx`.",
+      "enunciado": "Num app de entregas, o site quer saber onde o usuário está. Qual objeto e método do navegador obtêm a localização atual do usuário? O que precisa acontecer antes de o site receber a posição?\n\nNa sua resposta:\n1. diga o objeto e o método usados;\n2. explique o que acontece antes de o site receber a posição.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) navigator.geolocation.getCurrentPosition(); 2) o navegador pede a permissão do usuário antes de entregar a posição.",
       "respostasAceitas": [
-        "const ctx = tela.getContext(\"2d\");",
-        "const ctx = tela.getContext('2d');",
-        "let ctx = tela.getContext(\"2d\");"
-      ],
-      "palavrasChave": [
-        "ctx",
-        "tela.getcontext(",
-        "2d"
-      ],
-      "explicacao": "const ctx = tela.getContext(\"2d\"); — é pelo ctx que se desenha (fillRect, arc, fillText…)."
+        "navigator.geolocation.getCurrentPosition(). Antes, o navegador pede permissão ao usuário; só se ele permitir o site recebe a latitude e a longitude."
+      ]
     },
     {
       "tipo": "dissertativa",
       "tema": "JavaScript",
       "capacidade": "front.ct5",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "Para que serve o Webpack num projeto front-end?",
-      "palavrasChave": [
-        "empacot",
-        "módulo",
-        "arquivo"
+      "enunciado": "A variável `tela` guarda um elemento `<canvas>` da página. O que faz a linha `const ctx = tela.getContext(\"2d\");` e por que ela vem antes de qualquer desenho?\n\nNa sua resposta:\n1. diga o que a variável `ctx` passa a guardar;\n2. explique para que o `ctx` é usado depois (cite um método de exemplo).",
+      "respostasAceitas": [
+        "Pega o contexto de desenho 2D do canvas e guarda em ctx. O canvas sozinho não desenha: é pelo ctx que se chamam métodos como fillRect, arc e fillText."
       ],
-      "explicacao": "É um empacotador (bundler): junta os módulos JavaScript, CSS e outros arquivos do projeto em poucos arquivos otimizados para o navegador."
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ctx guarda o contexto de desenho 2D do canvas; 2) é por ele que se desenha (fillRect, arc, fillText…)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "JavaScript",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Para que serve o Webpack num projeto front-end?\n\nNa sua resposta:\n1. diga o que é o Webpack;\n2. explique uma vantagem de usá-lo.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) empacotador (bundler) que junta os módulos do projeto; 2) gera poucos arquivos otimizados, que carregam mais rápido.",
+      "respostasAceitas": [
+        "É um empacotador (bundler): junta os módulos JavaScript, o CSS e outros arquivos em poucos arquivos otimizados, e o site carrega mais rápido com menos requisições."
+      ]
     },
     {
       "tipo": "alternativa",
       "tema": "Design responsivo",
       "capacidade": "front.ct4",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "O que é design responsivo?",
@@ -187,6 +183,7 @@
       "tipo": "alternativa",
       "tema": "Design responsivo",
       "capacidade": "front.ct4",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Qual tag faz o celular usar a largura real da tela, em vez de mostrar a página de computador \"encolhida\"?",
@@ -203,6 +200,7 @@
       "tipo": "alternativa",
       "tema": "Design responsivo",
       "capacidade": "front.ct4",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Qual media query aplica as regras somente em telas de até 600px de largura?",
@@ -219,6 +217,7 @@
       "tipo": "alternativa",
       "tema": "Design responsivo",
       "capacidade": "front.ct6",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Qual unidade de medida faz o tamanho da fonte acompanhar o tamanho definido no elemento raiz (`html`)?",
@@ -235,6 +234,7 @@
       "tipo": "alternativa",
       "tema": "Design responsivo",
       "capacidade": "front.ct4",
+      "dificuldade": "dificil",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Na estratégia mobile first, como as media queries costumam ser escritas?",
@@ -251,6 +251,7 @@
       "tipo": "alternativa",
       "tema": "Design responsivo",
       "capacidade": "front.ct6",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Qual regra impede que uma imagem grande \"estoure\" a largura da tela no celular?",
@@ -267,72 +268,63 @@
       "tipo": "dissertativa",
       "tema": "Design responsivo",
       "capacidade": "front.ct4",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "Escreva a media query que muda o `.menu` para `flex-direction: column` em telas de até 768px.",
+      "enunciado": "No site de uma padaria, o menu (classe `.menu`, com `display: flex`) mostra os links lado a lado. O que faz a regra abaixo?\n\n```css\n@media (max-width: 768px) {\n  .menu { flex-direction: column; }\n}\n```\n\nNa sua resposta:\n1. diga em quais telas a regra vale;\n2. explique o que muda no menu nessas telas.",
       "respostasAceitas": [
-        "@media (max-width: 768px) { .menu { flex-direction: column; } }"
+        "Vale só em telas de até 768px de largura (celulares e tablets). Nelas, os links do menu deixam de ficar lado a lado e passam a ficar empilhados, um embaixo do outro."
       ],
-      "palavrasChave": [
-        "@media",
-        "max-width",
-        "768px",
-        ".menu",
-        "column"
-      ],
-      "explicacao": "@media (max-width: 768px) { .menu { flex-direction: column; } }"
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só em telas com até 768px de largura; 2) os itens do menu ficam em coluna (empilhados) em vez de em linha."
     },
     {
       "tipo": "dissertativa",
       "tema": "Design responsivo",
       "capacidade": "front.ct4",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "O que é um breakpoint no design responsivo?",
-      "palavrasChave": [
-        "largura",
-        "tela",
-        "media"
-      ],
-      "explicacao": "É a largura de tela em que o leiaute muda (ex.: 768px), definida por uma media query."
+      "enunciado": "O que é um breakpoint no design responsivo?\n\nNa sua resposta:\n1. diga o que é um breakpoint;\n2. dê um exemplo de largura usada como breakpoint.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) largura de tela em que o leiaute muda (via media query); 2) um exemplo, como 768px ou 600px.",
+      "respostasAceitas": [
+        "É a largura de tela em que o leiaute muda, definida por uma media query. Ex.: 768px, em que o menu passa a ficar em coluna."
+      ]
     },
     {
       "tipo": "dissertativa",
       "tema": "Design responsivo",
       "capacidade": "front.ct6",
+      "dificuldade": "dificil",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "Numa vitrine de produtos, escreva o valor de `grid-template-columns` que cria quantas colunas couberem na tela, cada uma com no mínimo 200px.",
+      "enunciado": "Numa vitrine de produtos, o contêiner dos cards usa `grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));`. O que essa declaração faz quando a tela fica mais larga ou mais estreita?\n\nNa sua resposta:\n1. explique o que `minmax(200px, 1fr)` garante para cada coluna;\n2. explique o que `auto-fit` faz com o número de colunas.",
       "respostasAceitas": [
-        "repeat(auto-fit, minmax(200px, 1fr))",
-        "repeat(auto-fill, minmax(200px, 1fr))",
-        "grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));"
+        "Cada coluna tem no mínimo 200px e divide igualmente o espaço que sobra (1fr). O auto-fit cria quantas colunas couberem: em tela larga ficam várias lado a lado; em tela estreita sobram menos colunas e os cards descem para a linha de baixo, sem media query."
       ],
-      "palavrasChave": [
-        "repeat(",
-        "minmax(200px",
-        "1fr)"
-      ],
-      "explicacao": "repeat(auto-fit, minmax(200px, 1fr)) — auto-fit (ou auto-fill) cria as colunas que couberem; minmax garante o mínimo de 200px e divide o espaço que sobra."
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mínimo de 200px por coluna, dividindo o espaço que sobra; 2) cria quantas colunas couberem na largura da tela."
     },
     {
       "tipo": "dissertativa",
       "tema": "Design responsivo",
       "capacidade": "front.ct4",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "Por que usar porcentagem (%) em vez de pixels fixos na largura dos blocos ajuda no design responsivo?",
-      "palavrasChave": [
-        "largura",
-        "tela",
-        "adapt"
-      ],
-      "explicacao": "Porque a porcentagem é relativa à largura do contêiner/tela: o bloco se adapta ao tamanho do aparelho, enquanto um valor fixo em px pode sobrar ou estourar a tela."
+      "enunciado": "Por que usar porcentagem (%) em vez de pixels fixos na largura dos blocos ajuda no design responsivo?\n\nNa sua resposta:\n1. explique como a largura em porcentagem se comporta;\n2. diga o problema de uma largura fixa em pixels no celular.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) % acompanha a largura do contêiner e se adapta; 2) px fixo pode ficar maior que a tela do celular (estoura/rolagem lateral).",
+      "respostasAceitas": [
+        "A porcentagem é relativa ao contêiner/tela, então o bloco se adapta ao tamanho do aparelho. Um valor fixo em px não muda: num celular pode estourar a tela e criar rolagem lateral."
+      ]
     },
     {
       "tipo": "alternativa",
       "tema": "Frameworks",
       "capacidade": "front.ct7",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "O que é um framework front-end?",
@@ -349,6 +341,7 @@
       "tipo": "alternativa",
       "tema": "Frameworks",
       "capacidade": "front.ct7",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Qual destas opções é um framework de ESTILOS (CSS), e não um framework de componentes JavaScript?",
@@ -365,6 +358,7 @@
       "tipo": "alternativa",
       "tema": "Frameworks",
       "capacidade": "front.ct7",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Qual comando cria, pelo terminal, um novo projeto React usando o Vite?",
@@ -381,6 +375,7 @@
       "tipo": "alternativa",
       "tema": "Frameworks",
       "capacidade": "front.ct7",
+      "dificuldade": "dificil",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Num componente React, qual hook executa um código (por exemplo, buscar dados numa API) depois que o componente aparece na tela?",
@@ -397,6 +392,7 @@
       "tipo": "alternativa",
       "tema": "Frameworks",
       "capacidade": "front.ct7",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Em React, o que acontece quando o estado criado com `const [contador, setContador] = useState(0)` é alterado por `setContador(contador + 1)`?",
@@ -413,6 +409,7 @@
       "tipo": "alternativa",
       "tema": "Frameworks",
       "capacidade": "front.ct7",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "No Bootstrap, qual classe faz uma coluna ocupar metade da linha em telas médias ou maiores?",
@@ -429,67 +426,63 @@
       "tipo": "dissertativa",
       "tema": "Frameworks",
       "capacidade": "front.ct7",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "Escreva o comando npm que instala o Bootstrap no projeto.",
+      "enunciado": "No terminal, dentro da pasta do projeto, o aluno rodou o comando `npm install bootstrap`. O que esse comando faz?\n\nNa sua resposta:\n1. diga para onde o pacote é baixado;\n2. explique o que muda no arquivo `package.json`.",
       "respostasAceitas": [
-        "npm install bootstrap",
-        "npm i bootstrap",
-        "npm install bootstrap --save"
+        "Baixa o Bootstrap (do repositório do npm) para a pasta node_modules do projeto e registra o bootstrap, com a versão, nas dependências do package.json."
       ],
-      "palavrasChave": [
-        "npm",
-        "bootstrap"
-      ],
-      "explicacao": "npm install bootstrap (ou npm i bootstrap) — baixa o pacote para node_modules e registra a dependência no package.json."
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) baixa o pacote para node_modules; 2) o bootstrap passa a constar nas dependências do package.json."
     },
     {
       "tipo": "dissertativa",
       "tema": "Frameworks",
       "capacidade": "front.ct7",
+      "dificuldade": "dificil",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "Qual a diferença entre uma biblioteca e um framework?",
-      "palavrasChave": [
-        "biblioteca",
-        "framework",
-        "chama",
-        "estrutura"
-      ],
-      "explicacao": "Na biblioteca é você que chama o código dela quando precisa; o framework define a estrutura e as regras do projeto e é ele que chama o seu código (inversão de controle)."
+      "enunciado": "Qual a diferença entre uma biblioteca e um framework?\n\nNa sua resposta:\n1. diga quem chama quem em cada caso;\n2. dê um exemplo de cada.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) biblioteca: você chama o código dela; framework: ele define a estrutura e chama o seu código; 2) exemplos coerentes (jQuery / Angular, Vue).",
+      "respostasAceitas": [
+        "Na biblioteca, o seu código chama a biblioteca quando precisa (ex.: jQuery). O framework define a estrutura do projeto e é ele que chama o seu código — inversão de controle (ex.: Angular, Vue)."
+      ]
     },
     {
       "tipo": "dissertativa",
       "tema": "Frameworks",
       "capacidade": "front.ct7",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "O que o arquivo `package.json` guarda num projeto front-end? Cite pelo menos duas informações.",
-      "palavrasChave": [
-        "depend",
-        "script",
-        "projeto"
-      ],
-      "explicacao": "Os dados do projeto (nome, versão), as dependências (pacotes e versões) e os scripts (ex.: npm run dev, npm run build)."
+      "enunciado": "O que o arquivo `package.json` guarda num projeto front-end?\n\nNa sua resposta:\n1. diga para que serve esse arquivo;\n2. cite pelo menos duas informações que ele guarda.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) descreve/configura o projeto para o npm; 2) duas entre: nome, versão, dependências, scripts.",
+      "respostasAceitas": [
+        "É o arquivo de configuração do projeto Node/npm. Guarda nome e versão do projeto, as dependências (pacotes e versões) e os scripts, como npm run dev e npm run build."
+      ]
     },
     {
       "tipo": "dissertativa",
       "tema": "Frameworks",
       "capacidade": "front.ct7",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "O que é um componente em frameworks como React ou Vue?",
-      "palavrasChave": [
-        "parte",
-        "interface",
-        "reutiliz"
-      ],
-      "explicacao": "É uma parte independente e reutilizável da interface (ex.: botão, card, menu), com sua própria estrutura, estilo e comportamento."
+      "enunciado": "O que é um componente em frameworks como React ou Vue?\n\nNa sua resposta:\n1. diga o que é um componente;\n2. dê um exemplo e uma vantagem de usar componentes.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) parte independente e reutilizável da interface; 2) exemplo (botão, card, menu) e vantagem (reaproveitar, organizar, manter).",
+      "respostasAceitas": [
+        "É uma parte independente e reutilizável da interface, com estrutura, estilo e comportamento próprios. Ex.: um card de produto, usado várias vezes sem repetir código."
+      ]
     },
     {
       "tipo": "alternativa",
       "tema": "Acessibilidade",
       "capacidade": "front.ct1",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "O que é acessibilidade na web?",
@@ -506,6 +499,7 @@
       "tipo": "alternativa",
       "tema": "Acessibilidade",
       "capacidade": "front.ct1",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Para quem usa leitor de tela, qual é a forma correta de colocar a foto de um gato que ilustra uma notícia?",
@@ -522,6 +516,7 @@
       "tipo": "alternativa",
       "tema": "Acessibilidade",
       "capacidade": "front.ct1",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Um botão só com o ícone de lupa, sem texto, deve ser anunciado como \"Pesquisar\" pelo leitor de tela. Qual atributo resolve?",
@@ -538,6 +533,7 @@
       "tipo": "alternativa",
       "tema": "Acessibilidade",
       "capacidade": "front.ct6",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Qual combinação de cores tende a ser a mais difícil de ler para pessoas com baixa visão?",
@@ -554,6 +550,7 @@
       "tipo": "alternativa",
       "tema": "Acessibilidade",
       "capacidade": "front.ct2",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Em um formulário, por que não usar só o `placeholder` como rótulo do campo?",
@@ -570,6 +567,7 @@
       "tipo": "alternativa",
       "tema": "Acessibilidade",
       "capacidade": "front.ct1",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Uma pessoa que não usa mouse navega pela página com a tecla Tab. Qual escolha atrapalha essa navegação?",
@@ -586,68 +584,63 @@
       "tipo": "dissertativa",
       "tema": "Acessibilidade",
       "capacidade": "front.ct1",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "Quais são os 4 princípios de acessibilidade das WCAG?",
-      "palavrasChave": [
-        "percept",
-        "oper",
-        "compreens",
-        "robust"
-      ],
-      "explicacao": "Perceptível, operável, compreensível e robusto."
+      "enunciado": "As WCAG organizam a acessibilidade na web em 4 princípios. Quais são eles?\n\nNa sua resposta:\n1. cite os 4 princípios;\n2. dê um exemplo prático de um deles.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) perceptível, operável, compreensível e robusto; 2) um exemplo correto de algum deles (alt na imagem, navegar por Tab…).",
+      "respostasAceitas": [
+        "Perceptível, operável, compreensível e robusto. Ex.: operável — tudo deve funcionar só pelo teclado."
+      ]
     },
     {
       "tipo": "dissertativa",
       "tema": "Acessibilidade",
       "capacidade": "front.ct1",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "Para que serve o atributo `alt` das imagens?",
-      "palavrasChave": [
-        "texto",
-        "leitor",
-        "imagem"
-      ],
-      "explicacao": "Dá um texto alternativo que descreve a imagem: o leitor de tela lê esse texto para quem não enxerga, e ele aparece se a imagem não carregar (também ajuda os buscadores)."
+      "enunciado": "Para que serve o atributo `alt` das imagens?\n\nNa sua resposta:\n1. diga o que o texto do `alt` deve conter;\n2. cite duas situações em que esse texto é usado.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) uma descrição da imagem; 2) leitor de tela, imagem que não carregou ou buscadores.",
+      "respostasAceitas": [
+        "É um texto alternativo que descreve a imagem. O leitor de tela lê esse texto para quem não enxerga, e ele aparece quando a imagem não carrega (também ajuda os buscadores)."
+      ]
     },
     {
       "tipo": "dissertativa",
       "tema": "Acessibilidade",
       "capacidade": "front.ct1",
+      "dificuldade": "dificil",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "O que é ARIA e quando ela deve ser usada?",
-      "palavrasChave": [
-        "atributo",
-        "leitor",
-        "html"
-      ],
-      "explicacao": "ARIA (Accessible Rich Internet Applications) é um conjunto de atributos (role, aria-label, aria-expanded…) que informa papel, nome e estado dos elementos aos leitores de tela. Deve ser usada quando o HTML semântico sozinho não resolve (ex.: componentes feitos com JavaScript)."
+      "enunciado": "O que é ARIA e quando ela deve ser usada?\n\nNa sua resposta:\n1. diga o que é ARIA (cite um atributo);\n2. explique quando usá-la e quando preferir o HTML semântico.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) atributos que informam papel/nome/estado aos leitores de tela; 2) usar quando o HTML nativo não resolve, preferindo a tag semântica quando ela existe.",
+      "respostasAceitas": [
+        "São atributos (role, aria-label, aria-expanded…) que informam ao leitor de tela o papel, o nome e o estado dos elementos. Usa-se quando o HTML nativo não basta (botão só com ícone, menu feito com div); se existe tag semântica, como button ou nav, ela vem primeiro."
+      ]
     },
     {
       "tipo": "dissertativa",
       "tema": "Acessibilidade",
       "capacidade": "front.ct2",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "Escreva o `<label>` com o texto Nome completo ligado a um campo de texto obrigatório com `id=\"nome\"`.",
+      "enunciado": "Num formulário de cadastro aparece o código `<label for=\"nome\">Nome completo</label> <input type=\"text\" id=\"nome\" required>`. Explique o que o `for` do label e o `required` do campo fazem.\n\nNa sua resposta:\n1. explique a ligação entre `for` e `id` e por que ela ajuda na acessibilidade;\n2. diga o que `required` faz se o usuário tentar enviar o campo vazio.",
       "respostasAceitas": [
-        "<label for=\"nome\">Nome completo</label> <input type=\"text\" id=\"nome\" required>",
-        "<label for=\"nome\">Nome completo</label><input type=\"text\" id=\"nome\" required>"
+        "O for=\"nome\" liga o rótulo ao campo de id=\"nome\": clicar no texto coloca o cursor no campo e o leitor de tela anuncia \"Nome completo\". O required torna o campo obrigatório: o navegador não envia o formulário vazio e mostra um aviso."
       ],
-      "palavrasChave": [
-        "<label for=\"nome\">",
-        "nome completo",
-        "id=\"nome\"",
-        "required"
-      ],
-      "explicacao": "<label for=\"nome\">Nome completo</label> <input type=\"text\" id=\"nome\" required> — o for do label é igual ao id do input e required torna o campo obrigatório."
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) for igual ao id liga o rótulo ao campo (clique e leitor de tela); 2) required impede o envio com o campo vazio."
     },
     {
       "tipo": "alternativa",
       "tema": "Web Apps",
       "capacidade": "front.ct5",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "O que é um Service Worker?",
@@ -664,6 +657,7 @@
       "tipo": "alternativa",
       "tema": "Web Apps",
       "capacidade": "front.ct5",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Qual código registra o service worker do arquivo `sw.js`?",
@@ -680,6 +674,7 @@
       "tipo": "alternativa",
       "tema": "Web Apps",
       "capacidade": "front.ct8",
+      "dificuldade": "dificil",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Na Cache API, o que faz o código abaixo?\n```js\ncaches.open(\"app-v1\").then(c => c.addAll([\"/\", \"/css/style.css\"]));\n```",
@@ -696,6 +691,7 @@
       "tipo": "alternativa",
       "tema": "Web Apps",
       "capacidade": "front.ct8",
+      "dificuldade": "dificil",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Um app de notícias quer avisar o usuário de uma notícia urgente mesmo com a aba fechada. Quais recursos são usados juntos?",
@@ -712,6 +708,7 @@
       "tipo": "alternativa",
       "tema": "Web Apps",
       "capacidade": "front.ct8",
+      "dificuldade": "dificil",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "O que o Background Sync (sincronização em segundo plano) permite fazer?",
@@ -728,6 +725,7 @@
       "tipo": "alternativa",
       "tema": "Web Apps",
       "capacidade": "front.ct4",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Qual tag pede ao navegador para baixar com prioridade a fonte usada logo no início da página atual?",
@@ -744,63 +742,63 @@
       "tipo": "dissertativa",
       "tema": "Web Apps",
       "capacidade": "front.ct4",
+      "dificuldade": "dificil",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "Qual a diferença entre `preload` e `prefetch`?",
-      "palavrasChave": [
-        "preload",
-        "prefetch",
-        "atual",
-        "próxima"
-      ],
-      "explicacao": "preload baixa com prioridade um recurso que a página atual vai usar logo; prefetch baixa, com baixa prioridade, um recurso que provavelmente será usado na próxima página."
+      "enunciado": "Qual a diferença entre `<link rel=\"preload\">` e `<link rel=\"prefetch\">`?\n\nNa sua resposta:\n1. diga quando cada um é usado;\n2. explique a diferença de prioridade entre eles.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) preload: recurso da página atual; prefetch: recurso da próxima página; 2) preload tem prioridade alta, prefetch baixa.",
+      "respostasAceitas": [
+        "O preload baixa com prioridade alta um recurso que a página atual vai usar logo (ex.: a fonte do título). O prefetch baixa com prioridade baixa um recurso que provavelmente será usado na próxima página."
+      ]
     },
     {
       "tipo": "dissertativa",
       "tema": "Web Apps",
       "capacidade": "front.ct5",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "O que é uma PWA (Progressive Web App)?",
-      "palavrasChave": [
-        "instal",
-        "offline",
-        "navegador"
-      ],
-      "explicacao": "É um site/aplicação web que funciona como aplicativo: pode ser instalado na tela inicial, funciona offline (service worker + cache) e pode receber notificações, rodando pelo navegador."
+      "enunciado": "O que é uma PWA (Progressive Web App)?\n\nNa sua resposta:\n1. diga o que é uma PWA;\n2. cite duas características que a fazem parecer um aplicativo.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) site/aplicação web que se comporta como app; 2) duas entre: instalável, funciona offline, notificações.",
+      "respostasAceitas": [
+        "É uma aplicação web que funciona como aplicativo, rodando pelo navegador. Pode ser instalada na tela inicial, funciona offline (service worker + cache) e recebe notificações."
+      ]
     },
     {
       "tipo": "dissertativa",
       "tema": "Web Apps",
       "capacidade": "front.ct4",
+      "dificuldade": "dificil",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "O que faz `<link rel=\"dns-prefetch\" href=\"https://api.exemplo.com\">`?",
-      "palavrasChave": [
-        "dns",
-        "antes",
-        "domínio"
-      ],
-      "explicacao": "Pede ao navegador para resolver o DNS (descobrir o IP) do domínio api.exemplo.com antes de ele ser usado, economizando tempo na primeira requisição."
+      "enunciado": "O que faz a tag `<link rel=\"dns-prefetch\" href=\"https://api.exemplo.com\">` colocada no `<head>` de uma página?\n\nNa sua resposta:\n1. diga o que o navegador faz com esse domínio;\n2. explique qual o ganho para a página.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) resolve o DNS (IP) do domínio com antecedência; 2) a primeira requisição a esse domínio fica mais rápida.",
+      "respostasAceitas": [
+        "Pede ao navegador para resolver antes o DNS (descobrir o IP) de api.exemplo.com. Quando a página fizer a primeira requisição para a API, esse tempo já foi economizado."
+      ]
     },
     {
       "tipo": "dissertativa",
       "tema": "Web Apps",
       "capacidade": "front.ct5",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "Qual é o papel do evento `install` no service worker?",
-      "palavrasChave": [
-        "cache",
-        "arquivos",
-        "instal"
-      ],
-      "explicacao": "É disparado quando o service worker é instalado; nele normalmente se abre o cache e se guardam os arquivos principais do app (HTML, CSS, JS, imagens) para funcionar offline."
+      "enunciado": "Qual é o papel do evento `install` no service worker?\n\nNa sua resposta:\n1. diga quando o evento `install` acontece;\n2. explique o que normalmente se faz nele.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) quando o service worker é instalado; 2) abre o cache e guarda os arquivos principais para uso offline.",
+      "respostasAceitas": [
+        "Ele dispara quando o service worker é instalado. Nele se abre o cache e se guardam os arquivos principais do app (HTML, CSS, JS, imagens) para funcionar offline."
+      ]
     },
     {
       "tipo": "alternativa",
       "tema": "UX design — experiência do usuário",
       "capacidade": "front.ct9",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Qual alternativa descreve UX (User Experience)?",
@@ -817,6 +815,7 @@
       "tipo": "alternativa",
       "tema": "UX design — experiência do usuário",
       "capacidade": "front.ct9",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Numa pesquisa de UX, o que é uma persona?",
@@ -833,6 +832,7 @@
       "tipo": "alternativa",
       "tema": "UX design — experiência do usuário",
       "capacidade": "front.ct9",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "O que é um fluxo do usuário (user flow)?",
@@ -849,6 +849,7 @@
       "tipo": "alternativa",
       "tema": "UX design — experiência do usuário",
       "capacidade": "front.ct9",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Qual diagrama de UX mostra, etapa por etapa, o que o cliente faz, pensa e sente antes, durante e depois de usar o serviço?",
@@ -865,6 +866,7 @@
       "tipo": "alternativa",
       "tema": "UX design — experiência do usuário",
       "capacidade": "front.ct9",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Um app de delivery tem muitas desistências na hora do pagamento. Qual ação de UX ajuda a descobrir o motivo?",
@@ -881,6 +883,7 @@
       "tipo": "alternativa",
       "tema": "UX design — experiência do usuário",
       "capacidade": "front.ct9",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Qual diagrama mostra a organização hierárquica das páginas de um site (Início > Produtos > Detalhe do produto)?",
@@ -897,62 +900,63 @@
       "tipo": "dissertativa",
       "tema": "UX design — experiência do usuário",
       "capacidade": "front.ct9",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "Explique a diferença entre UX e UI.",
-      "palavrasChave": [
-        "experi",
-        "interface",
-        "visual"
-      ],
-      "explicacao": "UX é a experiência do usuário como um todo (facilidade, fluxo, satisfação ao atingir o objetivo); UI é a interface, a parte visual com que ele interage (cores, botões, tipografia, leiaute)."
+      "enunciado": "Explique a diferença entre UX e UI.\n\nNa sua resposta:\n1. diga o que é UX;\n2. diga o que é UI e dê um exemplo de cada.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) UX = experiência como um todo (facilidade, fluxo, satisfação); 2) UI = parte visual (cores, botões, tipografia), com exemplos.",
+      "respostasAceitas": [
+        "UX é a experiência do usuário como um todo: se é fácil e agradável atingir o objetivo (ex.: comprar em poucos passos). UI é a interface visual com que ele interage: cores, botões, fontes (ex.: o estilo do botão Comprar)."
+      ]
     },
     {
       "tipo": "dissertativa",
       "tema": "UX design — experiência do usuário",
       "capacidade": "front.ct9",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "O que é o mapa de empatia? Cite três quadrantes que ele costuma ter.",
-      "palavrasChave": [
-        "pensa",
-        "sente",
-        "ouve"
-      ],
-      "explicacao": "É um diagrama para entender o usuário, com quadrantes como: o que ele pensa e sente, o que vê, o que ouve, o que fala e faz, além das dores e ganhos."
+      "enunciado": "O que é o mapa de empatia?\n\nNa sua resposta:\n1. diga para que serve o mapa de empatia;\n2. cite três quadrantes que ele costuma ter.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ferramenta para entender/se colocar no lugar do usuário; 2) três quadrantes (pensa e sente, vê, ouve, fala e faz, dores, ganhos).",
+      "respostasAceitas": [
+        "É um diagrama para entender o usuário: o que ele sente e vive. Quadrantes: o que pensa e sente, o que vê, o que ouve, o que fala e faz, dores e ganhos."
+      ]
     },
     {
       "tipo": "dissertativa",
       "tema": "UX design — experiência do usuário",
       "capacidade": "front.ct9",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "Escreva, usando setas (→), o fluxo do usuário para recuperar a senha esquecida, com pelo menos 4 passos.",
-      "palavrasChave": [
-        "esqueci",
-        "mail",
-        "nova senha"
-      ],
-      "explicacao": "Ex.: Tela de login → clica em \"Esqueci minha senha\" → informa o e-mail → recebe o link por e-mail → cria a nova senha → volta ao login."
+      "enunciado": "Veja o fluxo do usuário para recuperar a senha no app de uma academia:\n\nTela de login → clica em \"Esqueci minha senha\" → informa o e-mail → recebe o link por e-mail → cria a nova senha → volta ao login.\n\nPara que serve planejar um fluxo como esse antes de fazer o design das telas?\n\nNa sua resposta:\n1. diga o que o fluxo do usuário mostra;\n2. dê um exemplo de problema que o fluxo acima ajuda a perceber.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a sequência de passos/telas até o objetivo; 2) um problema coerente (caso de erro não previsto, passo a mais ou a menos).",
+      "respostasAceitas": [
+        "Mostra a sequência de passos (telas e ações) que o usuário faz para cumprir um objetivo. Ajuda a ver passos faltando ou sobrando — por exemplo, o que acontece se o e-mail digitado não estiver cadastrado ou se o link não chegar."
+      ]
     },
     {
       "tipo": "dissertativa",
       "tema": "UX design — experiência do usuário",
       "capacidade": "front.ct9",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "O que significa design centrado no usuário?",
-      "palavrasChave": [
-        "necessidade",
-        "usuário",
-        "pesquisa"
-      ],
-      "explicacao": "É projetar a partir das necessidades reais dos usuários, envolvendo-os em pesquisas e testes em todas as etapas, em vez de seguir só a opinião da equipe."
+      "enunciado": "O que significa design centrado no usuário?\n\nNa sua resposta:\n1. explique a ideia do design centrado no usuário;\n2. cite uma forma de envolver o usuário no projeto.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) projetar a partir das necessidades reais do usuário; 2) uma forma: entrevista, pesquisa, teste com protótipo.",
+      "respostasAceitas": [
+        "É projetar a partir das necessidades reais dos usuários, e não só da opinião da equipe. Eles participam com entrevistas, pesquisas e testes de usabilidade com protótipos."
+      ]
     },
     {
       "tipo": "alternativa",
       "tema": "UI design — interface do usuário",
       "capacidade": "front.ct9",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Qual destas tarefas é típica de UI design?",
@@ -969,6 +973,7 @@
       "tipo": "alternativa",
       "tema": "UI design — interface do usuário",
       "capacidade": "front.ct3",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "No Figma, qual recurso permite criar um botão uma vez e reutilizá-lo em várias telas, atualizando todas as cópias de uma só vez?",
@@ -985,6 +990,7 @@
       "tipo": "alternativa",
       "tema": "UI design — interface do usuário",
       "capacidade": "front.ct9",
+      "dificuldade": "dificil",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Ao enviar um formulário aparece a mensagem \"Cadastro realizado com sucesso!\". Qual heurística de usabilidade de Nielsen isso atende?",
@@ -1001,6 +1007,7 @@
       "tipo": "alternativa",
       "tema": "UI design — interface do usuário",
       "capacidade": "front.ct6",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Para destacar o botão principal (\"Comprar\") em relação ao secundário (\"Voltar\"), qual escolha de UI é mais adequada?",
@@ -1017,6 +1024,7 @@
       "tipo": "alternativa",
       "tema": "UI design — interface do usuário",
       "capacidade": "front.ct9",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "O que é um design system (guia de estilos) numa equipe de UI?",
@@ -1033,6 +1041,7 @@
       "tipo": "alternativa",
       "tema": "UI design — interface do usuário",
       "capacidade": "front.ct6",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 1,
       "enunciado": "Em telas de celular, qual recomendação de UI para botões está correta?",
@@ -1049,63 +1058,57 @@
       "tipo": "dissertativa",
       "tema": "UI design — interface do usuário",
       "capacidade": "front.ct9",
+      "dificuldade": "dificil",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "Segundo a norma ISO 9241-11, a usabilidade é medida por três aspectos. Quais são?",
-      "palavrasChave": [
-        "eficácia",
-        "eficiência",
-        "satisfação"
-      ],
-      "explicacao": "Eficácia (consegue atingir o objetivo), eficiência (com quanto esforço/tempo) e satisfação (quão agradável foi usar)."
+      "enunciado": "Segundo a norma ISO 9241-11, a usabilidade é medida por três aspectos. Quais são?\n\nNa sua resposta:\n1. cite os três aspectos;\n2. explique em poucas palavras o que cada um mede.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) eficácia, eficiência e satisfação; 2) objetivo atingido, esforço/tempo gasto e quão agradável foi.",
+      "respostasAceitas": [
+        "Eficácia (o usuário consegue atingir o objetivo), eficiência (com quanto esforço e tempo) e satisfação (quão agradável foi usar)."
+      ]
     },
     {
       "tipo": "dissertativa",
       "tema": "UI design — interface do usuário",
       "capacidade": "front.ct6",
+      "dificuldade": "media",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "O que é hierarquia visual numa tela? Cite um recurso usado para criá-la.",
-      "palavrasChave": [
-        "importan",
-        "tamanho",
-        "cor"
-      ],
-      "explicacao": "É organizar os elementos para que o olho veja primeiro o que é mais importante, usando tamanho, cor, contraste, peso da fonte, posição e espaçamento."
+      "enunciado": "O que é hierarquia visual numa tela?\n\nNa sua resposta:\n1. diga o que é hierarquia visual;\n2. cite um recurso usado para criá-la.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ordem de importância percebida pelo olhar; 2) um recurso (tamanho, cor, contraste, posição, espaçamento).",
+      "respostasAceitas": [
+        "É organizar os elementos para que o olho veja primeiro o que é mais importante. Recursos: tamanho, cor, contraste, peso da fonte, posição, espaçamento."
+      ]
     },
     {
       "tipo": "dissertativa",
       "tema": "UI design — interface do usuário",
       "capacidade": "front.ct3",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "Para que serve o modo Prototype (protótipo) do Figma?",
-      "palavrasChave": [
-        "telas",
-        "intera",
-        "testar"
-      ],
-      "explicacao": "Para ligar as telas com interações (clicar num botão leva a outra tela, transições), criando um protótipo navegável para testar o fluxo com usuários antes de programar."
+      "enunciado": "Para que serve o modo Prototype (protótipo) do Figma?\n\nNa sua resposta:\n1. diga o que se faz no modo Prototype;\n2. explique por que testar com ele antes de programar.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) liga telas com interações, criando protótipo navegável; 2) testar o fluxo com usuários e corrigir antes de codificar (mais barato).",
+      "respostasAceitas": [
+        "Liga as telas com interações (clicar num botão leva a outra tela, transições), criando um protótipo navegável. Assim se testa o fluxo com usuários e se corrigem problemas antes de gastar tempo programando."
+      ]
     },
     {
       "tipo": "dissertativa",
       "tema": "UI design — interface do usuário",
       "capacidade": "front.ct6",
+      "dificuldade": "facil",
       "revisao": "pendente",
       "peso": 2,
-      "enunciado": "Escreva a regra CSS da classe `btn-primario` com fundo `#2459c7`, texto branco (`#ffffff`) e cantos arredondados de 8px.",
+      "enunciado": "O botão principal de um site usa a regra `.btn-primario { background-color: #2459c7; color: #ffffff; border-radius: 8px; }`. O que cada declaração faz na aparência do botão?\n\nNa sua resposta:\n1. diga o que `background-color` e `color` mudam;\n2. explique o efeito de `border-radius: 8px`.",
       "respostasAceitas": [
-        ".btn-primario { background-color: #2459c7; color: #ffffff; border-radius: 8px; }",
-        ".btn-primario { background: #2459c7; color: #ffffff; border-radius: 8px; }"
+        "background-color pinta o fundo do botão de azul (#2459c7) e color deixa o texto branco (#ffffff). border-radius: 8px arredonda os cantos do botão."
       ],
-      "palavrasChave": [
-        ".btn-primario",
-        "background",
-        "#2459c7",
-        "#ffffff",
-        "border-radius"
-      ],
-      "explicacao": ".btn-primario { background-color: #2459c7; color: #ffffff; border-radius: 8px; }"
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) fundo azul e texto branco; 2) cantos arredondados de 8px."
     }
   ]
 }

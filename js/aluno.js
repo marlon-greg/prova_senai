@@ -2,7 +2,7 @@
 import { ic } from "./icones.js";
 import { temasDoAlunoNaRec, db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar, sortearAleatorio, esc, $, toast, dataBR, letra,
          idTentativaTeste, apagarTentativaTeste, confirmar, avisar, traduzirErro, iniciais, fecharModais, temaDe, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco, bancoDaQuestao, sortearQuestoes }
-  from "./common.js?v=20261127a";
+  from "./common.js?v=20261127b";
 import { baixarMaterial } from "./material.js";
 import { desenharConquistas } from "./aluno-conquistas.js?v=20261126a";
 import { regraDoTipo, calcNotaFinal } from "./nota-final.js";
@@ -12,7 +12,7 @@ import { iniciarAbas, definirAbasVisiveis, irParaAba, abaAtual } from "./aluno-n
 import { desenharTurma } from "./aluno-social.js";
 import { desenharRecompensas } from "./aluno-recompensas.js";
 let simulacao = false;   // equipe vendo a página como aluno (?simular=1): nada é gravado
-import { lerGamificacao, GAMI_PADRAO } from "./common.js?v=20261127a";
+import { lerGamificacao, GAMI_PADRAO } from "./common.js?v=20261127b";
 let gami = { ...GAMI_PADRAO };   // o que está ligado na gamificação (config/gamificacao)
 import { montarFormato, temFormato, FORMATOS, rotuloFormato, textoParaFalar, textoResposta, textoChave } from "./formatos-ui.js";
 const controles = {};   // qid -> controle do formato adaptado (valor, preencher, travar)
@@ -22,7 +22,7 @@ import { criteriosDaProva, NIVEIS_RUBRICA, carregarCriteriosOficiais } from "./p
 import { toolbar, collapsible, vazio, statTiles, chips } from "./ui.js";
 import { completar, aplicarVisual, mesclarQuestao } from "./acessibilidade.js";
 import { textoRespostaSql, questaoDaTentativa } from "../servidor/sql-correcao.js?v=20261127a";
-import { montarBancada } from "./workbench.js?v=20261127a";
+import { montarBancada } from "./workbench.js?v=20261127b";
 import { montarBancadaWeb } from "./bancada-web.js?v=20261125a";
 import { textoRespostaWeb, respostaEmBranco } from "../servidor/web-correcao.js?v=20261125a";
 import { textoRespostaDiagrama, textoGabaritoDiagrama, respostaVaziaDiagrama, NOMES_DIAGRAMA } from "../servidor/diagrama-correcao.js?v=20261126a";
@@ -1069,7 +1069,10 @@ function entrarNaTelaDaProva() {
 function formatarEnunciado(t) {
   return esc(t)
     .replace(/```\w*\n?([\s\S]+?)\n?```/g, '<pre class="codigo">$1</pre>')
-    .replace(/`([^`]+)`/g, (_, c) => c.includes("\n") ? `<pre class="codigo">${c}</pre>` : `<code>${c}</code>`);
+    .replace(/`([^`]+)`/g, (_, c) => c.includes("\n") ? `<pre class="codigo">${c}</pre>` : `<code>${c}</code>`)
+    // dissertativa: "Na sua resposta:" + lista numerada no fim = o que se espera da resposta, em destaque
+    .replace(/\n*(Na sua resposta:?)\s*\n((?:\s*\d+\.\s[^\n]+\n?)+)\s*$/i, (_, tit, itens) =>
+      `<span class="q-espera"><b>${tit}</b>${itens.trim().split(/\n/).map(l => `<span class="q-espera-item">${l.trim()}</span>`).join("")}</span>`);
 }
 
 // campo de resposta: colar/arrastar bloqueado, e cada tentativa fica registrada (e tira uma vida, se a prova tiver vidas)

@@ -1,11 +1,12 @@
 {
   "nome": "SQL misto — alternativas, dissertativas e Bancada (1 tarefa)",
   "materia": "Banco de Dados",
-  "contexto": "Banco para provas MISTAS de SQL: no mesmo tema há questões de múltipla escolha, dissertativas (escrever o comando) e questões na Bancada SQL com UMA tarefa só (o aluno escreve e executa). Marque os temas e diga quantas de cada tipo a prova sorteia (alternativas, dissertativas e SQL na Bancada).",
+  "contexto": "Banco para provas MISTAS de SQL: no mesmo tema há questões de múltipla escolha, dissertativas (explicar o que um comando faz e por quê) e questões na Bancada SQL com UMA tarefa só (o aluno escreve e executa). Marque os temas e diga quantas de cada tipo a prova sorteia (alternativas, dissertativas e SQL na Bancada).",
   "questoes": [
     {
       "tipo": "alternativa",
       "tema": "DML — INSERT",
+      "dificuldade": "facil",
       "enunciado": "Qual comando coloca uma linha nova na tabela jogador?",
       "alternativas": [
         "UPDATE jogador SET nome = 'Ana';",
@@ -20,6 +21,7 @@
     {
       "tipo": "alternativa",
       "tema": "DML — INSERT",
+      "dificuldade": "facil",
       "enunciado": "No INSERT abaixo, por que o id_jogador não foi informado?\n\n`INSERT INTO jogador (nome, email) VALUES ('Rafael', 'rafael@pf.com');`",
       "alternativas": [
         "Porque id_jogador é opcional",
@@ -34,6 +36,7 @@
     {
       "tipo": "alternativa",
       "tema": "DML — INSERT",
+      "dificuldade": "media",
       "enunciado": "Você rodou `INSERT INTO jogador (nome) VALUES ('Sem Email');` e recebeu o erro 1364. O que aconteceu?",
       "alternativas": [
         "O e-mail já existia (UNIQUE)",
@@ -48,6 +51,7 @@
     {
       "tipo": "alternativa",
       "tema": "DML — INSERT",
+      "dificuldade": "media",
       "enunciado": "O erro 1452 (Cannot add or update a child row: a foreign key constraint fails) aparece quando:",
       "alternativas": [
         "Você tenta apagar um pai que tem filha",
@@ -62,6 +66,7 @@
     {
       "tipo": "alternativa",
       "tema": "Consultas com JOIN",
+      "dificuldade": "media",
       "enunciado": "Qual consulta traz os personagens que NÃO estão em nenhuma guilda?",
       "alternativas": [
         "SELECT * FROM personagem WHERE id_guilda = NULL;",
@@ -76,6 +81,7 @@
     {
       "tipo": "alternativa",
       "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "dificuldade": "facil",
       "enunciado": "Qual comando mostra os 3 personagens de maior level?",
       "alternativas": [
         "SELECT nome, level FROM personagem ORDER BY level LIMIT 3;",
@@ -90,6 +96,7 @@
     {
       "tipo": "alternativa",
       "tema": "DML — UPDATE",
+      "dificuldade": "facil",
       "enunciado": "O que acontece ao executar `UPDATE personagem SET level = 1;` com o Safe Updates do Workbench DESLIGADO?",
       "alternativas": [
         "Só o primeiro personagem muda",
@@ -104,6 +111,7 @@
     {
       "tipo": "alternativa",
       "tema": "DML — DELETE",
+      "dificuldade": "media",
       "enunciado": "Você quer apagar o jogador de id 1, mas ele tem personagens cadastrados. Qual é a ordem correta?",
       "alternativas": [
         "DELETE no jogador e depois nos personagens",
@@ -118,6 +126,7 @@
     {
       "tipo": "alternativa",
       "tema": "DML — DELETE",
+      "dificuldade": "media",
       "enunciado": "Qual é a diferença entre DELETE FROM jogador e TRUNCATE TABLE jogador?",
       "alternativas": [
         "Nenhuma, são sinônimos",
@@ -132,6 +141,7 @@
     {
       "tipo": "alternativa",
       "tema": "DML — UPDATE",
+      "dificuldade": "facil",
       "enunciado": "Você abriu START TRANSACTION, rodou um UPDATE errado e percebeu antes de confirmar. Qual comando desfaz?",
       "alternativas": [
         "COMMIT;",
@@ -146,87 +156,80 @@
     {
       "tipo": "dissertativa",
       "tema": "DML — INSERT",
-      "enunciado": "Escreva o comando que insere na tabela item o registro com nome 'Poção de mana' e tipo 'consumível'.",
+      "dificuldade": "facil",
+      "enunciado": "Num jogo online, o banco tem as tabelas jogador (id_jogador, nome, email), personagem (id_personagem, nome, level, id_jogador, id_guilda) e item (id_item, nome, tipo). O id_item é AUTO_INCREMENT. O que faz o comando `INSERT INTO item (nome, tipo) VALUES ('Poção de mana', 'consumível');`? Por que o id_item não aparece no comando?\n\nNa sua resposta:\n1. diga o que o comando faz na tabela item;\n2. explique por que o id_item não foi informado.",
       "respostasAceitas": [
-        "INSERT INTO item (nome, tipo) VALUES ('Poção de mana', 'consumível');",
-        "INSERT INTO item (tipo, nome) VALUES ('consumível', 'Poção de mana');"
+        "Insere um novo item chamado 'Poção de mana', do tipo 'consumível'. O id_item não aparece porque é AUTO_INCREMENT: o MySQL gera o número sozinho."
       ],
-      "palavrasChave": [
-        "insert into item(",
-        "values(",
-        "'poção de mana'",
-        "'consumível'"
-      ],
-      "explicacao": "INSERT INTO item (nome, tipo) VALUES ('Poção de mana', 'consumível'); — o id_item é AUTO_INCREMENT e não entra.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) acrescenta uma linha nova em item com esse nome e tipo; 2) o id é gerado automaticamente (AUTO_INCREMENT).",
       "peso": 2
     },
     {
       "tipo": "dissertativa",
       "tema": "Consultas (SELECT, WHERE e ORDER BY)",
-      "enunciado": "Escreva a consulta que lista nome e level dos personagens com level maior que 30.",
+      "dificuldade": "facil",
+      "enunciado": "Num jogo online, o banco tem as tabelas jogador (id_jogador, nome, email), personagem (id_personagem, nome, level, id_jogador, id_guilda) e item (id_item, nome, tipo). O que mostra a consulta `SELECT nome, level FROM personagem WHERE level > 30;`?\n\nNa sua resposta:\n1. diga quais colunas aparecem;\n2. explique quais personagens entram no resultado (e se um de level 30 aparece).",
       "respostasAceitas": [
-        "SELECT nome, level FROM personagem WHERE level > 30;"
+        "Mostra o nome e o level dos personagens com level maior que 30. Um personagem com level exatamente 30 não aparece, porque > não inclui o 30."
       ],
-      "palavrasChave": [
-        "select nome,level from personagem where level>30"
-      ],
-      "explicacao": "SELECT nome, level FROM personagem WHERE level > 30; — só as duas colunas pedidas e o filtro com >.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só as colunas nome e level; 2) apenas level acima de 30; o 30 fica de fora (seria >= para incluir).",
       "peso": 2
     },
     {
       "tipo": "dissertativa",
       "tema": "DML — UPDATE",
-      "enunciado": "A personagem Lyria subiu 10 níveis. Escreva o UPDATE que soma 10 ao level atual dela (sem digitar o valor final na mão).",
+      "dificuldade": "media",
+      "enunciado": "Num jogo online, o banco tem as tabelas jogador (id_jogador, nome, email), personagem (id_personagem, nome, level, id_jogador, id_guilda) e item (id_item, nome, tipo). A personagem Lyria subiu 10 níveis e foi rodado `UPDATE personagem SET level = level + 10 WHERE nome = 'Lyria';`. O que esse comando faz?\n\nNa sua resposta:\n1. diga o que acontece com o level da Lyria;\n2. explique por que usar level + 10 em vez de digitar o valor final.",
       "respostasAceitas": [
-        "UPDATE personagem SET level = level + 10 WHERE nome = 'Lyria';"
+        "Soma 10 ao level atual da Lyria (se era 25, vira 35). Usar level + 10 aproveita o valor que já está gravado, sem precisar consultar e digitar o número final na mão."
       ],
-      "palavrasChave": [
-        "update personagem set level=level+10 where nome='lyria'"
-      ],
-      "explicacao": "UPDATE personagem SET level = level + 10 WHERE nome = 'Lyria'; — o WHERE garante que só a Lyria muda; `level + 10` usa o valor atual.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) aumenta 10 no level só da Lyria (WHERE); 2) level + 10 parte do valor atual, evitando erro de digitação.",
       "peso": 2
     },
     {
       "tipo": "dissertativa",
       "tema": "DML — DELETE",
-      "enunciado": "Escreva o comando que apaga o jogador cujo nome é 'Bruno Lima'.",
+      "dificuldade": "media",
+      "enunciado": "Num jogo online, o banco tem as tabelas jogador (id_jogador, nome, email), personagem (id_personagem, nome, level, id_jogador, id_guilda) e item (id_item, nome, tipo). O que faz o comando `DELETE FROM jogador WHERE nome = 'Bruno Lima';`? E se o Bruno tiver personagens cadastrados?\n\nNa sua resposta:\n1. diga o que o comando faz;\n2. explique o que a chave estrangeira de personagem faz nesse caso.",
       "respostasAceitas": [
-        "DELETE FROM jogador WHERE nome = 'Bruno Lima';"
+        "Apaga da tabela jogador o jogador chamado Bruno Lima. Se ele tiver personagens, a chave estrangeira impede a exclusão (erro 1451): é preciso apagar os personagens antes."
       ],
-      "palavrasChave": [
-        "delete from jogador where nome='bruno lima'"
-      ],
-      "explicacao": "DELETE FROM jogador WHERE nome = 'Bruno Lima'; — sem WHERE apagaria todos. Se ele tiver personagem, a FK barra com o erro 1451.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) remove a linha do Bruno Lima (só ela, pelo WHERE); 2) a FK protege o pai e barra o DELETE enquanto houver personagens dele.",
       "peso": 2
     },
     {
       "tipo": "dissertativa",
       "tema": "Consultas (SELECT, WHERE e ORDER BY)",
-      "enunciado": "Escreva a consulta que conta quantos personagens existem na tabela personagem.",
+      "dificuldade": "facil",
+      "enunciado": "Num jogo online, o banco tem as tabelas jogador (id_jogador, nome, email), personagem (id_personagem, nome, level, id_jogador, id_guilda) e item (id_item, nome, tipo). O que mostra a consulta `SELECT COUNT(*) FROM personagem;`?\n\nNa sua resposta:\n1. diga o que o resultado representa;\n2. explique quantas linhas o resultado tem.",
       "respostasAceitas": [
-        "SELECT COUNT(*) FROM personagem;",
-        "SELECT COUNT(*) AS total FROM personagem;"
+        "Mostra quantos personagens existem na tabela (o total de linhas). O resultado é uma única linha com esse número."
       ],
-      "palavrasChave": [
-        "select count(*)",
-        "from personagem"
-      ],
-      "explicacao": "SELECT COUNT(*) FROM personagem; — COUNT(*) conta as linhas.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) COUNT(*) conta todas as linhas de personagem; 2) volta um só número.",
       "peso": 2
     },
     {
       "tipo": "dissertativa",
       "tema": "DML — UPDATE",
-      "enunciado": "Explique, em uma ou duas linhas, por que todo UPDATE e todo DELETE deveriam começar com um SELECT usando o mesmo WHERE.",
-      "respostasAceitas": [],
+      "dificuldade": "media",
+      "enunciado": "Por que todo UPDATE e todo DELETE deveriam ser conferidos antes com um SELECT usando o mesmo WHERE?\n\nNa sua resposta:\n1. explique o que o SELECT mostra;\n2. diga que problema essa conferência evita.",
+      "respostasAceitas": [
+        "O SELECT com o mesmo WHERE mostra exatamente as linhas que o UPDATE/DELETE vai atingir. Assim dá para conferir antes e evitar alterar ou apagar linhas erradas."
+      ],
       "palavrasChave": [],
-      "explicacao": "Porque as linhas que o SELECT mostra são exatamente as que o UPDATE/DELETE vai atingir: é a conferência antes de alterar ou apagar. (Correção manual: aceite qualquer resposta que fale em conferir/ver as linhas afetadas antes.)",
+      "explicacao": "Espera-se: 1) mostra as linhas que serão afetadas; 2) evita alterar/apagar dados errados (sem volta).",
       "peso": 2,
       "correcaoManual": true
     },
     {
       "tipo": "alternativa",
       "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "dificuldade": "facil",
       "enunciado": "Qual comando cria um banco de dados novo SEM dar erro caso ele já exista?",
       "alternativas": [
         "CREATE DATABASE pf_suporte;",
@@ -241,6 +244,7 @@
     {
       "tipo": "alternativa",
       "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "dificuldade": "facil",
       "enunciado": "Para que serve o comando `USE pf_suporte;`?",
       "alternativas": [
         "Cria o banco pf_suporte",
@@ -255,6 +259,7 @@
     {
       "tipo": "alternativa",
       "tema": "DDL — CREATE TABLE e restrições",
+      "dificuldade": "facil",
       "enunciado": "Na tabela cliente, qual restrição impede que dois registros tenham o mesmo e-mail?",
       "alternativas": [
         "NOT NULL",
@@ -269,6 +274,7 @@
     {
       "tipo": "alternativa",
       "tema": "DDL — CREATE TABLE e restrições",
+      "dificuldade": "media",
       "enunciado": "Qual é a diferença entre PRIMARY KEY e UNIQUE?",
       "alternativas": [
         "Nenhuma, são sinônimos",
@@ -283,6 +289,7 @@
     {
       "tipo": "alternativa",
       "tema": "DDL — CREATE TABLE e restrições",
+      "dificuldade": "media",
       "enunciado": "Você tentou criar a tabela chamado antes da tabela cliente e o MySQL recusou (erro 1824). Por quê?",
       "alternativas": [
         "Porque a FOREIGN KEY aponta para uma tabela que ainda não existe",
@@ -297,6 +304,7 @@
     {
       "tipo": "alternativa",
       "tema": "DDL — ALTER TABLE, índices e DROP",
+      "dificuldade": "facil",
       "enunciado": "Qual comando acrescenta a coluna data_abertura (DATE) à tabela chamado, que já existe e já tem dados?",
       "alternativas": [
         "CREATE COLUMN data_abertura DATE ON chamado;",
@@ -311,6 +319,7 @@
     {
       "tipo": "alternativa",
       "tema": "DDL — ALTER TABLE, índices e DROP",
+      "dificuldade": "media",
       "enunciado": "Para que serve um índice (INDEX) numa coluna?",
       "alternativas": [
         "Para impedir valores repetidos na coluna",
@@ -325,6 +334,7 @@
     {
       "tipo": "alternativa",
       "tema": "DDL — ALTER TABLE, índices e DROP",
+      "dificuldade": "media",
       "enunciado": "Qual é a diferença entre `DROP TABLE chamado` e `DELETE FROM chamado`?",
       "alternativas": [
         "Não há diferença: os dois apagam a tabela",
@@ -339,6 +349,7 @@
     {
       "tipo": "alternativa",
       "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "dificuldade": "facil",
       "enunciado": "O que `DROP DATABASE pf_suporte;` faz?",
       "alternativas": [
         "Apaga só as tabelas vazias",
@@ -353,6 +364,7 @@
     {
       "tipo": "alternativa",
       "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "dificuldade": "media",
       "enunciado": "Você rodou `CREATE USER 'ana_suporte'@'localhost' IDENTIFIED BY 'Ana@2026';`. O que esse usuário já pode fazer no banco pf_suporte?",
       "alternativas": [
         "Consultar todas as tabelas",
@@ -367,6 +379,7 @@
     {
       "tipo": "alternativa",
       "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "dificuldade": "facil",
       "enunciado": "O que significa 'localhost' em `'ana_suporte'@'localhost'`?",
       "alternativas": [
         "O nome do banco de dados",
@@ -381,6 +394,7 @@
     {
       "tipo": "alternativa",
       "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "dificuldade": "media",
       "enunciado": "Seguindo o princípio do menor privilégio, qual GRANT é o mais adequado para quem só precisa consultar a tabela chamado?",
       "alternativas": [
         "GRANT ALL PRIVILEGES ON *.* TO ...",
@@ -395,6 +409,7 @@
     {
       "tipo": "alternativa",
       "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "dificuldade": "media",
       "enunciado": "Sobre o REVOKE, assinale a alternativa correta:",
       "alternativas": [
         "Usa a palavra TO, igual ao GRANT",
@@ -409,6 +424,7 @@
     {
       "tipo": "alternativa",
       "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "dificuldade": "facil",
       "enunciado": "O usuário tentou `INSERT INTO chamado ...` e recebeu `ERROR 1142: INSERT command denied`. O que isso significa?",
       "alternativas": [
         "A senha está errada",
@@ -423,6 +439,7 @@
     {
       "tipo": "alternativa",
       "tema": "Importação, exportação e backup",
+      "dificuldade": "dificil",
       "enunciado": "Um dump gerado com mysqldump usando `--databases` contém também CREATE DATABASE e USE. Qual é a consequência ao importar esse arquivo?",
       "alternativas": [
         "O arquivo não pode ser importado pelo Workbench",
@@ -437,6 +454,7 @@
     {
       "tipo": "alternativa",
       "tema": "Importação, exportação e backup",
+      "dificuldade": "media",
       "enunciado": "Qual opção do mysqldump exporta só a estrutura das tabelas, sem os dados?",
       "alternativas": [
         "--no-data",
@@ -451,6 +469,7 @@
     {
       "tipo": "alternativa",
       "tema": "Importação, exportação e backup",
+      "dificuldade": "facil",
       "enunciado": "No MySQL Workbench, onde fica a exportação do banco inteiro para um arquivo .sql?",
       "alternativas": [
         "File → Save Script",
@@ -465,6 +484,7 @@
     {
       "tipo": "alternativa",
       "tema": "Importação, exportação e backup",
+      "dificuldade": "dificil",
       "enunciado": "O comando `source C:/dumps/backup.sql;` funciona onde?",
       "alternativas": [
         "Na aba SQL do Workbench",
@@ -479,6 +499,7 @@
     {
       "tipo": "alternativa",
       "tema": "Importação, exportação e backup",
+      "dificuldade": "media",
       "enunciado": "Qual é a vantagem do backup incremental em relação ao backup full?",
       "alternativas": [
         "É mais simples de restaurar",
@@ -493,6 +514,7 @@
     {
       "tipo": "alternativa",
       "tema": "Importação, exportação e backup",
+      "dificuldade": "dificil",
       "enunciado": "O que o SELECT ... INTO OUTFILE exige para funcionar?",
       "alternativas": [
         "Que o arquivo já exista",
@@ -507,178 +529,153 @@
     {
       "tipo": "dissertativa",
       "tema": "DDL — CREATE TABLE e restrições",
-      "enunciado": "Contexto: a Pixel Forge Suporte está montando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nEscreva o comando completo que cria a tabela cliente no banco pf_suporte, com id_cliente como chave primária numérica e automática, nome (texto, obrigatório) e email (texto, obrigatório e sem repetir).",
+      "dificuldade": "media",
+      "enunciado": "Contexto: a Pixel Forge Suporte está organizando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nObserve o comando:\n`CREATE TABLE cliente (id_cliente INT PRIMARY KEY AUTO_INCREMENT, nome VARCHAR(80) NOT NULL, email VARCHAR(120) NOT NULL UNIQUE);`\nO que cada restrição garante na tabela cliente?\n\nNa sua resposta:\n1. explique o que PRIMARY KEY e AUTO_INCREMENT fazem no id_cliente;\n2. explique a diferença entre NOT NULL e UNIQUE no email.",
       "respostasAceitas": [
-        "CREATE TABLE cliente (id_cliente INT PRIMARY KEY AUTO_INCREMENT, nome VARCHAR(80) NOT NULL, email VARCHAR(120) NOT NULL UNIQUE);",
-        "CREATE TABLE cliente (id_cliente INT AUTO_INCREMENT PRIMARY KEY, nome VARCHAR(80) NOT NULL, email VARCHAR(120) NOT NULL UNIQUE);"
+        "PRIMARY KEY identifica cada cliente de forma única e AUTO_INCREMENT gera o número sozinho. NOT NULL obriga a preencher; UNIQUE impede dois clientes com o mesmo e-mail."
       ],
-      "palavrasChave": [
-        "create table cliente(",
-        "id_cliente int",
-        "primary key",
-        "auto_increment",
-        "nome varchar",
-        "not null",
-        "email varchar",
-        "unique"
-      ],
-      "explicacao": "CREATE TABLE cliente (id_cliente INT PRIMARY KEY AUTO_INCREMENT, nome VARCHAR(80) NOT NULL, email VARCHAR(120) NOT NULL UNIQUE); — PK + AUTO_INCREMENT no id, NOT NULL nas duas colunas e UNIQUE no e-mail.",
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) PK identifica unicamente o registro e AUTO_INCREMENT numera automaticamente; 2) NOT NULL = obrigatório, UNIQUE = sem repetir.",
       "peso": 2
     },
     {
       "tipo": "dissertativa",
       "tema": "DDL — CREATE TABLE e restrições",
-      "enunciado": "Contexto: a Pixel Forge Suporte está montando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nEscreva o comando completo que cria a tabela chamado, com id_chamado como chave primária numérica e automática, titulo (texto, obrigatório), prioridade (número inteiro, padrão 3) e a chave estrangeira id_cliente apontando para a tabela cliente.",
+      "dificuldade": "dificil",
+      "enunciado": "Contexto: a Pixel Forge Suporte está organizando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nA tabela chamado foi criada com:\n`CREATE TABLE chamado (id_chamado INT PRIMARY KEY AUTO_INCREMENT, titulo VARCHAR(100) NOT NULL, prioridade INT DEFAULT 3, id_cliente INT NOT NULL, FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente));`\nO que acontece se alguém inserir um chamado sem informar a prioridade? E se informar um id_cliente que não existe?\n\nNa sua resposta:\n1. diga o que o DEFAULT 3 faz;\n2. explique o que a FOREIGN KEY faz com um id_cliente inexistente;\n3. diga por que a tabela cliente precisa existir antes de chamado.",
       "respostasAceitas": [
-        "CREATE TABLE chamado (id_chamado INT PRIMARY KEY AUTO_INCREMENT, titulo VARCHAR(100) NOT NULL, prioridade INT DEFAULT 3, id_cliente INT NOT NULL, FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente));"
+        "Sem prioridade, o chamado fica com prioridade 3 (DEFAULT). Com id_cliente inexistente o MySQL recusa o INSERT, porque a FOREIGN KEY exige que o cliente exista. Por isso cliente tem que ser criada antes."
       ],
-      "palavrasChave": [
-        "create table chamado(",
-        "id_chamado int",
-        "primary key",
-        "auto_increment",
-        "titulo varchar",
-        "not null",
-        "prioridade int default 3",
-        "foreign key(id_cliente)references cliente(id_cliente)"
-      ],
-      "explicacao": "CREATE TABLE chamado (id_chamado INT PRIMARY KEY AUTO_INCREMENT, titulo VARCHAR(100) NOT NULL, prioridade INT DEFAULT 3, id_cliente INT NOT NULL, FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente)); — a FK precisa da coluna E da cláusula FOREIGN KEY ... REFERENCES.",
-      "peso": 2
-    },
-    {
-      "tipo": "dissertativa",
-      "tema": "DDL — ALTER TABLE, índices e DROP",
-      "enunciado": "Contexto: a Pixel Forge Suporte está montando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nA tabela chamado precisa evoluir. Escreva o comando que acrescenta a coluna data_abertura do tipo DATE.",
-      "respostasAceitas": [
-        "ALTER TABLE chamado ADD COLUMN data_abertura DATE;",
-        "ALTER TABLE chamado ADD data_abertura DATE;"
-      ],
-      "palavrasChave": [
-        "alter table chamado add",
-        "data_abertura date"
-      ],
-      "explicacao": "ALTER TABLE chamado ADD COLUMN data_abertura DATE; — ALTER muda a estrutura sem perder os dados que já existem.",
-      "peso": 2
-    },
-    {
-      "tipo": "dissertativa",
-      "tema": "DDL — ALTER TABLE, índices e DROP",
-      "enunciado": "Contexto: a Pixel Forge Suporte está montando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nEscreva o comando que cria um índice chamado idx_chamado_titulo na coluna titulo da tabela chamado.",
-      "respostasAceitas": [
-        "CREATE INDEX idx_chamado_titulo ON chamado(titulo);",
-        "CREATE INDEX idx_chamado_titulo ON chamado (titulo);"
-      ],
-      "palavrasChave": [
-        "create index idx_chamado_titulo on chamado(titulo)"
-      ],
-      "explicacao": "CREATE INDEX idx_chamado_titulo ON chamado(titulo); — também vale ALTER TABLE chamado ADD INDEX idx_chamado_titulo (titulo).",
-      "peso": 2
-    },
-    {
-      "tipo": "dissertativa",
-      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
-      "enunciado": "Escreva o comando que cria o usuário ana_suporte, que só acessa de localhost, com a senha Ana@2026.",
-      "respostasAceitas": [
-        "CREATE USER 'ana_suporte'@'localhost' IDENTIFIED BY 'Ana@2026';"
-      ],
-      "palavrasChave": [
-        "create user 'ana_suporte'@'localhost'",
-        "identified by 'ana@2026'"
-      ],
-      "explicacao": "CREATE USER 'ana_suporte'@'localhost' IDENTIFIED BY 'Ana@2026'; — usuário e host entre aspas simples, separados por @.",
-      "peso": 2
-    },
-    {
-      "tipo": "dissertativa",
-      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
-      "enunciado": "Contexto: a Pixel Forge Suporte está montando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nA usuária ana_suporte só pode consultar (ler) a tabela chamado do banco pf_suporte. Escreva o GRANT mais adequado.",
-      "respostasAceitas": [
-        "GRANT SELECT ON pf_suporte.chamado TO 'ana_suporte'@'localhost';"
-      ],
-      "palavrasChave": [
-        "grant select on pf_suporte.chamado to 'ana_suporte'@'localhost'"
-      ],
-      "explicacao": "GRANT SELECT ON pf_suporte.chamado TO 'ana_suporte'@'localhost'; — nível da tabela, só leitura (menor privilégio). GRANT em pf_suporte.* daria mais do que o pedido.",
-      "peso": 2
-    },
-    {
-      "tipo": "dissertativa",
-      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
-      "enunciado": "Contexto: a Pixel Forge Suporte está montando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nA usuária ana_suporte tinha INSERT e UPDATE na tabela cliente do banco pf_suporte. Escreva o comando que retira SOMENTE o UPDATE.",
-      "respostasAceitas": [
-        "REVOKE UPDATE ON pf_suporte.cliente FROM 'ana_suporte'@'localhost';"
-      ],
-      "palavrasChave": [
-        "revoke update on pf_suporte.cliente from 'ana_suporte'@'localhost'"
-      ],
-      "explicacao": "REVOKE UPDATE ON pf_suporte.cliente FROM 'ana_suporte'@'localhost'; — REVOKE usa FROM e tem que ser no mesmo nível (tabela) em que a permissão foi dada.",
-      "peso": 2
-    },
-    {
-      "tipo": "dissertativa",
-      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
-      "enunciado": "Escreva o comando que mostra todas as permissões da usuária ana_suporte para você conferir.",
-      "respostasAceitas": [
-        "SHOW GRANTS FOR 'ana_suporte'@'localhost';"
-      ],
-      "palavrasChave": [
-        "show grants for 'ana_suporte'@'localhost'"
-      ],
-      "explicacao": "SHOW GRANTS FOR 'ana_suporte'@'localhost'; — a linha GRANT USAGE ON *.* significa 'só pode conectar'.",
-      "peso": 2
-    },
-    {
-      "tipo": "dissertativa",
-      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
-      "enunciado": "Escreva o comando que apaga a usuária ana_suporte do servidor.",
-      "respostasAceitas": [
-        "DROP USER 'ana_suporte'@'localhost';"
-      ],
-      "palavrasChave": [
-        "drop user 'ana_suporte'@'localhost'"
-      ],
-      "explicacao": "DROP USER 'ana_suporte'@'localhost'; — apaga o crachá e todas as permissões dele.",
-      "peso": 2
-    },
-    {
-      "tipo": "dissertativa",
-      "tema": "Importação, exportação e backup",
-      "enunciado": "Contexto: a Pixel Forge Suporte está montando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nNo terminal (cmd), escreva o comando mysqldump que exporta o banco pf_suporte inteiro (estrutura e dados) para o arquivo backup.sql, usando o usuário root.",
-      "respostasAceitas": [
-        "mysqldump -u root -p pf_suporte > backup.sql",
-        "mysqldump -u root -p --databases pf_suporte > backup.sql"
-      ],
-      "palavrasChave": [
-        "mysqldump",
-        "-u root",
-        "pf_suporte>backup.sql"
-      ],
-      "explicacao": "mysqldump -u root -p pf_suporte > backup.sql — o > manda a saída para o arquivo. Com --databases o dump inclui CREATE DATABASE (cuidado ao importar por cima do original).",
-      "peso": 2
-    },
-    {
-      "tipo": "dissertativa",
-      "tema": "Importação, exportação e backup",
-      "enunciado": "Explique, em até três linhas, a diferença entre backup full e backup incremental, dizendo uma vantagem de cada um.",
-      "respostasAceitas": [],
       "palavrasChave": [],
-      "explicacao": "Full copia o banco inteiro: mais lento e pesado, mas a restauração é simples (um arquivo). Incremental copia só o que mudou desde o último backup: rápido e leve, mas a restauração precisa do full mais os incrementais em ordem. (Correção manual: aceite qualquer resposta com essas duas ideias.)",
+      "explicacao": "Espera-se: 1) DEFAULT preenche 3 quando o valor não é informado; 2) a FK recusa id_cliente que não existe em cliente (integridade referencial); 3) a tabela referenciada precisa existir antes.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "dificuldade": "facil",
+      "enunciado": "Contexto: a Pixel Forge Suporte está organizando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nA tabela chamado já tem vários registros. O que faz o comando `ALTER TABLE chamado ADD COLUMN data_abertura DATE;`?\n\nNa sua resposta:\n1. diga o que muda na tabela;\n2. explique o que acontece com os chamados que já estavam cadastrados.",
+      "respostasAceitas": [
+        "Acrescenta a coluna data_abertura (tipo data) na tabela chamado. Os chamados antigos continuam lá, com data_abertura vazia (NULL)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) adiciona uma nova coluna DATE à estrutura; 2) os dados existentes não são perdidos e a nova coluna fica NULL neles.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "dificuldade": "media",
+      "enunciado": "Contexto: a Pixel Forge Suporte está organizando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nO que faz o comando `CREATE INDEX idx_chamado_titulo ON chamado(titulo);` e para que ele serve?\n\nNa sua resposta:\n1. diga o que o comando cria;\n2. explique em que tipo de consulta ele ajuda.",
+      "respostasAceitas": [
+        "Cria um índice chamado idx_chamado_titulo na coluna titulo. Ele deixa mais rápidas as buscas e filtros pelo título (WHERE titulo = ...), como um índice de livro."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cria um índice na coluna titulo; 2) acelera consultas que buscam/filtram/ordenam por titulo.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "dificuldade": "facil",
+      "enunciado": "O que faz o comando `CREATE USER 'ana_suporte'@'localhost' IDENTIFIED BY 'Ana@2026';`?\n\nNa sua resposta:\n1. diga o que o comando cria;\n2. explique o que significam 'localhost' e IDENTIFIED BY.",
+      "respostasAceitas": [
+        "Cria a usuária ana_suporte no MySQL. 'localhost' quer dizer que ela só conecta da própria máquina do servidor, e IDENTIFIED BY define a senha Ana@2026."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cria um usuário (login) no servidor, ainda sem permissões nas tabelas; 2) localhost = só acessa da própria máquina; IDENTIFIED BY = senha.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "dificuldade": "media",
+      "enunciado": "Contexto: a Pixel Forge Suporte está organizando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nA usuária ana_suporte só precisa consultar a tabela chamado. O DBA tinha duas opções:\nA) `GRANT SELECT ON pf_suporte.chamado TO 'ana_suporte'@'localhost';`\nB) `GRANT ALL ON pf_suporte.* TO 'ana_suporte'@'localhost';`\nQual é a mais adequada e por quê?\n\nNa sua resposta:\n1. diga qual opção escolher;\n2. explique o princípio do menor privilégio.",
+      "respostasAceitas": [
+        "A opção A, porque dá só a leitura (SELECT) e só na tabela chamado. Pelo menor privilégio, cada usuário recebe apenas o que precisa; a B deixaria ela alterar e apagar tudo do banco."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) opção A; 2) menor privilégio: dar só a permissão necessária, reduzindo o risco de erro ou abuso (B dá todas as permissões em todas as tabelas).",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "dificuldade": "dificil",
+      "enunciado": "Contexto: a Pixel Forge Suporte está organizando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nA usuária ana_suporte tinha INSERT e UPDATE na tabela cliente. O DBA rodou `REVOKE UPDATE ON pf_suporte.cliente FROM 'ana_suporte'@'localhost';`. O que ela ainda pode fazer na tabela cliente depois disso?\n\nNa sua resposta:\n1. diga o que o REVOKE retirou e o que ficou;\n2. explique por que se usa FROM no REVOKE e TO no GRANT.",
+      "respostasAceitas": [
+        "O REVOKE tirou só o UPDATE; ela continua podendo fazer INSERT em cliente. No GRANT a permissão vai PARA (TO) o usuário; no REVOKE ela é tirada DE (FROM) o usuário."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) perde só o UPDATE, mantém o INSERT; 2) GRANT ... TO dá a permissão ao usuário, REVOKE ... FROM retira do usuário.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "dificuldade": "facil",
+      "enunciado": "O DBA rodou `SHOW GRANTS FOR 'ana_suporte'@'localhost';` e uma das linhas foi `GRANT USAGE ON *.* TO 'ana_suporte'@'localhost'`. O que esse comando mostra e o que significa essa linha?\n\nNa sua resposta:\n1. diga para que serve o SHOW GRANTS;\n2. explique o que significa GRANT USAGE.",
+      "respostasAceitas": [
+        "SHOW GRANTS lista todas as permissões da usuária. GRANT USAGE ON *.* quer dizer que ela só pode conectar no servidor, sem permissão nas tabelas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) lista as permissões do usuário para conferir; 2) USAGE = só conectar, nenhuma permissão de dados.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "dificuldade": "facil",
+      "enunciado": "O que faz o comando `DROP USER 'ana_suporte'@'localhost';`?\n\nNa sua resposta:\n1. diga o que acontece com a usuária;\n2. explique o que acontece com as permissões que ela tinha.",
+      "respostasAceitas": [
+        "Apaga a usuária ana_suporte do servidor; ela não consegue mais entrar. Todas as permissões dela são removidas junto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) remove o usuário (login) do servidor; 2) as permissões dele também somem.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "dificuldade": "media",
+      "enunciado": "Contexto: a Pixel Forge Suporte está organizando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nNo terminal (cmd), o técnico rodou `mysqldump -u root -p pf_suporte > backup.sql`. O que esse comando faz?\n\nNa sua resposta:\n1. diga o que vai para o arquivo backup.sql;\n2. explique para que servem o -p e o >.",
+      "respostasAceitas": [
+        "Exporta o banco pf_suporte inteiro (estrutura e dados, em comandos SQL) para o arquivo backup.sql. O -p pede a senha do root e o > manda a saída para o arquivo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) gera um backup .sql com CREATE TABLE e INSERT do banco; 2) -p pede a senha; > redireciona a saída para o arquivo.",
+      "peso": 2
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "dificuldade": "media",
+      "enunciado": "Explique a diferença entre backup full e backup incremental.\n\nNa sua resposta:\n1. diga o que cada um copia;\n2. dê uma vantagem de cada um.",
+      "respostasAceitas": [
+        "Full copia o banco inteiro: é mais pesado, mas restaura fácil. Incremental copia só o que mudou desde o último backup: é rápido e leve, mas a restauração precisa do full e de todos os incrementais."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) full = tudo, incremental = só o que mudou; 2) full restaura simples; incremental é rápido e ocupa pouco espaço.",
       "peso": 2,
       "correcaoManual": true
     },
     {
       "tipo": "dissertativa",
       "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
-      "enunciado": "Contexto: a Pixel Forge Suporte está montando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nA usuária recebeu `GRANT SELECT ON pf_suporte.* TO 'ana_suporte'@'localhost';`. Depois o professor rodou `REVOKE SELECT ON pf_suporte.chamado FROM 'ana_suporte'@'localhost';` e deu o erro 1147. Explique em até duas linhas por que o REVOKE falhou e como deveria ser feito.",
-      "respostasAceitas": [],
+      "dificuldade": "dificil",
+      "enunciado": "Contexto: a Pixel Forge Suporte está organizando o sistema de chamados no MySQL. Banco: pf_suporte. Tabelas: cliente (id_cliente, nome, email) e chamado (id_chamado, titulo, prioridade, id_cliente).\n\nA usuária recebeu `GRANT SELECT ON pf_suporte.* TO 'ana_suporte'@'localhost';`. Depois o professor rodou `REVOKE SELECT ON pf_suporte.chamado FROM 'ana_suporte'@'localhost';` e deu o erro 1147. Por que o REVOKE falhou?\n\nNa sua resposta:\n1. explique o motivo do erro;\n2. diga em que nível (banco ou tabela) o REVOKE deveria ser feito.",
+      "respostasAceitas": [
+        "O REVOKE tem que ser no mesmo nível do GRANT. A permissão foi dada no banco inteiro (pf_suporte.*), não na tabela chamado, então não havia o que retirar nesse nível. O REVOKE deveria ser em pf_suporte.*."
+      ],
       "palavrasChave": [],
-      "explicacao": "O REVOKE precisa ser no MESMO nível do GRANT. A permissão foi dada no banco inteiro (pf_suporte.*), então não existe um grant só na tabela chamado para retirar. O certo: REVOKE SELECT ON pf_suporte.* FROM ... e, se precisar, dar GRANT só nas tabelas que ela deve ver. (Correção manual.)",
+      "explicacao": "Espera-se: 1) GRANT e REVOKE precisam estar no mesmo nível; não existe grant só na tabela chamado; 2) revogar no nível do banco (pf_suporte.*).",
       "peso": 2,
       "correcaoManual": true
     },
     {
       "tipo": "sql",
       "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "dificuldade": "facil",
       "peso": 1,
       "enunciado": "O Pet Shop Amigo Fiel guarda seus dados no banco petshop, com as tabelas tutor (os donos), pet e atendimento (serviços feitos em cada pet). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -705,6 +702,7 @@
     {
       "tipo": "sql",
       "tema": "Agrupamento (GROUP BY e HAVING)",
+      "dificuldade": "dificil",
       "peso": 1,
       "enunciado": "O Pet Shop Amigo Fiel guarda seus dados no banco petshop, com as tabelas tutor (os donos), pet e atendimento (serviços feitos em cada pet). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -731,6 +729,7 @@
     {
       "tipo": "sql",
       "tema": "DML — UPDATE",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "O Pet Shop Amigo Fiel guarda seus dados no banco petshop, com as tabelas tutor (os donos), pet e atendimento (serviços feitos em cada pet). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -758,6 +757,7 @@
     {
       "tipo": "sql",
       "tema": "DML — INSERT",
+      "dificuldade": "facil",
       "peso": 1,
       "enunciado": "O Pet Shop Amigo Fiel guarda seus dados no banco petshop, com as tabelas tutor (os donos), pet e atendimento (serviços feitos em cada pet). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -785,6 +785,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "dificuldade": "facil",
       "peso": 1,
       "enunciado": "A biblioteca da escola usa o banco biblioteca, com as tabelas autor, livro e emprestimo. Um empréstimo sem data_devolucao (NULL) ainda não foi devolvido. Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -811,6 +812,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas com JOIN",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "A biblioteca da escola usa o banco biblioteca, com as tabelas autor, livro e emprestimo. Um empréstimo sem data_devolucao (NULL) ainda não foi devolvido. Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -837,6 +839,7 @@
     {
       "tipo": "sql",
       "tema": "DML — UPDATE",
+      "dificuldade": "facil",
       "peso": 1,
       "enunciado": "A biblioteca da escola usa o banco biblioteca, com as tabelas autor, livro e emprestimo. Um empréstimo sem data_devolucao (NULL) ainda não foi devolvido. Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -864,6 +867,7 @@
     {
       "tipo": "sql",
       "tema": "Agrupamento (GROUP BY e HAVING)",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "A biblioteca da escola usa o banco biblioteca, com as tabelas autor, livro e emprestimo. Um empréstimo sem data_devolucao (NULL) ainda não foi devolvido. Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -890,6 +894,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "dificuldade": "facil",
       "peso": 1,
       "enunciado": "A Oficina Motor Forte controla os serviços no banco oficina: cliente, veiculo (a placa é a chave primária) e ordem_servico (cada serviço tem valor de peças e de mão de obra separados). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -916,6 +921,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "A Oficina Motor Forte controla os serviços no banco oficina: cliente, veiculo (a placa é a chave primária) e ordem_servico (cada serviço tem valor de peças e de mão de obra separados). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -942,6 +948,7 @@
     {
       "tipo": "sql",
       "tema": "DML — UPDATE",
+      "dificuldade": "facil",
       "peso": 1,
       "enunciado": "A Oficina Motor Forte controla os serviços no banco oficina: cliente, veiculo (a placa é a chave primária) e ordem_servico (cada serviço tem valor de peças e de mão de obra separados). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -969,6 +976,7 @@
     {
       "tipo": "sql",
       "tema": "DDL — CREATE TABLE e restrições",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "A Oficina Motor Forte controla os serviços no banco oficina: cliente, veiculo (a placa é a chave primária) e ordem_servico (cada serviço tem valor de peças e de mão de obra separados). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -996,6 +1004,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "A academia Corpo em Movimento usa o banco academia: plano (com a mensalidade), aluno (ativo = 1 significa que está ativo; 0, inativo) e checkin (cada entrada do aluno na academia, com data e hora). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1022,6 +1031,7 @@
     {
       "tipo": "sql",
       "tema": "Agrupamento (GROUP BY e HAVING)",
+      "dificuldade": "dificil",
       "peso": 1,
       "enunciado": "A academia Corpo em Movimento usa o banco academia: plano (com a mensalidade), aluno (ativo = 1 significa que está ativo; 0, inativo) e checkin (cada entrada do aluno na academia, com data e hora). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1048,6 +1058,7 @@
     {
       "tipo": "sql",
       "tema": "DML — UPDATE",
+      "dificuldade": "dificil",
       "peso": 1,
       "enunciado": "A academia Corpo em Movimento usa o banco academia: plano (com a mensalidade), aluno (ativo = 1 significa que está ativo; 0, inativo) e checkin (cada entrada do aluno na academia, com data e hora). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1075,6 +1086,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "A academia Corpo em Movimento usa o banco academia: plano (com a mensalidade), aluno (ativo = 1 significa que está ativo; 0, inativo) e checkin (cada entrada do aluno na academia, com data e hora). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1101,6 +1113,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "dificuldade": "facil",
       "peso": 1,
       "enunciado": "O Cine Estrela guarda a programação no banco cinema: filme (duração em minutos e classificação indicativa), sala e sessao (cada sessão tem preço do ingresso e quantos ingressos foram vendidos). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1127,6 +1140,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas com JOIN",
+      "dificuldade": "dificil",
       "peso": 1,
       "enunciado": "O Cine Estrela guarda a programação no banco cinema: filme (duração em minutos e classificação indicativa), sala e sessao (cada sessão tem preço do ingresso e quantos ingressos foram vendidos). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1153,6 +1167,7 @@
     {
       "tipo": "sql",
       "tema": "Agrupamento (GROUP BY e HAVING)",
+      "dificuldade": "dificil",
       "peso": 1,
       "enunciado": "O Cine Estrela guarda a programação no banco cinema: filme (duração em minutos e classificação indicativa), sala e sessao (cada sessão tem preço do ingresso e quantos ingressos foram vendidos). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1179,6 +1194,7 @@
     {
       "tipo": "sql",
       "tema": "DML — UPDATE",
+      "dificuldade": "facil",
       "peso": 1,
       "enunciado": "O Cine Estrela guarda a programação no banco cinema: filme (duração em minutos e classificação indicativa), sala e sessao (cada sessão tem preço do ingresso e quantos ingressos foram vendidos). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1206,6 +1222,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "dificuldade": "facil",
       "peso": 1,
       "enunciado": "A hamburgueria Brasa & Pão registra as vendas no banco hamburgueria: produto, pedido e item_pedido (cada linha diz qual produto entrou em qual pedido e em que quantidade). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1232,6 +1249,7 @@
     {
       "tipo": "sql",
       "tema": "Agrupamento (GROUP BY e HAVING)",
+      "dificuldade": "dificil",
       "peso": 1,
       "enunciado": "A hamburgueria Brasa & Pão registra as vendas no banco hamburgueria: produto, pedido e item_pedido (cada linha diz qual produto entrou em qual pedido e em que quantidade). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1258,6 +1276,7 @@
     {
       "tipo": "sql",
       "tema": "DML — INSERT",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "A hamburgueria Brasa & Pão registra as vendas no banco hamburgueria: produto, pedido e item_pedido (cada linha diz qual produto entrou em qual pedido e em que quantidade). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1285,6 +1304,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas com JOIN",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "A hamburgueria Brasa & Pão registra as vendas no banco hamburgueria: produto, pedido e item_pedido (cada linha diz qual produto entrou em qual pedido e em que quantidade). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1311,6 +1331,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "dificuldade": "facil",
       "peso": 1,
       "enunciado": "A Clínica Veterinária Bicho Bom usa o banco clinica_vet: veterinario, animal e consulta (cada consulta liga um animal a um veterinário, com data, motivo e valor). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1337,6 +1358,7 @@
     {
       "tipo": "sql",
       "tema": "Agrupamento (GROUP BY e HAVING)",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "A Clínica Veterinária Bicho Bom usa o banco clinica_vet: veterinario, animal e consulta (cada consulta liga um animal a um veterinário, com data, motivo e valor). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1363,6 +1385,7 @@
     {
       "tipo": "sql",
       "tema": "DML — DELETE",
+      "dificuldade": "facil",
       "peso": 1,
       "enunciado": "A Clínica Veterinária Bicho Bom usa o banco clinica_vet: veterinario, animal e consulta (cada consulta liga um animal a um veterinário, com data, motivo e valor). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1390,6 +1413,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas com JOIN",
+      "dificuldade": "dificil",
       "peso": 1,
       "enunciado": "A Clínica Veterinária Bicho Bom usa o banco clinica_vet: veterinario, animal e consulta (cada consulta liga um animal a um veterinário, com data, motivo e valor). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1416,6 +1440,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "dificuldade": "facil",
       "peso": 1,
       "enunciado": "A escola de idiomas Fala Mundo usa o banco idiomas: curso (idioma, nível e mensalidade), estudante e matricula (nota_final fica NULL enquanto o curso não termina). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1442,6 +1467,7 @@
     {
       "tipo": "sql",
       "tema": "Agrupamento (GROUP BY e HAVING)",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "A escola de idiomas Fala Mundo usa o banco idiomas: curso (idioma, nível e mensalidade), estudante e matricula (nota_final fica NULL enquanto o curso não termina). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1468,6 +1494,7 @@
     {
       "tipo": "sql",
       "tema": "DML — UPDATE",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "A escola de idiomas Fala Mundo usa o banco idiomas: curso (idioma, nível e mensalidade), estudante e matricula (nota_final fica NULL enquanto o curso não termina). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1495,6 +1522,7 @@
     {
       "tipo": "sql",
       "tema": "DDL — ALTER TABLE, índices e DROP",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "A escola de idiomas Fala Mundo usa o banco idiomas: curso (idioma, nível e mensalidade), estudante e matricula (nota_final fica NULL enquanto o curso não termina). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1522,6 +1550,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "dificuldade": "facil",
       "peso": 1,
       "enunciado": "O Hotel Bela Vista usa o banco hotel: quarto (o número do quarto é a chave primária; o primeiro dígito é o andar), hospede e reserva. Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1548,6 +1577,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas com JOIN",
+      "dificuldade": "dificil",
       "peso": 1,
       "enunciado": "O Hotel Bela Vista usa o banco hotel: quarto (o número do quarto é a chave primária; o primeiro dígito é o andar), hospede e reserva. Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1574,6 +1604,7 @@
     {
       "tipo": "sql",
       "tema": "Agrupamento (GROUP BY e HAVING)",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "O Hotel Bela Vista usa o banco hotel: quarto (o número do quarto é a chave primária; o primeiro dígito é o andar), hospede e reserva. Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1600,6 +1631,7 @@
     {
       "tipo": "sql",
       "tema": "DML — UPDATE",
+      "dificuldade": "facil",
       "peso": 1,
       "enunciado": "O Hotel Bela Vista usa o banco hotel: quarto (o número do quarto é a chave primária; o primeiro dígito é o andar), hospede e reserva. Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1627,6 +1659,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "dificuldade": "facil",
       "peso": 1,
       "enunciado": "A loja Game Point usa o banco gamestore: plataforma, jogo (com preço e estoque) e venda (quantidade vendida de cada jogo em cada data). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1653,6 +1686,7 @@
     {
       "tipo": "sql",
       "tema": "Agrupamento (GROUP BY e HAVING)",
+      "dificuldade": "dificil",
       "peso": 1,
       "enunciado": "A loja Game Point usa o banco gamestore: plataforma, jogo (com preço e estoque) e venda (quantidade vendida de cada jogo em cada data). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1679,6 +1713,7 @@
     {
       "tipo": "sql",
       "tema": "DML — UPDATE",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "A loja Game Point usa o banco gamestore: plataforma, jogo (com preço e estoque) e venda (quantidade vendida de cada jogo em cada data). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1706,6 +1741,7 @@
     {
       "tipo": "sql",
       "tema": "DML — DELETE",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "A loja Game Point usa o banco gamestore: plataforma, jogo (com preço e estoque) e venda (quantidade vendida de cada jogo em cada data). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1733,6 +1769,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "dificuldade": "facil",
       "peso": 1,
       "enunciado": "A Farmácia Saúde Já usa o banco farmacia: laboratorio e medicamento (receita_obrigatoria = 1 quando o remédio só é vendido com receita). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1759,6 +1796,7 @@
     {
       "tipo": "sql",
       "tema": "Agrupamento (GROUP BY e HAVING)",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "A Farmácia Saúde Já usa o banco farmacia: laboratorio e medicamento (receita_obrigatoria = 1 quando o remédio só é vendido com receita). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1785,6 +1823,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "dificuldade": "facil",
       "peso": 1,
       "enunciado": "A Farmácia Saúde Já usa o banco farmacia: laboratorio e medicamento (receita_obrigatoria = 1 quando o remédio só é vendido com receita). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1811,6 +1850,7 @@
     {
       "tipo": "sql",
       "tema": "DML — UPDATE",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "A Farmácia Saúde Já usa o banco farmacia: laboratorio e medicamento (receita_obrigatoria = 1 quando o remédio só é vendido com receita). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1838,6 +1878,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "dificuldade": "facil",
       "peso": 1,
       "enunciado": "A Transportadora Rota Certa usa o banco transportadora: motorista, caminhao e entrega (data_entrega fica NULL enquanto a carga está na estrada). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1864,6 +1905,7 @@
     {
       "tipo": "sql",
       "tema": "Agrupamento (GROUP BY e HAVING)",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "A Transportadora Rota Certa usa o banco transportadora: motorista, caminhao e entrega (data_entrega fica NULL enquanto a carga está na estrada). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1890,6 +1932,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas com JOIN",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "A Transportadora Rota Certa usa o banco transportadora: motorista, caminhao e entrega (data_entrega fica NULL enquanto a carga está na estrada). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1916,6 +1959,7 @@
     {
       "tipo": "sql",
       "tema": "DML — INSERT",
+      "dificuldade": "dificil",
       "peso": 1,
       "enunciado": "A Transportadora Rota Certa usa o banco transportadora: motorista, caminhao e entrega (data_entrega fica NULL enquanto a carga está na estrada). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1943,6 +1987,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "dificuldade": "facil",
       "peso": 1,
       "enunciado": "O Estacionamento Vaga Certa usa o banco estacionamento: vaga (coberta = 1 para vaga coberta), veiculo (a placa é a chave primária) e ticket (saida e valor_pago ficam NULL enquanto o carro está estacionado). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1969,6 +2014,7 @@
     {
       "tipo": "sql",
       "tema": "Agrupamento (GROUP BY e HAVING)",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "O Estacionamento Vaga Certa usa o banco estacionamento: vaga (coberta = 1 para vaga coberta), veiculo (a placa é a chave primária) e ticket (saida e valor_pago ficam NULL enquanto o carro está estacionado). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -1995,6 +2041,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas com JOIN",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "O Estacionamento Vaga Certa usa o banco estacionamento: vaga (coberta = 1 para vaga coberta), veiculo (a placa é a chave primária) e ticket (saida e valor_pago ficam NULL enquanto o carro está estacionado). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -2021,6 +2068,7 @@
     {
       "tipo": "sql",
       "tema": "DML — UPDATE",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "O Estacionamento Vaga Certa usa o banco estacionamento: vaga (coberta = 1 para vaga coberta), veiculo (a placa é a chave primária) e ticket (saida e valor_pago ficam NULL enquanto o carro está estacionado). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -2048,6 +2096,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "dificuldade": "facil",
       "peso": 1,
       "enunciado": "A Floricultura Jardim Secreto usa o banco floricultura: arranjo (produtos), cliente e encomenda (entregue = 1 quando a encomenda já foi entregue). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -2074,6 +2123,7 @@
     {
       "tipo": "sql",
       "tema": "Agrupamento (GROUP BY e HAVING)",
+      "dificuldade": "dificil",
       "peso": 1,
       "enunciado": "A Floricultura Jardim Secreto usa o banco floricultura: arranjo (produtos), cliente e encomenda (entregue = 1 quando a encomenda já foi entregue). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -2100,6 +2150,7 @@
     {
       "tipo": "sql",
       "tema": "DML — UPDATE",
+      "dificuldade": "facil",
       "peso": 1,
       "enunciado": "A Floricultura Jardim Secreto usa o banco floricultura: arranjo (produtos), cliente e encomenda (entregue = 1 quando a encomenda já foi entregue). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -2127,6 +2178,7 @@
     {
       "tipo": "sql",
       "tema": "DDL — CREATE TABLE e restrições",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "A Floricultura Jardim Secreto usa o banco floricultura: arranjo (produtos), cliente e encomenda (entregue = 1 quando a encomenda já foi entregue). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -2154,6 +2206,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "dificuldade": "facil",
       "peso": 1,
       "enunciado": "O campeonato escolar de e-sports usa o banco esports: equipe, jogador (o nick é único) e partida (cada partida tem a equipe da casa, a visitante e o placar de cada uma). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -2180,6 +2233,7 @@
     {
       "tipo": "sql",
       "tema": "Agrupamento (GROUP BY e HAVING)",
+      "dificuldade": "media",
       "peso": 1,
       "enunciado": "O campeonato escolar de e-sports usa o banco esports: equipe, jogador (o nick é único) e partida (cada partida tem a equipe da casa, a visitante e o placar de cada uma). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -2206,6 +2260,7 @@
     {
       "tipo": "sql",
       "tema": "Consultas com JOIN",
+      "dificuldade": "dificil",
       "peso": 1,
       "enunciado": "O campeonato escolar de e-sports usa o banco esports: equipe, jogador (o nick é único) e partida (cada partida tem a equipe da casa, a visitante e o placar de cada uma). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {
@@ -2232,6 +2287,7 @@
     {
       "tipo": "sql",
       "tema": "DML — UPDATE",
+      "dificuldade": "facil",
       "peso": 1,
       "enunciado": "O campeonato escolar de e-sports usa o banco esports: equipe, jogador (o nick é único) e partida (cada partida tem a equipe da casa, a visitante e o placar de cada uma). Use a Bancada SQL: escreva o comando da tarefa e execute para conferir (o botão ↺ Restaurar base volta os dados ao início).",
       "banco": {

@@ -2,7 +2,7 @@
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, limparTema, apagarTentativaTeste,
          confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco,
          rotuloDias, nomeTurma, HORARIO_PADRAO, textoHorario, DIAS_SEMANA_LONGO,
-         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, materiaCorrigida, temasDoAlunoNaRec, bancoDaQuestao, bancosTeoricos, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261127a";
+         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, materiaCorrigida, temasDoAlunoNaRec, bancoDaQuestao, bancosTeoricos, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261127b";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
@@ -2082,7 +2082,7 @@ $("#btnImportarBanco").onclick = async () => {
   }
   if (b.questoes.some(q => q.tipo === "sql")) {
     $("#msgBanco").textContent = "Rodando os gabaritos das questões SQL…";
-    const { calcularGabarito } = await import("./workbench.js?v=20261127a");
+    const { calcularGabarito } = await import("./workbench.js?v=20261127b");
     for (const [i, q] of b.questoes.entries()) if (q.tipo === "sql") {
       try { gabSql[i] = await calcularGabarito(q, q.gabarito); }
       catch (e) { $("#msgBanco").innerHTML = `❌ Questão ${i + 1}: ${esc(e.message)}`; return false; }
@@ -2096,6 +2096,8 @@ $("#btnImportarBanco").onclick = async () => {
     const pub = { ordem: i + 1, tipo: q.tipo, enunciado: q.enunciado, peso: Number(q.peso || 1), tema: temaDe(q) };
     if (q.revisao === "pendente" || b.revisao === "pendente") pub.revisao = "pendente";   // escrita pela IA: só entra em prova real depois de aprovada
     if (q.capacidade) pub.capacidade = String(q.capacidade);
+    if (["facil", "media", "dificil"].includes(q.dificuldade)) pub.dificuldade = q.dificuldade;   // sorteio balanceado por dificuldade
+    if (q.grupo) pub.grupo = String(q.grupo).slice(0, 80);   // variações da mesma pergunta: nunca duas na mesma prova
     if (q.tipo === "alternativa") pub.alternativas = q.alternativas;
     if (q.tipo === "diagrama") { pub.diagrama = q.diagrama; if (q.conversao === false) pub.conversao = false; if (q.inicial) pub.inicial = typeof q.inicial === "string" ? q.inicial : JSON.stringify(q.inicial); }
     if (q.tipo === "web") { const { gabarito, tipo, enunciado, peso, tema, ...resto } = q; Object.assign(pub, resto); }
@@ -2114,7 +2116,13 @@ $("#btnImportarBanco").onclick = async () => {
 // ============================================================ BANCOS PRONTOS (vêm no site, importados com um clique)
 // Cada um traz somativas de exemplo já preenchidas (fechadas e sem turma: escolha a turma em Editar e libere).
 let ultimoBancoImportado = null, importandoEmLote = false;   // importandoEmLote: "Importar todos os que faltam" (sem perguntar banco por banco)
+// Banco de Dados: 150 questões por tema (27/11), a revisar. Cada arquivo = um tema; a lista cresce conforme os temas ficam prontos.
+const BANCOS_BD_150 = [
+  ["bd_01_sgbd_tipos", "SGBD, modelo relacional e tipos de dados"]
+].map(([arq, tema]) => ({ arquivo: `bancos/gerados/bd/${arq}.json`, icone: "🗃", titulo: `Banco de Dados — ${tema} (150 questões)`,
+  desc: "105 alternativas + 45 dissertativas (sem pedir comando), dificuldade balanceada. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] }));
 const BANCOS_PRONTOS = [
+  ...BANCOS_BD_150,
   { arquivo: "bancos/gerados/banco_lpa.json", icone: "🧮", titulo: "Lógica de Programação e Algoritmos — banco inicial", desc: "70 questões em 7 tópicos. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },
   { arquivo: "bancos/gerados/banco_req.json", icone: "🗂", titulo: "Levantamento de Requisitos — banco inicial", desc: "70 questões em 7 tópicos. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },
   { arquivo: "bancos/gerados/banco_req_diagramas_extra.json", icone: "📐", titulo: "Levantamento de Requisitos — mais 4 diagramas", desc: "requisitos, Kanban, histórias de usuário e mapa de empatia. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },
@@ -2226,6 +2234,11 @@ async function corrigirMateriaWeb({ silencioso = false } = {}) {
     if (!silencioso) { await carregarBancos(); carregarProvas(); }
   } catch (e) { toast("Não foi possível corrigir. " + traduzirErro(e), "erro"); }
 }
+// versão de cada banco pronto que mudou depois de publicado: quem importou a anterior vê "Atualizar" (sem versão = nunca mudou)
+const VERSOES_PRONTOS = Object.fromEntries(["bancos/banco_sql_misto.json", "bancos/gerados/amostra_dml_update.json",
+  ...["lpa", "req", "redes", "so", "marc", "back", "proj", "front", "mobile", "iot", "teste"].map(m => `bancos/gerados/banco_${m}.json`)].map(a => [a, "2026-11-27"]));
+const versaoPronto = b => b.versao || VERSOES_PRONTOS[b.arquivo] || null;
+const desatualizado = (b, ja) => !!ja && !!versaoPronto(b) && ja.versaoPronto !== versaoPronto(b);
 function desenharBancosProntos() {
   const box = $("#bancosProntos"); if (!box) return;
   if (!podeEditar()) { box.innerHTML = ""; return; }
@@ -2233,9 +2246,11 @@ function desenharBancosProntos() {
   box.innerHTML = `<div class="card bancos-prontos"><div class="linha" style="justify-content:space-between;align-items:center"><h3 style="margin:0 0 4px">📦 Bancos prontos</h3>${BANCOS_PRONTOS.some(b => !bancosCache.some(x => x.arquivoPronto === b.arquivo)) ? `<button type="button" class="ok mini" id="btnProntosTodos">Importar todos os que faltam</button>` : ""}</div><p class="pequeno" style="margin:0 0 10px">Importe com um clique, ou cole o seu próprio banco (JSON) logo abaixo.</p>` +
     BANCOS_PRONTOS.map((b, i) => {
       const ja = bancosCache.find(x => x.arquivoPronto === b.arquivo);
-      return `<div class="bp-item"><div><b>${b.icone} ${esc(b.titulo)}</b>${ja ? ` <span class="tag ok">importado</span>` : ""}<p class="pequeno" style="margin:2px 0 0">${esc(b.desc)}</p>
+      const velho = desatualizado(b, ja);
+      return `<div class="bp-item"><div><b>${b.icone} ${esc(b.titulo)}</b>${ja ? ` <span class="tag ok">importado</span>` : ""}${velho ? ` <span class="tag aviso">versão nova disponível</span>` : ""}<p class="pequeno" style="margin:2px 0 0">${esc(b.desc)}</p>
+        ${velho ? `<p class="pequeno" style="margin:2px 0 0">Versão nova: dissertativas sem pedir comando (o aluno explica o que o comando faz) e dificuldade em cada questão. A versão antiga sai das listas, mas as provas já feitas continuam com ela.</p>` : ""}
         </div>
-        ${ja ? "" : `<button class="ok mini" data-pronto="${i}">Importar banco</button>`}</div>`;
+        ${ja ? (velho ? `<button class="ok mini" data-atualizar="${i}">Atualizar</button>` : "") : `<button class="ok mini" data-pronto="${i}">Importar banco</button>`}</div>`;
     }).join("") + "" + `</div>`;
   $("#btnMateriaWeb")?.addEventListener("click", corrigirMateriaWeb);
   $("#btnProntosTodos")?.addEventListener("click", async e => {
@@ -2247,6 +2262,7 @@ function desenharBancosProntos() {
     toast("Bancos prontos importados.", "ok"); await carregarBancos();
   });
   box.querySelectorAll("[data-pronto]").forEach(bt => bt.onclick = () => importarPronto(BANCOS_PRONTOS[Number(bt.dataset.pronto)], bt));
+  box.querySelectorAll("[data-atualizar]").forEach(bt => bt.onclick = () => atualizarPronto(BANCOS_PRONTOS[Number(bt.dataset.atualizar)], bt));
 }
 async function importarPronto(item, bt) {
   bt.disabled = true;
@@ -2257,12 +2273,44 @@ async function importarPronto(item, bt) {
       $("#txtBanco").value = txt;
       ultimoBancoImportado = null;
       if (!(await $("#btnImportarBanco").onclick()) || !ultimoBancoImportado) { bt.disabled = false; return; }
-      await updateDoc(doc(db, "bancos", ultimoBancoImportado.id), { arquivoPronto: item.arquivo });
+      await updateDoc(doc(db, "bancos", ultimoBancoImportado.id), { arquivoPronto: item.arquivo, versaoPronto: versaoPronto(item) });
       banco = { id: ultimoBancoImportado.id, ...(await getDoc(doc(db, "bancos", ultimoBancoImportado.id))).data() };
     } else { toast(`O banco "${banco.nome}" já foi importado.`, "info"); bt.disabled = false; return; }
     toast(`Banco "${banco.nome}" importado. Para montar a prova: Somativas → Criar nova somativa → ✨ Sugerir prova.`, "ok");
     await carregarBancos();
   } catch (e) { toast("Não foi possível importar o banco pronto. " + traduzirErro(e), "erro"); console.error(e); }
+  bt.disabled = false;
+}
+// ATUALIZAR um banco pronto já importado: importa a versão nova como outro banco e a antiga vira "substituída" (duplicadoDe):
+// sai das listas e do sorteio de provas novas, mas nada é apagado (provas e notas antigas continuam). Somativas que ainda
+// ninguém fez passam a usar a versão nova (os temas têm os mesmos nomes).
+async function atualizarPronto(item, bt) {
+  const velho = bancosCache.find(x => x.arquivoPronto === item.arquivo);
+  if (!velho) return importarPronto(item, bt);
+  if (!(await confirmar(`Atualizar "${velho.nome}" para a versão nova?\n\nA versão nova entra como banco novo. A antiga sai das listas e do sorteio, mas NADA é apagado: as provas já aplicadas e as notas continuam iguais. As somativas que ainda ninguém fez passam a usar a versão nova.`, { titulo: "Atualizar banco pronto", ok: "Atualizar" }))) return;
+  bt.disabled = true;
+  try {
+    const txt = await (await fetch(item.arquivo + "?v=" + Date.now())).text();
+    $("#txtBanco").value = txt;
+    ultimoBancoImportado = null;
+    if (!(await $("#btnImportarBanco").onclick()) || !ultimoBancoImportado) { bt.disabled = false; return; }
+    const novo = ultimoBancoImportado.id;
+    const lote = writeBatch(db);
+    lote.update(doc(db, "bancos", novo), { arquivoPronto: item.arquivo, versaoPronto: versaoPronto(item) });
+    lote.update(doc(db, "bancos", velho.id), { arquivoPronto: deleteField(), duplicadoDe: novo, duplicadoEm: serverTimestamp(), duplicadoPor: eu.email, substituidoPorVersao: versaoPronto(item) });
+    for (const p of provasCache.filter(p => bancosDaProva(p).includes(velho.id))) {
+      const comTentativa = !(await getDocs(query(collection(db, "tentativas"), where("provaId", "==", p.id)))).empty;
+      if (comTentativa) continue;
+      const ids = bancosDaProva(p).map(x => x === velho.id ? novo : x).filter((x, i, l) => l.indexOf(x) === i);
+      const tpb = { ...(p.temasPorBanco || {}) }; if (tpb[velho.id] && !tpb[novo]) tpb[novo] = tpb[velho.id]; delete tpb[velho.id];
+      const pr = p.praticas ? JSON.parse(JSON.stringify(p.praticas)) : null;
+      if (pr) for (const o of Object.values(pr)) if (o && o[velho.id]) { o[novo] = o[velho.id]; delete o[velho.id]; }
+      lote.update(doc(db, "provas", p.id), { bancoId: ids[0], bancoIds: ids, temasPorBanco: tpb, temas: tpb[ids[0]] || null, ...(pr ? { praticas: pr } : {}) });
+    }
+    await lote.commit();
+    toast(`"${velho.nome}" atualizado. A versão antiga ficou guardada (provas antigas continuam funcionando).`, "ok");
+    await carregarBancos(); carregarProvas();
+  } catch (e) { toast("Não foi possível atualizar. " + traduzirErro(e), "erro"); console.error(e); }
   bt.disabled = false;
 }
 // semestre do banco: o gravado; senão o da criação

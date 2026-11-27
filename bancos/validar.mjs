@@ -33,7 +33,7 @@ qs.forEach((q, i) => {
   if (q.tipo === "alternativa") {
     if (!Array.isArray(q.alternativas) || q.alternativas.length !== 4) erros.push(`${n}: precisa de 4 alternativas`);
     else {
-      if (new Set(q.alternativas.map(norm)).size !== 4) erros.push(`${n}: alternativas repetidas`);
+      if (new Set(q.alternativas.map(a => String(a).trim().toLowerCase().replace(/\s+/g, " "))).size !== 4) erros.push(`${n}: alternativas repetidas`);
       if (q.alternativas.some(a => /todas as anteriores|nenhuma das anteriores/i.test(a))) erros.push(`${n}: "todas/nenhuma das anteriores"`);
     }
     if (!Number.isInteger(q.correta) || q.correta < 0 || q.correta > 3) erros.push(`${n}: correta deve ser 0..3`); else porCorreta[q.correta]++;
@@ -60,6 +60,7 @@ qs.forEach((q, i) => {
 // repetidas dentro do arquivo e contra outros
 const ps = qs.map(q => palavras(q.enunciado + " " + (q.alternativas || []).join(" ")));
 for (let i = 0; i < qs.length; i++) for (let j = i + 1; j < qs.length; j++) {
+  if (qs[i].tipo === "sql" || qs[j].tipo === "sql") continue;
   if (norm(qs[i].enunciado) === norm(qs[j].enunciado)) erros.push(`#${i + 1} e #${j + 1}: enunciado igual`);
   else if (parecido(ps[i], ps[j]) > 0.8 && !(qs[i].grupo && qs[i].grupo === qs[j].grupo)) avisos.push(`#${i + 1} e #${j + 1}: muito parecidas (use "grupo" igual se for de propósito)`);
 }

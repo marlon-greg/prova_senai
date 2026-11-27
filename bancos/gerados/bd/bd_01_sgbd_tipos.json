@@ -1,0 +1,2427 @@
+{
+  "nome": "Banco de Dados — SGBD, modelo relacional e tipos de dados (a revisar)",
+  "materia": "Banco de Dados",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é um SGBD (Sistema Gerenciador de Banco de Dados)?",
+      "alternativas": [
+        "Um software que cria, guarda, organiza e controla o acesso aos dados de um banco",
+        "Uma planilha eletrônica usada para fazer cálculos com os dados",
+        "O computador físico onde os arquivos do sistema ficam gravados",
+        "Uma linguagem de programação usada para criar sites"
+      ],
+      "correta": 0,
+      "explicacao": "O SGBD é o programa (ex.: MySQL) que gerencia o banco: armazena, consulta, protege e controla quem acessa os dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na escola, a secretaria fala em \"banco de dados\" e em \"SGBD\". Qual frase separa corretamente as duas ideias?",
+      "alternativas": [
+        "O banco de dados é o programa; o SGBD é o conjunto de dados guardados",
+        "Os dois termos são sinônimos e significam o mesmo programa",
+        "O SGBD é a tabela principal do banco de dados",
+        "O banco de dados é o conjunto de dados guardados; o SGBD é o programa que gerencia esses dados"
+      ],
+      "correta": 3,
+      "explicacao": "Banco de dados = os dados organizados (alunos, notas…). SGBD = o software que cuida deles, como o MySQL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes é um exemplo de SGBD relacional usado no curso?",
+      "alternativas": [
+        "HTML",
+        "Windows",
+        "MySQL",
+        "JSON"
+      ],
+      "correta": 2,
+      "explicacao": "MySQL é um SGBD relacional. HTML é linguagem de marcação, Windows é sistema operacional e JSON é um formato de texto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num banco de dados relacional, como os dados ficam organizados?",
+      "alternativas": [
+        "Em pastas e arquivos de texto soltos",
+        "Em tabelas formadas por linhas e colunas",
+        "Em uma única lista sem divisão",
+        "Em imagens que representam cada registro"
+      ],
+      "correta": 1,
+      "explicacao": "O modelo relacional organiza os dados em tabelas (relações), com colunas (campos) e linhas (registros)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa tabela `livro` da biblioteca, com as colunas id_livro, titulo e autor, cada livro cadastrado ocupa:",
+      "alternativas": [
+        "Uma coluna (campo) da tabela",
+        "Uma linha (registro) da tabela",
+        "Uma tabela nova para cada livro",
+        "Um banco de dados separado"
+      ],
+      "correta": 1,
+      "explicacao": "Cada livro é um registro, ou seja, uma linha. As colunas (id_livro, titulo, autor) são as informações que todo livro tem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa tabela `pet` do pet shop, com as colunas id_pet, nome, especie e peso, o que é \"especie\"?",
+      "alternativas": [
+        "Um campo (coluna) da tabela",
+        "Um registro (linha) da tabela",
+        "O nome do banco de dados",
+        "A chave estrangeira da tabela"
+      ],
+      "correta": 0,
+      "explicacao": "\"especie\" é uma coluna: a mesma informação guardada para todos os pets cadastrados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A padaria guardava as vendas numa planilha copiada em vários computadores, e cada cópia ficou com valores diferentes. Qual característica de um SGBD resolve esse problema?",
+      "alternativas": [
+        "O SGBD apaga automaticamente as vendas antigas",
+        "O SGBD impede que mais de uma pessoa veja os dados",
+        "O SGBD transforma a planilha em imagem para ninguém alterar",
+        "Os dados ficam num lugar central e todos os usuários acessam a mesma versão"
+      ],
+      "correta": 3,
+      "explicacao": "Com um SGBD os dados ficam centralizados; todos leem e gravam no mesmo banco, evitando cópias diferentes (inconsistência)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na clínica, duas recepcionistas tentam marcar consulta no mesmo horário, ao mesmo tempo. Qual recurso do SGBD cuida dessa situação?",
+      "alternativas": [
+        "A criptografia da senha do usuário root",
+        "O backup automático feito toda noite",
+        "O controle de acesso simultâneo (concorrência), que organiza as gravações ao mesmo tempo",
+        "A escolha do tipo VARCHAR para o nome do paciente"
+      ],
+      "correta": 2,
+      "explicacao": "O SGBD controla a concorrência: várias pessoas usam o banco ao mesmo tempo sem uma gravação estragar a outra."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas é uma vantagem de usar um SGBD em vez de guardar dados em arquivos de texto soltos?",
+      "alternativas": [
+        "Ele dispensa qualquer tipo de cópia de segurança",
+        "Ele deixa todos os usuários alterarem tudo sem senha",
+        "Ele garante regras de integridade, como impedir dois alunos com a mesma matrícula",
+        "Ele funciona sem precisar de nenhum computador"
+      ],
+      "correta": 2,
+      "explicacao": "O SGBD aplica regras (chave primária, NOT NULL, chave estrangeira) que mantêm os dados corretos. Backup e senha continuam necessários."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O dono da academia quer que o instrutor só consulte as fichas de treino, sem poder apagar nada. Qual característica do SGBD permite isso?",
+      "alternativas": [
+        "Redundância de dados",
+        "Controle de usuários e permissões",
+        "Tipos de dados numéricos",
+        "Organização em linhas e colunas"
+      ],
+      "correta": 1,
+      "explicacao": "O SGBD tem segurança: cada usuário recebe só as permissões de que precisa (ex.: só consultar)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O cadastro do hotel guarda o endereço do hóspede na tabela de hóspedes e de novo em cada reserva. Que problema isso causa?",
+      "alternativas": [
+        "Redundância: se o endereço mudar, pode ficar atualizado num lugar e errado no outro",
+        "Nenhum, pois repetir dados deixa o banco mais seguro",
+        "O MySQL não permite textos iguais em tabelas diferentes",
+        "A tabela de reservas deixa de ter chave primária"
+      ],
+      "correta": 0,
+      "explicacao": "Dado repetido (redundância) gasta espaço e gera inconsistência. O ideal é guardar uma vez e ligar pela chave."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual afirmação sobre a independência entre dados e programas, oferecida por um SGBD, está correta?",
+      "alternativas": [
+        "Cada programa precisa ter sua própria cópia dos dados para funcionar",
+        "O programa precisa saber em que setor do disco cada linha está gravada",
+        "Mudar a estrutura de uma tabela obriga a apagar todos os dados",
+        "Dá para acrescentar uma coluna na tabela sem precisar reescrever os programas que não usam essa coluna"
+      ],
+      "correta": 3,
+      "explicacao": "O SGBD esconde como os dados são gravados fisicamente; os programas pedem os dados pelo nome da tabela e da coluna."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual linguagem é usada para conversar com bancos de dados relacionais como o MySQL?",
+      "alternativas": [
+        "CSS",
+        "Python",
+        "HTML",
+        "SQL"
+      ],
+      "correta": 3,
+      "explicacao": "SQL (Structured Query Language) é a linguagem padrão dos bancos relacionais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma loja de games tem no banco as tabelas cliente, jogo e venda. Em um mesmo servidor MySQL, é possível ter:",
+      "alternativas": [
+        "Apenas um banco com uma única tabela",
+        "Apenas uma tabela por servidor",
+        "Vários bancos de dados, cada um com várias tabelas",
+        "Vários servidores dentro de cada tabela"
+      ],
+      "correta": 2,
+      "explicacao": "Um servidor MySQL guarda vários bancos (schemas), e cada banco guarda várias tabelas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é uma característica de um banco de dados NÃO relacional (NoSQL)?",
+      "alternativas": [
+        "Só aceita dados em tabelas com colunas definidas antes",
+        "Pode guardar dados sem uma estrutura fixa de tabelas, como documentos ou pares chave-valor",
+        "Obriga o uso de chave estrangeira entre tabelas",
+        "Só funciona com a linguagem SQL"
+      ],
+      "correta": 1,
+      "explicacao": "Bancos NoSQL usam outros modelos (documentos, chave-valor, grafos…) e costumam ter estrutura flexível."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num banco NoSQL de documentos, um registro de cliente costuma ser guardado como:",
+      "alternativas": [
+        "Um documento parecido com JSON, com campos e valores",
+        "Uma linha de uma tabela com colunas fixas",
+        "Uma imagem do formulário do cliente",
+        "Um arquivo de planilha com várias abas"
+      ],
+      "correta": 0,
+      "explicacao": "Bancos de documentos guardam cada item como um documento (formato parecido com JSON), por exemplo {\"nome\": \"Ana\", \"cidade\": \"Santos\"}."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num banco NoSQL do tipo chave-valor, como os dados são acessados?",
+      "alternativas": [
+        "Por uma chave única que devolve o valor guardado para ela",
+        "Por um JOIN entre várias tabelas",
+        "Pela posição da coluna na tabela",
+        "Por um diagrama entidade-relacionamento"
+      ],
+      "correta": 0,
+      "explicacao": "Chave-valor funciona como um dicionário: você informa a chave (ex.: \"sessao:123\") e recebe o valor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aplicativo de cinema precisa guardar o carrinho de compras temporário de cada usuário e buscar tudo rapidamente pelo código da sessão. Qual tipo de banco NoSQL combina melhor com isso?",
+      "alternativas": [
+        "Relacional com várias tabelas ligadas",
+        "Planilha compartilhada",
+        "Banco de grafos",
+        "Chave-valor"
+      ],
+      "correta": 3,
+      "explicacao": "Buscar um valor inteiro por uma chave (código da sessão) é exatamente o uso do modelo chave-valor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual situação combina MAIS com um banco relacional como o MySQL?",
+      "alternativas": [
+        "Guardar textos de postagens que cada usuário escreve com campos diferentes",
+        "Guardar só pares de código e valor para acesso muito rápido",
+        "Controle de vendas de uma loja, com clientes, produtos e pedidos bem definidos e ligados entre si",
+        "Guardar mensagens de sensores que mudam de formato a cada versão"
+      ],
+      "correta": 2,
+      "explicacao": "Dados bem estruturados e relacionados entre si (cliente–pedido–produto) são o ponto forte do modelo relacional."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Comparando os dois modelos, qual afirmação está correta?",
+      "alternativas": [
+        "No relacional cada linha pode ter colunas diferentes das outras",
+        "No relacional a estrutura das tabelas é definida antes; no NoSQL de documentos cada documento pode ter campos diferentes",
+        "No NoSQL é obrigatório definir todas as colunas antes de gravar",
+        "Os dois modelos usam exatamente a mesma estrutura de tabelas"
+      ],
+      "correta": 1,
+      "explicacao": "Relacional: esquema fixo (colunas definidas no CREATE TABLE). Documentos: esquema flexível."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num banco de documentos, o pedido de uma pizzaria foi guardado com os itens DENTRO do próprio documento do pedido. Qual é a principal diferença em relação ao modelo relacional?",
+      "alternativas": [
+        "No relacional os itens também ficariam dentro da mesma célula do pedido",
+        "No relacional os itens ficariam em outra tabela, ligados ao pedido por chave estrangeira",
+        "No relacional não é possível guardar itens de pedido",
+        "No relacional os itens seriam gravados como uma nova coluna para cada item"
+      ],
+      "correta": 1,
+      "explicacao": "No modelo relacional não se põe uma lista dentro de uma coluna: cria-se a tabela de itens com a chave estrangeira do pedido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Sobre bancos NoSQL, assinale a afirmação correta.",
+      "alternativas": [
+        "NoSQL significa \"não apenas SQL\" e reúne vários modelos diferentes, como documentos, chave-valor e grafos",
+        "NoSQL é uma versão mais nova do MySQL que substitui as tabelas",
+        "NoSQL significa que o banco não tem nenhuma forma de consulta",
+        "NoSQL é obrigatório para qualquer sistema de vendas"
+      ],
+      "correta": 0,
+      "explicacao": "\"Not only SQL\": é um nome para vários modelos que não seguem as tabelas relacionais. Cada um tem usos próprios."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma rede social quer mostrar \"amigos dos amigos\" de cada usuário. Qual tipo de banco NoSQL foi pensado para esse tipo de ligação?",
+      "alternativas": [
+        "Banco chave-valor",
+        "Banco de documentos",
+        "Planilha eletrônica",
+        "Banco de grafos"
+      ],
+      "correta": 3,
+      "explicacao": "Bancos de grafos guardam nós (pessoas) e ligações (amizades), facilitando percorrer conexões."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que um sistema bancário de saldo e transferências costuma usar um banco relacional?",
+      "alternativas": [
+        "Porque bancos relacionais não precisam de senha",
+        "Porque bancos relacionais guardam qualquer formato sem estrutura",
+        "Porque precisa de transações confiáveis: a transferência acontece por inteiro ou não acontece",
+        "Porque bancos relacionais não deixam duas pessoas usarem ao mesmo tempo"
+      ],
+      "correta": 2,
+      "explicacao": "Bancos relacionais oferecem transações com garantias (ACID): tirar de uma conta e pôr na outra é tudo ou nada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa tabela `aluno` com as colunas matricula, nome e turma, a matrícula identifica cada aluno sem repetir. Que papel a coluna matricula tem?",
+      "alternativas": [
+        "Chave estrangeira",
+        "Campo opcional",
+        "Chave primária",
+        "Tipo de dado"
+      ],
+      "correta": 2,
+      "explicacao": "A chave primária identifica cada linha de forma única e não pode ficar vazia."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual regra vale para uma chave primária?",
+      "alternativas": [
+        "Pode repetir, mas não pode ficar vazia",
+        "Não pode repetir e não pode ficar vazia (NULL)",
+        "Pode ficar vazia, mas não pode repetir",
+        "Pode repetir e pode ficar vazia"
+      ],
+      "correta": 1,
+      "explicacao": "Chave primária = valor único + obrigatório."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na oficina, a tabela `servico` (id_servico, descricao, id_veiculo) guarda id_veiculo para saber em qual carro o serviço foi feito. Que papel id_veiculo tem em `servico`?",
+      "alternativas": [
+        "Chave estrangeira que aponta para a tabela de veículos",
+        "Chave primária da tabela servico",
+        "Campo de texto livre",
+        "Índice de ordenação dos serviços"
+      ],
+      "correta": 0,
+      "explicacao": "A chave estrangeira guarda o valor da chave primária de outra tabela, criando a ligação entre elas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na biblioteca, a tabela `emprestimo` (id_emprestimo, id_livro, data_saida) tem id_livro como chave estrangeira para `livro`. O que acontece se alguém tentar registrar um empréstimo com id_livro 999, que não existe em `livro`?",
+      "alternativas": [
+        "O MySQL cria automaticamente o livro 999",
+        "O MySQL grava normalmente e corrige depois",
+        "O MySQL troca o valor por 1",
+        "O MySQL recusa, pois a chave estrangeira precisa apontar para um livro que existe"
+      ],
+      "correta": 3,
+      "explicacao": "Essa é a integridade referencial: a chave estrangeira só aceita valores que existem na tabela referenciada (ou NULL, se permitido)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `consulta` (id_consulta, id_paciente, data_consulta) da clínica, id_paciente é chave estrangeira. Um mesmo paciente pode ter várias consultas. Então, em `consulta`, o valor de id_paciente:",
+      "alternativas": [
+        "Não pode se repetir nunca",
+        "Precisa ser igual ao id_consulta",
+        "Precisa ser diferente de todos os pacientes",
+        "Pode se repetir em várias linhas"
+      ],
+      "correta": 3,
+      "explicacao": "Chave estrangeira pode repetir: vários registros filhos apontam para o mesmo registro pai."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a principal função de uma chave estrangeira?",
+      "alternativas": [
+        "Deixar a tabela em ordem alfabética",
+        "Impedir que qualquer valor se repita na coluna",
+        "Ligar uma tabela a outra e garantir que a ligação aponte para um registro que existe",
+        "Guardar a senha do usuário do banco"
+      ],
+      "correta": 2,
+      "explicacao": "Chave estrangeira cria o relacionamento e mantém a integridade referencial."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A academia pensou em usar o nome do aluno como chave primária da tabela `aluno`. Por que essa é uma má escolha?",
+      "alternativas": [
+        "Porque o nome é texto e chave primária só pode ser texto curto de 2 letras",
+        "Porque dois alunos podem ter o mesmo nome, e a chave primária não pode repetir",
+        "Porque o MySQL não aceita letras em nenhuma coluna de chave",
+        "Porque o nome sempre fica vazio no cadastro"
+      ],
+      "correta": 1,
+      "explicacao": "Chave primária precisa ser única para sempre. Nomes repetem; por isso usamos um código (id) ou matrícula."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `item_pedido` (id_pedido, id_produto, quantidade) da lanchonete, nenhuma coluna sozinha identifica a linha, mas a combinação id_pedido + id_produto não se repete. Como se chama essa chave?",
+      "alternativas": [
+        "Chave primária composta",
+        "Chave estrangeira simples",
+        "Chave candidata vazia",
+        "Campo multivalorado"
+      ],
+      "correta": 0,
+      "explicacao": "Quando duas ou mais colunas juntas formam o identificador único, temos uma chave primária composta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No pet shop, a tabela `pet` (id_pet, nome, id_tutor) tem id_tutor ligado a `tutor` (id_tutor, nome, telefone). Em `tutor`, id_tutor é INT. Qual deve ser o tipo de id_tutor em `pet`?",
+      "alternativas": [
+        "INT, o mesmo tipo da chave primária que ele referencia",
+        "VARCHAR(100), para caber o nome do tutor",
+        "DATE, para guardar quando o tutor foi cadastrado",
+        "Qualquer tipo, pois o MySQL converte sozinho"
+      ],
+      "correta": 0,
+      "explicacao": "A chave estrangeira deve ter tipo compatível (na prática, o mesmo) da chave primária referenciada; senão o MySQL recusa criar a ligação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O cinema tentou apagar o filme de id 5 da tabela `filme`, mas a tabela `sessao` (id_sessao, id_filme, horario) ainda tem sessões com id_filme 5. Com a chave estrangeira na configuração padrão, o que acontece?",
+      "alternativas": [
+        "O filme é apagado e as sessões ficam apontando para um filme que não existe",
+        "O MySQL apaga o filme e muda id_filme das sessões para 6",
+        "O filme é apagado e as sessões viram filmes novos",
+        "O MySQL recusa apagar o filme, porque há sessões ligadas a ele"
+      ],
+      "correta": 3,
+      "explicacao": "O padrão (RESTRICT/NO ACTION) impede apagar o registro pai enquanto houver filhos ligados, protegendo a integridade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa tabela `quarto` do hotel (numero, andar, tipo), cada quarto tem um número que não se repete. Qual destas colunas é a melhor candidata a chave primária?",
+      "alternativas": [
+        "andar",
+        "tipo",
+        "numero",
+        "andar + tipo"
+      ],
+      "correta": 2,
+      "explicacao": "Vários quartos ficam no mesmo andar e têm o mesmo tipo; só o número é único."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quantas chaves primárias uma tabela pode ter?",
+      "alternativas": [
+        "Nenhuma, a chave primária é opcional e única no banco todo",
+        "Apenas uma (que pode ser formada por uma ou mais colunas)",
+        "Uma para cada coluna da tabela",
+        "Até duas, uma de número e outra de texto"
+      ],
+      "correta": 1,
+      "explicacao": "Cada tabela tem uma única chave primária; ela pode ser simples (uma coluna) ou composta (várias colunas)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre o MySQL Server e o MySQL Workbench?",
+      "alternativas": [
+        "O Workbench guarda os dados e o Server só desenha diagramas",
+        "O Server é o serviço que guarda e processa os dados; o Workbench é o programa visual para se conectar e enviar comandos",
+        "Os dois são o mesmo programa com nomes diferentes",
+        "O Server é usado só no celular e o Workbench só no computador"
+      ],
+      "correta": 1,
+      "explicacao": "O servidor (mysqld) é o SGBD de fato. O Workbench é um cliente gráfico que conversa com ele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a porta padrão do MySQL Server?",
+      "alternativas": [
+        "3306",
+        "80",
+        "8080",
+        "21"
+      ],
+      "correta": 0,
+      "explicacao": "O MySQL escuta, por padrão, a porta TCP 3306. 80 e 8080 são de servidores web e 21 é do FTP."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao criar uma conexão no MySQL Workbench para o servidor instalado no próprio computador, qual endereço (hostname) se usa?",
+      "alternativas": [
+        "www.mysql.com",
+        "192.168.0.255",
+        "C:\\MySQL",
+        "localhost (ou 127.0.0.1)"
+      ],
+      "correta": 3,
+      "explicacao": "localhost/127.0.0.1 é o endereço do próprio computador, onde o servidor foi instalado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Durante a instalação do MySQL, pede-se uma senha para o usuário root. Quem é o root?",
+      "alternativas": [
+        "Um usuário de teste sem nenhuma permissão",
+        "O nome do primeiro banco de dados criado",
+        "O administrador do servidor, com todas as permissões",
+        "O programa que desenha diagramas no Workbench"
+      ],
+      "correta": 2,
+      "explicacao": "root é o superusuário do MySQL. A senha dele deve ser guardada com cuidado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quais informações o Workbench pede para criar uma conexão com o servidor?",
+      "alternativas": [
+        "Nome do aluno, turma e matrícula",
+        "Tamanho do disco, memória e processador",
+        "Endereço do servidor, porta, usuário e senha",
+        "Nome da tabela, colunas e tipos de dados"
+      ],
+      "correta": 2,
+      "explicacao": "Uma conexão precisa saber onde está o servidor (host e porta) e com quem entrar (usuário e senha)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao abrir a conexão no Workbench, apareceu: \"Can't connect to MySQL server on 'localhost:3306'\". Qual é a causa mais provável?",
+      "alternativas": [
+        "A tabela de clientes está vazia",
+        "O serviço do MySQL Server está parado no computador",
+        "O tipo VARCHAR foi usado numa coluna de nome",
+        "Falta chave estrangeira em alguma tabela"
+      ],
+      "correta": 1,
+      "explicacao": "Esse erro indica que não há servidor respondendo naquele endereço/porta. No Windows, confira se o serviço (ex.: MySQL80) está em execução."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao conectar, o Workbench mostrou: \"Access denied for user 'root'@'localhost'\". O que isso indica?",
+      "alternativas": [
+        "O servidor respondeu, mas o usuário ou a senha estão errados",
+        "O servidor está desligado",
+        "A porta 3306 não existe no computador",
+        "O banco de dados foi apagado"
+      ],
+      "correta": 0,
+      "explicacao": "\"Access denied\" vem do próprio servidor: ele está no ar, mas recusou o login (senha errada ou usuário sem permissão)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel lateral do Workbench aparece a seção \"Schemas\". O que são os schemas listados ali?",
+      "alternativas": [
+        "As senhas dos usuários",
+        "Os computadores conectados na rede",
+        "As cópias de segurança do Windows",
+        "Os bancos de dados existentes no servidor"
+      ],
+      "correta": 3,
+      "explicacao": "No MySQL, schema e database são sinônimos: cada schema é um banco com suas tabelas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No editor de SQL do Workbench, há dois ícones de raio. Qual é a diferença entre eles?",
+      "alternativas": [
+        "Um salva o arquivo e o outro fecha o Workbench",
+        "Um conecta no servidor e o outro desliga o computador",
+        "Os dois fazem a mesma coisa, só mudam de cor",
+        "Um executa todo o script (ou o trecho selecionado) e o outro só o comando onde está o cursor"
+      ],
+      "correta": 3,
+      "explicacao": "Raio simples (Ctrl+Shift+Enter) executa tudo/seleção; raio com cursor (Ctrl+Enter) executa só o comando atual."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de criar um banco novo pelo editor de SQL, ele não apareceu na lista de Schemas do Workbench. O que fazer?",
+      "alternativas": [
+        "Reinstalar o MySQL Server",
+        "Trocar a porta da conexão para 80",
+        "Atualizar a lista de Schemas (botão de recarregar)",
+        "Apagar a conexão e criar o banco de novo"
+      ],
+      "correta": 2,
+      "explicacao": "A lista lateral não se atualiza sozinha; basta clicar em atualizar (refresh) para ver o banco novo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O laboratório tem o MySQL Server instalado num computador de IP 192.168.0.20. Um aluno, em outra máquina, quer se conectar pelo Workbench. O que ele deve informar como hostname?",
+      "alternativas": [
+        "localhost",
+        "192.168.0.20",
+        "127.0.0.1",
+        "3306"
+      ],
+      "correta": 1,
+      "explicacao": "localhost/127.0.0.1 apontam para a própria máquina do aluno. Para outro computador usa-se o IP dele; 3306 é a porta, não o host."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno instalou o MySQL Server, mas outro programa da máquina já usava a porta 3306. Qual solução é correta?",
+      "alternativas": [
+        "Configurar o MySQL em outra porta (ex.: 3307) e informar essa porta na conexão do Workbench",
+        "Usar a porta 3306 mesmo assim, pois duas aplicações podem dividir a porta",
+        "Trocar o usuário root por outro nome",
+        "Mudar o tipo das colunas para VARCHAR"
+      ],
+      "correta": 0,
+      "explicacao": "Uma porta só atende um programa por vez. Mudando a porta do MySQL, a conexão precisa usar a porta nova."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na instalação do MySQL no Windows, qual opção de configuração é mais indicada para o computador do aluno, usado para estudar?",
+      "alternativas": [
+        "Development Computer (computador de desenvolvimento), que usa poucos recursos da máquina",
+        "Dedicated Computer, que reserva quase toda a memória para o MySQL",
+        "Nenhuma: o MySQL não roda em computador pessoal",
+        "Server Computer sem senha para o root"
+      ],
+      "correta": 0,
+      "explicacao": "\"Development Computer\" é pensado para máquinas que rodam outros programas junto; usa menos memória."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que não é recomendado usar o usuário root no dia a dia de um sistema da loja?",
+      "alternativas": [
+        "Porque o root não consegue consultar tabelas",
+        "Porque o root só funciona durante a instalação",
+        "Porque o root não aceita senha com números",
+        "Porque o root pode fazer tudo; se a senha vazar ou houver erro, o estrago atinge o servidor inteiro"
+      ],
+      "correta": 3,
+      "explicacao": "Boa prática: criar usuários com só as permissões necessárias e guardar o root para administração."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno quer apenas ver quais bancos existem no servidor ao qual está conectado. Qual comando faz isso?",
+      "alternativas": [
+        "SHOW COLUMNS;",
+        "SELECT DATABASE;",
+        "SHOW DATABASES;",
+        "LIST SERVER;"
+      ],
+      "correta": 2,
+      "explicacao": "SHOW DATABASES lista todos os bancos (schemas) que o usuário pode ver."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O MySQL Server instalado no Windows funciona como um serviço. O que isso significa na prática?",
+      "alternativas": [
+        "Ele só funciona com a janela do Workbench maximizada",
+        "Ele roda em segundo plano e precisa estar iniciado para aceitar conexões",
+        "Ele é um site que precisa de internet",
+        "Ele só roda uma vez e depois se desinstala"
+      ],
+      "correta": 1,
+      "explicacao": "Serviço = programa em segundo plano. Se estiver parado, nenhum cliente consegue se conectar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `produto` da padaria (id_produto, nome, quantidade_estoque), qual tipo é o mais adequado para quantidade_estoque, que guarda números inteiros como 0, 15 ou 230?",
+      "alternativas": [
+        "VARCHAR(10)",
+        "INT",
+        "DATE",
+        "TEXT"
+      ],
+      "correta": 1,
+      "explicacao": "Quantidade é número inteiro usado em contas; INT é o tipo certo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual tipo é o mais indicado para guardar o preço de um produto, como 12.90?",
+      "alternativas": [
+        "DECIMAL(8,2)",
+        "INT",
+        "VARCHAR(8)",
+        "DATE"
+      ],
+      "correta": 0,
+      "explicacao": "DECIMAL guarda valores com casas decimais de forma exata, ideal para dinheiro. INT perderia os centavos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual tipo guarda a data de nascimento de um aluno, como 15 de março de 2009?",
+      "alternativas": [
+        "TIME",
+        "INT",
+        "BOOLEAN",
+        "DATE"
+      ],
+      "correta": 3,
+      "explicacao": "DATE guarda só a data (ano, mês e dia). TIME guarda só horário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em que formato o MySQL espera uma data numa coluna DATE?",
+      "alternativas": [
+        "'15/03/2009' (dia/mês/ano)",
+        "'03-15-2009' (mês-dia-ano)",
+        "'2009-03-15' (ano-mês-dia)",
+        "'15.03.09' (dia.mês.ano curto)"
+      ],
+      "correta": 2,
+      "explicacao": "O formato padrão do MySQL é AAAA-MM-DD. A exibição em dd/mm/aaaa é feita depois, na consulta ou no sistema."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual tipo é usado para guardar textos curtos de tamanho variável, como o nome de um cliente?",
+      "alternativas": [
+        "INT",
+        "DECIMAL(p,s)",
+        "VARCHAR(n)",
+        "TIME"
+      ],
+      "correta": 2,
+      "explicacao": "VARCHAR(n) guarda textos de até n caracteres, usando só o espaço necessário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa coluna `nome VARCHAR(50)`, o que significa o número 50?",
+      "alternativas": [
+        "O mínimo de caracteres que o nome precisa ter",
+        "O máximo de caracteres que o nome pode ter",
+        "A quantidade de linhas que a tabela aceita",
+        "O número de casas decimais do campo"
+      ],
+      "correta": 1,
+      "explicacao": "Em VARCHAR(n), n é o limite máximo de caracteres."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual tipo guarda apenas o horário, como 14:30:00, de uma aula na academia?",
+      "alternativas": [
+        "TIME",
+        "DATE",
+        "YEAR",
+        "CHAR(2)"
+      ],
+      "correta": 0,
+      "explicacao": "TIME guarda horas, minutos e segundos (HH:MM:SS)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual tipo guarda data e hora juntas, como o momento exato em que uma venda foi registrada?",
+      "alternativas": [
+        "DATE",
+        "TIME",
+        "DECIMAL(10,2)",
+        "DATETIME"
+      ],
+      "correta": 3,
+      "explicacao": "DATETIME guarda 'AAAA-MM-DD HH:MM:SS'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `aluno`, a coluna ativo diz se a matrícula está ativa (sim ou não). Qual tipo é o mais adequado?",
+      "alternativas": [
+        "DATETIME",
+        "DECIMAL(5,2)",
+        "TEXT",
+        "BOOLEAN"
+      ],
+      "correta": 3,
+      "explicacao": "Para sim/não usa-se BOOLEAN (no MySQL é um TINYINT(1), que guarda 1 ou 0)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual tipo é mais adequado para guardar a sinopse de um filme, um texto longo que pode ter vários parágrafos?",
+      "alternativas": [
+        "CHAR(10)",
+        "INT",
+        "TEXT",
+        "BOOLEAN"
+      ],
+      "correta": 2,
+      "explicacao": "TEXT é feito para textos longos; VARCHAR é mais usado para textos curtos e médios."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A sigla do estado (UF), como SP, RJ ou MG, sempre tem exatamente 2 letras. Qual tipo é o mais indicado?",
+      "alternativas": [
+        "VARCHAR(255)",
+        "CHAR(2)",
+        "INT",
+        "DECIMAL(2,0)"
+      ],
+      "correta": 1,
+      "explicacao": "CHAR(n) é de tamanho fixo, perfeito para valores que sempre têm o mesmo tamanho."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre CHAR(10) e VARCHAR(10)?",
+      "alternativas": [
+        "CHAR(10) sempre reserva 10 caracteres; VARCHAR(10) usa só o espaço do texto gravado, até 10",
+        "CHAR(10) aceita só números; VARCHAR(10) aceita só letras",
+        "CHAR(10) aceita até 10 linhas; VARCHAR(10) aceita até 10 colunas",
+        "Não há diferença, os dois são o mesmo tipo"
+      ],
+      "correta": 0,
+      "explicacao": "CHAR é tamanho fixo (completa com espaços); VARCHAR é tamanho variável."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa coluna `valor DECIMAL(6,2)`, o que significam os números 6 e 2?",
+      "alternativas": [
+        "6 dígitos no total, sendo 2 depois da vírgula",
+        "6 casas antes da vírgula e 2 depois",
+        "Valor mínimo 6 e máximo 2",
+        "6 caracteres de texto e 2 de número"
+      ],
+      "correta": 0,
+      "explicacao": "Em DECIMAL(p,s), p é o total de dígitos e s quantos ficam após o separador. DECIMAL(6,2) vai até 9999.99."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é o maior valor positivo que cabe numa coluna DECIMAL(5,2)?",
+      "alternativas": [
+        "99999.99",
+        "99.999",
+        "5.2",
+        "999.99"
+      ],
+      "correta": 3,
+      "explicacao": "São 5 dígitos no total, 2 decimais: sobram 3 inteiros. Maior valor: 999.99."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd01_decimal_limite",
+      "enunciado": "A loja de games tem a coluna `preco DECIMAL(5,2)`. Um console de 2499.90 foi cadastrado. Com o modo estrito do MySQL 8 (padrão), o que acontece?",
+      "alternativas": [
+        "O MySQL grava 2499.90 normalmente",
+        "O MySQL grava 2499 e descarta os centavos sem avisar",
+        "O MySQL dá erro de valor fora do intervalo, pois o máximo é 999.99",
+        "O MySQL muda a coluna sozinho para DECIMAL(6,2)"
+      ],
+      "correta": 2,
+      "explicacao": "DECIMAL(5,2) só tem 3 dígitos inteiros. 2499.90 precisa de 4, então o modo estrito recusa (erro 1264, out of range)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd01_decimal_limite",
+      "enunciado": "Numa coluna `peso DECIMAL(5,2)` do pet shop, foi inserido o valor 12.345. O que fica gravado?",
+      "alternativas": [
+        "12.345, sem mudança",
+        "12.35, arredondado para 2 casas decimais",
+        "12, sem casas decimais",
+        "Nada, o MySQL sempre recusa valores com 3 casas"
+      ],
+      "correta": 1,
+      "explicacao": "A coluna tem 2 casas decimais; o MySQL arredonda a parte decimal que sobra (12.345 → 12.35)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que DECIMAL é preferível a FLOAT para guardar valores em dinheiro?",
+      "alternativas": [
+        "FLOAT não aceita números com vírgula",
+        "DECIMAL guarda o valor exato; FLOAT é aproximado e pode gerar diferenças de centavos nas contas",
+        "DECIMAL ocupa sempre menos espaço que qualquer outro tipo",
+        "FLOAT só aceita números negativos"
+      ],
+      "correta": 1,
+      "explicacao": "FLOAT/DOUBLE usam aproximação binária; somando muitos valores podem aparecer erros como 0.30000000000000004."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A nota de uma prova vai de 0 a 10, com uma casa decimal (ex.: 7.5 e 10.0). Qual tipo atende sem desperdício?",
+      "alternativas": [
+        "DECIMAL(3,1)",
+        "DECIMAL(2,1)",
+        "INT",
+        "DECIMAL(10,5)"
+      ],
+      "correta": 0,
+      "explicacao": "DECIMAL(3,1) vai até 99.9, cabendo 10.0. DECIMAL(2,1) para em 9.9 e INT perderia o .5."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual tipo é o mais adequado para guardar o telefone de um cliente, como (11) 98765-4321?",
+      "alternativas": [
+        "INT",
+        "DECIMAL(11,0)",
+        "DATE",
+        "VARCHAR(15)"
+      ],
+      "correta": 3,
+      "explicacao": "Telefone não é usado em contas e pode ter parênteses, traço e zero à esquerda; por isso é texto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que o CPF não deve ser guardado como INT?",
+      "alternativas": [
+        "Porque INT só aceita números negativos",
+        "Porque INT aceita no máximo 3 dígitos",
+        "Porque o CPF pode começar com zero, que se perderia, e porque CPF não é usado em contas",
+        "Porque o MySQL proíbe números em colunas de documento"
+      ],
+      "correta": 2,
+      "explicacao": "CPF é identificador, não quantidade. Como número, 012.345.678-90 viraria 1234567890. Usa-se CHAR(11) ou VARCHAR(14)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual tipo é o mais indicado para o CPF guardado só com os 11 dígitos, sem pontos nem traço?",
+      "alternativas": [
+        "INT",
+        "DECIMAL(11,2)",
+        "CHAR(11)",
+        "TEXT"
+      ],
+      "correta": 2,
+      "explicacao": "CPF sem máscara tem sempre 11 caracteres: CHAR(11) é tamanho fixo e preserva o zero à esquerda."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `cliente` da clínica, o CEP é guardado com o traço (ex.: 01310-100). Qual tipo é adequado?",
+      "alternativas": [
+        "INT",
+        "CHAR(9)",
+        "DATE",
+        "DECIMAL(8,1)"
+      ],
+      "correta": 1,
+      "explicacao": "Com traço, o CEP tem sempre 9 caracteres e pode começar com zero; CHAR(9) é o tipo certo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A oficina guarda a placa dos carros no padrão novo (ex.: ABC1D23). Qual tipo é o mais adequado?",
+      "alternativas": [
+        "CHAR(7)",
+        "INT",
+        "DECIMAL(7,0)",
+        "TIME"
+      ],
+      "correta": 0,
+      "explicacao": "A placa mistura letras e números e tem sempre 7 caracteres: CHAR(7)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual tipo é o mais adequado para guardar o e-mail de um hóspede do hotel?",
+      "alternativas": [
+        "CHAR(2)",
+        "INT",
+        "BOOLEAN",
+        "VARCHAR(100)"
+      ],
+      "correta": 3,
+      "explicacao": "E-mail é texto de tamanho variável; VARCHAR com um limite folgado, como 100, atende."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual regra prática ajuda a decidir se um dado com números deve ser numérico ou texto?",
+      "alternativas": [
+        "Todo dado que tem algum número deve ser INT",
+        "Todo dado deve ser VARCHAR para evitar erro",
+        "Dados numéricos devem ser sempre DECIMAL(10,2)",
+        "Se o dado for usado em contas (somar, fazer média), é numérico; se for só identificação, como CPF ou telefone, é texto"
+      ],
+      "correta": 3,
+      "explicacao": "Quantidade e preço entram em contas → numéricos. CPF, CEP, telefone, matrícula com zero à esquerda → texto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na academia, a coluna `altura` guarda a altura do aluno em metros, como 1.75. Qual tipo é adequado?",
+      "alternativas": [
+        "INT",
+        "CHAR(4)",
+        "DECIMAL(3,2)",
+        "DATE"
+      ],
+      "correta": 2,
+      "explicacao": "DECIMAL(3,2) vai até 9.99, suficiente para altura em metros com 2 casas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual tipo é o mais adequado para guardar a quantidade de vagas de uma turma, como 35?",
+      "alternativas": [
+        "DECIMAL(10,2)",
+        "INT",
+        "VARCHAR(35)",
+        "DATETIME"
+      ],
+      "correta": 1,
+      "explicacao": "Vagas são números inteiros e podem entrar em contas (vagas restantes)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No hotel, a coluna `checkin` guarda o dia e a hora em que o hóspede chegou. Qual tipo é o mais adequado?",
+      "alternativas": [
+        "DATETIME",
+        "DATE",
+        "TIME",
+        "VARCHAR(10)"
+      ],
+      "correta": 0,
+      "explicacao": "Precisa de dia e hora juntos: DATETIME. DATE perderia a hora e TIME perderia o dia."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A biblioteca quer guardar a duração de um evento de leitura, como 01:30:00 (uma hora e meia). Qual tipo combina?",
+      "alternativas": [
+        "TIME",
+        "DATE",
+        "BOOLEAN",
+        "CHAR(2)"
+      ],
+      "correta": 0,
+      "explicacao": "TIME guarda horários e também intervalos de tempo (horas:minutos:segundos)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O pet shop quer que a coluna `porte` só aceite os valores pequeno, médio ou grande. Qual tipo faz isso?",
+      "alternativas": [
+        "INT",
+        "TEXT",
+        "DATE",
+        "ENUM('pequeno','medio','grande')"
+      ],
+      "correta": 3,
+      "explicacao": "ENUM define uma lista fechada de valores permitidos para a coluna."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A coluna `status ENUM('aberto','em andamento','concluido')` da oficina recebeu o valor 'cancelado'. No MySQL 8 em modo estrito (padrão), o que acontece?",
+      "alternativas": [
+        "O MySQL acrescenta 'cancelado' à lista",
+        "O MySQL grava 'cancelado' normalmente",
+        "O MySQL dá erro, pois 'cancelado' não está na lista",
+        "O MySQL grava o valor 'concluido' no lugar"
+      ],
+      "correta": 2,
+      "explicacao": "ENUM só aceita os valores listados. Em modo estrito, valor fora da lista gera erro (Data truncated)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quando é melhor NÃO usar ENUM e preferir uma tabela separada ligada por chave estrangeira?",
+      "alternativas": [
+        "Quando a lista tem só 2 ou 3 opções que nunca mudam",
+        "Quando a lista de opções muda com frequência, como as categorias de produtos que a loja cria toda semana",
+        "Quando os valores são textos curtos",
+        "Quando a coluna precisa ser obrigatória"
+      ],
+      "correta": 1,
+      "explicacao": "Mudar um ENUM exige alterar a estrutura da tabela (ALTER TABLE). Listas que crescem ficam melhor numa tabela própria."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL, ao criar uma coluna `pago BOOLEAN`, como ela fica guardada de verdade?",
+      "alternativas": [
+        "Como VARCHAR(5), guardando 'true' ou 'false'",
+        "Como TINYINT(1), em que 1 é verdadeiro e 0 é falso",
+        "Como DATE, guardando a data do pagamento",
+        "Como TEXT, guardando 'sim' ou 'não'"
+      ],
+      "correta": 1,
+      "explicacao": "BOOLEAN é sinônimo de TINYINT(1) no MySQL. TRUE vale 1 e FALSE vale 0."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que o atributo UNSIGNED faz numa coluna INT, como `estoque INT UNSIGNED`?",
+      "alternativas": [
+        "Impede números negativos e aumenta o limite positivo",
+        "Permite guardar letras na coluna",
+        "Obriga a coluna a ter casas decimais",
+        "Deixa a coluna sem limite de tamanho"
+      ],
+      "correta": 0,
+      "explicacao": "UNSIGNED = sem sinal. A coluna aceita de 0 até cerca de 4,29 bilhões, em vez de -2,1 bi a +2,1 bi."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que um número de telefone com DDD, como 11987654321, nem cabe numa coluna INT comum?",
+      "alternativas": [
+        "Porque INT só aceita até 5 dígitos",
+        "Porque INT não aceita o número 9",
+        "Porque INT só aceita números com casas decimais",
+        "Porque passa do limite do INT, que é cerca de 2,1 bilhões (10 dígitos)"
+      ],
+      "correta": 3,
+      "explicacao": "INT (com sinal) vai até 2.147.483.647. 11987654321 é maior. Além disso, telefone é identificação, então o tipo certo é texto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa coluna `nome VARCHAR(10)`, tentou-se gravar 'Maria Eduarda Souza' (19 caracteres). No modo estrito (padrão do MySQL 8), o que acontece?",
+      "alternativas": [
+        "O nome é gravado inteiro",
+        "A coluna aumenta sozinha para VARCHAR(19)",
+        "Erro \"Data too long\" e a linha não é gravada",
+        "O MySQL grava só as vogais"
+      ],
+      "correta": 2,
+      "explicacao": "Com o modo estrito, texto maior que o limite gera o erro 1406 (Data too long)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa coluna `quantidade INT`, tentou-se gravar o valor 'dez'. No MySQL 8 em modo estrito, o que acontece?",
+      "alternativas": [
+        "O MySQL converte 'dez' para 10",
+        "O MySQL grava o texto 'dez' normalmente",
+        "Erro, pois 'dez' não é um número inteiro válido",
+        "A coluna vira VARCHAR automaticamente"
+      ],
+      "correta": 2,
+      "explicacao": "O MySQL não interpreta palavras como números: dá erro de valor inteiro incorreto (1366)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A loja guardou os preços numa coluna VARCHAR. Ao ordenar pelo preço, apareceu 100 antes de 20. Por que isso aconteceu?",
+      "alternativas": [
+        "Porque o MySQL ordena números sempre do maior para o menor",
+        "Porque texto é ordenado caractere por caractere, e '1' vem antes de '2'",
+        "Porque VARCHAR embaralha a ordem das linhas",
+        "Porque faltou chave primária na tabela"
+      ],
+      "correta": 1,
+      "explicacao": "Como texto, '100' < '20' (compara o primeiro caractere). Com DECIMAL a ordem seria numérica e correta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A clínica guardou datas de consulta como VARCHAR no formato '25/12/2026'. Qual problema isso traz?",
+      "alternativas": [
+        "A ordenação e as comparações de datas ficam erradas, e o banco aceita datas inválidas como '31/02/2026'",
+        "Nenhum, VARCHAR é o tipo recomendado para datas",
+        "O MySQL não deixa gravar barras em VARCHAR",
+        "As datas passam a ocupar menos espaço e ficam mais rápidas"
+      ],
+      "correta": 0,
+      "explicacao": "Com DATE o MySQL valida a data e ordena/compara de forma cronológica; como texto, não."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa coluna DATE, tentou-se gravar '2026-02-30'. No MySQL 8 em modo estrito, o que acontece?",
+      "alternativas": [
+        "Grava '2026-03-02' automaticamente",
+        "Grava '2026-02-30' normalmente",
+        "Grava a data de hoje no lugar",
+        "Erro, pois 30 de fevereiro não é uma data válida"
+      ],
+      "correta": 3,
+      "explicacao": "A coluna DATE valida o valor. Em modo estrito, data inexistente gera erro (Incorrect date value)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa coluna `codigo CHAR(5)`, foi gravado 'AB'. O que acontece com o espaço que sobra?",
+      "alternativas": [
+        "O MySQL dá erro porque faltam 3 caracteres",
+        "O MySQL repete 'AB' até completar 5 caracteres",
+        "O MySQL completa com zeros: 'AB000'",
+        "O MySQL completa com espaços ao gravar e os remove ao devolver o valor"
+      ],
+      "correta": 3,
+      "explicacao": "CHAR é fixo: guarda 'AB   ' internamente, mas na consulta devolve 'AB' sem os espaços do fim."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que precisamos escolher um tipo de dado para cada coluna de uma tabela?",
+      "alternativas": [
+        "Para deixar a tabela colorida no Workbench",
+        "Porque o tipo define o nome da tabela",
+        "Para o banco saber que tipo de valor aceitar, validar os dados e guardar com o espaço certo",
+        "Porque o tipo define quantas linhas a tabela pode ter"
+      ],
+      "correta": 2,
+      "explicacao": "O tipo define o que a coluna aceita (número, texto, data…), como compara e quanto espaço usa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `livro`, a coluna `ano_publicacao` guarda só o ano, como 1999. Quais são opções corretas no MySQL?",
+      "alternativas": [
+        "DATE ou TIME",
+        "YEAR ou SMALLINT",
+        "BOOLEAN ou ENUM",
+        "TEXT ou CHAR(1)"
+      ],
+      "correta": 1,
+      "explicacao": "Só o ano: YEAR (1901–2155) ou um inteiro pequeno. DATE exigiria mês e dia."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O cinema quer guardar a classificação indicativa dos filmes: L, 10, 12, 14, 16 ou 18. Qual tipo atende melhor?",
+      "alternativas": [
+        "ENUM('L','10','12','14','16','18')",
+        "DECIMAL(4,2)",
+        "DATETIME",
+        "BOOLEAN"
+      ],
+      "correta": 0,
+      "explicacao": "Lista pequena e fixa, com um valor que não é numérico (L): ENUM garante só as opções válidas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre guardar um valor vazio ('') e NULL numa coluna `telefone VARCHAR(15)`?",
+      "alternativas": [
+        "'' é um texto vazio informado; NULL significa que o valor é desconhecido ou não foi informado",
+        "Não há diferença, o MySQL trata os dois igual",
+        "NULL ocupa 15 espaços e '' ocupa zero",
+        "'' é um número zero e NULL é um texto"
+      ],
+      "correta": 0,
+      "explicacao": "NULL é ausência de valor; '' é um valor (texto de tamanho zero). Consultas com IS NULL não encontram ''."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A clínica pensa em guardar o histórico de atendimentos (textos longos de várias páginas) e o nome do paciente. Qual combinação de tipos é a mais adequada?",
+      "alternativas": [
+        "nome TEXT e historico CHAR(100)",
+        "nome CHAR(255) e historico VARCHAR(10)",
+        "nome INT e historico DATE",
+        "nome VARCHAR(100) e historico TEXT"
+      ],
+      "correta": 3,
+      "explicacao": "Nome é texto curto e variável (VARCHAR); histórico é texto longo (TEXT)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `venda` (id_venda, data_venda, total), a coluna id_venda é a chave primária numérica que o banco gera sozinho a cada venda. Qual é o tipo mais comum para ela?",
+      "alternativas": [
+        "VARCHAR(5) preenchido à mão",
+        "DATE com a data da venda",
+        "INT com AUTO_INCREMENT",
+        "DECIMAL(10,2) com o valor"
+      ],
+      "correta": 2,
+      "explicacao": "Chaves substitutas costumam ser INT com AUTO_INCREMENT: o MySQL gera 1, 2, 3…"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL também existe o tipo JSON para uma coluna. Para que ele serve?",
+      "alternativas": [
+        "Para transformar o MySQL em planilha",
+        "Para guardar dados em formato de documento JSON dentro de uma tabela relacional",
+        "Para guardar só datas",
+        "Para criar chave estrangeira automaticamente"
+      ],
+      "correta": 1,
+      "explicacao": "O tipo JSON permite guardar documentos (como num banco NoSQL de documentos) numa coluna, validando o formato."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é o formato de um valor DATETIME no MySQL?",
+      "alternativas": [
+        "'27/11/2026 2:05 PM'",
+        "'2026-11-27 14:05:00'",
+        "'14:05:00 27-11-2026'",
+        "'20261127'"
+      ],
+      "correta": 1,
+      "explicacao": "DATETIME usa 'AAAA-MM-DD HH:MM:SS'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é uma diferença real entre DATETIME e TIMESTAMP no MySQL?",
+      "alternativas": [
+        "TIMESTAMP tem faixa menor (de 1970 a 2038) e é ajustado pelo fuso horário; DATETIME vai de 1000 a 9999",
+        "DATETIME só guarda hora e TIMESTAMP só guarda data",
+        "TIMESTAMP aceita qualquer data desde o ano 1",
+        "Não existe diferença, são sinônimos"
+      ],
+      "correta": 0,
+      "explicacao": "TIMESTAMP guarda em UTC e converte pelo fuso da sessão; sua faixa termina em 2038. Data de nascimento antiga não cabe nele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na oficina, a coluna `quilometragem` guarda quantos km o carro já rodou, como 85432. Qual tipo é o mais adequado?",
+      "alternativas": [
+        "VARCHAR(5)",
+        "DATE",
+        "BOOLEAN",
+        "INT UNSIGNED"
+      ],
+      "correta": 3,
+      "explicacao": "Quilometragem é inteiro, não negativo e pode passar de 5 dígitos: INT UNSIGNED."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A loja de games tem `nome_jogo VARCHAR(40)`. Um jogo novo tem nome com 60 caracteres. Qual é a solução correta?",
+      "alternativas": [
+        "Trocar a coluna para INT",
+        "Cortar o nome à mão sempre, pois VARCHAR não pode mudar",
+        "Aumentar o tamanho da coluna (ex.: VARCHAR(80)) antes de cadastrar",
+        "Trocar a coluna para BOOLEAN"
+      ],
+      "correta": 2,
+      "explicacao": "O limite de VARCHAR pode ser alterado (ALTER TABLE … MODIFY). Isso evita perder parte do nome."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O pet shop quer guardar o peso dos animais em quilos, como 4.5 ou 32.8. Qual tipo é adequado?",
+      "alternativas": [
+        "INT",
+        "CHAR(2)",
+        "DECIMAL(5,2)",
+        "BOOLEAN"
+      ],
+      "correta": 2,
+      "explicacao": "Peso tem casas decimais: DECIMAL(5,2) vai até 999.99 kg."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique com suas palavras o que é um SGBD e dê um exemplo.\n\nNa sua resposta:\n1. diga o que é um SGBD;\n2. cite um exemplo de SGBD.",
+      "respostasAceitas": [
+        "SGBD é o programa que gerencia um banco de dados: guarda, organiza, consulta e controla o acesso aos dados. Exemplo: MySQL."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) software que gerencia/controla os dados do banco; 2) qualquer SGBD real, como MySQL, PostgreSQL, SQL Server, Oracle ou SQLite."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na secretaria da escola, alguém disse: \"o MySQL é o nosso banco de dados\". Explique por que essa frase mistura dois conceitos.\n\nNa sua resposta:\n1. diga o que é o banco de dados;\n2. diga o que é o MySQL.",
+      "respostasAceitas": [
+        "O banco de dados é o conjunto de dados da escola (alunos, notas…). O MySQL é o SGBD, o programa que gerencia esses dados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se separar dados (banco) de software (SGBD). Basta a ideia, sem termos técnicos exatos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma tabela `cliente` da padaria tem as colunas id_cliente, nome e telefone, e já tem 40 clientes cadastrados. Explique o que são as linhas e o que são as colunas nessa tabela.\n\nNa sua resposta:\n1. diga o que cada linha representa;\n2. diga o que cada coluna representa;\n3. diga quantas linhas a tabela tem agora.",
+      "respostasAceitas": [
+        "Cada linha (registro) é um cliente; cada coluna (campo) é uma informação de todos os clientes (id, nome, telefone). A tabela tem 40 linhas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) linha = um cliente/registro; 2) coluna = campo/atributo; 3) 40 linhas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique o que é a chave primária de uma tabela e por que ela é importante.\n\nNa sua resposta:\n1. diga o que é a chave primária;\n2. cite as duas regras que ela segue;\n3. explique por que ela é importante.",
+      "respostasAceitas": [
+        "É a coluna (ou colunas) que identifica cada linha. Não pode repetir nem ficar vazia. Assim cada registro pode ser achado e ligado a outras tabelas sem confusão."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: identificador único; única e não nula; permite identificar/relacionar registros sem ambiguidade."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na biblioteca, a tabela `emprestimo` (id_emprestimo, id_aluno, data_saida) tem a coluna id_aluno, que vem da tabela `aluno` (id_aluno, nome, turma). Explique o papel de id_aluno na tabela `emprestimo`.\n\nNa sua resposta:\n1. diga que tipo de chave id_aluno é em `emprestimo`;\n2. explique para que serve essa ligação.",
+      "respostasAceitas": [
+        "id_aluno é chave estrangeira: aponta para a chave primária de `aluno`. Serve para saber qual aluno fez cada empréstimo e impedir empréstimo para aluno que não existe."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) chave estrangeira; 2) liga empréstimo ao aluno / garante integridade."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Cite duas vantagens de uma loja usar um SGBD em vez de controlar as vendas em várias planilhas soltas.\n\nNa sua resposta:\n1. cite a primeira vantagem;\n2. cite a segunda vantagem.",
+      "respostasAceitas": [
+        "Os dados ficam centralizados e sem cópias diferentes; o SGBD controla quem pode acessar e mantém regras de integridade (ex.: não repetir código)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Aceitar duas entre: centralização/menos redundância, integridade, segurança/permissões, acesso simultâneo, backup/recuperação, consultas rápidas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique o que é um banco de dados não relacional (NoSQL) e cite um tipo.\n\nNa sua resposta:\n1. diga como ele guarda os dados, comparando com tabelas;\n2. cite um tipo de banco NoSQL.",
+      "respostasAceitas": [
+        "É um banco que não guarda os dados em tabelas relacionais fixas; usa outros formatos, com estrutura mais flexível. Exemplos: documentos, chave-valor, grafos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) não usa tabelas com esquema fixo; 2) documentos, chave-valor, colunar ou grafos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre o MySQL Server e o MySQL Workbench.\n\nNa sua resposta:\n1. diga o que é o MySQL Server;\n2. diga o que é o MySQL Workbench.",
+      "respostasAceitas": [
+        "O MySQL Server é o serviço que guarda e processa os dados. O Workbench é um programa visual (cliente) usado para conectar no servidor e enviar comandos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se servidor = SGBD/serviço; Workbench = ferramenta cliente/interface."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Para conectar o Workbench a um servidor MySQL, é preciso informar alguns dados. Explique quais são e para que cada um serve.\n\nNa sua resposta:\n1. cite os dados pedidos na conexão;\n2. explique para que serve cada um.",
+      "respostasAceitas": [
+        "Host (onde está o servidor, ex.: localhost), porta (3306, por onde o servidor atende), usuário e senha (quem está entrando)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se host, porta, usuário e senha com a função de cada um. Não descontar se esquecer o nome da conexão."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Durante a instalação do MySQL, é pedida a senha do usuário root. Explique quem é o root e por que essa senha deve ser bem guardada.\n\nNa sua resposta:\n1. diga quem é o root;\n2. explique por que proteger a senha dele.",
+      "respostasAceitas": [
+        "root é o administrador do MySQL, com todas as permissões. Quem tiver a senha pode ver, alterar ou apagar tudo no servidor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) superusuário/administrador; 2) acesso total → risco se vazar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique por que o preço de um produto deve ser guardado como DECIMAL e não como INT.\n\nNa sua resposta:\n1. diga o que se perde ao usar INT;\n2. diga o que o DECIMAL garante.",
+      "respostasAceitas": [
+        "INT só guarda inteiros, então 12.90 perderia os centavos. DECIMAL guarda as casas decimais de forma exata, como precisa o dinheiro."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) perde centavos/decimais; 2) valor exato com casas decimais."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique por que o telefone de um cliente deve ser guardado como texto (VARCHAR) e não como número.\n\nNa sua resposta:\n1. dê um motivo ligado ao formato do telefone;\n2. dê um motivo ligado ao uso do dado.",
+      "respostasAceitas": [
+        "O telefone pode ter zero à esquerda, parênteses e traço, que se perderiam como número. Além disso, ninguém faz contas com telefone."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se 1) zeros/símbolos/DDD com formatação; 2) não é usado em cálculo, é identificação."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na tabela `aluno`, a data de nascimento foi guardada numa coluna DATE. Explique por que esse tipo é melhor do que guardar a data como texto.\n\nNa sua resposta:\n1. diga uma vantagem ligada à validação;\n2. diga uma vantagem ligada a ordenar ou calcular.",
+      "respostasAceitas": [
+        "DATE só aceita datas válidas (não deixa 31/02) e permite ordenar por data e calcular idade corretamente."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se validação + ordenação/cálculo de datas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre os tipos DATE, TIME e DATETIME, dando um exemplo de uso para cada um.\n\nNa sua resposta:\n1. diga o que cada tipo guarda;\n2. dê um exemplo de uso para cada um.",
+      "respostasAceitas": [
+        "DATE guarda só a data (nascimento); TIME só o horário (horário da aula); DATETIME data e hora juntas (momento de uma venda)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se o que cada um guarda e exemplos coerentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No pet shop, a coluna `vacinado` diz se o animal já tomou a vacina. Explique qual tipo é o mais adequado e como o MySQL guarda esse valor.\n\nNa sua resposta:\n1. diga o tipo adequado;\n2. explique como os valores ficam guardados.",
+      "respostasAceitas": [
+        "BOOLEAN. No MySQL ele é um TINYINT(1): guarda 1 para verdadeiro (vacinado) e 0 para falso."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se BOOLEAN/TINYINT(1) e 1/0. Aceitar ENUM('sim','nao') com justificativa, mas o ideal é BOOLEAN."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique o que significa o número entre parênteses em `nome VARCHAR(80)` e o que acontece se o nome tiver só 20 letras.\n\nNa sua resposta:\n1. diga o que o 80 significa;\n2. diga quanto espaço um nome de 20 letras usa.",
+      "respostasAceitas": [
+        "80 é o limite máximo de caracteres. Um nome de 20 letras usa só o espaço dessas 20 (mais um pequeno controle), porque VARCHAR é variável."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) máximo de caracteres; 2) ocupa só o necessário."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique para que serve o tipo ENUM e dê um exemplo de coluna que poderia usá-lo numa academia.\n\nNa sua resposta:\n1. diga o que o ENUM faz;\n2. dê um exemplo de coluna com seus valores.",
+      "respostasAceitas": [
+        "ENUM limita a coluna a uma lista fixa de valores. Ex.: plano ENUM('mensal','trimestral','anual')."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se lista fechada de valores permitidos + exemplo coerente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique por que o nome do cliente não é uma boa chave primária para a tabela `cliente` de uma oficina.\n\nNa sua resposta:\n1. diga qual regra da chave primária o nome pode quebrar;\n2. diga o que costuma ser usado no lugar.",
+      "respostasAceitas": [
+        "Duas pessoas podem ter o mesmo nome, e a chave primária não pode repetir. Usa-se um código numérico (id_cliente) gerado pelo banco."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nomes repetem / podem mudar; 2) id numérico (AUTO_INCREMENT) ou outro código único."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O hotel quer guardar estes dados do hóspede: nome, CPF (só números), data de nascimento e e-mail. Indique um tipo adequado para cada dado, justificando.\n\nNa sua resposta:\n1. dê o tipo de cada um dos 4 dados;\n2. justifique cada escolha em poucas palavras.",
+      "respostasAceitas": [
+        "nome VARCHAR(100) (texto variável); CPF CHAR(11) (sempre 11 caracteres, mantém zero à esquerda); data de nascimento DATE (data válida); e-mail VARCHAR(100) (texto variável)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Aceitar tamanhos diferentes se coerentes (VARCHAR(14) para CPF também vale). Não aceitar INT para CPF."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A loja de games quer guardar o preço dos jogos e escolheu FLOAT. Explique por que DECIMAL seria melhor.\n\nNa sua resposta:\n1. explique o problema do FLOAT com dinheiro;\n2. diga o que o DECIMAL garante.",
+      "respostasAceitas": [
+        "FLOAT guarda valores aproximados; somando muitos preços podem aparecer diferenças de centavos. DECIMAL guarda o valor exato com as casas definidas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se aproximação/arredondamento do FLOAT x exatidão do DECIMAL."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique o significado de `DECIMAL(7,2)` e qual é o maior valor que cabe nessa coluna.\n\nNa sua resposta:\n1. explique o 7 e o 2;\n2. diga o maior valor possível.",
+      "respostasAceitas": [
+        "7 é o total de dígitos e 2 é o número de casas decimais; sobram 5 dígitos inteiros. Maior valor: 99999.99."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se precisão total/escala e 99999.99."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre CHAR(n) e VARCHAR(n) e dê um exemplo de dado que combina com cada um.\n\nNa sua resposta:\n1. explique a diferença de armazenamento;\n2. dê um exemplo para CHAR;\n3. dê um exemplo para VARCHAR.",
+      "respostasAceitas": [
+        "CHAR é de tamanho fixo (sempre reserva n caracteres); VARCHAR é variável (usa só o necessário). CHAR: UF, CPF sem máscara. VARCHAR: nome, e-mail."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se fixo x variável e exemplos coerentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A padaria guardou os preços numa coluna VARCHAR(10). Ao ordenar do menor para o maior, apareceu 105.00 antes de 9.50. Explique por que isso aconteceu e como evitar.\n\nNa sua resposta:\n1. explique a causa da ordem errada;\n2. diga qual tipo deveria ter sido usado.",
+      "respostasAceitas": [
+        "Como texto, a comparação é caractere por caractere: '1' vem antes de '9'. Usando DECIMAL a ordenação seria numérica."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se ordenação textual/alfabética e DECIMAL como solução."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na clínica, a coluna `data_consulta` foi definida como VARCHAR e as datas foram digitadas como '05/12/2026'. Explique dois problemas que isso pode causar.\n\nNa sua resposta:\n1. cite o primeiro problema;\n2. cite o segundo problema.",
+      "respostasAceitas": [
+        "O banco aceita datas inválidas (31/02) ou formatos misturados, e não ordena nem compara datas corretamente, pois trata como texto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Aceitar dois entre: sem validação, ordenação errada, filtros por período difíceis, formatos diferentes, cálculos de data impossíveis."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Compare o banco relacional e o banco NoSQL de documentos quanto à estrutura dos dados.\n\nNa sua resposta:\n1. explique como o relacional organiza os dados;\n2. explique como o banco de documentos organiza os dados;\n3. diga qual deles tem estrutura mais flexível.",
+      "respostasAceitas": [
+        "Relacional: tabelas com colunas definidas antes, ligadas por chaves. Documentos: cada item é um documento (tipo JSON) e cada um pode ter campos diferentes. O de documentos é mais flexível."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se esquema fixo x flexível."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aplicativo precisa guardar a sessão de login de cada usuário e buscá-la muito rápido pelo código da sessão. Explique por que um banco chave-valor combina com essa situação.\n\nNa sua resposta:\n1. explique como funciona um banco chave-valor;\n2. relacione esse funcionamento à situação.",
+      "respostasAceitas": [
+        "No chave-valor, cada valor é guardado e buscado por uma chave única, como num dicionário. O código da sessão é a chave e os dados da sessão são o valor, com busca direta e rápida."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se chave → valor e acesso direto/rápido pela chave."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na academia, a tabela `treino` (id_treino, id_aluno, descricao) tem id_aluno como chave estrangeira para `aluno` (id_aluno, nome). Explique por que id_aluno pode se repetir em `treino`, mas não em `aluno`.\n\nNa sua resposta:\n1. explique por que repete em `treino`;\n2. explique por que não repete em `aluno`.",
+      "respostasAceitas": [
+        "Em `treino` é chave estrangeira: um aluno pode ter vários treinos, então o mesmo id aparece várias vezes. Em `aluno` é chave primária, que identifica cada aluno e não pode repetir."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se FK repete (1 para muitos) e PK única."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique o que é integridade referencial, usando como exemplo as tabelas `filme` (id_filme, titulo) e `sessao` (id_sessao, id_filme, horario) de um cinema.\n\nNa sua resposta:\n1. explique o conceito;\n2. diga o que o banco impede nesse exemplo.",
+      "respostasAceitas": [
+        "Integridade referencial é a garantia de que toda chave estrangeira aponta para um registro que existe. O banco impede uma sessão com id_filme que não existe e impede apagar um filme que ainda tem sessões."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: FK sempre válida; impedir sessão de filme inexistente e/ou apagar filme com sessões."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O cadastro da oficina guarda o nome e o telefone do cliente em cada ordem de serviço, repetindo os dados a cada visita. Explique o problema dessa redundância e como o modelo relacional resolve.\n\nNa sua resposta:\n1. explique o problema da repetição;\n2. explique a solução com tabelas e chaves.",
+      "respostasAceitas": [
+        "Se o telefone mudar, precisa ser alterado em muitas linhas e algumas ficam erradas (inconsistência), além de gastar espaço. Solução: tabela `cliente` com os dados uma vez e a ordem de serviço guardando só id_cliente (chave estrangeira)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se inconsistência/espaço e separação em tabela de clientes ligada por FK."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Ao abrir a conexão no Workbench, apareceu o erro \"Can't connect to MySQL server on 'localhost:3306'\". Explique o que esse erro indica e o que você verificaria primeiro.\n\nNa sua resposta:\n1. diga o que o erro indica;\n2. cite uma verificação a fazer.",
+      "respostasAceitas": [
+        "Indica que nenhum servidor MySQL respondeu naquele endereço e porta. Primeiro verificaria se o serviço do MySQL está iniciado (e se host e porta estão certos)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: servidor não alcançado; verificar serviço parado, porta ou host errado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Compare os erros \"Can't connect to MySQL server\" e \"Access denied for user\" ao tentar conectar pelo Workbench.\n\nNa sua resposta:\n1. explique o que cada erro indica;\n2. diga em qual dos dois o servidor está funcionando.",
+      "respostasAceitas": [
+        "\"Can't connect\": o servidor não respondeu (parado ou endereço/porta errados). \"Access denied\": o servidor respondeu, mas recusou usuário/senha. No Access denied o servidor está funcionando."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se distinguir problema de conexão x problema de login."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique o que são \"localhost\" e a porta 3306 numa conexão com o MySQL.\n\nNa sua resposta:\n1. explique o localhost;\n2. explique a porta 3306.",
+      "respostasAceitas": [
+        "localhost é o próprio computador (127.0.0.1), onde o servidor está instalado. 3306 é a porta padrão em que o MySQL espera conexões."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se máquina local e porta padrão do MySQL."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No pet shop, a coluna `porte` foi definida como `ENUM('pequeno','medio','grande')`. Explique o que acontece se alguém tentar gravar 'gigante' e qual a vantagem desse comportamento.\n\nNa sua resposta:\n1. diga o que acontece com 'gigante';\n2. explique a vantagem.",
+      "respostasAceitas": [
+        "O MySQL recusa (erro, no modo estrito), pois 'gigante' não está na lista. A vantagem é manter os dados padronizados, sem variações como 'Grande', 'grd'."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se rejeição do valor e padronização/validação."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique por que a quantidade em estoque deve ser numérica (INT), enquanto o código de barras do produto, mesmo tendo só números, costuma ser texto.\n\nNa sua resposta:\n1. justifique o INT para o estoque;\n2. justifique o texto para o código de barras.",
+      "respostasAceitas": [
+        "Estoque entra em contas (somar, subtrair), então é INT. O código de barras é só identificação, pode começar com zero e ser longo, então é texto (CHAR/VARCHAR)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: cálculo x identificação; zeros à esquerda/tamanho."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A escola quer guardar a nota final dos alunos, de 0 a 10 com uma casa decimal. Indique um tipo adequado e explique por que INT e DECIMAL(2,1) não servem.\n\nNa sua resposta:\n1. indique o tipo adequado;\n2. explique por que INT não serve;\n3. explique por que DECIMAL(2,1) não serve.",
+      "respostasAceitas": [
+        "DECIMAL(3,1). INT perderia a casa decimal (7.5 viraria 8). DECIMAL(2,1) vai só até 9.9, e a nota 10.0 não caberia."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se DECIMAL(3,1) (aceitar DECIMAL(4,2)), INT sem decimais, DECIMAL(2,1) máximo 9.9."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "bd01_decimal_limite",
+      "enunciado": "A coluna `preco DECIMAL(5,2)` da lanchonete recebeu dois valores: 12.349 e 1500.00. Explique o que acontece com cada um no MySQL 8 (modo estrito padrão).\n\nNa sua resposta:\n1. diga o que acontece com 12.349;\n2. diga o que acontece com 1500.00;\n3. explique o motivo da diferença.",
+      "respostasAceitas": [
+        "12.349 é gravado arredondado para 12.35 (só sobra casa decimal). 1500.00 dá erro de valor fora do intervalo, pois o máximo é 999.99. Arredondar casas decimais é aceito; faltar espaço para a parte inteira não."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se arredondamento x erro out of range e o máximo 999.99."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma empresa de entregas quer guardar pedidos com clientes, produtos e pagamentos, mas também registros de rastreamento vindos de aparelhos, cada um com campos diferentes. Explique qual modelo de banco você usaria para cada parte e por quê.\n\nNa sua resposta:\n1. indique o modelo para pedidos, clientes e pagamentos;\n2. indique o modelo para os registros de rastreamento;\n3. justifique as duas escolhas.",
+      "respostasAceitas": [
+        "Pedidos, clientes e pagamentos: relacional, pois são dados estruturados, ligados entre si e que precisam de transações confiáveis. Rastreamento: NoSQL de documentos, pois cada registro tem campos diferentes e chega em grande volume."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se relacional para dados estruturados/transacionais e NoSQL para dados flexíveis/variados. Aceitar justificativa coerente (ex.: coluna JSON no MySQL)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na lanchonete, a tabela `item_pedido` (id_pedido, id_produto, quantidade) usa a chave primária formada por id_pedido + id_produto. Explique por que nenhuma das duas colunas serve sozinha como chave primária e o que a combinação garante.\n\nNa sua resposta:\n1. explique por que id_pedido sozinho não serve;\n2. explique por que id_produto sozinho não serve;\n3. diga o que a chave composta garante.",
+      "respostasAceitas": [
+        "Um pedido tem vários produtos, então id_pedido repete. Um produto aparece em vários pedidos, então id_produto repete. Juntas, garantem que o mesmo produto não apareça duas vezes no mesmo pedido."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se a repetição de cada coluna e a unicidade do par."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No cinema, alguém tentou apagar um filme que ainda tem sessões na tabela `sessao` (id_sessao, id_filme, horario), e o MySQL recusou. Explique por que o banco fez isso e o que aconteceria se ele deixasse.\n\nNa sua resposta:\n1. explique por que o MySQL recusou;\n2. explique o problema que seria criado se ele permitisse.",
+      "respostasAceitas": [
+        "A chave estrangeira id_filme, na configuração padrão, impede apagar um filme que ainda tem sessões ligadas. Se permitisse, as sessões ficariam apontando para um filme que não existe (registros órfãos), quebrando a integridade."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se integridade referencial e registros órfãos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre um campo vazio ('') e NULL numa coluna `telefone VARCHAR(15)`, e por que essa diferença importa ao procurar clientes sem telefone.\n\nNa sua resposta:\n1. explique o que é '';\n2. explique o que é NULL;\n3. explique o impacto na busca.",
+      "respostasAceitas": [
+        "'' é um texto vazio, um valor informado. NULL significa ausência de valor (não informado). Uma busca por telefone IS NULL não acha quem tem '', e uma busca por = '' não acha os NULL; misturar os dois faz a busca perder clientes."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se valor vazio x ausência de valor e o efeito nos filtros."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A biblioteca quer guardar a data e hora da devolução de livros e também a data de nascimento dos leitores, alguns nascidos antes de 1970. Explique por que DATETIME e DATE são melhores do que TIMESTAMP nesse caso.\n\nNa sua resposta:\n1. diga a limitação do TIMESTAMP;\n2. explique a escolha para cada coluna.",
+      "respostasAceitas": [
+        "TIMESTAMP só vai de 1970 a 2038 e muda com o fuso horário. Data de nascimento antes de 1970 não cabe; usa-se DATE (só data). Para a devolução, DATETIME guarda data e hora sem depender de fuso."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se faixa 1970–2038 do TIMESTAMP, DATE para nascimento e DATETIME para devolução."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A loja escolheu `status ENUM('ativo','inativo')` para clientes e `categoria ENUM('acao','esporte','corrida')` para jogos, mas cria categorias novas toda semana. Explique se cada ENUM foi uma boa escolha.\n\nNa sua resposta:\n1. avalie o ENUM de status;\n2. avalie o ENUM de categoria;\n3. proponha uma alternativa para o caso ruim.",
+      "respostasAceitas": [
+        "status: boa escolha, lista pequena e estável. categoria: ruim, pois cada categoria nova exige alterar a estrutura da tabela. Melhor uma tabela `categoria` ligada aos jogos por chave estrangeira."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se ENUM para lista fixa e tabela separada + FK para lista que muda."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No laboratório, o MySQL Server está instalado no computador do professor (IP 192.168.0.20). Um aluno, na própria máquina, configurou a conexão do Workbench com host 'localhost' e não conseguiu conectar. Explique o erro e como corrigir.\n\nNa sua resposta:\n1. explique por que 'localhost' não funcionou;\n2. diga o que deveria ser informado como host;\n3. cite outra condição para a conexão funcionar.",
+      "respostasAceitas": [
+        "localhost aponta para o próprio computador do aluno, onde não há servidor. O host deve ser 192.168.0.20. Além disso, o servidor precisa aceitar conexões remotas (porta 3306 liberada e usuário com permissão para aquele host)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se localhost = máquina local, usar o IP do servidor e uma condição: firewall/porta, usuário com acesso remoto, serviço ativo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre uma chave primária natural (como o CPF) e uma chave primária substituta (como um id numérico gerado pelo banco), dizendo uma vantagem da substituta.\n\nNa sua resposta:\n1. explique a chave natural;\n2. explique a chave substituta;\n3. dê uma vantagem da substituta.",
+      "respostasAceitas": [
+        "Natural é um dado do mundo real que já é único (CPF). Substituta é um código sem significado criado só para identificar (id AUTO_INCREMENT). Vantagem: nunca muda, é curta e não depende de a pessoa ter ou informar o documento."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se os dois conceitos e uma vantagem (estabilidade, tamanho menor, não expõe dado pessoal, sempre disponível)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "SGBD, modelo relacional e tipos de dados",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No hotel, a tabela `reserva` (id_reserva, id_hospede, data_entrada) liga cada reserva a `hospede` (id_hospede INT, nome). Explique por que a coluna id_hospede de `reserva` deve ter o mesmo tipo da chave primária de `hospede`.\n\nNa sua resposta:\n1. diga qual tipo id_hospede deve ter em `reserva`;\n2. explique por que os tipos precisam combinar.",
+      "respostasAceitas": [
+        "Deve ser INT, igual a id_hospede em `hospede`. A chave estrangeira guarda o mesmo valor da chave primária; com tipos diferentes o MySQL não deixa ligar as tabelas ou as comparações ficam erradas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se INT e a ideia de que FK e PK referenciada precisam ter tipos compatíveis para a ligação funcionar."
+    }
+  ]
+}

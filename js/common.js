@@ -317,10 +317,21 @@ export async function sortearQuestoes(prova, cota = null, opc = {}) {
     while (sai.length < n && resto.length) sai.push(resto.shift());
     return sai;
   };
+  // DIFICULDADE BALANCEADA: com o banco marcado (dificuldade facil/media/dificil), cerca de 1/3 difíceis e o resto metade média,
+  // metade fácil (ex.: 6 → 2 difíceis, 2 médias, 2 fáceis). Faltou de um nível, completa com os outros. Sem marcação = como antes.
+  const pegarBal = (lista, n) => {
+    const nivel = id => ["facil", "media", "dificil"].includes(dados[id]?.dificuldade) ? dados[id].dificuldade : null;
+    if (n < 2 || lista.filter(nivel).length < lista.length / 2) return pegar(lista, n);
+    const quer = { dificil: Math.round(n / 3) }; quer.media = Math.ceil((n - quer.dificil) / 2); quer.facil = n - quer.dificil - quer.media;
+    const sai = [];
+    for (const k of ["dificil", "media", "facil"]) sai.push(...pegar(lista.filter(id => nivel(id) === k && !sai.includes(id)), quer[k]));
+    if (sai.length < n) sai.push(...pegar(lista.filter(id => !sai.includes(id)), n - sai.length));
+    return sai;
+  };
   if (cota) {
     if (cota.nA + cota.nD < 1) throw new Error("Escolha pelo menos 1 questão.");
     if (diss.length < cota.nD || alt.length < cota.nA) throw new Error(`Não há questões suficientes: ${alt.length} alternativas e ${diss.length} dissertativas disponíveis nos temas da prova.`);
-    return sortearAleatorio([...pegar(diss, cota.nD), ...pegar(alt, cota.nA)], cota.nA + cota.nD);
+    return sortearAleatorio([...pegarBal(diss, cota.nD), ...pegarBal(alt, cota.nA)], cota.nA + cota.nD);
   }
   if (nG > diag.length) throw new Error("O banco não tem questões de diagrama suficientes nos temas escolhidos. Avise o professor.");
   if (!Array.isArray(prova.sqlPerguntas) && nS - nW - nG > sql.length) throw new Error("O banco não tem questões SQL (Bancada) suficientes nos temas escolhidos. Avise o professor.");
@@ -368,10 +379,10 @@ export async function sortearQuestoes(prova, cota = null, opc = {}) {
     // cota fixa: exatamente nAlternativas alternativas + nDissertativas dissertativas
     const nA = Number(prova.nAlternativas || 0);
     if (diss.length < nD || alt.length < nA) throw new Error("O banco não tem questões suficientes de cada tipo nos temas escolhidos. Avise o professor.");
-    return comSql(sortearAleatorio([...pegar(diss, nD), ...pegar(alt, nA)], nA + nD));
+    return comSql(sortearAleatorio([...pegarBal(diss, nD), ...pegarBal(alt, nA)], nA + nD));
   }
   if (nD > 0 && diss.length >= nD && alt.length >= nQ - nD)
-    return comSql(sortearAleatorio([...pegar(diss, nD), ...pegar(alt, nQ - nD)], nQ));
+    return comSql(sortearAleatorio([...pegarBal(diss, nD), ...pegarBal(alt, nQ - nD)], nQ));
   return comSql(pegar(ids, nQ));
 }
 export function ordenarTemas(lista) { return [...new Set(lista)].sort((a, b) => a.localeCompare(b, "pt-BR")); }
