@@ -1,0 +1,2424 @@
+{
+  "nome": "Teste de Software — Execução de testes (a revisar)",
+  "materia": "Teste de Software",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A padaria vai testar o novo sistema de pedidos antes de usá-lo no balcão. Onde os testes devem ser executados?",
+      "alternativas": [
+        "Num ambiente de teste separado, com a mesma estrutura do sistema e dados fictícios",
+        "Direto no sistema que os atendentes já usam no balcão, para ver o uso real",
+        "No computador do programador, com a versão do código que estiver aberta",
+        "No sistema em uso, desde que seja depois do horário de fechamento"
+      ],
+      "correta": 0,
+      "explicacao": "Teste se executa em ambiente próprio, separado da produção e com dados fictícios. Testar no sistema em uso (mesmo fora do horário) pode estragar dados reais; a máquina do programador não representa o ambiente controlado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No contexto de execução de testes, o que são \"dados de teste\"?",
+      "alternativas": [
+        "Os resultados que o sistema mostrou depois de executar os testes",
+        "Informações preparadas para usar nos testes, como clientes e produtos fictícios",
+        "As senhas de acesso que os testadores usam nos servidores do ambiente de produção",
+        "A lista de defeitos que foram encontrados no ciclo anterior"
+      ],
+      "correta": 1,
+      "explicacao": "Dados de teste são os valores e registros preparados para executar os casos (cadastros fictícios, produtos, valores). Resultado obtido e lista de defeitos são outras coisas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A clínica quer testar o agendamento usando uma cópia do banco real, com nome, CPF e telefone dos pacientes. Qual é a atitude mais adequada?",
+      "alternativas": [
+        "Usar a cópia do jeito que está, porque o ambiente de teste é só interno da clínica",
+        "Pedir aos testadores que não prestem atenção nos nomes dos pacientes",
+        "Usar os dados reais só nos testes de performance, que são automáticos",
+        "Trocar os dados pessoais por dados fictícios (anonimizar) antes de usar no teste"
+      ],
+      "correta": 3,
+      "explicacao": "Dados pessoais reais em ambiente de teste expõem os pacientes (LGPD). O certo é anonimizar ou gerar dados fictícios. \"Interno\" ou \"não olhar\" não protege os dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No ambiente de teste da loja virtual, o caso \"recuperar senha\" disparou e-mails para clientes de verdade. Qual falha de configuração explica isso?",
+      "alternativas": [
+        "O caso de teste não tinha um identificador como CT-001",
+        "O testador escolheu a técnica de regressão para esse caso",
+        "A severidade do defeito foi registrada com o valor errado no gerenciador",
+        "O ambiente de teste estava ligado a dados e serviços reais da produção"
+      ],
+      "correta": 3,
+      "explicacao": "Se e-mails chegaram a clientes reais, o ambiente usava dados ou serviço de envio da produção. O ambiente de teste deve ser isolado (dados fictícios, envio desligado ou de teste)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual ambiente costuma ser usado para o cliente conferir e aprovar o sistema antes de ele ir para produção?",
+      "alternativas": [
+        "Homologação",
+        "Desenvolvimento",
+        "Produção",
+        "Backup"
+      ],
+      "correta": 0,
+      "explicacao": "Homologação é o ambiente de teste, parecido com a produção, onde o cliente valida (homologa) a versão antes da liberação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que o ambiente de teste deve ter sistema operacional, banco de dados e navegador em versões parecidas com as da produção?",
+      "alternativas": [
+        "Para que os testes rodem bem mais rápido do que rodariam no ambiente de produção",
+        "Para que o comportamento visto no teste seja o mesmo que o usuário vai ter",
+        "Para que não seja mais preciso fazer o teste de aceitação",
+        "Para que os defeitos encontrados não precisem ser registrados"
+      ],
+      "correta": 1,
+      "explicacao": "Quanto mais o ambiente de teste se parece com a produção, mais confiável é o resultado: um erro que só aparece em certa versão de navegador, por exemplo, seria visto no teste."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na academia, o caso \"matricular aluno com CPF já cadastrado\" passou ontem e hoje falhou, porque outro testador apagou aquele aluno da base de teste. O que evitaria esse problema?",
+      "alternativas": [
+        "Executar o caso uma única vez e nunca mais repetir a execução",
+        "Restaurar a massa de dados antes de cada execução, com dados reservados por caso",
+        "Usar a base de dados da produção, que nunca é alterada pelos testadores da equipe",
+        "Marcar o caso como passou, já que ontem ele funcionou"
+      ],
+      "correta": 1,
+      "explicacao": "O resultado mudou por causa dos dados, não do sistema. Restaurar a massa de dados (estado conhecido) antes da execução e separar dados por caso torna o teste repetível."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O cadastro do clube aceita idade de 16 a 60 anos. Qual conjunto de dados de teste é melhor para o campo idade?",
+      "alternativas": [
+        "15, 16, 60 e 61",
+        "20, 30, 40 e 50",
+        "Somente 30",
+        "-1000 e 1000"
+      ],
+      "correta": 0,
+      "explicacao": "Os limites (16 e 60) e os valores logo fora deles (15 e 61) são onde mais aparecem erros. Valores só do meio da faixa não testam as fronteiras."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O sistema do hotel cobra diária mais cara nos feriados. A equipe vai testar em março, mas precisa conferir o preço do Natal. Qual configuração do ambiente resolve?",
+      "alternativas": [
+        "Ajustar a data do servidor de teste ou cadastrar um feriado fictício",
+        "Esperar até dezembro para executar esse caso de teste",
+        "Mudar a data do servidor de produção por alguns minutos, só durante a execução",
+        "Pular o caso, pois não há como testar fora da data real"
+      ],
+      "correta": 0,
+      "explicacao": "No ambiente de teste a equipe controla a data e os dados, então pode simular o feriado. Mexer na produção é proibido; esperar ou pular deixa a regra sem teste."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O pagamento com cartão da loja de games usa um serviço externo. No ambiente de teste, o mais adequado é:",
+      "alternativas": [
+        "Usar o cartão pessoal do testador e pedir o estorno depois",
+        "Desligar o pagamento e marcar o caso de teste como passou",
+        "Usar o modo de teste (sandbox) do serviço, com cartões de teste que não cobram",
+        "Usar os cartões reais de clientes que já estão salvos no banco de dados da produção"
+      ],
+      "correta": 2,
+      "explicacao": "Serviços de pagamento oferecem ambiente de teste (sandbox) com cartões fictícios. Assim a compra é testada de ponta a ponta sem cobrança real nem uso de dados de clientes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Antes de começar, a equipe confere se o banco foi carregado, se o sistema está na versão certa e se os usuários de teste existem. Essa atividade é:",
+      "alternativas": [
+        "Registro de defeito no gerenciador",
+        "Configuração do ambiente de teste",
+        "Relatório de teste",
+        "Teste de aceitação"
+      ],
+      "correta": 1,
+      "explicacao": "Deixar o ambiente pronto (versão, banco, usuários, dados) antes de executar é a configuração do ambiente de teste."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um defeito foi marcado como \"corrigido\", mas o testador continua vendo o erro. Depois viu que o ambiente de teste estava com a versão 1.3, e a correção entrou na 1.4. Que cuidado teria evitado o retrabalho?",
+      "alternativas": [
+        "Reabrir o defeito na hora, sem verificar mais nenhuma informação",
+        "Testar a correção direto no ambiente de produção",
+        "Conferir e anotar a versão instalada no ambiente antes de cada execução",
+        "Aumentar a prioridade do defeito para que ele seja revisto"
+      ],
+      "correta": 2,
+      "explicacao": "Cada execução deve registrar a versão testada. Se a versão do ambiente não tinha a correção, o resultado não diz nada sobre ela; reabrir sem conferir gera retrabalho."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é \"massa de dados\" na execução de testes?",
+      "alternativas": [
+        "Quantidade de memória RAM e de disco que fica disponível no servidor de teste",
+        "Tamanho total dos arquivos de log gerados pelo sistema",
+        "Registros carregados no banco para que os casos possam ser executados",
+        "Número de testadores que trabalham no mesmo ciclo"
+      ],
+      "correta": 2,
+      "explicacao": "Massa de dados é o conjunto de registros (clientes, produtos, pedidos…) preparado no banco de teste para os casos usarem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para testar o relatório de vendas por mês da sorveteria, quais dados de teste são necessários?",
+      "alternativas": [
+        "Uma única venda, de qualquer mês, já que o relatório da sorveteria é simples",
+        "Nenhum dado, pois o relatório é gerado sozinho pelo sistema",
+        "As vendas reais do mês passado, sem conferir os valores antes",
+        "Vendas em meses diferentes, com valores conhecidos para conferir os totais"
+      ],
+      "correta": 3,
+      "explicacao": "Para comparar esperado e obtido, o testador precisa saber de antemão quanto deve dar cada total. Por isso usa vendas fictícias em meses diferentes, com valores conhecidos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Dois grupos testam ao mesmo tempo no mesmo ambiente: um testa o cadastro de produtos e o outro, a exclusão de produtos. Os resultados ficam inconsistentes. Qual a melhor solução?",
+      "alternativas": [
+        "Executar todos os casos de novo, quantas vezes for preciso, até que todos passem",
+        "Separar os dados de cada grupo (ou os ambientes) e combinar a ordem de execução",
+        "Registrar cada resultado inconsistente como defeito do sistema",
+        "Desligar o banco de dados entre um caso de teste e outro"
+      ],
+      "correta": 1,
+      "explicacao": "Um grupo está alterando os dados que o outro usa. Isolar os dados (ou os ambientes) e organizar a execução resolve; repetir até passar ou culpar o sistema esconde a causa."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A escola vai testar o novo sistema de notas. Um coordenador sugeriu executar os testes direto no sistema que os professores já usam, \"para ganhar tempo\".\n\nNa sua resposta:\n1. diga se você concorda com a sugestão;\n2. cite dois riscos de testar no sistema em uso.",
+      "respostasAceitas": [
+        "Não concordo. Testar no sistema em uso pode alterar ou apagar notas reais e atrapalhar os professores (lentidão, erros, dados de teste misturados aos reais). O certo é um ambiente de teste separado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) não, os testes devem ir para um ambiente separado; 2) dois riscos, como perder/alterar dados reais, afetar quem está usando, misturar dados de teste com os reais, enviar avisos para alunos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No pet shop, cada cliente pode agendar no máximo 2 banhos por dia. Para testar essa regra, a equipe preparou estes dados de teste: cliente Lúcia, sem agendamentos no dia; cliente Marcos, com 1 agendamento no dia.\n\nNa sua resposta:\n1. diga qual situação importante ficou sem dados;\n2. explique por que essa situação precisa ser testada.",
+      "respostasAceitas": [
+        "Faltou um cliente que já tem 2 agendamentos no dia (no limite) tentando marcar o terceiro. É nessa situação que a regra deve bloquear, e é onde costumam aparecer erros."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cliente já com 2 agendamentos tentando o 3º; 2) é o limite da regra: só nele se vê se o sistema bloqueia corretamente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O analista quer copiar o banco de produção da farmácia, com nomes, CPFs e receitas dos clientes, para usar no ambiente de teste.\n\nNa sua resposta:\n1. explique o problema dessa ideia;\n2. diga como os dados de teste poderiam ser preparados.",
+      "respostasAceitas": [
+        "São dados pessoais e sensíveis (saúde): levá-los para o teste expõe os clientes e fere a LGPD. Os dados devem ser fictícios ou anonimizados (nomes e CPFs trocados), mantendo só o formato."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) exposição de dados pessoais/sensíveis, risco de vazamento, LGPD; 2) dados fictícios ou anonimizados/mascarados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Antes do ciclo 2 de testes do sistema da oficina, a equipe usou este checklist do ambiente:\n- [x] servidor de teste ligado\n- [x] banco restaurado com a massa de dados padrão\n- [ ] versão do sistema conferida\n- [ ] envio de SMS aos clientes desligado\n\nNa sua resposta:\n1. explique o risco de cada item não marcado;\n2. diga se o ciclo deve começar assim e por quê.",
+      "respostasAceitas": [
+        "Sem conferir a versão, o resultado pode valer para a versão errada (correções não testadas). Com o SMS ligado, clientes reais podem receber mensagens de teste. O ciclo não deve começar antes de resolver os dois itens."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) versão: resultados não confiáveis/versão errada; SMS: mensagens a clientes reais; 2) não, primeiro completar o checklist."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma empresa de software usa três ambientes: desenvolvimento, teste (homologação) e produção.\n\nNa sua resposta:\n1. diga quem usa cada ambiente;\n2. diga para que serve cada um.",
+      "respostasAceitas": [
+        "Desenvolvimento: os programadores, para escrever e ajustar o código. Teste/homologação: testadores e cliente, para executar os testes e aprovar a versão. Produção: os usuários reais, no dia a dia."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: desenvolvimento = programadores, construir; teste/homologação = testadores/cliente, testar e validar; produção = usuários finais, uso real."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O caso de teste \"gerar boleto\" passou no computador do desenvolvedor, mas falhou no ambiente de teste.\n\nNa sua resposta:\n1. cite duas diferenças entre os ambientes que podem causar isso;\n2. explique por que o resultado do ambiente de teste é o que vale.",
+      "respostasAceitas": [
+        "Podem mudar a versão do sistema ou do banco, os dados cadastrados, as configurações (data, permissões, serviços externos). Vale o ambiente de teste porque ele é controlado e parecido com a produção."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) duas diferenças plausíveis (versão, dados, configuração, bibliotecas, sistema operacional, serviços); 2) o ambiente de teste é controlado e representa a produção."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O sistema de ingressos do cinema cobra no cartão e envia o ingresso por SMS usando serviços externos. A equipe vai testar a compra completa no ambiente de teste.\n\nNa sua resposta:\n1. explique o cuidado que se deve ter com esses serviços externos;\n2. diga como o testador confere que a compra deu certo sem cobrança real.",
+      "respostasAceitas": [
+        "Os serviços devem estar em modo de teste (sandbox) ou simulados, para não cobrar nem mandar SMS a pessoas reais. O testador confere a compra registrada no sistema e a resposta de sucesso do modo de teste (ou o SMS num número de teste)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) usar sandbox/simulação, nada de cartões ou telefones reais; 2) verificar o registro da compra e a confirmação do serviço de teste."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na equipe de testes, quem normalmente executa os casos de teste e anota os resultados?",
+      "alternativas": [
+        "Testador",
+        "Cliente final",
+        "Gerente comercial",
+        "Administrador da produção"
+      ],
+      "correta": 0,
+      "explicacao": "O testador executa os casos, compara esperado e obtido, marca o status e registra os defeitos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual papel planeja o trabalho de teste, distribui as tarefas e acompanha o andamento do ciclo?",
+      "alternativas": [
+        "Testador mais experiente",
+        "Usuário final",
+        "Designer de telas do sistema",
+        "Líder (ou gerente) de testes"
+      ],
+      "correta": 3,
+      "explicacao": "O líder/gerente de testes organiza o trabalho: plano, distribuição, prazos e relatório."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que se recomenda que outra pessoa, e não só quem programou, teste a funcionalidade?",
+      "alternativas": [
+        "O desenvolvedor não tem permissão para abrir o sistema no ambiente de teste da equipe",
+        "Quem programou tende a testar do jeito que imaginou e pode não ver os próprios erros",
+        "Testes feitos por outra pessoa sempre encontram todos os defeitos",
+        "O desenvolvedor só pode fazer testes de performance no sistema"
+      ],
+      "correta": 1,
+      "explicacao": "Um olhar independente encontra situações que o autor não pensou. Isso não garante achar todos os defeitos, e o desenvolvedor continua testando (ex.: testes unitários)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quem costuma fazer os testes unitários das funções do código?",
+      "alternativas": [
+        "O cliente",
+        "O próprio desenvolvedor",
+        "O gerente comercial",
+        "O usuário na homologação"
+      ],
+      "correta": 1,
+      "explicacao": "Testes unitários verificam pequenas partes do código e são feitos pelo desenvolvedor, normalmente com ferramentas como o Jest."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na maioria das equipes, o analista de testes é responsável por:",
+      "alternativas": [
+        "Corrigir os defeitos encontrados no código-fonte",
+        "Estudar os requisitos e projetar os cenários e casos de teste",
+        "Aprovar o pagamento do projeto junto com o cliente e o setor financeiro",
+        "Instalar a versão final no ambiente de produção"
+      ],
+      "correta": 1,
+      "explicacao": "O analista de testes transforma requisitos em cenários e casos de teste. Corrigir é do desenvolvedor; instalar em produção é da equipe de implantação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O testador encontrou um erro no cálculo do desconto da loja. Qual forma de comunicar é a mais adequada?",
+      "alternativas": [
+        "Avisar no grupo da equipe que o programador responsável errou de novo no desconto",
+        "Corrigir ele mesmo o código, sem avisar ninguém da equipe",
+        "Guardar a informação e contar só no fim do projeto",
+        "Registrar o defeito com passos, dados e resultado obtido, sem apontar culpados"
+      ],
+      "correta": 3,
+      "explicacao": "O defeito é registrado com fatos que ajudam a corrigir. Culpar pessoas cria conflito; corrigir sem registrar perde o histórico; esperar atrasa a correção."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na equipe, quem transforma casos de teste repetitivos em scripts que rodam sozinhos?",
+      "alternativas": [
+        "Automatizador de testes",
+        "Gerente de projeto",
+        "Usuário-chave",
+        "Atendente do suporte"
+      ],
+      "correta": 0,
+      "explicacao": "O automatizador (ou engenheiro de automação) cria scripts com ferramentas como Cypress, Selenium ou Jest para repetir testes sem trabalho manual."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No teste de aceitação do sistema da biblioteca, quem participa para dizer se o sistema atende ao que foi pedido?",
+      "alternativas": [
+        "Os usuários-chave da biblioteca (cliente)",
+        "Somente o desenvolvedor",
+        "Somente os scripts automatizados",
+        "A empresa que vendeu o servidor da biblioteca"
+      ],
+      "correta": 0,
+      "explicacao": "Na aceitação, quem decide se o sistema serve é o cliente/usuário do negócio, apoiado pela equipe de testes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa empresa pequena com 2 programadores e nenhum testador, qual prática ajuda a manter a independência do teste?",
+      "alternativas": [
+        "Um programador testa a funcionalidade do outro, seguindo os casos de teste",
+        "Cada um testa só o próprio código e não registra nada",
+        "Deixar que os próprios clientes testem direto na produção, depois da entrega",
+        "Dispensar os casos de teste, já que a equipe é pequena"
+      ],
+      "correta": 0,
+      "explicacao": "Mesmo sem testador, trocar quem testa traz um olhar independente. Testar na produção ou sem registro aumenta o risco."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Sobre os papéis de testador e desenvolvedor, qual afirmação está correta?",
+      "alternativas": [
+        "O testador corrige o defeito no código e o desenvolvedor só confere se a correção funcionou",
+        "O testador encontra e relata o defeito; o desenvolvedor investiga a causa e corrige",
+        "Os dois só começam a trabalhar quando o sistema já está em produção",
+        "O desenvolvedor decide sozinho se o defeito relatado existe ou não"
+      ],
+      "correta": 1,
+      "explicacao": "Testar revela a falha; depurar (achar a causa no código) e corrigir é do desenvolvedor. A decisão sobre o defeito é da equipe, com base em evidências."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O desenvolvedor fechou um defeito dizendo \"na minha máquina funciona\". O testador ainda vê o erro no ambiente de teste. Qual é a atitude mais adequada?",
+      "alternativas": [
+        "Aceitar o fechamento, porque o desenvolvedor conhece melhor o código do sistema",
+        "Abrir um defeito novo, igual ao anterior, só com outro título",
+        "Pedir ao cliente que decida qual dos dois está com a razão",
+        "Reabrir o defeito com evidências do ambiente de teste e investigar a diferença"
+      ],
+      "correta": 3,
+      "explicacao": "O que vale é o comportamento no ambiente de teste. Reabrir com evidências e investigar juntos a diferença de ambiente é o caminho; duplicar o defeito bagunça o controle."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual característica é importante para quem trabalha como testador?",
+      "alternativas": [
+        "Facilidade para apresentar e vender o produto aos clientes da empresa",
+        "Costume de não registrar defeitos considerados pequenos",
+        "Atenção a detalhes e curiosidade para explorar situações diferentes",
+        "Concordar sempre com o que o desenvolvedor disser"
+      ],
+      "correta": 2,
+      "explicacao": "O testador precisa observar detalhes, pensar em situações diferentes e registrar tudo com clareza, inclusive defeitos pequenos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na equipe do sistema da clínica: Lia projeta os casos a partir dos requisitos; Rui executa os casos e registra os resultados; Téo corrige os defeitos; Bia acompanha os prazos e aprova o relatório. Quais são, nessa ordem, os papéis?",
+      "alternativas": [
+        "Testador, analista de testes, líder de testes e desenvolvedor",
+        "Desenvolvedor, testador, analista de testes e cliente",
+        "Analista de testes, testador, desenvolvedor e líder de testes",
+        "Líder de testes, desenvolvedor, testador e analista de testes"
+      ],
+      "correta": 2,
+      "explicacao": "Projetar casos = analista de testes; executar e registrar = testador; corrigir = desenvolvedor; acompanhar e aprovar relatório = líder de testes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Leia a conversa:\nDesenvolvedor: \"Testei aqui e funcionou, pode liberar.\"\nTestador: \"Vou executar os casos de teste no ambiente de teste antes.\"\n\nNa sua resposta:\n1. explique por que o testador está certo;\n2. diga qual é o papel de cada um nessa situação.",
+      "respostasAceitas": [
+        "O teste do desenvolvedor foi informal e na máquina dele; os casos no ambiente de teste verificam de forma planejada e independente. O desenvolvedor programa, faz testes unitários e corrige; o testador executa os casos e registra os resultados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) teste planejado, independente, no ambiente certo; 2) desenvolvedor: constrói/corrige; testador: executa os casos e relata."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num registro de defeito apareceu este comentário: \"O Pedro fez de novo esse código malfeito, o carrinho está todo errado.\"\n\nNa sua resposta:\n1. avalie o comentário;\n2. diga que informações deveriam estar no lugar dele.",
+      "respostasAceitas": [
+        "O comentário culpa uma pessoa e não ajuda a corrigir: é vago e gera conflito. Deveria descrever o defeito: passos para reproduzir, dados usados, resultado esperado e obtido, versão e evidência."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) comunicação inadequada: pessoal, sem fatos; 2) passos, dados, esperado x obtido, ambiente/versão, evidência."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O dono de uma lanchonete, que encomendou um sistema pequeno de pedidos, pergunta se a empresa de software precisa mesmo de alguém só para testar.\n\nNa sua resposta:\n1. diga uma vantagem de ter uma pessoa que testa sem ter programado;\n2. sugira uma alternativa caso a empresa não tenha um testador.",
+      "respostasAceitas": [
+        "Quem não programou olha de outro jeito e acha erros que o autor não vê. Sem testador, um programador pode testar o código do outro seguindo casos de teste, e o dono pode participar do teste de aceitação."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) independência/visão diferente; 2) troca entre programadores, uso de casos de teste, participação do cliente na aceitação."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O gerente pediu aos testadores: \"Não registrem os defeitos de baixa severidade, para o relatório ficar bonito.\"\n\nNa sua resposta:\n1. avalie o pedido;\n2. explique uma consequência para o projeto.",
+      "respostasAceitas": [
+        "O pedido está errado: o relatório deixa de mostrar a situação real. Defeitos pequenos esquecidos chegam ao cliente, somam-se e não podem ser priorizados nem corrigidos depois."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) inadequado, esconde informação; 2) defeitos chegam à produção, decisão baseada em dados falsos, perda de histórico."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No teste de aceitação, as funcionárias da biblioteca acharam problemas que a equipe de testes não tinha encontrado.\n\nNa sua resposta:\n1. explique por que isso pode acontecer;\n2. dê um exemplo de problema que um usuário do dia a dia notaria.",
+      "respostasAceitas": [
+        "As funcionárias conhecem a rotina real e usam o sistema do jeito do trabalho, não só pelos casos de teste. Ex.: a tela de empréstimo exige passos demais na fila, ou falta um campo que elas sempre precisam."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) visão do negócio/rotina real diferente da visão técnica; 2) exemplo coerente de uso (lentidão no fluxo, campo faltando, termo confuso)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num caso de teste, o campo \"pré-condição\" indica:",
+      "alternativas": [
+        "O resultado que o sistema deve mostrar no final",
+        "O que precisa estar pronto antes de executar os passos",
+        "O defeito que foi encontrado na execução",
+        "Quem será o responsável por corrigir o erro"
+      ],
+      "correta": 1,
+      "explicacao": "Pré-condição é a situação necessária antes da execução (ex.: \"usuário logado\", \"produto com estoque 5\")."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve o identificador (ID) de um caso de teste, como CT-015?",
+      "alternativas": [
+        "Para indicar a severidade do defeito que o caso encontrou na execução",
+        "Para mostrar quantas vezes o caso já falhou",
+        "Para guardar a senha do usuário de teste",
+        "Para citar o caso sem confusão em relatórios e registros de defeito"
+      ],
+      "correta": 3,
+      "explicacao": "O ID identifica o caso de forma única, permitindo ligá-lo a requisitos, defeitos e relatórios."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O caso CT-08 tem resultado esperado \"Mensagem: estoque insuficiente\" e resultado obtido \"Mensagem: estoque insuficiente\". Qual é o status?",
+      "alternativas": [
+        "Passou",
+        "Falhou",
+        "Bloqueado",
+        "Não executado"
+      ],
+      "correta": 0,
+      "explicacao": "Obtido igual ao esperado: o caso passou. Mesmo sendo uma mensagem de erro, era exatamente o que se esperava."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O caso CT-21 \"emitir nota fiscal\" não pôde ser executado porque o login do sistema estava com defeito. Qual status é o mais adequado?",
+      "alternativas": [
+        "Passou",
+        "Falhou",
+        "Bloqueado",
+        "Aprovado com ressalva"
+      ],
+      "correta": 2,
+      "explicacao": "Bloqueado = o caso não pôde ser executado por um impedimento externo a ele (aqui, o defeito no login). Não dá para dizer que a nota fiscal falhou."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num caso de teste de agendamento, qual destes é um resultado esperado bem definido?",
+      "alternativas": [
+        "Aparece \"Agendamento confirmado\" e o horário 14h sai da lista de livres",
+        "O sistema responde de forma adequada ao que o usuário espera ver",
+        "Tudo certo na tela depois de clicar no botão de agendar",
+        "O agendamento deve funcionar corretamente, sem nenhum problema"
+      ],
+      "correta": 0,
+      "explicacao": "O resultado esperado precisa ser observável e conferível. \"Adequado\", \"tudo certo\" e \"funcionar corretamente\" dependem da opinião de quem executa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em que momento o resultado obtido de um caso de teste é anotado?",
+      "alternativas": [
+        "Antes da execução, junto com a pré-condição e os dados do caso",
+        "Durante a execução, ao observar o que o sistema realmente fez",
+        "No planejamento, copiado do texto do requisito",
+        "Só no relatório final, lembrando do que aconteceu"
+      ],
+      "correta": 1,
+      "explicacao": "O resultado obtido é o que o sistema fez de fato, registrado na hora da execução. O que vem do requisito é o resultado esperado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Leia o caso pronto:\nCT-30 — Pré-condição: cliente logado. Passos: 1) abrir o carrinho; 2) aplicar o cupom. Dados: (vazio). Resultado esperado: desconto aplicado.\nO que falta para que dois testadores executem e confiram do mesmo jeito?",
+      "alternativas": [
+        "Trocar o identificador do caso para um número de três dígitos",
+        "Retirar a pré-condição, que só deixa o caso mais longo e difícil de ler",
+        "Informar qual cupom usar, os itens do carrinho e o valor final esperado",
+        "Já deixar o status marcado como passou antes de executar"
+      ],
+      "correta": 2,
+      "explicacao": "Sem dados (cupom, itens) e sem valor esperado concreto, cada testador faz de um jeito e julga \"desconto aplicado\" de forma diferente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Leia o caso de teste já executado:\nCT-12 — Pesquisar livro pelo título. Passos: digitar \"Dom Casmurro\" na busca e clicar em Buscar. Resultado esperado: aparece o livro \"Dom Casmurro\" na lista. Resultado obtido: aparece \"Nenhum resultado encontrado\". Status: Passou.\n\nNa sua resposta:\n1. diga se o status está certo;\n2. justifique comparando o esperado com o obtido.",
+      "respostasAceitas": [
+        "Está errado: deveria ser Falhou. O esperado era o livro aparecer, mas o obtido foi \"Nenhum resultado encontrado\"; como são diferentes, o caso falhou."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) não, o status correto é Falhou; 2) esperado ≠ obtido."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Leia o caso de teste pronto:\nCT-05 — Cadastro de aluno na academia. Passos: preencher o cadastro e salvar. Resultado esperado: funcionar.\n\nNa sua resposta:\n1. aponte dois problemas desse caso;\n2. explique por que eles atrapalham a execução.",
+      "respostasAceitas": [
+        "Os passos são vagos e não há dados de teste (que nome, CPF, plano); o resultado esperado \"funcionar\" não diz o que conferir; falta pré-condição. Cada testador fará de um jeito e não dá para decidir se passou."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dois entre passos vagos, sem dados, esperado vago, sem pré-condição; 2) execução não repetível e status subjetivo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O caso CT-40 \"cancelar reserva\" tem a pré-condição \"hóspede com reserva ativa\". O testador executou sem conferir: não havia reserva cadastrada, o sistema mostrou \"Nenhuma reserva encontrada\" e ele marcou Falhou.\n\nNa sua resposta:\n1. avalie a marcação do testador;\n2. diga o que deveria ter sido feito.",
+      "respostasAceitas": [
+        "A marcação está errada: o sistema não falhou, a pré-condição é que não foi atendida. Ele deveria preparar a reserva (ou marcar Bloqueado e pedir os dados) e então executar o caso."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Falhou é indevido, problema de pré-condição/dados; 2) cumprir a pré-condição antes ou marcar como bloqueado e resolver o impedimento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual campo do caso de teste descreve as ações, em ordem, que o testador deve realizar?",
+      "alternativas": [
+        "Passos",
+        "Pré-condição",
+        "Status",
+        "Resultado obtido"
+      ],
+      "correta": 0,
+      "explicacao": "Os passos são as ações numeradas da execução. Pré-condição vem antes; status e resultado obtido são preenchidos depois."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O campo \"dados de teste\" de um caso de teste informa:",
+      "alternativas": [
+        "O nome de quem programou a tela que vai ser testada naquele caso de teste",
+        "Os valores usados na execução, como o CPF digitado e o valor da compra",
+        "A data combinada para a entrega do projeto",
+        "A severidade do defeito que o caso pode encontrar"
+      ],
+      "correta": 1,
+      "explicacao": "Dados de teste são os valores concretos que o testador usa, para que todos executem igual."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um caso de teste falhou durante a execução. Qual é o próximo passo do testador?",
+      "alternativas": [
+        "Mudar o resultado esperado para ficar igual ao obtido",
+        "Apagar o caso de teste para não aparecer no relatório",
+        "Marcar como passou e avisar a equipe depois",
+        "Registrar um defeito ligado ao caso, com as evidências"
+      ],
+      "correta": 3,
+      "explicacao": "Falha gera registro de defeito com evidências, ligado ao ID do caso. Alterar o esperado ou apagar o caso esconde o problema."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O caso CT-17 tem o campo \"Requisito: RF-04\". Para que serve essa ligação?",
+      "alternativas": [
+        "Saber quais requisitos já foram testados e o que testar de novo se o RF-04 mudar",
+        "Indicar qual desenvolvedor vai corrigir os defeitos encontrados por esse caso de teste",
+        "Definir automaticamente a prioridade dos defeitos do caso",
+        "Calcular o tempo de resposta da tela ligada ao requisito"
+      ],
+      "correta": 0,
+      "explicacao": "Ligar caso e requisito (rastreabilidade) mostra a cobertura dos requisitos e quais casos repetir quando um requisito muda."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No caso de teste \"excluir produto\", o campo pós-condição diz: \"o produto não aparece mais na lista\". Esse campo indica:",
+      "alternativas": [
+        "O que precisa existir antes de começar o teste",
+        "Quem da equipe deve executar o caso",
+        "Qual ferramenta será usada no teste",
+        "Como o sistema deve ficar depois da execução"
+      ],
+      "correta": 3,
+      "explicacao": "Pós-condição é o estado esperado do sistema após a execução; pré-condição é o estado necessário antes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Os casos CT-01 \"login com senha correta\" e CT-02 \"login com senha errada\" mostram que:",
+      "alternativas": [
+        "É preciso testar entradas válidas e também entradas inválidas",
+        "Basta testar o caminho em que tudo dá certo",
+        "O CT-02 é desnecessário, pois a mensagem de erro já é esperada",
+        "Os dois casos são iguais e um deles deve ser apagado"
+      ],
+      "correta": 0,
+      "explicacao": "Bons casos cobrem o caminho válido e os inválidos. Verificar que o sistema recusa a senha errada é tão importante quanto aceitar a certa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O caso CT-50 tem 25 passos e testa cadastro, login, compra, pagamento e cancelamento juntos. Ele falhou no passo 18. Qual é o problema desse caso?",
+      "alternativas": [
+        "Casos de teste podem ter no máximo dois passos, pela norma",
+        "O passo 18 deveria ser apagado para o caso passar",
+        "Mistura objetivos demais; após a falha, o resto fica sem resultado",
+        "Casos longos sempre passam, então a falha só pode ser do ambiente de teste"
+      ],
+      "correta": 2,
+      "explicacao": "Cada caso deve ter um objetivo claro. Um caso enorme esconde o que foi testado: após a falha, os passos seguintes ficam sem resultado. Não existe limite de dois passos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No fim do dia, 5 casos nem foram iniciados por falta de tempo. Como eles devem aparecer no controle de execução?",
+      "alternativas": [
+        "Bloqueado",
+        "Falhou",
+        "Não executado",
+        "Passou"
+      ],
+      "correta": 2,
+      "explicacao": "Não executado = o caso ainda não rodou. Bloqueado é quando há um impedimento (defeito, ambiente fora do ar); não é o caso de falta de tempo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Resultado esperado: \"carrinho com 3 itens de R$ 30,00 e total R$ 90,00\". Resultado obtido: total R$ 90,00, mas a tela mostra só 2 itens no carrinho. Qual é o status?",
+      "alternativas": [
+        "Passou, porque o valor total, que é o mais importante, está certo",
+        "Bloqueado, porque o carrinho apresentou um comportamento estranho",
+        "Falhou, porque uma parte do resultado obtido é diferente do esperado",
+        "Não executado, porque o testador ficou em dúvida sobre o resultado"
+      ],
+      "correta": 2,
+      "explicacao": "Todo o resultado esperado precisa ser atendido. Com 2 itens na tela, o obtido difere do esperado: o caso falhou (e há um defeito a registrar)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a vantagem de ter casos de teste documentados e guardados?",
+      "alternativas": [
+        "Repetir os mesmos testes em novas versões, como na regressão",
+        "Dispensar o registro dos defeitos encontrados durante a execução",
+        "Garantir que o sistema não terá nenhum defeito",
+        "Evitar a necessidade de um ambiente de teste"
+      ],
+      "correta": 0,
+      "explicacao": "Casos documentados podem ser repetidos do mesmo jeito em cada versão, o que é a base do teste de regressão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes é uma boa evidência da execução de um caso de teste?",
+      "alternativas": [
+        "A opinião do testador, por escrito, de que estava tudo certo na tela",
+        "Captura de tela do resultado obtido, com data e versão testada",
+        "O código-fonte completo da função testada",
+        "Um e-mail do cliente elogiando o sistema"
+      ],
+      "correta": 1,
+      "explicacao": "Evidência mostra o que aconteceu de fato (print, vídeo, log), com data e versão. Opinião não é evidência."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ana vai executar o caso \"emitir boleto\". Qual é a ordem lógica?",
+      "alternativas": [
+        "Marcar o status, seguir os passos e depois conferir a pré-condição",
+        "Comparar o esperado com o obtido e só depois seguir os passos com os dados do caso de teste",
+        "Conferir a pré-condição, seguir passos e dados, comparar esperado e obtido, marcar status",
+        "Executar sem ler o caso e preencher o resultado esperado no final"
+      ],
+      "correta": 2,
+      "explicacao": "Primeiro garante-se a pré-condição, depois executam-se os passos com os dados, compara-se o obtido com o esperado e então marca-se o status."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Durante a execução, o testador nota que o caso espera \"frete grátis acima de R$ 100\", mas o requisito atual diz \"acima de R$ 150\". O sistema seguiu o requisito. O que fazer?",
+      "alternativas": [
+        "Registrar defeito no sistema, porque o que vale na execução é sempre o caso de teste",
+        "Marcar o caso como passou e não comentar com ninguém",
+        "Pedir que o requisito seja trocado para R$ 100",
+        "Avisar o responsável para atualizar o caso de teste, sem abrir defeito no sistema"
+      ],
+      "correta": 3,
+      "explicacao": "O sistema está certo segundo o requisito; quem está desatualizado é o caso de teste. Corrige-se o caso (e registra-se a mudança), sem abrir defeito no sistema."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre cenário de teste e caso de teste?",
+      "alternativas": [
+        "São a mesma coisa, só que com nomes diferentes dependendo da empresa e da norma",
+        "O cenário tem os passos e dados detalhados; o caso tem só um título curto",
+        "O cenário diz o que testar; o caso detalha passos, dados e resultado esperado",
+        "O caso de teste é usado apenas em testes automatizados"
+      ],
+      "correta": 2,
+      "explicacao": "Ex.: cenário \"pagar com Pix\"; casos: Pix aprovado, Pix expirado, Pix com valor errado, cada um com passos, dados e esperado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Resultado do dia no controle de execução:\n- CT-01: Passou\n- CT-02: Falhou\n- CT-03: Bloqueado\n- CT-04: Não executado\n\nNa sua resposta:\n1. explique o significado de cada status;\n2. diga qual deles exige registrar um defeito do caso.",
+      "respostasAceitas": [
+        "Passou: obtido igual ao esperado. Falhou: obtido diferente do esperado. Bloqueado: não deu para executar por um impedimento. Não executado: ainda não foi rodado. O CT-02 (Falhou) exige registro de defeito."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) os quatro significados; 2) CT-02. Aceitar se o aluno lembrar que o bloqueio pode ter sido causado por outro defeito já registrado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Leia o caso de teste pronto do site do cinema:\nCT-LOGIN-03 — Login com senha errada.\nPré-condição: usuária \"bia.teste\" cadastrada com a senha \"Cine2026\".\nPassos: 1) abrir a tela de login; 2) informar usuária e senha; 3) clicar em Entrar.\nDados: usuária \"bia.teste\", senha \"cine2026\".\nResultado esperado: mensagem \"Usuário ou senha inválidos\" e permanecer na tela de login.\n\nNa sua resposta:\n1. explique o que esse caso quer verificar;\n2. diga se ele está completo o bastante para dois testadores chegarem ao mesmo resultado, justificando.",
+      "respostasAceitas": [
+        "Verifica se o sistema recusa uma senha errada (só a letra maiúscula muda) e mostra a mensagem. Está completo: tem ID, pré-condição, passos, dados exatos e resultado esperado observável, então qualquer testador executa e confere igual."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) recusa de senha errada/diferença de maiúscula; 2) sim, por ter os campos essenciais e esperado concreto."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O caso \"desconto de estudante\" tem: Pré-condição: cliente com cadastro de estudante. Dados: compra de R$ 20,00. Resultado esperado: total R$ 18,00. O testador usou um cliente SEM cadastro de estudante; o sistema mostrou R$ 18,00 e ele marcou Passou.\n\nNa sua resposta:\n1. explique por que esse resultado não vale como aprovação;\n2. diga o que esse resultado pode indicar e o que fazer.",
+      "respostasAceitas": [
+        "A pré-condição não foi seguida, então o caso não foi executado de verdade. Além disso, um cliente comum ganhou desconto de estudante, o que indica um provável defeito: deve ser registrado, e o caso precisa ser executado de novo com um estudante."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) pré-condição/dados errados invalidam a execução; 2) possível defeito (desconto para quem não tem direito): registrar e reexecutar corretamente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No cadastro de clientes da floricultura existem dois casos prontos: CT-A testa o cadastro com e-mail válido; CT-B testa o cadastro com e-mail sem \"@\".\n\nNa sua resposta:\n1. diga o objetivo de cada caso;\n2. explique por que os dois são necessários.",
+      "respostasAceitas": [
+        "O CT-A verifica se um cadastro correto é aceito; o CT-B verifica se o sistema recusa um e-mail inválido. Os dois são necessários porque o sistema precisa aceitar o que é certo e barrar o que é errado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) caso válido (aceitar) e inválido (recusar); 2) cobrir os dois comportamentos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A equipe da escola de idiomas montou esta ligação entre requisitos e casos de teste:\n- RF-01 (matricular aluno): CT-01, CT-02\n- RF-02 (trancar matrícula): nenhum caso\n- RF-03 (emitir boleto): CT-03\n\nNa sua resposta:\n1. diga o que essa ligação revela;\n2. explique o risco de liberar o sistema assim.",
+      "respostasAceitas": [
+        "Revela que o RF-02, trancar matrícula, não tem nenhum caso de teste. Liberar assim é arriscado, pois essa função pode ter defeitos que ninguém verificou."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) RF-02 sem cobertura; 2) funcionalidade não testada pode chegar com defeito ao usuário."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O caso \"enviar comprovante por e-mail\" do sistema da academia foi executado 5 vezes, sem mudar nada: passou 3 vezes e falhou 2.\n\nNa sua resposta:\n1. diga como essa situação deve ser registrada;\n2. explique por que ela não pode ser ignorada.",
+      "respostasAceitas": [
+        "Deve ser registrado um defeito informando que é intermitente (falhou 2 de 5), com dados, horários e evidências. Não pode ser ignorado porque o usuário real também terá falhas de vez em quando."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) registrar defeito intermitente com frequência e evidências; 2) a falha acontece de verdade e afetará usuários."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve o Jest num projeto JavaScript?",
+      "alternativas": [
+        "Simular milhares de usuários acessando o site ao mesmo tempo",
+        "Registrar e acompanhar os defeitos encontrados",
+        "Rodar testes unitários automatizados das funções do código",
+        "Desenhar o modelo do banco de dados do sistema"
+      ],
+      "correta": 2,
+      "explicacao": "Jest é um framework de testes para JavaScript, muito usado em testes unitários. Carga é com JMeter; defeitos, com gerenciador de bugs."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O Postman é muito usado em testes para:",
+      "alternativas": [
+        "Automatizar cliques e digitação no navegador",
+        "Enviar requisições a uma API e conferir as respostas",
+        "Medir o consumo de energia do servidor",
+        "Organizar o cronograma da equipe de testes"
+      ],
+      "correta": 1,
+      "explicacao": "No Postman o testador monta requisições HTTP (GET, POST…) e confere status e corpo das respostas da API."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual ferramenta é usada para simular muitos usuários acessando o sistema ao mesmo tempo (teste de carga)?",
+      "alternativas": [
+        "Jest",
+        "Cypress",
+        "Gerenciador de bugs",
+        "JMeter"
+      ],
+      "correta": 3,
+      "explicacao": "O JMeter gera muitas requisições simultâneas e mede tempo de resposta e erros: teste de carga, estresse e performance."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Selenium e Cypress são ferramentas para:",
+      "alternativas": [
+        "Gerenciar o servidor de banco de dados de produção",
+        "Medir a cobertura de requisitos no relatório final",
+        "Automatizar ações no navegador, como clicar e preencher formulários",
+        "Calcular a prioridade dos defeitos registrados pela equipe de testes"
+      ],
+      "correta": 2,
+      "explicacao": "Selenium e Cypress controlam o navegador como um usuário faria, para testar telas e fluxos completos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Observe o teste em Jest:\n`test('soma o frete', () => { expect(calcularTotal(50, 10)).toBe(60); });`\nO que ele verifica?",
+      "alternativas": [
+        "Se a tela de frete abre em até 60 segundos",
+        "Se a função é chamada 60 vezes seguidas",
+        "Se calcularTotal(50, 10) devolve 60",
+        "Se o valor 50 é maior que o valor 10"
+      ],
+      "correta": 2,
+      "explicacao": "`expect(...).toBe(60)` compara o valor devolvido pela função com o esperado (60). Se for diferente, o teste falha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao rodar o Jest, aparece: `Expected: 60  Received: 50`. O que isso significa?",
+      "alternativas": [
+        "O teste falhou: a função devolveu 50, mas o esperado era 60",
+        "O teste passou, mas o Jest mostrou um aviso de desempenho",
+        "O Jest não conseguiu encontrar a função que seria testada",
+        "O teste foi bloqueado por um problema no ambiente"
+      ],
+      "correta": 0,
+      "explicacao": "Expected é o resultado esperado; Received é o obtido. Diferentes = teste falhou."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Postman, a requisição GET /produtos/999 (produto que não existe) voltou com status 200 e corpo vazio. O caso de teste esperava status 404. Qual é a conclusão?",
+      "alternativas": [
+        "O caso falhou: a API devolveu um código diferente do esperado",
+        "O caso passou, pois o status 200 significa sucesso",
+        "O Postman está com defeito e precisa ser reinstalado",
+        "O teste é de carga e esse resultado não deve ser considerado"
+      ],
+      "correta": 0,
+      "explicacao": "O esperado era 404 (não encontrado). Receber 200 é diferente do esperado: o caso falhou e deve gerar registro de defeito."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em qual situação o JMeter é a ferramenta mais indicada?",
+      "alternativas": [
+        "Conferir se o botão Comprar está com a cor definida no protótipo",
+        "Testar a função que calcula o preço da meia-entrada",
+        "Registrar o defeito do cupom de desconto da bilheteria",
+        "Ver se a venda de ingressos aguenta 2.000 acessos na estreia de um filme"
+      ],
+      "correta": 3,
+      "explicacao": "Muitos acessos simultâneos = teste de carga/performance, papel do JMeter. Cálculo isolado é unitário (Jest); registro de defeito é no gerenciador de bugs."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve um gerenciador de bugs (ferramenta de gestão de defeitos)?",
+      "alternativas": [
+        "Executar testes de carga com muitos usuários virtuais",
+        "Registrar cada defeito e acompanhar seu andamento até ser fechado",
+        "Compilar o código-fonte do sistema antes de cada nova versão ser liberada",
+        "Hospedar o site da empresa na internet"
+      ],
+      "correta": 1,
+      "explicacao": "O gerenciador de bugs guarda os defeitos com responsável, severidade, prioridade, status e histórico, do registro ao fechamento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma ferramenta de gestão de teste (ou uma planilha bem organizada) ajuda principalmente a:",
+      "alternativas": [
+        "Corrigir automaticamente o trecho de código que apresentou defeito no ciclo",
+        "Organizar os casos de teste, quem executa cada um e o status no ciclo",
+        "Substituir o ambiente de teste por um ambiente virtual",
+        "Gerar dados reais de clientes para usar nos testes"
+      ],
+      "correta": 1,
+      "explicacao": "Gestão de teste cuida dos casos, ciclos, responsáveis e resultados (passou, falhou, bloqueado). Ela não corrige código."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No pet shop a equipe precisa: (1) testar a função que calcula o preço do banho pelo porte; (2) testar a API de agendamentos; (3) testar o fluxo de agendar pela tela, no navegador. Quais ferramentas são adequadas, nessa ordem?",
+      "alternativas": [
+        "JMeter, Jest e Postman",
+        "Cypress, JMeter e Jest",
+        "Postman, Cypress e JMeter",
+        "Jest, Postman e Cypress"
+      ],
+      "correta": 3,
+      "explicacao": "Função isolada = Jest (unitário); API = Postman; fluxo na tela = Cypress (ou Selenium). JMeter é para carga."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que vale a pena automatizar com Cypress os testes de login que são repetidos a cada nova versão?",
+      "alternativas": [
+        "Testes automatizados nunca precisam de manutenção depois de prontos",
+        "A automação dispensa totalmente o trabalho dos testadores",
+        "Eles rodam rápido e sempre do mesmo jeito, o que ajuda na regressão",
+        "O Cypress encontra sozinho os problemas de usabilidade das telas"
+      ],
+      "correta": 2,
+      "explicacao": "Automatizar vale para testes repetitivos: executam rápido e de forma igual. Scripts precisam de manutenção e não substituem a análise humana."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes testes é o MENOS indicado para automatizar?",
+      "alternativas": [
+        "Avaliar se a nova tela é agradável e fácil de entender para os clientes",
+        "Conferir o cálculo de juros em 200 combinações de valores e prazos",
+        "Repetir o login com usuários diferentes em todas as versões",
+        "Verificar o status das respostas da API a cada nova versão"
+      ],
+      "correta": 0,
+      "explicacao": "Usabilidade e impressão do usuário dependem de julgamento humano. Cálculos repetitivos, login e checagem de API são ótimos para automação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Sobre ferramentas de teste, qual afirmação está correta?",
+      "alternativas": [
+        "A ferramenta descobre sozinha o que precisa ser testado no sistema",
+        "Usar uma ferramenta automática dispensa o registro de defeitos encontrados nos testes",
+        "Somente empresas grandes conseguem usar ferramentas de teste",
+        "A ferramenta executa; quem define os casos e os resultados esperados é a equipe"
+      ],
+      "correta": 3,
+      "explicacao": "Ferramentas executam e conferem o que foi planejado. O que testar e o que esperar é decidido pela equipe. Há várias ferramentas gratuitas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Observe o teste em Cypress:\n`cy.get('#email').type('ana@teste.com'); cy.get('#senha').type('abc123'); cy.contains('Entrar').click(); cy.contains('Bem-vinda, Ana');`\nO que esse teste faz?",
+      "alternativas": [
+        "Cadastra uma nova usuária chamada Ana no banco de dados com a senha abc123",
+        "Mede quanto tempo o login demora para responder",
+        "Envia uma mensagem para o endereço ana@teste.com",
+        "Preenche e-mail e senha, clica em Entrar e confere se aparece a saudação"
+      ],
+      "correta": 3,
+      "explicacao": "`get(...).type` digita nos campos, `contains('Entrar').click()` clica no botão e `contains('Bem-vinda, Ana')` confere o resultado esperado na tela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No JMeter, com 300 usuários simultâneos, o sistema de matrículas teve tempo médio de 7 s e 2% de erros. O requisito diz: \"responder em até 3 s com 300 usuários\". Qual é a conclusão?",
+      "alternativas": [
+        "O requisito foi atendido, pois 98% das requisições deram certo",
+        "Não dá para concluir nada, pois o JMeter só mede a quantidade de erros",
+        "Não atendido: registrar defeito de performance com os números medidos",
+        "O requisito foi atendido, pois o sistema não saiu do ar durante o teste"
+      ],
+      "correta": 2,
+      "explicacao": "O requisito fala em tempo: 7 s > 3 s com os mesmos 300 usuários. Falhou, e o registro deve trazer os números medidos como evidência."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Postman, o testador acrescentou à requisição POST /clientes uma verificação automática: \"o status deve ser 201\". Qual é a vantagem?",
+      "alternativas": [
+        "A conferência do resultado esperado fica automática e se repete a cada execução",
+        "A API passa a cadastrar os clientes mais rapidamente",
+        "Os dados também são gravados no banco de produção",
+        "A severidade dos defeitos da API passa a ser calculada sozinha pela própria ferramenta"
+      ],
+      "correta": 0,
+      "explicacao": "Verificações (testes) no Postman comparam a resposta com o esperado a cada execução, sem o testador conferir manualmente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No gerenciador de bugs, o histórico de um defeito mostra: Novo → Atribuído → Corrigido → Reaberto. O que \"Reaberto\" indica?",
+      "alternativas": [
+        "No reteste, o defeito continuou acontecendo",
+        "O defeito era uma cópia de outro já registrado",
+        "O cliente aprovou a correção feita",
+        "O defeito foi encerrado sem correção"
+      ],
+      "correta": 0,
+      "explicacao": "Reaberto = após a correção, o testador refez o teste e o problema ainda aparece. Duplicado e Fechado são outros status."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Leia o teste pronto em Jest:\n`test('aplica meia-entrada', () => { expect(precoIngresso(30, true)).toBe(15); });`\n\nNa sua resposta:\n1. diga o que esse teste verifica;\n2. diga o que acontece se a função devolver 30.",
+      "respostasAceitas": [
+        "Verifica se, com ingresso de R$ 30 e meia-entrada (true), a função devolve 15. Se devolver 30, o teste falha e o Jest mostra esperado 15 e recebido 30."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) preço com meia-entrada = metade (15); 2) teste falha (esperado ≠ obtido)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A loja de games tem pouco tempo e precisa testar: a tela de compra no navegador, a API de estoque e o pico de acessos na promoção de sexta.\n\nNa sua resposta:\n1. indique uma ferramenta adequada para cada situação;\n2. justifique uma das escolhas.",
+      "respostasAceitas": [
+        "Tela de compra: Cypress ou Selenium. API de estoque: Postman. Pico de acessos: JMeter. Ex.: o JMeter simula muitos usuários ao mesmo tempo e mede tempo de resposta e erros."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Cypress/Selenium, Postman, JMeter; 2) justificativa coerente de uma delas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No Postman, o testador enviou POST /agendamentos com um horário que já estava ocupado na barbearia. A resposta foi: status 201 e corpo {\"id\": 88, \"horario\": \"10:00\"}. O caso de teste esperava status 409 e a mensagem \"Horário ocupado\".\n\nNa sua resposta:\n1. interprete a resposta recebida;\n2. diga o status do caso e o que fazer em seguida.",
+      "respostasAceitas": [
+        "A API aceitou e gravou um agendamento num horário já ocupado (201 = registro feito), quando deveria recusar com 409. O caso falhou; deve-se registrar o defeito com a requisição, a resposta e o esperado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a API permitiu agendamento duplicado; 2) Falhou + registro de defeito com evidências."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O gerente quer automatizar 100% dos testes com Selenium e dispensar todos os testadores.\n\nNa sua resposta:\n1. avalie a proposta;\n2. cite um tipo de teste que continua precisando de uma pessoa e explique por quê.",
+      "respostasAceitas": [
+        "Não é boa ideia: alguém precisa planejar, definir os casos, manter os scripts e analisar as falhas, e nem tudo vale automatizar. Usabilidade e testes exploratórios precisam de pessoas, porque dependem de julgamento humano."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) automação ajuda, mas não substitui pessoas (planejar, manter, analisar); 2) usabilidade, exploratório, aceitação ou outro com justificativa."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A oficina mecânica controla os defeitos do seu sistema por mensagens num grupo de conversa da equipe.\n\nNa sua resposta:\n1. cite dois problemas desse controle;\n2. explique duas vantagens de usar um gerenciador de bugs.",
+      "respostasAceitas": [
+        "Mensagens se perdem, não há status nem responsável, e é difícil saber o que já foi corrigido. Um gerenciador de bugs guarda cada defeito com status, responsável, severidade e histórico, e permite gerar números para o relatório."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) perda de informação, sem status/responsável/histórico; 2) organização, acompanhamento, histórico, métricas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Resultado de teste de carga com JMeter no sistema de matrículas da escola:\n- 100 usuários: 1,2 s em média, 0% de erros\n- 300 usuários: 2,8 s, 0% de erros\n- 600 usuários: 9,5 s, 15% de erros\nRequisito: responder em até 3 s com até 400 usuários.\n\nNa sua resposta:\n1. interprete os números;\n2. diga se dá para afirmar que o requisito foi atendido e o que falta.",
+      "respostasAceitas": [
+        "Até 300 usuários o sistema atende (abaixo de 3 s, sem erros); com 600 fica lento e falha. Não dá para afirmar: o requisito é com 400 usuários e esse valor não foi medido; é preciso testar com 400."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) bom até 300, ruim com 600; 2) não comprovado, falta medir com 400 usuários."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Leia o teste pronto em Cypress do site da biblioteca:\n`cy.get('#busca').type('O Cortiço'); cy.contains('Buscar').click(); cy.contains('O Cortiço - Aluísio Azevedo');`\n\nNa sua resposta:\n1. explique o que o teste faz;\n2. diga em que situação ele falharia.",
+      "respostasAceitas": [
+        "Digita \"O Cortiço\" na busca, clica em Buscar e confere se o livro aparece na tela. Falharia se o livro não aparecesse no resultado (ou se o campo ou o botão não existissem)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) digita, busca e confere o resultado; 2) livro não encontrado na tela / elemento ausente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No registro de um defeito, os \"passos para reproduzir\" servem para:",
+      "alternativas": [
+        "Mostrar quanto tempo o testador levou para encontrar o defeito naquele dia",
+        "Definir automaticamente a prioridade de correção",
+        "Permitir que o desenvolvedor faça o erro acontecer de novo e ache a causa",
+        "Listar os casos de teste que passaram no ciclo"
+      ],
+      "correta": 2,
+      "explicacao": "Se o desenvolvedor não consegue reproduzir, dificilmente encontra a causa. Os passos numerados, com os dados, permitem repetir o erro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A severidade de um defeito indica:",
+      "alternativas": [
+        "A ordem em que o defeito será corrigido, decidida pelo negócio",
+        "O nome da pessoa que encontrou o defeito",
+        "O tamanho do impacto do defeito no funcionamento do sistema",
+        "A data em que o defeito foi registrado"
+      ],
+      "correta": 2,
+      "explicacao": "Severidade mede o impacto técnico (trava, perde dados, erro visual). A ordem de correção é a prioridade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A prioridade de um defeito indica:",
+      "alternativas": [
+        "O impacto técnico que o defeito causa no sistema",
+        "A quantidade de passos necessários para reproduzir o defeito no sistema",
+        "O nome do módulo em que o defeito apareceu",
+        "A urgência de corrigir, de acordo com a necessidade do negócio"
+      ],
+      "correta": 3,
+      "explicacao": "Prioridade = quando corrigir (urgência para o negócio). Impacto técnico é a severidade."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Leia o registro de defeito pronto:\nTítulo: \"Não funciona\"\nDescrição: \"O sistema deu erro.\"\nSeveridade: Alta\n\nNa sua resposta:\n1. aponte o que falta nesse registro;\n2. explique por que isso atrapalha a correção.",
+      "respostasAceitas": [
+        "Faltam título claro, passos para reproduzir, dados usados, resultado esperado e obtido, versão/ambiente e evidência. Sem isso o desenvolvedor não sabe onde nem como o erro acontece e não consegue reproduzi-lo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) pelo menos passos, esperado x obtido e ambiente/versão (ou evidência); 2) sem reproduzir, não há como achar a causa."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Dois defeitos foram registrados no sistema da padaria, em agosto:\n- Defeito A: o nome da padaria aparece com erro de digitação na tela inicial do site de encomendas.\n- Defeito B: o relatório anual de impostos, usado só em março, trava ao ser gerado.\n\nNa sua resposta:\n1. classifique a severidade e a prioridade de cada defeito;\n2. justifique as classificações.",
+      "respostasAceitas": [
+        "A: severidade baixa (não impede o uso) e prioridade alta (é a primeira coisa que o cliente vê). B: severidade alta (a função não funciona) e prioridade menor agora, pois só será usada em março, mas deve ser corrigido antes."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: A = severidade baixa, prioridade alta; B = severidade alta, prioridade média/baixa no momento. Justificativa: impacto técnico x urgência do negócio. Aceitar variações bem justificadas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na semana de abertura das matrículas, o site da escola mostra o logotipo com o nome da escola errado na página inicial. O resto funciona. Qual classificação é a mais adequada?",
+      "alternativas": [
+        "Severidade baixa e prioridade alta",
+        "Severidade alta e prioridade baixa",
+        "Severidade alta e prioridade alta",
+        "Severidade baixa e prioridade baixa"
+      ],
+      "correta": 0,
+      "explicacao": "O defeito não impede nenhuma função (severidade baixa), mas expõe a escola justo no período de maior acesso (prioridade alta)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O sistema do hotel trava e perde dados ao gerar um relatório usado só no fechamento anual, daqui a 8 meses. Ao mesmo tempo, há defeitos que atrapalham o check-in todos os dias. Qual classificação é a mais provável para o defeito do relatório?",
+      "alternativas": [
+        "Severidade baixa, porque o relatório é pouco usado",
+        "Severidade baixa e prioridade alta, por causa do fechamento anual do hotel",
+        "Nenhuma, pois defeito em relatório anual não é registrado",
+        "Severidade alta, com prioridade menor que a dos defeitos do check-in"
+      ],
+      "correta": 3,
+      "explicacao": "Travar e perder dados é impacto alto (severidade alta). Como só será usado em 8 meses e há problemas diários, a urgência (prioridade) pode ser menor agora, mas ele precisa ser corrigido antes do fechamento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes títulos de registro de defeito é o mais útil?",
+      "alternativas": [
+        "Carrinho não aplica cupom ESTUDANTE10 em pedidos acima de R$ 50",
+        "Erro grave no sistema da loja, resolver com urgência máxima",
+        "O cupom não está funcionando direito no site da loja",
+        "Problema no carrinho, parecido com o da semana passada"
+      ],
+      "correta": 0,
+      "explicacao": "Um bom título diz o que falha, onde e em que condição. Os outros são vagos ou trazem opinião."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Como são passos para reproduzir bem escritos num registro de defeito?",
+      "alternativas": [
+        "Um resumo de uma linha com a opinião do testador sobre o erro",
+        "Numerados, com os dados usados, partindo de um ponto inicial conhecido",
+        "Apenas a captura da tela final, sem nenhuma descrição",
+        "O trecho do código-fonte em que o testador acha que está o erro"
+      ],
+      "correta": 1,
+      "explicacao": "Passos numerados, a partir de um estado conhecido (ex.: \"logado como atendente\") e com os dados exatos, permitem repetir o erro. O print ajuda, mas não substitui os passos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Além dos passos para reproduzir, que informações ajudam muito num registro de defeito?",
+      "alternativas": [
+        "O nome do programador que provavelmente causou o erro no código do sistema",
+        "A opinião do cliente sobre as cores da tela",
+        "A senha do servidor de produção, para facilitar o acesso",
+        "Resultado esperado, resultado obtido, versão e ambiente onde ocorreu"
+      ],
+      "correta": 3,
+      "explicacao": "Esperado x obtido mostra o problema; versão e ambiente dizem onde reproduzir. Culpados e senhas não entram no registro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual sequência representa um ciclo de vida comum de um defeito?",
+      "alternativas": [
+        "Fechado → Novo → Corrigido → Atribuído → Reteste",
+        "Corrigido → Novo → Reteste → Atribuído → Fechado",
+        "Novo → Atribuído → Corrigido → Reteste → Fechado",
+        "Novo → Fechado → Atribuído → Reteste → Corrigido"
+      ],
+      "correta": 2,
+      "explicacao": "O defeito é registrado (novo), vai para alguém (atribuído), é corrigido, testado de novo e, se o erro sumiu, fechado. Se ainda ocorrer, é reaberto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Dois testadores registraram o mesmo erro: DEF-31 e DEF-35, ambos \"agenda aceita horário no passado\". O que fazer?",
+      "alternativas": [
+        "Manter os dois abertos, para aumentar a importância do erro",
+        "Apagar os dois registros e abrir um terceiro, mais completo e com outro título",
+        "Fechar o DEF-31 como corrigido e manter só o DEF-35",
+        "Marcar o DEF-35 como duplicado do DEF-31, juntando as informações úteis"
+      ],
+      "correta": 3,
+      "explicacao": "Defeitos repetidos são marcados como duplicados do primeiro, aproveitando o que o segundo trouxe de novo. Manter os dois distorce as contagens."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O testador registrou o defeito \"sistema não deixa vender fiado\", mas o requisito da padaria diz claramente que não há venda fiado. O registro deve ser:",
+      "alternativas": [
+        "Encerrado como \"não é defeito\", pois o sistema segue o requisito",
+        "Corrigido com prioridade alta, pois o testador encontrou",
+        "Marcado como duplicado de outro defeito qualquer",
+        "Reaberto até o sistema passar a permitir o fiado"
+      ],
+      "correta": 0,
+      "explicacao": "Defeito é desvio do esperado. Se o sistema faz o que o requisito pede, não é defeito; se a padaria quiser fiado, isso é uma mudança de requisito."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois que o DEF-12 foi corrigido, o testador executou de novo o caso que tinha falhado, para ver se o erro sumiu. Esse teste se chama:",
+      "alternativas": [
+        "Teste de estresse do servidor",
+        "Teste de aceitação do cliente",
+        "Reteste (teste de confirmação)",
+        "Teste paralelo com o sistema antigo"
+      ],
+      "correta": 2,
+      "explicacao": "Reteste (ou confirmação) é executar de novo o caso que falhou, para confirmar a correção."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Após corrigir o cálculo do frete, a equipe também executa os testes do carrinho e do pagamento, que não foram alterados. Por quê?",
+      "alternativas": [
+        "Para confirmar apenas que o defeito do frete foi corrigido",
+        "Porque o ciclo de vida exige três testes para cada defeito",
+        "Para verificar se a correção quebrou outras partes (regressão)",
+        "Para medir a carga máxima suportada pelo servidor"
+      ],
+      "correta": 2,
+      "explicacao": "Teste de regressão: depois de uma mudança, repetem-se testes de outras partes para garantir que nada que funcionava deixou de funcionar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que anexar uma captura de tela ou vídeo ao registro de defeito?",
+      "alternativas": [
+        "Substitui a necessidade de descrever os passos para reproduzir",
+        "Mostra exatamente o que aconteceu e ajuda a entender o erro",
+        "Aumenta a severidade do defeito automaticamente",
+        "Serve para provar qual pessoa errou no projeto"
+      ],
+      "correta": 1,
+      "explicacao": "A evidência mostra o resultado obtido de fato. Ela complementa os passos, não os substitui."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes defeitos do sistema de matrículas tem a MAIOR severidade?",
+      "alternativas": [
+        "O pagamento é cobrado, mas a matrícula não é salva",
+        "O botão Voltar aparece um pouco desalinhado no celular",
+        "O texto de ajuda da página de cursos tem uma palavra digitada errada",
+        "A lista de cursos aparece em ordem diferente da combinada"
+      ],
+      "correta": 0,
+      "explicacao": "Cobrar sem matricular causa prejuízo e perda de dados: impacto alto. Os outros são problemas visuais ou de ordem, de baixo impacto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quem normalmente decide a prioridade de correção dos defeitos?",
+      "alternativas": [
+        "O líder ou responsável pelo produto, junto com a equipe, pensando no negócio",
+        "Sempre o testador que encontrou o defeito, sem consultar ninguém",
+        "O desenvolvedor, escolhendo primeiro os defeitos mais fáceis e rápidos de corrigir",
+        "A ferramenta de gestão de defeitos, pela data de registro"
+      ],
+      "correta": 0,
+      "explicacao": "O testador sugere severidade; a prioridade é decidida por quem responde pelo produto/negócio, junto com a equipe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O testador viu um erro uma vez e não conseguiu repeti-lo. O que fazer?",
+      "alternativas": [
+        "Ignorar, porque um erro que não se repete não existe de verdade",
+        "Esperar que algum cliente reclame do mesmo problema depois que o sistema for para produção",
+        "Registrar mesmo assim, com o que observou, avisando que não conseguiu reproduzir",
+        "Marcar o caso como passou, já que nas outras vezes funcionou"
+      ],
+      "correta": 2,
+      "explicacao": "Defeitos difíceis de reproduzir também são registrados, com horário, dados, versão e evidência; o histórico ajuda a encontrar o padrão depois."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Leia o registro de defeito pronto:\nDEF-44 — Pagamento via Pix gera cobrança duplicada.\nPassos: 1) adicionar um produto de R$ 40,00; 2) pagar com Pix; 3) conferir o extrato de teste.\nEsperado: uma cobrança de R$ 40,00. Obtido: duas cobranças de R$ 40,00.\nSeveridade: Baixa. Prioridade: Baixa.\n\nNa sua resposta:\n1. avalie a severidade e a prioridade escolhidas;\n2. justifique sua avaliação.",
+      "respostasAceitas": [
+        "As duas estão erradas: deveriam ser altas. Cobrar duas vezes causa prejuízo ao cliente e afeta uma função essencial (pagamento), e isso precisa ser corrigido com urgência."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) severidade e prioridade altas (ou crítica); 2) dinheiro do cliente, função principal, impacto na confiança."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num registro de defeito do sistema da clínica, os passos para reproduzir estão assim: \"Entrei no sistema, fiz umas coisas no agendamento e deu erro.\"\n\nNa sua resposta:\n1. explique por que esses passos não ajudam;\n2. diga quais informações tornariam os passos úteis.",
+      "respostasAceitas": [
+        "São vagos: o desenvolvedor não sabe o que foi feito nem com que dados, então não consegue repetir o erro. Deveriam ter passos numerados, usuário e dados usados, tela, resultado esperado e obtido, versão."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) não permitem reproduzir; 2) passos numerados, dados, ponto de partida, esperado x obtido, versão/ambiente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O DEF-20 (\"desconto não aparece no carrinho\") foi marcado como corrigido na versão 2.1. No reteste, na versão 2.1, o desconto aparece para produtos comuns, mas continua sumindo para produtos em promoção.\n\nNa sua resposta:\n1. diga o que fazer com o DEF-20;\n2. diga que informação acrescentar ao registro.",
+      "respostasAceitas": [
+        "O DEF-20 deve ser reaberto, porque o erro ainda acontece em parte. Deve-se acrescentar que na 2.1 funciona com produtos comuns e falha com produtos em promoção, com os dados usados e a evidência."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) reabrir (aceitar também abrir defeito novo ligado ao DEF-20, se for política da equipe); 2) versão, condição em que falha (promoção), dados, evidência."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Leia o registro de defeito pronto:\nDEF-07 — Agenda permite marcar consulta em domingo.\nPassos: 1) logar como recepcionista; 2) abrir Nova consulta; 3) escolher 07/12 (domingo), 9h; 4) salvar.\nEsperado: mensagem \"A clínica não atende aos domingos\". Obtido: consulta salva.\nEvidência: print anexado. Severidade: Média.\n\nNa sua resposta:\n1. aponte dois pontos fortes desse registro;\n2. diga uma informação que ainda falta.",
+      "respostasAceitas": [
+        "Pontos fortes: título claro, passos numerados com dados exatos, esperado x obtido e evidência. Falta informar a versão e o ambiente em que ocorreu (e a prioridade)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dois entre título, passos, dados, esperado x obtido, evidência; 2) versão/ambiente (aceitar prioridade)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O requisito do pet shop diz apenas: \"o sistema deve aceitar o nome do pet\". O testador registrou um defeito porque o sistema aceitou o nome \"A1\". O desenvolvedor respondeu: \"está funcionando como foi pedido\".\n\nNa sua resposta:\n1. diga se isso é um defeito ou um problema no requisito e por quê;\n2. diga o que a equipe deve fazer.",
+      "respostasAceitas": [
+        "É mais um problema de requisito: ele não diz que nomes são válidos, então o sistema não descumpriu nada. A equipe deve levar a dúvida ao cliente, deixar a regra clara no requisito e então ajustar sistema e casos de teste."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) requisito ambíguo/incompleto, sem regra de validação; 2) esclarecer com o cliente/analista, atualizar requisito, casos e, se preciso, o sistema."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O registro de um defeito no sistema da loja de roupas tem os campos \"versão\" e \"ambiente\" em branco.\n\nNa sua resposta:\n1. explique por que a versão é importante;\n2. explique por que o ambiente é importante.",
+      "respostasAceitas": [
+        "A versão diz em qual código o erro apareceu e permite confirmar se a correção já está nela. O ambiente (teste, homologação, navegador, aparelho) mostra onde reproduzir, pois o erro pode existir só em certas condições."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) saber em que código o erro ocorre e conferir a correção; 2) onde reproduzir, condições específicas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num ciclo de testes, 80 casos foram planejados e 60 foram executados. Qual é o percentual de execução?",
+      "alternativas": [
+        "60%",
+        "80%",
+        "75%",
+        "133%"
+      ],
+      "correta": 2,
+      "explicacao": "Execução = executados ÷ planejados = 60 ÷ 80 = 0,75 = 75%."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Dos 60 casos executados num ciclo, 48 passaram. Qual é a taxa de aprovação sobre os executados?",
+      "alternativas": [
+        "60%",
+        "48%",
+        "80%",
+        "75%"
+      ],
+      "correta": 2,
+      "explicacao": "Aprovação = passaram ÷ executados = 48 ÷ 60 = 0,8 = 80%."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual informação NÃO deve aparecer num relatório de teste?",
+      "alternativas": [
+        "Quantidade de casos executados, que passaram e que falharam",
+        "Senhas dos usuários da produção",
+        "Defeitos abertos, separados por severidade",
+        "Recomendação sobre liberar ou não a versão"
+      ],
+      "correta": 1,
+      "explicacao": "O relatório traz números, defeitos e recomendação. Senhas nunca entram em documentos de teste."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O relatório mostra 12 defeitos abertos (nenhum crítico, 1 alto e 11 baixos) e o lançamento é amanhã. O que o relatório deve trazer para ajudar a decisão?",
+      "alternativas": [
+        "Apenas o número total de 12 defeitos, sem outras informações",
+        "Os riscos dos defeitos abertos e uma recomendação de liberar ou não, justificada",
+        "O nome de quem programou cada parte que tem defeito",
+        "Somente a lista de casos que passaram, para mostrar o progresso do ciclo à diretoria"
+      ],
+      "correta": 1,
+      "explicacao": "Quem decide precisa entender o risco: o que cada defeito aberto afeta e uma recomendação fundamentada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O sistema tem 20 requisitos; 17 deles têm pelo menos um caso de teste executado. Qual é a cobertura de requisitos?",
+      "alternativas": [
+        "17%",
+        "85%",
+        "80%",
+        "90%"
+      ],
+      "correta": 1,
+      "explicacao": "Cobertura = requisitos testados ÷ total = 17 ÷ 20 = 0,85 = 85%."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ciclo A: 95% de aprovação, mas só 20 dos 200 casos foram executados. Ciclo B: 85% de aprovação, com os 200 casos executados. Qual leitura está correta?",
+      "alternativas": [
+        "O B dá mais confiança, pois testou tudo; a taxa do A vale para poucos casos",
+        "O ciclo A é melhor, pois a taxa de aprovação dele é maior",
+        "Os dois ciclos são equivalentes, pois a média da aprovação dos dois ciclos é 90%",
+        "Nenhum dos dois ciclos serve para decidir, pois os dois tiveram casos que falharam"
+      ],
+      "correta": 0,
+      "explicacao": "Uma métrica sozinha engana: no ciclo A, 90% dos casos nem rodaram. Taxa de aprovação deve ser lida junto com o percentual de execução."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para quem o relatório de teste é útil?",
+      "alternativas": [
+        "Somente para o testador que preencheu o relatório",
+        "Somente para a contabilidade da empresa, na hora de cobrar o cliente",
+        "Para ninguém, pois é só uma formalidade do projeto",
+        "Gerentes, desenvolvedores e cliente, para decidir e corrigir"
+      ],
+      "correta": 3,
+      "explicacao": "O relatório informa a situação da qualidade para quem decide a liberação e para quem corrige."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No relatório semanal, os defeitos abertos foram: semana 1: 30; semana 2: 22; semana 3: 15; semana 4: 9. Com os testes seguindo no mesmo ritmo, o que essa tendência indica?",
+      "alternativas": [
+        "A qualidade do sistema está piorando a cada semana que passa no projeto",
+        "Os testadores estão encontrando cada vez mais defeitos novos a cada semana",
+        "Não é possível tirar conclusão de números semanais",
+        "Os defeitos abertos estão caindo: o sistema está estabilizando"
+      ],
+      "correta": 3,
+      "explicacao": "Com o ritmo de testes mantido, a queda dos defeitos abertos mostra que mais defeitos são fechados do que abertos: o sistema está estabilizando."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Módulo Agenda: 4 defeitos em 10 funcionalidades. Módulo Caixa: 9 defeitos em 30 funcionalidades. Qual módulo tem maior densidade de defeitos?",
+      "alternativas": [
+        "Caixa, porque tem mais defeitos no total",
+        "Agenda, com 0,4 defeito por funcionalidade",
+        "Caixa, com 0,3 defeito por funcionalidade",
+        "Os dois têm a mesma densidade"
+      ],
+      "correta": 1,
+      "explicacao": "Densidade = defeitos ÷ tamanho. Agenda: 4 ÷ 10 = 0,4; Caixa: 9 ÷ 30 = 0,3. O total maior do Caixa vem do tamanho maior."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Como deve ser um relatório de teste?",
+      "alternativas": [
+        "Objetivo, com números e fatos que podem ser conferidos",
+        "Baseado em impressões pessoais, sem números",
+        "Feito só ao fim do projeto, de memória",
+        "Guardado em segredo, sem ser mostrado à equipe"
+      ],
+      "correta": 0,
+      "explicacao": "Relatório bom é objetivo, com métricas e evidências, e é compartilhado com quem precisa decidir."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual métrica mostra quanto do trabalho de teste planejado já foi feito?",
+      "alternativas": [
+        "Número de defeitos de severidade baixa ainda abertos",
+        "Percentual de casos executados em relação aos planejados",
+        "Tempo médio de resposta da API no teste de carga",
+        "Quantidade de pessoas que fazem parte da equipe"
+      ],
+      "correta": 1,
+      "explicacao": "Executados ÷ planejados mostra o progresso da execução."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Resultado de um ciclo com 50 casos planejados: 30 passaram, 8 falharam, 4 ficaram bloqueados e 8 não foram executados. Qual afirmação está correta?",
+      "alternativas": [
+        "Foram executados os 50 casos, com aprovação de 60%",
+        "Foram executados 30 casos, com aprovação de 100%",
+        "Foram executados 46 casos (92%), com aprovação de cerca de 65%",
+        "Foram executados 38 casos (76%), com aprovação de cerca de 79%"
+      ],
+      "correta": 3,
+      "explicacao": "Executados = passaram + falharam = 38 (38 ÷ 50 = 76%). Bloqueados e não executados não rodaram. Aprovação = 30 ÷ 38 ≈ 79%."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre o relatório de progresso e o relatório final (de encerramento) dos testes?",
+      "alternativas": [
+        "O de progresso é feito no fim; o final é feito no começo do ciclo",
+        "O de progresso acompanha o ciclo em andamento; o final resume o resultado e as lições",
+        "Os dois são o mesmo documento, só mudando a data de entrega",
+        "O de progresso é feito pelo cliente da empresa; o final, pelo desenvolvedor do sistema"
+      ],
+      "correta": 1,
+      "explicacao": "Relatórios de progresso (diários/semanais) mostram o andamento; o final consolida resultados, defeitos pendentes, recomendação e lições aprendidas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Leia o resumo do relatório do ciclo 3 do app da academia:\n- Casos planejados: 40; executados: 36; passaram: 30; falharam: 6\n- Defeitos abertos: 1 crítico (pagamento da mensalidade) e 3 de severidade baixa (textos)\n\nNa sua resposta:\n1. interprete os números de execução e aprovação;\n2. diga se você recomendaria liberar a versão e por quê.",
+      "respostasAceitas": [
+        "Foram executados 90% dos casos (36 de 40) e cerca de 83% dos executados passaram (30 de 36). Não recomendaria liberar: há um defeito crítico aberto no pagamento, uma função essencial; os de texto poderiam esperar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 90% de execução e ~83% de aprovação (aceitar leitura correta sem a conta exata); 2) não liberar por causa do defeito crítico no pagamento."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Ao fim dos testes do sistema da biblioteca, o relatório dizia apenas: \"O sistema está bom.\"\n\nNa sua resposta:\n1. explique por que esse relatório não é suficiente;\n2. cite duas informações que deveriam estar nele.",
+      "respostasAceitas": [
+        "É uma opinião sem dados: ninguém consegue saber o que foi testado nem o risco de liberar. Deveria trazer, por exemplo, casos executados/passaram/falharam e defeitos abertos por severidade, além de uma recomendação."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) falta objetividade/dados; 2) duas métricas ou informações (execução, aprovação, defeitos por severidade, cobertura, recomendação)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O relatório final do sistema da loja diz: \"Aprovação de 100%. Sistema pronto para produção.\" Porém, só os casos de cadastro foram executados; os de pagamento não rodaram porque o ambiente de pagamento estava fora do ar.\n\nNa sua resposta:\n1. avalie a conclusão do relatório;\n2. diga o que o relatório deveria informar.",
+      "respostasAceitas": [
+        "A conclusão engana: os 100% valem só para o cadastro, e o pagamento não foi testado. O relatório deveria mostrar os casos não executados/bloqueados, o motivo, o risco de liberar sem testar o pagamento e recomendar não liberar ainda."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) conclusão enganosa/incompleta; 2) informar bloqueados/não executados, motivo, risco, recomendação."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Relatório semanal de defeitos do sistema do hotel:\n- Semana 1: 10 novos, 2 fechados\n- Semana 2: 8 novos, 9 fechados\n- Semana 3: 3 novos, 10 fechados\n\nNa sua resposta:\n1. interprete a evolução dos números;\n2. diga o que essa evolução sugere sobre a qualidade do sistema.",
+      "respostasAceitas": [
+        "No começo surgiam muito mais defeitos do que eram fechados; depois os fechamentos passaram os novos, e os novos caíram. Isso sugere que o sistema está ficando mais estável."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) novos caindo e fechados superando os novos; 2) estabilização/melhora (pode citar que ainda há defeitos abertos)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O relatório de teste do sistema da escola traz duas métricas: \"percentual de casos executados\" e \"defeitos abertos por severidade\".\n\nNa sua resposta:\n1. explique o que cada métrica mostra;\n2. diga por que elas ajudam o gerente a decidir.",
+      "respostasAceitas": [
+        "O percentual de execução mostra quanto do teste planejado já foi feito. Os defeitos por severidade mostram quantos problemas ainda existem e o quanto são graves. Juntas, mostram se dá para liberar ou se ainda há risco."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) progresso do teste; quantidade e gravidade dos defeitos; 2) apoiam a decisão de liberar com base em dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Padronizar (normalizar) a documentação de testes significa:",
+      "alternativas": [
+        "Diminuir a quantidade de testes executados em cada ciclo para ganhar tempo",
+        "Usar modelos e regras comuns para planos, casos, defeitos e relatórios",
+        "Deixar cada testador escolher o formato que preferir",
+        "Apagar os documentos de testes das versões antigas"
+      ],
+      "correta": 1,
+      "explicacao": "Normalizar é seguir normas/padrões combinados, para que todos os documentos tenham a mesma estrutura."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a norma internacional atual sobre teste de software, que inclui modelos de documentação de teste?",
+      "alternativas": [
+        "ISO 14001",
+        "ISO/IEC/IEEE 29119",
+        "ABNT NBR 6023",
+        "ISO 9241"
+      ],
+      "correta": 1,
+      "explicacao": "A série ISO/IEC/IEEE 29119 trata de teste de software; a parte 3 traz os documentos (plano, casos, relatórios). A 14001 é ambiental, a NBR 6023 trata de referências bibliográficas e a 9241, de ergonomia."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é a IEEE 829?",
+      "alternativas": [
+        "O padrão de redes sem fio usado nos roteadores Wi-Fi",
+        "A lei brasileira de proteção de dados pessoais",
+        "A especificação oficial da linguagem JavaScript usada nos navegadores",
+        "Um padrão antigo de documentação de teste, substituído pela 29119-3"
+      ],
+      "correta": 3,
+      "explicacao": "A IEEE 829 definia documentos de teste (plano, casos, relatório de incidente…) e foi substituída pela ISO/IEC/IEEE 29119-3. Wi-Fi é IEEE 802.11; LGPD é a Lei 13.709."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a vantagem de toda a equipe usar o mesmo modelo de caso de teste?",
+      "alternativas": [
+        "Os casos deixam de precisar de resultado esperado e de pré-condições",
+        "O sistema passa a ficar livre de defeitos",
+        "Deixa de ser necessário ter um ambiente de teste",
+        "Qualquer pessoa da equipe entende e executa os casos do mesmo jeito"
+      ],
+      "correta": 3,
+      "explicacao": "Com um modelo único, todos sabem onde está cada informação e executam igual. Padronização não elimina defeitos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A equipe combinou: casos de teste com o código \"CT-<módulo>-<número>\" (ex.: CT-CAIXA-007) e defeitos com \"DEF-<número>\". Esse combinado é um exemplo de:",
+      "alternativas": [
+        "Padronização da documentação de teste",
+        "Teste de estresse do sistema de caixa",
+        "Análise de risco do projeto",
+        "Teste de aceitação"
+      ],
+      "correta": 0,
+      "explicacao": "Combinar formatos e nomes dos documentos é padronização; facilita achar e ligar casos e defeitos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma empresa pequena acha a norma de documentação de teste grande demais para seus projetos. Qual atitude é a mais razoável?",
+      "alternativas": [
+        "Ignorar qualquer padrão, pois a norma completa é grande demais",
+        "Copiar a norma inteira em cada projeto, mesmo nos menores, sem tirar nenhum campo",
+        "Usar um formato diferente em cada ciclo de testes",
+        "Adaptar os modelos da norma ao tamanho do projeto, mantendo os campos essenciais"
+      ],
+      "correta": 3,
+      "explicacao": "Normas podem ser adaptadas (\"sob medida\"): mantém-se o essencial (ID, pré-condição, passos, esperado, status…) sem burocracia desnecessária."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes NÃO é um documento típico da documentação de testes?",
+      "alternativas": [
+        "Plano de teste",
+        "Especificação de casos de teste",
+        "Relatório de defeitos (incidentes)",
+        "Manual da impressora do escritório"
+      ],
+      "correta": 3,
+      "explicacao": "Plano, casos e relatórios de defeitos/incidentes fazem parte da documentação de teste prevista nas normas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A clínica contratou uma empresa de software e exigiu no contrato documentação de testes seguindo norma. Qual é o principal ganho para a clínica?",
+      "alternativas": [
+        "Ter a garantia, por contrato, de que o sistema entregue não terá nenhum defeito",
+        "Não precisar mais fazer o seu próprio teste de aceitação",
+        "Conferir o que foi testado, como e com que resultado, num formato conhecido",
+        "Pagar metade do preço, porque a documentação já está pronta"
+      ],
+      "correta": 2,
+      "explicacao": "A norma dá transparência e permite auditoria. Nenhuma norma garante ausência de defeitos, e a aceitação continua sendo do cliente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na empresa, cada testador registra os casos do seu jeito: um usa caderno, outro uma planilha com colunas próprias, outro só mensagens.\n\nNa sua resposta:\n1. cite dois problemas dessa situação;\n2. explique como a padronização ajudaria.",
+      "respostasAceitas": [
+        "Fica difícil entender e repetir o trabalho dos colegas, informações se perdem e não dá para juntar os números no relatório. Com um modelo padrão, todos registram os mesmos campos, no mesmo lugar, e qualquer um executa e consulta."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dois problemas (perda, dificuldade de entender/repetir, relatório difícil); 2) mesmo modelo, mesmos campos, consolidação."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O modelo de caso de teste da equipe, baseado na ISO/IEC/IEEE 29119-3, tem os campos: ID, objetivo, requisito, pré-condição, dados, passos, resultado esperado, resultado obtido e status.\n\nNa sua resposta:\n1. escolha dois desses campos e explique para que servem;\n2. explique por que todos devem usar o mesmo modelo.",
+      "respostasAceitas": [
+        "Ex.: requisito liga o caso ao que está sendo verificado (cobertura); resultado esperado diz o que conferir para decidir o status. Usar o mesmo modelo garante que todos registrem as mesmas informações e que qualquer um entenda e execute."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dois campos explicados corretamente; 2) uniformidade, entendimento, repetição, consolidação no relatório."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um estagiário comentou: \"Seguir padrão de documentação de teste é burocracia e só atrasa o projeto.\"\n\nNa sua resposta:\n1. avalie o comentário;\n2. dê um exemplo de situação em que o padrão economiza tempo.",
+      "respostasAceitas": [
+        "O comentário exagera: o padrão dá um pouco de trabalho no início, mas evita perda de informação e retrabalho. Ex.: quando um testador sai ou falta, outro executa os casos dele sem precisar perguntar nada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) discordar com equilíbrio (custo pequeno x benefício); 2) exemplo coerente (troca de pessoa, regressão, auditoria, relatório rápido)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Execução de testes",
+      "capacidade": "teste.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na equipe, as palavras \"erro\", \"defeito\" e \"falha\" são usadas como se fossem a mesma coisa, o que causa confusão nos registros. As normas de teste trazem um vocabulário padrão.\n\nNa sua resposta:\n1. explique a diferença entre erro, defeito e falha;\n2. explique por que padronizar os termos ajuda a equipe.",
+      "respostasAceitas": [
+        "Erro é o engano de uma pessoa (ex.: programador entendeu errado a regra); defeito é o problema que fica no código ou documento; falha é o comportamento errado que aparece ao executar. Termos padronizados evitam mal-entendidos nos registros e relatórios."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) erro = ação humana; defeito = no artefato/código; falha = manifestação na execução; 2) comunicação clara, registros consistentes. Aceitar explicação equivalente."
+    }
+  ]
+}
