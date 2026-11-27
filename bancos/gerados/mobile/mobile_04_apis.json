@@ -1,0 +1,2424 @@
+{
+  "nome": "Programação para Dispositivos Móveis — APIs (a revisar)",
+  "materia": "Programação para Dispositivos Móveis",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tela \"Onde estamos\" do app de um pet shop aparece um mapa de ruas que dá para arrastar e aproximar com dois dedos. De onde vêm essas imagens das ruas?",
+      "alternativas": [
+        "Da câmera do celular, que fotografa a rua na hora",
+        "Do GPS, que desenha as ruas da cidade sozinho",
+        "Do próprio app, que já vem instalado com fotos de todas as cidades do mundo",
+        "De uma API de mapas, que envia o mapa em partes pela internet"
+      ],
+      "correta": 3,
+      "explicacao": "O app pede o mapa a um serviço de mapas (API), que manda as imagens em pedaços conforme o usuário arrasta e aproxima. O GPS só informa a posição; ele não desenha ruas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "De forma simples, o que é uma API de mapas para quem desenvolve um app?",
+      "alternativas": [
+        "Um sensor do celular que mede a posição do usuário pelos satélites",
+        "Um banco de dados que fica guardado dentro do próprio aparelho",
+        "Um serviço que o app chama para mostrar mapas, endereços e caminhos",
+        "Uma tela pronta do sistema que só mostra a bússola"
+      ],
+      "correta": 2,
+      "explicacao": "A API de mapas é um serviço externo com funções prontas (mostrar mapa, marcadores, rotas, geocodificação). O sensor de posição é o GPS, que é hardware."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No mapa do app de uma clínica aparece um \"alfinete\" vermelho em cima do endereço da clínica. Como se chama esse elemento?",
+      "alternativas": [
+        "Rota",
+        "Geocodificação",
+        "Marcador",
+        "Camada de satélite"
+      ],
+      "correta": 2,
+      "explicacao": "O alfinete que indica um ponto no mapa é o marcador (marker). Rota é o caminho entre pontos; geocodificação converte endereço em coordenadas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma padaria, ao tocar no marcador da loja, abre um balãozinho com o nome e o horário de funcionamento. Para que serve esse balão?",
+      "alternativas": [
+        "Calcular o caminho do usuário até a porta da padaria",
+        "Pedir a permissão de localização ao usuário",
+        "Trocar o mapa de ruas pelo mapa de satélite",
+        "Mostrar informações rápidas sobre o local marcado"
+      ],
+      "correta": 3,
+      "explicacao": "O balão (janela de informação do marcador) mostra detalhes do ponto tocado, como nome, horário ou telefone."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de delivery, antes de o entregador sair, aparece no mapa uma linha azul ligando o restaurante à casa do cliente. O que essa linha representa?",
+      "alternativas": [
+        "A área de cobertura do sinal de celular no bairro do cliente",
+        "O raio de alcance do GPS do aparelho do cliente",
+        "O caminho calculado pela API entre os dois pontos",
+        "A distância em linha reta medida com o acelerômetro"
+      ],
+      "correta": 2,
+      "explicacao": "A linha desenhada pelas ruas é a rota que a API calculou da origem (restaurante) ao destino (cliente)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Além do traçado do caminho, o que uma API de rotas normalmente devolve para o app?",
+      "alternativas": [
+        "A senha do Wi-Fi dos lugares no caminho",
+        "A foto de perfil de quem vai fazer o trajeto",
+        "O nível de bateria do celular do destinatário",
+        "A distância e o tempo estimado do trajeto"
+      ],
+      "correta": 3,
+      "explicacao": "Rotas costumam vir com distância (km) e duração estimada (min), além dos pontos do caminho e, às vezes, as instruções de cada curva."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de um cinema tem o endereço \"Rua das Flores, 120, Campinas\" e precisa colocar um marcador nele. O que precisa ser feito antes?",
+      "alternativas": [
+        "Converter latitude e longitude em um endereço",
+        "Converter o endereço em latitude e longitude",
+        "Pedir ao usuário o token do aparelho",
+        "Calcular uma rota até a Rua das Flores"
+      ],
+      "correta": 1,
+      "explicacao": "O mapa posiciona marcadores por coordenadas. Transformar o endereço em coordenadas é a geocodificação (direta). O contrário é a geocodificação reversa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma biblioteca, o mapa abre mostrando o Brasil inteiro, mas deveria abrir já mostrando o bairro da biblioteca. Qual configuração do mapa deve ser ajustada?",
+      "alternativas": [
+        "O nível de zoom inicial",
+        "A chave de API do serviço",
+        "O token de notificação",
+        "A permissão de uso da câmera"
+      ],
+      "correta": 0,
+      "explicacao": "O zoom define o quanto o mapa está aproximado. Com zoom maior (e centro na biblioteca), o mapa já abre no bairro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de trilhas, o usuário quer ver o mapa com imagens reais vistas de cima, em vez do desenho das ruas. Qual opção do mapa atende?",
+      "alternativas": [
+        "Mapa em modo noturno, com cores escuras",
+        "Geocodificação reversa da trilha",
+        "Notificação local com a foto da trilha",
+        "Mapa do tipo satélite"
+      ],
+      "correta": 3,
+      "explicacao": "As APIs de mapa costumam ter tipos: padrão (ruas), satélite, híbrido e relevo. O satélite mostra fotos aéreas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que, em geral, um app precisa de internet para mostrar o mapa?",
+      "alternativas": [
+        "Porque o GPS só funciona quando o Wi-Fi está ligado",
+        "Porque a tela do celular não desenha nada sem internet",
+        "Porque a permissão de localização é liberada pela operadora",
+        "Porque as imagens do mapa vêm do servidor do serviço de mapas"
+      ],
+      "correta": 3,
+      "explicacao": "O mapa é baixado do servidor da API conforme o uso. O GPS funciona sem internet, mas sem internet o app não baixa as imagens novas (exceto mapas salvos para uso offline)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app web para celular, o que o comando abaixo pede ao aparelho?\n```js\nnavigator.geolocation.getCurrentPosition(mostrar);\n```",
+      "alternativas": [
+        "O endereço que o usuário digitou no formulário de cadastro",
+        "A lista de lojas próximas, vinda da API de mapas",
+        "A posição atual do aparelho, entregue à função mostrar",
+        "O token do aparelho para receber notificações"
+      ],
+      "correta": 2,
+      "explicacao": "getCurrentPosition pede uma leitura da localização atual e, quando ela chega, chama a função passada (mostrar) com a posição."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas funções de um app de academia realmente precisa de uma API de mapas?",
+      "alternativas": [
+        "Mostrar as unidades da academia mais perto do aluno",
+        "Registrar o peso e a altura do aluno a cada mês de treino",
+        "Listar os exercícios do treino do dia",
+        "Gerar o boleto da mensalidade"
+      ],
+      "correta": 0,
+      "explicacao": "Só a busca por unidades próximas envolve posição e mapa. As outras são cadastro e listagem comuns."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de transporte mostra \"Você está em: Av. Brasil, 500\" a partir da posição do GPS. Qual recurso da API faz essa conversão?",
+      "alternativas": [
+        "Geocodificação direta",
+        "Cálculo de rota",
+        "Notificação remota",
+        "Geocodificação reversa"
+      ],
+      "correta": 3,
+      "explicacao": "Coordenadas → endereço é geocodificação reversa. Endereço → coordenadas é a direta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de um hotel terá o mapa do hotel e um botão \"Como chegar\". Quais recursos da API de mapas serão usados?",
+      "alternativas": [
+        "Marcador no hotel e cálculo de rota",
+        "Token do aparelho e servidor de push",
+        "Câmera e microfone do celular",
+        "Acelerômetro e Bluetooth"
+      ],
+      "correta": 0,
+      "explicacao": "O marcador mostra onde fica o hotel e o \"Como chegar\" pede uma rota da posição do hóspede até lá."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao ler a posição, o app recebeu `pos.coords.accuracy` igual a 1500. O que esse valor indica?",
+      "alternativas": [
+        "Que o usuário andou 1500 metros desde a última leitura feita",
+        "Que o mapa está com zoom 1500 sobre a cidade",
+        "Que a posição pode estar errada em até uns 1500 metros",
+        "Que o GPS levou 1500 segundos para responder ao app"
+      ],
+      "correta": 2,
+      "explicacao": "accuracy é a precisão estimada, em metros. 1500 m é pouco preciso (posição pela rede, por exemplo); um GPS ao ar livre costuma dar poucos metros."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de um pet shop usa a biblioteca de mapas do projeto. O que acontece ao rodar a linha abaixo?\n```js\nmapa.adicionarMarcador({ lat: -22.90, lng: -43.20, titulo: 'Pet Shop Amigo' });\n```",
+      "alternativas": [
+        "O mapa calcula o caminho do usuário até o pet shop indicado",
+        "Aparece um marcador nessa posição, com esse título",
+        "O endereço do pet shop é convertido em coordenadas",
+        "O app pede ao usuário a permissão de localização"
+      ],
+      "correta": 1,
+      "explicacao": "A chamada só coloca um marcador nas coordenadas dadas, com o título informado. Não calcula rota nem geocodifica."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma rede de lojas de games, quantos marcadores aparecem no mapa depois deste trecho?\n```js\nconst lojas = [\n  { nome: 'Centro', lat: -23.54, lng: -46.63 },\n  { nome: 'Norte', lat: -23.48, lng: -46.62 },\n  { nome: 'Sul', lat: -23.65, lng: -46.70 }\n];\nlojas.forEach(l => mapa.adicionarMarcador({ lat: l.lat, lng: l.lng, titulo: l.nome }));\n```",
+      "alternativas": [
+        "1",
+        "6, um para cada latitude e um para cada longitude",
+        "3",
+        "Nenhum, porque falta calcular a rota antes"
+      ],
+      "correta": 2,
+      "explicacao": "forEach percorre os 3 objetos e chama adicionarMarcador uma vez para cada loja: 3 marcadores."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Os marcadores das lojas de um app apareceram no meio do oceano, longe do Brasil. O trecho usado foi `mapa.adicionarMarcador({ lat: loja.lng, lng: loja.lat })`. Qual é a causa?",
+      "alternativas": [
+        "Falta a chave de API no projeto",
+        "Latitude e longitude foram trocadas",
+        "O zoom do mapa está alto demais",
+        "O usuário negou a permissão de localização"
+      ],
+      "correta": 1,
+      "explicacao": "O código passa a longitude no lugar da latitude e vice-versa. Assim o ponto vai parar em outro lugar do planeta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao geocodificar só \"Rua São José\", a API devolveu dezenas de resultados em cidades diferentes. Como melhorar a busca?",
+      "alternativas": [
+        "Pedir uma chave de API nova ao serviço de mapas da empresa",
+        "Enviar o endereço completo, com número, cidade e UF",
+        "Aumentar o zoom do mapa antes de buscar",
+        "Trocar o tipo do mapa para satélite"
+      ],
+      "correta": 1,
+      "explicacao": "Existem muitas ruas com o mesmo nome. Quanto mais completo o endereço (número, bairro, cidade, UF, CEP), mais certeiro é o resultado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app da escola, o aluno escolhe \"a pé\" ou \"de ônibus\" para ver como chegar. O que muda no pedido feito à API de rotas?",
+      "alternativas": [
+        "O modo de transporte, que muda o caminho e o tempo",
+        "A chave de API, pois cada modo de transporte tem uma chave",
+        "O tipo de mapa, que passa de ruas para satélite",
+        "A permissão de localização, que passa a ser \"sempre\""
+      ],
+      "correta": 0,
+      "explicacao": "A API de rotas recebe o modo (a pé, carro, bicicleta, transporte público) e calcula caminho e duração para ele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API de rotas respondeu `{\"distancia_km\": 4.2, \"duracao_min\": 12}`. O que aparece na tela com o código abaixo?\n```js\nconst dados = await resposta.json();\ntexto.innerText = dados.distancia_km + ' km, ' + dados.duracao_min + ' min';\n```",
+      "alternativas": [
+        "12 km, 4.2 min",
+        "undefined km, undefined min",
+        "distancia_km km, duracao_min min",
+        "4.2 km, 12 min"
+      ],
+      "correta": 3,
+      "explicacao": "json() transforma a resposta em objeto; distancia_km vale 4.2 e duracao_min vale 12, montando o texto \"4.2 km, 12 min\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O mapa do app de uma imobiliária tem 2.000 marcadores e ficou lento e embolado. Qual solução é comum?",
+      "alternativas": [
+        "Remover a chave de API para o mapa carregar bem mais rápido",
+        "Trocar todos os marcadores por rotas entre os imóveis",
+        "Ligar a localização em segundo plano do usuário",
+        "Agrupar marcadores próximos e mostrar só a área visível"
+      ],
+      "correta": 3,
+      "explicacao": "Agrupar (cluster: um círculo com o número de imóveis da região) e carregar só a área vista deixa o mapa leve e legível."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de obter a posição do usuário, o app de uma sorveteria quer que o mapa \"vá até\" onde ele está. O que o código deve fazer?",
+      "alternativas": [
+        "Centralizar a visão do mapa nas coordenadas do usuário",
+        "Geocodificar o nome do usuário para achar o endereço",
+        "Calcular uma rota do usuário até ele mesmo",
+        "Pedir um novo token do aparelho ao servidor"
+      ],
+      "correta": 0,
+      "explicacao": "As bibliotecas de mapa têm uma função para mover a visão (câmera) do mapa para um ponto e um zoom."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de uma padaria geocodifica o endereço fixo da loja toda vez que alguém abre a tela do mapa, e a conta da API de mapas não para de crescer. O que fazer?",
+      "alternativas": [
+        "Guardar as coordenadas da loja uma vez e reutilizá-las",
+        "Geocodificar duas vezes para conferir o resultado",
+        "Trocar a geocodificação direta pela reversa",
+        "Diminuir o zoom para gastar menos com a API"
+      ],
+      "correta": 0,
+      "explicacao": "O endereço da loja não muda. Basta geocodificar uma vez (ou cadastrar as coordenadas) e evitar chamadas pagas repetidas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A mesma rota calculada pela API dava 15 minutos às 7h e 40 minutos às 18h. Qual é a explicação mais provável?",
+      "alternativas": [
+        "A API considera o trânsito do horário",
+        "A chave de API perde a validade no fim do dia",
+        "O GPS fica mais preciso depois que escurece",
+        "O zoom do mapa muda a duração da viagem"
+      ],
+      "correta": 0,
+      "explicacao": "Muitas APIs de rota usam dados de trânsito; em horário de pico o tempo estimado aumenta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na função \"Como chegar\" do app de uma clínica, quais são as ENTRADAS enviadas para a API de rotas?",
+      "alternativas": [
+        "Apenas o nome da clínica, sem mais nada",
+        "O token do aparelho e o texto da mensagem",
+        "A distância e o tempo estimado do trajeto",
+        "Ponto de partida, destino e modo de transporte"
+      ],
+      "correta": 3,
+      "explicacao": "Entradas: origem, destino e modo. Distância e tempo são a SAÍDA que a API devolve."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que acontece no trecho abaixo quando o usuário toca em \"Não permitir\" no pedido de localização?\n```js\nnavigator.geolocation.getCurrentPosition(ok, falhou);\nfunction falhou(e) {\n  if (e.code === e.PERMISSION_DENIED) aviso.innerText = 'Digite seu CEP para ver as lojas perto';\n}\n```",
+      "alternativas": [
+        "A função ok roda e mostra o CEP do usuário",
+        "O app fecha, pois sem permissão não há como continuar",
+        "O aviso aparece sempre que o app é aberto",
+        "A função falhou roda e oferece buscar pelo CEP"
+      ],
+      "correta": 3,
+      "explicacao": "Com a permissão negada, o navegador chama a função de erro com o código PERMISSION_DENIED. O app oferece outro caminho (CEP) em vez de travar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API de rotas devolve o caminho como uma lista de pontos (latitude e longitude) em ordem. O que o app faz para mostrar a rota no mapa?",
+      "alternativas": [
+        "Coloca um marcador só no primeiro ponto da lista",
+        "Converte cada ponto em endereço antes de mostrar",
+        "Liga os pontos em ordem com uma linha (polilinha)",
+        "Soma as latitudes para achar o centro da rota"
+      ],
+      "correta": 2,
+      "explicacao": "A rota é exibida como uma linha que passa por todos os pontos na ordem recebida (polilinha)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O código abaixo dá o erro \"Cannot read properties of undefined (reading 'coords')\". Por quê?\n```js\nlet pos;\nnavigator.geolocation.getCurrentPosition(p => { pos = p; });\nmapa.centralizar(pos.coords.latitude, pos.coords.longitude);\n```",
+      "alternativas": [
+        "O usuário negou a permissão de localização no aparelho",
+        "A propriedade certa é coords.lat, e não coords.latitude",
+        "A posição chega depois; centralizar roda com pos vazio",
+        "O mapa precisa de uma rota antes de ser centralizado"
+      ],
+      "correta": 2,
+      "explicacao": "getCurrentPosition é assíncrona: a função com p só roda quando a posição chegar. A linha seguinte executa na hora, com pos ainda undefined. O centralizar deve ficar dentro da função de retorno."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de uma loja de móveis usa o trecho abaixo. Com um endereço que não existe, a API devolve `{\"resultados\": []}` e o app trava. Qual é o problema?\n```js\nconst d = await resposta.json();\nmapa.adicionarMarcador({ lat: d.resultados[0].lat, lng: d.resultados[0].lng });\n```",
+      "alternativas": [
+        "O endereço deveria ser enviado em latitude e longitude",
+        "json() não funciona com respostas de geocodificação",
+        "Com a lista vazia, resultados[0] é undefined",
+        "Falta pedir a permissão de localização antes de geocodificar"
+      ],
+      "correta": 2,
+      "explicacao": "Quando a geocodificação não acha nada, a lista vem vazia e acessar .lat de undefined quebra. O app deve testar se há resultado e avisar \"endereço não encontrado\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app recebeu as lojas com a distância já calculada. O que aparece no título?\n```js\nconst lojas = [{ nome: 'A', km: 5.2 }, { nome: 'B', km: 1.8 }, { nome: 'C', km: 3.0 }];\nlojas.sort((x, y) => x.km - y.km);\ntitulo.innerText = 'Mais perto: ' + lojas[0].nome;\n```",
+      "alternativas": [
+        "Mais perto: A",
+        "Mais perto: C",
+        "Mais perto: B",
+        "Mais perto: 1.8"
+      ],
+      "correta": 2,
+      "explicacao": "sort com x.km - y.km ordena da menor para a maior distância: B (1.8), C (3.0), A (5.2). lojas[0] é B."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de corrida chama a geocodificação reversa a cada segundo, durante 1 hora de treino, só para mostrar o nome da rua. Qual é a melhor correção?",
+      "alternativas": [
+        "Chamar a geocodificação direta no lugar da reversa",
+        "Fazer as mesmas chamadas, mas com o zoom do mapa menor",
+        "Pedir uma chave de API nova a cada chamada feita",
+        "Chamar só quando a posição mudar bastante"
+      ],
+      "correta": 3,
+      "explicacao": "3.600 chamadas por treino custam dinheiro (APIs cobram por uso), dados e bateria. O nome da rua só muda quando a pessoa anda uma boa distância."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tela de mapa de um app de entregas usa `const id = navigator.geolocation.watchPosition(atualizar);` e, quando o usuário sai da tela, nada é feito. Qual é o efeito?",
+      "alternativas": [
+        "A posição para de ser lida sozinha assim que a tela fecha",
+        "O mapa apaga todos os marcadores e reinicia o app inteiro",
+        "O GPS segue ligado e gasta bateria; falta clearWatch(id)",
+        "A permissão de localização é tirada do app pelo sistema"
+      ],
+      "correta": 2,
+      "explicacao": "watchPosition fica acompanhando a posição até ser cancelado com clearWatch(id). Esquecer isso deixa o GPS trabalhando à toa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Requisito de um app de frete: \"mostrar ao cliente onde está o entregador\". Qual forma atende o requisito e cuida da privacidade do entregador?",
+      "alternativas": [
+        "Mostrar ao cliente o endereço da casa do entregador",
+        "Guardar para sempre todo o caminho feito pelo entregador",
+        "Mostrar a posição só durante a entrega daquele cliente",
+        "Mostrar a qualquer cliente a posição de todos os entregadores"
+      ],
+      "correta": 2,
+      "explicacao": "Localização é dado pessoal (LGPD). O cliente só precisa ver o entregador enquanto o pedido dele está a caminho; o resto é exposição sem necessidade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de turismo mostra, em cada tela, o mesmo mapa da praça principal, sem nada que mude. Qual opção economiza chamadas e dados?",
+      "alternativas": [
+        "Usar uma imagem estática do mapa gerada uma vez",
+        "Pedir uma rota nova sempre que a tela abrir",
+        "Geocodificar o endereço da praça a cada toque",
+        "Ligar o acompanhamento contínuo da posição"
+      ],
+      "correta": 0,
+      "explicacao": "Quando o mapa não precisa de interação, uma imagem estática (muitas APIs oferecem \"mapa estático\") pode ser guardada e reaproveitada, sem carregar o mapa interativo toda vez."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma escola de idiomas quer colocar no app uma tela \"Nossas unidades\" usando uma API de mapas.\n\nNa sua resposta:\n1. cite dois recursos da API de mapas que essa tela usaria;\n2. diga o que cada um mostraria ao aluno.",
+      "respostasAceitas": [
+        "Marcadores, para mostrar onde fica cada unidade; e rota (\"Como chegar\"), para mostrar o caminho e o tempo da posição do aluno até a unidade escolhida."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dois recursos como marcador, rota, zoom/centralização, balão de informação ou geocodificação; 2) a função de cada um na tela. Aceitar quaisquer dois recursos coerentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de uma oficina mecânica, o cliente digita o endereço de casa para o guincho buscá-lo, e o app mostra esse ponto no mapa.\n\nNa sua resposta:\n1. explique por que o endereço digitado precisa ser convertido antes de virar um ponto no mapa;\n2. diga o nome dessa conversão.",
+      "respostasAceitas": [
+        "O mapa posiciona pontos por latitude e longitude, não por texto. A conversão de endereço em coordenadas é a geocodificação (direta)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o mapa trabalha com coordenadas (latitude/longitude); 2) geocodificação."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de uma academia mostra o botão \"Como chegar\". Ao tocar, aparece uma linha no mapa e o texto \"2,5 km · 8 min de carro\".\n\nNa sua resposta:\n1. diga o que a API de rotas recebeu para calcular isso;\n2. diga o que a API devolveu para o app.",
+      "respostasAceitas": [
+        "Recebeu a origem (posição do aluno), o destino (academia) e o modo (carro). Devolveu o caminho (pontos da linha), a distância (2,5 km) e o tempo estimado (8 min)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) origem, destino e modo de transporte; 2) caminho/traçado, distância e duração."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega diz: \"o GPS do celular é a mesma coisa que a API de mapas\".\n\nNa sua resposta:\n1. explique o que o GPS faz;\n2. explique o que a API de mapas faz e por que um precisa do outro.",
+      "respostasAceitas": [
+        "O GPS é um sensor (hardware) que descobre a posição do aparelho em latitude e longitude. A API de mapas é um serviço que mostra o mapa, marcadores e rotas. O GPS dá o ponto; a API mostra esse ponto num mapa que faça sentido para a pessoa."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) GPS = hardware que obtém a posição; 2) API = serviço que exibe mapa/rotas/endereços; juntos mostram onde a pessoa está."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No mapa de um app de festas juninas, as barracas aparecem como marcadores de cores diferentes: verde para comida, azul para brincadeiras e amarelo para bebidas.\n\nNa sua resposta:\n1. diga qual a vantagem dessas cores para o usuário;\n2. diga que informação deveria aparecer ao tocar em um marcador.",
+      "respostasAceitas": [
+        "As cores deixam fácil achar o tipo de barraca só olhando o mapa. Ao tocar, deveria aparecer o nome da barraca e o que ela oferece (ou preço/horário)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) identificar rápido o tipo de local; 2) nome e detalhes da barraca no balão. Aceitar outras informações coerentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma desenvolvedora está em casa testando o app de uma rede de farmácias e precisa ver como ele se comporta com o usuário em outra cidade.\n\nNa sua resposta:\n1. explique como ela pode testar isso sem viajar;\n2. diga por que esse teste é importante.",
+      "respostasAceitas": [
+        "Ela pode simular uma localização falsa no emulador (ou nas ferramentas do navegador), informando outra latitude e longitude. É importante para conferir se o app mostra as farmácias certas para cada lugar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) simular a posição no emulador/ferramenta de desenvolvimento; 2) garantir que o resultado muda corretamente conforme a localização."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Observe o trecho de um app de padaria, que usa a biblioteca de mapas do projeto:\n```js\nnavigator.geolocation.getCurrentPosition(pos => {\n  const { latitude, longitude } = pos.coords;\n  mapa.centralizar(latitude, longitude, 15);\n  mapa.adicionarMarcador({ lat: latitude, lng: longitude, titulo: 'Você' });\n});\n```\n\nNa sua resposta:\n1. explique o que o trecho faz, na ordem;\n2. diga por que as linhas do mapa ficam dentro da função e não depois dela.",
+      "respostasAceitas": [
+        "Pede a posição atual; quando ela chega, pega latitude e longitude, centraliza o mapa ali com zoom 15 e põe um marcador \"Você\". As linhas ficam dentro porque a posição chega depois (assíncrona); fora da função ela ainda não existiria."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) obtém a posição, centraliza o mapa e marca o usuário; 2) a leitura da posição é assíncrona, só dentro do retorno os dados existem."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de uma imobiliária mostra \"Endereço não encontrado\" quando a pessoa digita \"R. Ipê 30\", mas encontra quando ela digita \"Rua Ipê, 30, Jardim Primavera, Sorocaba - SP\".\n\nNa sua resposta:\n1. explique por que a segunda busca funcionou;\n2. dê uma sugestão de tela para ajudar o usuário a digitar endereços completos.",
+      "respostasAceitas": [
+        "A geocodificação precisa de dados suficientes para achar um único lugar; com cidade, bairro e UF não há ambiguidade. Sugestão: campos separados (CEP, rua, número, cidade) ou autocompletar endereço enquanto digita."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) endereço completo elimina ambiguidade/erros na geocodificação; 2) sugestão como busca por CEP, campos separados ou autocompletar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de uma loja de bicicletas, a tela de mapa ficou travando com 1.500 marcadores de pontos de aluguel.\n\nNa sua resposta:\n1. explique por que tantos marcadores deixam o app lento;\n2. proponha uma solução e explique como ela ajuda.",
+      "respostasAceitas": [
+        "Cada marcador é um elemento a ser desenhado e mantido na memória; milhares pesam no celular. Solução: agrupar marcadores próximos (cluster) e carregar só os da área visível, o que reduz o que é desenhado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) muitos elementos na tela = muito processamento/memória; 2) agrupamento (cluster), carregar por região visível ou filtros. Aceitar soluções equivalentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de entregas de uma lanchonete mostra \"Seu pedido chega em 25 min\". O tempo vem da API de rotas, somado ao tempo de preparo.\n\nNa sua resposta:\n1. diga quais são as entradas, o processamento e a saída dessa funcionalidade;\n2. explique por que o tempo pode mudar durante a entrega.",
+      "respostasAceitas": [
+        "Entradas: posição da lanchonete (ou do entregador), endereço do cliente e modo. Processamento: a API calcula a rota e o app soma o preparo. Saída: o texto com os minutos. Muda porque o trânsito e a posição do entregador mudam, e a rota é recalculada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) entradas (origem, destino, modo), processamento (cálculo da rota + soma), saída (tempo na tela); 2) trânsito/posição atualizada."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de corridas de rua mostra a rua atual do corredor usando geocodificação reversa a cada segundo.\n\nNa sua resposta:\n1. explique o que é feito a cada chamada;\n2. explique por que chamar a cada segundo é um problema e o que mudar.",
+      "respostasAceitas": [
+        "A cada chamada o app envia latitude e longitude e recebe o endereço (nome da rua). A cada segundo gera milhares de chamadas pagas, gasta dados e bateria; o certo é chamar só quando a posição mudar bastante ou em intervalos maiores."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) coordenadas → endereço; 2) custo/limite da API, bateria e dados; reduzir a frequência ou guardar o último resultado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma loja de material de construção pediu: \"quero que o cliente veja no app qual das minhas 4 lojas é a mais próxima\".\n\nNa sua resposta:\n1. diga quais dados o app precisa ter ou obter para isso;\n2. explique o que acontece se o cliente não permitir a localização.",
+      "respostasAceitas": [
+        "Precisa da posição do cliente (permissão de localização) e das coordenadas das 4 lojas, para comparar as distâncias (ou pedir à API de rotas). Sem permissão, o app não sabe onde ele está: deve pedir CEP/cidade ou mostrar a lista de lojas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) posição do cliente + coordenadas das lojas + cálculo de distância; 2) alternativa sem localização (CEP, escolha manual), sem travar o app."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O código abaixo, de um app de clínica veterinária, às vezes mostra o mapa no lugar errado:\n```js\nlet minhaPos = null;\nnavigator.geolocation.getCurrentPosition(p => minhaPos = p.coords);\nif (minhaPos) mapa.centralizar(minhaPos.latitude, minhaPos.longitude);\nelse mapa.centralizar(-15.79, -47.88); // centro padrão\n```\n\nNa sua resposta:\n1. explique por que o mapa quase sempre vai para o centro padrão;\n2. explique como o código deveria ser organizado para usar a posição real.",
+      "respostasAceitas": [
+        "A posição chega de forma assíncrona; o if roda logo em seguida, quando minhaPos ainda é null, então cai no centro padrão. O centralizar com a posição real deve ficar dentro da função de retorno (e o padrão na função de erro)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) leitura assíncrona: o if executa antes da posição chegar; 2) mover a lógica para o callback de sucesso e usar o padrão no callback de erro (ou usar Promise/await)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de um food truck faz a geocodificação abaixo e trava com alguns endereços:\n```js\nconst r = await fetch(urlGeocodificacao);\nconst d = await r.json();\nconst p = d.resultados[0];\nmapa.adicionarMarcador({ lat: p.lat, lng: p.lng });\n```\n\nNa sua resposta:\n1. explique em quais situações esse código falha;\n2. explique que verificações deixariam o app seguro.",
+      "respostasAceitas": [
+        "Falha quando a lista vem vazia (endereço não encontrado), quando a resposta é de erro (chave inválida, limite estourado) ou sem internet. Deve checar r.ok, checar se resultados tem itens e usar try/catch, mostrando uma mensagem ao usuário."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) lista vazia, erro do servidor/chave, falta de rede; 2) testar status, testar tamanho da lista e tratar exceção com mensagem amigável."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de entregas quer mostrar ao cliente a posição do motoboy em tempo real.\n\nNa sua resposta:\n1. explique como a posição sai do celular do motoboy e chega ao mapa do cliente;\n2. cite dois cuidados com a privacidade do motoboy.",
+      "respostasAceitas": [
+        "O app do motoboy lê a posição de tempos em tempos e envia ao servidor; o app do cliente busca (ou recebe) essa posição e move o marcador no mapa. Cuidados: compartilhar só durante a entrega ativa, só com o cliente daquele pedido, e não guardar o histórico além do necessário."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) motoboy → servidor → cliente, atualizando o marcador; 2) dois cuidados como limitar ao período da entrega, a quem pode ver, tempo de guarda e transparência (LGPD)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Muitas APIs de mapas cobram por uso. Ao configurar a chave do app de uma sorveteria, por que é bom definir um limite (cota) de chamadas por dia?",
+      "alternativas": [
+        "Para o mapa carregar mais rápido no celular do cliente",
+        "Para o GPS gastar menos bateria do aparelho durante o dia",
+        "Para o app não precisar mais de permissão de localização",
+        "Para evitar uma conta enorme se houver abuso ou erro"
+      ],
+      "correta": 3,
+      "explicacao": "Com cota, se a chave vazar ou um erro fizer o app chamar a API sem parar, as chamadas param no limite e a conta não explode."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quando um app pede a localização, aparece uma janela com as opções de permitir ou não. Quem mostra essa janela?",
+      "alternativas": [
+        "A API de mapas, pela internet",
+        "O servidor do próprio app",
+        "A operadora de telefonia",
+        "O sistema operacional do celular"
+      ],
+      "correta": 3,
+      "explicacao": "Android e iOS controlam as permissões: o app só pede, e o sistema mostra a janela e guarda a escolha do usuário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual opção de permissão deixa o app usar a localização apenas enquanto ele está aberto na tela?",
+      "alternativas": [
+        "Permitir durante o uso do app",
+        "Permitir o tempo todo",
+        "Não permitir",
+        "Permitir só a câmera"
+      ],
+      "correta": 0,
+      "explicacao": "\"Durante o uso\" libera a localização só com o app em primeiro plano. \"O tempo todo\" inclui o segundo plano."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O usuário escolheu \"Permitir só desta vez\" para a localização. O que isso significa?",
+      "alternativas": [
+        "O app pode usar agora; depois terá de pedir outra vez",
+        "O app pode usar para sempre, até ser desinstalado",
+        "O app nunca mais poderá pedir a localização",
+        "O app pode usar só quando estiver em segundo plano"
+      ],
+      "correta": 0,
+      "explicacao": "A permissão única vale para aquele uso. Quando o app for fechado (ou após um tempo), ela acaba e o app pergunta de novo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de notícias de uma rádio só precisa saber a cidade do ouvinte para mostrar as notícias locais. Qual tipo de localização é suficiente?",
+      "alternativas": [
+        "Localização aproximada",
+        "Localização precisa, com GPS ligado",
+        "Localização em segundo plano",
+        "Localização contínua, a cada segundo"
+      ],
+      "correta": 0,
+      "explicacao": "Para saber a cidade, a posição aproximada basta. Pedir só o necessário respeita a privacidade e aumenta a chance de o usuário aceitar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes apps tem um bom motivo para usar a localização em segundo plano?",
+      "alternativas": [
+        "Um app de corrida que grava o percurso com a tela bloqueada",
+        "Um app de receitas que mostra o passo a passo do modo de preparo",
+        "Um app de calculadora de notas da escola",
+        "Um app de lanterna que só acende a luz do celular"
+      ],
+      "correta": 0,
+      "explicacao": "Gravar o trajeto enquanto a tela está apagada exige ler a posição com o app fora da tela. Os outros não dependem de localização."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que significa \"localização em segundo plano\"?",
+      "alternativas": [
+        "O app usa a localização mesmo sem estar aberto na tela",
+        "O app usa a localização só quando o usuário toca no mapa",
+        "O app guarda a última posição dentro do banco local",
+        "O app mostra a localização numa camada de fundo do mapa"
+      ],
+      "correta": 0,
+      "explicacao": "Segundo plano (background) é quando o app não está visível na tela; usar a localização assim exige permissão especial."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O usuário negou a permissão de localização no app de uma pizzaria. O que o app deve fazer?",
+      "alternativas": [
+        "Seguir funcionando e oferecer outra forma, como o CEP",
+        "Fechar sozinho, pois não consegue funcionar sem localização",
+        "Mostrar o pedido de permissão de novo a cada toque na tela",
+        "Usar a localização mesmo assim, sem avisar o usuário"
+      ],
+      "correta": 0,
+      "explicacao": "O usuário tem direito de negar. O app deve seguir funcionando com uma alternativa (CEP, escolher a cidade, lista de lojas)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao publicar o app na loja, o desenvolvedor precisa informar que o app coleta a localização. Por que a loja exige isso?",
+      "alternativas": [
+        "Para a loja calcular a rota até a casa do desenvolvedor",
+        "Para a loja liberar uma chave de API grátis para o app",
+        "Para o app poder usar a localização sem pedir permissão",
+        "Para o usuário saber, antes de instalar, que dados o app usa"
+      ],
+      "correta": 3,
+      "explicacao": "As lojas exigem declarar a coleta de dados e ter uma política de privacidade, para dar transparência ao usuário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Antes de mostrar o pedido de permissão, o app de uma academia exibe a tela: \"Vamos usar sua localização para achar a unidade mais perto de você\". Para que serve essa tela?",
+      "alternativas": [
+        "Substituir a janela de permissão do sistema operacional",
+        "Ligar o GPS sem que o usuário precise autorizar nada",
+        "Explicar o motivo do pedido antes da janela do sistema",
+        "Calcular a rota até a unidade antes de pedir a permissão"
+      ],
+      "correta": 2,
+      "explicacao": "Explicar o motivo antes (com linguagem simples) dá contexto ao pedido e costuma aumentar a aceitação. A janela oficial do sistema continua sendo necessária."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um usuário deu a permissão de localização a um app e agora se arrependeu. Onde ele pode mudar isso?",
+      "alternativas": [
+        "Só desinstalando o app e comprando outro celular",
+        "Nas configurações do celular, nas permissões do app",
+        "Ligando para a empresa que fez a API de mapas usada no app",
+        "Em lugar nenhum, a escolha não pode ser desfeita"
+      ],
+      "correta": 1,
+      "explicacao": "Android e iOS deixam rever as permissões de cada app a qualquer momento nas configurações."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma farmácia, qual forma de pegar a localização gasta MENOS bateria?",
+      "alternativas": [
+        "Ler a posição uma vez, quando a pessoa pede",
+        "Ler a posição a cada segundo, desde que o app é instalado",
+        "Ler a posição com precisão máxima também em segundo plano",
+        "Ler a posição o dia todo e guardar todas no celular"
+      ],
+      "correta": 0,
+      "explicacao": "Ler só quando o usuário precisa (uma leitura) usa o GPS por pouco tempo. Leituras contínuas e em segundo plano consomem muito mais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno mandou no grupo da turma um print do código em que aparece a chave da API de mapas do projeto. Qual é o risco?",
+      "alternativas": [
+        "O mapa do app passar a abrir sempre em outra cidade",
+        "Alguém usar a chave e gerar cobranças na conta do projeto",
+        "O celular do aluno perder a permissão de localização",
+        "O GPS de quem viu o print parar de funcionar"
+      ],
+      "correta": 1,
+      "explicacao": "A chave identifica quem paga pelas chamadas. Com ela, outra pessoa pode usar a API em nome do projeto. A chave deve ser trocada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Enquanto um app usa a localização em segundo plano, o Android costuma mostrar o quê ao usuário?",
+      "alternativas": [
+        "Uma rota no mapa até a casa do usuário, como confirmação",
+        "Um aviso ou ícone de que a localização está em uso",
+        "Um novo pedido de chave de API a cada minuto",
+        "Nada, o uso em segundo plano fica escondido"
+      ],
+      "correta": 1,
+      "explicacao": "Os sistemas avisam (notificação fixa, ícone na barra) para o usuário saber que está sendo localizado e poder interromper."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel do serviço de mapas, a desenvolvedora restringiu a chave para funcionar só no app com o identificador `com.padariapaoquente.app`. Para que serve isso?",
+      "alternativas": [
+        "Para a chave não funcionar se for copiada para outro app",
+        "Para o mapa só abrir quando a padaria estiver aberta",
+        "Para o app não precisar mais pedir localização",
+        "Para a chave nunca precisar ser trocada"
+      ],
+      "correta": 0,
+      "explicacao": "Restringir a chave por app (identificador do pacote/assinatura) ou por site faz o serviço recusar chamadas vindas de outro lugar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A equipe guardou a chave da API de mapas num arquivo de configuração separado do código. O que deve ir para o `.gitignore`?",
+      "alternativas": [
+        "A pasta com as telas do app",
+        "O arquivo que mostra o mapa",
+        "O arquivo de configuração com a chave",
+        "A lista de dependências do projeto"
+      ],
+      "correta": 2,
+      "explicacao": "Colocando o arquivo da chave no .gitignore, ele não é enviado ao repositório. Cada desenvolvedor tem uma cópia local."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A chave da API de mapas de um app de hotel vazou num repositório público. Qual é a primeira atitude correta?",
+      "alternativas": [
+        "Apagar o repositório inteiro e manter a mesma chave em uso",
+        "Desativar a chave no painel, gerar outra e trocar no app",
+        "Mudar o nome da variável que guarda a chave",
+        "Esperar a conta chegar para ver se alguém usou"
+      ],
+      "correta": 1,
+      "explicacao": "Apagar o arquivo não adianta: cópias e o histórico continuam. A chave antiga precisa ser revogada e substituída."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de uma clínica envia a posição do paciente para o servidor. Por que o endereço da API deve começar com https?",
+      "alternativas": [
+        "Para a posição chegar com mais precisão ao servidor",
+        "Para a posição ir criptografada pela rede",
+        "Para o GPS funcionar também em lugares fechados",
+        "Para a API devolver o mapa em melhor qualidade"
+      ],
+      "correta": 1,
+      "explicacao": "HTTPS criptografa a comunicação. Localização é dado pessoal e não pode trafegar aberta na rede."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app Android, além de pedir a permissão de localização na hora do uso, onde ela precisa ser declarada?",
+      "alternativas": [
+        "No arquivo de estilos e cores das telas do app",
+        "No manifesto do app (AndroidManifest.xml)",
+        "No banco de dados interno do aparelho",
+        "Na chave de API do serviço de mapas"
+      ],
+      "correta": 1,
+      "explicacao": "O manifesto lista as permissões que o app pode pedir. Sem a declaração, o pedido em tempo de execução nem aparece."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No iOS, a janela de permissão mostra uma frase escrita pelo desenvolvedor. Qual frase é a mais adequada para o app de uma rede de farmácias?",
+      "alternativas": [
+        "Precisamos da sua localização.",
+        "Permita a localização para continuar usando o app normalmente.",
+        "Usamos sua localização para mostrar farmácias perto de você.",
+        "O app não funciona sem a sua localização, aceite."
+      ],
+      "correta": 2,
+      "explicacao": "A frase deve dizer, de forma clara e honesta, para que a localização será usada. Frases genéricas ou de pressão são recusadas na revisão e afastam o usuário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de um supermercado, o usuário negou a localização e marcou para não perguntar de novo. Como o app deve agir quando ele tocar em \"Lojas perto de mim\"?",
+      "alternativas": [
+        "Mostrar a janela de permissão do sistema de novo, várias vezes",
+        "Explicar o motivo e oferecer um atalho para as configurações",
+        "Fechar o app com uma mensagem de erro técnico",
+        "Pegar a localização pela câmera sem pedir permissão"
+      ],
+      "correta": 1,
+      "explicacao": "Depois do \"não perguntar novamente\", o sistema não mostra mais a janela. O app pode explicar e levar o usuário às configurações, se ele quiser."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que Android e iOS tratam a localização em segundo plano como uma permissão separada e mais rígida?",
+      "alternativas": [
+        "Porque o mapa em segundo plano usa outra chave de API paga",
+        "Porque permite acompanhar a pessoa sem ela usar o app",
+        "Porque em segundo plano o GPS funciona sem satélites",
+        "Porque essa permissão só existe em celulares antigos"
+      ],
+      "correta": 1,
+      "explicacao": "Rastrear alguém o tempo todo é bem mais invasivo do que usar a posição só enquanto o app está aberto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de uma lista de compras quer a localização \"o tempo todo\" só para mostrar propaganda de mercados próximos. Como avaliar esse pedido?",
+      "alternativas": [
+        "Correto: todo app deve pedir a localização o tempo todo",
+        "Correto: propaganda é motivo aceito para rastrear sem aviso",
+        "Exagerado: o motivo não justifica acompanhar o usuário sempre",
+        "Indiferente: a permissão não muda nada para o usuário"
+      ],
+      "correta": 2,
+      "explicacao": "Permissão deve ser proporcional à função. Para mostrar ofertas basta a localização durante o uso, ou nenhuma (o usuário escolhe a loja)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de transporte escolar avisa os pais quando a van entra num raio de 1 km da escola. Como se chama esse círculo virtual em volta da escola?",
+      "alternativas": [
+        "Polilinha da rota",
+        "Cerca virtual (geofence)",
+        "Geocodificação reversa",
+        "Camada de satélite"
+      ],
+      "correta": 1,
+      "explicacao": "Geofence é uma área (normalmente um círculo) que dispara um evento quando o aparelho entra ou sai dela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de entregas lê a posição do motoboy a cada 1 segundo, com precisão máxima, também em segundo plano. A bateria acaba em 3 horas. O que ajustar?",
+      "alternativas": [
+        "Desligar o mapa no celular do cliente que acompanha a entrega",
+        "Pedir a permissão de localização de novo a cada entrega",
+        "Ler com intervalo maior ou após uma distância mínima",
+        "Trocar a chave de API por outra com mais cota"
+      ],
+      "correta": 2,
+      "explicacao": "Intervalo e distância mínima entre leituras (e precisão adequada) reduzem muito o uso do GPS sem estragar o acompanhamento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Pela LGPD (Lei Geral de Proteção de Dados), como deve ser tratada a localização do usuário num app?",
+      "alternativas": [
+        "Como dado público, que pode ser vendido a outras empresas sem aviso",
+        "Como dado pessoal, com finalidade clara e cuidado",
+        "Como dado técnico, que não tem relação com a pessoa",
+        "Como dado do celular, que pertence à operadora"
+      ],
+      "correta": 1,
+      "explicacao": "A posição identifica hábitos e lugares da pessoa: é dado pessoal. O app precisa informar para que usa, guardar com segurança e só pelo tempo necessário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app web para celular, o que aparece se o usuário já negou a localização antes?\n```js\nconst estado = await navigator.permissions.query({ name: 'geolocation' });\nif (estado.state === 'denied') mostrarBuscaPorCep();\nelse mostrarBotaoLocalizar();\n```",
+      "alternativas": [
+        "O botão de localizar",
+        "Os dois ao mesmo tempo",
+        "Nenhum, o código dá erro",
+        "A busca por CEP"
+      ],
+      "correta": 3,
+      "explicacao": "permissions.query consulta o estado da permissão. Com state igual a 'denied', o if chama mostrarBuscaPorCep()."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de ônibus mostra as linhas que passam perto do usuário. Que permissão de localização é a mais adequada?",
+      "alternativas": [
+        "O tempo todo, pedida logo na instalação do app",
+        "Nenhuma, o app adivinha a posição pelo horário do celular",
+        "O tempo todo, sem mostrar a janela de permissão",
+        "Durante o uso, pedida quando ele abre a busca"
+      ],
+      "correta": 3,
+      "explicacao": "A função só é usada com o app aberto. Pedir \"durante o uso\", no momento da busca, é proporcional e fácil de entender."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que é mais seguro o app pedir a rota ao SERVIDOR da empresa, que então chama a API paga com a chave, do que o app chamar a API direto?",
+      "alternativas": [
+        "O servidor deixa o GPS do celular mais preciso",
+        "O app deixa de precisar de internet para ver a rota calculada",
+        "O servidor dispensa a permissão de localização",
+        "A chave fica só no servidor, fora do app instalado"
+      ],
+      "correta": 3,
+      "explicacao": "Tudo o que vai dentro do app pode ser extraído do arquivo instalado. Com o servidor intermediário, a chave nunca sai dele, e ainda dá para controlar quem pede e quanto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A chave da API de mapas está restrita ao identificador do app, mas vai dentro do aplicativo instalado. Qual afirmação é correta?",
+      "alternativas": [
+        "A chave ainda pode ser extraída do app instalado",
+        "A chave fica invisível, pois o app é compilado antes da loja",
+        "A chave só pode ser lida com a senha do celular",
+        "A chave deixa de ter valor quando o app vai para a loja"
+      ],
+      "correta": 0,
+      "explicacao": "Arquivos de app podem ser abertos e analisados. Por isso se combina restrição por app, restrição por API e limite de uso; chaves mais sensíveis ficam só no servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app web de corrida grava o trajeto com `watchPosition`. Quando o usuário bloqueia a tela, o percurso para de ser gravado. Qual é a explicação?",
+      "alternativas": [
+        "O watchPosition só funciona com o Wi-Fi do celular desligado",
+        "A chave da API de mapas expira quando a tela apaga",
+        "O sistema pausa a página fora da tela; precisa de recurso nativo",
+        "O GPS do celular desliga sempre que a tela é bloqueada pelo usuário"
+      ],
+      "correta": 2,
+      "explicacao": "Para economizar bateria, o sistema suspende apps e páginas fora da tela. Rastrear com a tela bloqueada exige permissão de segundo plano e recursos próprios da plataforma (serviço em primeiro plano no Android, modo de localização em segundo plano no iOS)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app para a família encontrar o celular de um parente quer usar localização em segundo plano. O que torna esse uso aceitável?",
+      "alternativas": [
+        "Pedir a permissão sem explicar, para não assustar ninguém",
+        "Instalar o app no celular do parente sem ele saber",
+        "Consentimento de quem é localizado e aviso claro do uso",
+        "Mostrar a posição para qualquer pessoa da lista de contatos"
+      ],
+      "correta": 2,
+      "explicacao": "Localizar alguém sem saber é invasão de privacidade. O uso exige consentimento, transparência (aviso, ícone) e acesso limitado às pessoas autorizadas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Android atual, o app de uma transportadora precisa da localização em segundo plano. Qual sequência de pedidos é a correta?",
+      "alternativas": [
+        "Pedir \"o tempo todo\" logo na abertura, antes de qualquer outra permissão",
+        "Primeiro \"durante o uso\"; depois \"o tempo todo\", explicando",
+        "Pedir as duas permissões na mesma janela, antes de o usuário fazer login",
+        "Não pedir nada, pois a permissão em segundo plano vem liberada"
+      ],
+      "correta": 1,
+      "explicacao": "O Android exige que o app tenha a localização durante o uso antes de pedir a de segundo plano, e essa última é dada pelo usuário nas configurações, com explicação do app."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pico de acessos, a API de mapas começou a responder com o status HTTP 429. O que isso indica e o que o app deve fazer?",
+      "alternativas": [
+        "Chave errada: gerar uma chave nova a cada chamada feita ao serviço",
+        "Excesso de chamadas: esperar, tentar depois e reduzir pedidos",
+        "Sem permissão de localização: pedir de novo ao usuário",
+        "Endereço não encontrado: trocar por geocodificação reversa"
+      ],
+      "correta": 1,
+      "explicacao": "429 (Too Many Requests) significa limite de requisições estourado. O app deve aguardar (e tentar de novo com intervalo), guardar resultados e evitar chamadas repetidas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A chave do app de uma escola foi liberada para TODAS as APIs do serviço (mapas, tradução, voz…), mas o app só usa mapas. Qual é o risco?",
+      "alternativas": [
+        "O mapa fica mais lento por ter outras APIs liberadas na mesma chave",
+        "O GPS passa a ler a posição de forma menos precisa",
+        "O app perde a permissão de localização dos alunos",
+        "Se vazar, pode ser usada em outras APIs pagas"
+      ],
+      "correta": 3,
+      "explicacao": "Boa prática: dar à chave só o mínimo necessário (restrição por API). Assim um vazamento tem efeito limitado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Ao pedir a localização, o celular mostra as opções \"Durante o uso do app\", \"Só desta vez\" e \"Não permitir\".\n\nNa sua resposta:\n1. explique o que cada opção permite ao app;\n2. dê um exemplo de app em que \"Durante o uso do app\" é suficiente.",
+      "respostasAceitas": [
+        "Durante o uso: o app lê a posição só enquanto está aberto. Só desta vez: vale para aquele uso e depois pergunta de novo. Não permitir: o app não recebe a posição. Exemplo: app de pizzaria que acha a loja mais próxima."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) as três opções explicadas corretamente; 2) um exemplo de app que só usa a posição com a tela aberta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Os celulares atuais deixam o usuário escolher entre localização precisa e localização aproximada.\n\nNa sua resposta:\n1. explique a diferença entre as duas;\n2. dê um exemplo de app em que a aproximada já basta.",
+      "respostasAceitas": [
+        "Precisa: posição exata, de poucos metros (GPS). Aproximada: só a região, com erro de alguns quilômetros. Basta a aproximada em um app que mostra notícias ou eventos da cidade."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) precisa = exata (metros), aproximada = região/bairro/cidade; 2) exemplo coerente (notícias locais, previsão do tempo, ofertas da cidade)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de uma biblioteca escolar só mostra o acervo e permite reservar livros. Um colega quer que ele peça a localização \"o tempo todo\".\n\nNa sua resposta:\n1. diga se o app precisa dessa permissão;\n2. justifique pensando no usuário.",
+      "respostasAceitas": [
+        "Não precisa. Nenhuma função do app depende de onde o aluno está; pedir sem motivo invade a privacidade, gasta bateria e faz o usuário desconfiar e até desinstalar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) não precisa; 2) privacidade/desconfiança, bateria, permissão sem finalidade. Se o aluno disser que só pediria durante o uso para alguma função específica justificada, aceitar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma professora disse: \"a chave de API é como a senha do cartão do projeto\".\n\nNa sua resposta:\n1. explique por que essa comparação faz sentido;\n2. diga quem deveria conhecer essa chave.",
+      "respostasAceitas": [
+        "Porque a chave identifica o projeto para o serviço e as chamadas feitas com ela são cobradas na conta dele; quem tem a chave pode gastar em nome do projeto. Só a equipe de desenvolvimento (e o servidor/app configurado) deve conhecê-la."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a chave identifica e cobra o projeto; 2) só a equipe responsável, nunca publicada."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de caminhada usa a localização em segundo plano.\n\nNa sua resposta:\n1. explique o que é usar a localização em segundo plano;\n2. explique por que esse app precisa disso.",
+      "respostasAceitas": [
+        "É o app ler a posição mesmo quando não está aberto na tela (tela bloqueada ou outro app em uso). O app de caminhada precisa para registrar o percurso inteiro enquanto o celular fica no bolso."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) usar a posição com o app fora da tela; 2) gravar o trajeto com a tela apagada."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na página do app na loja de aplicativos aparece: \"Este app coleta localização aproximada e precisa\".\n\nNa sua resposta:\n1. explique por que a loja exige essa informação;\n2. diga o que o usuário ganha com ela.",
+      "respostasAceitas": [
+        "A loja exige transparência sobre os dados coletados (e a política de privacidade). O usuário consegue decidir, antes de instalar, se aceita compartilhar a localização."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) exigência de transparência/privacidade da loja; 2) o usuário decide informado antes de instalar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A desenvolvedora de um app de turismo recebeu uma conta da API de mapas muito maior que o normal e suspeita que a chave está sendo usada por outra pessoa.\n\nNa sua resposta:\n1. cite duas configurações da chave que ajudam a evitar esse problema;\n2. explique como cada uma ajuda.",
+      "respostasAceitas": [
+        "Restringir a chave ao app (ou site) do projeto: chamadas de outros lugares são recusadas. Limitar a cota diária: mesmo com abuso, o gasto para no limite. (Também: liberar só as APIs usadas.)"
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) duas entre restrição por app/site, restrição por API e cota/alerta de gasto; 2) explicação de cada uma."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de um mercado, o usuário negou a localização e marcou \"não perguntar novamente\". Mesmo assim, o app mostra um aviso de erro toda vez que abre.\n\nNa sua resposta:\n1. explique por que o app não consegue mais mostrar a janela de permissão;\n2. diga como o app deveria se comportar.",
+      "respostasAceitas": [
+        "Com \"não perguntar novamente\", o sistema bloqueia novos pedidos; só o usuário pode mudar nas configurações. O app deveria funcionar sem localização (busca por CEP/cidade) e, só quando a pessoa usar a função de mapa, explicar e oferecer abrir as configurações, sem insistir."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a escolha fica gravada no sistema e o pedido não aparece mais; 2) alternativa sem localização + atalho para configurações, sem mensagens repetidas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de um serviço de guincho acompanha a posição do motorista em segundo plano e os motoristas reclamam que a bateria acaba rápido.\n\nNa sua resposta:\n1. explique por que esse uso gasta tanta bateria;\n2. cite duas formas de reduzir o gasto.",
+      "respostasAceitas": [
+        "O GPS ligado direto, com leituras frequentes e envio pela internet, consome muita energia. Reduzir: aumentar o intervalo entre leituras, usar distância mínima de deslocamento, usar precisão menor quando possível e parar o rastreio quando não houver serviço ativo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) GPS e rede em uso contínuo; 2) duas formas coerentes (intervalo, distância mínima, precisão menor, desligar fora do serviço)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno publicou sem querer a chave da API de mapas do projeto num repositório público. Ele apagou o arquivo no commit seguinte e acha que o problema acabou.\n\nNa sua resposta:\n1. explique por que apagar o arquivo não resolve;\n2. diga o que deve ser feito com a chave.",
+      "respostasAceitas": [
+        "O histórico do repositório (e possíveis cópias feitas por robôs que procuram chaves) ainda tem a chave. É preciso revogar a chave no painel do serviço, gerar uma nova, trocar no projeto e guardar fora do repositório (arquivo no .gitignore)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) histórico/cópias continuam com a chave; 2) revogar, gerar outra e proteger a nova."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Observe o trecho de um app web para celular:\n```js\nconst estado = await navigator.permissions.query({ name: 'geolocation' });\nif (estado.state === 'granted') mostrarLojasPerto();\nelse if (estado.state === 'prompt') mostrarBotao('Usar minha localização');\nelse mostrarBuscaPorCep();\n```\n\nNa sua resposta:\n1. explique o que acontece em cada um dos três estados;\n2. diga por que é bom verificar o estado antes de pedir a posição.",
+      "respostasAceitas": [
+        "granted: já tem permissão, mostra as lojas perto. prompt: ainda não perguntou, mostra um botão para o usuário escolher usar a localização. denied (o else): mostra a busca por CEP. Verificar antes evita pedidos inúteis e permite oferecer o caminho certo para cada usuário."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) granted/prompt/negado explicados; 2) adaptar a tela, não insistir e não travar quando negado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Quando um app usa a localização, o celular mostra um ícone na barra de status (e, em segundo plano, um aviso).\n\nNa sua resposta:\n1. explique por que o sistema faz isso;\n2. diga o que o usuário pode fazer com essa informação.",
+      "respostasAceitas": [
+        "Para dar transparência: o usuário sabe quando está sendo localizado, mesmo sem olhar o app. Ele pode perceber um uso estranho e tirar a permissão ou encerrar o app."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) transparência/privacidade; 2) perceber e revogar/limitar a permissão."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na arquitetura de um app de entregas, o celular não chama a API de rotas diretamente: ele chama o servidor da empresa, e o servidor chama a API de rotas com a chave.\n\nNa sua resposta:\n1. explique a vantagem dessa arquitetura para a segurança da chave;\n2. cite uma vantagem extra e uma desvantagem dela.",
+      "respostasAceitas": [
+        "A chave fica só no servidor; não vai dentro do app, onde poderia ser extraída. Vantagem extra: o servidor pode guardar resultados (cache), limitar pedidos por usuário e trocar de fornecedor sem atualizar o app. Desvantagem: mais um ponto que pode falhar, custo de manter o servidor e um pouco mais de demora."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a chave não fica no aparelho; 2) uma vantagem (cache, controle de uso, troca de API) e uma desvantagem (custo, latência, ponto de falha)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma empresa quer um app para os pais acompanharem, em segundo plano, a localização dos filhos adolescentes.\n\nNa sua resposta:\n1. cite dois requisitos de privacidade que o app deve ter;\n2. explique por que a localização em segundo plano exige mais cuidado do que a localização durante o uso.",
+      "respostasAceitas": [
+        "Requisitos: o adolescente precisa saber e consentir (aviso visível de que está sendo localizado); só os responsáveis autorizados veem a posição; o histórico é guardado pelo menor tempo possível e com segurança. Em segundo plano o app acompanha a pessoa o tempo todo, revelando rotina, casa, escola e lugares frequentados, mesmo quando ela não está usando o app."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dois requisitos como consentimento/transparência, acesso restrito, tempo de guarda, segurança dos dados (LGPD); 2) rastreio contínuo revela rotina e acontece sem a pessoa estar usando o app."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No Android atual, um app não consegue pedir \"Permitir o tempo todo\" logo de cara: primeiro precisa ter \"Durante o uso\", e a opção de segundo plano é ligada pelo usuário nas configurações.\n\nNa sua resposta:\n1. explique por que o sistema funciona assim;\n2. explique como o app de uma transportadora deveria conduzir esse pedido para o motorista.",
+      "respostasAceitas": [
+        "Para que o usuário entenda o uso aos poucos e não libere o rastreio contínuo sem perceber; segundo plano é mais invasivo. O app deve pedir primeiro \"durante o uso\" quando o motorista usar o mapa; depois, quando ativar o rastreio de entregas, mostrar uma tela explicando por que precisa do segundo plano e levar às configurações, aceitando se ele recusar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) proteção da privacidade / decisão consciente; 2) pedido em etapas, no momento certo, com explicação e respeito à recusa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é o serviço do Google usado para entregar notificações push aos apps Android?",
+      "alternativas": [
+        "APNs (Apple Push Notification service)",
+        "GPS (Sistema de Posicionamento Global)",
+        "FCM (Firebase Cloud Messaging)",
+        "SMS da operadora de telefonia"
+      ],
+      "correta": 2,
+      "explicacao": "No Android o caminho padrão é o FCM. O APNs é o serviço equivalente da Apple."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O APNs é o serviço de notificações push de qual plataforma?",
+      "alternativas": [
+        "iOS, dos iPhones",
+        "Android, dos celulares em geral",
+        "Windows, dos computadores",
+        "Navegadores de qualquer sistema"
+      ],
+      "correta": 0,
+      "explicacao": "APNs = Apple Push Notification service: entrega notificações remotas para iPhone e iPad."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na notificação \"Seu livro reservado chegou\", do app de uma livraria, quem entrega a mensagem até o celular do cliente?",
+      "alternativas": [
+        "O próprio celular, que adivinha quando o livro chegou à loja",
+        "O GPS do celular, ao passar perto da livraria",
+        "A loja de aplicativos, ao atualizar o app da livraria",
+        "O serviço de push da plataforma (FCM ou APNs)"
+      ],
+      "correta": 3,
+      "explicacao": "O servidor da livraria decide enviar e pede ao serviço de push da plataforma; esse serviço entrega ao aparelho."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de uma pizzaria está fechado no celular do cliente. Ele ainda pode receber uma notificação push?",
+      "alternativas": [
+        "Sim, o sistema recebe e mostra mesmo com o app fechado",
+        "Não, a notificação só chega com o app aberto na tela do celular",
+        "Não, push só funciona quando o celular está carregando",
+        "Sim, mas só se o GPS estiver ligado naquele momento"
+      ],
+      "correta": 0,
+      "explicacao": "O sistema mantém a ligação com o serviço de push e exibe a notificação mesmo com o app fechado. Por isso o push serve para \"chamar\" o usuário de volta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No iPhone e nos Android mais novos, o que o app precisa ter antes de mostrar notificações?",
+      "alternativas": [
+        "A permissão de localização em segundo plano",
+        "A permissão do usuário para enviar notificações",
+        "Uma chave de API de mapas configurada",
+        "Acesso à câmera e ao microfone do celular"
+      ],
+      "correta": 1,
+      "explicacao": "Notificações exigem permissão própria. Sem ela, o sistema não exibe os avisos do app."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes avisos é uma notificação REMOTA (push)?",
+      "alternativas": [
+        "\"Seu pedido saiu\", enviado pelo servidor da loja",
+        "Timer de 15 minutos que o app de receitas agendou no celular",
+        "Lembrete de remédio agendado no próprio celular",
+        "Alarme de alongamento criado pelo app a cada hora"
+      ],
+      "correta": 0,
+      "explicacao": "A remota nasce no servidor (um evento lá fora, como o pedido sair). As outras são locais: o próprio app agendou no aparelho."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em que horário é mais adequado o app de uma loja de roupas enviar uma notificação de promoção?",
+      "alternativas": [
+        "Durante o dia, em horário comercial",
+        "Às 3h da manhã, quando há menos envios",
+        "No horário de aula, para mais gente ver",
+        "Em qualquer horário, tanto faz para o usuário"
+      ],
+      "correta": 0,
+      "explicacao": "Avisos não urgentes devem respeitar o descanso do usuário. De madrugada eles incomodam e levam a desligar as notificações."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que costuma acontecer quando um app manda muitas notificações sem importância?",
+      "alternativas": [
+        "O usuário passa a abrir o app muito mais vezes por dia",
+        "O sistema dá mais destaque ao app na tela inicial",
+        "O celular passa a gastar menos bateria com o app",
+        "O usuário desativa as notificações ou desinstala o app"
+      ],
+      "correta": 3,
+      "explicacao": "Excesso de avisos irrelevantes irrita. A reação comum é bloquear as notificações ou remover o app."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual notificação está mais bem escrita para o app de uma clínica?",
+      "alternativas": [
+        "Olá!",
+        "Consulta amanhã, 9h, com a Dra. Ana. Toque para confirmar.",
+        "Abra o app agora mesmo, temos uma coisa muito importante!!!",
+        "Você tem uma novidade importante, veja"
+      ],
+      "correta": 1,
+      "explicacao": "Uma boa notificação diz o que aconteceu e o que fazer, em pouco texto. Mensagens vagas ou apelativas não ajudam."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é o token do aparelho nas notificações push?",
+      "alternativas": [
+        "A senha que o usuário cria para entrar no app pela primeira vez",
+        "Um código que identifica a instalação do app para o serviço de push",
+        "O número de telefone do chip do celular",
+        "A chave que libera o uso da API de mapas"
+      ],
+      "correta": 1,
+      "explicacao": "O serviço de push gera um token para cada instalação do app. O servidor usa esse token para dizer para onde a notificação vai."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No ícone do app de mensagens da escola aparece uma bolinha vermelha com o número 3. O que ela indica?",
+      "alternativas": [
+        "Que o app tem 3 permissões de localização",
+        "Que o app foi aberto 3 vezes hoje",
+        "Que há 3 avisos ainda não vistos no app",
+        "Que o app vai atualizar em 3 dias"
+      ],
+      "correta": 2,
+      "explicacao": "Esse contador no ícone (badge) mostra quantos itens novos aguardam o usuário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para uma notificação push chegar ao celular, o aparelho precisa de quê?",
+      "alternativas": [
+        "GPS ligado",
+        "Bluetooth ativado",
+        "Conexão com a internet",
+        "Tela desbloqueada"
+      ],
+      "correta": 2,
+      "explicacao": "O push vem do servidor pela internet. Se o celular estiver sem conexão, o aviso fica guardado no serviço e chega quando ele voltar à rede (por um tempo limitado)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma escola técnica, qual aviso faz sentido ser enviado como push?",
+      "alternativas": [
+        "\"A aula de amanhã foi cancelada\"",
+        "\"Abra o app e veja nossas novidades\"",
+        "\"Faz 2 dias que você não entra no app\"",
+        "\"Toque aqui para ver o logotipo da escola\""
+      ],
+      "correta": 0,
+      "explicacao": "Push deve levar informação útil e oportuna. Os outros exemplos só tentam chamar atenção, sem valor para o aluno."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para não incomodar, o app de uma loja de games deve deixar o usuário fazer o quê?",
+      "alternativas": [
+        "Receber todos os avisos, sem nenhuma opção de escolha",
+        "Desligar avisos só desinstalando o app do celular",
+        "Escolher apenas a cor do ícone das notificações na tela",
+        "Escolher quais tipos de aviso quer receber"
+      ],
+      "correta": 3,
+      "explicacao": "Dar opções por tipo (pedidos, promoções, novidades) deixa o usuário no controle e evita que ele desligue tudo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a ordem correta do caminho de uma notificação push?",
+      "alternativas": [
+        "Aparelho → servidor do app → serviço de push",
+        "Servidor do app → serviço de push (FCM/APNs) → aparelho",
+        "Serviço de push → loja de aplicativos → aparelho",
+        "Servidor do app → GPS → aparelho"
+      ],
+      "correta": 1,
+      "explicacao": "O servidor do app pede o envio ao serviço de push da plataforma, que entrega ao aparelho certo pelo token."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de obter o token do aparelho, onde ele deve ficar guardado para o sistema poder enviar notificações depois?",
+      "alternativas": [
+        "No servidor do app, ligado à conta do usuário",
+        "Só na memória do celular, sem enviar a ninguém",
+        "Dentro da chave de API do serviço de mapas",
+        "Numa notificação local agendada no aparelho"
+      ],
+      "correta": 0,
+      "explicacao": "Quem decide enviar é o servidor. Ele precisa ter o token associado ao usuário para saber para qual aparelho mandar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em qual situação o token de push de um aparelho costuma mudar?",
+      "alternativas": [
+        "Toda vez que o usuário muda o volume do celular",
+        "Quando o usuário troca o papel de parede da tela inicial",
+        "Sempre que o celular se conecta a um Wi-Fi novo",
+        "Quando o app é reinstalado ou tem os dados apagados"
+      ],
+      "correta": 3,
+      "explicacao": "O token é da instalação. Reinstalar, limpar os dados ou o próprio serviço renovar o token gera um código novo; o app deve reenviá-lo ao servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao enviar uma push, o servidor de uma academia recebeu do serviço de push a resposta de que aquele token não está mais registrado. O que o servidor deve fazer?",
+      "alternativas": [
+        "Reenviar a mesma mensagem a cada minuto",
+        "Remover esse token da lista do aluno",
+        "Trocar a chave de API de mapas da academia",
+        "Mandar um SMS pedindo para o aluno ligar o GPS"
+      ],
+      "correta": 1,
+      "explicacao": "Token inválido significa que o app foi desinstalado ou o token mudou. Mantê-lo só gera falhas; o correto é apagá-lo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma academia, para que serve o trecho abaixo?\n```js\nconst token = await obterTokenDoAparelho();\nawait fetch('https://api.academia.exemplo/tokens', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify({ idAluno: 42, token })\n});\n```",
+      "alternativas": [
+        "Mostrar ao aluno 42 uma notificação local na mesma hora",
+        "Pedir ao aluno 42 a permissão de localização do aparelho",
+        "Enviar o token ao servidor, ligado ao aluno 42",
+        "Apagar o token do aluno 42 do servidor da academia de vez"
+      ],
+      "correta": 2,
+      "explicacao": "O app obtém o token e faz um POST com o id do aluno e o token. O servidor guarda isso e, quando precisar, envia push para esse aparelho."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de um time de futebol de várzea quer mandar o mesmo aviso a todos os torcedores que escolheram receber \"jogos\". Qual recurso do serviço de push facilita isso?",
+      "alternativas": [
+        "Enviar uma notificação local separada em cada aparelho inscrito",
+        "Enviar para um tópico em que os aparelhos se inscreveram",
+        "Calcular uma rota até cada torcedor inscrito",
+        "Pedir a localização de cada torcedor antes do envio"
+      ],
+      "correta": 1,
+      "explicacao": "Com tópicos, os aparelhos se inscrevem em \"jogos\" e o servidor envia uma vez para o tópico, sem listar token por token."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de um laboratório pensou em mandar a notificação \"Seu exame de gravidez deu positivo\". Qual é o problema?",
+      "alternativas": [
+        "O texto aparece na tela bloqueada e expõe um dado sensível",
+        "A notificação fica longa demais para o serviço de push",
+        "O exame só pode ser avisado por notificação local",
+        "Notificações não podem ter a palavra \"exame\""
+      ],
+      "correta": 0,
+      "explicacao": "Qualquer pessoa perto do celular pode ler a tela bloqueada. O certo é algo como \"Seu resultado está disponível\" e mostrar o conteúdo só dentro do app, após login."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Android, o app de um restaurante separou as notificações em canais: \"Pedidos\" e \"Promoções\". Qual é a vantagem?",
+      "alternativas": [
+        "As promoções passam a chegar sem precisar de internet",
+        "O app deixa de precisar do token do aparelho para enviar",
+        "O usuário pode desligar só as promoções",
+        "Os pedidos passam a chegar por SMS em vez de push"
+      ],
+      "correta": 2,
+      "explicacao": "Canais de notificação (Android) deixam o usuário controlar cada tipo separadamente: som, destaque ou desligar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de remédios, o trecho abaixo usa a biblioteca de notificações do projeto. Que tipo de notificação é essa?\n```js\nagendarNotificacao({ titulo: 'Hora do remédio', quando: new Date('2026-12-01T08:00') });\n```",
+      "alternativas": [
+        "Remota: o servidor do app envia às 8h pelo serviço de push",
+        "Local: o próprio aparelho dispara no horário",
+        "Remota: o FCM agenda e dispara para todos os usuários do app",
+        "Local: só funciona se o GPS estiver ligado às 8h"
+      ],
+      "correta": 1,
+      "explicacao": "O app agenda no próprio aparelho, que dispara na hora marcada. Não há servidor nem serviço de push envolvidos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A notificação de um app de delivery levou, além do título e do texto, os dados `{\"tela\": \"pedido\", \"id\": 1532}`. Para que servem esses dados?",
+      "alternativas": [
+        "Para o celular mostrar a notificação em outra cor",
+        "Para o serviço de push saber a localização exata do cliente",
+        "Para a notificação chegar mesmo sem internet",
+        "Para o app abrir direto a tela daquele pedido ao ser tocado"
+      ],
+      "correta": 3,
+      "explicacao": "Os dados extras (payload) não aparecem para o usuário: o app os lê ao ser aberto pela notificação e navega direto para o pedido 1532."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que mudou nas notificações a partir do Android 13?",
+      "alternativas": [
+        "As notificações passaram a chegar por SMS",
+        "O FCM deixou de funcionar e foi trocado pelo APNs da Apple",
+        "O app passou a pedir permissão para mostrar notificações",
+        "Os apps não podem mais enviar notificações locais"
+      ],
+      "correta": 2,
+      "explicacao": "Antes, no Android, as notificações vinham liberadas. A partir do Android 13 existe a permissão de notificações, pedida em tempo de uso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é o melhor momento para o app de uma lanchonete pedir a permissão de notificações?",
+      "alternativas": [
+        "Na primeira tela, antes de a pessoa ver qualquer coisa do cardápio",
+        "Toda vez que o app abrir, até a pessoa aceitar",
+        "Nunca: notificações não precisam de permissão",
+        "Logo depois do primeiro pedido, dizendo que vai avisar o andamento"
+      ],
+      "correta": 3,
+      "explicacao": "Pedir no momento em que o benefício fica claro (acompanhar o pedido) faz sentido para o usuário e aumenta a aceitação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma loja de eletrônicos quer mandar 6 notificações de promoção por dia para todos os clientes. Qual é a recomendação?",
+      "alternativas": [
+        "Mandar poucas e relevantes, respeitando cada cliente",
+        "Mandar ainda mais, para o cliente não esquecer a loja nenhum dia",
+        "Mandar todas de madrugada, para não atrapalhar o dia",
+        "Mandar todas juntas no mesmo minuto, de uma vez só"
+      ],
+      "correta": 0,
+      "explicacao": "Frequência baixa, conteúdo útil e respeito às preferências evitam que o cliente bloqueie as notificações ou desinstale o app."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Como o desenvolvedor pode testar se as notificações push chegam ao seu celular, sem esperar um pedido real?",
+      "alternativas": [
+        "Desligando a internet do celular para ver se a notificação aparece",
+        "Pedindo a permissão de localização e abrindo o mapa do app",
+        "Enviando uma notificação de teste pelo painel do serviço",
+        "Desinstalando o app logo antes de enviar a notificação"
+      ],
+      "correta": 2,
+      "explicacao": "Os serviços de push permitem mandar uma mensagem de teste para um token específico, o que confirma a configuração."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que o servidor de um app não envia a notificação direto para o celular, e usa o FCM ou o APNs no meio?",
+      "alternativas": [
+        "Porque o celular só aceita mensagens que passam pela loja de aplicativos",
+        "O celular não tem endereço fixo; o sistema mantém uma só conexão com o serviço",
+        "Porque o servidor do app não consegue enviar texto em português",
+        "Porque o FCM e o APNs deixam a notificação chegar sem internet"
+      ],
+      "correta": 1,
+      "explicacao": "O celular troca de rede o tempo todo e não fica \"esperando\" cada servidor. O sistema mantém uma única conexão econômica com o serviço de push, que entrega as mensagens de todos os apps."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para enviar push, o servidor usa uma credencial secreta do serviço de push. Por que ela NUNCA deve ir dentro do app?",
+      "alternativas": [
+        "Porque o app ficaria pesado demais para a loja aceitar a publicação",
+        "Porque o celular apagaria o token ao encontrar a credencial",
+        "Porque o app não conseguiria mais pedir a permissão ao usuário",
+        "Quem a extraísse poderia mandar push a todos os usuários"
+      ],
+      "correta": 3,
+      "explicacao": "Com a credencial de envio, alguém poderia mandar mensagens falsas (golpes) em nome da empresa. Ela fica só no servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma cliente usa o app de uma papelaria no celular e no tablet. Como o servidor deve guardar os tokens dela?",
+      "alternativas": [
+        "Uma lista de tokens da cliente, um para cada aparelho",
+        "Um token só, sempre o do último aparelho usado",
+        "Nenhum token, pois a conta já identifica a cliente",
+        "O mesmo token copiado para os dois aparelhos"
+      ],
+      "correta": 0,
+      "explicacao": "Cada instalação tem seu token. Para avisar nos dois aparelhos, o servidor guarda todos os tokens ligados à conta e remove os que ficarem inválidos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O servidor de um restaurante manda uma mensagem só com dados, sem título nem texto, para o app atualizar o cardápio em segundo plano. Qual afirmação é correta?",
+      "alternativas": [
+        "O usuário vê uma notificação em branco que precisa tocar para atualizar",
+        "O usuário não vê nada; o app recebe os dados e atualiza",
+        "A mensagem só chega se o app estiver aberto e com o mapa na tela",
+        "Esse tipo de mensagem dispensa o token, pois vai para todos os aparelhos"
+      ],
+      "correta": 1,
+      "explicacao": "Mensagens só de dados (\"silenciosas\") acordam o app para trabalhar em segundo plano. O sistema limita a frequência e pode atrasá-las para poupar bateria."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app nacional manda a notificação \"Bom dia! Veja as ofertas\" às 8h do horário de Brasília para todos os usuários, inclusive os do Acre. Qual é o problema e a solução?",
+      "alternativas": [
+        "No Acre chega às 10h; enviar mais cedo para todos",
+        "No Acre chega às 6h; agendar pelo fuso de cada usuário",
+        "No Acre não chega; o APNs não funciona lá",
+        "Não há problema; o celular ajusta o texto da mensagem"
+      ],
+      "correta": 1,
+      "explicacao": "O Acre está 2 horas atrás de Brasília. Envios programados devem considerar o fuso de cada pessoa para não chegar cedo demais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O trecho abaixo, do app de uma clínica, roda no primeiro acesso. Qual é a falha?\n```js\nawait pedirPermissaoNotificacao();\nconst token = await obterTokenDoAparelho();\nawait enviarTokenAoServidor(token);\nmostrar('Pronto! Você receberá os lembretes.');\n```",
+      "alternativas": [
+        "Pede o token antes de pedir a permissão de notificações ao usuário",
+        "Envia o token por notificação local em vez de usar a internet",
+        "Usa await, o que impede o pedido de permissão de aparecer",
+        "Ignora a resposta da permissão e diz \"Pronto!\" mesmo se negada"
+      ],
+      "correta": 3,
+      "explicacao": "O resultado de pedirPermissaoNotificacao() é ignorado. Se o usuário negar, o app promete lembretes que não vão aparecer; deveria verificar e oferecer outra opção (e-mail, ver no app)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de uma clínica agenda lembretes LOCAIS das consultas. A recepção remarcou uma consulta pelo sistema da clínica. O que precisa acontecer para o paciente não receber o lembrete errado?",
+      "alternativas": [
+        "O app ser avisado para cancelar o antigo e agendar o novo",
+        "Nada: o lembrete local se ajusta sozinho à nova data marcada no sistema",
+        "O paciente desinstalar e instalar o app de novo",
+        "O servidor apagar o token do paciente e criar outro"
+      ],
+      "correta": 0,
+      "explicacao": "A notificação local fica gravada no aparelho e não sabe da mudança no servidor. É preciso avisar o app (por exemplo, push silenciosa ou sincronização ao abrir) para reagendar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Para enviar notificações push, os apps usam o FCM (Firebase Cloud Messaging) ou o APNs (Apple Push Notification service).\n\nNa sua resposta:\n1. explique, com palavras simples, o papel desses serviços;\n2. diga qual é usado em cada plataforma.",
+      "respostasAceitas": [
+        "São os \"carteiros\" das notificações: recebem a mensagem do servidor do app e entregam no aparelho certo, mesmo com o app fechado. FCM no Android (também pode ser usado para iOS) e APNs no iPhone/iOS."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) intermediário que entrega a mensagem do servidor ao aparelho; 2) FCM = Android/Google, APNs = Apple/iOS."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na hora em que o app de uma academia é instalado, ele obtém o token do aparelho e manda para o servidor da academia.\n\nNa sua resposta:\n1. explique o que é o token do aparelho;\n2. explique por que o servidor precisa guardá-lo.",
+      "respostasAceitas": [
+        "É um código que identifica aquela instalação do app naquele aparelho para o serviço de push. O servidor guarda para, quando quiser avisar aquele aluno, dizer ao serviço de push para qual aparelho mandar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) identificador da instalação/aparelho no serviço de push; 2) é o \"endereço\" para enviar push depois."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma loja de roupas está começando a usar notificações push e quer que os clientes não as desliguem.\n\nNa sua resposta:\n1. cite duas boas práticas para as notificações não incomodarem;\n2. explique por que uma delas funciona.",
+      "respostasAceitas": [
+        "Mandar poucas e úteis; respeitar o horário (nada de madrugada); deixar o cliente escolher os tipos de aviso; textos claros. Por exemplo, deixar escolher os tipos evita que quem só quer saber dos pedidos receba promoção e acabe desligando tudo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) duas práticas como frequência baixa, relevância, horário adequado, preferências por tipo, texto claro; 2) justificativa coerente de uma delas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de uma escola de música pede permissão para enviar notificações.\n\nNa sua resposta:\n1. explique por que o sistema exige essa permissão;\n2. diga o que acontece se o aluno negar.",
+      "respostasAceitas": [
+        "Para o usuário decidir quem pode interromper e chamar sua atenção, evitando abuso. Se negar, os avisos não aparecem; o aluno precisa ver as novidades abrindo o app (e pode mudar nas configurações depois)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) controle do usuário / evitar incômodo e abuso; 2) as notificações não são exibidas; o app deve continuar funcionando."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de uma academia tem dois avisos: (A) \"Seu treino de hoje é de pernas\", agendado toda manhã a partir da ficha salva no celular; (B) \"A aula de spinning das 19h foi cancelada\", decidida pela academia agora há pouco.\n\nNa sua resposta:\n1. classifique cada aviso como notificação local ou remota;\n2. justifique cada classificação.",
+      "respostasAceitas": [
+        "A é local: o próprio app agenda no aparelho com dados que já estão lá. B é remota (push): o cancelamento acontece fora do celular, então o servidor da academia precisa enviar pelo serviço de push."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) A = local, B = remota; 2) local é agendada no aparelho; remota nasce de um evento no servidor."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de um cinema enviou a notificação com o texto: \"Novidade!\".\n\nNa sua resposta:\n1. explique por que esse texto é ruim;\n2. explique que informação uma boa notificação de cinema deveria trazer.",
+      "respostasAceitas": [
+        "Não diz o que aconteceu nem por que interessa ao usuário; parece propaganda vazia e incentiva desligar as notificações. Deveria dizer algo concreto, como o filme que estreou, o horário da sessão ou que a compra do ingresso foi confirmada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) vago, sem informação útil; 2) informação concreta e útil (o quê, quando, o que fazer)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de uma lanchonete, o cliente recebe \"Seu lanche está pronto, retire no balcão\" assim que a cozinha marca o pedido como pronto no sistema.\n\nNa sua resposta:\n1. explique o caminho dessa notificação, desde a cozinha até o celular;\n2. diga qual dado o servidor precisa ter para saber o aparelho certo.",
+      "respostasAceitas": [
+        "A cozinha marca o pedido como pronto; o servidor da lanchonete percebe, monta a mensagem e envia ao serviço de push (FCM/APNs) indicando o token; o serviço entrega ao celular, que mostra a notificação. O servidor precisa do token do aparelho do cliente, ligado ao pedido/conta."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sistema/servidor → serviço de push → aparelho; 2) o token do aparelho do cliente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O servidor de uma loja de games guarda os tokens dos clientes há 3 anos. Muitas notificações agora voltam com erro de \"token não registrado\".\n\nNa sua resposta:\n1. explique por que muitos tokens antigos deixaram de funcionar;\n2. diga o que o app e o servidor devem fazer para manter a lista correta.",
+      "respostasAceitas": [
+        "Clientes desinstalaram o app, trocaram de celular ou o token foi renovado. O servidor deve apagar os tokens que voltam inválidos, e o app deve reenviar o token sempre que ele mudar (e ao fazer login)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) desinstalação, troca de aparelho, renovação do token; 2) remover inválidos e atualizar o token pelo app."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um laboratório de análises quer avisar por push que o resultado do exame do paciente saiu.\n\nNa sua resposta:\n1. explique por que não é adequado colocar o resultado no texto da notificação;\n2. explique como avisar sem expor o paciente.",
+      "respostasAceitas": [
+        "A notificação aparece na tela bloqueada e pode ser lida por outras pessoas; resultado de exame é dado sensível de saúde (LGPD). O aviso deve ser neutro, como \"Seu resultado está disponível\", e o conteúdo só aparece dentro do app depois do login."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) exposição na tela bloqueada, dado sensível; 2) mensagem genérica + ver o detalhe no app com autenticação."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No Android, o app de um mercado separa as notificações em dois canais: \"Status do pedido\" e \"Ofertas da semana\".\n\nNa sua resposta:\n1. explique o que o usuário consegue fazer com esses canais;\n2. explique por que isso é bom também para o mercado.",
+      "respostasAceitas": [
+        "Ele pode ajustar cada canal separado: desligar as ofertas e manter o status do pedido, ou mudar o som de um deles. É bom para o mercado porque o cliente irritado com ofertas não desliga tudo e continua recebendo os avisos importantes dos pedidos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) controle separado por tipo (desligar, som, destaque); 2) evita que o usuário bloqueie todas as notificações."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Observe o trecho do app de uma escola de natação:\n```js\nconst token = await obterTokenDoAparelho();\nawait fetch('https://api.natacao.exemplo/alunos/17/token', {\n  method: 'PUT',\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify({ token })\n});\n```\n\nNa sua resposta:\n1. explique o que o trecho faz;\n2. explique por que ele deve rodar de novo quando o token mudar.",
+      "respostasAceitas": [
+        "Obtém o token de push do aparelho e envia ao servidor (PUT), gravando-o na ficha do aluno 17. Se o token mudar e o servidor continuar com o antigo, as notificações para esse aluno deixam de chegar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) pega o token e atualiza no servidor ligado ao aluno 17; 2) token antigo fica inválido e o aluno para de receber."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de uma pet shop pede a permissão de notificações logo na primeira tela, antes de o cliente fazer qualquer coisa, e a maioria das pessoas nega.\n\nNa sua resposta:\n1. explique por que tanta gente nega nesse momento;\n2. diga em que momento seria melhor pedir e por quê.",
+      "respostasAceitas": [
+        "Na primeira tela a pessoa ainda não sabe o que vai receber nem vê vantagem, então nega por precaução. Melhor pedir quando o benefício fica claro, como depois de agendar o banho e tosa (\"quer ser avisado quando seu pet estiver pronto?\")."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) falta de contexto/benefício; 2) pedir no momento em que a notificação é útil, com explicação."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Para economizar tempo, um desenvolvedor colocou dentro do app a credencial secreta que o servidor usa para mandar push pelo FCM, e o próprio app passou a enviar as notificações.\n\nNa sua resposta:\n1. explique o risco dessa decisão;\n2. explique onde a credencial deve ficar e como o app passa a pedir uma notificação.",
+      "respostasAceitas": [
+        "O arquivo do app pode ser aberto; quem extrair a credencial pode mandar notificações para todos os usuários em nome da empresa (golpes, links falsos). A credencial deve ficar só no servidor; o app chama a API do servidor (com login) e o servidor decide e envia pelo FCM."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) extração da credencial e envio de mensagens falsas/golpes; 2) credencial só no servidor; app pede ao servidor autenticado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma loja on-line quer mandar a mesma notificação de promoção para 100 mil clientes de todo o Brasil, às 7h de Brasília, todos os dias.\n\nNa sua resposta:\n1. aponte dois problemas desse plano;\n2. proponha ajustes que respeitem os clientes.",
+      "respostasAceitas": [
+        "Problemas: em fusos atrasados chega antes das 7h (no Acre, 5h); todo dia é frequente demais e gera bloqueios; mandar a todos ignora quem não quer promoção. Ajustes: enviar pelo fuso de cada um, em horário comercial, com frequência menor, só para quem aceitou ofertas e com conteúdo relevante."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dois entre fuso horário, frequência excessiva, falta de escolha/segmentação, pouca relevância; 2) ajustes correspondentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "APIs",
+      "capacidade": "mobile.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de uma clínica odontológica usa notificações locais para lembrar as consultas, agendadas no celular no momento da marcação. A clínica reclama que pacientes com consulta remarcada recebem o lembrete na data antiga.\n\nNa sua resposta:\n1. explique por que isso acontece;\n2. proponha uma solução usando o que se sabe de notificação local e remota.",
+      "respostasAceitas": [
+        "A notificação local fica gravada no aparelho e não sabe que a consulta mudou no servidor. Solução: ao remarcar, o servidor manda uma push (pode ser só de dados) ou o app sincroniza ao abrir, cancela o lembrete antigo e agenda o novo; ou o lembrete passa a ser uma push enviada pelo servidor na hora certa."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a local é independente do servidor e fica desatualizada; 2) push/sincronização para reagendar, ou usar push remota para o lembrete."
+    }
+  ]
+}
