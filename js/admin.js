@@ -2142,6 +2142,7 @@ const BANCOS_BD_150 = [
 const BANCOS_MARC_150 = [
   ["marc_04_html_estrutura", "HTML: estrutura, semântica e validação"],
   ["marc_05_html_textos_links", "HTML: textos, cores, imagens e links"],
+  ["marc_06_html_listas_tabelas", "HTML: listas e tabelas"],
   ["marc_07_html_formularios", "HTML: formulários"],
   ["marc_08_css_seletores", "CSS: seletores, formatação e validação"]
 ].map(([arq, tema]) => ({ arquivo: `bancos/gerados/marc/${arq}.json`, icone: "🏷", titulo: `Linguagem de Marcação — ${tema} (150 questões)`,
