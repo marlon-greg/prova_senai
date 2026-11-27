@@ -2122,7 +2122,9 @@ const BANCOS_BD_150 = [
   ["bd_02_mer_der", "Modelagem: MER e DER (conceitual e lógico)"],
   ["bd_03_normalizacao", "Normalização e dicionário de dados"],
   ["bd_04_ddl_database", "DDL — CREATE, USE e DROP DATABASE"],
+  ["bd_05_create_table", "DDL — CREATE TABLE e restrições"],
   ["bd_06_alter_indices_drop", "DDL — ALTER TABLE, índices e DROP"],
+  ["bd_07_dcl", "DCL — usuários e permissões (GRANT e REVOKE)"],
   ["bd_08_insert", "DML — INSERT"],
   ["bd_09_update", "DML — UPDATE"]
 ].map(([arq, tema]) => ({ arquivo: `bancos/gerados/bd/${arq}.json`, icone: "🗃", titulo: `Banco de Dados — ${tema} (150 questões)`,

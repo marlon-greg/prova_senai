@@ -1,0 +1,2477 @@
+{
+  "nome": "Banco de Dados — DCL: usuários e permissões (a revisar)",
+  "materia": "Banco de Dados",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No estudo de SQL, os comandos são divididos em grupos. O que significa a sigla DCL?",
+      "alternativas": [
+        "Linguagem de Consulta de Dados (Data Consult Language)",
+        "Linguagem de Controle de Dados (Data Control Language)",
+        "Linguagem de Definição de Dados (Data Definition Language)",
+        "Linguagem de Cópia de Dados (Data Copy Language)"
+      ],
+      "correta": 1,
+      "explicacao": "DCL é a parte do SQL que controla o acesso: quem pode fazer o quê no banco. Definição de estrutura é DDL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quais são os dois comandos principais da DCL no MySQL?",
+      "alternativas": [
+        "SELECT e INSERT",
+        "GRANT e REVOKE",
+        "CREATE TABLE e ALTER TABLE",
+        "COMMIT e ROLLBACK"
+      ],
+      "correta": 1,
+      "explicacao": "GRANT concede privilégios e REVOKE retira. SELECT/INSERT são DML/DQL; CREATE/ALTER são DDL; COMMIT/ROLLBACK são de transação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, o banco guarda notas e faltas dos alunos. Para que a DCL é usada nesse banco?",
+      "alternativas": [
+        "Para controlar quem pode acessar o banco e o que cada usuário pode fazer",
+        "Para definir as colunas e os tipos das tabelas de notas",
+        "Para inserir e alterar as notas dos alunos no fim do bimestre",
+        "Para gerar cópias de segurança automáticas das tabelas"
+      ],
+      "correta": 0,
+      "explicacao": "DCL trata de permissões. Definir colunas é DDL; inserir/alterar dados é DML; backup é outra tarefa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, o técnico rodou `CREATE USER 'bibliotecaria'@'localhost' IDENTIFIED BY 'Livro#2026';`. O que a parte `IDENTIFIED BY 'Livro#2026'` define?",
+      "alternativas": [
+        "O nome do banco que a conta vai poder acessar",
+        "O computador de onde a conta pode se conectar",
+        "O cargo da funcionária dentro da biblioteca",
+        "A senha que a conta vai usar para entrar no MySQL"
+      ],
+      "correta": 3,
+      "explicacao": "IDENTIFIED BY define a senha. O host fica depois do @ e o banco só aparece no GRANT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa padaria, a funcionária do caixa saiu da empresa. Qual comando remove a conta `'caixa01'@'localhost'` do servidor MySQL?",
+      "alternativas": [
+        "DELETE USER 'caixa01'@'localhost';",
+        "REVOKE USER 'caixa01'@'localhost';",
+        "DROP USER 'caixa01'@'localhost';",
+        "DROP TABLE 'caixa01'@'localhost';"
+      ],
+      "correta": 2,
+      "explicacao": "DROP USER apaga a conta e as permissões dela. DELETE USER e REVOKE USER não existem; DROP TABLE apaga tabela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel, foi criada a conta `'recepcao'@'%'`. O que o `%` no lugar do host indica?",
+      "alternativas": [
+        "Que a conta pode se conectar a partir de qualquer computador",
+        "Que a conta tem todas as permissões do servidor",
+        "Que a conta só pode se conectar pelo próprio servidor",
+        "Que a conta não precisa digitar senha para entrar"
+      ],
+      "correta": 0,
+      "explicacao": "'%' é um curinga de host: qualquer máquina. Permissões vêm do GRANT, não do host."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de roupas, o vendedor esqueceu a senha. Qual comando o administrador usa no MySQL 8 para definir uma senha nova para `'vendedor'@'localhost'`?",
+      "alternativas": [
+        "UPDATE USER 'vendedor'@'localhost' SET senha = 'Nova#Senha9';",
+        "CHANGE PASSWORD 'vendedor'@'localhost' TO 'Nova#Senha9';",
+        "ALTER USER 'vendedor'@'localhost' IDENTIFIED BY 'Nova#Senha9';",
+        "GRANT PASSWORD 'Nova#Senha9' TO 'vendedor'@'localhost';"
+      ],
+      "correta": 2,
+      "explicacao": "No MySQL 8 a senha é trocada com ALTER USER ... IDENTIFIED BY. As outras formas não existem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-nome-comando",
+      "enunciado": "Qual comando SQL é usado para conceder (dar) privilégios a um usuário?",
+      "alternativas": [
+        "REVOKE",
+        "GRANT",
+        "ALLOW",
+        "PERMIT"
+      ],
+      "correta": 1,
+      "explicacao": "GRANT concede. REVOKE retira. ALLOW e PERMIT não são comandos do MySQL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-nome-comando",
+      "enunciado": "Qual comando SQL é usado para retirar um privilégio que um usuário já tinha?",
+      "alternativas": [
+        "REVOKE",
+        "GRANT",
+        "DELETE",
+        "DROP"
+      ],
+      "correta": 0,
+      "explicacao": "REVOKE retira privilégios. DELETE apaga linhas e DROP apaga objetos (tabelas, bancos, usuários)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-show-grants",
+      "enunciado": "Numa academia, a professora conectada ao MySQL rodou apenas `SHOW GRANTS;` (sem FOR). O que aparece?",
+      "alternativas": [
+        "Os privilégios da própria conta que está conectada",
+        "Os privilégios de todos os usuários do servidor",
+        "A lista de todas as tabelas do banco atual",
+        "As senhas das contas cadastradas no servidor"
+      ],
+      "correta": 0,
+      "explicacao": "Sem FOR, SHOW GRANTS mostra os privilégios do usuário atual. Para outro usuário, usa-se SHOW GRANTS FOR."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, o comando foi `GRANT SELECT ON clinica.* TO 'recepcao'@'localhost';`. O que significa `clinica.*`?",
+      "alternativas": [
+        "Somente a tabela chamada clinica",
+        "Todos os bancos de dados do servidor",
+        "Todas as tabelas do banco clinica",
+        "Todas as colunas de uma tabela chamada *"
+      ],
+      "correta": 2,
+      "explicacao": "banco.* = todas as tabelas daquele banco. *.* seria todos os bancos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Como se chama a conta de administrador que vem criada na instalação do MySQL e tem todos os privilégios?",
+      "alternativas": [
+        "admin",
+        "root",
+        "master",
+        "system"
+      ],
+      "correta": 1,
+      "explicacao": "No MySQL o superusuário padrão é root. Ele não deve ser usado no dia a dia da aplicação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL, uma conta de usuário é identificada por qual combinação?",
+      "alternativas": [
+        "Somente o nome do usuário",
+        "Nome do usuário + nome do banco",
+        "Nome do usuário + senha cadastrada",
+        "Nome do usuário + host de onde ele se conecta"
+      ],
+      "correta": 3,
+      "explicacao": "A conta é 'nome'@'host'. 'ana'@'localhost' e 'ana'@'%' são contas diferentes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa farmácia, qual destas senhas é a mais segura para a conta do sistema de vendas?",
+      "alternativas": [
+        "123456",
+        "farmacia",
+        "farmacia2026",
+        "Fx7#qL2!pR9w"
+      ],
+      "correta": 3,
+      "explicacao": "Senha forte é longa e mistura letras maiúsculas, minúsculas, números e símbolos, sem palavras óbvias."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-if-exists",
+      "enunciado": "O técnico de uma pet shop rodou `CREATE USER 'tosador'@'localhost' IDENTIFIED BY 'Tosa#123';`, mas essa conta já existia. O que acontece?",
+      "alternativas": [
+        "O MySQL apenas troca a senha da conta que já existia",
+        "O MySQL dá erro dizendo que a operação CREATE USER falhou",
+        "O MySQL cria uma segunda conta com o mesmo nome e host",
+        "O MySQL apaga a conta antiga e cria outra vazia"
+      ],
+      "correta": 1,
+      "explicacao": "CREATE USER de conta existente gera ERROR 1396 (Operation CREATE USER failed). Para evitar, usa-se IF NOT EXISTS."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-if-exists",
+      "enunciado": "O que faz `CREATE USER IF NOT EXISTS 'garcom'@'localhost' IDENTIFIED BY 'Mesa#45';` numa pizzaria?",
+      "alternativas": [
+        "Cria a conta e, se ela já existir, troca a senha dela",
+        "Verifica se a conta existe, mas nunca cria nada",
+        "Cria a conta só se ela ainda não existir; se existir, só gera um aviso",
+        "Apaga a conta caso ela exista e cria outra nova"
+      ],
+      "correta": 2,
+      "explicacao": "IF NOT EXISTS evita o erro: se a conta existe, nada muda e aparece um warning. A senha antiga continua."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa oficina, a conta `'mecanico'@'localhost'` criou várias tabelas no banco oficina. Depois, o administrador rodou `DROP USER 'mecanico'@'localhost';`. O que acontece com essas tabelas?",
+      "alternativas": [
+        "São apagadas junto com a conta do mecânico",
+        "Continuam existindo; só a conta e as permissões dela são removidas",
+        "Ficam bloqueadas até outra conta assumir a posse",
+        "Vão para uma lixeira e somem depois de 30 dias"
+      ],
+      "correta": 1,
+      "explicacao": "No MySQL as tabelas pertencem ao banco, não ao usuário. DROP USER não apaga dados nem tabelas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa transportadora, rodaram `CREATE USER 'motorista' IDENTIFIED BY 'Rota#2026';` sem informar o host. Qual host o MySQL usa?",
+      "alternativas": [
+        "'localhost' (só o próprio servidor)",
+        "'%' (qualquer computador)",
+        "Nenhum: a conta fica sem host e não conecta",
+        "O mesmo host da conta que rodou o comando"
+      ],
+      "correta": 1,
+      "explicacao": "Quando o host é omitido, o MySQL assume '%'. Por isso é bom sempre escrever o host de forma explícita."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa imobiliária, o administrador rodou `ALTER USER 'corretor'@'localhost' IDENTIFIED BY 'Casa#Nova7';`. O que acontece com os privilégios que o corretor já tinha?",
+      "alternativas": [
+        "São apagados e precisam ser concedidos de novo",
+        "Viram ALL PRIVILEGES automaticamente",
+        "Continuam os mesmos; só a senha foi trocada",
+        "Só voltam a valer depois de FLUSH PRIVILEGES"
+      ],
+      "correta": 2,
+      "explicacao": "ALTER USER ... IDENTIFIED BY muda apenas a senha. Os GRANTs continuam ligados à conta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Comparando os grupos de comandos SQL, qual frase está correta?",
+      "alternativas": [
+        "DDL mexe na estrutura, DML mexe nos dados e DCL mexe nas permissões",
+        "DDL mexe nas permissões, DML na estrutura e DCL nos dados",
+        "DDL mexe nos dados, DML nas permissões e DCL na estrutura",
+        "DDL, DML e DCL são nomes diferentes para a mesma coisa"
+      ],
+      "correta": 0,
+      "explicacao": "DDL: CREATE/ALTER/DROP de objetos. DML: INSERT/UPDATE/DELETE. DCL: GRANT/REVOKE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de material de construção, existe só a conta `'estoquista'@'localhost'`. O estoquista tenta entrar no MySQL a partir de outro computador da rede. O que acontece?",
+      "alternativas": [
+        "Ele entra normalmente, porque usuário e senha estão certos",
+        "O acesso é negado, porque a conta só vale para conexões feitas no próprio servidor",
+        "Ele entra, mas só consegue fazer consultas",
+        "O MySQL cria sozinho uma conta 'estoquista'@'%' para ele"
+      ],
+      "correta": 1,
+      "explicacao": "'localhost' limita a conexão à própria máquina do servidor. De outro computador não existe conta que combine."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz o comando `DROP USER IF EXISTS 'estagiario'@'localhost';`?",
+      "alternativas": [
+        "Apaga a conta e todas as tabelas que ela criou",
+        "Apaga a conta se ela existir; se não existir, só gera um aviso em vez de erro",
+        "Verifica se a conta existe, mas não apaga nada",
+        "Bloqueia a conta até a próxima troca de senha"
+      ],
+      "correta": 1,
+      "explicacao": "IF EXISTS evita o erro quando a conta não existe. DROP USER nunca apaga tabelas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola de idiomas, o administrador rodou `SELECT user, host FROM mysql.user;`. O que esse comando mostra?",
+      "alternativas": [
+        "A lista de contas cadastradas no servidor, com nome e host",
+        "Os privilégios de cada conta em cada tabela",
+        "As senhas de todas as contas em texto normal",
+        "Os bancos de dados que cada conta criou"
+      ],
+      "correta": 0,
+      "explicacao": "A tabela mysql.user guarda as contas. A senha fica guardada como hash, nunca em texto puro. Privilégios se veem com SHOW GRANTS."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa ótica, a atendente quer saber com qual conta está conectada ao MySQL. Qual comando mostra isso?",
+      "alternativas": [
+        "SELECT CURRENT_USER();",
+        "SHOW USERS;",
+        "SELECT * FROM conta_atual;",
+        "SHOW DATABASES;"
+      ],
+      "correta": 0,
+      "explicacao": "CURRENT_USER() devolve a conta 'usuário'@'host' que o MySQL usou para autenticar. SHOW USERS não existe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa autoescola, o instrutor vai tirar férias de um mês. O administrador rodou `ALTER USER 'instrutor'@'localhost' ACCOUNT LOCK;`. O que acontece?",
+      "alternativas": [
+        "A conta é apagada junto com todas as permissões",
+        "A conta continua entrando, mas só pode consultar",
+        "A senha da conta é trocada por uma senha aleatória",
+        "A conta fica bloqueada para login, mas continua existindo com suas permissões"
+      ],
+      "correta": 3,
+      "explicacao": "ACCOUNT LOCK impede novas conexões sem apagar a conta. Na volta, ACCOUNT UNLOCK libera de novo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-rename",
+      "enunciado": "Num buffet, rodaram `RENAME USER 'aux'@'localhost' TO 'auxiliar'@'localhost';`. O que acontece?",
+      "alternativas": [
+        "É criada uma conta nova vazia e a antiga continua",
+        "A conta muda de nome, mas perde todas as permissões",
+        "A conta muda de nome e mantém a senha e as permissões",
+        "A conta antiga é apagada e a nova fica sem senha"
+      ],
+      "correta": 2,
+      "explicacao": "RENAME USER só troca o nome (e/ou host) da conta; senha e privilégios vão junto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num salão de beleza, existem as contas `'gerente'@'localhost'` e `'gerente'@'%'`. Qual frase está correta?",
+      "alternativas": [
+        "São duas contas diferentes, cada uma com sua senha e suas permissões",
+        "São a mesma conta, apenas escrita de dois jeitos",
+        "O MySQL não aceita duas contas com o mesmo nome",
+        "A segunda conta substitui a primeira automaticamente"
+      ],
+      "correta": 0,
+      "explicacao": "No MySQL a conta é o par nome + host. Mudou o host, é outra conta, com GRANTs separados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa veterinária, criaram a conta `'tecnico'@'192.168.0.%'`. De onde essa conta pode se conectar?",
+      "alternativas": [
+        "Só do computador de IP 192.168.0.0",
+        "De qualquer computador da internet",
+        "De qualquer computador cujo IP comece com 192.168.0.",
+        "Só do próprio servidor (localhost)"
+      ],
+      "correta": 2,
+      "explicacao": "O % funciona como curinga também dentro do host: '192.168.0.%' libera a rede local inteira daquela faixa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-grant-mysql8",
+      "enunciado": "Num MySQL 8 de uma floricultura, a conta 'entregador' ainda não existe e o técnico rodou `GRANT SELECT ON floricultura.* TO 'entregador'@'localhost';`. O que acontece?",
+      "alternativas": [
+        "A conta é criada sem senha e recebe o SELECT",
+        "Dá erro: no MySQL 8 a conta precisa ser criada antes com CREATE USER",
+        "A conta é criada com a senha padrão 'mysql'",
+        "O privilégio é guardado e vale quando a conta for criada"
+      ],
+      "correta": 1,
+      "explicacao": "Em versões antigas o GRANT criava a conta. No MySQL 8 isso foi removido: primeiro CREATE USER, depois GRANT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-aspas",
+      "enunciado": "Um aluno rodou `CREATE USER 'ana@localhost' IDENTIFIED BY 'Ana#2026';` (tudo dentro de um único par de aspas). Que conta foi criada?",
+      "alternativas": [
+        "A conta 'ana' com host 'localhost', como esperado",
+        "Nenhuma: o MySQL recusa o comando com erro de sintaxe",
+        "Uma conta chamada ana@localhost, com host '%'",
+        "A conta 'ana' com host '%' e senha vazia"
+      ],
+      "correta": 2,
+      "explicacao": "Nome e host são cotados separadamente: 'ana'@'localhost'. Com um só par de aspas, tudo vira o nome e o host fica '%'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, o administrador rodou `ALTER USER 'medico'@'localhost' PASSWORD EXPIRE;`. O que acontece no próximo acesso do médico?",
+      "alternativas": [
+        "Ele não consegue entrar nunca mais com essa conta",
+        "A conta é apagada automaticamente pelo servidor",
+        "Ele entra, mas precisa trocar a senha antes de rodar outros comandos",
+        "Ele entra sem senha e define uma nova depois"
+      ],
+      "correta": 2,
+      "explicacao": "PASSWORD EXPIRE marca a senha como vencida: o usuário conecta, mas o MySQL só aceita a troca de senha até que ela seja feita."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa papelaria, a conta `'vendas'@'localhost'` (que só tem SELECT e INSERT no banco papelaria) tentou rodar `CREATE USER 'novo'@'localhost' IDENTIFIED BY 'X#9a';`. O que acontece?",
+      "alternativas": [
+        "A conta é criada, porque qualquer usuário pode criar contas",
+        "Erro de acesso: criar contas exige o privilégio global CREATE USER",
+        "A conta é criada, mas só com acesso ao banco papelaria",
+        "A conta é criada e herda os privilégios da conta vendas"
+      ],
+      "correta": 1,
+      "explicacao": "CREATE USER exige o privilégio global CREATE USER (ou o root). Privilégios de um banco não bastam."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-host-especifico",
+      "enunciado": "Num cinema existem `'caixa'@'localhost'` (com SELECT e INSERT) e `'caixa'@'%'` (só com SELECT). O caixa conecta pelo próprio servidor. Qual conta o MySQL usa?",
+      "alternativas": [
+        "'caixa'@'%', porque o % sempre vale para todos",
+        "As duas ao mesmo tempo, somando os privilégios",
+        "Nenhuma: o MySQL recusa por ter contas duplicadas",
+        "'caixa'@'localhost', porque o host mais específico tem preferência"
+      ],
+      "correta": 3,
+      "explicacao": "Quando mais de uma conta combina, o MySQL escolhe a de host mais específico. Os privilégios não se somam entre contas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel, o administrador consultou a coluna authentication_string da tabela mysql.user, onde fica a senha das contas. O que ele vai ver ali?",
+      "alternativas": [
+        "Um hash da senha, e não a senha digitada em texto normal",
+        "A senha exatamente como foi digitada no CREATE USER",
+        "A senha escrita de trás para frente, para disfarçar",
+        "Um campo vazio, porque o MySQL não guarda senhas"
+      ],
+      "correta": 0,
+      "explicacao": "O MySQL guarda só o hash (resultado de uma função de embaralhamento) da senha. Por isso nem o administrador consegue ler a senha: ele só pode trocá-la com ALTER USER."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, o técnico rodou `DROP USER 'professor'@'%';`, mas a conta que existia era `'professor'@'localhost'`. O que acontece?",
+      "alternativas": [
+        "As duas contas 'professor' são apagadas, pois % vale para todos",
+        "Dá erro, porque a conta 'professor'@'%' não existe; a de localhost continua",
+        "A conta 'professor'@'localhost' é apagada no lugar",
+        "A conta de localhost perde as permissões, mas não é apagada"
+      ],
+      "correta": 1,
+      "explicacao": "O DROP USER precisa do par exato nome + host. '%' não é curinga nesse caso: é outra conta, que não existe."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa academia, o técnico explicou que o SQL tem um grupo de comandos chamado DCL.\n\nNa sua resposta:\n1. diga o que significa DCL;\n2. cite os dois comandos principais desse grupo;\n3. explique para que ele serve na academia.",
+      "respostasAceitas": [
+        "DCL é a Linguagem de Controle de Dados. Os comandos principais são GRANT (concede) e REVOKE (retira). Serve para controlar quem acessa o banco da academia e o que cada um pode fazer."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Data Control Language / controle de dados; 2) GRANT e REVOKE; 3) controlar permissões de acesso (ex.: recepcionista só consulta alunos)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "dcl-show-grants",
+      "enunciado": "Numa clínica veterinária, a atendente conectada ao MySQL rodou `SHOW GRANTS;` e o administrador rodou `SHOW GRANTS FOR 'atendente'@'localhost';`.\n\nNa sua resposta:\n1. diga o que cada um desses comandos mostra;\n2. explique quando faz sentido usar cada um.",
+      "respostasAceitas": [
+        "SHOW GRANTS mostra os privilégios da própria conta conectada; SHOW GRANTS FOR mostra os privilégios da conta indicada. A atendente usa o primeiro para ver o que ela pode fazer; o administrador usa o segundo para conferir outra conta."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sem FOR = conta atual; com FOR = conta informada; 2) conferir o próprio acesso x conferir/auditar o acesso de outra pessoa."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa lanchonete, o caixa trocou de turno e o administrador rodou `ALTER USER 'caixa'@'localhost' IDENTIFIED BY 'Lanche#77';`.\n\nNa sua resposta:\n1. diga o que o comando altera;\n2. explique se as permissões do caixa mudam.",
+      "respostasAceitas": [
+        "Troca a senha da conta caixa@localhost para Lanche#77. As permissões continuam as mesmas, só a senha muda."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) troca a senha; 2) privilégios não mudam."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "dcl-rename",
+      "enunciado": "Numa floricultura, o funcionário que usava a conta 'aux' foi promovido e o técnico rodou `RENAME USER 'aux'@'localhost' TO 'florista'@'localhost';`.\n\nNa sua resposta:\n1. diga o que o comando faz;\n2. explique o que acontece com a senha e as permissões da conta.",
+      "respostasAceitas": [
+        "Troca o nome da conta de aux para florista. A senha e as permissões continuam as mesmas, só o nome muda."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) renomeia a conta; 2) senha e privilégios são mantidos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num hotel, o técnico precisa decidir se a conta da recepção será `'recepcao'@'localhost'` ou `'recepcao'@'%'`.\n\nNa sua resposta:\n1. explique a diferença entre os dois hosts;\n2. diga qual é mais seguro e por quê.",
+      "respostasAceitas": [
+        "'localhost' só aceita conexão feita no próprio servidor; '%' aceita de qualquer computador. 'localhost' é mais seguro, porque limita de onde alguém pode tentar entrar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) localhost = só a máquina do servidor, % = qualquer máquina; 2) localhost é mais restrito, logo mais seguro (usar % só se for necessário)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa papelaria, a senha da conta do sistema de vendas é `papelaria123`.\n\nNa sua resposta:\n1. explique por que essa senha é fraca;\n2. diga duas características de uma senha forte.",
+      "respostasAceitas": [
+        "É fraca porque usa o nome da empresa e números em sequência, fáceis de adivinhar. Senha forte é longa e mistura maiúsculas, minúsculas, números e símbolos, sem palavras óbvias."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) previsível (nome da loja + sequência); 2) tamanho grande, mistura de tipos de caracteres, sem dados óbvios."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "dcl-if-exists",
+      "enunciado": "Numa escola técnica, o professor rodou `CREATE USER 'aluno01'@'localhost' IDENTIFIED BY 'Aula#01';` e, logo depois, `CREATE USER 'aluno01'@'localhost' IDENTIFIED BY 'Aula#02';`.\n\nNa sua resposta:\n1. diga o que acontece no segundo comando;\n2. explique o que mudaria se ele usasse IF NOT EXISTS no segundo comando.",
+      "respostasAceitas": [
+        "O segundo comando dá erro, porque a conta já existe (CREATE USER falhou). Com IF NOT EXISTS não haveria erro, só um aviso, e a senha continuaria Aula#01."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) erro (ERROR 1396), conta já existe; 2) IF NOT EXISTS: sem erro, só aviso, nada é alterado (senha não muda)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa oficina mecânica, existem as contas `'chefe'@'localhost'` e `'chefe'@'%'`. O técnico apagou só a primeira com `DROP USER 'chefe'@'localhost';`.\n\nNa sua resposta:\n1. explique por que existem duas contas com o mesmo nome;\n2. diga o que acontece com a conta 'chefe'@'%'.",
+      "respostasAceitas": [
+        "No MySQL a conta é o par nome + host, então são duas contas diferentes. A conta 'chefe'@'%' continua existindo, com a senha e as permissões dela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) conta = usuário + host; 2) a de % não é afetada, continua ativa."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de informática, o técnico rodou `SELECT user, host FROM mysql.user;` e viu uma conta `'teste'@'%'` que ninguém lembra de ter criado.\n\nNa sua resposta:\n1. diga o que esse SELECT mostra;\n2. explique por que essa conta é um risco e o que fazer com ela.",
+      "respostasAceitas": [
+        "Mostra as contas cadastradas no servidor (nome e host). Uma conta esquecida que aceita conexão de qualquer lugar pode ser usada por invasores; o certo é verificar e apagar com DROP USER."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) lista de contas; 2) conta esquecida com % é porta de entrada; remover (DROP USER) ou bloquear."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa academia, uma professora vai ficar dois meses de licença. O administrador rodou `ALTER USER 'prof_ana'@'localhost' ACCOUNT LOCK;` em vez de apagar a conta.\n\nNa sua resposta:\n1. diga o que o comando faz;\n2. explique a vantagem de bloquear em vez de usar DROP USER.",
+      "respostasAceitas": [
+        "Bloqueia a conta: ela não consegue mais conectar, mas continua existindo. Vantagem: quando a professora voltar, basta desbloquear (ACCOUNT UNLOCK) e as permissões continuam lá, sem refazer os GRANTs."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) bloqueia login sem apagar; 2) mantém senha/permissões para reativar depois."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa transportadora, o técnico rodou `CREATE USER 'rastreio' IDENTIFIED BY 'Carga#55';` sem informar o host.\n\nNa sua resposta:\n1. diga qual host o MySQL usa nesse caso;\n2. explique por que isso pode ser um problema de segurança.",
+      "respostasAceitas": [
+        "Sem host, o MySQL usa '%'. Assim a conta aceita conexão de qualquer computador, o que é mais exposto do que o necessário se o sistema roda no próprio servidor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) '%'; 2) acesso de qualquer lugar sem necessidade; melhor informar o host (ex.: localhost)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa biblioteca, o sistema mostra as contas `'leitor'@'localhost'` e `'leitor'@'192.168.1.%'`.\n\nNa sua resposta:\n1. explique de onde cada conta pode se conectar;\n2. diga uma vantagem de usar uma faixa de IP em vez de '%'.",
+      "respostasAceitas": [
+        "'leitor'@'localhost' só conecta do próprio servidor; 'leitor'@'192.168.1.%' conecta de qualquer computador da rede 192.168.1. A faixa de IP limita o acesso à rede interna, em vez de aceitar qualquer lugar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) localhost = servidor; faixa = computadores da rede local 192.168.1.x; 2) mais seguro que %, pois bloqueia acesso de fora da rede."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "dcl-grant-mysql8",
+      "enunciado": "Num MySQL 8 de uma pet shop, o técnico seguiu um tutorial antigo e rodou só `GRANT SELECT ON petshop.* TO 'banho'@'localhost' IDENTIFIED BY 'Banho#1';`, sem ter rodado CREATE USER antes.\n\nNa sua resposta:\n1. diga o que acontece no MySQL 8;\n2. explique qual é a ordem correta dos passos.",
+      "respostasAceitas": [
+        "No MySQL 8 dá erro: o GRANT não cria mais contas nem aceita IDENTIFIED BY. O certo é primeiro rodar CREATE USER com a senha e depois o GRANT com os privilégios."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) erro de sintaxe/de criação de conta — no MySQL 8 GRANT não cria usuário; 2) CREATE USER ... IDENTIFIED BY, depois GRANT."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "dcl-aspas",
+      "enunciado": "Num restaurante, um aluno rodou `CREATE USER 'cozinha@localhost' IDENTIFIED BY 'Panela#9';` e depois não conseguiu achar a conta 'cozinha'@'localhost' com SHOW GRANTS.\n\nNa sua resposta:\n1. explique que conta foi criada de verdade;\n2. diga qual foi o erro na escrita do comando.",
+      "respostasAceitas": [
+        "Foi criada uma conta com o nome 'cozinha@localhost' e host '%'. O erro foi colocar nome e host dentro do mesmo par de aspas; o certo é cotar cada parte: 'cozinha'@'localhost'."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nome = cozinha@localhost, host = %; 2) aspas separadas para usuário e host."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "dcl-host-especifico",
+      "enunciado": "Num cinema existem `'gerente'@'%'` (com SELECT, INSERT e UPDATE) e `'gerente'@'localhost'` (só com SELECT). O gerente conecta pelo próprio servidor e não consegue fazer UPDATE.\n\nNa sua resposta:\n1. explique qual conta o MySQL usou nessa conexão;\n2. explique por que o UPDATE foi negado.",
+      "respostasAceitas": [
+        "O MySQL usou 'gerente'@'localhost', porque é o host mais específico que combina com a conexão. Essa conta só tem SELECT; os privilégios da conta com % não se somam, por isso o UPDATE foi negado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a de localhost (mais específica); 2) cada conta tem seus próprios privilégios, não somam; localhost não tem UPDATE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num GRANT, o que significa escrever `ON *.*`?",
+      "alternativas": [
+        "Todas as tabelas do banco que está em uso",
+        "Somente as tabelas que ainda vão ser criadas",
+        "Todos os bancos e todas as tabelas do servidor",
+        "Todas as colunas de uma única tabela"
+      ],
+      "correta": 2,
+      "explicacao": "*.* é o nível global: vale para o servidor inteiro. Por isso deve ser evitado para contas comuns."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-privilegio-basico",
+      "enunciado": "Num hortifruti, a conta do totem de preços só precisa ler a tabela de produtos. Qual privilégio ela deve receber?",
+      "alternativas": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "CREATE"
+      ],
+      "correta": 0,
+      "explicacao": "SELECT permite apenas consultar (ler) os dados. Os outros permitem incluir, alterar ou criar objetos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-privilegio-basico",
+      "enunciado": "Numa clínica, a recepção precisa cadastrar pacientes novos na tabela paciente. Qual privilégio permite incluir linhas novas?",
+      "alternativas": [
+        "INSERT",
+        "SELECT",
+        "DELETE",
+        "DROP"
+      ],
+      "correta": 0,
+      "explicacao": "INSERT permite adicionar linhas. SELECT só lê, DELETE apaga linhas e DROP apaga a tabela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-privilegio-basico",
+      "enunciado": "Numa loja, o gerente precisa corrigir o preço de produtos que já estão cadastrados. Qual privilégio permite alterar dados existentes?",
+      "alternativas": [
+        "INSERT",
+        "ALTER",
+        "UPDATE",
+        "CREATE"
+      ],
+      "correta": 2,
+      "explicacao": "UPDATE altera valores de linhas que já existem. ALTER muda a estrutura da tabela, não os dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, qual é a diferença entre os privilégios DELETE e DROP?",
+      "alternativas": [
+        "DELETE permite apagar linhas; DROP permite apagar a tabela inteira",
+        "DELETE permite apagar a tabela; DROP permite apagar linhas",
+        "Os dois fazem a mesma coisa com nomes diferentes",
+        "DELETE apaga contas de usuário; DROP apaga linhas"
+      ],
+      "correta": 0,
+      "explicacao": "DELETE é sobre dados (linhas); DROP é sobre objetos (tabelas, bancos)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa software house, o desenvolvedor recebeu `GRANT CREATE ON projeto.* TO 'dev'@'localhost';`. O que ele passa a poder fazer?",
+      "alternativas": [
+        "Criar contas de usuário no servidor",
+        "Criar tabelas novas no banco projeto",
+        "Inserir linhas nas tabelas do banco projeto",
+        "Apagar tabelas do banco projeto"
+      ],
+      "correta": 1,
+      "explicacao": "O privilégio CREATE no nível do banco permite CREATE TABLE ali. Criar contas exige CREATE USER; inserir exige INSERT; apagar tabela exige DROP."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num estacionamento, o dono recebeu `GRANT ALL PRIVILEGES ON estacionamento.* TO 'dono'@'localhost';`. O que esse comando concede?",
+      "alternativas": [
+        "Todos os privilégios em todas as tabelas do banco estacionamento",
+        "Todos os privilégios em todos os bancos do servidor",
+        "Apenas SELECT em todas as tabelas do banco",
+        "Todos os privilégios só na tabela estacionamento"
+      ],
+      "correta": 0,
+      "explicacao": "ALL PRIVILEGES dá todos os privilégios do nível indicado. O nível aqui é estacionamento.* (um banco), não o servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de calçados, o administrador rodou `REVOKE DELETE ON loja.* FROM 'vendedor'@'localhost';`. O que acontece?",
+      "alternativas": [
+        "O vendedor perde o direito de apagar linhas nas tabelas do banco loja",
+        "A conta do vendedor é apagada do servidor",
+        "Todas as linhas apagadas pelo vendedor voltam",
+        "O vendedor perde todos os privilégios no banco loja"
+      ],
+      "correta": 0,
+      "explicacao": "REVOKE retira só o privilégio citado (DELETE). A conta e os outros privilégios continuam."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa padaria, o técnico rodou `GRANT SELECT, INSERT ON padaria.pedido TO 'balcao'@'localhost';`. O que a conta balcao pode fazer?",
+      "alternativas": [
+        "Consultar e apagar linhas na tabela pedido",
+        "Consultar e incluir em todas as tabelas da padaria",
+        "Consultar e incluir linhas na tabela pedido",
+        "Somente incluir linhas, sem poder consultar"
+      ],
+      "correta": 2,
+      "explicacao": "Vários privilégios podem ser dados juntos, separados por vírgula. O alvo é só a tabela pedido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No comando `GRANT SELECT ON escola.aluno TO 'secretaria'@'localhost';`, o que indica a parte que vem depois de TO?",
+      "alternativas": [
+        "O banco onde o privilégio vale",
+        "A conta que vai receber o privilégio",
+        "A tabela onde o privilégio vale",
+        "A senha nova da conta"
+      ],
+      "correta": 1,
+      "explicacao": "Estrutura: GRANT privilégio ON onde TO quem. Depois do ON vem o banco/tabela; depois do TO vem a conta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, o técnico rodou `GRANT SELECT ON escola.aluno TO 'portaria'@'localhost';`. O que a portaria pode consultar?",
+      "alternativas": [
+        "Todas as tabelas do banco escola",
+        "Todas as tabelas chamadas aluno em qualquer banco",
+        "A tabela aluno e as tabelas ligadas a ela por chave estrangeira",
+        "Somente a tabela aluno do banco escola"
+      ],
+      "correta": 3,
+      "explicacao": "banco.tabela limita o privilégio a uma tabela só. Chave estrangeira não estende permissão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-grant-mysql8",
+      "enunciado": "Para dar acesso a um funcionário novo de uma lavanderia, qual é a ordem certa dos passos no MySQL 8?",
+      "alternativas": [
+        "Primeiro GRANT para os privilégios; depois CREATE USER",
+        "Primeiro REVOKE para limpar; depois CREATE USER",
+        "Só o GRANT, que já cria a conta automaticamente",
+        "Primeiro CREATE USER para a conta; depois GRANT para os privilégios"
+      ],
+      "correta": 3,
+      "explicacao": "No MySQL 8 a conta precisa existir antes do GRANT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-grant-option",
+      "enunciado": "O que a cláusula `WITH GRANT OPTION` acrescenta a um GRANT?",
+      "alternativas": [
+        "Permite que a conta crie outras contas de usuário",
+        "Faz o privilégio valer em todos os bancos do servidor",
+        "Faz o privilégio expirar depois de um tempo",
+        "Permite que a conta repasse esses privilégios para outras contas"
+      ],
+      "correta": 3,
+      "explicacao": "WITH GRANT OPTION dá o poder de conceder (GRANT) a outros os mesmos privilégios recebidos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa pizzaria, a conta recebeu o privilégio DROP no banco pizzaria. O que ela passa a poder fazer?",
+      "alternativas": [
+        "Apagar apenas algumas linhas das tabelas",
+        "Apagar tabelas inteiras do banco pizzaria",
+        "Desfazer alterações feitas por outras contas",
+        "Retirar privilégios de outras contas"
+      ],
+      "correta": 1,
+      "explicacao": "DROP permite DROP TABLE (e até DROP DATABASE do banco). É um privilégio perigoso para contas comuns."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, o gerente recebeu `GRANT ALL PRIVILEGES ON loja.* TO 'gerente'@'localhost';`. Depois ele tentou dar SELECT para o estagiário. O que acontece?",
+      "alternativas": [
+        "Funciona, porque ALL PRIVILEGES inclui tudo, até repassar",
+        "Dá erro: ALL PRIVILEGES não inclui o poder de repassar (GRANT OPTION)",
+        "Funciona só se o estagiário já tiver outra permissão",
+        "Funciona, mas o estagiário recebe ALL PRIVILEGES também"
+      ],
+      "correta": 1,
+      "explicacao": "Para repassar privilégios é preciso WITH GRANT OPTION. ALL PRIVILEGES não inclui GRANT OPTION."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-revoke-all",
+      "enunciado": "Numa clínica, o técnico rodou `REVOKE ALL PRIVILEGES ON clinica.* FROM 'estagiario'@'localhost';`. O que acontece com a conta?",
+      "alternativas": [
+        "Continua existindo, mas sem privilégios no banco clinica",
+        "É apagada do servidor, junto com a senha",
+        "Fica bloqueada e não consegue mais conectar",
+        "Perde os privilégios em todos os bancos do servidor"
+      ],
+      "correta": 0,
+      "explicacao": "REVOKE nunca apaga a conta; para isso existe DROP USER. E o REVOKE vale só no nível indicado (clinica.*)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-soma",
+      "enunciado": "Num hotel, o técnico rodou primeiro `GRANT SELECT ON hotel.* TO 'recepcao'@'localhost';` e, no dia seguinte, `GRANT INSERT ON hotel.* TO 'recepcao'@'localhost';`. Com quais privilégios a recepção fica?",
+      "alternativas": [
+        "Só INSERT, porque o último GRANT substitui o anterior",
+        "SELECT e INSERT, porque os GRANTs se somam",
+        "Só SELECT, porque o primeiro GRANT tem prioridade",
+        "Nenhum, porque dois GRANTs no mesmo banco se anulam"
+      ],
+      "correta": 1,
+      "explicacao": "Cada GRANT acrescenta privilégios. Para tirar, é preciso REVOKE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, `SHOW GRANTS FOR 'enfermeira'@'localhost';` mostrou a linha `GRANT SELECT, UPDATE ON clinica.consulta TO 'enfermeira'@'localhost'`. O que a enfermeira pode fazer na tabela consulta?",
+      "alternativas": [
+        "Consultar, alterar, incluir e apagar linhas",
+        "Apenas consultar, porque UPDATE exige outro GRANT",
+        "Consultar e alterar em todas as tabelas do banco clinica",
+        "Consultar e alterar linhas, mas não incluir nem apagar"
+      ],
+      "correta": 3,
+      "explicacao": "A linha lista SELECT e UPDATE no nível da tabela consulta. INSERT e DELETE não aparecem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-tabela-nova",
+      "enunciado": "Numa loja virtual, a conta de relatórios recebeu `GRANT SELECT ON loja.* TO 'relatorio'@'localhost';`. Um mês depois, foi criada a tabela cupom no banco loja. A conta relatorio consegue consultar cupom?",
+      "alternativas": [
+        "Não, porque o GRANT só vale para tabelas que já existiam",
+        "Sim, porque loja.* vale para todas as tabelas do banco, inclusive as novas",
+        "Não, até que alguém rode FLUSH PRIVILEGES",
+        "Sim, mas só as linhas incluídas depois do GRANT"
+      ],
+      "correta": 1,
+      "explicacao": "Privilégio no nível do banco vale para qualquer tabela dele, mesmo as criadas depois."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, o técnico rodou `GRANT SELECT ON escola.* TO 'coord1'@'localhost', 'coord2'@'localhost';`. O que acontece?",
+      "alternativas": [
+        "Só a primeira conta recebe; a segunda é ignorada",
+        "Dá erro, porque o GRANT aceita uma conta por vez",
+        "As duas contas recebem SELECT no banco escola",
+        "As duas contas passam a ser uma conta só"
+      ],
+      "correta": 2,
+      "explicacao": "O GRANT aceita uma lista de contas separadas por vírgula."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa agência de viagens, o desenvolvedor recebeu só `GRANT CREATE ON viagens.* TO 'dev'@'localhost';`. Ele criou uma tabela de teste e depois tentou `DROP TABLE teste;`. O que acontece?",
+      "alternativas": [
+        "O DROP funciona, porque quem cria a tabela pode apagá-la",
+        "O DROP é negado, porque ele tem CREATE, mas não tem o privilégio DROP",
+        "O DROP funciona, porque CREATE inclui DROP",
+        "A tabela é esvaziada, mas não é apagada"
+      ],
+      "correta": 1,
+      "explicacao": "No MySQL não existe 'dono' da tabela: cada ação exige seu privilégio. Criar é CREATE; apagar é DROP."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a conta tem apenas `GRANT SELECT ON loja.pedido`. Ela roda um SELECT com JOIN entre as tabelas pedido e cliente. O que acontece?",
+      "alternativas": [
+        "Dá erro, porque falta o privilégio SELECT na tabela cliente",
+        "Funciona, porque o JOIN usa a permissão da primeira tabela",
+        "Funciona, mas as colunas de cliente vêm vazias",
+        "Funciona, porque pedido tem chave estrangeira para cliente"
+      ],
+      "correta": 0,
+      "explicacao": "Cada tabela usada na consulta precisa de SELECT. Sem SELECT em cliente, o MySQL nega o comando inteiro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-so-insert",
+      "enunciado": "Num sistema de pesquisa de satisfação, a conta 'formulario' recebeu só INSERT na tabela resposta. O que ela consegue fazer?",
+      "alternativas": [
+        "Gravar e também ler todas as respostas",
+        "Ler as respostas, mas não gravar novas",
+        "Gravar respostas novas, mas não consegue ler as respostas já gravadas",
+        "Gravar respostas e apagar as antigas"
+      ],
+      "correta": 2,
+      "explicacao": "INSERT não inclui SELECT. É um bom exemplo de menor privilégio: o formulário só precisa gravar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes comandos está escrito corretamente no MySQL?",
+      "alternativas": [
+        "GRANT UPDATE ON oficina.servico TO 'mecanico'@'localhost';",
+        "GRANT UPDATE TO 'mecanico'@'localhost' ON oficina.servico;",
+        "GRANT 'mecanico'@'localhost' UPDATE ON oficina.servico;",
+        "GRANT UPDATE ON 'mecanico'@'localhost' TO oficina.servico;"
+      ],
+      "correta": 0,
+      "explicacao": "A ordem é: GRANT privilégio ON banco.tabela TO 'conta'@'host'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel, o técnico rodou `REVOKE INSERT, UPDATE ON hotel.reserva FROM 'camareira'@'localhost';`. Ela tinha SELECT, INSERT e UPDATE nessa tabela. O que sobra?",
+      "alternativas": [
+        "Nada: o REVOKE com vírgula tira todos os privilégios",
+        "Só o SELECT na tabela reserva",
+        "SELECT e UPDATE, porque só o primeiro privilégio é retirado",
+        "SELECT, INSERT e UPDATE, porque falta FLUSH PRIVILEGES"
+      ],
+      "correta": 1,
+      "explicacao": "O REVOKE aceita lista de privilégios separados por vírgula e retira só os citados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num banco escolar com 10 tabelas, a conta 'merenda' precisa consultar só as tabelas cardapio e estoque. Qual é a forma mais adequada?",
+      "alternativas": [
+        "Um GRANT SELECT em escola.*, já que é só leitura",
+        "Um GRANT ALL em escola.cardapio e outro em escola.estoque",
+        "Dois GRANT SELECT, um em escola.cardapio e outro em escola.estoque",
+        "Um GRANT SELECT em *.*, para não precisar repetir"
+      ],
+      "correta": 2,
+      "explicacao": "Menor privilégio: dar só o que é necessário, só onde é necessário. Leitura das outras 8 tabelas não é necessária."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, a recepção já tinha SELECT em clinica.* e recebeu também `GRANT UPDATE ON clinica.agenda TO 'recepcao'@'localhost';`. Como fica o resultado de SHOW GRANTS para essa conta?",
+      "alternativas": [
+        "Uma linha com SELECT no banco clinica e outra com UPDATE na tabela agenda",
+        "Uma única linha com SELECT e UPDATE em clinica.*",
+        "Só a linha do UPDATE, que substituiu a anterior",
+        "Uma linha com UPDATE em todas as tabelas do banco"
+      ],
+      "correta": 0,
+      "explicacao": "Privilégios de níveis diferentes aparecem em linhas separadas no SHOW GRANTS (além da linha de USAGE)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa software house, o desenvolvedor precisa acrescentar colunas em tabelas que já existem (ALTER TABLE). Qual privilégio ele precisa ter?",
+      "alternativas": [
+        "UPDATE",
+        "ALTER",
+        "INSERT",
+        "CREATE"
+      ],
+      "correta": 1,
+      "explicacao": "ALTER permite mudar a estrutura da tabela. UPDATE muda dados, não a estrutura."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, a conta 'instrutor'@'localhost' acabou de ser criada e ainda não recebeu nenhum GRANT. O técnico rodou `REVOKE DELETE ON academia.* FROM 'instrutor'@'localhost';`. O que acontece?",
+      "alternativas": [
+        "Funciona e a conta do instrutor é apagada",
+        "Funciona e o instrutor fica proibido de receber DELETE no futuro",
+        "Dá erro, porque não existe esse privilégio concedido para retirar",
+        "Funciona sem mensagem, porque o REVOKE ignora o que não existe"
+      ],
+      "correta": 2,
+      "explicacao": "Não dá para retirar o que nunca foi concedido: o MySQL responde com erro (There is no such grant defined for user)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-coluna",
+      "enunciado": "Numa clínica, o técnico rodou `GRANT SELECT (nome, telefone) ON clinica.paciente TO 'callcenter'@'localhost';`. O que a conta pode consultar?",
+      "alternativas": [
+        "Somente as colunas nome e telefone da tabela paciente",
+        "Todas as colunas da tabela paciente",
+        "As colunas nome e telefone de todas as tabelas",
+        "Todas as colunas, menos nome e telefone"
+      ],
+      "correta": 0,
+      "explicacao": "O MySQL aceita privilégio por coluna. Um SELECT * daria erro, porque ela não pode ler as outras colunas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-grant-option-limite",
+      "enunciado": "Na escola, a coordenadora tem `SELECT ON escola.* ... WITH GRANT OPTION` e nenhum outro privilégio. Ela tenta dar UPDATE em escola.nota para um professor. O que acontece?",
+      "alternativas": [
+        "Funciona, porque GRANT OPTION permite conceder qualquer privilégio",
+        "Funciona, mas o UPDATE só vale enquanto ela estiver conectada",
+        "Funciona, e ela passa a ter UPDATE também",
+        "Dá erro: ela só pode repassar os privilégios que ela mesma tem"
+      ],
+      "correta": 3,
+      "explicacao": "WITH GRANT OPTION permite repassar só o que a conta já possui naquele nível."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a conta gerente tinha `SELECT, INSERT ON loja.* ... WITH GRANT OPTION`. O técnico rodou `REVOKE GRANT OPTION ON loja.* FROM 'gerente'@'localhost';`. O que muda?",
+      "alternativas": [
+        "O gerente perde SELECT, INSERT e o poder de repassar",
+        "O gerente perde só o INSERT, que era o último da lista",
+        "O gerente continua com SELECT e INSERT, mas não pode mais repassá-los",
+        "As contas que receberam privilégios do gerente são apagadas"
+      ],
+      "correta": 2,
+      "explicacao": "GRANT OPTION é um privilégio separado. Retirá-lo não mexe nos outros privilégios."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Com o banco hotel selecionado (`USE hotel;`), o técnico rodou `GRANT SELECT ON reserva TO 'guia'@'localhost';` (sem ponto). Qual é o alvo do GRANT?",
+      "alternativas": [
+        "Um banco de dados chamado reserva, inteiro",
+        "Todas as tabelas de todos os bancos",
+        "Nenhum: sem ponto o comando sempre dá erro",
+        "A tabela reserva do banco hotel, que está em uso"
+      ],
+      "correta": 3,
+      "explicacao": "Sem 'banco.', o nome é entendido como tabela do banco atual. Para um banco inteiro é preciso escrever reserva.*."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-update-select",
+      "enunciado": "Numa loja, a conta 'reajuste' tem só UPDATE em loja.produto. Ela roda `UPDATE produto SET preco = preco * 1.1 WHERE categoria = 'bebida';`. O que acontece?",
+      "alternativas": [
+        "Funciona, porque UPDATE já permite ler a tabela inteira",
+        "Funciona, mas altera todas as linhas, ignorando o WHERE",
+        "Funciona, mas os preços ficam iguais aos antigos",
+        "Dá erro: para ler preco e categoria (no SET e no WHERE) ela também precisa de SELECT"
+      ],
+      "correta": 3,
+      "explicacao": "Quando o UPDATE lê valores de colunas (no WHERE ou na expressão), o MySQL exige SELECT nessas colunas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a conta 'limpeza_dados' tem DELETE em escola.log_acesso e quer usar `TRUNCATE TABLE log_acesso;`. Qual privilégio o MySQL exige para o TRUNCATE?",
+      "alternativas": [
+        "DELETE, porque o TRUNCATE apaga linhas",
+        "UPDATE, porque o TRUNCATE altera a tabela",
+        "DROP, porque o TRUNCATE recria a tabela por dentro",
+        "Nenhum, porque o TRUNCATE só esvazia a tabela"
+      ],
+      "correta": 2,
+      "explicacao": "No MySQL o TRUNCATE TABLE funciona como apagar e recriar a tabela, e por isso exige o privilégio DROP."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, o técnico rodou `GRANT SELECT ON escola.* TO 'secretaria'@'localhost';`.\n\nNa sua resposta:\n1. diga o que a secretaria passa a poder fazer;\n2. cite uma coisa que ela ainda não pode fazer.",
+      "respostasAceitas": [
+        "A secretaria passa a consultar (SELECT) todas as tabelas do banco escola. Ela ainda não pode incluir, alterar ou apagar dados, nem mexer na estrutura das tabelas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) consultar todas as tabelas do banco escola; 2) qualquer ação sem privilégio: INSERT, UPDATE, DELETE, CREATE/DROP."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num hortifruti, o dono recebeu `GRANT ALL PRIVILEGES ON hortifruti.* TO 'dono'@'localhost';`.\n\nNa sua resposta:\n1. diga o que esse comando concede;\n2. explique por que não é bom dar esse mesmo GRANT para os caixas.",
+      "respostasAceitas": [
+        "Concede todos os privilégios (consultar, incluir, alterar, apagar, criar e apagar tabelas…) no banco hortifruti. Os caixas não precisam de tudo isso; se a conta deles fosse usada errado, poderiam apagar dados ou tabelas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) todos os privilégios em todas as tabelas do banco hortifruti; 2) menor privilégio: caixa só precisa do básico, risco de estrago."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num banco de uma biblioteca, compare `GRANT SELECT ON biblioteca.* TO 'balcao'@'localhost';` com `GRANT SELECT ON biblioteca.livro TO 'balcao'@'localhost';`.\n\nNa sua resposta:\n1. explique o que muda entre biblioteca.* e biblioteca.livro;\n2. diga qual dos dois é mais restrito.",
+      "respostasAceitas": [
+        "biblioteca.* vale para todas as tabelas do banco; biblioteca.livro vale só para a tabela livro. O segundo é mais restrito."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) .* = todas as tabelas, .livro = uma tabela; 2) banco.tabela é mais restrito."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa biblioteca, `SHOW GRANTS FOR 'balcao'@'localhost';` mostrou a linha `GRANT SELECT, INSERT ON biblioteca.* TO 'balcao'@'localhost'`.\n\nNa sua resposta:\n1. diga o que a conta balcao pode fazer;\n2. diga o que ela não pode fazer.",
+      "respostasAceitas": [
+        "Pode consultar e incluir linhas em todas as tabelas do banco biblioteca. Não pode alterar (UPDATE), apagar (DELETE) nem mexer na estrutura das tabelas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) SELECT e INSERT em todas as tabelas do banco biblioteca; 2) não pode UPDATE, DELETE, CREATE, DROP."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de calçados, a vendedora foi promovida a gerente e o técnico rodou `GRANT UPDATE ON loja.produto TO 'vendedora'@'localhost';`. Meses depois, ela voltou ao cargo antigo e ele rodou `REVOKE UPDATE ON loja.produto FROM 'vendedora'@'localhost';`.\n\nNa sua resposta:\n1. explique o que cada comando fez;\n2. diga se a conta dela continua existindo no final.",
+      "respostasAceitas": [
+        "O GRANT deu a ela o direito de alterar produtos; o REVOKE tirou esse direito. A conta continua existindo com os outros privilégios que tinha."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) GRANT concede UPDATE, REVOKE retira; 2) sim, REVOKE não apaga a conta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa software house, o técnico rodou `GRANT CREATE, DROP ON teste_dev.* TO 'dev'@'localhost';`.\n\nNa sua resposta:\n1. diga o que o desenvolvedor passa a poder fazer no banco teste_dev;\n2. explique por que o privilégio DROP merece cuidado.",
+      "respostasAceitas": [
+        "Pode criar tabelas novas e apagar tabelas no banco teste_dev. DROP merece cuidado porque apaga a tabela com todos os dados de uma vez; num banco com dados reais isso seria muito perigoso."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) CREATE TABLE e DROP TABLE no banco teste_dev; 2) DROP apaga estrutura + dados, sem volta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "dcl-grant-option",
+      "enunciado": "Numa rede de farmácias, o técnico rodou `GRANT SELECT, INSERT ON farmacia.* TO 'supervisor'@'localhost' WITH GRANT OPTION;`.\n\nNa sua resposta:\n1. explique o que o WITH GRANT OPTION acrescenta;\n2. explique qual é o risco de usar essa opção sem necessidade.",
+      "respostasAceitas": [
+        "Além de consultar e incluir, o supervisor pode repassar esses privilégios para outras contas. O risco é perder o controle: ele pode dar acesso a pessoas que o administrador não autorizou."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) permite conceder os mesmos privilégios a outras contas; 2) acesso se espalha sem controle do administrador."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, o técnico ficou em dúvida entre `GRANT SELECT ON *.* TO 'relatorio'@'localhost';` e `GRANT SELECT ON loja.* TO 'relatorio'@'localhost';`.\n\nNa sua resposta:\n1. explique a diferença de alcance entre os dois;\n2. diga qual escolher e por quê.",
+      "respostasAceitas": [
+        "*.* libera consulta em todos os bancos do servidor (inclusive o banco mysql, com dados das contas); loja.* libera só o banco loja. Deve-se escolher loja.*, pelo princípio do menor privilégio."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) *.* = servidor inteiro, loja.* = um banco; 2) loja.*, menor privilégio / não expor outros bancos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "dcl-soma",
+      "enunciado": "Num hotel, o técnico rodou, em dias diferentes, `GRANT SELECT ON hotel.* TO 'recepcao'@'localhost';`, depois `GRANT INSERT, UPDATE ON hotel.reserva TO 'recepcao'@'localhost';` e, por fim, `REVOKE UPDATE ON hotel.reserva FROM 'recepcao'@'localhost';`.\n\nNa sua resposta:\n1. diga com quais privilégios a recepção fica no final;\n2. explique por que o primeiro GRANT não foi substituído pelo segundo.",
+      "respostasAceitas": [
+        "No final ela tem SELECT em todas as tabelas do banco hotel e INSERT na tabela reserva. Os GRANTs se somam; só o REVOKE retira privilégios."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) SELECT em hotel.* + INSERT em hotel.reserva; 2) GRANT acumula, não substitui."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "dcl-revoke-all",
+      "enunciado": "Numa clínica, o técnico rodou `REVOKE ALL PRIVILEGES ON clinica.* FROM 'estagiario'@'localhost';` quando o estágio terminou, mas não rodou DROP USER.\n\nNa sua resposta:\n1. diga o que o REVOKE retirou e o que continuou existindo;\n2. explique por que seria melhor também apagar a conta.",
+      "respostasAceitas": [
+        "Retirou todos os privilégios do estagiário no banco clinica, mas a conta continua existindo e pode conectar (com USAGE). Como ele não trabalha mais ali, o ideal é apagar a conta com DROP USER, para não sobrar uma conta esquecida."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) tira os privilégios no banco, a conta fica; 2) conta sem uso é risco (senha pode vazar), DROP USER remove."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "dcl-tabela-nova",
+      "enunciado": "Numa loja virtual, a conta de relatórios recebeu `GRANT SELECT ON loja.* TO 'relatorio'@'localhost';`. Um mês depois foi incluída no banco a tabela salario_funcionario.\n\nNa sua resposta:\n1. diga se a conta relatorio consegue consultar a tabela nova;\n2. explique o cuidado que isso exige.",
+      "respostasAceitas": [
+        "Consegue, porque o privilégio no nível do banco (loja.*) vale para todas as tabelas, inclusive as novas. Por isso, se o banco recebe tabelas sigilosas, é melhor dar o SELECT tabela por tabela ou separar os dados sigilosos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sim, banco.* vale para tabelas futuras; 2) dados sensíveis ficam expostos: preferir GRANT por tabela."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "dcl-so-insert",
+      "enunciado": "Num sistema de pesquisa de satisfação, a conta do formulário recebeu só `GRANT INSERT ON pesquisa.resposta TO 'formulario'@'localhost';`.\n\nNa sua resposta:\n1. diga o que o formulário consegue e o que não consegue fazer;\n2. explique por que esse GRANT segue o princípio do menor privilégio.",
+      "respostasAceitas": [
+        "O formulário consegue gravar respostas novas, mas não consegue ler, alterar nem apagar as respostas. Segue o menor privilégio porque o formulário só precisa gravar; se a conta for invadida, ninguém consegue ler ou apagar os dados por ela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só INSERT, sem SELECT/UPDATE/DELETE; 2) recebe apenas o necessário, reduz estrago em caso de invasão."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "dcl-grant-option-limite",
+      "enunciado": "Numa escola, a coordenadora tem `SELECT ON escola.* ... WITH GRANT OPTION`. Ela tentou rodar `GRANT UPDATE ON escola.nota TO 'prof_joao'@'localhost';` e recebeu erro.\n\nNa sua resposta:\n1. explique por que deu erro;\n2. diga o que o administrador precisaria fazer para ela conseguir.",
+      "respostasAceitas": [
+        "Deu erro porque com GRANT OPTION ela só pode repassar os privilégios que tem; ela não tem UPDATE em escola.nota. O administrador precisaria dar UPDATE a ela (com GRANT OPTION) ou dar o UPDATE direto ao professor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só repassa o que possui; 2) conceder UPDATE com GRANT OPTION a ela ou o próprio administrador conceder ao professor."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "dcl-update-select",
+      "enunciado": "Numa loja, a conta 'reajuste' tem só UPDATE em loja.produto. O comando `UPDATE produto SET preco = 10;` funcionou, mas `UPDATE produto SET preco = preco * 1.1 WHERE categoria = 'bebida';` foi negado.\n\nNa sua resposta:\n1. explique por que o primeiro funcionou e o segundo não;\n2. diga qual privilégio falta.",
+      "respostasAceitas": [
+        "O primeiro só grava um valor fixo, sem ler nenhuma coluna. O segundo precisa ler preco e categoria para calcular e filtrar, e ler exige SELECT. Falta o SELECT na tabela produto (pelo menos nessas colunas)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o segundo lê colunas (WHERE e expressão), o primeiro não; 2) SELECT."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "dcl-coluna",
+      "enunciado": "Numa clínica, o técnico rodou `GRANT SELECT (nome, telefone) ON clinica.paciente TO 'callcenter'@'localhost';`. O atendente rodou `SELECT * FROM paciente;` e recebeu erro.\n\nNa sua resposta:\n1. explique o que esse GRANT permite;\n2. explique por que o SELECT * foi negado e por que esse tipo de GRANT é útil numa clínica.",
+      "respostasAceitas": [
+        "Permite consultar só as colunas nome e telefone da tabela paciente. O SELECT * tenta ler todas as colunas, inclusive as que ele não pode ver, por isso é negado. É útil porque o call center só precisa do contato, e dados como diagnóstico ficam protegidos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) privilégio por coluna; 2) * inclui colunas sem permissão; protege dados sensíveis (menor privilégio)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que diz o princípio do menor privilégio?",
+      "alternativas": [
+        "Cada conta deve receber o mínimo de senha possível para facilitar o acesso",
+        "As contas com menos uso devem receber mais privilégios",
+        "Todas as contas devem ter os mesmos privilégios, para ser justo",
+        "Cada conta deve receber só os privilégios necessários para o seu trabalho"
+      ],
+      "correta": 3,
+      "explicacao": "Menor privilégio = dar o mínimo necessário. Assim, um erro ou invasão causa menos estrago."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-root",
+      "enunciado": "Por que o sistema de vendas de uma loja não deve se conectar ao MySQL usando a conta root?",
+      "alternativas": [
+        "Porque a conta root é mais lenta para fazer consultas",
+        "Porque a conta root não consegue fazer INSERT",
+        "Porque, se o sistema for invadido, o invasor ganha controle total do servidor",
+        "Porque a conta root só funciona no MySQL Workbench"
+      ],
+      "correta": 2,
+      "explicacao": "root pode tudo: apagar bancos, criar contas, ler qualquer dado. A aplicação deve usar uma conta própria, com o mínimo necessário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, qual destes perfis normalmente precisa do privilégio CREATE?",
+      "alternativas": [
+        "O desenvolvedor que monta as tabelas do sistema",
+        "A atendente que só consulta a agenda",
+        "O paciente que acessa o site para marcar consulta",
+        "O caixa que registra os pagamentos"
+      ],
+      "correta": 0,
+      "explicacao": "CREATE serve para criar tabelas. Quem só usa os dados (atendente, caixa) não precisa mexer na estrutura."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao tentar entrar no MySQL, um funcionário da academia recebeu `ERROR 1045 (28000): Access denied for user 'instrutor'@'localhost' (using password: YES)`. O que isso indica?",
+      "alternativas": [
+        "O instrutor entrou, mas não tem SELECT em uma tabela",
+        "O banco academia não existe no servidor",
+        "Falha no login: o usuário ou a senha não conferem",
+        "O servidor MySQL está desligado"
+      ],
+      "correta": 2,
+      "explicacao": "O erro 1045 acontece na autenticação (login). Falta de privilégio em tabela é outro erro (1142)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-flush",
+      "enunciado": "No MySQL 8, depois de rodar `GRANT SELECT ON escola.* TO 'portaria'@'localhost';`, é obrigatório rodar `FLUSH PRIVILEGES;`?",
+      "alternativas": [
+        "Sim: sem ele o GRANT nunca passa a valer",
+        "Não: o GRANT já atualiza as permissões sozinho",
+        "Sim: sem ele o MySQL desfaz o GRANT ao reiniciar",
+        "Não: o GRANT só vale depois de reiniciar o servidor"
+      ],
+      "correta": 1,
+      "explicacao": "GRANT, REVOKE, CREATE USER e ALTER USER já recarregam os privilégios. FLUSH só é necessário se alguém mexer direto nas tabelas do banco mysql."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Onde é mais adequado guardar a senha que o sistema de uma pet shop usa para conectar ao MySQL?",
+      "alternativas": [
+        "Escrita direto no código, que vai para um repositório público",
+        "Num arquivo de configuração protegido, fora do código publicado",
+        "Num comentário dentro da página HTML do site",
+        "No nome da conta, para ninguém esquecer"
+      ],
+      "correta": 1,
+      "explicacao": "Senha no código público ou no HTML fica visível para qualquer pessoa. Ela deve ficar em configuração protegida."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, os três vendedores usam a mesma conta 'vendas' no MySQL. Qual é o principal problema disso?",
+      "alternativas": [
+        "O MySQL não deixa três pessoas usarem o banco no mesmo dia",
+        "A conta perde os privilégios quando muitas pessoas entram",
+        "Os dados ficam mais lentos para cada vendedor",
+        "Não dá para saber quem fez cada alteração nem bloquear só uma pessoa"
+      ],
+      "correta": 3,
+      "explicacao": "Cada pessoa deve ter sua conta: assim há rastreabilidade e dá para retirar o acesso de uma pessoa sem afetar as outras."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-root",
+      "enunciado": "Num servidor de testes de uma escola, a conta root está com senha vazia. Qual é o risco?",
+      "alternativas": [
+        "Qualquer pessoa com acesso ao servidor entra como administrador",
+        "O MySQL não deixa ninguém entrar, nem o próprio root",
+        "Os bancos ficam somente leitura enquanto não houver senha",
+        "As tabelas são apagadas automaticamente toda noite"
+      ],
+      "correta": 0,
+      "explicacao": "Senha vazia no root é como deixar a porta aberta com a chave mestra pendurada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa empresa, quem normalmente fica responsável por rodar GRANT e REVOKE?",
+      "alternativas": [
+        "Cada funcionário, nas suas próprias contas",
+        "O cliente que acessa o site da empresa",
+        "Qualquer pessoa que tenha a senha do Wi-Fi",
+        "O administrador do banco de dados (DBA)"
+      ],
+      "correta": 3,
+      "explicacao": "O DBA controla as contas e as permissões. Usuários comuns não devem dar privilégios a si mesmos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-flush",
+      "enunciado": "O que o comando `FLUSH PRIVILEGES;` faz no MySQL?",
+      "alternativas": [
+        "Apaga todos os privilégios de todas as contas",
+        "Mostra os privilégios da conta que está conectada",
+        "Concede todos os privilégios para a conta atual",
+        "Recarrega na memória do servidor as tabelas de privilégios"
+      ],
+      "correta": 3,
+      "explicacao": "O servidor guarda os privilégios em memória. FLUSH PRIVILEGES lê de novo as tabelas do banco mysql."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um funcionário foi demitido de uma oficina. O que o administrador do banco deve fazer com a conta dele?",
+      "alternativas": [
+        "Apagar ou bloquear a conta, para ele não acessar mais os dados",
+        "Deixar a conta como está, porque ele não sabe mais a senha",
+        "Dar mais privilégios para o substituto usar a mesma conta",
+        "Trocar só o nome da conta e manter a senha"
+      ],
+      "correta": 0,
+      "explicacao": "Conta de ex-funcionário deve ser removida (DROP USER) ou bloqueada (ACCOUNT LOCK) assim que ele sai."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, o site, o caixa e os relatórios acessam o mesmo banco. Por que é melhor cada sistema ter a sua conta no MySQL?",
+      "alternativas": [
+        "Porque cada um recebe só o que precisa e um problema num sistema não abre os outros",
+        "Porque o MySQL só deixa uma conexão por conta",
+        "Porque contas separadas deixam as consultas mais rápidas",
+        "Porque assim não é preciso dar nenhum privilégio"
+      ],
+      "correta": 0,
+      "explicacao": "Contas separadas permitem aplicar o menor privilégio a cada sistema e rastrear quem fez o quê."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em qual situação o administrador de um hotel usaria REVOKE?",
+      "alternativas": [
+        "Quando um funcionário novo é contratado e precisa de acesso",
+        "Quando é preciso trocar a senha de uma conta",
+        "Quando é preciso ver quais contas existem no servidor",
+        "Quando um funcionário muda de função e não precisa mais de um privilégio"
+      ],
+      "correta": 3,
+      "explicacao": "REVOKE retira privilégios. Acesso novo é GRANT; troca de senha é ALTER USER; listar contas é SELECT em mysql.user."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL, qual é a diferença entre autenticação e autorização?",
+      "alternativas": [
+        "Autenticação confere o que a conta pode fazer; autorização confere a senha",
+        "As duas palavras significam a mesma coisa",
+        "Autenticação vale para tabelas; autorização vale para bancos",
+        "Autenticação confere quem é a conta; autorização confere o que ela pode fazer"
+      ],
+      "correta": 3,
+      "explicacao": "Login (usuário + senha + host) é autenticação. GRANT/REVOKE definem a autorização (privilégios)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-flush-direto",
+      "enunciado": "Em qual destas situações o FLUSH PRIVILEGES é realmente necessário no MySQL 8?",
+      "alternativas": [
+        "Sempre depois de qualquer GRANT ou REVOKE",
+        "Sempre depois de rodar CREATE USER",
+        "Sempre que um usuário troca a própria senha",
+        "Quando alguém altera as tabelas do banco mysql direto com INSERT, UPDATE ou DELETE"
+      ],
+      "correta": 3,
+      "explicacao": "GRANT, REVOKE, CREATE USER e ALTER USER já atualizam a memória. Só a alteração direta nas tabelas de privilégio precisa de FLUSH."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A recepcionista de uma clínica rodou `USE financeiro;` e recebeu `ERROR 1044 (42000): Access denied for user 'recepcao'@'localhost' to database 'financeiro'`. O que isso significa?",
+      "alternativas": [
+        "A senha da recepcionista está errada",
+        "A conta entrou no MySQL, mas não tem privilégio nenhum no banco financeiro",
+        "O banco financeiro não existe no servidor",
+        "A conta está bloqueada com ACCOUNT LOCK"
+      ],
+      "correta": 1,
+      "explicacao": "O login funcionou (senão seria 1045). O erro 1044 é falta de acesso a um banco específico."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa padaria, o caixa recebeu `DELETE command denied to user 'caixa'@'localhost' for table 'venda'`. Qual é a atitude mais adequada do administrador?",
+      "alternativas": [
+        "Verificar se o caixa realmente precisa apagar vendas antes de conceder DELETE só nessa tabela",
+        "Dar GRANT ALL PRIVILEGES ON *.* ao caixa para não ter mais erro",
+        "Passar a usar a conta root no computador do caixa",
+        "Rodar FLUSH PRIVILEGES, que libera o comando negado"
+      ],
+      "correta": 0,
+      "explicacao": "Erro de permissão não se resolve liberando tudo. Primeiro avalia-se a necessidade; depois concede-se o mínimo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-perfis",
+      "enunciado": "Numa clínica, a atendente só consulta, o gerente consulta, cadastra e corrige dados, e o desenvolvedor mexe na estrutura das tabelas. Qual conjunto de privilégios combina com esses perfis?",
+      "alternativas": [
+        "Atendente: ALL; gerente: SELECT; desenvolvedor: INSERT",
+        "Atendente: SELECT, DELETE; gerente: CREATE; desenvolvedor: SELECT",
+        "Todos com ALL PRIVILEGES, para ninguém ficar travado",
+        "Atendente: SELECT; gerente: SELECT, INSERT, UPDATE; desenvolvedor: CREATE, ALTER, DROP"
+      ],
+      "correta": 3,
+      "explicacao": "Cada perfil recebe o que a função exige: leitura, manutenção de dados ou mudança de estrutura."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No banco de produção de uma loja virtual, a conta usada pelo site tem o privilégio DROP. Qual é o risco?",
+      "alternativas": [
+        "O site fica impedido de consultar os produtos",
+        "As tabelas ficam mais lentas com DROP liberado",
+        "Uma falha ou invasão no site pode apagar tabelas inteiras com seus dados",
+        "Nenhum, porque DROP só funciona pelo Workbench"
+      ],
+      "correta": 2,
+      "explicacao": "O site não precisa apagar tabelas. Ter DROP só aumenta o estrago possível."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-injection",
+      "enunciado": "Um site de uma escola sofreu um ataque de SQL injection. Como o princípio do menor privilégio ajuda nesse caso?",
+      "alternativas": [
+        "Ele impede que o ataque de SQL injection aconteça",
+        "Ele apaga automaticamente os comandos do invasor",
+        "O invasor só consegue fazer o que a conta do site tem permissão de fazer",
+        "Ele avisa o administrador por e-mail durante o ataque"
+      ],
+      "correta": 2,
+      "explicacao": "Menor privilégio não evita o ataque, mas limita o estrago ao que a conta do site pode fazer."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-app-tudo",
+      "enunciado": "`SHOW GRANTS FOR 'app'@'%';` de uma loja mostrou `GRANT ALL PRIVILEGES ON *.* TO 'app'@'%' WITH GRANT OPTION`. O que está errado?",
+      "alternativas": [
+        "Nada: é o jeito recomendado de configurar uma aplicação",
+        "Falta rodar FLUSH PRIVILEGES para a linha valer",
+        "A conta do sistema tem poder total no servidor, igual ao root",
+        "A conta só consegue consultar, porque está com %"
+      ],
+      "correta": 2,
+      "explicacao": "ALL em *.* com GRANT OPTION e host % é o oposto do menor privilégio: a aplicação vira um superusuário acessível de qualquer lugar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma escola recebeu um estagiário por 3 meses para ajudar nos relatórios de frequência. Qual é a forma mais adequada de dar acesso?",
+      "alternativas": [
+        "Passar para ele a senha da conta do coordenador",
+        "Conta própria com SELECT só nas tabelas necessárias, removida no fim do estágio",
+        "Conta própria com ALL PRIVILEGES, para ele aprender mais",
+        "Usar a conta root, já que é por pouco tempo"
+      ],
+      "correta": 1,
+      "explicacao": "Conta individual, privilégio mínimo e acesso com prazo: ao fim do estágio, DROP USER."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A senha da conta usada pelo sistema de uma farmácia apareceu num repositório público na internet. O que fazer primeiro?",
+      "alternativas": [
+        "Trocar a senha da conta imediatamente com ALTER USER",
+        "Rodar FLUSH PRIVILEGES para esconder a senha",
+        "Dar mais privilégios à conta para ela se defender",
+        "Apagar o banco de dados e recriar tudo do zero"
+      ],
+      "correta": 0,
+      "explicacao": "Senha vazada deve ser trocada na hora. Depois, corrige-se onde a senha é guardada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, o gerente precisa consultar, cadastrar e corrigir produtos, mas não deve apagar nada nem mexer na estrutura. Qual GRANT é o mais adequado?",
+      "alternativas": [
+        "GRANT ALL PRIVILEGES ON loja.produto TO 'gerente'@'localhost';",
+        "GRANT SELECT, INSERT, UPDATE, DELETE, DROP ON loja.* TO 'gerente'@'localhost';",
+        "GRANT SELECT, INSERT, UPDATE ON loja.produto TO 'gerente'@'localhost';",
+        "GRANT SELECT ON loja.produto TO 'gerente'@'localhost';"
+      ],
+      "correta": 2,
+      "explicacao": "Só SELECT é pouco (ele precisa cadastrar e corrigir); ALL e DELETE/DROP dão mais do que o necessário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, uma conta será usada apenas para gerar cópias de segurança (backup) do banco. Que tipo de privilégio ela deve ter?",
+      "alternativas": [
+        "ALL PRIVILEGES em *.*, porque o backup copia tudo",
+        "INSERT e DELETE, porque o backup move os dados",
+        "Nenhum privilégio, porque o backup não usa o MySQL",
+        "Privilégios de leitura (como SELECT e LOCK TABLES), sem INSERT, UPDATE ou DELETE"
+      ],
+      "correta": 3,
+      "explicacao": "O backup só precisa ler os dados. Dar escrita a essa conta seria um risco sem necessidade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A conta do sistema de uma imobiliária é `'sistema'@'%'` e usa a senha `imob123`. Por que essa combinação é perigosa?",
+      "alternativas": [
+        "O % faz a conta perder privilégios com o tempo",
+        "Senhas com números não funcionam no MySQL 8",
+        "Contas com % não conseguem usar senha",
+        "Qualquer computador pode tentar entrar e a senha é fácil de adivinhar"
+      ],
+      "correta": 3,
+      "explicacao": "Host aberto + senha fraca facilita ataques de tentativa e erro vindos de qualquer lugar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma escola tem o banco escola_teste (para os desenvolvedores) e o banco escola (com dados reais). O desenvolvedor tem `ALL PRIVILEGES ON escola_teste.*`. O que ele pode fazer no banco escola?",
+      "alternativas": [
+        "Tudo, porque ALL PRIVILEGES vale para o servidor inteiro",
+        "Só consultar, porque ALL inclui SELECT em todos os bancos",
+        "Tudo, desde que os dois bancos tenham nomes parecidos",
+        "Nada, porque os privilégios dele valem só no banco escola_teste"
+      ],
+      "correta": 3,
+      "explicacao": "O nível indicado no ON limita o alcance. Separar teste e produção protege os dados reais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel, foi preciso rever as permissões das contas. Qual é a forma correta de conferir os privilégios da conta 'reservas'@'localhost'?",
+      "alternativas": [
+        "Tentar apagar uma tabela com a conta para ver se dá erro",
+        "Rodar SHOW GRANTS FOR 'reservas'@'localhost'; e ler as linhas de GRANT",
+        "Rodar FLUSH PRIVILEGES e olhar a mensagem de retorno",
+        "Rodar SELECT CURRENT_USER(); conectado como root"
+      ],
+      "correta": 1,
+      "explicacao": "SHOW GRANTS FOR mostra os privilégios de uma conta sem precisar testar nada perigoso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-injection",
+      "enunciado": "Numa loja virtual, a conta do site tem SELECT, INSERT, UPDATE e DELETE em loja.*. Um invasor conseguiu SQL injection e tentou `DROP TABLE produto;`. O que acontece?",
+      "alternativas": [
+        "O DROP funciona, porque DELETE inclui DROP",
+        "Nada pode ser feito pelo invasor, porque a conta não é root",
+        "O DROP é negado por falta do privilégio DROP, mas o invasor ainda poderia apagar linhas com DELETE",
+        "O DROP é negado e o DELETE também, porque o ataque bloqueia a conta"
+      ],
+      "correta": 2,
+      "explicacao": "Menor privilégio limita, mas não zera o risco: com DELETE ainda dá para apagar dados. Por isso, cada privilégio deve ser justificado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-insert-select",
+      "enunciado": "Numa loja, a conta 'arquivo' tem só INSERT em loja.historico. Ela roda `INSERT INTO historico SELECT * FROM pedido WHERE ano = 2025;`. O que acontece?",
+      "alternativas": [
+        "Dá erro: além de INSERT em historico, ela precisa de SELECT em pedido",
+        "Funciona, porque o INSERT dá direito de ler qualquer tabela",
+        "Funciona, mas copia só as colunas que existem nas duas",
+        "Funciona, porque o SELECT dentro do INSERT não é verificado"
+      ],
+      "correta": 0,
+      "explicacao": "Cada parte do comando exige seu privilégio: ler de pedido (SELECT) e gravar em historico (INSERT)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "dcl-update-select",
+      "enunciado": "Numa loja, a conta 'caixa' tem só DELETE em loja.venda. Ela roda `DELETE FROM venda WHERE id_venda = 5;` e recebe erro. Por quê?",
+      "alternativas": [
+        "Porque DELETE só funciona sem WHERE",
+        "Porque DELETE com WHERE exige o privilégio DROP",
+        "Porque a venda 5 foi feita por outra conta",
+        "Para usar a coluna id_venda no WHERE, ela também precisa de SELECT"
+      ],
+      "correta": 3,
+      "explicacao": "Quando o comando lê colunas (no WHERE), o MySQL exige SELECT nelas. Só DELETE não basta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A conta 'gerente' tinha `GRANT SELECT ON loja.*` e `GRANT INSERT ON loja.pedido`. O administrador rodou `REVOKE SELECT ON loja.* FROM 'gerente'@'localhost';`. Com o que ela fica?",
+      "alternativas": [
+        "Só com INSERT na tabela pedido",
+        "Sem nenhum privilégio, porque o REVOKE no banco limpa as tabelas",
+        "Com SELECT e INSERT na tabela pedido",
+        "Com SELECT nas tabelas e sem o INSERT em pedido"
+      ],
+      "correta": 0,
+      "explicacao": "O REVOKE no nível do banco retira só o privilégio daquele nível. O INSERT dado no nível da tabela pedido continua."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O site de uma pizzaria e o MySQL rodam no mesmo servidor, mas a conta do site foi criada como `'site'@'%'`. Qual é a melhor correção?",
+      "alternativas": [
+        "Manter o %, porque localhost não funciona para sites",
+        "Trocar o % por *.*, que é mais seguro",
+        "Manter o % e dar ALL PRIVILEGES para evitar erros",
+        "Usar o host localhost, porque o site não precisa aceitar conexões de fora"
+      ],
+      "correta": 3,
+      "explicacao": "Se a aplicação está na mesma máquina, 'site'@'localhost' fecha a porta para tentativas vindas de outros computadores."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma conta de relatórios recebeu `GRANT SELECT ON *.* TO 'relatorio'@'localhost';`. Além dos bancos da empresa, que dado sensível ela passa a poder ler?",
+      "alternativas": [
+        "Nenhum: *.* não inclui os bancos internos do servidor",
+        "Os arquivos pessoais do computador do servidor",
+        "As senhas em texto puro digitadas no CREATE USER",
+        "As tabelas do banco mysql, com a lista de contas e os hashes das senhas"
+      ],
+      "correta": 3,
+      "explicacao": "*.* inclui o banco mysql. Ler mysql.user expõe contas e hashes, que podem ser atacados. Por isso se evita SELECT global."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A conta 'gerente' tem SELECT e UPDATE em loja.* e nenhum privilégio global. O administrador rodou `REVOKE ALL PRIVILEGES ON *.* FROM 'gerente'@'localhost';`. O que acontece com os privilégios em loja.*?",
+      "alternativas": [
+        "São retirados, porque *.* abrange todos os bancos",
+        "São retirados e a conta é apagada",
+        "Continuam, porque esse REVOKE vale só para o nível global (*.*)",
+        "Viram privilégios globais em todos os bancos"
+      ],
+      "correta": 2,
+      "explicacao": "Cada nível é separado: REVOKE em *.* não mexe em banco.*. Para limpar tudo existe REVOKE ALL PRIVILEGES, GRANT OPTION FROM conta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "dcl-root",
+      "enunciado": "O sistema de vendas de uma pet shop foi configurado para entrar no MySQL com a conta root.\n\nNa sua resposta:\n1. explique por que isso é perigoso;\n2. diga qual seria a forma correta de configurar o acesso do sistema.",
+      "respostasAceitas": [
+        "É perigoso porque o root pode tudo: se o sistema for invadido ou tiver um erro, o estrago pode atingir o servidor inteiro. O certo é usar uma conta própria do sistema, com só os privilégios necessários nas tabelas que ele usa."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) root tem poder total, invasão/erro = estrago total; 2) conta própria com menor privilégio."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de roupas, os quatro vendedores usam a mesma conta 'vendas' e a mesma senha para acessar o banco.\n\nNa sua resposta:\n1. explique dois problemas dessa prática;\n2. diga o que deveria ser feito.",
+      "respostasAceitas": [
+        "Não dá para saber qual vendedor fez cada alteração e, se um sair da loja, é preciso trocar a senha de todos. O certo é cada vendedor ter a própria conta, com os mesmos privilégios mínimos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sem rastreabilidade; não dá para bloquear uma pessoa só / senha circula; 2) uma conta por pessoa."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "dcl-flush",
+      "enunciado": "Um tutorial antigo manda rodar `FLUSH PRIVILEGES;` depois de cada `GRANT` no MySQL 8.\n\nNa sua resposta:\n1. diga o que o FLUSH PRIVILEGES faz;\n2. explique se ele é necessário depois de um GRANT no MySQL 8.",
+      "respostasAceitas": [
+        "O FLUSH PRIVILEGES recarrega na memória as tabelas de privilégios. Depois de GRANT não é necessário, porque o GRANT já atualiza tudo; ele só é preciso quando alguém mexe direto nas tabelas do banco mysql."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) recarrega as tabelas de privilégios; 2) não é necessário após GRANT/REVOKE/CREATE USER."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um funcionário de uma ótica tentou entrar no MySQL e recebeu `ERROR 1045 (28000): Access denied for user 'vendas'@'localhost' (using password: YES)`.\n\nNa sua resposta:\n1. explique o que essa mensagem indica;\n2. cite duas causas possíveis.",
+      "respostasAceitas": [
+        "Indica que o login falhou: o MySQL não aceitou a combinação de usuário, senha e host. Causas: senha digitada errada, nome da conta errado, ou a conta não existe para aquele host."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) falha de autenticação (login); 2) senha errada, usuário errado/inexistente, host diferente, conta bloqueada."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa farmácia, a senha da conta do sistema estava escrita direto no código, e o código foi publicado num repositório público.\n\nNa sua resposta:\n1. explique o risco disso;\n2. diga o que deve ser feito agora.",
+      "respostasAceitas": [
+        "Qualquer pessoa pode ler a senha e acessar o banco com os privilégios do sistema. É preciso trocar a senha na hora (ALTER USER) e passar a guardá-la num arquivo de configuração protegido, fora do repositório."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) senha exposta, acesso indevido aos dados; 2) trocar a senha já e guardar fora do código público."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A recepcionista de uma clínica rodou `USE financeiro;` e recebeu `ERROR 1044 (42000): Access denied for user 'recepcao'@'localhost' to database 'financeiro'`.\n\nNa sua resposta:\n1. explique o que a mensagem significa;\n2. diga se o administrador deve simplesmente liberar o acesso e por quê.",
+      "respostasAceitas": [
+        "Significa que o login funcionou, mas a conta não tem privilégio no banco financeiro. O administrador não deve liberar só porque deu erro: primeiro precisa ver se a recepção realmente precisa desses dados; se não precisa, o erro está protegendo o banco."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sem privilégio naquele banco (login ok); 2) não; avaliar necessidade — menor privilégio."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "dcl-perfis",
+      "enunciado": "Numa clínica, o administrador definiu: `GRANT SELECT ON clinica.* TO 'atendente'@'localhost';`, `GRANT SELECT, INSERT, UPDATE ON clinica.* TO 'gerente'@'localhost';` e `GRANT CREATE, ALTER, DROP ON clinica_teste.* TO 'dev'@'localhost';`.\n\nNa sua resposta:\n1. explique o que cada perfil pode fazer;\n2. explique por que o desenvolvedor recebeu privilégios só no banco de teste.",
+      "respostasAceitas": [
+        "A atendente só consulta; o gerente consulta, cadastra e corrige dados; o desenvolvedor mexe na estrutura das tabelas, mas só no banco clinica_teste. Assim ele pode testar mudanças sem risco de apagar ou estragar os dados reais da clínica."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) atendente = leitura; gerente = leitura + inserir/alterar; dev = estrutura; 2) separar teste de produção protege os dados reais."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa padaria, o caixa recebeu `DELETE command denied to user 'caixa'@'localhost' for table 'venda'`. O técnico pensou em resolver com `GRANT ALL PRIVILEGES ON *.* TO 'caixa'@'localhost';`.\n\nNa sua resposta:\n1. explique o que a mensagem de erro significa;\n2. explique por que a solução pensada é ruim e qual seria a mais adequada.",
+      "respostasAceitas": [
+        "A conta caixa não tem o privilégio DELETE na tabela venda. Dar ALL em *.* deixaria o caixa com poder total no servidor. O certo é avaliar se o caixa deve apagar vendas; se sim, conceder só DELETE (e SELECT, se usar WHERE) na tabela venda."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) falta DELETE em venda; 2) ALL *.* viola menor privilégio; conceder só o necessário, só na tabela."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "dcl-injection",
+      "enunciado": "O site de uma loja usa a conta `'site'@'localhost'`, que tem só `SELECT` na tabela produto. Um invasor fez SQL injection e tentou rodar `DELETE FROM produto;` por meio do site.\n\nNa sua resposta:\n1. diga o que acontece com o comando do invasor;\n2. explique como o princípio do menor privilégio ajudou.",
+      "respostasAceitas": [
+        "O DELETE é negado, porque a conta do site não tem esse privilégio. O menor privilégio não evitou o ataque, mas limitou o estrago: o invasor só pode fazer o que a conta do site pode, que é consultar produtos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) negado (command denied); 2) a conta só tinha SELECT, então o dano ficou limitado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, a conta usada para backup recebeu `GRANT SELECT, LOCK TABLES ON loja.* TO 'backup'@'localhost';`.\n\nNa sua resposta:\n1. explique por que essa conta recebeu privilégios de leitura;\n2. explique por que ela não deve ter INSERT, UPDATE ou DELETE.",
+      "respostasAceitas": [
+        "O backup só precisa ler os dados para copiar (e travar as tabelas durante a cópia). Ela não deve ter escrita porque nunca precisa alterar nada; se a senha vazar, ninguém consegue mudar ou apagar dados por essa conta."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) backup só lê/copia; 2) menor privilégio, reduz estrago se a conta for usada indevidamente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O site de uma pizzaria e o MySQL rodam no mesmo servidor. A conta do site existe como `'site'@'%'` e o técnico quer trocá-la por `'site'@'localhost'`.\n\nNa sua resposta:\n1. explique o que muda com essa troca;\n2. explique por que isso aumenta a segurança.",
+      "respostasAceitas": [
+        "Com localhost a conta só aceita conexões feitas no próprio servidor, onde o site está. Isso aumenta a segurança porque ninguém de outro computador consegue tentar entrar com essa conta, mesmo que descubra a senha."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só conexões locais; 2) bloqueia tentativas vindas de fora, reduz superfície de ataque."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma escola recebeu um estagiário por 3 meses. O administrador deu a ele `GRANT SELECT ON escola.frequencia TO 'estagiario'@'localhost';` e combinou rodar `DROP USER 'estagiario'@'localhost';` no último dia.\n\nNa sua resposta:\n1. explique por que o estagiário recebeu só esse privilégio;\n2. explique por que a conta deve ser apagada no fim do estágio.",
+      "respostasAceitas": [
+        "Ele só precisa consultar a frequência para os relatórios, então recebe só SELECT nessa tabela (menor privilégio). No fim do estágio a conta deve ser apagada para não sobrar um acesso sem dono que alguém possa usar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) menor privilégio para a tarefa; 2) conta sem uso é risco; acesso deve acabar junto com o vínculo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "dcl-flush-direto",
+      "enunciado": "Numa loja, o administrador bloqueou o caixa rodando `UPDATE mysql.user SET account_locked = 'Y' WHERE user = 'caixa';`. Mesmo assim, o caixa continuou conseguindo entrar no MySQL.\n\nNa sua resposta:\n1. explique por que o bloqueio não funcionou;\n2. diga como resolver e qual seria o jeito recomendado de bloquear.",
+      "respostasAceitas": [
+        "Ele mudou a tabela mysql.user direto, e o servidor continua usando os privilégios que estão na memória. Para valer, seria preciso rodar FLUSH PRIVILEGES. O jeito recomendado é usar ALTER USER 'caixa'@'localhost' ACCOUNT LOCK, que já atualiza tudo sozinho."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) alteração direta nas tabelas não recarrega a memória; 2) FLUSH PRIVILEGES — ou, melhor, ALTER USER ... ACCOUNT LOCK."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "dcl-insert-select",
+      "enunciado": "Numa loja, a conta 'arquivo' tem só INSERT em loja.historico. O comando `INSERT INTO historico SELECT * FROM pedido WHERE ano = 2025;` foi negado.\n\nNa sua resposta:\n1. explique quais privilégios esse comando exige;\n2. explique por que dar ALL PRIVILEGES não é a solução certa.",
+      "respostasAceitas": [
+        "O comando lê da tabela pedido (precisa de SELECT em pedido) e grava em historico (precisa de INSERT em historico). Falta o SELECT em pedido. Dar ALL resolveria o erro, mas daria poderes que a conta não precisa; o certo é conceder só SELECT em pedido."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) SELECT na origem + INSERT no destino; 2) menor privilégio: conceder só o que falta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DCL — usuários e permissões (GRANT e REVOKE)",
+      "capacidade": "bd.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "dcl-app-tudo",
+      "enunciado": "Na revisão de segurança de uma loja, `SHOW GRANTS FOR 'app'@'%';` mostrou `GRANT ALL PRIVILEGES ON *.* TO 'app'@'%' WITH GRANT OPTION`. Essa é a conta que o sistema de vendas usa.\n\nNa sua resposta:\n1. aponte três problemas nessa configuração;\n2. explique como deveria ser a conta do sistema.",
+      "respostasAceitas": [
+        "Problemas: ALL PRIVILEGES dá todos os poderes; *.* vale para todos os bancos do servidor; WITH GRANT OPTION deixa repassar privilégios; e o host % aceita conexão de qualquer lugar. A conta do sistema deveria ter só os privilégios necessários (ex.: SELECT, INSERT, UPDATE) no banco da loja, sem GRANT OPTION e com host restrito (localhost ou a rede interna)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) três entre ALL, *.*, GRANT OPTION, %; 2) menor privilégio, banco/tabelas certos, sem GRANT OPTION, host restrito."
+    }
+  ]
+}

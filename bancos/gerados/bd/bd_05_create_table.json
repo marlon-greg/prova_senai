@@ -1,0 +1,2491 @@
+{
+  "nome": "Banco de Dados — DDL: CREATE TABLE e restrições (a revisar)",
+  "materia": "Banco de Dados",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na biblioteca da escola foi executado `CREATE TABLE livro (id_livro INT PRIMARY KEY AUTO_INCREMENT, titulo VARCHAR(100) NOT NULL, ano YEAR);`. O que esse comando faz?",
+      "alternativas": [
+        "Cadastra um livro novo com título e ano dentro da tabela livro",
+        "Cria o banco de dados biblioteca com a tabela livro dentro dele",
+        "Cria a estrutura da tabela livro (colunas, tipos e restrições), ainda sem nenhuma linha",
+        "Mostra as colunas da tabela livro com seus tipos e restrições"
+      ],
+      "correta": 2,
+      "explicacao": "CREATE TABLE é DDL: define a estrutura. A tabela nasce vazia; quem cadastra linhas é o INSERT e quem mostra a estrutura é o DESCRIBE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop, a tabela `pet` tem as colunas id_pet, nome e especie, criada com `id_pet INT PRIMARY KEY AUTO_INCREMENT`. O que o AUTO_INCREMENT faz no id_pet?",
+      "alternativas": [
+        "Gera sozinho o próximo número do id_pet a cada pet cadastrado",
+        "Impede que dois pets sejam cadastrados com o mesmo nome",
+        "Aumenta o tamanho da coluna quando os números ficam grandes",
+        "Ordena os pets pelo id_pet em todas as consultas feitas"
+      ],
+      "correta": 0,
+      "explicacao": "AUTO_INCREMENT faz o MySQL numerar automaticamente (1, 2, 3…) a coluna, sem o usuário informar o valor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa oficina, a tabela `cliente` (id_cliente, nome, telefone) tem a coluna `telefone VARCHAR(15) NOT NULL`. O que o NOT NULL garante?",
+      "alternativas": [
+        "Que dois clientes não possam ter o mesmo número de telefone",
+        "Que o telefone receba 0 quando não for informado no cadastro",
+        "Que o telefone aceite só números, sem traços ou parênteses",
+        "Que todo cliente seja cadastrado com telefone, sem deixá-lo vazio"
+      ],
+      "correta": 3,
+      "explicacao": "NOT NULL torna a coluna obrigatória (não aceita NULL). Não impede repetição (isso é UNIQUE) nem valida o formato."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa hamburgueria, a tabela `pedido` (id_pedido, mesa, status) tem `status VARCHAR(20) DEFAULT 'recebido'`. Um pedido é inserido sem informar o status. Que valor fica na coluna?",
+      "alternativas": [
+        "NULL",
+        "'recebido'",
+        "'' (texto vazio)",
+        "O INSERT dá erro"
+      ],
+      "correta": 1,
+      "explicacao": "DEFAULT define o valor usado quando a coluna não é informada no INSERT: o status fica 'recebido'.",
+      "grupo": "default-omitido"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `aluno` (matricula, nome, turma), a coluna matricula é PRIMARY KEY. Qual é o papel dela?",
+      "alternativas": [
+        "Ligar a tabela aluno a outra tabela do banco de dados",
+        "Identificar cada aluno de forma única: não repete e não fica vazia",
+        "Deixar os alunos sempre em ordem alfabética nas consultas",
+        "Tornar a matrícula obrigatória, mas permitindo repetição"
+      ],
+      "correta": 1,
+      "explicacao": "A chave primária identifica cada linha: é única e obrigatória. Quem liga tabelas é a chave estrangeira."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa padaria, a tabela `produto` tem as colunas id_produto, nome e preco (ex.: 7.50). Qual tipo é o mais adequado para preco?",
+      "alternativas": [
+        "INT",
+        "VARCHAR(10)",
+        "CHAR(8)",
+        "DECIMAL(8,2)"
+      ],
+      "correta": 3,
+      "explicacao": "DECIMAL(8,2) guarda valores com 2 casas decimais exatas. INT perde os centavos e texto não permite contas.",
+      "grupo": "tipo-preco"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, a tabela `paciente` (id_paciente, nome, nascimento) precisa guardar a data de nascimento. Qual tipo usar em nascimento?",
+      "alternativas": [
+        "DATE",
+        "TIME",
+        "YEAR",
+        "INT"
+      ],
+      "correta": 0,
+      "explicacao": "DATE guarda dia, mês e ano (formato 'AAAA-MM-DD'). TIME guarda só horas e YEAR só o ano."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `endereco` (id_endereco, rua, numero, cep), há CEPs que começam com zero, como 01310100. Qual tipo evita perder esse zero?",
+      "alternativas": [
+        "INT",
+        "BIGINT",
+        "CHAR(8)",
+        "DECIMAL(8,0)"
+      ],
+      "correta": 2,
+      "explicacao": "Em tipo numérico o zero à esquerda some (01310100 vira 1310100). CEP não é usado em contas, então texto de tamanho fixo é o ideal.",
+      "grupo": "texto-numerico"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `jogador` (id_jogador, apelido, pontos), a coluna é `apelido VARCHAR(50)`. O que significa o 50?",
+      "alternativas": [
+        "O apelido precisa ter exatamente 50 caracteres",
+        "O apelido pode ter até 50 palavras",
+        "Cada apelido ocupa sempre 50 letras",
+        "O apelido pode ter até 50 caracteres"
+      ],
+      "correta": 3,
+      "explicacao": "Em VARCHAR(n), n é o máximo de caracteres; textos menores são aceitos e ocupam só o necessário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um CREATE TABLE termina com `) ENGINE=InnoDB;`. O que é InnoDB?",
+      "alternativas": [
+        "O nome do banco de dados onde a tabela será guardada no servidor",
+        "O mecanismo de armazenamento padrão do MySQL 8, que aceita chaves estrangeiras",
+        "Um tipo de dado especial para guardar números grandes e datas",
+        "O usuário do servidor que passa a ser o dono da tabela criada"
+      ],
+      "correta": 1,
+      "explicacao": "ENGINE escolhe o mecanismo de armazenamento. InnoDB é o padrão no MySQL 8 e garante chaves estrangeiras e transações."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `turma` (id_turma, nome, periodo) já existe. O que acontece ao rodar `CREATE TABLE IF NOT EXISTS turma (id_turma INT PRIMARY KEY, nome VARCHAR(30));`?",
+      "alternativas": [
+        "Nada é alterado: a tabela existente continua igual e só aparece um aviso",
+        "A tabela antiga é apagada e criada de novo com as duas colunas",
+        "O MySQL mostra o erro 1050 e interrompe o script inteiro",
+        "A coluna periodo é removida para ficar igual ao comando novo"
+      ],
+      "correta": 0,
+      "explicacao": "IF NOT EXISTS só cria a tabela se ela não existir. Se já existir, o comando vira apenas um aviso e a tabela não muda."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa sorveteria, o comando `CREATE TABLE sabor (id_sabor INT PRIMARY KEY, nome VARCHAR(40),);` deu erro 1064. Qual é a causa?",
+      "alternativas": [
+        "A falta de AUTO_INCREMENT na chave primária id_sabor",
+        "O uso da palavra nome, que é reservada no MySQL",
+        "A vírgula sobrando depois da última coluna, antes do parêntese",
+        "A falta de ENGINE=InnoDB no final do comando"
+      ],
+      "correta": 2,
+      "explicacao": "Erro 1064 é de sintaxe. A vírgula separa colunas; depois da última coluna não pode haver vírgula."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `produto` (id_produto, nome, preco), um colega rodou `DESCRIBE produto;`. O que aparece na tela?",
+      "alternativas": [
+        "Mostrar todas as linhas cadastradas na tabela produto",
+        "Apagar a estrutura da tabela produto e recriá-la vazia",
+        "Mostrar as colunas da tabela com tipo, se aceita NULL, chave, padrão e extras",
+        "Mostrar quais usuários têm permissão na tabela produto"
+      ],
+      "correta": 2,
+      "explicacao": "DESCRIBE (ou DESC) mostra a estrutura: Field, Type, Null, Key, Default e Extra. Os dados aparecem com SELECT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, a tabela `consulta` (id_consulta, data_consulta, id_paciente) tem `FOREIGN KEY (id_paciente) REFERENCES paciente(id_paciente)`. O que essa chave estrangeira garante?",
+      "alternativas": [
+        "Que toda consulta aponte para um paciente que existe na tabela paciente",
+        "Que cada paciente tenha no máximo uma consulta cadastrada",
+        "Que o nome do paciente seja copiado para a tabela consulta",
+        "Que o id_paciente seja gerado automaticamente na consulta"
+      ],
+      "correta": 0,
+      "explicacao": "A FK obriga o valor de id_paciente a existir em paciente(id_paciente). Ela não limita quantas consultas cada paciente tem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num mercadinho, as tabelas são: categoria; produto (com FK para categoria); venda; e item_venda (com FK para venda e para produto). Em qual ordem os CREATE TABLE funcionam sem erro?",
+      "alternativas": [
+        "item_venda, venda, produto, categoria",
+        "produto, categoria, item_venda, venda",
+        "venda, item_venda, categoria, produto",
+        "categoria, produto, venda, item_venda"
+      ],
+      "correta": 3,
+      "explicacao": "Tabela pai antes da filha: categoria antes de produto, e item_venda por último, porque depende de venda e de produto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `funcionario` (id_funcionario, nome, cpf), a coluna é `cpf VARCHAR(11) UNIQUE`, sem NOT NULL. Dois funcionários estrangeiros são cadastrados sem CPF (NULL). O que acontece?",
+      "alternativas": [
+        "O segundo dá erro de valor duplicado no cpf",
+        "Os dois são aceitos, pois UNIQUE permite vários NULL",
+        "Só o primeiro é aceito e o segundo é ignorado",
+        "O MySQL troca os NULL por texto vazio ('')"
+      ],
+      "correta": 1,
+      "explicacao": "No MySQL, UNIQUE não considera NULL igual a NULL, então vários NULL são aceitos. Para impedir isso, use também NOT NULL.",
+      "grupo": "unique-null"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `produto` (id_produto INT PRIMARY KEY AUTO_INCREMENT, nome VARCHAR(60) NOT NULL, preco DECIMAL(7,2)), foi rodado `INSERT INTO produto (preco) VALUES (4.90);`. O que acontece no MySQL 8 (modo estrito, o padrão)?",
+      "alternativas": [
+        "O produto é gravado com nome NULL e preço 4.90",
+        "O INSERT é recusado: nome é obrigatório e não tem valor padrão",
+        "O produto é gravado com nome 'nome' e preço 4.90",
+        "O produto é gravado com nome vazio e sem nenhum aviso"
+      ],
+      "correta": 1,
+      "explicacao": "Coluna NOT NULL sem DEFAULT precisa ser informada. O MySQL recusa com o erro 1364 (Field 'nome' doesn't have a default value)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno tentou: `CREATE TABLE sala (id_sala INT PRIMARY KEY, numero INT PRIMARY KEY, bloco CHAR(1));`. O que acontece?",
+      "alternativas": [
+        "A tabela é criada com duas chaves primárias independentes, uma em cada coluna",
+        "A tabela é criada e o MySQL junta as duas colunas numa chave composta",
+        "A tabela é criada e o MySQL ignora a segunda PRIMARY KEY sem avisar",
+        "Erro: a tabela só pode ter uma PRIMARY KEY; para juntar colunas usa-se PRIMARY KEY (id_sala, numero)"
+      ],
+      "correta": 3,
+      "explicacao": "Declarar PRIMARY KEY em duas colunas gera o erro 1068 (Multiple primary key defined). Chave composta se escreve numa linha só.",
+      "grupo": "pk-composta-sintaxe"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `matricula` (id_aluno, id_turma, data_matricula) tem `PRIMARY KEY (id_aluno, id_turma)`. Qual cadastro é PERMITIDO?",
+      "alternativas": [
+        "O mesmo aluno matriculado em duas turmas diferentes",
+        "O mesmo aluno matriculado duas vezes na mesma turma",
+        "Uma matrícula com id_aluno vazio (NULL)",
+        "Uma matrícula com id_turma vazio (NULL)"
+      ],
+      "correta": 0,
+      "explicacao": "Na chave composta, o que não pode repetir é a combinação. O aluno 1 pode estar nas turmas 10 e 20, mas não duas vezes na 10. Colunas da PK não aceitam NULL.",
+      "grupo": "pk-composta"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa papelaria, a tabela `produto` (id_produto, nome, estoque) foi criada com `estoque INT CHECK (estoque >= 0)`. O que acontece ao inserir um produto com estoque -5 no MySQL 8?",
+      "alternativas": [
+        "O produto é gravado com estoque 0 no lugar do -5",
+        "O produto é gravado com estoque 5, sem o sinal",
+        "O INSERT é recusado, pois o valor desrespeita a regra do CHECK",
+        "O produto é gravado com -5 e só aparece um aviso"
+      ],
+      "correta": 2,
+      "explicacao": "Desde o MySQL 8.0.16 o CHECK é verificado: valor que não atende a condição gera o erro 3819 (Check constraint is violated)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de uniformes, a tabela `camiseta` (id_camiseta, cor, tamanho) tem `tamanho ENUM('P','M','G')`. O que acontece ao inserir o tamanho 'GG'?",
+      "alternativas": [
+        "A camiseta é gravada com o tamanho 'G', o mais próximo",
+        "O MySQL acrescenta 'GG' à lista de valores do ENUM",
+        "A camiseta é gravada com tamanho NULL, sem aviso",
+        "O INSERT é recusado, porque 'GG' não está na lista do ENUM"
+      ],
+      "correta": 3,
+      "explicacao": "ENUM só aceita os valores da lista. No modo estrito do MySQL 8, um valor fora dela gera erro (Data truncated).",
+      "grupo": "enum-fora"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa cantina, a coluna `preco DECIMAL(5,2)` guarda o preço dos lanches. Qual é o MAIOR valor que ela aceita?",
+      "alternativas": [
+        "99999.99",
+        "999.99",
+        "9.99",
+        "99.999"
+      ],
+      "correta": 1,
+      "explicacao": "DECIMAL(5,2): 5 dígitos no total, 2 depois da vírgula. Sobram 3 antes: o máximo é 999.99.",
+      "grupo": "decimal-faixa"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `voo` (id_voo, origem, destino), a coluna é `origem CHAR(3)` para códigos como 'GRU'. Um usuário tenta gravar 'GRUX'. O que acontece no modo estrito do MySQL 8?",
+      "alternativas": [
+        "O INSERT é recusado por ser longo demais para a coluna",
+        "O MySQL grava só 'GRU' e não avisa nada",
+        "A coluna aumenta de tamanho para caber 'GRUX'",
+        "O MySQL grava NULL no lugar do valor inválido"
+      ],
+      "correta": 0,
+      "explicacao": "No modo estrito, texto maior que o tamanho da coluna gera o erro 1406 (Data too long). Não há corte silencioso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em `cliente`, a chave é `id_cliente INT`. Na tabela `pedido` foi usado `id_cliente VARCHAR(10)` com `FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente)`. O que acontece no CREATE TABLE pedido?",
+      "alternativas": [
+        "A tabela é criada e o MySQL converte os textos em números sozinho",
+        "A tabela é criada, mas a chave estrangeira nunca é verificada",
+        "Erro: a coluna da FK precisa ter tipo compatível com a coluna referenciada",
+        "A tabela é criada sem problema, porque as colunas têm o mesmo nome"
+      ],
+      "correta": 2,
+      "explicacao": "FK e coluna referenciada precisam ter tipos compatíveis (INT com INT). O MySQL recusa com erro de colunas incompatíveis (3780).",
+      "grupo": "fk-tipo"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop, `pet` tem `FOREIGN KEY (id_tutor) REFERENCES tutor(id_tutor) ON DELETE CASCADE`. O que acontece ao apagar um tutor que tem 2 pets?",
+      "alternativas": [
+        "O MySQL recusa apagar o tutor por ter pets",
+        "O tutor é apagado e os pets ficam com id_tutor NULL",
+        "O tutor e os 2 pets dele são apagados",
+        "O tutor é apagado e os pets continuam como estavam"
+      ],
+      "correta": 2,
+      "explicacao": "ON DELETE CASCADE propaga a exclusão: apagar a linha pai apaga as linhas filhas ligadas a ela.",
+      "grupo": "on-delete-efeito"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num mercado, `produto` tem `FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria)`, sem ON DELETE. O que acontece ao tentar apagar uma categoria que tem produtos?",
+      "alternativas": [
+        "O MySQL recusa a exclusão, porque há produtos ligados a ela",
+        "A categoria e todos os seus produtos são apagados juntos",
+        "A categoria é apagada e os produtos ficam com id_categoria NULL",
+        "A categoria é apagada e os produtos ficam apontando para ela"
+      ],
+      "correta": 0,
+      "explicacao": "Sem ON DELETE, o InnoDB age como RESTRICT/NO ACTION: não deixa apagar a linha pai enquanto houver filhas (erro 1451).",
+      "grupo": "on-delete-efeito"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No `DESCRIBE aluno;` (colunas id_aluno, nome, id_turma), a coluna id_turma aparece com `MUL` em Key. O que isso indica?",
+      "alternativas": [
+        "A coluna é a chave primária da tabela aluno",
+        "A coluna não aceita valores repetidos (é UNIQUE)",
+        "A coluna multiplica o valor por outra coluna",
+        "A coluna tem um índice que aceita valores repetidos, comum em chave estrangeira"
+      ],
+      "correta": 3,
+      "explicacao": "MUL quer dizer que a coluna é a primeira de um índice que permite repetição. Colunas de FK aparecem assim, pois vários alunos podem ter a mesma turma.",
+      "grupo": "mul"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O `DESCRIBE venda;` mostrou a linha: `id_venda | int | NO | PRI | NULL | auto_increment`. O que se conclui sobre id_venda?",
+      "alternativas": [
+        "É uma coluna opcional que começa com valor NULL",
+        "É a chave primária, obrigatória e numerada automaticamente",
+        "É uma chave estrangeira que aponta para outra tabela",
+        "É uma coluna que pode repetir, mas não pode ficar vazia"
+      ],
+      "correta": 1,
+      "explicacao": "PRI = chave primária; Null NO = obrigatória; Extra auto_increment = numerada pelo MySQL. O Default NULL é normal em coluna AUTO_INCREMENT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num sistema de notas, a coluna é `nota TINYINT UNSIGNED`. Qual destes valores é RECUSADO?",
+      "alternativas": [
+        "0",
+        "-1",
+        "100",
+        "255"
+      ],
+      "correta": 1,
+      "explicacao": "TINYINT UNSIGNED aceita de 0 a 255. UNSIGNED não aceita negativos, então -1 é fora da faixa.",
+      "grupo": "faixa-tinyint"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `senha` (id_senha INT PRIMARY KEY AUTO_INCREMENT, guiche INT) tinha os ids 1, 2 e 3. A senha 3 foi apagada e uma nova foi inserida. Qual id ela recebe no MySQL 8 (InnoDB)?",
+      "alternativas": [
+        "3",
+        "1",
+        "O INSERT dá erro",
+        "4"
+      ],
+      "correta": 3,
+      "explicacao": "O AUTO_INCREMENT não reaproveita números apagados: o contador continua do maior já usado. A nova senha recebe 4.",
+      "grupo": "ai-reaproveita"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca foi rodado: `CREATE TABLE emprestimo (id_emprestimo INT PRIMARY KEY AUTO_INCREMENT, id_leitor INT NOT NULL, FOREIGN KEY (id_leitor) REFERENCES leitor(id_leitor) ON DELETE SET NULL);`. O que acontece?",
+      "alternativas": [
+        "O MySQL recusa o CREATE: SET NULL exige que id_leitor aceite NULL",
+        "A tabela é criada e, ao apagar um leitor, grava 0 no id_leitor",
+        "A tabela é criada e o MySQL ignora o SET NULL sem avisar",
+        "A tabela é criada e, ao apagar um leitor, apaga os empréstimos"
+      ],
+      "correta": 0,
+      "explicacao": "ON DELETE SET NULL precisa colocar NULL na coluna filha. Se ela é NOT NULL, a regra é impossível e o CREATE falha (erro 1830).",
+      "grupo": "set-null-notnull"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `cidade` tem id_cidade (PRIMARY KEY) e nome (sem índice nem UNIQUE). Um aluno criou `FOREIGN KEY (nome_cidade) REFERENCES cidade(nome)` em outra tabela. O que acontece?",
+      "alternativas": [
+        "A FK é criada normalmente, pois nome é do mesmo tipo da coluna",
+        "A FK é criada, mas o MySQL não confere os valores inseridos",
+        "Erro: a coluna referenciada precisa ser chave ou ter índice (PRIMARY KEY ou UNIQUE)",
+        "O MySQL transforma a coluna nome na chave primária de cidade"
+      ],
+      "correta": 2,
+      "explicacao": "A coluna referenciada por uma FK precisa ter índice (normalmente PK ou UNIQUE). Sem isso o MySQL dá erro (1822, Missing index)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que acontece com `CREATE TABLE fila (id INT AUTO_INCREMENT, numero INT PRIMARY KEY, guiche INT);`?",
+      "alternativas": [
+        "A tabela é criada e o id vira a chave primária no lugar de numero",
+        "A tabela é criada e o AUTO_INCREMENT passa para a coluna numero",
+        "A tabela é criada normalmente, com id numerado e numero como PK",
+        "Erro: a coluna AUTO_INCREMENT precisa ser uma chave da tabela"
+      ],
+      "correta": 3,
+      "explicacao": "No MySQL só pode haver uma coluna AUTO_INCREMENT e ela precisa ser chave (indexada). Sem isso: erro 1075 (Incorrect table definition)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, `curso` tem `codigo VARCHAR(5) PRIMARY KEY` e `turma` tem `FOREIGN KEY (codigo_curso) REFERENCES curso(codigo) ON UPDATE CASCADE`. O código do curso mudou de 'INF' para 'DS'. O que acontece com as turmas desse curso?",
+      "alternativas": [
+        "Continuam com 'INF' e ficam sem curso correspondente",
+        "Passam a ter codigo_curso = 'DS' automaticamente",
+        "São apagadas junto com o código antigo do curso",
+        "Impedem a mudança e o MySQL mostra erro de FK"
+      ],
+      "correta": 1,
+      "explicacao": "ON UPDATE CASCADE repete na tabela filha a alteração da chave do pai: as turmas passam a apontar para 'DS'.",
+      "grupo": "on-update"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O `DESCRIBE item_pedido;` mostra `PRI` em Key nas duas colunas id_pedido e id_produto. O que isso indica?",
+      "alternativas": [
+        "A chave primária é composta: a combinação das duas colunas não pode repetir",
+        "A tabela tem duas chaves primárias separadas, uma para cada coluna",
+        "Cada coluna, sozinha, não pode repetir nenhum valor na tabela",
+        "A estrutura está errada e precisa ser criada novamente"
+      ],
+      "correta": 0,
+      "explicacao": "Uma tabela tem uma só PK, que pode ser formada por várias colunas. O DESCRIBE marca PRI em cada coluna que faz parte dela.",
+      "grupo": "pk-composta"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa sorveteria foi executado:\n`CREATE TABLE sorvete (id_sorvete INT PRIMARY KEY AUTO_INCREMENT, sabor VARCHAR(40) NOT NULL, preco DECIMAL(6,2) NOT NULL);`\nO que esse comando produz no banco?\n\nNa sua resposta:\n1. diga o que o comando faz e quais colunas a tabela terá;\n2. explique por que preco usa DECIMAL(6,2) e não INT.",
+      "respostasAceitas": [
+        "Cria a tabela sorvete, vazia, com id_sorvete (numerado automaticamente), sabor e preco, ambos obrigatórios. DECIMAL(6,2) guarda centavos exatos (até 9999.99); INT perderia os centavos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cria a estrutura da tabela (sem dados) com as três colunas; 2) DECIMAL guarda as duas casas decimais do preço com exatidão, INT só guarda inteiros."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num campeonato da escola, a tabela de inscrições foi criada assim:\n`CREATE TABLE inscricao (id_inscricao INT PRIMARY KEY AUTO_INCREMENT, equipe VARCHAR(50) NOT NULL, pago TINYINT(1) NOT NULL DEFAULT 0);`\nO que acontece com a coluna pago quando uma equipe é inscrita sem informar esse valor?\n\nNa sua resposta:\n1. diga que valor fica gravado em pago;\n2. explique por que esse valor padrão faz sentido nesse caso.",
+      "respostasAceitas": [
+        "Fica 0 (não pago), por causa do DEFAULT 0. Faz sentido porque toda inscrição começa sem pagamento; só depois é marcada como paga (1)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) grava 0 pelo DEFAULT; 2) toda inscrição nova ainda não foi paga, então 0 é o estado inicial correto e evita deixar o campo vazio.",
+      "grupo": "default-omitido"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No cadastro de visitantes de um museu, a tabela tem as colunas:\n`nome VARCHAR(60) NOT NULL` e `cidade VARCHAR(40) DEFAULT 'São Paulo'`.\nQual é a diferença entre as duas restrições?\n\nNa sua resposta:\n1. explique o que o NOT NULL exige na coluna nome;\n2. explique o que o DEFAULT faz quando a cidade não é informada.",
+      "respostasAceitas": [
+        "NOT NULL obriga a informar o nome (sem ele o cadastro é recusado). DEFAULT não obriga nada: se a cidade não for informada, o MySQL grava 'São Paulo'."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) NOT NULL = campo obrigatório, não aceita NULL; 2) DEFAULT = valor automático usado quando a coluna fica de fora do INSERT."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na tabela `contato` (id_contato, nome, telefone) de uma ONG, a coluna foi definida como `telefone VARCHAR(15)` e não como INT. Por que essa escolha é melhor?\n\nNa sua resposta:\n1. explique por que telefone deve ser texto;\n2. dê um exemplo de problema que o tipo INT causaria.",
+      "respostasAceitas": [
+        "Telefone não é usado em contas e pode ter zero à esquerda, parênteses, traço ou '+55'. Com INT, um número como 011 perderia o zero e não daria para guardar '(11) 98765-4321'; números grandes ainda passariam do limite do INT."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) telefone é um código, não uma quantidade; 2) exemplo: perde zero à esquerda, não aceita símbolos ou estoura o limite do INT. Qualquer exemplo correto vale.",
+      "grupo": "texto-numerico"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O sistema da cantina roda o mesmo script toda vez que é iniciado. No script está:\n`CREATE TABLE IF NOT EXISTS lanche (id_lanche INT PRIMARY KEY AUTO_INCREMENT, nome VARCHAR(50) NOT NULL);`\nPor que usar IF NOT EXISTS aqui?\n\nNa sua resposta:\n1. explique o que o IF NOT EXISTS muda no comando;\n2. diga o que aconteceria na segunda execução se ele não estivesse ali.",
+      "respostasAceitas": [
+        "Com IF NOT EXISTS a tabela só é criada se ainda não existir; se já existir, nada muda (só um aviso). Sem ele, na segunda vez o MySQL daria o erro 1050 (Table 'lanche' already exists) e o script pararia."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cria só quando a tabela não existe, sem mexer na existente; 2) sem ele, erro de tabela já existente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja virtual, os itens de cada pedido ficam numa tabela criada assim:\n`CREATE TABLE item_pedido (id_item INT PRIMARY KEY AUTO_INCREMENT, id_pedido INT NOT NULL, produto VARCHAR(60), quantidade INT, FOREIGN KEY (id_pedido) REFERENCES pedido(id_pedido) ON DELETE CASCADE);`\nO que acontece quando o pedido 10 é apagado da tabela pedido?\n\nNa sua resposta:\n1. diga o que acontece com os itens do pedido 10;\n2. explique por que o CASCADE faz sentido nesse caso.",
+      "respostasAceitas": [
+        "Os itens com id_pedido = 10 são apagados automaticamente junto com o pedido. Faz sentido porque um item não existe sem o seu pedido; sobrariam itens 'órfãos'."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o ON DELETE CASCADE apaga os itens ligados ao pedido; 2) os itens dependem totalmente do pedido, não têm utilidade sozinhos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de roupas, a tabela `venda` (id_venda, data_venda, valor, id_cliente) tem `FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente)`, sem nenhuma cláusula ON DELETE. O que acontece ao tentar apagar um cliente que já fez compras?\n\nNa sua resposta:\n1. diga o que o MySQL faz com esse DELETE;\n2. explique por que esse comportamento é mais seguro do que usar ON DELETE CASCADE aqui.",
+      "respostasAceitas": [
+        "O MySQL recusa o DELETE (erro 1451), pois há vendas ligadas ao cliente. É mais seguro porque com CASCADE o histórico de vendas seria apagado junto, perdendo informação financeira."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a exclusão é bloqueada (comportamento padrão RESTRICT/NO ACTION); 2) protege o histórico de vendas, que não deve sumir por apagar um cliente.",
+      "grupo": "cascade-risco"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O controle de presença de um curso usa:\n`CREATE TABLE presenca (id_aluno INT, data_aula DATE, presente TINYINT(1) DEFAULT 1, PRIMARY KEY (id_aluno, data_aula));`\nO que essa chave primária composta controla?\n\nNa sua resposta:\n1. diga o que ela impede de ser cadastrado;\n2. dê um exemplo de cadastro que continua permitido.",
+      "respostasAceitas": [
+        "Impede registrar o mesmo aluno duas vezes no mesmo dia. Continua permitido o mesmo aluno em datas diferentes, ou alunos diferentes na mesma data."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a combinação aluno + data não pode repetir; 2) exemplo válido: aluno 5 em 10/03 e em 11/03, ou alunos 5 e 6 em 10/03.",
+      "grupo": "pk-composta-diss"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No boletim de uma escola técnica, a tabela foi criada com:\n`CREATE TABLE avaliacao (id_avaliacao INT PRIMARY KEY AUTO_INCREMENT, id_aluno INT NOT NULL, nota DECIMAL(4,2) CHECK (nota BETWEEN 0 AND 10));`\nO que a restrição CHECK faz nessa tabela?\n\nNa sua resposta:\n1. explique a regra que o CHECK garante;\n2. diga o que acontece ao inserir uma nota 11 no MySQL 8.",
+      "respostasAceitas": [
+        "O CHECK só aceita notas de 0 a 10. Uma nota 11 é recusada com erro (Check constraint is violated) e nada é gravado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) limita a nota ao intervalo 0–10; 2) o INSERT com 11 dá erro no MySQL 8.0.16+, a linha não entra."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa oficina mecânica, a tabela `ordem_servico` tem a coluna:\n`situacao ENUM('aberta','em andamento','concluida') NOT NULL DEFAULT 'aberta'`.\nPor que usar ENUM nessa coluna?\n\nNa sua resposta:\n1. explique o que o ENUM limita;\n2. diga que vantagem ele tem em relação a um VARCHAR livre.",
+      "respostasAceitas": [
+        "O ENUM só aceita um dos três valores da lista. Com VARCHAR livre, cada pessoa digitaria de um jeito ('Concluída', 'concluido', 'pronto') e as consultas por situação falhariam."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) aceita apenas os valores listados; 2) padroniza os dados e evita erros de digitação/variações.",
+      "grupo": "enum-vantagem"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa rede de lojas, o `DESCRIBE funcionario;` mostrou:\n`id_func | int | NO | PRI | NULL | auto_increment`\n`email | varchar(100) | YES | UNI | NULL |`\n`setor | varchar(30) | NO | | geral |`\n`id_loja | int | NO | MUL | NULL |`\nComo interpretar esse resultado?\n\nNa sua resposta:\n1. explique o que PRI, UNI e MUL indicam nessas colunas;\n2. diga o que acontece se um funcionário for inserido sem informar o setor.",
+      "respostasAceitas": [
+        "PRI: id_func é a chave primária (numerada sozinha). UNI: email não pode repetir. MUL: id_loja tem índice que aceita repetição (é chave estrangeira para loja). Sem setor, grava 'geral', o valor padrão."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) PRI = chave primária, UNI = valor único, MUL = índice com repetição (típico de FK); 2) o setor recebe o DEFAULT 'geral'.",
+      "grupo": "describe-ler"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega rodou o comando abaixo e recebeu o erro 1064:\n`CREATE TABLE quadra (id_quadra INT PRIMARY KEY, nome VARCHAR(30) NOT NULL, coberta TINYINT(1) DEFAULT 0,);`\nO que deu errado?\n\nNa sua resposta:\n1. aponte onde está o erro e por que ele quebra o comando;\n2. diga se a tabela chegou a ser criada.",
+      "respostasAceitas": [
+        "Há uma vírgula sobrando depois da última coluna (antes do parêntese). A vírgula anuncia outra coluna que não vem, então é erro de sintaxe (1064) e a tabela não é criada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) vírgula sobrando antes do ')'; 2) com erro de sintaxe nada é criado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num sistema de entregas foi criado `cliente` com `id_cliente INT UNSIGNED PRIMARY KEY AUTO_INCREMENT`. Depois, a tabela de pedidos foi assim:\n`CREATE TABLE pedido (id_pedido INT PRIMARY KEY AUTO_INCREMENT, id_cliente INT NOT NULL, FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente));`\nO MySQL recusou a criação de pedido. Por quê?\n\nNa sua resposta:\n1. explique o motivo do erro;\n2. diga o que precisa ser igual entre a coluna da FK e a coluna referenciada.",
+      "respostasAceitas": [
+        "id_cliente é INT UNSIGNED em cliente e INT (com sinal) em pedido: tipos incompatíveis para FK (erro 3780). As duas colunas precisam ter o mesmo tipo, inclusive o UNSIGNED."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) diferença de UNSIGNED torna os tipos incompatíveis; 2) mesmo tipo de dado e mesmo sinal (e, em texto, mesmo conjunto de caracteres).",
+      "grupo": "fk-tipo"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num sistema de tarefas, a tabela foi criada assim:\n`CREATE TABLE tarefa (id_tarefa INT PRIMARY KEY AUTO_INCREMENT, descricao VARCHAR(100) NOT NULL, id_responsavel INT NULL, FOREIGN KEY (id_responsavel) REFERENCES funcionario(id_funcionario) ON DELETE SET NULL);`\nO que acontece com as tarefas quando um funcionário é apagado?\n\nNa sua resposta:\n1. diga o que acontece com as tarefas daquele funcionário;\n2. explique por que id_responsavel precisa aceitar NULL para isso funcionar.",
+      "respostasAceitas": [
+        "As tarefas continuam existindo, mas ficam sem responsável (id_responsavel vira NULL). A coluna precisa aceitar NULL porque é esse o valor que o SET NULL grava; se fosse NOT NULL, o CREATE daria erro."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) as tarefas não são apagadas, só perdem o responsável; 2) SET NULL grava NULL, então a coluna não pode ser NOT NULL.",
+      "grupo": "set-null-notnull"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um script de um curso livre tem, nesta ordem: `CREATE TABLE matricula (...)` com FKs para aluno e curso; depois `CREATE TABLE aluno (...)`; depois `CREATE TABLE curso (...)`. O script para já no primeiro comando. Mais tarde, para apagar tudo com DROP TABLE, a ordem também importa.\n\nNa sua resposta:\n1. explique por que o script falha logo no início;\n2. diga em que ordem as tabelas devem ser criadas e em que ordem devem ser apagadas, justificando.",
+      "respostasAceitas": [
+        "matricula referencia aluno e curso, que ainda não existem (erro 1824). Criar primeiro as tabelas pai (aluno e curso) e depois matricula. Para apagar, o inverso: matricula primeiro, depois aluno e curso, porque não se apaga uma tabela pai enquanto a filha aponta para ela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) FK para tabela inexistente; 2) cria pai → filha, apaga filha → pai."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cinema, a tabela `filme` (id_filme, titulo, sinopse) precisa guardar sinopses de vários parágrafos. Qual tipo é o mais adequado para sinopse?",
+      "alternativas": [
+        "CHAR(10)",
+        "INT",
+        "TEXT",
+        "DATE"
+      ],
+      "correta": 2,
+      "explicacao": "TEXT guarda textos longos. CHAR(10) é curto demais; INT e DATE não guardam texto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num clube, a tabela `socio` tem a coluna `ativo BOOLEAN`. No MySQL, que valores essa coluna guarda de fato?",
+      "alternativas": [
+        "'S' e 'N' como texto",
+        "As palavras 'true' e 'false'",
+        "0 (falso) e 1 (verdadeiro)",
+        "1 (falso) e 2 (verdadeiro)"
+      ],
+      "correta": 2,
+      "explicacao": "No MySQL, BOOLEAN é um apelido de TINYINT(1): guarda 0 para falso e 1 para verdadeiro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola de música, a tabela `aula` (id_aula, instrumento, horario_inicio) guarda o horário em que a aula começa, como 14:30. Qual tipo usar em horario_inicio?",
+      "alternativas": [
+        "TIME",
+        "DATE",
+        "YEAR",
+        "CHAR(1)"
+      ],
+      "correta": 0,
+      "explicacao": "TIME guarda horas, minutos e segundos ('14:30:00'). DATE guarda só a data."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num estacionamento, a tabela `ticket` (id_ticket, placa, entrada) precisa guardar o dia E a hora da entrada do carro. Qual tipo usar em entrada?",
+      "alternativas": [
+        "DATE",
+        "TIME",
+        "YEAR",
+        "DATETIME"
+      ],
+      "correta": 3,
+      "explicacao": "DATETIME guarda data e hora juntas ('2026-05-10 08:15:00'). DATE e TIME guardam só uma das partes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Você quer conferir as colunas e os tipos da tabela `cliente`, sem ver os dados. Qual comando usar?",
+      "alternativas": [
+        "SELECT * FROM cliente;",
+        "DESCRIBE cliente;",
+        "SHOW DATABASES;",
+        "USE cliente;"
+      ],
+      "correta": 1,
+      "explicacao": "DESCRIBE mostra a estrutura da tabela. SELECT mostra os dados, SHOW DATABASES lista bancos e USE escolhe um banco."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num restaurante, a tabela `item_comanda` (id_item, prato, quantidade) tem `quantidade INT NOT NULL DEFAULT 1`. Um item é lançado sem informar a quantidade. Que valor é gravado?",
+      "alternativas": [
+        "0",
+        "1",
+        "NULL",
+        "O INSERT dá erro"
+      ],
+      "correta": 1,
+      "explicacao": "Como a coluna tem DEFAULT 1, o valor 1 é usado quando a quantidade não é informada. O NOT NULL não atrapalha, pois o padrão preenche.",
+      "grupo": "default-omitido"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas linhas usa o IF NOT EXISTS na posição correta?",
+      "alternativas": [
+        "CREATE IF NOT EXISTS TABLE aluno (...);",
+        "CREATE TABLE aluno IF NOT EXISTS (...);",
+        "IF NOT EXISTS CREATE TABLE aluno (...);",
+        "CREATE TABLE IF NOT EXISTS aluno (...);"
+      ],
+      "correta": 3,
+      "explicacao": "A sintaxe é CREATE TABLE IF NOT EXISTS nome_da_tabela (...). As outras posições dão erro de sintaxe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `turma` (id_turma, nome, qtd_alunos), a coluna qtd_alunos guarda quantos alunos a turma tem (ex.: 32). Qual tipo é o mais adequado?",
+      "alternativas": [
+        "INT",
+        "VARCHAR(3)",
+        "DATE",
+        "TEXT"
+      ],
+      "correta": 0,
+      "explicacao": "Quantidade de alunos é um número inteiro, usado em contas e comparações: INT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, cada aluno pertence a uma turma e uma turma tem vários alunos. As tabelas são aluno (id_aluno, nome) e turma (id_turma, nome). Onde fica a chave estrangeira id_turma?",
+      "alternativas": [
+        "Na tabela turma",
+        "Nas duas tabelas",
+        "Na tabela aluno",
+        "Numa terceira tabela obrigatória"
+      ],
+      "correta": 2,
+      "explicacao": "Na relação 1:N a FK fica no lado N. Cada aluno guarda a sua turma; a turma não guarda a lista de alunos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `item_venda`, a linha `FOREIGN KEY (id_produto) REFERENCES produto(id_produto)` aparece no CREATE TABLE. O que a parte `REFERENCES produto(id_produto)` indica?",
+      "alternativas": [
+        "Uma coluna nova que será criada dentro da tabela produto",
+        "Que os dados de produto serão copiados para item_venda",
+        "Que os itens serão ordenados pelo id_produto",
+        "A tabela e a coluna para onde a chave estrangeira aponta"
+      ],
+      "correta": 3,
+      "explicacao": "REFERENCES diz qual tabela (pai) e qual coluna dela a FK deve consultar para validar os valores."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao rodar `CREATE TABLE aluno (...)`, o MySQL respondeu: `Error 1050: Table 'aluno' already exists`. O que isso significa?",
+      "alternativas": [
+        "O banco de dados aluno ainda não foi criado",
+        "Já existe uma tabela aluno no banco que está em uso",
+        "A tabela aluno foi criada sem chave primária",
+        "Uma das colunas de aluno tem o tipo errado"
+      ],
+      "correta": 1,
+      "explicacao": "O erro 1050 avisa que o nome já está em uso no banco atual. Para evitar o erro em scripts, usa-se IF NOT EXISTS."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Dentro dos parênteses do CREATE TABLE, o que separa uma coluna da outra?",
+      "alternativas": [
+        "Vírgula (,)",
+        "Ponto e vírgula (;)",
+        "Ponto (.)",
+        "Dois-pontos (:)"
+      ],
+      "correta": 0,
+      "explicacao": "As colunas e restrições são separadas por vírgula. O ponto e vírgula termina o comando inteiro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `cidade` (id_cidade, nome, uf), a uf guarda sempre 2 letras, como 'SP' ou 'MG'. Qual tipo é o mais adequado?",
+      "alternativas": [
+        "VARCHAR(255)",
+        "INT",
+        "CHAR(2)",
+        "TEXT"
+      ],
+      "correta": 2,
+      "explicacao": "Quando o texto tem sempre o mesmo tamanho, CHAR(n) é o ideal. VARCHAR(255) e TEXT são exagerados; INT não guarda letras."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `cor` foi criada com `id_cor INT PRIMARY KEY`. Uma coluna que é chave primária pode ficar vazia (NULL)?",
+      "alternativas": [
+        "Sim, desde que só uma linha fique com NULL",
+        "Sim, se a coluna não tiver AUTO_INCREMENT",
+        "Não: a chave primária é sempre obrigatória e única",
+        "Não, mas pode repetir valores entre linhas"
+      ],
+      "correta": 2,
+      "explicacao": "PRIMARY KEY já implica NOT NULL e valor único. Mesmo sem escrever NOT NULL, a coluna não aceita NULL.",
+      "grupo": "pk-notnull"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na coluna `mensalidade DECIMAL(10,2)` de uma academia, o que o número 2 indica?",
+      "alternativas": [
+        "Que o valor tem 2 casas depois da vírgula",
+        "Que o valor tem no máximo 2 dígitos",
+        "Que a coluna aceita só 2 valores diferentes",
+        "Que o valor é arredondado de 2 em 2"
+      ],
+      "correta": 0,
+      "explicacao": "Em DECIMAL(p,s), p é o total de dígitos e s é a quantidade de casas decimais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a FK de `venda` foi escrita como `CONSTRAINT fk_venda_cliente FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente)`. Para que serve dar o nome fk_venda_cliente?",
+      "alternativas": [
+        "Porque o MySQL não aceita chave estrangeira sem um nome definido",
+        "Para deixar as consultas com JOIN entre as tabelas mais rápidas",
+        "Para criar uma nova coluna chamada fk_venda_cliente em venda",
+        "Para identificar a restrição nas mensagens de erro e poder removê-la depois"
+      ],
+      "correta": 3,
+      "explicacao": "O nome é opcional (o MySQL gera um), mas um nome claro aparece nos erros e é usado em ALTER TABLE ... DROP FOREIGN KEY."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa quadra esportiva, a tabela `reserva` (id_reserva, id_quadra, data_reserva, horario) tem `UNIQUE (id_quadra, data_reserva, horario)`. O que essa restrição impede?",
+      "alternativas": [
+        "Duas reservas da mesma quadra em qualquer dia",
+        "Duas reservas da mesma quadra no mesmo dia e horário",
+        "Duas reservas no mesmo horário em quadras diferentes",
+        "Duas reservas feitas no mesmo dia, em qualquer quadra"
+      ],
+      "correta": 1,
+      "explicacao": "UNIQUE com várias colunas impede repetir a combinação inteira. Mudando qualquer uma delas (quadra, dia ou horário), a reserva é aceita.",
+      "grupo": "unique-composto"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `acesso` (id_acesso, usuario, criado_em), a coluna é `criado_em DATETIME DEFAULT CURRENT_TIMESTAMP`. Um acesso é inserido sem criado_em. O que fica gravado?",
+      "alternativas": [
+        "NULL, porque nenhum valor foi enviado no INSERT",
+        "A data e a hora do momento em que a linha foi inserida",
+        "A data e a hora em que a tabela foi criada",
+        "O valor '0000-00-00 00:00:00'"
+      ],
+      "correta": 1,
+      "explicacao": "CURRENT_TIMESTAMP como DEFAULT preenche a coluna com a data e hora atuais do servidor na hora do INSERT.",
+      "grupo": "current-timestamp"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que, para guardar valores em reais, é melhor usar DECIMAL do que FLOAT?",
+      "alternativas": [
+        "FLOAT não aceita números com casas decimais",
+        "DECIMAL sempre ocupa menos espaço que FLOAT",
+        "FLOAT só aceita números inteiros e positivos",
+        "DECIMAL guarda o valor exato; FLOAT pode ter pequenos erros de arredondamento"
+      ],
+      "correta": 3,
+      "explicacao": "FLOAT é aproximado (0.1 + 0.2 pode virar 0.30000001). Em dinheiro isso gera diferenças de centavos; DECIMAL é exato.",
+      "grupo": "tipo-preco"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa revenda de carros, a tabela `veiculo` (placa, modelo, ano_fabricacao) guarda apenas o ano, como 2019. Qual tipo é próprio do MySQL para isso?",
+      "alternativas": [
+        "YEAR",
+        "DATE",
+        "TIME",
+        "DATETIME"
+      ],
+      "correta": 0,
+      "explicacao": "YEAR guarda só o ano (de 1901 a 2155). DATE exigiria dia e mês, que não existem nesse dado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa pousada, a tabela `hospedagem` (id_hospedagem, entrada, saida) tem `CHECK (saida >= entrada)`. Qual INSERT é RECUSADO?",
+      "alternativas": [
+        "entrada '2026-05-10' e saida '2026-05-10'",
+        "entrada '2026-05-10' e saida '2026-05-12'",
+        "entrada '2026-05-10' e saida '2026-05-08'",
+        "entrada '2026-05-08' e saida '2026-05-10'"
+      ],
+      "correta": 2,
+      "explicacao": "O CHECK exige saída igual ou depois da entrada. Sair em 08/05 tendo entrado em 10/05 viola a regra."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa lanchonete, a tabela `pedido` tem `forma_pagamento ENUM('dinheiro','pix','cartao') NOT NULL DEFAULT 'pix'`. Qual afirmação é correta?",
+      "alternativas": [
+        "Um pedido com 'boleto' é aceito e grava 'boleto'",
+        "Um pedido pode ficar com forma de pagamento NULL",
+        "Cada pedido pode ter duas formas de pagamento",
+        "Um pedido sem forma de pagamento informada fica com 'pix'"
+      ],
+      "correta": 3,
+      "explicacao": "Sem valor informado, vale o DEFAULT 'pix'. 'boleto' está fora da lista, NULL é barrado pelo NOT NULL e ENUM guarda um valor só."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop, `pet` tem `id_tutor INT NULL` com `FOREIGN KEY (id_tutor) REFERENCES tutor(id_tutor)`. Um pet resgatado é cadastrado com id_tutor NULL. O que acontece?",
+      "alternativas": [
+        "É recusado com o erro 1452 de chave estrangeira",
+        "É aceito: a chave estrangeira só confere valores preenchidos",
+        "É gravado com id_tutor igual a 0 automaticamente",
+        "É recusado porque toda FK é obrigatória"
+      ],
+      "correta": 1,
+      "explicacao": "A FK valida apenas valores não nulos. Se a coluna aceita NULL, a linha pode ficar sem pai."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a tabela `carteirinha` (id_carteirinha, validade, id_aluno) tem id_aluno como FK para aluno e também `UNIQUE`. O que o UNIQUE na FK garante?",
+      "alternativas": [
+        "Que cada aluno tenha no máximo uma carteirinha (relação 1:1)",
+        "Que cada carteirinha possa pertencer a vários alunos",
+        "Que todo aluno seja obrigado a ter uma carteirinha",
+        "Nada muda, pois toda chave estrangeira já é única"
+      ],
+      "correta": 0,
+      "explicacao": "FK com UNIQUE impede que o mesmo aluno apareça em duas carteirinhas: vira um relacionamento 1:1. A FK sozinha permitiria 1:N."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Alunos podem fazer vários cursos extras e cada curso tem vários alunos. A tabela `inscricao` (id_aluno, id_curso) tem as duas FKs e `PRIMARY KEY (id_aluno, id_curso)`. Por que a PK foi feita assim?",
+      "alternativas": [
+        "Para impedir que um aluno se inscreva em mais de um curso",
+        "Para impedir que um curso tenha mais de um aluno inscrito",
+        "Para impedir que o mesmo aluno se inscreva duas vezes no mesmo curso",
+        "Para que os ids sejam gerados automaticamente pelo MySQL"
+      ],
+      "correta": 2,
+      "explicacao": "Na tabela associativa (N:N), a PK composta pelas duas FKs impede repetir o par aluno–curso, mas deixa o aluno em vários cursos.",
+      "grupo": "pk-composta"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No `DESCRIBE cliente;`, a coluna complemento aparece com `YES` em Null. O que isso significa?",
+      "alternativas": [
+        "Que o complemento é obrigatório em todo cadastro",
+        "Que o complemento não pode se repetir entre clientes",
+        "Que o complemento pode ficar sem valor (aceita NULL)",
+        "Que o complemento tem um valor padrão definido"
+      ],
+      "correta": 2,
+      "explicacao": "A coluna Null do DESCRIBE diz se aceita NULL: YES = opcional; NO = obrigatória."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O `DESCRIBE inscrito;` mostrou a linha `situacao | varchar(10) | NO | | ativo |`. Qual definição de coluna gera essa linha?",
+      "alternativas": [
+        "situacao VARCHAR(10) NOT NULL DEFAULT 'ativo'",
+        "situacao VARCHAR(10) DEFAULT NULL",
+        "situacao VARCHAR(10) UNIQUE DEFAULT 'ativo'",
+        "situacao ENUM('ativo') NULL"
+      ],
+      "correta": 0,
+      "explicacao": "Null NO = NOT NULL; Key vazio = sem PK/UNIQUE/índice; Default ativo = DEFAULT 'ativo'; Type varchar(10)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Duas tabelas com chave estrangeira foram criadas com `ENGINE=MyISAM`. Um pedido foi gravado com id_cliente 999, que não existe, e não deu erro. Por quê?",
+      "alternativas": [
+        "O MySQL só verifica a chave estrangeira depois de reiniciar o servidor",
+        "A chave estrangeira só vale para UPDATE, nunca para INSERT",
+        "O valor 999 é aceito porque é maior que todos os ids existentes",
+        "MyISAM não verifica chaves estrangeiras; para isso é preciso usar InnoDB"
+      ],
+      "correta": 3,
+      "explicacao": "MyISAM aceita a sintaxe, mas ignora a FK. InnoDB (padrão do MySQL 8) é o mecanismo que garante a integridade referencial.",
+      "grupo": "myisam"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `estoque` (id_produto, quantidade), a coluna é `quantidade INT UNSIGNED`. O que o UNSIGNED faz?",
+      "alternativas": [
+        "Impede que a quantidade fique sem valor",
+        "Impede valores negativos na quantidade",
+        "Impede quantidades repetidas na tabela",
+        "Permite números com casas decimais"
+      ],
+      "correta": 1,
+      "explicacao": "UNSIGNED tira o sinal do número: aceita só zero e positivos (e por isso dobra o limite positivo).",
+      "grupo": "unsigned"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, `pedido` tem FK para cliente com ON DELETE CASCADE, e `item_pedido` tem FK para pedido também com ON DELETE CASCADE. O que acontece ao apagar um cliente que tem 2 pedidos com 3 itens cada?",
+      "alternativas": [
+        "Só o cliente e os 2 pedidos são apagados",
+        "O cliente, os 2 pedidos e os 6 itens são apagados",
+        "O MySQL recusa por haver itens ligados aos pedidos",
+        "O cliente é apagado e os pedidos ficam com id_cliente NULL"
+      ],
+      "correta": 1,
+      "explicacao": "O CASCADE se propaga em cadeia: apagar o cliente apaga os pedidos, e apagar cada pedido apaga os itens dele.",
+      "grupo": "cascade-cadeia"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em `item_pedido`, a FK para pedido usa ON DELETE CASCADE e a FK para produto usa ON DELETE RESTRICT. Qual afirmação é correta?",
+      "alternativas": [
+        "Apagar um pedido é bloqueado; apagar um produto apaga os itens dele",
+        "Apagar um pedido ou um produto apaga os itens ligados a ele",
+        "Apagar um pedido ou um produto é sempre bloqueado se houver itens",
+        "Apagar um pedido apaga seus itens; apagar um produto vendido é bloqueado"
+      ],
+      "correta": 3,
+      "explicacao": "Cada FK tem a sua regra. CASCADE (pedido) leva os itens junto; RESTRICT (produto) impede apagar o produto enquanto houver itens com ele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma rifa da escola usa `CREATE TABLE bilhete (id_bilhete INT PRIMARY KEY AUTO_INCREMENT, comprador VARCHAR(60)) AUTO_INCREMENT = 1000;`. Qual id recebe o primeiro bilhete inserido?",
+      "alternativas": [
+        "1000",
+        "1",
+        "1001",
+        "0"
+      ],
+      "correta": 0,
+      "explicacao": "A opção de tabela AUTO_INCREMENT = 1000 define o valor inicial do contador: o primeiro bilhete recebe 1000."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `chamado` (id_chamado, titulo, status), a coluna é `status VARCHAR(15) NOT NULL DEFAULT 'pendente'`. Foi rodado `INSERT INTO chamado (titulo, status) VALUES ('Sem internet', NULL);`. O que acontece no MySQL 8?",
+      "alternativas": [
+        "O chamado é gravado com status 'pendente', o valor padrão",
+        "O chamado é gravado com status NULL, pois foi informado",
+        "Erro: status não aceita NULL, e o NULL escrito não vira o valor padrão",
+        "O chamado é gravado com status '' (texto vazio)"
+      ],
+      "correta": 2,
+      "explicacao": "O DEFAULT só entra quando a coluna é omitida. Enviar NULL de propósito numa coluna NOT NULL dá o erro 1048 (Column cannot be null)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `cliente`, o telefone foi guardado como `telefone INT`. Ao inserir 11987654321, o MySQL deu erro de valor fora da faixa. Por quê?",
+      "alternativas": [
+        "O INT não aceita números que começam com 1",
+        "O INT exige que o número tenha no máximo 8 dígitos",
+        "O INT só aceita números com casas decimais",
+        "O INT vai só até cerca de 2,1 bilhões, e o número tem 11 dígitos"
+      ],
+      "correta": 3,
+      "explicacao": "INT (com sinal) vai até 2.147.483.647. Um celular com DDD tem 11 dígitos e passa do limite; por isso telefone deve ser texto.",
+      "grupo": "telefone-int"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num estacionamento, a tabela `veiculo` tem `placa CHAR(7) PRIMARY KEY`. Qual afirmação é correta?",
+      "alternativas": [
+        "A chave primária precisa ser INT, então placa não pode ser chave",
+        "A chave primária pode ser texto, desde que única e obrigatória; ela só não usa AUTO_INCREMENT",
+        "Toda chave primária precisa de AUTO_INCREMENT para funcionar",
+        "A placa não pode ser chave por ter letras e números juntos"
+      ],
+      "correta": 1,
+      "explicacao": "Qualquer tipo pode ser PK se identificar a linha de forma única. AUTO_INCREMENT só funciona em colunas numéricas, então a placa é informada pelo usuário."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num pet shop, a tabela de vacinas foi criada assim:\n`CREATE TABLE vacina (id_vacina INT PRIMARY KEY AUTO_INCREMENT, nome_vacina VARCHAR(50) NOT NULL, data_aplicacao DATE, id_pet INT NOT NULL, FOREIGN KEY (id_pet) REFERENCES pet(id_pet));`\nPor que a tabela vacina guarda o id_pet e não o nome do pet?\n\nNa sua resposta:\n1. explique o papel da coluna id_pet;\n2. diga uma vantagem de guardar o id em vez do nome.",
+      "respostasAceitas": [
+        "id_pet liga cada vacina a um pet da tabela pet (é chave estrangeira). O id é único (pode haver dois pets 'Thor') e, se o nome mudar, não é preciso alterar as vacinas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) id_pet é a FK que liga a vacina ao pet; 2) o id identifica o pet sem ambiguidade e evita repetir/atualizar o nome em vários lugares."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Antes de cadastrar livros, um colega rodou `DESCRIBE livro;` na tabela livro (id_livro, titulo, autor, ano). Para que serve esse comando nesse momento?\n\nNa sua resposta:\n1. diga o que o DESCRIBE mostra;\n2. explique como isso ajuda antes de fazer os INSERTs.",
+      "respostasAceitas": [
+        "Mostra as colunas da tabela com tipo, se aceita NULL, se é chave, o valor padrão e extras como auto_increment. Ajuda a saber a ordem e o tipo das colunas, quais são obrigatórias e quais o MySQL preenche sozinho."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mostra a estrutura (Field, Type, Null, Key, Default, Extra); 2) permite montar o INSERT certo: colunas obrigatórias, tipos e o id automático."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na tabela `evento` (id_evento, nome, data_evento) de um grêmio estudantil, a coluna foi criada como `data_evento VARCHAR(10)`, guardando textos como '25/12/2026'. Por que isso é um problema?\n\nNa sua resposta:\n1. explique um problema de guardar a data como texto;\n2. diga que vantagem o tipo DATE traria.",
+      "respostasAceitas": [
+        "Como texto, o MySQL não sabe que é data: aceita '99/99/2026', ordena errado ('01/12' antes de '25/01') e não faz contas de datas. Com DATE, só entram datas válidas e dá para ordenar, comparar e calcular prazos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) aceita datas inválidas e ordena/compara como texto; 2) DATE valida a data e permite ordenar e calcular corretamente.",
+      "grupo": "data-texto"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O sistema do grêmio estudantil tem a tabela:\n`CREATE TABLE usuario (id_usuario INT PRIMARY KEY AUTO_INCREMENT, login VARCHAR(30) NOT NULL UNIQUE, senha_hash VARCHAR(255) NOT NULL);`\nO que acontece se dois alunos tentarem usar o mesmo login? E por que o id_usuario continua sendo a chave primária?\n\nNa sua resposta:\n1. diga o que acontece com o segundo cadastro de mesmo login;\n2. explique por que manter o id_usuario como chave primária, mesmo o login sendo único.",
+      "respostasAceitas": [
+        "O segundo cadastro é recusado (erro de valor duplicado), por causa do UNIQUE. O id continua como PK porque é um número curto que nunca muda; o login pode ser trocado pelo usuário, e as outras tabelas apontam para o id."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o UNIQUE barra o login repetido; 2) a PK deve ser estável e simples; o login pode mudar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um CREATE TABLE da biblioteca termina assim: `... FOREIGN KEY (id_leitor) REFERENCES leitor(id_leitor)) ENGINE=InnoDB;`. O que significa o `ENGINE=InnoDB`?\n\nNa sua resposta:\n1. diga o que essa parte indica;\n2. explique por que ela é importante quando a tabela tem chave estrangeira.",
+      "respostasAceitas": [
+        "Indica o mecanismo de armazenamento da tabela: InnoDB, o padrão do MySQL 8. Ele é o que verifica as chaves estrangeiras; em MyISAM a FK seria ignorada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) escolhe o mecanismo de armazenamento (InnoDB); 2) InnoDB garante a integridade referencial das FKs.",
+      "grupo": "myisam"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de bicicletas, a tabela tem:\n`CREATE TABLE peca (id_peca INT PRIMARY KEY AUTO_INCREMENT, nome VARCHAR(60) NOT NULL, preco_custo DECIMAL(8,2) NOT NULL, preco_venda DECIMAL(8,2) NOT NULL, CHECK (preco_venda >= preco_custo));`\nQual regra de negócio esse CHECK protege?\n\nNa sua resposta:\n1. explique a regra que o CHECK garante;\n2. dê um exemplo de cadastro que seria recusado.",
+      "respostasAceitas": [
+        "Garante que nenhuma peça seja vendida por menos do que custou (preço de venda maior ou igual ao custo). Ex.: custo 50.00 e venda 40.00 é recusado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) preço de venda nunca abaixo do custo; 2) qualquer exemplo com venda menor que custo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa biblioteca, um livro pode ter vários autores e um autor pode ter vários livros. Por isso existe:\n`CREATE TABLE livro_autor (id_livro INT, id_autor INT, PRIMARY KEY (id_livro, id_autor), FOREIGN KEY (id_livro) REFERENCES livro(id_livro), FOREIGN KEY (id_autor) REFERENCES autor(id_autor));`\nPor que essa tabela é necessária?\n\nNa sua resposta:\n1. explique por que livro e autor precisam dessa tabela no meio;\n2. diga o que a chave primária composta impede.",
+      "respostasAceitas": [
+        "É um relacionamento N:N; não dá para guardar uma lista de autores numa coluna de livro. A tabela associativa guarda cada par livro–autor. A PK composta impede repetir o mesmo autor no mesmo livro."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) N:N vira tabela associativa com duas FKs; 2) a combinação livro + autor não pode se repetir.",
+      "grupo": "nn-associativa"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na tabela `senha_atendimento` (id_senha INT PRIMARY KEY AUTO_INCREMENT, guiche INT) de uma prefeitura, existiam as senhas 1 a 5. A senha 5 foi apagada e uma nova senha foi inserida. Qual id ela recebeu?\n\nNa sua resposta:\n1. diga o número que a nova senha recebe;\n2. explique por que o 'buraco' na numeração não é um problema.",
+      "respostasAceitas": [
+        "Recebe 6: o AUTO_INCREMENT não reaproveita números apagados. Não é problema porque o id só precisa ser único; ele não é um contador de quantas linhas existem."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) id 6; 2) a PK só precisa identificar, não precisa ser sequência sem falhas; reaproveitar poderia até confundir registros antigos.",
+      "grupo": "ai-reaproveita"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A tabela `produto` (id_produto, nome) já existia. Um colega acrescentou a coluna preco no script e rodou:\n`CREATE TABLE IF NOT EXISTS produto (id_produto INT PRIMARY KEY AUTO_INCREMENT, nome VARCHAR(60), preco DECIMAL(8,2));`\nDepois disso, o `DESCRIBE produto;` não mostra a coluna preco. Por quê?\n\nNa sua resposta:\n1. diga o que o comando fez com a tabela existente;\n2. explique por que a coluna preco não apareceu.",
+      "respostasAceitas": [
+        "Nada: como produto já existia, o IF NOT EXISTS pulou a criação (só gerou um aviso). Ele não compara nem atualiza estrutura; para incluir a coluna seria preciso alterar a tabela (ALTER TABLE)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a tabela ficou como estava; 2) IF NOT EXISTS só verifica se o nome existe, não acrescenta colunas.",
+      "grupo": "if-not-exists"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa empresa, `departamento` tem `sigla VARCHAR(5) PRIMARY KEY` e `funcionario` tem:\n`FOREIGN KEY (sigla_depto) REFERENCES departamento(sigla) ON UPDATE CASCADE`.\nO departamento 'ADM' passou a se chamar 'ADMIN'. O que acontece?\n\nNa sua resposta:\n1. diga o que acontece com os funcionários desse departamento;\n2. explique o que aconteceria sem o ON UPDATE CASCADE.",
+      "respostasAceitas": [
+        "Os funcionários passam automaticamente a ter sigla_depto 'ADMIN'. Sem o ON UPDATE CASCADE, o MySQL recusaria mudar a sigla enquanto houvesse funcionários com 'ADM'."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a alteração é repetida na tabela filha; 2) sem a cláusula, a atualização da chave do pai é bloqueada (RESTRICT/NO ACTION).",
+      "grupo": "on-update"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num pet shop, a tabela `pesagem` (id_pesagem, id_pet, peso) tem `peso DECIMAL(5,2)`, em quilos. Qual é o maior peso que cabe nessa coluna? E se alguém digitar 1250.00 por engano?\n\nNa sua resposta:\n1. diga o maior valor aceito e explique como chegou nele;\n2. diga o que acontece com o valor 1250.00.",
+      "respostasAceitas": [
+        "5 dígitos no total e 2 decimais: sobram 3 inteiros, então o máximo é 999.99 kg. 1250.00 tem 4 dígitos inteiros e é recusado (fora da faixa) no modo estrito."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 999.99, pois 5 − 2 = 3 dígitos antes da vírgula; 2) erro de valor fora da faixa (o MySQL 8 não grava).",
+      "grupo": "decimal-faixa"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No registro de entradas de uma academia, a tabela é:\n`CREATE TABLE catraca (id_registro INT PRIMARY KEY AUTO_INCREMENT, id_aluno INT NOT NULL, entrada DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);`\nO aplicativo envia só o id_aluno. O que fica em entrada?\n\nNa sua resposta:\n1. diga o que é gravado na coluna entrada;\n2. explique uma vantagem de deixar o banco preencher esse valor.",
+      "respostasAceitas": [
+        "Fica a data e a hora do momento do INSERT, pelo DEFAULT CURRENT_TIMESTAMP. Vantagem: o horário vem do relógio do servidor, igual para todos, e ninguém esquece ou falsifica o horário no aplicativo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) data e hora atuais; 2) padroniza e garante o registro mesmo que o aplicativo não envie (qualquer vantagem coerente).",
+      "grupo": "current-timestamp"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, `aluno` tem `id_aluno INT PRIMARY KEY` e também `ra VARCHAR(10) NOT NULL UNIQUE`. A tabela de empréstimos usa:\n`FOREIGN KEY (ra_aluno) REFERENCES aluno(ra)`.\nA FK funciona mesmo apontando para uma coluna que não é a chave primária. Por quê?\n\nNa sua resposta:\n1. explique por que essa FK é aceita;\n2. diga o que aconteceria se ra não tivesse UNIQUE nem índice.",
+      "respostasAceitas": [
+        "A FK pode apontar para qualquer coluna com índice que identifique a linha; ra tem UNIQUE, então cada RA aponta para um aluno só. Sem UNIQUE nem índice, o MySQL recusaria a FK (erro de índice faltando)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a coluna referenciada precisa ser única/indexada, não necessariamente PK; 2) sem índice, erro ao criar a FK."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola de idiomas, há duas opções para a coluna turno:\nA) `turno ENUM('manha','tarde','noite') NOT NULL`\nB) `turno VARCHAR(10) NOT NULL CHECK (turno IN ('manha','tarde','noite'))`\nAs duas limitam os valores. Compare-as.\n\nNa sua resposta:\n1. explique em que as duas opções se parecem e em que diferem;\n2. diga qual você escolheria e justifique.",
+      "respostasAceitas": [
+        "As duas só aceitam manha, tarde ou noite. ENUM é um tipo de lista fixa, guarda pouco espaço e mantém a ordem da lista. CHECK é uma regra sobre um VARCHAR comum, mais fácil de entender e de mudar a regra. Qualquer escolha bem justificada vale."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ambas restringem os valores; ENUM é tipo próprio, CHECK é regra sobre texto; 2) escolha justificada (economia/ordem do ENUM ou flexibilidade/portabilidade do CHECK).",
+      "grupo": "enum-vantagem"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa empresa, a tabela de funcionários foi criada assim:\n`CREATE TABLE funcionario (id_func INT PRIMARY KEY AUTO_INCREMENT, nome VARCHAR(60) NOT NULL, id_gerente INT NULL, FOREIGN KEY (id_gerente) REFERENCES funcionario(id_func));`\nA chave estrangeira aponta para a própria tabela. O que isso representa?\n\nNa sua resposta:\n1. explique o que a coluna id_gerente representa;\n2. explique por que id_gerente precisa aceitar NULL.",
+      "respostasAceitas": [
+        "É um autorrelacionamento: cada funcionário aponta para outro funcionário que é o gerente dele. Precisa aceitar NULL porque quem está no topo (o diretor) não tem gerente, e o primeiro funcionário cadastrado não teria para quem apontar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) FK para a mesma tabela, ligando funcionário ao seu gerente; 2) o chefe máximo não tem gerente, então o valor fica NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O CREATE TABLE faz parte da DDL. O que caracteriza os comandos DDL?",
+      "alternativas": [
+        "Definem a estrutura do banco: criam, alteram e apagam tabelas",
+        "Inserem, alteram e apagam as linhas guardadas nas tabelas",
+        "Consultam os dados e mostram o resultado na tela",
+        "Dão e retiram permissões dos usuários do banco"
+      ],
+      "correta": 0,
+      "explicacao": "DDL (Data Definition Language) cuida da estrutura: CREATE, ALTER, DROP. Linhas são DML; permissões são DCL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes comandos é de DDL?",
+      "alternativas": [
+        "INSERT INTO",
+        "SELECT",
+        "CREATE TABLE",
+        "UPDATE"
+      ],
+      "correta": 2,
+      "explicacao": "CREATE TABLE define estrutura (DDL). INSERT e UPDATE mexem em dados (DML) e SELECT consulta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No resultado do DESCRIBE, a coluna Key mostra `PRI` para id_cliente. O que significa PRI?",
+      "alternativas": [
+        "Que id_cliente é preenchido primeiro no INSERT",
+        "Que id_cliente é uma coluna privada",
+        "Que id_cliente é a chave primária da tabela",
+        "Que id_cliente tem prioridade nas consultas"
+      ],
+      "correta": 2,
+      "explicacao": "PRI indica que a coluna faz parte da PRIMARY KEY. UNI indica UNIQUE e MUL, índice com repetição."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No DESCRIBE da tabela `chamado`, a coluna id_chamado mostra `auto_increment` em Extra. O que isso informa?",
+      "alternativas": [
+        "Que o MySQL gera o número do id_chamado sozinho",
+        "Que o id_chamado aumenta de tamanho quando precisa",
+        "Que o id_chamado é atualizado em cada consulta",
+        "Que o id_chamado aceita valores repetidos"
+      ],
+      "correta": 0,
+      "explicacao": "Extra auto_increment indica que a coluna é numerada automaticamente a cada nova linha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cadastro de clientes, qual tipo é o mais adequado para a coluna email?",
+      "alternativas": [
+        "INT",
+        "DATE",
+        "DECIMAL(10,2)",
+        "VARCHAR(100)"
+      ],
+      "correta": 3,
+      "explicacao": "E-mail é texto de tamanho variável: VARCHAR com um limite razoável."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num canil, a tabela `cao` (id_cao, nome, peso) guarda o peso com uma casa decimal, como 12.5 kg. Qual tipo usar em peso?",
+      "alternativas": [
+        "INT",
+        "DECIMAL(4,1)",
+        "DATE",
+        "CHAR(1)"
+      ],
+      "correta": 1,
+      "explicacao": "DECIMAL(4,1) guarda até 999.9 com uma casa decimal. INT perderia o ',5'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num jogo de perguntas, a coluna pontos deve ser obrigatória e começar com 0. Qual definição faz isso?",
+      "alternativas": [
+        "pontos INT NULL",
+        "pontos INT NOT NULL DEFAULT 0",
+        "pontos INT UNIQUE",
+        "pontos INT DEFAULT NULL"
+      ],
+      "correta": 1,
+      "explicacao": "NOT NULL torna obrigatória e DEFAULT 0 preenche com zero quando não informado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `pedido` tem uma FK id_cliente que aponta para `cliente(id_cliente)`. Nessa ligação, qual é a tabela pai?",
+      "alternativas": [
+        "pedido",
+        "As duas são tabelas pai",
+        "Nenhuma, pois FK não tem pai",
+        "cliente"
+      ],
+      "correta": 3,
+      "explicacao": "A tabela pai é a referenciada (cliente). A tabela que guarda a FK (pedido) é a filha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O comando `CREATE TABLE cor id_cor INT, nome VARCHAR(20);` deu erro de sintaxe. O que está faltando?",
+      "alternativas": [
+        "Os parênteses em volta da lista de colunas",
+        "A palavra DATABASE depois de CREATE",
+        "Um ponto e vírgula depois de cada coluna",
+        "As aspas em volta do nome da tabela"
+      ],
+      "correta": 0,
+      "explicacao": "A lista de colunas fica entre parênteses: CREATE TABLE cor (id_cor INT, nome VARCHAR(20));"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quantas colunas AUTO_INCREMENT uma tabela pode ter no MySQL?",
+      "alternativas": [
+        "Duas",
+        "Quantas quiser",
+        "Apenas uma",
+        "Nenhuma: só o banco tem AUTO_INCREMENT"
+      ],
+      "correta": 2,
+      "explicacao": "O MySQL permite uma única coluna AUTO_INCREMENT por tabela, e ela precisa ser chave."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cadastro de leitores, a coluna guarda se a pessoa aceita receber avisos por e-mail (sim ou não). Qual tipo é o mais adequado?",
+      "alternativas": [
+        "DATE",
+        "DECIMAL(5,2)",
+        "TEXT",
+        "BOOLEAN"
+      ],
+      "correta": 3,
+      "explicacao": "Sim/não é um valor lógico: BOOLEAN (no MySQL, TINYINT(1) com 0 ou 1)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de criar várias tabelas, qual comando lista todas as tabelas do banco em uso?",
+      "alternativas": [
+        "DESCRIBE TABLES;",
+        "SHOW TABLES;",
+        "SELECT TABLES;",
+        "LIST TABLES;"
+      ],
+      "correta": 1,
+      "explicacao": "SHOW TABLES lista as tabelas do banco atual. DESCRIBE mostra as colunas de uma tabela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que o comando `SHOW CREATE TABLE produto;` mostra?",
+      "alternativas": [
+        "O comando CREATE TABLE completo da tabela, com chaves e restrições",
+        "Todas as linhas que já foram cadastradas na tabela produto",
+        "Uma cópia nova e vazia da tabela produto no mesmo banco",
+        "Apenas os nomes das colunas, sem tipos nem restrições"
+      ],
+      "correta": 0,
+      "explicacao": "SHOW CREATE TABLE devolve o comando que recria a tabela, incluindo FKs, ON DELETE, ENGINE e CHECK.",
+      "grupo": "show-create"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `cliente`, o CPF é guardado só com os 11 dígitos, como 01234567890. Qual tipo é o mais adequado?",
+      "alternativas": [
+        "INT",
+        "DECIMAL(11,2)",
+        "CHAR(11)",
+        "DATE"
+      ],
+      "correta": 2,
+      "explicacao": "CPF é um código: não entra em contas e pode começar com zero. Texto de tamanho fixo (CHAR(11)) é o ideal.",
+      "grupo": "texto-numerico"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `aluno`, a coluna apelido é opcional. Como ela deve ser definida?",
+      "alternativas": [
+        "apelido VARCHAR(30) NOT NULL",
+        "apelido VARCHAR(30) PRIMARY KEY",
+        "apelido VARCHAR(30) NULL",
+        "apelido VARCHAR(30) NOT NULL UNIQUE"
+      ],
+      "correta": 2,
+      "explicacao": "Coluna opcional aceita NULL (é o padrão quando não se escreve NOT NULL). PRIMARY KEY e NOT NULL tornariam obrigatória."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hospital veterinário, a coluna é `prioridade VARCHAR(10) DEFAULT 'normal'`. Um atendimento é inserido com prioridade 'urgente'. O que fica gravado?",
+      "alternativas": [
+        "'urgente'",
+        "'normal'",
+        "NULL",
+        "O INSERT dá erro"
+      ],
+      "correta": 0,
+      "explicacao": "O DEFAULT só é usado quando a coluna não é informada. Se o valor vem no INSERT, ele é gravado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao inserir um aluno, apareceu: `Error 1062: Duplicate entry 'ana@escola.br' for key 'aluno.email'`. Qual é a causa?",
+      "alternativas": [
+        "A coluna email é NOT NULL e o valor veio vazio",
+        "O e-mail é longo demais para o tamanho da coluna",
+        "O e-mail não existe na tabela pai da chave estrangeira",
+        "Já existe um aluno com esse e-mail e a coluna email é UNIQUE"
+      ],
+      "correta": 3,
+      "explicacao": "Erro 1062 (Duplicate entry) aparece quando um valor repetido é inserido numa coluna UNIQUE ou PRIMARY KEY."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa autoescola, a tabela `aluno` tem `idade INT, CONSTRAINT chk_idade CHECK (idade >= 18)`. Ao cadastrar um aluno de 17 anos apareceu `Check constraint 'chk_idade' is violated`. O que isso quer dizer?",
+      "alternativas": [
+        "A coluna idade não aceita números inteiros",
+        "A idade informada desrespeita a regra de ter 18 anos ou mais",
+        "Já existe outro aluno cadastrado com a mesma idade",
+        "A restrição chk_idade foi escrita com erro de sintaxe"
+      ],
+      "correta": 1,
+      "explicacao": "A mensagem diz que o valor viola a regra do CHECK chamado chk_idade. O nome da restrição ajuda a identificar qual regra falhou."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `cliente` existe. Um aluno rodou `CREATE TABLE venda (..., FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente));` e recebeu erro. Qual é a causa mais provável?",
+      "alternativas": [
+        "A tabela venda deveria ter sido criada antes de cliente",
+        "O nome da tabela foi digitado errado (clientes), e essa tabela não existe",
+        "A coluna id_cliente não pode ter o mesmo nome nas duas tabelas",
+        "Uma tabela só pode ter chave estrangeira se tiver CHECK"
+      ],
+      "correta": 1,
+      "explicacao": "REFERENCES precisa apontar para uma tabela existente. Com o nome errado, o MySQL não encontra a tabela referenciada (erro 1824)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que o nome do cliente costuma ser `VARCHAR(100)` e não `CHAR(100)`?",
+      "alternativas": [
+        "CHAR não aceita letras com acento",
+        "VARCHAR aceita mais de 100 caracteres",
+        "CHAR só pode ser usado em chave primária",
+        "VARCHAR ocupa só o tamanho do texto; CHAR(100) ocupa sempre 100"
+      ],
+      "correta": 3,
+      "explicacao": "CHAR tem tamanho fixo (completa com espaços); VARCHAR guarda só o necessário. Para nomes de tamanhos diferentes, VARCHAR economiza espaço."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `cor` foi criada com `id_cor INT PRIMARY KEY, nome VARCHAR(20)`, sem escrever NOT NULL. Mesmo assim, o `DESCRIBE cor;` mostra `NO` em Null para id_cor. Por quê?",
+      "alternativas": [
+        "Porque toda coluna de chave primária é obrigatória automaticamente",
+        "Porque o MySQL deixa toda coluna INT como NOT NULL",
+        "Porque a tabela ainda não tem nenhuma linha cadastrada",
+        "Porque o DESCRIBE mostra NO quando não há DEFAULT"
+      ],
+      "correta": 0,
+      "explicacao": "PRIMARY KEY implica NOT NULL. O MySQL marca a coluna como obrigatória mesmo sem a palavra NOT NULL.",
+      "grupo": "pk-notnull"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `boletim`, a chave deve ser a combinação de id_aluno e id_disciplina. Qual trecho do CREATE TABLE está correto?",
+      "alternativas": [
+        "id_aluno INT PRIMARY KEY, id_disciplina INT PRIMARY KEY",
+        "PRIMARY KEY id_aluno AND id_disciplina",
+        "PRIMARY KEY (id_aluno, id_disciplina)",
+        "PRIMARY KEY (id_aluno) (id_disciplina)"
+      ],
+      "correta": 2,
+      "explicacao": "A chave composta é declarada uma vez, com as colunas separadas por vírgula entre parênteses.",
+      "grupo": "pk-composta-sintaxe"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, `produto` tem `id_fornecedor INT NULL` com `FOREIGN KEY (id_fornecedor) REFERENCES fornecedor(id_fornecedor) ON DELETE SET NULL`. O que acontece ao apagar um fornecedor?",
+      "alternativas": [
+        "Ele é apagado junto com todos os produtos dele",
+        "O MySQL recusa apagar enquanto houver produtos dele",
+        "Ele é apagado e os produtos passam para outro fornecedor",
+        "Ele é apagado e seus produtos ficam com id_fornecedor NULL"
+      ],
+      "correta": 3,
+      "explicacao": "ON DELETE SET NULL mantém as linhas filhas, mas limpa a ligação (coloca NULL na FK).",
+      "grupo": "on-delete-efeito"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num blog da escola, cada comentário pertence a uma postagem e não faz sentido sem ela. Que regra usar na FK de comentario para postagem?",
+      "alternativas": [
+        "ON DELETE SET NULL",
+        "ON DELETE CASCADE",
+        "ON DELETE RESTRICT",
+        "Nenhuma FK entre as tabelas"
+      ],
+      "correta": 1,
+      "explicacao": "Se a postagem some, os comentários perdem o sentido: CASCADE apaga os comentários junto.",
+      "grupo": "decidir-on-delete"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, as vendas precisam ficar no histórico mesmo que alguém tente apagar o cliente. Que regra usar na FK de venda para cliente?",
+      "alternativas": [
+        "ON DELETE RESTRICT",
+        "ON DELETE CASCADE",
+        "ON DELETE SET NULL sem permitir NULL",
+        "Nenhuma FK, para poder apagar livremente"
+      ],
+      "correta": 0,
+      "explicacao": "RESTRICT impede apagar um cliente que tem vendas, protegendo o histórico. CASCADE apagaria as vendas.",
+      "grupo": "decidir-on-delete"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O comando `CREATE TABLE produto (id INT PRIMARY KEY, desc VARCHAR(100));` deu erro 1064. Por quê?",
+      "alternativas": [
+        "VARCHAR(100) é grande demais para uma descrição",
+        "A chave primária não pode se chamar id",
+        "DESC é palavra reservada do MySQL e não pode ser nome de coluna assim",
+        "Falta o NOT NULL na coluna desc"
+      ],
+      "correta": 2,
+      "explicacao": "DESC é reservada (ordem decrescente e atalho do DESCRIBE). Use outro nome, como descricao, ou crases: `desc`."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `produto` de uma feira, a coluna é `preco DECIMAL(6,2)`. O que é gravado ao inserir o preço 1234.567?",
+      "alternativas": [
+        "1234.567",
+        "1234.56",
+        "1234.57",
+        "O INSERT dá erro"
+      ],
+      "correta": 2,
+      "explicacao": "As casas decimais a mais são arredondadas para caber em 2 (com um aviso), e 1234 cabe nos 4 dígitos inteiros.",
+      "grupo": "decimal-faixa"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de criar a FK id_categoria em `produto`, o DESCRIBE mostra `MUL` nessa coluna, mesmo sem ninguém ter criado índice nela. Por quê?",
+      "alternativas": [
+        "O InnoDB cria um índice na coluna da chave estrangeira automaticamente",
+        "Toda coluna INT recebe MUL quando a tabela é criada",
+        "MUL indica que a coluna aceita multiplicações",
+        "O MySQL transformou id_categoria numa segunda chave primária"
+      ],
+      "correta": 0,
+      "explicacao": "Para verificar a FK rapidamente, o InnoDB exige um índice na coluna e o cria sozinho se não houver. Como ele aceita repetição, aparece MUL.",
+      "grupo": "mul"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno criou `CREATE TABLE recado (texto VARCHAR(200), autor VARCHAR(50));`, sem chave primária. O que acontece?",
+      "alternativas": [
+        "O MySQL recusa o comando, pois toda tabela precisa de PK",
+        "O MySQL cria sozinho uma coluna id visível com AUTO_INCREMENT",
+        "O MySQL usa a primeira coluna como chave primária",
+        "O MySQL cria a tabela, mas sem PK as linhas não têm um identificador único"
+      ],
+      "correta": 3,
+      "explicacao": "Por padrão, o MySQL aceita tabela sem PK, mas é má prática: linhas iguais não podem ser diferenciadas e ligações por FK ficam difíceis."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um script antigo, feito no MySQL 5.7, tinha `CHECK (preco > 0)` e aceitava preços negativos. Ao rodar o mesmo script no MySQL 8.0.16 ou mais novo, o que muda?",
+      "alternativas": [
+        "Nada muda: o MySQL continua ignorando o CHECK",
+        "O CHECK passa a ser verificado e preços negativos são recusados",
+        "O comando falha, pois o MySQL 8 não aceita CHECK",
+        "O MySQL 8 troca os negativos por zero automaticamente"
+      ],
+      "correta": 1,
+      "explicacao": "Até o 5.7 o CHECK era aceito na sintaxe, mas ignorado. A partir do 8.0.16 ele é aplicado de verdade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "`cliente` ← `pedido` (FK com ON DELETE CASCADE) ← `pagamento` (FK para pedido com ON DELETE RESTRICT). Ao apagar um cliente que tem um pedido com pagamento, o que acontece?",
+      "alternativas": [
+        "O cliente e o pedido são apagados; o pagamento fica sem pedido",
+        "O DELETE inteiro falha: o RESTRICT do pagamento bloqueia a cascata",
+        "Só o cliente é apagado; pedido e pagamento continuam",
+        "O cliente, o pedido e o pagamento são apagados juntos"
+      ],
+      "correta": 1,
+      "explicacao": "A cascata tenta apagar o pedido, mas o RESTRICT do pagamento impede. Como o comando falha, nada é apagado.",
+      "grupo": "cascade-cadeia"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `placar` (id, pontos), a coluna é `pontos TINYINT` (com sinal). O que acontece ao gravar 200 no modo estrito do MySQL 8?",
+      "alternativas": [
+        "É gravado 200 normalmente",
+        "É gravado 127 sem nenhum aviso",
+        "É gravado -56, dando a volta no número",
+        "Erro: valor fora da faixa, pois o TINYINT com sinal vai até 127"
+      ],
+      "correta": 3,
+      "explicacao": "TINYINT com sinal vai de -128 a 127. No modo estrito, valor fora da faixa gera erro (1264, Out of range).",
+      "grupo": "faixa-tinyint"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `ingresso` (id_ingresso INT PRIMARY KEY AUTO_INCREMENT, setor VARCHAR(10)), os ids iam até 7. Foi inserido um ingresso informando id_ingresso = 50. Depois, um ingresso foi inserido sem informar o id. Qual id ele recebe?",
+      "alternativas": [
+        "51",
+        "8",
+        "50",
+        "1"
+      ],
+      "correta": 0,
+      "explicacao": "Ao gravar um valor manual maior que o contador, o AUTO_INCREMENT passa a continuar dele: o próximo é 51.",
+      "grupo": "ai-reaproveita"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas definições permite que duas pessoas com CPFs diferentes usem o MESMO e-mail?",
+      "alternativas": [
+        "UNIQUE (cpf), UNIQUE (email)",
+        "email VARCHAR(100) UNIQUE",
+        "UNIQUE (cpf, email)",
+        "PRIMARY KEY (email)"
+      ],
+      "correta": 2,
+      "explicacao": "UNIQUE (cpf, email) só barra a mesma combinação. Com UNIQUE separado no email ou PK no email, o e-mail não pode repetir.",
+      "grupo": "unique-composto"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em `departamento`, a chave é `sigla VARCHAR(20)`. Em `funcionario`, a FK é `sigla_depto VARCHAR(10)` com REFERENCES departamento(sigla), mesmo conjunto de caracteres. O MySQL aceita essa FK?",
+      "alternativas": [
+        "Não: o tamanho do VARCHAR precisa ser exatamente igual nas duas",
+        "Não: chave estrangeira não pode ser do tipo VARCHAR",
+        "Sim, mas o MySQL aumenta sozinho sigla_depto para VARCHAR(20)",
+        "Sim: em texto o tamanho pode ser diferente, se o tipo e os caracteres forem compatíveis"
+      ],
+      "correta": 3,
+      "explicacao": "Para FK, tipos inteiros precisam ser iguais (inclusive UNSIGNED), mas em texto o tamanho pode variar. O cuidado é que siglas maiores que 10 não caberão na filha.",
+      "grupo": "fk-tipo"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa padaria, um colega rodou primeiro `CREATE TABLE produto (...)` e depois `INSERT INTO produto (...) VALUES (...)`. Os dois são SQL, mas pertencem a grupos diferentes.\n\nNa sua resposta:\n1. explique o que o CREATE TABLE define;\n2. explique a diferença entre ele e o INSERT.",
+      "respostasAceitas": [
+        "CREATE TABLE é DDL: define a estrutura (nome da tabela, colunas, tipos e restrições). INSERT é DML: coloca linhas de dados dentro de uma tabela que já existe."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) estrutura da tabela; 2) INSERT grava dados, CREATE define o 'molde' onde os dados vão."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, a tabela foi criada sem chave primária: `CREATE TABLE cliente (nome VARCHAR(60), telefone VARCHAR(15));`. Duas clientes chamadas Ana Souza, com o mesmo telefone de casa, foram cadastradas.\n\nNa sua resposta:\n1. explique que problema essa tabela tem;\n2. diga como uma chave primária resolveria.",
+      "respostasAceitas": [
+        "Sem PK não há como diferenciar as duas Anas: um UPDATE ou DELETE pelo nome atingiria as duas, e outras tabelas não teriam como apontar para uma delas. Uma coluna id_cliente como PK (por exemplo com AUTO_INCREMENT) dá a cada uma um número único."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) linhas iguais não se distinguem; 2) PK dá identificador único a cada linha."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num jogo da turma, a tabela é `jogador (id_jogador INT PRIMARY KEY AUTO_INCREMENT, apelido VARCHAR(10) NOT NULL)`. Um jogador tentou o apelido 'MestreDosGames' (14 letras).\n\nNa sua resposta:\n1. diga o que acontece no MySQL 8;\n2. explique como escolher o tamanho de um VARCHAR.",
+      "respostasAceitas": [
+        "O INSERT é recusado por dado longo demais (erro 1406), pois só cabem 10 caracteres. O tamanho deve ser o maior valor real esperado com alguma folga, sem exagero."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) erro de texto maior que a coluna; 2) escolher pelo maior valor esperado, com folga razoável."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa biblioteca:\n`CREATE TABLE autor (id_autor INT PRIMARY KEY AUTO_INCREMENT, nome VARCHAR(80) NOT NULL);`\n`CREATE TABLE livro (id_livro INT PRIMARY KEY AUTO_INCREMENT, titulo VARCHAR(100) NOT NULL, id_autor INT NOT NULL, FOREIGN KEY (id_autor) REFERENCES autor(id_autor));`\nComo essas duas tabelas se relacionam?\n\nNa sua resposta:\n1. diga qual é a tabela pai e qual é a filha;\n2. explique quantos livros um autor pode ter e quantos autores um livro tem, nesse modelo.",
+      "respostasAceitas": [
+        "autor é a tabela pai e livro é a filha (tem a FK). Um autor pode ter vários livros, pois o mesmo id_autor pode aparecer em vários livros; cada livro tem um só autor, pois guarda um único id_autor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) pai = autor, filha = livro; 2) relação 1:N — autor com vários livros, livro com um autor."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na tabela `estoque` de um hortifruti, a coluna é `quantidade INT UNSIGNED NOT NULL`. O que o UNSIGNED acrescenta?\n\nNa sua resposta:\n1. explique o que o UNSIGNED faz;\n2. diga por que ele faz sentido numa quantidade em estoque.",
+      "respostasAceitas": [
+        "UNSIGNED só aceita zero e números positivos. Faz sentido porque não existe estoque negativo; um valor como -3 seria recusado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) impede negativos; 2) quantidade em estoque nunca é negativa.",
+      "grupo": "unsigned"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Compare duas versões da tabela de uma feira de ciências:\nA) `CREATE TABLE projeto (id INT, titulo VARCHAR(100), email_lider VARCHAR(100), nota DECIMAL(4,2));`\nB) `CREATE TABLE projeto (id INT PRIMARY KEY AUTO_INCREMENT, titulo VARCHAR(100) NOT NULL, email_lider VARCHAR(100) NOT NULL UNIQUE, nota DECIMAL(4,2) CHECK (nota BETWEEN 0 AND 10));`\nQue diferença as restrições fazem?\n\nNa sua resposta:\n1. dê dois problemas que a versão A permite;\n2. explique como a versão B evita esses problemas.",
+      "respostasAceitas": [
+        "A aceita ids repetidos ou vazios, projetos sem título, o mesmo líder em dois projetos e nota 15. B evita: PK/AUTO_INCREMENT dá id único, NOT NULL obriga título e e-mail, UNIQUE barra e-mail repetido e CHECK limita a nota de 0 a 10."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dois problemas quaisquer (id repetido, título vazio, e-mail repetido, nota fora de 0–10); 2) relacionar cada problema à restrição que o evita."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de informática, produtos pertencem a fornecedores. Na FK de produto para fornecedor, a equipe discute entre `ON DELETE CASCADE` e `ON DELETE SET NULL`.\n\nNa sua resposta:\n1. explique o que cada opção faria ao apagar um fornecedor;\n2. diga qual escolher para não perder os produtos e o que mais precisa ser feito na coluna.",
+      "respostasAceitas": [
+        "CASCADE apagaria todos os produtos do fornecedor; SET NULL manteria os produtos, só sem fornecedor. Para não perder produtos, SET NULL, e a coluna id_fornecedor precisa aceitar NULL."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) CASCADE apaga os filhos, SET NULL limpa a ligação; 2) SET NULL, com a coluna aceitando NULL.",
+      "grupo": "decidir-on-delete"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega quer ver as chaves estrangeiras e as regras ON DELETE da tabela `matricula`. Ele rodou `DESCRIBE matricula;` e não as encontrou. Outro colega sugeriu `SHOW CREATE TABLE matricula;`.\n\nNa sua resposta:\n1. explique o que cada um desses comandos mostra;\n2. explique por que o segundo é o mais útil nesse caso.",
+      "respostasAceitas": [
+        "DESCRIBE mostra as colunas (tipo, Null, Key, Default, Extra), só com MUL nas FKs. SHOW CREATE TABLE mostra o comando completo, com cada FOREIGN KEY, a tabela referenciada, ON DELETE/ON UPDATE e o ENGINE."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) DESCRIBE = resumo das colunas; SHOW CREATE = comando inteiro; 2) só o segundo mostra as FKs e suas regras.",
+      "grupo": "show-create"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa enquete da escola, a tabela é:\n`CREATE TABLE voto (id_aluno INT, id_enquete INT, opcao CHAR(1) NOT NULL, PRIMARY KEY (id_aluno, id_enquete));`\nUm aluno tentou votar duas vezes na mesma enquete e recebeu o erro 1062 (Duplicate entry).\n\nNa sua resposta:\n1. explique por que o segundo voto deu erro;\n2. diga que regra da enquete essa chave garante.",
+      "respostasAceitas": [
+        "O par (id_aluno, id_enquete) já existia, e a PK composta não aceita repetir a combinação. A regra é: cada aluno vota uma vez em cada enquete (mas pode votar em enquetes diferentes)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) combinação aluno + enquete repetida; 2) um voto por aluno por enquete.",
+      "grupo": "pk-composta-diss"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa papelaria, a tabela foi criada com `preco VARCHAR(10)` e `quantidade VARCHAR(5)`. Ao ordenar pela quantidade, '100' apareceu antes de '20'.\n\nNa sua resposta:\n1. explique por que a ordenação saiu assim;\n2. diga que outro problema guardar números como texto causa e que tipos seriam adequados.",
+      "respostasAceitas": [
+        "Texto é comparado caractere por caractere: '1' vem antes de '2', então '100' fica antes de '20'. Também dificulta contas (somar, multiplicar) e aceita valores como 'dez'. Adequados: DECIMAL(8,2) para preço e INT para quantidade."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) comparação de texto é alfabética; 2) contas/validação prejudicadas; preço DECIMAL e quantidade INT.",
+      "grupo": "data-texto"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno criou as tabelas `cliente` e `pedido` com FOREIGN KEY, mas usou `ENGINE=MyISAM`. Ele cadastrou um pedido com id_cliente 500, que não existe, e não apareceu erro nenhum.\n\nNa sua resposta:\n1. explique por que não houve erro;\n2. diga o que deveria ser mudado e o que passaria a acontecer.",
+      "respostasAceitas": [
+        "MyISAM aceita a sintaxe de FOREIGN KEY, mas não a verifica. Usando ENGINE=InnoDB (padrão do MySQL 8), a FK passa a valer e o pedido com cliente inexistente é recusado (erro 1452)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) MyISAM ignora FKs; 2) usar InnoDB, que bloqueia valores sem pai.",
+      "grupo": "myisam"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola de informática, a tabela `aluno` está ligada a `pagamento` por FK com `ON DELETE CASCADE`. Uma secretária apagou por engano o cadastro de um aluno.\n\nNa sua resposta:\n1. diga o que aconteceu com os pagamentos desse aluno;\n2. explique por que essa regra é perigosa aqui e que alternativa seria mais segura.",
+      "respostasAceitas": [
+        "Todos os pagamentos do aluno foram apagados junto, e o histórico financeiro sumiu. É perigoso porque um engano apaga dados importantes. Mais seguro: RESTRICT (padrão), que impede apagar o aluno enquanto houver pagamentos, ou desativar o aluno em vez de apagar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) os pagamentos foram apagados pela cascata; 2) risco de perder histórico; usar RESTRICT ou marcar o aluno como inativo.",
+      "grupo": "cascade-risco"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa rede social da escola, o `DESCRIBE usuario;` mostra a linha:\n`email | varchar(100) | YES | UNI | NULL |`\nO professor disse que essa definição ainda deixa passar um problema.\n\nNa sua resposta:\n1. explique o que essa coluna permite e o que ela impede;\n2. diga o que falta na definição para que todo usuário tenha um e-mail diferente.",
+      "respostasAceitas": [
+        "UNI impede e-mails repetidos, mas Null YES permite cadastrar sem e-mail, e vários usuários podem ficar com NULL (o UNIQUE aceita vários NULL). Falta NOT NULL: email VARCHAR(100) NOT NULL UNIQUE."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) não repete, mas pode ficar vazio, inclusive em várias linhas; 2) acrescentar NOT NULL.",
+      "grupo": "unique-null"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa lanchonete, os itens vendidos ficam em:\n`CREATE TABLE item_pedido (id_pedido INT, id_produto INT, quantidade INT NOT NULL, preco_unitario DECIMAL(8,2) NOT NULL, PRIMARY KEY (id_pedido, id_produto), FOREIGN KEY (id_pedido) REFERENCES pedido(id_pedido), FOREIGN KEY (id_produto) REFERENCES produto(id_produto));`\nA tabela produto já tem o preço. Por que item_pedido também guarda preco_unitario?\n\nNa sua resposta:\n1. explique por que guardar o preço também no item;\n2. diga o que a chave primária composta impede nesse caso.",
+      "respostasAceitas": [
+        "O preço do produto muda com o tempo; o item precisa guardar o preço do dia da venda, senão pedidos antigos mudariam de valor. A PK composta impede repetir o mesmo produto duas vezes no mesmo pedido (a quantidade é que aumenta)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) preserva o preço praticado na venda (histórico); 2) um mesmo produto aparece uma vez por pedido.",
+      "grupo": "nn-associativa"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE TABLE e restrições",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa biblioteca, a tabela de empréstimos tem:\n`data_emprestimo DATE NOT NULL, data_devolucao DATE NULL, CHECK (data_devolucao IS NULL OR data_devolucao >= data_emprestimo)`.\nO que essa restrição garante?\n\nNa sua resposta:\n1. explique a regra que o CHECK garante;\n2. diga se um empréstimo ainda não devolvido (data_devolucao NULL) é aceito e qual o papel da parte `data_devolucao IS NULL OR`.",
+      "respostasAceitas": [
+        "A devolução nunca pode ser antes do empréstimo. Um empréstimo em aberto (data_devolucao NULL) é aceito: o 'IS NULL OR' deixa claro na regra que a devolução vazia é permitida, e só se compara as datas quando a devolução foi preenchida."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) devolução igual ou depois do empréstimo; 2) sim, é aceito; a parte IS NULL OR libera explicitamente a devolução vazia (também vale citar que o CHECK só recusa quando a condição dá falso)."
+    }
+  ]
+}
