@@ -1,0 +1,2452 @@
+{
+  "nome": "Banco de Dados — Subconsultas (a revisar)",
+  "materia": "Banco de Dados",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em SQL, o que é uma subconsulta?",
+      "alternativas": [
+        "Um SELECT escrito dentro de outro comando, entre parênteses",
+        "Uma consulta salva no banco com nome próprio para reutilizar",
+        "Um SELECT que só pode aparecer depois do ORDER BY",
+        "Uma tabela temporária criada com CREATE TABLE"
+      ],
+      "correta": 0,
+      "explicacao": "Subconsulta (subquery) é um SELECT dentro de outro comando SQL, sempre entre parênteses. Consulta salva com nome é uma VIEW."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa padaria, a tabela `produto` tem as colunas id_produto, nome e preco. No comando `SELECT nome FROM produto WHERE preco = (SELECT MAX(preco) FROM produto);`, qual parte o MySQL precisa resolver primeiro para conseguir filtrar as linhas?",
+      "alternativas": [
+        "O SELECT de fora, que lista os nomes dos produtos",
+        "O SELECT entre parênteses, que acha o maior preço",
+        "A coluna nome, que é lida antes do WHERE",
+        "Nenhuma: as duas partes não têm relação"
+      ],
+      "correta": 1,
+      "explicacao": "Numa subconsulta comum (não correlacionada) o valor de dentro é calculado antes e usado no WHERE de fora, como se fosse um número escrito ali."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa padaria, a tabela `produto` tem as colunas id_produto, nome e preco. O que mostra o comando `SELECT nome FROM produto WHERE preco = (SELECT MAX(preco) FROM produto);`?",
+      "alternativas": [
+        "Apenas o maior preço da tabela, sem nenhum nome",
+        "O nome do produto (ou produtos) que tem o maior preço",
+        "Todos os produtos, do mais caro para o mais barato",
+        "O nome do primeiro produto que foi cadastrado"
+      ],
+      "correta": 1,
+      "explicacao": "A subconsulta devolve o maior preço; o SELECT de fora mostra o nome de quem tem esse preço. Se houver empate, aparecem todos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `produto` tem as colunas nome e preco. O comando `SELECT nome FROM produto WHERE preco > AVG(preco);` dá erro. Por quê?",
+      "alternativas": [
+        "AVG só funciona em colunas do tipo INT, e preco é DECIMAL",
+        "O WHERE não aceita o operador > com números",
+        "Funções de agregação, como AVG, não são aceitas no WHERE",
+        "AVG precisa de um ORDER BY escrito logo depois dele"
+      ],
+      "correta": 2,
+      "explicacao": "O WHERE avalia linha por linha e não pode usar agregação. A solução é calcular a média numa subconsulta: WHERE preco > (SELECT AVG(preco) FROM produto)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Dentro de um comando SQL, como a subconsulta deve ser escrita?",
+      "alternativas": [
+        "Entre parênteses",
+        "Entre aspas simples",
+        "Entre colchetes",
+        "Entre chaves"
+      ],
+      "correta": 0,
+      "explicacao": "A subconsulta sempre fica entre parênteses. Entre aspas ela viraria um texto comum."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma subconsulta devolve uma lista com vários códigos. Qual operador do WHERE compara uma coluna com essa lista inteira?",
+      "alternativas": [
+        "=",
+        "LIKE",
+        "IN",
+        "BETWEEN"
+      ],
+      "correta": 2,
+      "explicacao": "IN verifica se o valor está em uma lista (fixa ou vinda de uma subconsulta). O = espera um valor só."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-medico",
+      "enunciado": "Numa clínica, a tabela `medico` (id_medico, nome) tem as linhas (1, Ana), (2, Bruno) e (3, Carla). A tabela `consulta` (id_consulta, id_medico) tem (10, 1), (11, 1) e (12, 3). O que mostra `SELECT nome FROM medico WHERE id_medico IN (SELECT id_medico FROM consulta);`?",
+      "alternativas": [
+        "Ana, Bruno e Carla",
+        "Ana, Ana e Carla",
+        "Ana e Carla",
+        "Somente Bruno"
+      ],
+      "correta": 2,
+      "explicacao": "A subconsulta devolve 1, 1 e 3. O IN só pergunta se o id está na lista, então cada médico aparece uma vez: Ana e Carla."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-medico",
+      "enunciado": "Numa clínica, a tabela `medico` (id_medico, nome) tem as linhas (1, Ana), (2, Bruno) e (3, Carla). A tabela `consulta` (id_consulta, id_medico) tem (10, 1), (11, 1) e (12, 3). O que mostra `SELECT nome FROM medico WHERE id_medico NOT IN (SELECT id_medico FROM consulta);`?",
+      "alternativas": [
+        "Somente Bruno",
+        "Ana e Carla",
+        "Nenhum médico",
+        "Ana, Bruno e Carla"
+      ],
+      "correta": 0,
+      "explicacao": "A lista da subconsulta é 1, 1, 3. NOT IN mostra quem não está nela: só o médico 2, Bruno, que não tem consulta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-notin-null",
+      "enunciado": "Numa biblioteca, a tabela `aluno` (id_aluno, nome) tem os alunos 1, 2 e 3. A tabela `emprestimo` (id_emprestimo, id_aluno) tem duas linhas: uma com id_aluno = 1 e outra com id_aluno NULL. O que mostra `SELECT nome FROM aluno WHERE id_aluno NOT IN (SELECT id_aluno FROM emprestimo);`?",
+      "alternativas": [
+        "Os alunos 2 e 3",
+        "Os alunos 1, 2 e 3",
+        "Uma mensagem de erro 1242",
+        "Nenhuma linha"
+      ],
+      "correta": 3,
+      "explicacao": "Com NULL na lista, \"id NOT IN (1, NULL)\" vira \"id <> 1 AND id <> NULL\". Comparar com NULL dá desconhecido, então nenhuma linha passa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-notin-null",
+      "enunciado": "Uma consulta usa `id_cliente NOT IN (SELECT id_cliente FROM pedido)` e não mostra nada, porque a coluna id_cliente de `pedido` tem um valor NULL. Qual ajuste resolve o problema?",
+      "alternativas": [
+        "Trocar NOT IN por IN na consulta de fora",
+        "Colocar DISTINCT no SELECT da consulta de fora",
+        "Colocar ORDER BY id_cliente dentro da subconsulta",
+        "Filtrar id_cliente IS NOT NULL na subconsulta"
+      ],
+      "correta": 3,
+      "explicacao": "Tirando o NULL da lista, o NOT IN volta a funcionar. Outra saída é usar NOT EXISTS, que não sofre com NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-1242",
+      "enunciado": "O MySQL mostra o erro 1242, \"Subquery returns more than 1 row\". O que isso quer dizer?",
+      "alternativas": [
+        "A subconsulta não devolveu nenhuma linha de resultado",
+        "A tabela citada dentro da subconsulta não existe",
+        "A subconsulta usada com = devolveu várias linhas",
+        "Faltou dar um apelido para a tabela da subconsulta"
+      ],
+      "correta": 2,
+      "explicacao": "Com =, >, < etc. a subconsulta precisa devolver um valor só. Se devolve várias linhas, dá o erro 1242."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-1242",
+      "enunciado": "Numa academia, a tabela `aluno` tem id_aluno, nome e cidade, e a tabela `matricula` tem id_matricula e id_aluno. O comando `SELECT * FROM matricula WHERE id_aluno = (SELECT id_aluno FROM aluno WHERE cidade = 'Santos');` deu erro 1242, porque há três alunos de Santos. Qual troca resolve?",
+      "alternativas": [
+        "Trocar o = por LIKE",
+        "Tirar os parênteses da subconsulta",
+        "Trocar o = por IN",
+        "Trocar o WHERE por HAVING"
+      ],
+      "correta": 2,
+      "explicacao": "IN aceita uma lista de valores; o = aceita um valor só. Com IN, a consulta mostra as matrículas dos três alunos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `produto` tem id_produto, nome e preco. Não existe produto com id 999. O que acontece com `SELECT nome FROM produto WHERE preco = (SELECT preco FROM produto WHERE id_produto = 999);`?",
+      "alternativas": [
+        "Não dá erro e não mostra nenhuma linha",
+        "Dá o erro 1242 porque a subconsulta veio vazia",
+        "Mostra todos os produtos da tabela",
+        "Mostra os produtos que têm preço NULL"
+      ],
+      "correta": 0,
+      "explicacao": "Subconsulta escalar sem linha vale NULL. A comparação preco = NULL nunca é verdadeira, então o resultado fica vazio, sem erro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que o operador IN pode receber entre os parênteses?",
+      "alternativas": [
+        "Apenas números inteiros digitados à mão",
+        "Apenas uma subconsulta com várias colunas",
+        "Apenas o nome de outra tabela do banco",
+        "Valores fixos ou uma subconsulta de uma coluna"
+      ],
+      "correta": 3,
+      "explicacao": "IN (1, 2, 3) e IN (SELECT id FROM ...) são válidos. A subconsulta do IN deve devolver uma coluna."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de games, a tabela `item_venda` tem id_venda, id_jogo e quantidade. O que acontece com `SELECT titulo FROM jogo WHERE id_jogo IN (SELECT id_jogo, quantidade FROM item_venda);`?",
+      "alternativas": [
+        "Mostra os jogos vendidos e a quantidade de cada um",
+        "Mostra só os jogos com quantidade maior que zero",
+        "Ignora a coluna quantidade e mostra os jogos vendidos",
+        "Dá erro, pois a subconsulta devolve duas colunas"
+      ],
+      "correta": 3,
+      "explicacao": "O IN compara um valor com uma coluna. Com duas colunas o MySQL dá o erro 1241 (\"Operand should contain 1 column(s)\")."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, a tabela `aluno` tem as colunas nome e idade. Qual comando mostra o nome do aluno mais novo?",
+      "alternativas": [
+        "SELECT nome FROM aluno WHERE idade = MIN(idade);",
+        "SELECT nome FROM aluno WHERE idade = (SELECT MIN(idade) FROM aluno);",
+        "SELECT nome FROM aluno WHERE idade = (SELECT MIN(aluno) FROM idade);",
+        "SELECT nome FROM aluno WHERE idade IN MIN(aluno);"
+      ],
+      "correta": 1,
+      "explicacao": "A menor idade é calculada na subconsulta. MIN direto no WHERE dá erro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-empate",
+      "enunciado": "Num hotel, a tabela `quarto` (numero, diaria) tem as linhas (101, 150), (102, 200), (103, 200) e (104, 120). O que mostra `SELECT numero FROM quarto WHERE diaria = (SELECT MAX(diaria) FROM quarto);`?",
+      "alternativas": [
+        "Os quartos 102 e 103",
+        "Somente o quarto 102",
+        "O valor 200",
+        "Os quartos 101, 102 e 103"
+      ],
+      "correta": 0,
+      "explicacao": "O maior valor é 200 e dois quartos têm essa diária. Os dois aparecem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop, a tabela `servico` (nome, preco) tem: Banho 40, Tosa 60, Consulta 80 e Vacina 100. O que mostra `SELECT nome FROM servico WHERE preco > (SELECT AVG(preco) FROM servico);`?",
+      "alternativas": [
+        "Banho e Tosa",
+        "Tosa, Consulta e Vacina",
+        "Somente Vacina",
+        "Consulta e Vacina"
+      ],
+      "correta": 3,
+      "explicacao": "A média é (40+60+80+100)/4 = 70. Ficam os serviços acima de 70: Consulta (80) e Vacina (100)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de games, a tabela `jogo` tem id_jogo, titulo e id_genero, e a tabela `genero` tem id_genero e nome. O que faz `SELECT titulo FROM jogo WHERE id_genero = (SELECT id_genero FROM genero WHERE nome = 'Corrida');`?",
+      "alternativas": [
+        "Mostra o código do gênero Corrida",
+        "Mostra todos os gêneros que têm jogos",
+        "Mostra os títulos dos jogos do gênero Corrida",
+        "Muda o gênero de todos os jogos para Corrida"
+      ],
+      "correta": 2,
+      "explicacao": "A subconsulta acha o código do gênero Corrida; a consulta de fora lista os jogos com esse código."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cinema, a tabela `sessao` tem id_sessao, id_filme e horario, e a tabela `filme` tem id_filme, titulo e classificacao. O que mostra `SELECT horario FROM sessao WHERE id_filme IN (SELECT id_filme FROM filme WHERE classificacao = 'Livre');`?",
+      "alternativas": [
+        "Os títulos dos filmes com classificação Livre",
+        "Os horários de todas as sessões do cinema",
+        "A classificação de cada filme em cartaz",
+        "Os horários das sessões de filmes livres"
+      ],
+      "correta": 3,
+      "explicacao": "A subconsulta devolve os códigos dos filmes livres; a de fora mostra os horários das sessões desses filmes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, a tabela `livro` tem id_livro e titulo, e a tabela `emprestimo` tem id_emprestimo e id_livro. O que mostra `SELECT titulo FROM livro WHERE id_livro NOT IN (SELECT id_livro FROM emprestimo);`?",
+      "alternativas": [
+        "Os livros que estão emprestados agora",
+        "Os livros que nunca foram emprestados",
+        "Os livros emprestados mais de uma vez",
+        "Todos os livros, com e sem empréstimo"
+      ],
+      "correta": 1,
+      "explicacao": "NOT IN fica com os livros cujo código não aparece em nenhum empréstimo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "É possível escrever uma subconsulta dentro de outra subconsulta?",
+      "alternativas": [
+        "Sim, as subconsultas podem ser aninhadas em vários níveis",
+        "Não, o MySQL aceita apenas um nível de subconsulta",
+        "Só quando as duas usam a mesma tabela",
+        "Só na lista do SELECT, nunca no WHERE"
+      ],
+      "correta": 0,
+      "explicacao": "Subconsultas podem ficar uma dentro da outra. A mais interna é resolvida primeiro (quando não é correlacionada)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa oficina, a tabela `mecanico` tem nome e salario. O que mostra `SELECT MAX(salario) FROM mecanico WHERE salario < (SELECT MAX(salario) FROM mecanico);`?",
+      "alternativas": [
+        "O maior salário da tabela",
+        "O segundo maior salário da tabela",
+        "O menor salário da tabela",
+        "Todos os salários menos o maior"
+      ],
+      "correta": 1,
+      "explicacao": "A subconsulta acha o maior salário; o WHERE tira quem ganha isso; o MAX do que sobrou é o segundo maior."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `venda` tem id_venda e valor. Qual subconsulta, usada depois de `WHERE valor =`, nunca causa o erro 1242?",
+      "alternativas": [
+        "(SELECT MAX(valor) FROM venda)",
+        "(SELECT valor FROM venda)",
+        "(SELECT valor FROM venda WHERE valor > 10)",
+        "(SELECT DISTINCT valor FROM venda)"
+      ],
+      "correta": 0,
+      "explicacao": "MAX sem GROUP BY sempre devolve uma linha. As outras podem devolver várias linhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A condição `WHERE id_turma IN (2, 5)` equivale a qual outra condição?",
+      "alternativas": [
+        "WHERE id_turma = 2 AND id_turma = 5",
+        "WHERE id_turma BETWEEN 2 AND 5",
+        "WHERE id_turma = 2 OR id_turma = 5",
+        "WHERE id_turma > 2 AND id_turma < 5"
+      ],
+      "correta": 2,
+      "explicacao": "IN é um atalho para vários = ligados por OR. BETWEEN pegaria também 3 e 4."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL 8, o que acontece com `SELECT nome FROM cliente WHERE id_cliente IN (SELECT id_cliente FROM pedido ORDER BY valor DESC LIMIT 3);`?",
+      "alternativas": [
+        "Mostra os três clientes com os pedidos de maior valor",
+        "Dá erro: o MySQL não aceita LIMIT nessa subconsulta",
+        "Mostra todos os clientes, pois o LIMIT é ignorado",
+        "Mostra só o cliente do pedido de maior valor"
+      ],
+      "correta": 1,
+      "explicacao": "O MySQL 8 responde \"This version of MySQL doesn't yet support 'LIMIT & IN/ALL/ANY/SOME subquery'\". Uma saída é usar a subconsulta no FROM, como tabela derivada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a tabela `turma` tem 5 linhas. A subconsulta `(SELECT id_turma FROM aula WHERE dia = 'domingo')` não devolve nenhuma linha. O que mostra `SELECT * FROM turma WHERE id_turma NOT IN (SELECT id_turma FROM aula WHERE dia = 'domingo');`?",
+      "alternativas": [
+        "Nenhuma turma",
+        "Erro, pois a lista está vazia",
+        "As 5 turmas",
+        "Somente as turmas com aula"
+      ],
+      "correta": 2,
+      "explicacao": "Com a lista vazia, nenhum valor está nela, então NOT IN é verdadeiro para todas as linhas. Já o IN com lista vazia não mostraria nada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa padaria, a tabela `produto` tem nome e categoria. O que mostra `SELECT nome FROM produto WHERE categoria = (SELECT categoria FROM produto WHERE nome = 'Pão francês');`, supondo que só exista um Pão francês?",
+      "alternativas": [
+        "Os produtos da mesma categoria, sem o Pão francês",
+        "Somente a categoria do Pão francês",
+        "Os produtos de todas as outras categorias",
+        "Os produtos dessa categoria, inclusive o Pão francês"
+      ],
+      "correta": 3,
+      "explicacao": "A subconsulta acha a categoria; a de fora lista todos dessa categoria, e o próprio Pão francês também cumpre a condição."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-empate",
+      "enunciado": "Numa escola, a tabela `nota` (aluno, valor) tem: Ana 8, Beto 6, Caio 9 e Duda 6. O que mostra `SELECT aluno FROM nota WHERE valor = (SELECT MIN(valor) FROM nota);`?",
+      "alternativas": [
+        "Somente Beto",
+        "O valor 6",
+        "Caio",
+        "Beto e Duda"
+      ],
+      "correta": 3,
+      "explicacao": "A menor nota é 6, e dois alunos têm essa nota."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que caracteriza uma subconsulta NÃO correlacionada?",
+      "alternativas": [
+        "Ela usa colunas da consulta de fora e roda para cada linha",
+        "Ela só pode aparecer dentro do FROM",
+        "Ela pode rodar sozinha, pois não usa colunas da consulta de fora",
+        "Ela precisa ter sempre um GROUP BY"
+      ],
+      "correta": 2,
+      "explicacao": "A não correlacionada é independente: dá para copiar e rodar sozinha. A correlacionada depende da linha de fora."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Antes de usar uma subconsulta num comando maior, qual é um bom jeito de conferir se ela está certa?",
+      "alternativas": [
+        "Rodar o SELECT de dentro sozinho e ver o resultado",
+        "Apagar a tabela e criá-la de novo para testar",
+        "Trocar todos os = por IN, por segurança",
+        "Rodar só a consulta de fora sem o WHERE"
+      ],
+      "correta": 0,
+      "explicacao": "Uma subconsulta não correlacionada pode ser executada sozinha; assim se vê se ela devolve um valor ou uma lista."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma subconsulta devolve exatamente uma linha. O que acontece se trocarmos `WHERE id = (subconsulta)` por `WHERE id IN (subconsulta)`?",
+      "alternativas": [
+        "Dá erro 1242",
+        "O resultado sempre fica vazio",
+        "Aparecem linhas repetidas",
+        "O resultado é o mesmo"
+      ],
+      "correta": 3,
+      "explicacao": "Com uma linha, IN e = se comportam igual. A diferença só aparece quando a subconsulta devolve várias linhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `cliente` tem nome e cidade, e alguns clientes estão com cidade NULL. O que acontece com esses clientes em `SELECT nome FROM cliente WHERE cidade NOT IN ('Santos', 'Campinas');`?",
+      "alternativas": [
+        "Eles aparecem, pois NULL não é Santos nem Campinas",
+        "Eles aparecem com a cidade escrita como NULL",
+        "A consulta dá erro por causa do NULL",
+        "Eles não aparecem no resultado"
+      ],
+      "correta": 3,
+      "explicacao": "NULL NOT IN (...) dá desconhecido, não verdadeiro. Para incluí-los seria preciso acrescentar OR cidade IS NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em quais partes de um SELECT uma subconsulta pode aparecer?",
+      "alternativas": [
+        "Somente no WHERE, nunca em outro lugar",
+        "No WHERE, no FROM, no HAVING e no SELECT",
+        "Somente depois do ORDER BY, no final",
+        "Somente no FROM, no lugar de uma tabela"
+      ],
+      "correta": 1,
+      "explicacao": "A subconsulta pode filtrar (WHERE, HAVING), servir de tabela (FROM) ou calcular uma coluna (lista do SELECT)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `venda` tem id_venda, id_vendedor e valor. O que mostra `SELECT id_vendedor, SUM(valor) FROM venda GROUP BY id_vendedor HAVING SUM(valor) > (SELECT AVG(valor) FROM venda);`?",
+      "alternativas": [
+        "Os vendedores cujo total supera a média dos totais dos vendedores",
+        "As vendas com valor acima da média de todas as vendas",
+        "Os vendedores cujo total vendido supera o valor médio de uma venda",
+        "O vendedor com o maior total vendido"
+      ],
+      "correta": 2,
+      "explicacao": "A subconsulta calcula a média de UMA venda (de todas as linhas). O HAVING compara o total de cada vendedor com esse número."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa padaria, a tabela `produto` tem as colunas id_produto, nome e preco. Observe o comando:\n\n`SELECT nome FROM produto WHERE preco = (SELECT MAX(preco) FROM produto);`\n\nNa sua resposta:\n1. diga o que a subconsulta (entre parênteses) devolve;\n2. explique o que a consulta de fora mostra no final.",
+      "respostasAceitas": [
+        "A subconsulta devolve o maior preço da tabela. A consulta de fora mostra o nome do produto (ou produtos, se houver empate) que tem esse preço."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o MAX devolve um único valor, o maior preço; 2) mostra o(s) nome(s) do(s) produto(s) mais caro(s)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno quis listar os serviços de um pet shop com preço acima da média e escreveu `SELECT nome FROM servico WHERE preco > AVG(preco);`. O MySQL deu erro.\n\nNa sua resposta:\n1. explique por que esse comando dá erro;\n2. explique como uma subconsulta resolve esse problema.",
+      "respostasAceitas": [
+        "Não se pode usar função de agregação (AVG) direto no WHERE, que avalia linha por linha. Com uma subconsulta, a média é calculada antes, (SELECT AVG(preco) FROM servico), e o WHERE compara cada preço com esse número."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) agregação não é permitida no WHERE; 2) a subconsulta calcula a média separadamente e devolve um valor para comparar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa academia, o comando abaixo deu o erro 1242 (\"Subquery returns more than 1 row\"):\n\n`SELECT * FROM matricula WHERE id_aluno = (SELECT id_aluno FROM aluno WHERE cidade = 'Santos');`\n\nNa sua resposta:\n1. explique por que o erro aconteceu;\n2. diga qual operador deveria ser usado no lugar do = e por quê.",
+      "respostasAceitas": [
+        "Há mais de um aluno de Santos, então a subconsulta devolve várias linhas, e o = só compara com um valor. Usando IN, a consulta aceita a lista e mostra as matrículas de todos esses alunos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a subconsulta devolveu mais de uma linha para um operador de valor único; 2) IN, que compara com uma lista."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa biblioteca, a tabela `aluno` tem os alunos 1, 2 e 3, e a tabela `emprestimo` tem id_aluno com os valores 1 e NULL. O comando `SELECT nome FROM aluno WHERE id_aluno NOT IN (SELECT id_aluno FROM emprestimo);` não mostrou nenhum aluno, mas o professor esperava ver os alunos 2 e 3.\n\nNa sua resposta:\n1. explique por que o resultado ficou vazio;\n2. diga uma forma de corrigir a consulta (sem precisar escrevê-la inteira).",
+      "respostasAceitas": [
+        "O NOT IN vira \"id <> 1 AND id <> NULL\". Qualquer comparação com NULL é desconhecida, então nenhuma linha passa. Corrige-se tirando o NULL da subconsulta (WHERE id_aluno IS NOT NULL) ou usando NOT EXISTS."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o NULL na lista torna o NOT IN desconhecido para todas as linhas; 2) filtrar IS NOT NULL na subconsulta ou trocar por NOT EXISTS."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Compare as duas condições abaixo, usadas num cinema:\n\n`WHERE id_filme = (SELECT id_filme FROM filme WHERE titulo = 'Aurora')`\n`WHERE id_filme IN (SELECT id_filme FROM filme WHERE classificacao = 'Livre')`\n\nNa sua resposta:\n1. explique quantos valores a subconsulta pode devolver em cada caso;\n2. explique a diferença entre usar = e IN com subconsulta.",
+      "respostasAceitas": [
+        "Com = a subconsulta precisa devolver um único valor (um filme). Com IN ela pode devolver uma lista (vários filmes livres). O = compara com um valor; o IN verifica se o valor está na lista."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) = espera um valor, IN aceita vários; 2) se a subconsulta do = devolver várias linhas dá erro 1242."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa oficina, a tabela `servico` (id_servico, descricao) tem (1, Troca de óleo), (2, Alinhamento) e (3, Revisão). A tabela `ordem` (id_ordem, id_servico) tem (50, 1), (51, 3) e (52, 3). Observe:\n\n`SELECT descricao FROM servico WHERE id_servico IN (SELECT id_servico FROM ordem);`\n\nNa sua resposta:\n1. diga quais linhas aparecem no resultado;\n2. explique por que Revisão aparece só uma vez, mesmo estando em duas ordens.",
+      "respostasAceitas": [
+        "Aparecem Troca de óleo e Revisão. O IN só verifica se o id do serviço está na lista (1, 3, 3); cada serviço é uma linha da tabela de fora, então aparece uma vez."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Troca de óleo e Revisão; 2) o IN testa pertencimento, não junta linhas como um JOIN, então não duplica."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega disse que \"subconsulta é só um SELECT dentro de outro\".\n\nNa sua resposta:\n1. explique o que é uma subconsulta;\n2. diga como ela é escrita dentro do comando;\n3. diga qual parte é resolvida primeiro numa subconsulta comum.",
+      "respostasAceitas": [
+        "Subconsulta é um SELECT dentro de outro comando SQL. Ela fica entre parênteses. Numa subconsulta não correlacionada, a de dentro é resolvida primeiro e o resultado é usado pela de fora."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) SELECT dentro de outro comando; 2) entre parênteses; 3) a interna primeiro."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, a tabela `cliente` tem id_cliente e nome, e a tabela `pedido` tem id_pedido e id_cliente (sem valores NULL). Observe:\n\n`SELECT nome FROM cliente WHERE id_cliente NOT IN (SELECT id_cliente FROM pedido);`\n\nNa sua resposta:\n1. diga qual pergunta do dono da loja essa consulta responde;\n2. explique como o NOT IN chega a esse resultado.",
+      "respostasAceitas": [
+        "Responde \"quais clientes nunca fizeram pedido?\". A subconsulta lista os clientes que têm pedido; o NOT IN fica com os que não estão nessa lista."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) clientes sem nenhum pedido; 2) NOT IN exclui quem aparece na lista da subconsulta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num hotel, não existe hóspede com id 500. Observe:\n\n`SELECT nome FROM hospede WHERE cidade = (SELECT cidade FROM hospede WHERE id_hospede = 500);`\n\nNa sua resposta:\n1. explique o que a subconsulta devolve nesse caso;\n2. explique por que o comando não dá erro e mesmo assim não mostra nenhuma linha.",
+      "respostasAceitas": [
+        "A subconsulta não acha linha e vale NULL. Não é erro: o erro 1242 é só para mais de uma linha. Como cidade = NULL nunca é verdadeiro, nenhuma linha aparece."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) NULL (nenhuma linha); 2) comparação com NULL não é verdadeira, então o resultado é vazio sem erro."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa oficina, a tabela `mecanico` tem nome e salario. Observe:\n\n`SELECT MAX(salario) FROM mecanico WHERE salario < (SELECT MAX(salario) FROM mecanico);`\n\nNa sua resposta:\n1. explique, passo a passo, o que o comando calcula;\n2. explique o que acontece se dois mecânicos empatarem com o maior salário.",
+      "respostasAceitas": [
+        "A subconsulta acha o maior salário; o WHERE tira os que ganham esse valor; o MAX do resto é o segundo maior salário. Se dois empatam no maior, os dois saem e o resultado é o próximo valor diferente, abaixo deles."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) segundo maior salário (o maior valor menor que o máximo); 2) empate no topo não conta como segundo; aparece o próximo valor distinto."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno vai usar a subconsulta `(SELECT id_turma FROM turma WHERE turno = 'noite')` dentro de um comando maior.\n\nNa sua resposta:\n1. explique por que vale a pena rodar essa subconsulta sozinha antes;\n2. diga o que ele deve observar no resultado para escolher entre = e IN.",
+      "respostasAceitas": [
+        "Rodando sozinha ele vê o que ela devolve e confere se está certa. Se devolver uma linha só, = funciona; se puder devolver várias, precisa de IN."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) conferir o resultado antes de combinar; 2) quantidade de linhas (uma → =, várias → IN)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de games, o comando abaixo deu o erro 1241 (\"Operand should contain 1 column(s)\"):\n\n`SELECT titulo FROM jogo WHERE id_jogo IN (SELECT id_jogo, quantidade FROM item_venda);`\n\nNa sua resposta:\n1. explique a causa do erro;\n2. diga o que deveria mudar na subconsulta.",
+      "respostasAceitas": [
+        "O IN compara um valor (id_jogo) com uma lista de uma coluna, mas a subconsulta devolve duas colunas. Basta deixar só id_jogo no SELECT da subconsulta."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) subconsulta com duas colunas onde se espera uma; 2) devolver só a coluna id_jogo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de games, a tabela `genero` tem id_genero e nome, e a tabela `jogo` tem titulo e id_genero. Observe:\n\n`SELECT titulo FROM jogo WHERE id_genero = (SELECT id_genero FROM genero WHERE nome = 'Terror');`\n\nNa sua resposta:\n1. diga o que o comando mostra;\n2. explique em que situação esse comando daria erro.",
+      "respostasAceitas": [
+        "Mostra os títulos dos jogos do gênero Terror. Daria erro 1242 se houvesse mais de um gênero chamado Terror, porque a subconsulta devolveria várias linhas para o =."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) jogos do gênero Terror; 2) se a subconsulta devolver mais de uma linha (nome repetido)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, a tabela `venda` tem id_venda, id_vendedor e valor. Observe:\n\n`SELECT id_vendedor, SUM(valor) FROM venda GROUP BY id_vendedor HAVING SUM(valor) > (SELECT AVG(valor) FROM venda);`\n\nNa sua resposta:\n1. explique o que a subconsulta calcula;\n2. explique o que o HAVING compara e o que aparece no resultado.",
+      "respostasAceitas": [
+        "A subconsulta calcula a média do valor de uma venda, considerando todas as vendas. O HAVING compara o total de cada vendedor com essa média; aparecem os vendedores cujo total é maior que ela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) média de todas as vendas (uma venda); 2) total por vendedor > essa média; não é a média dos totais."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, a subconsulta `(SELECT id_turma FROM aula WHERE dia = 'domingo')` não devolve nenhuma linha. A tabela `turma` tem 5 linhas. Compare:\n\n`SELECT * FROM turma WHERE id_turma IN (SELECT id_turma FROM aula WHERE dia = 'domingo');`\n`SELECT * FROM turma WHERE id_turma NOT IN (SELECT id_turma FROM aula WHERE dia = 'domingo');`\n\nNa sua resposta:\n1. diga quantas linhas cada comando mostra;\n2. explique o porquê de cada resultado.",
+      "respostasAceitas": [
+        "O primeiro não mostra nenhuma linha; o segundo mostra as 5 turmas. Com a lista vazia, nenhum id está nela: o IN é falso para todos e o NOT IN é verdadeiro para todos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) IN → 0 linhas, NOT IN → 5 linhas; 2) lista vazia: nada pertence a ela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-all-any",
+      "enunciado": "O que significa a condição `preco > ALL (subconsulta)`?",
+      "alternativas": [
+        "O preço é maior que pelo menos um dos valores",
+        "O preço é igual a algum dos valores devolvidos",
+        "O preço é maior que todos os valores devolvidos",
+        "O preço é maior que a soma de todos os valores"
+      ],
+      "correta": 2,
+      "explicacao": "ALL exige que a comparação seja verdadeira para todos os valores da lista."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-all-any",
+      "enunciado": "O que significa a condição `preco > ANY (subconsulta)`?",
+      "alternativas": [
+        "O preço é maior que todos os valores devolvidos",
+        "O preço é diferente de todos os valores devolvidos",
+        "O preço é maior que a média dos valores",
+        "O preço é maior que pelo menos um dos valores devolvidos"
+      ],
+      "correta": 3,
+      "explicacao": "ANY basta que a comparação seja verdadeira para algum valor da lista."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL, a palavra SOME, usada como em `nota > SOME (subconsulta)`, tem o mesmo sentido de qual palavra?",
+      "alternativas": [
+        "ANY",
+        "ALL",
+        "EXISTS",
+        "DISTINCT"
+      ],
+      "correta": 0,
+      "explicacao": "SOME é sinônimo de ANY: a comparação precisa valer para pelo menos um valor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A condição `id_aluno = ANY (SELECT id_aluno FROM matricula)` tem o mesmo efeito de qual condição?",
+      "alternativas": [
+        "id_aluno = ALL (SELECT id_aluno FROM matricula)",
+        "id_aluno NOT IN (SELECT id_aluno FROM matricula)",
+        "EXISTS (SELECT id_aluno FROM aluno)",
+        "id_aluno IN (SELECT id_aluno FROM matricula)"
+      ],
+      "correta": 3,
+      "explicacao": "\"Igual a algum valor da lista\" é exatamente o que o IN faz."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A condição `id_pet <> ALL (SELECT id_pet FROM vacina)` tem o mesmo efeito de qual condição?",
+      "alternativas": [
+        "id_pet NOT IN (SELECT id_pet FROM vacina)",
+        "id_pet IN (SELECT id_pet FROM vacina)",
+        "id_pet <> ANY (SELECT id_pet FROM vacina)",
+        "EXISTS (SELECT id_pet FROM vacina)"
+      ],
+      "correta": 0,
+      "explicacao": "\"Diferente de todos\" é o NOT IN. Já <> ANY seria \"diferente de pelo menos um\", que quase sempre é verdadeiro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-cantina",
+      "enunciado": "Na cantina da escola, a tabela `bebida` tem os preços 5 e 8. A tabela `lanche` (nome, preco) tem: Pastel 4, Coxinha 7 e Sanduíche 10. O que mostra `SELECT nome FROM lanche WHERE preco > ALL (SELECT preco FROM bebida);`?",
+      "alternativas": [
+        "Somente Sanduíche",
+        "Coxinha e Sanduíche",
+        "Pastel, Coxinha e Sanduíche",
+        "Nenhum lanche"
+      ],
+      "correta": 0,
+      "explicacao": "Precisa ser maior que 5 e também maior que 8. Só o Sanduíche (10) passa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-cantina",
+      "enunciado": "Na cantina da escola, a tabela `bebida` tem os preços 5 e 8. A tabela `lanche` (nome, preco) tem: Pastel 4, Coxinha 7 e Sanduíche 10. O que mostra `SELECT nome FROM lanche WHERE preco > ANY (SELECT preco FROM bebida);`?",
+      "alternativas": [
+        "Somente Sanduíche",
+        "Coxinha e Sanduíche",
+        "Pastel e Coxinha",
+        "Pastel, Coxinha e Sanduíche"
+      ],
+      "correta": 1,
+      "explicacao": "Basta ser maior que algum preço da lista; maior que 5 já serve. Passam Coxinha (7) e Sanduíche (10)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-vazia",
+      "enunciado": "Numa loja, a subconsulta `(SELECT preco FROM produto WHERE categoria = 'Brinquedo')` não devolve nenhuma linha. O que mostra `SELECT nome FROM produto WHERE preco > ALL (SELECT preco FROM produto WHERE categoria = 'Brinquedo');`?",
+      "alternativas": [
+        "Nenhum produto",
+        "Erro, porque a lista está vazia",
+        "Todos os produtos",
+        "Somente os produtos mais caros"
+      ],
+      "correta": 2,
+      "explicacao": "Com a lista vazia não há nenhum valor que desobedeça a condição, então > ALL é verdadeiro para todas as linhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-vazia",
+      "enunciado": "Numa loja, a subconsulta `(SELECT preco FROM produto WHERE categoria = 'Brinquedo')` não devolve nenhuma linha. O que mostra `SELECT nome FROM produto WHERE preco > ANY (SELECT preco FROM produto WHERE categoria = 'Brinquedo');`?",
+      "alternativas": [
+        "Todos os produtos",
+        "Nenhum produto",
+        "Erro, porque a lista está vazia",
+        "Somente os produtos sem categoria"
+      ],
+      "correta": 1,
+      "explicacao": "ANY precisa de pelo menos um valor que faça a comparação ser verdadeira. Lista vazia: nenhum valor, nenhum produto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Se a coluna não tem valores NULL, a condição `salario > ALL (SELECT salario FROM estagiario)` dá o mesmo resultado de qual condição?",
+      "alternativas": [
+        "salario > (SELECT MIN(salario) FROM estagiario)",
+        "salario > (SELECT MAX(salario) FROM estagiario)",
+        "salario > (SELECT AVG(salario) FROM estagiario)",
+        "salario > (SELECT SUM(salario) FROM estagiario)"
+      ],
+      "correta": 1,
+      "explicacao": "Ser maior que todos é o mesmo que ser maior que o maior deles (MAX)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Se a coluna não tem valores NULL e a subconsulta devolve linhas, a condição `nota < ANY (SELECT nota FROM prova)` dá o mesmo resultado de qual condição?",
+      "alternativas": [
+        "nota < (SELECT MAX(nota) FROM prova)",
+        "nota < (SELECT MIN(nota) FROM prova)",
+        "nota < (SELECT AVG(nota) FROM prova)",
+        "nota < (SELECT COUNT(nota) FROM prova)"
+      ],
+      "correta": 0,
+      "explicacao": "Menor que pelo menos um valor equivale a ser menor que o maior valor da lista."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quando a condição `EXISTS (subconsulta)` é verdadeira?",
+      "alternativas": [
+        "Quando a subconsulta devolve exatamente uma linha",
+        "Quando a subconsulta devolve um valor maior que zero",
+        "Quando a tabela da subconsulta tem chave primária",
+        "Quando a subconsulta devolve pelo menos uma linha"
+      ],
+      "correta": 3,
+      "explicacao": "EXISTS só verifica se existe alguma linha no resultado da subconsulta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quando a condição `NOT EXISTS (subconsulta)` é verdadeira?",
+      "alternativas": [
+        "Quando a subconsulta devolve o valor zero",
+        "Quando a subconsulta não devolve nenhuma linha",
+        "Quando a subconsulta devolve só valores NULL",
+        "Quando a subconsulta dá algum erro"
+      ],
+      "correta": 1,
+      "explicacao": "NOT EXISTS é o contrário do EXISTS: vale quando o resultado da subconsulta está vazio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que é comum escrever `EXISTS (SELECT 1 FROM ...)` em vez de listar colunas na subconsulta?",
+      "alternativas": [
+        "Porque o EXISTS só quer saber se há linhas",
+        "Porque o EXISTS só funciona com o número 1",
+        "Porque assim a subconsulta devolve só uma linha",
+        "Porque o 1 é o código da primeira linha da tabela"
+      ],
+      "correta": 0,
+      "explicacao": "Para o EXISTS o que conta é existir linha. SELECT 1, SELECT * ou SELECT id dão o mesmo resultado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é uma subconsulta correlacionada?",
+      "alternativas": [
+        "Uma subconsulta que pode ser executada sozinha, sem a consulta de fora",
+        "Uma subconsulta que usa coluna da consulta de fora, linha a linha",
+        "Uma subconsulta que sempre fica dentro do FROM",
+        "Uma subconsulta que liga duas tabelas usando JOIN"
+      ],
+      "correta": 1,
+      "explicacao": "Na correlacionada, a de dentro depende do valor da linha de fora (ex.: p.id_cliente = c.id_cliente)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a consulta de fora é `SELECT nome FROM cliente c WHERE ...`. Qual destas subconsultas é correlacionada?",
+      "alternativas": [
+        "(SELECT COUNT(*) FROM pedido p WHERE p.valor > 100 AND p.status = 'pago')",
+        "(SELECT MAX(valor) FROM pedido)",
+        "(SELECT id_cliente FROM pedido WHERE status = 'pago')",
+        "(SELECT COUNT(*) FROM pedido p WHERE p.id_cliente = c.id_cliente)"
+      ],
+      "correta": 3,
+      "explicacao": "Ela usa c.id_cliente, que vem da consulta de fora. As outras rodam sozinhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop, a tabela `pet` tem id_pet e nome, e a tabela `vacina` tem id_vacina e id_pet. O que mostra `SELECT nome FROM pet p WHERE EXISTS (SELECT 1 FROM vacina v WHERE v.id_pet = p.id_pet);`?",
+      "alternativas": [
+        "Os pets que nunca tomaram vacina",
+        "Os pets com pelo menos uma vacina",
+        "Todas as vacinas de cada pet",
+        "A quantidade de vacinas de cada pet"
+      ],
+      "correta": 1,
+      "explicacao": "Para cada pet, a subconsulta procura vacinas dele. Se achar alguma, o EXISTS é verdadeiro e o nome aparece."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-notexists",
+      "enunciado": "Numa academia, a tabela `aluno` tem id_aluno e nome, e a tabela `avaliacao` tem id_avaliacao e id_aluno. O que mostra `SELECT nome FROM aluno a WHERE NOT EXISTS (SELECT 1 FROM avaliacao v WHERE v.id_aluno = a.id_aluno);`?",
+      "alternativas": [
+        "Os alunos que ainda não fizeram nenhuma avaliação",
+        "Os alunos que fizeram pelo menos uma avaliação",
+        "Os alunos com mais de uma avaliação",
+        "As avaliações que não têm aluno ligado"
+      ],
+      "correta": 0,
+      "explicacao": "NOT EXISTS mostra o aluno quando a subconsulta não encontra nenhuma avaliação dele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `pedido` tem várias linhas. O que mostra `SELECT nome FROM cliente WHERE EXISTS (SELECT 1 FROM pedido);`, sem ligar pedido ao cliente?",
+      "alternativas": [
+        "Todos os clientes, já que existem pedidos",
+        "Só os clientes que fizeram pedido",
+        "Só os clientes que nunca fizeram pedido",
+        "Erro, porque o EXISTS precisa de WHERE"
+      ],
+      "correta": 0,
+      "explicacao": "Sem a ligação (p.id_cliente = c.id_cliente), a subconsulta é a mesma para todos e acha linhas; o EXISTS fica verdadeiro sempre."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que o NOT EXISTS costuma ser mais seguro que o NOT IN quando a subconsulta pode ter valores NULL?",
+      "alternativas": [
+        "Porque o NOT EXISTS apaga os NULL da tabela antes de rodar",
+        "Porque ele só testa se há linhas, sem comparar com NULL",
+        "Porque o NOT EXISTS transforma NULL em zero",
+        "Porque o NOT EXISTS ignora o WHERE da subconsulta"
+      ],
+      "correta": 1,
+      "explicacao": "No NOT IN, um NULL na lista deixa tudo desconhecido e some com o resultado. O NOT EXISTS não compara com a lista, só testa se há linha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-hotel",
+      "enunciado": "Num hotel, a tabela `hospede` (id_hospede, nome) tem (1, Lia), (2, Marcos) e (3, Nina). A tabela `reserva` (id_reserva, id_hospede) tem id_hospede 1, 3 e 3. O que mostra `SELECT nome FROM hospede h WHERE EXISTS (SELECT 1 FROM reserva r WHERE r.id_hospede = h.id_hospede);`?",
+      "alternativas": [
+        "Lia, Nina e Nina",
+        "Lia e Nina",
+        "Somente Marcos",
+        "Lia, Marcos e Nina"
+      ],
+      "correta": 1,
+      "explicacao": "Lia (1) e Nina (3) têm reserva. Cada hóspede é testado uma vez, então Nina não se repete."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-hotel",
+      "enunciado": "Num hotel, a tabela `hospede` (id_hospede, nome) tem (1, Lia), (2, Marcos) e (3, Nina). A tabela `reserva` (id_reserva, id_hospede) tem id_hospede 1, 3 e 3. O que mostra `SELECT nome FROM hospede h WHERE NOT EXISTS (SELECT 1 FROM reserva r WHERE r.id_hospede = h.id_hospede);`?",
+      "alternativas": [
+        "Lia e Nina",
+        "Nenhum hóspede",
+        "Somente Marcos",
+        "Marcos e Nina"
+      ],
+      "correta": 2,
+      "explicacao": "Só o hóspede 2, Marcos, não tem nenhuma reserva."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma subconsulta devolve uma linha em que todas as colunas são NULL. Como fica `EXISTS (essa subconsulta)`?",
+      "alternativas": [
+        "Falso, porque a linha só tem NULL",
+        "Verdadeiro, porque existe uma linha",
+        "Desconhecido, por causa do NULL",
+        "Dá erro, porque EXISTS não aceita NULL"
+      ],
+      "correta": 1,
+      "explicacao": "EXISTS não olha os valores, só se há linha. Uma linha cheia de NULL continua sendo uma linha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `produto` tem nome, categoria e preco. O que mostra `SELECT nome FROM produto p WHERE preco > (SELECT AVG(preco) FROM produto p2 WHERE p2.categoria = p.categoria);`?",
+      "alternativas": [
+        "Os produtos mais caros que a média da própria categoria",
+        "Os produtos mais caros que a média geral da loja",
+        "A média de preço de cada categoria",
+        "Os produtos da categoria com maior média"
+      ],
+      "correta": 0,
+      "explicacao": "A subconsulta é correlacionada: para cada produto, calcula a média só da categoria dele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa subconsulta correlacionada que usa a mesma tabela dentro e fora (`produto p` e `produto p2`), para que servem os apelidos p e p2?",
+      "alternativas": [
+        "Para dizer de qual cópia da tabela vem cada coluna",
+        "Para deixar a consulta mais rápida no MySQL",
+        "Para criar duas tabelas novas no banco",
+        "Para ordenar o resultado pela coluna p"
+      ],
+      "correta": 0,
+      "explicacao": "Sem apelidos, \"categoria = categoria\" seria ambíguo: o MySQL usaria a tabela de dentro dos dois lados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "As palavras ALL, ANY e SOME são usadas logo depois de quê?",
+      "alternativas": [
+        "Da palavra FROM, no lugar do nome da tabela",
+        "Da palavra ORDER BY, para ordenar a lista",
+        "Do nome de uma coluna, sem operador nenhum",
+        "De um operador de comparação, como =, > ou <"
+      ],
+      "correta": 3,
+      "explicacao": "Exemplos: > ALL (...), = ANY (...), < SOME (...)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual operador de subconsulta pode ser lido como \"existe pelo menos uma linha que...\"?",
+      "alternativas": [
+        "ALL",
+        "NOT IN",
+        "EXISTS",
+        "DISTINCT"
+      ],
+      "correta": 2,
+      "explicacao": "EXISTS é verdadeiro se a subconsulta encontra pelo menos uma linha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-lista679",
+      "enunciado": "A subconsulta `(SELECT nota FROM prova)` devolve 6, 7 e 9. Para qual valor de x a condição `x > ALL (SELECT nota FROM prova)` é verdadeira?",
+      "alternativas": [
+        "10",
+        "8",
+        "9",
+        "7"
+      ],
+      "correta": 0,
+      "explicacao": "Precisa ser maior que 6, 7 e 9. Só o 10 é maior que todos (9 não é maior que 9)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-lista679",
+      "enunciado": "A subconsulta `(SELECT nota FROM prova)` devolve 6, 7 e 9. Para qual valor de x a condição `x < ANY (SELECT nota FROM prova)` é verdadeira?",
+      "alternativas": [
+        "9",
+        "10",
+        "12",
+        "8"
+      ],
+      "correta": 3,
+      "explicacao": "Basta ser menor que algum valor: 8 é menor que 9. Já 9, 10 e 12 não são menores que nenhum."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A subconsulta `(SELECT preco FROM concorrente)` devolve os valores 5 e NULL. Para um produto de preço 10, como fica `preco > ALL (SELECT preco FROM concorrente)`?",
+      "alternativas": [
+        "Verdadeiro, porque 10 é maior que 5",
+        "Falso, porque NULL vale zero",
+        "Desconhecido, e o produto não aparece",
+        "Dá erro, porque há NULL na lista"
+      ],
+      "correta": 2,
+      "explicacao": "10 > 5 é verdadeiro, mas 10 > NULL é desconhecido. Para o ALL, o resultado fica desconhecido e o WHERE não deixa a linha passar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na prática, o EXISTS costuma ser usado com qual tipo de subconsulta?",
+      "alternativas": [
+        "Correlacionada, ligando a linha de fora com as linhas de dentro",
+        "Não correlacionada, que devolve sempre o mesmo resultado",
+        "Subconsulta no FROM, com apelido obrigatório",
+        "Subconsulta com MAX, que devolve um valor só"
+      ],
+      "correta": 0,
+      "explicacao": "Sem ligar com a linha de fora, o EXISTS daria o mesmo resultado para todas as linhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Que tipo de resposta o EXISTS entrega para o WHERE?",
+      "alternativas": [
+        "Uma lista de valores",
+        "Verdadeiro ou falso",
+        "Um número com a contagem",
+        "O nome das colunas encontradas"
+      ],
+      "correta": 1,
+      "explicacao": "EXISTS é uma condição: diz se há linha (verdadeiro) ou não (falso)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que uma subconsulta correlacionada pode ficar lenta em tabelas muito grandes?",
+      "alternativas": [
+        "Porque ela apaga e recria os índices da tabela",
+        "Porque ela sempre lê o banco inteiro, de todas as tabelas",
+        "Porque ela é avaliada de novo para cada linha da consulta de fora",
+        "Porque ela só funciona sem chave primária"
+      ],
+      "correta": 2,
+      "explicacao": "Muitas linhas de fora significam muitas execuções da de dentro. Índices e JOIN podem ajudar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa empresa, a tabela `funcionario` (nome, setor, salario) tem: Ana Vendas 3000, Bia Vendas 5000, Caio TI 4000, Davi TI 6000 e Eva TI 8000. O que mostra `SELECT nome FROM funcionario f WHERE salario > (SELECT AVG(salario) FROM funcionario f2 WHERE f2.setor = f.setor);`?",
+      "alternativas": [
+        "Davi e Eva",
+        "Bia, Davi e Eva",
+        "Bia e Eva",
+        "Somente Eva"
+      ],
+      "correta": 2,
+      "explicacao": "Média de Vendas = 4000 (Bia passa). Média de TI = 6000 (só Eva passa). Davi e Eva seria a comparação com a média geral (5200)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-notexists",
+      "enunciado": "Numa escola técnica, a tabela `curso` tem id_curso e nome, e a tabela `matricula` tem id_matricula e id_curso. Quais cursos aparecem em `SELECT nome FROM curso c WHERE NOT EXISTS (SELECT 1 FROM matricula m WHERE m.id_curso = c.id_curso);`?",
+      "alternativas": [
+        "Os cursos com pelo menos uma matrícula",
+        "Os cursos com só uma matrícula",
+        "Todos os cursos, com o total de matrículas",
+        "Os cursos sem nenhuma matrícula"
+      ],
+      "correta": 3,
+      "explicacao": "NOT EXISTS fica com os cursos para os quais a subconsulta não acha matrícula."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num pet shop, a tabela `pet` tem id_pet e nome, e a tabela `vacina` tem id_vacina e id_pet. Observe:\n\n`SELECT nome FROM pet p WHERE EXISTS (SELECT 1 FROM vacina v WHERE v.id_pet = p.id_pet);`\n\nNa sua resposta:\n1. diga o que o EXISTS verifica;\n2. diga quais pets aparecem no resultado.",
+      "respostasAceitas": [
+        "O EXISTS verifica se a subconsulta acha pelo menos uma linha, ou seja, se há vacina daquele pet. Aparecem os pets com pelo menos uma vacina registrada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) se existe alguma linha na subconsulta para aquele pet; 2) pets com vacina."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A subconsulta `(SELECT preco FROM bebida)` devolve 5 e 8. Compare as condições `preco > ALL (SELECT preco FROM bebida)` e `preco > ANY (SELECT preco FROM bebida)`.\n\nNa sua resposta:\n1. explique a diferença entre ALL e ANY;\n2. diga se um lanche de preço 7 passa em cada uma delas.",
+      "respostasAceitas": [
+        "ALL exige ser maior que todos os valores; ANY, maior que pelo menos um. O lanche de 7 não passa no ALL (não é maior que 8), mas passa no ANY (é maior que 5)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ALL = todos, ANY = pelo menos um; 2) 7 falha no ALL e passa no ANY."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, a tabela `produto` tem nome, categoria e preco. Observe:\n\n`SELECT nome FROM produto p WHERE preco > (SELECT AVG(preco) FROM produto p2 WHERE p2.categoria = p.categoria);`\n\nNa sua resposta:\n1. explique por que essa subconsulta é chamada de correlacionada;\n2. diga o que a consulta mostra.",
+      "respostasAceitas": [
+        "Ela usa p.categoria, que vem da consulta de fora, e por isso é recalculada para cada produto. Mostra os produtos com preço acima da média da própria categoria."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) depende da linha de fora (p.categoria); 2) produtos acima da média da sua categoria."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa biblioteca, a coluna id_aluno da tabela `emprestimo` pode ter NULL. Para listar alunos sem empréstimo, um professor prefere `NOT EXISTS (SELECT 1 FROM emprestimo e WHERE e.id_aluno = a.id_aluno)` em vez de `id_aluno NOT IN (SELECT id_aluno FROM emprestimo)`.\n\nNa sua resposta:\n1. explique o problema do NOT IN quando há NULL na subconsulta;\n2. explique por que o NOT EXISTS não tem esse problema.",
+      "respostasAceitas": [
+        "Com NULL na lista, o NOT IN compara com NULL, o resultado vira desconhecido e nenhuma linha aparece. O NOT EXISTS só testa se existe linha ligada ao aluno; a linha com NULL não se liga a ninguém e não atrapalha."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) NULL torna o NOT IN desconhecido e esvazia o resultado; 2) NOT EXISTS testa existência, não compara com a lista."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja não há produto da categoria Brinquedo. Mesmo assim, a consulta abaixo mostrou todos os produtos:\n\n`SELECT nome FROM produto WHERE preco > ALL (SELECT preco FROM produto WHERE categoria = 'Brinquedo');`\n\nNa sua resposta:\n1. explique por que todos os produtos apareceram;\n2. explique o que aconteceria se fosse usado ANY no lugar de ALL.",
+      "respostasAceitas": [
+        "A subconsulta veio vazia. Com ALL, não há nenhum valor que contrarie a condição, então ela é verdadeira para todos. Com ANY, seria preciso existir pelo menos um valor; com lista vazia, nenhum produto apareceria."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ALL com lista vazia é verdadeiro; 2) ANY com lista vazia é falso, resultado vazio."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa academia, um colega escreveu `EXISTS (SELECT 1 FROM avaliacao v WHERE v.id_aluno = a.id_aluno)` e outro achou estranho o número 1 ali.\n\nNa sua resposta:\n1. explique o que o EXISTS leva em conta para decidir;\n2. explique por que usar SELECT 1 ou SELECT * dá o mesmo resultado.",
+      "respostasAceitas": [
+        "O EXISTS só quer saber se a subconsulta acha alguma linha. Os valores das colunas não importam, por isso SELECT 1 e SELECT * dão o mesmo resultado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) existência de linhas; 2) as colunas escolhidas não influenciam o EXISTS."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num hotel, a tabela `hospede` (id_hospede, nome) tem (1, Lia), (2, Marcos) e (3, Nina). A tabela `reserva` (id_reserva, id_hospede) tem id_hospede 1, 3 e 3. Observe:\n\n`SELECT nome FROM hospede h WHERE NOT EXISTS (SELECT 1 FROM reserva r WHERE r.id_hospede = h.id_hospede);`\n\nNa sua resposta:\n1. diga quais hóspedes aparecem;\n2. explique, para um hóspede que aparece e um que não aparece, o que a subconsulta encontrou.",
+      "respostasAceitas": [
+        "Aparece só Marcos. Para Marcos (2) a subconsulta não acha reserva, então NOT EXISTS é verdadeiro. Para Lia (1) ela acha uma reserva, então NOT EXISTS é falso e Lia não aparece."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Marcos; 2) sem reserva → aparece; com reserva → não aparece."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, as condições `id_aluno = ANY (SELECT id_aluno FROM matricula)` e `id_aluno IN (SELECT id_aluno FROM matricula)` dão o mesmo resultado.\n\nNa sua resposta:\n1. explique o que significa \"= ANY\";\n2. explique por que ele equivale ao IN.",
+      "respostasAceitas": [
+        "= ANY significa \"igual a pelo menos um valor da lista\". O IN verifica se o valor está na lista, que é a mesma coisa."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) igual a algum valor da lista; 2) estar na lista = ser igual a algum valor dela."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, compare as subconsultas:\n\n(A) `(SELECT MAX(valor) FROM pedido)`\n(B) `(SELECT MAX(valor) FROM pedido p WHERE p.id_cliente = c.id_cliente)`\n\nAmbas aparecem dentro de uma consulta que lê `cliente c`.\n\nNa sua resposta:\n1. diga qual é correlacionada e qual não é;\n2. explique a diferença no resultado de cada uma.",
+      "respostasAceitas": [
+        "A não é correlacionada: devolve o maior pedido da loja, igual para todos os clientes. B é correlacionada: usa c.id_cliente e devolve o maior pedido de cada cliente."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) A não correlacionada, B correlacionada; 2) A = mesmo valor para todos; B = valor por cliente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, o objetivo era listar os clientes que fizeram pedido, mas a consulta abaixo mostrou todos os clientes:\n\n`SELECT nome FROM cliente c WHERE EXISTS (SELECT 1 FROM pedido p);`\n\nNa sua resposta:\n1. explique por que todos os clientes apareceram;\n2. explique o que falta na subconsulta para ela atender o objetivo.",
+      "respostasAceitas": [
+        "A subconsulta não está ligada ao cliente: ela procura qualquer pedido da tabela. Como existem pedidos, o EXISTS é verdadeiro para todos. Falta a ligação p.id_cliente = c.id_cliente no WHERE da subconsulta, para procurar só os pedidos daquele cliente."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) subconsulta sem correlação sempre acha linhas; 2) ligar pedido ao cliente da linha de fora."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa biblioteca, a tabela `livro` tem id_livro e titulo, e a tabela `emprestimo` tem id_livro. Observe:\n\n`SELECT titulo FROM livro l WHERE NOT EXISTS (SELECT 1 FROM emprestimo e WHERE e.id_livro = l.id_livro);`\n\nNa sua resposta:\n1. diga qual pergunta essa consulta responde;\n2. explique como o NOT EXISTS chega ao resultado para cada livro.",
+      "respostasAceitas": [
+        "Responde \"quais livros nunca foram emprestados?\". Para cada livro, a subconsulta procura empréstimos dele; se não achar nenhum, o NOT EXISTS é verdadeiro e o título aparece."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) livros sem empréstimo; 2) testa, livro por livro, se não há empréstimo ligado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa rede de academias com milhões de registros de treino, uma consulta com subconsulta correlacionada ficou muito lenta.\n\nNa sua resposta:\n1. explique por que a subconsulta correlacionada pode ser lenta;\n2. cite uma alternativa ou cuidado que pode ajudar.",
+      "respostasAceitas": [
+        "Ela é avaliada para cada linha da consulta de fora, então muitas linhas geram muitas execuções. Pode ajudar criar índice na coluna de ligação ou reescrever com JOIN (ou tabela derivada com GROUP BY)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) repetição por linha; 2) índice na coluna usada na ligação ou troca por JOIN."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um professor disse que, sem valores NULL, `preco > ALL (SELECT preco FROM bebida)` dá o mesmo que `preco > (SELECT MAX(preco) FROM bebida)`.\n\nNa sua resposta:\n1. explique por que as duas formas são equivalentes;\n2. diga qual delas pode dar erro 1242 se trocarmos o MAX por uma coluna sem agregação, e por quê.",
+      "respostasAceitas": [
+        "Ser maior que todos é ser maior que o maior valor. Se tirar o MAX da segunda, (SELECT preco FROM bebida) devolve várias linhas para o >, e dá erro 1242; o ALL aceita lista e não dá erro."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) maior que todos = maior que o máximo; 2) a forma com > sem MAX, pois espera valor único."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, a subconsulta `(SELECT nota FROM prova)` devolve 6, 7 e 9. Observe a condição `x > ANY (SELECT nota FROM prova)`.\n\nNa sua resposta:\n1. explique o que essa condição exige de x;\n2. diga se x = 6 e x = 8 passam, justificando.",
+      "respostasAceitas": [
+        "x precisa ser maior que pelo menos uma das notas. 6 não passa (não é maior que 6, 7 nem 9). 8 passa (é maior que 6)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) maior que algum valor; 2) 6 não, 8 sim."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa empresa, a tabela `funcionario` (nome, setor, salario) tem: Ana Vendas 3000, Bia Vendas 5000, Caio TI 4000, Davi TI 6000 e Eva TI 8000. Observe:\n\n`SELECT nome FROM funcionario f WHERE salario > (SELECT AVG(salario) FROM funcionario f2 WHERE f2.setor = f.setor);`\n\nNa sua resposta:\n1. diga quais funcionários aparecem, mostrando a média usada para cada setor;\n2. explique por que o resultado seria diferente sem a condição f2.setor = f.setor.",
+      "respostasAceitas": [
+        "Vendas tem média 4000 (Bia passa) e TI tem média 6000 (Eva passa): aparecem Bia e Eva. Sem a ligação, a subconsulta calcula a média geral (5200) e apareceriam Davi e Eva."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Bia e Eva (médias 4000 e 6000); 2) sem correlação vira média geral, resultado Davi e Eva."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Como se chama a subconsulta usada dentro do FROM, no lugar de uma tabela?",
+      "alternativas": [
+        "Tabela derivada",
+        "Chave estrangeira",
+        "Tabela temporária permanente",
+        "Índice composto"
+      ],
+      "correta": 0,
+      "explicacao": "Subconsulta no FROM gera uma tabela derivada, que existe só enquanto o comando roda."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-alias",
+      "enunciado": "No MySQL, o que é obrigatório numa subconsulta usada no FROM?",
+      "alternativas": [
+        "Usar sempre ORDER BY dentro dela",
+        "Colocar a palavra TABLE antes dela",
+        "Devolver uma única linha",
+        "Dar um apelido a ela, como AS t"
+      ],
+      "correta": 3,
+      "explicacao": "Toda tabela derivada precisa de apelido. Sem ele, o MySQL dá o erro 1248."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-alias",
+      "enunciado": "Numa loja, o comando `SELECT AVG(total) FROM (SELECT id_cliente, SUM(valor) AS total FROM pedido GROUP BY id_cliente);` foi executado no MySQL. O que acontece?",
+      "alternativas": [
+        "Mostra a média do total gasto por cliente",
+        "Dá erro, porque AVG não pode ler uma subconsulta",
+        "Dá erro, porque a tabela derivada está sem apelido",
+        "Mostra o total gasto por cada cliente"
+      ],
+      "correta": 2,
+      "explicacao": "O MySQL responde \"Every derived table must have its own alias\" (erro 1248). Basta pôr AS t depois do parêntese."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `pedido` tem id_pedido, id_cliente e valor. O que calcula `SELECT AVG(total) FROM (SELECT id_cliente, SUM(valor) AS total FROM pedido GROUP BY id_cliente) AS t;`?",
+      "alternativas": [
+        "A média do valor de cada pedido",
+        "O total gasto pelo melhor cliente",
+        "A soma de todos os pedidos da loja",
+        "A média do total gasto por cliente"
+      ],
+      "correta": 3,
+      "explicacao": "Primeiro soma por cliente (tabela t), depois tira a média desses totais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `pedido` (id_cliente, valor) tem: cliente 1 com 100 e 50; cliente 2 com 30. Qual é o resultado de `SELECT AVG(total) FROM (SELECT id_cliente, SUM(valor) AS total FROM pedido GROUP BY id_cliente) AS t;`?",
+      "alternativas": [
+        "60",
+        "150",
+        "90",
+        "180"
+      ],
+      "correta": 2,
+      "explicacao": "Totais por cliente: 150 e 30. Média: (150 + 30) / 2 = 90. A média por pedido seria 60."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, o que mostra `SELECT nome, (SELECT COUNT(*) FROM pedido p WHERE p.id_cliente = c.id_cliente) AS qtd FROM cliente c;`?",
+      "alternativas": [
+        "Só os clientes que fizeram pedidos",
+        "O nome de cada cliente e quantos pedidos ele fez",
+        "O total de pedidos da loja, numa linha",
+        "Os pedidos de cada cliente, um por linha"
+      ],
+      "correta": 1,
+      "explicacao": "A subconsulta no SELECT calcula, para cada cliente, a contagem dos pedidos dele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-select-semlinha",
+      "enunciado": "Na consulta `SELECT nome, (SELECT COUNT(*) FROM pedido p WHERE p.id_cliente = c.id_cliente) AS qtd FROM cliente c;`, como aparece um cliente que nunca fez pedido?",
+      "alternativas": [
+        "Não aparece no resultado",
+        "Aparece com qtd igual a NULL",
+        "Faz a consulta dar erro",
+        "Aparece com qtd igual a 0"
+      ],
+      "correta": 3,
+      "explicacao": "COUNT de nenhuma linha dá 0. O cliente vem da tabela de fora, então aparece."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-select-semlinha",
+      "enunciado": "Na consulta `SELECT nome, (SELECT SUM(valor) FROM pedido p WHERE p.id_cliente = c.id_cliente) AS gasto FROM cliente c;`, como aparece um cliente que nunca fez pedido?",
+      "alternativas": [
+        "Aparece com gasto 0",
+        "Não aparece no resultado",
+        "Faz a consulta dar erro 1242",
+        "Aparece com gasto NULL"
+      ],
+      "correta": 3,
+      "explicacao": "SUM de nenhuma linha dá NULL (diferente do COUNT, que dá 0). Para mostrar 0 usa-se COALESCE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma subconsulta usada na lista de colunas do SELECT precisa devolver o quê?",
+      "alternativas": [
+        "Um único valor: uma coluna e no máximo uma linha",
+        "Uma tabela com várias colunas",
+        "Pelo menos duas linhas",
+        "Uma lista de valores separados por vírgula"
+      ],
+      "correta": 0,
+      "explicacao": "Ela ocupa uma célula de cada linha do resultado, então precisa ser um valor só."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, o que acontece com `SELECT nome, (SELECT valor FROM pedido p WHERE p.id_cliente = c.id_cliente) AS valor FROM cliente c;` se algum cliente tiver dois pedidos?",
+      "alternativas": [
+        "Esse cliente aparece duas vezes, uma por pedido",
+        "Aparece só o primeiro pedido desse cliente",
+        "Aparece a soma dos dois pedidos",
+        "Dá o erro 1242, pois a subconsulta devolve duas linhas"
+      ],
+      "correta": 3,
+      "explicacao": "Subconsulta no SELECT tem de devolver um valor. Com dois pedidos, vêm duas linhas e o MySQL dá \"Subquery returns more than 1 row\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, o que mostra `SELECT nome, preco, (SELECT AVG(preco) FROM produto) AS media FROM produto;`?",
+      "alternativas": [
+        "Só a média geral, numa linha",
+        "Cada produto, seu preço e a média geral repetida",
+        "Cada produto com a média da sua categoria",
+        "Só os produtos acima da média"
+      ],
+      "correta": 1,
+      "explicacao": "A subconsulta não é correlacionada: dá o mesmo valor para todas as linhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na consulta `SELECT t.total FROM (SELECT id_cliente, SUM(valor) AS total FROM pedido GROUP BY id_cliente) AS t;`, de onde vem o nome total usado fora?",
+      "alternativas": [
+        "De uma coluna total que existe na tabela pedido",
+        "Do apelido t dado à tabela derivada",
+        "Do apelido dado à soma dentro da tabela derivada",
+        "De uma função do MySQL chamada total"
+      ],
+      "correta": 2,
+      "explicacao": "Dentro, SUM(valor) AS total cria a coluna total da tabela derivada t; fora ela é lida como t.total."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, é preciso mostrar o nome do cliente E o valor de cada pedido dele, lado a lado. Qual recurso é o mais adequado?",
+      "alternativas": [
+        "Uma subconsulta com IN no WHERE",
+        "Um JOIN entre cliente e pedido",
+        "Uma subconsulta com NOT EXISTS",
+        "Uma subconsulta com > ALL"
+      ],
+      "correta": 1,
+      "explicacao": "Subconsulta no WHERE só filtra; as colunas dela não vão para o resultado. Para mostrar colunas das duas tabelas, usa-se JOIN."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-in-join",
+      "enunciado": "As consultas `SELECT nome FROM cliente WHERE id_cliente IN (SELECT id_cliente FROM pedido);` e `SELECT DISTINCT c.nome FROM cliente c JOIN pedido p ON p.id_cliente = c.id_cliente;` dão o mesmo resultado (nomes diferentes). Por que o JOIN precisou do DISTINCT?",
+      "alternativas": [
+        "Porque o JOIN não funciona sem DISTINCT",
+        "Porque o JOIN repete o cliente a cada pedido",
+        "Porque o IN também repete, e o DISTINCT iguala",
+        "Porque o DISTINCT ordena os nomes"
+      ],
+      "correta": 1,
+      "explicacao": "O JOIN junta cada pedido ao cliente; quem tem 3 pedidos aparece 3 vezes. O IN só testa se o id está na lista."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na consulta `SELECT nome FROM medico WHERE id_medico IN (SELECT id_medico FROM consulta);`, dá para mostrar também a data da consulta no resultado?",
+      "alternativas": [
+        "Sim, basta escrever data no SELECT de fora",
+        "Sim, o IN traz todas as colunas de consulta",
+        "Não, porque IN só funciona com números",
+        "Não, a subconsulta do WHERE só filtra as linhas"
+      ],
+      "correta": 3,
+      "explicacao": "A subconsulta do WHERE só serve para filtrar. Para mostrar a data seria preciso JOIN com consulta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual consulta com JOIN dá o mesmo resultado de `SELECT c.nome FROM cliente c WHERE NOT EXISTS (SELECT 1 FROM pedido p WHERE p.id_cliente = c.id_cliente);`?",
+      "alternativas": [
+        "SELECT c.nome FROM cliente c INNER JOIN pedido p ON p.id_cliente = c.id_cliente WHERE p.id_pedido IS NULL;",
+        "SELECT c.nome FROM cliente c LEFT JOIN pedido p ON p.id_cliente = c.id_cliente WHERE p.id_pedido IS NOT NULL;",
+        "SELECT c.nome FROM cliente c LEFT JOIN pedido p ON p.id_cliente = c.id_cliente WHERE p.id_pedido IS NULL;",
+        "SELECT c.nome FROM cliente c INNER JOIN pedido p ON p.id_cliente <> c.id_cliente;"
+      ],
+      "correta": 2,
+      "explicacao": "O LEFT JOIN mantém clientes sem pedido com as colunas de pedido em NULL; o filtro IS NULL fica só com eles."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de games, a tabela `item_venda` tem id_jogo e quantidade. O que mostra `SELECT id_jogo FROM (SELECT id_jogo, SUM(quantidade) AS total FROM item_venda GROUP BY id_jogo) AS t WHERE t.total > 10;`?",
+      "alternativas": [
+        "Os jogos que venderam mais de 10 unidades no total",
+        "As vendas com mais de 10 unidades num só item",
+        "Os 10 jogos mais vendidos",
+        "A soma das unidades de todos os jogos"
+      ],
+      "correta": 0,
+      "explicacao": "A tabela derivada soma por jogo; o WHERE de fora filtra os totais acima de 10 (efeito parecido com HAVING)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-max-count",
+      "enunciado": "Numa loja, o que mostra `SELECT MAX(qtd) FROM (SELECT id_cliente, COUNT(*) AS qtd FROM pedido GROUP BY id_cliente) AS t;`?",
+      "alternativas": [
+        "Quantos pedidos fez o cliente que mais comprou",
+        "O número total de pedidos feitos na loja",
+        "O código do cliente com o maior id",
+        "Quantos clientes diferentes fizeram pedido"
+      ],
+      "correta": 0,
+      "explicacao": "A tabela derivada conta os pedidos de cada cliente; o MAX pega a maior dessas contagens."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-max-count",
+      "enunciado": "Por que `SELECT MAX(COUNT(*)) FROM pedido GROUP BY id_cliente;` dá erro no MySQL e a solução usa uma tabela derivada?",
+      "alternativas": [
+        "Porque não se pode pôr agregação dentro de agregação",
+        "Porque MAX não funciona junto com GROUP BY",
+        "Porque COUNT(*) só funciona sem GROUP BY",
+        "Porque falta um ORDER BY antes do MAX"
+      ],
+      "correta": 0,
+      "explicacao": "Agregação aninhada dá \"Invalid use of group function\". A tabela derivada faz a contagem primeiro e o MAX depois."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a tabela `turma` (id_turma, nome) tem (1, 1A) e (2, 1B), e a tabela `aluno` tem id_turma 1, 1, 1 e 2. O que mostra `SELECT nome, (SELECT COUNT(*) FROM aluno a WHERE a.id_turma = t.id_turma) AS total FROM turma t;`?",
+      "alternativas": [
+        "1A com 4 e 1B com 4",
+        "1A com 3 e 1B com 1",
+        "Somente 1A com 3",
+        "1A com 1 e 1B com 3"
+      ],
+      "correta": 1,
+      "explicacao": "Para cada turma, a subconsulta conta os alunos dela: três na 1A e um na 1B."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por quanto tempo existe uma tabela derivada (subconsulta no FROM)?",
+      "alternativas": [
+        "Só enquanto o comando está rodando",
+        "Até o servidor MySQL ser reiniciado",
+        "Até alguém rodar DROP TABLE nela",
+        "Para sempre, como uma tabela comum"
+      ],
+      "correta": 0,
+      "explicacao": "Ela não é gravada no banco; é um resultado intermediário daquele SELECT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em qual situação uma subconsulta é a escolha mais natural?",
+      "alternativas": [
+        "Mostrar colunas de duas tabelas lado a lado",
+        "Mudar o tipo de uma coluna da tabela",
+        "Dar permissão de leitura a um usuário",
+        "Comparar cada linha com a média da tabela"
+      ],
+      "correta": 3,
+      "explicacao": "Ex.: produtos acima da média: WHERE preco > (SELECT AVG(preco) ...). Juntar colunas de duas tabelas é tarefa do JOIN."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL, o que acontece com `UPDATE produto SET preco = preco * 1.1 WHERE preco < (SELECT AVG(preco) FROM produto);`?",
+      "alternativas": [
+        "Aumenta em 10% o preço dos produtos abaixo da média",
+        "Aumenta em 10% o preço de todos os produtos da tabela",
+        "Dá erro 1093, pois a subconsulta lê a própria tabela do UPDATE",
+        "Dá erro 1242, porque o AVG devolve várias linhas"
+      ],
+      "correta": 2,
+      "explicacao": "O MySQL não deixa a subconsulta usar a mesma tabela do UPDATE (\"You can't specify target table ... for update in FROM clause\"). Uma saída é calcular a média antes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja virtual, o que faz `DELETE FROM item_carrinho WHERE id_produto IN (SELECT id_produto FROM produto WHERE ativo = 0);`?",
+      "alternativas": [
+        "Apaga os produtos inativos da tabela produto",
+        "Apaga dos carrinhos os itens de produtos inativos",
+        "Apaga todos os itens de todos os carrinhos",
+        "Marca como inativos os produtos dos carrinhos"
+      ],
+      "correta": 1,
+      "explicacao": "A subconsulta lista os produtos inativos; o DELETE apaga de item_carrinho as linhas com esses produtos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cinema, a tabela derivada `(SELECT id_sessao, SUM(valor) AS total FROM ingresso GROUP BY id_sessao) AS t` devolve: sessão 1 com 60, sessão 2 com 120 e sessão 3 com 90. O que mostra `SELECT id_sessao FROM (...) AS t WHERE total >= 90;` usando essa tabela?",
+      "alternativas": [
+        "As sessões 2 e 3",
+        "Somente a sessão 2",
+        "As sessões 1, 2 e 3",
+        "Somente a sessão 3"
+      ],
+      "correta": 0,
+      "explicacao": "Totais maiores ou iguais a 90: 120 (sessão 2) e 90 (sessão 3)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que `SELECT nome, preco * 0.9 AS promo FROM produto WHERE promo < 20;` dá erro, mas funciona colocando o primeiro SELECT numa tabela derivada e filtrando por promo fora dela?",
+      "alternativas": [
+        "O apelido promo é palavra reservada e só pode ser usado no FROM",
+        "O cálculo preco * 0.9 só é permitido dentro de subconsulta",
+        "O WHERE não vê apelidos do SELECT; na derivada, promo vira coluna",
+        "O WHERE só aceita colunas do tipo INT"
+      ],
+      "correta": 2,
+      "explicacao": "O WHERE é avaliado antes da lista do SELECT. Dentro da tabela derivada, promo vira uma coluna de verdade para a consulta de fora."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em `SELECT nome, (SELECT MAX(valor) FROM venda) AS recorde FROM vendedor;`, onde está a subconsulta?",
+      "alternativas": [
+        "No WHERE",
+        "No FROM, como tabela derivada",
+        "Na lista de colunas do SELECT",
+        "No ORDER BY"
+      ],
+      "correta": 2,
+      "explicacao": "Ela aparece entre as colunas mostradas e gera a coluna recorde."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Sobre subconsulta e JOIN, qual afirmação está correta?",
+      "alternativas": [
+        "Subconsulta é sempre mais rápida que JOIN",
+        "JOIN não consegue fazer o que um IN com subconsulta faz",
+        "Subconsulta só funciona em tabelas sem chave estrangeira",
+        "Muitas consultas podem ser escritas das duas formas"
+      ],
+      "correta": 3,
+      "explicacao": "IN, EXISTS e JOIN muitas vezes se equivalem. A escolha depende de clareza, do que precisa ser mostrado e do desempenho."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "bd15-in-join",
+      "enunciado": "Numa loja, a cliente Ana tem 2 pedidos. Compare `SELECT c.nome FROM cliente c JOIN pedido p ON p.id_cliente = c.id_cliente;` e `SELECT nome FROM cliente WHERE id_cliente IN (SELECT id_cliente FROM pedido);`. Quantas vezes Ana aparece em cada uma?",
+      "alternativas": [
+        "Uma vez no JOIN e duas vezes no IN",
+        "Duas vezes no JOIN e uma vez no IN",
+        "Duas vezes nas duas consultas",
+        "Uma vez nas duas consultas"
+      ],
+      "correta": 1,
+      "explicacao": "O JOIN gera uma linha por pedido; o IN testa cada cliente uma vez."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, o que mostra `SELECT nome, (SELECT valor FROM pedido p WHERE p.id_cliente = c.id_cliente ORDER BY data DESC LIMIT 1) AS ultimo FROM cliente c;`?",
+      "alternativas": [
+        "Cada cliente com o valor do seu pedido mais recente",
+        "Dá erro, pois o MySQL não aceita LIMIT em subconsulta",
+        "Cada cliente com o valor do seu maior pedido",
+        "Só o cliente que fez o pedido mais recente"
+      ],
+      "correta": 0,
+      "explicacao": "O LIMIT 1 garante uma linha, evitando o erro 1242. A restrição do MySQL a LIMIT vale para IN/ALL/ANY/SOME, não para subconsulta escalar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual trecho usa corretamente uma tabela derivada no MySQL?",
+      "alternativas": [
+        "FROM SELECT id_aluno, AVG(nota) AS media FROM nota GROUP BY id_aluno AS m",
+        "FROM (SELECT id_aluno, AVG(nota) AS media FROM nota GROUP BY id_aluno) AS m",
+        "FROM m AS (SELECT id_aluno, AVG(nota) AS media FROM nota GROUP BY id_aluno)",
+        "FROM (SELECT id_aluno, AVG(nota) AS media FROM nota GROUP BY id_aluno)"
+      ],
+      "correta": 1,
+      "explicacao": "Tabela derivada: subconsulta entre parênteses seguida do apelido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `venda` tem id_venda e valor. O que mostra a coluna perc em `SELECT id_venda, valor * 100 / (SELECT SUM(valor) FROM venda) AS perc FROM venda;`?",
+      "alternativas": [
+        "A soma de todas as vendas multiplicada por 100",
+        "O desconto de cada venda em porcentagem",
+        "A média das vendas dividida por 100",
+        "Quanto cada venda representa, em %, do total vendido"
+      ],
+      "correta": 3,
+      "explicacao": "A subconsulta dá o total geral; cada valor é dividido por ele e multiplicado por 100."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa oficina, a tabela `dono` (id_dono, cidade) tem: 1 Sorocaba, 2 Itu e 3 Sorocaba. A tabela `carro` (placa, id_dono) tem: ABC 1, DEF 2, GHI 3 e JKL 3. O que mostra `SELECT placa FROM carro WHERE id_dono IN (SELECT id_dono FROM dono WHERE cidade = 'Sorocaba');`?",
+      "alternativas": [
+        "ABC e GHI",
+        "Somente DEF",
+        "ABC, GHI e JKL",
+        "ABC, DEF, GHI e JKL"
+      ],
+      "correta": 2,
+      "explicacao": "A subconsulta devolve os donos 1 e 3. Os carros desses donos são ABC, GHI e JKL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, o que mostra `SELECT p.nome FROM produto p JOIN (SELECT categoria, MAX(preco) AS maior FROM produto GROUP BY categoria) AS m ON m.categoria = p.categoria AND p.preco = m.maior;`?",
+      "alternativas": [
+        "O produto mais caro da loja inteira",
+        "O produto mais caro de cada categoria",
+        "O maior preço de cada categoria, sem nomes",
+        "Os produtos acima da média da categoria"
+      ],
+      "correta": 1,
+      "explicacao": "A tabela derivada m tem o maior preço por categoria; o JOIN acha os produtos com esse preço na sua categoria (empates aparecem juntos)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que se costuma dar um apelido com AS a uma subconsulta escrita na lista do SELECT, como em `(SELECT COUNT(*) ...) AS qtd`?",
+      "alternativas": [
+        "Porque sem AS a subconsulta não é executada",
+        "Para transformar a subconsulta em tabela",
+        "Para a coluna do resultado ter um nome claro",
+        "Para que ela devolva mais de uma linha"
+      ],
+      "correta": 2,
+      "explicacao": "Sem apelido, o cabeçalho da coluna seria o texto inteiro da subconsulta. O AS não é obrigatório ali, só deixa claro."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, observe o comando:\n\n`SELECT AVG(total) FROM (SELECT id_cliente, SUM(valor) AS total FROM pedido GROUP BY id_cliente) AS t;`\n\nNa sua resposta:\n1. explique o que é a parte entre parênteses e o que ela devolve;\n2. explique o que o SELECT de fora calcula com ela.",
+      "respostasAceitas": [
+        "A parte entre parênteses é uma tabela derivada (subconsulta no FROM) que devolve o total gasto por cada cliente. O SELECT de fora calcula a média desses totais, ou seja, quanto um cliente gasta em média."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) tabela derivada com o total por cliente; 2) média dos totais por cliente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No MySQL, o comando abaixo deu o erro 1248 (\"Every derived table must have its own alias\"):\n\n`SELECT MAX(qtd) FROM (SELECT id_cliente, COUNT(*) AS qtd FROM pedido GROUP BY id_cliente);`\n\nNa sua resposta:\n1. explique o que o erro quer dizer;\n2. diga o que precisa ser acrescentado e onde.",
+      "respostasAceitas": [
+        "Toda subconsulta usada no FROM (tabela derivada) precisa de um nome. Basta acrescentar um apelido depois do parêntese de fechamento, como AS t."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) tabela derivada sem apelido; 2) apelido logo após o parêntese que fecha a subconsulta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, observe:\n\n`SELECT nome, (SELECT COUNT(*) FROM pedido p WHERE p.id_cliente = c.id_cliente) AS qtd FROM cliente c;`\n\nNa sua resposta:\n1. diga o que aparece em cada linha do resultado;\n2. diga como aparece um cliente que nunca fez pedido.",
+      "respostasAceitas": [
+        "Cada linha mostra o nome do cliente e a quantidade de pedidos dele. Um cliente sem pedido aparece com qtd igual a 0."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nome + quantidade de pedidos; 2) aparece com 0."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, compare as duas colunas calculadas para cada cliente:\n\n`(SELECT COUNT(*) FROM pedido p WHERE p.id_cliente = c.id_cliente) AS qtd`\n`(SELECT SUM(valor) FROM pedido p WHERE p.id_cliente = c.id_cliente) AS gasto`\n\nNa sua resposta:\n1. diga o que cada uma mostra para um cliente sem pedidos;\n2. explique por que os resultados são diferentes.",
+      "respostasAceitas": [
+        "qtd mostra 0 e gasto mostra NULL. COUNT de nenhuma linha é 0; SUM de nenhuma linha não tem valor para somar e devolve NULL (pode ser trocado por 0 com COALESCE)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 0 e NULL; 2) COUNT conta e dá zero; SUM sem linhas dá NULL."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno quis saber o maior número de pedidos feitos por um único cliente e tentou `SELECT MAX(COUNT(*)) FROM pedido GROUP BY id_cliente;`, que deu erro. O professor mostrou esta versão:\n\n`SELECT MAX(qtd) FROM (SELECT id_cliente, COUNT(*) AS qtd FROM pedido GROUP BY id_cliente) AS t;`\n\nNa sua resposta:\n1. explique por que a primeira versão dá erro;\n2. explique como a tabela derivada resolve o problema em duas etapas.",
+      "respostasAceitas": [
+        "Não se pode colocar uma agregação dentro de outra (MAX de COUNT) no mesmo nível. A tabela derivada primeiro conta os pedidos de cada cliente; depois o SELECT de fora pega o maior valor dessa contagem."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) agregação aninhada não é permitida; 2) etapa 1 conta por cliente, etapa 2 tira o MAX."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa clínica, o gerente quer uma lista com o nome do paciente e a data de cada consulta dele. Um estagiário pensou em usar `WHERE id_paciente IN (SELECT id_paciente FROM consulta)`.\n\nNa sua resposta:\n1. explique por que a subconsulta no WHERE não atende esse pedido;\n2. diga qual recurso é mais adequado e por quê.",
+      "respostasAceitas": [
+        "A subconsulta no WHERE só filtra os pacientes; a data da consulta não vai para o resultado. O adequado é um JOIN entre paciente e consulta, que permite mostrar colunas das duas tabelas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) subconsulta do WHERE não traz colunas para o resultado; 2) JOIN para mostrar dados das duas tabelas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, a cliente Ana tem 2 pedidos e o cliente Rui tem 1. Compare:\n\n`SELECT c.nome FROM cliente c JOIN pedido p ON p.id_cliente = c.id_cliente;`\n`SELECT nome FROM cliente WHERE id_cliente IN (SELECT id_cliente FROM pedido);`\n\nNa sua resposta:\n1. diga o resultado de cada consulta;\n2. explique por que elas diferem.",
+      "respostasAceitas": [
+        "O JOIN mostra Ana, Ana e Rui; o IN mostra Ana e Rui. O JOIN gera uma linha por pedido; o IN só testa, cliente por cliente, se o id está na lista."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) JOIN repete Ana, IN não; 2) JOIN junta linhas, IN testa pertencimento (o JOIN precisaria de DISTINCT)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "As duas consultas abaixo listam os clientes sem nenhum pedido:\n\n`SELECT c.nome FROM cliente c WHERE NOT EXISTS (SELECT 1 FROM pedido p WHERE p.id_cliente = c.id_cliente);`\n`SELECT c.nome FROM cliente c LEFT JOIN pedido p ON p.id_cliente = c.id_cliente WHERE p.id_pedido IS NULL;`\n\nNa sua resposta:\n1. explique como cada uma encontra os clientes sem pedido;\n2. explique por que a segunda não funcionaria com INNER JOIN.",
+      "respostasAceitas": [
+        "A primeira testa, para cada cliente, se não existe pedido dele. A segunda mantém todos os clientes no LEFT JOIN; quem não tem pedido fica com as colunas de pedido em NULL, e o IS NULL filtra esses. Com INNER JOIN, os clientes sem pedido nem entrariam no resultado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) NOT EXISTS testa ausência; LEFT JOIN + IS NULL pega quem ficou sem par; 2) INNER JOIN descarta quem não tem par."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num cinema, a tabela `ingresso` (id_sessao, valor) gera, com `(SELECT id_sessao, SUM(valor) AS total FROM ingresso GROUP BY id_sessao) AS t`, os totais: sessão 1 = 60, sessão 2 = 120 e sessão 3 = 90. Observe:\n\n`SELECT id_sessao FROM (SELECT id_sessao, SUM(valor) AS total FROM ingresso GROUP BY id_sessao) AS t WHERE total >= 90;`\n\nNa sua resposta:\n1. diga quais sessões aparecem;\n2. explique o papel da tabela derivada e do WHERE de fora.",
+      "respostasAceitas": [
+        "Aparecem as sessões 2 e 3. A tabela derivada calcula o total por sessão; o WHERE de fora filtra os totais maiores ou iguais a 90."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sessões 2 e 3; 2) derivada soma por sessão, WHERE filtra o total."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, observe:\n\n`SELECT id_venda, valor * 100 / (SELECT SUM(valor) FROM venda) AS perc FROM venda;`\n\nNa sua resposta:\n1. explique o que a subconsulta calcula;\n2. explique o que a coluna perc mostra e dê um exemplo com números.",
+      "respostasAceitas": [
+        "A subconsulta calcula o total de todas as vendas. perc mostra quanto cada venda representa do total, em %. Ex.: total 1000 e venda de 250 → 25."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) soma geral das vendas; 2) percentual de cada venda no total, com exemplo coerente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa papelaria, observe:\n\n`SELECT nome, preco, (SELECT AVG(preco) FROM produto) AS media FROM produto;`\n\nNa sua resposta:\n1. diga o que aparece na coluna media;\n2. explique por que o valor dela é igual em todas as linhas.",
+      "respostasAceitas": [
+        "A coluna media mostra a média de preço de todos os produtos. É igual em todas as linhas porque a subconsulta não depende da linha de fora (não é correlacionada)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) média geral dos preços; 2) subconsulta independente, mesmo valor para todos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, a consulta abaixo funcionou ontem, mas hoje deu erro 1242:\n\n`SELECT nome, (SELECT valor FROM pedido p WHERE p.id_cliente = c.id_cliente) AS valor FROM cliente c;`\n\nNa sua resposta:\n1. explique o que mudou nos dados para o erro aparecer;\n2. cite uma forma de evitar o erro, explicando a ideia.",
+      "respostasAceitas": [
+        "Algum cliente passou a ter mais de um pedido, e a subconsulta no SELECT devolveu várias linhas. Pode-se usar uma agregação (SUM ou MAX do valor) ou ORDER BY com LIMIT 1, para devolver um só valor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) um cliente com dois ou mais pedidos; 2) agregação ou LIMIT 1 para garantir um valor só."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No MySQL, o comando abaixo deu o erro 1093:\n\n`UPDATE produto SET preco = preco * 1.1 WHERE preco < (SELECT AVG(preco) FROM produto);`\n\nNa sua resposta:\n1. explique o que o comando pretendia fazer;\n2. explique por que o MySQL recusa o comando;\n3. descreva uma forma de contornar o problema (sem precisar escrever o comando).",
+      "respostasAceitas": [
+        "Pretendia aumentar 10% nos produtos abaixo da média. O MySQL não deixa a subconsulta ler a mesma tabela que está sendo atualizada. Pode-se calcular a média antes (num SELECT separado ou guardar numa variável) e usar o número no UPDATE, ou envolver a subconsulta numa tabela derivada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) aumento para quem está abaixo da média; 2) mesma tabela no UPDATE e na subconsulta; 3) calcular a média antes ou usar tabela derivada."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja virtual, observe:\n\n`DELETE FROM item_carrinho WHERE id_produto IN (SELECT id_produto FROM produto WHERE ativo = 0);`\n\nNa sua resposta:\n1. diga o que o comando apaga;\n2. explique por que é bom rodar a subconsulta sozinha antes de executar o DELETE.",
+      "respostasAceitas": [
+        "Apaga dos carrinhos os itens de produtos inativos. Rodando a subconsulta antes, dá para conferir quais produtos ela devolve e evitar apagar itens errados, já que o DELETE não tem volta."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) itens de produtos inativos; 2) conferir a lista antes de apagar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Subconsultas",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, observe:\n\n`SELECT p.nome FROM produto p JOIN (SELECT categoria, MAX(preco) AS maior FROM produto GROUP BY categoria) AS m ON m.categoria = p.categoria AND p.preco = m.maior;`\n\nNa sua resposta:\n1. explique o que a tabela derivada m guarda;\n2. explique o que o JOIN faz com ela e o que aparece no final.",
+      "respostasAceitas": [
+        "m guarda o maior preço de cada categoria. O JOIN liga cada produto à linha da sua categoria e só mantém quem tem preço igual ao maior. Aparece o produto mais caro de cada categoria (com empates, aparecem todos)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) maior preço por categoria; 2) liga pela categoria e pelo preço; mostra o mais caro de cada categoria."
+    }
+  ]
+}
