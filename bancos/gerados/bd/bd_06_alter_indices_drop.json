@@ -1,0 +1,2440 @@
+{
+  "nome": "Banco de Dados — DDL: ALTER TABLE, índices e DROP (a revisar)",
+  "materia": "Banco de Dados",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa padaria, a tabela `cliente` tem as colunas id_cliente, nome e email. A dona quer acrescentar a coluna telefone (VARCHAR(20)) logo depois da coluna nome. Qual comando faz isso?",
+      "alternativas": [
+        "ALTER TABLE cliente ADD COLUMN telefone VARCHAR(20) BEFORE email;",
+        "ALTER TABLE cliente ADD COLUMN telefone VARCHAR(20) NEXT nome;",
+        "ALTER TABLE cliente INSERT COLUMN telefone VARCHAR(20) AFTER nome;",
+        "ALTER TABLE cliente ADD COLUMN telefone VARCHAR(20) AFTER nome;"
+      ],
+      "correta": 3,
+      "explicacao": "AFTER nome coloca a nova coluna logo depois de nome. O MySQL não tem BEFORE nem NEXT, e INSERT COLUMN não existe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hortifrúti, a tabela `produto` tem as colunas nome e preco. O gerente quer acrescentar a coluna codigo (INT) como a PRIMEIRA coluna da tabela. Qual comando faz isso?",
+      "alternativas": [
+        "ALTER TABLE produto ADD COLUMN codigo INT AFTER 0;",
+        "ALTER TABLE produto ADD COLUMN codigo INT START;",
+        "ALTER TABLE produto ADD COLUMN codigo INT FIRST;",
+        "ALTER TABLE produto ADD FIRST COLUMN codigo INT;"
+      ],
+      "correta": 2,
+      "explicacao": "A palavra FIRST, no fim da definição da coluna, coloca a coluna nova no começo da tabela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola de música, a tabela `instrumento` tem as colunas id_instrumento, nome e tipo. Foi rodado `ALTER TABLE instrumento ADD COLUMN marca VARCHAR(40);`, sem AFTER nem FIRST. Em que posição a coluna marca fica?",
+      "alternativas": [
+        "No começo da tabela, antes de id_instrumento",
+        "No fim da tabela, depois da coluna tipo",
+        "Em ordem alfabética, entre id_instrumento e nome",
+        "Logo depois da chave primária id_instrumento"
+      ],
+      "correta": 1,
+      "explicacao": "Sem AFTER ou FIRST, o MySQL sempre põe a coluna nova no fim da tabela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `aluno` de uma escola tem as colunas id_aluno, nome, apelido e turma, com 300 alunos cadastrados. O que acontece ao rodar `ALTER TABLE aluno DROP COLUMN apelido;`?",
+      "alternativas": [
+        "A coluna apelido some, com tudo que estava guardado nela; as outras colunas e os 300 alunos continuam",
+        "As 300 linhas da tabela aluno são apagadas",
+        "A coluna apelido continua existindo, mas fica com NULL em todas as linhas",
+        "Só os apelidos repetidos são removidos da tabela"
+      ],
+      "correta": 0,
+      "explicacao": "DROP COLUMN remove a coluna inteira (estrutura e valores). As linhas continuam, só sem aquela coluna."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O comando ALTER TABLE pertence a qual grupo de comandos SQL?",
+      "alternativas": [
+        "DDL, porque muda a estrutura de uma tabela",
+        "DML, porque muda os dados guardados nas linhas",
+        "DCL, porque muda as permissões dos usuários",
+        "DQL, porque consulta os dados da tabela"
+      ],
+      "correta": 0,
+      "explicacao": "DDL (linguagem de definição) reúne CREATE, ALTER, DROP e TRUNCATE: comandos que mexem na estrutura."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa oficina, a tabela `servico` tem as colunas id_servico, descricao (VARCHAR(30)) e valor. Algumas descrições novas não cabem em 30 caracteres. Qual comando aumenta a coluna descricao para VARCHAR(100), sem trocar o nome?",
+      "alternativas": [
+        "UPDATE servico SET descricao = VARCHAR(100);",
+        "ALTER TABLE servico RENAME descricao VARCHAR(100);",
+        "ALTER TABLE servico ADD descricao VARCHAR(100);",
+        "ALTER TABLE servico MODIFY descricao VARCHAR(100);"
+      ],
+      "correta": 3,
+      "explicacao": "MODIFY redefine o tipo de uma coluna que já existe e mantém o nome. UPDATE mexe em dados, não em tipo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na biblioteca do bairro, a tabela `livro` tem as colunas id_livro, titulo e autr (nome digitado errado). Usando MySQL 8, qual comando troca o nome da coluna autr para autor, sem mexer no tipo?",
+      "alternativas": [
+        "ALTER TABLE livro MODIFY autr autor;",
+        "RENAME TABLE livro.autr TO livro.autor;",
+        "ALTER TABLE livro RENAME COLUMN autr TO autor;",
+        "UPDATE livro SET autr = autor;"
+      ],
+      "correta": 2,
+      "explicacao": "RENAME COLUMN antigo TO novo (MySQL 8) só troca o nome e mantém tipo e restrições."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma ONG tem a tabela `doadores_tmp` (id_doador, nome, valor) e quer que ela passe a se chamar `doador`. Qual comando faz essa troca de nome?",
+      "alternativas": [
+        "ALTER TABLE doadores_tmp CHANGE TO doador;",
+        "ALTER TABLE doadores_tmp RENAME TO doador;",
+        "UPDATE TABLE doadores_tmp SET NAME = 'doador';",
+        "ALTER TABLE doadores_tmp MODIFY NAME doador;"
+      ],
+      "correta": 1,
+      "explicacao": "ALTER TABLE ... RENAME TO novo_nome troca o nome da tabela (RENAME TABLE faz o mesmo)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de rodar um ALTER TABLE na tabela `consulta` de uma clínica (id_consulta, data_consulta, id_paciente), a técnica quer conferir os nomes das colunas, os tipos e se cada uma aceita NULL. Qual comando mostra isso?",
+      "alternativas": [
+        "SELECT * FROM consulta;",
+        "SHOW DATABASES;",
+        "DESCRIBE consulta;",
+        "SHOW TABLES consulta;"
+      ],
+      "correta": 2,
+      "explicacao": "DESCRIBE mostra a estrutura: campo, tipo, se aceita NULL, chave e valor padrão. SELECT mostra dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, a tabela `aluno` tem as colunas id_aluno e nome. Qual comando acrescenta, de uma vez só, as colunas altura (DECIMAL(3,2)) e peso (DECIMAL(5,2))?",
+      "alternativas": [
+        "ALTER TABLE aluno ADD COLUMN altura DECIMAL(3,2), ADD COLUMN peso DECIMAL(5,2);",
+        "ALTER TABLE aluno ADD COLUMN altura DECIMAL(3,2) AND peso DECIMAL(5,2);",
+        "ALTER TABLE aluno ADD COLUMNS altura DECIMAL(3,2); peso DECIMAL(5,2);",
+        "ALTER TABLE aluno, ADD altura DECIMAL(3,2) + peso DECIMAL(5,2);"
+      ],
+      "correta": 0,
+      "explicacao": "Num mesmo ALTER TABLE dá para fazer várias alterações separadas por vírgula, cada uma com seu ADD COLUMN."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa sorveteria, a tabela `sabor` (id_sabor, nome, preco) já tem 25 sabores. Foi rodado `ALTER TABLE sabor ADD COLUMN calorias INT;`. Com que valor os 25 sabores antigos ficam na coluna calorias?",
+      "alternativas": [
+        "Zero, porque a coluna é do tipo INT",
+        "O mesmo valor da coluna preco",
+        "Nenhum: o comando dá erro porque a tabela já tem dados",
+        "NULL, porque a coluna aceita NULL e não tem valor padrão"
+      ],
+      "correta": 3,
+      "explicacao": "Coluna nova sem NOT NULL e sem DEFAULT fica NULL nas linhas que já existiam."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `funcionario` de um lava-rápido (id_funcionario, nome, cargo) tem 12 funcionários. Foi rodado `ALTER TABLE funcionario ADD COLUMN ativo TINYINT NOT NULL DEFAULT 1;`. O que acontece com os 12 funcionários?",
+      "alternativas": [
+        "Ficam com NULL, e só os novos funcionários recebem 1",
+        "Todos recebem o valor 1 na coluna ativo",
+        "Nada: o comando dá erro, pois NOT NULL não pode ser usado em tabela com dados",
+        "São apagados para respeitar a regra NOT NULL"
+      ],
+      "correta": 1,
+      "explicacao": "Com DEFAULT, o MySQL preenche as linhas antigas com o valor padrão, e o NOT NULL fica respeitado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma papelaria tem a tabela `fornecedor` com as colunas id_fornecedor, nome, telefone e fax. Ninguém usa mais fax. Qual comando remove essa coluna?",
+      "alternativas": [
+        "DELETE COLUMN fax FROM fornecedor;",
+        "ALTER TABLE fornecedor DROP COLUMN fax;",
+        "DROP COLUMN fax ON fornecedor;",
+        "ALTER TABLE fornecedor DELETE fax;"
+      ],
+      "correta": 1,
+      "explicacao": "Remover coluna é mudança de estrutura: ALTER TABLE ... DROP COLUMN. DELETE apaga linhas, não colunas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No ALTER TABLE, qual palavra permite trocar o NOME e o TIPO de uma coluna no mesmo comando?",
+      "alternativas": [
+        "CHANGE",
+        "MODIFY",
+        "DROP",
+        "ADD"
+      ],
+      "correta": 0,
+      "explicacao": "CHANGE nome_antigo nome_novo TIPO troca nome e definição. MODIFY muda só a definição, mantendo o nome."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, a tabela `paciente` tem a coluna nome definida como VARCHAR(50) NOT NULL. Foi rodado `ALTER TABLE paciente MODIFY nome VARCHAR(80);`. Como a coluna fica?",
+      "alternativas": [
+        "VARCHAR(80) e continua NOT NULL, pois o MODIFY só mexe no tamanho",
+        "Igual a antes, porque o comando dá erro sem o NOT NULL",
+        "VARCHAR(80) aceitando NULL, porque o NOT NULL não foi repetido no MODIFY",
+        "VARCHAR(80) apenas para as linhas novas; as antigas ficam com 50"
+      ],
+      "correta": 2,
+      "explicacao": "O MODIFY troca a definição inteira. O que não for repetido (NOT NULL, DEFAULT) se perde."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "change_sintaxe",
+      "enunciado": "Num estacionamento, a tabela `veiculo` tem as colunas id_veiculo, placa e cor_carro (VARCHAR(20)). Usando CHANGE, qual comando troca o nome cor_carro para cor, mantendo VARCHAR(20)?",
+      "alternativas": [
+        "ALTER TABLE veiculo CHANGE cor_carro cor;",
+        "ALTER TABLE veiculo CHANGE cor VARCHAR(20) cor_carro;",
+        "ALTER TABLE veiculo MODIFY cor_carro TO cor VARCHAR(20);",
+        "ALTER TABLE veiculo CHANGE cor_carro cor VARCHAR(20);"
+      ],
+      "correta": 3,
+      "explicacao": "CHANGE pede nome antigo, nome novo e a definição completa, nessa ordem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "change_sintaxe",
+      "enunciado": "Um aluno tentou trocar o nome da coluna cor_carro para cor, na tabela `veiculo` (id_veiculo, placa, cor_carro VARCHAR(20)), com `ALTER TABLE veiculo CHANGE cor_carro cor;` e recebeu erro. Qual é o motivo?",
+      "alternativas": [
+        "O CHANGE não serve para trocar nome de coluna",
+        "O nome novo precisa vir antes do nome antigo",
+        "O CHANGE exige, além do nome novo, o tipo completo da coluna",
+        "A tabela tem dados, e com dados não se troca nome"
+      ],
+      "correta": 2,
+      "explicacao": "Sem o tipo depois do nome novo, o CHANGE fica incompleto. Para só renomear, RENAME COLUMN é mais simples."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cinema de bairro, a tabela `filme` tem as colunas id_filme, titulo, duracao e genero (VARCHAR(30)). Qual comando leva a coluna genero para logo depois de titulo, sem mudar o tipo?",
+      "alternativas": [
+        "ALTER TABLE filme MOVE genero AFTER titulo;",
+        "ALTER TABLE filme RENAME COLUMN genero AFTER titulo;",
+        "UPDATE filme SET genero AFTER titulo;",
+        "ALTER TABLE filme MODIFY genero VARCHAR(30) AFTER titulo;"
+      ],
+      "correta": 3,
+      "explicacao": "MODIFY (ou CHANGE) aceita AFTER/FIRST e, repetindo a definição, só muda a posição. MOVE não existe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `contato` de uma imobiliária (id_contato, nome, email) tem alguns contatos com email NULL. Foi rodado `ALTER TABLE contato MODIFY email VARCHAR(80) NOT NULL;` no MySQL 8 (modo estrito, o padrão). O que acontece?",
+      "alternativas": [
+        "Dá erro, porque há linhas com email NULL que não respeitam a nova regra",
+        "As linhas com email NULL são apagadas",
+        "A regra NOT NULL passa a valer só para as linhas novas",
+        "O MySQL copia o e-mail da linha anterior para preencher os NULL"
+      ],
+      "correta": 0,
+      "explicacao": "Para colocar NOT NULL, as linhas que já existem precisam estar preenchidas. Antes, é preciso tratar os NULL com UPDATE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `produto` de uma loja de bairro, a coluna nome é VARCHAR(100) e alguns nomes têm 60 caracteres. Foi rodado `ALTER TABLE produto MODIFY nome VARCHAR(40);` no MySQL 8 (modo estrito). O que acontece?",
+      "alternativas": [
+        "Os nomes grandes são apagados e ficam NULL",
+        "Dá erro, porque há nomes que não cabem em 40 caracteres",
+        "Funciona e nenhum dado muda",
+        "O MySQL aumenta sozinho a coluna para VARCHAR(60)"
+      ],
+      "correta": 1,
+      "explicacao": "Diminuir o tamanho pode cortar dados; no modo estrito o MySQL recusa a alteração (dados longos demais)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a tabela `aluno` (id_aluno, nome) já tem 500 alunos, todos do turno da manhã. Qual comando acrescenta a coluna turno, obrigatória, já deixando 'manha' para todos os alunos antigos?",
+      "alternativas": [
+        "ALTER TABLE aluno ADD COLUMN turno VARCHAR(10) NOT NULL;",
+        "ALTER TABLE aluno ADD COLUMN turno VARCHAR(10) NOT NULL DEFAULT 'manha';",
+        "ALTER TABLE aluno ADD COLUMN turno VARCHAR(10) = 'manha';",
+        "INSERT INTO aluno (turno) VALUES ('manha');"
+      ],
+      "correta": 1,
+      "explicacao": "O DEFAULT preenche as linhas que já existem. Sem DEFAULT, as antigas ficariam com texto vazio; INSERT criaria uma linha nova."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa lanchonete, a tabela `pedido` tem a coluna status (VARCHAR(15)). Qual comando define 'aberto' como valor padrão dessa coluna, sem redefinir o tipo?",
+      "alternativas": [
+        "UPDATE pedido SET status = DEFAULT 'aberto';",
+        "ALTER TABLE pedido DEFAULT status = 'aberto';",
+        "ALTER TABLE pedido ADD DEFAULT 'aberto' TO status;",
+        "ALTER TABLE pedido ALTER COLUMN status SET DEFAULT 'aberto';"
+      ],
+      "correta": 3,
+      "explicacao": "ALTER COLUMN ... SET DEFAULT muda só o padrão da coluna. Para tirar o padrão: ALTER COLUMN ... DROP DEFAULT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `pedido` de uma lanchonete (id_pedido, data_pedido, status), havia pedidos com status 'pendente'. Foi rodado `ALTER TABLE pedido ALTER COLUMN status SET DEFAULT 'aberto';`. O que acontece com os pedidos antigos?",
+      "alternativas": [
+        "Todos passam a ter status 'aberto'",
+        "Os pedidos com status 'pendente' são apagados",
+        "Nada: o padrão novo só vale para os próximos INSERT que não informarem status",
+        "O comando dá erro porque a tabela já tem dados"
+      ],
+      "correta": 2,
+      "explicacao": "Valor padrão só é usado quando uma linha nova é inserida sem aquela coluna. Linhas antigas não mudam."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre `RENAME COLUMN` e `CHANGE` no ALTER TABLE do MySQL 8?",
+      "alternativas": [
+        "RENAME COLUMN só troca o nome e mantém a definição; CHANGE troca o nome e exige repetir tipo e restrições",
+        "São iguais, mas RENAME COLUMN apaga os dados da coluna",
+        "RENAME COLUMN muda o tipo; CHANGE muda só o nome",
+        "CHANGE só funciona em tabela vazia; RENAME COLUMN em qualquer tabela"
+      ],
+      "correta": 0,
+      "explicacao": "RENAME COLUMN é mais seguro para só renomear: não corre o risco de esquecer NOT NULL ou DEFAULT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola técnica, a tabela `turma` tem as colunas id_turma e nome. Um aluno rodou `ALTER TABLE turma ADD sala VARCHAR(10);`, sem a palavra COLUMN. O comando funciona?",
+      "alternativas": [
+        "Não, sem COLUMN dá erro de sintaxe",
+        "Sim, mas a coluna sala vira chave primária",
+        "Sim, a palavra COLUMN é opcional no ADD",
+        "Não, sem COLUMN o MySQL tenta acrescentar uma tabela chamada sala"
+      ],
+      "correta": 2,
+      "explicacao": "ADD COLUMN e ADD fazem o mesmo. Escrever COLUMN deixa o comando mais claro, mas não é obrigatório."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `item` de uma papelaria (id_item, descricao, preco DECIMAL(6,2)), foi rodado `ALTER TABLE item CHANGE preco valor DECIMAL(10,2) NOT NULL;`. Qual é o resultado?",
+      "alternativas": [
+        "É acrescentada uma coluna valor, e preco continua existindo",
+        "Os dados de preco são copiados para uma tabela nova chamada valor",
+        "Só o tipo muda; o nome continua preco",
+        "A coluna preco passa a se chamar valor, com tipo DECIMAL(10,2) e obrigatória"
+      ],
+      "correta": 3,
+      "explicacao": "CHANGE renomeia e redefine a coluna ao mesmo tempo. Os valores continuam, agora na coluna valor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel-fazenda, a tabela `quarto` tem a coluna numero do tipo INT, com valores como 101 e 102. Foi rodado `ALTER TABLE quarto MODIFY numero VARCHAR(5);`. O que acontece com os números já cadastrados?",
+      "alternativas": [
+        "São apagados, porque o tipo da coluna mudou",
+        "Viram texto ('101', '102'...) e continuam na tabela",
+        "Nada, o comando dá erro: INT nunca pode virar VARCHAR",
+        "Ficam NULL em todas as linhas"
+      ],
+      "correta": 1,
+      "explicacao": "O MySQL converte os valores para o novo tipo quando a conversão é possível. Número cabe em texto sem perda."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa barbearia, a tabela `senha` (id_senha INT AUTO_INCREMENT, horario) guarda as senhas de atendimento. Foi rodado `ALTER TABLE senha AUTO_INCREMENT = 1000;` e não há nenhum id maior que 1000. O que esse comando faz?",
+      "alternativas": [
+        "Faz o próximo id gerado automaticamente ser 1000",
+        "Troca todos os ids que já existem para começar em 1000",
+        "Limita a tabela a no máximo 1000 linhas",
+        "Apaga as senhas com id menor que 1000"
+      ],
+      "correta": 0,
+      "explicacao": "Esse ALTER ajusta o contador do AUTO_INCREMENT; não mexe nas linhas que já existem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `cliente` (id_cliente, nome) tem 40 clientes. Foi rodado `ALTER TABLE cliente ADD COLUMN cpf CHAR(11) UNIQUE;`. O que acontece?",
+      "alternativas": [
+        "Dá erro, pois 40 linhas com NULL violam o UNIQUE",
+        "Funciona, e o MySQL preenche CPFs diferentes para cada cliente",
+        "Funciona: os 40 clientes ficam com cpf NULL, e o UNIQUE aceita vários NULL",
+        "Dá erro, pois UNIQUE só pode ser usado em coluna NOT NULL"
+      ],
+      "correta": 2,
+      "explicacao": "No MySQL, NULL não conta como valor repetido para o UNIQUE. A coluna nasce NULL nas linhas antigas e o comando funciona."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "drop_coluna_fk",
+      "enunciado": "Numa distribuidora, a tabela `pedido` (id_pedido, data_pedido, id_cliente) tem uma chave estrangeira em id_cliente que aponta para `cliente` (id_cliente, nome). Foi rodado `ALTER TABLE pedido DROP COLUMN id_cliente;`. O que acontece no MySQL 8?",
+      "alternativas": [
+        "Remove a coluna e também apaga os clientes ligados aos pedidos",
+        "Dá erro, porque a coluna é usada pela chave estrangeira; é preciso remover a FK antes",
+        "Remove a coluna, e a FK passa a usar a coluna id_pedido",
+        "Remove a coluna e apaga a tabela cliente"
+      ],
+      "correta": 1,
+      "explicacao": "Coluna que faz parte de uma FK não pode ser removida direto: primeiro DROP FOREIGN KEY, depois DROP COLUMN."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma tabela de testes, `rascunho`, tem só uma coluna: anotacao. Foi rodado `ALTER TABLE rascunho DROP COLUMN anotacao;`. O que acontece?",
+      "alternativas": [
+        "A tabela continua existindo, sem nenhuma coluna",
+        "A tabela é apagada automaticamente",
+        "A coluna fica, mas todos os valores viram NULL",
+        "Dá erro: a tabela não pode ficar sem colunas; para isso se usa DROP TABLE"
+      ],
+      "correta": 3,
+      "explicacao": "O MySQL não deixa remover todas as colunas de uma tabela. Para eliminar a tabela, usa-se DROP TABLE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa central de suporte, a tabela `chamado` tem id_chamado INT AUTO_INCREMENT PRIMARY KEY. Foi rodado `ALTER TABLE chamado MODIFY id_chamado INT;`. Como a coluna fica?",
+      "alternativas": [
+        "Continua chave primária, mas perde o AUTO_INCREMENT; os próximos INSERT precisam informar o id",
+        "Perde a chave primária e o AUTO_INCREMENT",
+        "Continua igual, pois o AUTO_INCREMENT nunca é removido",
+        "Nada muda, porque o comando dá erro em tabela com dados"
+      ],
+      "correta": 0,
+      "explicacao": "A chave primária é guardada à parte e continua. Mas o AUTO_INCREMENT faz parte da definição: como não foi repetido no MODIFY, sumiu."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num servidor antigo com MySQL 5.7, o comando RENAME COLUMN não existe. A tabela `contato` tem a coluna fone (VARCHAR(20)) que deve passar a se chamar telefone. Qual comando funciona nessa versão?",
+      "alternativas": [
+        "ALTER TABLE contato MODIFY fone telefone;",
+        "ALTER TABLE contato RENAME fone TO telefone;",
+        "ALTER TABLE contato CHANGE fone telefone VARCHAR(20);",
+        "ALTER TABLE contato ALTER fone telefone VARCHAR(20);"
+      ],
+      "correta": 2,
+      "explicacao": "Antes do MySQL 8, renomear coluna era feito com CHANGE, repetindo a definição completa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `acesso` de um coworking (id_acesso, id_membro) já tem 3 mil registros. Foi rodado `ALTER TABLE acesso ADD COLUMN registrado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;`. Que valor os registros antigos recebem em registrado_em?",
+      "alternativas": [
+        "A data e a hora do momento em que o ALTER TABLE foi executado",
+        "NULL, porque eram linhas antigas",
+        "A data e a hora em que cada linha foi inserida originalmente",
+        "Nenhum: dá erro, pois CURRENT_TIMESTAMP só vale para linhas novas"
+      ],
+      "correta": 0,
+      "explicacao": "O MySQL não sabe quando cada linha antiga foi inserida; usa o valor padrão calculado na hora do ALTER."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num mercadinho, a tabela `estoque` tem a coluna quantidade VARCHAR(10), com valores como '10', '25' e 'dez'. Foi rodado `ALTER TABLE estoque MODIFY quantidade INT;` no MySQL 8 (modo estrito). O que acontece?",
+      "alternativas": [
+        "Funciona, e 'dez' vira 10 automaticamente",
+        "Dá erro, porque 'dez' não pode ser convertido em número inteiro",
+        "Funciona, e a linha com 'dez' é apagada",
+        "Funciona, mas a coluna continua VARCHAR"
+      ],
+      "correta": 1,
+      "explicacao": "No modo estrito, valor que não vira número barra a alteração. Antes é preciso corrigir os dados com UPDATE."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa papelaria, a tabela `cliente` (id_cliente, nome, email) tem 200 clientes. O que faz o comando `ALTER TABLE cliente ADD COLUMN data_nascimento DATE AFTER nome;`?\n\nNa sua resposta:\n1. diga o que muda na estrutura da tabela;\n2. explique o que acontece com os 200 clientes e com que valor eles ficam na coluna nova.",
+      "respostasAceitas": [
+        "Acrescenta a coluna data_nascimento (DATE) logo depois de nome. Os 200 clientes continuam cadastrados, com data_nascimento NULL."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) acrescenta a coluna data_nascimento depois de nome; 2) os dados continuam e a coluna nova fica NULL nas linhas antigas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No ALTER TABLE do MySQL existem as opções `MODIFY` e `CHANGE`. Explique a diferença entre elas.\n\nNa sua resposta:\n1. diga o que o MODIFY permite fazer;\n2. diga o que o CHANGE faz a mais que o MODIFY.",
+      "respostasAceitas": [
+        "MODIFY muda o tipo/restrições de uma coluna mantendo o nome. CHANGE faz isso e também troca o nome da coluna."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) MODIFY redefine a coluna sem trocar o nome; 2) CHANGE também renomeia (pede nome antigo, novo e tipo)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma pet shop tem a tabela `animal` (id_animal, nome, especie) com 1.500 animais cadastrados e precisa acrescentar a coluna raca. Um colega sugeriu apagar a tabela e fazer de novo com a coluna a mais. Por que é melhor usar ALTER TABLE?\n\nNa sua resposta:\n1. diga o que se perderia apagando a tabela;\n2. explique a vantagem do ALTER TABLE nesse caso.",
+      "respostasAceitas": [
+        "Apagando a tabela, os 1.500 animais seriam perdidos. O ALTER TABLE muda só a estrutura e mantém os dados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) DROP + CREATE perde todos os dados; 2) ALTER acrescenta a coluna mantendo os registros."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na tabela `aluno` de uma escola (id_aluno, nome, observacao, turma), o que faz o comando `ALTER TABLE aluno DROP COLUMN observacao;`?\n\nNa sua resposta:\n1. diga o que acontece com a coluna e com os valores dela;\n2. cite um cuidado que se deve ter antes de rodar o comando.",
+      "respostasAceitas": [
+        "Remove a coluna observacao e todos os valores dela; os alunos continuam. Antes, conferir se ninguém usa a coluna e ter backup, pois não dá para desfazer."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a coluna e seus dados somem, as linhas ficam; 2) cuidado: backup / conferir se a coluna não é usada pelo sistema."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de roupas, a tabela `produto` tem a coluna vlr. O que faz o comando `ALTER TABLE produto RENAME COLUMN vlr TO valor;`?\n\nNa sua resposta:\n1. diga o que muda na tabela;\n2. explique o que acontece com o tipo e com os valores guardados.",
+      "respostasAceitas": [
+        "Troca o nome da coluna vlr para valor. Tipo, restrições e valores continuam iguais."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só o nome da coluna muda; 2) tipo e dados são mantidos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O comando ALTER TABLE muda a tabela, e o UPDATE também \"muda\" a tabela. Por que o ALTER TABLE é classificado como DDL e o UPDATE como DML?\n\nNa sua resposta:\n1. diga o que o ALTER TABLE altera;\n2. diga o que o UPDATE altera.",
+      "respostasAceitas": [
+        "ALTER TABLE altera a estrutura (colunas, tipos, restrições), por isso é DDL. UPDATE altera os valores das linhas, por isso é DML."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ALTER mexe na estrutura; 2) UPDATE mexe nos dados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa clínica, a coluna telefone da tabela `paciente` era VARCHAR(15) NOT NULL. Foi rodado `ALTER TABLE paciente MODIFY telefone VARCHAR(20);`.\n\nNa sua resposta:\n1. diga o que mudou no tamanho da coluna;\n2. explique qual regra foi perdida e por quê.",
+      "respostasAceitas": [
+        "A coluna passou a aceitar até 20 caracteres. Perdeu o NOT NULL, porque o MODIFY substitui a definição inteira e ele não foi repetido."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) de 15 para 20 caracteres; 2) perdeu o NOT NULL (o MODIFY não guarda o que não foi repetido)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num lava-rápido, a tabela `funcionario` (id_funcionario, nome) tem 12 funcionários, todos trabalhando. Foi rodado `ALTER TABLE funcionario ADD COLUMN ativo TINYINT NOT NULL DEFAULT 1;`. Por que o DEFAULT 1 foi importante aqui?\n\nNa sua resposta:\n1. diga que valor os 12 funcionários recebem na coluna ativo;\n2. explique o que aconteceria com eles se o comando não tivesse DEFAULT.",
+      "respostasAceitas": [
+        "Todos recebem 1 (ativo). Sem DEFAULT, o MySQL usaria o valor implícito do tipo, 0, e todos ficariam marcados como inativos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) as linhas antigas recebem 1; 2) sem DEFAULT ficariam com 0 (valor implícito do NOT NULL), o que seria errado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num mercadinho, a coluna descricao da tabela `produto` é VARCHAR(100). Um colega quer rodar `ALTER TABLE produto MODIFY descricao VARCHAR(30);` para economizar espaço.\n\nNa sua resposta:\n1. diga o que o comando tenta fazer;\n2. explique o que acontece se já houver descrições com mais de 30 caracteres;\n3. diga como conferir isso antes de rodar o comando.",
+      "respostasAceitas": [
+        "Tenta diminuir a coluna para 30 caracteres. Se houver descrições maiores, o MySQL 8 dá erro (no modo estrito) e nada muda. Antes, consultar o maior tamanho guardado (ex.: MAX(CHAR_LENGTH(descricao)))."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) reduzir para 30; 2) erro/risco de cortar dados; 3) consultar o tamanho máximo das descrições antes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na tabela `contato` de uma imobiliária, alguns contatos têm email NULL. O comando `ALTER TABLE contato MODIFY email VARCHAR(80) NOT NULL;` deu erro.\n\nNa sua resposta:\n1. explique por que o comando deu erro;\n2. diga o que precisa ser feito antes para ele funcionar.",
+      "respostasAceitas": [
+        "Deu erro porque há linhas com email NULL, que não obedecem ao NOT NULL. Antes é preciso preencher (ou corrigir) esses e-mails com UPDATE e só depois rodar o MODIFY."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dados existentes violam a regra nova; 2) tratar os NULL antes (UPDATE) e então alterar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na biblioteca, a coluna autr era VARCHAR(60) NOT NULL. Para corrigir o nome, um colega rodou `ALTER TABLE livro CHANGE autr autor VARCHAR(60);`.\n\nNa sua resposta:\n1. diga qual problema esse comando causou;\n2. explique por que `RENAME COLUMN autr TO autor` seria mais seguro.",
+      "respostasAceitas": [
+        "O nome foi corrigido, mas a coluna perdeu o NOT NULL, porque o CHANGE substitui a definição. RENAME COLUMN só troca o nome e mantém tipo e restrições."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) perdeu o NOT NULL; 2) RENAME COLUMN não mexe na definição."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num cinema, a tabela `filme` (id_filme, titulo, duracao) recebeu a coluna genero com `ALTER TABLE filme ADD COLUMN genero VARCHAR(30) AFTER titulo;`.\n\nNa sua resposta:\n1. diga o que o AFTER titulo faz;\n2. explique se a posição da coluna muda o resultado de um SELECT que lista as colunas pelo nome.",
+      "respostasAceitas": [
+        "O AFTER põe a coluna genero logo depois de titulo. A posição só muda a ordem em SELECT * e no DESCRIBE; num SELECT com as colunas pelo nome, o resultado é o mesmo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) define a posição da coluna; 2) a ordem é organização: SELECT com nomes não muda."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um sistema guarda o nome das pessoas numa coluna só, nome_completo, na tabela `participante` (id_participante, nome_completo). A equipe vai separar em nome e sobrenome com esta sequência:\n\n1) `ALTER TABLE participante ADD COLUMN nome VARCHAR(40), ADD COLUMN sobrenome VARCHAR(60);`\n2) um UPDATE que copia as partes de nome_completo para as colunas novas;\n3) `ALTER TABLE participante DROP COLUMN nome_completo;`\n\nNa sua resposta:\n1. explique por que o DROP COLUMN precisa ser o último passo;\n2. diga o que se perderia se ele fosse feito primeiro;\n3. cite um cuidado antes do passo 3.",
+      "respostasAceitas": [
+        "O DROP precisa vir depois porque o UPDATE usa nome_completo como fonte. Se fosse primeiro, os nomes seriam perdidos para sempre. Antes do passo 3, conferir se as colunas novas ficaram certas e ter backup."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a coluna antiga é a fonte do UPDATE; 2) perda dos nomes; 3) conferir os dados copiados / backup."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, a tabela `cliente` (id_cliente, nome) tem 40 clientes. O comando `ALTER TABLE cliente ADD COLUMN cpf CHAR(11) NOT NULL UNIQUE;` deu erro de valor duplicado.\n\nNa sua resposta:\n1. explique que valor as 40 linhas receberiam na coluna cpf;\n2. explique por que isso gera valor duplicado;\n3. diga uma forma de chegar ao resultado desejado.",
+      "respostasAceitas": [
+        "Sem DEFAULT e com NOT NULL, as 40 linhas receberiam o valor implícito, texto vazio ''. Como são 40 valores iguais, o UNIQUE recusa. Saída: acrescentar a coluna aceitando NULL, preencher os CPFs e depois tornar NOT NULL."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) texto vazio (valor implícito); 2) vários '' violam o UNIQUE; 3) adicionar sem NOT NULL, preencher, depois MODIFY com NOT NULL."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "drop_coluna_fk",
+      "enunciado": "A tabela `pedido` (id_pedido, data_pedido, id_cliente) tem a chave estrangeira fk_pedido_cliente em id_cliente, apontando para `cliente`. O comando `ALTER TABLE pedido DROP COLUMN id_cliente;` deu erro.\n\nNa sua resposta:\n1. explique por que o MySQL recusou;\n2. diga em que ordem seria preciso agir para remover a coluna;\n3. explique o que o sistema perde com isso.",
+      "respostasAceitas": [
+        "A coluna é usada pela chave estrangeira, então não pode ser removida direto. Primeiro se remove a FK (DROP FOREIGN KEY fk_pedido_cliente) e depois a coluna. O sistema perde a ligação entre pedido e cliente: não saberá mais de quem é cada pedido."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) coluna presa à FK; 2) DROP FOREIGN KEY e depois DROP COLUMN; 3) perde o vínculo pedido-cliente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a tabela `sala` (codigo, bloco, capacidade) foi criada sem chave primária. Qual comando transforma a coluna codigo em chave primária?",
+      "alternativas": [
+        "ALTER TABLE sala MODIFY PRIMARY KEY codigo;",
+        "UPDATE sala SET PRIMARY KEY = codigo;",
+        "ALTER TABLE sala ADD KEY PRIMARY codigo;",
+        "ALTER TABLE sala ADD PRIMARY KEY (codigo);"
+      ],
+      "correta": 3,
+      "explicacao": "ADD PRIMARY KEY (coluna) acrescenta a chave primária a uma tabela que já existe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num sistema de jogos online da escola, a tabela `usuario` tem as colunas id_usuario, login e senha. O login não pode se repetir. Qual comando acrescenta essa regra?",
+      "alternativas": [
+        "ALTER TABLE usuario ADD DISTINCT (login);",
+        "ALTER TABLE usuario MODIFY login SINGLE;",
+        "ALTER TABLE usuario ADD UNIQUE (login);",
+        "ALTER TABLE usuario ADD PRIMARY (login);"
+      ],
+      "correta": 2,
+      "explicacao": "ADD UNIQUE (coluna) impede valores repetidos. DISTINCT é usado no SELECT, não em restrições."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, há as tabelas `paciente` (id_paciente, nome) e `consulta` (id_consulta, data_consulta, id_paciente). Qual comando faz consulta.id_paciente virar chave estrangeira ligada a paciente?",
+      "alternativas": [
+        "ALTER TABLE consulta ADD CONSTRAINT fk_consulta_paciente FOREIGN KEY (id_paciente) REFERENCES paciente(id_paciente);",
+        "ALTER TABLE paciente ADD CONSTRAINT fk_consulta_paciente FOREIGN KEY (id_paciente) REFERENCES consulta(id_paciente);",
+        "ALTER TABLE consulta ADD CONSTRAINT fk_consulta_paciente REFERENCES paciente;",
+        "ALTER TABLE consulta LINK id_paciente TO paciente(id_paciente);"
+      ],
+      "correta": 0,
+      "explicacao": "A FK fica na tabela filha (consulta) e aponta (REFERENCES) para a chave da tabela pai (paciente)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de calçados, a tabela `venda` tem a chave estrangeira chamada fk_venda_vendedor. Qual comando remove essa chave estrangeira?",
+      "alternativas": [
+        "ALTER TABLE venda DROP COLUMN fk_venda_vendedor;",
+        "DROP FOREIGN KEY fk_venda_vendedor;",
+        "ALTER TABLE venda DELETE CONSTRAINT fk_venda_vendedor;",
+        "ALTER TABLE venda DROP FOREIGN KEY fk_venda_vendedor;"
+      ],
+      "correta": 3,
+      "explicacao": "Remove-se a FK pelo nome da restrição, dentro de ALTER TABLE: DROP FOREIGN KEY nome."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No comando `ALTER TABLE matricula ADD CONSTRAINT fk_matricula_aluno FOREIGN KEY (id_aluno) REFERENCES aluno(id_aluno);`, para que serve o trecho fk_matricula_aluno?",
+      "alternativas": [
+        "É o nome de uma coluna nova que será acrescentada",
+        "É o nome da restrição, usado para encontrá-la ou removê-la depois",
+        "É um apelido para a tabela aluno",
+        "É a senha necessária para alterar a restrição"
+      ],
+      "correta": 1,
+      "explicacao": "Depois de CONSTRAINT vem o nome da regra. Com um nome claro, fica fácil fazer DROP FOREIGN KEY depois."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja virtual de artesanato, a tabela `cliente` (id_cliente, nome, cidade) é muito consultada por cidade. Qual comando cria o índice idx_cliente_cidade nessa coluna?",
+      "alternativas": [
+        "CREATE INDEX idx_cliente_cidade ON cliente (cidade);",
+        "CREATE INDEX cliente (cidade) AS idx_cliente_cidade;",
+        "ALTER INDEX idx_cliente_cidade ON cliente.cidade;",
+        "INSERT INDEX idx_cliente_cidade INTO cliente (cidade);"
+      ],
+      "correta": 0,
+      "explicacao": "Sintaxe: CREATE INDEX nome_do_indice ON tabela (coluna)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `cliente` (id_cliente, nome, cidade) tem o índice idx_cliente_cidade, que não é mais útil. Qual comando remove esse índice?",
+      "alternativas": [
+        "DELETE INDEX idx_cliente_cidade FROM cliente;",
+        "DROP INDEX cliente.cidade;",
+        "ALTER INDEX idx_cliente_cidade DROP;",
+        "DROP INDEX idx_cliente_cidade ON cliente;"
+      ],
+      "correta": 3,
+      "explicacao": "No MySQL: DROP INDEX nome ON tabela (ou ALTER TABLE tabela DROP INDEX nome)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um colega quer criar índice em todas as colunas de todas as tabelas \"para garantir\". Qual é o custo disso?",
+      "alternativas": [
+        "Os índices apagam dados antigos para liberar espaço",
+        "Os índices ocupam espaço e deixam INSERT, UPDATE e DELETE mais lentos, pois também precisam ser atualizados",
+        "Todos os SELECT ficam mais lentos",
+        "A tabela deixa de aceitar linhas novas"
+      ],
+      "correta": 1,
+      "explicacao": "Índice acelera leitura, mas cada gravação precisa atualizar todos os índices da tabela. Crie só onde há busca frequente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na biblioteca, a tabela `livro` tem as colunas id_livro, isbn, titulo, observacao e foto_capa. A tela de busca sempre filtra com `WHERE isbn = ...`. Em qual coluna um índice ajuda mais?",
+      "alternativas": [
+        "observacao, porque é um texto longo",
+        "foto_capa, porque guarda o caminho da imagem",
+        "isbn, porque é a coluna usada no filtro das buscas",
+        "titulo, porque aparece na tela, mesmo sem ser filtrado"
+      ],
+      "correta": 2,
+      "explicacao": "Índice ajuda a coluna que aparece no WHERE (ou em JOIN) das consultas frequentes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No estacionamento, foi rodado `CREATE UNIQUE INDEX idx_placa ON veiculo (placa);` na tabela `veiculo` (id_veiculo, placa, modelo). O que esse índice faz além de acelerar as buscas por placa?",
+      "alternativas": [
+        "Nada além de acelerar, não cria nenhuma regra",
+        "Impede cadastrar duas vezes a mesma placa",
+        "Transforma placa em chave estrangeira",
+        "Apaga as placas repetidas que já existiam"
+      ],
+      "correta": 1,
+      "explicacao": "Índice UNIQUE funciona como restrição: não aceita valor repetido na coluna."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `produto` (id_produto INT PRIMARY KEY, nome, preco) é consultada por id_produto o tempo todo. É preciso criar um índice em id_produto?",
+      "alternativas": [
+        "Sim, sem índice a chave primária não funciona",
+        "Sim, mas só quando a tabela passa de mil linhas",
+        "Não, porque chave primária nunca é usada em buscas",
+        "Não, a chave primária já ganha um índice automaticamente"
+      ],
+      "correta": 3,
+      "explicacao": "Toda PRIMARY KEY já é um índice (único). Criar outro igual só gasta espaço."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de informática, qual comando lista os índices que existem na tabela `produto`?",
+      "alternativas": [
+        "SHOW INDEX FROM produto;",
+        "DESCRIBE INDEX produto;",
+        "SELECT INDEX FROM produto;",
+        "SHOW TABLES INDEX produto;"
+      ],
+      "correta": 0,
+      "explicacao": "SHOW INDEX FROM tabela mostra cada índice, suas colunas e se é único."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, foi rodado `ALTER TABLE matricula ADD CONSTRAINT fk_mat_aluno FOREIGN KEY (id_aluno) REFERENCES aluno(id_aluno);`, com `aluno` (id_aluno, nome) e `matricula` (id_matricula, id_aluno, ano). O que o MySQL passa a impedir?",
+      "alternativas": [
+        "Cadastrar dois alunos com o mesmo nome",
+        "Cadastrar matrícula sem informar o ano",
+        "Cadastrar matrícula com um id_aluno que não existe na tabela aluno",
+        "Consultar matrículas de anos anteriores"
+      ],
+      "correta": 2,
+      "explicacao": "A FK garante a integridade: a matrícula só pode apontar para aluno que existe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de bicicletas, foi rodado `ALTER TABLE produto ADD CONSTRAINT chk_preco CHECK (preco > 0);` na tabela `produto` (id_produto, nome, preco), no MySQL 8. O que a regra faz?",
+      "alternativas": [
+        "Recusa produto com preço zero ou negativo",
+        "Troca preços negativos por positivos",
+        "Apaga produtos com preço zero",
+        "Só mostra um aviso e grava mesmo assim"
+      ],
+      "correta": 0,
+      "explicacao": "Desde o MySQL 8.0.16 o CHECK é respeitado: INSERT ou UPDATE que quebre a regra dá erro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `usuario` (id_usuario, login, senha) tem a restrição UNIQUE chamada uq_login na coluna login. Qual comando remove essa restrição?",
+      "alternativas": [
+        "ALTER TABLE usuario DROP UNIQUE login;",
+        "ALTER TABLE usuario DELETE UNIQUE uq_login;",
+        "DROP CONSTRAINT uq_login;",
+        "ALTER TABLE usuario DROP INDEX uq_login;"
+      ],
+      "correta": 3,
+      "explicacao": "No MySQL, UNIQUE é guardado como índice; remove-se com DROP INDEX pelo nome."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa distribuidora, a tabela `item_pedido` (id_item, id_produto, qtd) tem uma linha com id_produto = 99, mas não existe produto 99 na tabela `produto` (id_produto, nome). O que acontece ao rodar `ALTER TABLE item_pedido ADD CONSTRAINT fk_item_produto FOREIGN KEY (id_produto) REFERENCES produto(id_produto);`?",
+      "alternativas": [
+        "Funciona e apaga a linha órfã",
+        "Funciona e cria um produto 99 vazio",
+        "Dá erro, porque já existe linha apontando para um produto que não existe",
+        "Funciona, pois a regra só vale para linhas novas"
+      ],
+      "correta": 2,
+      "explicacao": "Ao acrescentar a FK, o MySQL confere as linhas que já existem. Linha órfã impede a criação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "restricao_com_duplicado",
+      "enunciado": "Numa escola, a tabela `sala` (codigo, bloco) tem duas linhas com codigo 'B12'. O que acontece ao rodar `ALTER TABLE sala ADD PRIMARY KEY (codigo);`?",
+      "alternativas": [
+        "Funciona e mantém só a primeira sala 'B12'",
+        "Dá erro de valor duplicado; é preciso corrigir a repetição antes",
+        "Funciona, porque a regra só vale para linhas novas",
+        "Funciona e transforma codigo em AUTO_INCREMENT"
+      ],
+      "correta": 1,
+      "explicacao": "Chave primária não aceita repetição; se já há valores repetidos, a restrição não é criada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `venda` (id_venda, data_venda, id_vendedor), a FK de id_vendedor se chama fk_venda_vendedor. Um aluno rodou `ALTER TABLE venda DROP FOREIGN KEY id_vendedor;` e recebeu erro. Por quê?",
+      "alternativas": [
+        "É preciso apagar a coluna id_vendedor antes",
+        "Chave estrangeira nunca pode ser removida",
+        "Faltou a palavra COLUMN depois de DROP",
+        "DROP FOREIGN KEY pede o nome da restrição, não o nome da coluna"
+      ],
+      "correta": 3,
+      "explicacao": "O certo seria DROP FOREIGN KEY fk_venda_vendedor. O nome da FK e o da coluna são coisas diferentes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A FK da tabela `venda` (id_venda, id_vendedor) foi criada sem dar nome com CONSTRAINT. Como descobrir o nome que o MySQL deu a ela?",
+      "alternativas": [
+        "Com SHOW CREATE TABLE venda; o nome aparece, por exemplo venda_ibfk_1",
+        "Com DESCRIBE venda; o nome aparece na coluna Key",
+        "Com SELECT * FROM venda; o nome aparece no cabeçalho",
+        "Não precisa: o nome é sempre igual ao da coluna"
+      ],
+      "correta": 0,
+      "explicacao": "Sem nome, o MySQL gera algo como tabela_ibfk_1. SHOW CREATE TABLE mostra a definição completa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `venda` (id_venda, data_venda, id_vendedor), foi rodado `ALTER TABLE venda DROP FOREIGN KEY fk_venda_vendedor;`. O que acontece com a coluna id_vendedor?",
+      "alternativas": [
+        "Ela é apagada junto com a chave estrangeira",
+        "As vendas que tinham vendedor são apagadas",
+        "Ela continua com seus valores; só deixa de existir a regra que a ligava à tabela vendedor",
+        "A tabela vendedor também é apagada"
+      ],
+      "correta": 2,
+      "explicacao": "DROP FOREIGN KEY remove só a regra. A coluna e os dados ficam, mas sem a proteção da integridade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, a tabela `consulta` (id_consulta, id_medico, data_consulta, id_paciente, valor) recebeu o índice `CREATE INDEX idx_med_data ON consulta (id_medico, data_consulta);`. Qual consulta mais se beneficia desse índice?",
+      "alternativas": [
+        "WHERE valor > 100",
+        "WHERE id_medico = 3 AND data_consulta = '2026-05-10'",
+        "WHERE id_paciente = 8",
+        "WHERE valor BETWEEN 50 AND 80"
+      ],
+      "correta": 1,
+      "explicacao": "O índice composto ajuda filtros que começam pela primeira coluna dele (id_medico), e melhor ainda com as duas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `setor` de uma pequena empresa tem só 20 linhas. Um colega quer criar índice na coluna nome para \"deixar rápido\". O que é correto dizer?",
+      "alternativas": [
+        "Em tabela tão pequena a diferença é mínima; índice compensa em tabelas grandes com buscas frequentes",
+        "O índice deixa a tabela 20 vezes mais rápida",
+        "Sem índice, o MySQL não consegue buscar por nome",
+        "Em tabela pequena o índice é obrigatório"
+      ],
+      "correta": 0,
+      "explicacao": "Ler 20 linhas já é instantâneo. O ganho do índice aparece quando há muitas linhas para percorrer."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando tem o mesmo efeito de `CREATE INDEX idx_nome ON aluno (nome);`, na tabela `aluno` (id_aluno, nome, turma)?",
+      "alternativas": [
+        "ALTER TABLE aluno MODIFY nome INDEX;",
+        "UPDATE aluno SET INDEX = nome;",
+        "ALTER TABLE aluno ADD COLUMN idx_nome INDEX;",
+        "ALTER TABLE aluno ADD INDEX idx_nome (nome);"
+      ],
+      "correta": 3,
+      "explicacao": "Índice também pode ser criado com ALTER TABLE ... ADD INDEX nome (coluna)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa assistência técnica, foi rodado `ALTER TABLE ordem_servico ADD CONSTRAINT fk_os_cliente FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente) ON DELETE CASCADE;`. O que acontece quando um cliente é apagado?",
+      "alternativas": [
+        "O cliente não pode ser apagado enquanto tiver ordens",
+        "As ordens de serviço desse cliente também são apagadas automaticamente",
+        "As ordens dele ficam com id_cliente NULL",
+        "Todas as ordens de serviço da tabela são apagadas"
+      ],
+      "correta": 1,
+      "explicacao": "ON DELETE CASCADE propaga a exclusão para as linhas filhas. Útil, mas perigoso se usado sem pensar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `categoria`, id_categoria é INT. Na tabela `produto`, a coluna id_categoria foi criada como VARCHAR(10). O que acontece ao acrescentar uma FK de produto.id_categoria para categoria(id_categoria)?",
+      "alternativas": [
+        "Funciona, e o MySQL converte os textos em número sozinho",
+        "Funciona, mas a FK só vale para números",
+        "Dá erro, porque as duas colunas precisam ter tipos compatíveis",
+        "Funciona e muda categoria.id_categoria para VARCHAR"
+      ],
+      "correta": 2,
+      "explicacao": "Coluna da FK e coluna referenciada precisam ter o mesmo tipo (INT com INT, por exemplo)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "restricao_com_duplicado",
+      "enunciado": "Numa escola, a tabela `aluno` (id_aluno, nome, email) tem dois alunos com o mesmo e-mail. O que acontece ao rodar `ALTER TABLE aluno ADD CONSTRAINT uq_aluno_email UNIQUE (email);`?",
+      "alternativas": [
+        "Funciona e apaga um dos alunos repetidos",
+        "Funciona e a regra só vale para os próximos cadastros",
+        "Funciona e troca o e-mail repetido por NULL",
+        "Dá erro de valor duplicado, e a restrição não é criada"
+      ],
+      "correta": 3,
+      "explicacao": "A restrição só é criada se os dados atuais já obedecem à regra. Antes, corrija os repetidos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a coluna id_cliente da tabela `pedido` (id_pedido, id_cliente, total) não tinha índice. Ao rodar ADD CONSTRAINT ... FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente), o que o MySQL (InnoDB) faz?",
+      "alternativas": [
+        "Cria automaticamente um índice em id_cliente, se ainda não houver um",
+        "Apaga o índice da chave primária de pedido",
+        "Copia a tabela cliente para dentro de pedido",
+        "Transforma id_cliente na chave primária de pedido"
+      ],
+      "correta": 0,
+      "explicacao": "O InnoDB exige índice na coluna da FK; se não existir, cria um. Isso também ajuda os JOIN."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, a tabela `aluno` vai receber uma regra na coluna cpf. Qual é a diferença entre adicionar `UNIQUE (cpf)` e `PRIMARY KEY (cpf)`?",
+      "alternativas": [
+        "UNIQUE permite repetição; PRIMARY KEY não",
+        "UNIQUE aceita NULL e pode haver vários por tabela; PRIMARY KEY não aceita NULL e só existe uma por tabela",
+        "São iguais, só muda o nome",
+        "PRIMARY KEY aceita NULL; UNIQUE não"
+      ],
+      "correta": 1,
+      "explicacao": "Os dois impedem repetição. A PK é única na tabela e nunca NULL; UNIQUE pode haver várias e aceitam NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `categoria` (id_categoria INT PRIMARY KEY, nome VARCHAR(40)) a coluna nome não tem índice. Foi rodado `ALTER TABLE produto ADD CONSTRAINT fk_prod_cat FOREIGN KEY (nome_categoria) REFERENCES categoria(nome);`. O que acontece?",
+      "alternativas": [
+        "Funciona, pois qualquer coluna pode ser referenciada",
+        "Funciona e transforma nome em chave primária de categoria",
+        "Dá erro, porque a coluna referenciada precisa ter índice (normalmente ser PRIMARY KEY ou UNIQUE)",
+        "Funciona, mas só para categorias cadastradas depois"
+      ],
+      "correta": 2,
+      "explicacao": "A FK precisa apontar para coluna indexada na tabela pai; o comum é apontar para a chave primária."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `cliente` de um aplicativo tem 1 milhão de linhas e a coluna ativo, que só vale 0 ou 1 (metade de cada). Criar um índice em ativo para `WHERE ativo = 1` vale a pena?",
+      "alternativas": [
+        "Vale muito: qualquer índice deixa a busca instantânea",
+        "É proibido criar índice em coluna de 0 e 1",
+        "Ajuda pouco: com só dois valores, o filtro ainda devolve metade da tabela",
+        "Vale, porque transforma ativo em chave única"
+      ],
+      "correta": 2,
+      "explicacao": "Índice rende quando o filtro separa poucas linhas. Coluna com poucos valores diferentes ganha pouco."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa agenda de clientes, a tabela `cliente` (id_cliente, nome, telefone) tem índice na coluna nome. Qual filtro pode aproveitar esse índice?",
+      "alternativas": [
+        "WHERE nome LIKE '%Ana'",
+        "WHERE nome LIKE 'Ana%'",
+        "WHERE nome LIKE '%Ana%'",
+        "WHERE UPPER(nome) = 'ANA'"
+      ],
+      "correta": 1,
+      "explicacao": "O índice é ordenado pelo começo do texto. Curinga no início ou função sobre a coluna impedem o uso dele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa central de senhas, a tabela `ticket` tem id_ticket INT AUTO_INCREMENT PRIMARY KEY. O que acontece ao rodar `ALTER TABLE ticket DROP PRIMARY KEY;`?",
+      "alternativas": [
+        "Dá erro, pois a coluna AUTO_INCREMENT precisa ser chave; antes é preciso tirar o AUTO_INCREMENT",
+        "Remove a chave e o AUTO_INCREMENT continua funcionando",
+        "Remove a chave primária e apaga a coluna id_ticket",
+        "Remove a chave e apaga as linhas repetidas"
+      ],
+      "correta": 0,
+      "explicacao": "No MySQL a coluna AUTO_INCREMENT deve ser chave. Primeiro MODIFY sem AUTO_INCREMENT, depois DROP PRIMARY KEY."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "indice_da_fk",
+      "enunciado": "Na tabela `pedido` (id_pedido, id_cliente, total), o índice idx_pedido_cliente é o único índice da coluna id_cliente, que tem uma FK para `cliente`. O que acontece ao rodar `DROP INDEX idx_pedido_cliente ON pedido;`?",
+      "alternativas": [
+        "Remove o índice e a FK também some",
+        "Remove o índice e apaga a coluna id_cliente",
+        "Remove o índice e os pedidos ficam sem cliente",
+        "Dá erro, porque o índice é necessário para a chave estrangeira; seria preciso remover a FK antes"
+      ],
+      "correta": 3,
+      "explicacao": "A FK precisa de um índice na coluna. Se ele é o único, o MySQL não deixa removê-lo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No depósito de uma loja, a tabela `produto` (id_produto, nome, estoque) tem um produto com estoque -3. O que acontece ao rodar `ALTER TABLE produto ADD CONSTRAINT chk_estoque CHECK (estoque >= 0);` no MySQL 8?",
+      "alternativas": [
+        "Funciona e corrige o -3 para 0",
+        "Funciona e a regra vale só para linhas novas",
+        "Dá erro, porque uma linha que já existe viola a regra",
+        "Funciona e apaga o produto com estoque negativo"
+      ],
+      "correta": 2,
+      "explicacao": "O MySQL confere os dados atuais ao acrescentar o CHECK. É preciso corrigir o estoque negativo antes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num curso livre, a tabela `matricula` tem as colunas id_aluno, id_turma e data_matricula, sem chave primária. Foi rodado `ALTER TABLE matricula ADD PRIMARY KEY (id_aluno, id_turma);`. Qual é o efeito?",
+      "alternativas": [
+        "O par (aluno, turma) não pode se repetir, mas o mesmo aluno pode estar em turmas diferentes",
+        "Nem id_aluno nem id_turma podem se repetir sozinhos",
+        "São criadas duas chaves primárias separadas",
+        "Só id_aluno vira chave; id_turma é ignorado"
+      ],
+      "correta": 0,
+      "explicacao": "Chave primária composta: o que não pode repetir é a combinação das duas colunas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma lanchonete tem a tabela `pedido` (id_pedido, data_pedido, total) com 500 mil linhas, e a tela de relatório sempre busca por data_pedido. Foi rodado `CREATE INDEX idx_pedido_data ON pedido (data_pedido);`.\n\nNa sua resposta:\n1. diga o que o comando faz;\n2. explique por que a busca por data tende a ficar mais rápida.",
+      "respostasAceitas": [
+        "Cria um índice na coluna data_pedido. Com ele, o MySQL vai direto nas linhas da data pedida, sem ler as 500 mil linhas uma a uma."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cria índice em data_pedido; 2) o índice funciona como atalho e evita ler a tabela inteira."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num sistema de cadastro, foi rodado `ALTER TABLE usuario ADD CONSTRAINT uq_usuario_email UNIQUE (email);` na tabela `usuario` (id_usuario, nome, email).\n\nNa sua resposta:\n1. diga o que a restrição passa a garantir;\n2. explique para que serve dar o nome uq_usuario_email a ela.",
+      "respostasAceitas": [
+        "Garante que não haverá dois usuários com o mesmo e-mail. O nome serve para identificar a regra em mensagens de erro e para removê-la depois."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) e-mail sem repetição; 2) o nome facilita achar/remover a restrição."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na biblioteca, há as tabelas `livro` (id_livro, titulo) e `emprestimo` (id_emprestimo, id_livro, data_saida). Foi rodado `ALTER TABLE emprestimo ADD CONSTRAINT fk_emprestimo_livro FOREIGN KEY (id_livro) REFERENCES livro(id_livro);`.\n\nNa sua resposta:\n1. diga quais tabelas o comando liga e por qual coluna;\n2. explique o que passa a ser impedido.",
+      "respostasAceitas": [
+        "Liga emprestimo a livro pela coluna id_livro. Passa a ser impedido registrar empréstimo de livro que não existe (e apagar livro que tem empréstimo)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) emprestimo.id_livro → livro.id_livro; 2) impede empréstimo de livro inexistente / livro com empréstimo ser apagado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de calçados, foi rodado `ALTER TABLE venda DROP FOREIGN KEY fk_venda_vendedor;` na tabela `venda` (id_venda, data_venda, id_vendedor).\n\nNa sua resposta:\n1. diga o que deixa de existir;\n2. diga o que continua na tabela;\n3. explique o risco que isso traz.",
+      "respostasAceitas": [
+        "Some a regra de chave estrangeira. A coluna id_vendedor e os dados continuam. Risco: passar a aceitar vendas com vendedor que não existe."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a restrição FK; 2) coluna e dados ficam; 3) perde a integridade (ids órfãos)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega quer colocar índice em todas as colunas do banco de uma loja, dizendo que assim \"tudo fica mais rápido\". Ele está certo?\n\nNa sua resposta:\n1. explique o que o índice custa para o banco;\n2. diga em que tipo de coluna vale a pena criar índice.",
+      "respostasAceitas": [
+        "Não. Índice ocupa espaço e deixa INSERT, UPDATE e DELETE mais lentos. Vale a pena em colunas muito usadas em WHERE, JOIN ou ORDER BY."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) espaço e escrita mais lenta; 2) colunas usadas em filtros/ligações frequentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A tabela `sala` de uma escola (codigo, bloco, capacidade) foi criada sem chave primária. Depois, foi rodado `ALTER TABLE sala ADD PRIMARY KEY (codigo);`.\n\nNa sua resposta:\n1. diga o que o comando passa a garantir na coluna codigo;\n2. explique por que toda tabela deve ter chave primária.",
+      "respostasAceitas": [
+        "Garante que codigo não se repete e nunca fica vazio (NULL). A chave primária identifica cada linha sem ambiguidade e permite que outras tabelas se liguem a ela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) único e não nulo; 2) identificar cada linha / servir de referência para FKs."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa distribuidora, o comando `ALTER TABLE item_pedido ADD CONSTRAINT fk_item_produto FOREIGN KEY (id_produto) REFERENCES produto(id_produto);` deu o erro \"Cannot add or update a child row: a foreign key constraint fails\".\n\nNa sua resposta:\n1. explique o que esse erro indica sobre os dados que já existem;\n2. diga duas formas de resolver antes de tentar de novo.",
+      "respostasAceitas": [
+        "Indica que há itens com id_produto que não existe na tabela produto (linhas órfãs). Para resolver: cadastrar os produtos que faltam ou corrigir/apagar esses itens; depois criar a FK."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) há linhas órfãs; 2) cadastrar o pai que falta ou corrigir/remover as linhas órfãs."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno tentou remover uma chave estrangeira com `ALTER TABLE venda DROP FOREIGN KEY id_vendedor;` e recebeu erro. A tabela é `venda` (id_venda, data_venda, id_vendedor).\n\nNa sua resposta:\n1. explique o engano do aluno;\n2. diga como ele pode descobrir o nome correto.",
+      "respostasAceitas": [
+        "Ele usou o nome da coluna, mas o DROP FOREIGN KEY pede o nome da restrição. O nome aparece em SHOW CREATE TABLE venda (ex.: venda_ibfk_1)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) confundiu coluna com restrição; 2) SHOW CREATE TABLE mostra o nome."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa assistência técnica, a FK de `ordem_servico` para `cliente` foi recriada com `... REFERENCES cliente(id_cliente) ON DELETE CASCADE;`.\n\nNa sua resposta:\n1. explique o que acontece quando um cliente é apagado;\n2. diga um risco dessa escolha.",
+      "respostasAceitas": [
+        "Ao apagar um cliente, todas as ordens de serviço dele são apagadas junto. Risco: um DELETE errado num cliente apaga também todo o histórico de serviços."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) exclusão em cascata das filhas; 2) perda de histórico por engano."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No estacionamento, um colega ficou em dúvida entre `CREATE INDEX idx_placa ON veiculo (placa);` e `CREATE UNIQUE INDEX idx_placa ON veiculo (placa);` na tabela `veiculo` (id_veiculo, placa, modelo).\n\nNa sua resposta:\n1. diga o que os dois têm em comum;\n2. explique o que o UNIQUE acrescenta;\n3. diga qual faz mais sentido para placa e por quê.",
+      "respostasAceitas": [
+        "Os dois aceleram buscas por placa. O UNIQUE também impede placas repetidas. Para placa faz mais sentido o UNIQUE, pois cada veículo tem uma placa só."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ambos aceleram a busca; 2) UNIQUE impede repetição; 3) UNIQUE, pois placa não se repete."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma estufa automatizada grava a leitura de 50 sensores a cada segundo na tabela `leitura` (id_leitura, id_sensor, valor, momento). Um colega quer acrescentar 6 índices nela.\n\nNa sua resposta:\n1. explique por que essa tabela pede cuidado com índices;\n2. diga como escolher quais índices manter.",
+      "respostasAceitas": [
+        "A tabela recebe muitos INSERT, e cada índice precisa ser atualizado a cada gravação, deixando tudo mais lento. Manter só os índices das buscas realmente usadas (ex.: id_sensor e momento)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) muita escrita = custo alto de índices; 2) só índices para as consultas frequentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de bicicletas, foi rodado `ALTER TABLE produto ADD CONSTRAINT chk_preco CHECK (preco > 0);` no MySQL 8, na tabela `produto` (id_produto, nome, preco).\n\nNa sua resposta:\n1. diga o que a regra garante;\n2. explique o que aconteceria se já existisse produto com preço 0.",
+      "respostasAceitas": [
+        "Garante que nenhum produto tenha preço zero ou negativo. Se já houvesse produto com preço 0, o ALTER daria erro e a regra não seria criada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) preço sempre maior que zero; 2) dados atuais violando = erro no ALTER."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa clínica, a tabela `consulta` (id_consulta, id_medico, data_consulta, valor) tem o índice `CREATE INDEX idx_med_data ON consulta (id_medico, data_consulta);`. Um relatório filtra só por `WHERE data_consulta = '2026-05-10'` e continua lento.\n\nNa sua resposta:\n1. explique por que esse índice ajuda pouco nesse filtro;\n2. diga quais filtros aproveitam bem o índice;\n3. diga uma saída para o relatório.",
+      "respostasAceitas": [
+        "O índice composto é ordenado primeiro por id_medico; filtrando só pela segunda coluna, o MySQL não consegue usá-lo direito. Ele serve para filtros por id_medico ou por id_medico + data. Saída: criar um índice só em data_consulta."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) regra do prefixo à esquerda; 2) id_medico ou id_medico + data; 3) índice próprio em data_consulta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "indice_da_fk",
+      "enunciado": "Na tabela `pedido` (id_pedido, id_cliente, total), o índice idx_pedido_cliente é o único da coluna id_cliente, que tem chave estrangeira para `cliente`. O comando `DROP INDEX idx_pedido_cliente ON pedido;` deu erro.\n\nNa sua resposta:\n1. explique por que o MySQL não deixou remover o índice;\n2. diga o que precisaria ser feito para removê-lo.",
+      "respostasAceitas": [
+        "A chave estrangeira precisa de um índice na coluna id_cliente; como ele é o único, não pode sair. Seria preciso remover a FK antes (ou criar outro índice que comece por id_cliente)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) índice exigido pela FK; 2) remover a FK antes ou ter outro índice na coluna."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, a tabela `venda` (id_venda, data_venda, total) tem índice em data_venda. Mesmo assim, a consulta `SELECT * FROM venda WHERE YEAR(data_venda) = 2026;` lê a tabela inteira, enquanto `... WHERE data_venda BETWEEN '2026-01-01' AND '2026-12-31';` é rápida.\n\nNa sua resposta:\n1. explique por que a versão com YEAR() não aproveita o índice;\n2. explique por que a versão com BETWEEN aproveita.",
+      "respostasAceitas": [
+        "Com YEAR(data_venda), o MySQL precisa calcular a função em cada linha antes de comparar, então não usa o índice. Com BETWEEN, a coluna fica pura e o índice acha direto o intervalo de datas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) função na coluna impede o uso do índice; 2) intervalo sobre a coluna pura usa o índice."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa gráfica, a tabela `rascunho` (id_rascunho, texto) foi apagada com `DROP TABLE rascunho;`. Logo depois, alguém roda `SELECT * FROM rascunho;`. O que acontece?",
+      "alternativas": [
+        "Aparece a tabela vazia, só com as colunas",
+        "Dá erro dizendo que a tabela não existe",
+        "Aparecem os dados antigos, que ficaram guardados",
+        "Aparecem só os nomes das colunas, sem linhas"
+      ],
+      "correta": 1,
+      "explicacao": "DROP TABLE remove a tabela inteira; ela deixa de existir no banco."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "drop_if_exists",
+      "enunciado": "Num script de instalação, aparece a linha `DROP TABLE IF EXISTS teste;`. O que ela faz?",
+      "alternativas": [
+        "Apaga só as linhas da tabela teste, se houver linhas",
+        "Cria a tabela teste se ela não existir",
+        "Pergunta ao usuário se a tabela deve ser apagada",
+        "Apaga a tabela teste se ela existir; se não existir, só gera um aviso, sem erro"
+      ],
+      "correta": 3,
+      "explicacao": "IF EXISTS evita o erro de tabela inexistente: o script segue em frente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num portal de notícias da escola, a tabela `log_acesso` (id_log, pagina, data_acesso) tem 2 milhões de linhas. O que faz `TRUNCATE TABLE log_acesso;`?",
+      "alternativas": [
+        "Apaga a tabela inteira, estrutura e dados",
+        "Apaga todas as linhas e mantém a tabela com as mesmas colunas",
+        "Apaga só a última linha inserida",
+        "Apaga as colunas que estão vazias"
+      ],
+      "correta": 1,
+      "explicacao": "TRUNCATE esvazia a tabela; a estrutura continua pronta para receber dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `log_acesso` (id_log, pagina, data_acesso) guarda acessos de vários anos. Qual comando apaga SÓ os acessos de 2024?",
+      "alternativas": [
+        "DELETE FROM log_acesso WHERE YEAR(data_acesso) = 2024;",
+        "TRUNCATE TABLE log_acesso WHERE YEAR(data_acesso) = 2024;",
+        "DROP TABLE log_acesso WHERE YEAR(data_acesso) = 2024;",
+        "ALTER TABLE log_acesso DROP ROWS 2024;"
+      ],
+      "correta": 0,
+      "explicacao": "Só o DELETE aceita WHERE. TRUNCATE e DROP não filtram: agem na tabela toda."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa floricultura, a tabela se chama `prod` e deve passar a se chamar `produto`. Qual comando faz isso?",
+      "alternativas": [
+        "RENAME prod AS produto TABLE;",
+        "ALTER prod RENAME produto;",
+        "UPDATE TABLE prod SET nome = 'produto';",
+        "RENAME TABLE prod TO produto;"
+      ],
+      "correta": 3,
+      "explicacao": "RENAME TABLE antigo TO novo troca o nome da tabela; os dados continuam."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num delivery, há as tabelas `cliente` (id_cliente, nome) e `pedido` (id_pedido, id_cliente), e pedido.id_cliente é chave estrangeira para cliente. Para apagar as duas tabelas, qual é a ordem certa?",
+      "alternativas": [
+        "Primeiro cliente, depois pedido",
+        "Qualquer ordem funciona",
+        "Primeiro pedido, depois cliente",
+        "Nenhuma das duas pode ser apagada"
+      ],
+      "correta": 2,
+      "explicacao": "Apaga-se primeiro a tabela filha (que tem a FK). Depois a pai fica livre para ser apagada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O comando TRUNCATE TABLE é classificado em qual grupo do SQL?",
+      "alternativas": [
+        "DML, igual ao DELETE",
+        "DCL, pois mexe em permissões",
+        "DDL, pois esvazia a tabela recriando-a vazia",
+        "DQL, pois consulta a tabela"
+      ],
+      "correta": 2,
+      "explicacao": "Apesar de apagar dados, o TRUNCATE é DDL: recria a tabela vazia e não pode ser desfeito com ROLLBACK."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No banco de um curso de férias, existem as tabelas `tmp_inscricao` e `tmp_pagamento`, usadas só em testes e sem ligação entre si. O que faz `DROP TABLE tmp_inscricao, tmp_pagamento;`?",
+      "alternativas": [
+        "Apaga só a primeira tabela da lista",
+        "Apaga as duas tabelas no mesmo comando",
+        "Apaga só as linhas das duas tabelas",
+        "Dá erro, pois DROP TABLE aceita uma tabela por vez"
+      ],
+      "correta": 1,
+      "explicacao": "DROP TABLE aceita uma lista de tabelas separadas por vírgula."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um estagiário rodou `DROP TABLE cliente;` por engano no banco de uma loja. Como recuperar os dados?",
+      "alternativas": [
+        "Só restaurando um backup feito antes do DROP",
+        "Rodando UNDROP TABLE cliente;",
+        "Rodando SELECT * FROM lixeira.cliente;",
+        "Rodando CREATE TABLE cliente de novo, que traz os dados de volta"
+      ],
+      "correta": 0,
+      "explicacao": "Não existe 'desfazer' para DROP TABLE. Sem backup, os dados são perdidos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de apagar algumas tabelas do banco `escola`, o professor quer ver a lista das tabelas que sobraram. Qual comando mostra isso?",
+      "alternativas": [
+        "DESCRIBE DATABASE escola;",
+        "SELECT TABLES;",
+        "SHOW COLUMNS;",
+        "SHOW TABLES;"
+      ],
+      "correta": 3,
+      "explicacao": "SHOW TABLES lista as tabelas do banco em uso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No banco `escola`, que tem as tabelas aluno, turma e aula, qual comando remove SÓ a tabela aula (estrutura e dados), sem mexer nas outras?",
+      "alternativas": [
+        "DROP DATABASE escola;",
+        "DELETE FROM aula;",
+        "DROP TABLE aula;",
+        "TRUNCATE DATABASE aula;"
+      ],
+      "correta": 2,
+      "explicacao": "DROP TABLE remove uma tabela. DROP DATABASE apagaria o banco inteiro; DELETE só apaga as linhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No banco de uma loja, qual destes comandos exige MAIS cuidado antes de ser executado?",
+      "alternativas": [
+        "SELECT * FROM cliente;",
+        "DROP TABLE cliente;",
+        "DESCRIBE cliente;",
+        "SHOW TABLES;"
+      ],
+      "correta": 1,
+      "explicacao": "DROP TABLE apaga estrutura e dados de vez. Os outros só mostram informações."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Comparando `RENAME TABLE func TO funcionario;` com `ALTER TABLE func RENAME TO funcionario;`, o que é correto afirmar?",
+      "alternativas": [
+        "Nenhuma no resultado: os dois trocam o nome da tabela",
+        "O RENAME TABLE apaga os dados; o ALTER não",
+        "O ALTER TABLE cria uma cópia; o RENAME não",
+        "O RENAME TABLE só funciona em tabela vazia"
+      ],
+      "correta": 0,
+      "explicacao": "Duas formas de fazer a mesma coisa. RENAME TABLE também permite renomear várias de uma vez."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `teste_carga` (id, valor) tem 5 milhões de linhas de teste que não servem mais, e a tabela vai continuar sendo usada. Qual comando costuma esvaziá-la mais rápido?",
+      "alternativas": [
+        "DELETE FROM teste_carga;",
+        "UPDATE teste_carga SET valor = NULL;",
+        "DROP TABLE teste_carga;",
+        "TRUNCATE TABLE teste_carga;"
+      ],
+      "correta": 3,
+      "explicacao": "TRUNCATE recria a tabela vazia em vez de apagar linha por linha. DROP apagaria a tabela, que ainda será usada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "autoinc_esvaziar",
+      "enunciado": "Num posto de saúde, a tabela `senha` tem id_senha INT AUTO_INCREMENT e já chegou ao id 80. A tabela foi esvaziada com TRUNCATE (`TRUNCATE TABLE senha;`). Qual id recebe a próxima senha inserida?",
+      "alternativas": [
+        "1",
+        "81",
+        "80",
+        "0"
+      ],
+      "correta": 0,
+      "explicacao": "TRUNCATE recria a tabela e zera o contador do AUTO_INCREMENT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "autoinc_esvaziar",
+      "enunciado": "Num posto de saúde, a tabela `senha` tem id_senha INT AUTO_INCREMENT e já chegou ao id 80. A tabela foi esvaziada com DELETE sem WHERE (`DELETE FROM senha;`). Qual id recebe a próxima senha inserida?",
+      "alternativas": [
+        "1",
+        "81",
+        "80",
+        "0"
+      ],
+      "correta": 1,
+      "explicacao": "DELETE apaga as linhas, mas o contador do AUTO_INCREMENT continua de onde parou."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "drop_tabela_pai",
+      "enunciado": "Numa loja de material de construção, a tabela `produto` (id_produto, nome, id_categoria) tem chave estrangeira para `categoria` (id_categoria, nome). O que acontece ao rodar `DROP TABLE categoria;`?",
+      "alternativas": [
+        "Apaga categoria, e os produtos ficam com ids sem correspondência",
+        "Apaga categoria e produto juntas",
+        "Apaga categoria e coloca NULL em produto.id_categoria",
+        "Dá erro, porque produto tem chave estrangeira que aponta para categoria"
+      ],
+      "correta": 3,
+      "explicacao": "O MySQL não deixa apagar uma tabela pai enquanto outra tabela a referencia por FK."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num curso, a tabela `matricula` (id_matricula, id_aluno, id_turma) tem chaves estrangeiras para `aluno` (id_aluno, nome) e para `turma` (id_turma, nome). Qual sequência apaga as três tabelas sem erro?",
+      "alternativas": [
+        "DROP TABLE aluno; DROP TABLE turma; DROP TABLE matricula;",
+        "DROP TABLE turma; DROP TABLE matricula; DROP TABLE aluno;",
+        "DROP TABLE matricula; DROP TABLE aluno; DROP TABLE turma;",
+        "DROP TABLE aluno; DROP TABLE matricula; DROP TABLE turma;"
+      ],
+      "correta": 2,
+      "explicacao": "A tabela que tem as FKs (matricula) sai primeiro; depois aluno e turma ficam livres."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um script que monta o banco de uma escola começa com várias linhas `DROP TABLE IF EXISTS ...;` antes dos CREATE TABLE. Por que usar IF EXISTS ali?",
+      "alternativas": [
+        "Para apagar só as tabelas vazias",
+        "Para o script rodar sem erro também na primeira vez, quando as tabelas ainda não existem",
+        "Para guardar uma cópia das tabelas antes de apagar",
+        "Para impedir que as tabelas sejam apagadas"
+      ],
+      "correta": 1,
+      "explicacao": "Sem IF EXISTS, o primeiro DROP de uma tabela inexistente daria erro e pararia o script."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sistema montou a tabela `cliente_novo` com os dados corrigidos. Foi rodado `RENAME TABLE cliente TO cliente_antigo, cliente_novo TO cliente;`. Qual é o resultado?",
+      "alternativas": [
+        "As tabelas trocam de lugar: a antiga vira cliente_antigo e a nova passa a se chamar cliente",
+        "Os dados de cliente_novo são copiados para cliente",
+        "Dá erro, pois só se renomeia uma tabela por comando",
+        "As duas tabelas são juntadas numa só chamada cliente"
+      ],
+      "correta": 0,
+      "explicacao": "RENAME TABLE aceita várias trocas no mesmo comando; útil para trocar uma tabela pela outra de uma vez."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `produto` (id_produto, nome, preco) tem o índice idx_produto_nome e chave primária em id_produto. Foi rodado `DROP TABLE produto;`. O que acontece com os índices dessa tabela?",
+      "alternativas": [
+        "Ficam guardados para uma tabela com o mesmo nome",
+        "Passam para outra tabela do banco",
+        "São apagados junto com a tabela",
+        "Continuam e podem ser usados em outras consultas"
+      ],
+      "correta": 2,
+      "explicacao": "Índices pertencem à tabela: com o DROP TABLE, somem estrutura, dados, índices e restrições."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "drop_if_exists",
+      "enunciado": "A tabela `pedido` não existe no banco. O que acontece ao rodar `DROP TABLE pedido;` (sem IF EXISTS)?",
+      "alternativas": [
+        "Só aparece um aviso e o comando segue",
+        "O MySQL cria a tabela e depois apaga",
+        "Nada, o comando é ignorado sem mensagem",
+        "Dá erro de tabela desconhecida (Unknown table)"
+      ],
+      "correta": 3,
+      "explicacao": "Sem IF EXISTS, apagar tabela inexistente é erro; com IF EXISTS vira só um aviso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em qual situação o TRUNCATE TABLE é a melhor escolha?",
+      "alternativas": [
+        "Apagar só os clientes inativos",
+        "Esvaziar a tabela de testes antes de uma nova rodada, recomeçando a numeração",
+        "Remover uma tabela que não será mais usada",
+        "Trocar o nome de uma tabela"
+      ],
+      "correta": 1,
+      "explicacao": "TRUNCATE: apagar todas as linhas e manter a tabela. Para filtrar, DELETE; para sumir com a tabela, DROP."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de `RENAME TABLE func TO funcionario;`, o programa da empresa continua rodando `SELECT * FROM func;`. O que acontece?",
+      "alternativas": [
+        "Dá erro, pois a tabela func não existe mais com esse nome",
+        "Funciona, pois o MySQL guarda o nome antigo como apelido",
+        "Funciona, mas mostra a tabela vazia",
+        "Funciona só para leitura"
+      ],
+      "correta": 0,
+      "explicacao": "O MySQL não guarda apelido do nome antigo. Programas e consultas precisam ser ajustados ao novo nome."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando esvazia a tabela `carrinho` (id_item INT AUTO_INCREMENT, produto, qtd), mantém a tabela e faz a numeração recomeçar do 1?",
+      "alternativas": [
+        "DELETE FROM carrinho;",
+        "DROP TABLE carrinho;",
+        "TRUNCATE TABLE carrinho;",
+        "ALTER TABLE carrinho DROP ALL;"
+      ],
+      "correta": 2,
+      "explicacao": "Só o TRUNCATE esvazia e zera o AUTO_INCREMENT. DELETE mantém o contador; DROP apaga a tabela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num curso, a tabela `matricula` (id_matricula, id_aluno) tem chave estrangeira para `aluno` (id_aluno, nome). Foi rodado `DROP TABLE matricula;`. O que acontece com a tabela aluno?",
+      "alternativas": [
+        "Os alunos que tinham matrícula são apagados",
+        "A tabela aluno também é apagada",
+        "A tabela aluno fica bloqueada para novos cadastros",
+        "Nada: aluno continua com todos os dados; só a tabela matricula some"
+      ],
+      "correta": 3,
+      "explicacao": "Apagar a tabela filha não afeta a pai. A FK que existia some junto com a filha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `produto` (id_produto, nome, preco) tem o índice idx_produto_nome. Foi rodado `DROP INDEX idx_produto_nome ON produto;`. O que acontece com os dados?",
+      "alternativas": [
+        "A coluna nome é apagada",
+        "Continuam todos; só some o atalho de busca, e buscas por nome podem ficar mais lentas",
+        "Os produtos são apagados",
+        "A tabela produto é apagada"
+      ],
+      "correta": 1,
+      "explicacao": "Índice é uma estrutura auxiliar. Removê-lo não apaga dados, só tira o ganho de velocidade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No banco de uma loja de brinquedos, a tabela `promocao_natal_2020` (id_promocao, descricao, desconto) não é mais usada por nenhuma parte do sistema, e nenhuma outra tabela aponta para ela. Qual comando é o mais adequado para tirá-la do banco?",
+      "alternativas": [
+        "TRUNCATE TABLE promocao_natal_2020;",
+        "DELETE FROM promocao_natal_2020;",
+        "ALTER TABLE promocao_natal_2020 DROP COLUMN descricao;",
+        "DROP TABLE promocao_natal_2020;"
+      ],
+      "correta": 3,
+      "explicacao": "Para eliminar a tabela de vez (estrutura e dados), usa-se DROP TABLE. TRUNCATE e DELETE deixam a tabela vazia, mas ela continua existindo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `categoria` (id_categoria, nome) é referenciada por chave estrangeira da tabela `produto`, que hoje está vazia. O que acontece ao rodar `TRUNCATE TABLE categoria;` no MySQL 8?",
+      "alternativas": [
+        "Funciona, porque produto está vazia",
+        "Funciona e apaga também a tabela produto",
+        "Dá erro, porque categoria é referenciada por chave estrangeira de outra tabela",
+        "Funciona e desliga a chave estrangeira"
+      ],
+      "correta": 2,
+      "explicacao": "O InnoDB não faz TRUNCATE em tabela referenciada por FK de outra tabela, mesmo sem filhas. Um DELETE funcionaria."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num sistema de compras, foi aberto `START TRANSACTION;`. Qual destes comandos pode ser desfeito depois com ROLLBACK?",
+      "alternativas": [
+        "DELETE FROM carrinho;",
+        "TRUNCATE TABLE carrinho;",
+        "DROP TABLE carrinho;",
+        "ALTER TABLE carrinho DROP COLUMN qtd;"
+      ],
+      "correta": 0,
+      "explicacao": "DELETE é DML e respeita a transação. TRUNCATE, DROP e ALTER são DDL: confirmam a transação sozinhos (commit implícito)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para apagar a tabela `categoria`, referenciada pela FK de `produto`, um colega rodou `SET FOREIGN_KEY_CHECKS = 0;` e depois `DROP TABLE categoria;`. Qual é a consequência?",
+      "alternativas": [
+        "Dá erro do mesmo jeito",
+        "A tabela é apagada, mas produto fica com id_categoria apontando para categorias que não existem",
+        "A tabela produto também é apagada",
+        "Os produtos recebem NULL em id_categoria"
+      ],
+      "correta": 1,
+      "explicacao": "Desligar a checagem permite o DROP, mas quebra a integridade: os dados de produto ficam órfãos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL, os bancos `loja` e `arquivo` estão no mesmo servidor. Foi rodado `RENAME TABLE loja.venda_2020 TO arquivo.venda_2020;`. Qual é o resultado?",
+      "alternativas": [
+        "A tabela é movida, com os dados, do banco loja para o banco arquivo",
+        "Dá erro: RENAME TABLE não aceita nome de banco",
+        "Uma cópia é feita em arquivo, e a original fica em loja",
+        "Só a estrutura vai para arquivo; os dados ficam em loja"
+      ],
+      "correta": 0,
+      "explicacao": "RENAME TABLE com o nome do banco na frente move a tabela entre bancos do mesmo servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `produto` tem FK em id_categoria apontando para `categoria`. Foi rodado `RENAME TABLE categoria TO categoria_produto;`. O que acontece com a FK de produto?",
+      "alternativas": [
+        "É apagada automaticamente",
+        "Passa a dar erro em todo INSERT de produto",
+        "Continua funcionando, agora apontando para categoria_produto",
+        "Dá erro, porque não se renomeia tabela referenciada"
+      ],
+      "correta": 2,
+      "explicacao": "O InnoDB atualiza sozinho as FKs que apontam para a tabela renomeada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "drop_tabela_pai",
+      "enunciado": "A tabela `produto` tem uma FK para `categoria` com ON DELETE CASCADE. O que acontece ao rodar `DROP TABLE categoria;`?",
+      "alternativas": [
+        "Apaga categoria e, em cascata, a tabela produto",
+        "Apaga categoria e os produtos ligados a ela",
+        "Apaga categoria e deixa id_categoria NULL em produto",
+        "Dá erro mesmo assim: o CASCADE vale para DELETE de linhas, não para DROP TABLE"
+      ],
+      "correta": 3,
+      "explicacao": "ON DELETE CASCADE só age quando linhas da pai são apagadas com DELETE. Apagar a tabela pai continua proibido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `categoria` existe e é referenciada pela FK de `produto`. Um colega rodou `DROP TABLE IF EXISTS categoria;` achando que o IF EXISTS evitaria qualquer problema. O que acontece?",
+      "alternativas": [
+        "Apaga categoria sem erro, por causa do IF EXISTS",
+        "Não faz nada e mostra só um aviso",
+        "Apaga categoria e produto",
+        "Dá erro, pois o IF EXISTS só evita o erro de tabela inexistente, não o da FK"
+      ],
+      "correta": 3,
+      "explicacao": "IF EXISTS trata só a ausência da tabela. A proteção da chave estrangeira continua valendo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa agenda escolar, a tabela `compromisso` (id_compromisso, titulo, data_hora) tem vários registros. Explique a diferença entre `DROP TABLE compromisso;` e `TRUNCATE TABLE compromisso;`.\n\nNa sua resposta:\n1. diga o que sobra depois do DROP TABLE;\n2. diga o que sobra depois do TRUNCATE TABLE.",
+      "respostasAceitas": [
+        "Depois do DROP não sobra nada: a tabela deixa de existir. Depois do TRUNCATE a tabela continua, com as colunas, mas sem nenhuma linha."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) DROP apaga estrutura e dados; 2) TRUNCATE apaga só as linhas e mantém a estrutura."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num script que prepara o banco de uma loja, aparece a linha `DROP TABLE IF EXISTS teste_importacao;`.\n\nNa sua resposta:\n1. diga o que a linha faz;\n2. explique por que o IF EXISTS é útil em scripts.",
+      "respostasAceitas": [
+        "Apaga a tabela teste_importacao, se ela existir. O IF EXISTS evita erro quando a tabela não existe, e o script não para no meio."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) remove a tabela se existir; 2) evita erro/interrupção do script."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O professor avisou: \"nunca rode `DROP TABLE cliente;` no banco de produção sem pensar duas vezes\".\n\nNa sua resposta:\n1. diga o que se perde com esse comando;\n2. cite um cuidado a tomar antes de executá-lo.",
+      "respostasAceitas": [
+        "Perde a tabela inteira: estrutura, dados e índices, sem como desfazer. Antes, ter um backup atualizado e conferir que está no banco certo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) tudo da tabela, de forma definitiva; 2) backup / conferir o banco e a tabela."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa empresa de limpeza, foi rodado `RENAME TABLE func TO funcionario;`.\n\nNa sua resposta:\n1. diga o que muda no banco;\n2. diga o que acontece com os dados;\n3. explique o que precisa ser ajustado no sistema que usa o banco.",
+      "respostasAceitas": [
+        "Muda só o nome da tabela, de func para funcionario. Os dados continuam iguais. As consultas e programas que usavam func precisam passar a usar funcionario."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) troca o nome; 2) dados mantidos; 3) ajustar consultas/programas ao nome novo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Para esvaziar a tabela `carrinho` de uma loja virtual, um colega usa `DELETE FROM carrinho;` e outro usa `TRUNCATE TABLE carrinho;`.\n\nNa sua resposta:\n1. diga o que os dois comandos têm em comum;\n2. cite uma diferença entre eles.",
+      "respostasAceitas": [
+        "Os dois apagam todas as linhas e mantêm a tabela. Diferença: o TRUNCATE zera o AUTO_INCREMENT e é mais rápido; o DELETE aceita WHERE e pode ser desfeito com ROLLBACK."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) esvaziam a tabela; 2) uma diferença: AUTO_INCREMENT, velocidade, WHERE ou ROLLBACK."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num delivery, a tabela `pedido` (id_pedido, id_cliente) tem chave estrangeira para `cliente` (id_cliente, nome). As duas tabelas serão apagadas.\n\nNa sua resposta:\n1. diga qual tabela deve ser apagada primeiro;\n2. explique por quê.",
+      "respostasAceitas": [
+        "Primeiro pedido, depois cliente. Pedido tem a FK que depende de cliente; enquanto ela existir, o MySQL não deixa apagar cliente."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a filha (pedido); 2) a FK da filha impede apagar a pai."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "drop_tabela_pai",
+      "enunciado": "Ao rodar `DROP TABLE categoria;`, o MySQL mostrou: \"Cannot drop table 'categoria' referenced by a foreign key constraint 'fk_produto_categoria' on table 'produto'\".\n\nNa sua resposta:\n1. explique com suas palavras o que a mensagem diz;\n2. explique por que o MySQL protege a tabela;\n3. diga o que precisaria ser feito antes para apagá-la.",
+      "respostasAceitas": [
+        "A tabela produto tem uma FK que aponta para categoria. Se categoria sumisse, os produtos ficariam ligados a categorias inexistentes. Antes, apagar produto ou remover a FK fk_produto_categoria."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) categoria é referenciada por FK de produto; 2) evitar dados órfãos; 3) remover a FK ou a tabela filha antes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "autoinc_esvaziar",
+      "enunciado": "A tabela `senha` de um posto de saúde tem id_senha INT AUTO_INCREMENT e chegou ao id 80. No fim do dia, a tabela é esvaziada para o dia seguinte.\n\nNa sua resposta:\n1. diga qual será o próximo id se o esvaziamento for feito com TRUNCATE;\n2. diga qual será o próximo id se for feito com DELETE sem WHERE;\n3. diga qual dos dois combina com senhas que recomeçam do 1 a cada dia.",
+      "respostasAceitas": [
+        "Com TRUNCATE, o próximo id é 1. Com DELETE, é 81, porque o contador não volta. Para recomeçar do 1 todo dia, o TRUNCATE."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 1; 2) 81; 3) TRUNCATE."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num script de reset do banco de um curso, os DROP aparecem na ordem `matricula`, `aluno`, `turma`, e depois os CREATE na ordem `aluno`, `turma`, `matricula`. A tabela matricula tem FKs para aluno e turma.\n\nNa sua resposta:\n1. explique por que matricula é a primeira a ser apagada;\n2. explique por que matricula é a última a ser recriada.",
+      "respostasAceitas": [
+        "Matricula é apagada primeiro porque as FKs dela impedem apagar aluno e turma. Ela é recriada por último porque as FKs precisam que aluno e turma já existam."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a filha sai antes por causa das FKs; 2) a filha entra depois porque referencia as pais."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma loja montou a tabela `preco_novo` com a tabela de preços atualizada e, na virada do mês, rodou `RENAME TABLE preco TO preco_antigo, preco_novo TO preco;`.\n\nNa sua resposta:\n1. diga o que o comando faz com as duas tabelas;\n2. explique a vantagem de fazer as duas trocas num comando só.",
+      "respostasAceitas": [
+        "A tabela atual vira preco_antigo e a nova passa a se chamar preco. Num comando só, a troca acontece de uma vez: o sistema nunca fica sem uma tabela preco, e a antiga fica guardada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) troca os nomes das duas; 2) troca instantânea, sem intervalo sem tabela, e cópia antiga preservada."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A tabela `log_sistema` (id_log, mensagem, data_log) está muito grande. A equipe precisa apagar os registros antigos, mas manter os dos últimos 30 dias.\n\nNa sua resposta:\n1. diga qual comando serve: TRUNCATE TABLE ou DELETE com WHERE;\n2. explique por que o outro não serve nesse caso.",
+      "respostasAceitas": [
+        "DELETE com WHERE, filtrando as datas antigas. O TRUNCATE não aceita filtro: apagaria também os registros dos últimos 30 dias."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) DELETE com WHERE; 2) TRUNCATE apaga tudo, sem filtro."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um estagiário queria apagar os e-mails dos clientes e rodou `ALTER TABLE cliente DROP COLUMN email;` na tabela `cliente` (id_cliente, nome, email).\n\nNa sua resposta:\n1. explique o que realmente aconteceu com a tabela;\n2. diga que tipo de comando faria só limpar os e-mails, mantendo a coluna.",
+      "respostasAceitas": [
+        "A coluna email foi removida da estrutura, junto com todos os valores; a tabela não tem mais onde guardar e-mail. Para só limpar os valores, um UPDATE (DML) colocando NULL na coluna."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a coluna sumiu da estrutura; 2) UPDATE ... SET email = NULL (DML)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Para apagar a tabela `categoria`, referenciada pela FK de `produto`, um colega rodou `SET FOREIGN_KEY_CHECKS = 0;` e em seguida `DROP TABLE categoria;`.\n\nNa sua resposta:\n1. explique o que o SET FOREIGN_KEY_CHECKS = 0 faz;\n2. explique o problema que fica nos dados de produto;\n3. diga uma forma mais segura de agir.",
+      "respostasAceitas": [
+        "Desliga a verificação de chaves estrangeiras, por isso o DROP funciona. Os produtos ficam com id_categoria apontando para categorias que não existem (dados órfãos). Mais seguro: remover a FK ou tratar os produtos primeiro, com a checagem ligada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) desliga a checagem de FK; 2) dados órfãos; 3) remover FK/tratar filhas antes, sem desligar a proteção."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num sistema de compras, foi executado `START TRANSACTION;`, depois `TRUNCATE TABLE carrinho;`, e em seguida `ROLLBACK;`. Os itens do carrinho não voltaram.\n\nNa sua resposta:\n1. explique por que o ROLLBACK não desfez o TRUNCATE;\n2. diga qual comando, nessa situação, poderia ser desfeito.",
+      "respostasAceitas": [
+        "TRUNCATE é DDL e faz commit implícito: a operação é confirmada na hora, fora do controle da transação. Um DELETE FROM carrinho (DML) poderia ser desfeito com ROLLBACK."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) DDL confirma sozinho (commit implícito); 2) DELETE pode ser desfeito."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — ALTER TABLE, índices e DROP",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A tabela `categoria` é referenciada pela FK de `produto`, que está vazia. `DELETE FROM categoria;` funcionou, mas `TRUNCATE TABLE categoria;` deu erro.\n\nNa sua resposta:\n1. explique por que o DELETE funcionou;\n2. explique por que o TRUNCATE foi recusado mesmo sem produtos.",
+      "respostasAceitas": [
+        "O DELETE apaga linha por linha e confere a FK em cada uma; como nenhum produto aponta para elas, pode apagar. O TRUNCATE recria a tabela sem olhar linha por linha, então o MySQL recusa em qualquer tabela referenciada por FK de outra tabela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) DELETE checa cada linha e não há filhas; 2) TRUNCATE é recusado em tabela referenciada, independentemente dos dados."
+    }
+  ]
+}

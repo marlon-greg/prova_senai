@@ -1,0 +1,2464 @@
+{
+  "nome": "Banco de Dados — DDL: CREATE, USE e DROP DATABASE (a revisar)",
+  "materia": "Banco de Dados",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quais comandos fazem parte da DDL (Linguagem de Definição de Dados)?",
+      "alternativas": [
+        "INSERT, UPDATE e DELETE",
+        "CREATE, ALTER e DROP",
+        "GRANT e REVOKE",
+        "COMMIT e ROLLBACK"
+      ],
+      "correta": 1,
+      "explicacao": "DDL define a estrutura: CREATE (cria), ALTER (altera) e DROP (remove). INSERT/UPDATE/DELETE são DML; GRANT/REVOKE são DCL; COMMIT/ROLLBACK controlam transações."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que significa a sigla DDL, usada para comandos como `CREATE DATABASE`?",
+      "alternativas": [
+        "Linguagem de Definição de Dados",
+        "Linguagem de Manipulação de Dados",
+        "Linguagem de Controle de Dados",
+        "Linguagem de Consulta de Dados"
+      ],
+      "correta": 0,
+      "explicacao": "DDL = Data Definition Language, a parte do SQL que define a estrutura (bancos, tabelas, colunas). Manipulação é DML e controle de acesso é DCL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na padaria do bairro, o técnico rodou primeiro `CREATE DATABASE padaria;` e, dias depois, `INSERT INTO pao (nome, preco) VALUES ('Francês', 0.80);`. Como esses dois comandos são classificados?",
+      "alternativas": [
+        "Os dois são DDL, pois mexem no banco",
+        "Os dois são DML, pois usam o banco padaria",
+        "CREATE DATABASE é DML e INSERT é DDL",
+        "CREATE DATABASE é DDL e INSERT é DML"
+      ],
+      "correta": 3,
+      "explicacao": "CREATE DATABASE define estrutura (DDL). INSERT grava registros dentro de uma tabela (DML)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual frase descreve melhor a diferença entre DDL e DML?",
+      "alternativas": [
+        "DDL só consulta dados; DML altera a estrutura das tabelas",
+        "DDL só funciona no Workbench; DML só funciona no terminal",
+        "DDL define a estrutura (bancos e tabelas); DML mexe nos registros guardados nela",
+        "DDL apaga registros; DML cria bancos e tabelas novas"
+      ],
+      "correta": 2,
+      "explicacao": "DDL cuida do 'molde' (CREATE, ALTER, DROP). DML cuida do conteúdo (INSERT, UPDATE, DELETE). As duas funcionam em qualquer cliente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O comando `GRANT SELECT ON loja.* TO 'caixa'@'localhost';` dá permissão de leitura a um usuário. A qual grupo de comandos SQL ele pertence?",
+      "alternativas": [
+        "DDL (definição de estrutura)",
+        "DCL (controle de acesso)",
+        "DML (manipulação de dados)",
+        "TCL (controle de transações)"
+      ],
+      "correta": 1,
+      "explicacao": "GRANT e REVOKE controlam permissões: são DCL. Não criam estrutura (DDL) nem mexem em registros (DML)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A escola quer um banco de dados chamado `biblioteca` para o sistema de empréstimos. Qual comando cria esse banco?",
+      "alternativas": [
+        "CREATE TABLE biblioteca;",
+        "CREATE DATABASE biblioteca;",
+        "NEW DATABASE biblioteca;",
+        "INSERT DATABASE biblioteca;"
+      ],
+      "correta": 1,
+      "explicacao": "CREATE DATABASE cria o banco. CREATE TABLE cria tabela (e precisaria de colunas). NEW e INSERT DATABASE não existem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "schema-sinonimo",
+      "peso": 1,
+      "enunciado": "No MySQL, o que faz o comando `CREATE SCHEMA academia;`?",
+      "alternativas": [
+        "Cria só um desenho do banco, sem guardar nada",
+        "Cria o banco academia, exatamente como CREATE DATABASE",
+        "Cria uma tabela chamada schema dentro de academia",
+        "Mostra a estrutura do banco academia já existente"
+      ],
+      "correta": 1,
+      "explicacao": "No MySQL, SCHEMA é sinônimo de DATABASE. CREATE SCHEMA e CREATE DATABASE fazem a mesma coisa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno rodou `CREATE DATABASE oficina;` duas vezes seguidas. Na segunda vez apareceu:\n`ERROR 1007 (HY000): Can't create database 'oficina'; database exists`.\nQual é a explicação?",
+      "alternativas": [
+        "Faltou selecionar o banco com USE antes de criar",
+        "O banco oficina já tinha sido criado na primeira execução",
+        "O nome oficina é uma palavra reservada do MySQL",
+        "É preciso rodar SHOW DATABASES antes de criar"
+      ],
+      "correta": 1,
+      "explicacao": "O erro 1007 diz que o banco já existe. A primeira execução criou; a segunda tentou criar de novo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "ifnotexists-existente",
+      "peso": 1,
+      "enunciado": "O banco `oficina` já existe no servidor. O que acontece ao rodar `CREATE DATABASE IF NOT EXISTS oficina;`?",
+      "alternativas": [
+        "O banco é apagado e criado de novo, vazio",
+        "Nada é alterado; o MySQL só registra um aviso (warning)",
+        "Aparece o erro 1007 e o script para",
+        "É criado um segundo banco chamado oficina_1"
+      ],
+      "correta": 1,
+      "explicacao": "Com IF NOT EXISTS, se o banco já existe o comando não faz nada e gera apenas um aviso (Note 1007), sem erro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "ifnotexists-existente",
+      "peso": 1,
+      "enunciado": "O banco `oficina` já existe e tem 5 tabelas cheias de dados. O técnico roda `CREATE DATABASE IF NOT EXISTS oficina;`. Como fica o banco depois?",
+      "alternativas": [
+        "As tabelas continuam, mas os dados são apagados",
+        "As 5 tabelas e todos os dados continuam como estavam",
+        "O banco é recriado e perde as 5 tabelas",
+        "O banco é renomeado para oficina_old"
+      ],
+      "correta": 1,
+      "explicacao": "IF NOT EXISTS não recria nada: como o banco já existe, o comando é ignorado (só um aviso). Tabelas e dados ficam intactos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que o comando `SHOW DATABASES;` exibe na tela?",
+      "alternativas": [
+        "Listar os bancos de dados que existem no servidor",
+        "Listar as tabelas do banco selecionado",
+        "Mostrar as colunas de uma tabela",
+        "Mostrar quais usuários estão conectados"
+      ],
+      "correta": 0,
+      "explicacao": "SHOW DATABASES lista os bancos do servidor (que o usuário pode ver). As tabelas do banco atual aparecem com SHOW TABLES."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bancos-sistema",
+      "peso": 1,
+      "enunciado": "Num MySQL recém-instalado, `SHOW DATABASES;` mostra information_schema, mysql, performance_schema e sys. O que são esses bancos?",
+      "alternativas": [
+        "Bancos de exemplo que podem ser apagados à vontade",
+        "Bancos criados pelo último aluno que usou o computador",
+        "Bancos do próprio MySQL, usados pelo funcionamento do servidor",
+        "Cópias de segurança automáticas de outros bancos"
+      ],
+      "correta": 2,
+      "explicacao": "São bancos de sistema: guardam usuários, configurações e informações sobre o servidor. Não devem ser apagados nem alterados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Logo depois de `CREATE DATABASE pet_shop;`, quantas tabelas existem dentro do banco pet_shop?",
+      "alternativas": [
+        "Nenhuma: o banco nasce vazio",
+        "Uma tabela padrão chamada pet_shop",
+        "As tabelas de exemplo do MySQL",
+        "Quatro tabelas copiadas do sistema"
+      ],
+      "correta": 0,
+      "explicacao": "CREATE DATABASE só cria o 'recipiente'. As tabelas precisam ser criadas depois com CREATE TABLE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que mostra o comando `SHOW DATABASES LIKE 'loja%';`?",
+      "alternativas": [
+        "Cria bancos com nomes que começam com loja",
+        "As tabelas cujo nome começa com loja",
+        "Só os bancos cujo nome começa com loja",
+        "Os registros da tabela loja"
+      ],
+      "correta": 2,
+      "explicacao": "LIKE filtra a lista de bancos pelo nome; % representa qualquer sequência de caracteres. Nada é criado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de `CREATE DATABASE escola;`, qual comando deve vir para que o próximo `CREATE TABLE aluno (...)` crie a tabela dentro do banco escola?",
+      "alternativas": [
+        "USE escola;",
+        "SHOW DATABASES;",
+        "SELECT escola;",
+        "OPEN escola;"
+      ],
+      "correta": 0,
+      "explicacao": "USE escolhe o banco atual. CREATE DATABASE não seleciona o banco sozinho. SELECT escola e OPEN escola não fazem isso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No terminal do MySQL, depois de `CREATE DATABASE clinica;` apareceu `Query OK, 1 row affected`. O que essa mensagem indica?",
+      "alternativas": [
+        "Uma linha foi inserida numa tabela",
+        "O banco clinica foi criado com sucesso",
+        "O banco foi criado já com uma tabela",
+        "Houve um erro, mas ele foi ignorado"
+      ],
+      "correta": 1,
+      "explicacao": "'Query OK' indica sucesso. No CREATE DATABASE o '1 row affected' é só o jeito do MySQL informar que o comando foi aplicado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "drop-recuperar",
+      "peso": 1,
+      "enunciado": "Um aluno rodou `DROP DATABASE estoque;` por engano e logo em seguida digitou `ROLLBACK;`. O banco volta?",
+      "alternativas": [
+        "Não: comandos DDL confirmam sozinhos (commit implícito) e o ROLLBACK não os desfaz",
+        "Sim, porque ROLLBACK desfaz qualquer comando anterior",
+        "Volta só a estrutura das tabelas, sem os dados",
+        "Sim, desde que seja feito no mesmo minuto"
+      ],
+      "correta": 0,
+      "explicacao": "No MySQL, DDL como DROP DATABASE causa commit implícito. Não há desfazer: só restaurando um backup."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes comandos é classificado como DDL, mesmo parecendo que só mexe nos dados?",
+      "alternativas": [
+        "TRUNCATE TABLE venda;",
+        "DELETE FROM venda;",
+        "UPDATE venda SET valor = 0;",
+        "INSERT INTO venda VALUES (1, 10);"
+      ],
+      "correta": 0,
+      "explicacao": "TRUNCATE esvazia a tabela recriando-a por dentro; por isso é DDL (e não pode ser desfeito com ROLLBACK). DELETE, UPDATE e INSERT são DML."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes comandos NÃO é DDL?",
+      "alternativas": [
+        "CREATE DATABASE mercado;",
+        "UPDATE produto SET preco = 10;",
+        "DROP DATABASE mercado;",
+        "ALTER TABLE produto ADD estoque INT;"
+      ],
+      "correta": 1,
+      "explicacao": "UPDATE altera registros (DML). CREATE, DROP e ALTER mudam a estrutura (DDL)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Antes de criar o banco da sorveteria, Júlia quer ver a lista de bancos que já existem no servidor. Qual comando ela usa?",
+      "alternativas": [
+        "SELECT DATABASES;",
+        "LIST DATABASES;",
+        "SHOW TABLES;",
+        "SHOW DATABASES;"
+      ],
+      "correta": 3,
+      "explicacao": "SHOW DATABASES lista os bancos. SHOW TABLES lista tabelas do banco atual. SELECT DATABASES e LIST DATABASES não existem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que o comando `SHOW CREATE DATABASE petshop;` exibe?",
+      "alternativas": [
+        "Cria o banco petshop se ele ainda não existir",
+        "A lista de tabelas criadas dentro de petshop",
+        "Os registros guardados no banco petshop",
+        "O comando CREATE do banco, com o conjunto de caracteres usado"
+      ],
+      "correta": 3,
+      "explicacao": "SHOW CREATE DATABASE mostra como o banco está definido, incluindo CHARACTER SET e COLLATE. Não cria nada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O usuário `estagiario` tentou `CREATE DATABASE loja;` e recebeu:\n`ERROR 1044 (42000): Access denied for user 'estagiario'@'localhost' to database 'loja'`.\nQual é a causa?",
+      "alternativas": [
+        "O usuário não tem permissão (privilégio CREATE) para criar esse banco",
+        "O banco loja já existe no servidor",
+        "Faltou o comando USE loja antes",
+        "O nome loja é uma palavra reservada"
+      ],
+      "correta": 0,
+      "explicacao": "Erro 1044 é falta de permissão. Banco já existente daria erro 1007; o USE não é necessário para criar banco."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno escreveu `create database feira;` e outro `CREATE DATABASE feira;`. O que se pode dizer?",
+      "alternativas": [
+        "As palavras-chave aceitam maiúsculas ou minúsculas; os comandos são equivalentes",
+        "Só a versão em maiúsculas funciona",
+        "Só a versão em minúsculas funciona",
+        "Os dois comandos criam dois bancos diferentes"
+      ],
+      "correta": 0,
+      "explicacao": "Palavras-chave do SQL não diferenciam maiúsculas de minúsculas. Escrevê-las em maiúsculas é só costume para facilitar a leitura."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL, o que é um banco de dados (database)?",
+      "alternativas": [
+        "Um conjunto que agrupa as tabelas e outros objetos de um sistema",
+        "Uma única tabela com todas as informações",
+        "O programa usado para escrever comandos SQL",
+        "Uma linha de dados dentro de uma tabela"
+      ],
+      "correta": 0,
+      "explicacao": "O banco (database/schema) é o 'recipiente' que guarda as tabelas de um sistema. O Workbench é o programa; a linha é um registro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No comando `CREATE DATABASE hotel;`, qual é a função do ponto e vírgula no final?",
+      "alternativas": [
+        "Separar o nome do banco do comando",
+        "Indicar o fim do comando",
+        "Transformar a linha em comentário",
+        "Confirmar que o banco ainda não existe"
+      ],
+      "correta": 1,
+      "explicacao": "O ; marca onde termina cada comando. Isso permite rodar vários comandos em sequência num script."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num mesmo servidor MySQL, é possível existir dois bancos com o nome `vendas`?",
+      "alternativas": [
+        "Sim, se forem criados por usuários diferentes",
+        "Não: cada banco do servidor precisa ter um nome único",
+        "Sim, desde que tenham tabelas diferentes",
+        "Sim, se um usar utf8mb4 e o outro latin1"
+      ],
+      "correta": 1,
+      "explicacao": "O nome identifica o banco no servidor. Tentar criar outro com o mesmo nome dá o erro 1007 (database exists)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "ifne-charset",
+      "peso": 1,
+      "enunciado": "O banco `academia` já existe e foi criado com CHARACTER SET latin1. O técnico roda:\n`CREATE DATABASE IF NOT EXISTS academia CHARACTER SET utf8mb4;`\nO que acontece?",
+      "alternativas": [
+        "O banco passa a usar utf8mb4",
+        "Nada muda: o banco continua latin1 e só aparece um aviso",
+        "Dá erro, porque o conjunto de caracteres é diferente",
+        "As tabelas são convertidas para utf8mb4"
+      ],
+      "correta": 1,
+      "explicacao": "Se o banco existe, o IF NOT EXISTS faz o comando inteiro ser ignorado, inclusive o CHARACTER SET. Para mudar, seria ALTER DATABASE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No comando `CREATE DATABASE sorveteria;`, qual parte é o nome do banco?",
+      "alternativas": [
+        "CREATE",
+        "DATABASE",
+        "CREATE DATABASE",
+        "sorveteria"
+      ],
+      "correta": 3,
+      "explicacao": "CREATE DATABASE são as palavras-chave do comando; sorveteria é o nome escolhido para o banco."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "ordem-script",
+      "peso": 1,
+      "enunciado": "Qual é a sequência mínima para ter um banco novo e começar a criar tabelas dentro dele, sem usar o nome do banco antes de cada tabela?",
+      "alternativas": [
+        "USE, depois CREATE DATABASE, depois CREATE TABLE",
+        "CREATE DATABASE, depois USE, depois CREATE TABLE",
+        "CREATE TABLE, depois CREATE DATABASE, depois USE",
+        "SHOW DATABASES, depois CREATE TABLE, depois USE"
+      ],
+      "correta": 1,
+      "explicacao": "Primeiro o banco precisa existir (CREATE DATABASE), depois ser selecionado (USE) e só então recebe tabelas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Além de bancos de dados, que outros objetos são definidos com comandos DDL?",
+      "alternativas": [
+        "Os valores guardados em cada linha",
+        "O resultado das consultas SELECT",
+        "Os registros apagados por DELETE",
+        "Tabelas, colunas e restrições"
+      ],
+      "correta": 3,
+      "explicacao": "DDL define estrutura: bancos, tabelas, colunas, chaves e restrições. Os valores das linhas são assunto da DML."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "maiusculas-nome",
+      "peso": 1,
+      "enunciado": "Num servidor MySQL rodando em Linux (configuração padrão), o técnico rodou `CREATE DATABASE Loja;` e depois `USE loja;`, recebendo `ERROR 1049 (42000): Unknown database 'loja'`. Por quê?",
+      "alternativas": [
+        "O comando USE não aceita nomes em letras minúsculas",
+        "No Linux o nome do banco diferencia maiúsculas: Loja e loja são bancos diferentes",
+        "O banco só pode ser usado se tiver sido criado com IF NOT EXISTS",
+        "Faltou rodar SHOW DATABASES antes do USE"
+      ],
+      "correta": 1,
+      "explicacao": "No Linux, por padrão, cada banco vira uma pasta e o nome diferencia maiúsculas. Por isso o costume é usar sempre minúsculas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "De forma geral, o que faz um comando DROP na DDL?",
+      "alternativas": [
+        "Remove só os dados, mantendo a estrutura",
+        "Muda o nome do objeto",
+        "Desativa o objeto por um tempo",
+        "Remove um objeto (banco, tabela) por completo"
+      ],
+      "correta": 3,
+      "explicacao": "DROP elimina o objeto inteiro: estrutura e conteúdo. Esvaziar mantendo a estrutura é DELETE/TRUNCATE; renomear é RENAME/ALTER."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O banco `loja` já existe. Qual comando DDL muda o conjunto de caracteres dele para utf8mb4?",
+      "alternativas": [
+        "UPDATE DATABASE loja SET utf8mb4;",
+        "CREATE DATABASE loja CHARACTER SET utf8mb4;",
+        "ALTER DATABASE loja CHARACTER SET utf8mb4;",
+        "USE loja CHARACTER SET utf8mb4;"
+      ],
+      "correta": 2,
+      "explicacao": "ALTER DATABASE altera opções de um banco existente. CREATE daria erro 1007 (já existe); UPDATE é DML de registros; USE só seleciona."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas tarefas do sistema de uma pizzaria é feita com um comando DDL?",
+      "alternativas": [
+        "Criar o banco de dados do sistema",
+        "Cadastrar um novo sabor de pizza",
+        "Mudar o preço da pizza de calabresa",
+        "Excluir um pedido cancelado"
+      ],
+      "correta": 0,
+      "explicacao": "Criar o banco é definir estrutura (DDL). Cadastrar, alterar e excluir registros é DML (INSERT, UPDATE, DELETE)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "ifnotexists-existente",
+      "peso": 1,
+      "enunciado": "Depois de rodar `CREATE DATABASE IF NOT EXISTS clinica;`, o técnico usou `SHOW WARNINGS;` e viu:\n`Note | 1007 | Can't create database 'clinica'; database exists`.\nPor que isso não interrompeu o script?",
+      "alternativas": [
+        "Com IF NOT EXISTS, o problema vira só um aviso (Note) e o script segue",
+        "Porque o MySQL apagou o banco antigo antes de criar",
+        "Porque SHOW WARNINGS corrige o erro automaticamente",
+        "Porque avisos só aparecem quando se usa o Workbench"
+      ],
+      "correta": 0,
+      "explicacao": "Sem IF NOT EXISTS seria o ERROR 1007, que para o script. Com ele, vira uma Note: o banco existente fica como está e a execução continua."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre os comandos DDL e os comandos DML no SQL.\n\nNa sua resposta:\n1. diga o que os comandos DDL fazem;\n2. diga o que os comandos DML fazem;\n3. cite um comando de cada grupo.",
+      "respostasAceitas": [
+        "DDL define a estrutura do banco (bancos, tabelas, colunas), ex.: CREATE DATABASE, DROP. DML trabalha com os registros dentro das tabelas, ex.: INSERT, UPDATE, DELETE."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) DDL = estrutura; 2) DML = dados/registros; 3) um exemplo correto de cada (CREATE/ALTER/DROP e INSERT/UPDATE/DELETE)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Observe o comando `CREATE DATABASE sorveteria;`.\n\nNa sua resposta:\n1. diga o que o comando faz;\n2. diga o que existe dentro do banco logo depois de executado.",
+      "respostasAceitas": [
+        "Cria um banco de dados novo chamado sorveteria no servidor. Ele nasce vazio, sem nenhuma tabela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cria o banco sorveteria; 2) o banco fica vazio, as tabelas ainda precisam ser criadas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um script de instalação começa com `CREATE DATABASE IF NOT EXISTS clinica_vet;`. Por que o programador usou IF NOT EXISTS?\n\nNa sua resposta:\n1. diga o que acontece se o banco ainda não existe;\n2. diga o que acontece se o banco já existe;\n3. explique por que isso é útil num script que pode ser executado mais de uma vez.",
+      "respostasAceitas": [
+        "Se não existe, o banco é criado. Se já existe, nada é feito (só um aviso), sem erro e sem apagar nada. Assim o script pode rodar de novo sem parar no erro 1007."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cria; 2) ignora/gera aviso, mantendo o banco; 3) evita o erro 'database exists' e permite reexecutar o script."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bancos-sistema",
+      "peso": 2,
+      "enunciado": "Num computador do laboratório, `SHOW DATABASES;` mostrou: escola, information_schema, mysql, performance_schema e sys. O aluno só criou um deles.\n\nNa sua resposta:\n1. diga qual banco provavelmente foi criado pelo aluno;\n2. explique o que são os outros bancos;\n3. explique por que não se deve apagá-los.",
+      "respostasAceitas": [
+        "O aluno criou o escola. Os outros são bancos do próprio MySQL (usuários, configurações, informações do servidor). Apagá-los pode estragar o servidor e os acessos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) escola; 2) bancos de sistema do MySQL; 3) o servidor depende deles, apagar causa falhas/perda de usuários."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Ao rodar um script, apareceu a mensagem:\n`ERROR 1007 (HY000): Can't create database 'academia'; database exists`\n\nNa sua resposta:\n1. explique o que a mensagem informa;\n2. diga uma causa provável;\n3. diga como conferir isso no servidor.",
+      "respostasAceitas": [
+        "Informa que não foi possível criar o banco academia porque já existe um banco com esse nome. Provavelmente o script já tinha sido rodado antes. Dá para conferir com SHOW DATABASES."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o banco já existe; 2) script rodado de novo/banco criado antes; 3) SHOW DATABASES (ou ver no Workbench)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Considere os comandos: `CREATE DATABASE`, `INSERT`, `GRANT`, `DROP DATABASE` e `UPDATE`.\n\nNa sua resposta:\n1. diga quais são DDL;\n2. diga quais são DML;\n3. diga qual deles é de outro grupo e que grupo é esse.",
+      "respostasAceitas": [
+        "DDL: CREATE DATABASE e DROP DATABASE. DML: INSERT e UPDATE. GRANT é DCL (controle de permissões)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se a classificação correta: DDL (CREATE/DROP), DML (INSERT/UPDATE), GRANT = DCL."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "drop-recuperar",
+      "peso": 2,
+      "enunciado": "Comandos DDL como `DROP DATABASE` não podem ser desfeitos com `ROLLBACK` no MySQL.\n\nNa sua resposta:\n1. explique por que o ROLLBACK não funciona nesse caso;\n2. diga qual é a consequência prática de um DROP DATABASE por engano;\n3. diga o que deve existir para conseguir recuperar o banco.",
+      "respostasAceitas": [
+        "DDL faz commit implícito: o comando é confirmado na hora e não entra numa transação que possa ser desfeita. Se o banco for apagado por engano, tabelas e dados somem. Só um backup feito antes permite recuperar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) commit implícito/DDL confirma automaticamente; 2) perda definitiva; 3) backup."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma papelaria vai ter um sistema de vendas. Por que é melhor ter um banco de dados próprio para esse sistema (por exemplo, `papelaria`) em vez de colocar as tabelas num banco que já é usado por outro sistema?\n\nNa sua resposta:\n1. dê uma vantagem de organização;\n2. explique o problema de nomes de tabelas repetidos;\n3. dê uma vantagem na hora de fazer backup ou remover o sistema.",
+      "respostasAceitas": [
+        "Fica organizado: tudo do sistema em um lugar. Evita conflito com tabelas de mesmo nome de outro sistema (ex.: cliente). Dá para copiar, restaurar ou apagar só o banco da papelaria sem afetar o resto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) organização/separação; 2) conflito de nomes; 3) backup/remoção independentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "schema-sinonimo",
+      "peso": 2,
+      "enunciado": "No MySQL Workbench aparece a palavra \"schema\" e, nas aulas, o professor fala \"database\". Os comandos `CREATE SCHEMA loja;` e `CREATE DATABASE loja;` também existem.\n\nNa sua resposta:\n1. diga se existe diferença entre schema e database no MySQL;\n2. diga onde o Workbench mostra os schemas.",
+      "respostasAceitas": [
+        "No MySQL não há diferença: schema é sinônimo de database, os dois comandos criam o mesmo banco. O Workbench lista os bancos no painel SCHEMAS do Navigator, à esquerda."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) são sinônimos no MySQL; 2) painel/aba Schemas do Navigator."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O comando `SHOW CREATE DATABASE petshop;` mostrou:\n`CREATE DATABASE petshop DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci`\n\nNa sua resposta:\n1. explique para que serve o comando SHOW CREATE DATABASE;\n2. explique o que indicam o CHARACTER SET e o COLLATE mostrados.",
+      "respostasAceitas": [
+        "Ele mostra como o banco está definido. utf8mb4 é o conjunto de caracteres (aceita acentos e emojis) e utf8mb4_0900_ai_ci é a regra de comparação/ordenação, que ignora acento e maiúsculas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) exibir a definição do banco; 2) charset = quais caracteres guarda; collation = como compara/ordena (ai/ci)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num projeto da turma, um grupo chamou o banco de `banco1` e outro de `controle_estoque`.\n\nNa sua resposta:\n1. diga qual nome é melhor e por quê;\n2. explique um problema de usar nomes genéricos como banco1.",
+      "respostasAceitas": [
+        "controle_estoque é melhor porque diz o que o banco guarda. Com nomes genéricos, quando há vários bancos no servidor fica difícil saber qual é qual, e é fácil mexer (ou apagar) o banco errado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nome descritivo; 2) confusão entre bancos/risco de usar o banco errado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num servidor de empresa, o usuário `estagiario` rodou `CREATE DATABASE financeiro;` e recebeu:\n`ERROR 1044 (42000): Access denied for user 'estagiario'@'localhost' to database 'financeiro'`\n\nNa sua resposta:\n1. explique o que a mensagem significa;\n2. explique por que faz sentido a empresa limitar quem pode criar ou apagar bancos;\n3. diga quem poderia resolver a situação.",
+      "respostasAceitas": [
+        "O usuário não tem permissão para criar esse banco. Limitar CREATE e DROP evita que qualquer um crie bancos à toa ou apague dados importantes. Um administrador (root/DBA) pode criar o banco ou dar a permissão com GRANT."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) falta de privilégio; 2) segurança/evitar perdas e bagunça; 3) administrador do banco."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "ifne-charset",
+      "peso": 2,
+      "enunciado": "O banco `academia` foi criado há meses com CHARACTER SET latin1. Hoje o técnico rodou `CREATE DATABASE IF NOT EXISTS academia CHARACTER SET utf8mb4;`, conferiu com SHOW CREATE DATABASE e o banco continua latin1.\n\nNa sua resposta:\n1. explique por que o conjunto de caracteres não mudou;\n2. diga qual comando DDL é próprio para mudar opções de um banco que já existe.",
+      "respostasAceitas": [
+        "Como o banco já existia, o IF NOT EXISTS fez o MySQL ignorar o comando inteiro (só um aviso), inclusive o CHARACTER SET. Para mudar, usa-se ALTER DATABASE."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) IF NOT EXISTS ignora tudo quando o banco existe; 2) ALTER DATABASE."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega rodou `CREATE DATABASE loja;` e disse: \"Pronto, agora já posso cadastrar os produtos\".\n\nNa sua resposta:\n1. diga o que existe no servidor logo depois desse comando;\n2. diga o que ainda falta antes de cadastrar produtos.",
+      "respostasAceitas": [
+        "Existe só o banco loja, vazio. Ainda falta selecioná-lo com USE e criar a tabela de produtos (CREATE TABLE); só depois dá para inserir os produtos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) banco vazio; 2) USE + criar tabela antes do INSERT."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "maiusculas-nome",
+      "peso": 2,
+      "enunciado": "Num servidor Linux, o técnico rodou `CREATE DATABASE Vendas;` e depois `USE vendas;`, recebendo `ERROR 1049 (42000): Unknown database 'vendas'`.\n\nNa sua resposta:\n1. explique por que o MySQL não encontrou o banco;\n2. diga que costume de nomes evita esse problema.",
+      "respostasAceitas": [
+        "No Linux o nome do banco diferencia maiúsculas e minúsculas: Vendas e vendas são nomes diferentes, e só Vendas existe. Usar sempre nomes em minúsculas (com _) evita a confusão."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) diferenciação de maiúsculas no Linux; 2) padronizar nomes em minúsculas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de `USE farmacia;`, o técnico roda `CREATE TABLE remedio (id_remedio INT PRIMARY KEY, nome VARCHAR(60));`. Onde a tabela remedio é criada?",
+      "alternativas": [
+        "No banco mysql, do sistema",
+        "Em todos os bancos do servidor",
+        "Em lugar nenhum; o comando dá erro",
+        "Dentro do banco farmacia"
+      ],
+      "correta": 3,
+      "explicacao": "USE define o banco atual. Os comandos seguintes sem prefixo (como CREATE TABLE remedio) agem dentro dele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando mostra qual banco está selecionado no momento?",
+      "alternativas": [
+        "SHOW DATABASES;",
+        "SELECT DATABASE();",
+        "USE DATABASE();",
+        "SHOW TABLES;"
+      ],
+      "correta": 1,
+      "explicacao": "SELECT DATABASE() devolve o nome do banco atual. SHOW DATABASES lista todos; SHOW TABLES lista as tabelas do banco atual."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Logo depois de abrir o terminal do MySQL, sem ter rodado nenhum USE, o aluno executa `SELECT DATABASE();`. O que aparece?",
+      "alternativas": [
+        "O nome do último banco criado",
+        "NULL",
+        "mysql",
+        "ERROR 1046: No database selected"
+      ],
+      "correta": 1,
+      "explicacao": "Sem banco selecionado, DATABASE() devolve NULL. Não é erro: a função só informa que não há banco atual."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "erro1046",
+      "peso": 1,
+      "enunciado": "Ao rodar `CREATE TABLE produto (id_produto INT PRIMARY KEY, nome VARCHAR(50));`, apareceu `ERROR 1046 (3D000): No database selected`. Qual é a causa?",
+      "alternativas": [
+        "Nenhum banco foi escolhido com USE antes",
+        "A tabela produto já existe",
+        "O nome produto é inválido para tabela",
+        "Faltou IF NOT EXISTS no CREATE TABLE"
+      ],
+      "correta": 0,
+      "explicacao": "O erro 1046 diz que não há banco atual. A tabela precisa de um banco para ficar dentro: falta USE nome_do_banco."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O aluno rodou `USE mercadinho;` e recebeu `ERROR 1049 (42000): Unknown database 'mercadinho'`. O que isso indica?",
+      "alternativas": [
+        "O banco existe, mas está sem tabelas",
+        "Faltou rodar SELECT DATABASE() antes do USE",
+        "Não existe banco com esse nome no servidor (ou o nome foi digitado errado)",
+        "O banco foi criado com IF NOT EXISTS"
+      ],
+      "correta": 2,
+      "explicacao": "Erro 1049 = banco desconhecido. Banco vazio pode ser usado normalmente; o problema é o nome não existir."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "ordem-script",
+      "peso": 1,
+      "enunciado": "Num servidor novo, sem nenhum banco do sistema, o técnico roda o script:\n```\nUSE lanchonete;\nCREATE DATABASE lanchonete;\nCREATE TABLE lanche (id_lanche INT PRIMARY KEY, nome VARCHAR(40));\n```\nO que acontece na primeira linha?",
+      "alternativas": [
+        "Funciona, pois a ordem dos comandos não importa",
+        "O USE cria o banco lanchonete automaticamente",
+        "O USE seleciona o banco mysql no lugar",
+        "O USE falha (erro 1049) porque o banco ainda não existe"
+      ],
+      "correta": 3,
+      "explicacao": "USE só seleciona banco que já existe. A ordem certa é CREATE DATABASE, depois USE, depois CREATE TABLE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O técnico rodou `USE loja;` e, alguns comandos depois, `USE estoque;`. Qual banco fica selecionado?",
+      "alternativas": [
+        "loja",
+        "estoque",
+        "loja e estoque ao mesmo tempo",
+        "nenhum dos dois"
+      ],
+      "correta": 1,
+      "explicacao": "Só existe um banco atual por conexão. O último USE vale: agora é estoque."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Nenhum banco está selecionado (não houve USE). O aluno roda `SELECT * FROM loja.produto;`. O que acontece?",
+      "alternativas": [
+        "Funciona: loja.produto indica o banco e a tabela",
+        "Dá o erro 1046, pois sempre é preciso USE",
+        "Cria a tabela produto dentro do banco loja",
+        "Lista os bancos que têm tabela produto"
+      ],
+      "correta": 0,
+      "explicacao": "O nome qualificado banco.tabela dispensa o USE. O USE serve para não precisar repetir o nome do banco."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "nome-valido",
+      "peso": 1,
+      "enunciado": "Qual destes nomes de banco pode ser usado sem precisar de crases (`)?",
+      "alternativas": [
+        "controle-estoque",
+        "controle estoque",
+        "controle_estoque",
+        "controle.estoque"
+      ],
+      "correta": 2,
+      "explicacao": "Letras, números e _ são aceitos sem crases. Hífen, espaço e ponto têm outro significado no SQL e quebram o comando."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O comando `CREATE DATABASE loja-virtual;` deu `ERROR 1064` (erro de sintaxe). Por quê?",
+      "alternativas": [
+        "Nomes de banco não podem ter duas palavras",
+        "O banco loja já existe no servidor",
+        "Faltou IF NOT EXISTS no comando",
+        "Sem crases, o hífen é lido como sinal de menos e o nome fica inválido"
+      ],
+      "correta": 3,
+      "explicacao": "O - é operador de subtração. Use loja_virtual (com _) ou, se for obrigatório, `loja-virtual` entre crases."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O aluno tentou `CREATE DATABASE order;` para o sistema de pedidos e recebeu erro de sintaxe (1064). Qual é o motivo?",
+      "alternativas": [
+        "Nomes de banco precisam ter pelo menos oito letras",
+        "Nomes de banco devem estar em português",
+        "ORDER é palavra reservada do SQL e não pode ser nome sem crases",
+        "Faltou o ponto e vírgula antes do nome"
+      ],
+      "correta": 2,
+      "explicacao": "ORDER (de ORDER BY) é palavra reservada. Melhor escolher outro nome, como pedidos; com crases funcionaria, mas atrapalha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes nomes segue a boa prática recomendada para bancos de dados?",
+      "alternativas": [
+        "sistema_academia",
+        "Sistema Academia",
+        "SistemaAcadêmia!",
+        "sistema-academia"
+      ],
+      "correta": 0,
+      "explicacao": "Minúsculas, sem acento nem símbolos, palavras separadas por _. Espaço, hífen e ! exigem crases ou dão erro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No terminal do MySQL, depois de `USE escola;` aparece a mensagem `Database changed`. O que ela quer dizer?",
+      "alternativas": [
+        "O banco escola foi alterado e perdeu dados",
+        "O nome do banco escola foi trocado",
+        "O banco escola passou a ser o banco atual",
+        "O banco escola foi apagado e recriado"
+      ],
+      "correta": 2,
+      "explicacao": "'Database changed' só confirma a troca do banco atual. Nada no conteúdo do banco foi modificado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Até quando vale a escolha feita com `USE academia;`?",
+      "alternativas": [
+        "Até outro USE ou até a conexão ser encerrada",
+        "Só para o próximo comando digitado",
+        "Para sempre, em todas as conexões",
+        "Até alguém rodar SHOW DATABASES"
+      ],
+      "correta": 0,
+      "explicacao": "O banco atual pertence à conexão (sessão). Muda com outro USE e se perde quando a conexão fecha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ana abriu duas janelas do terminal mysql (duas conexões). Na janela 1 rodou `USE vendas;`. Na janela 2, rodou `CREATE TABLE cliente (id INT);` e recebeu o erro 1046. Por quê?",
+      "alternativas": [
+        "O banco vendas fica travado enquanto a janela 1 estiver aberta",
+        "A tabela cliente já existia no banco vendas",
+        "Cada conexão tem seu próprio banco atual; o USE da janela 1 não vale na janela 2",
+        "O MySQL só aceita um USE por servidor"
+      ],
+      "correta": 2,
+      "explicacao": "O banco atual é da sessão. Cada conexão precisa do seu próprio USE (ou usar vendas.cliente)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "ordem-script",
+      "peso": 1,
+      "enunciado": "Qual é a ordem correta dos comandos num script que instala o sistema do zero?",
+      "alternativas": [
+        "USE → CREATE DATABASE → INSERT → CREATE TABLE",
+        "CREATE DATABASE → USE → CREATE TABLE → INSERT",
+        "CREATE TABLE → INSERT → CREATE DATABASE → USE",
+        "INSERT → CREATE TABLE → USE → CREATE DATABASE"
+      ],
+      "correta": 1,
+      "explicacao": "Primeiro o banco, depois selecioná-lo, depois as tabelas e só então os dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa conexão sem banco selecionado, o técnico roda:\n```\nCREATE DATABASE IF NOT EXISTS sorveteria;\nCREATE TABLE sabor (id_sabor INT PRIMARY KEY, nome VARCHAR(40));\n```\nO que acontece?",
+      "alternativas": [
+        "Tudo funciona e a tabela fica dentro de sorveteria",
+        "O primeiro comando dá erro 1007",
+        "A tabela sabor é criada no banco mysql",
+        "O banco é criado, mas o CREATE TABLE dá erro 1046 (faltou USE)"
+      ],
+      "correta": 3,
+      "explicacao": "CREATE DATABASE não seleciona o banco. Sem USE sorveteria, não há banco atual para receber a tabela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "drop-atual",
+      "peso": 1,
+      "enunciado": "O técnico rodou `USE estoque;` e, em seguida, `DROP DATABASE estoque;`. Depois executou `SELECT DATABASE();`. O que aparece?",
+      "alternativas": [
+        "estoque",
+        "ERROR 1049: Unknown database",
+        "NULL",
+        "mysql"
+      ],
+      "correta": 2,
+      "explicacao": "Ao apagar o banco que estava em uso, a conexão fica sem banco atual e DATABASE() passa a devolver NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa mesma conexão, quantos bancos podem ser o \"banco atual\" ao mesmo tempo?",
+      "alternativas": [
+        "Todos os bancos do servidor",
+        "No máximo dois",
+        "Nenhum, o MySQL não tem banco atual",
+        "Apenas um"
+      ],
+      "correta": 3,
+      "explicacao": "Cada conexão tem um único banco atual (ou nenhum). Para mudar, roda-se outro USE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é o tamanho máximo do nome de um banco de dados no MySQL?",
+      "alternativas": [
+        "8 caracteres",
+        "64 caracteres",
+        "255 caracteres",
+        "Não há limite de tamanho"
+      ],
+      "correta": 1,
+      "explicacao": "Identificadores de banco e tabela no MySQL podem ter até 64 caracteres. Mesmo assim, nomes curtos e claros são melhores."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O técnico quer chamar o banco de `2026vendas` e roda `CREATE DATABASE 2026vendas;`. O que acontece?",
+      "alternativas": [
+        "Dá erro: nome de banco nunca pode começar com número",
+        "Só é aceito se for escrito em maiúsculas",
+        "É aceito, mas o banco passa a se chamar 2026",
+        "É aceito: o nome pode começar com número, desde que não seja só número"
+      ],
+      "correta": 3,
+      "explicacao": "No MySQL um nome pode começar com dígito, mas não pode ser formado só por dígitos sem crases. Ainda assim, começar com letra é mais seguro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Com o banco `biblioteca` selecionado, qual comando lista as tabelas que existem nele?",
+      "alternativas": [
+        "SHOW DATABASES;",
+        "SHOW TABLES;",
+        "SELECT DATABASE();",
+        "DESCRIBE DATABASE;"
+      ],
+      "correta": 1,
+      "explicacao": "SHOW TABLES lista as tabelas do banco atual. SHOW DATABASES lista bancos; SELECT DATABASE() mostra o nome do banco atual."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O aluno rodou `CREATE DATABASE restaurante;` e logo depois `SHOW TABLES;`, recebendo `ERROR 1046 (3D000): No database selected`. Por quê?",
+      "alternativas": [
+        "O banco restaurante ainda não tem tabelas",
+        "SHOW TABLES só funciona dentro do Workbench",
+        "restaurante é uma palavra reservada do SQL",
+        "CREATE DATABASE não seleciona o banco; faltou USE restaurante"
+      ],
+      "correta": 3,
+      "explicacao": "Criar não é selecionar. Banco sem tabelas daria 'Empty set', não erro; o 1046 indica que falta o USE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Nenhum banco está selecionado na conexão. Qual destes comandos gera o erro 1046 (No database selected)?",
+      "alternativas": [
+        "CREATE TABLE cliente (id_cliente INT);",
+        "CREATE DATABASE cliente;",
+        "SHOW DATABASES;",
+        "SELECT DATABASE();"
+      ],
+      "correta": 0,
+      "explicacao": "Só o CREATE TABLE precisa de um banco atual. Criar banco, listar bancos ou perguntar o banco atual funcionam sem USE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Antes de instalar o sistema de RH no servidor de uma empresa, o técnico quer saber se já existe um banco chamado `rh_sistema`. Qual comando faz essa conferência sem mudar nada?",
+      "alternativas": [
+        "SHOW DATABASES LIKE 'rh_sistema';",
+        "SHOW TABLES LIKE 'rh_sistema';",
+        "SELECT DATABASE('rh_sistema');",
+        "CREATE DATABASE rh_sistema;"
+      ],
+      "correta": 0,
+      "explicacao": "SHOW DATABASES com LIKE filtra a lista de bancos. SHOW TABLES procura tabelas; CREATE tentaria criar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O banco foi criado com `` CREATE DATABASE `minha loja`; `` (nome com espaço, entre crases). Qual é a consequência?",
+      "alternativas": [
+        "Funciona, mas o nome terá de vir entre crases sempre que for usado",
+        "Dá erro mesmo com as crases",
+        "São criados dois bancos: minha e loja",
+        "O espaço vira _ automaticamente"
+      ],
+      "correta": 0,
+      "explicacao": "Crases permitem nomes com espaço, mas todo comando depois (USE `minha loja`;) precisa delas. Por isso se evita espaço."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de `USE escola;`, o aluno roda `SELECT DATABASE();`. O que aparece?",
+      "alternativas": [
+        "NULL",
+        "1",
+        "escola",
+        "A lista de todos os bancos"
+      ],
+      "correta": 2,
+      "explicacao": "DATABASE() devolve o nome do banco atual, que foi definido pelo USE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num script, o técnico colocou `USE padaria;` antes de todos os CREATE TABLE. Qual é a vantagem disso?",
+      "alternativas": [
+        "O banco fica mais rápido nas consultas",
+        "É feito um backup automático do banco",
+        "Não precisa escrever padaria. antes do nome de cada tabela",
+        "Outros usuários ficam sem acesso ao banco"
+      ],
+      "correta": 2,
+      "explicacao": "USE define o banco atual, então os comandos seguintes já sabem onde agir. Não tem relação com velocidade, backup ou acesso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "erro1046",
+      "peso": 1,
+      "enunciado": "Qual é a forma mais direta de resolver o erro `No database selected` (1046)?",
+      "alternativas": [
+        "Rodar CREATE DATABASE de novo",
+        "Reiniciar o servidor MySQL",
+        "Rodar SHOW DATABASES",
+        "Rodar USE com o nome do banco certo"
+      ],
+      "correta": 3,
+      "explicacao": "O erro diz que não há banco atual; o USE resolve. SHOW DATABASES só lista, não seleciona."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "reset-teste",
+      "peso": 1,
+      "enunciado": "Um script de testes tem:\n```\nDROP DATABASE IF EXISTS cantina;\nCREATE DATABASE cantina;\nUSE cantina;\nCREATE TABLE produto (id_produto INT PRIMARY KEY, nome VARCHAR(40));\n```\nO que acontece ao rodar esse script pela segunda vez?",
+      "alternativas": [
+        "Dá erro 1007 no CREATE DATABASE",
+        "Fica com duas tabelas produto",
+        "Mantém os dados inseridos depois da primeira vez",
+        "Termina de novo com cantina recém-criada, só com a tabela produto vazia"
+      ],
+      "correta": 3,
+      "explicacao": "O DROP apaga o banco anterior (com tudo que foi inserido) e o resto recria do zero. Bom para teste, perigoso para dados reais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve colocar `SELECT DATABASE();` no meio de um script longo?",
+      "alternativas": [
+        "Conferir em qual banco os próximos comandos vão agir",
+        "Criar o banco se ele ainda não existir",
+        "Listar todos os bancos do servidor",
+        "Apagar o banco que estiver selecionado"
+      ],
+      "correta": 0,
+      "explicacao": "DATABASE() só informa o banco atual. É uma conferência para não criar ou apagar coisas no banco errado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "maiusculas-nome",
+      "peso": 1,
+      "enunciado": "Num servidor MySQL em Windows (configuração padrão), o técnico rodou `CREATE DATABASE Loja;` e depois `CREATE DATABASE loja;`. O que acontece no segundo comando?",
+      "alternativas": [
+        "Cria um segundo banco, diferente do primeiro",
+        "Renomeia o banco Loja para loja",
+        "Apaga o banco Loja e cria loja",
+        "Dá erro 1007, pois no Windows Loja e loja são o mesmo nome"
+      ],
+      "correta": 3,
+      "explicacao": "No Windows o MySQL guarda os nomes em minúsculas e não diferencia maiúsculas. Já no Linux seriam bancos diferentes: por isso se padroniza em minúsculas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "nome-valido",
+      "peso": 1,
+      "enunciado": "Para separar palavras no nome de um banco, como em \"gestão de clientes\", o que é recomendado usar?",
+      "alternativas": [
+        "- (hífen), como gestao-clientes",
+        "espaço, como gestao clientes",
+        ". (ponto), como gestao.clientes",
+        "_ (sublinhado), como gestao_clientes"
+      ],
+      "correta": 3,
+      "explicacao": "O _ é aceito sem crases. O ponto separa banco de tabela, o hífen é subtração e o espaço quebra o nome."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que se evita acento e cedilha em nomes de banco, como `gestão_clínica`?",
+      "alternativas": [
+        "Podem dar problema de codificação e de digitação em outros sistemas e servidores",
+        "O MySQL apaga sozinho o banco que tiver acento",
+        "Acento deixa o banco só para leitura",
+        "Acento faz o nome virar maiúsculo"
+      ],
+      "correta": 0,
+      "explicacao": "Nomes só com letras sem acento, números e _ funcionam igual em qualquer sistema, teclado e linguagem de programação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "banco-de-outro",
+      "peso": 1,
+      "enunciado": "O script de um sistema novo tem `CREATE DATABASE IF NOT EXISTS loja;`, `USE loja;` e `CREATE TABLE produto (...);`. No servidor do cliente, o CREATE TABLE deu `ERROR 1050: Table 'produto' already exists`. O que isso revela?",
+      "alternativas": [
+        "O CREATE DATABASE falhou e nenhum banco foi selecionado",
+        "Já havia um banco loja (de outro sistema) com tabela produto; nenhum banco novo foi criado",
+        "O USE criou uma cópia do banco loja",
+        "O IF NOT EXISTS apagou as tabelas antigas"
+      ],
+      "correta": 1,
+      "explicacao": "Como loja já existia, o IF NOT EXISTS só ignorou a criação e o USE entrou no banco antigo. Por isso o nome do banco deve ser específico e conferido antes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num script aparece `USE farmacia;` logo antes de vários `CREATE TABLE`.\n\nNa sua resposta:\n1. diga o que o comando USE faz;\n2. diga o que aconteceria com os CREATE TABLE se nenhum banco tivesse sido selecionado.",
+      "respostasAceitas": [
+        "USE escolhe farmacia como banco atual, e as tabelas seguintes são criadas nele. Sem banco selecionado, cada CREATE TABLE daria o erro 1046 (No database selected)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) seleciona o banco atual; 2) erro 'No database selected' (ou a necessidade de prefixar o nome do banco)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "erro1046",
+      "peso": 2,
+      "enunciado": "Ao executar um CREATE TABLE, o aluno recebeu:\n`ERROR 1046 (3D000): No database selected`\n\nNa sua resposta:\n1. explique o que a mensagem informa;\n2. diga como resolver.",
+      "respostasAceitas": [
+        "Informa que nenhum banco está selecionado, então o MySQL não sabe onde criar a tabela. Resolve-se rodando USE com o nome do banco antes (ou usando banco.tabela)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) não há banco atual; 2) USE nome_do_banco."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O aluno rodou `USE esccola;` e recebeu:\n`ERROR 1049 (42000): Unknown database 'esccola'`\n\nNa sua resposta:\n1. explique o que a mensagem informa;\n2. diga a causa mais provável nesse caso;\n3. diga como conferir o nome certo.",
+      "respostasAceitas": [
+        "O MySQL não achou banco com esse nome. Provavelmente foi erro de digitação (esccola em vez de escola). Dá para conferir com SHOW DATABASES."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) banco desconhecido/inexistente; 2) digitação errada; 3) SHOW DATABASES ou painel Schemas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "ordem-use",
+      "peso": 2,
+      "enunciado": "Num servidor novo, o técnico rodou este script e a primeira linha deu erro:\n```\nUSE lanchonete;\nCREATE DATABASE lanchonete;\nCREATE TABLE lanche (id_lanche INT PRIMARY KEY, nome VARCHAR(40));\n```\n\nNa sua resposta:\n1. explique por que a primeira linha falhou;\n2. explique em que ordem as linhas deveriam estar e por quê.",
+      "respostasAceitas": [
+        "O USE falhou porque o banco lanchonete ainda não existia (erro 1049). A ordem certa é CREATE DATABASE, depois USE, depois CREATE TABLE: o banco precisa existir para ser selecionado, e a tabela precisa de um banco selecionado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) não dá para usar banco inexistente; 2) CREATE DATABASE → USE → CREATE TABLE com justificativa."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O comando `SELECT DATABASE();` às vezes mostra um nome e às vezes mostra NULL.\n\nNa sua resposta:\n1. diga para que serve esse comando;\n2. explique o que significa quando o resultado é NULL.",
+      "respostasAceitas": [
+        "Serve para mostrar qual é o banco atual da conexão. NULL quer dizer que nenhum banco está selecionado (ainda não houve USE)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mostra o banco atual; 2) NULL = nenhum banco selecionado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Dois alunos tentaram estes comandos e ambos deram erro:\n`CREATE DATABASE loja-virtual;`\n`CREATE DATABASE minha loja;`\n\nNa sua resposta:\n1. explique o problema do hífen;\n2. explique o problema do espaço;\n3. diga qual padrão de nome evita esses erros.",
+      "respostasAceitas": [
+        "O hífen é lido como sinal de menos e o espaço separa palavras, então o MySQL não entende como um nome só (erro de sintaxe). O padrão é usar minúsculas, sem acento, com _ entre as palavras: loja_virtual."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) hífen = operador; 2) espaço quebra o nome; 3) minúsculas e _ (ou crases, menos recomendado)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Ana abriu duas janelas do terminal mysql. Na janela 1 rodou `USE vendas;`. Na janela 2, um CREATE TABLE deu o erro 1046 (No database selected).\n\nNa sua resposta:\n1. explique por que a janela 2 não está usando o banco vendas;\n2. explique o que significa dizer que o USE vale \"por conexão\".",
+      "respostasAceitas": [
+        "Cada janela é uma conexão separada, com seu próprio banco atual. O USE da janela 1 só vale para ela; na janela 2 é preciso outro USE. O banco atual dura enquanto a conexão estiver aberta."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) conexões/sessões independentes; 2) o USE afeta só a sessão em que foi rodado e acaba quando ela fecha."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um script de instalação segue a ordem: CREATE DATABASE, USE, CREATE TABLE e INSERT.\n\nNa sua resposta:\n1. diga o que cada etapa faz;\n2. explique por que essa ordem não pode ser invertida.",
+      "respostasAceitas": [
+        "CREATE DATABASE cria o banco, USE seleciona, CREATE TABLE cria as tabelas e INSERT grava os dados. Cada etapa depende da anterior: não dá para usar banco que não existe, nem inserir em tabela que não existe."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) função de cada comando; 2) dependência entre as etapas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Sem ter rodado nenhum USE, um colega executa `SELECT * FROM biblioteca.livro;` e funciona.\n\nNa sua resposta:\n1. explique o que significa escrever biblioteca.livro;\n2. diga em que situação essa forma é útil.",
+      "respostasAceitas": [
+        "biblioteca.livro indica a tabela livro do banco biblioteca, então o MySQL não precisa de banco atual. É útil para consultar outro banco sem trocar o USE, ou juntar tabelas de bancos diferentes."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nome qualificado banco.tabela; 2) acessar outro banco sem USE / evitar ambiguidade."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "reset-producao",
+      "peso": 2,
+      "enunciado": "Uma empresa vai instalar um sistema de agendamento no servidor de uma clínica. O arquivo de instalação entregue começa assim:\n```\nDROP DATABASE IF EXISTS agenda;\nCREATE DATABASE agenda;\nUSE agenda;\n```\nO técnico da clínica percebe que já existe no servidor um banco agenda, usado por outro sistema.\n\nNa sua resposta:\n1. explique o que a primeira linha faria nesse servidor;\n2. diga o que deveria ser conferido ou mudado antes de rodar o script.",
+      "respostasAceitas": [
+        "O DROP apagaria o banco agenda do outro sistema, com todas as tabelas e dados, sem pedir confirmação. Antes, deve-se conferir com SHOW DATABASES, fazer backup e usar um nome de banco próprio do novo sistema (ou tirar o DROP do script)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) perda total do banco existente; 2) conferir bancos/backup/nome exclusivo/remover DROP."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno criou as tabelas do trabalho de escola, mas elas foram parar no banco academia, de outro trabalho.\n\nNa sua resposta:\n1. explique como isso provavelmente aconteceu;\n2. diga como conferir o banco atual antes de criar tabelas.",
+      "respostasAceitas": [
+        "O banco atual ainda era academia (de um USE anterior), e os CREATE TABLE sem prefixo foram criados nele. Antes de criar, rodar USE escola e conferir com SELECT DATABASE()."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) USE anterior/esqueceu de trocar o banco atual; 2) SELECT DATABASE() (ou ver o schema em negrito no Workbench)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O aluno rodou `CREATE DATABASE hamburgueria;`, depois `USE hamburgueria;` e então `SHOW TABLES;`. Apareceu `Empty set`.\n\nNa sua resposta:\n1. diga o que o SHOW TABLES mostra;\n2. explique por que o resultado veio vazio.",
+      "respostasAceitas": [
+        "SHOW TABLES lista as tabelas do banco atual. Veio vazio porque o banco acabou de ser criado e ainda não tem nenhuma tabela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) lista tabelas do banco atual; 2) banco novo nasce sem tabelas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "banco-de-outro",
+      "peso": 2,
+      "enunciado": "O script de um sistema novo tem `CREATE DATABASE IF NOT EXISTS loja;` e `USE loja;`. No servidor do cliente, o CREATE TABLE seguinte deu `ERROR 1050: Table 'produto' already exists`.\n\nNa sua resposta:\n1. explique por que o IF NOT EXISTS não evitou o problema;\n2. diga que cuidado com o nome do banco evitaria isso.",
+      "respostasAceitas": [
+        "Já existia um banco loja de outro sistema; o IF NOT EXISTS só pulou a criação e o USE entrou nesse banco antigo, que já tinha a tabela produto. Usar um nome bem específico para o sistema e conferir com SHOW DATABASES antes."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o banco existente foi reaproveitado; 2) nome exclusivo/conferir antes de instalar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "drop-atual",
+      "peso": 2,
+      "enunciado": "O técnico rodou `USE estoque;` e depois `DROP DATABASE estoque;`. Em seguida, `SELECT DATABASE();` mostrou NULL e um CREATE TABLE deu o erro 1046.\n\nNa sua resposta:\n1. explique por que DATABASE() passou a mostrar NULL;\n2. explique por que o CREATE TABLE falhou.",
+      "respostasAceitas": [
+        "O banco atual foi apagado, então a conexão ficou sem banco selecionado (NULL). Sem banco atual, o CREATE TABLE não tem onde criar a tabela e dá 'No database selected'."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) apagar o banco em uso deixa a sessão sem banco; 2) por isso o erro 1046."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Os comandos `SHOW DATABASES;` e `SHOW TABLES;` parecem parecidos, mas mostram coisas diferentes.\n\nNa sua resposta:\n1. diga o que cada um lista;\n2. diga qual deles depende de um banco selecionado.",
+      "respostasAceitas": [
+        "SHOW DATABASES lista os bancos do servidor; SHOW TABLES lista as tabelas do banco atual. O SHOW TABLES depende de um USE antes."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) bancos x tabelas; 2) SHOW TABLES precisa de banco atual."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "drop-ifexists",
+      "peso": 1,
+      "enunciado": "O banco `teste` NÃO existe no servidor. O que acontece ao rodar `DROP DATABASE IF EXISTS teste;`?",
+      "alternativas": [
+        "Dá o erro 1008 e o script para",
+        "O banco teste é criado vazio",
+        "Todos os bancos do servidor são apagados",
+        "Não dá erro; o MySQL só registra um aviso"
+      ],
+      "correta": 3,
+      "explicacao": "IF EXISTS evita o erro quando o banco não existe: o comando vira só um aviso (Note 1008)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao rodar `DROP DATABASE loja_antiga;`, apareceu:\n`ERROR 1008 (HY000): Can't drop database 'loja_antiga'; database doesn't exist`.\nO que aconteceu?",
+      "alternativas": [
+        "O banco tem tabelas e por isso não pode ser apagado",
+        "O usuário não tem permissão para apagar bancos",
+        "Tentou-se apagar um banco que não existe, sem usar IF EXISTS",
+        "O banco está selecionado com USE e ficou travado"
+      ],
+      "correta": 2,
+      "explicacao": "Erro 1008 = o banco não existe. Banco com tabelas pode ser apagado normalmente; falta de permissão seria outro erro (1044)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "drop-recuperar",
+      "peso": 1,
+      "enunciado": "Depois de `DROP DATABASE academia;`, como é possível recuperar os dados?",
+      "alternativas": [
+        "Rodando ROLLBACK logo em seguida",
+        "Só restaurando um backup feito antes",
+        "Rodando UNDO DATABASE academia",
+        "Buscando o banco na lixeira do MySQL"
+      ],
+      "correta": 1,
+      "explicacao": "O MySQL não tem lixeira nem desfazer para DROP DATABASE. Sem backup, os dados estão perdidos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de `DROP DATABASE oficina;`, o terminal mostrou `Query OK, 6 rows affected`. O que indica o número 6?",
+      "alternativas": [
+        "Quantos registros havia na maior tabela",
+        "Quantos usuários perderam o acesso",
+        "Quantos segundos o comando demorou",
+        "Quantas tabelas foram apagadas junto com o banco"
+      ],
+      "correta": 3,
+      "explicacao": "No DROP DATABASE, o 'rows affected' informa quantas tabelas foram removidas. É um sinal de quanta coisa sumiu."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que nunca se deve rodar `DROP DATABASE mysql;`?",
+      "alternativas": [
+        "O banco mysql é só um exemplo vazio",
+        "O banco mysql guarda os backups de todos os bancos",
+        "O banco mysql guarda usuários, senhas e configurações do servidor",
+        "O banco mysql é recriado sozinho na hora"
+      ],
+      "correta": 2,
+      "explicacao": "O banco mysql é do sistema: sem ele, usuários e permissões se perdem e o servidor pode deixar de funcionar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Antes de rodar `DROP DATABASE` no servidor de uma empresa, o que deve ser feito primeiro?",
+      "alternativas": [
+        "Rodar USE no banco para travá-lo",
+        "Rodar CREATE DATABASE IF NOT EXISTS",
+        "Fazer backup e conferir o nome do banco",
+        "Desligar o servidor por segurança"
+      ],
+      "correta": 2,
+      "explicacao": "DROP DATABASE não tem desfazer. Backup e conferência do nome (e do servidor) evitam perdas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "grant-permanece",
+      "peso": 1,
+      "enunciado": "O usuário `vendedor` tinha `GRANT SELECT ON loja.* TO 'vendedor'@'localhost';`. O técnico rodou `DROP DATABASE loja;` e depois `CREATE DATABASE loja;`. O que acontece com a permissão do vendedor?",
+      "alternativas": [
+        "Continua valendo, pois o DROP DATABASE não remove as permissões dadas ao banco",
+        "Some, e é preciso dar um novo GRANT",
+        "O vendedor vira dono do banco novo",
+        "O usuário vendedor é apagado junto com o banco"
+      ],
+      "correta": 0,
+      "explicacao": "No MySQL, permissões dadas para um banco não são apagadas automaticamente pelo DROP DATABASE. Ao recriar com o mesmo nome, elas voltam a valer."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "drop-ifexists",
+      "peso": 1,
+      "enunciado": "Qual comando apaga o banco `rascunho` sem dar erro caso ele não exista?",
+      "alternativas": [
+        "DELETE DATABASE rascunho;",
+        "DROP DATABASE IF NOT EXISTS rascunho;",
+        "DROP DATABASE IF EXISTS rascunho;",
+        "REMOVE DATABASE rascunho;"
+      ],
+      "correta": 2,
+      "explicacao": "Para apagar usa-se IF EXISTS. IF NOT EXISTS é do CREATE; DELETE e REMOVE DATABASE não existem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um técnico confundiu `DROP TABLE cliente;` com `DROP DATABASE loja;`. O que cada um remove?",
+      "alternativas": [
+        "DROP TABLE apaga só os dados; DROP DATABASE apaga só a estrutura",
+        "Os dois fazem a mesma coisa com nomes diferentes",
+        "DROP TABLE remove uma tabela; DROP DATABASE remove o banco com todas as tabelas",
+        "DROP DATABASE só remove bancos sem nenhuma tabela"
+      ],
+      "correta": 2,
+      "explicacao": "DROP TABLE age numa tabela. DROP DATABASE apaga o banco inteiro, com tudo o que tem dentro, mesmo com dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um estagiário rodou `DROP DATABASE vendas;` no servidor de produção achando que estava no servidor de testes. Qual prática teria evitado o problema?",
+      "alternativas": [
+        "Escrever o comando todo em letras maiúsculas",
+        "Usar DROP DATABASE IF EXISTS vendas",
+        "Conferir em qual servidor/conexão estava antes de rodar comandos de risco",
+        "Rodar SHOW TABLES depois do DROP"
+      ],
+      "correta": 2,
+      "explicacao": "O IF EXISTS não protege (o banco existia). Conferir a conexão e ter permissões diferentes em produção é o que evita o erro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que o IF EXISTS NÃO deixa o `DROP DATABASE` mais seguro para os dados?",
+      "alternativas": [
+        "Ele pede confirmação, mas é fácil confirmar sem querer",
+        "Ele faz um backup, mas o backup fica incompleto",
+        "Ele só evita o erro quando o banco não existe; se existir, apaga do mesmo jeito",
+        "Ele só apaga o banco se estiver vazio"
+      ],
+      "correta": 2,
+      "explicacao": "IF EXISTS não pergunta nada nem faz backup: apenas troca o erro 1008 por aviso quando o banco não existe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual conjunto de caracteres é recomendado no MySQL 8 para guardar textos com acentos e também emojis?",
+      "alternativas": [
+        "latin1",
+        "ascii",
+        "utf8mb4",
+        "binary"
+      ],
+      "correta": 2,
+      "explicacao": "utf8mb4 guarda qualquer caractere Unicode, inclusive emojis. latin1 e ascii não têm emojis."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No comando `CREATE DATABASE loja CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;`, o que o COLLATE define?",
+      "alternativas": [
+        "O tamanho máximo que o banco pode ter",
+        "A senha para acessar o banco",
+        "As regras para comparar e ordenar os textos",
+        "O idioma das mensagens de erro"
+      ],
+      "correta": 2,
+      "explicacao": "Collation é a regra de comparação e ordenação (por exemplo, se 'a' = 'A' e se 'é' = 'e')."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No collation `utf8mb4_0900_ai_ci`, o que significa o final `ci`?",
+      "alternativas": [
+        "character index: cria um índice nos textos",
+        "case insensitive: não diferencia maiúsculas de minúsculas",
+        "compressed: guarda os textos compactados",
+        "case important: diferencia maiúsculas de minúsculas"
+      ],
+      "correta": 1,
+      "explicacao": "ci = case insensitive. 'ai' = accent insensitive (ignora acentos)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O banco usa o collation `utf8mb4_0900_ai_ci`. Numa tabela `cliente` com as colunas id_cliente e nome, existe o nome 'José'. A consulta `SELECT * FROM cliente WHERE nome = 'jose';` encontra esse cliente?",
+      "alternativas": [
+        "Não: o acento sempre torna os textos diferentes",
+        "Só encontraria se o banco fosse latin1",
+        "Só encontraria usando LIKE no lugar de =",
+        "Sim: ai ignora o acento e ci ignora maiúsculas"
+      ],
+      "correta": 3,
+      "explicacao": "Com _ai_ci, 'jose' e 'José' são considerados iguais na comparação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL 8, se o `CREATE DATABASE` for escrito sem CHARACTER SET, qual conjunto de caracteres o banco recebe por padrão?",
+      "alternativas": [
+        "latin1",
+        "utf8mb4",
+        "ascii",
+        "utf8mb3"
+      ],
+      "correta": 1,
+      "explicacao": "Desde o MySQL 8.0 o padrão é utf8mb4 (com collation utf8mb4_0900_ai_ci). Em versões antigas era latin1."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que se recomenda `utf8mb4` em vez do antigo `utf8` (utf8mb3) do MySQL?",
+      "alternativas": [
+        "utf8mb4 sempre ocupa menos espaço em disco",
+        "O utf8 antigo não consegue guardar acentos",
+        "utf8mb4 só funciona em servidores Windows",
+        "utf8mb4 guarda todos os caracteres, inclusive emojis; o utf8 antigo não"
+      ],
+      "correta": 3,
+      "explicacao": "O utf8 antigo usa até 3 bytes e não guarda emojis e alguns símbolos. utf8mb4 usa até 4 bytes e cobre tudo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O comando `CREATE DATABASE loja CHARACTER SET utf8mb4 COLLATE latin1_swedish_ci;` deu:\n`ERROR 1253 (42000): COLLATION 'latin1_swedish_ci' is not valid for CHARACTER SET 'utf8mb4'`.\nQual é o problema?",
+      "alternativas": [
+        "O banco loja já existe com outro collation",
+        "Faltou IF NOT EXISTS no comando",
+        "O collation escolhido é de outro conjunto de caracteres, não do utf8mb4",
+        "latin1 não existe mais no MySQL 8"
+      ],
+      "correta": 2,
+      "explicacao": "Cada collation pertence a um charset. Para utf8mb4 seria, por exemplo, utf8mb4_0900_ai_ci."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL Workbench, em que parte da tela ficam listados os bancos de dados do servidor?",
+      "alternativas": [
+        "Na aba Result Grid, abaixo do editor",
+        "No painel Output, no rodapé",
+        "No painel SCHEMAS, do Navigator (à esquerda)",
+        "Na tela inicial, junto das conexões"
+      ],
+      "correta": 2,
+      "explicacao": "O Navigator, à esquerda, tem a aba Schemas com a lista de bancos. Result Grid mostra resultados de consultas; Output mostra mensagens."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "schema-sinonimo",
+      "peso": 1,
+      "enunciado": "No MySQL Workbench, o que a palavra \"schema\" significa?",
+      "alternativas": [
+        "Uma tabela do banco",
+        "Um usuário do servidor",
+        "O mesmo que banco de dados (database)",
+        "Um diagrama do banco"
+      ],
+      "correta": 2,
+      "explicacao": "No MySQL, schema e database são sinônimos. O Workbench prefere a palavra schema."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O aluno rodou `CREATE DATABASE festa;` no editor do Workbench, viu o sinal verde no Output, mas o banco não aparece no painel SCHEMAS. O que fazer?",
+      "alternativas": [
+        "Rodar o CREATE DATABASE de novo",
+        "Rodar USE festa para ele aparecer",
+        "Atualizar o painel (botão de refresh / Refresh All)",
+        "Fechar e reinstalar o Workbench"
+      ],
+      "correta": 2,
+      "explicacao": "O painel não se atualiza sozinho após comandos SQL. Rodar de novo daria erro 1007, pois o banco já existe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel SCHEMAS do Workbench, um dos bancos aparece em negrito. O que isso indica?",
+      "alternativas": [
+        "É o schema padrão, usado como banco atual da conexão",
+        "É um schema do sistema que não pode ser alterado",
+        "É o schema que tem mais tabelas",
+        "É um schema com erro que precisa de reparo"
+      ],
+      "correta": 0,
+      "explicacao": "O negrito marca o default schema, o banco atual. Equivale ao banco escolhido com USE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Workbench, clicar com o botão direito num schema e escolher \"Set as Default Schema\" tem o mesmo efeito de qual comando?",
+      "alternativas": [
+        "CREATE DATABASE nome_do_schema;",
+        "DROP DATABASE nome_do_schema;",
+        "SHOW DATABASES;",
+        "USE nome_do_schema;"
+      ],
+      "correta": 3,
+      "explicacao": "Definir o schema padrão é o mesmo que selecionar o banco atual com USE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Workbench, ao criar um banco pelo ícone \"Create a new schema\", aparece uma janela de revisão com `CREATE SCHEMA vendas;` e o botão Apply. O que isso mostra?",
+      "alternativas": [
+        "A interface cria o banco sem usar nenhum comando SQL",
+        "O banco fica só no Workbench, não no servidor",
+        "O comando fica guardado para rodar no dia seguinte",
+        "A interface monta o comando SQL, que é executado ao clicar em Apply"
+      ],
+      "correta": 3,
+      "explicacao": "Os botões do Workbench geram SQL e o enviam ao servidor. Ver o comando ajuda a entender e a conferir antes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Workbench, ao clicar com o botão direito num schema e escolher \"Drop Schema...\", aparecem as opções \"Review SQL\" e \"Drop Now\". O que faz \"Drop Now\"?",
+      "alternativas": [
+        "Apaga o banco na hora, como um DROP DATABASE",
+        "Move o banco para uma lixeira do Workbench",
+        "Tira o banco só do painel, sem apagar no servidor",
+        "Apaga as tabelas, mas mantém o banco"
+      ],
+      "correta": 0,
+      "explicacao": "Drop Now executa o DROP SCHEMA direto no servidor. Review SQL mostra o comando antes, para conferir."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "reset-teste",
+      "peso": 1,
+      "enunciado": "Em scripts de teste é comum `DROP DATABASE IF EXISTS` aparecer antes do `CREATE DATABASE`. Para que serve isso?",
+      "alternativas": [
+        "Para fazer backup antes de criar o banco",
+        "Para começar sempre de um banco limpo, recriado do zero",
+        "Para o CREATE DATABASE rodar mais rápido",
+        "Para manter os dados do teste anterior"
+      ],
+      "correta": 1,
+      "explicacao": "Apagar e recriar garante o mesmo ponto de partida a cada execução. Por isso não serve para bancos com dados reais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes comandos NÃO deve estar num script de atualização do sistema de um cliente que já tem dados reais?",
+      "alternativas": [
+        "CREATE DATABASE IF NOT EXISTS sistema;",
+        "USE sistema;",
+        "SELECT DATABASE();",
+        "DROP DATABASE IF EXISTS sistema;"
+      ],
+      "correta": 3,
+      "explicacao": "O DROP apagaria o banco com os dados do cliente. Os outros não destroem nada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que o CHARACTER SET de um banco define?",
+      "alternativas": [
+        "Quais caracteres (letras, acentos, símbolos) podem ser guardados",
+        "A ordem em que as colunas aparecem",
+        "O número máximo de tabelas do banco",
+        "O idioma da tela do Workbench"
+      ],
+      "correta": 0,
+      "explicacao": "Charset é o conjunto de caracteres aceitos e como são guardados. A regra de comparação é o collation."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O site de uma lanchonete grava comentários de clientes, mas ao salvar um comentário com emoji aparece `ERROR 1366: Incorrect string value`. O banco foi criado com CHARACTER SET latin1. Qual é a causa?",
+      "alternativas": [
+        "latin1 não tem emojis; o banco deveria usar utf8mb4",
+        "Faltou o comando USE antes do INSERT",
+        "O collation ci não aceita emojis",
+        "Emojis só podem ser gravados com comandos DDL"
+      ],
+      "correta": 0,
+      "explicacao": "O emoji não existe no latin1, então o MySQL recusa o texto. Com utf8mb4 ele seria gravado normalmente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL Workbench, onde se digita um comando como `CREATE DATABASE padaria;` para executá-lo?",
+      "alternativas": [
+        "No painel Output",
+        "Na tela inicial das conexões",
+        "No menu Help",
+        "Na aba de consulta (editor SQL / Query)"
+      ],
+      "correta": 3,
+      "explicacao": "Os comandos são digitados no editor SQL (aba Query) e executados com o raio. O Output só mostra mensagens."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma empresa vai instalar o sistema de agenda de um consultório num servidor que já guarda bancos de outros clientes. Qual cuidado com o nome do banco é mais importante?",
+      "alternativas": [
+        "Usar um nome curto e genérico, como db1",
+        "Usar o mesmo nome dos bancos que já existem",
+        "Usar um nome com espaço para destacar",
+        "Usar um nome único e específico, como consultorio_agenda"
+      ],
+      "correta": 3,
+      "explicacao": "Nome específico evita colisão com bancos existentes (erro 1007 ou, pior, mexer no banco de outro sistema)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "reset-producao",
+      "peso": 1,
+      "enunciado": "O professor tem um script de reset da aula:\n```\nDROP DATABASE IF EXISTS escola;\nCREATE DATABASE escola;\n```\nPor engano, ele roda o script no servidor da secretaria, onde o banco escola tem as notas reais. Resultado?",
+      "alternativas": [
+        "Nada muda, pois o IF EXISTS protege os dados",
+        "Dá o erro 1007 e nada é feito",
+        "As notas são perdidas: o banco é apagado e recriado vazio",
+        "Só a estrutura é recriada e as notas são mantidas"
+      ],
+      "correta": 2,
+      "explicacao": "O banco existia, então o DROP apagou tudo e o CREATE criou um banco vazio. IF EXISTS não protege dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bancos-sistema",
+      "peso": 1,
+      "enunciado": "Qual destes bancos é do próprio MySQL e NÃO deve ser apagado?",
+      "alternativas": [
+        "mysql",
+        "loja_teste",
+        "escola",
+        "padaria"
+      ],
+      "correta": 0,
+      "explicacao": "mysql é banco de sistema (usuários, permissões). Os outros são bancos criados por usuários."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz o comando `DROP SCHEMA academia;` no MySQL?",
+      "alternativas": [
+        "Apaga o banco academia, igual a DROP DATABASE",
+        "Apaga só o diagrama do banco academia",
+        "Apaga só as tabelas vazias do banco",
+        "Dá erro, pois SCHEMA não existe no MySQL"
+      ],
+      "correta": 0,
+      "explicacao": "SCHEMA é sinônimo de DATABASE também no DROP: o banco inteiro é apagado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Antes de entregar o script de instalação a um cliente, o técnico comentou (com --) a linha `DROP DATABASE IF EXISTS sistema;`. Por que isso é prudente?",
+      "alternativas": [
+        "Comentários fazem o script executar mais rápido",
+        "Evita que o script apague um banco com dados reais se for rodado de novo",
+        "DROP DATABASE não funciona em servidores de clientes",
+        "O MySQL exige um comentário antes de cada DROP"
+      ],
+      "correta": 1,
+      "explicacao": "Linha comentada não é executada. Assim, rodar o script outra vez não destrói o banco já em uso."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "drop-ifexists",
+      "peso": 2,
+      "enunciado": "Observe o comando `DROP DATABASE IF EXISTS loja_teste;`.\n\nNa sua resposta:\n1. diga o que acontece se o banco loja_teste existir;\n2. diga o que acontece se ele não existir.",
+      "respostasAceitas": [
+        "Se existir, o banco é apagado com todas as tabelas e dados. Se não existir, nada acontece: só um aviso, sem erro."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) apaga o banco inteiro; 2) não dá erro (aviso)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um técnico vai rodar `DROP DATABASE financeiro;` no servidor de uma empresa.\n\nNa sua resposta:\n1. diga o que é apagado;\n2. diga se é possível desfazer o comando;\n3. cite um cuidado que deve ser tomado antes.",
+      "respostasAceitas": [
+        "Apaga o banco financeiro inteiro: todas as tabelas e dados. Não dá para desfazer (não tem ROLLBACK nem lixeira). Antes, fazer backup e conferir o nome do banco e o servidor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) banco + tabelas + dados; 2) não há desfazer; 3) backup/conferência."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No comando `CREATE DATABASE loja CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;` aparecem duas opções extras.\n\nNa sua resposta:\n1. explique para que serve o CHARACTER SET;\n2. explique para que serve o COLLATE.",
+      "respostasAceitas": [
+        "CHARACTER SET define quais caracteres o banco guarda (utf8mb4 aceita acentos e emojis). COLLATE define como os textos são comparados e ordenados (esse ignora acento e maiúsculas)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) conjunto de caracteres; 2) regras de comparação/ordenação."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um sistema de pedidos vai receber nomes de clientes com acentos e comentários com emojis.\n\nNa sua resposta:\n1. explique por que utf8mb4 é melhor que latin1 nesse caso;\n2. diga o que pode acontecer se o banco for criado com latin1.",
+      "respostasAceitas": [
+        "utf8mb4 guarda qualquer caractere, inclusive emojis; latin1 não tem emojis. Com latin1, os comentários com emoji dão erro ao gravar (Incorrect string value) ou aparecem com caracteres trocados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) utf8mb4 cobre todos os caracteres; 2) erro/perda de caracteres com latin1."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No Workbench, o aluno rodou um CREATE DATABASE pelo editor e o banco não apareceu no painel SCHEMAS.\n\nNa sua resposta:\n1. diga o que o painel SCHEMAS mostra;\n2. explique por que o banco novo pode não aparecer;\n3. diga como resolver.",
+      "respostasAceitas": [
+        "O painel mostra os bancos do servidor. Ele não se atualiza sozinho depois de um comando SQL. Basta clicar no botão de atualizar (Refresh All)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) lista de bancos; 2) painel desatualizado; 3) refresh."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No Workbench existe a opção \"Set as Default Schema\" e o schema escolhido fica em negrito.\n\nNa sua resposta:\n1. explique o que essa opção faz;\n2. diga a que comando SQL ela corresponde.",
+      "respostasAceitas": [
+        "Ela define o banco atual da conexão, onde os próximos comandos sem prefixo vão agir; o negrito mostra qual é. Corresponde ao comando USE."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) define o banco padrão/atual; 2) USE."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "grant-permanece",
+      "peso": 2,
+      "enunciado": "O usuário `vendedor` tinha permissão SELECT no banco loja. O técnico rodou `DROP DATABASE loja;` e, depois, `CREATE DATABASE loja;`. O vendedor continuou conseguindo consultar o banco novo.\n\nNa sua resposta:\n1. explique por que a permissão continuou valendo;\n2. explique por que isso pode ser um risco de segurança.",
+      "respostasAceitas": [
+        "O DROP DATABASE não remove as permissões dadas para aquele banco; elas ficam guardadas no servidor e voltam a valer quando um banco com o mesmo nome é criado. Assim, alguém pode ganhar acesso a um banco novo sem ninguém ter dado permissão de propósito."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) GRANTs não são apagados com o banco; 2) acesso indevido a um banco recriado (é preciso REVOKE)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Ao rodar um script, apareceu:\n`ERROR 1008 (HY000): Can't drop database 'loja_antiga'; database doesn't exist`\n\nNa sua resposta:\n1. explique o que a mensagem informa;\n2. diga como o script poderia evitar esse erro.",
+      "respostasAceitas": [
+        "Informa que não foi possível apagar o banco loja_antiga porque ele não existe. Usando DROP DATABASE IF EXISTS, o comando não daria erro."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) banco inexistente; 2) IF EXISTS."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma empresa vai instalar seu sistema no servidor de um cliente. O script usa `CREATE DATABASE IF NOT EXISTS` e `CREATE TABLE IF NOT EXISTS`, e não tem nenhum DROP.\n\nNa sua resposta:\n1. explique o que esse cuidado garante se o script for rodado mais de uma vez;\n2. explique por que um script com DROP DATABASE IF EXISTS seria arriscado nesse cliente.",
+      "respostasAceitas": [
+        "Rodar de novo não dá erro e não apaga nada: o que já existe é mantido. Com DROP DATABASE IF EXISTS, a cada execução o banco do cliente seria apagado com todos os dados reais."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) reexecução segura, sem perda; 2) DROP destruiria dados reais."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num banco com collation `utf8mb4_0900_ai_ci`, a busca por 'joao' encontra o cliente 'João'.\n\nNa sua resposta:\n1. explique por que isso acontece;\n2. dê uma situação em que esse comportamento ajuda;\n3. dê uma situação em que ele pode atrapalhar.",
+      "respostasAceitas": [
+        "O ai ignora acentos e o ci ignora maiúsculas, então 'joao' e 'João' são iguais na comparação. Ajuda em buscas por nome digitadas sem acento. Pode atrapalhar quando a diferença importa, como uma senha ou código em que 'A' e 'a' deveriam ser diferentes."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) significado de ai/ci; 2) exemplo de vantagem (busca); 3) exemplo de problema (dados que diferenciam maiúsculas/acentos)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Os comandos `DROP TABLE produto;` e `DROP DATABASE loja;` começam igual, mas têm efeitos de tamanhos diferentes.\n\nNa sua resposta:\n1. diga o que cada um apaga;\n2. diga qual dos dois causa o maior estrago se rodado por engano.",
+      "respostasAceitas": [
+        "DROP TABLE apaga só a tabela produto (estrutura e dados). DROP DATABASE apaga o banco loja inteiro, com todas as tabelas. O DROP DATABASE causa o estrago maior."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) uma tabela x banco inteiro; 2) DROP DATABASE."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No Workbench, ao escolher \"Drop Schema...\" num banco, aparecem as opções \"Review SQL\" e \"Drop Now\".\n\nNa sua resposta:\n1. diga o que cada opção faz;\n2. explique por que \"Review SQL\" é a escolha mais segura.",
+      "respostasAceitas": [
+        "Review SQL mostra o comando DROP antes de executar; Drop Now apaga o banco direto. Revisar permite conferir o nome do banco antes de apagar algo que não tem volta."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) revisar x apagar na hora; 2) conferência antes de ação irreversível."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "reset-producao",
+      "peso": 2,
+      "enunciado": "Observe o script:\n```\nDROP DATABASE IF EXISTS clinica;\nCREATE DATABASE clinica CHARACTER SET utf8mb4;\nUSE clinica;\nCREATE TABLE paciente (id_paciente INT PRIMARY KEY, nome VARCHAR(80));\n```\n\nNa sua resposta:\n1. explique o que o script faz, linha por linha;\n2. diga se ele é adequado para montar um ambiente de testes e por quê;\n3. diga se ele é adequado para atualizar o sistema de uma clínica em funcionamento e por quê.",
+      "respostasAceitas": [
+        "Apaga o banco clinica se existir, cria de novo com utf8mb4, seleciona e cria a tabela paciente. Para testes é bom, pois sempre começa do zero. Para a clínica em uso não, porque o DROP apagaria todos os pacientes cadastrados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cada linha; 2) adequado para teste (recomeço limpo); 3) inadequado em produção (perda de dados)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O site de uma lanchonete dá `ERROR 1366: Incorrect string value` ao gravar comentários com emoji. O banco foi criado com CHARACTER SET latin1.\n\nNa sua resposta:\n1. explique a causa do erro;\n2. diga qual conjunto de caracteres deveria ter sido escolhido na criação do banco.",
+      "respostasAceitas": [
+        "O latin1 não tem emojis, então o MySQL recusa o texto. O banco deveria ter sido criado com utf8mb4."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) charset sem suporte ao caractere; 2) utf8mb4."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DDL — CREATE, USE e DROP DATABASE",
+      "capacidade": "bd.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No laboratório, todos os alunos usam o mesmo servidor MySQL e o mesmo usuário. Um aluno rodou DROP DATABASE no banco de um colega por engano.\n\nNa sua resposta:\n1. explique por que isso foi possível;\n2. cite dois cuidados que evitariam o problema.",
+      "respostasAceitas": [
+        "Todos tinham o mesmo usuário com permissão de apagar qualquer banco. Cuidados: usar nomes de banco com o nome do aluno, conferir o nome antes do DROP, ter usuários separados com permissões limitadas e fazer backup."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mesmo usuário/permissão total; 2) dois cuidados plausíveis (nomes próprios, conferência, permissões, backup)."
+    }
+  ]
+}

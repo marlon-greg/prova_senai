@@ -1,0 +1,2543 @@
+{
+  "nome": "Banco de Dados — DML: INSERT (a revisar)",
+  "materia": "Banco de Dados",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-dml-sigla",
+      "peso": 1,
+      "enunciado": "O que significa a sigla DML, grupo de comandos ao qual o INSERT pertence?",
+      "alternativas": [
+        "Linguagem de Definição de Dados: comandos que criam e alteram a estrutura das tabelas",
+        "Linguagem de Controle de Dados: comandos que dão e tiram permissões dos usuários",
+        "Linguagem de Modelagem de Dados: o desenho das entidades e relacionamentos do sistema",
+        "Linguagem de Manipulação de Dados: comandos que incluem, alteram e removem os dados guardados nas tabelas"
+      ],
+      "correta": 3,
+      "explicacao": "DML (Data Manipulation Language) mexe nos dados: INSERT, UPDATE e DELETE. A estrutura é DDL e as permissões são DCL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-dml-sigla",
+      "peso": 1,
+      "enunciado": "Qual das listas abaixo tem apenas comandos DML?",
+      "alternativas": [
+        "CREATE, ALTER e DROP",
+        "INSERT, UPDATE e DELETE",
+        "GRANT, REVOKE e CREATE USER",
+        "INSERT, CREATE e GRANT"
+      ],
+      "correta": 1,
+      "explicacao": "INSERT, UPDATE e DELETE manipulam os dados. CREATE/ALTER/DROP são DDL e GRANT/REVOKE são DCL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, a tabela `livro` (id_livro, titulo, autor, ano) já existe e está funcionando. A bibliotecária quer cadastrar um livro novo que chegou. Qual comando ela deve usar?",
+      "alternativas": [
+        "CREATE TABLE livro (titulo, autor, ano);",
+        "ALTER TABLE livro ADD titulo VARCHAR(100);",
+        "INSERT INTO livro (titulo, autor, ano) VALUES (...);",
+        "UPDATE livro SET titulo = ...;"
+      ],
+      "correta": 2,
+      "explicacao": "A tabela já existe: o que falta é uma linha nova, e quem acrescenta linhas é o INSERT. CREATE e ALTER mexem na estrutura; UPDATE muda linhas que já existem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa padaria, a tabela `produto` tem as colunas id_produto (AUTO_INCREMENT), nome e preco. Qual comando está com a sintaxe correta?",
+      "alternativas": [
+        "`INSERT INTO produto VALUES (nome, preco) ('Pão de queijo', 4.50);`",
+        "`INSERT INTO produto (nome, preco) = ('Pão de queijo', 4.50);`",
+        "`ADD INTO produto (nome, preco) VALUES ('Pão de queijo', 4.50);`",
+        "`INSERT INTO produto (nome, preco) VALUES ('Pão de queijo', 4.50);`"
+      ],
+      "correta": 3,
+      "explicacao": "A forma é INSERT INTO tabela (colunas) VALUES (valores). A lista de colunas vem logo depois do nome da tabela, e os valores depois de VALUES."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No comando `INSERT INTO aluno (nome, turma) VALUES ('Bianca', '2B');`, o que a parte `VALUES ('Bianca', '2B')` informa?",
+      "alternativas": [
+        "Os nomes das colunas que serão criadas na tabela aluno",
+        "Os dados da nova linha, na mesma ordem das colunas listadas antes",
+        "O filtro que escolhe qual aluno será alterado",
+        "Os tipos de dados das colunas nome e turma"
+      ],
+      "correta": 1,
+      "explicacao": "Depois de VALUES vêm os valores que serão gravados: o 1º vai para nome e o 2º para turma."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop, a tabela `pet` tem as colunas id_pet, nome, especie e idade. Depois de rodar `INSERT INTO pet (nome, especie, idade) VALUES ('Thor', 'cachorro', 3);`, qual valor fica na coluna especie?",
+      "alternativas": [
+        "'Thor'",
+        "'cachorro'",
+        "3",
+        "NULL, porque especie não é a primeira coluna"
+      ],
+      "correta": 1,
+      "explicacao": "Os valores casam com as colunas pela posição: nome = 'Thor', especie = 'cachorro', idade = 3."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-ordem-valores",
+      "peso": 1,
+      "enunciado": "Na tabela `pet` (id_pet, nome VARCHAR(40), especie VARCHAR(20)), um atendente rodou `INSERT INTO pet (especie, nome) VALUES ('Mel', 'gato');`. O que acontece?",
+      "alternativas": [
+        "A linha é gravada com especie = 'Mel' e nome = 'gato'",
+        "O MySQL percebe a troca e grava nome = 'Mel' e especie = 'gato'",
+        "Dá erro, porque as colunas foram listadas fora da ordem da tabela",
+        "Dá erro, porque 'Mel' não é uma espécie válida"
+      ],
+      "correta": 0,
+      "explicacao": "O MySQL só casa posição com posição; ele não entende o significado dos textos. Como os dois são VARCHAR, a linha entra com os dados trocados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-varias-linhas-sintaxe",
+      "peso": 1,
+      "enunciado": "Numa sorveteria, a tabela `sabor` tem as colunas id_sabor (AUTO_INCREMENT) e nome. Qual comando insere três sabores de uma vez só?",
+      "alternativas": [
+        "`INSERT INTO sabor (nome) VALUES ('Morango', 'Uva', 'Coco');`",
+        "`INSERT INTO sabor (nome) VALUES ('Morango'); ('Uva'); ('Coco');`",
+        "`INSERT INTO sabor (nome) VALUES ('Morango'), ('Uva'), ('Coco');`",
+        "`INSERT INTO sabor (nome) VALUES [('Morango'), ('Uva'), ('Coco')];`"
+      ],
+      "correta": 2,
+      "explicacao": "Cada linha vai entre parênteses e as linhas são separadas por vírgula. ('Morango', 'Uva', 'Coco') seria uma linha só com três valores."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-varias-linhas-sintaxe",
+      "peso": 1,
+      "enunciado": "Na tabela `fruta` (id_fruta AUTO_INCREMENT, nome, preco_kg), quantas linhas o comando abaixo grava?\n\n`INSERT INTO fruta (nome, preco_kg) VALUES ('Manga', 8.90), ('Caju', 12.00), ('Acerola', 9.50), ('Pitanga', 15.00);`",
+      "alternativas": [
+        "1 linha com 8 valores",
+        "4 linhas",
+        "8 linhas, uma para cada valor",
+        "2 linhas, uma para cada coluna listada"
+      ],
+      "correta": 1,
+      "explicacao": "Cada grupo entre parênteses é uma linha. São 4 grupos, então 4 frutas novas (o MySQL responde 4 row(s) affected)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-tudo-ou-nada",
+      "peso": 1,
+      "enunciado": "Na tabela `cliente` (id_cliente PK, nome, email UNIQUE), engine InnoDB, já existe o e-mail 'bia@mail.com'. O que acontece com o comando abaixo?\n\n`INSERT INTO cliente (nome, email) VALUES ('Caio', 'caio@mail.com'), ('Bia', 'bia@mail.com'), ('Duda', 'duda@mail.com');`",
+      "alternativas": [
+        "Caio é gravado, Bia dá erro e Duda não chega a ser tentada",
+        "Caio e Duda são gravados e só a linha da Bia é ignorada",
+        "O comando inteiro falha com Duplicate entry e nenhuma das três linhas é gravada",
+        "As três linhas são gravadas e o e-mail antigo da Bia é substituído"
+      ],
+      "correta": 2,
+      "explicacao": "No InnoDB, um comando é tudo ou nada: se uma linha do INSERT falha, o comando inteiro é desfeito."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-auto-proximo",
+      "peso": 1,
+      "enunciado": "A tabela `chamado` tem id_chamado INT AUTO_INCREMENT PRIMARY KEY e já possui os chamados de 1 a 7 (nenhum foi apagado). Qual id recebe a linha inserida por `INSERT INTO chamado (titulo) VALUES ('Impressora sem tinta');`?",
+      "alternativas": [
+        "1",
+        "7",
+        "NULL, porque o id não foi informado",
+        "8"
+      ],
+      "correta": 3,
+      "explicacao": "O AUTO_INCREMENT usa o próximo número da sequência: depois do 7 vem o 8."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-auto-manual",
+      "peso": 1,
+      "enunciado": "A tabela `ingresso` tem id_ingresso AUTO_INCREMENT e ids de 1 a 5. Alguém rodou `INSERT INTO ingresso (id_ingresso, setor) VALUES (50, 'Pista');` e depois `INSERT INTO ingresso (setor) VALUES ('Camarote');`. Qual id o Camarote recebe?",
+      "alternativas": [
+        "6",
+        "51",
+        "50",
+        "Dá erro, porque não se pode informar o id numa coluna AUTO_INCREMENT"
+      ],
+      "correta": 1,
+      "explicacao": "Pode-se informar o id à mão. Depois disso o contador continua a partir do maior valor usado: 51."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL 8, a tabela `reserva` (id_reserva AUTO_INCREMENT) tinha ids de 1 a 10. A reserva 10 foi apagada com DELETE. Qual id recebe a próxima reserva inserida sem informar o id?",
+      "alternativas": [
+        "10, porque o número ficou livre",
+        "1, porque o contador volta ao início",
+        "9, porque é o último id que sobrou",
+        "11"
+      ],
+      "correta": 3,
+      "explicacao": "O AUTO_INCREMENT não reaproveita números apagados com DELETE: o contador continua de onde parou (no MySQL 8 ele fica guardado mesmo após reiniciar o servidor)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-auto-buraco",
+      "peso": 1,
+      "enunciado": "Na tabela `aluno` (id_aluno AUTO_INCREMENT, email UNIQUE), os ids ficaram 1, 2, 3 e 5. Ninguém apagou linhas. Qual a explicação mais provável para o 4 não existir?",
+      "alternativas": [
+        "O MySQL pula números pares quando a tabela tem UNIQUE",
+        "O número 4 foi guardado para ser usado no próximo INSERT",
+        "Uma tentativa de INSERT falhou (por exemplo, e-mail repetido) depois de reservar o número 4",
+        "Um INSERT com erro sempre apaga a linha anterior"
+      ],
+      "correta": 2,
+      "explicacao": "No InnoDB o número é reservado antes de gravar a linha; se o INSERT falha, o número se perde. Buracos na sequência são normais e não causam problema."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-omitir-coluna",
+      "peso": 1,
+      "enunciado": "Numa academia, a tabela `aluno` tem a coluna situacao VARCHAR(20) DEFAULT 'ativo'. Qual valor fica em situacao depois de `INSERT INTO aluno (nome) VALUES ('Rafael');`?",
+      "alternativas": [
+        "NULL",
+        "'ativo'",
+        "Texto vazio ('')",
+        "Dá erro, porque situacao não foi informada"
+      ],
+      "correta": 1,
+      "explicacao": "Coluna com DEFAULT que fica fora do INSERT recebe o valor padrão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-omitir-coluna",
+      "peso": 1,
+      "enunciado": "Na tabela `paciente` (id_paciente AUTO_INCREMENT, nome VARCHAR(80) NOT NULL, alergia VARCHAR(100) NULL, sem DEFAULT), qual valor fica em alergia após `INSERT INTO paciente (nome) VALUES ('Joana');`?",
+      "alternativas": [
+        "NULL",
+        "'nenhuma'",
+        "Texto vazio ('')",
+        "Dá erro 1364, porque alergia ficou de fora"
+      ],
+      "correta": 0,
+      "explicacao": "Coluna que aceita NULL e não tem DEFAULT recebe NULL quando é omitida. O erro só aconteceria se ela fosse NOT NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-default-palavra",
+      "peso": 1,
+      "enunciado": "A tabela `tarefa` tem as colunas id_tarefa AUTO_INCREMENT, titulo e status VARCHAR(20) DEFAULT 'aberta'. O que faz a palavra DEFAULT em `INSERT INTO tarefa (titulo, status) VALUES ('Lavar a quadra', DEFAULT);`?",
+      "alternativas": [
+        "Grava o texto 'DEFAULT' na coluna status",
+        "Pede para o MySQL gravar o valor padrão da coluna, ou seja, 'aberta'",
+        "Deixa a coluna status com NULL",
+        "Dá erro, pois DEFAULT só pode ser usado no CREATE TABLE"
+      ],
+      "correta": 1,
+      "explicacao": "Dentro de VALUES, a palavra DEFAULT (sem aspas) significa \"use o valor padrão desta coluna\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-null-vs-default",
+      "peso": 1,
+      "enunciado": "A tabela `tarefa` tem status VARCHAR(20) NULL DEFAULT 'aberta'. Qual valor fica em status depois de `INSERT INTO tarefa (titulo, status) VALUES ('Trocar lâmpada', NULL);`?",
+      "alternativas": [
+        "'aberta', porque o DEFAULT substitui o NULL",
+        "NULL, porque o valor informado no INSERT vale mais que o DEFAULT",
+        "O texto 'NULL'",
+        "Dá erro, porque não se pode mandar NULL para coluna com DEFAULT"
+      ],
+      "correta": 1,
+      "explicacao": "O DEFAULT só é usado quando a coluna fica de fora (ou recebe a palavra DEFAULT). Se você manda NULL e a coluna aceita NULL, grava NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-null-texto",
+      "peso": 1,
+      "enunciado": "Na tabela `contato` (id_contato, nome, telefone VARCHAR(20) NULL), o que fica gravado em telefone após `INSERT INTO contato (nome, telefone) VALUES ('Carlos', 'NULL');`?",
+      "alternativas": [
+        "A ausência de valor (NULL de verdade)",
+        "Texto vazio ('')",
+        "O texto de quatro letras NULL, e não a ausência de valor",
+        "Dá erro, porque NULL não pode ir entre aspas"
+      ],
+      "correta": 2,
+      "explicacao": "Entre aspas, 'NULL' é só um texto. Para gravar a ausência de valor, NULL vai sem aspas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `cliente` (id_cliente INT AUTO_INCREMENT PRIMARY KEY, nome), o que acontece com `INSERT INTO cliente (id_cliente, nome) VALUES (NULL, 'Rita');`?",
+      "alternativas": [
+        "Dá erro, porque a chave primária não aceita NULL",
+        "A linha é gravada com id_cliente vazio",
+        "O id_cliente fica com valor 0",
+        "O MySQL gera o próximo número da sequência para id_cliente"
+      ],
+      "correta": 3,
+      "explicacao": "Mandar NULL para uma coluna AUTO_INCREMENT tem o mesmo efeito de omiti-la: o MySQL gera o próximo número."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-notnull-obrigatoria",
+      "peso": 1,
+      "enunciado": "A tabela `funcionario` tem: id_funcionario (AUTO_INCREMENT), nome (NOT NULL, sem DEFAULT), setor (DEFAULT 'geral') e apelido (aceita NULL). Qual coluna NÃO pode ficar de fora de um INSERT?",
+      "alternativas": [
+        "id_funcionario",
+        "setor",
+        "nome",
+        "apelido"
+      ],
+      "correta": 2,
+      "explicacao": "id_funcionario é gerado sozinho, setor recebe o padrão e apelido fica NULL. Já nome é NOT NULL sem DEFAULT: precisa ser informado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-timestamp",
+      "peso": 1,
+      "enunciado": "Numa loja virtual, a tabela `pedido` tem data_pedido DATETIME DEFAULT CURRENT_TIMESTAMP. O que fica em data_pedido após `INSERT INTO pedido (id_cliente, valor) VALUES (4, 120.00);`?",
+      "alternativas": [
+        "NULL, porque a data não foi informada",
+        "A data em que a tabela foi criada",
+        "A data e a hora do momento em que o INSERT foi executado",
+        "'0000-00-00 00:00:00'"
+      ],
+      "correta": 2,
+      "explicacao": "DEFAULT CURRENT_TIMESTAMP preenche a coluna com o momento da gravação quando ela fica fora do INSERT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno escreveu tudo em letras minúsculas: `insert into curso (nome) values ('Robótica');`. O que acontece?",
+      "alternativas": [
+        "Funciona normalmente, pois as palavras do SQL não diferenciam maiúsculas de minúsculas",
+        "Dá erro de sintaxe, porque INSERT precisa ser em maiúsculas",
+        "Grava o nome como 'robótica', tudo em minúsculas",
+        "Funciona, mas só se o nome da tabela também estiver em maiúsculas"
+      ],
+      "correta": 0,
+      "explicacao": "Palavras-chave como INSERT, INTO e VALUES podem ser escritas em maiúsculas ou minúsculas. As maiúsculas são só um costume para facilitar a leitura."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-insert-set",
+      "peso": 1,
+      "enunciado": "No MySQL, o que faz o comando `INSERT INTO aluno SET nome = 'Léo', turma = '1A';`, sendo a tabela `aluno` (id_aluno AUTO_INCREMENT, nome, turma)?",
+      "alternativas": [
+        "Insere uma linha nova com nome 'Léo' e turma '1A'",
+        "Altera o nome e a turma de todos os alunos",
+        "Dá erro, porque SET só existe no UPDATE",
+        "Cria as colunas nome e turma na tabela aluno"
+      ],
+      "correta": 0,
+      "explicacao": "O MySQL aceita a forma INSERT ... SET coluna = valor, que equivale a INSERT ... (colunas) VALUES (valores). Continua sendo inserção de uma linha nova."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `usuario` (id_usuario, nome, ativo BOOLEAN), o que fica gravado em ativo após `INSERT INTO usuario (nome, ativo) VALUES ('Ana', TRUE);`?",
+      "alternativas": [
+        "O texto 'TRUE'",
+        "O número 0",
+        "O número 1",
+        "NULL, porque o MySQL não tem tipo lógico"
+      ],
+      "correta": 2,
+      "explicacao": "No MySQL, BOOLEAN é um TINYINT(1): TRUE é guardado como 1 e FALSE como 0."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-too-long",
+      "peso": 1,
+      "enunciado": "Na tabela `aluno` (id_aluno, nome VARCHAR(10) NOT NULL), o que acontece com `INSERT INTO aluno (nome) VALUES ('Maria Eduarda Santos');` no MySQL 8 (modo estrito, o padrão)?",
+      "alternativas": [
+        "Grava 'Maria Eduarda Santos' e aumenta a coluna sozinho",
+        "Grava só 'Maria Edua' sem avisar nada",
+        "Dá erro Data too long, porque o texto passa de 10 caracteres",
+        "Grava NULL, porque o texto não coube"
+      ],
+      "correta": 2,
+      "explicacao": "No modo estrito o MySQL não corta o texto: recusa o INSERT com o erro 1406 (Data too long for column)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de roupas, a tabela `camiseta` tem tamanho ENUM('P', 'M', 'G'). O que acontece com `INSERT INTO camiseta (modelo, tamanho) VALUES ('Lisa', 'GG');` no MySQL 8?",
+      "alternativas": [
+        "Grava 'G', o valor mais parecido",
+        "Grava 'GG' e acrescenta esse valor ao ENUM",
+        "Grava a linha com tamanho NULL",
+        "Dá erro, porque 'GG' não está na lista de valores do ENUM"
+      ],
+      "correta": 3,
+      "explicacao": "ENUM só aceita os valores da lista. No modo estrito o MySQL recusa o valor (erro Data truncated for column 'tamanho')."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-check",
+      "peso": 1,
+      "enunciado": "Na tabela `atleta` (id_atleta, nome, idade INT CHECK (idade >= 0)), o que acontece no MySQL 8 com `INSERT INTO atleta (nome, idade) VALUES ('Gui', -3);`?",
+      "alternativas": [
+        "Dá erro, porque o valor desrespeita a restrição CHECK",
+        "Grava -3, porque o MySQL ignora CHECK",
+        "Grava 3, trocando o sinal sozinho",
+        "Grava 0, o menor valor permitido"
+      ],
+      "correta": 0,
+      "explicacao": "Desde o MySQL 8.0.16 o CHECK é verificado: o INSERT é recusado (erro 3819, Check constraint is violated)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um único comando `INSERT INTO ... VALUES ...` grava linhas em quantas tabelas?",
+      "alternativas": [
+        "Em todas as tabelas do banco que tiverem as mesmas colunas",
+        "Em uma tabela só: a que vem depois de INTO",
+        "Em duas tabelas: a principal e a de backup",
+        "Em quantas tabelas forem citadas no VALUES"
+      ],
+      "correta": 1,
+      "explicacao": "O INSERT tem um destino só. Para gravar em duas tabelas, usam-se dois INSERT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `material` (id_material, descricao, estoque INT), o que acontece com `INSERT INTO material (descricao, estoque) VALUES ('Caneta azul', '30');`?",
+      "alternativas": [
+        "Dá erro, porque número nunca pode ir entre aspas",
+        "Grava estoque como texto e a coluna vira VARCHAR",
+        "Grava estoque = 0, porque '30' é texto",
+        "Grava normalmente: o MySQL converte o texto '30' para o número 30"
+      ],
+      "correta": 3,
+      "explicacao": "O MySQL converte '30' para número sozinho. Funciona, mas o certo é escrever números sem aspas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de inserir um professor na tabela `professor`, qual comando mostra as linhas da tabela para conferir se ele entrou?",
+      "alternativas": [
+        "`SELECT * FROM professor;`",
+        "`SHOW professor;`",
+        "`DESCRIBE professor;`",
+        "`INSERT INTO professor SELECT;`"
+      ],
+      "correta": 0,
+      "explicacao": "SELECT * FROM mostra os dados. DESCRIBE mostra só a estrutura (colunas e tipos), não as linhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-auto-proximo",
+      "peso": 1,
+      "enunciado": "A tabela `turma` (id_turma AUTO_INCREMENT, nome, vagas) tem como maior id o 4, e nenhuma linha foi apagada. Quais ids recebem as linhas do comando `INSERT INTO turma (nome, vagas) VALUES ('2B', 30), ('2C', 32);`?",
+      "alternativas": [
+        "4 e 5",
+        "5 e 5",
+        "1 e 2",
+        "5 e 6"
+      ],
+      "correta": 3,
+      "explicacao": "Num INSERT de várias linhas, cada linha recebe o próximo número: 5 para '2B' e 6 para '2C'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `brinquedo` (id_brinquedo AUTO_INCREMENT, nome, preco), o que acontece com o comando abaixo?\n\n`INSERT INTO brinquedo (nome, preco) VALUES ('Pião', 10.00), ('Bola');`",
+      "alternativas": [
+        "Erro Column count doesn't match value count at row 2, e nenhuma linha é gravada",
+        "O Pião é gravado e a Bola fica com preco NULL",
+        "As duas linhas são gravadas e a Bola recebe preço 0",
+        "O Pião é gravado e a Bola é ignorada sem erro"
+      ],
+      "correta": 0,
+      "explicacao": "Todas as linhas precisam ter a mesma quantidade de valores da lista de colunas. A 2ª linha tem só um valor, então o comando inteiro é recusado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a principal vantagem de cadastrar 50 produtos com um INSERT de várias linhas em vez de 50 comandos INSERT separados?",
+      "alternativas": [
+        "Permite gravar os produtos em tabelas diferentes",
+        "Deixa o MySQL ignorar os produtos com erro",
+        "É mais rápido e prático: um comando só é enviado e executado pelo banco",
+        "Dispensa informar os valores das colunas NOT NULL"
+      ],
+      "correta": 2,
+      "explicacao": "O INSERT de várias linhas reduz o número de comandos e de idas ao servidor. Mas se uma linha der erro, o comando todo falha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `veiculo` as colunas foram criadas na ordem id_veiculo, placa, modelo, ano. O comando `INSERT INTO veiculo (modelo, placa) VALUES ('Furgão', 'ABC1D23');` funciona?",
+      "alternativas": [
+        "Não: as colunas têm que estar na mesma ordem em que foram criadas",
+        "Não: é obrigatório listar todas as colunas, inclusive id e ano",
+        "Sim, mas o MySQL grava 'Furgão' na placa por causa da ordem da tabela",
+        "Sim: a lista de colunas pode ter qualquer ordem, desde que os valores sigam essa mesma ordem"
+      ],
+      "correta": 3,
+      "explicacao": "Quem manda é a lista do próprio INSERT: modelo recebe 'Furgão' e placa recebe 'ABC1D23'."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-dml-sigla",
+      "peso": 2,
+      "enunciado": "Os comandos SQL são divididos em grupos, como DDL e DML. O INSERT pertence ao grupo DML.\n\nNa sua resposta:\n1. explique o que é DML e o que os comandos desse grupo fazem;\n2. diga a diferença entre um comando DML (como o INSERT) e um comando DDL (como o CREATE TABLE).",
+      "respostasAceitas": [
+        "DML é a linguagem de manipulação de dados: INSERT, UPDATE e DELETE incluem, alteram e apagam linhas das tabelas. DDL mexe na estrutura (cria, altera e apaga tabelas); o INSERT não muda a estrutura, só coloca dados nela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) DML manipula os dados (incluir, alterar, apagar linhas); 2) DDL define a estrutura, DML trabalha com o conteúdo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa biblioteca escolar, a tabela `livro` tem as colunas id_livro (AUTO_INCREMENT), titulo, autor e ano. Observe o comando:\n\n`INSERT INTO livro (titulo, autor, ano) VALUES ('Dom Casmurro', 'Machado de Assis', 1899);`\n\nNa sua resposta:\n1. explique o papel de cada parte: INSERT INTO livro, a lista (titulo, autor, ano) e o VALUES;\n2. diga qual valor vai para cada coluna.",
+      "respostasAceitas": [
+        "INSERT INTO livro diz que uma linha nova vai para a tabela livro; a lista diz quais colunas serão preenchidas; VALUES traz os dados na mesma ordem. titulo = 'Dom Casmurro', autor = 'Machado de Assis', ano = 1899 (o id é gerado sozinho)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) tabela de destino, colunas e valores; 2) correspondência por posição (título, autor, ano)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-auto-manual",
+      "peso": 2,
+      "enunciado": "A tabela `ingresso` tem id_ingresso INT AUTO_INCREMENT PRIMARY KEY e os ids de 1 a 5. Foram executados, nesta ordem:\n\n`INSERT INTO ingresso (id_ingresso, setor) VALUES (20, 'Pista');`\n`INSERT INTO ingresso (setor) VALUES ('Arquibancada');`\n\nNa sua resposta:\n1. diga qual id cada ingresso recebeu;\n2. explique como o AUTO_INCREMENT decide o número do segundo ingresso.",
+      "respostasAceitas": [
+        "O primeiro ficou com id 20 (informado à mão) e o segundo com 21. O AUTO_INCREMENT continua a partir do maior valor já usado na coluna."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 20 e 21; 2) o contador segue do maior id existente, não do próximo 'buraco' (6)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-varias-linhas-sintaxe",
+      "peso": 2,
+      "enunciado": "Numa sorveteria, a tabela `sabor` tem id_sabor (AUTO_INCREMENT) e nome. Observe:\n\n`INSERT INTO sabor (nome) VALUES ('Açaí'), ('Pistache'), ('Doce de leite');`\n\nNa sua resposta:\n1. diga quantas linhas esse comando grava e o que cada parêntese representa;\n2. cite uma vantagem de usar um comando assim em vez de vários INSERT separados.",
+      "respostasAceitas": [
+        "Grava 3 linhas: cada parêntese é uma linha (um sabor). A vantagem é ser mais rápido e prático: um comando só, uma ida ao servidor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) três linhas, cada grupo entre parênteses é uma linha; 2) menos comandos, mais rapidez/praticidade."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-omitir-coluna",
+      "peso": 2,
+      "enunciado": "Numa academia, a tabela `aluno` tem: id_aluno (AUTO_INCREMENT), nome (NOT NULL), plano VARCHAR(20) DEFAULT 'mensal' e observacao (aceita NULL, sem DEFAULT). A última matrícula tem id 14. Foi executado:\n\n`INSERT INTO aluno (nome) VALUES ('Tainá');`\n\nNa sua resposta:\n1. diga qual valor fica em cada uma das quatro colunas da nova linha;\n2. explique por que o comando não deu erro mesmo informando uma coluna só.",
+      "respostasAceitas": [
+        "id_aluno = 15, nome = 'Tainá', plano = 'mensal', observacao = NULL. Não deu erro porque as colunas que ficaram de fora têm como se preencher: AUTO_INCREMENT, DEFAULT ou NULL."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 15, 'Tainá', 'mensal', NULL; 2) só NOT NULL sem DEFAULT precisa ser informada; as outras são preenchidas automaticamente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-null-vs-default",
+      "peso": 2,
+      "enunciado": "A tabela `tarefa` tem status VARCHAR(20) NULL DEFAULT 'aberta'. Compare os dois comandos:\n\n`INSERT INTO tarefa (titulo) VALUES ('Pintar muro');`\n`INSERT INTO tarefa (titulo, status) VALUES ('Lavar calçada', NULL);`\n\nNa sua resposta:\n1. diga o valor de status em cada linha;\n2. explique por que os resultados são diferentes.",
+      "respostasAceitas": [
+        "Na primeira, status = 'aberta'; na segunda, status = NULL. O DEFAULT só é usado quando a coluna fica fora do INSERT; ao mandar NULL de propósito, o MySQL grava NULL."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 'aberta' e NULL; 2) omitir usa o padrão, NULL explícito é um valor informado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-null-texto",
+      "peso": 2,
+      "enunciado": "Na tabela `contato` (id_contato, nome, telefone NULL), um estagiário rodou `INSERT INTO contato (nome, telefone) VALUES ('Paulo', 'NULL');` achando que o telefone ficaria sem valor.\n\nNa sua resposta:\n1. explique o que de fato foi gravado em telefone;\n2. explique como o NULL deveria aparecer no comando para indicar ausência de valor.",
+      "respostasAceitas": [
+        "Foi gravado o texto 'NULL' (quatro letras), não a ausência de valor. Para indicar ausência, NULL vai sem aspas (ou a coluna fica fora do INSERT)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) texto 'NULL'; 2) NULL sem aspas ou omitir a coluna."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-ordem-valores",
+      "peso": 2,
+      "enunciado": "Num pet shop, a tabela `pet` tem id_pet, nome VARCHAR(40) e especie VARCHAR(20). Um atendente rodou `INSERT INTO pet (especie, nome) VALUES ('Paçoca', 'cachorro');` e o MySQL não mostrou erro.\n\nNa sua resposta:\n1. explique como ficaram gravados os dados;\n2. explique por que o MySQL não acusou erro.",
+      "respostasAceitas": [
+        "Ficou especie = 'Paçoca' e nome = 'cachorro', trocados. O MySQL casa cada valor com a coluna da mesma posição e não entende o significado; como os dois são textos, ele aceita."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dados trocados; 2) correspondência por posição e tipos compatíveis, o banco não valida o sentido."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-tudo-ou-nada",
+      "peso": 2,
+      "enunciado": "Na tabela `cliente` (id_cliente PK, nome, cpf UNIQUE), engine InnoDB, já existe o CPF '111.222.333-44'. Foi executado:\n\n`INSERT INTO cliente (nome, cpf) VALUES ('Ari', '555.666.777-88'), ('Lia', '111.222.333-44');`\n\nNa sua resposta:\n1. diga quantas linhas foram gravadas e por quê;\n2. explique o que precisa mudar nos dados para o comando funcionar.",
+      "respostasAceitas": [
+        "Nenhuma linha foi gravada: a Lia repete um CPF UNIQUE (Duplicate entry) e, no InnoDB, o comando é tudo ou nada. É preciso corrigir ou retirar o CPF repetido (verificar o CPF da Lia) e rodar de novo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) zero linhas, o erro em uma linha desfaz o comando inteiro; 2) corrigir/remover o CPF repetido."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-auto-buraco",
+      "peso": 2,
+      "enunciado": "Na tabela `inscricao` (id_inscricao AUTO_INCREMENT, email UNIQUE), os ids ficaram 1, 2, 3, 5 e 6, sem nenhum DELETE. O coordenador acha que o banco está com defeito.\n\nNa sua resposta:\n1. explique a causa mais provável do número 4 ter sido pulado;\n2. diga se isso é um problema para o sistema e por quê.",
+      "respostasAceitas": [
+        "Provavelmente um INSERT falhou (por exemplo, e-mail repetido) depois de o número 4 ser reservado; o AUTO_INCREMENT não volta atrás. Não é problema: o id só precisa ser único, não precisa ser sequencial sem buracos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) INSERT com erro consumiu o número; 2) não é defeito, a PK só garante unicidade."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-default-palavra",
+      "peso": 2,
+      "enunciado": "A tabela `chamado` tem prioridade VARCHAR(10) DEFAULT 'normal'. Observe:\n\n`INSERT INTO chamado (titulo, prioridade) VALUES ('Sem internet', DEFAULT);`\n\nNa sua resposta:\n1. explique o que a palavra DEFAULT faz dentro de VALUES;\n2. diga qual valor fica em prioridade.",
+      "respostasAceitas": [
+        "DEFAULT (sem aspas) manda o MySQL usar o valor padrão da coluna. Fica prioridade = 'normal'."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) usa o valor padrão definido na tabela; 2) 'normal'."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-too-long",
+      "peso": 2,
+      "enunciado": "Na tabela `aluno` (id_aluno, nome VARCHAR(10) NOT NULL), o comando `INSERT INTO aluno (nome) VALUES ('Maria Eduarda Santos');` mostrou o erro `Data too long for column 'nome' at row 1`.\n\nNa sua resposta:\n1. explique o que a mensagem quer dizer;\n2. cite duas formas de resolver o problema.",
+      "respostasAceitas": [
+        "O texto tem mais caracteres do que os 10 que a coluna aceita, e o MySQL recusou. Resolve abreviando o nome para caber ou aumentando o tamanho da coluna (ALTER TABLE para VARCHAR(80), por exemplo)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) valor maior que o tamanho da coluna; 2) encurtar o dado ou aumentar o VARCHAR."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-check",
+      "peso": 2,
+      "enunciado": "Num clube, a tabela `socio` tem idade INT CHECK (idade BETWEEN 5 AND 100). No MySQL 8, o comando `INSERT INTO socio (nome, idade) VALUES ('Vitor', 150);` deu o erro `Check constraint 'socio_chk_1' is violated`.\n\nNa sua resposta:\n1. explique o que a restrição CHECK faz;\n2. explique por que esse INSERT foi recusado e o que acontece com a linha.",
+      "respostasAceitas": [
+        "CHECK é uma regra que todo valor gravado precisa cumprir. 150 está fora do intervalo de 5 a 100, então o MySQL recusou o INSERT e a linha não foi gravada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) regra de validação na coluna; 2) 150 viola a regra, nada é gravado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-insert-set",
+      "peso": 2,
+      "enunciado": "No MySQL, os dois comandos abaixo foram usados na tabela `aluno` (id_aluno AUTO_INCREMENT, nome, turma):\n\n`INSERT INTO aluno (nome, turma) VALUES ('Léo', '1A');`\n`INSERT INTO aluno SET nome = 'Gabi', turma = '1B';`\n\nNa sua resposta:\n1. diga se os dois comandos fazem o mesmo tipo de operação;\n2. explique a diferença na forma de informar os valores.",
+      "respostasAceitas": [
+        "Sim, os dois inserem uma linha nova. No primeiro, as colunas vêm numa lista e os valores depois de VALUES, na mesma ordem; no segundo, cada coluna recebe o valor direto com coluna = valor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ambos inserem uma linha; 2) lista + VALUES por posição × pares coluna = valor."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-timestamp",
+      "peso": 2,
+      "enunciado": "Numa loja virtual, a tabela `pedido` tem data_pedido DATETIME DEFAULT CURRENT_TIMESTAMP, e os INSERT do site não informam essa coluna.\n\nNa sua resposta:\n1. diga qual valor a coluna recebe em cada pedido novo;\n2. explique por que isso é útil para a loja.",
+      "respostasAceitas": [
+        "Recebe a data e a hora do momento em que o pedido foi gravado. É útil porque o registro do horário fica automático e confiável, sem depender de o programa mandar a data."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) data e hora do INSERT; 2) registro automático, sem esquecer nem errar a data."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-aspas-tipos",
+      "peso": 1,
+      "enunciado": "Numa escola, a tabela `aluno` tem: id_aluno (AUTO_INCREMENT), nome VARCHAR(80), idade INT e nascimento DATE. Qual INSERT está com os valores escritos corretamente?",
+      "alternativas": [
+        "`INSERT INTO aluno (nome, idade, nascimento) VALUES (Davi, 16, 2010-05-20);`",
+        "`INSERT INTO aluno (nome, idade, nascimento) VALUES ('Davi', 16, '2010-05-20');`",
+        "`INSERT INTO aluno (nome, idade, nascimento) VALUES ('Davi', 16, '20/05/2010');`",
+        "`INSERT INTO aluno (nome, idade, nascimento) VALUES ('Davi', 16, 20052010);`"
+      ],
+      "correta": 1,
+      "explicacao": "Texto e data vão entre aspas simples; a data no formato ano-mês-dia ('2010-05-20'); número vai sem aspas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-data-formato",
+      "peso": 1,
+      "enunciado": "Numa clínica, a coluna data_consulta é do tipo DATE. Como a data 15 de março de 2026 deve ser escrita no INSERT?",
+      "alternativas": [
+        "'15/03/2026'",
+        "2026-03-15 (sem aspas)",
+        "'03-15-2026'",
+        "'2026-03-15'"
+      ],
+      "correta": 3,
+      "explicacao": "O MySQL usa o formato 'AAAA-MM-DD' (ano-mês-dia), entre aspas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-data-sem-aspas",
+      "peso": 1,
+      "enunciado": "Na tabela `consulta` (id_consulta, motivo, data_consulta DATE), o que acontece com `INSERT INTO consulta (motivo, data_consulta) VALUES ('Retorno', 2026-03-15);` no MySQL 8?",
+      "alternativas": [
+        "Grava 15/03/2026 normalmente, pois as aspas são opcionais em datas",
+        "Grava a data de hoje, porque o valor não foi entendido",
+        "Grava NULL na data e mostra só um aviso",
+        "Dá erro: sem aspas o MySQL faz a conta 2026 − 3 − 15 = 2008, que não é uma data válida"
+      ],
+      "correta": 3,
+      "explicacao": "Sem aspas, os traços viram sinais de menos. O resultado (2008) não é uma data e o modo estrito recusa o INSERT (Incorrect date value)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-aspas-texto",
+      "peso": 1,
+      "enunciado": "Na tabela `aluno` (id_aluno, nome VARCHAR(80), idade INT), um aluno rodou `INSERT INTO aluno (nome, idade) VALUES (Ana, 15);` e recebeu um erro. Qual?",
+      "alternativas": [
+        "Duplicate entry 'Ana', porque o nome já existe",
+        "Data too long, porque Ana não cabe na coluna",
+        "Column 'nome' cannot be null, porque Ana sem aspas vira NULL",
+        "Unknown column 'Ana' in 'field list', porque sem aspas Ana é lido como nome de coluna"
+      ],
+      "correta": 3,
+      "explicacao": "Texto sem aspas é interpretado como nome de coluna. Como não existe coluna Ana, dá o erro 1054."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-decimal-ponto",
+      "peso": 1,
+      "enunciado": "Numa lanchonete, a coluna preco é DECIMAL(6,2). O suco custa R$ 7,50. Como esse valor deve aparecer no INSERT?",
+      "alternativas": [
+        "7,50",
+        "'R$ 7,50'",
+        "750",
+        "7.50"
+      ],
+      "correta": 3,
+      "explicacao": "No SQL a casa decimal é separada por ponto, sem símbolo de moeda."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-virgula-decimal",
+      "peso": 1,
+      "enunciado": "Na tabela `salgado` (id_salgado AUTO_INCREMENT, nome, preco DECIMAL(6,2)), o que acontece com `INSERT INTO salgado (nome, preco) VALUES ('Coxinha', 6,50);`?",
+      "alternativas": [
+        "Erro Column count doesn't match value count, porque a vírgula criou três valores para duas colunas",
+        "Grava a coxinha com preço 6.50 normalmente",
+        "Grava a coxinha com preço 6, ignorando o 50",
+        "Grava o preço 650, juntando os números"
+      ],
+      "correta": 0,
+      "explicacao": "A vírgula separa valores. ('Coxinha', 6, 50) são três valores para duas colunas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-virgula-decimal",
+      "peso": 1,
+      "enunciado": "Na tabela `salgado` (id_salgado AUTO_INCREMENT, nome, preco DECIMAL(6,2), estoque INT), o que acontece com o comando abaixo?\n\n`INSERT INTO salgado (nome, preco, estoque) VALUES ('Coxinha', 6,50);`",
+      "alternativas": [
+        "Grava sem erro, mas com preco = 6.00 e estoque = 50",
+        "Dá erro Column count doesn't match value count",
+        "Grava preco = 6.50 e estoque = NULL",
+        "Grava preco = 6.50 e estoque = 0"
+      ],
+      "correta": 0,
+      "explicacao": "A vírgula decimal virou separador: 'Coxinha', 6 e 50 são três valores para três colunas. O MySQL aceita e o erro passa despercebido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-hora-formato",
+      "peso": 1,
+      "enunciado": "Numa portaria, a coluna entrada é DATETIME. Como deve ser escrito o momento 15 de março de 2026, às 14h30?",
+      "alternativas": [
+        "'15/03/2026 14h30'",
+        "'2026-03-15 14:30:00'",
+        "'14:30:00 2026-03-15'",
+        "2026-03-15 14:30:00 (sem aspas)"
+      ],
+      "correta": 1,
+      "explicacao": "DATETIME usa 'AAAA-MM-DD HH:MM:SS', entre aspas: primeiro a data, depois a hora."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-apostrofo",
+      "peso": 1,
+      "enunciado": "Uma confeitaria se chama Doce D'Ouro. Qual INSERT grava esse nome corretamente na tabela `loja` (id_loja, nome)?",
+      "alternativas": [
+        "`INSERT INTO loja (nome) VALUES ('Doce D''Ouro');`",
+        "`INSERT INTO loja (nome) VALUES ('Doce D'Ouro');`",
+        "`INSERT INTO loja (nome) VALUES (Doce D'Ouro);`",
+        "`INSERT INTO loja (nome) VALUES ('Doce D\"Ouro');`"
+      ],
+      "correta": 0,
+      "explicacao": "Um apóstrofo dentro de um texto com aspas simples encerraria o texto. Escrevendo dois apóstrofos seguidos (''), o MySQL grava um só."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola de idiomas, a tabela `matricula` tem data_matricula DATE. O que fica gravado com `INSERT INTO matricula (aluno, data_matricula) VALUES ('Lia', CURDATE());`?",
+      "alternativas": [
+        "O texto 'CURDATE()'",
+        "NULL, porque CURDATE() só funciona no SELECT",
+        "A data do dia em que o comando foi executado",
+        "A data em que o banco de dados foi criado"
+      ],
+      "correta": 2,
+      "explicacao": "CURDATE() é uma função que devolve a data atual; o resultado dela é gravado na coluna."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-sem-lista-ordem",
+      "peso": 1,
+      "enunciado": "Na tabela `cor` (id_cor INT PRIMARY KEY, nome VARCHAR(30)), sem AUTO_INCREMENT, o que faz `INSERT INTO cor VALUES (1, 'Azul');`?",
+      "alternativas": [
+        "Grava id_cor = 1 e nome = 'Azul', seguindo a ordem das colunas na tabela",
+        "Dá erro, porque a lista de colunas é obrigatória",
+        "Grava os dois valores na coluna nome",
+        "Grava só o id e deixa nome NULL"
+      ],
+      "correta": 0,
+      "explicacao": "Sem a lista de colunas, os valores são aplicados a todas as colunas, na ordem em que foram criadas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-sem-lista-auto",
+      "peso": 1,
+      "enunciado": "Na tabela `produto` (id_produto AUTO_INCREMENT, nome, preco), o que acontece com `INSERT INTO produto VALUES ('Bolo de fubá', 20.00);`?",
+      "alternativas": [
+        "Grava o bolo e gera o id sozinho",
+        "Erro Column count doesn't match value count, porque sem lista é preciso informar as 3 colunas",
+        "Grava 'Bolo de fubá' no id e 20.00 no nome",
+        "Grava o bolo com preço NULL"
+      ],
+      "correta": 1,
+      "explicacao": "Sem lista de colunas, o MySQL espera um valor para cada coluna da tabela, inclusive o id."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-sem-lista-auto",
+      "peso": 1,
+      "enunciado": "A tabela `produto` tem as colunas id_produto (AUTO_INCREMENT), nome e preco, nessa ordem. Sem usar lista de colunas, qual INSERT grava o produto e deixa o MySQL gerar o id?",
+      "alternativas": [
+        "`INSERT INTO produto VALUES (NULL, 'Bolo de fubá', 20.00);`",
+        "`INSERT INTO produto VALUES ('Bolo de fubá', 20.00);`",
+        "`INSERT INTO produto VALUES ('Bolo de fubá', 20.00, NULL);`",
+        "`INSERT INTO produto VALUES (AUTO, 'Bolo de fubá', 20.00);`"
+      ],
+      "correta": 0,
+      "explicacao": "Sem lista é preciso dar um valor para cada coluna na ordem da tabela; NULL (ou DEFAULT) na coluna AUTO_INCREMENT faz o MySQL gerar o número."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-sem-lista-alter",
+      "peso": 1,
+      "enunciado": "Um sistema roda sempre `INSERT INTO cliente VALUES (NULL, 'Nome', 'email');`, sem lista de colunas. Depois de um `ALTER TABLE cliente ADD telefone VARCHAR(20);`, o que acontece com esse INSERT?",
+      "alternativas": [
+        "Passa a dar erro Column count doesn't match, pois agora a tabela tem 4 colunas",
+        "Continua funcionando e telefone fica NULL",
+        "Grava o e-mail na coluna telefone",
+        "Continua funcionando, pois o MySQL ignora colunas novas"
+      ],
+      "correta": 0,
+      "explicacao": "Sem lista, o INSERT precisa de um valor para cada coluna. Com a coluna nova, 3 valores não bastam. Com lista de colunas o comando continuaria funcionando."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-sem-lista-ordem",
+      "peso": 1,
+      "enunciado": "A tabela `pessoa` foi criada com as colunas id_pessoa (AUTO_INCREMENT), sobrenome e nome, nessa ordem. O que acontece com `INSERT INTO pessoa VALUES (NULL, 'Bruna', 'Lopes');`?",
+      "alternativas": [
+        "Grava nome = 'Bruna' e sobrenome = 'Lopes'",
+        "Dá erro, porque o MySQL percebe a troca",
+        "Dá erro, porque NULL não pode ir no id",
+        "Grava sobrenome = 'Bruna' e nome = 'Lopes', sem nenhum erro"
+      ],
+      "correta": 3,
+      "explicacao": "Sem lista, vale a ordem da tabela. Os dois são textos, então o MySQL aceita, e os dados ficam trocados. Esse é um risco de omitir a lista de colunas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-contagem",
+      "peso": 1,
+      "enunciado": "O que significa o erro `Column count doesn't match value count at row 1`?",
+      "alternativas": [
+        "Uma das colunas listadas não existe na tabela",
+        "A quantidade de valores é diferente da quantidade de colunas do INSERT",
+        "O valor da chave primária já existe",
+        "A tabela ainda não tem nenhuma linha"
+      ],
+      "correta": 1,
+      "explicacao": "Cada coluna listada precisa de exatamente um valor. Se sobra ou falta valor, dá esse erro (1136)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-contagem",
+      "peso": 1,
+      "enunciado": "A tabela `servico` tem: id_servico (AUTO_INCREMENT), descricao, valor e duracao_min. Qual dos comandos causa o erro Column count doesn't match value count?",
+      "alternativas": [
+        "`INSERT INTO servico (descricao, valor, duracao_min) VALUES ('Banho', 40.00, 30);`",
+        "`INSERT INTO servico (descricao) VALUES ('Tosa');`",
+        "`INSERT INTO servico (descricao, valor) VALUES ('Banho', 40.00, 30);`",
+        "`INSERT INTO servico (valor, descricao) VALUES (55.00, 'Tosa');`"
+      ],
+      "correta": 2,
+      "explicacao": "A lista tem 2 colunas e o VALUES tem 3 valores. Nos outros, a quantidade bate."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `produto` (id_produto, nome VARCHAR(60) NOT NULL, preco), o que acontece com `INSERT INTO produto (nome, preco) VALUES (NULL, 9.90);`?",
+      "alternativas": [
+        "Erro Column 'nome' cannot be null, porque NULL foi mandado para uma coluna NOT NULL",
+        "Grava o produto com nome vazio",
+        "Grava o texto 'NULL' no nome",
+        "Grava o produto e mostra só um aviso"
+      ],
+      "correta": 0,
+      "explicacao": "NOT NULL proíbe a ausência de valor. Mandar NULL de propósito gera o erro 1048."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-notnull-obrigatoria",
+      "peso": 1,
+      "enunciado": "A tabela `hospede` tem: id_hospede (AUTO_INCREMENT), nome (NOT NULL), documento (NOT NULL) e telefone (aceita NULL). Qual INSERT vai falhar?",
+      "alternativas": [
+        "`INSERT INTO hospede (nome, telefone) VALUES ('Otávio', '11 98888-0000');`",
+        "`INSERT INTO hospede (nome, documento) VALUES ('Otávio', 'RG 12.345');`",
+        "`INSERT INTO hospede (nome, documento, telefone) VALUES ('Otávio', 'RG 12.345', NULL);`",
+        "`INSERT INTO hospede (documento, nome) VALUES ('RG 12.345', 'Otávio');`"
+      ],
+      "correta": 0,
+      "explicacao": "documento é NOT NULL e ficou de fora. Os outros informam nome e documento; telefone pode faltar ou ser NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-notnull-default",
+      "peso": 1,
+      "enunciado": "Na tabela `conta` (id_conta, titular NOT NULL, saldo DECIMAL(10,2) NOT NULL DEFAULT 0), o que acontece com `INSERT INTO conta (titular) VALUES ('Sílvia');`?",
+      "alternativas": [
+        "Dá erro, porque saldo é NOT NULL e não foi informado",
+        "Grava a conta com saldo 0.00",
+        "Grava a conta com saldo NULL",
+        "Dá erro, porque DEFAULT não pode ser usado com NOT NULL"
+      ],
+      "correta": 1,
+      "explicacao": "Coluna NOT NULL com DEFAULT pode ficar fora do INSERT: recebe o valor padrão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-duplicado-pk",
+      "peso": 1,
+      "enunciado": "Ao inserir um aluno, apareceu `Duplicate entry '12' for key 'aluno.PRIMARY'`. O que isso quer dizer?",
+      "alternativas": [
+        "A tabela aluno tem só 12 linhas",
+        "O valor 12 é grande demais para a coluna",
+        "A coluna id está como NOT NULL",
+        "Já existe um aluno com id 12, e a chave primária não aceita repetição"
+      ],
+      "correta": 3,
+      "explicacao": "PRIMARY é a chave primária. O valor 12 já está em uso, então o INSERT é recusado (erro 1062)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-unique",
+      "peso": 1,
+      "enunciado": "Na tabela `cliente` (id_cliente AUTO_INCREMENT, nome, email UNIQUE) foram executados, nesta ordem:\n\n`INSERT INTO cliente (nome, email) VALUES ('Ana', 'ana@mail.com');`\n`INSERT INTO cliente (nome, email) VALUES ('Ana Paula', 'ana@mail.com');`\n\nO que acontece?",
+      "alternativas": [
+        "Os dois gravam, pois os nomes são diferentes",
+        "O segundo substitui o primeiro",
+        "Os dois dão erro, pois o e-mail é igual",
+        "O primeiro grava e o segundo dá erro Duplicate entry, porque o e-mail se repete"
+      ],
+      "correta": 3,
+      "explicacao": "UNIQUE impede repetir o e-mail. O primeiro entra normalmente; o segundo é recusado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-unique",
+      "peso": 1,
+      "enunciado": "Na tabela `cliente` (id_cliente AUTO_INCREMENT, nome, cpf VARCHAR(14) NULL UNIQUE), o que acontece ao inserir dois clientes sem CPF, os dois com cpf NULL?",
+      "alternativas": [
+        "O segundo dá erro Duplicate entry, porque NULL repetiu",
+        "O segundo é gravado com cpf vazio ('')",
+        "Os dois dão erro, porque UNIQUE não aceita NULL",
+        "Os dois são gravados: UNIQUE não considera NULL como valor repetido"
+      ],
+      "correta": 3,
+      "explicacao": "No MySQL, uma coluna UNIQUE que aceita NULL pode ter vários NULL: ausência de valor não conta como repetição."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-pk-composta",
+      "peso": 1,
+      "enunciado": "Numa escola, a tabela `matricula` tem a chave primária composta (id_aluno, id_curso) e já possui a linha (1, 3). Qual INSERT dá erro de Duplicate entry?",
+      "alternativas": [
+        "`INSERT INTO matricula (id_aluno, id_curso) VALUES (1, 2);`",
+        "`INSERT INTO matricula (id_aluno, id_curso) VALUES (3, 1);`",
+        "`INSERT INTO matricula (id_aluno, id_curso) VALUES (1, 3);`",
+        "`INSERT INTO matricula (id_aluno, id_curso) VALUES (2, 3);`"
+      ],
+      "correta": 2,
+      "explicacao": "Na chave composta, o que não pode repetir é o par. (1, 3) já existe; os outros pares são novos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-vazio-null",
+      "peso": 1,
+      "enunciado": "Na tabela `cidade` (id_cidade, nome VARCHAR(60) NOT NULL), o que acontece com `INSERT INTO cidade (nome) VALUES ('');`?",
+      "alternativas": [
+        "Dá erro Column 'nome' cannot be null",
+        "Grava NULL no nome",
+        "Dá erro de sintaxe por causa das aspas vazias",
+        "Grava a linha com um texto vazio, porque texto vazio não é NULL"
+      ],
+      "correta": 3,
+      "explicacao": "NOT NULL só barra a ausência de valor. Texto vazio ('') é um valor e é aceito; para barrar, seria preciso um CHECK."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-aspas-tipos",
+      "peso": 1,
+      "enunciado": "Na tabela `produto` (nome VARCHAR(60), estoque INT, preco DECIMAL(8,2), lote INT), em qual coluna o valor deve ir entre aspas no INSERT?",
+      "alternativas": [
+        "nome",
+        "estoque",
+        "preco",
+        "lote"
+      ],
+      "correta": 0,
+      "explicacao": "VARCHAR é texto e vai entre aspas simples. INT e DECIMAL são números e vão sem aspas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `ingresso` (id_ingresso, setor, preco DECIMAL(5,2)), o que acontece no MySQL 8 com `INSERT INTO ingresso (setor, preco) VALUES ('VIP', 1500.00);`?",
+      "alternativas": [
+        "Grava 1500.00 normalmente",
+        "Grava 999.99 sem avisar",
+        "Dá erro Out of range value, pois DECIMAL(5,2) vai no máximo até 999.99",
+        "Grava 15.00, cortando os zeros"
+      ],
+      "correta": 2,
+      "explicacao": "DECIMAL(5,2) tem 5 dígitos, 2 depois da vírgula: sobram 3 para a parte inteira. 1500 não cabe e o modo estrito recusa (erro 1264)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `turma` (id_turma, nome, vagas INT), o que acontece no MySQL 8 com `INSERT INTO turma (nome, vagas) VALUES ('3A', 'dez');`?",
+      "alternativas": [
+        "Grava vagas = 10",
+        "Grava o texto 'dez' na coluna vagas",
+        "Dá erro Incorrect integer value, porque 'dez' não é um número",
+        "Grava vagas = NULL"
+      ],
+      "correta": 2,
+      "explicacao": "O MySQL só converte texto que tenha forma de número (como '10'). 'dez' não pode ser convertido e o modo estrito recusa o INSERT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas mensagens aparece quando um INSERT repete o valor de uma chave primária ou de uma coluna UNIQUE?",
+      "alternativas": [
+        "Unknown column",
+        "Cannot add or update a child row",
+        "Duplicate entry",
+        "Column count doesn't match value count"
+      ],
+      "correta": 2,
+      "explicacao": "Duplicate entry = valor repetido. Unknown column = coluna inexistente; child row = FK; Column count = número de valores errado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `endereco` (id_endereco, cep CHAR(8)), o CEP 01001000 foi inserido assim: `INSERT INTO endereco (cep) VALUES (01001000);`. O que fica gravado?",
+      "alternativas": [
+        "'01001000', exatamente como foi digitado",
+        "'1001000', porque sem aspas o valor virou número e perdeu o zero da frente",
+        "Dá erro, porque CHAR não aceita números",
+        "NULL, porque o número não coube"
+      ],
+      "correta": 1,
+      "explicacao": "Sem aspas, 01001000 é o número 1001000. Ao virar texto, o zero inicial some. Códigos como CEP e telefone vão entre aspas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-duplicado-pk",
+      "peso": 1,
+      "enunciado": "A tabela `produto` (id_produto AUTO_INCREMENT PRIMARY KEY, nome) tem ids de 1 a 5. O que acontece com `INSERT INTO produto (id_produto, nome) VALUES (3, 'Régua');`?",
+      "alternativas": [
+        "Grava a régua com id 6, ignorando o 3",
+        "Dá erro Duplicate entry '3', porque o id 3 já está em uso",
+        "Substitui o produto 3 pela régua",
+        "Grava a régua com id 3 ao lado do produto antigo"
+      ],
+      "correta": 1,
+      "explicacao": "Mesmo com AUTO_INCREMENT, se você informa o id ele é usado como está. Como 3 já existe, a PK barra o INSERT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um INSERT de uma linha deu erro de NOT NULL. O que aconteceu com os dados daquele comando?",
+      "alternativas": [
+        "A linha foi gravada com as colunas que estavam certas",
+        "A linha foi gravada com NULL na coluna obrigatória",
+        "Nada foi gravado: a linha com erro não entra na tabela",
+        "A tabela foi esvaziada para evitar inconsistência"
+      ],
+      "correta": 2,
+      "explicacao": "Quando o INSERT é recusado, a linha não é gravada. É preciso corrigir o comando e rodar de novo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `evento` (id_evento, nome, data_evento DATE), o que acontece no MySQL 8 com `INSERT INTO evento (nome, data_evento) VALUES ('Feira', '2026-02-30');`?",
+      "alternativas": [
+        "Grava 2026-03-02, passando para março",
+        "Dá erro Incorrect date value, porque fevereiro não tem dia 30",
+        "Grava 2026-02-28, o último dia válido",
+        "Grava a data como texto, sem conferir"
+      ],
+      "correta": 1,
+      "explicacao": "No modo estrito o MySQL confere se a data existe. 30 de fevereiro não existe e o INSERT é recusado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-decimal-ponto",
+      "peso": 1,
+      "enunciado": "Uma loja de móveis cadastrou uma mesa de R$ 1.250,00 numa coluna preco DECIMAL(8,2). Como esse valor deve aparecer no INSERT?",
+      "alternativas": [
+        "1.250,00",
+        "1250.00",
+        "1,250.00",
+        "'R$ 1.250,00'"
+      ],
+      "correta": 1,
+      "explicacao": "No SQL não se usa separador de milhar e a parte decimal vem depois do ponto: 1250.00."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-hora-formato",
+      "peso": 1,
+      "enunciado": "Numa academia, a coluna horario_aula é do tipo TIME. Como o horário 7h45 deve ser escrito no INSERT?",
+      "alternativas": [
+        "'7h45'",
+        "'07:45:00'",
+        "07:45:00 (sem aspas)",
+        "'45:07:00'"
+      ],
+      "correta": 1,
+      "explicacao": "TIME usa 'HH:MM:SS', entre aspas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-aspas-tipos",
+      "peso": 2,
+      "enunciado": "Na tabela `aluno` (id_aluno AUTO_INCREMENT, nome VARCHAR(80), idade INT, nascimento DATE), observe:\n\n`INSERT INTO aluno (nome, idade, nascimento) VALUES ('Davi', 16, '2010-05-20');`\n\nNa sua resposta:\n1. explique por que 'Davi' e '2010-05-20' estão entre aspas e 16 não;\n2. diga em que formato a data foi escrita.",
+      "respostasAceitas": [
+        "Texto (VARCHAR) e data (DATE) vão entre aspas simples; números (INT) vão sem aspas. A data está no formato ano-mês-dia (AAAA-MM-DD), que é o do MySQL."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) texto e data com aspas, número sem; 2) AAAA-MM-DD."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-virgula-decimal",
+      "peso": 2,
+      "enunciado": "Na tabela `salgado` (id_salgado AUTO_INCREMENT, nome, preco DECIMAL(6,2), estoque INT), alguém rodou `INSERT INTO salgado (nome, preco, estoque) VALUES ('Empada', 7,50);` e o MySQL respondeu 1 row affected, sem erro.\n\nNa sua resposta:\n1. explique o que foi gravado em preco e em estoque;\n2. explique por que o MySQL não acusou nenhum erro.",
+      "respostasAceitas": [
+        "Foi gravado preco = 7.00 e estoque = 50. A vírgula separa valores, então 'Empada', 7 e 50 viraram três valores para três colunas; a quantidade bateu e os tipos eram válidos, por isso não houve erro. O certo seria usar ponto (7.50) e informar o estoque."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) preço 7 e estoque 50; 2) a vírgula separou os valores e a contagem coincidiu com as colunas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-duplicado-pk",
+      "peso": 2,
+      "enunciado": "Na tabela `aluno` (id_aluno INT PRIMARY KEY, nome), já existe o aluno 12. O comando `INSERT INTO aluno (id_aluno, nome) VALUES (12, 'Gustavo');` mostrou `Duplicate entry '12' for key 'aluno.PRIMARY'`.\n\nNa sua resposta:\n1. explique o que a mensagem quer dizer;\n2. diga por que o banco impede essa gravação.",
+      "respostasAceitas": [
+        "Já existe uma linha com id 12 e a chave primária não aceita valor repetido, então o INSERT foi recusado. O banco impede porque a PK precisa identificar cada aluno de forma única."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) id 12 já usado; 2) a PK garante que cada linha é única."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-notnull-default",
+      "peso": 2,
+      "enunciado": "A tabela `conta` tem titular VARCHAR(60) NOT NULL e saldo DECIMAL(10,2) NOT NULL DEFAULT 0. Também tem cpf VARCHAR(14) NOT NULL, sem DEFAULT. Observe:\n\n`INSERT INTO conta (titular) VALUES ('Sílvia');`\n\nNa sua resposta:\n1. diga se o comando funciona e qual coluna causa problema;\n2. explique por que saldo pode ficar de fora e cpf não.",
+      "respostasAceitas": [
+        "Não funciona: falta o cpf (erro Field 'cpf' doesn't have a default value). saldo pode ficar de fora porque tem DEFAULT 0; cpf é NOT NULL e não tem valor padrão, então precisa ser informado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) erro por causa do cpf; 2) NOT NULL com DEFAULT recebe o padrão; sem DEFAULT é obrigatória."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-sem-lista-alter",
+      "peso": 2,
+      "enunciado": "Num sistema, todos os cadastros usam INSERT sem lista de colunas, como `INSERT INTO fornecedor VALUES (NULL, 'Rio Embalagens', '21 3333-0000');`.\n\nNa sua resposta:\n1. explique como o MySQL decide em qual coluna vai cada valor nesse caso;\n2. cite dois riscos de escrever o INSERT dessa forma.",
+      "respostasAceitas": [
+        "Sem lista, os valores seguem a ordem em que as colunas foram criadas na tabela. Riscos: se a tabela ganhar ou perder uma coluna o comando quebra (Column count), e se a ordem for esquecida os dados podem ir para a coluna errada sem erro."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ordem das colunas na tabela; 2) quebra ao mudar a estrutura e troca silenciosa de dados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-data-formato",
+      "peso": 2,
+      "enunciado": "Na clínica, a recepcionista rodou `INSERT INTO consulta (paciente, data_consulta) VALUES ('Rui', '15/03/2026');` e a data_consulta (DATE) não foi aceita.\n\nNa sua resposta:\n1. explique por que a data não foi aceita;\n2. diga em que formato ela deveria aparecer no comando.",
+      "respostasAceitas": [
+        "O MySQL não usa o formato dia/mês/ano; ele não entende '15/03/2026' como 15 de março e recusa o valor (Incorrect date value). A data deve ir como '2026-03-15' (AAAA-MM-DD), entre aspas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) formato errado para o MySQL; 2) 'AAAA-MM-DD'."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-aspas-texto",
+      "peso": 2,
+      "enunciado": "Na tabela `aluno` (id_aluno, nome VARCHAR(80), idade INT), o comando `INSERT INTO aluno (nome, idade) VALUES (Ana, 15);` mostrou `Unknown column 'Ana' in 'field list'`.\n\nNa sua resposta:\n1. explique por que o MySQL falou em coluna se Ana é um nome de pessoa;\n2. diga o que falta no comando.",
+      "respostasAceitas": [
+        "Sem aspas, o MySQL entende Ana como nome de coluna (ou outro identificador), e não existe coluna Ana. Falta colocar o texto entre aspas simples: 'Ana'."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) texto sem aspas é lido como identificador; 2) faltam as aspas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-unique",
+      "peso": 2,
+      "enunciado": "Na tabela `cliente` (id_cliente AUTO_INCREMENT, nome, email VARCHAR(80) NULL UNIQUE), foram executados quatro INSERT: Ana com 'ana@mail.com', Bruno com 'ana@mail.com', Carla sem e-mail (NULL) e Diego sem e-mail (NULL).\n\nNa sua resposta:\n1. diga quais INSERT funcionaram e qual falhou;\n2. explique por que dois clientes com e-mail NULL não violam o UNIQUE.",
+      "respostasAceitas": [
+        "Funcionaram Ana, Carla e Diego; o de Bruno falhou com Duplicate entry, porque repete o e-mail da Ana. NULL significa ausência de valor e o MySQL não trata dois NULL como valores iguais, então o UNIQUE permite vários."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só o de Bruno falha; 2) NULL não conta como valor repetido."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-contagem",
+      "peso": 2,
+      "enunciado": "Na tabela `servico` (id_servico AUTO_INCREMENT, descricao, valor), o comando `INSERT INTO servico (descricao, valor) VALUES ('Banho', 40.00, 30);` mostrou `Column count doesn't match value count at row 1`.\n\nNa sua resposta:\n1. explique o que a mensagem quer dizer;\n2. aponte o que está errado nesse comando.",
+      "respostasAceitas": [
+        "A quantidade de valores não bate com a quantidade de colunas. Foram listadas 2 colunas (descricao e valor) e informados 3 valores; sobra o 30."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) número de valores diferente do de colunas; 2) 2 colunas e 3 valores."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-apostrofo",
+      "peso": 2,
+      "enunciado": "Uma confeitaria chamada Doce D'Ouro tentou se cadastrar com `INSERT INTO loja (nome) VALUES ('Doce D'Ouro');` e recebeu um erro de sintaxe.\n\nNa sua resposta:\n1. explique por que o apóstrofo do nome causou o erro;\n2. explique como o apóstrofo deve aparecer dentro do texto para ser gravado.",
+      "respostasAceitas": [
+        "O apóstrofo de D' fecha o texto antes da hora: o MySQL lê 'Doce D' e não entende o resto (Ouro'). Dentro de um texto com aspas simples, o apóstrofo deve ser escrito duas vezes ('Doce D''Ouro') para ser gravado como um só."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o apóstrofo encerra a string; 2) dobrar o apóstrofo (ou escapar com barra)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-sem-lista-alter",
+      "peso": 2,
+      "enunciado": "Por meses o sistema de uma papelaria rodou `INSERT INTO cliente VALUES (NULL, 'Nome', 'email');` sem problemas. Depois que o técnico rodou `ALTER TABLE cliente ADD telefone VARCHAR(20);`, todo cadastro novo passou a falhar.\n\nNa sua resposta:\n1. explique por que o ALTER TABLE fez o INSERT parar de funcionar;\n2. explique como o uso da lista de colunas teria evitado o problema.",
+      "respostasAceitas": [
+        "Sem lista, o INSERT precisa de um valor para cada coluna da tabela. Com o telefone, a tabela passou a ter 4 colunas e o comando manda 3 valores (Column count doesn't match). Com a lista (nome, email), o MySQL preencheria só essas e o telefone ficaria NULL."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mudou a quantidade de colunas; 2) com lista, colunas novas que aceitam NULL/DEFAULT não atrapalham."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-decimal-ponto",
+      "peso": 2,
+      "enunciado": "No Brasil escrevemos preços como 12,50, mas num INSERT a coluna preco DECIMAL(6,2) deve receber 12.50.\n\nNa sua resposta:\n1. explique por que não se usa a vírgula como separador decimal no INSERT;\n2. diga o que o MySQL faz com a vírgula dentro de VALUES.",
+      "respostasAceitas": [
+        "No SQL o separador decimal é o ponto. Dentro de VALUES a vírgula separa um valor do outro, então 12,50 vira dois valores (12 e 50)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) padrão do SQL é o ponto; 2) a vírgula separa valores."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-pk-composta",
+      "peso": 2,
+      "enunciado": "Numa escola, a tabela `matricula` tem a chave primária composta (id_aluno, id_curso) e já possui as linhas (1, 3) e (2, 3). Uma secretária quer saber por que `VALUES (1, 4)` funcionou e `VALUES (2, 3)` deu Duplicate entry.\n\nNa sua resposta:\n1. explique o que a chave primária composta impede de repetir;\n2. explique o resultado de cada um dos dois INSERT.",
+      "respostasAceitas": [
+        "Na chave composta o que não pode repetir é a combinação dos dois valores. (1, 4) é um par novo (o aluno 1 num curso novo), por isso entrou; (2, 3) já existia, por isso deu Duplicate entry."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o par não pode repetir, cada coluna sozinha pode; 2) (1,4) novo, (2,3) repetido."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-data-sem-aspas",
+      "peso": 2,
+      "enunciado": "Na tabela `consulta` (id_consulta, motivo, data_consulta DATE), um aluno rodou `INSERT INTO consulta (motivo, data_consulta) VALUES ('Retorno', 2026-03-15);` e recebeu `Incorrect date value: '2008'`.\n\nNa sua resposta:\n1. explique de onde saiu o número 2008;\n2. explique por que a data precisa de aspas.",
+      "respostasAceitas": [
+        "Sem aspas, os traços viram sinais de menos e o MySQL faz a conta 2026 − 3 − 15 = 2008, que não é uma data válida. Com aspas ('2026-03-15') o valor é lido como data."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) foi feita uma subtração; 2) aspas fazem o MySQL tratar como data."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-vazio-null",
+      "peso": 2,
+      "enunciado": "Na tabela `cidade` (id_cidade, nome VARCHAR(60) NOT NULL), o comando `INSERT INTO cidade (nome) VALUES ('');` funcionou, mas `INSERT INTO cidade (nome) VALUES (NULL);` deu erro.\n\nNa sua resposta:\n1. explique a diferença entre texto vazio ('') e NULL;\n2. explique por que só o segundo comando deu erro.",
+      "respostasAceitas": [
+        "Texto vazio é um valor (um texto sem letras); NULL é a ausência de valor. NOT NULL proíbe só a ausência de valor, por isso só o NULL foi recusado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) '' é valor, NULL é falta de valor; 2) NOT NULL barra apenas o NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-fk-inexistente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `pedido` (id_pedido, id_cliente, valor) tem id_cliente como chave estrangeira para `cliente` (id_cliente, nome). A tabela cliente tem só os ids 1, 2 e 3. O que acontece com `INSERT INTO pedido (id_cliente, valor) VALUES (8, 50.00);`?",
+      "alternativas": [
+        "Grava o pedido e cria o cliente 8 sozinho",
+        "Grava o pedido com id_cliente NULL",
+        "Dá erro Duplicate entry, porque o 8 já foi usado",
+        "Dá erro Cannot add or update a child row, porque o cliente 8 não existe"
+      ],
+      "correta": 3,
+      "explicacao": "A FK só aceita valores que existem na tabela pai. Não há cliente 8, então o MySQL recusa (erro 1452)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-ordem-pai-filho",
+      "peso": 1,
+      "enunciado": "Numa escola, a tabela `aluno` tem id_curso como chave estrangeira para a tabela `curso`. O banco está vazio. Qual deve ser a ordem dos cadastros?",
+      "alternativas": [
+        "Primeiro o aluno, depois o curso",
+        "Tanto faz: o MySQL ajusta a ordem sozinho",
+        "Primeiro o curso, depois o aluno que aponta para ele",
+        "Os dois juntos, no mesmo INSERT"
+      ],
+      "correta": 2,
+      "explicacao": "A linha filha (aluno) só pode apontar para um curso que já existe. Por isso o pai (curso) é inserido antes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-ordem-script",
+      "peso": 1,
+      "enunciado": "Num mercado, as tabelas são: `cliente`; `categoria`; `produto` (FK id_categoria); `venda` (FK id_cliente); `item_venda` (FK id_venda e FK id_produto). O banco está vazio. Qual ordem de INSERT funciona sem erro de chave estrangeira?",
+      "alternativas": [
+        "produto, categoria, cliente, venda, item_venda",
+        "cliente, venda, item_venda, categoria, produto",
+        "categoria, produto, cliente, venda, item_venda",
+        "categoria, cliente, item_venda, produto, venda"
+      ],
+      "correta": 2,
+      "explicacao": "Cada tabela só pode ser preenchida depois das tabelas para as quais ela aponta. item_venda depende de venda e produto, por isso fica por último."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-fk-null",
+      "peso": 1,
+      "enunciado": "Na tabela `funcionario`, a coluna id_setor é chave estrangeira para `setor` e aceita NULL. O que acontece com `INSERT INTO funcionario (nome, id_setor) VALUES ('Nara', NULL);`?",
+      "alternativas": [
+        "Dá erro Cannot add or update a child row, porque NULL não existe em setor",
+        "Grava a funcionária no primeiro setor da tabela",
+        "Dá erro, porque coluna com FK nunca aceita NULL",
+        "Grava normalmente: a FK só confere valores preenchidos, e NULL indica que ainda não há setor"
+      ],
+      "correta": 3,
+      "explicacao": "Se a coluna da FK aceita NULL, o MySQL não procura nada na tabela pai para esse valor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-fk-inexistente",
+      "peso": 1,
+      "enunciado": "Na tabela `autor` existem os ids 1, 2 e 4. A tabela `livro` (id_livro, titulo, id_autor) tem id_autor como FK para autor. Qual INSERT funciona?",
+      "alternativas": [
+        "`INSERT INTO livro (titulo, id_autor) VALUES ('Contos da serra', 3);`",
+        "`INSERT INTO livro (titulo, id_autor) VALUES ('Contos da serra', 4);`",
+        "`INSERT INTO livro (titulo, id_autor) VALUES ('Contos da serra', 5);`",
+        "`INSERT INTO livro (titulo, id_autor) VALUES ('Contos da serra', 0);`"
+      ],
+      "correta": 1,
+      "explicacao": "Só o 4 existe na tabela autor entre as opções. Os demais (3, 5 e 0) causam o erro de chave estrangeira."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No banco de uma livraria, `livro` tem a coluna id_editora, que é chave estrangeira para `editora`. Nesse relacionamento, qual é a tabela pai?",
+      "alternativas": [
+        "livro, porque é a tabela que tem a FK",
+        "As duas são pai uma da outra",
+        "editora, porque é a tabela referenciada pela FK",
+        "Nenhuma: FK não define pai e filho"
+      ],
+      "correta": 2,
+      "explicacao": "A tabela pai é a referenciada (editora); a filha é a que guarda a FK (livro). Por isso a editora precisa existir antes do livro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, `consulta` (id_consulta, id_paciente, id_medico, data) tem FK para `paciente` e para `medico`. Existem pacientes de 1 a 50 e médicos de 1 a 6. O comando `INSERT INTO consulta (id_paciente, id_medico, data) VALUES (3, 15, '2026-04-02');` deu erro de chave estrangeira. Qual a causa mais provável?",
+      "alternativas": [
+        "O paciente 3 não existe",
+        "A data deveria estar sem aspas",
+        "A consulta 15 já existe",
+        "Os ids foram trocados: 15 foi para id_medico, e não existe médico 15"
+      ],
+      "correta": 3,
+      "explicacao": "Os valores seguem a ordem da lista. id_medico recebeu 15, e só há médicos de 1 a 6, então a FK recusa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-associativa",
+      "peso": 1,
+      "enunciado": "A tabela associativa `aluno_curso` (id_aluno FK, id_curso FK) liga alunos a cursos. Para inserir a linha (7, 2), o que precisa existir antes?",
+      "alternativas": [
+        "O aluno 7 na tabela aluno e o curso 2 na tabela curso",
+        "Só o aluno 7",
+        "Só o curso 2",
+        "Nada: tabela associativa não confere as FKs"
+      ],
+      "correta": 0,
+      "explicacao": "Cada FK é conferida separadamente: os dois pais precisam existir."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao inserir uma matrícula apareceu: `Cannot add or update a child row: a foreign key constraint fails (... FOREIGN KEY (id_turma) REFERENCES turma (id_turma))`. O que deve ser conferido?",
+      "alternativas": [
+        "Se o valor usado em id_turma existe na tabela turma",
+        "Se a tabela turma está vazia, pois ela precisa estar",
+        "Se o id da matrícula já existe",
+        "Se a coluna id_turma é do tipo texto"
+      ],
+      "correta": 0,
+      "explicacao": "A mensagem mostra qual coluna (id_turma) aponta para qual tabela (turma). O valor informado não foi encontrado lá."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-insert-select-basico",
+      "peso": 1,
+      "enunciado": "Qual é a finalidade de colocar uma consulta dentro de um INSERT, na forma `INSERT INTO ... SELECT ...`?",
+      "alternativas": [
+        "Para gravar numa tabela as linhas que uma consulta (SELECT) devolve",
+        "Para mostrar as linhas logo depois de inseridas",
+        "Para inserir uma linha e consultar o id gerado",
+        "Para criar uma tabela nova a partir de outra"
+      ],
+      "correta": 0,
+      "explicacao": "No INSERT ... SELECT, em vez de valores digitados no VALUES, as linhas vêm do resultado de um SELECT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-insert-select-basico",
+      "peso": 1,
+      "enunciado": "Uma escola quer copiar os alunos formados para a tabela `ex_aluno` (nome, email). A tabela `aluno` tem nome, email e situacao. Qual comando está correto?",
+      "alternativas": [
+        "`INSERT INTO ex_aluno (nome, email) VALUES SELECT nome, email FROM aluno WHERE situacao = 'formado';`",
+        "`INSERT INTO ex_aluno SELECT FROM aluno (nome, email) WHERE situacao = 'formado';`",
+        "`INSERT INTO ex_aluno (nome, email) SELECT nome, email FROM aluno WHERE situacao = 'formado';`",
+        "`SELECT nome, email INSERT INTO ex_aluno FROM aluno WHERE situacao = 'formado';`"
+      ],
+      "correta": 2,
+      "explicacao": "No INSERT ... SELECT não se usa VALUES: depois da lista de colunas vem direto o SELECT, com as colunas na mesma ordem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-insert-select-qtd",
+      "peso": 1,
+      "enunciado": "A tabela `aluno` tem 30 linhas, e 4 delas têm situacao = 'formado'. Quantas linhas `INSERT INTO ex_aluno (nome, email) SELECT nome, email FROM aluno WHERE situacao = 'formado';` grava em ex_aluno?",
+      "alternativas": [
+        "30",
+        "1",
+        "4",
+        "26"
+      ],
+      "correta": 2,
+      "explicacao": "O INSERT ... SELECT grava uma linha para cada linha devolvida pelo SELECT. O WHERE deixa só 4."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que acontece com `INSERT INTO contato_backup (nome, telefone) SELECT nome FROM contato;`?",
+      "alternativas": [
+        "Copia os nomes e deixa telefone NULL",
+        "Copia os nomes e os telefones normalmente",
+        "Dá erro Column count doesn't match, porque o SELECT devolve 1 coluna e a lista tem 2",
+        "Copia só a primeira linha de contato"
+      ],
+      "correta": 2,
+      "explicacao": "No INSERT ... SELECT a quantidade de colunas do SELECT precisa ser igual à da lista do INSERT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-insert-select-fixo",
+      "peso": 1,
+      "enunciado": "A tabela `aluno` (nome, email) tem 12 linhas. O que faz `INSERT INTO lista_evento (nome, origem) SELECT nome, 'site' FROM aluno;`?",
+      "alternativas": [
+        "Grava 12 linhas em lista_evento, todas com origem = 'site'",
+        "Grava 1 linha com origem = 'site'",
+        "Dá erro, porque o SELECT só pode trazer colunas da tabela",
+        "Grava 12 linhas com origem NULL"
+      ],
+      "correta": 0,
+      "explicacao": "Um valor fixo no SELECT ('site') se repete em cada linha devolvida. Assim cada aluno entra com a origem 'site'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-insert-select-copia",
+      "peso": 1,
+      "enunciado": "Depois de `INSERT INTO pedido_arquivo SELECT * FROM pedido WHERE ano = 2024;`, o que acontece com os pedidos de 2024 na tabela `pedido`?",
+      "alternativas": [
+        "Continuam lá: o INSERT ... SELECT só copia, não apaga a origem",
+        "São apagados de pedido e passam para pedido_arquivo",
+        "Ficam marcados como arquivados",
+        "Ficam com valores NULL"
+      ],
+      "correta": 0,
+      "explicacao": "O INSERT grava no destino; o SELECT apenas lê a origem. Para tirar de pedido seria preciso um DELETE depois."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-last-id-basico",
+      "peso": 1,
+      "enunciado": "Para que serve a função `LAST_INSERT_ID()` no MySQL?",
+      "alternativas": [
+        "Mostrar o maior id que existe na tabela",
+        "Mostrar o id gerado pelo AUTO_INCREMENT no último INSERT da sua conexão",
+        "Apagar a última linha inserida",
+        "Mostrar quantas linhas a tabela tem"
+      ],
+      "correta": 1,
+      "explicacao": "LAST_INSERT_ID() devolve o número que o AUTO_INCREMENT gerou no último INSERT feito pela sua própria conexão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-last-id-basico",
+      "peso": 1,
+      "enunciado": "Na tabela `pedido` (id_pedido AUTO_INCREMENT), um INSERT gerou o pedido 27. Logo depois, na mesma conexão, foi executado `SELECT LAST_INSERT_ID();`. Qual o resultado?",
+      "alternativas": [
+        "27",
+        "28",
+        "1",
+        "0"
+      ],
+      "correta": 0,
+      "explicacao": "LAST_INSERT_ID() devolve o id gerado pelo último INSERT da conexão: 27."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-last-id-varias",
+      "peso": 1,
+      "enunciado": "Na tabela `produto` (id_produto AUTO_INCREMENT), o comando `INSERT INTO produto (nome) VALUES ('Lápis'), ('Borracha'), ('Régua');` gerou os ids 31, 32 e 33. Qual o resultado de `SELECT LAST_INSERT_ID();` logo depois?",
+      "alternativas": [
+        "33",
+        "3",
+        "31",
+        "32"
+      ],
+      "correta": 2,
+      "explicacao": "Num INSERT de várias linhas, LAST_INSERT_ID() devolve o id da primeira linha gerada pelo comando."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-last-id-conexao",
+      "peso": 1,
+      "enunciado": "A secretária A inseriu um aluno que ganhou id 40. Um segundo depois, a secretária B, em outra conexão, inseriu outro aluno (id 41). Se a secretária A rodar `SELECT LAST_INSERT_ID();`, qual o resultado?",
+      "alternativas": [
+        "41, porque é o último id da tabela",
+        "40, porque cada conexão enxerga o seu próprio último id",
+        "0, porque outra pessoa inseriu depois",
+        "Dá erro, porque duas pessoas inseriram ao mesmo tempo"
+      ],
+      "correta": 1,
+      "explicacao": "LAST_INSERT_ID() é guardado por conexão. O INSERT da secretária B não muda o valor que a secretária A vê."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-last-id-uso",
+      "peso": 1,
+      "enunciado": "Num sistema de vendas, logo após `INSERT INTO pedido (id_cliente) VALUES (5);` foi executado `INSERT INTO item_pedido (id_pedido, id_produto, qtd) VALUES (LAST_INSERT_ID(), 12, 2);`. O que o segundo comando faz?",
+      "alternativas": [
+        "Grava o item ligado ao pedido que acabou de ser criado",
+        "Grava o item no pedido de número 5",
+        "Grava o item no pedido mais antigo da tabela",
+        "Grava o item com id_pedido NULL"
+      ],
+      "correta": 0,
+      "explicacao": "LAST_INSERT_ID() traz o id do pedido recém-inserido, então o item fica ligado a ele sem precisar consultar a tabela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na mesma conexão, `INSERT INTO cliente (nome) VALUES ('Ivo');` gerou o id 9. Em seguida rodou-se `INSERT INTO cliente (id_cliente, nome) VALUES (100, 'Zeca');`. Qual o resultado de `SELECT LAST_INSERT_ID();`?",
+      "alternativas": [
+        "100, porque foi o último INSERT",
+        "101, o próximo número da sequência",
+        "9, porque o id 100 foi informado à mão e não gerado pelo AUTO_INCREMENT",
+        "0, porque o último INSERT não usou AUTO_INCREMENT"
+      ],
+      "correta": 2,
+      "explicacao": "LAST_INSERT_ID() só muda quando o AUTO_INCREMENT gera um número. Com id informado, o valor anterior (9) continua."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-digitacao",
+      "peso": 1,
+      "enunciado": "No banco loja existe a tabela `produto`. O comando `INSERT INTO produtos (nome) VALUES ('Caderno');` deu `Table 'loja.produtos' doesn't exist`. Qual a causa?",
+      "alternativas": [
+        "A tabela produto está vazia",
+        "Falta informar o id do produto",
+        "O nome 'Caderno' já existe",
+        "O nome da tabela foi digitado errado (produtos no plural)"
+      ],
+      "correta": 3,
+      "explicacao": "A mensagem diz que não existe tabela com o nome escrito. O nome correto é produto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-digitacao",
+      "peso": 1,
+      "enunciado": "Na tabela `cliente` (id_cliente, nome, email), o comando `INSERT INTO cliente (nome, emial) VALUES ('Rui', 'rui@mail.com');` deu erro. Qual?",
+      "alternativas": [
+        "Duplicate entry 'rui@mail.com'",
+        "Unknown column 'emial' in 'field list', porque a coluna foi escrita errado",
+        "Column count doesn't match value count",
+        "Table 'cliente' doesn't exist"
+      ],
+      "correta": 1,
+      "explicacao": "A coluna se chama email; 'emial' não existe, por isso o erro 1054."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-ordem-script",
+      "peso": 1,
+      "enunciado": "Um script de carga roda, nesta ordem: (1) INSERT em `matricula`, que tem FK para aluno; (2) INSERT em `aluno`. O banco está vazio. O que acontece?",
+      "alternativas": [
+        "Os dois funcionam, porque estão no mesmo script",
+        "O MySQL guarda a matrícula e espera o aluno chegar",
+        "O segundo INSERT falha, porque o aluno já foi usado",
+        "O primeiro INSERT falha por chave estrangeira, pois o aluno ainda não existe"
+      ],
+      "correta": 3,
+      "explicacao": "Cada INSERT é conferido na hora. A matrícula aponta para um aluno inexistente. A solução é inserir o aluno antes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-autorrel",
+      "peso": 1,
+      "enunciado": "A tabela `funcionario` (id_funcionario AUTO_INCREMENT, nome, id_gerente) tem id_gerente como FK para a própria tabela funcionario, aceitando NULL. Como cadastrar a diretora, que não tem gerente, sendo a primeira funcionária?",
+      "alternativas": [
+        "Inserir a diretora com id_gerente = 1, pois será o id dela",
+        "Inserir a diretora com id_gerente NULL; depois os outros apontam para o id dela",
+        "Não é possível: autorrelacionamento exige outra tabela",
+        "Inserir primeiro um funcionário qualquer e depois a diretora"
+      ],
+      "correta": 1,
+      "explicacao": "Com a tabela vazia, não existe ninguém para ser gerente. NULL é aceito pela FK e indica que ela não tem chefe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-insert-select-copia",
+      "peso": 1,
+      "enunciado": "As tabelas `produto` e `produto_backup` têm as mesmas colunas, na mesma ordem. O que faz `INSERT INTO produto_backup SELECT * FROM produto;`?",
+      "alternativas": [
+        "Copia todas as linhas de produto para produto_backup",
+        "Troca o conteúdo das duas tabelas",
+        "Apaga produto_backup e cria de novo",
+        "Copia só a estrutura, sem as linhas"
+      ],
+      "correta": 0,
+      "explicacao": "Sem WHERE, o SELECT traz todas as linhas. Como as estruturas são iguais, SELECT * encaixa coluna por coluna."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-fk-integridade",
+      "peso": 1,
+      "enunciado": "Por que o MySQL recusa um INSERT numa tabela filha que aponta para um registro pai inexistente?",
+      "alternativas": [
+        "Para economizar espaço no disco",
+        "Porque a tabela filha precisa estar vazia",
+        "Porque INSERT não pode ser usado em tabelas com FK",
+        "Para manter a integridade: não deixar uma linha apontando para algo que não existe"
+      ],
+      "correta": 3,
+      "explicacao": "A chave estrangeira garante que toda referência é válida, evitando registros órfãos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-ordem-pai-filho",
+      "peso": 1,
+      "enunciado": "Numa loja, a nova cliente Joana quer fazer o primeiro pedido. A tabela `pedido` tem FK id_cliente para `cliente`. O que fazer primeiro?",
+      "alternativas": [
+        "Cadastrar a Joana em cliente e usar o id dela no INSERT do pedido",
+        "Cadastrar o pedido e depois a Joana",
+        "Cadastrar o pedido com id_cliente = 0",
+        "Cadastrar a Joana direto na tabela pedido"
+      ],
+      "correta": 0,
+      "explicacao": "O pedido aponta para um cliente; esse cliente tem que existir antes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `acesso` (id_acesso, usuario, momento DATETIME), o que fica em momento após `INSERT INTO acesso (usuario, momento) VALUES ('ana', NOW());`?",
+      "alternativas": [
+        "A data e a hora atuais, do momento do INSERT",
+        "O texto 'NOW()'",
+        "Só a data, sem a hora",
+        "NULL, pois funções não podem ir no VALUES"
+      ],
+      "correta": 0,
+      "explicacao": "NOW() devolve data e hora atuais, e esse valor é gravado na coluna."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-insert-select-qtd",
+      "peso": 1,
+      "enunciado": "O comando `INSERT INTO ex_aluno (nome, email) SELECT nome, email FROM aluno WHERE situacao = 'formado';` foi executado, mas nenhum aluno está formado. O que acontece?",
+      "alternativas": [
+        "Dá erro, porque o SELECT não devolveu linhas",
+        "Grava uma linha com nome e email NULL",
+        "Copia todos os alunos, ignorando o WHERE",
+        "Nada é gravado e não há erro: o MySQL informa 0 linhas afetadas"
+      ],
+      "correta": 3,
+      "explicacao": "Se o SELECT devolve zero linhas, o INSERT grava zero linhas. Não é erro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-tudo-ou-nada",
+      "peso": 1,
+      "enunciado": "A tabela `item_venda` (id_venda FK, id_produto FK, qtd) recebe, num só comando, três itens. Os produtos 1 e 2 existem, mas o 99 não. O que acontece com `INSERT INTO item_venda (id_venda, id_produto, qtd) VALUES (10, 1, 2), (10, 99, 1), (10, 2, 3);`?",
+      "alternativas": [
+        "Nenhum item é gravado: o erro de FK no item do produto 99 desfaz o comando inteiro",
+        "Os itens dos produtos 1 e 2 são gravados e o 99 é ignorado",
+        "Só o primeiro item é gravado",
+        "Os três são gravados e o produto 99 é criado"
+      ],
+      "correta": 0,
+      "explicacao": "No InnoDB, um INSERT de várias linhas é tudo ou nada. A FK falha no 2º item e nenhuma linha fica gravada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-last-id-conexao",
+      "peso": 1,
+      "enunciado": "Por que usar `LAST_INSERT_ID()` é mais seguro do que `SELECT MAX(id_pedido) FROM pedido;` para descobrir o id do pedido que você acabou de inserir?",
+      "alternativas": [
+        "Porque MAX não funciona em colunas AUTO_INCREMENT",
+        "Porque LAST_INSERT_ID() também apaga o pedido anterior",
+        "Porque outra pessoa pode inserir um pedido logo depois e o MAX traria o id dela",
+        "Porque MAX sempre devolve o menor id"
+      ],
+      "correta": 2,
+      "explicacao": "Com vários usuários ao mesmo tempo, o maior id pode ser de outro. LAST_INSERT_ID() é por conexão: devolve o seu."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para cadastrar um cliente novo na tabela `cliente` e o primeiro pedido dele na tabela `pedido`, quantos comandos INSERT são necessários no mínimo?",
+      "alternativas": [
+        "1, porque o pedido já cria o cliente",
+        "2, um para cada tabela",
+        "3, um a mais para ligar as tabelas",
+        "Nenhum, basta um UPDATE"
+      ],
+      "correta": 1,
+      "explicacao": "Cada INSERT grava em uma tabela só. Cliente e pedido são tabelas diferentes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-associativa",
+      "peso": 1,
+      "enunciado": "A tabela `item_pedido` (id_pedido FK para pedido, id_produto FK para produto, quantidade) recebe um INSERT. O que o MySQL confere por causa das chaves estrangeiras?",
+      "alternativas": [
+        "Só se o id_pedido existe, pois é a primeira coluna",
+        "Se o id_pedido existe em pedido e se o id_produto existe em produto",
+        "Se a quantidade é maior que zero",
+        "Se o produto ainda tem estoque"
+      ],
+      "correta": 1,
+      "explicacao": "Cada FK é verificada: os dois valores precisam existir nas tabelas pai. Quantidade e estoque não são conferidos por FK."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-form-cadastro",
+      "peso": 1,
+      "enunciado": "Num site de inscrições, o aluno preenche o formulário e clica em Enviar. Qual comando SQL o sistema usa para guardar esses dados como um registro novo?",
+      "alternativas": [
+        "SELECT",
+        "UPDATE",
+        "CREATE",
+        "INSERT"
+      ],
+      "correta": 3,
+      "explicacao": "Guardar um registro novo é inserir uma linha: INSERT. UPDATE muda dados existentes, SELECT consulta e CREATE cria estrutura."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-fk-inexistente",
+      "peso": 2,
+      "enunciado": "Numa loja, a tabela `pedido` (id_pedido, id_cliente, valor) tem id_cliente como FK para `cliente`, que só tem os ids 1 a 3. O comando `INSERT INTO pedido (id_cliente, valor) VALUES (7, 80.00);` mostrou `Cannot add or update a child row: a foreign key constraint fails`.\n\nNa sua resposta:\n1. explique o que a mensagem quer dizer;\n2. diga o que precisa ser feito para cadastrar esse pedido.",
+      "respostasAceitas": [
+        "O pedido aponta para o cliente 7, que não existe, e a FK impede essa referência. É preciso cadastrar o cliente antes (ou usar o id de um cliente que exista)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) referência a pai inexistente; 2) inserir o cliente primeiro ou usar id válido."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-ordem-pai-filho",
+      "peso": 2,
+      "enunciado": "Numa escola, a tabela `aluno` tem id_turma como chave estrangeira para a tabela `turma`. O banco foi recém-criado e está vazio.\n\nNa sua resposta:\n1. diga qual tabela deve receber dados primeiro;\n2. explique por que essa ordem é necessária.",
+      "respostasAceitas": [
+        "Primeiro a turma, depois os alunos. O aluno guarda o id da turma, e a FK só aceita ids que já existem na tabela turma."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) turma (pai) antes; 2) a FK exige que o pai exista."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-ordem-script",
+      "peso": 2,
+      "enunciado": "A rotina de carga de uma oficina roda, nesta ordem:\n\n`INSERT INTO servico_os (id_os, id_servico) VALUES (1, 1);`\n`INSERT INTO ordem_servico (id_os, placa) VALUES (1, 'BRA2E19');`\n`INSERT INTO servico (id_servico, nome) VALUES (1, 'Troca de óleo');`\n\nA tabela servico_os tem FK para ordem_servico e para servico. O banco está vazio.\n\nNa sua resposta:\n1. diga qual comando falha e por quê;\n2. diga em que ordem os três INSERT deveriam ser executados.",
+      "respostasAceitas": [
+        "Falha o primeiro: servico_os aponta para a OS 1 e o serviço 1, que ainda não existem. A ordem certa é ordem_servico e servico (em qualquer ordem entre si) e por último servico_os."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o INSERT em servico_os, por FK; 2) os pais antes, a associativa por último."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-insert-select-basico",
+      "peso": 2,
+      "enunciado": "Uma escola executou:\n\n`INSERT INTO ex_aluno (nome, email) SELECT nome, email FROM aluno WHERE situacao = 'formado';`\n\nNa sua resposta:\n1. explique o que o comando faz;\n2. explique o papel do WHERE nesse comando.",
+      "respostasAceitas": [
+        "Copia para ex_aluno o nome e o e-mail de cada aluno da tabela aluno; cada linha do SELECT vira uma linha nova. O WHERE limita a cópia aos alunos com situação 'formado'."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) grava em ex_aluno o resultado do SELECT; 2) só os formados são copiados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-insert-select-fixo",
+      "peso": 2,
+      "enunciado": "A tabela `participante` (nome, origem, data_cadastro) recebeu:\n\n`INSERT INTO participante (nome, origem, data_cadastro) SELECT nome, 'feira', CURDATE() FROM visitante WHERE aceitou_contato = 1;`\n\nA tabela visitante tem 40 linhas, 15 delas com aceitou_contato = 1.\n\nNa sua resposta:\n1. diga quantas linhas são gravadas e o que fica em cada coluna;\n2. explique como 'feira' e CURDATE() aparecem em todas as linhas.",
+      "respostasAceitas": [
+        "São gravadas 15 linhas: nome vem de visitante, origem = 'feira' e data_cadastro = data de hoje. Valores fixos e funções no SELECT são repetidos em cada linha devolvida."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 15 linhas, nome copiado, 'feira' e data atual; 2) valor fixo no SELECT se repete por linha."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-last-id-uso",
+      "peso": 2,
+      "enunciado": "Num sistema de pedidos, o programa executa:\n\n`INSERT INTO pedido (id_cliente) VALUES (5);`\n`INSERT INTO item_pedido (id_pedido, id_produto, qtd) VALUES (LAST_INSERT_ID(), 12, 2);`\n\nNa sua resposta:\n1. explique o que LAST_INSERT_ID() devolve nesse caso;\n2. explique por que ele foi usado no segundo INSERT.",
+      "respostasAceitas": [
+        "Devolve o id que o AUTO_INCREMENT gerou para o pedido recém-inserido. Foi usado para ligar o item a esse pedido sem precisar saber ou consultar o número."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o id do pedido que acabou de ser criado; 2) ligar o item (filho) ao pedido (pai)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-last-id-conexao",
+      "peso": 2,
+      "enunciado": "Um estagiário descobre o id do pedido que acabou de inserir com `SELECT MAX(id_pedido) FROM pedido;`. O site tem muitos clientes comprando ao mesmo tempo.\n\nNa sua resposta:\n1. explique o risco dessa forma de descobrir o id;\n2. explique por que LAST_INSERT_ID() não tem esse problema.",
+      "respostasAceitas": [
+        "Entre o INSERT e o SELECT outro cliente pode gravar um pedido, e o MAX traria o id dele; os itens iriam para o pedido errado. LAST_INSERT_ID() é guardado por conexão: devolve o id gerado pelo seu próprio INSERT."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) concorrência, pegar o id de outro; 2) LAST_INSERT_ID é por conexão."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "grupo": "bd08-last-id-varias",
+      "peso": 2,
+      "enunciado": "Na tabela `produto` (id_produto AUTO_INCREMENT), o comando `INSERT INTO produto (nome) VALUES ('Lápis'), ('Borracha'), ('Régua');` gerou os ids 31, 32 e 33. Logo depois, `SELECT LAST_INSERT_ID();` mostrou 31.\n\nNa sua resposta:\n1. explique por que o resultado foi 31 e não 33;\n2. explique como descobrir o id da Régua a partir desse valor.",
+      "respostasAceitas": [
+        "Num INSERT de várias linhas, LAST_INSERT_ID() devolve o id da primeira linha gerada. Como os ids são seguidos, a Régua (3ª linha) é 31 + 2 = 33."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) devolve o primeiro id do comando; 2) somar a posição (31 + 2)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-form-cadastro",
+      "peso": 2,
+      "enunciado": "Num site, o visitante preenche um formulário de cadastro e clica em Cadastrar. No banco, isso vira um comando INSERT na tabela `usuario`.\n\nNa sua resposta:\n1. explique o que o INSERT faz com os dados do formulário;\n2. explique por que esse comando é classificado como DML.",
+      "respostasAceitas": [
+        "O INSERT grava os dados preenchidos como uma linha nova na tabela usuario. É DML porque manipula dados (conteúdo da tabela), sem mudar a estrutura."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) acrescenta uma linha com os dados; 2) mexe nos dados, não na estrutura."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-autorrel",
+      "peso": 2,
+      "enunciado": "A tabela `funcionario` (id_funcionario AUTO_INCREMENT, nome, id_gerente) tem id_gerente como FK para a própria tabela funcionario, aceitando NULL. A empresa vai cadastrar a diretora e depois a equipe dela.\n\nNa sua resposta:\n1. explique por que a diretora deve ser inserida com id_gerente NULL;\n2. explique como os funcionários seguintes ficam ligados a ela.",
+      "respostasAceitas": [
+        "A diretora não tem gerente e, com a tabela vazia, não existe ninguém para ela apontar; NULL é aceito pela FK. Depois, cada funcionário é inserido com id_gerente igual ao id da diretora."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) não há pai para apontar e NULL é aceito; 2) os seguintes usam o id dela em id_gerente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-fk-null",
+      "peso": 2,
+      "enunciado": "Na tabela `funcionario`, a coluna id_setor é FK para `setor` e aceita NULL. O RH inseriu uma funcionária recém-contratada com id_setor NULL e o MySQL aceitou.\n\nNa sua resposta:\n1. explique por que a chave estrangeira não barrou o NULL;\n2. diga o que esse NULL representa para a empresa.",
+      "respostasAceitas": [
+        "A FK só confere valores preenchidos; NULL significa ausência de valor, então não há nada a procurar em setor. Representa que a funcionária ainda não foi alocada em nenhum setor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) FK ignora NULL quando a coluna aceita NULL; 2) ainda sem setor."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-fk-integridade",
+      "peso": 2,
+      "enunciado": "Um aluno perguntou por que o MySQL não deixa cadastrar uma matrícula com um id_aluno que não existe na tabela aluno.\n\nNa sua resposta:\n1. explique o que é um registro órfão;\n2. explique como a chave estrangeira evita esse problema no INSERT.",
+      "respostasAceitas": [
+        "Registro órfão é uma linha filha que aponta para um pai que não existe (uma matrícula de aluno nenhum). A FK confere no INSERT se o valor existe na tabela pai e recusa o comando se não existir."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) filho apontando para pai inexistente; 2) a FK verifica e barra."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-insert-select-copia",
+      "peso": 2,
+      "enunciado": "Antes de uma mudança no sistema, o técnico rodou `INSERT INTO produto_backup SELECT * FROM produto;`. As duas tabelas têm as mesmas colunas, na mesma ordem.\n\nNa sua resposta:\n1. explique o que o comando faz;\n2. diga o que acontece com os dados da tabela produto.",
+      "respostasAceitas": [
+        "Copia todas as linhas de produto para produto_backup (sem WHERE, vem tudo). A tabela produto não muda: o SELECT só lê."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cópia de todas as linhas; 2) a origem continua igual."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "grupo": "bd08-digitacao",
+      "peso": 2,
+      "enunciado": "Na tabela `cliente` (id_cliente, nome, email), o comando `INSERT INTO cliente (nome, emial) VALUES ('Rui', 'rui@mail.com');` mostrou `Unknown column 'emial' in 'field list'`.\n\nNa sua resposta:\n1. explique o que a mensagem quer dizer;\n2. aponte o erro no comando.",
+      "respostasAceitas": [
+        "A mensagem diz que não existe coluna chamada emial na tabela. O nome da coluna foi digitado errado: o certo é email."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) coluna inexistente; 2) erro de digitação em email."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — INSERT",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "grupo": "bd08-associativa",
+      "peso": 2,
+      "enunciado": "A tabela associativa `aluno_oficina` (id_aluno FK para aluno, id_oficina FK para oficina) registra quem participa de cada oficina. O comando `INSERT INTO aluno_oficina (id_aluno, id_oficina) VALUES (4, 9);` deu erro de chave estrangeira, embora o aluno 4 exista.\n\nNa sua resposta:\n1. explique qual é a causa provável do erro;\n2. explique o que o MySQL confere em cada uma das duas colunas.",
+      "respostasAceitas": [
+        "Provavelmente a oficina 9 não existe. Cada FK é conferida: o id_aluno precisa existir em aluno e o id_oficina precisa existir em oficina; basta um faltar para o INSERT ser recusado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a oficina 9 não existe; 2) as duas FKs são verificadas separadamente."
+    }
+  ]
+}

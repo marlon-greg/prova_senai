@@ -42,7 +42,7 @@ qs.forEach((q, i) => {
   if (q.tipo === "dissertativa") {
     const e = String(q.enunciado || "");
     const pergunta = e.split(/\n\s*Na sua resposta/i)[0];
-    if (PROIBIDO.test(pergunta) || CMD_PEDIDO.test(pergunta) && /escrev|cri|mont/i.test(pergunta)) erros.push(`${n}: dissertativa pedindo comando/código/desenho: "${pergunta.slice(0, 90)}…"`);
+    if (PROIBIDO.test(pergunta) || CMD_PEDIDO.test(pergunta) && /\b(escrev\w*|cri[ae]\w*|mont[ae]\w*)\b/i.test(pergunta)) erros.push(`${n}: dissertativa pedindo comando/código/desenho: "${pergunta.slice(0, 90)}…"`);
     if (!/\n\s*Na sua resposta:?\s*\n\s*1\. /i.test(e)) erros.push(`${n}: dissertativa sem a lista "Na sua resposta:\\n1. …"`);
     if (!Array.isArray(q.respostasAceitas) || !String(q.respostasAceitas[0] || "").trim()) erros.push(`${n}: sem resposta-modelo (respostasAceitas[0])`);
     if (Array.isArray(q.palavrasChave) && q.palavrasChave.length) avisos.push(`${n}: palavrasChave deveria ficar vazio`);
