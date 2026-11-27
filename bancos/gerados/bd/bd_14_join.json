@@ -1,0 +1,2434 @@
+{
+  "nome": "Banco de Dados — Consultas com JOIN e UNION (a revisar)",
+  "materia": "Banco de Dados",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop, a tabela `tutor` tem as colunas id_tutor e nome, e a tabela `pet` tem id_pet, nome e id_tutor. Quais colunas devem ser comparadas para ligar cada pet ao seu tutor num JOIN?",
+      "alternativas": [
+        "pet.nome com tutor.nome",
+        "pet.id_pet com tutor.id_tutor",
+        "pet.id_tutor com tutor.id_tutor",
+        "pet.id_pet com tutor.nome"
+      ],
+      "correta": 2,
+      "explicacao": "A chave estrangeira pet.id_tutor aponta para a chave primária tutor.id_tutor. Comparar nomes ou ids diferentes liga linhas que não têm relação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve o JOIN numa consulta SELECT?",
+      "alternativas": [
+        "Para mostrar juntas colunas de duas ou mais tabelas ligadas por uma condição",
+        "Para empilhar o resultado de duas consultas, uma embaixo da outra",
+        "Para apagar as linhas repetidas que existem nas duas tabelas",
+        "Para gerar uma tabela nova e permanente com as colunas das outras"
+      ],
+      "correta": 0,
+      "explicacao": "JOIN junta tabelas lado a lado, ligando as linhas por uma condição (normalmente chave estrangeira = chave primária). Empilhar resultados é papel do UNION."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `cliente` tem id_cliente e nome, e a tabela `pedido` tem id_pedido, valor e id_cliente. No comando `SELECT c.nome, p.valor FROM cliente c, pedido p WHERE c.id_cliente = p.id_cliente;`, qual é o papel do WHERE?",
+      "alternativas": [
+        "Ordena os pedidos pelo nome de cada cliente",
+        "Liga cada pedido ao seu cliente, como o ON do INNER JOIN",
+        "Apaga da consulta os pedidos que não têm cliente",
+        "Agrupa os pedidos de cada cliente numa linha só"
+      ],
+      "correta": 1,
+      "explicacao": "Na junção antiga (tabelas separadas por vírgula), a condição de ligação vai no WHERE. Sem ela, sairia o produto cartesiano."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de roupas, a tabela `camiseta` tem 3 linhas e a tabela `cor` tem 4 linhas. Quantas linhas traz `SELECT * FROM camiseta CROSS JOIN cor;`?",
+      "alternativas": [
+        "3",
+        "4",
+        "7",
+        "12"
+      ],
+      "correta": 3,
+      "explicacao": "CROSS JOIN é o produto cartesiano: cada linha de camiseta com cada linha de cor, 3 × 4 = 12."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é o produto cartesiano entre duas tabelas?",
+      "alternativas": [
+        "Só as linhas que têm o mesmo id nas duas tabelas",
+        "Todas as combinações: cada linha de uma tabela com cada linha da outra",
+        "A soma das linhas das duas tabelas, uma embaixo da outra",
+        "As linhas da primeira tabela que não aparecem na segunda"
+      ],
+      "correta": 1,
+      "explicacao": "Produto cartesiano = todas as combinações possíveis. Se uma tabela tem 5 linhas e a outra 4, saem 20 linhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a tabela `aluno` tem 10 linhas e a tabela `turma` tem 3. O que acontece ao rodar `SELECT * FROM aluno, turma;` (sem WHERE)?",
+      "alternativas": [
+        "Sai o produto cartesiano: 30 linhas, cada aluno com cada turma",
+        "Dá erro de sintaxe, porque a vírgula exige um WHERE",
+        "Saem só os 10 alunos, cada um com a sua turma",
+        "Saem 13 linhas: primeiro os alunos, depois as turmas"
+      ],
+      "correta": 0,
+      "explicacao": "Tabelas separadas por vírgula sem condição de ligação geram o produto cartesiano (10 × 3 = 30). Não é erro de sintaxe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, `livro` tem id_livro, titulo e id_autor; `autor` tem id_autor e nome. Qual palavra completa a lacuna em `SELECT titulo, nome FROM livro INNER JOIN autor ___ livro.id_autor = autor.id_autor;`?",
+      "alternativas": [
+        "HAVING",
+        "BY",
+        "ON",
+        "IN"
+      ],
+      "correta": 2,
+      "explicacao": "No INNER JOIN, a condição de ligação vem depois de ON. HAVING filtra grupos, BY aparece em ORDER BY/GROUP BY e IN compara com uma lista."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa empresa, as tabelas `funcionario` e `setor` são ligadas por id_setor. Quais linhas o INNER JOIN entre elas mostra?",
+      "alternativas": [
+        "Todos os funcionários, mesmo os que não têm setor",
+        "Todos os setores, mesmo os que não têm funcionário",
+        "Todas as combinações de funcionário com setor",
+        "Só os pares funcionário–setor que atendem à condição do ON"
+      ],
+      "correta": 3,
+      "explicacao": "INNER JOIN só mostra as linhas que têm par nas duas tabelas. Linhas sem par ficam de fora (para mantê-las usa-se LEFT/RIGHT JOIN)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cinema, no comando `SELECT f.titulo FROM filme f;`, o que é o `f`?",
+      "alternativas": [
+        "Um apelido (alias) da tabela filme, usado no resto da consulta",
+        "Uma coluna chamada f que existe na tabela filme",
+        "Um filtro que traz só os filmes que começam com f",
+        "O nome do banco de dados onde a tabela está"
+      ],
+      "correta": 0,
+      "explicacao": "Depois do nome da tabela no FROM pode vir um apelido curto. A partir dali a tabela é chamada por ele: f.titulo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL, escrever só `JOIN` (sem a palavra INNER) significa:",
+      "alternativas": [
+        "O mesmo que LEFT JOIN",
+        "O mesmo que INNER JOIN",
+        "O mesmo que UNION",
+        "O mesmo que RIGHT JOIN"
+      ],
+      "correta": 1,
+      "explicacao": "JOIN sozinho é INNER JOIN. LEFT e RIGHT precisam ser escritos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa consulta com JOIN, por que se escreve o nome da tabela antes da coluna, como em `cliente.nome`?",
+      "alternativas": [
+        "Para a consulta rodar mais rápido no servidor",
+        "Porque o MySQL exige isso em todo e qualquer SELECT",
+        "Para dizer de qual tabela vem a coluna",
+        "Para mudar o nome da coluna no resultado final"
+      ],
+      "correta": 2,
+      "explicacao": "Com várias tabelas, colunas de mesmo nome (como nome ou id) precisam dizer de onde vêm. Renomear no resultado é papel do AS."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cinema, `sessao` tem id_sessao, horario e id_filme; `filme` tem id_filme e titulo. Qual consulta mostra o título do filme de cada sessão com o horário?",
+      "alternativas": [
+        "SELECT titulo, horario FROM sessao, filme;",
+        "SELECT titulo, horario FROM sessao INNER JOIN filme ON sessao.id_sessao = filme.id_filme;",
+        "SELECT titulo, horario FROM sessao INNER JOIN filme ON sessao.horario = filme.titulo;",
+        "SELECT titulo, horario FROM sessao INNER JOIN filme ON sessao.id_filme = filme.id_filme;"
+      ],
+      "correta": 3,
+      "explicacao": "A ligação certa é a chave estrangeira sessao.id_filme com a chave primária filme.id_filme. A vírgula sem WHERE dá produto cartesiano; as outras comparam colunas sem relação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em geral, a condição do ON num JOIN compara:",
+      "alternativas": [
+        "A chave estrangeira de uma tabela com a chave primária da outra",
+        "Duas colunas de texto quaisquer que tenham o mesmo nome",
+        "A chave primária de uma tabela com ela mesma",
+        "A quantidade de linhas das duas tabelas"
+      ],
+      "correta": 0,
+      "explicacao": "O relacionamento entre tabelas é feito pela chave estrangeira, que guarda o valor da chave primária da outra tabela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na junção antiga, no formato `SELECT ... FROM a, b WHERE ...`, como as tabelas são separadas no FROM?",
+      "alternativas": [
+        "Por ponto e vírgula",
+        "Por vírgula",
+        "Por ponto",
+        "Pela palavra AND"
+      ],
+      "correta": 1,
+      "explicacao": "Na junção antiga as tabelas vêm separadas por vírgula e a ligação vai no WHERE. Ponto e vírgula encerra o comando."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Sobre `FROM produto AS p` e `FROM produto p` no MySQL, é correto dizer:",
+      "alternativas": [
+        "Só a primeira forma funciona",
+        "Só a segunda forma funciona",
+        "As duas funcionam: o AS é opcional no apelido",
+        "As duas dão erro: apelido só vale para colunas"
+      ],
+      "correta": 2,
+      "explicacao": "O apelido da tabela pode vir com ou sem AS. Os dois jeitos são aceitos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, `medico` tem as linhas (1, 'Ana'), (2, 'Bruno') e (3, 'Carla'). A tabela `consulta` tem 5 linhas: duas com id_medico = 1 e três com id_medico = 3. Quantas linhas traz `SELECT * FROM medico m INNER JOIN consulta c ON c.id_medico = m.id_medico;`?",
+      "alternativas": [
+        "3",
+        "8",
+        "15",
+        "5"
+      ],
+      "correta": 3,
+      "explicacao": "Cada consulta encontra um médico: 2 da Ana + 3 da Carla = 5. Bruno não tem consulta e fica de fora. 15 seria o produto cartesiano."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma lanchonete tem a tabela `pao` com 4 tipos e a tabela `recheio` com 5 tipos. Ela quer listar todas as combinações possíveis de pão com recheio. O que usar?",
+      "alternativas": [
+        "CROSS JOIN, que gera as 20 combinações",
+        "INNER JOIN, que gera 9 linhas",
+        "LEFT JOIN, que gera só 4 linhas",
+        "UNION, que gera 20 combinações"
+      ],
+      "correta": 0,
+      "explicacao": "Quando se quer todas as combinações de propósito, o CROSS JOIN é o certo: 4 × 5 = 20. UNION empilharia os 9 nomes, sem combinar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Os dois comandos abaixo trazem o mesmo resultado?\nA: `SELECT a.nome, t.sala FROM aluno a, turma t WHERE a.id_turma = t.id_turma;`\nB: `SELECT a.nome, t.sala FROM aluno a INNER JOIN turma t ON a.id_turma = t.id_turma;`",
+      "alternativas": [
+        "Não: A traz o produto cartesiano",
+        "Sim: os dois ligam aluno e turma pela mesma condição",
+        "Não: B traz também os alunos sem turma",
+        "Não: A dá erro porque falta a palavra JOIN"
+      ],
+      "correta": 1,
+      "explicacao": "A junção antiga com a condição no WHERE equivale ao INNER JOIN com a condição no ON."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a principal vantagem de usar INNER JOIN ... ON em vez da junção antiga (vírgula + WHERE)?",
+      "alternativas": [
+        "É o único formato que o MySQL 8 ainda aceita sem erro",
+        "Sempre roda bem mais rápido que a junção antiga",
+        "Deixa a ligação no ON, separada dos filtros do WHERE",
+        "Mostra também as linhas que não têm nenhum par"
+      ],
+      "correta": 2,
+      "explicacao": "As duas formas funcionam e dão o mesmo resultado. O INNER JOIN deixa a ligação separada dos filtros, o que facilita a leitura e evita o produto cartesiano por esquecimento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa oficina, `cliente` tem 5 linhas e `carro` tem 6 linhas, das quais 4 têm ano maior que 2015. Quantas linhas traz `SELECT * FROM cliente, carro WHERE carro.ano > 2015;`?",
+      "alternativas": [
+        "4",
+        "6",
+        "5",
+        "20"
+      ],
+      "correta": 3,
+      "explicacao": "Não há condição de ligação, só um filtro. O produto cartesiano é feito com os 4 carros filtrados: 5 × 4 = 20."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, `aluno` tem id_aluno, nome e id_curso; `curso` tem id_curso e nome. Na consulta `SELECT ___ FROM aluno a INNER JOIN curso c ON a.id_curso = c.id_curso;`, como se pede o nome do curso?",
+      "alternativas": [
+        "c.nome",
+        "curso.c.nome",
+        "a.curso.nome",
+        "nome.c"
+      ],
+      "correta": 0,
+      "explicacao": "O formato é apelido.coluna. Como curso recebeu o apelido c, o nome do curso é c.nome."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, `livro` tem id_livro, titulo e id_autor; `autor` tem id_autor, nome e pais. Qual consulta traz os títulos dos livros de autores do Brasil?",
+      "alternativas": [
+        "SELECT l.titulo FROM livro l JOIN autor a ON a.pais = 'Brasil' WHERE l.id_autor IS NOT NULL;",
+        "SELECT l.titulo FROM livro l JOIN autor a ON l.id_autor = a.id_autor WHERE a.pais = 'Brasil';",
+        "SELECT l.titulo FROM livro l JOIN autor a ON l.id_autor = a.id_autor WHERE l.pais = 'Brasil';",
+        "SELECT l.titulo FROM livro l JOIN autor a ON l.id_livro = a.id_autor WHERE a.pais = 'Brasil';"
+      ],
+      "correta": 1,
+      "explicacao": "Primeiro liga livro ao autor (ON l.id_autor = a.id_autor), depois filtra o país no WHERE. Pôr o país no ON não liga as tabelas; livro não tem coluna pais; e id_livro não é a chave de ligação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma loja tem 8 pedidos e 5 clientes. Cada pedido tem um id_cliente que existe na tabela `cliente`. Quantas linhas traz o INNER JOIN de pedido com cliente pela chave id_cliente?",
+      "alternativas": [
+        "5",
+        "13",
+        "8",
+        "40"
+      ],
+      "correta": 2,
+      "explicacao": "Cada pedido encontra exatamente um cliente, então sai uma linha por pedido: 8. 40 seria o produto cartesiano."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num mercado, `produto` tem nome e id_categoria; `categoria` tem id_categoria e nome. O que faz o AND em `SELECT p.nome FROM produto p, categoria c WHERE p.id_categoria = c.id_categoria AND c.nome = 'Bebidas';`?",
+      "alternativas": [
+        "Troca a ligação das tabelas por um filtro comum",
+        "Faz o MySQL ignorar a primeira das condições",
+        "Acrescenta mais duas tabelas na consulta",
+        "Mantém a ligação e também filtra só Bebidas"
+      ],
+      "correta": 3,
+      "explicacao": "Na junção antiga, o WHERE guarda a ligação e os filtros juntos, unidos por AND. As duas condições precisam ser verdadeiras."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, as tabelas `cliente` e `vendedor` têm, cada uma, uma coluna `nome`. Por que usar `SELECT c.nome AS cliente, v.nome AS vendedor ...` numa consulta com JOIN?",
+      "alternativas": [
+        "Para os cabeçalhos não virem os dois como nome",
+        "Porque sem o AS o JOIN não consegue ligar as tabelas",
+        "Para gravar duas colunas novas nas tabelas",
+        "Para o MySQL ordenar o resultado pelo cliente"
+      ],
+      "correta": 0,
+      "explicacao": "O apelido de coluna (AS) só muda o cabeçalho no resultado. Sem ele, apareceriam duas colunas chamadas nome."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Trocar `funcionario INNER JOIN setor` por `setor INNER JOIN funcionario` (com o mesmo ON) muda quais linhas aparecem?",
+      "alternativas": [
+        "Sim, passam a aparecer as linhas que não têm par",
+        "Não; os pares encontrados continuam os mesmos",
+        "Sim, o resultado da consulta passa a vir vazio",
+        "Sim, a consulta passa a funcionar como LEFT JOIN"
+      ],
+      "correta": 1,
+      "explicacao": "No INNER JOIN a ordem das tabelas não muda os pares encontrados. Já no LEFT/RIGHT JOIN a ordem importa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, `aluno` tem 30 linhas e `disciplina` tem 20. Uma consulta que devia listar cada aluno com suas disciplinas trouxe 600 linhas. O que provavelmente aconteceu?",
+      "alternativas": [
+        "Os dados das duas tabelas estão duplicados",
+        "O INNER JOIN trouxe só os pares corretos",
+        "Faltou ligar as tabelas: produto cartesiano",
+        "O ORDER BY repetiu cada aluno 20 vezes"
+      ],
+      "correta": 2,
+      "explicacao": "30 × 20 = 600 é exatamente o produto cartesiano: sinal de que a ligação (ON ou WHERE) foi esquecida."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel, `hospede` tem (1, 'Lia'), (2, 'Rui') e (3, 'Téo'). `reserva` tem 3 linhas: duas com id_hospede = 1 e uma com id_hospede = 2. Quais nomes saem em `SELECT h.nome FROM hospede h, reserva r WHERE h.id_hospede = r.id_hospede;`?",
+      "alternativas": [
+        "Lia, Rui e Téo",
+        "Lia e Rui, uma vez cada",
+        "Só Téo",
+        "Lia, Lia e Rui"
+      ],
+      "correta": 3,
+      "explicacao": "Sai uma linha por reserva com par: Lia aparece duas vezes (duas reservas), Rui uma vez e Téo não aparece (sem reserva)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa sorveteria, `tamanho` tem 3 linhas (P, M, G) e `sabor` tem 5 linhas, das quais 2 têm tipo = 'doce'. Quantas linhas traz `SELECT * FROM tamanho CROSS JOIN sabor WHERE sabor.tipo = 'doce';`?",
+      "alternativas": [
+        "6",
+        "15",
+        "5",
+        "2"
+      ],
+      "correta": 0,
+      "explicacao": "O CROSS JOIN gera 15 combinações e o WHERE deixa só as que têm sabor doce: 3 tamanhos × 2 sabores = 6."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num mercado, o que acontece ao rodar `SELECT p.nome, c.nome FROM produto p INNER JOIN categoria c ON p.id_categoria = categoria.id_categoria;`?",
+      "alternativas": [
+        "Funciona, porque categoria é o nome verdadeiro da tabela",
+        "Dá erro: com o apelido c, o ON deve usar c",
+        "Traz o produto cartesiano de produto com categoria",
+        "Traz só as categorias que ainda não têm produto"
+      ],
+      "correta": 1,
+      "explicacao": "Quando a tabela recebe apelido, o nome original deixa de valer na consulta. O MySQL responde que a coluna categoria.id_categoria é desconhecida (erro 1054)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `aluno` tem: Ana (Santos), Beto (Santos) e Caio (Recife). A tabela `escola` tem: E1 (Santos), E2 (Santos) e E3 (Recife). Quantas linhas traz `SELECT * FROM aluno a INNER JOIN escola e ON a.cidade = e.cidade;`?",
+      "alternativas": [
+        "3",
+        "9",
+        "5",
+        "2"
+      ],
+      "correta": 2,
+      "explicacao": "Ana casa com E1 e E2 (2), Beto com E1 e E2 (2), Caio com E3 (1): 5 linhas. Ligar por coluna que não é chave pode repetir linhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma loja tem `cliente` (4 linhas), `pedido` (6 linhas, todas com cliente válido) e `produto` (10 linhas). Quantas linhas traz `SELECT * FROM cliente c, pedido p, produto pr WHERE c.id_cliente = p.id_cliente;`?",
+      "alternativas": [
+        "6",
+        "10",
+        "240",
+        "60"
+      ],
+      "correta": 3,
+      "explicacao": "Cliente e pedido estão ligados (6 pares), mas produto não tem condição: cada par se combina com os 10 produtos, 6 × 10 = 60. Com 3 tabelas são precisas 2 condições."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `funcionario` tem 5 linhas: 3 com id_setor de setores que existem e 2 com id_setor NULL. Quantas linhas traz o INNER JOIN de funcionario com setor por id_setor?",
+      "alternativas": [
+        "3, porque NULL não é igual a nenhum id_setor",
+        "5, porque todo funcionário sempre aparece",
+        "2, só os que estão com NULL",
+        "0, porque o NULL causa erro na consulta"
+      ],
+      "correta": 0,
+      "explicacao": "Comparar NULL com qualquer valor não dá verdadeiro, então os 2 funcionários sem setor não têm par e somem no INNER JOIN."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num INNER JOIN entre `funcionario f` e `setor s`, colocar o filtro `s.ativo = 1` junto do ON (com AND) ou no WHERE muda o resultado?",
+      "alternativas": [
+        "Sim: quando está no ON, o filtro é ignorado",
+        "Não: no INNER JOIN dá as mesmas linhas",
+        "Sim: no WHERE a consulta vira um LEFT JOIN",
+        "Sim: no ON a consulta dá erro de sintaxe"
+      ],
+      "correta": 1,
+      "explicacao": "No INNER JOIN só ficam as linhas que atendem a tudo, então tanto faz. No LEFT JOIN já faz diferença (no ON mantém as linhas da esquerda)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um restaurante monta um menu com as tabelas `entrada` (2 linhas), `prato` (3 linhas) e `sobremesa` (4 linhas). Quantas linhas traz `SELECT * FROM entrada CROSS JOIN prato CROSS JOIN sobremesa;`?",
+      "alternativas": [
+        "9",
+        "12",
+        "24",
+        "6"
+      ],
+      "correta": 2,
+      "explicacao": "O produto cartesiano de três tabelas multiplica as três quantidades: 2 × 3 × 4 = 24."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de roupas, a tabela `camisa` tem 4 linhas e a tabela `tamanho` tem 3 linhas (P, M e G). Observe o comando `SELECT * FROM camisa CROSS JOIN tamanho;`.\n\nNa sua resposta:\n1. diga o que o CROSS JOIN faz;\n2. diga quantas linhas o resultado terá e por quê.",
+      "respostasAceitas": [
+        "O CROSS JOIN combina cada camisa com cada tamanho (produto cartesiano). Saem 4 × 3 = 12 linhas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) todas as combinações entre as linhas das duas tabelas; 2) 12 linhas, porque multiplica 4 por 3."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa clínica, `paciente` tem id_paciente e nome, e `consulta` tem id_consulta, data e id_paciente. Observe o comando `SELECT p.nome, c.data FROM paciente p, consulta c WHERE p.id_paciente = c.id_paciente;`.\n\nNa sua resposta:\n1. explique o papel do WHERE nesse comando;\n2. diga o que aconteceria se o WHERE fosse retirado.",
+      "respostasAceitas": [
+        "O WHERE liga cada consulta ao seu paciente (chave estrangeira = chave primária). Sem ele, sairia o produto cartesiano: cada paciente com todas as consultas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) é a condição de ligação da junção antiga; 2) sem ela, todas as combinações (produto cartesiano), com dados errados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa empresa, observe o comando `SELECT f.nome, s.nome FROM funcionario f INNER JOIN setor s ON f.id_setor = s.id_setor;`.\n\nNa sua resposta:\n1. diga o que são o f e o s;\n2. dê uma vantagem de usá-los.",
+      "respostasAceitas": [
+        "f e s são apelidos (aliases) das tabelas funcionario e setor. Deixam a consulta mais curta e permitem dizer de qual tabela vem cada coluna (como as duas colunas nome)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) apelidos das tabelas; 2) consulta mais curta/legível ou evitar ambiguidade entre colunas de mesmo nome."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de games, `jogo` tem id_jogo, titulo e id_plataforma; `plataforma` tem id_plataforma e nome. Observe o comando `SELECT j.titulo, p.nome FROM jogo j INNER JOIN plataforma p ON j.id_plataforma = p.id_plataforma;`.\n\nNa sua resposta:\n1. diga o que a consulta mostra;\n2. explique o que o ON faz.",
+      "respostasAceitas": [
+        "Mostra o título de cada jogo com o nome da sua plataforma. O ON diz como ligar: o id_plataforma do jogo tem de ser igual ao id_plataforma da plataforma."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cada jogo com o nome da plataforma; 2) o ON é a condição de ligação (chave estrangeira = chave primária)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa academia, o nome do aluno fica na tabela `aluno` e o nome do plano fica na tabela `plano`; a tabela aluno guarda só o id_plano. Por que é preciso usar JOIN para ver o nome do aluno ao lado do nome do plano?\n\nNa sua resposta:\n1. explique por que os dados estão em tabelas separadas;\n2. explique o papel do JOIN nessa consulta.",
+      "respostasAceitas": [
+        "Os dados ficam separados para não repetir o nome do plano em cada aluno (o aluno guarda só o id_plano). O JOIN usa esse id para buscar o nome do plano na outra tabela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) evitar repetição/normalização: o aluno só guarda a chave do plano; 2) o JOIN liga as tabelas pela chave e junta as colunas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, compare os dois comandos:\nA: `SELECT a.nome, t.sala FROM aluno a, turma t WHERE a.id_turma = t.id_turma;`\nB: `SELECT a.nome, t.sala FROM aluno a INNER JOIN turma t ON a.id_turma = t.id_turma;`\n\nNa sua resposta:\n1. diga se os dois trazem o mesmo resultado e por quê;\n2. dê uma vantagem do formato B.",
+      "respostasAceitas": [
+        "Sim, trazem as mesmas linhas: os dois ligam aluno e turma pela mesma condição. O B separa a ligação (ON) dos filtros (WHERE), fica mais claro e é mais difícil esquecer a ligação."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mesmo resultado, a condição é a mesma; 2) mais legível, ligação separada dos filtros, evita produto cartesiano sem querer."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma escola tem 30 alunos na tabela `aluno` e 5 turmas na tabela `turma`. Um colega rodou `SELECT * FROM aluno, turma;` esperando ver 30 linhas (cada aluno com sua turma), mas recebeu 150.\n\nNa sua resposta:\n1. explique por que vieram 150 linhas;\n2. diga o que faltou no comando.",
+      "respostasAceitas": [
+        "Sem condição de ligação, o MySQL fez o produto cartesiano: cada aluno com cada turma, 30 × 5 = 150. Faltou a condição que liga aluno.id_turma a turma.id_turma (no WHERE ou num INNER JOIN ... ON)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) produto cartesiano 30 × 5; 2) faltou a condição de ligação entre as chaves."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma lanchonete tem a tabela `pao` (4 tipos) e a tabela `recheio` (6 tipos) e quer uma lista de todos os lanches possíveis para o cardápio. O programador usou `SELECT p.nome, r.nome FROM pao p CROSS JOIN recheio r;`.\n\nNa sua resposta:\n1. explique por que o CROSS JOIN é adequado neste caso;\n2. cite um cuidado ao usar CROSS JOIN com tabelas grandes.",
+      "respostasAceitas": [
+        "Aqui se quer justamente todas as combinações de pão com recheio (24 lanches), e o CROSS JOIN gera isso. Com tabelas grandes, o número de linhas explode (multiplica), deixando a consulta pesada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a intenção é combinar tudo com tudo; 2) o resultado multiplica as linhas e pode ficar enorme/lento."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa oficina, `mecanico` tem as linhas (1, 'Rafa'), (2, 'Sueli') e (3, 'Davi'). `servico` tem (10, 'troca de óleo', id_mecanico 1), (11, 'freio', id_mecanico 1) e (12, 'alinhamento', id_mecanico 2). Observe `SELECT m.nome, s.descricao FROM mecanico m INNER JOIN servico s ON s.id_mecanico = m.id_mecanico;`.\n\nNa sua resposta:\n1. diga quais linhas aparecem no resultado;\n2. explique por que Davi não aparece.",
+      "respostasAceitas": [
+        "Aparecem 3 linhas: Rafa–troca de óleo, Rafa–freio e Sueli–alinhamento. Davi não tem serviço, e o INNER JOIN só mostra quem tem par."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) as 3 linhas citadas (Rafa duas vezes); 2) INNER JOIN descarta linhas sem correspondente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num mercado, `produto` tem id_produto, nome e id_categoria; `categoria` tem id_categoria e nome. Um aluno escreveu o JOIN com `ON p.id_produto = c.id_categoria`.\n\nNa sua resposta:\n1. explique o que está errado nessa condição;\n2. diga o que o resultado mostraria com ela.",
+      "respostasAceitas": [
+        "Ele comparou o id do produto com o id da categoria, que não têm relação. O certo é comparar a chave estrangeira p.id_categoria com c.id_categoria. Com o erro, o produto 1 sairia com a categoria 1, o 2 com a 2 etc., misturando dados por coincidência de número."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a ligação deve usar a chave estrangeira id_categoria; 2) pares errados, ligados só porque os números coincidem."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa biblioteca, observe `SELECT l.titulo FROM livro l INNER JOIN autor a ON l.id_autor = a.id_autor WHERE a.pais = 'Brasil';`.\n\nNa sua resposta:\n1. explique o papel do ON;\n2. explique o papel do WHERE.",
+      "respostasAceitas": [
+        "O ON liga cada livro ao seu autor. O WHERE filtra, deixando só os livros cujo autor é do Brasil."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ON = condição de ligação entre as tabelas; 2) WHERE = filtro sobre o resultado ligado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, um aluno rodou `SELECT produto.nome, c.nome FROM produto p INNER JOIN categoria c ON p.id_categoria = c.id_categoria;` e recebeu um erro dizendo que a coluna produto.nome é desconhecida.\n\nNa sua resposta:\n1. explique por que deu erro;\n2. diga como a coluna deve ser chamada nessa consulta.",
+      "respostasAceitas": [
+        "Ao dar o apelido p para produto, a consulta passa a conhecer a tabela só por p; o nome original produto não vale mais ali. A coluna deve ser chamada de p.nome."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) com apelido, o nome original da tabela deixa de valer na consulta; 2) usar p.nome."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa clínica veterinária, `animal` tem 6 linhas: 4 com id_veterinario preenchido (veterinários que existem) e 2 com id_veterinario NULL. Observe `SELECT a.nome, v.nome FROM animal a INNER JOIN veterinario v ON a.id_veterinario = v.id_veterinario;`.\n\nNa sua resposta:\n1. diga quantas linhas aparecem;\n2. explique o que acontece com os 2 animais sem veterinário e por quê.",
+      "respostasAceitas": [
+        "Aparecem 4 linhas. Os 2 animais com id_veterinario NULL somem, porque NULL comparado com qualquer valor não dá verdadeiro e o INNER JOIN só mostra quem tem par."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 4 linhas; 2) NULL não casa com nada, INNER JOIN descarta (para vê-los seria preciso LEFT JOIN)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A tabela `aluno` tem Ana (Santos), Beto (Santos) e Caio (Recife). A tabela `escola` tem E1 (Santos), E2 (Santos) e E3 (Recife). Observe `SELECT a.nome, e.nome FROM aluno a INNER JOIN escola e ON a.cidade = e.cidade;`.\n\nNa sua resposta:\n1. diga quantas vezes cada aluno aparece;\n2. explique por que ligar por uma coluna que não é chave pode repetir linhas.",
+      "respostasAceitas": [
+        "Ana e Beto aparecem 2 vezes cada (E1 e E2) e Caio 1 vez (E3), total 5 linhas. Cidade não é chave: vários registros têm o mesmo valor, então cada aluno casa com todas as escolas daquela cidade."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Ana 2, Beto 2, Caio 1; 2) valores repetidos na coluna de ligação geram vários pares por linha."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, `cliente` tem 4 linhas, `pedido` tem 6 linhas (todas com cliente válido) e `produto` tem 10 linhas. Um colega rodou `SELECT * FROM cliente c, pedido p, produto pr WHERE c.id_cliente = p.id_cliente;` e recebeu 60 linhas.\n\nNa sua resposta:\n1. explique por que vieram 60 linhas;\n2. diga quantas condições de ligação são necessárias para ligar 3 tabelas e por quê.",
+      "respostasAceitas": [
+        "A condição liga só cliente e pedido (6 pares). A tabela produto ficou sem ligação, então cada par se combinou com os 10 produtos: 6 × 10 = 60. Para 3 tabelas são precisas 2 condições (uma para cada ligação entre duas tabelas)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) produto ficou solto, produto cartesiano 6 × 10; 2) duas condições (número de tabelas menos um)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, `cliente` e `pedido` são ligadas por id_cliente. O que mostra `cliente LEFT JOIN pedido`?",
+      "alternativas": [
+        "Todos os clientes, tenham ou não pedido",
+        "Só os clientes que têm pedido",
+        "Todos os pedidos, tenham ou não cliente",
+        "Todas as combinações de cliente com pedido"
+      ],
+      "correta": 0,
+      "explicacao": "O LEFT JOIN garante todas as linhas da tabela da esquerda (cliente). Quem não tem pedido aparece com as colunas de pedido em NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "left-null",
+      "enunciado": "Num LEFT JOIN, quando uma linha da tabela da esquerda não tem par, o que aparece nas colunas da tabela da direita?",
+      "alternativas": [
+        "O número 0",
+        "NULL",
+        "Um texto vazio ('')",
+        "A linha não aparece"
+      ],
+      "correta": 1,
+      "explicacao": "Sem par, o MySQL preenche as colunas da outra tabela com NULL (ausência de valor), não com zero nem texto vazio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, o que `aluno RIGHT JOIN curso ON aluno.id_curso = curso.id_curso` garante que aparece no resultado?",
+      "alternativas": [
+        "Todos os alunos cadastrados na escola",
+        "Só os alunos que estão matriculados",
+        "Todos os cursos, até os sem aluno",
+        "Só os cursos que têm pelo menos um aluno"
+      ],
+      "correta": 2,
+      "explicacao": "O RIGHT JOIN garante todas as linhas da tabela da direita (curso)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, `autor` tem id_autor e nome; `livro` tem id_livro, titulo e id_autor. Qual JOIN lista TODOS os autores, inclusive os que ainda não têm livro, no formato `FROM autor ___ livro ON ...`?",
+      "alternativas": [
+        "INNER JOIN",
+        "CROSS JOIN",
+        "RIGHT JOIN",
+        "LEFT JOIN"
+      ],
+      "correta": 3,
+      "explicacao": "Autor está à esquerda; para manter todos os autores, usa-se LEFT JOIN. O INNER JOIN tiraria os autores sem livro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop, para achar os tutores que NÃO têm nenhum pet cadastrado, qual combinação se usa?",
+      "alternativas": [
+        "tutor LEFT JOIN pet e WHERE pet.id_pet IS NULL",
+        "tutor INNER JOIN pet e WHERE pet.id_pet = 0",
+        "tutor CROSS JOIN pet e WHERE pet.id_pet IS NOT NULL",
+        "tutor RIGHT JOIN pet e WHERE tutor.id_tutor = NULL"
+      ],
+      "correta": 0,
+      "explicacao": "O LEFT JOIN mantém todos os tutores; os que não têm pet ficam com pet.id_pet NULL, e o IS NULL deixa só eles."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que, para achar valores vazios, se escreve `IS NULL` e não `= NULL`?",
+      "alternativas": [
+        "Porque = NULL deixa a consulta mais lenta",
+        "Porque `= NULL` nunca dá verdadeiro",
+        "Porque = NULL só funciona com colunas numéricas",
+        "Porque o MySQL não aceita a palavra NULL no WHERE"
+      ],
+      "correta": 1,
+      "explicacao": "NULL significa 'sem valor'. Qualquer comparação com = NULL dá NULL (desconhecido), nunca verdadeiro, então nenhuma linha passa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, um aluno faz vários cursos e um curso tem vários alunos. A tabela `matricula` (id_aluno, id_curso) que liga os dois é chamada de:",
+      "alternativas": [
+        "Tabela de registro (log)",
+        "Tabela temporária",
+        "Tabela associativa (de ligação)",
+        "Tabela principal"
+      ],
+      "correta": 2,
+      "explicacao": "Num relacionamento muitos-para-muitos, a tabela associativa guarda cada par aluno–curso numa linha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para mostrar o nome do aluno e o nome do curso usando as tabelas `aluno`, `matricula` e `curso`, quantas condições de ligação (ON) são necessárias?",
+      "alternativas": [
+        "1",
+        "3",
+        "0",
+        "2"
+      ],
+      "correta": 3,
+      "explicacao": "Três tabelas precisam de duas ligações: aluno com matricula e matricula com curso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "left-right-troca",
+      "enunciado": "`A LEFT JOIN B` (com a mesma condição) traz as mesmas linhas que:",
+      "alternativas": [
+        "B RIGHT JOIN A",
+        "B LEFT JOIN A",
+        "A RIGHT JOIN B",
+        "A CROSS JOIN B"
+      ],
+      "correta": 0,
+      "explicacao": "LEFT e RIGHT são espelhos: o que importa é qual tabela é garantida. Em B RIGHT JOIN A, a garantida continua sendo A."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num LEFT JOIN, qual é a tabela 'da esquerda'?",
+      "alternativas": [
+        "A que vem depois das palavras LEFT JOIN",
+        "A que vem antes das palavras LEFT JOIN",
+        "A que tem mais linhas",
+        "A que tem a chave estrangeira"
+      ],
+      "correta": 1,
+      "explicacao": "É a posição no comando que conta: a tabela escrita antes do LEFT JOIN é a da esquerda, e todas as linhas dela aparecem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `cliente` tem Ana, Beto e Carla. A tabela `pedido` tem 2 pedidos da Ana e 1 da Carla. Quantas linhas traz `cliente LEFT JOIN pedido` pela chave id_cliente?",
+      "alternativas": [
+        "3",
+        "9",
+        "4",
+        "2"
+      ],
+      "correta": 2,
+      "explicacao": "Ana sai 2 vezes (um por pedido), Carla 1 vez e Beto 1 vez com NULL nas colunas de pedido: 4 linhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa lanchonete, a tabela associativa `item_pedido` tem id_pedido, id_produto e quantidade. As colunas id_pedido e id_produto são:",
+      "alternativas": [
+        "Colunas de texto livre",
+        "Chaves primárias sem ligação com outras tabelas",
+        "Apelidos das tabelas pedido e produto",
+        "Chaves estrangeiras que apontam para pedido e produto"
+      ],
+      "correta": 3,
+      "explicacao": "Na tabela associativa, cada coluna de ligação é chave estrangeira para uma das tabelas do relacionamento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, `aluno` tem id_plano e `plano` tem id_plano e nome. Para ver TODOS os planos, inclusive os sem aluno, o que completa `FROM aluno a ___ plano p ON a.id_plano = p.id_plano`?",
+      "alternativas": [
+        "RIGHT JOIN",
+        "LEFT JOIN",
+        "INNER JOIN",
+        "CROSS JOIN"
+      ],
+      "correta": 0,
+      "explicacao": "Plano está à direita no comando. Para manter todas as linhas dela, usa-se RIGHT JOIN."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "left-null",
+      "enunciado": "Numa clínica, num `paciente LEFT JOIN consulta`, como aparece um paciente que não tem nenhuma consulta?",
+      "alternativas": [
+        "Não aparece",
+        "Aparece uma vez, com as colunas de consulta em NULL",
+        "Aparece uma vez para cada consulta do banco",
+        "Aparece com as colunas de consulta preenchidas com zero"
+      ],
+      "correta": 1,
+      "explicacao": "O LEFT JOIN mantém o paciente; como não há par, as colunas da consulta vêm NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL, `LEFT OUTER JOIN` e `LEFT JOIN`:",
+      "alternativas": [
+        "São diferentes: o OUTER traz também o produto cartesiano",
+        "São diferentes: só o LEFT OUTER JOIN aceita ON",
+        "São a mesma coisa; a palavra OUTER é opcional",
+        "LEFT OUTER JOIN não existe no MySQL"
+      ],
+      "correta": 2,
+      "explicacao": "OUTER é opcional: LEFT JOIN e LEFT OUTER JOIN são iguais (o mesmo vale para RIGHT)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O MySQL 8 tem o comando FULL OUTER JOIN (que mantém as linhas sem par dos dois lados)?",
+      "alternativas": [
+        "Sim, do mesmo jeito que em outros bancos",
+        "Sim, mas só funciona com tabelas pequenas",
+        "Não; o CROSS JOIN faz exatamente o mesmo papel",
+        "Não; simula-se com LEFT JOIN, UNION e RIGHT JOIN"
+      ],
+      "correta": 3,
+      "explicacao": "O MySQL não tem FULL OUTER JOIN. Simula-se com SELECT ... LEFT JOIN ... UNION SELECT ... RIGHT JOIN ...."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, `livro` tem id_livro e titulo; `emprestimo` tem id_emprestimo, id_livro e data. Qual consulta traz os livros que nunca foram emprestados?",
+      "alternativas": [
+        "SELECT l.titulo FROM livro l LEFT JOIN emprestimo e ON e.id_livro = l.id_livro WHERE e.id_emprestimo IS NULL;",
+        "SELECT l.titulo FROM livro l INNER JOIN emprestimo e ON e.id_livro = l.id_livro WHERE e.id_emprestimo IS NULL;",
+        "SELECT l.titulo FROM livro l LEFT JOIN emprestimo e ON e.id_livro = l.id_livro WHERE e.id_emprestimo IS NOT NULL;",
+        "SELECT l.titulo FROM livro l LEFT JOIN emprestimo e ON e.id_livro = l.id_livro WHERE e.id_emprestimo = NULL;"
+      ],
+      "correta": 0,
+      "explicacao": "LEFT JOIN mantém todos os livros e IS NULL deixa só os sem empréstimo. Com INNER JOIN nunca sobra NULL; IS NOT NULL traz os emprestados; = NULL não traz nada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que `SELECT l.titulo FROM livro l INNER JOIN emprestimo e ON e.id_livro = l.id_livro WHERE e.id_emprestimo IS NULL;` não traz nenhum livro?",
+      "alternativas": [
+        "Porque o IS NULL só funciona com colunas numéricas",
+        "Porque o INNER JOIN já tirou os livros sem empréstimo",
+        "Porque falta um ORDER BY no final da consulta",
+        "Porque o INNER JOIN não aceita usar WHERE depois"
+      ],
+      "correta": 1,
+      "explicacao": "Só o LEFT/RIGHT JOIN gera linhas com NULL para quem não tem par. No INNER JOIN elas nem chegam ao WHERE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma empresa tem os setores TI, RH, Vendas e Compras. TI tem 3 funcionários, Vendas tem 2, e RH e Compras não têm nenhum. Quantas linhas traz `setor LEFT JOIN funcionario` pela chave id_setor?",
+      "alternativas": [
+        "5",
+        "4",
+        "7",
+        "16"
+      ],
+      "correta": 2,
+      "explicacao": "TI 3 + Vendas 2 + RH 1 (com NULL) + Compras 1 (com NULL) = 7."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma empresa tem os setores TI, RH, Vendas e Compras. A tabela `funcionario` tem 6 linhas: 3 de TI, 2 de Vendas e 1 com id_setor NULL. Em `funcionario f RIGHT JOIN setor s ON f.id_setor = s.id_setor`, o que fica de FORA do resultado?",
+      "alternativas": [
+        "O setor RH",
+        "O setor Compras",
+        "Nenhuma linha fica de fora",
+        "O funcionário que está sem setor"
+      ],
+      "correta": 3,
+      "explicacao": "O RIGHT JOIN garante todos os setores (RH e Compras aparecem com NULL). O funcionário sem setor não tem par e está na tabela da esquerda, então some."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, `aluno` (id_aluno, nome), `matricula` (id_aluno, id_curso) e `curso` (id_curso, nome). Qual trecho liga as três tabelas corretamente?",
+      "alternativas": [
+        "FROM aluno a JOIN matricula m ON m.id_aluno = a.id_aluno JOIN curso c ON c.id_curso = m.id_curso",
+        "FROM aluno a JOIN curso c ON c.id_curso = a.id_aluno JOIN matricula m ON m.id_aluno = a.id_aluno",
+        "FROM aluno a JOIN matricula m ON m.id_curso = a.id_aluno JOIN curso c ON c.id_curso = m.id_aluno",
+        "FROM aluno a JOIN curso c JOIN matricula m ON a.id_aluno = c.id_curso"
+      ],
+      "correta": 0,
+      "explicacao": "A tabela associativa fica no meio: aluno liga com matricula por id_aluno, e matricula liga com curso por id_curso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que um relacionamento muitos-para-muitos (aluno faz vários cursos, curso tem vários alunos) precisa de uma tabela associativa?",
+      "alternativas": [
+        "Para guardar com segurança a senha de cada aluno",
+        "Porque uma coluna id_curso em aluno guarda um curso só",
+        "Porque o MySQL não aceita chave estrangeira em aluno",
+        "Para que o JOIN não seja mais necessário nas consultas"
+      ],
+      "correta": 1,
+      "explicacao": "Uma coluna guarda um valor por linha. Com a tabela associativa, cada matrícula (par aluno–curso) vira uma linha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, `aluno` tem 4 linhas, `curso` tem 3 e `matricula` tem 5 (todas com aluno e curso que existem). Quantas linhas traz o INNER JOIN das três tabelas (aluno–matricula–curso)?",
+      "alternativas": [
+        "4",
+        "3",
+        "5",
+        "60"
+      ],
+      "correta": 2,
+      "explicacao": "Cada matrícula encontra um aluno e um curso, então sai uma linha por matrícula: 5."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para achar 'quem não tem' com LEFT JOIN, por que se costuma testar a chave primária da tabela da direita (como `p.id_pet IS NULL`)?",
+      "alternativas": [
+        "Porque é a única coluna que aceita o teste IS NULL",
+        "Porque assim o resultado sai ordenado pela chave",
+        "Porque a chave primária é sempre a primeira coluna",
+        "Porque ela só fica NULL quando não houve par"
+      ],
+      "correta": 3,
+      "explicacao": "Uma coluna comum pode estar NULL de verdade. A chave primária nunca está, então NULL nela só acontece quando o LEFT JOIN não achou par."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel há 10 quartos, e 7 deles têm pelo menos uma reserva. Quantas linhas traz `SELECT q.numero FROM quarto q LEFT JOIN reserva r ON r.numero = q.numero WHERE r.id_reserva IS NULL;`?",
+      "alternativas": [
+        "3",
+        "7",
+        "10",
+        "0"
+      ],
+      "correta": 0,
+      "explicacao": "A consulta traz só os quartos sem nenhuma reserva: 10 − 7 = 3, uma linha cada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de games, `jogo` tem id_jogo e titulo; `venda` tem id_venda, id_jogo e data. Qual consulta mostra TODOS os jogos e a data de cada venda (jogos sem venda também)?",
+      "alternativas": [
+        "SELECT j.titulo, v.data FROM venda v LEFT JOIN jogo j ON v.id_jogo = j.id_jogo;",
+        "SELECT j.titulo, v.data FROM venda v RIGHT JOIN jogo j ON v.id_jogo = j.id_jogo;",
+        "SELECT j.titulo, v.data FROM venda v INNER JOIN jogo j ON v.id_jogo = j.id_jogo;",
+        "SELECT j.titulo, v.data FROM venda v CROSS JOIN jogo j;"
+      ],
+      "correta": 1,
+      "explicacao": "Jogo está à direita; o RIGHT JOIN mantém todos os jogos. O LEFT JOIN manteria todas as vendas, e o INNER JOIN tiraria os jogos sem venda."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa lanchonete, onde deve ficar a quantidade de cada produto num pedido, se existem as tabelas `pedido`, `produto` e `item_pedido` (id_pedido, id_produto)?",
+      "alternativas": [
+        "Em produto, porque a quantidade é do produto",
+        "Em pedido, porque a quantidade é do pedido",
+        "Em item_pedido, porque depende do par pedido–produto",
+        "Em nenhuma tabela, porque o JOIN calcula"
+      ],
+      "correta": 2,
+      "explicacao": "A quantidade muda conforme o pedido E o produto, então é um dado do par, guardado na tabela associativa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que muda ao trocar `cliente LEFT JOIN pedido` por `pedido LEFT JOIN cliente` (com a mesma condição)?",
+      "alternativas": [
+        "Nada muda nas linhas do resultado",
+        "A consulta passa a dar erro de sintaxe",
+        "A consulta passa a ser um CROSS JOIN",
+        "Os clientes sem pedido deixam de aparecer"
+      ],
+      "correta": 3,
+      "explicacao": "No LEFT JOIN a ordem importa: a tabela da esquerda é a garantida. Trocando, os clientes sem pedido deixam de aparecer."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma loja quer todos os clientes e seus pedidos acima de R$ 100, mas usou `SELECT c.nome, p.valor FROM cliente c LEFT JOIN pedido p ON p.id_cliente = c.id_cliente WHERE p.valor > 100;`. O que acontece com os clientes sem pedido?",
+      "alternativas": [
+        "Somem, porque NULL > 100 não é verdadeiro",
+        "Aparecem todos, com p.valor preenchido em NULL",
+        "A consulta dá erro, pois LEFT JOIN não aceita WHERE",
+        "Aparecem só eles, sem os outros clientes"
+      ],
+      "correta": 0,
+      "explicacao": "O WHERE roda depois do JOIN e descarta as linhas com NULL. Na prática vira um INNER JOIN. Para manter todos, o filtro iria no ON."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que traz `SELECT c.nome, p.id_pedido FROM cliente c LEFT JOIN pedido p ON p.id_cliente = c.id_cliente AND p.ano = 2026;`?",
+      "alternativas": [
+        "Só os clientes que têm algum pedido em 2026",
+        "Todos os clientes; sem pedido de 2026, vem NULL",
+        "Erro, porque o ON só aceita uma condição",
+        "Todos os pedidos de todos os anos, sem filtro"
+      ],
+      "correta": 1,
+      "explicacao": "No LEFT JOIN, a condição do ON só decide quem é par; a tabela da esquerda continua toda. Pedidos de outros anos não entram como par."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola: Ana tem 2 matrículas, Beto tem 1, e Caio e Duda não têm nenhuma. Quantas linhas traz `aluno a LEFT JOIN matricula m ON m.id_aluno = a.id_aluno LEFT JOIN curso c ON c.id_curso = m.id_curso`?",
+      "alternativas": [
+        "3",
+        "4",
+        "5",
+        "8"
+      ],
+      "correta": 2,
+      "explicacao": "Ana 2 + Beto 1 + Caio 1 (NULL) + Duda 1 (NULL) = 5. O segundo LEFT JOIN não tira ninguém."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, com `curso` (id_curso, nome) e `matricula` (id_aluno, id_curso), qual trecho acha os cursos sem nenhum aluno matriculado?",
+      "alternativas": [
+        "FROM curso c INNER JOIN matricula m ON m.id_curso = c.id_curso WHERE m.id_aluno IS NULL",
+        "FROM matricula m LEFT JOIN curso c ON m.id_curso = c.id_curso WHERE c.id_curso IS NULL",
+        "FROM curso c LEFT JOIN matricula m ON m.id_curso = c.id_curso WHERE c.id_curso IS NULL",
+        "FROM curso c LEFT JOIN matricula m ON m.id_curso = c.id_curso WHERE m.id_curso IS NULL"
+      ],
+      "correta": 3,
+      "explicacao": "Curso precisa estar à esquerda do LEFT JOIN, e o teste é no lado da matrícula. c.id_curso nunca é NULL; a segunda opção acharia matrículas sem curso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "left-right-troca",
+      "enunciado": "A consulta `SELECT * FROM pedido p RIGHT JOIN cliente c ON p.id_cliente = c.id_cliente;` pode ser trocada sem RIGHT JOIN (com as mesmas linhas) por:",
+      "alternativas": [
+        "FROM cliente c LEFT JOIN pedido p ON p.id_cliente = c.id_cliente",
+        "FROM pedido p LEFT JOIN cliente c ON p.id_cliente = c.id_cliente",
+        "FROM cliente c INNER JOIN pedido p ON p.id_cliente = c.id_cliente",
+        "FROM cliente c CROSS JOIN pedido p"
+      ],
+      "correta": 0,
+      "explicacao": "Basta inverter a ordem: a tabela garantida (cliente) vai para a esquerda e usa-se LEFT JOIN."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa consulta `produto p LEFT JOIN fornecedor f ON p.id_fornecedor = f.id_fornecedor`, a coluna f.nome veio NULL numa linha. O que isso pode significar?",
+      "alternativas": [
+        "Que o produto foi apagado da tabela produto",
+        "Que não achou fornecedor, ou o nome está NULL",
+        "Que o LEFT JOIN sempre deixa NULL na última linha",
+        "Que o fornecedor tem mais de um produto cadastrado"
+      ],
+      "correta": 1,
+      "explicacao": "NULL numa coluna da direita pode ser falta de par ou um valor realmente vazio. Por isso, para 'quem não tem', testa-se a chave primária."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa lanchonete: o pedido 1 tem os produtos Suco e Pão; o pedido 2 tem só Suco (tabela `item_pedido`). Quantas vezes 'Suco' aparece em `SELECT pr.nome FROM pedido p JOIN item_pedido i ON i.id_pedido = p.id_pedido JOIN produto pr ON pr.id_produto = i.id_produto;`?",
+      "alternativas": [
+        "1",
+        "3",
+        "2",
+        "0"
+      ],
+      "correta": 2,
+      "explicacao": "Sai uma linha por item: Suco (pedido 1), Pão (pedido 1) e Suco (pedido 2). Suco aparece 2 vezes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa biblioteca, a tabela `autor` tem 10 autores, e 3 deles ainda não têm livro na tabela `livro`. Compare `autor INNER JOIN livro` com `autor LEFT JOIN livro` (mesma condição).\n\nNa sua resposta:\n1. diga o que o INNER JOIN mostra;\n2. diga o que o LEFT JOIN mostra a mais.",
+      "respostasAceitas": [
+        "O INNER JOIN mostra só os autores que têm livro. O LEFT JOIN mostra também os 3 autores sem livro, com as colunas de livro em NULL."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só pares com correspondência; 2) também as linhas da esquerda sem par, com NULL."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num pet shop, a consulta `SELECT t.nome, p.nome FROM tutor t LEFT JOIN pet p ON p.id_tutor = t.id_tutor;` trouxe uma linha 'Marcos | NULL'.\n\nNa sua resposta:\n1. explique o que esse NULL significa;\n2. explique por que Marcos aparece mesmo assim.",
+      "respostasAceitas": [
+        "O NULL indica que Marcos não tem nenhum pet cadastrado. Ele aparece porque o LEFT JOIN mantém todas as linhas da tabela da esquerda (tutor)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) não há pet ligado a ele; 2) LEFT JOIN garante todos os tutores."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, um aluno pode fazer vários cursos e cada curso tem vários alunos. Para isso existe a tabela `matricula` (id_aluno, id_curso, data).\n\nNa sua resposta:\n1. explique por que essa tabela existe;\n2. diga o que cada linha dela representa.",
+      "respostasAceitas": [
+        "Ela existe porque o relacionamento é muitos-para-muitos e não dá para guardar vários cursos numa coluna do aluno. Cada linha é uma matrícula: um aluno num curso, com a data."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) tabela associativa do N:N; 2) cada linha = um par aluno–curso."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num hotel, um aluno quis listar os quartos sem reserva com `SELECT q.numero FROM quarto q LEFT JOIN reserva r ON r.numero = q.numero WHERE r.id_reserva = NULL;`, e o resultado veio vazio.\n\nNa sua resposta:\n1. explique por que o filtro = NULL não trouxe nada;\n2. diga o que deveria ser usado no lugar e por quê.",
+      "respostasAceitas": [
+        "Comparar com = NULL nunca dá verdadeiro, porque NULL não é um valor. Deveria usar IS NULL, que é o teste certo para ausência de valor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) = NULL resulta em desconhecido, nenhuma linha passa; 2) IS NULL."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, observe `SELECT t.nome, a.nome FROM aluno a RIGHT JOIN turma t ON a.id_turma = t.id_turma;`.\n\nNa sua resposta:\n1. diga quais linhas o RIGHT JOIN garante;\n2. diga o que aparece para uma turma que ainda não tem aluno.",
+      "respostasAceitas": [
+        "Garante todas as turmas (tabela da direita). Uma turma sem aluno aparece uma vez, com o nome do aluno em NULL."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) todas as turmas; 2) a turma com NULL nas colunas de aluno."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num hotel, observe `SELECT q.numero FROM quarto q LEFT JOIN reserva r ON r.numero = q.numero WHERE r.id_reserva IS NULL;`.\n\nNa sua resposta:\n1. diga o que a consulta traz;\n2. explique o papel do LEFT JOIN;\n3. explique o papel do IS NULL.",
+      "respostasAceitas": [
+        "Traz os quartos que nunca tiveram reserva. O LEFT JOIN mantém todos os quartos (os sem reserva ficam com NULL). O IS NULL deixa só essas linhas sem par."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) quartos sem reserva; 2) mantém todos os quartos; 3) filtra os que não acharam reserva."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na biblioteca, um aluno quis os livros nunca emprestados com `SELECT l.titulo FROM livro l INNER JOIN emprestimo e ON e.id_livro = l.id_livro WHERE e.id_emprestimo IS NULL;`, mas veio vazio.\n\nNa sua resposta:\n1. explique por que veio vazio;\n2. diga qual tipo de JOIN resolveria e por quê.",
+      "respostasAceitas": [
+        "O INNER JOIN só deixa livros que têm empréstimo; neles id_emprestimo nunca é NULL, então o filtro tira tudo. Com LEFT JOIN, os livros sem empréstimo ficam com NULL e o IS NULL os encontra."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) INNER JOIN já descartou quem não tem par; 2) LEFT JOIN (livro à esquerda)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, observe `SELECT a.nome, c.nome FROM aluno a INNER JOIN matricula m ON m.id_aluno = a.id_aluno INNER JOIN curso c ON c.id_curso = m.id_curso;`.\n\nNa sua resposta:\n1. explique o que cada ON liga;\n2. diga o que o resultado mostra.",
+      "respostasAceitas": [
+        "O primeiro ON liga o aluno às suas matrículas; o segundo liga cada matrícula ao seu curso. O resultado mostra cada aluno ao lado de cada curso em que está matriculado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) aluno–matricula por id_aluno, matricula–curso por id_curso; 2) pares aluno–curso."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma empresa tem `setor` com (1, 'TI'), (2, 'RH') e (3, 'Vendas'), e `funcionario` com Ana (setor 1), Bia (setor 1) e Caio (setor 3). Observe `SELECT s.nome, f.nome FROM setor s LEFT JOIN funcionario f ON f.id_setor = s.id_setor;`.\n\nNa sua resposta:\n1. diga quantas linhas aparecem;\n2. diga como aparece o setor RH e por quê.",
+      "respostasAceitas": [
+        "Aparecem 4 linhas: TI–Ana, TI–Bia, Vendas–Caio e RH–NULL. RH não tem funcionário, mas o LEFT JOIN mantém todos os setores."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 4 linhas; 2) RH com NULL no nome do funcionário."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Compare `cliente LEFT JOIN pedido` com `pedido RIGHT JOIN cliente`, usando a mesma condição de ligação.\n\nNa sua resposta:\n1. diga se trazem as mesmas linhas e por quê;\n2. explique por que muita gente prefere usar só LEFT JOIN.",
+      "respostasAceitas": [
+        "Sim: nos dois a tabela garantida é cliente. Muitos preferem LEFT JOIN porque a tabela principal fica no começo (FROM) e a leitura fica mais natural."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mesmas linhas, cliente é garantido nos dois; 2) padronizar/ler da esquerda para a direita."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O MySQL 8 não tem FULL OUTER JOIN. Uma escola quer ver todos os alunos e todas as turmas, inclusive aluno sem turma e turma sem aluno. O professor mostrou uma consulta com `... aluno LEFT JOIN turma ...` seguida de UNION e de `... aluno RIGHT JOIN turma ...`.\n\nNa sua resposta:\n1. explique o que o FULL OUTER JOIN faria;\n2. explique como essa consulta do professor chega ao mesmo resultado.",
+      "respostasAceitas": [
+        "O FULL OUTER JOIN traria as linhas com par e as sem par dos dois lados. O LEFT JOIN traz todos os alunos, o RIGHT JOIN traz todas as turmas, e o UNION junta tudo tirando as linhas repetidas (os pares que aparecem nas duas)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) manter sem par dos dois lados; 2) LEFT + RIGHT juntos por UNION, que tira duplicadas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa lanchonete existem `pedido`, `produto` e `item_pedido` (id_pedido, id_produto). Um colega quer guardar a quantidade de cada produto pedido na tabela `produto`.\n\nNa sua resposta:\n1. diga em qual tabela a quantidade deve ficar;\n2. justifique.",
+      "respostasAceitas": [
+        "Deve ficar em item_pedido. A quantidade depende do par pedido–produto: o mesmo produto pode ter 2 unidades num pedido e 5 em outro."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) item_pedido; 2) é um dado do relacionamento, não do produto."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma loja queria todos os clientes e, ao lado, só os pedidos acima de R$ 100. Usou `SELECT c.nome, p.valor FROM cliente c LEFT JOIN pedido p ON p.id_cliente = c.id_cliente WHERE p.valor > 100;` e os clientes sem pedido sumiram.\n\nNa sua resposta:\n1. explique por que eles sumiram;\n2. explique onde a condição do valor deveria ficar para manter todos os clientes.",
+      "respostasAceitas": [
+        "Para os clientes sem pedido, p.valor é NULL, e NULL > 100 não é verdadeiro, então o WHERE os descarta (vira um INNER JOIN). A condição deveria ir no ON (junto com a ligação, com AND): assim ela só decide o par e todos os clientes continuam."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) WHERE depois do JOIN corta as linhas com NULL; 2) mover o filtro para o ON."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola: Ana tem matrícula em Inglês e em Espanhol, Beto em Inglês, e Caio em nenhum curso. Observe `SELECT a.nome, c.nome FROM aluno a LEFT JOIN matricula m ON m.id_aluno = a.id_aluno LEFT JOIN curso c ON c.id_curso = m.id_curso;`.\n\nNa sua resposta:\n1. diga quantas linhas aparecem;\n2. explique por que Ana aparece duas vezes e como aparece Caio.",
+      "respostasAceitas": [
+        "Aparecem 4 linhas: Ana–Inglês, Ana–Espanhol, Beto–Inglês e Caio–NULL. Ana tem duas matrículas, uma linha para cada. Caio não tem matrícula, mas o LEFT JOIN o mantém, com o curso NULL."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 4 linhas; 2) uma linha por matrícula; Caio com NULL."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma empresa tem os setores TI, RH e Vendas. A tabela `funcionario` tem um funcionário com id_setor NULL. Observe `SELECT f.nome, s.nome FROM funcionario f RIGHT JOIN setor s ON f.id_setor = s.id_setor;`.\n\nNa sua resposta:\n1. explique por que o funcionário sem setor não aparece;\n2. explique o que seria preciso para ver também ele e os setores vazios ao mesmo tempo.",
+      "respostasAceitas": [
+        "No RIGHT JOIN, só os setores são garantidos; o funcionário sem setor está na tabela da esquerda e não tem par, então some. Para ver os dois lados seria preciso juntar um LEFT JOIN e um RIGHT JOIN com UNION (simulando o FULL OUTER JOIN)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) RIGHT JOIN só garante a direita; 2) LEFT JOIN UNION RIGHT JOIN."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa consulta com JOIN, o MySQL mostrou o erro 1052: `Column 'id_cliente' in field list is ambiguous`. Quando esse erro acontece?",
+      "alternativas": [
+        "Quando a coluna está em duas tabelas, sem dizer qual",
+        "Quando a coluna não existe em nenhuma das tabelas",
+        "Quando alguma das tabelas não tem chave primária",
+        "Quando o JOIN foi escrito sem usar nenhum apelido"
+      ],
+      "correta": 0,
+      "explicacao": "Ambiguous = ambígua: o MySQL achou a coluna em duas tabelas e não sabe qual mostrar. Coluna inexistente é outro erro (1054)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, `cliente` tem id_cliente e nome; `pedido` tem id_pedido, id_cliente e valor. Qual coluna causa erro de ambiguidade em `SELECT id_cliente, nome, valor FROM cliente INNER JOIN pedido ON cliente.id_cliente = pedido.id_cliente;`?",
+      "alternativas": [
+        "nome",
+        "id_cliente",
+        "valor",
+        "Nenhuma delas"
+      ],
+      "correta": 1,
+      "explicacao": "id_cliente existe nas duas tabelas e aparece no SELECT sem dizer de qual. nome só existe em cliente e valor só em pedido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Como se corrige o erro 1052 (coluna ambígua) numa consulta com JOIN?",
+      "alternativas": [
+        "Apagando a coluna repetida de uma das tabelas",
+        "Trocando o INNER JOIN por um CROSS JOIN",
+        "Pondo a tabela ou apelido antes: c.id_cliente",
+        "Colocando o nome da coluna entre aspas simples"
+      ],
+      "correta": 2,
+      "explicacao": "Basta dizer de qual tabela vem a coluna: tabela.coluna ou apelido.coluna. Não é preciso mudar a estrutura do banco."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz o UNION entre dois SELECTs?",
+      "alternativas": [
+        "Junta as colunas das duas tabelas lado a lado",
+        "Liga as tabelas pela chave estrangeira",
+        "Faz o produto cartesiano das consultas",
+        "Junta os resultados dos dois SELECTs, um embaixo do outro"
+      ],
+      "correta": 3,
+      "explicacao": "UNION empilha linhas de consultas diferentes. Juntar colunas lado a lado é o papel do JOIN."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual a diferença entre UNION e UNION ALL?",
+      "alternativas": [
+        "UNION tira as linhas repetidas; UNION ALL mantém todas",
+        "UNION ALL tira as linhas repetidas; UNION mantém todas",
+        "Os dois tiram as linhas repetidas",
+        "UNION ALL só funciona com três ou mais SELECTs"
+      ],
+      "correta": 0,
+      "explicacao": "UNION remove duplicadas do resultado; UNION ALL traz tudo, inclusive repetidas (e por isso dá menos trabalho ao banco)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para usar UNION, os dois SELECTs precisam ter:",
+      "alternativas": [
+        "As mesmas tabelas escritas no FROM",
+        "A mesma quantidade de colunas, compatíveis",
+        "A mesma condição de filtro no WHERE",
+        "Uma chave estrangeira ligando os dois"
+      ],
+      "correta": 1,
+      "explicacao": "Cada SELECT pode vir de tabelas diferentes, mas o número de colunas tem de ser igual e as colunas correspondentes devem ter o mesmo sentido/tipo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "using-equivale",
+      "enunciado": "Numa escola, `aluno` e `turma` têm, as duas, a coluna id_turma. `FROM aluno INNER JOIN turma USING (id_turma)` é o mesmo que:",
+      "alternativas": [
+        "ON aluno.id_aluno = turma.id_turma",
+        "WHERE id_turma IS NULL",
+        "ON aluno.id_turma = turma.id_turma",
+        "CROSS JOIN turma"
+      ],
+      "correta": 2,
+      "explicacao": "USING (coluna) é um atalho para ligar as tabelas pela coluna de mesmo nome nas duas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para ligar duas tabelas com `USING (coluna)`, a coluna precisa:",
+      "alternativas": [
+        "Ser chave primária nas duas tabelas",
+        "Ser do tipo texto (VARCHAR)",
+        "Existir em só uma das tabelas",
+        "Ter o mesmo nome nas duas tabelas"
+      ],
+      "correta": 3,
+      "explicacao": "O USING só funciona quando a coluna de ligação se chama igual nas duas tabelas. Se os nomes forem diferentes, usa-se ON."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `professor` tem os nomes Ana, Beto e Cris. A tabela `aluno` tem Dani, Ana, Edu e Fabi. Quantas linhas traz `SELECT nome FROM professor UNION SELECT nome FROM aluno;`?",
+      "alternativas": [
+        "6",
+        "7",
+        "4",
+        "12"
+      ],
+      "correta": 0,
+      "explicacao": "São 7 nomes, mas Ana aparece nos dois. O UNION tira a repetida: 6 linhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "union-contar-cidades",
+      "enunciado": "As cidades dos clientes são Santos e Recife; as dos fornecedores são Recife, Natal e Natal. Quantas linhas traz `SELECT cidade FROM cliente UNION ALL SELECT cidade FROM fornecedor;`?",
+      "alternativas": [
+        "3",
+        "5",
+        "4",
+        "2"
+      ],
+      "correta": 1,
+      "explicacao": "UNION ALL não tira repetidas: 2 + 3 = 5 linhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num `SELECT nome_aluno FROM aluno UNION SELECT nome_prof FROM professor;`, qual é o nome da coluna no resultado?",
+      "alternativas": [
+        "O nome da coluna do último SELECT (nome_prof)",
+        "Os dois nomes juntos (nome_aluno_nome_prof)",
+        "O nome da coluna do primeiro SELECT (nome_aluno)",
+        "Nenhum nome, só a palavra UNION"
+      ],
+      "correta": 2,
+      "explicacao": "No UNION, os cabeçalhos do resultado vêm do primeiro SELECT. Para outro nome, usa-se AS no primeiro SELECT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na lanchonete, `categoria` tem (1, 'Bebida') e (2, 'Lanche'). `produto` tem Suco (categoria 1), Coxinha (2), Pastel (2) e Bolo (categoria NULL). Quantas linhas traz o INNER JOIN de produto com categoria por id_categoria?",
+      "alternativas": [
+        "4",
+        "2",
+        "8",
+        "3"
+      ],
+      "correta": 3,
+      "explicacao": "Suco, Coxinha e Pastel acham categoria; Bolo (NULL) não tem par e sai: 3 linhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa consulta com UNION, onde fica o ORDER BY que ordena o resultado inteiro?",
+      "alternativas": [
+        "No fim, depois do último SELECT",
+        "No primeiro SELECT, antes do UNION",
+        "Entre a palavra UNION e o segundo SELECT",
+        "Em lugar nenhum: UNION não pode ser ordenado"
+      ],
+      "correta": 0,
+      "explicacao": "O ORDER BY final vale para o resultado já juntado e fica depois do último SELECT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop, as tabelas `pet` e `tutor` têm, as duas, a coluna nome. O que acontece com `SELECT nome FROM pet INNER JOIN tutor ON pet.id_tutor = tutor.id_tutor;`?",
+      "alternativas": [
+        "Mostra o nome do pet em cada linha",
+        "Dá o erro 1052 de coluna ambígua",
+        "Mostra o nome do tutor em cada linha",
+        "Mostra as duas colunas nome, lado a lado"
+      ],
+      "correta": 1,
+      "explicacao": "O MySQL não escolhe sozinho: como nome existe nas duas tabelas, é preciso escrever pet.nome ou tutor.nome."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma escola quer uma lista única com os e-mails dos alunos (tabela `aluno`) e dos responsáveis (tabela `responsavel`) para mandar um aviso. O recurso adequado é:",
+      "alternativas": [
+        "INNER JOIN entre aluno e responsavel",
+        "CROSS JOIN entre as duas tabelas",
+        "UNION entre os dois SELECTs de e-mail",
+        "LEFT JOIN com IS NULL"
+      ],
+      "correta": 2,
+      "explicacao": "A ideia é empilhar duas listas numa coluna só, e isso é UNION. JOIN poria os e-mails lado a lado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na loja, com `SELECT * FROM pedido INNER JOIN cliente USING (id_cliente);`, quantas vezes a coluna id_cliente aparece no resultado?",
+      "alternativas": [
+        "Duas vezes, uma de cada tabela",
+        "Nenhuma vez, ela é escondida",
+        "Só se for escrita no SELECT",
+        "Uma vez só: o USING as junta"
+      ],
+      "correta": 3,
+      "explicacao": "Com USING, a coluna de ligação vira uma só no SELECT *. Com ON, ela apareceria duas vezes (uma de cada tabela)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que acontece com `SELECT nome, email FROM aluno UNION SELECT nome FROM professor;`?",
+      "alternativas": [
+        "Dá erro: os SELECTs têm quantidades diferentes de colunas",
+        "O e-mail dos professores é preenchido com NULL",
+        "Aparece só a coluna nome",
+        "Os professores aparecem numa coluna separada"
+      ],
+      "correta": 0,
+      "explicacao": "O UNION exige o mesmo número de colunas nos dois SELECTs. O MySQL não completa sozinho (erro 1222)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "union-ordem",
+      "enunciado": "O que acontece com `SELECT nome, telefone FROM cliente UNION SELECT telefone, nome FROM fornecedor;`?",
+      "alternativas": [
+        "Dá o erro 1052 de coluna ambígua",
+        "Roda, mas nomes e telefones se misturam",
+        "O MySQL arruma a ordem pelos nomes das colunas",
+        "Aparecem só os clientes, sem os fornecedores"
+      ],
+      "correta": 1,
+      "explicacao": "O UNION junta por posição, não por nome: a 1ª coluna de um fica embaixo da 1ª do outro. Não dá erro, mas os dados ficam trocados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quando é melhor usar UNION ALL em vez de UNION?",
+      "alternativas": [
+        "Quando se quer tirar as linhas repetidas do resultado",
+        "Quando os dois SELECTs têm números diferentes de colunas",
+        "Quando as linhas repetidas devem aparecer no resultado",
+        "Nunca, porque UNION ALL é mais lento que UNION"
+      ],
+      "correta": 2,
+      "explicacao": "UNION ALL mantém as repetidas (por exemplo, para contar ocorrências) e é mais rápido, pois não precisa procurar duplicadas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num mercado, o que acontece com `SELECT p.nome FROM produto p INNER JOIN categoria c ON p.id_categoria = c.id_categoria WHERE id_categoria = 2;`?",
+      "alternativas": [
+        "Funciona e filtra só a categoria 2",
+        "O WHERE é ignorado pelo MySQL",
+        "Sai o produto cartesiano das tabelas",
+        "Dá erro 1052 por causa do WHERE"
+      ],
+      "correta": 3,
+      "explicacao": "A ambiguidade vale para qualquer parte da consulta, inclusive o WHERE. Corrige-se com p.id_categoria ou c.id_categoria."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, `aluno` tem a coluna id_turma, mas na tabela `turma` a chave se chama só id. O que acontece com `FROM aluno INNER JOIN turma USING (id_turma)`?",
+      "alternativas": [
+        "Dá erro, porque turma não tem coluna chamada id_turma",
+        "Funciona: o MySQL descobre a ligação sozinho",
+        "Vira um CROSS JOIN",
+        "Traz só os alunos sem turma"
+      ],
+      "correta": 0,
+      "explicacao": "USING exige o mesmo nome nas duas tabelas. Com nomes diferentes, usa-se ON aluno.id_turma = turma.id."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "`categoria` tem Bebida, Lanche e Doce. `produto` tem Suco (Bebida), Coxinha (Lanche) e Pastel (Lanche). Em `categoria LEFT JOIN produto`, quantas linhas vêm com NULL nas colunas de produto?",
+      "alternativas": [
+        "0",
+        "1",
+        "2",
+        "3"
+      ],
+      "correta": 1,
+      "explicacao": "Só Doce não tem produto: 1 linha com NULL. O resultado total tem 4 linhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, `SELECT nome FROM cliente WHERE cidade = 'Santos' UNION SELECT nome FROM cliente WHERE cidade = 'Recife';` traz o mesmo que:",
+      "alternativas": [
+        "SELECT nome FROM cliente WHERE cidade = 'Santos' AND cidade = 'Recife';",
+        "Um CROSS JOIN de cliente com ele mesmo",
+        "SELECT DISTINCT nome FROM cliente WHERE cidade IN ('Santos', 'Recife');",
+        "SELECT nome FROM cliente;"
+      ],
+      "correta": 2,
+      "explicacao": "O UNION junta as duas listas e tira os nomes repetidos, como o DISTINCT. AND nunca seria verdadeiro (uma cidade não é duas)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel, `hospede` (id_hospede, nome), `reserva` (id_reserva, id_hospede, numero, entrada) e `quarto` (numero, andar). Na consulta `SELECT nome, numero, entrada FROM hospede h JOIN reserva r ON r.id_hospede = h.id_hospede JOIN quarto q ON q.numero = r.numero;`, qual coluna do SELECT dá erro 1052?",
+      "alternativas": [
+        "nome",
+        "entrada",
+        "Nenhuma",
+        "numero"
+      ],
+      "correta": 3,
+      "explicacao": "numero existe em reserva e em quarto. nome só está em hospede e entrada só em reserva."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `funcionario` tem Lia e Rui; a tabela `estagiario` tem Lia e Téo. Quantas vezes 'Lia' aparece em `SELECT nome FROM funcionario UNION ALL SELECT nome FROM estagiario;`?",
+      "alternativas": [
+        "2",
+        "1",
+        "0",
+        "4"
+      ],
+      "correta": 0,
+      "explicacao": "UNION ALL mantém as repetidas: Lia vem uma vez de cada tabela. Com UNION, apareceria só 1 vez."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "using-equivale",
+      "enunciado": "Numa loja, `venda` e `vendedor` têm, as duas, a coluna id_vendedor. `FROM venda v JOIN vendedor d USING (id_vendedor)` é o mesmo que:",
+      "alternativas": [
+        "FROM venda v JOIN vendedor d ON v.id_venda = d.id_vendedor",
+        "FROM venda v JOIN vendedor d ON v.id_vendedor = d.id_vendedor",
+        "FROM venda v, vendedor d",
+        "FROM venda v LEFT JOIN vendedor d ON d.id_vendedor IS NULL"
+      ],
+      "correta": 1,
+      "explicacao": "USING (id_vendedor) compara a coluna id_vendedor das duas tabelas, como o ON da segunda opção."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre JOIN e UNION?",
+      "alternativas": [
+        "Nenhuma: são dois nomes para a mesma coisa",
+        "JOIN empilha linhas; UNION junta colunas lado a lado",
+        "JOIN põe colunas lado a lado; UNION empilha linhas",
+        "UNION só funciona entre tabelas com chave estrangeira"
+      ],
+      "correta": 2,
+      "explicacao": "JOIN aumenta as colunas (tabelas lado a lado); UNION aumenta as linhas (resultados um embaixo do outro)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "union-ordem",
+      "enunciado": "No UNION, por que a ordem das colunas em cada SELECT importa?",
+      "alternativas": [
+        "Porque o MySQL ordena o resultado pela primeira coluna",
+        "Porque os nomes das colunas precisam ser iguais",
+        "Porque senão a consulta sempre dá o erro 1052",
+        "Porque as colunas são encaixadas pela posição"
+      ],
+      "correta": 3,
+      "explicacao": "O UNION encaixa as colunas pela posição. Os nomes podem ser diferentes; vale o nome do primeiro SELECT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela A tem (Ana, Santos) e (Beto, Recife). A tabela B tem (Ana, Recife) e (Beto, Recife). Quantas linhas traz `SELECT nome, cidade FROM A UNION SELECT nome, cidade FROM B;`?",
+      "alternativas": [
+        "3",
+        "4",
+        "2",
+        "1"
+      ],
+      "correta": 0,
+      "explicacao": "O UNION compara a linha inteira. Só (Beto, Recife) se repete; (Ana, Santos) e (Ana, Recife) são diferentes. Total: 3."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "union-contar-cidades",
+      "enunciado": "As cidades dos clientes são Santos, Santos e Recife; a do único fornecedor é Natal. Quantas linhas traz `SELECT cidade FROM cliente UNION SELECT cidade FROM fornecedor;`?",
+      "alternativas": [
+        "4",
+        "3",
+        "2",
+        "1"
+      ],
+      "correta": 1,
+      "explicacao": "O UNION tira as repetidas do resultado inteiro, inclusive as que vêm do mesmo SELECT: Santos, Recife e Natal."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, o que acontece com `SELECT * FROM pedido JOIN cliente USING (id_cliente) WHERE id_cliente = 3;`?",
+      "alternativas": [
+        "Dá erro 1052, como em qualquer JOIN",
+        "Dá erro, porque USING não aceita WHERE",
+        "Funciona: com USING, a coluna vira uma só",
+        "Traz o produto cartesiano já filtrado"
+      ],
+      "correta": 2,
+      "explicacao": "Com USING, a coluna de ligação é juntada numa só, então citá-la sem tabela não é ambíguo. Com ON, o mesmo WHERE daria erro 1052."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cinema: `filme` tem A, B e C; `sessao` tem s1 (filme A), s2 (filme A) e s3 (filme B); `ingresso` tem dois da s1 e um da s3. Quantas linhas traz `filme f LEFT JOIN sessao s ON s.id_filme = f.id_filme LEFT JOIN ingresso i ON i.id_sessao = s.id_sessao`?",
+      "alternativas": [
+        "3",
+        "6",
+        "4",
+        "5"
+      ],
+      "correta": 3,
+      "explicacao": "A: s1 com 2 ingressos (2 linhas) + s2 sem ingresso (1). B: s3 com 1 ingresso (1). C: sem sessão (1). Total 5."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para simular o FULL OUTER JOIN no MySQL, junta-se `... LEFT JOIN ...` e `... RIGHT JOIN ...`. Por que se usa UNION e não UNION ALL entre eles?",
+      "alternativas": [
+        "Para não repetir os pares, que saem nas duas",
+        "Porque UNION ALL não aceita consultas com JOIN",
+        "Porque UNION é sempre mais rápido que UNION ALL",
+        "Para o resultado sair em ordem alfabética"
+      ],
+      "correta": 0,
+      "explicacao": "Os pares que têm correspondência saem tanto no LEFT quanto no RIGHT JOIN. O UNION tira essas repetições."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, `cliente` e `pedido` têm a coluna id_cliente. A consulta `SELECT * FROM cliente c INNER JOIN pedido p ON c.id_cliente = p.id_cliente;` dá erro 1052?",
+      "alternativas": [
+        "Sim, porque id_cliente existe nas duas tabelas",
+        "Não; só mostra id_cliente duas vezes",
+        "Sim, porque o * não pode ser usado com JOIN",
+        "Não, e o id_cliente aparece uma vez só"
+      ],
+      "correta": 1,
+      "explicacao": "O * não cita a coluna pelo nome, então não há ambiguidade: aparecem todas as colunas das duas tabelas, com id_cliente duas vezes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, `turma` tem os ids 1, 2 e 4. `aluno` tem 5 linhas com id_turma 1, 1, 2, 3 e NULL. Quantas linhas traz `turma t LEFT JOIN aluno a ON a.id_turma = t.id_turma`?",
+      "alternativas": [
+        "3",
+        "5",
+        "4",
+        "6"
+      ],
+      "correta": 2,
+      "explicacao": "Turma 1: 2 alunos; turma 2: 1; turma 4: nenhum (1 linha com NULL). Os alunos da turma 3 e do NULL não têm turma à esquerda e saem. Total 4."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, `cliente` tem id_cliente e nome; `pedido` tem id_pedido, id_cliente e valor. Observe `SELECT id_cliente, nome, valor FROM cliente INNER JOIN pedido ON cliente.id_cliente = pedido.id_cliente;`, que deu o erro 1052 (coluna ambígua).\n\nNa sua resposta:\n1. explique o que significa o erro;\n2. explique como ele é corrigido.",
+      "respostasAceitas": [
+        "A coluna id_cliente existe nas duas tabelas e o SELECT não disse de qual vem, então o MySQL não sabe qual mostrar. Corrige-se dizendo a tabela (ou apelido) antes da coluna, como cliente.id_cliente."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) coluna presente em duas tabelas, sem indicação; 2) qualificar com tabela.coluna ou apelido.coluna."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A tabela `aluno` tem os nomes Ana e Beto, e a tabela `professor` tem Ana e Cris. Compare `SELECT nome FROM aluno UNION SELECT nome FROM professor;` com o mesmo comando usando UNION ALL.\n\nNa sua resposta:\n1. diga quantas linhas cada um traz;\n2. explique a diferença entre eles.",
+      "respostasAceitas": [
+        "O UNION traz 3 linhas (Ana, Beto, Cris); o UNION ALL traz 4 (Ana aparece duas vezes). O UNION tira as linhas repetidas; o UNION ALL mantém todas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 3 e 4; 2) UNION remove duplicadas, UNION ALL não."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, observe `SELECT * FROM pedido INNER JOIN cliente USING (id_cliente);`.\n\nNa sua resposta:\n1. explique o que o USING faz;\n2. diga qual condição as tabelas precisam cumprir para usá-lo.",
+      "respostasAceitas": [
+        "O USING liga as duas tabelas pela coluna id_cliente (igual a ON pedido.id_cliente = cliente.id_cliente). Só funciona se a coluna tiver o mesmo nome nas duas tabelas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) atalho da condição de ligação; 2) coluna com o mesmo nome nas duas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega disse que JOIN e UNION servem para a mesma coisa, porque os dois 'juntam tabelas'.\n\nNa sua resposta:\n1. explique o que o JOIN junta;\n2. explique o que o UNION junta.",
+      "respostasAceitas": [
+        "O JOIN junta tabelas lado a lado, aumentando as colunas, ligando as linhas por uma condição. O UNION empilha o resultado de consultas, aumentando as linhas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) JOIN = colunas lado a lado, ligadas por condição; 2) UNION = linhas uma embaixo da outra."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, o comando `SELECT nome, email FROM aluno UNION SELECT nome FROM professor;` deu erro.\n\nNa sua resposta:\n1. explique por que deu erro;\n2. diga qual regra do UNION não foi seguida.",
+      "respostasAceitas": [
+        "O primeiro SELECT tem 2 colunas e o segundo só 1. O UNION exige que os SELECTs tenham a mesma quantidade de colunas, em ordem compatível."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) números de colunas diferentes; 2) mesma quantidade de colunas compatíveis."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma loja de games tem a tabela `jogo_loja` com os títulos Zumbi Run, Fazenda Feliz e Kart Turbo, e a tabela `jogo_online` com Kart Turbo e Pirata Pop. Observe `SELECT titulo FROM jogo_loja UNION SELECT titulo FROM jogo_online;`.\n\nNa sua resposta:\n1. diga quantas linhas o resultado tem e quais são;\n2. diga quantas linhas teria com UNION ALL e por quê.",
+      "respostasAceitas": [
+        "Com UNION: 4 linhas (Zumbi Run, Fazenda Feliz, Kart Turbo, Pirata Pop). Com UNION ALL: 5, porque Kart Turbo aparece duas vezes (o UNION ALL não tira repetidas)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 4 linhas, Kart Turbo uma vez; 2) 5 linhas, mantém a repetida."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num mercado, observe `SELECT p.nome, c.nome FROM produto p INNER JOIN categoria c ON p.id_categoria = c.id_categoria WHERE id_categoria = 2;`. O SELECT usa apelidos, mas a consulta deu o erro 1052.\n\nNa sua resposta:\n1. explique onde está a ambiguidade;\n2. explique por que usar apelidos só no SELECT não basta.",
+      "respostasAceitas": [
+        "A ambiguidade está no WHERE: id_categoria existe em produto e em categoria e ali não tem apelido. A regra vale para toda a consulta (SELECT, WHERE, ORDER BY...), não só para o SELECT; o certo seria p.id_categoria ou c.id_categoria."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) id_categoria sem qualificar no WHERE; 2) toda coluna ambígua precisa de tabela/apelido em qualquer parte."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, a tabela `aluno` tem a coluna id_turma, mas na tabela `turma` a chave se chama apenas id. Um colega tentou ligar as duas com `USING (id_turma)` e recebeu erro.\n\nNa sua resposta:\n1. explique por que o USING não serve aqui;\n2. explique o que deve ser usado no lugar.",
+      "respostasAceitas": [
+        "O USING só funciona quando a coluna tem o mesmo nome nas duas tabelas, e turma não tem id_turma. Deve-se usar ON, comparando aluno.id_turma com turma.id."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nomes diferentes; 2) ON com as duas colunas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma loja juntou clientes e fornecedores com `SELECT nome, telefone FROM cliente UNION SELECT telefone, nome FROM fornecedor;`. Não deu erro, mas a lista ficou estranha.\n\nNa sua resposta:\n1. explique por que não deu erro;\n2. explique o problema no resultado.",
+      "respostasAceitas": [
+        "Não deu erro porque os dois SELECTs têm 2 colunas. Mas o UNION encaixa por posição: os telefones dos fornecedores foram parar na coluna nome, e os nomes na coluna telefone."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a quantidade de colunas é igual; 2) as colunas foram invertidas, misturando os dados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma padaria registra vendas da loja física na tabela `venda_balcao` e do site na tabela `venda_site` (as duas com data e valor). Para somar o total do dia, o gerente vai juntar as duas listas. No mesmo dia houve duas vendas de R$ 12,00, uma em cada tabela.\n\nNa sua resposta:\n1. diga se deve usar UNION ou UNION ALL;\n2. explique o que aconteceria com a outra opção.",
+      "respostasAceitas": [
+        "Deve usar UNION ALL, que mantém todas as vendas. Com UNION, as duas vendas iguais (mesma data e R$ 12,00) virariam uma só, e o total ficaria R$ 12,00 menor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) UNION ALL; 2) UNION tiraria linhas iguais e perderia vendas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa hamburgueria, `pedido` tem 1, 2 e 3; `item_pedido` tem (pedido 1, Burger), (pedido 1, Refri) e (pedido 2, Burger); o pedido 3 ainda não tem itens. Observe `SELECT p.id_pedido, pr.nome FROM pedido p JOIN item_pedido i ON i.id_pedido = p.id_pedido JOIN produto pr ON pr.id_produto = i.id_produto;`.\n\nNa sua resposta:\n1. diga quais linhas aparecem;\n2. explique por que o pedido 3 não aparece.",
+      "respostasAceitas": [
+        "Aparecem 3 linhas: 1–Burger, 1–Refri e 2–Burger. O pedido 3 não tem item, e o JOIN (INNER) só mostra quem tem par."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) as três linhas citadas; 2) sem item, sem par no INNER JOIN."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, observe `SELECT a.nome AS aluno, c.nome AS curso FROM aluno a JOIN matricula m ON m.id_aluno = a.id_aluno JOIN curso c ON c.id_curso = m.id_curso;`.\n\nNa sua resposta:\n1. explique o papel dos apelidos a, m e c;\n2. explique o papel de AS aluno e AS curso.",
+      "respostasAceitas": [
+        "a, m e c são apelidos das tabelas: encurtam a consulta e dizem de onde vem cada coluna (as duas colunas nome). AS aluno e AS curso dão nomes claros às colunas no resultado, que senão viriam as duas como nome."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) apelidos de tabela, evitam ambiguidade; 2) apelidos de coluna, cabeçalhos claros."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "As cidades na tabela `cliente` são Santos, Santos e Recife; a tabela `fornecedor` tem Natal. Um aluno esperava 4 linhas em `SELECT cidade FROM cliente UNION SELECT cidade FROM fornecedor;`, mas vieram 3.\n\nNa sua resposta:\n1. explique por que vieram 3 linhas;\n2. diga o que mudaria para vir 4 linhas.",
+      "respostasAceitas": [
+        "O UNION tira as repetidas do resultado inteiro, inclusive as que vêm do mesmo SELECT: Santos aparece uma vez só (Santos, Recife, Natal). Com UNION ALL viriam as 4 linhas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) UNION remove duplicadas mesmo dentro do mesmo SELECT; 2) usar UNION ALL."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno disse: 'O erro 1052 é bobagem do MySQL. Depois do JOIN, cliente.id_cliente e pedido.id_cliente têm sempre o mesmo valor, então tanto faz qual ele mostra.'\n\nNa sua resposta:\n1. explique por que o MySQL exige saber de qual tabela vem a coluna;\n2. explique em que tipo de JOIN os dois valores podem ser diferentes.",
+      "respostasAceitas": [
+        "O MySQL não supõe nada: são duas colunas diferentes com o mesmo nome. Além disso, num LEFT JOIN, para um cliente sem pedido, cliente.id_cliente tem valor e pedido.id_cliente vem NULL, então os valores não são iguais."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) são colunas distintas, o banco não escolhe por conta própria; 2) em LEFT/RIGHT JOIN, o lado sem par fica NULL."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas com JOIN",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num pet shop, um aluno quis listar os tutores sem pet com `SELECT t.nome FROM pet p RIGHT JOIN tutor t ON p.id_tutor = t.id_tutor WHERE t.id_tutor IS NULL;`, mas o resultado veio vazio.\n\nNa sua resposta:\n1. explique por que veio vazio;\n2. diga qual coluna deveria ser testada e por quê.",
+      "respostasAceitas": [
+        "No RIGHT JOIN, todos os tutores aparecem com o id_tutor preenchido, então t.id_tutor nunca é NULL. Deveria testar a chave do lado que pode faltar, p.id_pet IS NULL: ela só fica NULL quando o tutor não tem pet."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a tabela garantida (tutor) nunca tem NULL na chave; 2) testar a chave de pet."
+    }
+  ]
+}
