@@ -2140,6 +2140,7 @@ const BANCOS_BD_150 = [
   desc: "105 alternativas + 45 dissertativas (sem pedir comando), dificuldade balanceada. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] }));
 const BANCOS_PRONTOS = [
   ...BANCOS_BD_150,
+  { arquivo: "bancos/gerados/bd/bd_sql_cenarios_fisico.json", icone: "🗄", titulo: "Bancada SQL: 25 cenários de SQL físico (10 tarefas cada)", desc: "Adaptados dos cenários da FATEC: 3 consultas, 3 de dados, 3 de tabela (CREATE/ALTER, conferidas pela estrutura) e 1 de permissão em cada. Todos \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },
   { arquivo: "bancos/gerados/banco_lpa.json", icone: "🧮", titulo: "Lógica de Programação e Algoritmos — banco inicial", desc: "70 questões em 7 tópicos. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },
   { arquivo: "bancos/gerados/banco_req.json", icone: "🗂", titulo: "Levantamento de Requisitos — banco inicial", desc: "70 questões em 7 tópicos. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },
   { arquivo: "bancos/gerados/banco_req_diagramas_extra.json", icone: "📐", titulo: "Levantamento de Requisitos — mais 4 diagramas", desc: "requisitos, Kanban, histórias de usuário e mapa de empatia. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },
