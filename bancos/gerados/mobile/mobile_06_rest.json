@@ -1,0 +1,2430 @@
+{
+  "nome": "Programação para Dispositivos Móveis — Consumo de web service REST (a revisar)",
+  "materia": "Programação para Dispositivos Móveis",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de uma padaria mostra o cardápio buscando os dados num web service REST. O que é esse web service?",
+      "alternativas": [
+        "Um banco de dados instalado dentro do celular que guarda o cardápio sem precisar de internet",
+        "Uma biblioteca de componentes visuais usada para montar as telas e os botões do aplicativo",
+        "Um serviço no servidor que o app acessa por HTTP, trocando dados (em geral JSON) por URLs",
+        "Um programa que compila o código do aplicativo e gera o arquivo de instalação para a loja"
+      ],
+      "correta": 2,
+      "explicacao": "Web service REST é um serviço no servidor acessado por HTTP, com recursos identificados por URLs e dados trocados normalmente em JSON. Não é banco local, biblioteca visual nem compilador."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app da academia, a URL `https://api.academia.com/alunos` é chamada de endpoint. O que é um endpoint?",
+      "alternativas": [
+        "O último comando do código, que encerra o aplicativo quando o usuário sai",
+        "O endereço de um recurso da API que o app chama para fazer uma operação",
+        "O servidor de e-mail que o app usa para avisar o aluno sobre os treinos",
+        "A tela final do aplicativo, mostrada logo depois que o login dá certo"
+      ],
+      "correta": 1,
+      "explicacao": "Endpoint é a URL de um recurso da API (ex.: /alunos). O app manda requisições para esses endereços."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma escola de idiomas, o aluno pode corrigir todos os dados do seu cadastro (nome, e-mail e telefone) e tocar em \"Salvar\". Numa API REST, qual método HTTP costuma ser usado para essa atualização completa?",
+      "alternativas": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ],
+      "correta": 3,
+      "explicacao": "PUT atualiza (substitui) um recurso que já existe. GET busca, POST cria e DELETE remove."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No código `const resp = await fetch('https://api.hotel.com/quartos');` não foi passado nenhum objeto de opções. Qual método HTTP o fetch usa nesse caso?",
+      "alternativas": [
+        "GET",
+        "POST",
+        "PUT",
+        "Nenhum: sem opções a requisição não é enviada"
+      ],
+      "correta": 0,
+      "explicacao": "Sem o objeto de opções, o fetch faz uma requisição GET, que serve para buscar dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para enviar um novo cadastro com fetch e o método POST, onde ficam os dados do cadastro?",
+      "alternativas": [
+        "Na propriedade body, convertidos em texto com JSON.stringify",
+        "Na própria URL, logo depois do nome do recurso, sem nenhuma conversão",
+        "Na propriedade method, escritos logo depois da palavra POST",
+        "Na propriedade headers, dentro do valor do Content-Type"
+      ],
+      "correta": 0,
+      "explicacao": "No fetch, o corpo da requisição vai em body. Como o corpo é texto, o objeto é convertido com JSON.stringify."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de uma clínica recebe um token depois do login. Nas próximas requisições, em qual cabeçalho esse token costuma ser enviado?",
+      "alternativas": [
+        "`Content-Type: <token>`",
+        "`Accept: <token>`",
+        "`Authorization: Bearer <token>`",
+        "`User-Agent: <token>`"
+      ],
+      "correta": 2,
+      "explicacao": "O padrão mais comum é o cabeçalho Authorization com o esquema Bearer. Content-Type diz o formato do corpo, Accept o formato desejado e User-Agent identifica o programa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve o token que a API devolve depois que o usuário faz login no app?",
+      "alternativas": [
+        "Para criptografar o banco de dados interno do celular depois do login",
+        "Para medir a velocidade da conexão de internet do usuário a cada nova tela aberta",
+        "Para guardar a lista de produtos e dispensar novas chamadas à API",
+        "Para identificar o usuário logado nas próximas requisições, sem reenviar a senha"
+      ],
+      "correta": 3,
+      "explicacao": "O token é uma credencial temporária: a API o confere a cada requisição para saber quem está pedindo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma pizzaria, o app chama `GET /pedidos/15`. O que essa requisição pede?",
+      "alternativas": [
+        "Os dados do pedido de id 15",
+        "Os 15 primeiros pedidos da lista",
+        "A exclusão do pedido de número 15",
+        "Os pedidos feitos no dia 15"
+      ],
+      "correta": 0,
+      "explicacao": "Na REST, o número depois do recurso identifica um item: /pedidos/15 é o pedido de id 15. GET só busca."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de um cinema chama `GET /filmes?genero=comedia`. O que a parte `?genero=comedia` faz?",
+      "alternativas": [
+        "Cadastra um novo filme do gênero comédia no servidor",
+        "Filtra a busca, pedindo só os filmes do gênero comédia",
+        "Altera o gênero de todos os filmes para comédia",
+        "Abre a tela de comédias no app sem chamar o servidor"
+      ],
+      "correta": 1,
+      "explicacao": "O que vem depois do ? é a query string: parâmetros que filtram ou ajustam a busca. Com GET, nada é alterado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Com axios, o código `const resp = await axios.get('https://api.petshop.com/racoes');` busca as rações. Onde ficam os dados já convertidos do JSON?",
+      "alternativas": [
+        "Em `resp.data`",
+        "Em `resp.body`",
+        "Em `resp.json()`",
+        "Em `resp.text`"
+      ],
+      "correta": 0,
+      "explicacao": "O axios já converte o JSON e entrega os dados em resp.data. O método json() é do fetch, não do axios."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de uma biblioteca envia o cabeçalho `Accept: application/json` nas requisições. Para que serve esse cabeçalho?",
+      "alternativas": [
+        "Para dizer ao servidor que o corpo enviado pelo app está em JSON",
+        "Para dizer ao servidor que o app quer receber a resposta em JSON",
+        "Para autorizar o usuário a acessar os dados protegidos da API",
+        "Para aceitar automaticamente os termos de uso do aplicativo"
+      ],
+      "correta": 1,
+      "explicacao": "Accept indica o formato que o app aceita receber. Quem informa o formato do corpo enviado é o Content-Type."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de um pet shop, o cliente cancela o agendamento de id 42. Qual requisição segue o padrão REST para remover esse agendamento?",
+      "alternativas": [
+        "`GET /agendamentos/42/apagar`",
+        "`POST /agendamentos` com o corpo `{ \"id\": 42 }`",
+        "`PUT /agendamentos/42` com o corpo vazio",
+        "`DELETE /agendamentos/42`"
+      ],
+      "correta": 3,
+      "explicacao": "Na REST, a remoção usa o método DELETE na URL do item. GET não deve alterar dados e POST serve para criar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que a API usada pelo app de login de uma loja deve ter endereço com https e não só http?",
+      "alternativas": [
+        "Porque o https deixa o app funcionar mesmo quando está sem internet",
+        "Porque o http só funciona em computadores e não funciona em celulares",
+        "Porque o https dispensa o uso de token depois que o login é feito",
+        "Porque no https os dados viajam criptografados, protegendo senha e token"
+      ],
+      "correta": 3,
+      "explicacao": "O https criptografa a comunicação; em http, quem está na mesma rede (ex.: Wi-Fi público) pode ler senha e token."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma oficina, o arquivo `api.js` tem o código abaixo. Para que serve o `baseURL`?\n\n```js\nconst api = axios.create({ baseURL: 'https://api.oficina.com' });\nconst resp = await api.get('/servicos');\n```",
+      "alternativas": [
+        "Guardar uma vez o endereço comum da API, para as chamadas usarem só o caminho",
+        "Trocar de servidor sozinho quando o endereço principal da API sai do ar",
+        "Fazer uma cópia local do banco de dados da API dentro do celular",
+        "Mudar o método padrão de todas as requisições feitas pelo app para o POST"
+      ],
+      "correta": 0,
+      "explicacao": "baseURL é o início comum das URLs. api.get('/servicos') chama https://api.oficina.com/servicos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de uma loja de games envia um novo cliente com o código abaixo. O servidor responde 400 dizendo que não entendeu o formato dos dados. O que provavelmente está faltando?\n\n```js\nawait fetch('https://api.loja.com/clientes', {\n  method: 'POST',\n  body: JSON.stringify(cliente)\n});\n```",
+      "alternativas": [
+        "Um await antes de `JSON.stringify(cliente)`",
+        "O cabeçalho `Content-Type: application/json`",
+        "Trocar o método POST pelo método GET",
+        "O cabeçalho `Accept-Language: pt-BR`"
+      ],
+      "correta": 1,
+      "explicacao": "Sem Content-Type: application/json, o servidor não sabe que o corpo é JSON. JSON.stringify não é assíncrono e GET não envia corpo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma sorveteria, o aluno escreveu `body: produto` no fetch, sendo `produto` um objeto JavaScript, sem usar JSON.stringify. O que é enviado ao servidor?",
+      "alternativas": [
+        "O JSON correto, porque o fetch converte o objeto sozinho",
+        "Nada, porque o fetch mostra um erro de sintaxe antes mesmo de rodar",
+        "O texto `[object Object]`, porque o objeto não foi convertido em JSON",
+        "Somente o primeiro campo do objeto, convertido em texto"
+      ],
+      "correta": 2,
+      "explicacao": "O fetch transforma o objeto em texto com toString(), que dá \"[object Object]\". Por isso se usa JSON.stringify."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Com axios, o código `await axios.post('/reservas', reserva);` envia um objeto JavaScript. É preciso usar JSON.stringify antes?",
+      "alternativas": [
+        "Sim: sem JSON.stringify o axios envia o objeto vazio ao servidor",
+        "Sim: o axios só aceita texto puro no segundo parâmetro do post",
+        "Não: o axios converte o objeto em JSON e coloca o Content-Type sozinho",
+        "Não, porque o axios manda os dados da reserva pela própria URL"
+      ],
+      "correta": 2,
+      "explicacao": "Quando recebe um objeto, o axios faz a conversão para JSON e define Content-Type: application/json. No fetch isso é manual."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma clínica veterinária, o cliente quer mudar só o telefone, sem reenviar os outros dados do cadastro. Qual método HTTP muitas APIs usam para essa atualização parcial?",
+      "alternativas": [
+        "PUT",
+        "POST",
+        "PATCH",
+        "GET"
+      ],
+      "correta": 2,
+      "explicacao": "PATCH altera só os campos enviados. PUT substitui o recurso inteiro; POST cria; GET busca."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de um salão de beleza envia `Authorization: Bearer` seguido do token e recebe o status 401. O que isso indica?",
+      "alternativas": [
+        "O token não foi aceito (ausente, errado ou expirado); é preciso entrar de novo",
+        "O servidor está fora do ar e o app deve tentar de novo daqui a alguns minutos",
+        "O recurso pedido foi apagado do servidor por outro usuário",
+        "A requisição deu certo, mas não havia dados para devolver"
+      ],
+      "correta": 0,
+      "explicacao": "401 (não autorizado) indica falta de autenticação válida. Servidor fora do ar é 5xx; recurso inexistente é 404; sucesso sem corpo é 204."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma academia, o aluno toca em \"Sair da conta\". O que o app deve fazer com o token guardado?",
+      "alternativas": [
+        "Manter o token guardado no aparelho, para o próximo login ser mais rápido",
+        "Mandar o token por e-mail para o aluno guardar com segurança",
+        "Trocar o token por um novo e continuar usando o mesmo usuário",
+        "Apagar o token guardado, para as requisições seguintes irem sem autenticação"
+      ],
+      "correta": 3,
+      "explicacao": "Ao sair, o app descarta o token (e, se a API tiver, avisa o servidor). Sem token, ninguém usa a conta pelo aparelho."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma padaria, a busca usa o código abaixo. Por que usar `encodeURIComponent` no termo \"pão de queijo\"?\n\n```js\nconst url = BASE + '/produtos?busca=' + encodeURIComponent(termo);\n```",
+      "alternativas": [
+        "Para criptografar o termo e esconder a busca do servidor",
+        "Para converter espaços e acentos num formato válido dentro da URL",
+        "Para transformar o termo digitado em um objeto JSON",
+        "Para a busca não diferenciar letras maiúsculas e minúsculas"
+      ],
+      "correta": 1,
+      "explicacao": "URLs não aceitam espaço e certos caracteres. encodeURIComponent troca, por exemplo, espaço por %20 e ã por %C3%A3."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno roda a API no computador em `http://localhost:3000` e testa o app num celular de verdade, ligado no mesmo Wi-Fi. O app não consegue conectar. Por quê?",
+      "alternativas": [
+        "No celular, localhost é o próprio celular; deve-se usar o IP do computador",
+        "O celular não aceita a porta 3000 em nenhuma situação de teste na rede",
+        "O endereço localhost só funciona quando o método usado é POST",
+        "A API precisa estar escrita na mesma linguagem do aplicativo"
+      ],
+      "correta": 0,
+      "explicacao": "localhost aponta para o próprio aparelho. No celular, a API do computador é acessada pelo IP dele na rede (ex.: 192.168.0.10:3000)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz a chamada abaixo, no app de tarefas de uma escola?\n\n```js\nawait axios.put('/tarefas/8', { titulo: 'Estudar química', feita: true });\n```",
+      "alternativas": [
+        "Cria uma nova tarefa no servidor e dá a ela o número de id 8",
+        "Busca a tarefa de id 8 e mostra o título na tela",
+        "Apaga a tarefa de id 8 e não coloca nada no lugar",
+        "Substitui os dados da tarefa de id 8 pelos dados enviados"
+      ],
+      "correta": 3,
+      "explicacao": "PUT na URL do item atualiza/substitui aquele recurso com o corpo enviado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma clínica, a agenda só pode ser lida com o token. Qual chamada axios envia o token do jeito certo?",
+      "alternativas": [
+        "`axios.get('/agenda', { body: 'Bearer ' + token })`",
+        "`axios.get('/agenda', { headers: { Authorization: 'Bearer ' + token } })`",
+        "`axios.get('/agenda', { Authorization: 'Bearer ' + token })`",
+        "`axios.get('/agenda', 'Bearer ' + token)`"
+      ],
+      "correta": 1,
+      "explicacao": "No axios, cabeçalhos vão dentro da opção headers. Sem headers, o Authorization é ignorado; GET não leva body."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma loja de roupas, um colega quer mandar os filtros de busca no body de uma requisição GET feita com fetch. O que acontece?",
+      "alternativas": [
+        "O fetch não aceita corpo em GET; filtros vão na URL (query string)",
+        "Funciona do mesmo jeito que no POST, sem nenhuma diferença no envio",
+        "O GET só aceita corpo quando os filtros estão em XML",
+        "Os filtros devem ir dentro do cabeçalho Content-Type"
+      ],
+      "correta": 0,
+      "explicacao": "O fetch lança TypeError se um GET tiver body. Filtros de busca vão na URL: /roupas?tamanho=M&cor=azul."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa API REST, cada requisição do app precisa levar tudo de que o servidor precisa, como o token, porque o servidor não lembra das requisições anteriores. Como se chama essa característica?",
+      "alternativas": [
+        "Ser sem estado (stateless)",
+        "Ser síncrona (synchronous)",
+        "Ser off-line (offline)",
+        "Ser em cache (cacheable)"
+      ],
+      "correta": 0,
+      "explicacao": "Stateless: o servidor não guarda sessão entre requisições; cada uma é independente e traz suas credenciais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma autoescola, qual URL segue melhor o padrão REST para listar as aulas do aluno de id 12?",
+      "alternativas": [
+        "`GET /pegarAulasDoAluno?id=12`",
+        "`GET /alunos/12/aulas`",
+        "`POST /listar/aulas/aluno/12`",
+        "`DELETE /alunos/12/aulas`"
+      ],
+      "correta": 1,
+      "explicacao": "REST usa substantivos (recursos) na URL e o método diz a ação: GET /alunos/12/aulas. Verbos na URL e POST para listar fogem do padrão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um colega fez o login do app chamar `GET /login?usuario=ana&senha=123`. Qual é o problema?",
+      "alternativas": [
+        "A URL não aceita números, então a senha 123 será cortada pelo servidor da API",
+        "O GET é sempre mais lento que o POST quando usado para fazer o login",
+        "A senha deveria ir no cabeçalho Accept da requisição, e não na URL",
+        "A URL fica gravada em históricos e registros; a senha deve ir no corpo de um POST"
+      ],
+      "correta": 3,
+      "explicacao": "Dados na URL aparecem em logs, histórico e ferramentas de rede. Credenciais vão no corpo de um POST, sempre com https."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas rotas, num app de tarefas, quebra a regra de que GET deve apenas buscar dados, sem alterar nada no servidor?",
+      "alternativas": [
+        "`GET /tarefas?feita=true`, que lista as tarefas já feitas",
+        "`GET /tarefas/9`, que mostra os dados da tarefa 9",
+        "`GET /tarefas?pagina=2`, que traz a segunda página",
+        "`GET /tarefas/9/excluir`, que apaga a tarefa quando é chamada"
+      ],
+      "correta": 3,
+      "explicacao": "GET deve ser seguro (não alterar dados). Um GET que apaga pode ser disparado por cache, pré-carregamento ou repetição sem o usuário querer."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma lanchonete, o token está certo e válido, mas a API responde 401. Veja como o cabeçalho foi montado. Qual é o erro?\n\n```js\nheaders: { Authorization: 'Bearer' + token }\n```",
+      "alternativas": [
+        "O nome correto do cabeçalho é Token, e não Authorization",
+        "Falta o espaço depois de Bearer; o valor fica colado e não é reconhecido",
+        "O token deveria ser enviado no body, convertido com JSON.stringify",
+        "A palavra Bearer só funciona quando escrita toda em minúsculas"
+      ],
+      "correta": 1,
+      "explicacao": "O formato é \"Bearer <token>\", com espaço. 'Bearer' + token gera \"BearereyJ...\", que a API não reconhece."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma oficina, o mecânico tira a foto do carro com a câmera e precisa enviá-la à API junto com a placa. Qual é a forma mais adequada?",
+      "alternativas": [
+        "Colocar a foto inteira na URL, como um parâmetro a mais da query string",
+        "Usar o método GET, que envia arquivos mais rápido que o POST",
+        "Enviar com FormData (multipart/form-data), porque a foto é um arquivo",
+        "Converter a foto em XML e mandar com Content-Type de texto"
+      ],
+      "correta": 2,
+      "explicacao": "Arquivos são enviados com multipart/form-data (FormData), que junta campos de texto e o arquivo numa só requisição."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de uma biblioteca manda `DELETE /reservas/30`. A primeira resposta é 204 e, ao repetir a mesma requisição, a resposta é 404. Por que isso acontece?",
+      "alternativas": [
+        "O servidor desfez a primeira exclusão e depois apagou de novo a mesma reserva",
+        "O DELETE precisa ter um corpo em JSON a partir da segunda vez",
+        "Na segunda vez a reserva já não existe; o servidor fica igual, só a resposta muda",
+        "O token expira automaticamente depois de cada requisição DELETE enviada pelo app"
+      ],
+      "correta": 2,
+      "explicacao": "DELETE é idempotente: repetir não muda o resultado no servidor (a reserva continua apagada). O 404 só informa que ela não existe mais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app publicado na loja tem, fixo no código, um token de administrador da API. Qual é o risco?",
+      "alternativas": [
+        "Qualquer um pode extrair o token do app instalado e usar a API como administrador",
+        "Nenhum, porque o código de um app compilado não pode ser lido por ninguém",
+        "O app fica mais lento, porque o token fixo ocupa muita memória do celular",
+        "O token para de funcionar quando o celular troca de rede"
+      ],
+      "correta": 0,
+      "explicacao": "O pacote do app pode ser descompactado e analisado. Segredos fixos no código vazam; cada usuário deve ter o próprio token, obtido no login."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma loja, o colega chama `PUT /clientes/3` mandando só `{ \"telefone\": \"11 98888-0000\" }`. A API segue o PUT à risca. O que pode acontecer?",
+      "alternativas": [
+        "Só o telefone muda, porque o PUT sempre altera apenas o que foi enviado",
+        "O servidor cria um novo cliente com o id 3 e só o telefone",
+        "A requisição vira um GET, porque o corpo tem um só campo",
+        "Os campos não enviados podem ficar vazios, pois o PUT substitui tudo"
+      ],
+      "correta": 3,
+      "explicacao": "PUT manda a representação completa. Para mudar só um campo, o certo é PATCH (ou enviar todos os campos no PUT)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de um cinema, o arquivo da API é carregado quando o app abre, antes do login. Depois do login, todas as chamadas dão 401. Qual é a causa?\n\n```js\nlet token = null; // preenchido depois do login\nconst api = axios.create({\n  baseURL: 'https://api.cinema.com',\n  headers: { Authorization: 'Bearer ' + token }\n});\n```",
+      "alternativas": [
+        "O baseURL não pode ser usado junto com o cabeçalho Authorization no axios",
+        "O axios apaga o token sozinho sempre que uma tela nova do app é aberta",
+        "A instância foi criada com o token vazio, e o cabeçalho não muda depois do login",
+        "A variável token deveria ser const para o axios conseguir ler"
+      ],
+      "correta": 2,
+      "explicacao": "O texto 'Bearer null' foi montado na criação. Mudar a variável depois não altera esse texto; é preciso atualizar o cabeçalho (ou usar um interceptador) após o login."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de uma pizzaria mostra o cardápio e recebe pedidos usando uma API REST. O app não se conecta direto ao banco de dados da pizzaria.\n\nNa sua resposta:\n1. explique o que é uma API REST;\n2. diga por que o app não acessa o banco de dados do servidor diretamente.",
+      "respostasAceitas": [
+        "API REST é um serviço no servidor acessado por HTTP, com recursos em URLs e dados em JSON. O app usa a API porque ela controla quem acessa e o que pode ser feito; ligar o app direto ao banco exporia a senha do banco e permitiria qualquer alteração."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) serviço via HTTP/URLs/JSON; 2) segurança e controle: a API valida e protege o banco (senha do banco não fica no app)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de uma barbearia precisa: listar os horários livres, marcar um horário, remarcar um horário já marcado e cancelar um horário. A API segue o padrão REST.\n\nNa sua resposta:\n1. diga o método HTTP adequado para cada uma das quatro ações;\n2. explique em uma frase o que cada método faz.",
+      "respostasAceitas": [
+        "Listar: GET (busca). Marcar: POST (cria). Remarcar: PUT ou PATCH (atualiza). Cancelar: DELETE (remove)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: GET, POST, PUT/PATCH e DELETE, com o sentido de cada um. Aceitar PATCH ou PUT para remarcar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de uma clínica, depois do login a API devolve um token. O app guarda esse token e o envia em todas as requisições seguintes.\n\nNa sua resposta:\n1. explique o que é o token;\n2. diga por que ele vai em todas as requisições;\n3. diga o que acontece quando ele expira.",
+      "respostasAceitas": [
+        "O token é uma credencial temporária que identifica o usuário logado. Vai em toda requisição porque a API não guarda sessão e precisa saber quem pede. Quando expira, a API responde 401 e o usuário precisa entrar de novo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) credencial/identificação após o login; 2) API sem estado confere a cada pedido; 3) 401 e novo login."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de um mercadinho há duas chamadas: `GET /produtos/8` e `GET /produtos?categoria=bebidas`.\n\nNa sua resposta:\n1. diga o que cada chamada pede à API;\n2. explique quando usar o valor no caminho e quando usar a query string.",
+      "respostasAceitas": [
+        "A primeira pede o produto de id 8; a segunda pede a lista de produtos da categoria bebidas. O caminho identifica um item específico; a query string filtra, ordena ou pagina uma lista."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) um item × lista filtrada; 2) caminho para identificar, query para filtrar/buscar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno usa o app da escola no Wi-Fi aberto de uma lanchonete. O login do app manda usuário e senha para a API.\n\nNa sua resposta:\n1. explique a diferença entre http e https;\n2. diga o que pode acontecer com a senha se a API usar só http nessa rede.",
+      "respostasAceitas": [
+        "No https a comunicação é criptografada; no http os dados viajam como texto aberto. Numa rede pública, alguém na mesma rede pode capturar a senha e o token enviados por http."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) https criptografa; 2) risco de captura da senha/token na rede pública."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Leia o código do app de uma loja de games:\n\n```js\nawait fetch('https://api.loja.com/clientes', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify({ nome: 'Caio', email: 'caio@email.com' })\n});\n```\n\nNa sua resposta:\n1. explique o papel de method;\n2. explique o papel de headers;\n3. explique o papel de body.",
+      "respostasAceitas": [
+        "method: POST indica que um novo cliente será criado. headers: o Content-Type avisa que o corpo está em JSON. body: leva os dados do cliente convertidos em texto JSON."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ação de criar (POST); 2) cabeçalho informa o formato JSON; 3) corpo com os dados em JSON."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Os dois trechos abaixo, do app de um hotel, fazem a mesma reserva.\n\n```js\n// Trecho A\nawait fetch(BASE + '/reservas', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify(reserva)\n});\n\n// Trecho B\nawait axios.post(BASE + '/reservas', reserva);\n```\n\nNa sua resposta:\n1. diga o que os dois trechos fazem;\n2. aponte duas diferenças na forma de escrever.",
+      "respostasAceitas": [
+        "Os dois enviam um POST para criar uma reserva com os dados em JSON. No axios não é preciso JSON.stringify nem o Content-Type (ele faz sozinho) e o método já vem no nome da função (post), enquanto no fetch vai na opção method."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) POST criando reserva; 2) diferenças: conversão para JSON automática, Content-Type automático, método no nome da função."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de uma escola chama `https://api.escola.com/v1/notas`. A equipe da API avisa que vai lançar a versão `v2`, com mudanças nos campos.\n\nNa sua resposta:\n1. explique o que o v1 indica na URL;\n2. diga o que acontece com quem ainda usa a versão antiga do app quando sai a v2.",
+      "respostasAceitas": [
+        "O v1 é a versão da API. Com a versão na URL, a v2 pode mudar campos sem quebrar o app antigo, que continua chamando a v1 até ser atualizado (ou até a v1 ser desligada)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) versão da API; 2) app antigo segue funcionando na v1, sem quebrar, enquanto ela existir."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A loja de materiais de construção tem 5.000 produtos. A API aceita `GET /produtos?pagina=1&limite=20`.\n\nNa sua resposta:\n1. explique por que o app não deve buscar todos os produtos de uma vez;\n2. diga como a paginação ajuda o usuário e o aparelho.",
+      "respostasAceitas": [
+        "Buscar 5.000 itens demora, gasta dados móveis e memória e pode travar a lista. Com paginação o app traz 20 por vez, mostra rápido e busca a próxima página quando o usuário rola até o fim."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) tempo, dados, memória; 2) carrega aos poucos (ex.: rolagem infinita), resposta mais rápida."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de uma academia, toda chamada à API passa pelo arquivo abaixo.\n\n```js\n// api.js\nconst api = axios.create({\n  baseURL: 'https://api.academia.com',\n  timeout: 10000\n});\nexport default api;\n```\n\nNa sua resposta:\n1. diga o que esse arquivo faz;\n2. explique duas vantagens de concentrar a configuração da API num só arquivo.",
+      "respostasAceitas": [
+        "Cria uma instância do axios com o endereço base da API e tempo limite de 10 s, usada pelo app inteiro. Vantagens: trocar o endereço (teste/produção) num só lugar e não repetir configurações como timeout e cabeçalhos em cada tela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) instância com baseURL e timeout; 2) manutenção num só lugar, menos repetição, padronização."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Leia o trecho do app de uma clínica:\n\n```js\nif (resp.status === 401) {\n  await apagarToken();\n  irParaTela('Login');\n}\n```\n\nNa sua resposta:\n1. diga em que situação esse trecho roda;\n2. explique por que o app apaga o token;\n3. explique por que leva o usuário ao login.",
+      "respostasAceitas": [
+        "Roda quando a API recusa a autenticação (token ausente, inválido ou expirado). O token guardado não serve mais, então é apagado. O usuário vai ao login para receber um token novo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) resposta 401; 2) token inválido/expirado; 3) obter novo token pelo login."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de um pet shop, o formulário de cadastro já confere se o e-mail tem @ antes de enviar. Mesmo assim, a API também confere todos os dados recebidos.\n\nNa sua resposta:\n1. explique por que a API confere de novo;\n2. diga para que serve a conferência feita no app.",
+      "respostasAceitas": [
+        "Qualquer um pode chamar a API sem usar o app (ou com app alterado), então só a validação no servidor garante os dados. A do app serve para avisar o usuário na hora e evitar requisições inúteis."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) segurança: API não confia no cliente; 2) experiência do usuário e economia de requisições."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de uma lanchonete, o usuário tocou em \"Finalizar pedido\" e a internet oscilou. O app reenviou o mesmo `POST /pedidos` três vezes e as três chegaram ao servidor. Em outra tela, o app reenviou três vezes o mesmo `PUT /pedidos/50` e não houve problema.\n\nNa sua resposta:\n1. explique o que aconteceu ao repetir o POST;\n2. explique por que repetir o PUT não causou problema;\n3. diga uma forma de evitar o problema do POST.",
+      "respostasAceitas": [
+        "Cada POST cria um novo recurso, então surgiram três pedidos iguais. PUT é idempotente: repetir deixa o pedido 50 no mesmo estado. Para evitar, bloquear o botão durante o envio e/ou mandar um código único do pedido para o servidor ignorar repetidos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) duplicação (POST não é idempotente); 2) PUT idempotente; 3) desabilitar botão, chave/código único, conferir antes de reenviar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de uma clínica usa esta função em todas as chamadas à API:\n\n```js\nasync function chamarApi(caminho, opcoes = {}) {\n  const token = await lerToken();\n  const headers = { 'Content-Type': 'application/json', ...opcoes.headers };\n  if (token) headers.Authorization = 'Bearer ' + token;\n  return fetch(BASE + caminho, { ...opcoes, headers });\n}\n```\n\nNa sua resposta:\n1. explique o que a função faz;\n2. explique por que existe o if (token);\n3. diga uma vantagem de usar essa função no app inteiro.",
+      "respostasAceitas": [
+        "Ela monta a requisição: junta a URL base ao caminho, coloca o Content-Type JSON, mantém outros cabeçalhos e chama o fetch. O if só coloca o Authorization quando há token (ex.: antes do login não há). Vantagem: o token e os cabeçalhos ficam num só lugar, sem repetir em cada tela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) monta URL, cabeçalhos e chama fetch; 2) evita mandar 'Bearer null' quando não logado; 3) centralização/menos repetição/fácil manutenção."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de uma loja de bicicletas, um colega guardou a chave secreta de acesso ao serviço de pagamentos dentro do código do app, para o próprio app cobrar o cliente direto no serviço.\n\nNa sua resposta:\n1. explique o risco dessa decisão;\n2. diga onde a chave deveria ficar e como o app faria a cobrança.",
+      "respostasAceitas": [
+        "O pacote do app pode ser analisado e a chave extraída; com ela, qualquer um usa a conta de pagamentos da loja. A chave deve ficar só no servidor da loja: o app chama a API da loja (com o token do usuário) e o servidor fala com o serviço de pagamentos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) segredo no app vaza (engenharia reversa); 2) segredo só no servidor, app usa a própria API como intermediária."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes textos é um JSON válido, como uma API mandaria para o app de uma escola?",
+      "alternativas": [
+        "`{nome: \"Ana\", idade: 16}`",
+        "`{'nome': 'Ana', 'idade': 16}`",
+        "`{\"nome\": \"Ana\", \"idade\": 16}`",
+        "`{\"nome\" = \"Ana\", \"idade\" = 16}`"
+      ],
+      "correta": 2,
+      "explicacao": "Em JSON as chaves e os textos usam aspas duplas e o separador é dois-pontos. Aspas simples, chaves sem aspas ou = não valem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "json-conv",
+      "enunciado": "No app de uma loja, antes de enviar um pedido, o código usa `JSON.stringify(pedido)`. Para que serve essa função?",
+      "alternativas": [
+        "Transformar o objeto JavaScript em texto JSON para enviar à API",
+        "Transformar o texto JSON recebido da API em objeto JavaScript",
+        "Conferir se todos os campos do pedido foram preenchidos",
+        "Enviar o pedido ao servidor e esperar a resposta chegar"
+      ],
+      "correta": 0,
+      "explicacao": "JSON.stringify converte objeto em texto JSON (para o body). O contrário é JSON.parse. Ela não envia nem valida nada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "json-conv",
+      "enunciado": "O app de uma biblioteca guardou no aparelho o texto `'{\"titulo\":\"Dom Casmurro\",\"ano\":1899}'`. Qual função transforma esse texto num objeto para usar `livro.titulo`?",
+      "alternativas": [
+        "`JSON.parse`",
+        "`JSON.stringify`",
+        "`Number`",
+        "`String`"
+      ],
+      "correta": 0,
+      "explicacao": "JSON.parse lê o texto JSON e devolve o objeto. JSON.stringify faz o caminho inverso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma floricultura, depois de `const resp = await fetch(url);`, o que faz `await resp.json()`?",
+      "alternativas": [
+        "Lê o corpo da resposta e converte o JSON em objeto ou lista",
+        "Envia ao servidor os dados do app convertidos em JSON",
+        "Confere se a resposta veio com o status 200 antes de ler",
+        "Transforma a resposta em XML para mostrar na tela"
+      ],
+      "correta": 0,
+      "explicacao": "resp.json() lê o corpo e faz o parse do JSON. Ele não envia nada nem confere o status."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de uma sorveteria buscou os sabores e recebeu o status 200. O que esse código indica?",
+      "alternativas": [
+        "O recurso não foi encontrado",
+        "O usuário não está autenticado",
+        "O servidor teve um erro interno",
+        "A requisição deu certo"
+      ],
+      "correta": 3,
+      "explicacao": "200 (OK) é sucesso. Não encontrado é 404, sem autenticação é 401 e erro do servidor é 500."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de um hotel tentou buscar as reservas e recebeu o status 500. O que ele indica?",
+      "alternativas": [
+        "Que o usuário digitou a senha errada",
+        "Que o celular está sem internet",
+        "Um erro interno no servidor da API",
+        "Que a reserva foi criada com sucesso"
+      ],
+      "correta": 2,
+      "explicacao": "Códigos 5xx são falhas do servidor. Sem internet nem há status (a requisição nem chega)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Os códigos de status HTTP da faixa 4xx (como 400, 401, 403 e 404) indicam, em geral:",
+      "alternativas": [
+        "Que a requisição deu certo e todos os dados chegaram corretamente ao app",
+        "Que o servidor caiu e não consegue responder a nenhuma requisição",
+        "Um problema na requisição do app, como dado inválido ou falta de permissão",
+        "Que o app deve seguir para outro endereço indicado pela API"
+      ],
+      "correta": 2,
+      "explicacao": "2xx = sucesso, 3xx = redirecionamento, 4xx = erro do lado de quem pediu (cliente), 5xx = erro do servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de uma academia mandou `POST /alunos` e o aluno foi cadastrado. Qual status a API costuma devolver?",
+      "alternativas": [
+        "404 (Not Found)",
+        "401 (Unauthorized)",
+        "201 (Created)",
+        "503 (Service Unavailable)"
+      ],
+      "correta": 2,
+      "explicacao": "201 indica que um recurso novo foi criado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API de um pet shop devolveu a lista abaixo, guardada em `dados`. Como pegar o nome \"Mel\"?\n\n```json\n[ {\"id\": 1, \"nome\": \"Rex\"}, {\"id\": 2, \"nome\": \"Mel\"} ]\n```",
+      "alternativas": [
+        "`dados[2].nome`",
+        "`dados.nome[1]`",
+        "`dados[1].nome`",
+        "`dados.Mel`"
+      ],
+      "correta": 2,
+      "explicacao": "A lista começa no índice 0: dados[0] é Rex e dados[1] é Mel. Depois se acessa a propriedade nome."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API de uma loja devolveu o JSON abaixo, guardado em `dados`. Como pegar a cidade?\n\n```json\n{ \"cliente\": { \"nome\": \"Rui\", \"endereco\": { \"cidade\": \"Campinas\" } } }\n```",
+      "alternativas": [
+        "`dados.cidade`",
+        "`dados.endereco.cidade`",
+        "`dados[cidade]`",
+        "`dados.cliente.endereco.cidade`"
+      ],
+      "correta": 3,
+      "explicacao": "Objetos dentro de objetos são acessados em sequência: cliente → endereco → cidade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de uma lanchonete recebeu a lista de lanches e precisa transformar cada lanche numa linha de texto para a tela. Qual método de lista é o mais indicado?",
+      "alternativas": [
+        "`filter`",
+        "`push`",
+        "`pop`",
+        "`map`"
+      ],
+      "correta": 3,
+      "explicacao": "map gera uma nova lista transformando cada item. filter só escolhe itens; push e pop adicionam/removem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de uma biblioteca buscou os livros emprestados do aluno e a API respondeu 200 com a lista vazia `[]`. O que a tela deve mostrar?",
+      "alternativas": [
+        "Uma mensagem como \"Você não tem livros emprestados\"",
+        "Uma mensagem de erro dizendo que a API está fora do ar",
+        "A tela em branco, sem nenhum texto, até chegar algum livro",
+        "A lista de livros da última vez que o app foi aberto"
+      ],
+      "correta": 0,
+      "explicacao": "Lista vazia com 200 não é erro: é um resultado válido. A tela deve explicar que não há itens."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma API antiga de um fornecedor responde no formato abaixo. Que formato é esse?\n\n```xml\n<produto><nome>Bolo</nome><preco>25</preco></produto>\n```",
+      "alternativas": [
+        "JSON",
+        "CSV",
+        "XML",
+        "HTML"
+      ],
+      "correta": 2,
+      "explicacao": "XML usa tags de abertura e fechamento criadas pelo próprio sistema, como <produto> e <preco>."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No XML `<aluno ativo=\"sim\"><nome>Bia</nome></aluno>`, como se chama o `ativo=\"sim\"`?",
+      "alternativas": [
+        "Tag filha de aluno",
+        "Comentário do XML",
+        "Valor do campo nome",
+        "Atributo da tag aluno"
+      ],
+      "correta": 3,
+      "explicacao": "Dentro da tag de abertura ficam os atributos (nome=\"valor\"). <nome> é uma tag filha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma clínica, quando a linha abaixo lança o erro?\n\n```js\nif (!resp.ok) throw new Error('Erro ' + resp.status);\n```",
+      "alternativas": [
+        "Somente quando o celular está sem nenhuma conexão de internet",
+        "Quando o status está fora da faixa 200 a 299, como 404 ou 500",
+        "Sempre que a resposta da API chega com o corpo vazio",
+        "Somente quando a resposta da API chega com status 200"
+      ],
+      "correta": 1,
+      "explicacao": "resp.ok é true para status 200–299. Para os demais, o código lança o erro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "fetch-404",
+      "enunciado": "No app de um mercadinho, o código abaixo pede um produto que não existe e a API responde 404. O que acontece?\n\n```js\ntry {\n  const resp = await fetch(BASE + '/produtos/999');\n  const produto = await resp.json();\n  mostrar(produto.nome);\n} catch (e) {\n  avisar('Erro ao carregar');\n}\n```",
+      "alternativas": [
+        "O fetch lança erro no 404 e o aviso \"Erro ao carregar\" aparece na tela",
+        "O app fecha sozinho, porque o 404 não pode ser tratado com try/catch",
+        "O fetch repete a requisição sozinho até o produto 999 passar a existir na API",
+        "O 404 não gera erro no fetch; o código segue e usa dados que não são do produto"
+      ],
+      "correta": 3,
+      "explicacao": "O fetch só rejeita em falha de rede. Com 404 a Promise é resolvida; é preciso conferir resp.ok/resp.status."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de um hotel, com axios, a API responde 404 a `await axios.get('/quartos/77')` dentro de um try/catch. O que acontece?",
+      "alternativas": [
+        "O axios lança o erro e, no catch, `erro.response.status` vale 404",
+        "O axios trata o 404 como sucesso e `resp.data` fica vazio",
+        "O axios repete a chamada sozinho, várias vezes, até receber o status 200",
+        "O axios troca o 404 por 200 e devolve a lista de quartos"
+      ],
+      "correta": 0,
+      "explicacao": "O axios rejeita a Promise para status fora de 2xx. O status fica em erro.response.status."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma papelaria, o aluno escreveu o código abaixo. O console mostra undefined. Por quê?\n\n```js\nconst resp = await fetch(BASE + '/cadernos');\nconst dados = resp.json();\nconsole.log(dados.length);\n```",
+      "alternativas": [
+        "A API devolveu a lista vazia, e por isso o tamanho é undefined",
+        "O length só funciona em textos, não funciona em listas",
+        "Faltou await: dados é uma Promise, e não a lista de cadernos",
+        "O fetch não devolve nada quando o método não é informado"
+      ],
+      "correta": 2,
+      "explicacao": "resp.json() devolve uma Promise. Sem await, dados é a Promise, que não tem length."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma loja de tintas, o que fica em `disponiveis`?\n\n```js\nconst disponiveis = produtos.filter(p => p.estoque > 0);\n```",
+      "alternativas": [
+        "O número de produtos que têm estoque maior que zero",
+        "A lista de produtos com o estoque zerado pelo código",
+        "Uma nova lista só com os produtos que têm estoque",
+        "O primeiro produto da lista que tem estoque maior que zero"
+      ],
+      "correta": 2,
+      "explicacao": "filter devolve uma nova lista com os itens que passam no teste. Contar seria .length; o primeiro seria find."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao mostrar a lista de clientes vinda da API num componente de lista, por que cada item deve ter uma chave única, como o id?",
+      "alternativas": [
+        "Para a API saber em que ordem mandar os clientes ao app",
+        "Para o app conseguir converter o JSON recebido em objeto JavaScript",
+        "Para o usuário digitar o id e encontrar o cliente na lista",
+        "Para o componente identificar cada item e atualizar só o que mudou"
+      ],
+      "correta": 3,
+      "explicacao": "A chave (key) permite à lista saber qual item foi incluído, removido ou alterado, sem redesenhar tudo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API de uma pizzaria, o preço vem como texto: `\"preco\": \"39.90\"`. O que mostra o código abaixo?\n\n```js\nconst total = pizza.preco + 10;\nconsole.log(total);\n```",
+      "alternativas": [
+        "`49.9`, porque o JavaScript soma os dois valores",
+        "`NaN`, porque texto não pode ser somado",
+        "`39.9010`, porque o texto foi juntado com o número",
+        "Um erro, porque preco não é número"
+      ],
+      "correta": 2,
+      "explicacao": "Texto + número concatena. É preciso converter: Number(pizza.preco) + 10 = 49.9."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API de uma oficina devolve `\"telefone\": null` para um cliente sem telefone, e a tela mostra `Telefone: null`. Qual é a melhor correção?",
+      "alternativas": [
+        "Pedir à API para mandar o telefone sempre como número zero",
+        "Apagar da lista todos os clientes que não têm telefone",
+        "Testar o valor antes e mostrar algo como \"Sem telefone\" quando vier null",
+        "Converter a resposta inteira com JSON.stringify antes de mostrar na tela"
+      ],
+      "correta": 2,
+      "explicacao": "Campos podem vir null. O app deve tratar esse caso e exibir um texto amigável."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes status indica que os dados enviados pelo app estavam inválidos, por exemplo um campo obrigatório vazio?",
+      "alternativas": [
+        "500 (Internal Server Error)",
+        "503 (Service Unavailable)",
+        "201 (Created)",
+        "400 (Bad Request)"
+      ],
+      "correta": 3,
+      "explicacao": "400 indica requisição inválida (erro de quem enviou). 500 e 503 são do servidor; 201 é sucesso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma escola, um aluno logado tenta abrir a tela de lançar notas, que é só de professores, e a API responde 403. O que isso significa?",
+      "alternativas": [
+        "O usuário não está logado e precisa enviar um token válido",
+        "A tela de notas foi apagada do servidor da escola",
+        "O servidor da escola está em manutenção no momento",
+        "O usuário está identificado, mas não tem permissão para isso"
+      ],
+      "correta": 3,
+      "explicacao": "403 (Forbidden) = sabe quem é, mas não pode. 401 = não autenticado. 404 = não existe; 503 = indisponível."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O XML abaixo vem de uma API de uma confeitaria. Qual JSON representa os mesmos dados?\n\n```xml\n<produto><nome>Bolo</nome><preco>25</preco></produto>\n```",
+      "alternativas": [
+        "`{\"produto\": [\"nome\", \"Bolo\", \"preco\", 25]}`",
+        "`{\"produto\": {\"nome\": \"Bolo\", \"preco\": 25}}`",
+        "`{\"nome\": {\"Bolo\": {\"preco\": 25}}}`",
+        "`[\"produto\", \"Bolo\", 25]`"
+      ],
+      "correta": 1,
+      "explicacao": "Cada tag com filhas vira um objeto, e cada tag com valor vira uma propriedade: produto → { nome, preco }."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API de uma clínica manda a consulta com `\"data\": \"2026-11-27T14:30:00Z\"`. O que é esse valor?",
+      "alternativas": [
+        "Um código de erro do servidor que o app deve mostrar ao usuário na tela",
+        "Data e hora no padrão ISO 8601, que o app converte para o formato brasileiro",
+        "Uma data inválida, porque o T e o Z não podem aparecer em datas",
+        "O token de acesso do usuário, que expira nessa data e hora"
+      ],
+      "correta": 1,
+      "explicacao": "ISO 8601 é o padrão comum em APIs (Z = horário UTC). O app converte para exibir, ex.: 27/11/2026 11:30 no horário de Brasília."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API de uma loja responde `{ \"total\": 57, \"itens\": [ ... ] }` e o código faz `dados.map(...)`. Aparece o erro \"dados.map is not a function\". Por quê?",
+      "alternativas": [
+        "dados é um objeto; a lista está em dados.itens",
+        "O map só funciona quando a lista tem menos de 50 itens",
+        "O JSON veio com erro, porque total não pode ser número",
+        "Faltou converter a resposta com JSON.stringify antes"
+      ],
+      "correta": 0,
+      "explicacao": "map é método de lista (array). A resposta é um objeto que guarda a lista na propriedade itens."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que mostra o código abaixo, no app de uma escola?\n\n```js\nconsole.log(JSON.stringify({ nome: 'Lia', apelido: undefined }));\n```",
+      "alternativas": [
+        "`{\"nome\":\"Lia\",\"apelido\":undefined}`",
+        "`{\"nome\":\"Lia\"}`",
+        "`{\"nome\":\"Lia\",\"apelido\":null}`",
+        "`{nome:'Lia'}`"
+      ],
+      "correta": 1,
+      "explicacao": "JSON não tem undefined; JSON.stringify simplesmente omite propriedades com esse valor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma agenda, o código abaixo apaga um contato. A API responde 204, mas o app cai no catch. Por quê?\n\n```js\nconst resp = await fetch(BASE + '/contatos/4', { method: 'DELETE' });\nconst dados = await resp.json();\n```",
+      "alternativas": [
+        "O status 204 indica que o contato não chegou a ser apagado no servidor",
+        "O DELETE exige o cabeçalho Accept para funcionar no fetch",
+        "A resposta 204 não tem corpo, e resp.json() num corpo vazio gera erro",
+        "O fetch não aceita o método DELETE sem enviar um body"
+      ],
+      "correta": 2,
+      "explicacao": "204 (No Content) é sucesso sem corpo. Não há JSON para ler; resp.json() lança SyntaxError."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de um cinema, quando a internet cai, o catch mostra ao usuário a mensagem \"TypeError: Network request failed\". Qual é a melhor prática?",
+      "alternativas": [
+        "Manter a mensagem técnica na tela, porque ela é a mais precisa e a mais completa para quem usa o app",
+        "Mostrar uma mensagem simples, como \"Sem conexão. Tente de novo\", e registrar o detalhe técnico no log",
+        "Não mostrar nada e deixar a tela exatamente como estava, para não assustar o usuário",
+        "Fechar o app sozinho, para o usuário abrir de novo quando a internet voltar a funcionar"
+      ],
+      "correta": 1,
+      "explicacao": "O usuário precisa de uma mensagem compreensível e de uma ação (tentar de novo). Detalhes técnicos vão para o log da equipe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API de um banco escolar sempre responde 200, mesmo em falha, mandando `{\"sucesso\": false, \"erro\": \"Saldo insuficiente\"}`. O app só confere `resp.ok`. Qual é o problema?",
+      "alternativas": [
+        "resp.ok será false, porque o JSON da resposta contém um campo de erro",
+        "resp.ok será true; o app precisa conferir também o campo sucesso do JSON",
+        "O fetch lança erro sozinho, porque encontra a palavra erro",
+        "Não há problema, porque o status 200 garante que deu certo"
+      ],
+      "correta": 1,
+      "explicacao": "resp.ok só olha o status HTTP. Se a API usa 200 para tudo, o app precisa ler o campo do JSON para saber o resultado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma loja, `await resp.json()` deu o erro \"Unexpected token < in JSON\". O que provavelmente aconteceu?",
+      "alternativas": [
+        "O servidor devolveu uma página HTML (de erro), e não JSON",
+        "O JSON tinha números maiores do que o app consegue guardar",
+        "A resposta veio em JSON, mas sem o cabeçalho Authorization",
+        "A internet caiu no meio da leitura e cortou a primeira letra"
+      ],
+      "correta": 0,
+      "explicacao": "HTML começa com <. Quando um servidor ou proxy responde uma página de erro, o parse do JSON falha nesse caractere."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que fica em `nomes` no app de um pet shop?\n\n```js\nconst nomes = pets.map(p => { p.nome; });\n```",
+      "alternativas": [
+        "A lista com os nomes de todos os pets vindos da API",
+        "Somente o nome do primeiro pet, porque o map para no primeiro",
+        "Uma lista vazia, porque o map não aceita funções com chaves",
+        "Uma lista de undefined, porque a função com chaves não tem return"
+      ],
+      "correta": 3,
+      "explicacao": "Com { } é preciso return. Sem ele, cada item vira undefined. O certo: p => p.nome ou p => { return p.nome; }."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No cadastro do app de uma academia, a API responde 409 (Conflict) com `{\"erro\": \"E-mail já cadastrado\"}`. O que isso significa?",
+      "alternativas": [
+        "O servidor está sobrecarregado e o app deve repetir o envio do cadastro",
+        "Há conflito com dados que já existem; o app deve pedir outro e-mail",
+        "O token expirou e o usuário precisa fazer login de novo",
+        "O cadastro foi feito, mas o e-mail será trocado pela API"
+      ],
+      "correta": 1,
+      "explicacao": "409 indica conflito com o estado atual do recurso (ex.: valor que deve ser único). Repetir não resolve."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de uma livraria faz uma requisição à API a cada letra digitada na busca. Depois de um tempo, a API passa a responder 429. O que isso indica?",
+      "alternativas": [
+        "Muitas requisições em pouco tempo; o app deve diminuir o ritmo",
+        "A busca não encontrou nenhum livro com aquelas letras digitadas",
+        "O app enviou um JSON inválido no corpo da requisição",
+        "O servidor apagou os livros procurados pelo usuário"
+      ],
+      "correta": 0,
+      "explicacao": "429 (Too Many Requests) é limite de requisições. Esperar o usuário parar de digitar resolve."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A API de um pet shop devolveu o JSON abaixo.\n\n```json\n{\n  \"id\": 7,\n  \"nome\": \"Thor\",\n  \"vacinado\": true,\n  \"peso\": 12.5,\n  \"vacinas\": [\"raiva\", \"V10\"]\n}\n```\n\nNa sua resposta:\n1. diga o que é objeto e o que é lista (array) nesse JSON;\n2. diga o tipo de cada valor (id, nome, vacinado, peso).",
+      "respostasAceitas": [
+        "O conjunto entre chaves é um objeto (o pet); vacinas é uma lista entre colchetes. id e peso são números, nome é texto (string) e vacinado é booleano (verdadeiro/falso)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) objeto { } e lista [ ]; 2) número, texto, booleano, número."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Os mesmos dados de um aluno, em dois formatos:\n\n```json\n{ \"nome\": \"Duda\", \"turma\": \"2B\" }\n```\n\n```xml\n<aluno><nome>Duda</nome><turma>2B</turma></aluno>\n```\n\nNa sua resposta:\n1. explique a diferença na forma de escrever;\n2. diga por que o JSON é o formato mais usado nas APIs para apps.",
+      "respostasAceitas": [
+        "O JSON usa chaves e pares nome: valor; o XML usa tags de abertura e fechamento, ficando maior. O JSON é mais leve (menos dados móveis) e o JavaScript converte direto em objeto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) chaves/pares × tags; 2) leveza e conversão direta para objeto."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de uma loja recebe respostas com status das faixas 2xx, 4xx e 5xx.\n\nNa sua resposta:\n1. explique o que significa cada faixa;\n2. diga o que o usuário deve ver na tela em cada caso.",
+      "respostasAceitas": [
+        "2xx: deu certo, mostrar o resultado. 4xx: problema no pedido (dado inválido, sem login, não encontrado), mostrar o que corrigir. 5xx: falha no servidor, avisar que houve um problema e pedir para tentar mais tarde."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sucesso / erro do cliente / erro do servidor; 2) mensagens adequadas a cada um."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de uma biblioteca, a tela \"Meus empréstimos\" pode receber duas respostas: status 200 com `[]` ou status 500.\n\nNa sua resposta:\n1. explique o que cada resposta significa;\n2. diga como a tela deve ficar em cada caso.",
+      "respostasAceitas": [
+        "200 com [] significa que deu certo e o aluno não tem empréstimos: mostrar \"Nenhum empréstimo\". 500 é erro no servidor: mostrar mensagem de erro e um botão para tentar de novo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) lista vazia válida × falha; 2) mensagem de lista vazia × mensagem de erro com nova tentativa."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de uma escola, a API devolveu a lista `alunos` e o código faz:\n\n```js\nconst linhas = alunos.map(a => a.nome + ' - ' + a.turma);\n```\n\nNa sua resposta:\n1. explique o que o map faz;\n2. diga o que fica em linhas se vierem Ana da 1A e Léo da 2C.",
+      "respostasAceitas": [
+        "O map percorre a lista e cria uma nova lista transformando cada aluno num texto com nome e turma. linhas fica [\"Ana - 1A\", \"Léo - 2C\"]."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) transforma cada item numa nova lista; 2) [\"Ana - 1A\", \"Léo - 2C\"]."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de uma loja de eletrônicos, a lista de produtos mostra só nome, preço e foto. Ao tocar num produto, a tela de detalhes chama `GET /produtos/{id}` e mostra todas as informações.\n\nNa sua resposta:\n1. explique por que a lista mostra só alguns campos;\n2. explique por que a tela de detalhes faz uma nova requisição.",
+      "respostasAceitas": [
+        "Na lista o usuário só precisa reconhecer e comparar os produtos; menos campos deixam a lista leve e rápida. Os detalhes completos só são buscados para o produto escolhido, quando o usuário realmente precisa."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) lista enxuta, leve, legível; 2) busca sob demanda dos dados completos daquele item."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Leia o código do app de uma autoescola:\n\n```js\nasync function carregarAulas() {\n  try {\n    const resp = await fetch(BASE + '/aulas');\n    if (!resp.ok) throw new Error('Status ' + resp.status);\n    const aulas = await resp.json();\n    mostrarLista(aulas);\n  } catch (erro) {\n    mostrarMensagem('Não foi possível carregar as aulas.');\n  }\n}\n```\n\nNa sua resposta:\n1. diga o que acontece se a API responder 200;\n2. diga o que acontece se ela responder 500;\n3. diga o que acontece se o celular estiver sem internet.",
+      "respostasAceitas": [
+        "Com 200, o JSON é lido e a lista de aulas aparece. Com 500, resp.ok é false, o throw lança o erro e o catch mostra a mensagem. Sem internet, o fetch rejeita e o catch também mostra a mensagem."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mostra a lista; 2) throw → catch; 3) falha de rede → catch."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na equipe do app de uma loja, um aluno usa fetch e outro usa axios. Os dois tratam erros com try/catch.\n\nNa sua resposta:\n1. diga quando o fetch rejeita a Promise;\n2. diga quando o axios rejeita a Promise;\n3. explique o que o aluno do fetch precisa fazer a mais.",
+      "respostasAceitas": [
+        "O fetch só rejeita em falha de rede (ou cancelamento); 404 e 500 chegam como resposta normal. O axios rejeita também para status fora de 2xx. Quem usa fetch precisa conferir resp.ok ou resp.status e lançar o erro."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) fetch: rede; 2) axios: rede e status de erro; 3) conferir resp.ok."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de uma padaria precisa consultar o estoque numa API antiga do fornecedor, que só responde em XML.\n\nNa sua resposta:\n1. explique o que muda em relação a uma API que responde JSON;\n2. diga o que o app precisa fazer para usar esses dados na tela.",
+      "respostasAceitas": [
+        "Não dá para usar resp.json(): a resposta é XML. O app lê o corpo como texto (resp.text()), usa um leitor (parser) de XML para pegar as tags e monta objetos JavaScript para mostrar na tela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) não há conversão direta como no JSON; 2) ler texto, usar parser de XML, converter em objetos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No cadastro do app de uma academia, a API responde 400 com o JSON abaixo.\n\n```json\n{ \"erros\": { \"email\": \"E-mail inválido\", \"telefone\": \"Campo obrigatório\" } }\n```\n\nNa sua resposta:\n1. explique o que a resposta informa;\n2. diga como o app deve mostrar isso ao usuário.",
+      "respostasAceitas": [
+        "Informa que os dados enviados estão inválidos e diz o problema de cada campo. O app deve mostrar cada mensagem perto do campo correspondente (e-mail e telefone), para o usuário corrigir e enviar de novo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) requisição inválida, erros por campo; 2) mensagens junto aos campos, sem apagar o que foi digitado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de uma loja de roupas tem uma busca por nome. Uma opção é baixar todos os produtos e usar `filter` no app; outra é chamar `GET /produtos?busca=termo`.\n\nNa sua resposta:\n1. diga quando filtrar no próprio app faz sentido;\n2. diga quando é melhor pedir a busca ao servidor.",
+      "respostasAceitas": [
+        "Filtrar no app serve quando a lista já está carregada e é pequena (resposta instantânea, funciona sem internet). Para catálogos grandes, o servidor busca e manda só o resultado, economizando dados e memória."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) lista pequena/já carregada; 2) muitos dados, economia de rede e memória."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Leia a linha do app de uma clínica, que recebe os dados do paciente da API:\n\n```js\nconst cidade = paciente.endereco?.cidade ?? 'Não informada';\n```\n\nNa sua resposta:\n1. explique o que o ?. faz;\n2. explique o que o ?? faz;\n3. diga por que isso é útil com dados vindos de uma API.",
+      "respostasAceitas": [
+        "?. só acessa cidade se endereco existir; se for null ou undefined, devolve undefined sem dar erro. ?? usa 'Não informada' quando o valor é null ou undefined. É útil porque a API pode mandar campos vazios e o app não pode quebrar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) acesso seguro (encadeamento opcional); 2) valor padrão; 3) evita erro com campos ausentes/null."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de uma lanchonete mostrava os preços certinhos. Depois de uma atualização na API, a tela passou a mostrar \"R$ undefined\". A equipe descobriu que o campo `preco` passou a se chamar `valor`.\n\nNa sua resposta:\n1. explique por que o app passou a mostrar undefined;\n2. diga duas formas de evitar que isso aconteça de novo.",
+      "respostasAceitas": [
+        "O app continua lendo item.preco, que não existe mais, e recebe undefined. Para evitar: versionar a API (mudanças só numa versão nova), combinar o formato entre as equipes, testar o app contra a API e tratar campos ausentes com valor padrão."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) campo renomeado → propriedade inexistente; 2) versão da API, contrato/documentação, testes, tratamento de ausência."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de uma empresa mostra 3.000 contatos vindos da API. Quando todos eram desenhados de uma vez, a tela travava ao abrir. A equipe trocou por um componente de lista que só desenha os itens visíveis (como o FlatList).\n\nNa sua resposta:\n1. explique por que desenhar todos os itens travava a tela;\n2. explique como a lista que só desenha os visíveis resolve o problema.",
+      "respostasAceitas": [
+        "Desenhar 3.000 itens gasta muita memória e processamento de uma vez, e a interface fica ocupada. A lista virtual desenha só os itens da tela (e alguns perto) e reaproveita os que saem ao rolar, então abre rápido e rola sem travar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) muito trabalho/memória de uma vez; 2) renderiza só o visível e reaproveita itens."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "fetch-404",
+      "enunciado": "No app de uma loja, um colega diz: \"Se a API responder 404, o meu catch já mostra a mensagem de erro\". Ele usa fetch e o código é este:\n\n```js\ntry {\n  const resp = await fetch(BASE + '/pedidos/' + id);\n  const pedido = await resp.json();\n  mostrarPedido(pedido);\n} catch (e) {\n  mostrarMensagem('Pedido não encontrado');\n}\n```\n\nNa sua resposta:\n1. diga se o colega está certo e por quê;\n2. explique o que a tela mostra quando a API responde 404 com o JSON {\"erro\": \"não encontrado\"}.",
+      "respostasAceitas": [
+        "Ele está errado: o fetch não rejeita no 404, então o catch não roda por causa do status. O JSON de erro é lido como se fosse o pedido e mostrarPedido exibe campos vazios/undefined. Falta conferir resp.ok antes."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) fetch só rejeita em falha de rede; 2) tela mostra pedido \"vazio\"/undefined; falta checar resp.ok."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma pizzaria, o fetch do cardápio foi disparado e a resposta ainda não chegou. Em que estado está a Promise devolvida pelo fetch?",
+      "alternativas": [
+        "Resolvida (fulfilled)",
+        "Pendente (pending)",
+        "Rejeitada (rejected)",
+        "Cancelada (canceled)"
+      ],
+      "correta": 1,
+      "explicacao": "Enquanto espera, a Promise está pendente. Depois fica resolvida (deu certo) ou rejeitada (falhou)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No código comum de uma tela do app, onde a palavra `await` pode ser usada?",
+      "alternativas": [
+        "Somente dentro de um laço for",
+        "Em qualquer lugar, sem regra nenhuma",
+        "Somente dentro de um bloco catch",
+        "Dentro de uma função marcada com async"
+      ],
+      "correta": 3,
+      "explicacao": "await só funciona dentro de funções async (ou no nível de módulo, em alguns ambientes)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma loja, o que o `await` faz na linha `const resp = await fetch(url);`?",
+      "alternativas": [
+        "Trava o celular inteiro até o servidor responder à requisição",
+        "Faz a requisição ficar mais rápida, pulando a espera da rede",
+        "Repete a requisição várias vezes seguidas até ela finalmente dar certo",
+        "Pausa só aquela função até a resposta chegar, sem travar o resto do app"
+      ],
+      "correta": 3,
+      "explicacao": "await espera a Promise dentro da função async; enquanto isso, a interface continua respondendo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma floricultura, quando a função `avisarErro()` é chamada?\n\n```js\nfetch(url)\n  .then(r => r.json())\n  .then(dados => mostrar(dados))\n  .catch(e => avisarErro());\n```",
+      "alternativas": [
+        "Quando alguma etapa falha, como a falta de internet",
+        "Sempre, logo depois que os dados aparecem na tela",
+        "Antes do fetch, para preparar a mensagem de erro",
+        "Somente quando a lista recebida da API está vazia"
+      ],
+      "correta": 0,
+      "explicacao": "O catch recebe o erro de qualquer etapa anterior da corrente (rede, conversão do JSON, etc.)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que o app de um hotel mostra um indicador de carregamento (o círculo girando) enquanto busca os quartos na API?",
+      "alternativas": [
+        "Para a requisição ficar mais rápida enquanto o círculo gira",
+        "Para impedir que o servidor receba outras requisições",
+        "Para economizar a bateria enquanto a resposta não chega",
+        "Para o usuário saber que o app está buscando os dados e não travou"
+      ],
+      "correta": 3,
+      "explicacao": "O indicador dá retorno visual: algo está acontecendo. Ele não acelera nem economiza nada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma academia, em qual bloco se esconde o indicador de carregamento para ele sumir tanto no sucesso quanto no erro?",
+      "alternativas": [
+        "`try`",
+        "`finally`",
+        "`catch`",
+        "`if`"
+      ],
+      "correta": 1,
+      "explicacao": "finally roda sempre, depois do try ou do catch. No try ele não sumiria no erro; no catch, não sumiria no sucesso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um usuário abre o app de notícias da escola no metrô, sem sinal, e a requisição falha. O que a tela deveria mostrar?",
+      "alternativas": [
+        "Uma mensagem de sem conexão e um botão para tentar de novo",
+        "A tela em branco, até a internet voltar sozinha",
+        "Uma mensagem com o código técnico completo do erro de rede",
+        "O indicador de carregamento girando sem parar"
+      ],
+      "correta": 0,
+      "explicacao": "O usuário precisa entender o que houve e ter uma ação: tentar de novo quando a conexão voltar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é o tempo limite (timeout) de uma requisição no app?",
+      "alternativas": [
+        "O tempo que o token leva para expirar depois que o login é feito",
+        "O intervalo em que o app atualiza a lista sozinho, sem o usuário pedir",
+        "Um prazo máximo de espera; passado, a requisição é cancelada e vira erro",
+        "O tempo que o servidor guarda os dados antes de apagá-los"
+      ],
+      "correta": 2,
+      "explicacao": "Timeout evita esperar para sempre: depois do prazo, o app desiste e mostra uma mensagem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No desenvolvimento mobile, o que é a thread principal (thread de interface) do app?",
+      "alternativas": [
+        "A linha de execução que desenha a tela e responde aos toques",
+        "A conexão de internet mais rápida disponível no aparelho",
+        "O servidor principal onde fica hospedada a API do app",
+        "A primeira tela que aparece quando o app é aberto"
+      ],
+      "correta": 0,
+      "explicacao": "A thread principal cuida da interface. Se ela fica ocupada esperando a rede, a tela congela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma lanchonete, alguns clientes tocavam duas vezes em \"Finalizar pedido\" e o pedido era enviado em dobro. Qual é a solução mais simples na tela?",
+      "alternativas": [
+        "Aumentar o tamanho do botão para ele ficar mais fácil",
+        "Desativar o botão enquanto a requisição está em andamento",
+        "Mostrar o botão só depois que o pedido for entregue",
+        "Pedir ao cliente para tocar devagar no botão"
+      ],
+      "correta": 1,
+      "explicacao": "Com o botão desativado (e um texto como \"Enviando...\"), o segundo toque não dispara outra requisição."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que uma função marcada com `async` sempre devolve?",
+      "alternativas": [
+        "Uma Promise",
+        "Um texto JSON",
+        "Um número",
+        "Nada (undefined)"
+      ],
+      "correta": 0,
+      "explicacao": "Toda função async devolve uma Promise; o valor do return vira o resultado dessa Promise."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma loja, o usuário puxa a lista de ofertas para baixo (gesto de \"puxar para atualizar\"). O que o app normalmente faz?",
+      "alternativas": [
+        "Apaga a lista atual e fecha a tela de ofertas do aplicativo",
+        "Faz nova requisição à API e atualiza a lista com os dados novos",
+        "Mostra de novo a mesma lista que já estava, sem chamar a API",
+        "Envia as ofertas mostradas na tela de volta ao servidor da loja"
+      ],
+      "correta": 1,
+      "explicacao": "Puxar para atualizar (pull-to-refresh) dispara uma nova busca e mostra um indicador enquanto ela acontece."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Dizer que uma requisição do app é assíncrona significa que:",
+      "alternativas": [
+        "O app só pode fazer uma requisição por vez, uma depois da outra",
+        "A requisição é feita sem internet e enviada depois, sozinha, pelo sistema",
+        "O servidor responde sempre na mesma hora, sem nenhuma espera para o usuário",
+        "O app dispara a requisição e segue funcionando, tratando o resultado quando chegar"
+      ],
+      "correta": 3,
+      "explicacao": "Assíncrono: não fica parado esperando; o resultado é tratado depois (then/await)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para o app de uma loja mostrar a última lista de produtos mesmo sem internet, o que ele pode fazer?",
+      "alternativas": [
+        "Chamar a API mais vezes, até a requisição passar sem internet",
+        "Deixar a tela vazia e esperar o usuário reiniciar o celular e o app",
+        "Guardar a última resposta no aparelho e mostrá-la quando estiver off-line",
+        "Trocar o fetch pelo axios, que funciona sem conexão"
+      ],
+      "correta": 2,
+      "explicacao": "Guardar uma cópia local (cache) permite mostrar dados, avisando que podem estar desatualizados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "ordem-async",
+      "enunciado": "No app de uma escola, em que ordem as letras aparecem no console?\n\n```js\nconsole.log('A');\nfetch(url).then(() => console.log('B'));\nconsole.log('C');\n```",
+      "alternativas": [
+        "A, C, B",
+        "A, B, C",
+        "B, A, C",
+        "C, A, B"
+      ],
+      "correta": 0,
+      "explicacao": "O fetch é assíncrono: o then só roda quando a resposta chega. Antes disso, o console.log('C') já rodou."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma loja, o código abaixo dá o erro \"resp.json is not a function\". Por quê?\n\n```js\nconst resp = fetch(BASE + '/ofertas');\nconst dados = await resp.json();\n```",
+      "alternativas": [
+        "O endereço da API está errado e o servidor não respondeu",
+        "O json() só existe no axios, e não existe no fetch",
+        "Faltou await no fetch: resp é uma Promise, e não a resposta",
+        "Faltou JSON.stringify antes de chamar o resp.json()"
+      ],
+      "correta": 2,
+      "explicacao": "Sem await, resp guarda a Promise. A Promise não tem o método json(); a resposta (Response) tem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma clínica, a tela inicial usa o código abaixo. O que ele faz?\n\n```js\nconst [perfil, consultas] = await Promise.all([\n  buscarPerfil(),\n  buscarConsultas()\n]);\n```",
+      "alternativas": [
+        "Começa as duas buscas juntas e espera ambas; se uma falhar, lança o erro",
+        "Faz a busca do perfil e só quando ela termina começa a busca das consultas",
+        "Usa o resultado que chegar primeiro e ignora a outra busca",
+        "Junta o perfil e as consultas num único pedido ao servidor"
+      ],
+      "correta": 0,
+      "explicacao": "Promise.all roda em paralelo e espera todas; basta uma rejeitar para o conjunto rejeitar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma loja, o código busca o cliente e, depois, os pedidos dele. Por que aqui as requisições precisam ser uma depois da outra?\n\n```js\nconst cliente = await buscarCliente(email);\nconst pedidos = await buscarPedidos(cliente.id);\n```",
+      "alternativas": [
+        "Porque a segunda requisição precisa do id que vem na resposta da primeira",
+        "Porque o fetch não consegue fazer duas requisições ao mesmo tempo no app",
+        "Porque a API só aceita uma requisição por usuário a cada minuto",
+        "Porque o await só pode ser usado uma vez em cada função async"
+      ],
+      "correta": 0,
+      "explicacao": "Há dependência: cliente.id só existe depois da primeira resposta. Sem dependência, daria para usar Promise.all."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de um cinema, o servidor demora 10 segundos para responder. O que acontece com o código abaixo?\n\n```js\nconst controle = new AbortController();\nconst t = setTimeout(() => controle.abort(), 8000);\nconst resp = await fetch(url, { signal: controle.signal });\nclearTimeout(t);\n```",
+      "alternativas": [
+        "O app espera os 10 segundos inteiros e mostra a resposta normalmente",
+        "Aos 8 s a requisição é cancelada e o await lança um erro (AbortError)",
+        "O fetch repete a requisição a cada 8 segundos até conseguir",
+        "O app trava por 8 segundos e depois fecha sozinho"
+      ],
+      "correta": 1,
+      "explicacao": "O abort() cancela o fetch ligado ao signal; a Promise é rejeitada com AbortError, que o catch pode tratar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma academia, o que faz a opção `timeout: 5000` no axios?\n\n```js\nconst resp = await axios.get('/treinos', { timeout: 5000 });\n```",
+      "alternativas": [
+        "Espera 5 segundos antes de enviar a requisição ao servidor",
+        "Cancela a requisição com erro se a resposta demorar mais de 5 segundos",
+        "Repete a requisição a cada 5 segundos para manter os dados novos",
+        "Guarda a resposta no aparelho por 5 segundos e depois apaga"
+      ],
+      "correta": 1,
+      "explicacao": "timeout é o prazo máximo (em milissegundos). Estourou, o axios rejeita a Promise."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de um pet shop, às vezes o círculo de carregamento fica girando para sempre. Veja o código. Qual é o problema?\n\n```js\nsetCarregando(true);\ntry {\n  const resp = await api.get('/servicos');\n  setServicos(resp.data);\n  setCarregando(false);\n} catch (e) {\n  setErro('Falha ao carregar');\n}\n```",
+      "alternativas": [
+        "O setCarregando(true) deveria ficar depois do await, e não antes",
+        "No erro, setCarregando(false) não roda; ele deveria ficar no finally",
+        "O catch deveria chamar a API de novo até a resposta chegar",
+        "O axios não permite usar try/catch com o método get"
+      ],
+      "correta": 1,
+      "explicacao": "Se a requisição falha, o fluxo pula para o catch e o indicador nunca é desligado. No finally ele desliga sempre."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de uma feira orgânica usa uma biblioteca que informa o estado da rede. Antes de enviar um pedido, ela indica que o celular está off-line. Qual é a melhor atitude?",
+      "alternativas": [
+        "Enviar mesmo assim e mostrar \"Pedido enviado\" para o cliente na hora",
+        "Apagar o pedido e pedir ao cliente para montar tudo de novo mais tarde",
+        "Fechar o app, porque ele não funciona sem conexão",
+        "Avisar que está sem conexão e guardar o pedido para enviar quando ela voltar"
+      ],
+      "correta": 3,
+      "explicacao": "O app não deve fingir sucesso nem perder dados: avisa e guarda numa fila para sincronizar depois."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma biblioteca, o que faz o código abaixo?\n\n```js\nasync function buscarComRepeticao() {\n  for (let i = 1; i <= 3; i++) {\n    try {\n      return await buscarLivros();\n    } catch (e) {\n      if (i === 3) throw e;\n    }\n  }\n}\n```",
+      "alternativas": [
+        "Busca os livros 3 vezes e devolve as 3 listas juntas",
+        "Tenta uma vez só e repete a busca apenas se a lista vier vazia",
+        "Repete para sempre até a busca dos livros dar certo",
+        "Tenta até 3 vezes; se as três falharem, repassa o último erro"
+      ],
+      "correta": 3,
+      "explicacao": "No sucesso, o return encerra a função. Nas falhas tenta de novo; na 3ª, lança o erro para quem chamou."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de uma livraria faz uma requisição a cada letra digitada na busca. Qual é a melhor prática para diminuir isso?",
+      "alternativas": [
+        "Fazer a requisição só depois de o usuário fechar o teclado do celular",
+        "Esperar o usuário parar de digitar por um instante antes de buscar (debounce)",
+        "Buscar na API só a primeira letra que o usuário digitou no campo",
+        "Pedir que o usuário digite a busca mais devagar"
+      ],
+      "correta": 1,
+      "explicacao": "Debounce: cada letra reinicia um pequeno prazo (ex.: 400 ms); a busca só sai quando o usuário para."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma tela que mostra a lista de consultas vinda da API precisa tratar quais situações?",
+      "alternativas": [
+        "Carregando, erro, lista vazia e lista com dados",
+        "Somente a lista com dados, porque a API sempre responde",
+        "Somente carregando e lista com dados, sem erro nem vazia",
+        "Somente o erro, porque a lista aparece sozinha"
+      ],
+      "correta": 0,
+      "explicacao": "Uma tela robusta tem um retorno para cada estado: carregando, falhou, não há itens, há itens."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma sorveteria, o que o segundo `then` recebe em `d`?\n\n```js\nfetch(url)\n  .then(r => r.json())\n  .then(d => mostrar(d));\n```",
+      "alternativas": [
+        "O objeto de resposta do fetch",
+        "Os dados já convertidos do JSON",
+        "O texto JSON sem conversão",
+        "A URL usada na requisição"
+      ],
+      "correta": 1,
+      "explicacao": "Cada then recebe o que o anterior devolveu. r.json() devolve uma Promise com os dados convertidos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "ordem-async",
+      "enunciado": "No app de uma oficina, em que ordem os números aparecem no console? (A função enviar faz uma requisição à API.)\n\n```js\nasync function salvar() {\n  console.log(1);\n  await enviar();\n  console.log(3);\n}\nsalvar();\nconsole.log(2);\n```",
+      "alternativas": [
+        "1, 2, 3",
+        "1, 3, 2",
+        "2, 1, 3",
+        "3, 2, 1"
+      ],
+      "correta": 0,
+      "explicacao": "salvar começa e mostra 1; no await, devolve o controle e o 2 aparece; quando enviar termina, aparece o 3."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma loja, a lista aparece vazia na tela, embora a API mande produtos. Por quê?\n\n```js\nlet lista = [];\nasync function carregar() {\n  const resp = await fetch(BASE + '/produtos');\n  lista = await resp.json();\n}\ncarregar();\nmostrar(lista);\n```",
+      "alternativas": [
+        "A variável lista não pode receber dados dentro de uma função",
+        "O fetch apaga o conteúdo da lista sempre que a função carregar é chamada",
+        "mostrar(lista) roda antes de a resposta chegar, com a lista ainda vazia",
+        "O mostrar só funciona quando é chamado dentro de um then"
+      ],
+      "correta": 2,
+      "explicacao": "carregar() é assíncrona e não foi esperada. O certo é await carregar() antes de mostrar, ou mostrar dentro dela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma agenda, a mensagem \"Tudo apagado\" aparece antes de os contatos serem apagados no servidor. Por quê?\n\n```js\nids.forEach(async id => {\n  await apagarContato(id);\n});\nmostrar('Tudo apagado');\n```",
+      "alternativas": [
+        "O await dentro do forEach faz as exclusões rodarem ao contrário",
+        "O DELETE é sempre mais lento do que qualquer outra requisição",
+        "O forEach não espera as funções async; o mostrar roda logo em seguida",
+        "O forEach apaga só o primeiro contato e ignora os outros"
+      ],
+      "correta": 2,
+      "explicacao": "forEach ignora as Promises devolvidas. Para esperar, use for...of com await ou await Promise.all(ids.map(...))."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma padaria, a busca chama a API a cada letra. O usuário digita \"pa\" e depois \"pão\"; a resposta de \"pa\" chega por último e a tela mostra o resultado errado. Qual é a solução?",
+      "alternativas": [
+        "Trocar a busca para POST, que sempre responde na ordem certa",
+        "Cancelar a requisição anterior ou ignorar respostas de buscas antigas",
+        "Usar um timeout maior, para todas as respostas chegarem juntas",
+        "Mostrar sempre a resposta que tiver mais itens na lista"
+      ],
+      "correta": 1,
+      "explicacao": "As respostas podem chegar fora de ordem (condição de corrida). Cancelar com AbortController ou conferir o termo atual resolve."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma floricultura, `mostrar` recebe undefined. Por quê?\n\n```js\nfetch(url)\n  .then(r => { r.json(); })\n  .then(d => mostrar(d));\n```",
+      "alternativas": [
+        "O r.json() só funciona dentro de uma função marcada com async",
+        "O segundo then roda antes do primeiro e não encontra os dados",
+        "O fetch devolve undefined quando a resposta vem em JSON",
+        "Sem return na função com chaves, o segundo then recebe undefined"
+      ],
+      "correta": 3,
+      "explicacao": "Com { } é preciso return r.json(). Sem ele, o then devolve undefined para o próximo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma clínica, o que acontece com o código abaixo se o servidor demorar 9 segundos? (A função esperar(ms) devolve uma Promise que termina depois de ms milissegundos.)\n\n```js\nconst resp = await Promise.race([\n  fetch(url),\n  esperar(5000).then(() => { throw new Error('Tempo esgotado'); })\n]);\n```",
+      "alternativas": [
+        "O app espera os 9 s, porque o fetch sempre ganha a corrida",
+        "Aos 5 s o fetch é cancelado no servidor e nada mais é enviado",
+        "O Promise.race espera os dois terminarem e devolve os dois",
+        "Aos 5 s o await lança \"Tempo esgotado\", mas o fetch não é cancelado"
+      ],
+      "correta": 3,
+      "explicacao": "race termina com a primeira Promise a acabar (o erro, aos 5 s). Sem AbortController, a requisição segue em andamento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tela inicial do app de uma escola busca avisos, notas e cardápio. Se uma das três falhar, as outras devem aparecer mesmo assim. Qual recurso é o mais adequado?",
+      "alternativas": [
+        "`Promise.all`, que mostra as três respostas mesmo se uma delas falhar",
+        "`Promise.allSettled`, que espera todas e informa o resultado de cada uma",
+        "`Promise.race`, que espera todas as buscas e ignora as que falharam",
+        "Três fetch sem await, um seguido do outro, sem try/catch"
+      ],
+      "correta": 1,
+      "explicacao": "Promise.all rejeita na primeira falha. allSettled devolve o status de cada uma, permitindo mostrar o que deu certo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Android nativo, fazer uma requisição de rede na thread principal gera o erro NetworkOnMainThreadException. Por que o sistema proíbe isso?",
+      "alternativas": [
+        "Porque a thread principal não tem permissão do Android para usar a internet",
+        "Porque a thread principal só consegue ler dados que estejam no formato XML",
+        "Para a interface não congelar esperando a rede (e evitar o aviso de app travado)",
+        "Porque o servidor recusa as requisições que vêm da thread principal do celular"
+      ],
+      "correta": 2,
+      "explicacao": "A thread principal desenha a tela. Esperar a rede nela congela a interface e pode gerar o aviso ANR (Application Not Responding)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de uma loja tenta de novo automaticamente quando a API falha, esperando 1 s, depois 2 s, depois 4 s. Por que aumentar o intervalo entre as tentativas?",
+      "alternativas": [
+        "Para o usuário desistir e fechar o app antes de chegar a última tentativa",
+        "Porque o servidor só aceita receber requisições em segundos pares",
+        "Para não sobrecarregar servidor e bateria, dando tempo para a rede ou a API voltar",
+        "Porque o token precisa de mais tempo para ser validado a cada nova tentativa"
+      ],
+      "correta": 2,
+      "explicacao": "Esse recuo progressivo (backoff) evita uma enxurrada de requisições quando o servidor já está com problema."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Os dois trechos do app de uma biblioteca fazem a mesma coisa:\n\n```js\n// Trecho A\nfetch(url)\n  .then(r => r.json())\n  .then(livros => mostrar(livros))\n  .catch(() => avisar('Erro'));\n\n// Trecho B\ntry {\n  const r = await fetch(url);\n  const livros = await r.json();\n  mostrar(livros);\n} catch {\n  avisar('Erro');\n}\n```\n\nNa sua resposta:\n1. diga o que os dois trechos fazem;\n2. diga qual é mais fácil de ler e por quê.",
+      "respostasAceitas": [
+        "Os dois buscam os livros na API, convertem o JSON e mostram; se algo falhar, avisam o erro. O B (async/await) costuma ser mais fácil de ler porque fica na ordem de cima para baixo, parecido com código comum, e usa try/catch."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) busca, converte, mostra, trata erro; 2) opinião justificada (normalmente async/await pela leitura sequencial)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de uma clínica não mostrava nada enquanto buscava as consultas, que às vezes demoravam alguns segundos. Os pacientes reclamavam e tocavam várias vezes no botão.\n\nNa sua resposta:\n1. explique por que os pacientes tocavam várias vezes;\n2. diga o que o indicador de carregamento muda para o usuário.",
+      "respostasAceitas": [
+        "Sem nenhum sinal, parecia que o app tinha travado ou que o toque não funcionou, e eles tocavam de novo. O indicador mostra que o app está trabalhando, o usuário espera e não repete a ação."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) falta de retorno visual; 2) indica que está carregando, evita toques repetidos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um professor compara uma Promise com a comanda de um pedido numa lanchonete: você recebe a comanda e espera o lanche ficar pronto.\n\nNa sua resposta:\n1. explique o estado pendente;\n2. explique o estado resolvido;\n3. explique o estado rejeitado.",
+      "respostasAceitas": [
+        "Pendente: o pedido foi feito e ainda está sendo preparado (a resposta não chegou). Resolvido: o lanche ficou pronto e foi entregue (a requisição deu certo e trouxe o resultado). Rejeitado: algo deu errado, acabou o ingrediente (a requisição falhou e há um erro)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se a relação de cada estado com a analogia e com a requisição."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de um cinema define um tempo limite de 10 segundos para as requisições à API.\n\nNa sua resposta:\n1. explique o que é esse tempo limite;\n2. explique por que o app não deve esperar para sempre;\n3. diga o que mostrar ao usuário quando o tempo estourar.",
+      "respostasAceitas": [
+        "É o prazo máximo de espera: passou de 10 s, a requisição é cancelada e vira erro. Sem limite, o app pode ficar carregando eternamente numa rede ruim. Ao estourar, mostrar algo como \"A conexão está lenta. Tente de novo\" com um botão de nova tentativa."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) prazo máximo; 2) evitar espera infinita; 3) mensagem clara e tentar de novo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de lista de compras de um mercadinho guarda os itens no próprio celular. Quando está sem internet, o usuário continua marcando itens; quando a internet volta, o app envia as mudanças para a API.\n\nNa sua resposta:\n1. diga o que acontece enquanto o celular está sem internet;\n2. diga quando as mudanças vão para o servidor;\n3. diga uma vantagem desse jeito de funcionar.",
+      "respostasAceitas": [
+        "Sem internet, o app usa os dados locais e guarda as mudanças. Quando a conexão volta, ele sincroniza com a API. Vantagem: o usuário usa o app no mercado mesmo sem sinal e nada se perde."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dados e mudanças locais; 2) sincroniza ao voltar a conexão; 3) funciona off-line/sem perda."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa lanchonete, no balcão A o cliente faz o pedido e fica parado na frente do caixa até o lanche ficar pronto, travando a fila. No balcão B o cliente recebe uma senha, sai da fila e é chamado quando o lanche fica pronto.\n\nNa sua resposta:\n1. diga qual balcão funciona de forma síncrona e qual de forma assíncrona;\n2. relacione o exemplo com as requisições de um app.",
+      "respostasAceitas": [
+        "A é síncrono: espera parado e bloqueia os outros. B é assíncrono: dispara o pedido e segue, sendo avisado depois. No app, a requisição assíncrona deixa a tela livre para o usuário enquanto a resposta não chega."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) A síncrono, B assíncrono; 2) requisição assíncrona não trava a tela."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A tela inicial do app de uma academia faz:\n\n```js\nconst [aluno, treinos, avisos] = await Promise.all([\n  api.get('/aluno'),\n  api.get('/treinos'),\n  api.get('/avisos')\n]);\n```\n\nCada requisição leva cerca de 1 segundo.\n\nNa sua resposta:\n1. diga o que o código faz;\n2. compare o tempo com fazer as três com await, uma depois da outra;\n3. diga o que acontece se uma das três falhar.",
+      "respostasAceitas": [
+        "Dispara as três requisições ao mesmo tempo e espera todas. Leva cerca de 1 s, contra cerca de 3 s uma após a outra. Se uma falhar, o Promise.all rejeita e o código vai para o catch (os outros resultados não são usados)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) paralelo, espera todas; 2) ~1 s × ~3 s; 3) uma falha rejeita o conjunto."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de notícias de uma escola, o usuário puxa a lista para atualizar várias vezes seguidas, e o app dispara várias requisições iguais ao mesmo tempo.\n\nNa sua resposta:\n1. explique que problemas isso pode causar;\n2. diga como o app pode evitar requisições repetidas nesse caso.",
+      "respostasAceitas": [
+        "Gasta dados e bateria, sobrecarrega a API e as respostas podem chegar fora de ordem, mostrando dados misturados. O app pode guardar um estado \"carregando\" e não disparar outra busca enquanto ele for verdadeiro (ou cancelar a anterior)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) desperdício, sobrecarga, respostas fora de ordem; 2) flag de carregamento/ignorar ou cancelar a anterior."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno fez o app de uma loja esperar a resposta assim:\n\n```js\nlet pronto = false;\nbuscarProdutos().then(() => { pronto = true; });\nwhile (!pronto) { }\nmostrarProdutos();\n```\n\nNa sua resposta:\n1. explique por que a tela congela;\n2. explique por que o then nunca consegue rodar;\n3. diga como o await resolve isso.",
+      "respostasAceitas": [
+        "O while fica rodando sem parar na thread principal, que não desenha nem responde a toques. Enquanto o laço ocupa a thread, o then (que espera a vez) nunca roda, então pronto nunca vira true. Com await, a função pausa sem ocupar a thread e continua quando a resposta chega."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) laço ocupado bloqueia a interface; 2) o callback não ganha a vez (laço infinito); 3) await libera a thread enquanto espera."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de um salão, o botão \"Agendar\" chama a função abaixo, sem nenhum try/catch:\n\n```js\nasync function agendar() {\n  await api.post('/agendamentos', dados);\n  avisar('Horário agendado!');\n}\n```\n\nNa sua resposta:\n1. diga o que acontece se a API falhar;\n2. diga o que o usuário vê nesse caso;\n3. explique o que falta no código.",
+      "respostasAceitas": [
+        "O await lança o erro e a função para; a Promise fica rejeitada sem tratamento. O usuário não vê nem a confirmação nem um aviso de erro, sem saber se agendou. Falta try/catch para mostrar uma mensagem de falha (e, se houver, finally para o carregamento)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) erro não tratado interrompe; 2) nenhuma mensagem; 3) try/catch com mensagem ao usuário."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Ao abrir, o app de uma pizzaria mostra na hora o cardápio guardado no celular e, ao mesmo tempo, busca o cardápio atualizado na API. Quando a resposta chega, a tela é atualizada.\n\nNa sua resposta:\n1. diga o que o usuário vê primeiro;\n2. diga o que acontece quando a resposta chega;\n3. explique a vantagem desse jeito.",
+      "respostasAceitas": [
+        "Primeiro vê o cardápio salvo da última vez. Quando a API responde, a tela troca para o cardápio novo e a cópia local é atualizada. Vantagem: a tela abre rápido (e até sem internet) e depois fica atualizada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dados locais; 2) atualiza tela e cache; 3) rapidez e funcionamento off-line."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de uma oficina, a tela de orçamento tem este código no botão \"Salvar\":\n\n```js\nasync function salvar() {\n  await api.post('/orcamentos', orcamento);\n  irParaTela('Lista');\n}\n```\n\nNa sua resposta:\n1. explique por que a navegação fica depois do await;\n2. diga o que poderia acontecer se a navegação viesse antes.",
+      "respostasAceitas": [
+        "Assim o app só sai da tela depois de a API confirmar que salvou; se der erro, o usuário continua na tela com os dados. Se navegasse antes, a lista poderia abrir sem o orçamento novo e, em caso de falha, o usuário nem saberia e perderia o que digitou."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só segue após confirmação; 2) lista desatualizada, erro sem aviso, perda dos dados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de uma loja, o `POST /pagamentos` estourou o tempo limite de 10 segundos e o app mostrou erro. Depois se descobriu que o servidor recebeu e processou o pagamento; só a resposta é que demorou.\n\nNa sua resposta:\n1. explique por que o timeout não garante que o servidor não fez nada;\n2. explique o risco de o usuário tocar em \"Pagar\" de novo;\n3. diga como o app pode agir com segurança nesse caso.",
+      "respostasAceitas": [
+        "O timeout só diz que a resposta não chegou a tempo; o pedido pode ter chegado e sido processado. Pagar de novo pode cobrar duas vezes. O app deve consultar a situação do pagamento antes de repetir e mandar um código único do pagamento para o servidor recusar repetidos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) timeout é do lado do app; 2) cobrança duplicada; 3) consultar status, código único (idempotência), avisar o usuário."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de uma loja, o usuário abre a tela de detalhes de um produto e sai dela antes de a resposta da API chegar. A equipe decidiu cancelar a requisição ao sair da tela, usando AbortController.\n\nNa sua resposta:\n1. explique o problema de deixar a requisição continuar;\n2. explique o que o cancelamento faz;\n3. diga o que o código deve fazer com o erro gerado pelo cancelamento.",
+      "respostasAceitas": [
+        "A resposta chegaria para uma tela que já fechou: gasta dados e o código pode tentar atualizar uma tela que não existe (ou mostrar dados errados). O abort() interrompe a requisição. O AbortError deve ser ignorado (não é erro para o usuário), sem mostrar mensagem."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) desperdício e atualização de tela fechada; 2) interrompe o fetch; 3) tratar AbortError em silêncio."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consumo de web service REST",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A equipe do app de entregas de uma farmácia discute o tempo limite das requisições: uns querem 3 segundos, outros querem 60 segundos. Muitos usuários estão em regiões com internet móvel lenta.\n\nNa sua resposta:\n1. explique o risco de um tempo limite muito curto;\n2. explique o risco de um tempo limite muito longo;\n3. diga como a equipe pode decidir o valor.",
+      "respostasAceitas": [
+        "Muito curto: em rede lenta, requisições que dariam certo são canceladas e o usuário vê erro à toa. Muito longo: o usuário fica preso no carregamento sem retorno quando a rede caiu. Decidir medindo o tempo real das respostas, pensando no tipo de operação e testando em rede lenta; dar opção de tentar de novo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) falsos erros; 2) espera longa sem retorno; 3) medir/testar em rede real, ajustar por operação."
+    }
+  ]
+}
