@@ -2140,18 +2140,26 @@ const BANCOS_BD_150 = [
   desc: "105 alternativas + 45 dissertativas (sem pedir comando), dificuldade balanceada. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] }));
 // Linguagem de Marcação: 150 questões por tema (27/11), a revisar
 const BANCOS_MARC_150 = [
+  ["marc_01_linguagens", "Linguagens de marcação"],
   ["marc_02_www", "World Wide Web (WWW)"],
+  ["marc_03_leiautes", "Leiautes de tela"],
   ["marc_04_html_estrutura", "HTML: estrutura, semântica e validação"],
   ["marc_05_html_textos_links", "HTML: textos, cores, imagens e links"],
   ["marc_06_html_listas_tabelas", "HTML: listas e tabelas"],
   ["marc_07_html_formularios", "HTML: formulários"],
   ["marc_08_css_seletores", "CSS: seletores, formatação e validação"],
-  ["marc_09_css_box_model", "CSS: box model e diagramação"]
+  ["marc_09_css_box_model", "CSS: box model e diagramação"],
+  ["marc_10_css_efeitos", "CSS: menus, pseudoclasses, efeitos e imagens"]
 ].map(([arq, tema]) => ({ arquivo: `bancos/gerados/marc/${arq}.json`, icone: "🏷", titulo: `Linguagem de Marcação — ${tema} (150 questões)`,
+  desc: "105 alternativas + 45 dissertativas (sem pedir código), dificuldade balanceada. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] }));
+// Programação Back-End: 150 questões por tema (27/11), a revisar
+const BANCOS_BACK_150 = [
+].map(([arq, tema]) => ({ arquivo: `bancos/gerados/back/${arq}.json`, icone: "⚙", titulo: `Programação Back-End — ${tema} (150 questões)`,
   desc: "105 alternativas + 45 dissertativas (sem pedir código), dificuldade balanceada. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] }));
 const BANCOS_PRONTOS = [
   ...BANCOS_BD_150,
   ...BANCOS_MARC_150,
+  ...BANCOS_BACK_150,
   { arquivo: "bancos/gerados/bd/bd_sql_cenarios_fisico.json", icone: "🗄", titulo: "Bancada SQL: 25 cenários de SQL físico (10 tarefas cada)", desc: "Adaptados dos cenários da FATEC: 3 consultas, 3 de dados, 3 de tabela (CREATE/ALTER, conferidas pela estrutura) e 1 de permissão em cada. Todos \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },
   { arquivo: "bancos/gerados/banco_lpa.json", icone: "🧮", titulo: "Lógica de Programação e Algoritmos — banco inicial", desc: "70 questões em 7 tópicos. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },
   { arquivo: "bancos/gerados/banco_req.json", icone: "🗂", titulo: "Levantamento de Requisitos — banco inicial", desc: "70 questões em 7 tópicos. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },

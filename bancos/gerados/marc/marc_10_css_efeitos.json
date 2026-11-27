@@ -1,0 +1,2456 @@
+{
+  "nome": "Linguagem de Marcação — CSS: menus, pseudoclasses, efeitos e imagens (a revisar)",
+  "materia": "Linguagem de Marcação",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site da padaria, o menu é uma `<ul class=\"menu\">` com vários `<li>` e links dentro. As bolinhas da lista aparecem antes de cada item. Qual declaração em `.menu` tira essas bolinhas?",
+      "alternativas": [
+        "text-decoration: none;",
+        "display: none;",
+        "list-style: none;",
+        "border: none;"
+      ],
+      "correta": 2,
+      "explicacao": "list-style: none remove os marcadores (bolinhas) da lista. text-decoration tira sublinhado, display: none esconde a lista inteira e border não tem relação com marcadores."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Os links do menu da biblioteca aparecem sublinhados. Qual declaração, aplicada em `.menu a`, tira o sublinhado?",
+      "alternativas": [
+        "list-style: none;",
+        "font-style: normal;",
+        "underline: none;",
+        "text-decoration: none;"
+      ],
+      "correta": 3,
+      "explicacao": "O sublinhado dos links vem do text-decoration. list-style mexe nos marcadores da lista, font-style no itálico e underline não é uma propriedade CSS."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num menu feito com `<ul class=\"menu\">`, os itens aparecem um embaixo do outro. Qual regra coloca os itens lado a lado do jeito mais simples?",
+      "alternativas": [
+        ".menu { display: block; }",
+        ".menu { display: flex; }",
+        ".menu { list-style: none; }",
+        ".menu { position: static; }"
+      ],
+      "correta": 1,
+      "explicacao": "Com display: flex no ul, os li (filhos) passam a ficar em linha. block mantém tudo empilhado, list-style só tira as bolinhas e position: static é o padrão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No menu do pet shop, cada `<li>` recebeu `display: inline-block;`. O que muda na tela?",
+      "alternativas": [
+        "Ficam lado a lado e aceitam largura, altura e padding",
+        "Somem da tela e só aparecem quando o mouse passa por cima",
+        "Os itens ficam um embaixo do outro, ocupando a linha toda",
+        "Os itens perdem o texto e mostram só as bolinhas"
+      ],
+      "correta": 0,
+      "explicacao": "inline-block deixa os itens lado a lado (como texto), mas eles aceitam width, height e padding como um bloco."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Observe o CSS do menu da academia:\n```css\n.menu { display: flex; gap: 20px; }\n```\nO que o `gap: 20px` faz?",
+      "alternativas": [
+        "Aumenta em 20px a altura e a largura de cada item do menu",
+        "Coloca 20px de espaço entre um item e outro do menu",
+        "Cria uma borda de 20px em volta do menu",
+        "Afasta o menu 20px do topo da página"
+      ],
+      "correta": 1,
+      "explicacao": "Num contêiner flex, gap define o espaço entre os itens, sem precisar de margin em cada um."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O menu do hotel tem `.menu { display: flex; justify-content: space-between; }` e quatro itens. Como os itens ficam na linha?",
+      "alternativas": [
+        "Todos ficam juntos no centro da linha, sem espaço entre eles",
+        "Todos ficam empilhados em uma coluna",
+        "Primeiro no início, último no fim, espaço dividido entre eles",
+        "Todos ficam juntos encostados na direita da linha do menu"
+      ],
+      "correta": 2,
+      "explicacao": "space-between distribui o espaço livre entre os itens: o primeiro vai para o início e o último para o fim."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No menu da escola, o usuário só consegue clicar em cima das letras do link, e não na área colorida inteira do item. Qual declaração em `.menu a` faz o link ocupar o item todo?",
+      "alternativas": [
+        "display: inline;",
+        "display: block;",
+        "list-style: none;",
+        "text-align: left;"
+      ],
+      "correta": 1,
+      "explicacao": "O link é inline por padrão e só ocupa o tamanho do texto. Com display: block (junto com o padding no link) ele ocupa toda a área do item."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site da loja de games, o submenu nunca aparece. O CSS é:\n```css\n.submenu { display: none; }\n.submenu:hover { display: block; }\n```\nPor que isso acontece?",
+      "alternativas": [
+        "Faltou a propriedade list-style: none no submenu para ele aparecer",
+        "A pseudoclasse :hover só funciona em links <a>, não em listas",
+        "Com display: none o submenu não aparece, então nunca recebe o mouse",
+        "O valor display: block não pode ser usado em listas"
+      ],
+      "correta": 2,
+      "explicacao": "Um elemento com display: none não ocupa espaço nem pode ser apontado pelo mouse. O :hover deve ficar no item pai: li:hover .submenu { display: block; }.",
+      "grupo": "submenu-hover"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site da clínica, o submenu aparece no hover, mas empurra todo o conteúdo da página para baixo. Qual combinação faz ele aparecer \"por cima\" do conteúdo?",
+      "alternativas": [
+        "li { position: absolute; } e .submenu { position: static; }",
+        "li { display: flex; } e .submenu { display: inline; }",
+        "li { float: left; } e .submenu { float: right; }",
+        "li { position: relative; } e .submenu { position: absolute; }"
+      ],
+      "correta": 3,
+      "explicacao": "position: absolute tira o submenu do fluxo da página (não empurra nada) e o position: relative no li faz o submenu se posicionar em relação ao item."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O submenu do cinema já tem `position: absolute`, mas aparece atrás do banner da página. Qual declaração no submenu ajuda a colocá-lo na frente?",
+      "alternativas": [
+        "z-index: 10;",
+        "z-index: -1;",
+        "opacity: 0;",
+        "overflow: hidden;"
+      ],
+      "correta": 0,
+      "explicacao": "z-index controla quem fica na frente entre elementos posicionados. Valor maior fica à frente; -1 manda para trás."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual pseudoclasse aplica um estilo enquanto o mouse está em cima de um elemento?",
+      "alternativas": [
+        ":hover",
+        ":focus",
+        ":active",
+        ":visited"
+      ],
+      "correta": 0,
+      "explicacao": ":hover vale enquanto o ponteiro está sobre o elemento. :focus é o elemento selecionado, :active é o clique pressionado e :visited é link já visitado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No formulário de cadastro da clínica existe a regra `input:focus { border-color: blue; }`. Quando a borda do campo fica azul?",
+      "alternativas": [
+        "Quando o mouse apenas passa por cima do campo",
+        "Quando o campo está vazio e ainda não foi preenchido",
+        "Depois que o formulário é enviado",
+        "Quando o campo está selecionado para digitar"
+      ],
+      "correta": 3,
+      "explicacao": ":focus vale para o elemento que está recebendo a digitação, seja por clique ou pela tecla Tab."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site da oficina, o botão tem a regra `.botao:active { background: darkred; }`. Quando o fundo fica vermelho-escuro?",
+      "alternativas": [
+        "Enquanto o botão está sendo pressionado",
+        "Quando o mouse só passa por cima do botão",
+        "Assim que a página termina de carregar",
+        "Depois que o botão foi clicado uma vez, para sempre"
+      ],
+      "correta": 0,
+      "explicacao": ":active vale só durante o clique (botão do mouse pressionado). Ao soltar, o estilo volta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No catálogo da biblioteca existe a regra `a:visited { color: purple; }`. O que ela faz?",
+      "alternativas": [
+        "Deixa roxos todos os links quando o mouse passa",
+        "Deixa roxos os links de páginas que o usuário já abriu",
+        "Deixa roxos os links que levam a páginas que não existem",
+        "Deixa roxo só o link que está sendo clicado"
+      ],
+      "correta": 1,
+      "explicacao": ":visited seleciona links cujo endereço já está no histórico do navegador."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site do cinema, o efeito de hover não muda a cor dos links que ainda não foram visitados. O CSS é:\n```css\na:hover { color: red; }\na:link { color: blue; }\n```\nPor quê?",
+      "alternativas": [
+        "A pseudoclasse :hover não funciona em links",
+        "As duas têm o mesmo peso e a:link vem depois, então vence",
+        "O valor red não é aceito na propriedade color de links",
+        "Faltou colocar a regra a:visited entre as duas regras de link"
+      ],
+      "correta": 1,
+      "explicacao": "a:link e a:hover têm a mesma especificidade; em empate vale a que vem por último. Por isso a ordem recomendada é :link, :visited, :hover, :active.",
+      "grupo": "lvha"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O cardápio da lanchonete é uma lista com 5 pratos e tem a regra `.cardapio li:first-child { font-weight: bold; }`. O que aparece na tela?",
+      "alternativas": [
+        "Só o primeiro prato da lista fica em negrito",
+        "Todos os pratos ficam em negrito",
+        "Só o último prato fica em negrito",
+        "A primeira letra de cada prato fica em negrito"
+      ],
+      "correta": 0,
+      "explicacao": ":first-child seleciona o elemento que é o primeiro filho do seu pai, então só o primeiro li."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No menu da papelaria, cada item tem uma linha divisória à direita:\n```css\n.menu li { border-right: 1px solid #ccc; }\n.menu li:last-child { border-right: none; }\n```\nO que a segunda regra faz?",
+      "alternativas": [
+        "Tira a linha divisória só do último item",
+        "Tira a linha divisória de todos os itens",
+        "Coloca a linha divisória só no último item",
+        "Esconde o último item do menu"
+      ],
+      "correta": 0,
+      "explicacao": ":last-child pega só o último li, que fica sem a borda da direita (não sobra um traço no fim do menu)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa tabela de horários da academia existe a regra `tr:nth-child(even) { background: #eee; }`. O que aparece na tela?",
+      "alternativas": [
+        "As linhas ímpares (1ª, 3ª, 5ª…) ficam com fundo cinza-claro",
+        "Só a segunda linha fica com fundo cinza-claro",
+        "As linhas pares (2ª, 4ª, 6ª…) ficam com fundo cinza-claro",
+        "Todas as linhas ficam cinza, menos a primeira"
+      ],
+      "correta": 2,
+      "explicacao": "even = pares. É o efeito \"zebrado\", que facilita a leitura de tabelas. odd seriam as ímpares."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa `<ul class=\"ranking\">` com 10 `<li>` (o ranking de jogadores da loja de games), qual seletor pega só o terceiro item?",
+      "alternativas": [
+        ".ranking li:first-child(3)",
+        ".ranking li:nth-child(3)",
+        ".ranking li:child(3)",
+        ".ranking li:nth(3)"
+      ],
+      "correta": 1,
+      "explicacao": ":nth-child(3) seleciona o elemento que é o 3º filho. As outras formas não existem no CSS."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa galeria de fotos do pet shop há a regra `.galeria img:nth-child(3n) { border: 3px solid orange; }`. Quais imagens ganham borda (todas as filhas da galeria são img)?",
+      "alternativas": [
+        "Só as três primeiras imagens",
+        "Todas, menos a terceira",
+        "A 3ª e todas as que vêm depois dela",
+        "A 3ª, a 6ª, a 9ª… (de três em três)"
+      ],
+      "correta": 3,
+      "explicacao": "3n significa múltiplos de 3: n = 1, 2, 3… dá 3, 6, 9…"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Observe o HTML e o CSS do card da padaria:\n```html\n<div class=\"card\">\n  <h2>Promoção</h2>\n  <p>Pão francês</p>\n  <p>Sonho</p>\n</div>\n```\n```css\n.card p:first-child { color: red; }\n```\nO que fica vermelho?",
+      "alternativas": [
+        "O parágrafo \"Pão francês\", que é o primeiro parágrafo",
+        "Os dois parágrafos, porque ambos estão no card",
+        "Nada, porque o primeiro filho do .card é o h2",
+        "O título \"Promoção\""
+      ],
+      "correta": 2,
+      "explicacao": "p:first-child exige que o p seja o primeiro filho do pai. O primeiro filho é o h2, então nenhum p combina. Para o primeiro p, o certo seria :first-of-type."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No menu do hotel há a regra `.menu a:not(.ativo) { opacity: 0.6; }`. O que aparece na tela?",
+      "alternativas": [
+        "Só o link com a classe ativo fica meio apagado na tela",
+        "Nenhum link fica apagado, porque :not desliga a regra",
+        "Os links ficam apagados até o mouse passar por cima",
+        "Todos os links ficam meio apagados, menos o ativo"
+      ],
+      "correta": 3,
+      "explicacao": ":not(.ativo) seleciona os links que NÃO têm a classe ativo, então só o link ativo fica com opacidade normal."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve a pseudoclasse `:not()` no CSS?",
+      "alternativas": [
+        "Para desativar uma regra CSS que está com erro",
+        "Para esconder da página os elementos indicados no seletor",
+        "Para selecionar tudo, menos o que está entre parênteses",
+        "Para inverter o valor de uma propriedade, como a cor"
+      ],
+      "correta": 2,
+      "explicacao": ":not() é uma \"exceção\": pega tudo do seletor, menos o que está entre parênteses."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença de escrita entre pseudoclasse e pseudoelemento no CSS atual?",
+      "alternativas": [
+        "Pseudoclasse usa um dois-pontos (:hover); pseudoelemento usa dois (::before)",
+        "Pseudoclasse usa parênteses (hover()); pseudoelemento usa colchetes ([before])",
+        "Não há diferença: os dois são escritos com um ponto antes do nome",
+        "Pseudoclasse começa com #; pseudoelemento começa com ."
+      ],
+      "correta": 0,
+      "explicacao": "Pseudoclasses (estado: :hover, :focus) usam um dois-pontos; pseudoelementos (parte do elemento: ::before, ::after) usam dois."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site da padaria, o preço está em `<span class=\"preco\">12,00</span>` e existe a regra `.preco::before { content: \"R$ \"; }`. O que aparece na tela?",
+      "alternativas": [
+        "12,00 R$",
+        "Só \"R$ \", e o preço some",
+        "Só 12,00, porque content só funciona em imagens",
+        "R$ 12,00"
+      ],
+      "correta": 3,
+      "explicacao": "::before insere o conteúdo de content antes do conteúdo do elemento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No cardápio, o item `<li class=\"novo\">Bolo de cenoura</li>` tem a regra `.novo::after { content: \" (novo!)\"; color: red; }`. O que aparece na tela?",
+      "alternativas": [
+        "Bolo de cenoura (novo!), com o \"(novo!)\" em vermelho",
+        "(novo!) Bolo de cenoura, tudo em vermelho",
+        "Bolo de cenoura em vermelho, sem nada acrescentado",
+        "Só (novo!), no lugar do nome do bolo"
+      ],
+      "correta": 0,
+      "explicacao": "::after acrescenta o conteúdo depois do texto, e o color da regra vale só para o pseudoelemento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno quer um destaque antes de cada aviso da escola e escreveu `.aviso::before { color: red; font-weight: bold; }`. Nada aparece. Qual é o erro?",
+      "alternativas": [
+        "O ::before só funciona dentro de links e botões",
+        "Faltou a propriedade content, sem ela nada é gerado",
+        "Faltou :hover antes do ::before",
+        "A propriedade color não vale para pseudoelementos"
+      ],
+      "correta": 1,
+      "explicacao": "::before e ::after só existem se tiverem content (mesmo que seja content: \"\")."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em quais elementos a pseudoclasse `:hover` pode ser usada?",
+      "alternativas": [
+        "Em quase qualquer elemento visível (div, li, img…)",
+        "Só em links <a>, por isso o menu precisa ter links",
+        "Só em botões <button> e campos de formulário",
+        "Só em imagens <img> e elementos com fundo"
+      ],
+      "correta": 0,
+      "explicacao": ":hover funciona em qualquer elemento que o mouse possa apontar, não só em links."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site da escola, alguém colocou `button:focus { outline: none; }` para \"tirar aquela borda feia\". Qual é o problema?",
+      "alternativas": [
+        "Os botões param de funcionar quando clicados com o mouse",
+        "Quem usa a tecla Tab não vê qual botão está selecionado",
+        "Os botões ficam invisíveis para quem acessa pelo celular",
+        "O formulário deixa de ser enviado ao apertar Enter"
+      ],
+      "correta": 1,
+      "explicacao": "O contorno de foco mostra onde o teclado está. Tirá-lo sem pôr outro destaque prejudica a acessibilidade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Nos cards do cinema existe a regra `.card:hover .titulo { color: orange; }`. Quando o título fica laranja?",
+      "alternativas": [
+        "Só quando o mouse está exatamente sobre o título",
+        "Sempre, e o mouse não muda nada",
+        "Quando o mouse está em qualquer parte do card",
+        "Quando o card inteiro é clicado"
+      ],
+      "correta": 2,
+      "explicacao": "O :hover está no .card; .titulo é o descendente que muda. Basta o mouse estar sobre o card."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No menu do hotel, o link da página atual tem `class=\"ativo\"` e existe a regra `.menu a.ativo { border-bottom: 3px solid gold; }`. Para que ela serve?",
+      "alternativas": [
+        "Para deixar dourados todos os links quando o mouse passa",
+        "Para esconder o link da página atual",
+        "Para permitir que o link seja clicado",
+        "Para destacar o link da página em que o usuário está"
+      ],
+      "correta": 3,
+      "explicacao": "Marcar o item ativo ajuda o usuário a saber em que página está."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O menu lateral da biblioteca deve ter os itens um embaixo do outro, cada link ocupando a largura toda. Qual declaração nos links resolve?",
+      "alternativas": [
+        "display: inline;",
+        "float: left;",
+        "list-style: none;",
+        "display: block;"
+      ],
+      "correta": 3,
+      "explicacao": "Com display: block cada link ocupa a linha inteira e fica um embaixo do outro. inline e float: left colocam lado a lado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O menu da clínica tem `.menu { display: flex; flex-direction: column; }`. Como os itens aparecem?",
+      "alternativas": [
+        "Lado a lado, da direita para a esquerda",
+        "Empilhados, um embaixo do outro",
+        "Em colunas de tamanho igual, lado a lado",
+        "Escondidos até o mouse passar"
+      ],
+      "correta": 1,
+      "explicacao": "flex-direction: column muda o eixo principal para vertical: os itens se empilham."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O menu da loja tem um submenu dentro de outro submenu. Com a regra `.menu li:hover .submenu { display: block; }`, ao passar o mouse no item principal, os DOIS níveis aparecem de uma vez. Qual troca mostra só o submenu logo abaixo do item?",
+      "alternativas": [
+        "Usar li:hover + .submenu, que pega o irmão",
+        "Usar li:active .submenu, que abre só com o clique",
+        "Usar li:hover > .submenu, que pega só o filho direto",
+        "Usar .submenu:first-child no lugar do hover"
+      ],
+      "correta": 2,
+      "explicacao": "O espaço (descendente) pega todos os .submenu dentro do li, em qualquer nível. O > pega só o filho direto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No menu da academia há a regra `.menu li:nth-child(odd) { background: #f2f2f2; }` e 6 itens. Quais itens ficam com fundo cinza?",
+      "alternativas": [
+        "O 2º, o 4º e o 6º",
+        "Só o 1º",
+        "O 1º, o 3º e o 5º",
+        "Do 1º ao 3º"
+      ],
+      "correta": 2,
+      "explicacao": "odd = ímpares: 1, 3, 5."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Observe o CSS do menu do pet shop:\n```css\n.menu { list-style: none; display: flex; }\n.menu a { text-decoration: none; }\n```\nO que cada regra muda na aparência do menu?\n\nNa sua resposta:\n1. diga o que a primeira regra faz com a lista e os itens;\n2. diga o que a segunda regra faz com os links.",
+      "respostasAceitas": [
+        "1) A primeira tira as bolinhas da lista e coloca os itens lado a lado (em linha). 2) A segunda tira o sublinhado dos links."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) list-style: none remove marcadores e display: flex deixa os itens em linha; 2) text-decoration: none tira o sublinhado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site da escola, o menu foi feito com uma lista `<ul>` e itens `<li>`, cada um com um link, em vez de vários `<a>` soltos. Por que esse jeito é tão usado?\n\nNa sua resposta:\n1. diga uma vantagem de usar a lista para o menu;\n2. explique como o CSS faz a lista virar uma barra horizontal.",
+      "respostasAceitas": [
+        "1) A lista organiza os links como um conjunto de itens, o que é mais semântico e acessível (leitores de tela anunciam quantos itens há). 2) O CSS tira as bolinhas (list-style: none) e coloca os itens lado a lado (display: flex no ul ou inline-block nos li)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) organização/semântica/acessibilidade; 2) list-style: none + display: flex/inline-block. Aceitar respostas curtas com essas ideias."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site da oficina, o submenu aparece quando o mouse passa no item do menu, mas some quando o usuário tenta levar o mouse até ele. O item tem 40px de altura e o CSS do submenu é:\n```css\n.item { position: relative; }\n.item:hover .submenu { display: block; }\n.submenu { display: none; position: absolute; top: 60px; }\n```\nPor que o submenu some?\n\nNa sua resposta:\n1. explique o que acontece com o :hover quando o mouse sai do item;\n2. diga que ajuste no CSS resolveria.",
+      "respostasAceitas": [
+        "1) O submenu começa 60px abaixo do item, que tem só 40px: sobra um vão de 20px. Quando o mouse passa por esse vão, ele não está nem no item nem no submenu, o :hover acaba e o submenu volta a display: none. 2) Colocar top: 40px (ou top: 100%) para o submenu encostar no item."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o vão entre item e submenu faz o hover terminar; 2) encostar o submenu no item (top: 40px/100%) ou tirar o vão."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site da loja de games, os botões têm estas regras:\n```css\n.botao:hover { background: #4caf50; }\n.botao:active { background: #2e7d32; }\n```\nQual a diferença entre o momento em que cada regra vale?\n\nNa sua resposta:\n1. diga quando vale o :hover;\n2. diga quando vale o :active.",
+      "respostasAceitas": [
+        "1) :hover vale enquanto o mouse está em cima do botão (verde mais claro). 2) :active vale só enquanto o botão está sendo pressionado (verde-escuro), e volta ao soltar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mouse sobre; 2) durante o clique pressionado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No formulário de agendamento da clínica existe a regra `input:focus { background: #fffbe6; border-color: orange; }`. Para que ela serve?\n\nNa sua resposta:\n1. diga quando o estilo aparece;\n2. explique como isso ajuda quem está preenchendo o formulário.",
+      "respostasAceitas": [
+        "1) Quando o campo está selecionado para digitar (por clique ou Tab). 2) Mostra claramente em qual campo a pessoa está digitando, evitando erro de preenchimento e ajudando quem usa o teclado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) campo com foco; 2) destaca o campo atual (usabilidade/acessibilidade)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na tabela de preços da papelaria foi usada a regra `tbody tr:nth-child(odd) { background: #f5f5f5; }`. O que ela faz e por que é útil?\n\nNa sua resposta:\n1. diga quais linhas mudam;\n2. explique por que isso ajuda a ler a tabela.",
+      "respostasAceitas": [
+        "1) As linhas ímpares do corpo da tabela (1ª, 3ª, 5ª…) ficam com fundo cinza-claro. 2) As linhas alternadas (zebradas) ajudam o olho a seguir a linha certa até o preço sem se perder."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) linhas ímpares; 2) efeito zebrado facilita a leitura."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No menu da padaria foi usada a regra:\n```css\n.menu li:not(:last-child)::after { content: \"|\"; margin-left: 10px; }\n```\nO que aparece na tela?\n\nNa sua resposta:\n1. diga o que aparece depois de cada item;\n2. explique por que o último item fica diferente.",
+      "respostasAceitas": [
+        "1) Aparece uma barra vertical \"|\" depois de cada item, separando os links. 2) O :not(:last-child) exclui o último item, então não sobra uma barra sobrando no fim do menu."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) separador | após os itens; 2) :not(:last-child) tira o separador do último."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega colocou o preço dos produtos do pet shop só dentro do CSS, com `.racao::after { content: \"R$ 89,90\"; }`. Por que isso não é uma boa ideia?\n\nNa sua resposta:\n1. explique o problema de deixar uma informação importante no content do CSS;\n2. diga onde essa informação deveria ficar.",
+      "respostasAceitas": [
+        "1) O conteúdo gerado por ::after é decorativo: pode não ser lido por leitores de tela, não dá para selecionar/copiar e some se o CSS não carregar; além disso, mudar o preço exige mexer no CSS. 2) O preço deve ficar no HTML, como texto da página."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) content é para enfeite, informação importante pode se perder (acessibilidade, CSS não carregado); 2) no HTML."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No catálogo online da biblioteca existe a regra `a:visited { color: gray; }`. Explique o efeito dela.\n\nNa sua resposta:\n1. diga o que acontece com os links;\n2. diga como isso ajuda o leitor que está procurando livros.",
+      "respostasAceitas": [
+        "1) Os links de livros que o usuário já abriu ficam cinza. 2) O leitor percebe quais livros já consultou e não abre de novo sem querer."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) links visitados ficam cinza; 2) ajuda a saber o que já foi visto."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O menu do site do cinema abre os submenus só com `li:hover .submenu { display: block; }`. Muitos clientes acessam pelo celular. Qual o problema dessa solução?\n\nNa sua resposta:\n1. explique por que o hover é um problema em telas de toque;\n2. sugira uma forma de abrir o submenu que funcione no celular.",
+      "respostasAceitas": [
+        "1) No celular não existe mouse \"passando por cima\": o hover depende do toque e pode não abrir ou abrir/fechar de forma estranha. 2) Abrir o submenu com um toque/clique (um botão que mostra o submenu, com JavaScript) ou usar :focus-within."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) tela de toque não tem hover de verdade; 2) abrir por clique/toque (botão, JS, :focus-within). Qualquer alternativa razoável vale."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na aula, o professor disse que os estados dos links devem aparecer no CSS nesta ordem: `a:link`, `a:visited`, `a:hover`, `a:active`. Por que a ordem importa?\n\nNa sua resposta:\n1. explique o que acontece quando duas regras com o mesmo peso valem para o mesmo link;\n2. dê um exemplo do que dá errado se :hover vier antes de :link.",
+      "respostasAceitas": [
+        "1) As quatro pseudoclasses têm o mesmo peso; se duas valem ao mesmo tempo, vence a que está mais abaixo no CSS. 2) Se :hover vier antes de :link, num link não visitado o :link (que vem depois) vence e a cor do hover nunca aparece."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) empate de especificidade, vale a última; 2) hover anulado pelo :link/:visited.",
+      "grupo": "lvha"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na lista de produtos da padaria existem as regras:\n```css\n.lista li:first-child { color: green; }\n.lista li:last-child { color: gray; }\n```\nO que cada uma faz?\n\nNa sua resposta:\n1. diga qual item fica verde;\n2. diga qual item fica cinza.",
+      "respostasAceitas": [
+        "1) O primeiro item da lista fica verde. 2) O último item da lista fica cinza."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) primeiro filho; 2) último filho."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site da loja, os botões desabilitados não devem mudar no hover. Foi usada a regra `.botao:not(:disabled):hover { background: navy; }`. Explique essa regra.\n\nNa sua resposta:\n1. diga quais botões ficam azul-marinho no hover;\n2. explique o papel do :not(:disabled).",
+      "respostasAceitas": [
+        "1) Só os botões habilitados ficam azul-marinho quando o mouse passa. 2) O :not(:disabled) exclui os botões desabilitados, que não recebem o efeito e não parecem clicáveis."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) botões ativos/habilitados; 2) :not exclui os desabilitados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No menu do site do hotel, o link da página atual recebe a classe `ativo`, com a regra `.menu a.ativo { background: #003366; color: white; }`. Por que é bom destacar o item ativo?\n\nNa sua resposta:\n1. diga o que o usuário vê;\n2. explique como isso ajuda na navegação.",
+      "respostasAceitas": [
+        "1) O link da página atual aparece com fundo azul-escuro e texto branco, diferente dos outros. 2) O usuário sabe em que página está e se orienta melhor no site."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) item atual destacado; 2) orientação do usuário."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na lista de vantagens do plano da academia foi usado:\n```css\n.vantagens { list-style: none; }\n.vantagens li::before { content: \"✔ \"; color: green; }\n```\nO que aparece na tela?\n\nNa sua resposta:\n1. diga o que acontece com as bolinhas da lista;\n2. diga o que aparece antes de cada item.",
+      "respostasAceitas": [
+        "1) As bolinhas padrão somem. 2) Antes de cada item aparece um ✔ verde."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) list-style: none tira marcadores; 2) ::before põe o ✔ verde."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Os cards de produtos da padaria receberam `border-radius: 10px;`. O que muda na tela?",
+      "alternativas": [
+        "Os cards ganham uma borda de 10px de espessura",
+        "Os cards ficam 10px menores",
+        "Os cards ganham uma sombra de 10px",
+        "Os cantos dos cards ficam arredondados"
+      ],
+      "correta": 3,
+      "explicacao": "border-radius arredonda os cantos. Ele não cria borda nem sombra."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "As fotos de perfil dos professores da academia são quadradas (150px por 150px) e receberam `border-radius: 50%;`. Como elas aparecem?",
+      "alternativas": [
+        "Quadradas, com uma borda de 50px",
+        "Redondas, em forma de círculo",
+        "Pela metade, cortadas ao meio",
+        "Com 50% de transparência"
+      ],
+      "correta": 1,
+      "explicacao": "Com 50% de raio em todos os cantos, um quadrado vira círculo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um banner retangular do hotel (400px de largura e 200px de altura) recebeu `border-radius: 50%;`. Qual formato ele assume?",
+      "alternativas": [
+        "Um círculo perfeito",
+        "Um retângulo com cantos retos",
+        "Uma elipse (oval)",
+        "Um losango"
+      ],
+      "correta": 2,
+      "explicacao": "50% é calculado sobre a largura e a altura separadamente; num retângulo o resultado é uma elipse. Só vira círculo se for quadrado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Os cards do cinema receberam `box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);`. O que aparece na tela?",
+      "alternativas": [
+        "Uma borda preta de 4px em volta do card",
+        "Uma sombra nas letras do card",
+        "Uma sombra escura e suave embaixo do card",
+        "O card fica 30% transparente"
+      ],
+      "correta": 2,
+      "explicacao": "box-shadow cria sombra na caixa: 0 de deslocamento horizontal, 4px para baixo, 8px de desfoque e cor preta com 30% de opacidade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em `box-shadow: 5px 10px 15px gray;`, o que significa o valor 10px?",
+      "alternativas": [
+        "O desfoque (o quanto a sombra é espalhada)",
+        "O deslocamento vertical da sombra (para baixo)",
+        "O deslocamento horizontal da sombra",
+        "A espessura da borda do elemento"
+      ],
+      "correta": 1,
+      "explicacao": "Ordem: deslocamento horizontal, deslocamento vertical, desfoque e cor.",
+      "grupo": "box-shadow-valores"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O campo de busca da biblioteca recebeu `box-shadow: inset 0 0 6px #999;`. O que muda?",
+      "alternativas": [
+        "A sombra fica do lado de dentro, parecendo afundado",
+        "A sombra aparece só embaixo do campo, do lado de fora",
+        "A sombra aparece nas letras digitadas",
+        "A sombra é ignorada, porque inset não existe"
+      ],
+      "correta": 0,
+      "explicacao": "inset desenha a sombra para dentro da caixa, dando efeito de \"afundado\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual propriedade coloca sombra nas letras do título do site da loja de games?",
+      "alternativas": [
+        "box-shadow",
+        "text-shadow",
+        "font-shadow",
+        "letter-shadow"
+      ],
+      "correta": 1,
+      "explicacao": "text-shadow é a sombra do texto. box-shadow é a sombra da caixa. As outras não existem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O título branco do banner da pizzaria recebeu `text-shadow: 2px 2px 0 black;`. O que aparece?",
+      "alternativas": [
+        "Uma sombra preta borrada em volta da caixa do título",
+        "As letras ficam pretas com borda branca",
+        "Uma sombra preta acima e à esquerda das letras",
+        "Sombra preta nítida, à direita e abaixo das letras"
+      ],
+      "correta": 3,
+      "explicacao": "2px para a direita, 2px para baixo, desfoque 0 (sombra nítida) e cor preta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O selo de \"esgotado\" na vitrine do pet shop recebeu `opacity: 0.5;`. O que acontece?",
+      "alternativas": [
+        "O selo fica com metade do tamanho original",
+        "O selo some e libera o espaço que ocupava",
+        "Fica semitransparente, mostrando o que está atrás",
+        "O selo fica com metade do brilho, mas opaco"
+      ],
+      "correta": 2,
+      "explicacao": "opacity vai de 0 (invisível) a 1 (normal). 0.5 é metade da opacidade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site da clínica, o card tem `opacity: 0.5` e o texto de dentro também ficou apagado. O que deixa só o FUNDO do card transparente?",
+      "alternativas": [
+        "Trocar o opacity por um fundo rgba(255, 255, 255, 0.5)",
+        "Manter o opacity no card e colocar opacity: 1 no texto",
+        "Colocar opacity: 0.5 também no texto",
+        "Usar color: transparent no texto"
+      ],
+      "correta": 0,
+      "explicacao": "opacity vale para o elemento e tudo dentro dele (um filho não volta a 1). Com rgba só a cor de fundo fica transparente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na página da escola, um aviso recebeu `opacity: 0;`. O que acontece com ele?",
+      "alternativas": [
+        "Some e o espaço dele é ocupado pelos outros elementos",
+        "Fica preto",
+        "Fica invisível, mas continua ocupando o espaço na página",
+        "É apagado do HTML"
+      ],
+      "correta": 2,
+      "explicacao": "opacity: 0 só deixa transparente; o elemento continua no lugar (e pode até receber clique). Quem tira o espaço é display: none."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O botão da oficina tem uma mudança de cor no hover com transição. Em qual regra deve ficar a `transition` para ela funcionar tanto quando o mouse entra quanto quando sai?",
+      "alternativas": [
+        "Só na regra .botao:hover, onde a cor muda",
+        "Na regra normal do botão (.botao)",
+        "Na regra .botao:active",
+        "Dentro de um @keyframes"
+      ],
+      "correta": 1,
+      "explicacao": "Na regra normal ela vale nos dois sentidos. Se estiver só no :hover, ao tirar o mouse a regra some e a volta é instantânea.",
+      "grupo": "transition-lugar"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um card da livraria tem `transition: all 2s;` e muda de cor no hover. O que acontece quando o mouse sai do card?",
+      "alternativas": [
+        "A cor volta de uma vez, sem nenhuma transição",
+        "A cor fica a do hover para sempre",
+        "Volta à cor original suavemente, também em 2s",
+        "O card some por 2 segundos e depois volta"
+      ],
+      "correta": 2,
+      "explicacao": "Com a transition na regra normal, a mudança é suave nos dois sentidos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site do hotel, o submenu tem `display: none; opacity: 0; transition: opacity 0.5s;` e no hover vira `display: block; opacity: 1;`. Mas ele aparece de repente, sem a transição. Por quê?",
+      "alternativas": [
+        "Meio segundo é rápido demais para o olho perceber a mudança",
+        "A troca de display não é animada: o submenu surge pronto",
+        "A propriedade opacity não aceita transition",
+        "Faltou cursor: pointer no submenu"
+      ],
+      "correta": 1,
+      "explicacao": "display não é uma propriedade animável. Para um fade, costuma-se usar opacity junto com visibility (ou outra técnica), sem trocar o display.",
+      "grupo": "transition-display"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na vitrine da loja de games, as capas recebem `transform: scale(1.1);` no hover. O que acontece?",
+      "alternativas": [
+        "A capa aumenta 110 pixels",
+        "A capa aumenta 10% de tamanho",
+        "A capa gira 1,1 grau",
+        "A capa fica 10% transparente"
+      ],
+      "correta": 1,
+      "explicacao": "scale(1.1) = 110% do tamanho original."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um selo de promoção da padaria recebeu `transform: rotate(45deg);`. O que acontece?",
+      "alternativas": [
+        "O selo fica girado 45 graus",
+        "O selo anda 45 pixels para o lado",
+        "O selo fica 45% maior",
+        "O selo fica com cantos de 45px arredondados"
+      ],
+      "correta": 0,
+      "explicacao": "rotate gira o elemento; deg é grau. Valor positivo gira no sentido horário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Os cards da academia têm `.card:hover { transform: translateY(-5px); }`. O que acontece no hover?",
+      "alternativas": [
+        "O card desce 5 pixels",
+        "O card sobe 5 pixels",
+        "O card vai 5 pixels para a esquerda",
+        "O card diminui 5%"
+      ],
+      "correta": 1,
+      "explicacao": "translateY move no eixo vertical; valor negativo é para cima."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na galeria do pet shop, uma foto aumenta com `transform: scale(1.2);` no hover. O que acontece com as fotos vizinhas?",
+      "alternativas": [
+        "Não se mexem: a foto cresce por cima delas",
+        "São empurradas para os lados para dar espaço",
+        "Diminuem na mesma proporção que a foto aumenta",
+        "Também aumentam 20%"
+      ],
+      "correta": 0,
+      "explicacao": "transform muda só a aparência do elemento; o espaço que ele ocupa no leiaute continua o mesmo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site do cinema, o pôster tem esta regra:\n```css\n.poster:hover {\n  transform: scale(1.1);\n  transform: rotate(5deg);\n}\n```\nO que acontece no hover?",
+      "alternativas": [
+        "Só gira: a segunda declaração substitui a primeira",
+        "Aumenta e gira ao mesmo tempo",
+        "Só aumenta, porque a primeira declaração é a que vale",
+        "Nada, o CSS dá erro e o pôster some"
+      ],
+      "correta": 0,
+      "explicacao": "A mesma propriedade repetida: vale a última. Para os dois efeitos, os valores vão juntos: transform: scale(1.1) rotate(5deg);"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um ícone do app da clínica recebeu `transform: scale(0.5);`. Como ele aparece?",
+      "alternativas": [
+        "Com metade da opacidade",
+        "Deslocado 0,5 pixel",
+        "Com metade do tamanho",
+        "Girado meia volta"
+      ],
+      "correta": 2,
+      "explicacao": "scale menor que 1 diminui: 0.5 = 50% do tamanho."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O cabeçalho da sorveteria tem `background: linear-gradient(to right, red, yellow);`. O que aparece?",
+      "alternativas": [
+        "Um fundo laranja liso",
+        "Metade vermelha e metade amarela, com divisão reta",
+        "Degradê do vermelho (esquerda) ao amarelo (direita)",
+        "Um degradê de cima (vermelho) para baixo (amarelo)"
+      ],
+      "correta": 2,
+      "explicacao": "linear-gradient faz a transição suave entre as cores; to right define a direção da esquerda para a direita."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site da academia, a regra `.topo { background-color: linear-gradient(blue, white); }` não mostra o degradê. Por quê?",
+      "alternativas": [
+        "Degradê é imagem: deve ir em background ou background-image",
+        "Faltou indicar a direção to right dentro do linear-gradient",
+        "O degradê só funciona em textos, não em fundos",
+        "O degradê precisa de pelo menos três cores"
+      ],
+      "correta": 0,
+      "explicacao": "linear-gradient gera uma imagem; background-color só aceita cor. A direção é opcional."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Se a direção não for informada, como fica `background: linear-gradient(blue, white);`?",
+      "alternativas": [
+        "Azul na esquerda, passando para branco na direita",
+        "Azul no centro e branco nas bordas",
+        "Azul e branco listrados",
+        "Azul em cima, passando para branco embaixo"
+      ],
+      "correta": 3,
+      "explicacao": "A direção padrão do linear-gradient é to bottom (de cima para baixo)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A faixa da bandeira do time da escola usa `background: linear-gradient(to right, black 50%, white 50%);`. O que aparece?",
+      "alternativas": [
+        "Metade esquerda preta e direita branca, sem transição",
+        "Um degradê suave do preto ao branco, da esquerda à direita",
+        "Um fundo cinza liso",
+        "Metade de cima preta e metade de baixo branca"
+      ],
+      "correta": 0,
+      "explicacao": "As duas cores param no mesmo ponto (50%), então não há transição: a troca é seca. to right faz a divisão vertical (esquerda/direita)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve o `@keyframes` no CSS?",
+      "alternativas": [
+        "Para definir as etapas de uma animação",
+        "Para definir atalhos de teclado da página",
+        "Para definir tamanhos de tela do site",
+        "Para carregar fontes de outro site"
+      ],
+      "correta": 0,
+      "explicacao": "@keyframes dá nome a uma animação e descreve como o elemento fica em cada etapa (from/to ou porcentagens)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O ícone de notificação do app da escola tem `animation: pulsar 1s infinite;`. O que essa declaração indica?",
+      "alternativas": [
+        "Que a animação pulsar espera 1 segundo e roda uma vez",
+        "Que o ícone pulsa uma vez e some",
+        "Que a animação dura para sempre em uma só volta",
+        "Que a animação pulsar dura 1 segundo e se repete sem parar"
+      ],
+      "correta": 3,
+      "explicacao": "Na animation: nome, duração e quantidade de repetições (infinite = sempre)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site da loja, a animação não funciona:\n```css\n@keyframes girar {\n  from { transform: rotate(0deg); }\n  to { transform: rotate(360deg); }\n}\n.carregando { animation: rodar 2s infinite; }\n```\nQual é o problema?",
+      "alternativas": [
+        "A propriedade rotate não pode ser usada dentro de @keyframes",
+        "Faltou um :hover para a animação começar",
+        "360deg é um valor inválido para rotate",
+        "O nome usado na animation não é o nome do @keyframes"
+      ],
+      "correta": 3,
+      "explicacao": "A animation procura um @keyframes com o mesmo nome. Como não existe \"rodar\", nada acontece."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença principal entre transition e animation no CSS?",
+      "alternativas": [
+        "A transition repete sem parar sozinha; a animation acontece só uma vez",
+        "A transition só muda cores; a animation só muda tamanhos",
+        "A transition depende de mudança de estado; a animation roda sozinha",
+        "Não há diferença, são só dois nomes diferentes para a mesma coisa"
+      ],
+      "correta": 2,
+      "explicacao": "transition suaviza a passagem entre dois estados. animation (com @keyframes) pode começar ao carregar a página e ter várias etapas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site do pet shop, os cards são `<div>` clicáveis. Qual declaração faz o ponteiro do mouse virar uma \"mãozinha\" sobre eles?",
+      "alternativas": [
+        "cursor: hand-click;",
+        "cursor: pointer;",
+        "pointer: hand;",
+        "mouse: pointer;"
+      ],
+      "correta": 1,
+      "explicacao": "cursor: pointer mostra a mãozinha e indica que o elemento é clicável."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O botão de \"Finalizar compra\" da papelaria fica desabilitado quando o carrinho está vazio e recebe `cursor: not-allowed;`. O que o usuário vê?",
+      "alternativas": [
+        "O botão desaparece da tela até ter itens",
+        "O botão fica girando",
+        "O ponteiro some sobre o botão",
+        "Um ponteiro com o símbolo de proibido"
+      ],
+      "correta": 3,
+      "explicacao": "not-allowed mostra o cursor de proibido, avisando que a ação não está disponível."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O botão do app da academia tem `transition: transform 0.4s ease-in-out;`. O que significa o `ease-in-out`?",
+      "alternativas": [
+        "O movimento tem sempre a mesma velocidade",
+        "O movimento começa rápido e para de repente",
+        "Começa devagar, acelera e termina devagar",
+        "O movimento espera 0,4 segundo para começar"
+      ],
+      "correta": 2,
+      "explicacao": "ease-in-out é a curva de velocidade: suave no início e no fim. Velocidade constante é linear."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aviso do site do hotel tem `transition: opacity 1s 2s;`. Quando a opacidade muda, o que acontece?",
+      "alternativas": [
+        "Muda a opacidade em 2 segundos e espera 1 segundo",
+        "Espera 2 segundos e então muda a opacidade em 1 segundo",
+        "Muda a opacidade duas vezes, cada uma em 1 segundo",
+        "Muda em 3 segundos no total, sem espera"
+      ],
+      "correta": 1,
+      "explicacao": "Com dois tempos na transition, o primeiro é a duração e o segundo é o atraso (delay)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No CSS do site da clínica aparece a cor `rgba(0, 0, 0, 0.3)`. O que significa o 0.3?",
+      "alternativas": [
+        "O brilho da cor: ela fica 30% mais clara",
+        "O tamanho em pixels da cor",
+        "A quantidade de vermelho da cor",
+        "A opacidade: o preto fica 30% visível"
+      ],
+      "correta": 3,
+      "explicacao": "Em rgba, os três primeiros números são vermelho, verde e azul; o quarto (alfa) é a opacidade, de 0 a 1."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um selo de \"lançamento\" na loja de games recebeu `transform: rotate(-90deg);`. Como ele fica?",
+      "alternativas": [
+        "Girado 90 graus no sentido horário",
+        "De cabeça para baixo",
+        "Espelhado da esquerda para a direita",
+        "Girado 90 graus no sentido anti-horário"
+      ],
+      "correta": 3,
+      "explicacao": "Ângulo positivo gira no sentido horário; negativo, no anti-horário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "As abas do site da biblioteca têm `border-radius: 10px 10px 0 0;`. Quais cantos ficam arredondados?",
+      "alternativas": [
+        "Só os dois cantos de cima",
+        "Só os dois cantos de baixo",
+        "Só os cantos da esquerda",
+        "Todos os quatro cantos"
+      ],
+      "correta": 0,
+      "explicacao": "A ordem é: superior esquerdo, superior direito, inferior direito, inferior esquerdo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Os cards do cardápio da lanchonete têm este CSS:\n```css\n.card { transition: transform 0.3s; }\n.card:hover { transform: translateY(-8px); }\n```\nO que o usuário vê ao passar o mouse num card?\n\nNa sua resposta:\n1. diga o que acontece com o card;\n2. explique o papel da transition.",
+      "respostasAceitas": [
+        "1) O card sobe 8 pixels. 2) A transition faz essa subida acontecer de forma suave, em 0,3 segundo (e a volta também), em vez de pular de uma vez."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) card sobe 8px; 2) transition deixa o movimento suave."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site da escola, um aluno quer esconder um aviso. Ele está em dúvida entre `opacity: 0;` e `display: none;`. Qual a diferença entre as duas?\n\nNa sua resposta:\n1. diga o que acontece com o espaço do aviso em cada caso;\n2. diga qual das duas permite fazer o aviso sumir aos poucos com transition.",
+      "respostasAceitas": [
+        "1) Com opacity: 0 o aviso fica invisível mas continua ocupando o espaço (e pode receber clique); com display: none ele sai da página e o espaço é ocupado pelos outros. 2) opacity, porque é animável; display muda de uma vez."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) opacity mantém o espaço, display tira; 2) opacity aceita transition."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site da academia há dois efeitos: um botão que muda de cor suavemente no hover (com transition) e um ícone que fica pulsando sozinho (com animation e @keyframes). Explique a diferença entre transition e animation.\n\nNa sua resposta:\n1. diga do que a transition precisa para acontecer;\n2. diga o que a animation consegue fazer que a transition não faz.",
+      "respostasAceitas": [
+        "1) A transition precisa de uma mudança de estado, como o hover ou uma classe nova: ela suaviza a passagem de um valor para outro. 2) A animation pode começar sozinha ao carregar a página, ter várias etapas e se repetir (infinite)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mudança de estado; 2) roda sozinha, várias etapas, repetição."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num card da padaria, o efeito de hover foi feito com `.card:hover { margin-top: -10px; }`. Um colega sugeriu trocar por `.card:hover { transform: translateY(-10px); }`. Por que a troca é melhor?\n\nNa sua resposta:\n1. explique o que acontece com os elementos ao redor usando margin;\n2. explique o que muda usando transform.",
+      "respostasAceitas": [
+        "1) Mudar a margin altera o leiaute: o card e os elementos vizinhos podem se mexer (a página \"pula\"). 2) Com transform o card só é desenhado deslocado; o espaço dele continua o mesmo e os vizinhos não se mexem (e a animação costuma ficar mais leve)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) margin mexe no leiaute e empurra vizinhos; 2) transform só muda a aparência. Citar desempenho é bônus, não obrigatório."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Os cards do pet shop têm `box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);`. Explique o que cada parte desse valor significa.\n\nNa sua resposta:\n1. diga o que significam o 0 e o 2px;\n2. diga o que significam o 6px e o rgba.",
+      "respostasAceitas": [
+        "1) 0 = a sombra não vai para os lados; 2px = desce 2 pixels. 2) 6px = desfoque (sombra espalhada e suave); rgba(0,0,0,0.2) = preto com 20% de opacidade (sombra clarinha)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) deslocamento horizontal e vertical; 2) desfoque e cor com transparência.",
+      "grupo": "box-shadow-valores"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site do hotel, um aviso de promoção tem este CSS:\n```css\n@keyframes piscar {\n  0% { opacity: 1; }\n  50% { opacity: 0; }\n  100% { opacity: 1; }\n}\n.alerta { animation: piscar 1s infinite; }\n```\nO que acontece com o aviso?\n\nNa sua resposta:\n1. descreva o efeito na tela;\n2. diga um cuidado ao usar esse tipo de animação.",
+      "respostasAceitas": [
+        "1) O aviso some e reaparece (pisca) a cada 1 segundo, sem parar. 2) Animação que pisca sem parar cansa e distrai o usuário e pode incomodar pessoas sensíveis a movimento; deve ser usada com moderação."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) pisca continuamente a cada 1s; 2) incomoda, distrai, acessibilidade."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site da oficina, o botão tem:\n```css\n.botao { background: gray; }\n.botao:hover { background: orange; transition: background 0.5s; }\n```\nAo passar o mouse, a cor muda suavemente, mas ao tirar o mouse ela volta de uma vez. Por quê?\n\nNa sua resposta:\n1. explique por que a volta não tem transição;\n2. diga onde a transition deveria ficar.",
+      "respostasAceitas": [
+        "1) A transition está só na regra :hover. Quando o mouse sai, essa regra deixa de valer, e com ela a transition: a cor volta sem efeito. 2) A transition deve ficar na regra normal (.botao), para valer na ida e na volta."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) transition só existe durante o hover; 2) colocar no .botao.",
+      "grupo": "transition-lugar"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site da biblioteca, as capas de livro são `<div>` clicáveis e receberam `cursor: pointer;`. Por que isso é importante?\n\nNa sua resposta:\n1. diga o que muda no ponteiro do mouse;\n2. explique como isso ajuda o usuário.",
+      "respostasAceitas": [
+        "1) O ponteiro vira uma mãozinha sobre a capa. 2) Indica que o elemento é clicável; sem isso a pessoa pode não perceber que dá para clicar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mãozinha; 2) sinaliza que é clicável."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No banner da sorveteria, o título branco fica em cima de uma foto colorida e às vezes é difícil de ler. Foi usada a regra `h1 { text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8); }`. Explique.\n\nNa sua resposta:\n1. diga o que aparece em volta das letras;\n2. explique por que isso melhora a leitura.",
+      "respostasAceitas": [
+        "1) Aparece uma sombra escura e borrada atrás das letras, um pouco para a direita e para baixo. 2) A sombra separa o texto branco do fundo claro da foto, aumentando o contraste."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sombra escura no texto; 2) mais contraste/legibilidade."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site da academia, o fundo do cabeçalho usa `background: linear-gradient(to right, #ff6600, #ffcc00);` em vez de uma imagem de degradê feita num editor. Qual a vantagem?\n\nNa sua resposta:\n1. diga o que aparece no cabeçalho;\n2. dê uma vantagem de fazer o degradê pelo CSS.",
+      "respostasAceitas": [
+        "1) Um degradê do laranja (esquerda) ao amarelo (direita). 2) Não precisa baixar arquivo de imagem (carrega mais rápido), se ajusta a qualquer tamanho sem perder qualidade e é fácil trocar as cores."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) degradê laranja→amarelo; 2) leve, sem download, se adapta ao tamanho, fácil de editar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na galeria de fotos da pousada foi usado:\n```css\n.moldura { width: 300px; height: 200px; overflow: hidden; }\n.moldura img { transition: transform 0.5s; }\n.moldura:hover img { transform: scale(1.2); }\n```\nO que o usuário vê ao passar o mouse na foto?\n\nNa sua resposta:\n1. descreva o efeito;\n2. explique o papel do overflow: hidden na moldura.",
+      "respostasAceitas": [
+        "1) A foto dá um zoom suave (aumenta 20% em meio segundo) quando o mouse passa na moldura. 2) O overflow: hidden corta o que passa da moldura, então a foto aumenta \"dentro\" dela, sem invadir o resto da página."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) zoom suave na foto; 2) overflow: hidden recorta o excesso e mantém o tamanho da moldura."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "As fotos dos funcionários da clínica têm `border-radius: 50%;`. Algumas aparecem redondas e outras ovais. Por quê?\n\nNa sua resposta:\n1. diga qual formato de foto vira círculo;\n2. explique por que as outras ficam ovais.",
+      "respostasAceitas": [
+        "1) As fotos quadradas (largura igual à altura) viram círculo. 2) Nas retangulares, os 50% são calculados sobre a largura e sobre a altura, que são diferentes, então o resultado é uma elipse (oval)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) quadradas; 2) retangulares viram elipse porque os 50% usam medidas diferentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No rodapé do site da escola, os logotipos dos parceiros têm:\n```css\n.parceiro { opacity: 0.6; transition: opacity 0.3s; }\n.parceiro:hover { opacity: 1; }\n```\nO que acontece?\n\nNa sua resposta:\n1. diga como os logotipos aparecem normalmente;\n2. diga o que acontece no hover.",
+      "respostasAceitas": [
+        "1) Os logotipos ficam meio apagados (60% de opacidade). 2) Quando o mouse passa, o logotipo fica totalmente visível, de forma suave."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) semitransparentes; 2) ficam opacos suavemente no hover."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Quando a página da livraria abre, o banner aparece deslizando da esquerda. O CSS é:\n```css\n@keyframes entrar {\n  from { transform: translateX(-100%); }\n  to { transform: translateX(0); }\n}\n.banner { animation: entrar 1s; }\n```\nExplique o efeito.\n\nNa sua resposta:\n1. diga de onde o banner sai e onde termina;\n2. diga quantas vezes o efeito acontece e por quê.",
+      "respostasAceitas": [
+        "1) O banner começa todo fora da tela, à esquerda (-100% da sua largura), e desliza até a posição normal. 2) Acontece uma vez só, ao carregar, porque a animation não tem repetição (infinite) e dura 1 segundo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) desliza da esquerda para o lugar; 2) uma vez (sem infinite)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site do cinema, um aluno quis fazer o submenu aparecer aos poucos:\n```css\n.submenu { display: none; opacity: 0; transition: opacity 0.5s; }\nli:hover .submenu { display: block; opacity: 1; }\n```\nO submenu aparece, mas de repente, sem o efeito. Explique o motivo.\n\nNa sua resposta:\n1. explique por que a transition não acontece;\n2. diga uma ideia para o efeito funcionar.",
+      "respostasAceitas": [
+        "1) display não é animável: na troca de none para block o elemento surge já no estado final, e a transition de opacity não tem um \"antes\" visível para animar. 2) Não usar display para esconder: deixar o submenu com opacity: 0 e visibility: hidden e, no hover, opacity: 1 e visibility: visible."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) display não anima/elemento surge pronto; 2) esconder com opacity/visibility em vez de display. Outras soluções corretas também valem.",
+      "grupo": "transition-display"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O cabeçalho do site da padaria tem `background-image: url(\"img/paes.jpg\");`. O que essa declaração faz?",
+      "alternativas": [
+        "Insere a foto paes.jpg como uma <img> no HTML",
+        "Coloca a foto paes.jpg como fundo do cabeçalho",
+        "Cria um link para a foto paes.jpg",
+        "Define paes.jpg como ícone da aba do navegador"
+      ],
+      "correta": 1,
+      "explicacao": "background-image usa a imagem como fundo do elemento. A imagem não vira conteúdo do HTML."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site da sorveteria, uma imagem pequena colocada como fundo apareceu repetida várias vezes, como um mosaico. Por que isso aconteceu?",
+      "alternativas": [
+        "Porque a imagem estava em formato PNG",
+        "Porque faltou definir a largura do elemento",
+        "Porque o background-repeat padrão é repeat",
+        "Porque a url foi escrita entre aspas"
+      ],
+      "correta": 2,
+      "explicacao": "Por padrão (background-repeat: repeat) o fundo se repete na horizontal e na vertical até preencher o elemento.",
+      "grupo": "repeat"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual declaração faz a imagem de fundo do banner da escola aparecer uma vez só, sem se repetir?",
+      "alternativas": [
+        "background-repeat: once;",
+        "background-repeat: no-repeat;",
+        "background-size: no-repeat;",
+        "background-image: single;"
+      ],
+      "correta": 1,
+      "explicacao": "no-repeat desliga a repetição. Os outros valores ou propriedades não existem com esse sentido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O rodapé da papelaria tem uma imagem de \"lápis\" com `background-repeat: repeat-x;`. Como ela aparece?",
+      "alternativas": [
+        "Repetida só na vertical, formando uma coluna",
+        "Uma vez só, no canto",
+        "Repetida em todas as direções",
+        "Repetida só na horizontal, formando uma faixa"
+      ],
+      "correta": 3,
+      "explicacao": "repeat-x repete no eixo horizontal (x); repeat-y repete no vertical (y)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O banner do hotel tem uma foto de fundo com `background-size: cover;`. Como a foto aparece?",
+      "alternativas": [
+        "Cobre todo o banner sem deformar, cortando sobras",
+        "Aparece inteira, sobrando espaço vazio nas laterais",
+        "Esticada para caber exatamente, ficando deformada",
+        "No tamanho original, repetida"
+      ],
+      "correta": 0,
+      "explicacao": "cover aumenta a imagem até cobrir toda a área, mantendo a proporção; o que sobra é cortado.",
+      "grupo": "cover-contain"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O logotipo da clínica foi colocado como fundo de uma caixa com `background-size: contain;`. Como ele aparece?",
+      "alternativas": [
+        "Inteiro na caixa, podendo sobrar espaço",
+        "Cobrindo toda a caixa, com partes cortadas",
+        "Esticado e deformado para ocupar a caixa",
+        "Com metade do tamanho original"
+      ],
+      "correta": 0,
+      "explicacao": "contain faz a imagem caber inteira, mantendo a proporção; pode sobrar espaço.",
+      "grupo": "cover-contain"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O fundo da página inicial da academia é uma foto que precisa preencher a tela toda, sem faixas vazias, em qualquer tamanho de tela. Qual valor de background-size é o mais indicado?",
+      "alternativas": [
+        "contain",
+        "auto",
+        "cover",
+        "100px"
+      ],
+      "correta": 2,
+      "explicacao": "cover sempre preenche toda a área (cortando um pouco se precisar). contain pode deixar faixas vazias.",
+      "grupo": "cover-contain"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual declaração centraliza a imagem de fundo do cartaz do cinema dentro do elemento?",
+      "alternativas": [
+        "background-align: center;",
+        "text-align: center;",
+        "background-repeat: center;",
+        "background-position: center;"
+      ],
+      "correta": 3,
+      "explicacao": "background-position define onde o fundo fica. text-align alinha conteúdo inline, não o fundo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site do pet shop, uma marca d'água tem `background: url(\"pata.png\") no-repeat; background-position: right bottom;`. Onde a pata aparece?",
+      "alternativas": [
+        "No canto superior direito do elemento",
+        "No canto inferior direito do elemento",
+        "No canto inferior esquerdo do elemento",
+        "No centro, alinhada à direita do texto"
+      ],
+      "correta": 1,
+      "explicacao": "right bottom = horizontal à direita, vertical embaixo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No banner da loja de games, a foto de fundo recebeu `background-size: 100% 100%;`. O que pode acontecer?",
+      "alternativas": [
+        "A foto cobre o banner sem deformar, cortando as sobras",
+        "A foto estica até o tamanho exato e pode deformar",
+        "A foto fica no tamanho original, sem mudar",
+        "A foto é repetida 100 vezes em cada direção"
+      ],
+      "correta": 1,
+      "explicacao": "Com largura e altura em 100%, a imagem é forçada ao tamanho exato da caixa, sem manter a proporção. cover mantém a proporção.",
+      "grupo": "100-100"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No projeto da biblioteca, o CSS está em `css/estilo.css` e a imagem em `img/fundo.jpg` (as pastas css e img estão lado a lado, na raiz). A regra `body { background-image: url(\"img/fundo.jpg\"); }` não mostra a imagem. Por quê?",
+      "alternativas": [
+        "Na url, faltou subir uma pasta: \"../img/fundo.jpg\"",
+        "A propriedade background-image não funciona na tag body",
+        "Imagens JPG não podem ser usadas como fundo, só PNG",
+        "A url precisa sempre começar com http:// ou https://"
+      ],
+      "correta": 0,
+      "explicacao": "Dentro do arquivo CSS, o caminho é contado a partir da pasta do próprio CSS. É preciso subir uma pasta (../) para chegar em img.",
+      "grupo": "caminho-url"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site da padaria, as fotos dos produtos receberam `img { max-width: 100%; }`. O que isso garante?",
+      "alternativas": [
+        "Que a imagem sempre ocupa 100% da largura da tela",
+        "Que a imagem fica com 100 pixels",
+        "Que ela nunca fica mais larga que o seu espaço",
+        "Que a imagem carrega 100% mais rápido"
+      ],
+      "correta": 2,
+      "explicacao": "max-width: 100% limita a largura ao contêiner: em telas pequenas a imagem diminui em vez de \"vazar\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na página da oficina, uma foto de 300px de largura fica dentro de uma área de 1000px. Com `img { width: 100%; }` ela aparece borrada. Com `max-width: 100%` não. Por quê?",
+      "alternativas": [
+        "max-width: 100% aumenta a nitidez das fotos",
+        "width: 100% amplia a foto até 1000px; max-width não",
+        "width: 100% diminui a foto para 100px",
+        "As duas fazem o mesmo; a foto estava borrada por outro motivo"
+      ],
+      "correta": 1,
+      "explicacao": "width: 100% obriga a imagem a ocupar toda a largura (ampliando além do tamanho real). max-width só limita o máximo; a imagem pode ficar no tamanho natural."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que se usa `height: auto;` junto com `max-width: 100%;` nas imagens do site da escola?",
+      "alternativas": [
+        "Para a imagem ocupar toda a altura da tela",
+        "Para centralizar a imagem na página",
+        "Para a altura seguir a largura, sem deformar",
+        "Para tirar o espaço em branco abaixo da imagem"
+      ],
+      "correta": 2,
+      "explicacao": "Se a largura diminui, height: auto recalcula a altura na mesma proporção."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na vitrine da loja, todas as fotos ficam numa caixa de 200px por 200px e receberam `object-fit: cover;`. Como elas aparecem?",
+      "alternativas": [
+        "Aparecem inteiras, sobrando espaço vazio na caixa",
+        "Esticadas e deformadas para caber na caixa",
+        "No tamanho original, passando da caixa",
+        "Preenchem a caixa sem deformar, cortando a sobra"
+      ],
+      "correta": 3,
+      "explicacao": "object-fit: cover faz com a <img> o mesmo que background-size: cover faz com o fundo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "As fotos dos produtos do pet shop têm `width: 200px; height: 200px; object-fit: contain;`. Uma foto retangular (deitada) aparece como?",
+      "alternativas": [
+        "Cortada nas laterais, preenchendo a caixa",
+        "Esticada, ocupando a caixa toda",
+        "Inteira, com faixas vazias em cima e embaixo",
+        "Girada para ficar em pé"
+      ],
+      "correta": 2,
+      "explicacao": "contain mostra a imagem inteira; como ela é mais larga que alta, sobra espaço em cima e embaixo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual propriedade ajusta uma `<img>` dentro de uma caixa de tamanho fixo, do mesmo jeito que o background-size faz com imagens de fundo?",
+      "alternativas": [
+        "background-size",
+        "object-fit",
+        "image-size",
+        "fit-content"
+      ],
+      "correta": 1,
+      "explicacao": "object-fit vale para <img> e <video>. background-size só vale para imagens de fundo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno colocou `object-fit: cover;` numa `<img>` da galeria da pousada, mas sem definir width e height. Nada mudou. Por quê?",
+      "alternativas": [
+        "object-fit só funciona em imagens colocadas como fundo no CSS",
+        "object-fit só funciona se houver também um background-repeat",
+        "object-fit só funciona com imagens PNG, e a foto era JPG",
+        "Sem width e height fixos, não há o que ajustar na imagem"
+      ],
+      "correta": 3,
+      "explicacao": "object-fit decide como a imagem se encaixa numa caixa com tamanho diferente do dela. Sem essa diferença, nada muda."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma foto de 400px por 200px recebeu `width: 200px; height: 200px;` (sem object-fit) no site da clínica. Como ela aparece?",
+      "alternativas": [
+        "Cortada nas laterais, sem deformar",
+        "Inteira, com faixas vazias em cima e embaixo",
+        "Deformada, espremida na largura",
+        "No tamanho original de 400px por 200px"
+      ],
+      "correta": 2,
+      "explicacao": "Sem object-fit, o padrão é fill: a imagem é forçada ao novo tamanho e perde a proporção."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é um sprite de imagens no CSS?",
+      "alternativas": [
+        "Um GIF animado de um personagem que anda pela tela",
+        "Um ícone vetorial desenhado em SVG que muda de cor",
+        "Uma pasta do site com muitas imagens pequenas de ícones",
+        "Um só arquivo com vários ícones, recortados pelo CSS"
+      ],
+      "correta": 3,
+      "explicacao": "No sprite, vários ícones ficam num arquivo só; o CSS mostra a parte certa mudando a posição do fundo.",
+      "grupo": "sprite"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual a principal vantagem de juntar os 20 ícones do site da loja num único sprite?",
+      "alternativas": [
+        "Os ícones ficam com mais cores e mais nitidez",
+        "Os ícones passam a ser vetoriais",
+        "O navegador baixa um arquivo só, em vez de 20",
+        "Os ícones ficam animados automaticamente"
+      ],
+      "correta": 2,
+      "explicacao": "Menos arquivos = menos pedidos ao servidor. Isso deixa o carregamento mais rápido.",
+      "grupo": "sprite"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O sprite `icones.png` tem ícones de 32px lado a lado (casa, carrinho, usuário). O CSS é:\n```css\n.icone { width: 32px; height: 32px; background: url(\"icones.png\"); }\n.icone-x { background-position: -32px 0; }\n```\nQual ícone aparece em `.icone-x`?",
+      "alternativas": [
+        "O carrinho, o segundo ícone",
+        "A casa, o primeiro ícone",
+        "O usuário, o terceiro ícone",
+        "Metade da casa e metade do carrinho"
+      ],
+      "correta": 0,
+      "explicacao": "Mover o fundo -32px para a esquerda \"pula\" o primeiro ícone e a caixa de 32px mostra o segundo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um ícone SVG foi colocado direto no HTML (com a tag `<svg>`) no site da academia. Qual propriedade CSS muda a cor de preenchimento dele?",
+      "alternativas": [
+        "fill",
+        "background-size",
+        "object-fit",
+        "opacity-color"
+      ],
+      "correta": 0,
+      "explicacao": "Em SVG, fill é a cor de preenchimento e stroke é a cor do contorno."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual formato é o mais indicado para uma foto grande do quarto, no banner do site do hotel?",
+      "alternativas": [
+        "SVG, que é feito para fotografias",
+        "JPG (ou WebP), que comprime bem fotografias",
+        "GIF, que tem milhões de cores",
+        "BMP, que deixa o arquivo menor"
+      ],
+      "correta": 1,
+      "explicacao": "JPG e WebP comprimem bem fotos. SVG é para desenhos vetoriais; GIF tem só 256 cores; BMP gera arquivos enormes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O logotipo da pizzaria precisa aparecer sobre um fundo colorido, sem um quadrado branco em volta. Qual formato de imagem atende?",
+      "alternativas": [
+        "JPG, porque aceita fundo transparente",
+        "BMP, porque tem melhor qualidade",
+        "Qualquer formato, porque o CSS tira o fundo branco",
+        "PNG, porque aceita fundo transparente"
+      ],
+      "correta": 3,
+      "explicacao": "PNG (e também SVG e WebP) aceitam transparência. JPG não aceita."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma foto de 4000px de largura (5 MB) é exibida num card de 300px no site da padaria. Qual é a melhor ação?",
+      "alternativas": [
+        "Só colocar width: 300px no CSS para ela ficar menor",
+        "Converter a foto para BMP, que tem melhor qualidade",
+        "Usar a foto como background-image",
+        "Diminuir e comprimir o arquivo antes de publicar"
+      ],
+      "correta": 3,
+      "explicacao": "O CSS só muda o tamanho na tela: o navegador ainda baixa os 5 MB. Redimensionar e comprimir diminui o arquivo.",
+      "grupo": "foto-pesada"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O banner da academia usa:\n```css\n.banner {\n  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(\"treino.jpg\");\n}\n```\nO que aparece?",
+      "alternativas": [
+        "Só um fundo preto, porque o degradê cobre a foto",
+        "A foto e, abaixo dela, uma faixa preta",
+        "A foto com uma película preta semitransparente",
+        "Um degradê do preto ao transparente sem a foto"
+      ],
+      "correta": 2,
+      "explicacao": "Com vários fundos separados por vírgula, o primeiro fica por cima. O degradê de preto com 50% escurece a foto (e o texto branco fica mais legível).",
+      "grupo": "camada-escura"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No cabeçalho do cinema há `background-color: #222;` junto com uma background-image bem escura e texto branco. Para que serve o background-color?",
+      "alternativas": [
+        "Garantir fundo escuro se a imagem não carregar",
+        "Para escurecer ainda mais a imagem de fundo",
+        "Para a imagem se repetir só na horizontal",
+        "É obrigatório: sem ele a imagem de fundo não aparece"
+      ],
+      "correta": 0,
+      "explicacao": "A cor de fundo fica atrás da imagem e funciona como reserva enquanto ela carrega ou se der erro.",
+      "grupo": "fundo-reserva"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site da loja, qual destas imagens deve ser uma `<img>` no HTML, e não uma background-image?",
+      "alternativas": [
+        "A textura decorativa do cabeçalho",
+        "O degradê atrás do título",
+        "O padrão de bolinhas no rodapé",
+        "A foto do produto à venda"
+      ],
+      "correta": 3,
+      "explicacao": "Imagem que faz parte do conteúdo vai no HTML (com alt). Enfeites de fundo ficam no CSS.",
+      "grupo": "img-ou-fundo"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz a declaração `background: url(\"capa.jpg\") no-repeat center / cover;` no banner da livraria?",
+      "alternativas": [
+        "Põe a foto uma vez, centralizada e cobrindo todo o banner",
+        "Põe a foto repetida, centralizada, no tamanho original",
+        "Põe a foto inteira, sobrando espaço, no canto",
+        "Dá erro, porque não se pode usar / no CSS"
+      ],
+      "correta": 0,
+      "explicacao": "Na forma abreviada background, o valor depois da / é o background-size. Ficam juntos: imagem, no-repeat, posição center e tamanho cover."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site da escola, uma `<div class=\"banner\"></div>` vazia tem só `background-image: url(\"escola.jpg\");` e a imagem não aparece. Qual é o motivo mais provável?",
+      "alternativas": [
+        "A imagem de fundo precisa estar em SVG",
+        "A div vazia e sem height tem 0px de altura",
+        "Faltou background-repeat: repeat",
+        "background-image só funciona no body"
+      ],
+      "correta": 1,
+      "explicacao": "Imagem de fundo não dá tamanho ao elemento. Sem conteúdo e sem height, a div tem altura zero."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a principal vantagem do formato WebP para as imagens do site do pet shop?",
+      "alternativas": [
+        "Permite ampliar a imagem sem nenhuma perda",
+        "Só funciona em computadores, não em celulares",
+        "Arquivos menores com qualidade parecida",
+        "Permite editar o texto da imagem pelo navegador"
+      ],
+      "correta": 2,
+      "explicacao": "WebP comprime melhor que JPG e PNG na maioria dos casos. Ampliar sem perda é característica de vetor (SVG)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site da sorveteria há esta regra:\n```css\n@media (max-width: 600px) {\n  .banner { background-image: url(\"banner-pequeno.jpg\"); }\n}\n```\nO que ela faz?",
+      "alternativas": [
+        "Em telas de até 600px de largura, o banner usa uma imagem menor",
+        "Em telas maiores que 600px, o banner usa a imagem menor",
+        "Diminui a imagem original para 600px em todas as telas",
+        "Esconde o banner em telas de até 600px"
+      ],
+      "correta": 0,
+      "explicacao": "A media query só vale em telas de até 600px; nelas o banner troca para uma imagem menor (mais leve no celular).",
+      "grupo": "media-fundo"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "As miniaturas da galeria da pousada têm `img:hover { opacity: 0.7; }`. O que acontece?",
+      "alternativas": [
+        "A foto aumenta 70% quando o mouse passa",
+        "A foto fica um pouco transparente no hover",
+        "A foto some por completo quando o mouse passa",
+        "A foto fica 70% mais escura sempre"
+      ],
+      "correta": 1,
+      "explicacao": "No hover, a opacidade cai para 0.7 (70% visível)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual valor faz a imagem de fundo do cartão da biblioteca se repetir só na vertical?",
+      "alternativas": [
+        "repeat-y",
+        "repeat-x",
+        "no-repeat",
+        "repeat-vertical"
+      ],
+      "correta": 0,
+      "explicacao": "y é o eixo vertical; x é o horizontal. repeat-vertical não existe."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O cabeçalho do site da padaria tem:\n```css\n.topo {\n  height: 250px;\n  background-image: url(\"forno.jpg\");\n  background-repeat: no-repeat;\n  background-position: center;\n}\n```\nO que aparece na tela?\n\nNa sua resposta:\n1. diga quantas vezes a imagem aparece;\n2. diga onde ela fica dentro do cabeçalho.",
+      "respostasAceitas": [
+        "1) A imagem forno.jpg aparece uma vez só, sem repetir. 2) Fica centralizada no cabeçalho de 250px de altura."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) uma vez (no-repeat); 2) centralizada."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre `background-size: cover` e `background-size: contain`, usando o exemplo de uma foto deitada como fundo de uma caixa quadrada no site do hotel.\n\nNa sua resposta:\n1. diga o que acontece com a foto usando cover;\n2. diga o que acontece usando contain.",
+      "respostasAceitas": [
+        "1) Com cover a foto preenche a caixa toda, mantendo a proporção, e as laterais são cortadas. 2) Com contain a foto aparece inteira, mantendo a proporção, e sobra espaço vazio em cima e embaixo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cover preenche e corta; 2) contain mostra inteira e sobra espaço.",
+      "grupo": "cover-contain"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Nas fotos do site da clínica foi usado `img { max-width: 100%; height: auto; }`. Por que essa regra deixa as imagens responsivas?\n\nNa sua resposta:\n1. explique o que o max-width: 100% faz no celular;\n2. explique o papel do height: auto.",
+      "respostasAceitas": [
+        "1) A imagem nunca passa da largura do espaço onde está: numa tela estreita ela diminui junto, sem vazar nem criar rolagem para o lado. 2) height: auto ajusta a altura na mesma proporção da largura, então a foto não deforma."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) limita a largura ao contêiner; 2) mantém a proporção."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No projeto da oficina, o arquivo `css/estilo.css` tem `background-image: url(\"img/carro.jpg\");`, mas a imagem não aparece. As pastas css e img estão lado a lado, na raiz do site, e a imagem existe. O que está errado?\n\nNa sua resposta:\n1. explique a partir de qual pasta o caminho da url é contado;\n2. diga qual caminho funcionaria.",
+      "respostasAceitas": [
+        "1) Dentro do CSS, o caminho é contado a partir da pasta do próprio arquivo CSS (css/). Então o navegador procura css/img/carro.jpg, que não existe. 2) \"../img/carro.jpg\" (sobe uma pasta e entra em img)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) relativo ao arquivo CSS; 2) ../img/carro.jpg.",
+      "grupo": "caminho-url"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na vitrine da loja de games as capas têm tamanhos diferentes (umas em pé, outras deitadas). Foi usado:\n```css\n.vitrine img { width: 180px; height: 240px; object-fit: cover; }\n```\nPor que o object-fit: cover foi usado?\n\nNa sua resposta:\n1. diga o que aconteceria com as capas sem o object-fit;\n2. diga o que o cover faz com elas.",
+      "respostasAceitas": [
+        "1) Sem object-fit as capas seriam esticadas para 180x240 e as de proporção diferente ficariam deformadas. 2) Com cover todas preenchem a caixa do mesmo tamanho, mantendo a proporção, e só a sobra é cortada: a vitrine fica uniforme."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) deformariam; 2) preenche sem deformar, cortando a sobra."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site da papelaria, todos os ícones (lápis, caderno, mochila…) estão num único arquivo `icones.png`, usado como sprite. Explique a técnica.\n\nNa sua resposta:\n1. diga qual a vantagem de juntar os ícones num arquivo só;\n2. explique como o CSS mostra só o ícone desejado.",
+      "respostasAceitas": [
+        "1) O navegador baixa um arquivo só em vez de vários, então a página carrega mais rápido. 2) Cada elemento tem o tamanho de um ícone e usa o sprite de fundo; o background-position desloca a imagem para que só o ícone certo apareça na \"janela\"."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) menos downloads/requisições; 2) caixa do tamanho do ícone + background-position.",
+      "grupo": "sprite"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site do pet shop, a foto de um cachorro à venda foi colocada como background-image de uma div, e a textura de patinhas do rodapé foi colocada como `<img>`. Um colega disse que deveria ser o contrário. Ele está certo?\n\nNa sua resposta:\n1. diga quando usar <img> no HTML;\n2. diga quando usar background-image no CSS.",
+      "respostasAceitas": [
+        "Sim. 1) <img> é para imagens de conteúdo, que o usuário precisa ver (a foto do cachorro à venda), com texto alternativo. 2) background-image é para enfeite (a textura de patinhas)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) conteúdo → <img> (com alt); 2) decoração → fundo no CSS.",
+      "grupo": "img-ou-fundo"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na página da padaria, uma foto de 4000px (5 MB) aparece num card de 300px com `width: 300px;` no CSS. A página demora muito no celular. Por que o CSS não resolve?\n\nNa sua resposta:\n1. explique o que o navegador baixa mesmo com width: 300px;\n2. diga o que fazer com a imagem antes de publicar.",
+      "respostasAceitas": [
+        "1) O width só muda o tamanho exibido: o navegador continua baixando o arquivo inteiro de 5 MB, o que pesa no 4G e demora. 2) Redimensionar a foto para perto de 300px (ou o dobro para telas de alta densidade) e comprimir (JPG/WebP com qualidade menor)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) baixa o arquivo original inteiro; 2) redimensionar e comprimir.",
+      "grupo": "foto-pesada"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site da academia, os ícones das redes sociais são SVG colocados direto no HTML, e a regra `.icone:hover { fill: orange; }` muda a cor deles. Explique as vantagens dessa escolha.\n\nNa sua resposta:\n1. diga o que acontece no hover;\n2. dê uma vantagem de usar SVG em vez de vários PNG coloridos.",
+      "respostasAceitas": [
+        "1) O ícone fica laranja quando o mouse passa. 2) Com SVG não é preciso ter uma imagem para cada cor: a cor é trocada pelo CSS; além disso o arquivo é pequeno e fica nítido em qualquer tamanho."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) muda o preenchimento para laranja; 2) cor pelo CSS sem novos arquivos (bônus: leve, nítido)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O banner do site do cinema tem uma foto clara e o título branco quase não aparece. Foi usado:\n```css\n.banner {\n  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(\"sala.jpg\");\n  background-size: cover;\n}\n```\nExplique a solução.\n\nNa sua resposta:\n1. diga o que o degradê faz sobre a foto;\n2. explique por que o título fica mais legível.",
+      "respostasAceitas": [
+        "1) O degradê (que é preto com 60% de opacidade, igual nos dois lados) fica por cima da foto como uma película escura semitransparente. 2) A foto escurece e o texto branco ganha contraste."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) camada escura semitransparente por cima (primeiro fundo da lista fica em cima); 2) mais contraste.",
+      "grupo": "camada-escura"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site da loja, o rodapé tem `background-color: #1a1a1a;` e também `background-image: url(\"textura.jpg\");`, com texto branco. Por que manter a cor de fundo se já existe uma imagem?\n\nNa sua resposta:\n1. diga o que acontece se a imagem não carregar;\n2. explique por que isso é importante para o texto.",
+      "respostasAceitas": [
+        "1) Se a imagem falhar ou demorar, aparece a cor escura #1a1a1a no lugar. 2) Sem a cor, o fundo ficaria branco e o texto branco ficaria invisível; a cor garante a leitura."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a cor aparece como reserva; 2) mantém o contraste do texto.",
+      "grupo": "fundo-reserva"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site da sorveteria, um aluno usou um desenho pequeno de casquinha (50px por 50px) como fundo da página inteira, sem mudar nada no background-repeat. Explique o resultado.\n\nNa sua resposta:\n1. diga como a casquinha aparece na página;\n2. diga qual valor faria ela aparecer uma vez só.",
+      "respostasAceitas": [
+        "1) A casquinha se repete lado a lado e de cima a baixo, preenchendo a página como um mosaico, porque o padrão é repeat. 2) background-repeat: no-repeat."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) repete em mosaico (padrão repeat); 2) no-repeat.",
+      "grupo": "repeat"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site do hotel há esta regra:\n```css\n.banner { background-image: url(\"praia-grande.jpg\"); background-size: cover; }\n@media (max-width: 600px) {\n  .banner { background-image: url(\"praia-pequena.jpg\"); }\n}\n```\nPor que usar duas imagens?\n\nNa sua resposta:\n1. diga quando cada imagem é usada;\n2. explique a vantagem para quem acessa pelo celular.",
+      "respostasAceitas": [
+        "1) Em telas de até 600px usa praia-pequena.jpg; nas maiores, praia-grande.jpg. 2) O celular baixa uma imagem menor e mais leve: a página abre mais rápido e gasta menos internet."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) até 600px a pequena, acima a grande; 2) mais leve, rápido, menos dados.",
+      "grupo": "media-fundo"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O site da pizzaria tem uma foto da pizza no destaque e o logotipo em cima de um fundo vermelho. Qual formato de imagem escolher para cada um?\n\nNa sua resposta:\n1. diga o formato indicado para a foto e por quê;\n2. diga o formato indicado para o logotipo e por quê.",
+      "respostasAceitas": [
+        "1) Foto: JPG ou WebP, que comprimem bem fotografias (arquivo menor). 2) Logotipo: PNG ou SVG, que aceitam fundo transparente (o SVG ainda fica nítido em qualquer tamanho)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) JPG/WebP para foto; 2) PNG/SVG pela transparência."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — menus, pseudoclasses, efeitos e imagens",
+      "capacidade": "marc.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No banner da academia, primeiro foi usado `background-size: 100% 100%;` e os atletas da foto ficaram \"esticados\". Trocando para `background-size: cover;` o problema sumiu. Explique.\n\nNa sua resposta:\n1. explique por que 100% 100% deforma a foto;\n2. explique por que o cover não deforma.",
+      "respostasAceitas": [
+        "1) 100% 100% força a foto a ter exatamente a largura e a altura do banner, sem respeitar a proporção original, então ela estica. 2) O cover aumenta a foto mantendo a proporção até cobrir o banner e corta a sobra, sem esticar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) força as duas medidas, perde a proporção; 2) cover mantém a proporção e corta.",
+      "grupo": "100-100"
+    }
+  ]
+}

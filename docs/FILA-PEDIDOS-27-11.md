@@ -11,7 +11,7 @@ Pedidos do professor (mensagem própria + prompt sobre o que a FATEC ganhou na P
 | C | DESCRIBE igual ao MySQL; usuários e permissões na Bancada (CREATE USER, GRANT, REVOKE, SHOW GRANTS) | feito (b5df1b9); cenários com banco de tarefas: a fazer |
 | D | Diagramas: arrasto e zoom (Ctrl+rodinha, Ver tudo) já funcionavam; aqui não há diagrama de sequência; botões ilegíveis no tema escuro: corrigido | feito |
 | E | Dissertativas sem pedir comando/desenho (86 reescritas), dificuldade em todas e sorteio balanceado; 15 cenários da Bancada com 10 tarefas | feito; 25 cenários fis da FATEC: em andamento |
-| E | 150 questões por tema: Banco de Dados com os 18 temas prontos (2.700 questões, bancos/gerados/bd); próximas: Linguagem de Marcação e demais do plano | em andamento |
+| E | 150 questões por tema: Banco de Dados 18 temas (2.700) e Linguagem de Marcação 10 temas (1.500) prontos; Programação Back-End em andamento; depois as demais do plano | em andamento |
 
 ## Como ficou o modelo das perguntas de SQL (bloco A)
 - Cenário SQL = banco pronto + várias tarefas independentes (cada uma corrigida a partir da base original).
