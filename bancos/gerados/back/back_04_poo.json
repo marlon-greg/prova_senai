@@ -1,0 +1,2489 @@
+{
+  "nome": "Programação Back-End — Programação orientada a objetos (a revisar)",
+  "materia": "Programação Back-End",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é a programação orientada a objetos (POO)?",
+      "alternativas": [
+        "Uma linguagem de programação feita só para o back-end",
+        "Organizar o programa em objetos que juntam dados e ações",
+        "Um jeito de programar só com funções soltas e variáveis globais",
+        "Um tipo de banco de dados que guarda objetos em tabelas"
+      ],
+      "correta": 1,
+      "explicacao": "POO é um paradigma (um jeito de pensar e organizar o código): o programa é formado por objetos, cada um com seus dados (atributos) e suas ações (métodos). Não é uma linguagem nem um banco de dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num sistema de padaria, a classe `Produto` tem nome, preço e validade. Na POO, nome, preço e validade são chamados de:",
+      "alternativas": [
+        "Métodos",
+        "Construtores",
+        "Módulos",
+        "Atributos"
+      ],
+      "correta": 3,
+      "explicacao": "Atributos são as características (os dados) que cada objeto guarda. Métodos são as ações."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na classe `Pedido` de uma lanchonete existem `calcularTotal()` e `fecharConta()`. Na POO, eles são chamados de:",
+      "alternativas": [
+        "Métodos",
+        "Atributos",
+        "Objetos",
+        "Pacotes"
+      ],
+      "correta": 0,
+      "explicacao": "Métodos são os comportamentos (as ações) que o objeto sabe executar. Atributos são os dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em JavaScript, qual palavra-chave gera um objeto novo a partir de uma classe?",
+      "alternativas": [
+        "class",
+        "this",
+        "new",
+        "extends"
+      ],
+      "correta": 2,
+      "explicacao": "`new Classe()` gera um objeto (instância). `class` declara a classe, `this` aponta para o próprio objeto e `extends` é usado na herança."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve o `constructor` de uma classe em JavaScript?",
+      "alternativas": [
+        "Serve para apagar o objeto da memória quando ele não é mais usado",
+        "É chamado sozinho no new, para preparar os atributos do objeto",
+        "É uma classe especial que serve para gerar as outras classes",
+        "É um atributo obrigatório que guarda o nome da classe"
+      ],
+      "correta": 1,
+      "explicacao": "O constructor roda automaticamente quando se usa `new` e normalmente recebe valores para preencher os atributos do objeto novo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Dentro de um método de uma classe, a palavra `this` se refere:",
+      "alternativas": [
+        "À classe-mãe da classe em que ele está",
+        "Ao arquivo onde a classe foi escrita",
+        "À última variável declarada no programa",
+        "Ao objeto que está executando o método"
+      ],
+      "correta": 3,
+      "explicacao": "`this` é o objeto atual: em `a.ligar()`, dentro de ligar o this é o objeto a."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que este código imprime?\n```js\nclass Livro {\n  constructor(titulo) {\n    this.titulo = titulo;\n  }\n}\nconst l = new Livro(\"O Cortiço\");\nconsole.log(l.titulo);\n```",
+      "alternativas": [
+        "O Cortiço",
+        "titulo",
+        "undefined",
+        "Livro"
+      ],
+      "correta": 0,
+      "explicacao": "O constructor guarda o valor recebido em this.titulo; l.titulo mostra \"O Cortiço\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No sistema de um pet shop:\n```js\nclass Animal {\n  constructor(nome) { this.nome = nome; }\n}\nconst a1 = new Animal(\"Rex\");\nconst a2 = new Animal(\"Mimi\");\nconst a3 = new Animal(\"Bob\");\n```\nQuantas classes e quantos objetos há nesse código?",
+      "alternativas": [
+        "3 classes e 1 objeto",
+        "3 classes e 3 objetos",
+        "1 classe e 3 objetos",
+        "1 classe e 1 objeto"
+      ],
+      "correta": 2,
+      "explicacao": "Há uma única classe (Animal), usada três vezes com new: três objetos (instâncias) diferentes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por convenção, como se escreve o nome de uma classe em JavaScript?",
+      "alternativas": [
+        "Tudo minúsculo com _, como conta_bancaria",
+        "Em PascalCase, como ContaBancaria",
+        "Tudo maiúsculo, como CONTABANCARIA",
+        "Em camelCase, como contaBancaria"
+      ],
+      "correta": 1,
+      "explicacao": "Classes usam PascalCase (cada palavra com inicial maiúscula). camelCase é usado em variáveis e métodos; MAIÚSCULAS em constantes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A classe `Lampada` tem o método `ligar()`. O objeto `sala` foi feito com `const sala = new Lampada();`. Como chamar o método para esse objeto?",
+      "alternativas": [
+        "ligar.sala();",
+        "sala->ligar();",
+        "new ligar(sala);",
+        "sala.ligar();"
+      ],
+      "correta": 3,
+      "explicacao": "Em JavaScript chama-se o método com objeto.metodo(). A seta -> é de outras linguagens."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que este código imprime?\n```js\nclass Contador {\n  constructor() { this.valor = 0; }\n  somar() { this.valor++; }\n}\nconst c = new Contador();\nc.somar();\nc.somar();\nconsole.log(c.valor);\n```",
+      "alternativas": [
+        "2",
+        "0",
+        "1",
+        "undefined"
+      ],
+      "correta": 0,
+      "explicacao": "O valor começa em 0 e cada chamada de somar() aumenta 1: duas chamadas, valor 2."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que este código imprime?\n```js\nclass Copo {\n  constructor() { this.ml = 0; }\n  encher() { this.ml = 300; }\n}\nconst a = new Copo();\nconst b = new Copo();\na.encher();\nconsole.log(a.ml, b.ml);\n```",
+      "alternativas": [
+        "300 300",
+        "0 0",
+        "300 0",
+        "0 300"
+      ],
+      "correta": 2,
+      "explicacao": "Cada objeto tem seus próprios atributos. Encher o copo a não muda o copo b."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-new",
+      "enunciado": "Numa clínica, existe a classe `Paciente` com um constructor que recebe o nome. Qual linha gera um objeto corretamente?",
+      "alternativas": [
+        "const p = Paciente(\"Ana\");",
+        "const p = new Paciente(\"Ana\");",
+        "const p = class Paciente(\"Ana\");",
+        "new const p = Paciente(\"Ana\");"
+      ],
+      "correta": 1,
+      "explicacao": "Objeto se gera com new. Chamar a classe sem new (Paciente(\"Ana\")) dá TypeError em JavaScript."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quais são os quatro pilares mais citados da programação orientada a objetos?",
+      "alternativas": [
+        "Classe, tabela, rota e servidor",
+        "Variável, laço de repetição, condição e função",
+        "Herança, compilação, indexação e deploy",
+        "Abstração, encapsulamento, herança e polimorfismo"
+      ],
+      "correta": 3,
+      "explicacao": "Os quatro pilares da POO são abstração, encapsulamento, herança e polimorfismo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que este código imprime?\n```js\nclass Aluno {\n  constructor(nome) {\n    nome = nome;\n  }\n}\nconst a = new Aluno(\"Bia\");\nconsole.log(a.nome);\n```",
+      "alternativas": [
+        "undefined",
+        "Bia",
+        "null",
+        "Erro de sintaxe"
+      ],
+      "correta": 0,
+      "explicacao": "Sem this, a linha só copia o parâmetro nele mesmo; o objeto nunca ganha o atributo nome. Ler um atributo que não existe dá undefined."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que este código imprime?\n```js\nclass Retangulo {\n  constructor(b, h) { this.b = b; this.h = h; }\n  area() { return this.b * this.h; }\n}\nconst r = new Retangulo(4, 5);\nr.b = 10;\nconsole.log(r.area());\n```",
+      "alternativas": [
+        "20",
+        "9",
+        "50",
+        "15"
+      ],
+      "correta": 2,
+      "explicacao": "area() é calculada na hora da chamada, com os valores atuais: b já vale 10, então 10 × 5 = 50."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que este código imprime?\n```js\nclass Pedido {\n  constructor(mesa, status = \"aberto\") {\n    this.mesa = mesa;\n    this.status = status;\n  }\n}\nconst p = new Pedido(5);\nconsole.log(p.status);\n```",
+      "alternativas": [
+        "undefined",
+        "aberto",
+        "5",
+        "null"
+      ],
+      "correta": 1,
+      "explicacao": "status tem valor padrão \"aberto\"; como só a mesa foi informada, o padrão é usado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que este código imprime?\n```js\nclass Carrinho {\n  constructor() { this.itens = []; }\n  adicionar(preco) { this.itens.push(preco); }\n  total() {\n    let s = 0;\n    for (const p of this.itens) s += p;\n    return s;\n  }\n}\nconst c = new Carrinho();\nc.adicionar(10);\nc.adicionar(15);\nconsole.log(c.total());\n```",
+      "alternativas": [
+        "1015",
+        "2",
+        "0",
+        "25"
+      ],
+      "correta": 3,
+      "explicacao": "Os preços são números e ficam no array itens; total() soma 10 + 15 = 25."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-referencia",
+      "enunciado": "O que este código imprime?\n```js\nclass Ficha {\n  constructor(n) { this.nota = n; }\n}\nconst f1 = new Ficha(7);\nconst f2 = f1;\nf2.nota = 9;\nconsole.log(f1.nota);\n```",
+      "alternativas": [
+        "9",
+        "7",
+        "undefined",
+        "16"
+      ],
+      "correta": 0,
+      "explicacao": "f2 = f1 não copia o objeto: as duas variáveis apontam para o mesmo objeto. Mudar por f2 muda o que f1 vê."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que este código imprime?\n```js\nclass Quarto {}\nconst q = new Quarto();\nconsole.log(q instanceof Quarto);\n```",
+      "alternativas": [
+        "false",
+        "Quarto",
+        "true",
+        "undefined"
+      ],
+      "correta": 2,
+      "explicacao": "instanceof verifica se o objeto foi feito a partir daquela classe. q é uma instância de Quarto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que este código imprime?\n```js\nclass Senha {\n  constructor() { this.fila = 0; }\n  chamar() {\n    this.fila++;\n    return this;\n  }\n}\nconst s = new Senha();\ns.chamar().chamar().chamar();\nconsole.log(s.fila);\n```",
+      "alternativas": [
+        "1",
+        "3",
+        "0",
+        "Erro: chamar não existe"
+      ],
+      "correta": 1,
+      "explicacao": "Como chamar() devolve o próprio objeto (return this), dá para encadear as chamadas. Foram três: fila vale 3."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-atributo-dinamico",
+      "enunciado": "O que este código imprime?\n```js\nclass Filme {\n  constructor(titulo) { this.titulo = titulo; }\n}\nconst f = new Filme(\"Aventura\");\nf.duracao = 120;\nconsole.log(Object.keys(f));\n```",
+      "alternativas": [
+        "[ 'titulo' ]",
+        "Erro: duracao não existe na classe",
+        "[ 'duracao' ]",
+        "[ 'titulo', 'duracao' ]"
+      ],
+      "correta": 3,
+      "explicacao": "Em JavaScript dá para acrescentar atributos a um objeto depois de pronto. Object.keys lista os dois."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Comparando com um programa feito só de funções soltas e variáveis globais, qual é uma vantagem da POO?",
+      "alternativas": [
+        "Junta dados e funções que mexem neles, facilitando manutenção",
+        "Deixa o programa sempre mais rápido, porque objetos ocupam menos memória que funções",
+        "Dispensa o uso de banco de dados, porque os objetos ficam salvos para sempre",
+        "Impede que o programa tenha erros, porque a classe confere tudo antes de rodar"
+      ],
+      "correta": 0,
+      "explicacao": "A vantagem é de organização: dados e comportamentos ficam juntos na classe, o código fica mais fácil de entender, manter e reaproveitar. POO não garante velocidade nem ausência de erros."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-abstracao",
+      "enunciado": "Numa clínica veterinária, a classe `Animal` tem nome, espécie, peso e vacinas, mas não tem \"música favorita do dono\". Que pilar da POO explica essa escolha?",
+      "alternativas": [
+        "Herança",
+        "Polimorfismo",
+        "Abstração",
+        "Composição"
+      ],
+      "correta": 2,
+      "explicacao": "Abstração é representar só o que importa para o sistema e deixar de fora detalhes inúteis para ele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-campo-classe",
+      "enunciado": "O que este código imprime?\n```js\nclass Hospede {\n  diarias = 0;\n  constructor(nome) { this.nome = nome; }\n}\nconst h = new Hospede(\"Caio\");\nconsole.log(h.diarias, h.nome);\n```",
+      "alternativas": [
+        "undefined Caio",
+        "0 Caio",
+        "0 undefined",
+        "Erro de sintaxe"
+      ],
+      "correta": 1,
+      "explicacao": "diarias = 0 é um campo da classe: todo objeto já nasce com ele. O constructor preenche o nome."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-classe-vs-literal",
+      "enunciado": "Uma escola precisa guardar 300 alunos, todos com nome, turma, nota e um método para calcular a situação. Por que é melhor usar uma classe do que escrever 300 objetos literais `{ }`?",
+      "alternativas": [
+        "Objetos literais não podem guardar textos, só números",
+        "Objetos literais não podem ser usados no Node.js",
+        "Com classe, os 300 alunos passam a ocupar um único objeto",
+        "A estrutura e os métodos ficam escritos uma vez só, na classe"
+      ],
+      "correta": 3,
+      "explicacao": "A classe é o molde: escreve-se a estrutura e o método uma vez e geram-se quantas instâncias forem precisas. Repetir objetos literais repete o método 300 vezes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na POO, o que é o \"estado\" de um objeto?",
+      "alternativas": [
+        "Os valores dos atributos num certo momento",
+        "A lista de métodos que a classe dele possui",
+        "O nome do arquivo onde a classe foi declarada",
+        "Se a classe dele herda ou não de outra classe"
+      ],
+      "correta": 0,
+      "explicacao": "Estado = valores atuais dos atributos (ex.: saldo 200, status \"aberto\"). Os métodos são o comportamento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que este código imprime?\n```js\nclass Reserva {\n  constructor({ quarto, noites }) {\n    this.quarto = quarto;\n    this.noites = noites;\n  }\n}\nconst r = new Reserva({ noites: 3, quarto: 12 });\nconsole.log(r.quarto * r.noites);\n```",
+      "alternativas": [
+        "15",
+        "NaN",
+        "36",
+        "undefined"
+      ],
+      "correta": 2,
+      "explicacao": "O constructor recebe um objeto e pega as propriedades pelo nome (não pela ordem): quarto 12 e noites 3, 12 × 3 = 36."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-metodo-parenteses",
+      "enunciado": "O que este código imprime no Node.js?\n```js\nclass Retangulo {\n  constructor(b, h) { this.b = b; this.h = h; }\n  area() { return this.b * this.h; }\n}\nconst r = new Retangulo(4, 5);\nconsole.log(r.area);\n```",
+      "alternativas": [
+        "20",
+        "[Function: area]",
+        "undefined",
+        "Erro: faltam os parênteses"
+      ],
+      "correta": 1,
+      "explicacao": "Sem os parênteses o método não é executado: r.area é a própria função, e o Node mostra [Function: area]. Para obter 20 seria r.area()."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que acontece ao executar este código?\n```js\nconst t = new Treino(\"pernas\");\nclass Treino {\n  constructor(g) { this.grupo = g; }\n}\n```",
+      "alternativas": [
+        "Gera o objeto normalmente, com grupo igual a pernas",
+        "Gera o objeto normalmente, mas com grupo igual a undefined",
+        "Não acontece nada, porque o objeto não é impresso",
+        "Dá ReferenceError: a classe é usada antes de declarada"
+      ],
+      "correta": 3,
+      "explicacao": "Diferente de uma function comum, a classe só existe depois da linha da declaração. Usar antes dá ReferenceError (Cannot access 'Treino' before initialization)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que acontece ao executar este código?\n```js\nclass Placar {\n  constructor() { this.gols = 0; }\n  marcar() { this.gols++; }\n}\nconst p = new Placar();\nconst f = p.marcar;\nf();\n```",
+      "alternativas": [
+        "Dá erro, pois o this fica undefined na chamada solta",
+        "O atributo gols de p passa a valer 1",
+        "Nada muda, e o atributo gols de p continua valendo 0, sem erro",
+        "Surge uma variável global chamada gols, valendo 1"
+      ],
+      "correta": 0,
+      "explicacao": "f guarda só a função, sem o objeto. Chamada solta, o this dentro da classe fica undefined e this.gols++ dá TypeError."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-igualdade",
+      "enunciado": "O que este código imprime?\n```js\nclass Ponto {\n  constructor(x) { this.x = x; }\n}\nconst a = new Ponto(1);\nconst b = new Ponto(1);\nconsole.log(a === b, a.x === b.x);\n```",
+      "alternativas": [
+        "true true",
+        "false false",
+        "false true",
+        "true false"
+      ],
+      "correta": 2,
+      "explicacao": "a e b são objetos diferentes (=== compara se é o mesmo objeto), por isso false. Os atributos x têm o mesmo número, por isso true."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que este código imprime?\n```js\nclass Contador {\n  constructor() { this.valor = 0; }\n  somar() { this.valor++; }\n}\nconst a = new Contador();\nconst b = new Contador();\nconsole.log(a.somar === b.somar);\n```",
+      "alternativas": [
+        "false",
+        "true",
+        "undefined",
+        "Erro: somar precisa de parênteses"
+      ],
+      "correta": 1,
+      "explicacao": "Os métodos ficam na classe (no protótipo) e são compartilhados por todas as instâncias: é a mesma função. Os atributos (valor) é que são de cada objeto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-valor-fixo",
+      "enunciado": "O que este código imprime?\n```js\nclass Ingresso {\n  constructor(preco, meia) {\n    this.preco = preco;\n    this.meia = meia;\n    this.valor = this.calcular();\n  }\n  calcular() { return this.meia ? this.preco / 2 : this.preco; }\n}\nconst i = new Ingresso(30, true);\ni.meia = false;\nconsole.log(i.valor);\n```",
+      "alternativas": [
+        "30",
+        "undefined",
+        "NaN",
+        "15"
+      ],
+      "correta": 3,
+      "explicacao": "valor foi calculado uma vez, no constructor, quando meia era true (30 / 2 = 15). Mudar meia depois não recalcula o atributo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que este código imprime?\n```js\nclass Caixa {\n  constructor(saldo) { this.saldo = saldo; }\n  sacar(saldo) {\n    saldo = saldo - 50;\n    return this.saldo;\n  }\n}\nconst c = new Caixa(200);\nconsole.log(c.sacar(100));\n```",
+      "alternativas": [
+        "200",
+        "150",
+        "50",
+        "100"
+      ],
+      "correta": 0,
+      "explicacao": "Dentro de sacar, saldo (sem this) é o parâmetro, que vira 50 e é descartado. O método devolve this.saldo, o atributo, que continua 200."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa academia, a classe abaixo representa um aluno:\n```js\nclass AlunoAcademia {\n  constructor(nome, plano) {\n    this.nome = nome;\n    this.plano = plano;\n  }\n  renovarPlano(novo) { this.plano = novo; }\n}\n```\nIdentifique os atributos e os métodos dessa classe.\n\nNa sua resposta:\n1. diga o que são atributos e quais são os desta classe;\n2. diga o que são métodos e qual é o desta classe.",
+      "respostasAceitas": [
+        "Atributos são os dados do objeto: nome e plano. Métodos são as ações: renovarPlano (o constructor também é um método especial)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) atributos = características/dados, aqui nome e plano; 2) métodos = ações/comportamentos, aqui renovarPlano. Citar o constructor como método especial é aceito, não é obrigatório."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-abstracao",
+      "enunciado": "Numa clínica veterinária, a classe `Animal` guarda nome, espécie, peso e vacinas, mas não guarda a cor da coleira nem a música favorita do dono. Que pilar da POO explica essa escolha?\n\nNa sua resposta:\n1. diga o nome do pilar;\n2. explique o que ele significa.",
+      "respostasAceitas": [
+        "Abstração: a classe representa só as características importantes para o sistema da clínica e deixa de fora detalhes que não servem para ele."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) abstração; 2) modelar só o essencial para o problema, ignorando detalhes irrelevantes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega disse: \"o objeto `quarto101` é uma instância da classe `Quarto`\". O que significa essa frase?\n\nNa sua resposta:\n1. explique o que é uma instância;\n2. diga qual é o papel da classe Quarto nessa relação.",
+      "respostasAceitas": [
+        "Instância é um objeto concreto gerado a partir de uma classe (com new). A classe Quarto é o molde que define atributos e métodos; quarto101 é um quarto de verdade feito com esse molde."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) instância = objeto concreto feito a partir da classe; 2) a classe é o molde/modelo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja a classe de uma loja:\n```js\nclass Produto {\n  constructor(preco) { this.preco = preco; }\n  precoComDesconto() { return this.preco * 0.9; }\n  reajustar(p) { this.preco = p; }\n}\n```\nOs dois métodos trabalham de jeitos diferentes. Explique a diferença.\n\nNa sua resposta:\n1. diga o que precoComDesconto() faz com o atributo preco;\n2. diga o que reajustar() faz com o atributo preco.",
+      "respostasAceitas": [
+        "precoComDesconto() só calcula e devolve um valor (90% do preço), sem mudar o objeto. reajustar() não devolve nada, mas altera o atributo preco do objeto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) devolve um valor calculado e não altera o estado; 2) altera o estado (o atributo preco)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Pense numa lâmpada inteligente representada por um objeto num sistema de automação de uma escola. Explique o que é um objeto usando esse exemplo.\n\nNa sua resposta:\n1. dê um exemplo de dado (estado) que esse objeto guarda;\n2. dê um exemplo de ação (comportamento) que esse objeto sabe fazer.",
+      "respostasAceitas": [
+        "Um objeto junta estado e comportamento. Estado: se está acesa, a cor ou o brilho. Comportamento: ligar(), desligar(), mudarCor()."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) um atributo coerente (acesa, cor, potência…); 2) um método coerente (ligar, desligar…). Aceitar qualquer exemplo que faça sentido."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-metodo-parenteses",
+      "enunciado": "Veja o código:\n```js\nclass Retangulo {\n  constructor(b, h) { this.b = b; this.h = h; }\n  area() { return this.b * this.h; }\n}\nconst r = new Retangulo(4, 5);\nconsole.log(r.area);\nconsole.log(r.area());\n```\nAs duas últimas linhas mostram coisas diferentes. Explique por quê.\n\nNa sua resposta:\n1. diga o que a linha com r.area mostra;\n2. diga o que a linha com r.area() mostra.",
+      "respostasAceitas": [
+        "r.area, sem parênteses, mostra a própria função (no Node: [Function: area]), sem executá-la. r.area() executa o método e mostra 20."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sem parênteses é a referência ao método, não executa; 2) com parênteses executa e devolve 4 × 5 = 20."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um programa de biblioteca pode ser feito no estilo estruturado (funções soltas e variáveis globais) ou no estilo orientado a objetos (classes Livro, Leitor, Emprestimo). Compare os dois estilos.\n\nNa sua resposta:\n1. explique como cada estilo organiza o código;\n2. cite uma vantagem da orientação a objetos.",
+      "respostasAceitas": [
+        "No estruturado, dados e funções ficam separados e as funções recebem os dados. Na POO, cada classe junta seus dados e seus métodos. Vantagem: organização, reuso e manutenção mais fáceis (ex.: tudo de Livro fica na classe Livro)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) estruturado = funções e dados separados; POO = objetos com atributos e métodos juntos; 2) uma vantagem coerente (organização, reuso, manutenção, encapsulamento)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja a classe de um hotel:\n```js\nclass Hospede {\n  constructor(nome) { this.nome = nome; }\n  checkin() { return \"Bem-vindo, \" + this.nome; }\n}\n```\nUm aluno trocou `this.nome` por só `nome` dentro de `checkin()`. O que acontece e por quê?\n\nNa sua resposta:\n1. diga o que acontece ao chamar checkin();\n2. explique para que serve o this.",
+      "respostasAceitas": [
+        "Dá erro (ReferenceError: nome is not defined), porque dentro de checkin não existe variável nome; o nome está guardado no objeto. O this aponta para o próprio objeto e dá acesso aos atributos dele."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) erro (ou valor errado, se existisse uma variável global nome); 2) this = o objeto atual, usado para ler/alterar seus atributos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-classe-vs-literal",
+      "enunciado": "Uma escola tinha três alunos escritos assim:\n```js\nconst a1 = { nome: \"Ana\", nota: 8, situacao() { return this.nota >= 6 ? \"aprovado\" : \"reprovado\"; } };\nconst a2 = { nome: \"Leo\", nota: 5, situacao() { return this.nota >= 6 ? \"aprovado\" : \"reprovado\"; } };\nconst a3 = { nome: \"Rui\", nota: 7, situacao() { return this.nota >= 6 ? \"aprovado\" : \"reprovado\"; } };\n```\nPor que seria melhor ter uma classe `Aluno`?\n\nNa sua resposta:\n1. aponte o problema deste código;\n2. explique como a classe resolve esse problema.",
+      "respostasAceitas": [
+        "O método situacao está repetido em cada objeto; se a regra mudar (ex.: média 7), é preciso mudar em todos e é fácil esquecer um. Com a classe, a estrutura e o método ficam num lugar só e cada aluno é gerado com new Aluno(nome, nota)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) repetição de código/difícil manutenção; 2) a classe é o molde único, gerando quantos objetos quiser com a mesma regra."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-campo-classe",
+      "enunciado": "Veja a classe:\n```js\nclass Hospede {\n  diarias = 0;\n  constructor(nome) { this.nome = nome; }\n}\n```\nO atributo diarias foi declarado fora do constructor e o nome foi declarado dentro. Explique a diferença.\n\nNa sua resposta:\n1. diga com que valor cada objeto começa em diarias;\n2. explique de onde vem o valor de nome.",
+      "respostasAceitas": [
+        "diarias é um campo da classe: todo hóspede começa com 0, igual para todos. nome vem do parâmetro do constructor, ou seja, de quem usou new Hospede(\"...\"), e muda de objeto para objeto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) diarias começa em 0 em todo objeto (valor fixo inicial); 2) nome é recebido no new, pelo constructor."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-new",
+      "enunciado": "Numa clínica, um programador escreveu:\n```js\nconst p = Paciente(\"Ana\");\n```\nsendo `Paciente` uma classe. O código deu erro. Explique.\n\nNa sua resposta:\n1. diga o que faltou na linha;\n2. explique o que essa palavra faz.",
+      "respostasAceitas": [
+        "Faltou o new. Em JavaScript uma classe não pode ser chamada como função; o new gera um objeto novo, roda o constructor e devolve o objeto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) faltou new; 2) new gera a instância e chama o constructor."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-atributo-dinamico",
+      "enunciado": "Num sistema de cinema:\n```js\nclass Filme {\n  constructor(titulo, duracao) { this.titulo = titulo; this.duracao = duracao; }\n}\nconst f = new Filme(\"Aventura\", 120);\nf.duraçao = 150;\n```\nO programador queria mudar a duração, mas o filme continuou com 120 minutos e não apareceu nenhum erro. Explique o que aconteceu.\n\nNa sua resposta:\n1. diga o que a última linha fez de verdade;\n2. explique por que o JavaScript não avisou o erro.",
+      "respostasAceitas": [
+        "Por causa do ç, a linha acrescentou um atributo novo, duraçao, e não mexeu em duracao. O JavaScript deixa acrescentar atributos a qualquer momento, então não vê isso como erro."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) foi acrescentado um atributo novo, com outro nome; 2) objetos em JS aceitam atributos novos a qualquer momento (por isso métodos/set e encapsulamento ajudam)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-referencia",
+      "enunciado": "Veja o código:\n```js\nclass Ficha {\n  constructor(n) { this.nota = n; }\n}\nconst f1 = new Ficha(7);\nconst f2 = f1;\nf2.nota = 9;\nconsole.log(f1.nota);\n```\nO código imprime 9, embora só f2 tenha sido alterado. Explique.\n\nNa sua resposta:\n1. diga o que a linha const f2 = f1 faz de verdade;\n2. explique por que f1.nota também mudou.",
+      "respostasAceitas": [
+        "f2 = f1 não copia o objeto, copia a referência: as duas variáveis apontam para o mesmo objeto na memória. Alterar por f2 altera esse único objeto, e f1 vê a mudança."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) copia a referência, não gera outro objeto; 2) existe um só objeto, compartilhado pelas duas variáveis."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-valor-fixo",
+      "enunciado": "Veja o código:\n```js\nclass Ingresso {\n  constructor(preco, meia) {\n    this.preco = preco;\n    this.meia = meia;\n    this.valor = this.calcular();\n  }\n  calcular() { return this.meia ? this.preco / 2 : this.preco; }\n}\nconst i = new Ingresso(30, true);\ni.meia = false;\nconsole.log(i.valor);\n```\nO código imprime 15, mesmo depois de meia virar false. Explique.\n\nNa sua resposta:\n1. diga quando o atributo valor foi calculado;\n2. explique por que ele não mudou e cite uma forma de ter o valor sempre atualizado.",
+      "respostasAceitas": [
+        "valor foi calculado uma única vez, no constructor, quando meia era true (15). Depois é só um número guardado; mudar meia não recalcula. Para ficar sempre certo, chamar i.calcular() na hora ou usar um getter (get valor) que calcula a cada leitura."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) no constructor, na hora do new; 2) é um valor guardado, não uma fórmula; solução: chamar o método na hora ou usar get."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-igualdade",
+      "enunciado": "Veja o código:\n```js\nclass Ponto {\n  constructor(x) { this.x = x; }\n}\nconst a = new Ponto(1);\nconst b = new Ponto(1);\nconsole.log(a === b);\n```\nO código imprime false, mesmo com os dois pontos tendo x = 1. Explique.\n\nNa sua resposta:\n1. diga o que o === compara quando os dois lados são objetos;\n2. diga como comparar se os dois pontos têm o mesmo valor.",
+      "respostasAceitas": [
+        "Com objetos, === compara se é o mesmo objeto na memória, e a e b são dois objetos diferentes. Para comparar o conteúdo, compara-se os atributos (a.x === b.x) ou faz-se um método como mesmoLugar(outro)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) compara referência/identidade, não o conteúdo; 2) comparar os atributos (a.x === b.x) ou um método próprio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na POO, o que é encapsulamento?",
+      "alternativas": [
+        "Colocar todas as classes do sistema dentro de um único arquivo",
+        "Fazer uma classe receber os atributos e métodos de outra",
+        "Proteger os dados do objeto, liberando acesso só por métodos",
+        "Fazer o mesmo método funcionar de jeitos diferentes em cada classe"
+      ],
+      "correta": 2,
+      "explicacao": "Encapsular é esconder os detalhes internos e oferecer métodos (ou get/set) para usar o objeto com segurança. Receber de outra classe é herança; mesmo método com comportamentos diferentes é polimorfismo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em JavaScript, como se declara um atributo realmente privado chamado senha dentro de uma classe?",
+      "alternativas": [
+        "private senha",
+        "#senha",
+        "_senha",
+        "$senha"
+      ],
+      "correta": 1,
+      "explicacao": "O # torna o campo privado de verdade. \"private\" é do TypeScript/Java e não funciona em JavaScript puro; o _ é só uma convenção, o campo continua acessível."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-privado-fora",
+      "enunciado": "O que acontece ao executar este código?\n```js\nclass Cofre {\n  #codigo = 1234;\n}\nconst c = new Cofre();\nconsole.log(c.#codigo);\n```",
+      "alternativas": [
+        "Imprime 1234, porque o objeto foi gerado com esse valor",
+        "Imprime undefined, sem nenhum erro",
+        "Imprime null, porque o campo está oculto",
+        "Erro de sintaxe: campo privado lido fora da classe"
+      ],
+      "correta": 3,
+      "explicacao": "Campos com # só podem ser usados dentro da própria classe. Tentar ler de fora é erro de sintaxe (SyntaxError)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa classe `Pedido`, existe `get total() { ... }`. Como se lê esse valor de um objeto `p`?",
+      "alternativas": [
+        "p.total",
+        "p.total()",
+        "p.get(total)",
+        "p.getTotal"
+      ],
+      "correta": 0,
+      "explicacao": "O get permite ler o valor como se fosse um atributo, sem parênteses: p.total."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em JavaScript, qual palavra indica que uma classe herda de outra?",
+      "alternativas": [
+        "implements",
+        "super",
+        "extends",
+        "inherits"
+      ],
+      "correta": 2,
+      "explicacao": "class Filha extends Mae. \"implements\" e \"inherits\" não existem em JS; super é usado para chamar coisas da classe-mãe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No constructor de uma classe filha, para que serve `super(nome)`?",
+      "alternativas": [
+        "Criar um atributo privado chamado nome",
+        "Chamar o constructor da classe-mãe",
+        "Chamar um método estático chamado nome",
+        "Apagar o atributo nome herdado da mãe"
+      ],
+      "correta": 1,
+      "explicacao": "super(...) executa o constructor da classe-mãe, que prepara a parte herdada do objeto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-sobrescrita-basica",
+      "enunciado": "O que este código imprime?\n```js\nclass Animal {\n  falar() { return \"...\"; }\n}\nclass Gato extends Animal {\n  falar() { return \"miau\"; }\n}\nconsole.log(new Gato().falar());\n```",
+      "alternativas": [
+        "...",
+        "...miau",
+        "undefined",
+        "miau"
+      ],
+      "correta": 3,
+      "explicacao": "Gato sobrescreve falar(): vale a versão da classe filha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-heranca-metodo",
+      "enunciado": "O que este código imprime?\n```js\nclass Funcionario {\n  constructor(n) { this.nome = n; }\n  cracha() { return \"Crachá de \" + this.nome; }\n}\nclass Cozinheiro extends Funcionario {}\nconst c = new Cozinheiro(\"Lia\");\nconsole.log(c.cracha());\n```",
+      "alternativas": [
+        "Crachá de Lia",
+        "Erro: cracha não existe em Cozinheiro",
+        "Crachá de undefined",
+        "undefined"
+      ],
+      "correta": 0,
+      "explicacao": "Cozinheiro herda o constructor e o método cracha() de Funcionario, então funciona normalmente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na herança, o que é sobrescrita de método?",
+      "alternativas": [
+        "A mesma classe tem dois métodos com o mesmo nome e parâmetros diferentes",
+        "A classe filha apaga um método que veio da classe-mãe",
+        "A classe filha redefine, com o mesmo nome, um método que herdou",
+        "O método passa a ser privado com o uso do #"
+      ],
+      "correta": 2,
+      "explicacao": "Sobrescrever (override) é a filha dar a sua própria versão de um método herdado. Dois métodos de mesmo nome na mesma classe seria sobrecarga, que o JavaScript não tem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual frase indica que faz sentido usar herança?",
+      "alternativas": [
+        "Um carro tem um motor",
+        "Um cachorro é um animal",
+        "Um pedido tem vários itens",
+        "Uma escola usa uma impressora"
+      ],
+      "correta": 1,
+      "explicacao": "Herança é para relações do tipo \"é um\". \"Tem um\" e \"usa um\" são relacionamentos entre objetos (composição, agregação, associação)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em JavaScript, uma classe pode herdar diretamente de duas classes ao mesmo tempo (`class A extends B, C`)?",
+      "alternativas": [
+        "Sim, de quantas classes quiser",
+        "Sim, mas no máximo de duas classes",
+        "Só se as duas classes forem estáticas",
+        "Não: o extends aceita uma só classe"
+      ],
+      "correta": 3,
+      "explicacao": "JavaScript só tem herança simples: um único extends com uma única classe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na declaração `class Moto extends Veiculo`, qual é a superclasse (classe-mãe)?",
+      "alternativas": [
+        "Veiculo",
+        "Moto",
+        "extends",
+        "As duas são superclasses"
+      ],
+      "correta": 0,
+      "explicacao": "A classe que vem depois do extends é a mãe (superclasse); Moto é a filha (subclasse)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Dentro da própria classe, como um método lê o atributo privado `#saldo`?",
+      "alternativas": [
+        "this.saldo",
+        "#this.saldo",
+        "this.#saldo",
+        "saldo.#this"
+      ],
+      "correta": 2,
+      "explicacao": "Dentro da classe o campo privado é acessado com this.#nome. this.saldo seria outro atributo, público."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A palavra polimorfismo vem do grego. O que ela significa?",
+      "alternativas": [
+        "Muitas classes",
+        "Muitas formas",
+        "Uma só forma",
+        "Forma escondida"
+      ],
+      "correta": 1,
+      "explicacao": "Poli = muitas, morfo = forma. Um mesmo método pode ter \"muitas formas\", uma em cada classe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-get-set",
+      "enunciado": "O que este código imprime?\n```js\nclass Termometro {\n  #c = 0;\n  set celsius(v) { if (v > -50 && v < 60) this.#c = v; }\n  get celsius() { return this.#c; }\n}\nconst t = new Termometro();\nt.celsius = 100;\nconsole.log(t.celsius);\n```",
+      "alternativas": [
+        "100",
+        "undefined",
+        "Erro: celsius é privado",
+        "0"
+      ],
+      "correta": 3,
+      "explicacao": "A atribuição chama o set, que recusa 100 (fora da faixa). O campo continua 0 e o get devolve 0."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-polimorfismo-frete",
+      "enunciado": "O que este código imprime?\n```js\nclass Entrega { frete() { return 10; } }\nclass Moto extends Entrega { frete() { return 15; } }\nclass Bike extends Entrega {}\nconst lista = [new Moto(), new Bike()];\nconsole.log(lista.map(e => e.frete()));\n```",
+      "alternativas": [
+        "[ 15, 10 ]",
+        "[ 10, 10 ]",
+        "[ 15, 15 ]",
+        "[ 15, undefined ]"
+      ],
+      "correta": 0,
+      "explicacao": "Moto sobrescreve frete() e devolve 15; Bike não sobrescreve e usa o da mãe, 10. É o polimorfismo: a mesma chamada, respostas diferentes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que este código imprime?\n```js\nclass Pessoa {}\nclass Aluno extends Pessoa {}\nconst a = new Aluno();\nconsole.log(a instanceof Pessoa, a instanceof Aluno);\n```",
+      "alternativas": [
+        "false true",
+        "true false",
+        "true true",
+        "false false"
+      ],
+      "correta": 2,
+      "explicacao": "Um Aluno também é uma Pessoa (herança \"é um\"), então instanceof é true para as duas classes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-underline",
+      "enunciado": "Numa classe, um programador declarou o atributo `this._saldo` (com underline). O que isso garante?",
+      "alternativas": [
+        "O atributo fica privado de verdade, igual a #saldo",
+        "Nada: é só um aviso, o atributo segue acessível de fora",
+        "O atributo vira uma constante e não pode mudar",
+        "O atributo só pode ser lido por classes filhas"
+      ],
+      "correta": 1,
+      "explicacao": "O _ é convenção (\"não mexa\"), mas o JavaScript não impede o acesso. Privado de verdade é com #."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que este código imprime?\n```js\nclass Estoque {\n  #qtd = 10;\n  retirar(n) { if (n <= this.#qtd) this.#qtd -= n; }\n  get qtd() { return this.#qtd; }\n}\nconst e = new Estoque();\ne.retirar(4);\ne.retirar(8);\nconsole.log(e.qtd);\n```",
+      "alternativas": [
+        "-2",
+        "10",
+        "2",
+        "6"
+      ],
+      "correta": 3,
+      "explicacao": "Primeiro retira 4 (sobram 6). Depois pede 8, mas 8 > 6, então o método recusa. Fica 6."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A classe `Prova` tem `get nota()`, mas não tem `set nota()`. O atributo interno é `#nota`. O que isso indica?",
+      "alternativas": [
+        "A nota pode ser lida de fora, mas não trocada direto",
+        "A nota pode ser trocada de fora, mas não pode ser lida",
+        "A nota fica pública e qualquer código pode alterá-la",
+        "A classe dá erro, porque todo get precisa de um set"
+      ],
+      "correta": 0,
+      "explicacao": "Só com get, o valor é \"somente leitura\" para quem está fora. A alteração, se houver, acontece por métodos da própria classe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-super",
+      "enunciado": "O que este código imprime?\n```js\nclass Produto {\n  descricao() { return \"Produto\"; }\n}\nclass Bolo extends Produto {\n  descricao() { return super.descricao() + \" - Bolo\"; }\n}\nconsole.log(new Bolo().descricao());\n```",
+      "alternativas": [
+        "Bolo - Produto",
+        "Produto",
+        "Produto - Bolo",
+        "undefined - Bolo"
+      ],
+      "correta": 2,
+      "explicacao": "super.descricao() chama a versão da mãe (\"Produto\") e a filha completa com \" - Bolo\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-sem-super",
+      "enunciado": "O que acontece ao executar este código?\n```js\nclass Veiculo {\n  constructor(placa) { this.placa = placa; }\n}\nclass Taxi extends Veiculo {\n  constructor(placa, ponto) {\n    this.ponto = ponto;\n  }\n}\nnew Taxi(\"ABC1D23\", \"Centro\");\n```",
+      "alternativas": [
+        "O táxi é gerado sem placa, só com o ponto",
+        "Erro: faltou chamar super() antes de usar this",
+        "O táxi é gerado com placa undefined e ponto Centro",
+        "O táxi é gerado normalmente, com placa e ponto"
+      ],
+      "correta": 1,
+      "explicacao": "Se a filha tem constructor, ela precisa chamar super(...) antes de usar this. Sem isso, dá ReferenceError."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que este código imprime?\n```js\nclass Pessoa {\n  constructor(nome) { this.nome = nome; }\n}\nclass Medico extends Pessoa {\n  constructor(nome, crm) {\n    super(nome);\n    this.crm = crm;\n  }\n  apresentar() { return \"Dr(a). \" + this.nome + \" - CRM \" + this.crm; }\n}\nconsole.log(new Medico(\"Rita\", 123).apresentar());\n```",
+      "alternativas": [
+        "Dr(a). undefined - CRM 123",
+        "Dr(a). Rita - CRM undefined",
+        "Erro: nome é da classe Pessoa",
+        "Dr(a). Rita - CRM 123"
+      ],
+      "correta": 3,
+      "explicacao": "super(nome) faz o constructor de Pessoa guardar o nome; depois a filha guarda o crm. O método usa os dois."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que este código imprime?\n```js\nclass Base {\n  constructor() { console.log(\"Base\"); }\n}\nclass Login extends Base {\n  constructor() {\n    super();\n    console.log(\"Login\");\n  }\n}\nnew Login();\n```",
+      "alternativas": [
+        "Base e depois Login",
+        "Login e depois Base",
+        "Só Login",
+        "Só Base"
+      ],
+      "correta": 0,
+      "explicacao": "O constructor de Login chama super() primeiro, que imprime \"Base\"; depois continua e imprime \"Login\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-get-calculado",
+      "enunciado": "O que este código imprime?\n```js\nclass Aluno {\n  constructor(n1, n2) { this.n1 = n1; this.n2 = n2; }\n  get media() { return (this.n1 + this.n2) / 2; }\n}\nconst a = new Aluno(6, 9);\na.n2 = 10;\nconsole.log(a.media);\n```",
+      "alternativas": [
+        "7.5",
+        "undefined",
+        "8",
+        "[Function: media]"
+      ],
+      "correta": 2,
+      "explicacao": "O get é executado a cada leitura, com os valores atuais: (6 + 10) / 2 = 8."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa classe `Senha`, o método `#gerar()` começa com #. O que isso significa?",
+      "alternativas": [
+        "O método só pode ser chamado pelas classes filhas",
+        "Só pode ser chamado dentro da própria classe",
+        "O método é chamado direto na classe, sem objeto",
+        "O método é executado sozinho quando o objeto é gerado"
+      ],
+      "correta": 1,
+      "explicacao": "Métodos com # são privados, como os campos: servem de apoio interno à classe. Chamar sem objeto seria static."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-heranca-errada",
+      "enunciado": "Qual destes é um uso ERRADO de herança?",
+      "alternativas": [
+        "class Gerente extends Funcionario",
+        "class Cachorro extends Animal",
+        "class Poupanca extends Conta",
+        "class Carro extends Motor"
+      ],
+      "correta": 3,
+      "explicacao": "Carro não \"é um\" Motor, carro \"tem um\" motor: o certo é composição (um atributo motor). As outras são relações \"é um\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-polimorfismo-frete",
+      "enunciado": "Uma loja tem as classes `Moto` e `Bike`, filhas de `Entrega`, cada uma com seu `frete()`. O sistema faz `for (const e of entregas) total += e.frete();`. Se entrar uma nova classe `Drone` com seu próprio `frete()`, o que precisa mudar no laço?",
+      "alternativas": [
+        "Nada: cada objeto responde a frete() do seu jeito",
+        "Acrescentar um if para conferir se o objeto é um Drone",
+        "Trocar e.frete() por Drone.frete() dentro do laço",
+        "Separar os drones em outro laço só para eles"
+      ],
+      "correta": 0,
+      "explicacao": "Com polimorfismo, o código que usa os objetos não precisa saber o tipo de cada um: basta que todos tenham frete()."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que acontece com este código?\n```js\nclass Conta {\n  #saldo = 100;\n}\nclass Poupanca extends Conta {\n  ver() { return this.#saldo; }\n}\n```",
+      "alternativas": [
+        "ver() devolve 100, porque a filha herda tudo da mãe",
+        "ver() devolve undefined, sem dar erro",
+        "Dá erro: #saldo é privado de Conta e a classe filha não enxerga",
+        "ver() devolve 0, o valor padrão de números"
+      ],
+      "correta": 2,
+      "explicacao": "Campo # é privado da classe onde foi declarado, nem a filha acessa. O código nem chega a rodar: SyntaxError. A mãe teria que oferecer um get ou método."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-this-sobrescrita",
+      "enunciado": "O que este código imprime?\n```js\nclass Ingresso {\n  preco() { return 40; }\n  resumo() { return \"Valor: \" + this.preco(); }\n}\nclass Meia extends Ingresso {\n  preco() { return 20; }\n}\nconsole.log(new Meia().resumo());\n```",
+      "alternativas": [
+        "Valor: 40",
+        "Valor: 20",
+        "Valor: 60",
+        "Erro: resumo não existe em Meia"
+      ],
+      "correta": 1,
+      "explicacao": "resumo() é herdado, mas this é o objeto Meia, então this.preco() chama a versão sobrescrita (20)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-set-recursivo",
+      "enunciado": "O que acontece ao executar este código?\n```js\nclass Cliente {\n  set nome(v) { this.nome = v.trim(); }\n}\nconst c = new Cliente();\nc.nome = \" Ana \";\n```",
+      "alternativas": [
+        "O nome é guardado como Ana",
+        "O nome é guardado como \" Ana \"",
+        "O nome fica undefined e nenhum erro aparece no terminal",
+        "Estouro de pilha: o set chama a si mesmo"
+      ],
+      "correta": 3,
+      "explicacao": "Dentro do set, this.nome = ... chama o próprio set de novo, infinitamente: RangeError (Maximum call stack size exceeded). O valor deveria ir para outro campo, como #nome."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que este código imprime?\n```js\nclass Prato {\n  constructor(n) { this.nome = n; }\n  toString() { return \"Prato: \" + this.nome; }\n}\nconsole.log(\"Pedido -> \" + new Prato(\"Feijoada\"));\n```",
+      "alternativas": [
+        "Pedido -> Prato: Feijoada",
+        "Pedido -> [object Object]",
+        "Pedido -> Feijoada",
+        "Pedido -> undefined"
+      ],
+      "correta": 0,
+      "explicacao": "Ao juntar com texto, o JavaScript chama toString(). Prato sobrescreveu o toString padrão (que daria [object Object])."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em JavaScript, uma classe `Frete` tem dois métodos `calcular(peso)` e `calcular(peso, distancia)`, nessa ordem. O que acontece?",
+      "alternativas": [
+        "Os dois existem e o JavaScript escolhe pela quantidade de parâmetros",
+        "Dá erro de sintaxe, porque nomes de métodos não podem se repetir",
+        "Vale só o último calcular; JS não tem sobrecarga",
+        "Vale só o primeiro calcular; o segundo é ignorado"
+      ],
+      "correta": 2,
+      "explicacao": "Em JS o segundo método com o mesmo nome substitui o primeiro. Para aceitar formas diferentes, usa-se parâmetros opcionais/padrão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-get-vaza",
+      "enunciado": "O que este código imprime?\n```js\nclass Turma {\n  #alunos = [\"Ana\", \"Leo\"];\n  get alunos() { return this.#alunos; }\n}\nconst t = new Turma();\nt.alunos.push(\"Intruso\");\nconsole.log(t.alunos.length);\n```",
+      "alternativas": [
+        "2",
+        "3",
+        "Erro: #alunos é privado",
+        "undefined"
+      ],
+      "correta": 1,
+      "explicacao": "O get devolve o próprio array privado (a referência). O push de fora altera o array de dentro: o encapsulamento vazou. Para proteger, o get deveria devolver uma cópia ([...this.#alunos])."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que este código imprime?\n```js\nclass Base {\n  constructor() { this.tipo = \"base\"; }\n}\nclass Promo extends Base {\n  constructor() { super(); this.tipo = \"promo\"; }\n}\nclass Black extends Promo {}\nconsole.log(new Black().tipo);\n```",
+      "alternativas": [
+        "base",
+        "undefined",
+        "Erro: Black não tem constructor",
+        "promo"
+      ],
+      "correta": 3,
+      "explicacao": "Black usa o constructor herdado de Promo, que chama o de Base (tipo = \"base\") e depois troca para \"promo\"."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um caixa eletrônico não deixa ninguém mexer direto no saldo guardado: só dá para sacar, depositar e consultar. Relacione isso com o encapsulamento.\n\nNa sua resposta:\n1. explique o que é encapsulamento;\n2. diga uma vantagem de proteger o saldo dessa forma.",
+      "respostasAceitas": [
+        "Encapsulamento é esconder os dados internos do objeto e só permitir acesso por métodos controlados. Vantagem: o método pode validar (não sacar mais que o saldo, não depositar valor negativo), evitando dados errados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) esconder dados e oferecer métodos de acesso; 2) segurança/validação/controle das alterações."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-get-set",
+      "enunciado": "Veja a classe:\n```js\nclass Termometro {\n  #c = 0;\n  set celsius(v) { if (v > -50 && v < 60) this.#c = v; }\n  get celsius() { return this.#c; }\n}\n```\nExplique o papel do get e do set nessa classe.\n\nNa sua resposta:\n1. diga quando o set é executado e o que ele faz;\n2. diga quando o get é executado e o que ele faz.",
+      "respostasAceitas": [
+        "O set roda quando alguém faz t.celsius = valor: ele só guarda o valor se estiver entre -50 e 60. O get roda quando alguém lê t.celsius: devolve o valor guardado em #c."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) set = na atribuição, valida e guarda; 2) get = na leitura, devolve o valor."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-heranca-metodo",
+      "enunciado": "Veja o código:\n```js\nclass Funcionario {\n  constructor(n) { this.nome = n; }\n  cracha() { return \"Crachá de \" + this.nome; }\n}\nclass Cozinheiro extends Funcionario {}\nconst c = new Cozinheiro(\"Lia\");\nconsole.log(c.cracha());\n```\nA classe Cozinheiro está vazia, mas o código imprime \"Crachá de Lia\". Explique.\n\nNa sua resposta:\n1. diga qual conceito da POO explica isso;\n2. explique de onde vieram o constructor e o método cracha().",
+      "respostasAceitas": [
+        "Herança: Cozinheiro estende Funcionario e recebe dele o constructor e o método cracha(), por isso funciona sem escrever nada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) herança; 2) vieram da classe-mãe Funcionario."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-sobrescrita-basica",
+      "enunciado": "Veja o código:\n```js\nclass Animal { falar() { return \"...\"; } }\nclass Gato extends Animal { falar() { return \"miau\"; } }\nclass Peixe extends Animal {}\n```\nExplique o que acontece ao chamar falar() num Gato e num Peixe.\n\nNa sua resposta:\n1. diga o que cada um devolve;\n2. diga o nome do que a classe Gato fez com o método falar().",
+      "respostasAceitas": [
+        "O Gato devolve \"miau\" e o Peixe devolve \"...\". Gato sobrescreveu o método falar() herdado; Peixe não sobrescreveu e usa o da classe Animal."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Gato \"miau\", Peixe \"...\"; 2) sobrescrita (override)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-polimorfismo-frete",
+      "enunciado": "Veja o código de uma transportadora:\n```js\nclass Entrega { frete() { return 10; } }\nclass Moto extends Entrega { frete() { return 15; } }\nclass Caminhao extends Entrega { frete() { return 50; } }\nconst lista = [new Moto(), new Caminhao(), new Entrega()];\nfor (const e of lista) console.log(e.frete());\n```\nA mesma linha `e.frete()` mostra 15, 50 e 10. Explique.\n\nNa sua resposta:\n1. diga qual pilar da POO aparece aqui;\n2. explique por que a mesma chamada dá resultados diferentes.",
+      "respostasAceitas": [
+        "Polimorfismo. Cada objeto responde a frete() com a versão da sua própria classe: Moto e Caminhao sobrescreveram o método, e Entrega usa o original."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) polimorfismo; 2) cada classe tem sua versão do método (sobrescrita) e vale a do objeto."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-privado-fora",
+      "enunciado": "Veja o código:\n```js\nclass Cofre {\n  #codigo = 1234;\n}\nconst c = new Cofre();\nconsole.log(c.#codigo);\n```\nO código dá erro. Explique.\n\nNa sua resposta:\n1. diga o que o # faz no campo codigo;\n2. explique por que a última linha dá erro.",
+      "respostasAceitas": [
+        "O # torna o campo privado: só a própria classe Cofre pode usá-lo. A última linha está fora da classe, então não pode ler #codigo (erro de sintaxe)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) torna privado; 2) acesso de fora da classe é proibido."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-super",
+      "enunciado": "A palavra `super` aparece de dois jeitos neste código:\n```js\nclass Produto {\n  constructor(nome) { this.nome = nome; }\n  etiqueta() { return this.nome; }\n}\nclass Bolo extends Produto {\n  constructor(nome, sabor) {\n    super(nome);\n    this.sabor = sabor;\n  }\n  etiqueta() { return super.etiqueta() + \" de \" + this.sabor; }\n}\n```\nExplique os dois usos.\n\nNa sua resposta:\n1. diga o que faz super(nome) no constructor;\n2. diga o que faz super.etiqueta() no método.",
+      "respostasAceitas": [
+        "super(nome) chama o constructor de Produto, que guarda o nome. super.etiqueta() chama a versão da mãe do método etiqueta, e a filha só acrescenta o sabor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) chama o constructor da classe-mãe; 2) chama o método da mãe, aproveitando o que ele faz."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num sistema de login de uma escola, a classe `Usuario` guarda a senha em `#senha` e tem o método `confere(tentativa)`, que devolve true ou false. Não existe get para a senha. Explique essa decisão.\n\nNa sua resposta:\n1. diga por que a senha é privada e sem get;\n2. explique como o sistema consegue verificar a senha mesmo assim.",
+      "respostasAceitas": [
+        "A senha é dado sensível: ninguém de fora deve ler ou trocar direto. O método confere compara a tentativa com a senha lá dentro e devolve só true/false, sem nunca expor a senha."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) proteger dado sensível (encapsulamento); 2) um método da própria classe compara e devolve só o resultado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-underline",
+      "enunciado": "Um colega escreveu `this._saldo` e outro escreveu `#saldo` na classe Conta. Explique a diferença.\n\nNa sua resposta:\n1. diga o que o _ indica e se ele protege o atributo;\n2. diga o que o # faz.",
+      "respostasAceitas": [
+        "O _ é só convenção, um aviso de \"uso interno\": o atributo continua acessível e alterável de fora. O # torna o campo privado de verdade, e o JavaScript dá erro se alguém de fora tentar usar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) convenção, não protege; 2) privado de verdade, garantido pela linguagem."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-sem-super",
+      "enunciado": "Veja o código:\n```js\nclass Veiculo {\n  constructor(placa) { this.placa = placa; }\n}\nclass Taxi extends Veiculo {\n  constructor(placa, ponto) {\n    this.ponto = ponto;\n  }\n}\nnew Taxi(\"ABC1D23\", \"Centro\");\n```\nO código dá erro ao gerar o táxi. Explique.\n\nNa sua resposta:\n1. diga o que faltou no constructor de Taxi;\n2. explique por que isso é obrigatório e o que aconteceria com a placa.",
+      "respostasAceitas": [
+        "Faltou chamar super(placa) antes de usar this. Na classe filha, o objeto só fica pronto depois que o constructor da mãe roda; além disso, sem ele a placa nunca seria guardada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) faltou super(placa); 2) a filha precisa chamar o constructor da mãe antes de usar this; ele é quem guarda a placa."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-get-calculado",
+      "enunciado": "Veja o código:\n```js\nclass Aluno {\n  constructor(n1, n2) { this.n1 = n1; this.n2 = n2; }\n  get media() { return (this.n1 + this.n2) / 2; }\n}\nconst a = new Aluno(6, 9);\na.n2 = 10;\nconsole.log(a.media);\n```\nO código imprime 8, e não 7.5. Explique.\n\nNa sua resposta:\n1. diga quando o get media é calculado;\n2. explique por que o resultado considera a nota 10.",
+      "respostasAceitas": [
+        "O get é executado toda vez que a.media é lido. Na leitura, n2 já vale 10, então calcula (6 + 10) / 2 = 8."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a cada leitura; 2) usa os valores atuais dos atributos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-heranca-errada",
+      "enunciado": "Um programador fez `class Carro extends Motor` para que o carro tenha os métodos ligar() e desligar() do motor. Explique por que isso é um uso ruim de herança.\n\nNa sua resposta:\n1. diga qual pergunta ajuda a decidir se cabe herança;\n2. diga qual seria a forma mais adequada de ligar Carro e Motor.",
+      "respostasAceitas": [
+        "A pergunta é \"é um?\": carro não é um motor, carro tem um motor. O certo é composição: a classe Carro tem um atributo motor (um objeto Motor) e chama this.motor.ligar()."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) teste \"é um\" (herança) x \"tem um\"; 2) composição/atributo do tipo Motor."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-get-vaza",
+      "enunciado": "Veja o código:\n```js\nclass Turma {\n  #alunos = [\"Ana\", \"Leo\"];\n  get alunos() { return this.#alunos; }\n}\nconst t = new Turma();\nt.alunos.push(\"Intruso\");\n```\nMesmo com #alunos privado, o código de fora conseguiu acrescentar um aluno. Explique.\n\nNa sua resposta:\n1. diga o que o get devolve de verdade;\n2. diga o que o get deveria devolver para proteger a lista.",
+      "respostasAceitas": [
+        "O get devolve a referência do próprio array privado, então quem recebe mexe no array original. Para proteger, o get deveria devolver uma cópia da lista (ex.: [...this.#alunos]) e as inclusões passarem por um método que valida."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a referência ao mesmo array; 2) uma cópia (e um método próprio para incluir)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-this-sobrescrita",
+      "enunciado": "Veja o código:\n```js\nclass Ingresso {\n  preco() { return 40; }\n  resumo() { return \"Valor: \" + this.preco(); }\n}\nclass Meia extends Ingresso {\n  preco() { return 20; }\n}\nconsole.log(new Meia().resumo());\n```\nO método resumo() foi escrito em Ingresso, mas o resultado é \"Valor: 20\". Explique.\n\nNa sua resposta:\n1. diga quem é o this quando resumo() roda;\n2. explique por que this.preco() usa a versão de Meia.",
+      "respostasAceitas": [
+        "O this é o objeto Meia que chamou resumo(). Como Meia sobrescreveu preco(), this.preco() procura primeiro na classe do objeto e acha a versão que devolve 20."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o objeto da classe Meia; 2) polimorfismo/sobrescrita: vale o método da classe do objeto, não da classe onde resumo foi escrito."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-set-recursivo",
+      "enunciado": "Veja o código:\n```js\nclass Cliente {\n  set nome(v) { this.nome = v.trim(); }\n}\nconst c = new Cliente();\nc.nome = \" Ana \";\n```\nO programa trava com \"Maximum call stack size exceeded\". Explique.\n\nNa sua resposta:\n1. diga o que a linha dentro do set provoca;\n2. diga onde o valor deveria ser guardado.",
+      "respostasAceitas": [
+        "Dentro do set, this.nome = ... é uma nova atribuição a nome, que chama o set outra vez, sem fim, até estourar a pilha. O valor deveria ser guardado em outro campo, como um privado #nome (com um get nome para ler)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o set chama a si mesmo (recursão infinita); 2) num campo diferente, ex.: #nome."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O JavaScript tem a palavra `interface` para declarar contratos, como o Java?",
+      "alternativas": [
+        "Não: usa-se, por convenção, uma classe-base que lança erro",
+        "Sim: basta escrever interface Pagavel { } no arquivo",
+        "Sim, mas só nos arquivos que rodam no Node.js",
+        "Sim, desde que o arquivo use import e export"
+      ],
+      "correta": 0,
+      "explicacao": "JavaScript não tem interface nem abstract nativos. Por convenção, faz-se uma classe-base cujos métodos lançam erro (\"implemente na filha\")."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num sistema, `const Status = Object.freeze({ ABERTO: \"aberto\", PAGO: \"pago\" });`. Para que serve o Object.freeze aqui?",
+      "alternativas": [
+        "Deixar o objeto mais rápido de ler",
+        "Tornar o objeto privado da classe",
+        "Impedir que os valores sejam alterados",
+        "Converter o objeto em uma classe"
+      ],
+      "correta": 2,
+      "explicacao": "Object.freeze \"congela\" o objeto: é assim que se imita uma enumeração (lista fixa de valores) em JavaScript."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por convenção, como se escrevem os nomes dos valores de uma enumeração em JavaScript?",
+      "alternativas": [
+        "Em camelCase, como Status.emPreparo",
+        "Em maiúsculas, como Status.EM_PREPARO",
+        "Em PascalCase, como Status.EmPreparo",
+        "Com # na frente, como Status.#emPreparo"
+      ],
+      "correta": 1,
+      "explicacao": "Constantes e valores de enumeração costumam ficar em MAIÚSCULAS com _ separando as palavras."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um professor dá aula para uma turma, mas o professor existe sem a turma e a turma existe sem aquele professor. Os dois objetos só se conhecem. Que relacionamento é esse?",
+      "alternativas": [
+        "Herança",
+        "Composição",
+        "Polimorfismo",
+        "Associação"
+      ],
+      "correta": 3,
+      "explicacao": "Associação é a ligação mais simples: um objeto conhece/usa o outro, e cada um vive por conta própria."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um time de futebol amador tem vários jogadores. Se o time acabar, os jogadores continuam existindo e podem ir para outro time. Que relacionamento é esse?",
+      "alternativas": [
+        "Agregação",
+        "Composição",
+        "Herança",
+        "Sobrescrita"
+      ],
+      "correta": 0,
+      "explicacao": "Agregação é o \"tem\" fraco: o todo (time) reúne partes (jogadores) que existem independentes dele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A frase \"um carro tem um motor\" indica qual tipo de ligação entre as classes Carro e Motor?",
+      "alternativas": [
+        "Herança: Carro extends Motor",
+        "Herança: Motor extends Carro",
+        "Composição entre objetos",
+        "Polimorfismo entre Carro e Motor"
+      ],
+      "correta": 2,
+      "explicacao": "\"Tem um\" indica relacionamento (o carro guarda um objeto motor como atributo), não herança, que é \"é um\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que este código imprime?\n```js\nclass Veterinario {\n  atender(animal) { return \"Atendendo \" + animal.nome; }\n}\nconst vet = new Veterinario();\nconsole.log(vet.atender({ nome: \"Thor\" }));\n```",
+      "alternativas": [
+        "Atendendo undefined",
+        "Atendendo Thor",
+        "Atendendo animal",
+        "Erro: animal não é atributo"
+      ],
+      "correta": 1,
+      "explicacao": "O método recebe outro objeto como parâmetro e usa o nome dele: é uma associação simples entre Veterinario e o animal."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num projeto Node.js, para que serve o `export` num arquivo `produto.js`?",
+      "alternativas": [
+        "Enviar o arquivo para o servidor de produção",
+        "Salvar os objetos da classe no banco de dados",
+        "Transformar o arquivo em JSON",
+        "Deixar a classe disponível para outros arquivos"
+      ],
+      "correta": 3,
+      "explicacao": "export publica algo do módulo; outro arquivo usa import para trazer esse algo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que é comum deixar cada classe em seu próprio arquivo (módulo) num projeto?",
+      "alternativas": [
+        "Organiza e facilita achar, reaproveitar e testar",
+        "Porque o JavaScript só aceita uma classe por arquivo",
+        "Porque arquivos separados deixam o programa mais rápido",
+        "Para não precisar usar import e export"
+      ],
+      "correta": 0,
+      "explicacao": "É uma questão de organização; JavaScript aceita várias classes num arquivo, mas separar facilita a manutenção."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um método declarado com `static` pertence a quem?",
+      "alternativas": [
+        "A cada objeto, que recebe uma cópia dele",
+        "Só às classes filhas, que herdam o método",
+        "À classe: chama-se Classe.metodo()",
+        "Ao arquivo, e não pode ser chamado"
+      ],
+      "correta": 2,
+      "explicacao": "Métodos e atributos static ficam na própria classe, não nas instâncias."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é o melhor nome para uma variável que guarda o total de alunos matriculados?",
+      "alternativas": [
+        "t",
+        "totalAlunosMatriculados",
+        "x1",
+        "dadosDaListaDeAlunosDaEscola"
+      ],
+      "correta": 1,
+      "explicacao": "Nome que revela a intenção dispensa comentário. t, x1 e dados não dizem o que guardam."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que diz o princípio da responsabilidade única?",
+      "alternativas": [
+        "Cada sistema deve ter uma única classe com todas as tarefas",
+        "Cada método deve ser escrito por um único programador",
+        "Cada classe deve ter um único atributo",
+        "Cada classe deve cuidar de uma só tarefa"
+      ],
+      "correta": 3,
+      "explicacao": "Responsabilidade única: uma classe (ou função) faz uma coisa só. Assim, uma mudança mexe em um lugar só."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes nomes de método segue melhor o código limpo?",
+      "alternativas": [
+        "calcularDesconto()",
+        "fazTudo()",
+        "desc()",
+        "metodoDoPedidoNumero1()"
+      ],
+      "correta": 0,
+      "explicacao": "Métodos são ações: um verbo mais o que ele faz. fazTudo indica responsabilidade demais; desc e metodo1 não explicam nada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num projeto com Git, um arquivo tem vários trechos de código antigo comentados \"por garantia\", que não são mais usados. O que o código limpo recomenda?",
+      "alternativas": [
+        "Manter tudo, para o caso de alguém precisar",
+        "Copiar os trechos para o fim do arquivo",
+        "Apagar, pois o Git guarda o histórico",
+        "Transformar os trechos em métodos static"
+      ],
+      "correta": 2,
+      "explicacao": "Código morto comentado só atrapalha a leitura. Se precisar dele de novo, o Git guarda as versões antigas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-abstrata",
+      "enunciado": "Veja a classe de uma oficina:\n```js\nclass Forma {\n  constructor() {\n    if (new.target === Forma) throw new Error(\"Forma é abstrata\");\n  }\n}\n```\nO que acontece com `new Forma()`?",
+      "alternativas": [
+        "Gera um objeto Forma vazio",
+        "Dá o erro \"Forma é abstrata\"",
+        "Gera um objeto e imprime Forma é abstrata",
+        "Não faz nada, porque new.target não existe"
+      ],
+      "correta": 1,
+      "explicacao": "new.target é a classe usada no new. Se for a própria Forma, o constructor lança erro: assim se imita uma classe abstrata. Classes filhas passam, porque new.target será a filha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Sobre `const Turno = Object.freeze({ MANHA: \"manha\", TARDE: \"tarde\" });`, qual afirmação está correta?",
+      "alternativas": [
+        "Dá para acrescentar a chave NOITE, mas não mudar MANHA",
+        "Dá para mudar MANHA, mas não acrescentar chaves novas",
+        "O freeze só vale até o programa chamar Turno pela primeira vez",
+        "Não dá para mudar nem acrescentar chaves"
+      ],
+      "correta": 3,
+      "explicacao": "Objeto congelado não aceita mudar, acrescentar ou remover propriedades. Fora do modo estrito a tentativa é ignorada em silêncio; em modo estrito (módulos, classes) dá TypeError."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que este código imprime?\n```js\nconst Nivel = Object.freeze({ BASICO: 1, MEDIO: 2, AVANCADO: 3 });\nconst aluno = { nivel: Nivel.MEDIO };\nconsole.log(aluno.nivel === 2, Object.keys(Nivel).length);\n```",
+      "alternativas": [
+        "true 3",
+        "false 3",
+        "true 2",
+        "false 1"
+      ],
+      "correta": 0,
+      "explicacao": "Nivel.MEDIO vale 2, então a comparação dá true; a enumeração tem 3 chaves."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-agreg-comp",
+      "enunciado": "Veja o código de uma biblioteca:\n```js\nclass Biblioteca {\n  constructor() { this.livros = []; }\n  adicionar(livro) { this.livros.push(livro); }\n}\nconst l = new Livro(\"Iracema\");\nbiblioteca.adicionar(l);\n```\nO livro é gerado fora e só depois entregue à biblioteca. Que relacionamento o código sugere?",
+      "alternativas": [
+        "Composição",
+        "Herança",
+        "Agregação",
+        "Sobrescrita"
+      ],
+      "correta": 2,
+      "explicacao": "As partes (livros) existem fora do todo e são apenas reunidas por ele: agregação. Na composição, o todo gera e controla a vida das partes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-import",
+      "enunciado": "O arquivo `produto.js` termina com `export default class Produto { }`. Qual import está certo em outro arquivo?",
+      "alternativas": [
+        "import { Produto } from './produto.js';",
+        "import Produto from './produto.js';",
+        "require Produto from './produto.js';",
+        "export Produto from './produto.js';"
+      ],
+      "correta": 1,
+      "explicacao": "Exportação padrão (default) é importada sem chaves. As chaves servem para exportações nomeadas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-import",
+      "enunciado": "O arquivo `util.js` tem:\n```js\nexport const TAXA = 0.1;\nexport function calcularTaxa(v) { return v * TAXA; }\n```\nQual import traz só a função para outro arquivo?",
+      "alternativas": [
+        "import calcularTaxa from './util.js';",
+        "import util.calcularTaxa from './util.js';",
+        "import { util } from './calcularTaxa.js';",
+        "import { calcularTaxa } from './util.js';"
+      ],
+      "correta": 3,
+      "explicacao": "Exportações nomeadas são importadas entre chaves, com o mesmo nome. Sem chaves buscaria o export default, que esse arquivo não tem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para usar `import` e `export` em arquivos .js comuns no Node.js, o que normalmente se coloca no package.json?",
+      "alternativas": [
+        "\"type\": \"module\"",
+        "\"main\": \"import\"",
+        "\"scripts\": \"export\"",
+        "\"modules\": true"
+      ],
+      "correta": 0,
+      "explicacao": "Com \"type\": \"module\", o Node trata os .js como módulos ES (import/export). Sem isso, o padrão é CommonJS (require/module.exports)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que este código imprime?\n```js\nclass Senha {\n  static proxima = 0;\n  static gerar() {\n    Senha.proxima++;\n    return Senha.proxima;\n  }\n}\nSenha.gerar();\nSenha.gerar();\nconsole.log(Senha.gerar());\n```",
+      "alternativas": [
+        "1",
+        "0",
+        "3",
+        "undefined"
+      ],
+      "correta": 2,
+      "explicacao": "proxima é static: existe uma só, na classe. Cada gerar() soma 1; a terceira chamada devolve 3."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes métodos faz mais sentido ser `static`?",
+      "alternativas": [
+        "Um que soma um valor ao saldo de uma conta específica",
+        "Um que converte Celsius em Fahrenheit",
+        "Um que muda o nome de um aluno já cadastrado",
+        "Um que devolve a idade de um paciente a partir da data dele"
+      ],
+      "correta": 1,
+      "explicacao": "static serve para o que não depende do estado de um objeto. As outras opções usam dados de uma instância (saldo, nome, data)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "limpo-sru",
+      "enunciado": "Veja a classe:\n```js\nclass Pedido {\n  calcularTotal() { /* ... */ }\n  salvarNoBanco() { /* ... */ }\n  enviarEmail() { /* ... */ }\n  gerarPdf() { /* ... */ }\n}\n```\nQual é o principal problema de código limpo?",
+      "alternativas": [
+        "Os nomes dos métodos deveriam ser abreviados para ocupar menos espaço",
+        "Todos os métodos deveriam ser static, para não precisar de objeto",
+        "A classe deveria herdar de uma classe Email para enviar e-mails",
+        "A classe tem responsabilidades demais"
+      ],
+      "correta": 3,
+      "explicacao": "Pedido mistura regra de negócio, persistência, e-mail e geração de PDF: fere a responsabilidade única. Cada assunto deveria ter sua classe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um método de 200 linhas valida os dados, calcula o valor e grava no banco. O que o código limpo recomenda?",
+      "alternativas": [
+        "Dividir em métodos menores, cada um com uma tarefa",
+        "Manter tudo junto, porque um método grande é mais fácil de achar",
+        "Colocar comentários a cada linha explicando o que ela faz",
+        "Passar o método inteiro para um arquivo separado, sem mudar nada"
+      ],
+      "correta": 0,
+      "explicacao": "Funções pequenas e com uma só tarefa (validar(), calcular(), salvar()) são mais fáceis de ler, testar e reaproveitar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "limpo-numero-magico",
+      "enunciado": "Num sistema de locadora aparece `if (idade >= 18 && valor > 350) { ... }`. Qual melhoria de código limpo cabe aqui?",
+      "alternativas": [
+        "Trocar 18 e 350 por variáveis chamadas a e b",
+        "Colocar os números 18 e 350 entre aspas",
+        "Trocar 18 e 350 por constantes com nome",
+        "Apagar o if, porque números no código são proibidos"
+      ],
+      "correta": 2,
+      "explicacao": "Números soltos (\"números mágicos\") não dizem o que significam. Constantes com nome explicam a regra e ficam num lugar só para mudar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-contrato",
+      "enunciado": "Duas classes, `Email` e `Sms`, têm o método `enviar(msg)`. O sistema de avisos de uma escola só chama `enviar()`, sem saber qual é a classe. Como se chama esse \"combinado\" de que toda classe de aviso terá enviar()?",
+      "alternativas": [
+        "Enumeração",
+        "Contrato (interface)",
+        "Composição",
+        "Herança múltipla"
+      ],
+      "correta": 1,
+      "explicacao": "Interface/contrato é a lista de métodos que uma classe se compromete a ter. Em JS não há interface nativa, mas o combinado existe do mesmo jeito."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "As classes `Gerente` e `Vendedor` têm o mesmo método `calcularVale()`, copiado e colado nas duas. As duas já herdam de `Funcionario`. Qual a melhor melhoria?",
+      "alternativas": [
+        "Renomear o método em uma das classes para não ficar igual",
+        "Deixar como está, porque código repetido é mais seguro",
+        "Transformar as duas classes em uma enumeração",
+        "Mover calcularVale() para a classe Funcionario"
+      ],
+      "correta": 3,
+      "explicacao": "Código repetido (fere o princípio \"não se repita\") vira um ponto só: como as duas herdam de Funcionario, o método comum pode ficar na mãe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-abstrata",
+      "enunciado": "O que acontece ao executar este código?\n```js\nclass Forma {\n  area() { throw new Error(\"Implemente area()\"); }\n}\nclass Quadrado extends Forma {\n  constructor(l) { super(); this.l = l; }\n}\nconsole.log(new Quadrado(3).area());\n```",
+      "alternativas": [
+        "Dá o erro \"Implemente area()\"",
+        "Imprime 9, porque 3 × 3 = 9",
+        "Imprime undefined, pois area() não devolve nada",
+        "Imprime 0, o valor padrão"
+      ],
+      "correta": 0,
+      "explicacao": "Quadrado herdou o area() da classe-base, que só lança erro. Esse é o jeito de imitar método abstrato: a filha é obrigada a sobrescrever."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-freeze-raso",
+      "enunciado": "O que este código imprime?\n```js\nconst Config = Object.freeze({ taxa: 5, horarios: [\"8h\", \"14h\"] });\nConfig.horarios.push(\"20h\");\nconsole.log(Config.horarios.length);\n```",
+      "alternativas": [
+        "2",
+        "Erro: Config está congelado",
+        "3",
+        "undefined"
+      ],
+      "correta": 2,
+      "explicacao": "Object.freeze é raso: congela as chaves de Config, mas o array dentro dele não foi congelado e aceita push."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "poo-composicao-heranca",
+      "enunciado": "Uma `Impressora` precisa registrar log. A equipe escreveu `class Impressora extends Logger`. Qual a crítica mais adequada?",
+      "alternativas": [
+        "Está certo, porque herança é sempre melhor que relacionamento entre objetos",
+        "Impressora não é um Logger; melhor ter um logger como atributo",
+        "O certo seria class Logger extends Impressora",
+        "O certo seria tornar todos os métodos de Logger privados com #"
+      ],
+      "correta": 1,
+      "explicacao": "Herança só faz sentido para \"é um\". Para reaproveitar um serviço, prefere-se composição: this.logger = new Logger() e this.logger.registrar(...)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que acontece ao executar este código?\n```js\nclass Conversor {\n  static paraReais(c) { return \"R$ \" + (c / 100).toFixed(2); }\n}\nconst c = new Conversor();\nconsole.log(c.paraReais(1550));\n```",
+      "alternativas": [
+        "Imprime R$ 15.50, convertendo os centavos",
+        "Imprime R$ 1550.00, sem converter",
+        "Imprime undefined",
+        "Dá TypeError: paraReais só existe na classe"
+      ],
+      "correta": 3,
+      "explicacao": "Método static é chamado pela classe: Conversor.paraReais(1550) daria \"R$ 15.50\". A instância não tem esse método."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que este código imprime?\n```js\nclass Visitante {\n  static total = 0;\n  constructor() { Visitante.total++; }\n}\nnew Visitante();\nnew Visitante();\nconst v = new Visitante();\nconsole.log(Visitante.total, v.total);\n```",
+      "alternativas": [
+        "3 undefined",
+        "3 3",
+        "1 undefined",
+        "3 1"
+      ],
+      "correta": 0,
+      "explicacao": "O contador static é da classe e soma a cada new: 3. O objeto v não tem atributo total, por isso undefined."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "limpo-comentario",
+      "enunciado": "Veja o trecho:\n```js\n// verifica se o cliente pode alugar\nfunction v(c) { return c.i >= 18 && !c.d; }\n```\nQual é a melhor melhoria de código limpo?",
+      "alternativas": [
+        "Escrever um comentário maior, explicando o que são v, c, i e d",
+        "Apagar o comentário e manter os nomes como estão, que são curtos",
+        "Dar nomes claros (podeAlugar, idade, temDebito) e dispensar o comentário",
+        "Transformar a função em método static de uma classe Cliente"
+      ],
+      "correta": 2,
+      "explicacao": "O comentário tenta salvar nomes ruins. Com nomes que revelam a intenção, o próprio código se explica."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num sistema de escola aparece a chamada `salvar(aluno, true, false)`. Por que ela é considerada difícil de ler?",
+      "alternativas": [
+        "Porque métodos não podem receber valores booleanos",
+        "Não dá para saber o que true e false significam",
+        "Porque o aluno deveria ser o último parâmetro",
+        "Porque o nome salvar é curto demais"
+      ],
+      "correta": 1,
+      "explicacao": "Parâmetros booleanos soltos (\"flags\") escondem o sentido. Melhor métodos separados (salvarENotificar) ou um objeto com nomes ({ notificar: true })."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa padaria, os pedidos têm status. O programador usou:\n```js\nconst Status = Object.freeze({ ABERTO: \"aberto\", NO_FORNO: \"no_forno\", PRONTO: \"pronto\" });\npedido.status = Status.PRONTO;\n```\nExplique a vantagem disso em relação a usar o texto \"pronto\" direto em cada lugar do código.\n\nNa sua resposta:\n1. diga o que o Object.freeze faz com Status;\n2. cite uma vantagem de usar Status.PRONTO.",
+      "respostasAceitas": [
+        "O freeze congela o objeto: ninguém muda nem acrescenta valores. Usar Status.PRONTO evita erro de digitação (\"prontu\"), deixa claro quais valores existem e, se o texto mudar, muda num lugar só."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) impede alterar/acrescentar valores (enumeração fixa); 2) evita erros de digitação, centraliza os valores, deixa o código mais claro."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja a classe de uma loja de games:\n```js\nclass Senha {\n  static proxima = 0;\n  static gerar() {\n    Senha.proxima++;\n    return Senha.proxima;\n  }\n}\nconsole.log(Senha.gerar());\n```\nExplique o que o static faz aqui.\n\nNa sua resposta:\n1. diga a quem pertencem proxima e gerar();\n2. explique por que foi possível chamar gerar() sem usar new.",
+      "respostasAceitas": [
+        "Pertencem à própria classe Senha, não aos objetos: existe um único contador proxima para todo o sistema. Por isso gerar() é chamado direto pela classe, Senha.gerar(), sem gerar objeto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) à classe; 2) membros static são acessados pelo nome da classe, sem instância."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Compare as duas funções de um sistema escolar:\n```js\nfunction calc(a, b) { return (a + b) / 2; }\nfunction calcularMediaFinal(nota1, nota2) { return (nota1 + nota2) / 2; }\n```\nAs duas fazem a mesma conta. Explique por que a segunda é melhor.\n\nNa sua resposta:\n1. diga o que falta na primeira;\n2. explique que diferença isso faz para quem vai manter o código.",
+      "respostasAceitas": [
+        "A primeira não diz o que calcula nem o que são a e b. A segunda tem nomes que revelam a intenção: quem lê entende sem precisar de comentário, e fica mais fácil manter e achar erros."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nomes claros/significativos; 2) leitura e manutenção mais fáceis, sem precisar de comentários."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O código limpo recomenda funções e métodos pequenos. Explique essa recomendação.\n\nNa sua resposta:\n1. diga o que é uma função \"pequena\" no sentido do código limpo;\n2. cite uma vantagem disso.",
+      "respostasAceitas": [
+        "É uma função que faz uma coisa só (e por isso costuma ter poucas linhas), com um nome que diz o que ela faz. Vantagens: mais fácil de ler, testar, reaproveitar e achar erro."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) faz uma só tarefa, poucas linhas; 2) leitura, teste, reuso ou manutenção."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "limpo-numero-magico",
+      "enunciado": "Num sistema de academia aparece:\n```js\nif (dias > 30) { cobrarMulta(aluno, 0.02); }\n```\nUm colega chamou o 30 e o 0.02 de \"números mágicos\". Explique.\n\nNa sua resposta:\n1. diga por que esses números atrapalham;\n2. diga como melhorar, sem mudar a regra.",
+      "respostasAceitas": [
+        "Quem lê não sabe o que 30 e 0.02 significam, e se a regra mudar é preciso caçar o número no código. Melhor dar nomes: PRAZO_DIAS = 30 e TAXA_MULTA = 0.02."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) não explicam o significado e se repetem; 2) constantes com nomes claros."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um projeto Node.js tem os arquivos aluno.js, turma.js e app.js. O aluno.js termina com `export default class Aluno { ... }` e o app.js começa com `import Aluno from './aluno.js';`. Explique.\n\nNa sua resposta:\n1. diga o que o export faz no aluno.js;\n2. diga o que o import faz no app.js.",
+      "respostasAceitas": [
+        "O export deixa a classe Aluno disponível para outros arquivos. O import, no app.js, traz essa classe para poder usá-la ali (new Aluno(...))."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) publica a classe para outros módulos; 2) traz a classe de outro arquivo para usar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num sistema de clínica veterinária, `Veterinario` tem o método `atender(animal)`, que recebe um objeto `Animal`. Um aluno sugeriu `class Veterinario extends Animal` \"para o veterinário ter acesso ao animal\". Explique por que essa ideia está errada.\n\nNa sua resposta:\n1. diga por que não é herança;\n2. diga que tipo de relacionamento o método atender(animal) já representa.",
+      "respostasAceitas": [
+        "Veterinário não \"é um\" animal, então herança não faz sentido. O método que recebe o animal já é uma associação: o veterinário usa/conhece o animal, e cada um existe sozinho."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) falha no teste \"é um\"; 2) associação (um objeto usa o outro)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-import",
+      "enunciado": "Explique a diferença entre `export default` e `export` nomeado num módulo JavaScript.\n\nNa sua resposta:\n1. diga quantos de cada um um arquivo pode ter;\n2. diga como fica o import de cada um.",
+      "respostasAceitas": [
+        "Um arquivo tem no máximo um export default e quantos exports nomeados quiser. O default é importado sem chaves (import Produto from ...); os nomeados vão entre chaves, com o mesmo nome (import { calcularTaxa } from ...)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) um default só, vários nomeados; 2) default sem chaves, nomeado com chaves."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "limpo-sru",
+      "enunciado": "Num cinema, a classe `Sessao` calcula o valor dos ingressos, grava no banco, manda e-mail para o cliente e gera o PDF do ingresso. Explique o problema dessa classe.\n\nNa sua resposta:\n1. diga qual princípio de código limpo ela fere;\n2. sugira como dividir as tarefas.",
+      "respostasAceitas": [
+        "Fere a responsabilidade única: a classe tem vários motivos para mudar. Melhor deixar em Sessao só a regra (valor dos ingressos) e passar a gravação, o e-mail e o PDF para outras classes (ex.: SessaoRepositorio, EnviadorEmail, GeradorPdf)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) responsabilidade única; 2) separar persistência, e-mail e PDF em classes próprias."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-abstrata",
+      "enunciado": "Veja o código:\n```js\nclass Forma {\n  area() { throw new Error(\"Falta area() na filha\"); }\n}\nclass Circulo extends Forma {\n  constructor(r) { super(); this.r = r; }\n  area() { return 3.14 * this.r * this.r; }\n}\n```\nExplique o papel do método area() da classe Forma.\n\nNa sua resposta:\n1. explique por que ele só lança um erro;\n2. diga qual ideia da POO ele imita, já que o JavaScript não tem esse recurso pronto.",
+      "respostasAceitas": [
+        "Ele obriga as filhas a sobrescreverem area(): se alguma esquecer, o erro avisa. Imita um método abstrato (classe abstrata/interface), que o JavaScript não tem nativamente."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) forçar a filha a reescrever o método; 2) classe/método abstrato ou contrato/interface."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-contrato",
+      "enunciado": "Num sistema de escola, os avisos podem sair por `Email`, `Sms` ou `Mural`. Todas essas classes têm o método `enviar(msg)` e o sistema só chama `aviso.enviar(msg)`. Explique esse \"contrato\".\n\nNa sua resposta:\n1. diga o que é esse contrato (interface) em linguagem simples;\n2. explique o que acontece se uma nova classe de aviso não tiver enviar().",
+      "respostasAceitas": [
+        "É o combinado de que toda classe de aviso terá enviar(msg); o sistema confia nisso e não precisa saber a classe. Se uma nova classe não tiver enviar(), o sistema quebra (TypeError: enviar is not a function) ao usá-la."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) lista de métodos que as classes se comprometem a ter; 2) dá erro na hora de chamar, porque o contrato não foi cumprido."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "limpo-comentario",
+      "enunciado": "Veja o trecho:\n```js\n// verifica se o produto pode ser vendido\nfunction ok(p) { return p.q > 0 && !p.v; }\n```\nUm colega disse que \"o comentário está tentando salvar um código mal escrito\". Explique.\n\nNa sua resposta:\n1. diga qual é o problema real do trecho;\n2. diga como deixar o comentário desnecessário.",
+      "respostasAceitas": [
+        "Os nomes não dizem nada (ok, p, q, v), por isso foi preciso comentar. Com nomes claros, como podeSerVendido(produto), quantidade e vencido, o código se explica e o comentário sobra."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nomes ruins, sem significado; 2) renomear função e variáveis para revelar a intenção."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-agreg-comp",
+      "enunciado": "Compare os dois códigos:\n```js\n// A\nclass Hotel {\n  constructor() { this.quartos = [new Quarto(1), new Quarto(2)]; }\n}\n// B\nclass Biblioteca {\n  constructor() { this.livros = []; }\n  adicionar(livro) { this.livros.push(livro); }\n}\n```\nUm representa composição e o outro, agregação. Explique.\n\nNa sua resposta:\n1. diga qual é a composição e qual é a agregação, justificando pelo código;\n2. explique o que acontece com as partes quando o todo deixa de existir em cada caso.",
+      "respostasAceitas": [
+        "A é composição: o próprio Hotel gera os quartos, que só existem dentro dele. B é agregação: os livros são gerados fora e só entregues à biblioteca. Se o hotel deixa de existir, os quartos somem com ele; se a biblioteca deixa de existir, os livros continuam existindo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) A composição (o todo gera as partes), B agregação (recebe partes prontas); 2) na composição as partes morrem com o todo; na agregação sobrevivem."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-freeze-raso",
+      "enunciado": "Veja o código:\n```js\nconst Config = Object.freeze({ taxa: 5, horarios: [\"8h\", \"14h\"] });\nConfig.taxa = 10;\nConfig.horarios.push(\"20h\");\n```\nDepois disso, taxa continua 5, mas horarios passou a ter 3 itens. Explique.\n\nNa sua resposta:\n1. diga o que o Object.freeze congelou de fato;\n2. explique por que o array horarios ainda pôde ser alterado.",
+      "respostasAceitas": [
+        "O freeze é raso: congela só as propriedades diretas de Config, então taxa não muda. O array é outro objeto, guardado ali por referência, e não foi congelado; por isso aceita push. Para travar tudo seria preciso congelar o array também."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só o primeiro nível (as chaves de Config); 2) o array é um objeto à parte que não foi congelado (freeze raso)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Programação orientada a objetos",
+      "capacidade": "back.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "poo-composicao-heranca",
+      "enunciado": "Num hotel, a classe `Recepcao` precisa enviar notificações. Um programador escreveu `class Recepcao extends Notificador`; outro preferiu `this.notificador = new Notificador()` dentro de Recepcao. Compare as duas soluções.\n\nNa sua resposta:\n1. diga qual relação cada solução representa;\n2. diga qual é a mais adequada e por quê.",
+      "respostasAceitas": [
+        "A primeira é herança (Recepcao \"é um\" Notificador); a segunda é composição (Recepcao \"tem um\" notificador). A segunda é melhor: recepção não é um notificador, só usa um; fica mais flexível (dá para trocar o notificador) e não herda métodos que não fazem sentido."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) herança x composição; 2) composição, porque falha o teste \"é um\" e é mais flexível (\"prefira composição a herança\")."
+    }
+  ]
+}
