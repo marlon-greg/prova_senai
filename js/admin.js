@@ -2140,6 +2140,7 @@ const BANCOS_BD_150 = [
   desc: "105 alternativas + 45 dissertativas (sem pedir comando), dificuldade balanceada. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] }));
 // Linguagem de Marcação: 150 questões por tema (27/11), a revisar
 const BANCOS_MARC_150 = [
+  ["marc_02_www", "World Wide Web (WWW)"],
   ["marc_04_html_estrutura", "HTML: estrutura, semântica e validação"],
   ["marc_05_html_textos_links", "HTML: textos, cores, imagens e links"],
   ["marc_06_html_listas_tabelas", "HTML: listas e tabelas"],
