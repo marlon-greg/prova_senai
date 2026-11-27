@@ -2145,7 +2145,7 @@ const BANCOS_PRONTOS = [
   { arquivo: "bancos/gerados/banco_iot.json", icone: "📡", titulo: "Internet das Coisas — banco inicial", desc: "60 questões em 6 tópicos. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },
   { arquivo: "bancos/gerados/banco_teste.json", icone: "🧪", titulo: "Teste de Software — banco inicial", desc: "30 questões em 3 tópicos. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] },
   { arquivo: "bancos/gerados/amostra_dml_update.json", icone: "🧪", titulo: "Amostra do pedido 13: DML — UPDATE (36 questões novas, a revisar)", desc: "20 alternativas, 12 dissertativas e 4 de SQL físico, ligadas à capacidade de DML. Entram como \"a revisar\": só caem na Área de testes até você aprovar em Bancos → tópico → Ver questões.", provas: [] },
-  { arquivo: "bancos/banco_sql_workbench.json", icone: "🗄", titulo: "Bancada SQL: 15 cenários práticos", desc: "Pet shop, biblioteca, oficina, academia, cinema, hotel… Cada aluno recebe um cenário diferente (base e tarefas), escreve e executa SQL na Bancada parecida com o MySQL Workbench. Correção automática pelo resultado; a IA só entra nas tarefas que não bateram.",
+  { arquivo: "bancos/banco_sql_workbench.json", icone: "🗄", titulo: "Bancada SQL: 15 cenários práticos (10 tarefas cada)", desc: "Cada cenário tem 10 tarefas: 3 consultas, 3 de dados, 3 de tabela e 1 de permissão; na Nova somativa você escolhe quantas tarefas e de que tipo em cada pergunta. Pet shop, biblioteca, oficina, academia, cinema, hotel… Cada aluno recebe um cenário diferente (base e tarefas), escreve e executa SQL na Bancada parecida com o MySQL Workbench. Correção automática pelo resultado; a IA só entra nas tarefas que não bateram.",
     provas: [
       { titulo: "Prática SQL na Bancada (1 cenário sorteado)", nSql: 1, tempoMinutos: 45 },
       { titulo: "Prática SQL na Bancada (2 cenários sorteados)", nSql: 2, tempoMinutos: 90 },
@@ -2243,7 +2243,7 @@ async function corrigirMateriaWeb({ silencioso = false } = {}) {
   } catch (e) { toast("Não foi possível corrigir. " + traduzirErro(e), "erro"); }
 }
 // versão de cada banco pronto que mudou depois de publicado: quem importou a anterior vê "Atualizar" (sem versão = nunca mudou)
-const VERSOES_PRONTOS = Object.fromEntries(["bancos/banco_sql_misto.json", "bancos/gerados/amostra_dml_update.json",
+const VERSOES_PRONTOS = Object.fromEntries(["bancos/banco_sql_misto.json", "bancos/banco_sql_workbench.json", "bancos/gerados/amostra_dml_update.json",
   ...["lpa", "req", "redes", "so", "marc", "back", "proj", "front", "mobile", "iot", "teste"].map(m => `bancos/gerados/banco_${m}.json`)].map(a => [a, "2026-11-27"]));
 const versaoPronto = b => b.versao || VERSOES_PRONTOS[b.arquivo] || null;
 const desatualizado = (b, ja) => !!ja && !!versaoPronto(b) && ja.versaoPronto !== versaoPronto(b);
