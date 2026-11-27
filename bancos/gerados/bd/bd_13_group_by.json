@@ -1,0 +1,2467 @@
+{
+  "nome": "Banco de Dados — Agrupamento: GROUP BY e HAVING (a revisar)",
+  "materia": "Banco de Dados",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, a tabela `livro` tem as colunas id_livro, titulo, autor e ano. O que mostra a consulta `SELECT COUNT(*) FROM livro;`?",
+      "alternativas": [
+        "A soma de todos os valores de id_livro",
+        "A quantidade de livros cadastrados",
+        "A lista com o título de todos os livros",
+        "O maior id_livro cadastrado até agora"
+      ],
+      "correta": 1,
+      "explicacao": "COUNT(*) conta as linhas da tabela. Não soma valores (isso é SUM) nem lista dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa padaria, a tabela `venda` tem as colunas id_venda, produto, quantidade e valor_total. Qual função soma todos os valores de valor_total para saber o faturamento?",
+      "alternativas": [
+        "COUNT(valor_total)",
+        "AVG(valor_total)",
+        "MAX(valor_total)",
+        "SUM(valor_total)"
+      ],
+      "correta": 3,
+      "explicacao": "SUM soma os valores. COUNT conta linhas, AVG calcula a média e MAX pega o maior valor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, a tabela `aluno` tem as colunas id_aluno, nome e idade. Qual expressão calcula a idade média dos alunos?",
+      "alternativas": [
+        "SUM(idade)",
+        "AVG(idade)",
+        "COUNT(idade)",
+        "MEDIA(idade)"
+      ],
+      "correta": 1,
+      "explicacao": "AVG (average) calcula a média. MEDIA não existe no MySQL; SUM soma e COUNT conta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "min_max_basico",
+      "enunciado": "Num pet shop, a tabela `servico` tem as colunas id_servico, nome e preco. Qual expressão devolve o preço do serviço mais barato?",
+      "alternativas": [
+        "MIN(preco)",
+        "MAX(preco)",
+        "COUNT(preco)",
+        "SUM(preco)"
+      ],
+      "correta": 0,
+      "explicacao": "MIN devolve o menor valor da coluna; MAX devolve o maior."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "data_agregacao",
+      "enunciado": "Num cinema, a tabela `sessao` tem as colunas id_sessao, filme e data_sessao (DATE). O que mostra `SELECT MAX(data_sessao) FROM sessao;`?",
+      "alternativas": [
+        "A data de sessão mais antiga da tabela",
+        "A quantidade de sessões cadastradas",
+        "A data de sessão mais recente",
+        "Um erro, pois MAX só funciona com números"
+      ],
+      "correta": 2,
+      "explicacao": "MAX também funciona com datas: a maior data é a mais recente. A mais antiga seria MIN."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "groupby_def",
+      "enunciado": "Para que serve a cláusula GROUP BY num SELECT?",
+      "alternativas": [
+        "Colocar o resultado em ordem crescente pela coluna indicada",
+        "Apagar da tabela as linhas que estão duplicadas",
+        "Filtrar as linhas antes de a consulta ser executada",
+        "Formar grupos de linhas com o mesmo valor numa coluna"
+      ],
+      "correta": 3,
+      "explicacao": "GROUP BY forma grupos de linhas com o mesmo valor; as funções de agregação (COUNT, SUM…) são calculadas por grupo. Ordenar é papel do ORDER BY."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de games, a tabela `jogo` tem as colunas id_jogo, titulo, genero e preco. Qual consulta mostra quantos jogos existem de cada gênero?",
+      "alternativas": [
+        "`SELECT genero, COUNT(*) FROM jogo ORDER BY genero;`",
+        "`SELECT COUNT(genero) FROM jogo;`",
+        "`SELECT genero, COUNT(*) FROM jogo WHERE genero;`",
+        "`SELECT genero, COUNT(*) FROM jogo GROUP BY genero;`"
+      ],
+      "correta": 3,
+      "explicacao": "Para contar por gênero é preciso agrupar por genero (GROUP BY genero). Sem GROUP BY o COUNT conta a tabela inteira."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "having_def",
+      "enunciado": "Depois de agrupar com GROUP BY, qual cláusula filtra os grupos usando o resultado de uma função como COUNT(*) ou SUM()?",
+      "alternativas": [
+        "HAVING",
+        "WHERE",
+        "ORDER BY",
+        "LIMIT"
+      ],
+      "correta": 0,
+      "explicacao": "HAVING filtra grupos depois do agrupamento e aceita funções de agregação. WHERE filtra linhas antes de agrupar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel, a tabela `pagamento` tem as colunas id_pagamento, id_reserva e valor. Quantas linhas aparecem no resultado de `SELECT SUM(valor) FROM pagamento;`?",
+      "alternativas": [
+        "Uma linha para cada pagamento da tabela",
+        "Uma linha para cada reserva diferente",
+        "Uma linha só, com a soma de todos os pagamentos",
+        "Nenhuma linha, pois falta o GROUP BY"
+      ],
+      "correta": 2,
+      "explicacao": "Sem GROUP BY, a função de agregação trata a tabela inteira como um grupo e devolve um único valor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "count_null",
+      "enunciado": "Numa clínica, a tabela `paciente` tem as colunas id_paciente, nome e telefone. Há 10 pacientes, e 3 deles estão com telefone NULL. Qual o resultado de `SELECT COUNT(telefone) FROM paciente;`?",
+      "alternativas": [
+        "10",
+        "3",
+        "13",
+        "7"
+      ],
+      "correta": 3,
+      "explicacao": "COUNT(coluna) não conta os valores NULL. Dos 10 pacientes, só 7 têm telefone preenchido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "ordem_clausulas",
+      "enunciado": "Qual é a ordem correta das cláusulas num SELECT com agrupamento?",
+      "alternativas": [
+        "SELECT … FROM … GROUP BY … WHERE … ORDER BY … HAVING …",
+        "SELECT … FROM … HAVING … WHERE … GROUP BY … ORDER BY …",
+        "SELECT … FROM … WHERE … GROUP BY … HAVING … ORDER BY …",
+        "SELECT … GROUP BY … FROM … WHERE … HAVING … ORDER BY …"
+      ],
+      "correta": 2,
+      "explicacao": "WHERE vem antes do GROUP BY (filtra linhas), HAVING logo depois (filtra grupos) e ORDER BY por último."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a tabela `matricula` tem as colunas id_matricula, id_aluno e curso. Na consulta `SELECT curso, COUNT(*) AS total FROM matricula GROUP BY curso;`, o que é `total`?",
+      "alternativas": [
+        "Uma nova coluna que passa a existir na tabela matricula",
+        "Uma variável que guarda a soma dos números dos cursos",
+        "O nome (apelido) dado à coluna da contagem no resultado",
+        "O nome de uma tabela temporária gravada no banco"
+      ],
+      "correta": 2,
+      "explicacao": "AS dá um apelido (alias) à coluna do resultado. Não altera a tabela nem grava nada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa oficina, a tabela `ordem_servico` tem as colunas id_os, placa, data_entrada e valor. Um mesmo carro pode voltar várias vezes. Qual expressão conta quantos carros diferentes já foram atendidos?",
+      "alternativas": [
+        "COUNT(placa)",
+        "COUNT(DISTINCT placa)",
+        "SUM(DISTINCT placa)",
+        "DISTINCT COUNT(placa)"
+      ],
+      "correta": 1,
+      "explicacao": "COUNT(DISTINCT placa) conta cada placa uma vez só. COUNT(placa) contaria todas as visitas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "leitura_count",
+      "enunciado": "Numa escola, a tabela `aluno` (id_aluno, nome, turma) tem estas linhas: (1, Ana, 1A), (2, Bruno, 1B), (3, Carla, 1A), (4, Davi, 1A), (5, Eva, 1B). Qual o resultado de `SELECT turma, COUNT(*) FROM aluno GROUP BY turma;`?",
+      "alternativas": [
+        "Duas linhas: 1A com 1 e 1B com 1",
+        "Uma linha só, com o número 5",
+        "Duas linhas: 1A com 3 e 1B com 2",
+        "Cinco linhas, cada uma com o número 1"
+      ],
+      "correta": 2,
+      "explicacao": "O GROUP BY forma um grupo por turma: 1A tem Ana, Carla e Davi (3); 1B tem Bruno e Eva (2)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "where_agregado",
+      "enunciado": "Num mercado, a tabela `produto` tem as colunas id_produto, nome, categoria e estoque. O que acontece ao rodar `SELECT categoria, SUM(estoque) FROM produto WHERE SUM(estoque) > 100 GROUP BY categoria;`?",
+      "alternativas": [
+        "Dá erro: WHERE não aceita função de agregação; o filtro deveria ir no HAVING",
+        "Funciona e mostra as categorias com estoque total acima de 100",
+        "Dá erro, porque o GROUP BY deveria vir antes do WHERE",
+        "Funciona, mas mostra só os produtos com estoque acima de 100"
+      ],
+      "correta": 0,
+      "explicacao": "O WHERE é avaliado antes de os grupos existirem, então não pode usar SUM. O MySQL acusa uso inválido de função de grupo. O certo é HAVING SUM(estoque) > 100."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "only_full",
+      "enunciado": "Numa empresa, a tabela `funcionario` tem as colunas id_funcionario, nome, setor e salario. No MySQL 8 (configuração padrão), o que acontece com `SELECT setor, nome, COUNT(*) FROM funcionario GROUP BY setor;`?",
+      "alternativas": [
+        "Mostra todos os nomes de cada setor separados por vírgula",
+        "Dá erro, porque nome não está no GROUP BY nem dentro de uma função de agregação",
+        "Mostra o primeiro nome de cada setor, sem nenhum aviso",
+        "Conta quantos funcionários têm o mesmo nome em cada setor"
+      ],
+      "correta": 1,
+      "explicacao": "Com ONLY_FULL_GROUP_BY (ligado por padrão no MySQL 8), toda coluna do SELECT precisa estar no GROUP BY ou numa agregação. Um setor tem vários nomes: o banco não sabe qual mostrar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, a tabela `emprestimo` (id_emprestimo, id_leitor, data_emprestimo) tem: leitor 1 com 3 empréstimos, leitor 2 com 1, leitor 3 com 2 e leitor 4 com 4. Quais leitores aparecem em `SELECT id_leitor, COUNT(*) FROM emprestimo GROUP BY id_leitor HAVING COUNT(*) >= 3;`?",
+      "alternativas": [
+        "Os leitores 1 e 4",
+        "Os leitores 1, 3 e 4",
+        "Somente o leitor 4",
+        "Os leitores 2 e 3"
+      ],
+      "correta": 0,
+      "explicacao": "HAVING COUNT(*) >= 3 mantém só os grupos com 3 ou mais: leitor 1 (3) e leitor 4 (4)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel, a tabela `reserva` tem as colunas id_reserva, tipo_quarto, valor e status. O que mostra `SELECT tipo_quarto, COUNT(*) FROM reserva WHERE status = 'cancelada' GROUP BY tipo_quarto;`?",
+      "alternativas": [
+        "Quantas reservas canceladas houve em cada tipo de quarto",
+        "Quantas reservas existem em cada tipo de quarto, de qualquer status",
+        "Só o tipo de quarto que teve mais cancelamentos",
+        "O total de reservas canceladas numa única linha"
+      ],
+      "correta": 0,
+      "explicacao": "O WHERE deixa só as linhas canceladas; depois o GROUP BY conta essas linhas por tipo de quarto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, a tabela `frequencia` tem as colunas id_frequencia, id_aluno e data_treino (uma linha por dia de treino). Qual consulta lista os alunos do que mais treinou para o que menos treinou?",
+      "alternativas": [
+        "`SELECT id_aluno, COUNT(*) FROM frequencia GROUP BY id_aluno ORDER BY COUNT(*) DESC;`",
+        "`SELECT id_aluno, COUNT(*) FROM frequencia GROUP BY id_aluno ORDER BY id_aluno DESC;`",
+        "`SELECT id_aluno, COUNT(*) FROM frequencia ORDER BY COUNT(*) DESC;`",
+        "`SELECT id_aluno, COUNT(*) FROM frequencia GROUP BY id_aluno ORDER BY COUNT(*);`"
+      ],
+      "correta": 0,
+      "explicacao": "É preciso agrupar por aluno e ordenar pela contagem em ordem decrescente (DESC). Sem DESC a ordem fica do menor para o maior."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "avg_null",
+      "enunciado": "Numa escola, a tabela `prova` tem a coluna nota com os valores 8, 6, NULL e 10. Qual o resultado de `SELECT AVG(nota) FROM prova;`?",
+      "alternativas": [
+        "6, porque a soma 24 é dividida pelas 4 linhas",
+        "NULL, porque um dos valores é nulo",
+        "8, pois o NULL é ignorado",
+        "Dá erro, porque há um valor nulo na coluna"
+      ],
+      "correta": 2,
+      "explicacao": "AVG ignora os NULL: soma 24 e divide por 3 valores preenchidos, dando 8."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "duas_colunas",
+      "enunciado": "Numa loja, a tabela `venda` tem as colunas id_venda, vendedor, mes e valor. O que muda ao usar `GROUP BY vendedor, mes` em vez de `GROUP BY vendedor`?",
+      "alternativas": [
+        "O resultado fica ordenado primeiro por vendedor e depois por mês",
+        "Passa a sair uma linha para cada combinação de vendedor e mês",
+        "Passa a sair uma linha por vendedor e outra por mês, separadas",
+        "Nada muda, pois só a primeira coluna do GROUP BY é usada"
+      ],
+      "correta": 1,
+      "explicacao": "Com duas colunas, cada grupo é a combinação dos dois valores (ex.: Rita–março, Rita–abril)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num restaurante, a tabela `prato` tem as colunas id_prato, nome e preco. O que faz `SELECT ROUND(AVG(preco), 2) FROM prato;`?",
+      "alternativas": [
+        "Arredonda cada preço para 2 casas e depois soma todos",
+        "Calcula a média dos preços e mostra o resultado com 2 casas decimais",
+        "Calcula a média só dos 2 primeiros pratos da tabela",
+        "Calcula a média dos preços e divide o resultado por 2"
+      ],
+      "correta": 1,
+      "explicacao": "AVG calcula a média e ROUND(valor, 2) arredonda esse resultado para 2 casas decimais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "join_count",
+      "enunciado": "Numa escola técnica, há as tabelas `curso` (id_curso, nome) e `aluno` (id_aluno, nome, id_curso). O que mostra `SELECT c.nome, COUNT(a.id_aluno) FROM curso c INNER JOIN aluno a ON a.id_curso = c.id_curso GROUP BY c.id_curso, c.nome;`?",
+      "alternativas": [
+        "Quantos alunos tem cada curso que possui alunos",
+        "Quantos cursos existem no total, numa linha só",
+        "O nome de cada aluno ao lado do nome do seu curso",
+        "Somente os cursos que ainda não têm nenhum aluno"
+      ],
+      "correta": 0,
+      "explicacao": "O JOIN liga aluno ao curso e o GROUP BY conta por curso. Com INNER JOIN, curso sem aluno não aparece."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa padaria, a tabela `item_pedido` tem as colunas id_item, id_pedido, produto e quantidade. Qual consulta mostra os produtos que venderam mais de 50 unidades no total?",
+      "alternativas": [
+        "`SELECT produto, SUM(quantidade) FROM item_pedido WHERE quantidade > 50 GROUP BY produto;`",
+        "`SELECT produto, SUM(quantidade) FROM item_pedido GROUP BY produto WHERE SUM(quantidade) > 50;`",
+        "`SELECT produto, SUM(quantidade) FROM item_pedido GROUP BY produto HAVING SUM(quantidade) > 50;`",
+        "`SELECT produto, COUNT(*) FROM item_pedido GROUP BY produto HAVING COUNT(*) > 50;`"
+      ],
+      "correta": 2,
+      "explicacao": "O total por produto é SUM(quantidade) agrupado por produto, filtrado com HAVING. WHERE quantidade > 50 olharia cada item isolado, e COUNT contaria itens, não unidades."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "leitura_sum",
+      "enunciado": "Num cinema, a tabela `ingresso` (id_ingresso, sessao, valor) tem: sessão A com ingressos de 20, 20 e 15; sessão B com ingressos de 30 e 10. Qual o resultado de `SELECT sessao, SUM(valor) FROM ingresso GROUP BY sessao;`?",
+      "alternativas": [
+        "A com 55 e B com 40",
+        "A com 3 e B com 2",
+        "A com 20 e B com 30",
+        "Uma linha só, com 95"
+      ],
+      "correta": 0,
+      "explicacao": "SUM soma por grupo: A = 20 + 20 + 15 = 55; B = 30 + 10 = 40. 3 e 2 seriam o COUNT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "where_vs_having",
+      "enunciado": "Sobre WHERE e HAVING numa consulta com GROUP BY, qual afirmação está correta?",
+      "alternativas": [
+        "WHERE filtra linhas antes de agrupar; HAVING filtra grupos depois",
+        "HAVING filtra linhas antes de agrupar; WHERE filtra grupos depois",
+        "Os dois fazem a mesma coisa e podem ser trocados à vontade",
+        "HAVING só pode ser usado em consultas que não têm GROUP BY"
+      ],
+      "correta": 0,
+      "explicacao": "A ordem é: WHERE escolhe as linhas, GROUP BY agrupa, HAVING escolhe os grupos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `cliente` tem as colunas id_cliente, nome e cidade. O que mostra `SELECT MIN(nome) FROM cliente;`?",
+      "alternativas": [
+        "O nome com menos letras",
+        "O nome do primeiro cliente cadastrado",
+        "Um erro, pois MIN só funciona com números",
+        "O nome que vem primeiro na ordem alfabética"
+      ],
+      "correta": 3,
+      "explicacao": "Com texto, MIN e MAX usam a ordem alfabética: MIN é o primeiro, MAX o último."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop, a tabela `pet` (id_pet, nome, especie) tem 2 cães, 3 gatos e 2 pets com especie NULL. Quantas linhas saem de `SELECT especie, COUNT(*) FROM pet GROUP BY especie;`?",
+      "alternativas": [
+        "2 linhas, porque as linhas com NULL são descartadas",
+        "4 linhas, porque cada NULL vira um grupo separado",
+        "3 linhas: cão, gato e um grupo NULL com 2",
+        "7 linhas, uma para cada pet cadastrado"
+      ],
+      "correta": 2,
+      "explicacao": "O GROUP BY junta todos os NULL num único grupo. Por isso aparece uma linha especie = NULL com 2."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `venda` tem as colunas id_venda, data_venda e valor. Não houve nenhuma venda no dia 01/01/2026. Qual o resultado de `SELECT SUM(valor) FROM venda WHERE data_venda = '2026-01-01';`?",
+      "alternativas": [
+        "Uma linha com 0",
+        "Nenhuma linha",
+        "Um erro, porque não há linhas para somar",
+        "Uma linha com NULL"
+      ],
+      "correta": 3,
+      "explicacao": "Sem linhas para somar, SUM devolve NULL (e não 0), numa linha. Já COUNT(*) devolveria 0."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "left_count",
+      "enunciado": "Numa clínica, há as tabelas `medico` (id_medico, nome) e `consulta` (id_consulta, id_medico, data). O Dr. Paulo não tem nenhuma consulta. Em `SELECT m.nome, COUNT(*) FROM medico m LEFT JOIN consulta c ON c.id_medico = m.id_medico GROUP BY m.id_medico, m.nome;`, qual número aparece para o Dr. Paulo?",
+      "alternativas": [
+        "0, porque ele não tem nenhuma consulta",
+        "1, pois o LEFT JOIN cria uma linha para ele",
+        "NULL, porque não há consulta para contar",
+        "Ele não aparece, porque não tem consulta"
+      ],
+      "correta": 1,
+      "explicacao": "COUNT(*) conta a linha criada pelo LEFT JOIN. Para dar 0 seria preciso COUNT(c.id_consulta), que ignora o NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL 8, uma consulta com GROUP BY e sem ORDER BY é executada. Sobre a ordem das linhas no resultado, o que é correto afirmar?",
+      "alternativas": [
+        "Sai sempre em ordem crescente pela coluna do GROUP BY",
+        "Sai sempre na ordem em que as linhas foram inseridas",
+        "A ordem não é garantida sem ORDER BY",
+        "Sai sempre em ordem decrescente pelo valor agregado"
+      ],
+      "correta": 2,
+      "explicacao": "Desde o MySQL 8.0 o GROUP BY não ordena mais o resultado. Só o ORDER BY garante a ordem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "only_full",
+      "enunciado": "Numa loja, `cliente` (id_cliente chave primária, nome) e `pedido` (id_pedido, id_cliente, valor). No MySQL 8 padrão, o que acontece com `SELECT c.id_cliente, c.nome, COUNT(*) FROM cliente c JOIN pedido p ON p.id_cliente = c.id_cliente GROUP BY c.id_cliente;`?",
+      "alternativas": [
+        "Funciona, pois nome depende da chave id_cliente agrupada",
+        "Dá erro, porque c.nome não aparece na lista do GROUP BY",
+        "Funciona, mas mostra um nome qualquer de outro cliente",
+        "Dá erro, porque COUNT(*) não pode ser usado com JOIN"
+      ],
+      "correta": 0,
+      "explicacao": "O MySQL 8 reconhece a dependência funcional: agrupando pela chave primária, cada grupo tem um único nome. Mesmo assim, colocar c.nome no GROUP BY também é correto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop, a tabela `atendimento` (id, especie, valor) tem: cão 50, cão 80, gato 40, gato 60, cão 30 e ave 20. Qual o resultado de `SELECT especie, SUM(valor) FROM atendimento WHERE valor >= 40 GROUP BY especie HAVING SUM(valor) > 100;`?",
+      "alternativas": [
+        "Só cão, com 160",
+        "Cão com 130 e gato com 100",
+        "Só cão, com 130",
+        "Nenhuma linha"
+      ],
+      "correta": 2,
+      "explicacao": "O WHERE tira cão 30 e ave 20. Somas: cão 50 + 80 = 130, gato 40 + 60 = 100. O HAVING > 100 deixa só cão (130)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "avg_null",
+      "enunciado": "Numa escola, a coluna nota da tabela `prova` tem os valores 10, NULL, 6 e 8. Quais são os resultados de `AVG(nota)` e de `SUM(nota) / COUNT(*)`?",
+      "alternativas": [
+        "Os dois dão 8",
+        "Os dois dão 6",
+        "AVG dá 6 e SUM/COUNT(*) dá 8",
+        "AVG dá 8 e SUM/COUNT(*) dá 6"
+      ],
+      "correta": 3,
+      "explicacao": "AVG ignora o NULL: 24 / 3 = 8. COUNT(*) conta as 4 linhas: 24 / 4 = 6. Por isso os dois cálculos podem ser diferentes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cinema, a tabela `venda` (id_venda, filme, cpf_cliente) tem: filme X comprado pelos CPFs 1, 1 e 2; filme Y comprado pelos CPFs 3, 3 e 3. Qual o resultado de `SELECT filme, COUNT(DISTINCT cpf_cliente) FROM venda GROUP BY filme;`?",
+      "alternativas": [
+        "X com 3 e Y com 3",
+        "X com 2 e Y com 3",
+        "X com 1 e Y com 1",
+        "X com 2 e Y com 1"
+      ],
+      "correta": 3,
+      "explicacao": "Em cada grupo, COUNT(DISTINCT) conta os CPFs diferentes: X tem 1 e 2 (2); Y só tem o 3 (1)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de roupas, a tabela `cliente` tem as colunas id_cliente, nome e email. Alguns clientes não informaram e-mail (email é NULL). Compare os comandos `SELECT COUNT(*) FROM cliente;` e `SELECT COUNT(email) FROM cliente;`.\n\nNa sua resposta:\n1. diga o que cada comando conta;\n2. explique por que os resultados podem ser diferentes.",
+      "respostasAceitas": [
+        "COUNT(*) conta todas as linhas (todos os clientes). COUNT(email) conta só as linhas com e-mail preenchido, pois ignora NULL. Se houver clientes sem e-mail, o segundo número é menor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) COUNT(*) = todas as linhas; COUNT(email) = só e-mails não nulos; 2) os NULL não entram no COUNT(coluna)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa papelaria, a tabela `produto` tem as colunas id_produto, nome, categoria e preco. Há produtos das categorias caderno, caneta e mochila. Considere `SELECT categoria, COUNT(*) FROM produto GROUP BY categoria;`.\n\nNa sua resposta:\n1. diga o que a consulta mostra;\n2. diga quantas linhas o resultado terá e por quê.",
+      "respostasAceitas": [
+        "Mostra quantos produtos existem em cada categoria. Terá 3 linhas, uma para cada categoria diferente (caderno, caneta e mochila)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) contagem de produtos por categoria; 2) uma linha por valor diferente de categoria: 3."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega diz que WHERE e HAVING são a mesma coisa, só com nomes diferentes. Pense numa consulta com GROUP BY sobre uma tabela de vendas.\n\nNa sua resposta:\n1. explique quando o WHERE age e o que ele filtra;\n2. explique quando o HAVING age e o que ele filtra.",
+      "respostasAceitas": [
+        "O WHERE age antes do agrupamento e filtra linhas (ex.: só vendas de 2026). O HAVING age depois do GROUP BY e filtra grupos, podendo usar COUNT, SUM etc. (ex.: só vendedores com total acima de 1000)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) WHERE = linhas, antes de agrupar, sem funções de agregação; 2) HAVING = grupos, depois de agrupar, com funções de agregação."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa oficina, a tabela `servico` tem as colunas id_servico, descricao e preco. Considere `SELECT MAX(preco), MIN(preco) FROM servico;`.\n\nNa sua resposta:\n1. diga o que a consulta mostra;\n2. diga quantas linhas o resultado terá.",
+      "respostasAceitas": [
+        "Mostra o preço do serviço mais caro e o preço do serviço mais barato. O resultado tem uma linha só, porque não há GROUP BY."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) maior e menor preço; 2) uma linha (a tabela toda é um grupo)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num curso de inglês, a tabela `avaliacao` tem as colunas id_avaliacao, id_aluno e nota (inteiro de 0 a 10). A consulta `SELECT AVG(nota) FROM avaliacao;` mostrou 7.3333.\n\nNa sua resposta:\n1. diga o que a consulta calcula;\n2. explique por que o resultado tem casas decimais se as notas são inteiras.",
+      "respostasAceitas": [
+        "Calcula a média das notas de todas as avaliações. A média é a soma dividida pela quantidade de notas, e essa divisão nem sempre é exata, por isso aparecem casas decimais."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) média das notas; 2) divisão da soma pela quantidade gera decimais (o MySQL devolve um valor decimal)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de games, a tabela `venda` tem as colunas id_venda, jogo e valor. Considere `SELECT jogo, COUNT(*) AS total FROM venda GROUP BY jogo ORDER BY total DESC;`.\n\nNa sua resposta:\n1. diga o que a consulta mostra;\n2. explique o papel do ORDER BY total DESC.",
+      "respostasAceitas": [
+        "Mostra quantas vendas cada jogo teve. O ORDER BY total DESC coloca os jogos do mais vendido para o menos vendido, usando o apelido total da contagem."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) quantidade de vendas por jogo; 2) ordena pela contagem, da maior para a menor (ranking)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa academia, a tabela `aula` tem as colunas id_aula, modalidade e data_aula. Um aluno rodou `SELECT modalidade, COUNT(*) FROM aula WHERE COUNT(*) > 5 GROUP BY modalidade;` e recebeu erro.\n\nNa sua resposta:\n1. explique por que o comando dá erro;\n2. diga qual cláusula deveria receber a condição COUNT(*) > 5 e por quê.",
+      "respostasAceitas": [
+        "Dá erro porque o WHERE é avaliado antes de agrupar, linha por linha, e não pode usar COUNT. A condição deve ir no HAVING, que filtra os grupos depois do GROUP BY."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) WHERE não aceita função de agregação (os grupos ainda não existem); 2) HAVING, que age depois do agrupamento."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, a tabela `aluno` tem as colunas id_aluno, nome, turma e cidade. No MySQL 8, a consulta `SELECT turma, nome, COUNT(*) FROM aluno GROUP BY turma;` gera erro de ONLY_FULL_GROUP_BY.\n\nNa sua resposta:\n1. explique o motivo do erro;\n2. diga duas formas de resolver o problema, sem escrever o comando.",
+      "respostasAceitas": [
+        "Cada turma vira uma linha, mas tem vários nomes: o banco não sabe qual nome mostrar, e por isso nome precisa estar no GROUP BY ou numa agregação. Soluções: tirar nome do SELECT ou colocar nome também no GROUP BY (que muda o agrupamento)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) coluna fora do GROUP BY e fora de agregação, com vários valores por grupo; 2) remover a coluna, incluí-la no GROUP BY ou usar uma função de agregação (ex.: MIN(nome))."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num supermercado, a tabela `compra` tem as colunas id_compra, id_cliente, data_compra e valor. Compare `SELECT COUNT(id_cliente) FROM compra;` com `SELECT COUNT(DISTINCT id_cliente) FROM compra;`.\n\nNa sua resposta:\n1. diga o que cada consulta conta;\n2. dê um exemplo em que os números sejam diferentes.",
+      "respostasAceitas": [
+        "A primeira conta quantas compras têm cliente informado; a segunda conta quantos clientes diferentes compraram. Se a cliente 5 fez 3 compras, ela conta 3 vezes na primeira e 1 vez na segunda."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) COUNT = compras (linhas não nulas); COUNT(DISTINCT) = clientes diferentes; 2) qualquer exemplo de cliente com mais de uma compra."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de bicicletas, a tabela `venda` (id_venda, vendedor, valor) tem: Lia 300, Lia 500, Rui 900, Rui 50, Mel 200. Considere `SELECT vendedor, SUM(valor) FROM venda GROUP BY vendedor HAVING SUM(valor) > 750;`.\n\nNa sua resposta:\n1. diga quais vendedores aparecem no resultado e com qual total;\n2. explique por que o vendedor que sobrou ficou de fora.",
+      "respostasAceitas": [
+        "Aparecem Lia com 800 e Rui com 950. Mel ficou de fora porque o total dela é 200, que não passa de 750."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Lia 800 e Rui 950; 2) Mel tem só 200, e o HAVING descarta grupos com soma até 750."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num hotel, a tabela `hospedagem` tem as colunas id_hospedagem, tipo_quarto, ano e valor. Considere `SELECT tipo_quarto, SUM(valor) FROM hospedagem WHERE ano = 2026 GROUP BY tipo_quarto HAVING SUM(valor) > 10000;`.\n\nNa sua resposta:\n1. explique o que o WHERE faz nessa consulta;\n2. explique o que o HAVING faz nessa consulta;\n3. diga o que aparece no resultado final.",
+      "respostasAceitas": [
+        "O WHERE deixa só as hospedagens de 2026. Depois o GROUP BY soma o valor por tipo de quarto, e o HAVING mantém só os tipos com total acima de 10000. O resultado mostra esses tipos de quarto e seus totais em 2026."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) filtra linhas do ano 2026 antes de agrupar; 2) filtra grupos com soma > 10000; 3) tipos de quarto com faturamento de 2026 acima de 10000."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa sorveteria, a tabela `produto` tem as colunas id_produto, sabor e preco. A consulta `SELECT AVG(preco) FROM produto;` mostrou 12.456667, e o dono pediu um relatório mais limpo. Foi usado `SELECT ROUND(AVG(preco), 2) FROM produto;`.\n\nNa sua resposta:\n1. diga o que o ROUND faz nesse comando;\n2. diga qual valor aparece agora e por que isso ajuda no relatório.",
+      "respostasAceitas": [
+        "O ROUND arredonda o resultado da média para 2 casas decimais. Aparece 12.46, que é mais fácil de ler e combina com valores em reais."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) arredonda a média para 2 casas; 2) 12.46, formato de dinheiro, mais legível."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num petshop, há as tabelas `servico` (id_servico, nome) e `agendamento` (id_agendamento, id_servico, data). O serviço Hidratação nunca foi agendado. Compare o uso de `COUNT(*)` e de `COUNT(a.id_agendamento)` em `SELECT s.nome, ... FROM servico s LEFT JOIN agendamento a ON a.id_servico = s.id_servico GROUP BY s.id_servico, s.nome;`.\n\nNa sua resposta:\n1. diga qual número aparece para Hidratação em cada caso;\n2. explique o motivo da diferença.",
+      "respostasAceitas": [
+        "Com COUNT(*) aparece 1; com COUNT(a.id_agendamento) aparece 0. O LEFT JOIN cria uma linha para Hidratação com os campos de agendamento em NULL: COUNT(*) conta essa linha, e COUNT(coluna) ignora o NULL."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 1 e 0; 2) a linha do LEFT JOIN existe, mas a coluna do agendamento é NULL e COUNT(coluna) não conta NULL."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa lanchonete, a tabela `venda` tem as colunas id_venda, data_venda e valor. Num dia sem vendas, `SELECT SUM(valor) FROM venda WHERE data_venda = '2026-03-02';` mostrou NULL, e o relatório exibiu um campo vazio.\n\nNa sua resposta:\n1. explique por que o resultado foi NULL e não 0;\n2. diga que problema isso pode causar num relatório ou em contas feitas depois.",
+      "respostasAceitas": [
+        "Não havia nenhuma linha para somar, e o SUM de nenhum valor dá NULL. No relatório aparece vazio em vez de zero, e contas com NULL (ex.: somar com outro dia) também dão NULL."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) SUM sem linhas devolve NULL (COUNT devolveria 0); 2) campo vazio/confuso e contas com NULL que resultam em NULL. Citar COALESCE/IFNULL é um extra, não obrigatório."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa sorveteria com várias lojas, a tabela `venda` tem as colunas id_venda, loja, mes e valor. Compare o resultado de `SELECT loja, SUM(valor) FROM venda GROUP BY loja;` com o de `SELECT loja, mes, SUM(valor) FROM venda GROUP BY loja, mes;`.\n\nNa sua resposta:\n1. explique o que cada linha representa em cada consulta;\n2. diga qual das duas terá mais linhas e por quê.",
+      "respostasAceitas": [
+        "Na primeira, cada linha é o total de uma loja no período todo. Na segunda, cada linha é o total de uma loja num mês. A segunda tem mais linhas (ou o mesmo número), porque cada loja é dividida em vários meses."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) total por loja vs total por loja em cada mês; 2) a segunda tem mais linhas, uma por combinação loja + mês."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa sorveteria, a tabela `venda` tem as colunas id_venda, sabor e valor. Qual destas formas de somar a coluna valor está escrita corretamente no MySQL?",
+      "alternativas": [
+        "`SUM(valor)`",
+        "`SUM valor`",
+        "`SUM[valor]`",
+        "`SOMA(valor)`"
+      ],
+      "correta": 0,
+      "explicacao": "As funções de agregação recebem a coluna entre parênteses: SUM(valor). SOMA não existe no MySQL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "ordem_clausulas",
+      "enunciado": "Numa consulta com agrupamento, em que posição deve ficar a cláusula HAVING?",
+      "alternativas": [
+        "Logo depois do FROM e antes do WHERE",
+        "Antes do GROUP BY e depois do WHERE",
+        "Logo depois do GROUP BY e antes do ORDER BY",
+        "No final do comando, depois do ORDER BY"
+      ],
+      "correta": 2,
+      "explicacao": "A sequência é FROM, WHERE, GROUP BY, HAVING, ORDER BY. O HAVING filtra os grupos, por isso vem depois do GROUP BY."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, a tabela `livro` tem as colunas id_livro, titulo e ano_publicacao. O que mostra `SELECT COUNT(*) FROM livro WHERE ano_publicacao < 2000;`?",
+      "alternativas": [
+        "A lista dos livros publicados antes de 2000",
+        "A soma dos anos dos livros antigos",
+        "Quantos livros foram publicados a partir de 2000",
+        "Quantos livros foram publicados antes de 2000"
+      ],
+      "correta": 3,
+      "explicacao": "O WHERE escolhe os livros com ano menor que 2000, e o COUNT(*) conta quantas linhas sobraram."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que as funções COUNT, SUM, AVG, MIN e MAX têm em comum?",
+      "alternativas": [
+        "Alteram os valores guardados na coluna indicada",
+        "Criam uma nova coluna permanente na tabela",
+        "Só funcionam com colunas do tipo texto",
+        "Resumem várias linhas num único valor"
+      ],
+      "correta": 3,
+      "explicacao": "São funções de agregação: resumem várias linhas num só valor. Não alteram a tabela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "linhas_grupo",
+      "enunciado": "Num hotel, a tabela `quarto` (id_quarto, andar, tipo) tem 3 quartos no andar 1, 2 quartos no andar 2 e 4 quartos no andar 3. Quantas linhas tem o resultado de `SELECT andar, COUNT(*) FROM quarto GROUP BY andar;`?",
+      "alternativas": [
+        "9",
+        "1",
+        "3",
+        "4"
+      ],
+      "correta": 2,
+      "explicacao": "Sai uma linha para cada valor diferente de andar: 1, 2 e 3. Os 9 quartos são distribuídos nesses 3 grupos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa farmácia, a tabela `venda` tem as colunas id_venda, id_cliente e valor. Qual consulta mostra quanto cada cliente já gastou?",
+      "alternativas": [
+        "`SELECT id_cliente, COUNT(valor) FROM venda GROUP BY id_cliente;`",
+        "`SELECT id_cliente, SUM(valor) FROM venda GROUP BY id_cliente;`",
+        "`SELECT id_cliente, SUM(valor) FROM venda;`",
+        "`SELECT id_cliente, valor FROM venda ORDER BY id_cliente;`"
+      ],
+      "correta": 1,
+      "explicacao": "Gasto total = SUM(valor), agrupado por cliente. COUNT diria quantas compras, e sem GROUP BY não sai um total por cliente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "min_max_basico",
+      "enunciado": "Numa academia, a tabela `instrutor` tem as colunas id_instrutor, nome e salario. Qual consulta mostra o maior salário pago?",
+      "alternativas": [
+        "`SELECT MIN(salario) FROM instrutor;`",
+        "`SELECT TOP(salario) FROM instrutor;`",
+        "`SELECT SUM(salario) FROM instrutor;`",
+        "`SELECT MAX(salario) FROM instrutor;`"
+      ],
+      "correta": 3,
+      "explicacao": "MAX devolve o maior valor. TOP não é função do MySQL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas é uma função de agregação do MySQL?",
+      "alternativas": [
+        "UPPER",
+        "CONCAT",
+        "NOW",
+        "COUNT"
+      ],
+      "correta": 3,
+      "explicacao": "COUNT resume várias linhas num número. UPPER e CONCAT trabalham com texto de cada linha, e NOW devolve a data e hora atuais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "having_leitura",
+      "enunciado": "Numa loja, a consulta `SELECT vendedor, SUM(valor) FROM venda GROUP BY vendedor HAVING SUM(valor) > 1000;` foi executada. O que o HAVING faz aqui?",
+      "alternativas": [
+        "Mostra só as vendas individuais acima de 1000",
+        "Soma 1000 ao total de cada vendedor",
+        "Mostra os vendedores com mais de 1000 vendas",
+        "Deixa só vendedores com total acima de 1000"
+      ],
+      "correta": 3,
+      "explicacao": "HAVING SUM(valor) > 1000 olha o total de cada grupo (vendedor), não cada venda."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "count_null",
+      "enunciado": "Numa escola, a tabela `aluno` tem as colunas id_aluno, nome e email, e alguns e-mails estão NULL. Sobre `COUNT(*)`, qual afirmação está correta?",
+      "alternativas": [
+        "Conta só as linhas que não têm nenhum NULL",
+        "Conta só os valores diferentes da tabela",
+        "Conta as colunas da tabela, não as linhas",
+        "Conta todas as linhas, mesmo com NULL"
+      ],
+      "correta": 3,
+      "explicacao": "COUNT(*) conta linhas, sem olhar o conteúdo. Quem ignora NULL é COUNT(coluna)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cinema, a tabela `filme` tem as colunas id_filme, titulo e genero. O que mostra `SELECT genero, COUNT(*) AS total FROM filme GROUP BY genero ORDER BY total DESC LIMIT 1;`?",
+      "alternativas": [
+        "O gênero com mais filmes e sua quantidade",
+        "O gênero com menos filmes e sua quantidade",
+        "O primeiro gênero em ordem alfabética",
+        "O total de filmes de todos os gêneros"
+      ],
+      "correta": 0,
+      "explicacao": "Conta por gênero, ordena da maior contagem para a menor e o LIMIT 1 deixa só o primeiro: o gênero com mais filmes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa oficina, a tabela `ordem_servico` tem as colunas id_os, placa e valor. O que mostra `SELECT SUM(valor) FROM ordem_servico WHERE placa = 'ABC1D23';`?",
+      "alternativas": [
+        "Quantas vezes o carro ABC1D23 foi à oficina",
+        "O serviço mais caro feito no carro ABC1D23",
+        "O total gasto por todos os carros da oficina",
+        "O total gasto pelo carro ABC1D23"
+      ],
+      "correta": 3,
+      "explicacao": "O WHERE deixa só as ordens desse carro e o SUM soma os valores delas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `cliente` (id_cliente, nome, cidade) de uma loja, você quer saber quantos clientes há em cada cidade. Qual coluna deve ficar no GROUP BY?",
+      "alternativas": [
+        "id_cliente",
+        "cidade",
+        "nome",
+        "COUNT(*)"
+      ],
+      "correta": 1,
+      "explicacao": "Agrupa-se pela coluna que define os grupos: a cidade. Agrupar por id_cliente daria um grupo por cliente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, a tabela `avaliacao_fisica` tem as colunas id_avaliacao, id_aluno, peso e data_avaliacao. O que mostra `SELECT AVG(peso) FROM avaliacao_fisica WHERE id_aluno = 7;`?",
+      "alternativas": [
+        "A média dos pesos do aluno 7",
+        "O peso mais recente do aluno 7",
+        "A média de peso de todos os alunos",
+        "Quantas avaliações o aluno 7 já fez"
+      ],
+      "correta": 0,
+      "explicacao": "O WHERE filtra as avaliações do aluno 7 e o AVG calcula a média do peso nelas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a tabela `aluno` tem as colunas id_aluno, nome e email. Suspeita-se de e-mails cadastrados mais de uma vez. Qual consulta mostra os e-mails repetidos?",
+      "alternativas": [
+        "`SELECT email, COUNT(*) FROM aluno WHERE COUNT(*) > 1 GROUP BY email;`",
+        "`SELECT DISTINCT email FROM aluno;`",
+        "`SELECT email, COUNT(*) FROM aluno GROUP BY email HAVING COUNT(*) > 1;`",
+        "`SELECT email, COUNT(*) FROM aluno GROUP BY email HAVING COUNT(*) = 1;`"
+      ],
+      "correta": 2,
+      "explicacao": "Agrupando por e-mail, grupos com mais de uma linha são repetições. DISTINCT só esconde as repetições, e COUNT(*) = 1 mostraria os únicos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a tabela `boletim` (id_aluno, disciplina, nota) tem: Matemática com notas 6, 8 e 10; Português com notas 7 e 8. Qual o resultado de `SELECT disciplina, AVG(nota) FROM boletim GROUP BY disciplina;`?",
+      "alternativas": [
+        "Matemática 24 e Português 15",
+        "Matemática 8 e Português 7,5",
+        "Matemática 3 e Português 2",
+        "Uma linha só, com média 7,8"
+      ],
+      "correta": 1,
+      "explicacao": "Média por grupo: Matemática (6 + 8 + 10) / 3 = 8; Português (7 + 8) / 2 = 7,5."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de eletrônicos, a tabela `produto` tem as colunas id_produto, nome, categoria e preco. Qual consulta mostra as categorias cujo preço médio passa de 500?",
+      "alternativas": [
+        "`SELECT categoria, AVG(preco) FROM produto WHERE preco > 500 GROUP BY categoria;`",
+        "`SELECT categoria, AVG(preco) FROM produto GROUP BY categoria HAVING preco > 500;`",
+        "`SELECT categoria, AVG(preco) FROM produto WHERE AVG(preco) > 500 GROUP BY categoria;`",
+        "`SELECT categoria, AVG(preco) FROM produto GROUP BY categoria HAVING AVG(preco) > 500;`"
+      ],
+      "correta": 3,
+      "explicacao": "A condição é sobre a média do grupo, então vai no HAVING com AVG(preco). WHERE preco > 500 mudaria quais produtos entram na média."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "where_agregado",
+      "enunciado": "Numa loja, a tabela `cliente` tem as colunas id_cliente, nome e cidade. Por que `SELECT cidade, COUNT(*) AS qtd FROM cliente WHERE qtd > 3 GROUP BY cidade;` não funciona?",
+      "alternativas": [
+        "Porque o apelido qtd deveria ser escrito entre aspas",
+        "Porque o WHERE roda antes de existir a contagem",
+        "Porque COUNT(*) não pode receber um apelido com AS",
+        "Porque cidade deveria estar dentro de uma função de agregação"
+      ],
+      "correta": 1,
+      "explicacao": "Quando o WHERE é avaliado, a contagem ainda não existe. A condição deve ir no HAVING (ex.: HAVING COUNT(*) > 3)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cinema, a tabela `ingresso` tem as colunas id_ingresso, filme, data_venda e valor. O que mostra `SELECT filme, SUM(valor) FROM ingresso WHERE data_venda BETWEEN '2026-07-01' AND '2026-07-31' GROUP BY filme;`?",
+      "alternativas": [
+        "Quantos ingressos cada filme vendeu em julho de 2026",
+        "Quanto cada filme arrecadou em julho de 2026",
+        "Quanto cada filme arrecadou desde a estreia",
+        "O filme que mais arrecadou em julho de 2026"
+      ],
+      "correta": 1,
+      "explicacao": "O WHERE deixa só as vendas de julho e o SUM(valor) soma a arrecadação de cada filme."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, a tabela `consulta` tem as colunas id_consulta, id_medico e data_consulta. Não há nenhuma consulta para o médico 99. Qual o resultado de `SELECT COUNT(*) FROM consulta WHERE id_medico = 99;`?",
+      "alternativas": [
+        "Uma linha com o valor 0",
+        "Uma linha com NULL",
+        "Nenhuma linha",
+        "Um erro de médico inexistente"
+      ],
+      "correta": 0,
+      "explicacao": "COUNT sempre devolve um número: sem linhas, devolve 0. (Diferente de SUM, que daria NULL.)"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `cliente` tem as colunas id_cliente, nome e cidade. Você quer contar os clientes por cidade, mas só de Recife e Natal. Onde é melhor colocar o filtro `cidade IN ('Recife', 'Natal')`?",
+      "alternativas": [
+        "No HAVING, porque filtros sempre ficam depois do GROUP BY",
+        "No ORDER BY, porque ele escolhe quais grupos aparecem",
+        "No WHERE, antes de agrupar",
+        "No GROUP BY, no lugar da coluna cidade"
+      ],
+      "correta": 2,
+      "explicacao": "O filtro é sobre uma coluna comum, não sobre um total: o WHERE descarta essas linhas antes, o que é mais claro e mais leve."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa papelaria, a tabela `produto` tem as colunas id_produto, nome, categoria e preco. O que mostra `SELECT categoria, COUNT(*), MIN(preco), MAX(preco) FROM produto GROUP BY categoria;`?",
+      "alternativas": [
+        "Para cada produto: sua categoria, seu preço mínimo e seu preço máximo",
+        "Para cada categoria: quantos produtos há, o menor preço e o maior preço",
+        "Uma linha só com o total de produtos e os preços extremos",
+        "Para cada categoria: o produto mais barato e o mais caro, pelo nome"
+      ],
+      "correta": 1,
+      "explicacao": "Várias funções de agregação podem ser usadas juntas; todas são calculadas para cada grupo (categoria). Nomes de produto não aparecem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "join_sum",
+      "enunciado": "Num restaurante, há as tabelas `prato` (id_prato, nome, categoria) e `item_pedido` (id_item, id_prato, quantidade). Qual consulta mostra quantas unidades foram vendidas por categoria de prato?",
+      "alternativas": [
+        "`SELECT p.categoria, SUM(i.quantidade) FROM prato p JOIN item_pedido i ON i.id_prato = p.id_prato GROUP BY i.id_prato;`",
+        "`SELECT p.categoria, SUM(i.quantidade) FROM prato p JOIN item_pedido i ON i.id_prato = p.id_prato GROUP BY p.categoria;`",
+        "`SELECT p.categoria, COUNT(p.categoria) FROM prato p GROUP BY p.categoria;`",
+        "`SELECT categoria, SUM(quantidade) FROM item_pedido GROUP BY categoria;`"
+      ],
+      "correta": 1,
+      "explicacao": "A categoria está em prato e a quantidade em item_pedido: é preciso o JOIN e agrupar por categoria. item_pedido não tem a coluna categoria."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "duas_colunas",
+      "enunciado": "Numa loja, a tabela `venda` (vendedor, mes, valor) tem as linhas: (Rita, jan, 100), (Rita, jan, 50), (Rita, fev, 80), (Caio, jan, 70), (Caio, fev, 30), (Caio, fev, 90). Quantas linhas tem o resultado de `SELECT vendedor, mes, SUM(valor) FROM venda GROUP BY vendedor, mes;`?",
+      "alternativas": [
+        "2",
+        "4",
+        "6",
+        "3"
+      ],
+      "correta": 1,
+      "explicacao": "Os grupos são as combinações: Rita–jan, Rita–fev, Caio–jan e Caio–fev. São 4 linhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja online, a tabela `pedido` tem as colunas id_pedido, id_cliente e valor. O que mostra `SELECT id_cliente FROM pedido GROUP BY id_cliente HAVING COUNT(*) = 1;`?",
+      "alternativas": [
+        "O primeiro pedido de cada cliente",
+        "Os clientes com mais de um pedido",
+        "O cliente de número 1 e seus pedidos",
+        "Clientes com um único pedido"
+      ],
+      "correta": 3,
+      "explicacao": "Agrupa por cliente e mantém só os grupos com uma linha: clientes com um único pedido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa transportadora, a coluna cidade da tabela `entrega` tem os valores: Recife, Natal, Recife, NULL, Natal, Salvador. Qual o resultado de `SELECT COUNT(DISTINCT cidade) FROM entrega;`?",
+      "alternativas": [
+        "3",
+        "6",
+        "4",
+        "5"
+      ],
+      "correta": 0,
+      "explicacao": "Cidades diferentes: Recife, Natal e Salvador. O NULL não é contado pelo COUNT(DISTINCT)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num supermercado, a consulta `SELECT setor, SUM(valor) FROM venda GROUP BY setor ORDER BY SUM(valor);` foi executada. Em que ordem saem os setores?",
+      "alternativas": [
+        "Do setor com maior total vendido para o de menor total",
+        "Em ordem alfabética pelo nome do setor",
+        "Do setor com menor total vendido para o de maior total",
+        "Na ordem em que os setores foram cadastrados"
+      ],
+      "correta": 2,
+      "explicacao": "ORDER BY sem DESC é crescente: do menor total para o maior."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de móveis, a tabela `venda` tem as colunas id_venda, data_venda (DATE) e valor. O que mostra `SELECT YEAR(data_venda), SUM(valor) FROM venda GROUP BY YEAR(data_venda);`?",
+      "alternativas": [
+        "O total vendido em cada ano",
+        "O total vendido em cada dia",
+        "O ano com a maior venda",
+        "A quantidade de vendas em cada ano"
+      ],
+      "correta": 0,
+      "explicacao": "YEAR(data_venda) pega só o ano; agrupando por ele, o SUM dá o total de cada ano."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, a tabela `emprestimo` (id, id_leitor, devolvido) tem: leitor 1 com N, N, S; leitor 2 com N; leitor 3 com N, N, N; leitor 4 com S, S. Qual o resultado de `SELECT id_leitor, COUNT(*) FROM emprestimo WHERE devolvido = 'N' GROUP BY id_leitor HAVING COUNT(*) >= 2;`?",
+      "alternativas": [
+        "Leitor 1 com 3, leitor 3 com 3 e leitor 4 com 2",
+        "Somente o leitor 3, com 3",
+        "Leitor 1 com 2, leitor 2 com 1 e leitor 3 com 3",
+        "Leitor 1 com 2 e leitor 3 com 3"
+      ],
+      "correta": 3,
+      "explicacao": "O WHERE deixa só os N: leitor 1 (2), leitor 2 (1), leitor 3 (3). O HAVING >= 2 deixa leitores 1 e 3."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `pedido` tem as colunas id_pedido, id_cliente e valor. O que acontece com `SELECT COUNT(*) FROM pedido HAVING COUNT(*) > 100;`, que tem HAVING mas não tem GROUP BY?",
+      "alternativas": [
+        "Dá erro, porque HAVING só pode ser usado junto com GROUP BY",
+        "Mostra os pedidos com valor acima de 100",
+        "Mostra sempre a contagem, porque o HAVING é ignorado sem GROUP BY",
+        "Sai uma linha só se a contagem passar de 100"
+      ],
+      "correta": 3,
+      "explicacao": "Sem GROUP BY, a tabela toda é um único grupo e o HAVING decide se esse grupo aparece."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a coluna idade (INT) da tabela `aluno` tem os valores 15, 16 e 16. Qual o resultado de `SELECT ROUND(AVG(idade), 1) FROM aluno;`?",
+      "alternativas": [
+        "15.6",
+        "15.7",
+        "16",
+        "15.67"
+      ],
+      "correta": 1,
+      "explicacao": "A média é 47 / 3 = 15,666…; arredondando para 1 casa fica 15.7."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "count_null",
+      "enunciado": "Numa escola, a tabela `aluno` (id_aluno, turma, tel_responsavel) tem: turma 1A com telefones preenchido, NULL e preenchido; turma 1B com NULL e NULL. Qual o resultado de `SELECT turma, COUNT(tel_responsavel) FROM aluno GROUP BY turma;`?",
+      "alternativas": [
+        "1A com 2 e 1B com 0",
+        "1A com 3 e 1B com 2",
+        "1A com 2, e 1B não aparece",
+        "1A com 1 e 1B com 2"
+      ],
+      "correta": 0,
+      "explicacao": "O grupo 1B existe (tem 2 alunos), mas COUNT(coluna) ignora NULL e dá 0. Na 1A há 2 telefones preenchidos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "left_count",
+      "enunciado": "Numa loja, há as tabelas `categoria` (id_categoria, nome) e `produto` (id_produto, nome, id_categoria). Você quer listar todas as categorias com a quantidade de produtos, mostrando 0 nas que não têm produto. Qual consulta faz isso?",
+      "alternativas": [
+        "`SELECT c.nome, COUNT(p.id_produto) FROM categoria c INNER JOIN produto p ON p.id_categoria = c.id_categoria GROUP BY c.id_categoria, c.nome;`",
+        "`SELECT c.nome, COUNT(*) FROM categoria c LEFT JOIN produto p ON p.id_categoria = c.id_categoria GROUP BY c.id_categoria, c.nome;`",
+        "`SELECT c.nome, COUNT(p.id_produto) FROM categoria c LEFT JOIN produto p ON p.id_categoria = c.id_categoria;`",
+        "`SELECT c.nome, COUNT(p.id_produto) FROM categoria c LEFT JOIN produto p ON p.id_categoria = c.id_categoria GROUP BY c.id_categoria, c.nome;`"
+      ],
+      "correta": 3,
+      "explicacao": "O LEFT JOIN mantém categorias sem produto, e COUNT(p.id_produto) dá 0 para elas. INNER JOIN as esconde, COUNT(*) daria 1, e sem GROUP BY sai uma linha só."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "where_vs_having",
+      "enunciado": "Numa loja, a tabela `compra` tem as colunas id_compra, id_cliente e valor. Compare (1) `SELECT id_cliente, SUM(valor) FROM compra WHERE valor > 100 GROUP BY id_cliente;` e (2) `SELECT id_cliente, SUM(valor) FROM compra GROUP BY id_cliente HAVING SUM(valor) > 100;`. Qual afirmação está correta?",
+      "alternativas": [
+        "(1) soma só compras acima de 100; (2) filtra o total acima de 100",
+        "As duas dão sempre o mesmo resultado, só mudam a forma de escrever",
+        "(1) mostra os clientes com total acima de 100; (2) soma só as compras acima de 100",
+        "(1) dá erro, porque WHERE não pode ser usado junto com GROUP BY"
+      ],
+      "correta": 0,
+      "explicacao": "WHERE filtra cada compra antes da soma; HAVING filtra o total depois da soma. Um cliente com 3 compras de 50 aparece em (2) com 150, mas não em (1)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, a tabela `matricula` (id, modalidade, status) tem: Pilates com ativo e ativo; Yoga com cancelado e cancelado; Funcional com ativo e cancelado. Qual o resultado de `SELECT modalidade, COUNT(*) FROM matricula WHERE status = 'ativo' GROUP BY modalidade;`?",
+      "alternativas": [
+        "Pilates com 2, Yoga com 0 e Funcional com 1",
+        "Pilates com 2, Yoga com 2 e Funcional com 2",
+        "Pilates com 2 e Funcional com 1; Yoga não aparece",
+        "Pilates com 2 e Funcional com 2; Yoga não aparece"
+      ],
+      "correta": 2,
+      "explicacao": "O WHERE tira as linhas canceladas antes de agrupar. Yoga fica sem nenhuma linha, então nem forma grupo (não aparece com 0)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa feira de artesanato, a tabela `venda` tem as colunas id_venda, peca e valor. Compare `SELECT SUM(valor) FROM venda;` com `SELECT COUNT(valor) FROM venda;`.\n\nNa sua resposta:\n1. diga o que cada consulta mostra;\n2. explique para que o dono da barraca usaria cada uma.",
+      "respostasAceitas": [
+        "SUM(valor) mostra o total em dinheiro vendido; COUNT(valor) mostra quantas vendas foram feitas. O dono usaria o SUM para saber o faturamento e o COUNT para saber o número de vendas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) SUM = soma dos valores; COUNT = quantidade de vendas; 2) faturamento vs quantidade de vendas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, a tabela `boletim` tem as colunas id_aluno, turma e nota. Considere `SELECT turma, AVG(nota) FROM boletim GROUP BY turma;`.\n\nNa sua resposta:\n1. diga o que a consulta mostra;\n2. explique o papel do GROUP BY turma.",
+      "respostasAceitas": [
+        "Mostra a média das notas de cada turma. O GROUP BY turma junta as notas da mesma turma num grupo, e o AVG é calculado separado para cada grupo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) média por turma; 2) forma um grupo por turma para calcular a média de cada uma."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa academia, a tabela `aluno` tem 120 linhas, com as colunas id_aluno, nome e mensalidade. A consulta `SELECT SUM(mensalidade) FROM aluno;` devolveu uma única linha.\n\nNa sua resposta:\n1. diga o que esse valor representa;\n2. explique por que saiu uma linha só, e não 120.",
+      "respostasAceitas": [
+        "O valor é a soma das mensalidades de todos os alunos. Saiu uma linha porque não há GROUP BY: a função de agregação resume a tabela inteira num único valor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) soma de todas as mensalidades; 2) sem GROUP BY, a tabela toda é um grupo só."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa clínica, a tabela `paciente` tem as colunas id_paciente, nome e cpf. Para conferir o cadastro, usou-se `SELECT cpf, COUNT(*) FROM paciente GROUP BY cpf HAVING COUNT(*) > 1;`.\n\nNa sua resposta:\n1. diga o que essa consulta encontra;\n2. explique por que isso é útil para a clínica.",
+      "respostasAceitas": [
+        "Encontra os CPFs que aparecem em mais de um cadastro, ou seja, pacientes duplicados. É útil para corrigir cadastros repetidos, que podem separar o histórico de um mesmo paciente."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) CPFs repetidos (cadastro duplicado); 2) corrigir duplicidade, evitar erros de histórico/cobrança."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "data_agregacao",
+      "enunciado": "Num clube de xadrez, a tabela `socio` tem as colunas id_socio, nome e data_nascimento. Considere `SELECT MIN(data_nascimento) FROM socio;`.\n\nNa sua resposta:\n1. diga o que a consulta mostra;\n2. diga se essa data é do sócio mais novo ou do mais velho, e por quê.",
+      "respostasAceitas": [
+        "Mostra a menor data de nascimento da tabela. É a do sócio mais velho, porque quem nasceu primeiro tem a data mais antiga (menor)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a menor (mais antiga) data de nascimento; 2) sócio mais velho, pois a data menor é a mais antiga."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de calçados, a consulta `SELECT modelo, SUM(quantidade) AS vendidos FROM venda GROUP BY modelo ORDER BY vendidos DESC LIMIT 1;` é usada no painel do gerente.\n\nNa sua resposta:\n1. diga o que a consulta mostra;\n2. explique o que o ORDER BY e o LIMIT fazem juntos.",
+      "respostasAceitas": [
+        "Mostra o modelo mais vendido e quantas unidades vendeu. O ORDER BY vendidos DESC coloca o maior total primeiro e o LIMIT 1 deixa só essa primeira linha."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o modelo campeão de vendas; 2) ordena do maior para o menor total e pega só o primeiro."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num cinema, a tabela `ingresso` tem as colunas id_ingresso, filme e cpf_cliente. Considere `SELECT filme, COUNT(*), COUNT(DISTINCT cpf_cliente) FROM ingresso GROUP BY filme;`.\n\nNa sua resposta:\n1. diga o que cada uma das duas contagens mostra;\n2. explique o que significa a segunda contagem ser bem menor que a primeira num filme.",
+      "respostasAceitas": [
+        "COUNT(*) mostra quantos ingressos o filme vendeu; COUNT(DISTINCT cpf_cliente) mostra quantas pessoas diferentes compraram. Se a segunda é bem menor, muitas pessoas compraram mais de um ingresso (ex.: para a família ou para ver de novo)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ingressos vendidos vs clientes diferentes; 2) clientes repetindo compras."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa rede de padarias, a consulta `SELECT loja, SUM(valor) AS total FROM venda GROUP BY loja ORDER BY total DESC;` devolveu: Centro 18500, Praia 22300, Bairro Novo 9100 (já ordenado pelo banco).\n\nNa sua resposta:\n1. diga em que ordem as lojas aparecem no resultado;\n2. diga qual loja vendeu mais e explique como o resultado mostra isso.",
+      "respostasAceitas": [
+        "Aparecem Praia (22300), Centro (18500) e Bairro Novo (9100), do maior total para o menor. A Praia vendeu mais, porque o DESC coloca o maior total na primeira linha."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Praia, Centro, Bairro Novo; 2) Praia, por ter o maior SUM e ficar em primeiro com DESC."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de informática, a tabela `cliente` tem as colunas id_cliente, nome, cidade e ativo (1 ou 0). Considere `SELECT cidade, COUNT(*) FROM cliente WHERE ativo = 1 GROUP BY cidade;`.\n\nNa sua resposta:\n1. explique o que o WHERE faz antes do agrupamento;\n2. diga como mudaria o resultado se o WHERE fosse retirado.",
+      "respostasAceitas": [
+        "O WHERE deixa só os clientes ativos antes de agrupar, então a contagem por cidade é só de ativos. Sem o WHERE, a contagem incluiria também os inativos, e os números por cidade ficariam iguais ou maiores."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) filtra linhas (só ativos) antes do GROUP BY; 2) contaria todos os clientes, números iguais ou maiores (e cidades só com inativos passariam a aparecer)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola de música, a tabela `aula` tem as colunas id_aula, professor, instrumento e duracao_min. Considere `SELECT professor, instrumento, SUM(duracao_min) FROM aula GROUP BY professor, instrumento;`.\n\nNa sua resposta:\n1. explique como as linhas são agrupadas;\n2. dê um exemplo do que uma linha do resultado significa.",
+      "respostasAceitas": [
+        "As linhas são agrupadas pela combinação de professor e instrumento. Uma linha como (Marta, violão, 300) significa que Marta deu 300 minutos de aula de violão no total."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) um grupo por par professor + instrumento; 2) exemplo coerente de total de minutos para um par."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "join_sum",
+      "enunciado": "Numa loja de games, há as tabelas `jogo` (id_jogo, titulo, genero) e `venda` (id_venda, id_jogo, valor). Considere `SELECT j.genero, SUM(v.valor) FROM jogo j JOIN venda v ON v.id_jogo = j.id_jogo GROUP BY j.genero;`.\n\nNa sua resposta:\n1. explique por que o JOIN é necessário nessa consulta;\n2. diga o que o resultado mostra.",
+      "respostasAceitas": [
+        "O JOIN é necessário porque o gênero está na tabela jogo e o valor está na tabela venda. O resultado mostra o total vendido (em dinheiro) de cada gênero de jogo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) os dados estão em duas tabelas ligadas por id_jogo; 2) faturamento por gênero."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "avg_null",
+      "enunciado": "Numa escola, a tabela `prova` tem as colunas id_aluno e nota. Os alunos que faltaram ficaram com nota NULL. A professora rodou `SELECT AVG(nota) FROM prova;` para saber a média da turma.\n\nNa sua resposta:\n1. explique o que o AVG faz com as notas NULL;\n2. diga se a média mostrada inclui os alunos que faltaram e que cuidado a professora deve ter.",
+      "respostasAceitas": [
+        "O AVG ignora os NULL: soma só as notas preenchidas e divide pela quantidade delas. A média não inclui quem faltou; ela é a média de quem fez a prova, e não de toda a turma."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) NULL fica fora da soma e da contagem; 2) a média é só de quem fez; se quiser contar falta como zero, o cálculo seria outro."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, `pedido` (id_pedido, id_cliente, valor_frete) e `item_pedido` (id_item, id_pedido, produto). Para somar o frete por cliente, usou-se `SELECT p.id_cliente, SUM(p.valor_frete) FROM pedido p JOIN item_pedido i ON i.id_pedido = p.id_pedido GROUP BY p.id_cliente;`, e o total saiu maior que o real.\n\nNa sua resposta:\n1. explique por que a soma ficou maior que o real;\n2. diga o que deveria ser feito para obter o valor certo, sem escrever o comando.",
+      "respostasAceitas": [
+        "O JOIN repete cada pedido uma vez para cada item. Um pedido com 3 itens tem o frete somado 3 vezes. Para o valor certo, a soma do frete deve ser feita só na tabela pedido, sem juntar com item_pedido."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o JOIN multiplica as linhas do pedido pela quantidade de itens; 2) somar o frete sem o JOIN com itens (ou agrupar antes)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, há as tabelas `cliente` (id_cliente, nome) e `compra` (id_compra, id_cliente, valor). Há duas clientes diferentes chamadas Ana Souza. A consulta `SELECT c.nome, SUM(co.valor) FROM cliente c JOIN compra co ON co.id_cliente = c.id_cliente GROUP BY c.nome;` foi usada num relatório.\n\nNa sua resposta:\n1. explique o problema que acontece com as duas Anas;\n2. diga como o agrupamento deveria ser feito para separá-las.",
+      "respostasAceitas": [
+        "As duas Anas têm o mesmo nome e caem no mesmo grupo: as compras delas são somadas juntas, como se fossem uma pessoa. O certo é agrupar pela chave, c.id_cliente (podendo mostrar também o nome)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) agrupar por nome mistura pessoas com o mesmo nome; 2) agrupar pelo id_cliente (chave primária)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, a turma A tem duas notas (10 e 10) e a turma B tem uma nota (4). Um colega calculou a média de cada turma (10 e 4) e depois a média dessas médias, dando 7. Já `SELECT AVG(nota) FROM boletim;` mostrou 8.\n\nNa sua resposta:\n1. explique por que os dois números são diferentes;\n2. diga qual dos dois é a média de todas as notas da escola.",
+      "respostasAceitas": [
+        "A média das médias dá o mesmo peso para cada turma, mesmo a B tendo só uma nota. O AVG(nota) soma as 3 notas (24) e divide por 3, dando 8. A média de todas as notas é 8."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) turmas com quantidades diferentes de notas; a média das médias não pondera; 2) 8, a do AVG sobre todas as linhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa locadora de carros, a tabela `veiculo` tem as colunas id_veiculo, modelo e valor_diaria. Qual comando mostra quantos veículos estão cadastrados?",
+      "alternativas": [
+        "`SELECT SUM(*) FROM veiculo;`",
+        "`SELECT COUNT(*) FROM veiculo;`",
+        "`SELECT COUNT FROM veiculo;`",
+        "`SELECT TOTAL(*) FROM veiculo;`"
+      ],
+      "correta": 1,
+      "explicacao": "COUNT(*) conta as linhas. SUM precisa de uma coluna numérica, COUNT exige parênteses e TOTAL não é função do MySQL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a tabela `prova` tem as colunas id_aluno e nota. O que mostra `SELECT MAX(nota) - MIN(nota) FROM prova;`?",
+      "alternativas": [
+        "A média entre a maior e a menor nota",
+        "A quantidade de notas diferentes",
+        "A diferença entre a maior e a menor nota",
+        "A soma da maior com a menor nota"
+      ],
+      "correta": 2,
+      "explicacao": "MAX pega a maior nota, MIN a menor, e o sinal de menos calcula a diferença entre elas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop, `SELECT especie, COUNT(*) FROM pet GROUP BY especie;` devolveu: cão 5, gato 3, coelho 1. Quantos pets há na tabela `pet` (id_pet, nome, especie)?",
+      "alternativas": [
+        "9",
+        "3",
+        "5",
+        "1"
+      ],
+      "correta": 0,
+      "explicacao": "Cada linha do resultado conta os pets de uma espécie. Somando 5 + 3 + 1 = 9 pets. O 3 é a quantidade de espécies."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a média das notas da turma deu 7,4667. Qual valor mostra `ROUND(AVG(nota), 1)`?",
+      "alternativas": [
+        "7.4",
+        "7.5",
+        "7",
+        "7.47"
+      ],
+      "correta": 1,
+      "explicacao": "ROUND com 1 casa olha a segunda casa (6): arredonda 7,46… para cima, dando 7.5."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `venda` tem as colunas id_venda, id_vendedor e valor, e a tabela `vendedor` tem id_vendedor e nome. Por que um relatório de total vendido por nome do vendedor precisa de JOIN?",
+      "alternativas": [
+        "Porque a venda guarda só o id_vendedor, não o nome",
+        "Porque o GROUP BY só funciona quando há duas tabelas",
+        "Porque a função SUM precisa de duas tabelas para somar",
+        "Porque o JOIN é que coloca o resultado em ordem"
+      ],
+      "correta": 0,
+      "explicacao": "O JOIN liga as duas tabelas pelo id_vendedor, trazendo o nome para junto dos valores das vendas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, alguém escreveu `SELECT autor, COUNT(*) AS qtd FROM livro GROUP BY autor ORDER BY qtd DESC;`. O apelido qtd pode ser usado no ORDER BY?",
+      "alternativas": [
+        "Não: o ORDER BY só aceita nomes de colunas da tabela",
+        "Sim: o ORDER BY aceita o apelido dado no SELECT",
+        "Não: é preciso repetir COUNT(*) com o AS no ORDER BY",
+        "Sim, mas só se qtd estiver também no GROUP BY"
+      ],
+      "correta": 1,
+      "explicacao": "O ORDER BY é processado depois do SELECT, então conhece os apelidos criados com AS."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "linhas_grupo",
+      "enunciado": "Uma rede de lojas tem 200 vendas registradas, feitas em 4 lojas diferentes. Quantas linhas saem de `SELECT loja, SUM(valor) FROM venda GROUP BY loja;`?",
+      "alternativas": [
+        "200",
+        "1",
+        "4",
+        "204"
+      ],
+      "correta": 2,
+      "explicacao": "O GROUP BY cria um grupo por loja diferente: 4 linhas, cada uma com o total da loja."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de tintas, a coluna quantidade da tabela `item_venda` tem 3 linhas, com os valores 2, 5 e 1. Quais os resultados de `SUM(quantidade)` e `COUNT(quantidade)`?",
+      "alternativas": [
+        "SUM = 3 e COUNT = 8",
+        "SUM = 8 e COUNT = 3",
+        "SUM = 8 e COUNT = 8",
+        "SUM = 5 e COUNT = 3"
+      ],
+      "correta": 1,
+      "explicacao": "SUM soma os valores (2 + 5 + 1 = 8); COUNT conta quantos valores há (3)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "having_leitura",
+      "enunciado": "Numa escola, a consulta `SELECT turma, COUNT(*) FROM aluno GROUP BY turma HAVING COUNT(*) >= 30;` foi feita na tabela `aluno` (id_aluno, nome, turma). O que ela mostra?",
+      "alternativas": [
+        "As turmas com 30 alunos ou mais",
+        "Os 30 primeiros alunos de cada turma",
+        "As turmas com menos de 30 alunos",
+        "Os alunos que estão em 30 turmas ou mais"
+      ],
+      "correta": 0,
+      "explicacao": "HAVING COUNT(*) >= 30 mantém só os grupos (turmas) com 30 linhas ou mais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `cliente` tem as colunas id_cliente, nome, cidade e ativo (1 = ativo, 0 = inativo). Em `SELECT cidade, COUNT(*) FROM cliente WHERE ativo = 1 GROUP BY cidade;`, o que acontece com os clientes inativos?",
+      "alternativas": [
+        "Não entram em nenhuma contagem",
+        "Eles aparecem numa linha separada no final",
+        "Eles são contados junto com os ativos",
+        "Eles são apagados da tabela cliente"
+      ],
+      "correta": 0,
+      "explicacao": "O WHERE tira os inativos antes do agrupamento. Um SELECT nunca apaga dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a tabela `prova` tem as colunas id_aluno, turma e nota. Qual consulta mostra a maior nota de cada turma?",
+      "alternativas": [
+        "`SELECT turma, MAX(nota) FROM prova;`",
+        "`SELECT turma, nota FROM prova ORDER BY nota DESC;`",
+        "`SELECT turma, MAX(nota) FROM prova GROUP BY turma;`",
+        "`SELECT MAX(turma), nota FROM prova GROUP BY nota;`"
+      ],
+      "correta": 2,
+      "explicacao": "De cada turma = GROUP BY turma; maior nota = MAX(nota)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa rede de lanchonetes, `SELECT COUNT(*) FROM venda GROUP BY loja;` mostrou só uma coluna de números, como 120, 85 e 64. Por que não dá para saber de qual loja é cada número?",
+      "alternativas": [
+        "Porque faltou um HAVING na consulta",
+        "Porque COUNT(*) apaga o nome das lojas",
+        "Porque o GROUP BY esconde a coluna usada nele",
+        "Porque loja não está no SELECT"
+      ],
+      "correta": 3,
+      "explicacao": "O GROUP BY agrupa por loja, mas só aparece no resultado o que está no SELECT. O certo é SELECT loja, COUNT(*)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "data_agregacao",
+      "enunciado": "Num curso livre, a tabela `matricula` tem as colunas id_matricula, id_aluno e data_matricula. Qual expressão mostra a data da primeira matrícula feita?",
+      "alternativas": [
+        "MAX(data_matricula)",
+        "MIN(data_matricula)",
+        "COUNT(data_matricula)",
+        "FIRST(data_matricula)"
+      ],
+      "correta": 1,
+      "explicacao": "A primeira matrícula tem a data mais antiga, que é a menor: MIN. FIRST não é função do MySQL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `cliente` tem as colunas id_cliente, nome e cidade. O que mostra `SELECT cidade FROM cliente GROUP BY cidade;`, sem nenhuma função de agregação?",
+      "alternativas": [
+        "Cada cidade uma vez só, como o DISTINCT",
+        "Todas as cidades, com as repetições",
+        "Um erro, porque GROUP BY exige uma função como COUNT",
+        "Só a cidade com mais clientes"
+      ],
+      "correta": 0,
+      "explicacao": "Sem agregação, o GROUP BY só junta os iguais: sai uma linha por cidade, igual ao DISTINCT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "only_full",
+      "enunciado": "Numa loja, a tabela `produto` tem as colunas id_produto, nome, categoria e preco. `SELECT categoria, nome, AVG(preco) FROM produto GROUP BY categoria;` deu erro de ONLY_FULL_GROUP_BY no MySQL 8. Qual mudança resolve o erro mantendo a média por categoria?",
+      "alternativas": [
+        "Tirar a coluna nome do SELECT",
+        "Trocar GROUP BY por ORDER BY",
+        "Colocar AVG(preco) dentro do GROUP BY",
+        "Acrescentar WHERE nome IS NOT NULL"
+      ],
+      "correta": 0,
+      "explicacao": "nome não está no GROUP BY nem numa agregação. Tirá-lo do SELECT resolve. (Colocar nome no GROUP BY também resolve, mas a média passaria a ser por produto.)"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "join_count",
+      "enunciado": "Numa lanchonete, `categoria` (id_categoria, nome) tem: 1 Bebidas, 2 Doces, 3 Salgados. `produto` (id_produto, nome, id_categoria) tem: Suco (1), Refrigerante (1), Água (1), Bolo (2), Brigadeiro (2). Qual o resultado de `SELECT c.nome, COUNT(*) FROM categoria c INNER JOIN produto p ON p.id_categoria = c.id_categoria GROUP BY c.id_categoria, c.nome;`?",
+      "alternativas": [
+        "Bebidas 3, Doces 2 e Salgados 0",
+        "Bebidas 3 e Doces 2",
+        "Bebidas 3, Doces 2 e Salgados 1",
+        "Uma linha só, com 5"
+      ],
+      "correta": 1,
+      "explicacao": "O INNER JOIN só traz categorias que têm produto. Salgados não tem nenhum, então não aparece."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, há as tabelas `medico` (id_medico, nome) e `avaliacao` (id_avaliacao, id_medico, nota). Qual consulta mostra os médicos cuja nota média passa de 4?",
+      "alternativas": [
+        "`SELECT m.nome, AVG(a.nota) FROM medico m JOIN avaliacao a ON a.id_medico = m.id_medico WHERE a.nota > 4 GROUP BY m.id_medico, m.nome;`",
+        "`SELECT m.nome, AVG(a.nota) FROM medico m JOIN avaliacao a ON a.id_medico = m.id_medico HAVING AVG(a.nota) > 4;`",
+        "`SELECT m.nome, AVG(a.nota) FROM medico m JOIN avaliacao a ON a.id_medico = m.id_medico GROUP BY m.id_medico, m.nome HAVING AVG(a.nota) > 4;`",
+        "`SELECT m.nome, a.nota FROM medico m JOIN avaliacao a ON a.id_medico = m.id_medico WHERE a.nota > 4;`"
+      ],
+      "correta": 2,
+      "explicacao": "É preciso agrupar por médico e filtrar a média no HAVING. WHERE a.nota > 4 descartaria notas antes da média."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de games, a tabela `venda` tem as colunas id_venda, jogo e valor. Qual consulta mostra os 3 jogos que mais faturaram?",
+      "alternativas": [
+        "`SELECT jogo, SUM(valor) AS total FROM venda GROUP BY jogo ORDER BY total LIMIT 3;`",
+        "`SELECT jogo, SUM(valor) AS total FROM venda GROUP BY jogo ORDER BY total DESC LIMIT 3;`",
+        "`SELECT jogo, SUM(valor) AS total FROM venda GROUP BY jogo HAVING total = 3;`",
+        "`SELECT jogo, valor FROM venda ORDER BY valor DESC LIMIT 3;`"
+      ],
+      "correta": 1,
+      "explicacao": "Soma por jogo, ordena do maior para o menor (DESC) e pega 3. Sem DESC viriam os 3 piores; sem GROUP BY seriam as 3 vendas mais caras."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "duas_colunas",
+      "enunciado": "Numa rede de padarias, a tabela `venda` (loja, turno, valor) tem: (Centro, manhã, 100), (Centro, manhã, 50), (Centro, tarde, 80), (Praia, tarde, 70). Qual o resultado de `SELECT loja, turno, SUM(valor) FROM venda GROUP BY loja, turno;`?",
+      "alternativas": [
+        "Centro 230 e Praia 70",
+        "Centro/manhã 100, Centro/manhã 50, Centro/tarde 80 e Praia/tarde 70",
+        "Centro/manhã 150, Centro/tarde 80 e Praia/tarde 70",
+        "Manhã 150 e tarde 150"
+      ],
+      "correta": 2,
+      "explicacao": "Cada grupo é uma combinação loja + turno; as duas vendas de Centro/manhã se juntam (100 + 50 = 150)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que, no MySQL, o apelido criado no SELECT (ex.: `COUNT(*) AS qtd`) pode ser usado no ORDER BY, mas não no WHERE?",
+      "alternativas": [
+        "Porque o WHERE só aceita números, e o apelido é texto",
+        "Porque o ORDER BY é processado antes do WHERE",
+        "Porque o WHERE roda antes do SELECT, e o ORDER BY depois",
+        "Porque apelidos só funcionam em consultas sem GROUP BY"
+      ],
+      "correta": 2,
+      "explicacao": "Ordem lógica: FROM, WHERE, GROUP BY, HAVING, SELECT, ORDER BY. Quando o WHERE roda, o apelido ainda não existe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, `SELECT modalidade, COUNT(*) AS total FROM matricula GROUP BY modalidade HAVING total > 20;` foi executado no MySQL 8. O que acontece?",
+      "alternativas": [
+        "Dá erro, porque o HAVING não aceita apelidos",
+        "Funciona, mas ignora o HAVING",
+        "Funciona: o MySQL aceita o apelido no HAVING",
+        "Dá erro, porque total é palavra reservada"
+      ],
+      "correta": 2,
+      "explicacao": "O MySQL permite usar o apelido no HAVING (outros bancos podem exigir repetir COUNT(*)). No WHERE isso não é permitido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa rede de livrarias, a tabela `venda` tem as colunas id_venda, loja e id_cliente. Qual consulta mostra quantos clientes diferentes compraram em cada loja?",
+      "alternativas": [
+        "`SELECT loja, COUNT(id_cliente) FROM venda GROUP BY loja;`",
+        "`SELECT DISTINCT loja, COUNT(*) FROM venda GROUP BY loja;`",
+        "`SELECT loja, COUNT(DISTINCT loja) FROM venda GROUP BY id_cliente;`",
+        "`SELECT loja, COUNT(DISTINCT id_cliente) FROM venda GROUP BY loja;`"
+      ],
+      "correta": 3,
+      "explicacao": "COUNT(DISTINCT id_cliente) conta cada cliente uma vez dentro de cada loja. COUNT(id_cliente) contaria as vendas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de materiais, a tabela `item_pedido` tem as colunas id_item, id_pedido, quantidade e preco_unitario. O que mostra `SELECT id_pedido, SUM(quantidade * preco_unitario) FROM item_pedido GROUP BY id_pedido;`?",
+      "alternativas": [
+        "A quantidade total de itens de todos os pedidos",
+        "O preço do item mais caro de cada pedido",
+        "O valor total de todos os pedidos numa linha",
+        "O valor total de cada pedido"
+      ],
+      "correta": 3,
+      "explicacao": "Para cada item calcula quantidade × preço, e o SUM soma esses valores dentro de cada pedido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, o que mostra `SELECT id_cliente FROM compra GROUP BY id_cliente HAVING COUNT(*) >= 2 AND SUM(valor) > 500;` na tabela `compra` (id_compra, id_cliente, valor)?",
+      "alternativas": [
+        "Os clientes com pelo menos 2 compras ou total gasto acima de 500",
+        "Os clientes com pelo menos 2 compras e total gasto acima de 500",
+        "As compras acima de 500 dos clientes que compraram 2 vezes",
+        "Os clientes que fizeram exatamente 2 compras de 500"
+      ],
+      "correta": 1,
+      "explicacao": "O HAVING pode ter várias condições com AND: o grupo precisa cumprir as duas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "where_agregado",
+      "enunciado": "No MySQL, a mensagem de erro Invalid use of group function costuma aparecer quando:",
+      "alternativas": [
+        "O GROUP BY é usado sem nenhuma função de agregação",
+        "Uma função de agregação recebe um apelido com AS",
+        "O HAVING é usado junto com o ORDER BY",
+        "Uma função como SUM ou COUNT é usada dentro do WHERE"
+      ],
+      "correta": 3,
+      "explicacao": "Funções de grupo não podem ser usadas no WHERE, que trabalha linha por linha. O lugar delas é no SELECT, HAVING ou ORDER BY."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a coluna desconto da tabela `venda` tem os valores NULL, 5 e 10. Qual o resultado de `SELECT MIN(desconto) FROM venda;`?",
+      "alternativas": [
+        "NULL",
+        "0",
+        "5",
+        "10"
+      ],
+      "correta": 2,
+      "explicacao": "MIN e MAX ignoram os NULL. Entre 5 e 10, o menor é 5."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, há as tabelas `cliente` (id_cliente, nome) e `compra` (id_compra, id_cliente, valor). Duas clientes diferentes se chamam Ana Lima. Qual o problema de agrupar o total de compras com `GROUP BY c.nome`?",
+      "alternativas": [
+        "A consulta dá erro, porque há nomes repetidos",
+        "Cada compra das Anas aparece numa linha separada",
+        "As compras das duas Anas viram um total só",
+        "As duas Anas são retiradas do resultado"
+      ],
+      "correta": 2,
+      "explicacao": "Agrupar pelo nome junta pessoas diferentes com o mesmo nome. O correto é agrupar pelo id_cliente (e mostrar o nome)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa feira, a coluna valor da tabela `venda` tem 4 linhas: 10, 20, 30 e 40. Qual o resultado de `SELECT COUNT(*), SUM(valor), AVG(valor) FROM venda;`?",
+      "alternativas": [
+        "4, 100 e 25",
+        "4, 100 e 40",
+        "100, 4 e 25",
+        "4, 40 e 10"
+      ],
+      "correta": 0,
+      "explicacao": "São 4 linhas, a soma é 10 + 20 + 30 + 40 = 100, e a média é 100 / 4 = 25."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, `medico` tem Lia (1), Caio (2) e Rui (3). `avaliacao` (id_medico, nota) tem: médico 1 com 5, 4 e 3; médico 2 com 5 e 5; médico 3 com 2. Quem aparece em `SELECT m.nome, AVG(a.nota) FROM medico m JOIN avaliacao a ON a.id_medico = m.id_medico GROUP BY m.id_medico, m.nome HAVING COUNT(*) >= 2 AND AVG(a.nota) >= 4;`?",
+      "alternativas": [
+        "Só Caio",
+        "Lia, Caio e Rui",
+        "Lia e Caio",
+        "Só Lia"
+      ],
+      "correta": 2,
+      "explicacao": "Lia: 3 notas, média 4 (passa, pois é >= 4). Caio: 2 notas, média 5. Rui tem 1 nota e média 2: cai nas duas condições."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "media_medias",
+      "enunciado": "Numa escola, a tabela `boletim` (turma, nota) tem: turma A com notas 10 e 10; turma B com nota 4. Qual o resultado de `SELECT AVG(nota) FROM boletim;`?",
+      "alternativas": [
+        "7",
+        "8",
+        "14",
+        "10"
+      ],
+      "correta": 1,
+      "explicacao": "O AVG usa todas as linhas: (10 + 10 + 4) / 3 = 8. O 7 seria a média das médias das turmas (10 e 4), que é outro cálculo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "where_vs_having",
+      "enunciado": "Numa rede de lojas, compare `SELECT loja, SUM(valor) FROM venda WHERE loja = 'Centro' GROUP BY loja;` com `SELECT loja, SUM(valor) FROM venda GROUP BY loja HAVING loja = 'Centro';`. Qual afirmação está correta?",
+      "alternativas": [
+        "Mesmo resultado, mas o WHERE filtra antes e é mais eficiente",
+        "Só a segunda funciona, porque filtro com GROUP BY deve ir no HAVING",
+        "Dão resultados diferentes, porque o HAVING soma todas as lojas",
+        "Só a primeira funciona, porque o HAVING não aceita colunas comuns"
+      ],
+      "correta": 0,
+      "explicacao": "Como loja está no GROUP BY, as duas funcionam e dão o mesmo resultado. Mas filtrar uma coluna comum no WHERE evita agrupar linhas que serão descartadas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "join_infla",
+      "enunciado": "Numa loja, `pedido` (id_pedido, id_cliente, valor_frete) e `item_pedido` (id_item, id_pedido, produto). O pedido 1 tem frete 20 e 3 itens. Em `SELECT p.id_cliente, SUM(p.valor_frete) FROM pedido p JOIN item_pedido i ON i.id_pedido = p.id_pedido GROUP BY p.id_cliente;`, quanto o pedido 1 soma de frete?",
+      "alternativas": [
+        "60, pois o JOIN repete o pedido por item",
+        "20, porque o frete pertence ao pedido",
+        "3, porque o pedido tem 3 itens no total",
+        "23, porque soma o frete com os itens"
+      ],
+      "correta": 0,
+      "explicacao": "O JOIN gera 3 linhas para o pedido 1, cada uma com frete 20. O SUM soma 20 três vezes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa lanchonete, a coluna valor da tabela `venda` tem 3 linhas: 10, 10 e 20. Quais os resultados de `SUM(valor)` e `SUM(DISTINCT valor)`?",
+      "alternativas": [
+        "40 e 40",
+        "40 e 30",
+        "30 e 40",
+        "40 e 20"
+      ],
+      "correta": 1,
+      "explicacao": "SUM soma tudo: 10 + 10 + 20 = 40. SUM(DISTINCT) soma cada valor diferente uma vez: 10 + 20 = 30."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `venda` tem vendas de 2025 e de 2026, com as colunas id_venda, data_venda e valor. O que acontece em `SELECT MONTH(data_venda), SUM(valor) FROM venda GROUP BY MONTH(data_venda);`?",
+      "alternativas": [
+        "Sai uma linha para cada mês de cada ano, separados",
+        "Dá erro, porque não se pode agrupar por uma função",
+        "Só as vendas de 2026 são consideradas",
+        "Janeiro de 2025 e de 2026 caem no mesmo grupo"
+      ],
+      "correta": 3,
+      "explicacao": "MONTH devolve só o número do mês (1 a 12). Para separar os anos é preciso agrupar também por YEAR(data_venda)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "join_infla",
+      "enunciado": "Numa loja, `pedido` (id_pedido, id_cliente) e `item_pedido` (id_item, id_pedido, produto). A cliente 7 fez 2 pedidos, um com 3 itens e outro com 2. Qual o resultado de `SELECT p.id_cliente, COUNT(*) FROM pedido p JOIN item_pedido i ON i.id_pedido = p.id_pedido WHERE p.id_cliente = 7 GROUP BY p.id_cliente;`?",
+      "alternativas": [
+        "2, porque a cliente fez 2 pedidos",
+        "1, porque há uma cliente só",
+        "3, porque o maior pedido tem 3 itens",
+        "5, pois conta os itens, não os pedidos"
+      ],
+      "correta": 3,
+      "explicacao": "Depois do JOIN há uma linha por item: 3 + 2 = 5. Para contar pedidos seria preciso COUNT(DISTINCT p.id_pedido)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na aula de Banco de Dados, o professor falou em funções de agregação, como COUNT e SUM, usadas por exemplo numa tabela `venda` (id_venda, produto, valor) de uma quitanda.\n\nNa sua resposta:\n1. explique o que é uma função de agregação;\n2. diga o que COUNT e SUM fazem nessa tabela de vendas.",
+      "respostasAceitas": [
+        "Função de agregação recebe várias linhas e devolve um único valor que resume essas linhas. Na tabela venda, COUNT conta quantas vendas existem e SUM(valor) soma o dinheiro vendido."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) várias linhas → um valor (por grupo); 2) COUNT = quantidade de vendas; SUM = total em dinheiro."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa pizzaria, considere `SELECT id_cliente, COUNT(*) AS qtd_pedidos FROM pedido GROUP BY id_cliente;` na tabela `pedido` (id_pedido, id_cliente, data_pedido).\n\nNa sua resposta:\n1. diga o que a consulta mostra;\n2. explique para que serve o AS qtd_pedidos.",
+      "respostasAceitas": [
+        "Mostra quantos pedidos cada cliente fez. O AS qtd_pedidos dá um nome claro para a coluna da contagem no resultado; não muda a tabela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) número de pedidos por cliente; 2) apelido da coluna, só no resultado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa lanchonete, a tabela `produto` tem as colunas id_produto, nome, categoria e preco. Considere `SELECT MAX(preco) FROM produto WHERE categoria = 'bebida';`.\n\nNa sua resposta:\n1. diga o que a consulta mostra;\n2. explique a função do WHERE nessa consulta.",
+      "respostasAceitas": [
+        "Mostra o preço da bebida mais cara. O WHERE deixa só os produtos da categoria bebida, e o MAX pega o maior preço entre eles."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) maior preço entre as bebidas; 2) o WHERE limita a busca à categoria bebida."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, a tabela `cliente` tem as colunas id_cliente, nome e cidade. Compare `SELECT cidade FROM cliente GROUP BY cidade;` com `SELECT DISTINCT cidade FROM cliente;`.\n\nNa sua resposta:\n1. diga o que cada consulta mostra;\n2. explique o que o GROUP BY permitiria fazer a mais, se fosse acrescentada uma função como COUNT(*).",
+      "respostasAceitas": [
+        "As duas mostram cada cidade uma vez só. Com o GROUP BY daria para acrescentar COUNT(*) e saber quantos clientes há em cada cidade, o que o DISTINCT sozinho não faz."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mesmo resultado (cidades sem repetição); 2) com GROUP BY dá para calcular algo por cidade (contagem, soma…)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num hotel, `SELECT tipo_quarto, COUNT(*) FROM reserva GROUP BY tipo_quarto;` devolveu: standard 12, luxo 4 e suíte 2. A tabela é `reserva` (id_reserva, tipo_quarto, data_entrada).\n\nNa sua resposta:\n1. explique o que significa a linha luxo 4;\n2. diga quantas reservas há na tabela e como você chegou nesse número.",
+      "respostasAceitas": [
+        "Luxo 4 significa que há 4 reservas para quartos do tipo luxo. Há 18 reservas na tabela: 12 + 4 + 2, porque cada reserva está em exatamente um grupo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 4 reservas do tipo luxo; 2) 18, somando as contagens dos grupos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa biblioteca, `SELECT COUNT(*) FROM emprestimo WHERE id_leitor = 500;` mostrou 0. A tabela é `emprestimo` (id_emprestimo, id_leitor, data_emprestimo), e o leitor 500 nunca pegou livro.\n\nNa sua resposta:\n1. explique por que o resultado foi 0;\n2. diga se a consulta deu erro ou não, e por quê.",
+      "respostasAceitas": [
+        "Nenhuma linha passou pelo WHERE, então não havia nada para contar: o COUNT devolve 0. Não deu erro; a consulta é válida e o resultado é uma linha com 0."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nenhuma linha do leitor 500, contagem zero; 2) não é erro: COUNT sempre devolve um número."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No MySQL, `SELECT curso, COUNT(*) AS qtd FROM matricula GROUP BY curso ORDER BY qtd DESC;` funciona, mas `SELECT curso, COUNT(*) AS qtd FROM matricula WHERE qtd > 10 GROUP BY curso;` dá erro.\n\nNa sua resposta:\n1. explique em que ordem o banco processa WHERE, GROUP BY, SELECT e ORDER BY;\n2. explique, com base nessa ordem, por que o apelido qtd funciona num caso e no outro não.",
+      "respostasAceitas": [
+        "O banco processa FROM, WHERE, GROUP BY, HAVING, SELECT e por fim ORDER BY. O apelido qtd nasce no SELECT: o ORDER BY vem depois e o conhece, mas o WHERE vem antes, quando a contagem ainda nem existe."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) WHERE → GROUP BY → (HAVING) → SELECT → ORDER BY; 2) o apelido só existe depois do SELECT. (A condição sobre a contagem vai no HAVING.)"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, a aprovação exige média 7. O sistema mostra a média de cada aluno com `ROUND(AVG(nota), 1)`. A média real de um aluno é 6,95, e a tela mostrou 7.0.\n\nNa sua resposta:\n1. explique por que apareceu 7.0;\n2. explique o risco de decidir a aprovação usando o valor arredondado.",
+      "respostasAceitas": [
+        "O ROUND com 1 casa arredondou 6,95 para 7.0. Se a aprovação usar o valor arredondado, o aluno com 6,95 seria aprovado sem ter atingido 7; o arredondamento deve servir só para exibir, e a decisão deve usar a média real (ou uma regra de arredondamento definida pela escola)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) arredondamento para 1 casa (6,95 → 7,0); 2) a decisão pode mudar por causa do arredondamento; usar o valor real ou regra oficial."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, considere `SELECT id_cliente, COUNT(*), SUM(valor) FROM compra GROUP BY id_cliente HAVING COUNT(*) >= 3 AND SUM(valor) >= 1000;` na tabela `compra` (id_compra, id_cliente, valor). A loja quer dar um cupom para clientes fiéis.\n\nNa sua resposta:\n1. explique quais clientes aparecem no resultado;\n2. diga o que mudaria se o AND fosse trocado por OR.",
+      "respostasAceitas": [
+        "Aparecem os clientes com 3 compras ou mais e que gastaram 1000 ou mais no total. Com OR, bastaria cumprir uma das condições, e mais clientes apareceriam."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) as duas condições ao mesmo tempo; 2) com OR, basta uma, o resultado fica igual ou maior."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa concessionária, a tabela `venda` tem as colunas id_venda, data_venda (DATE) e valor. O gerente usa `SELECT YEAR(data_venda) AS ano, SUM(valor) FROM venda GROUP BY YEAR(data_venda) ORDER BY ano;`.\n\nNa sua resposta:\n1. explique o que YEAR(data_venda) faz e por que ele está no GROUP BY;\n2. diga o que o resultado mostra ao gerente.",
+      "respostasAceitas": [
+        "YEAR pega só o ano da data. Agrupando por ele, todas as vendas do mesmo ano ficam num grupo. O resultado mostra o total vendido em cada ano, em ordem de ano."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) extrai o ano e agrupa por ano; 2) faturamento anual em ordem cronológica."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num aplicativo de delivery, considere `SELECT restaurante, COUNT(*) AS pedidos FROM pedido GROUP BY restaurante ORDER BY pedidos DESC LIMIT 3;` na tabela `pedido` (id_pedido, restaurante, valor).\n\nNa sua resposta:\n1. explique o que o GROUP BY e o COUNT fazem;\n2. explique o papel do ORDER BY … DESC e do LIMIT 3;\n3. diga o que aparece no resultado final.",
+      "respostasAceitas": [
+        "O GROUP BY junta os pedidos de cada restaurante e o COUNT conta quantos são. O ORDER BY pedidos DESC põe os que têm mais pedidos primeiro, e o LIMIT 3 deixa só os três primeiros. Aparecem os 3 restaurantes com mais pedidos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) contagem por restaurante; 2) ordena do maior para o menor e corta em 3; 3) o top 3 em número de pedidos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "join_count",
+      "enunciado": "Numa escola técnica, há as tabelas `curso` (id_curso, nome) e `aluno` (id_aluno, nome, id_curso). O curso de Robótica ainda não tem alunos. A consulta `SELECT c.nome, COUNT(a.id_aluno) FROM curso c INNER JOIN aluno a ON a.id_curso = c.id_curso GROUP BY c.id_curso, c.nome;` não mostrou Robótica.\n\nNa sua resposta:\n1. explique por que Robótica não aparece;\n2. diga que tipo de junção faria Robótica aparecer e com qual contagem.",
+      "respostasAceitas": [
+        "O INNER JOIN só traz cursos que têm alunos ligados; Robótica não tem, então some. Com LEFT JOIN (curso à esquerda), Robótica aparece, e COUNT(a.id_aluno) mostra 0."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) INNER JOIN exige correspondência nas duas tabelas; 2) LEFT JOIN, com contagem 0 por usar COUNT da coluna do aluno."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, a tabela `venda` tem vendas de 2025 e de 2026 (id_venda, data_venda, valor). O relatório mensal usa `SELECT MONTH(data_venda) AS mes, SUM(valor) FROM venda GROUP BY MONTH(data_venda);`, e o total de janeiro ficou bem maior que o esperado.\n\nNa sua resposta:\n1. explique por que janeiro ficou maior que o esperado;\n2. diga como o agrupamento deveria ser feito para corrigir, sem escrever o comando.",
+      "respostasAceitas": [
+        "MONTH devolve só o número do mês, então janeiro de 2025 e janeiro de 2026 caíram no mesmo grupo e foram somados juntos. É preciso agrupar pelo ano e pelo mês (YEAR e MONTH da data), ou filtrar um ano só no WHERE."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) meses de anos diferentes no mesmo grupo; 2) agrupar por ano + mês ou filtrar o ano."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma apostila antiga diz que o GROUP BY sempre devolve o resultado em ordem crescente. Um aluno testou `SELECT bairro, COUNT(*) FROM cliente GROUP BY bairro;` no MySQL 8 e os bairros não vieram em ordem alfabética.\n\nNa sua resposta:\n1. explique por que a ordem não veio garantida no MySQL 8;\n2. diga o que deve ser usado quando a ordem do resultado importa.",
+      "respostasAceitas": [
+        "No MySQL 8 o GROUP BY não ordena mais o resultado; a ordem depende de como o banco processou a consulta e pode variar. Quando a ordem importa, deve-se usar ORDER BY."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) desde o MySQL 8.0 o GROUP BY não garante ordem (versões antigas ordenavam); 2) usar ORDER BY."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Agrupamento (GROUP BY e HAVING)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa rede de lojas, duas consultas dão o mesmo resultado: `... FROM venda WHERE loja = 'Centro' GROUP BY loja;` e `... FROM venda GROUP BY loja HAVING loja = 'Centro';` (as duas com `SELECT loja, SUM(valor)`).\n\nNa sua resposta:\n1. explique por que as duas dão o mesmo resultado;\n2. explique qual é a melhor escolha e por quê.",
+      "respostasAceitas": [
+        "Dão o mesmo resultado porque loja está no GROUP BY, e filtrar antes ou depois deixa só o grupo Centro. O WHERE é melhor: descarta as outras lojas antes de agrupar, fazendo menos trabalho, e o HAVING fica para condições com agregação."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a coluna filtrada é a do agrupamento; 2) WHERE é mais eficiente e mais claro; HAVING é para COUNT/SUM etc."
+    }
+  ]
+}

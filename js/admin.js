@@ -2129,6 +2129,7 @@ const BANCOS_BD_150 = [
   ["bd_09_update", "DML — UPDATE"],
   ["bd_10_delete", "DML — DELETE"],
   ["bd_12_funcoes", "Funções nativas (data, matemáticas e texto)"],
+  ["bd_13_group_by", "Agrupamento (GROUP BY e HAVING)"],
   ["bd_15_subconsultas", "Subconsultas"],
   ["bd_18_backup", "Importação, exportação e backup"]
 ].map(([arq, tema]) => ({ arquivo: `bancos/gerados/bd/${arq}.json`, icone: "🗃", titulo: `Banco de Dados — ${tema} (150 questões)`,
