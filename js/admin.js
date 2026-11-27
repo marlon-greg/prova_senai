@@ -2127,6 +2127,7 @@ const BANCOS_BD_150 = [
   ["bd_07_dcl", "DCL — usuários e permissões (GRANT e REVOKE)"],
   ["bd_08_insert", "DML — INSERT"],
   ["bd_09_update", "DML — UPDATE"],
+  ["bd_10_delete", "DML — DELETE"],
   ["bd_12_funcoes", "Funções nativas (data, matemáticas e texto)"]
 ].map(([arq, tema]) => ({ arquivo: `bancos/gerados/bd/${arq}.json`, icone: "🗃", titulo: `Banco de Dados — ${tema} (150 questões)`,
   desc: "105 alternativas + 45 dissertativas (sem pedir comando), dificuldade balanceada. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] }));

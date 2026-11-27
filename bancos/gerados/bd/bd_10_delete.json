@@ -1,0 +1,2426 @@
+{
+  "nome": "Banco de Dados — DML: DELETE (a revisar)",
+  "materia": "Banco de Dados",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa padaria, a tabela `produto` tem as colunas id_produto, nome e preco. O que faz o comando `DELETE FROM produto WHERE id_produto = 12;`?",
+      "alternativas": [
+        "Apaga só a coluna id_produto da tabela",
+        "Zera o preço do produto de id 12",
+        "Apaga a tabela produto inteira",
+        "Apaga a linha do produto de id 12"
+      ],
+      "correta": 3,
+      "explicacao": "DELETE remove linhas. O WHERE id_produto = 12 escolhe só a linha desse produto; a tabela e as colunas continuam."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O comando DELETE pertence a qual grupo de comandos do SQL?",
+      "alternativas": [
+        "DML, que manipula os dados",
+        "DDL, que define a estrutura",
+        "DCL, que controla permissões",
+        "DQL, que só faz consultas"
+      ],
+      "correta": 0,
+      "explicacao": "INSERT, UPDATE e DELETE são DML (Data Manipulation Language): mexem nas linhas, não na estrutura."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop, a tabela `animal` tem as colunas id_animal, nome e especie. Qual comando está escrito na ordem certa para apagar o animal de id 5?",
+      "alternativas": [
+        "DELETE animal WHERE id_animal = 5 FROM;",
+        "DELETE WHERE id_animal = 5 FROM animal;",
+        "FROM animal DELETE WHERE id_animal = 5;",
+        "DELETE FROM animal WHERE id_animal = 5;"
+      ],
+      "correta": 3,
+      "explicacao": "A forma é DELETE FROM tabela WHERE condição. Outras ordens dão erro de sintaxe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, a tabela `aluno` tem as colunas id_aluno, nome e plano. O que acontece ao rodar `DELETE FROM aluno;` (sem WHERE)?",
+      "alternativas": [
+        "Dá erro, porque o WHERE é obrigatório no DELETE",
+        "Apaga só a primeira linha da tabela",
+        "Apaga todas as linhas, mas a tabela continua existindo",
+        "Apaga a tabela aluno e a estrutura dela"
+      ],
+      "correta": 2,
+      "explicacao": "Sem WHERE não há filtro: todas as linhas são apagadas. A estrutura da tabela fica (quem apaga a estrutura é o DROP)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No comando `DELETE FROM livro WHERE ano < 1990;`, qual é o papel do WHERE?",
+      "alternativas": [
+        "Dizer de qual tabela as linhas saem",
+        "Confirmar a exclusão no fim do comando",
+        "Ordenar as linhas antes de apagar",
+        "Escolher quais linhas serão apagadas"
+      ],
+      "correta": 3,
+      "explicacao": "O WHERE filtra: só as linhas que atendem à condição (ano menor que 1990) são apagadas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Antes de rodar `DELETE FROM cliente WHERE cidade = 'Santos';`, qual é o hábito mais seguro?",
+      "alternativas": [
+        "Rodar o DELETE duas vezes para garantir",
+        "Apagar a tabela inteira e criar de novo com os dados certos",
+        "Trocar o WHERE por ORDER BY cidade",
+        "Conferir antes com um SELECT usando o mesmo WHERE"
+      ],
+      "correta": 3,
+      "explicacao": "O SELECT com o mesmo WHERE mostra exatamente as linhas que o DELETE vai apagar. Se a lista estiver errada, ainda dá tempo de corrigir."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `funcionario` (id_funcionario, nome, setor), qual comando apaga os funcionários dos setores 'Caixa' e 'Estoque'?",
+      "alternativas": [
+        "DELETE FROM funcionario WHERE setor = 'Caixa' AND setor = 'Estoque';",
+        "DELETE FROM funcionario WHERE setor LIKE 'Caixa, Estoque';",
+        "DELETE FROM funcionario WHERE setor IN ('Caixa', 'Estoque');",
+        "DELETE FROM funcionario WHERE setor BETWEEN 'Caixa' AND 'Estoque';"
+      ],
+      "correta": 2,
+      "explicacao": "IN aceita uma lista de valores. Com AND, uma linha teria de ter os dois setores ao mesmo tempo, o que nunca acontece."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `reserva` (id_reserva, hospede, data_entrada) de um hotel, o comando `DELETE FROM reserva WHERE id_reserva BETWEEN 10 AND 15;` apaga quais reservas?",
+      "alternativas": [
+        "Só as de id 10 e 15",
+        "As de id 11 a 14",
+        "As de id 10 a 15, incluindo 10 e 15",
+        "As de id menor que 10 ou maior que 15"
+      ],
+      "correta": 2,
+      "explicacao": "BETWEEN inclui os dois limites: 10, 11, 12, 13, 14 e 15."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `contato` (id_contato, nome, email), o comando `DELETE FROM contato WHERE nome LIKE 'Jo%';` apaga quais linhas?",
+      "alternativas": [
+        "Os contatos cujo nome começa com 'Jo'",
+        "Os contatos cujo nome termina com 'Jo'",
+        "Só o contato com nome exatamente 'Jo%'",
+        "Os contatos com 'Jo' em qualquer parte do nome"
+      ],
+      "correta": 0,
+      "explicacao": "No LIKE, % vale qualquer sequência de caracteres. 'Jo%' = começa com Jo (João, Jorge, Josefa…)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de rodar um DELETE, o MySQL mostrou: `Query OK, 3 rows affected`. O que isso quer dizer?",
+      "alternativas": [
+        "Que 3 linhas foram apagadas",
+        "Que 3 colunas foram apagadas",
+        "Que o comando deu 3 avisos",
+        "Que a tabela ficou com 3 linhas"
+      ],
+      "correta": 0,
+      "explicacao": "\"rows affected\" é a quantidade de linhas que o comando atingiu. Num DELETE, são as linhas apagadas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL Workbench, um aluno rodou `DELETE FROM produto;` e recebeu o erro 1175 (safe update mode). Por que o Workbench bloqueou?",
+      "alternativas": [
+        "Porque a tabela produto não existe",
+        "Porque a tabela está vazia",
+        "Porque o aluno não tem a permissão de DELETE nessa tabela do banco",
+        "Porque o Safe Updates barra DELETE sem WHERE com chave"
+      ],
+      "correta": 3,
+      "explicacao": "O Safe Updates (ligado por padrão no Workbench) bloqueia UPDATE/DELETE sem WHERE que use uma coluna de chave, justamente para evitar apagar tudo sem querer."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, a tabela `consulta` tem as colunas id_consulta, paciente e status. Qual comando apaga só as consultas com status 'cancelada'?",
+      "alternativas": [
+        "DELETE status FROM consulta WHERE 'cancelada';",
+        "DELETE FROM consulta SET status = 'cancelada';",
+        "DELETE FROM consulta = 'cancelada';",
+        "DELETE FROM consulta WHERE status = 'cancelada';"
+      ],
+      "correta": 3,
+      "explicacao": "O filtro vai no WHERE: coluna = valor. DELETE não usa SET (isso é do UPDATE) e não apaga uma coluna isolada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cinema, a tabela `sessao` tem as colunas id_sessao, filme e sala. Rodando `DELETE FROM sessao WHERE id_sessao = 999;` e não existindo sessão de id 999, o que acontece?",
+      "alternativas": [
+        "O MySQL dá erro de chave inexistente",
+        "Apaga a última sessão cadastrada",
+        "Apaga todas as sessões",
+        "Nada é apagado: 0 linhas afetadas"
+      ],
+      "correta": 3,
+      "explicacao": "Se nenhuma linha atende ao WHERE, o DELETE roda sem erro e informa 0 rows affected."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando desliga o modo de atualização segura (Safe Updates) na sessão atual do MySQL?",
+      "alternativas": [
+        "SET SQL_SAFE_UPDATES = 0;",
+        "SET SQL_SAFE_UPDATES = 1;",
+        "DROP SAFE_UPDATES;",
+        "ALTER DATABASE SAFE_UPDATES OFF;"
+      ],
+      "correta": 0,
+      "explicacao": "SQL_SAFE_UPDATES = 0 desliga e = 1 liga. O ideal é religar depois de terminar o comando."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de games, a tabela `jogo` tem as colunas id_jogo, titulo, plataforma e preco. O comando `DELETE FROM jogo WHERE plataforma = 'PC' OR preco < 20;` apaga quais jogos?",
+      "alternativas": [
+        "Só os jogos de PC que custam menos de 20",
+        "Nenhum, porque OR não pode ser usado no WHERE de um DELETE",
+        "Só os jogos que não são de PC",
+        "Todo jogo de PC e todo jogo abaixo de 20"
+      ],
+      "correta": 3,
+      "explicacao": "Com OR basta uma das condições ser verdadeira: sai todo jogo de PC e todo jogo abaixo de 20, de qualquer plataforma."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "and_or_jogo",
+      "enunciado": "Na mesma tabela `jogo` (id_jogo, titulo, plataforma, preco), o comando `DELETE FROM jogo WHERE plataforma = 'PC' AND preco < 20;` apaga quais jogos?",
+      "alternativas": [
+        "Todos os jogos de PC",
+        "Todos os jogos abaixo de 20",
+        "Só os jogos de PC que custam menos de 20",
+        "Os jogos de PC ou abaixo de 20"
+      ],
+      "correta": 2,
+      "explicacao": "Com AND as duas condições têm de valer ao mesmo tempo: plataforma PC e preço menor que 20."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, a tabela `emprestimo` tem as colunas id_emprestimo, id_livro e data_devolucao (vazia, NULL, quando o livro ainda não voltou). Qual comando apaga os empréstimos que ainda não têm devolução?",
+      "alternativas": [
+        "DELETE FROM emprestimo WHERE data_devolucao = NULL;",
+        "DELETE FROM emprestimo WHERE data_devolucao = '';",
+        "DELETE FROM emprestimo WHERE data_devolucao IS NULL;",
+        "DELETE FROM emprestimo WHERE NULL;"
+      ],
+      "correta": 2,
+      "explicacao": "Para testar NULL usa-se IS NULL. A comparação = NULL nunca é verdadeira, então não apagaria nada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um colega rodou `DELETE FROM emprestimo WHERE data_devolucao = NULL;` e o MySQL respondeu `0 rows affected`, embora existam linhas com data_devolucao vazia (NULL). Por quê?",
+      "alternativas": [
+        "Porque o DELETE não aceita filtrar por colunas do tipo data no WHERE",
+        "Porque NULL só pode ser usado no INSERT",
+        "Porque o Safe Updates apagou as linhas antes",
+        "Porque comparar com = NULL nunca dá verdadeiro; o certo é IS NULL"
+      ],
+      "correta": 3,
+      "explicacao": "NULL é 'desconhecido': qualquer comparação com = NULL dá desconhecido, não verdadeiro. Por isso nenhuma linha entra no filtro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Com o Safe Updates ligado, qual destes comandos o MySQL Workbench deixa rodar normalmente? (Tabela `pedido` com chave primária id_pedido; a coluna status não tem índice.)",
+      "alternativas": [
+        "DELETE FROM pedido WHERE status = 'teste';",
+        "DELETE FROM pedido WHERE 1 = 1;",
+        "DELETE FROM pedido;",
+        "DELETE FROM pedido WHERE id_pedido = 40;"
+      ],
+      "correta": 3,
+      "explicacao": "O Safe Updates exige um WHERE que use coluna de chave (ou um LIMIT). id_pedido é a chave primária; status não é chave, e os outros nem filtram."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `produto` (id_produto, nome, preco), qual comando apaga os produtos cujo nome TERMINA com 'light'?",
+      "alternativas": [
+        "DELETE FROM produto WHERE nome LIKE 'light%';",
+        "DELETE FROM produto WHERE nome = '%light';",
+        "DELETE FROM produto WHERE nome LIKE '%light';",
+        "DELETE FROM produto WHERE nome IN ('light');"
+      ],
+      "correta": 2,
+      "explicacao": "'%light' = qualquer coisa antes e 'light' no fim. 'light%' seria começar com light. Com = o % não funciona como coringa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a tabela `ocorrencia` tem id_ocorrencia, id_aluno e data_ocorrencia (DATE). Qual comando apaga as ocorrências do mês de março de 2025 inteiro?",
+      "alternativas": [
+        "DELETE FROM ocorrencia WHERE data_ocorrencia BETWEEN '2025-03-01' AND '2025-03-31';",
+        "DELETE FROM ocorrencia WHERE data_ocorrencia = '2025-03';",
+        "DELETE FROM ocorrencia WHERE data_ocorrencia > '2025-03-01' AND data_ocorrencia < '2025-03-31';",
+        "DELETE FROM ocorrencia WHERE data_ocorrencia IN ('2025-03-01', '2025-03-31');"
+      ],
+      "correta": 0,
+      "explicacao": "BETWEEN inclui os limites, então pega do dia 1 ao dia 31. Com > e < ficariam de fora os dias 1 e 31; IN pega só os dois dias citados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno rodou o SELECT de conferência `SELECT * FROM cliente WHERE cidade = 'Ourinhos';` e apareceram 4 linhas. Em seguida rodou `DELETE FROM cliente WHERE cidade = 'Ourinhos';`. Quantas linhas o MySQL deve informar como afetadas?",
+      "alternativas": [
+        "1, porque o DELETE apaga uma linha por vez",
+        "0, porque o SELECT já apagou as linhas",
+        "4, as mesmas linhas que o SELECT mostrou",
+        "Todas as linhas da tabela cliente"
+      ],
+      "correta": 2,
+      "explicacao": "Com o mesmo WHERE e sem mudanças entre os comandos, o DELETE atinge as mesmas linhas que o SELECT mostrou: 4."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "and_or_jogo",
+      "enunciado": "Numa oficina, a tabela `servico` tem as colunas id_servico, descricao, valor e status. Qual comando apaga os serviços com status 'orcamento' e valor menor que 50?",
+      "alternativas": [
+        "DELETE FROM servico WHERE status = 'orcamento' OR valor < 50;",
+        "DELETE FROM servico WHERE status = 'orcamento' AND valor < 50;",
+        "DELETE FROM servico WHERE status = 'orcamento', valor < 50;",
+        "DELETE FROM servico WHERE status IN ('orcamento', 50);"
+      ],
+      "correta": 1,
+      "explicacao": "As duas condições precisam valer juntas: AND. Vírgula não junta condições no WHERE, e OR apagaria mais do que o pedido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `aluno` (id_aluno, nome, turma), o comando `DELETE FROM aluno WHERE turma NOT IN ('1A', '1B');` apaga quais alunos?",
+      "alternativas": [
+        "Só os alunos das turmas 1A e 1B",
+        "Os alunos de todas as turmas, exceto 1A e 1B",
+        "Nenhum aluno, porque NOT IN não existe",
+        "Só os alunos sem turma"
+      ],
+      "correta": 1,
+      "explicacao": "NOT IN inverte a lista: apaga quem NÃO está em 1A nem em 1B. (Linhas com turma NULL também ficam de fora do filtro.)"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O comando `DELETE FROM log_acesso ORDER BY data_acesso LIMIT 100;` foi rodado numa tabela `log_acesso` (id_log, pagina, data_acesso). O que ele faz no MySQL?",
+      "alternativas": [
+        "Apaga os 100 acessos mais antigos",
+        "Apaga os 100 acessos mais recentes",
+        "Mostra os 100 acessos mais antigos sem apagar",
+        "Dá erro, porque DELETE não aceita LIMIT"
+      ],
+      "correta": 0,
+      "explicacao": "No MySQL, DELETE de uma tabela aceita ORDER BY e LIMIT. Ordenando pela data em ordem crescente, os 100 primeiros são os mais antigos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel, a tabela `quarto` tem as colunas id_quarto, numero e andar. O comando `DELETE FROM quarto WHERE andar = 3 OR andar = 4 AND numero > 410;` apaga quais quartos? (Lembre que o AND é avaliado antes do OR.)",
+      "alternativas": [
+        "Os quartos do 3º andar e os do 4º andar com número acima de 410",
+        "Só os quartos do 3º e do 4º andar com número acima de 410",
+        "Todos os quartos do 3º e do 4º andar",
+        "Só os quartos do 4º andar com número acima de 410"
+      ],
+      "correta": 0,
+      "explicacao": "O AND é resolvido primeiro: andar = 3 OR (andar = 4 AND numero > 410). Para juntar os andares antes, seriam necessários parênteses."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um técnico quer apagar o cliente de id 8 da tabela `cliente` (id_cliente, nome, cpf). Por que usar a chave primária no WHERE é mais seguro do que usar o nome?",
+      "alternativas": [
+        "Porque o nome não pode aparecer no WHERE de um DELETE",
+        "Porque a chave primária é única: garante que só aquela linha sai",
+        "Porque com o nome o DELETE fica mais lento e dá erro",
+        "Porque a chave primária apaga também a estrutura"
+      ],
+      "correta": 1,
+      "explicacao": "Pode haver dois clientes com o mesmo nome. A chave primária não se repete, então o filtro aponta para uma linha só."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `mensagem` (id_mensagem, remetente, texto), qual comando apaga as mensagens cujo texto tem a palavra 'promoção' em qualquer posição?",
+      "alternativas": [
+        "DELETE FROM mensagem WHERE texto LIKE 'promoção';",
+        "DELETE FROM mensagem WHERE texto LIKE '%promoção%';",
+        "DELETE FROM mensagem WHERE texto = '%promoção%';",
+        "DELETE FROM mensagem WHERE texto IN ('%promoção%');"
+      ],
+      "correta": 1,
+      "explicacao": "'%promoção%' aceita qualquer coisa antes e depois. Sem os % o LIKE exige o texto exato; com = ou IN o % não é coringa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `pedido` (id_pedido, cliente, status), um aluno quis apagar os pedidos 'cancelado' e 'teste' com `DELETE FROM pedido WHERE status = 'cancelado' OR 'teste';`. O que acontece no MySQL?",
+      "alternativas": [
+        "Apaga exatamente os pedidos 'cancelado' e 'teste'",
+        "Dá erro de sintaxe, porque falta repetir a coluna status, e nada é apagado",
+        "Apaga só os 'cancelado', porque o texto 'teste' sozinho vale falso",
+        "Apaga todos os pedidos da tabela"
+      ],
+      "correta": 2,
+      "explicacao": "O MySQL lê (status = 'cancelado') OR 'teste'. O texto 'teste' convertido em número vale 0 (falso), então só os cancelados saem. O certo é status IN ('cancelado','teste')."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Com o Safe Updates ligado no Workbench, um aluno rodou `DELETE FROM produto WHERE preco < 5;` (preco não é chave nem tem índice) e recebeu o erro 1175. Qual alternativa resolve sem desligar a proteção de vez?",
+      "alternativas": [
+        "Desligar com `SET SQL_SAFE_UPDATES = 0;`, rodar e religar com `= 1`",
+        "Trocar o DELETE por `DROP TABLE produto;` e cadastrar de novo os produtos que ficam",
+        "Rodar o mesmo DELETE outra vez até passar",
+        "Tirar o WHERE do comando"
+      ],
+      "correta": 0,
+      "explicacao": "Desligar só para aquele comando e religar em seguida mantém a proteção para o resto da sessão. Tirar o WHERE apagaria tudo (e continuaria bloqueado)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `aluno` (id_aluno, nome, nota), o comando `DELETE FROM aluno WHERE nota < 5 OR nota IS NULL;` foi rodado. Antes havia 30 alunos: 6 com nota menor que 5, 2 sem nota (NULL) e o resto com nota 5 ou mais. Quantas linhas foram afetadas?",
+      "alternativas": [
+        "6",
+        "2",
+        "22",
+        "8"
+      ],
+      "correta": 3,
+      "explicacao": "Saem os 6 com nota abaixo de 5 e os 2 com nota NULL: 8 linhas. Sem o IS NULL, os alunos sem nota ficariam."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `produto` (id_produto, nome, id_categoria), alguns produtos não têm categoria (NULL). O comando `DELETE FROM produto WHERE id_categoria <> 3;` apaga os produtos sem categoria?",
+      "alternativas": [
+        "Sim, porque NULL é diferente de 3",
+        "Não, porque comparar NULL com <> não dá verdadeiro",
+        "Sim, mas só se o Safe Updates estiver desligado",
+        "Não, porque o DELETE ignora a coluna id_categoria"
+      ],
+      "correta": 1,
+      "explicacao": "Qualquer comparação com NULL (=, <>, <, >) dá desconhecido, e o WHERE só aceita verdadeiro. Para incluir, seria preciso OR id_categoria IS NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que o modo Safe Updates aceita `DELETE FROM pedido WHERE status = 'teste' LIMIT 10;` mesmo sem usar coluna de chave no WHERE?",
+      "alternativas": [
+        "Porque o LIMIT limita quantas linhas podem ser apagadas, o que reduz o estrago",
+        "Porque o LIMIT desliga o Safe Updates para o resto da sessão inteira, até sair do Workbench",
+        "Porque com LIMIT o DELETE só mostra as linhas",
+        "Porque o LIMIT faz o MySQL pedir confirmação"
+      ],
+      "correta": 0,
+      "explicacao": "A regra do Safe Updates é: WHERE com coluna de chave OU LIMIT. Com LIMIT, no máximo aquela quantidade de linhas sai."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `cliente` (id_cliente, nome, cidade), alguém conferiu com `SELECT * FROM cliente WHERE cidade = 'Bauru';` (5 linhas) e depois rodou `DELETE FROM cliente WHERE cidade = 'Baurú';`. O MySQL informou 0 rows affected. A explicação mais provável é:",
+      "alternativas": [
+        "O SELECT de conferência já tinha apagado as 5 linhas antes de o DELETE rodar",
+        "O DELETE não aceita texto no WHERE",
+        "O WHERE do DELETE não é igual ao do SELECT; o valor foi digitado diferente",
+        "O Safe Updates escondeu as linhas apagadas"
+      ],
+      "correta": 2,
+      "explicacao": "A conferência só vale se o WHERE for exatamente o mesmo. Um acento a mais mudou o filtro e nenhuma linha bateu. O ideal é copiar o WHERE do SELECT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `inscricao` (id_inscricao, nome, idade), qual comando apaga as inscrições de quem tem de 15 a 17 anos E também as de quem não informou a idade (NULL)?",
+      "alternativas": [
+        "DELETE FROM inscricao WHERE idade BETWEEN 15 AND 17 AND idade IS NULL;",
+        "DELETE FROM inscricao WHERE idade IN (15, 17, NULL);",
+        "DELETE FROM inscricao WHERE idade BETWEEN 15 AND 17 OR idade = NULL;",
+        "DELETE FROM inscricao WHERE idade BETWEEN 15 AND 17 OR idade IS NULL;"
+      ],
+      "correta": 3,
+      "explicacao": "Precisa de OR (um grupo ou outro) e de IS NULL. Com AND nenhuma linha atende; = NULL e NULL dentro do IN não pegam os vazios; IN (15,17) pularia o 16."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa padaria, a tabela `encomenda` tem as colunas id_encomenda, cliente e data_entrega. Considere o comando `DELETE FROM encomenda WHERE id_encomenda = 21;`.\n\nNa sua resposta:\n1. diga o que o comando faz;\n2. explique por que a encomenda 22 não é afetada.",
+      "respostasAceitas": [
+        "Apaga a encomenda de id 21. A 22 não é afetada porque o WHERE filtra só a linha com id 21."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) remove a linha da encomenda 21; 2) o WHERE limita a exclusão a essa linha."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa academia, um instrutor rodou `DELETE FROM treino;` querendo apagar só o treino de um aluno. A tabela `treino` tem id_treino, id_aluno e exercicio.\n\nNa sua resposta:\n1. diga o que aconteceu com a tabela;\n2. explique o que faltou no comando.",
+      "respostasAceitas": [
+        "Todas as linhas de treino foram apagadas (a tabela ficou vazia, mas existe). Faltou o WHERE filtrando o aluno ou o treino."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) todos os treinos foram apagados, a estrutura continua; 2) faltou o WHERE."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Antes de apagar os produtos vencidos de um mercado, a técnica rodou `SELECT * FROM produto WHERE validade < '2026-11-01';` e só depois `DELETE FROM produto WHERE validade < '2026-11-01';`.\n\nNa sua resposta:\n1. explique para que serviu o SELECT;\n2. diga o que ela faria se o SELECT mostrasse produtos que não deviam sair.",
+      "respostasAceitas": [
+        "O SELECT mostrou exatamente quais linhas o DELETE ia apagar. Se aparecessem produtos errados, ela ajustaria o WHERE antes de rodar o DELETE."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) conferir as linhas que serão apagadas; 2) corrigir o filtro antes de apagar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No MySQL Workbench, o comando `DELETE FROM cliente WHERE nome = 'Ana';` não rodou e apareceu o erro 1175, falando em \"safe update mode\".\n\nNa sua resposta:\n1. explique o que é o Safe Updates;\n2. diga por que esse comando foi bloqueado.",
+      "respostasAceitas": [
+        "É uma proteção do Workbench que bloqueia UPDATE/DELETE sem WHERE usando chave. Foi bloqueado porque nome não é chave, então poderia apagar mais de uma linha."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) proteção contra apagar/alterar muitas linhas sem querer; 2) o WHERE usa nome, que não é coluna de chave."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Depois de `DELETE FROM matricula WHERE id_turma = 4;`, o MySQL respondeu `Query OK, 0 rows affected`.\n\nNa sua resposta:\n1. diga o que essa mensagem significa;\n2. dê um motivo possível para esse resultado.",
+      "respostasAceitas": [
+        "Significa que o comando rodou sem erro, mas nenhuma linha foi apagada. Possível motivo: não existe matrícula com id_turma 4."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nenhuma linha atendeu ao WHERE; 2) por exemplo, não há matrículas da turma 4 (ou já foram apagadas)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num cinema, a tabela `sessao` tem as colunas id_sessao, filme e sala. Compare `DELETE FROM sessao WHERE sala = 2;` com `DELETE FROM sessao;`.\n\nNa sua resposta:\n1. diga o que cada um apaga;\n2. diga qual deles é mais perigoso e por quê.",
+      "respostasAceitas": [
+        "O primeiro apaga só as sessões da sala 2; o segundo apaga todas as sessões. O segundo é mais perigoso porque não tem filtro e esvazia a tabela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) com WHERE só sala 2, sem WHERE tudo; 2) o sem WHERE, por apagar todas as linhas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de games, foi rodado `DELETE FROM jogo WHERE plataforma = 'PS3' OR estoque = 0;` na tabela `jogo` (id_jogo, titulo, plataforma, estoque). O dono queria apagar só os jogos de PS3 sem estoque.\n\nNa sua resposta:\n1. diga quais jogos o comando realmente apagou;\n2. explique qual operador deveria ter sido usado e por quê.",
+      "respostasAceitas": [
+        "Apagou todos os jogos de PS3 e todos os jogos com estoque 0, de qualquer plataforma. Deveria usar AND, para exigir as duas condições juntas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) com OR saem os de PS3 (com ou sem estoque) e todos os zerados; 2) AND exige as duas condições ao mesmo tempo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num sistema escolar, a professora quer apagar os recados de 2024 da tabela `recado` (id_recado, texto, data_envio) e usou `DELETE FROM recado WHERE data_envio BETWEEN '2024-01-01' AND '2024-12-31';`.\n\nNa sua resposta:\n1. explique quais datas o BETWEEN pega;\n2. diga se o recado do dia 31/12/2024 é apagado e por quê.",
+      "respostasAceitas": [
+        "O BETWEEN pega as datas de 01/01/2024 a 31/12/2024, com os dois limites. O recado de 31/12/2024 é apagado porque o limite final está incluído."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) intervalo fechado, limites incluídos; 2) sim, o dia 31/12 entra (a coluna é DATE)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O MySQL Workbench vem com o Safe Updates ligado. Um colega diz que é melhor desligar de vez, porque \"só atrapalha\".\n\nNa sua resposta:\n1. explique qual erro o Safe Updates evita;\n2. diga se você concorda com o colega e por quê.",
+      "respostasAceitas": [
+        "Evita rodar DELETE ou UPDATE sem WHERE de chave e apagar/alterar a tabela inteira por engano. Não concordo: é melhor manter ligado e desligar só quando necessário, religando depois."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) apagar/alterar muitas linhas sem querer; 2) manter a proteção (aceitar resposta justificada, desde que mostre o risco)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na tabela `funcionario` (id_funcionario, nome, setor) foi rodado `DELETE FROM funcionario WHERE setor IN ('Limpeza', 'Portaria');`.\n\nNa sua resposta:\n1. diga o que o comando faz;\n2. explique por que trocar o IN por `setor = 'Limpeza' AND setor = 'Portaria'` não daria certo.",
+      "respostasAceitas": [
+        "Apaga os funcionários dos setores Limpeza ou Portaria. Com AND, a linha teria de ter os dois setores ao mesmo tempo, o que é impossível, então nada seria apagado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) apaga quem está em um dos dois setores; 2) AND na mesma coluna com valores diferentes nunca é verdadeiro."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa clínica, a recepcionista rodou `DELETE FROM paciente WHERE nome LIKE '%Silva';` na tabela `paciente` (id_paciente, nome, telefone).\n\nNa sua resposta:\n1. diga quais pacientes saem;\n2. explique um risco de apagar pacientes filtrando pelo nome com LIKE.",
+      "respostasAceitas": [
+        "Saem os pacientes cujo nome termina em Silva. O risco é pegar mais gente do que o desejado (vários Silva), apagando pacientes que deviam ficar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nomes terminados em 'Silva'; 2) filtro amplo, pode apagar várias pessoas; melhor usar a chave ou conferir com SELECT."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um técnico apagou clientes com `DELETE FROM cliente WHERE cidade = 'Marília';` e o MySQL informou `Query OK, 57 rows affected`. Ele esperava apagar só 3 clientes.\n\nNa sua resposta:\n1. explique o que o número 57 indica;\n2. diga o que ele deveria ter feito antes para perceber o problema.",
+      "respostasAceitas": [
+        "Indica que 57 linhas foram apagadas, ou seja, o filtro pegou muito mais clientes do que ele queria. Antes, deveria rodar um SELECT com o mesmo WHERE para ver quantas e quais linhas sairiam."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) quantidade de linhas apagadas; 2) conferir com SELECT (e/ou ter backup)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na tabela `aluno` (id_aluno, nome, email), um aluno rodou `DELETE FROM aluno WHERE email = NULL;` para apagar quem não tem e-mail, e o resultado foi `0 rows affected`. Depois rodou `DELETE FROM aluno WHERE email <> 'x';` e viu que os alunos sem e-mail também continuaram.\n\nNa sua resposta:\n1. explique por que nenhum dos dois comandos atingiu as linhas com email NULL;\n2. diga como o filtro deveria testar o NULL.",
+      "respostasAceitas": [
+        "Comparações com NULL (=, <>) não dão verdadeiro, dão desconhecido, e o WHERE só pega linhas com resultado verdadeiro. O certo é usar IS NULL."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) NULL não é comparado com = ou <>; o resultado é desconhecido; 2) usar IS NULL (ou IS NOT NULL)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa biblioteca, o bibliotecário rodou `DELETE FROM livro WHERE genero = 'Terror' OR genero = 'Suspense' AND ano < 2000;` querendo apagar livros de terror ou suspense anteriores a 2000.\n\nNa sua resposta:\n1. explique como o MySQL interpreta esse WHERE (qual operador vem primeiro);\n2. diga quais livros acabam apagados e como os parênteses resolveriam.",
+      "respostasAceitas": [
+        "O AND é avaliado antes do OR: genero = 'Terror' OR (genero = 'Suspense' AND ano < 2000). Assim saem todos os livros de terror, de qualquer ano. Com parênteses em (Terror OR Suspense) AND ano < 2000, só os antigos sairiam."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) AND tem prioridade sobre OR; 2) apaga todo terror + suspense antigo; parênteses em volta do OR corrigem."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Com o Safe Updates ligado, `DELETE FROM pedido WHERE status = 'teste';` deu erro 1175, mas `DELETE FROM pedido WHERE id_pedido = 10;` rodou normalmente. A tabela `pedido` tem chave primária id_pedido; status não tem índice.\n\nNa sua resposta:\n1. explique a regra do Safe Updates que separa os dois casos;\n2. diga uma forma segura de apagar os pedidos de teste.",
+      "respostasAceitas": [
+        "O Safe Updates só deixa DELETE com WHERE em coluna de chave (ou com LIMIT); status não é chave e id_pedido é. Forma segura: conferir com SELECT e desligar a proteção só para esse comando (SET SQL_SAFE_UPDATES = 0, rodar, voltar para 1), ou apagar pelos ids."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) WHERE precisa usar chave/índice (ou LIMIT); 2) conferir antes e desligar só temporariamente, ou filtrar pelos ids. Aceitar outras saídas seguras."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a tabela `matricula` (id_matricula, id_aluno) tem chave estrangeira para `aluno` (id_aluno, nome). Nessa ligação, qual tabela é a \"pai\"?",
+      "alternativas": [
+        "matricula, porque tem mais linhas",
+        "aluno, porque é a tabela referenciada pela chave estrangeira",
+        "As duas são pai ao mesmo tempo",
+        "Nenhuma, porque só existe tabela pai quando a FK tem a regra CASCADE"
+      ],
+      "correta": 1,
+      "explicacao": "A tabela pai é a referenciada (aluno). A filha é a que guarda a chave estrangeira (matricula)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao tentar apagar um cliente que tem pedidos ligados a ele por chave estrangeira, o MySQL mostrou o erro 1451 (\"Cannot delete or update a parent row: a foreign key constraint fails\"). O que esse erro quer dizer?",
+      "alternativas": [
+        "Que o cliente não existe na tabela",
+        "Que a tabela cliente está vazia",
+        "Que o cliente tem registros filhos e por isso não pode ser apagado",
+        "Que o usuário conectado não tem a permissão de DELETE nessa tabela do banco"
+      ],
+      "correta": 2,
+      "explicacao": "O erro 1451 aparece quando a linha pai ainda é usada por linhas filhas e a regra da FK não deixa apagar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, `consulta` (id_consulta, id_paciente) tem FK para `paciente` (id_paciente, nome) sem nenhuma regra ON DELETE. O que acontece ao tentar apagar um paciente que tem consultas?",
+      "alternativas": [
+        "O MySQL bloqueia a exclusão com erro",
+        "O paciente e as consultas são apagados",
+        "As consultas ficam com id_paciente vazio",
+        "O paciente é apagado e as consultas ficam soltas"
+      ],
+      "correta": 0,
+      "explicacao": "Sem regra, o InnoDB age como RESTRICT/NO ACTION: não deixa apagar o pai enquanto houver filhos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz a regra ON DELETE CASCADE numa chave estrangeira?",
+      "alternativas": [
+        "Impede apagar o registro pai",
+        "Ao apagar o pai, apaga também os filhos ligados a ele",
+        "Ao apagar o pai, deixa a FK dos filhos vazia",
+        "Ao apagar o filho, apaga também o pai"
+      ],
+      "correta": 1,
+      "explicacao": "CASCADE propaga a exclusão do pai para os filhos. Quem deixa a FK vazia é o SET NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa chave estrangeira, qual é o efeito da regra ON DELETE SET NULL quando o registro pai é apagado?",
+      "alternativas": [
+        "Apaga os filhos junto com o pai",
+        "Impede apagar o pai",
+        "A coluna de FK dos filhos fica NULL",
+        "Apaga o pai e cria um pai novo vazio"
+      ],
+      "correta": 2,
+      "explicacao": "Com SET NULL o pai sai, os filhos ficam, mas perdem a ligação: a FK deles vira NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa oficina, `ordem_servico` (id_os, id_veiculo) tem FK para `veiculo` (id_veiculo, placa). Qual é a ordem certa para apagar um veículo e as ordens de serviço dele, sem CASCADE?",
+      "alternativas": [
+        "Primeiro o veículo, depois as ordens de serviço",
+        "Tanto faz a ordem",
+        "Só o veículo, as ordens saem sozinhas",
+        "Primeiro as ordens de serviço, depois o veículo"
+      ],
+      "correta": 3,
+      "explicacao": "Sem CASCADE, os filhos (ordens) precisam sair antes; senão o MySQL bloqueia a exclusão do pai (erro 1451)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A regra `ON DELETE RESTRICT` numa chave estrangeira significa que:",
+      "alternativas": [
+        "o pai não pode ser apagado enquanto tiver filhos",
+        "o pai e os filhos são apagados juntos",
+        "os filhos ficam com a FK NULL",
+        "só o administrador pode apagar o pai"
+      ],
+      "correta": 0,
+      "explicacao": "RESTRICT bloqueia a exclusão do pai que ainda tem filhos. É o mesmo efeito do padrão do InnoDB."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop, `vacina` (id_vacina, id_animal) tem FK para `animal` (id_animal, nome). Apagar uma vacina (a linha filha) com `DELETE FROM vacina WHERE id_vacina = 3;` dá erro de chave estrangeira?",
+      "alternativas": [
+        "Sim, nunca se pode apagar linha filha",
+        "Sim, a não ser que exista CASCADE",
+        "Não, apagar a filha não quebra nenhuma ligação",
+        "Não, mas o animal também é apagado"
+      ],
+      "correta": 2,
+      "explicacao": "A FK protege o pai. Apagar a filha não deixa nenhuma referência quebrada, então é permitido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é o número do erro do MySQL que aparece ao tentar apagar um registro pai que ainda tem filhos ligados?",
+      "alternativas": [
+        "1175",
+        "1451",
+        "1062",
+        "1146"
+      ],
+      "correta": 1,
+      "explicacao": "1451 = não pode apagar/alterar linha pai por causa da FK. 1175 é do Safe Updates, 1062 é chave duplicada, 1146 é tabela inexistente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, `emprestimo` (id_emprestimo, id_livro) tem FK para `livro` com `ON DELETE CASCADE`. O livro de id 10 tem 4 empréstimos. O que acontece com `DELETE FROM livro WHERE id_livro = 10;`?",
+      "alternativas": [
+        "Dá erro 1451",
+        "Só o livro sai; os 4 empréstimos ficam",
+        "O livro sai e os 4 empréstimos ficam com id_livro NULL",
+        "O livro e os 4 empréstimos dele são apagados"
+      ],
+      "correta": 3,
+      "explicacao": "Com CASCADE a exclusão do pai leva junto os filhos ligados a ele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, `produto` (id_produto, nome, id_categoria) tem FK para `categoria` com `ON DELETE SET NULL`. Ao apagar a categoria 'Brinquedos', o que acontece com os produtos dela?",
+      "alternativas": [
+        "Continuam cadastrados, mas com id_categoria NULL",
+        "São apagados junto com a categoria",
+        "Impedem a exclusão da categoria",
+        "Passam para a primeira categoria da tabela"
+      ],
+      "correta": 0,
+      "explicacao": "SET NULL mantém os filhos e apaga só a ligação: a coluna id_categoria deles fica NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na ligação entre `turma` (pai) e `aluno` (filha, com id_turma), qual tabela guarda a chave estrangeira?",
+      "alternativas": [
+        "turma",
+        "As duas guardam a mesma FK",
+        "aluno",
+        "Nenhuma, a FK fica no banco"
+      ],
+      "correta": 2,
+      "explicacao": "A FK fica na tabela filha (aluno.id_turma), apontando para a chave primária do pai (turma.id_turma)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que o MySQL bloqueia, por padrão, apagar um cliente que ainda tem pedidos?",
+      "alternativas": [
+        "Para deixar o DELETE mais rápido, já que o MySQL apaga primeiro os filhos",
+        "Porque cliente é uma palavra reservada",
+        "Porque DELETE só funciona em tabelas filhas",
+        "Para não deixar pedidos apontando para um cliente que não existe"
+      ],
+      "correta": 3,
+      "explicacao": "A FK garante a integridade referencial: nenhum pedido pode ficar ligado a um cliente inexistente (\"órfão\")."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, `pagamento` (id_pagamento, id_aluno) tem FK para `aluno`. O aluno de id 7 tem 2 pagamentos. Sem CASCADE, qual sequência apaga o aluno 7 sem erro?",
+      "alternativas": [
+        "DELETE FROM pagamento WHERE id_aluno = 7; depois DELETE FROM aluno WHERE id_aluno = 7;",
+        "DELETE FROM aluno WHERE id_aluno = 7; depois DELETE FROM pagamento WHERE id_aluno = 7;",
+        "DELETE FROM aluno, pagamento WHERE 7;",
+        "DROP TABLE pagamento; depois DELETE FROM aluno WHERE id_aluno = 7;"
+      ],
+      "correta": 0,
+      "explicacao": "Primeiro saem os filhos (pagamentos do aluno 7), depois o pai. Apagar a tabela pagamento inteira resolveria do jeito errado, perdendo tudo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a FK de `nota` (id_nota, id_aluno, valor) para `aluno` foi criada com `ON DELETE SET NULL`, mas a coluna nota.id_aluno é NOT NULL. O que acontece?",
+      "alternativas": [
+        "O MySQL troca sozinho o SET NULL por CASCADE",
+        "Funciona normalmente e as notas ficam com id_aluno 0",
+        "O MySQL não aceita essa regra na criação da FK",
+        "As notas são apagadas sem aviso"
+      ],
+      "correta": 2,
+      "explicacao": "SET NULL precisa que a coluna aceite NULL. Com NOT NULL, o MySQL recusa a definição da chave estrangeira."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel, `reserva` (id_reserva, id_hospede) tem FK para `hospede` com `ON DELETE CASCADE`, e `pagamento` (id_pagamento, id_reserva) tem FK para `reserva` também com CASCADE. O que acontece ao apagar um hóspede?",
+      "alternativas": [
+        "Só o hóspede sai",
+        "Saem o hóspede e as reservas dele; os pagamentos ficam",
+        "Saem o hóspede, as reservas dele e os pagamentos dessas reservas",
+        "Dá erro, porque o CASCADE só funciona em um nível, não em cadeia de tabelas"
+      ],
+      "correta": 2,
+      "explicacao": "O CASCADE se propaga em cadeia: apagar o hóspede apaga as reservas, e apagar cada reserva apaga os pagamentos dela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No caso anterior, se a FK de `pagamento` para `reserva` fosse RESTRICT (e a de reserva para hóspede continuasse CASCADE), apagar um hóspede com reservas pagas daria:",
+      "alternativas": [
+        "Erro, porque o cascade esbarra nos pagamentos que bloqueiam a reserva",
+        "Certo, apagando hóspede e reservas e deixando os pagamentos",
+        "Certo, apagando só o hóspede",
+        "Certo, e os pagamentos ficam com id_reserva NULL"
+      ],
+      "correta": 0,
+      "explicacao": "O cascade tenta apagar as reservas, mas elas têm pagamentos com RESTRICT. A operação inteira falha e nada é apagado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num sistema de cursos, `matricula` (id_matricula, id_aluno, id_curso) tem FK para `aluno` e para `curso`. Qual destes comandos pode dar o erro 1451?",
+      "alternativas": [
+        "DELETE FROM matricula WHERE id_matricula = 5;",
+        "DELETE FROM curso WHERE id_curso = 2;",
+        "SELECT * FROM curso WHERE id_curso = 2;",
+        "DELETE FROM matricula WHERE id_curso = 2;"
+      ],
+      "correta": 1,
+      "explicacao": "curso é tabela pai; se o curso 2 tiver matrículas (e a FK não for CASCADE/SET NULL), apagá-lo dá 1451. Apagar matrículas (filhas) não dá esse erro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre o erro 1451 e o erro 1452 do MySQL?",
+      "alternativas": [
+        "1451 é erro de sintaxe no DELETE e 1452 é erro de permissão do usuário",
+        "1451 é no INSERT e 1452 é no DELETE",
+        "Os dois significam tabela inexistente",
+        "1451: apagar pai que tem filhos; 1452: inserir filho sem pai"
+      ],
+      "correta": 3,
+      "explicacao": "Os dois são de chave estrangeira, em lados opostos: 1451 protege o pai, 1452 impede filho órfão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de games, o dono quer poder apagar um fornecedor, mas os jogos dele devem continuar cadastrados (sem fornecedor). Qual regra na FK de `jogo.id_fornecedor` atende a isso?",
+      "alternativas": [
+        "ON DELETE CASCADE",
+        "ON DELETE SET NULL",
+        "ON DELETE RESTRICT",
+        "Nenhuma regra (padrão)"
+      ],
+      "correta": 1,
+      "explicacao": "SET NULL permite apagar o pai e mantém os filhos, só sem a ligação. CASCADE apagaria os jogos; RESTRICT e o padrão bloqueariam."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num aplicativo de mensagens, quando uma conversa é apagada, todas as mensagens dela devem sumir junto. Qual regra combina com isso na FK `mensagem.id_conversa`?",
+      "alternativas": [
+        "ON DELETE RESTRICT",
+        "ON DELETE SET NULL",
+        "ON DELETE CASCADE",
+        "ON UPDATE CASCADE"
+      ],
+      "correta": 2,
+      "explicacao": "Mensagens não fazem sentido sem a conversa: CASCADE apaga as filhas junto. ON UPDATE trata mudança de chave, não exclusão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, os prontuários (`prontuario`, com id_paciente) nunca podem ser perdidos sem querer. Qual regra na FK de prontuario para paciente protege melhor esses dados?",
+      "alternativas": [
+        "ON DELETE RESTRICT",
+        "ON DELETE CASCADE",
+        "ON DELETE SET NULL",
+        "ON UPDATE SET NULL"
+      ],
+      "correta": 0,
+      "explicacao": "RESTRICT impede apagar o paciente enquanto houver prontuários. CASCADE apagaria os prontuários; SET NULL os deixaria sem dono."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, `aluno` (id_aluno, nome, id_turma) tem FK para `turma`, e `nota` (id_nota, id_aluno) tem FK para `aluno`, ambas sem CASCADE. Para apagar a turma 3 com todos os alunos e notas, qual é a ordem certa?",
+      "alternativas": [
+        "turma, aluno, nota",
+        "aluno, nota, turma",
+        "nota, turma, aluno",
+        "nota, aluno, turma"
+      ],
+      "correta": 3,
+      "explicacao": "Apaga-se de baixo para cima: primeiro os netos (notas), depois os filhos (alunos), por fim o pai (turma)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma FK foi definida como `FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente) ON UPDATE CASCADE`. Ao apagar um cliente que tem pedidos, o que acontece?",
+      "alternativas": [
+        "Os pedidos são apagados, por causa do CASCADE",
+        "O MySQL bloqueia, porque não há regra ON DELETE (vale o padrão)",
+        "Os pedidos ficam com id_cliente NULL",
+        "O cliente é apagado e os pedidos dele ficam órfãos, sem cliente válido"
+      ],
+      "correta": 1,
+      "explicacao": "ON UPDATE CASCADE só trata a mudança do valor da chave. Para exclusão, sem ON DELETE, vale o padrão RESTRICT/NO ACTION."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No InnoDB do MySQL, qual é a diferença prática entre `ON DELETE RESTRICT` e `ON DELETE NO ACTION`?",
+      "alternativas": [
+        "RESTRICT apaga os filhos em cascata e NO ACTION não apaga nada",
+        "NO ACTION deixa a FK NULL e RESTRICT não",
+        "Nenhuma: os dois bloqueiam a exclusão do pai que tem filhos",
+        "RESTRICT só vale para UPDATE"
+      ],
+      "correta": 2,
+      "explicacao": "No InnoDB os dois têm o mesmo efeito (e são o padrão): o pai com filhos não pode ser apagado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop, `animal` (id_animal, nome, id_tutor) tem FK para `tutor` com CASCADE. Um funcionário rodou `DELETE FROM tutor WHERE cidade = 'Assis';` e o MySQL informou `2 rows affected`. Quantos animais podem ter sido apagados junto?",
+      "alternativas": [
+        "Nenhum, porque o número informado diz que só 2 linhas mudaram no total",
+        "Exatamente 2",
+        "No máximo 1 por tutor",
+        "Todos os animais desses 2 tutores, qualquer que seja a quantidade"
+      ],
+      "correta": 3,
+      "explicacao": "O CASCADE apaga os filhos dos tutores removidos. O \"rows affected\" informa as linhas da tabela do comando, não as apagadas em cascata."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Antes de apagar um fornecedor, um técnico quer saber se ele ainda tem produtos ligados. Qual consulta ajuda nisso? (`produto` tem id_produto, nome e id_fornecedor.)",
+      "alternativas": [
+        "SELECT COUNT(*) FROM produto WHERE id_fornecedor = 4;",
+        "SELECT * FROM fornecedor;",
+        "DELETE FROM produto WHERE id_fornecedor = 4;",
+        "SHOW TABLES;"
+      ],
+      "correta": 0,
+      "explicacao": "Contar os filhos do fornecedor 4 mostra se a exclusão vai esbarrar na FK (ou levar filhos junto, se houver CASCADE)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um colega desligou a checagem com `SET FOREIGN_KEY_CHECKS = 0;` só para conseguir rodar `DELETE FROM cliente WHERE id_cliente = 3;`, que tinha pedidos. Qual é a consequência?",
+      "alternativas": [
+        "Os pedidos do cliente 3 são apagados em cascata",
+        "O DELETE continua dando erro 1451",
+        "O cliente sai e os pedidos dele ficam órfãos",
+        "O MySQL cria o cliente 3 de novo"
+      ],
+      "correta": 2,
+      "explicacao": "Sem a checagem, o MySQL não confere a FK: o pai sai e os filhos ficam com uma referência quebrada. Isso estraga a integridade dos dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num curso, `turma` tem FK para `professor` com `ON DELETE SET NULL`, e `aula` (id_aula, id_turma) tem FK para `turma` com CASCADE. O que acontece ao apagar um professor que tem 2 turmas, cada uma com 10 aulas?",
+      "alternativas": [
+        "Saem o professor, as 2 turmas e as 20 aulas",
+        "Sai o professor; as turmas ficam sem professor e as aulas continuam",
+        "Dá erro 1451 por causa das aulas",
+        "Sai o professor e as 20 aulas; as turmas ficam"
+      ],
+      "correta": 1,
+      "explicacao": "SET NULL não apaga as turmas, só limpa a ligação. Como nenhuma turma foi apagada, o CASCADE de aula não é acionado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, `item_pedido` tem FK para `pedido` com CASCADE e FK para `produto` com RESTRICT. O que acontece com `DELETE FROM pedido WHERE id_pedido = 30;` se o pedido 30 tem 3 itens?",
+      "alternativas": [
+        "Dá erro 1451, por causa do RESTRICT com produto",
+        "O pedido e os 3 itens saem; os produtos continuam",
+        "O pedido, os itens e os produtos dos itens saem",
+        "Só o pedido sai; os itens ficam com id_pedido NULL"
+      ],
+      "correta": 1,
+      "explicacao": "O RESTRICT de produto só protege a exclusão de PRODUTOS. Apagar itens (filhos) não incomoda os produtos (pais deles)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `funcionario` (id_funcionario, nome, id_chefe), id_chefe é FK para a própria tabela (o chefe também é funcionário), sem CASCADE. O que acontece ao tentar apagar um funcionário que é chefe de outros?",
+      "alternativas": [
+        "Apaga normalmente, porque a FK é na mesma tabela",
+        "Apaga ele e todos os subordinados",
+        "Os subordinados viram chefes automaticamente",
+        "Dá erro 1451, porque há funcionários apontando para ele"
+      ],
+      "correta": 3,
+      "explicacao": "Autorrelacionamento funciona como qualquer FK: o chefe é pai dos subordinados e não pode sair enquanto alguém apontar para ele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, `responsavel` tem FK para `aluno` com CASCADE, e `aluno` tem FK para `turma` com RESTRICT. Um técnico rodou `DELETE FROM turma WHERE id_turma = 9;` e a turma 9 tem 25 alunos. Qual é o resultado?",
+      "alternativas": [
+        "Saem a turma, os alunos e os responsáveis",
+        "Saem a turma e os alunos; os responsáveis ficam",
+        "Erro 1451: nada é apagado, nem os responsáveis",
+        "Saem só os responsáveis dos 25 alunos"
+      ],
+      "correta": 2,
+      "explicacao": "A regra que vale é a da FK entre aluno e turma: RESTRICT. Como a turma tem alunos, o DELETE falha por inteiro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um técnico precisa apagar o cliente 12, que tem pedidos, e cada pedido tem itens; as FKs são RESTRICT. Ele rodou `DELETE FROM pedido WHERE id_cliente = 12;` primeiro. O que acontece?",
+      "alternativas": [
+        "Dá erro 1451, porque os pedidos ainda têm itens",
+        "Apaga os pedidos e os itens deles",
+        "Apaga os pedidos e o cliente 12",
+        "Apaga os pedidos e deixa os itens com id_pedido NULL"
+      ],
+      "correta": 0,
+      "explicacao": "Pedido também é pai (de item_pedido). Com RESTRICT, os itens precisam sair antes dos pedidos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um colega afirma: \"Se eu usar CASCADE em todas as FKs, nunca mais vou ter erro 1451, então é sempre a melhor opção\". Qual é o principal problema dessa ideia?",
+      "alternativas": [
+        "CASCADE não existe no MySQL 8",
+        "Um único DELETE pode apagar, sem aviso, muitos dados de outras tabelas",
+        "CASCADE deixa o SELECT mais lento",
+        "Com CASCADE em todas as FKs, não é mais possível apagar nenhuma linha da tabela pai"
+      ],
+      "correta": 1,
+      "explicacao": "O erro 1451 é uma proteção. Com CASCADE em tudo, apagar um registro pai pode levar junto históricos, pagamentos etc. que deviam ficar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `categoria` (id_categoria, nome, id_categoria_mae), cada subcategoria aponta para a categoria mãe com `ON DELETE CASCADE`. 'Eletrônicos' tem as filhas 'Celulares' e 'TVs', e 'Celulares' tem a filha 'Capinhas'. O que sai com `DELETE FROM categoria WHERE nome = 'Eletrônicos';`?",
+      "alternativas": [
+        "Só Eletrônicos",
+        "Eletrônicos, Celulares e TVs; Capinhas fica",
+        "Nada, porque FK na mesma tabela não aceita CASCADE",
+        "Eletrônicos, Celulares, TVs e Capinhas"
+      ],
+      "correta": 3,
+      "explicacao": "O cascade segue em cadeia também no autorrelacionamento: Eletrônicos leva Celulares e TVs, e Celulares leva Capinhas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa clínica, ao rodar `DELETE FROM medico WHERE id_medico = 4;`, apareceu o erro 1451: \"Cannot delete or update a parent row: a foreign key constraint fails\". A tabela `consulta` tem FK id_medico para `medico`.\n\nNa sua resposta:\n1. explique por que o MySQL bloqueou;\n2. diga o que precisaria acontecer antes para o médico poder ser apagado.",
+      "respostasAceitas": [
+        "Bloqueou porque o médico 4 tem consultas ligadas a ele pela FK. Antes, as consultas dele teriam de ser apagadas (ou passadas para outro médico)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) há filhos (consultas) apontando para ele; 2) tirar/realocar os filhos antes (ou ter regra CASCADE/SET NULL)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa biblioteca, a FK de `emprestimo` para `livro` usa `ON DELETE CASCADE`.\n\nNa sua resposta:\n1. explique o que acontece com os empréstimos ao apagar um livro;\n2. diga uma desvantagem dessa regra.",
+      "respostasAceitas": [
+        "Os empréstimos do livro são apagados junto com ele. Desvantagem: perde-se o histórico de empréstimos sem aviso."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) os filhos são apagados automaticamente; 2) perda de histórico / apagar mais do que se percebe."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, a FK de `produto` para `categoria` usa `ON DELETE SET NULL`.\n\nNa sua resposta:\n1. explique o que acontece com os produtos ao apagar uma categoria;\n2. diga qual cuidado a coluna produto.id_categoria precisa ter para essa regra funcionar.",
+      "respostasAceitas": [
+        "Os produtos continuam, mas ficam sem categoria (id_categoria NULL). A coluna precisa aceitar NULL (não pode ser NOT NULL)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) filhos ficam, sem ligação; 2) coluna da FK aceitando NULL."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num pet shop, as tabelas são `tutor` (id_tutor, nome) e `animal` (id_animal, nome, id_tutor), com FK de animal para tutor sem regra ON DELETE. O dono quer apagar um tutor e os animais dele.\n\nNa sua resposta:\n1. diga em que ordem as exclusões devem ser feitas;\n2. explique por que essa ordem é necessária.",
+      "respostasAceitas": [
+        "Primeiro os animais do tutor, depois o tutor. Porque sem CASCADE o MySQL não deixa apagar o pai enquanto houver filhos apontando para ele."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) filhos antes, pai depois; 2) a FK bloqueia apagar o pai com filhos (erro 1451)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, `turma` é a tabela pai e `aluno` é a tabela filha (aluno tem id_turma).\n\nNa sua resposta:\n1. explique o que é a tabela pai e o que é a tabela filha nessa ligação;\n2. diga qual das duas o MySQL protege quando alguém tenta apagar uma turma.",
+      "respostasAceitas": [
+        "Pai é a tabela referenciada (turma); filha é a que tem a chave estrangeira (aluno). Ao apagar uma turma, o MySQL protege a ligação dos alunos, bloqueando a exclusão se houver alunos nela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) pai = referenciada, filha = tem a FK; 2) o MySQL impede que alunos fiquem apontando para turma inexistente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A regra `ON DELETE RESTRICT` foi usada na FK de `nota_fiscal` para `cliente` num sistema de vendas.\n\nNa sua resposta:\n1. explique o que essa regra faz;\n2. diga por que ela faz sentido para notas fiscais.",
+      "respostasAceitas": [
+        "Impede apagar um cliente que tenha notas fiscais. Faz sentido porque notas fiscais são registros importantes e não podem sumir ou ficar sem cliente."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) bloqueia apagar o pai com filhos; 2) documentos/históricos que precisam ser preservados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num hotel, a equipe discute qual regra usar na FK de `reserva` para `hospede`: CASCADE, SET NULL ou RESTRICT. As reservas são usadas para relatórios de faturamento.\n\nNa sua resposta:\n1. diga o que aconteceria com as reservas em cada uma das três regras ao apagar um hóspede;\n2. indique qual você escolheria e justifique.",
+      "respostasAceitas": [
+        "CASCADE apagaria as reservas; SET NULL manteria as reservas sem hóspede; RESTRICT impediria apagar o hóspede. Escolheria RESTRICT (ou exclusão lógica do hóspede), para não perder dados de faturamento."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) os três comportamentos corretos; 2) escolha justificada (RESTRICT ou SET NULL bem argumentado; CASCADE só se justificar a perda)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um estagiário, para se livrar do erro 1451, rodou `SET FOREIGN_KEY_CHECKS = 0;` e então apagou um fornecedor que ainda tinha produtos.\n\nNa sua resposta:\n1. explique o que ficou errado nos dados depois disso;\n2. diga uma forma correta de resolver o erro 1451.",
+      "respostasAceitas": [
+        "Os produtos ficaram órfãos, apontando para um fornecedor que não existe mais. O correto é apagar ou transferir os produtos antes, ou usar uma regra de FK adequada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) referências quebradas/órfãos; 2) tratar os filhos antes (apagar, mudar de fornecedor) ou definir CASCADE/SET NULL."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, as FKs são: `nota` → `aluno` e `aluno` → `turma`, todas sem CASCADE. O coordenador quer apagar a turma 5, que acabou, com seus alunos e notas.\n\nNa sua resposta:\n1. diga a ordem das exclusões;\n2. explique o que aconteceria se ele começasse pela turma.",
+      "respostasAceitas": [
+        "Primeiro as notas dos alunos da turma 5, depois os alunos, por fim a turma. Começando pela turma, o MySQL daria erro 1451, porque ainda há alunos ligados a ela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nota → aluno → turma (do mais filho ao pai); 2) erro 1451 e nada seria apagado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num sistema de pedidos, a FK de `item_pedido` para `pedido` usa CASCADE. Um técnico rodou `DELETE FROM pedido WHERE data_pedido < '2020-01-01';` e o MySQL informou `120 rows affected`.\n\nNa sua resposta:\n1. diga o que o número 120 representa;\n2. explique o que mais foi apagado e por que isso não aparece nesse número.",
+      "respostasAceitas": [
+        "120 são os pedidos apagados. Os itens desses pedidos também foram apagados por causa do CASCADE, mas o MySQL conta só as linhas da tabela do comando."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) pedidos removidos; 2) itens apagados em cascata, que não entram no rows affected."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa clínica, a FK de `exame` para `paciente` usa CASCADE. A gerente pediu para apagar um paciente cadastrado em duplicidade.\n\nNa sua resposta:\n1. explique o risco desse DELETE por causa do CASCADE;\n2. diga o que deve ser conferido antes de apagar.",
+      "respostasAceitas": [
+        "O CASCADE apaga também todos os exames ligados ao paciente, que podem ser dados reais. Antes, conferir com SELECT se o cadastro duplicado tem exames e, se tiver, passá-los para o cadastro certo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) perda de exames em cascata; 2) conferir os filhos (SELECT) e transferir antes, se for o caso."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno diz que os erros 1451 e 1452 são \"a mesma coisa\" porque os dois falam de foreign key.\n\nNa sua resposta:\n1. explique em que situação aparece cada um;\n2. diga o que os dois têm em comum.",
+      "respostasAceitas": [
+        "O 1451 aparece ao apagar/alterar um pai que ainda tem filhos; o 1452 ao inserir/alterar um filho com um pai que não existe. Os dois protegem a integridade referencial da FK."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 1451 = lado do pai (DELETE/UPDATE do pai), 1452 = lado do filho (INSERT/UPDATE do filho); 2) ambos impedem referências quebradas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, `item_pedido` tem FK para `pedido` com CASCADE, e `pedido` tem FK para `cliente` com RESTRICT. O gerente rodou `DELETE FROM cliente WHERE id_cliente = 15;` e recebeu erro 1451. Um colega disse: \"Mas os itens têm CASCADE, devia ter apagado tudo!\"\n\nNa sua resposta:\n1. explique por que deu erro;\n2. explique por que o CASCADE dos itens não ajudou nesse caso.",
+      "respostasAceitas": [
+        "Deu erro porque a FK entre pedido e cliente é RESTRICT e o cliente 15 tem pedidos. O CASCADE dos itens só age quando um pedido é apagado; ele não muda a regra entre cliente e pedido."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a regra que vale é a da FK pedido→cliente (RESTRICT); 2) cada FK tem a sua regra; o CASCADE de itens só vale ao apagar pedidos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa empresa, `funcionario` (id_funcionario, nome, id_gerente) tem id_gerente como FK para a própria tabela. Ao tentar apagar a gerente Rita, apareceu erro 1451.\n\nNa sua resposta:\n1. explique por que uma FK na mesma tabela também bloqueia;\n2. proponha uma forma de conseguir tirar a Rita sem perder os subordinados.",
+      "respostasAceitas": [
+        "Os subordinados apontam para a Rita pela FK; ela é o \"pai\" deles, mesmo na mesma tabela. Primeiro trocar o id_gerente dos subordinados (para outro gerente ou NULL) e depois apagar a Rita."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) autorrelacionamento funciona como pai/filho; 2) atualizar os subordinados antes (UPDATE para outro gerente ou NULL) ou usar SET NULL/exclusão lógica."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num curso, `aula` tem FK para `turma` com CASCADE, e `turma` tem FK para `professor` com SET NULL. Um professor com 3 turmas foi apagado.\n\nNa sua resposta:\n1. diga o que aconteceu com as turmas e com as aulas;\n2. explique por que o CASCADE de aula não foi acionado.",
+      "respostasAceitas": [
+        "As turmas continuaram, só que com id_professor NULL; as aulas não mudaram. O CASCADE de aula só age quando uma turma é apagada, e nenhuma turma foi apagada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) turmas sem professor, aulas intactas; 2) SET NULL não apaga a turma, então não dispara a cascata."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando remove a tabela `rascunho` inteira, com estrutura e dados, do banco?",
+      "alternativas": [
+        "DELETE FROM rascunho;",
+        "TRUNCATE TABLE rascunho;",
+        "DROP TABLE rascunho;",
+        "DELETE rascunho WHERE 1;"
+      ],
+      "correta": 2,
+      "explicacao": "DROP TABLE apaga a tabela (estrutura e dados). DELETE e TRUNCATE só esvaziam, a tabela continua existindo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes comandos permite apagar só ALGUMAS linhas de uma tabela, escolhidas por uma condição?",
+      "alternativas": [
+        "TRUNCATE TABLE",
+        "DELETE com WHERE",
+        "DROP TABLE",
+        "DROP DATABASE"
+      ],
+      "correta": 1,
+      "explicacao": "Só o DELETE aceita WHERE. TRUNCATE esvazia tudo; DROP apaga a tabela ou o banco."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno tentou rodar `TRUNCATE TABLE cliente WHERE cidade = 'Lins';`. O que acontece?",
+      "alternativas": [
+        "Apaga os clientes de Lins",
+        "Apaga todos os clientes, ignorando o WHERE",
+        "Apaga a tabela cliente",
+        "Dá erro de sintaxe, porque TRUNCATE não aceita WHERE"
+      ],
+      "correta": 3,
+      "explicacao": "TRUNCATE sempre esvazia a tabela inteira e não tem WHERE. Para filtrar, é DELETE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, a tabela `aluno` tem id_aluno INT AUTO_INCREMENT. O último aluno cadastrado tem id 40 e foi apagado com `DELETE FROM aluno WHERE id_aluno = 40;`. Qual id recebe o próximo aluno inserido?",
+      "alternativas": [
+        "40, porque o número ficou livre",
+        "41, porque o contador não volta atrás",
+        "1, porque o DELETE zera o contador",
+        "39, porque é o último que sobrou"
+      ],
+      "correta": 1,
+      "explicacao": "O DELETE não mexe no contador do AUTO_INCREMENT. O próximo id continua a sequência: 41."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é \"exclusão lógica\" de um registro?",
+      "alternativas": [
+        "Apagar a linha com DELETE",
+        "Apagar a tabela com DROP",
+        "Marcar a linha como inativa (ex.: ativo = 0) sem apagá-la",
+        "Apagar só as colunas vazias da linha, mantendo as que têm dados"
+      ],
+      "correta": 2,
+      "explicacao": "Na exclusão lógica a linha continua no banco, só marcada como inativa. A exclusão física é o DELETE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `cliente` (id_cliente, nome, ativo), qual comando faz a exclusão LÓGICA do cliente 9?",
+      "alternativas": [
+        "UPDATE cliente SET ativo = 0 WHERE id_cliente = 9;",
+        "DELETE FROM cliente WHERE id_cliente = 9;",
+        "DROP TABLE cliente;",
+        "DELETE FROM cliente WHERE ativo = 0;"
+      ],
+      "correta": 0,
+      "explicacao": "Exclusão lógica é um UPDATE que marca a linha como inativa. O DELETE seria exclusão física."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Antes de rodar um DELETE grande numa tabela importante, qual é a precaução mais indicada?",
+      "alternativas": [
+        "Desligar o servidor",
+        "Apagar os índices da tabela",
+        "Fazer um backup dos dados",
+        "Rodar o DELETE sem WHERE para testar"
+      ],
+      "correta": 2,
+      "explicacao": "Com backup, se o DELETE apagar algo errado, os dados podem ser recuperados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a ferramenta de linha de comando do MySQL usada para gerar um arquivo de backup (.sql) de um banco?",
+      "alternativas": [
+        "mysqldump",
+        "mysqlrestore",
+        "mysqldelete",
+        "mysqltruncate"
+      ],
+      "correta": 0,
+      "explicacao": "O mysqldump gera um arquivo .sql com os comandos para recriar as tabelas e os dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel, a tabela `hospede` tem as colunas id_hospede, nome e ativo. Com exclusão lógica, qual consulta lista só os hóspedes que NÃO foram excluídos?",
+      "alternativas": [
+        "SELECT * FROM hospede;",
+        "SELECT * FROM hospede WHERE ativo = 0;",
+        "SELECT * FROM hospede WHERE ativo IS NULL;",
+        "SELECT * FROM hospede WHERE ativo = 1;"
+      ],
+      "correta": 3,
+      "explicacao": "Os registros \"excluídos\" continuam na tabela com ativo = 0; por isso a consulta precisa filtrar ativo = 1."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando apaga o banco de dados `teste_escola` inteiro, com todas as tabelas?",
+      "alternativas": [
+        "DELETE DATABASE teste_escola;",
+        "DROP DATABASE teste_escola;",
+        "TRUNCATE DATABASE teste_escola;",
+        "DELETE FROM teste_escola;"
+      ],
+      "correta": 1,
+      "explicacao": "DROP DATABASE apaga o banco e tudo o que há nele. DELETE e TRUNCATE trabalham só com linhas de tabelas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de `TRUNCATE TABLE pedido;`, o que continua existindo?",
+      "alternativas": [
+        "As linhas da tabela",
+        "Nada, nem a tabela",
+        "A estrutura da tabela (colunas e restrições)",
+        "Só as linhas inseridas hoje, que ainda não foram confirmadas"
+      ],
+      "correta": 2,
+      "explicacao": "TRUNCATE tira todas as linhas mas mantém a tabela, com colunas, chaves e restrições."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é uma vantagem da exclusão lógica (coluna ativo) em relação ao DELETE?",
+      "alternativas": [
+        "Ocupa menos espaço no banco",
+        "O registro pode ser recuperado depois, mudando ativo para 1",
+        "Dispensa o uso de WHERE nas consultas, porque os inativos somem sozinhos",
+        "Apaga também os registros filhos"
+      ],
+      "correta": 1,
+      "explicacao": "Como a linha continua lá, basta voltar ativo = 1 para restaurar. Em troca, a tabela cresce e as consultas precisam filtrar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `promocao` (id_promocao, descricao, valor) só tem promoções vencidas e deve ficar vazia, mas continuar existindo. Qual comando é o mais adequado?",
+      "alternativas": [
+        "TRUNCATE TABLE promocao;",
+        "DROP TABLE promocao;",
+        "DROP DATABASE loja;",
+        "ALTER TABLE promocao DROP COLUMN valor;"
+      ],
+      "correta": 0,
+      "explicacao": "TRUNCATE esvazia a tabela mantendo a estrutura (e reinicia o AUTO_INCREMENT). DROP apagaria a tabela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O comando `CREATE TABLE cliente_backup AS SELECT * FROM cliente;` é usado antes de um DELETE para:",
+      "alternativas": [
+        "apagar os clientes repetidos",
+        "guardar uma cópia dos dados dos clientes em outra tabela",
+        "trocar o nome da tabela cliente",
+        "desligar a chave estrangeira de cliente enquanto o DELETE estiver rodando"
+      ],
+      "correta": 1,
+      "explicacao": "Ele faz uma tabela nova com as mesmas colunas e uma cópia das linhas de cliente. Se o DELETE der errado, dá para recuperar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, a tabela `livro` tem id_livro AUTO_INCREMENT, com livros de id 1 a 20. Foram apagados os livros 5, 6 e 7. Qual id terá o próximo livro inserido?",
+      "alternativas": [
+        "5, preenchendo o primeiro buraco",
+        "18, porque sobraram 17 livros",
+        "21, continuando depois do maior id já usado",
+        "1, porque o contador recomeça"
+      ],
+      "correta": 2,
+      "explicacao": "O AUTO_INCREMENT não reaproveita buracos: continua do maior valor já gerado (20), então 21."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num sistema de vendas, foi rodado `START TRANSACTION;`, depois `DELETE FROM venda WHERE id_venda = 3;` e por fim `ROLLBACK;`. O que acontece com a venda 3?",
+      "alternativas": [
+        "Volta a existir, porque o ROLLBACK desfaz o DELETE da transação",
+        "Continua apagada, porque DELETE não pode ser desfeito",
+        "Fica duplicada na tabela",
+        "Fica com todas as colunas NULL"
+      ],
+      "correta": 0,
+      "explicacao": "Dentro de uma transação (tabela InnoDB), o ROLLBACK desfaz o DELETE como se ele não tivesse acontecido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL, por padrão, o autocommit vem ligado. O que isso significa para um `DELETE` rodado fora de uma transação?",
+      "alternativas": [
+        "Ele só vale depois de um COMMIT manual",
+        "Ele é gravado na hora e não dá para desfazer com ROLLBACK",
+        "Ele pode ser desfeito a qualquer momento",
+        "Ele só apaga uma linha por vez"
+      ],
+      "correta": 1,
+      "explicacao": "Com autocommit ligado, cada comando é confirmado assim que termina. Para poder desfazer, é preciso abrir uma transação antes (START TRANSACTION)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, `consulta` (id_consulta, id_paciente) e `paciente` (id_paciente, nome, ativo). Qual comando apaga as consultas dos pacientes inativos usando subconsulta?",
+      "alternativas": [
+        "DELETE FROM paciente WHERE ativo = 0 IN consulta;",
+        "DELETE FROM consulta WHERE id_paciente NOT IN (SELECT id_paciente FROM paciente WHERE ativo = 0);",
+        "DELETE FROM consulta, paciente WHERE ativo = 0;",
+        "DELETE FROM consulta WHERE id_paciente IN (SELECT id_paciente FROM paciente WHERE ativo = 0);"
+      ],
+      "correta": 3,
+      "explicacao": "A subconsulta devolve os ids dos pacientes inativos; o DELETE apaga as consultas cujo id_paciente está nessa lista. A coluna ativo não existe em consulta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O comando `DELETE p FROM pedido p JOIN cliente c ON p.id_cliente = c.id_cliente WHERE c.cidade = 'Garça';` apaga linhas de qual tabela?",
+      "alternativas": [
+        "Só de pedido",
+        "Só de cliente",
+        "De pedido e de cliente",
+        "De nenhuma, porque DELETE não aceita JOIN"
+      ],
+      "correta": 0,
+      "explicacao": "No DELETE com JOIN do MySQL, a(s) tabela(s) escrita(s) logo depois de DELETE (aqui, o apelido p) é que perdem linhas. cliente só serve de filtro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a principal diferença entre `DELETE FROM tabela;` e `TRUNCATE TABLE tabela;` em relação a transações no MySQL?",
+      "alternativas": [
+        "Nenhuma, os dois podem ser desfeitos com ROLLBACK",
+        "O TRUNCATE pode ser desfeito com ROLLBACK numa transação; o DELETE confirma na hora sempre",
+        "O DELETE pode ser desfeito numa transação; o TRUNCATE confirma na hora (commit implícito)",
+        "Os dois confirmam na hora e não podem ser desfeitos"
+      ],
+      "correta": 2,
+      "explicacao": "TRUNCATE é DDL e provoca commit implícito. O DELETE, dentro de START TRANSACTION, pode ser desfeito com ROLLBACK."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de games, o dono quer tirar da vitrine um jogo descontinuado, mas o jogo aparece em vendas antigas que devem continuar nos relatórios. Qual é a melhor solução?",
+      "alternativas": [
+        "DELETE do jogo com SET FOREIGN_KEY_CHECKS = 0",
+        "Exclusão lógica: marcar o jogo como inativo",
+        "DROP TABLE jogo",
+        "TRUNCATE TABLE venda"
+      ],
+      "correta": 1,
+      "explicacao": "Marcar como inativo tira o jogo da vitrine e mantém o histórico das vendas e a integridade das FKs."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num sistema com exclusão lógica, a tabela `produto` tem a coluna ativo. Um relatório usa `SELECT * FROM produto;`. Qual problema isso causa?",
+      "alternativas": [
+        "Nenhum, os inativos não aparecem sozinhos",
+        "O SELECT dá erro por causa da coluna ativo",
+        "Os produtos ativos somem do relatório",
+        "Os produtos \"excluídos\" também aparecem no relatório"
+      ],
+      "correta": 3,
+      "explicacao": "Na exclusão lógica as linhas continuam na tabela; se a consulta não filtrar ativo = 1, elas aparecem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num posto de atendimento, a tabela `senha` (id_senha AUTO_INCREMENT, hora) tem 200 senhas. Foi rodado `DELETE FROM senha;` e depois uma senha nova foi inserida. Por que ela não ganhou id 1?",
+      "alternativas": [
+        "Porque o DELETE apaga as linhas mas não reinicia o contador do AUTO_INCREMENT",
+        "Porque o DELETE sem WHERE não apagou nada",
+        "Porque o MySQL escolhe o próximo id ao acaso entre os números que já foram usados",
+        "Porque é preciso desligar o Safe Updates"
+      ],
+      "correta": 0,
+      "explicacao": "O contador só é reiniciado com TRUNCATE (ou ALTER TABLE ... AUTO_INCREMENT). O DELETE mantém a sequência."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando faz o próximo id da tabela `chamado` voltar a ser 1, SEM apagar a tabela, numa tabela que já está vazia?",
+      "alternativas": [
+        "DELETE FROM chamado;",
+        "ALTER TABLE chamado AUTO_INCREMENT = 1;",
+        "DROP TABLE chamado;",
+        "UPDATE chamado SET id_chamado = 1;"
+      ],
+      "correta": 1,
+      "explicacao": "ALTER TABLE ... AUTO_INCREMENT = n ajusta o contador. (Ele não pode ficar menor que o maior id existente; com a tabela vazia, vai para 1.)"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, antes de apagar as matrículas de 2023, o técnico rodou `CREATE TABLE matricula_2023 AS SELECT * FROM matricula WHERE ano = 2023;`. Para que serve isso?",
+      "alternativas": [
+        "Para apagar as matrículas de 2023 mais rápido",
+        "Para impedir que qualquer usuário rode DELETE nas matrículas de 2023",
+        "Para guardar uma cópia só das matrículas que vão ser apagadas",
+        "Para trocar o ano das matrículas para 2023"
+      ],
+      "correta": 2,
+      "explicacao": "É um backup seletivo: as linhas de 2023 ficam guardadas em outra tabela antes do DELETE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando apaga, em uma tabela `aviso` (id_aviso, texto, data_aviso), os avisos com mais de 1 ano?",
+      "alternativas": [
+        "DELETE FROM aviso WHERE data_aviso < CURDATE() - INTERVAL 1 YEAR;",
+        "DELETE FROM aviso WHERE data_aviso > CURDATE() - INTERVAL 1 YEAR;",
+        "DELETE FROM aviso WHERE data_aviso = 1 YEAR;",
+        "TRUNCATE TABLE aviso WHERE data_aviso < 1 YEAR;"
+      ],
+      "correta": 0,
+      "explicacao": "CURDATE() - INTERVAL 1 YEAR é a data de um ano atrás; o que for anterior a ela (<) tem mais de 1 ano. Com > sairiam os recentes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop, a FK de `animal` aponta para `tutor` (sem CASCADE). Qual comando dá erro 1701 (\"Cannot truncate a table referenced in a foreign key constraint\")?",
+      "alternativas": [
+        "TRUNCATE TABLE animal;",
+        "DELETE FROM tutor WHERE id_tutor = 99;",
+        "TRUNCATE TABLE tutor;",
+        "DELETE FROM animal;"
+      ],
+      "correta": 2,
+      "explicacao": "O MySQL não deixa dar TRUNCATE numa tabela referenciada por FK (tutor), mesmo que a filha esteja vazia. A filha (animal) pode ser truncada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, o comando `DELETE i, p FROM item_pedido i JOIN pedido p ON i.id_pedido = p.id_pedido WHERE p.status = 'cancelado';` foi rodado. O que ele apaga?",
+      "alternativas": [
+        "Só os pedidos cancelados",
+        "Os pedidos cancelados e os itens deles",
+        "Só os itens dos pedidos cancelados",
+        "Todos os itens de todos os pedidos"
+      ],
+      "correta": 1,
+      "explicacao": "Como i e p aparecem depois de DELETE, as linhas das duas tabelas que atendem ao JOIN/WHERE são apagadas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL, o comando `DELETE FROM produto WHERE preco < (SELECT AVG(preco) FROM produto);` dá o erro 1093. Por quê?",
+      "alternativas": [
+        "Porque funções como AVG não podem ser usadas dentro de uma subconsulta de DELETE",
+        "Porque o DELETE não aceita subconsulta",
+        "Porque o Safe Updates bloqueia subconsultas",
+        "Porque a subconsulta lê a mesma tabela de onde o DELETE está apagando"
+      ],
+      "correta": 3,
+      "explicacao": "O MySQL não deixa a subconsulta do WHERE ler a mesma tabela que o DELETE/UPDATE está alterando (\"You can't specify target table... for update in FROM clause\")."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um técnico rodou `START TRANSACTION;`, `DELETE FROM log WHERE id_log < 100;`, `TRUNCATE TABLE rascunho;` e por fim `ROLLBACK;`. O que acontece com as linhas de log apagadas?",
+      "alternativas": [
+        "Voltam, porque o ROLLBACK desfaz tudo desde o START TRANSACTION",
+        "Continuam apagadas, porque o TRUNCATE causou um commit implícito antes do ROLLBACK",
+        "Voltam, mas a tabela rascunho também volta",
+        "Ficam pela metade: algumas voltam, outras não"
+      ],
+      "correta": 1,
+      "explicacao": "TRUNCATE é DDL e confirma (commit) a transação aberta. O DELETE do log foi confirmado junto e o ROLLBACK não tem mais o que desfazer."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `cliente` (id_cliente, nome, email), há clientes repetidos com o mesmo e-mail. Qual comando apaga as cópias e mantém, para cada e-mail, o de MENOR id?",
+      "alternativas": [
+        "DELETE c1 FROM cliente c1 JOIN cliente c2 ON c1.email = c2.email AND c1.id_cliente > c2.id_cliente;",
+        "DELETE FROM cliente WHERE email IN (SELECT email FROM cliente);",
+        "DELETE c1 FROM cliente c1 JOIN cliente c2 ON c1.email = c2.email AND c1.id_cliente < c2.id_cliente;",
+        "DELETE FROM cliente GROUP BY email;"
+      ],
+      "correta": 0,
+      "explicacao": "Apaga c1 quando existe outro c2 com o mesmo e-mail e id menor: sobra só o menor id. Com < sobraria o maior. A segunda opção daria erro 1093 (mesma tabela na subconsulta)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num sistema que usa exclusão lógica (coluna ativo), um cliente pede pela lei que seus dados pessoais sejam realmente eliminados. O que fazer?",
+      "alternativas": [
+        "Manter ativo = 0, porque marcar como inativo já elimina os dados pessoais do cliente",
+        "Mudar ativo para NULL",
+        "Fazer a exclusão física (DELETE) ou apagar/anonimizar os dados pessoais dele",
+        "Rodar TRUNCATE na tabela cliente"
+      ],
+      "correta": 2,
+      "explicacao": "Na exclusão lógica os dados continuam no banco. Para eliminar de verdade, é preciso apagá-los (ou anonimizá-los) — sem esvaziar a tabela dos outros clientes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma tabela `evento` tem id_evento AUTO_INCREMENT; o maior id é 500. Um técnico rodou `DELETE FROM evento WHERE id_evento > 450;` e depois `ALTER TABLE evento AUTO_INCREMENT = 100;`. Qual será o próximo id inserido?",
+      "alternativas": [
+        "100",
+        "501",
+        "450",
+        "451"
+      ],
+      "correta": 3,
+      "explicacao": "O AUTO_INCREMENT não pode ficar abaixo do maior id existente + 1. Como o maior que sobrou é 450, o InnoDB ajusta o contador para 451."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel, `reserva` tem FK para `hospede`. Com exclusão lógica em hospede (coluna ativo), um hóspede foi marcado com ativo = 0. O que acontece com as reservas dele?",
+      "alternativas": [
+        "Continuam ligadas normalmente, porque o hóspede não saiu da tabela",
+        "São apagadas em cascata, porque o hóspede deixou de existir para o sistema",
+        "Ficam com id_hospede NULL",
+        "Dão erro 1451 no UPDATE"
+      ],
+      "correta": 0,
+      "explicacao": "A exclusão lógica é um UPDATE na coluna ativo; a chave primária não muda e a linha continua. As FKs não são afetadas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando apaga as consultas de 2022 da tabela `consulta` (id_consulta, id_medico, data_consulta) só dos médicos da especialidade 'Pediatria' (tabela `medico`: id_medico, nome, especialidade)?",
+      "alternativas": [
+        "DELETE FROM consulta WHERE especialidade = 'Pediatria' AND YEAR(data_consulta) = 2022;",
+        "DELETE c FROM consulta c JOIN medico m ON c.id_medico = m.id_medico WHERE m.especialidade = 'Pediatria' AND YEAR(c.data_consulta) = 2022;",
+        "DELETE m FROM consulta c JOIN medico m ON c.id_medico = m.id_medico WHERE m.especialidade = 'Pediatria' AND YEAR(c.data_consulta) = 2022;",
+        "DELETE FROM consulta JOIN medico WHERE 'Pediatria' AND 2022;"
+      ],
+      "correta": 1,
+      "explicacao": "O alvo é c (consulta). DELETE m apagaria os médicos; a primeira opção usa uma coluna que não existe em consulta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, a tabela `aviso` (id_aviso, texto) precisa ficar vazia. Um colega sugeriu `DROP TABLE aviso;` e outro `DELETE FROM aviso;`.\n\nNa sua resposta:\n1. diga o que sobra da tabela em cada caso;\n2. indique qual comando atende ao pedido e por quê.",
+      "respostasAceitas": [
+        "Com DROP não sobra nada (some a tabela); com DELETE sobra a tabela vazia. O DELETE atende, porque a tabela deve continuar existindo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) DROP remove estrutura e dados, DELETE só as linhas; 2) DELETE (ou TRUNCATE), já que a tabela fica."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma loja usa a coluna `ativo` na tabela `produto`: em vez de apagar, roda `UPDATE produto SET ativo = 0 WHERE id_produto = 8;`.\n\nNa sua resposta:\n1. explique o que é essa exclusão lógica;\n2. dê uma vantagem dela em relação ao DELETE.",
+      "respostasAceitas": [
+        "É marcar o produto como inativo sem tirar a linha do banco. Vantagem: dá para recuperar o produto e manter o histórico de vendas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) marca como excluído, a linha continua; 2) recuperação, histórico, não quebra FKs."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num sistema de chamados, o último chamado tinha id 73 e foi apagado com DELETE. O próximo chamado inserido recebeu id 74, e o técnico estranhou.\n\nNa sua resposta:\n1. explique por que o id 73 não foi reaproveitado;\n2. diga se isso é um problema para o banco.",
+      "respostasAceitas": [
+        "Porque o DELETE não volta o contador do AUTO_INCREMENT; ele sempre continua do maior número já gerado. Não é problema: o id só precisa ser único, não precisa ser sem buracos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o contador não volta com DELETE; 2) buracos na sequência são normais."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Antes de apagar os alunos formados, a secretaria fez um backup do banco com o mysqldump.\n\nNa sua resposta:\n1. explique para que serve esse backup;\n2. diga o que poderia acontecer se o DELETE desse errado e não houvesse backup.",
+      "respostasAceitas": [
+        "Serve para guardar uma cópia dos dados e poder recuperá-los. Sem backup, se o DELETE apagasse alunos errados, os dados seriam perdidos para sempre."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cópia para restaurar; 2) perda definitiva dos dados apagados por engano."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Considere os comandos `DELETE FROM visita WHERE data_visita < '2025-01-01';` e `TRUNCATE TABLE visita;` numa tabela `visita` (id_visita, nome, data_visita).\n\nNa sua resposta:\n1. diga o que cada um apaga;\n2. explique por que só o primeiro serve para apagar as visitas antigas.",
+      "respostasAceitas": [
+        "O DELETE apaga só as visitas antes de 2025; o TRUNCATE apaga todas. Só o DELETE aceita WHERE para escolher as linhas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) DELETE filtrado x TRUNCATE tudo; 2) TRUNCATE não tem WHERE."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num banco de testes chamado `loja_teste` foi rodado `DROP DATABASE loja_teste;`.\n\nNa sua resposta:\n1. diga o que foi apagado;\n2. explique por que esse comando precisa de muito cuidado.",
+      "respostasAceitas": [
+        "Foi apagado o banco inteiro, com todas as tabelas e dados. Precisa de cuidado porque não dá para desfazer; se for o banco errado, tudo se perde."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) banco, tabelas e dados; 2) irreversível (sem backup), risco de apagar o banco errado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num sistema de cursos, foi rodado:\n`START TRANSACTION;`\n`DELETE FROM inscricao WHERE id_curso = 7;`\n`ROLLBACK;`\n\nNa sua resposta:\n1. diga o que aconteceu com as inscrições do curso 7 no final;\n2. explique por que, sem o START TRANSACTION, o ROLLBACK não ajudaria.",
+      "respostasAceitas": [
+        "As inscrições voltaram, porque o ROLLBACK desfez o DELETE da transação. Sem START TRANSACTION, com o autocommit ligado, o DELETE já teria sido gravado na hora."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nada foi apagado no fim; 2) autocommit confirma cada comando imediatamente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa clínica, a tabela `paciente` tem a coluna ativo, e os pacientes \"excluídos\" ficam com ativo = 0. O relatório de pacientes ainda mostra pessoas que já foram excluídas.\n\nNa sua resposta:\n1. explique por que isso acontece;\n2. diga o que as consultas do sistema precisam ter para evitar isso.",
+      "respostasAceitas": [
+        "Porque a exclusão lógica não tira a linha da tabela, só marca ativo = 0. As consultas precisam filtrar WHERE ativo = 1."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a linha continua no banco; 2) todo SELECT de uso normal deve filtrar os ativos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na clínica, para apagar as consultas dos pacientes inativos, foi usado `DELETE FROM consulta WHERE id_paciente IN (SELECT id_paciente FROM paciente WHERE ativo = 0);`.\n\nNa sua resposta:\n1. explique o que a subconsulta devolve;\n2. diga o que o comando inteiro faz.",
+      "respostasAceitas": [
+        "A subconsulta devolve a lista de ids dos pacientes inativos. O comando apaga todas as consultas cujo id_paciente está nessa lista."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ids dos pacientes com ativo = 0; 2) apaga as consultas desses pacientes, só da tabela consulta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma escola precisa esvaziar a tabela `presenca` todo começo de ano e quer que os ids recomecem em 1. Um técnico usa `DELETE FROM presenca;`.\n\nNa sua resposta:\n1. explique por que os ids não recomeçam com esse comando;\n2. diga qual comando faria os ids recomeçarem e qual cuidado ele exige.",
+      "respostasAceitas": [
+        "O DELETE apaga as linhas mas mantém o contador do AUTO_INCREMENT. O TRUNCATE TABLE reinicia o contador; cuidado: não pode ser desfeito com ROLLBACK e não funciona se a tabela for referenciada por FK."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) DELETE não zera o AUTO_INCREMENT; 2) TRUNCATE (ou ALTER TABLE ... AUTO_INCREMENT = 1), com cuidado de ser irreversível/FK."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um técnico rodou `DELETE p FROM pedido p JOIN cliente c ON p.id_cliente = c.id_cliente WHERE c.cidade = 'Tupã';`.\n\nNa sua resposta:\n1. diga de qual tabela as linhas saem;\n2. explique para que serve o JOIN com cliente nesse comando.",
+      "respostasAceitas": [
+        "Saem linhas só da tabela pedido (apelido p, logo depois do DELETE). O JOIN serve para filtrar pelos dados do cliente: apaga os pedidos dos clientes de Tupã."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só pedido; 2) JOIN usado como filtro pela cidade do cliente; cliente não perde linhas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma empresa vai apagar os registros antigos da tabela `venda`. A chefe pediu: \"Antes, guarde uma cópia com `CREATE TABLE venda_antiga AS SELECT * FROM venda WHERE ano < 2022;`\".\n\nNa sua resposta:\n1. explique o que esse comando guarda;\n2. diga por que fazer isso ANTES do DELETE.",
+      "respostasAceitas": [
+        "Guarda numa tabela nova uma cópia das vendas anteriores a 2022. Precisa ser antes porque depois do DELETE esses dados não existem mais para copiar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cópia das linhas que vão sair; 2) depois do DELETE não há o que copiar; serve de backup."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma loja de games discute se usa exclusão lógica (coluna ativo) ou física (DELETE) para os clientes. Os clientes têm compras ligadas por FK, e alguns pedem para ter os dados pessoais eliminados.\n\nNa sua resposta:\n1. compare as duas formas quanto ao histórico de compras e às chaves estrangeiras;\n2. explique por que a exclusão lógica sozinha não atende ao pedido de eliminar dados pessoais.",
+      "respostasAceitas": [
+        "A lógica mantém o cliente e as compras ligadas, sem erro de FK e com histórico; a física apaga o cliente e esbarra nas FKs (erro 1451) ou apaga compras em cascata. A lógica não elimina os dados: eles continuam no banco, então seria preciso apagar ou anonimizar os dados pessoais."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) lógica preserva histórico/FK, física quebra ou perde histórico; 2) com ativo = 0 os dados continuam guardados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um técnico rodou, nesta ordem: `START TRANSACTION;`, `DELETE FROM pedido WHERE status = 'teste';`, `TRUNCATE TABLE carrinho;`, `ROLLBACK;`. Os pedidos de teste não voltaram.\n\nNa sua resposta:\n1. explique por que o ROLLBACK não trouxe os pedidos de volta;\n2. diga o que ele deveria ter feito para poder desfazer o DELETE.",
+      "respostasAceitas": [
+        "O TRUNCATE é DDL e faz commit implícito: ao rodar, confirmou a transação, inclusive o DELETE. Ele deveria conferir o DELETE e decidir (COMMIT ou ROLLBACK) antes do TRUNCATE, ou não misturar o TRUNCATE na transação."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) commit implícito do TRUNCATE; 2) finalizar a transação antes do TRUNCATE / não usar DDL dentro dela."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "DML — DELETE",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No MySQL, `DELETE FROM produto WHERE preco > (SELECT AVG(preco) FROM produto);` deu o erro 1093 (\"You can't specify target table 'produto' for update in FROM clause\").\n\nNa sua resposta:\n1. explique o que o comando tentava fazer;\n2. explique por que o MySQL recusou.",
+      "respostasAceitas": [
+        "Tentava apagar os produtos com preço acima da média. O MySQL recusou porque a subconsulta lê a mesma tabela que o DELETE está alterando, e ele não permite isso."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) apagar produtos acima da média; 2) a subconsulta usa a mesma tabela alvo do DELETE. (Pode citar como contorno calcular a média antes ou usar uma tabela derivada.)"
+    }
+  ]
+}
