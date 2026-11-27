@@ -2194,6 +2194,7 @@ const TEMAS_150 = [   // [unidade, arquivo, tema]
   ["front", "front_03_frameworks", "Frameworks"],
   ["so", "so_06_seguranca", "Segurança cibernética"],
   ["front", "front_05_web_apps", "Web Apps"],
+  ["so", "so_07_psi", "Política de Segurança da Informação (PSI)"],
 ];
 const BANCOS_OUTROS_150 = TEMAS_150.map(([u, arq, tema]) => ({ arquivo: `bancos/gerados/${u}/${arq}.json`, icone: MATERIAS_150[u][1],
   titulo: `${MATERIAS_150[u][0]} — ${tema} (150 questões)`, desc: "105 alternativas + 45 dissertativas (sem pedir código), dificuldade balanceada. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] }));
