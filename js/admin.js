@@ -2190,6 +2190,7 @@ const TEMAS_150 = [   // [unidade, arquivo, tema]
   ["redes", "redes_02_protocolos", "Modelos e protocolos de rede"],
   ["redes", "redes_04_hardware_iot", "Arquitetura de hardware IoT"],
   ["redes", "redes_03_equipamentos", "Equipamentos de rede"],
+  ["so", "so_02_linux", "SO de código aberto (Linux)"],
 ];
 const BANCOS_OUTROS_150 = TEMAS_150.map(([u, arq, tema]) => ({ arquivo: `bancos/gerados/${u}/${arq}.json`, icone: MATERIAS_150[u][1],
   titulo: `${MATERIAS_150[u][0]} — ${tema} (150 questões)`, desc: "105 alternativas + 45 dissertativas (sem pedir código), dificuldade balanceada. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] }));
