@@ -1,0 +1,2429 @@
+{
+  "nome": "Sistemas Operacionais — Firewall nativo do SO (a revisar)",
+  "materia": "Sistemas Operacionais",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na padaria, o dono ouviu do técnico que o computador do caixa \"está com o firewall ligado\". Em linguagem simples, o que é esse firewall?",
+      "alternativas": [
+        "Um programa que procura e apaga vírus escondidos dentro dos arquivos",
+        "Um aparelho que aumenta o alcance do sinal do Wi-Fi",
+        "Um filtro que decide quais conexões de rede passam ou são barradas",
+        "Uma cópia de segurança dos arquivos guardada na nuvem"
+      ],
+      "correta": 2,
+      "explicacao": "Firewall é um filtro de tráfego de rede: compara cada conexão com regras e permite ou bloqueia. Procurar vírus é papel do antivírus."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que significa dizer que um firewall é \"nativo\" do sistema operacional?",
+      "alternativas": [
+        "Ele só funciona em computadores montados no Brasil",
+        "Ele precisa ser comprado à parte, na loja de aplicativos do sistema",
+        "Ele só funciona quando o computador está sem rede",
+        "Ele já vem junto com o sistema, sem instalar outro programa"
+      ],
+      "correta": 3,
+      "explicacao": "Nativo = faz parte do próprio sistema. O Windows traz o Windows Defender Firewall; o Linux traz o filtro do kernel, configurado com ferramentas como ufw e iptables."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é o nome do firewall que já vem instalado no Windows 10 e no Windows 11?",
+      "alternativas": [
+        "Gerenciador de Tarefas",
+        "Explorador de Arquivos",
+        "Visualizador de Eventos",
+        "Windows Defender Firewall"
+      ],
+      "correta": 3,
+      "explicacao": "O firewall nativo do Windows se chama Windows Defender Firewall. Os outros são ferramentas do sistema com outras funções."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Ubuntu, qual ferramenta foi feita para configurar o firewall de um jeito simples, com comandos curtos como `allow` e `deny`?",
+      "alternativas": [
+        "chmod",
+        "apt",
+        "grep",
+        "ufw"
+      ],
+      "correta": 3,
+      "explicacao": "ufw significa Uncomplicated Firewall (firewall descomplicado). chmod muda permissões, apt instala pacotes e grep procura texto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Nas regras de firewall aparecem números como 22, 80 e 443. O que é uma \"porta\" nesse contexto?",
+      "alternativas": [
+        "A entrada USB onde se liga o cabo do teclado",
+        "A senha usada para entrar na configuração do roteador",
+        "O nome que o computador usa dentro da rede local",
+        "Um número que identifica o serviço que recebe a conexão"
+      ],
+      "correta": 3,
+      "explicacao": "Porta é um número lógico: cada serviço escuta numa porta (SSH 22, HTTP 80, HTTPS 443). O firewall libera ou bloqueia por porta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um colega quer abrir uma pasta compartilhada que está no SEU computador. Para o firewall do seu computador, essa conexão é:",
+      "alternativas": [
+        "Tráfego de saída, pois sai primeiro do computador do colega",
+        "Tráfego interno, que o firewall nunca analisa",
+        "Tráfego de backup, que só existe em servidores",
+        "Tráfego de entrada, pois vem de fora para o seu computador"
+      ],
+      "correta": 3,
+      "explicacao": "Do ponto de vista de quem recebe, conexão que chega é de entrada. Ela precisa de uma regra de entrada que a permita."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa regra de firewall, quais são as duas ações mais comuns?",
+      "alternativas": [
+        "Permitir ou bloquear a conexão",
+        "Copiar ou colar o arquivo",
+        "Formatar ou particionar o disco",
+        "Compactar ou descompactar a pasta"
+      ],
+      "correta": 0,
+      "explicacao": "Toda regra de firewall termina numa ação: permitir (liberar) ou bloquear (negar) a conexão que combina com ela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No cinema do bairro, o computador da bilheteria já tem antivírus. Mesmo assim, o técnico mantém o firewall ligado. Por quê?",
+      "alternativas": [
+        "O antivírus só funciona se o firewall estiver ligado",
+        "O firewall faz o antivírus atualizar mais rápido",
+        "O firewall controla conexões; o antivírus analisa arquivos",
+        "O firewall serve para limpar vírus que o antivírus achou"
+      ],
+      "correta": 2,
+      "explicacao": "São proteções diferentes: o firewall filtra o tráfego de rede; o antivírus procura programas maliciosos nos arquivos. Um não substitui o outro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O firewall que roda dentro do próprio computador e protege apenas aquela máquina é chamado de:",
+      "alternativas": [
+        "Firewall de host",
+        "Firewall de rede",
+        "Firewall de borda",
+        "Firewall de provedor"
+      ],
+      "correta": 0,
+      "explicacao": "Firewall de host (ou pessoal) roda no sistema operacional e cuida só daquele computador. O de rede/borda fica entre a rede e a internet."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na academia, um equipamento instalado entre a internet e a rede interna filtra o tráfego de todos os computadores ao mesmo tempo. Ele é um exemplo de:",
+      "alternativas": [
+        "Firewall de rede",
+        "Firewall de host",
+        "Antivírus de rede",
+        "Servidor de arquivos"
+      ],
+      "correta": 0,
+      "explicacao": "Um equipamento que protege a rede inteira, na passagem para a internet, é um firewall de rede (de borda)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que significa um firewall ter a política padrão \"negar entrada\"?",
+      "alternativas": [
+        "Toda conexão que chega é bloqueada, a não ser que uma regra a libere",
+        "Toda conexão que chega é liberada, a não ser que uma regra a bloqueie",
+        "O computador deixa de conseguir abrir qualquer site",
+        "Só o usuário administrador consegue usar a internet"
+      ],
+      "correta": 0,
+      "explicacao": "Política padrão é o que vale quando nenhuma regra combina. \"Negar entrada\" bloqueia o que chega e só passa o que foi liberado por regra."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um notebook com o firewall desligado é usado no Wi-Fi aberto da rodoviária. Qual é o risco?",
+      "alternativas": [
+        "O notebook deixa de conseguir se conectar a qualquer rede",
+        "A bateria do notebook passa a descarregar mais rápido",
+        "Os arquivos do notebook são apagados no mesmo instante",
+        "Estranhos na rede podem acessar serviços abertos no notebook"
+      ],
+      "correta": 3,
+      "explicacao": "Sem firewall, qualquer serviço escutando no notebook (compartilhamento, área remota…) fica exposto a quem está na mesma rede pública."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual porta é normalmente usada pelos sites que abrem com HTTPS?",
+      "alternativas": [
+        "21",
+        "25",
+        "3389",
+        "443"
+      ],
+      "correta": 3,
+      "explicacao": "HTTPS usa a porta 443/TCP. 21 é FTP, 25 é envio de e-mail (SMTP) e 3389 é a Área de Trabalho Remota do Windows."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na escola, quem normalmente consegue mudar as regras do firewall de um computador do laboratório?",
+      "alternativas": [
+        "Qualquer visitante que use o Wi-Fi da escola",
+        "Qualquer site aberto no navegador",
+        "Somente o fabricante da placa de rede",
+        "Um usuário com permissão de administrador"
+      ],
+      "correta": 3,
+      "explicacao": "Mudar o firewall é tarefa administrativa. Usuários comuns não conseguem, o que impede que alguém abra portas sem controle."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Com a política \"negar entrada\" ligada, o aluno abre um site e a página carrega normalmente. Por que a resposta do site não é bloqueada?",
+      "alternativas": [
+        "O firewall aceita respostas das conexões que o computador iniciou",
+        "O firewall se desliga sozinho enquanto o navegador está aberto",
+        "Sites com HTTPS passam por fora do firewall do sistema operacional",
+        "A política negar entrada só vale para computadores servidores"
+      ],
+      "correta": 0,
+      "explicacao": "Os firewalls atuais acompanham as conexões: se o computador iniciou (saída permitida), a resposta é reconhecida e aceita. O que é bloqueado é a conexão NOVA vinda de fora."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é uma vantagem do firewall de host em relação ao firewall de rede?",
+      "alternativas": [
+        "Protege todos os computadores da rede com um só equipamento",
+        "Dispensa qualquer configuração de regras pelo técnico",
+        "Protege a máquina mesmo quando ela está fora da rede da empresa",
+        "Impede todo tipo de ataque vindo de qualquer lugar"
+      ],
+      "correta": 2,
+      "explicacao": "O firewall de host vai junto com o computador: protege no Wi-Fi de casa, do hotel, da rodoviária. Proteger a rede toda com um equipamento é vantagem do firewall de rede."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que uma empresa costuma usar firewall de rede E firewall de host ao mesmo tempo?",
+      "alternativas": [
+        "Porque o firewall de host só funciona se houver um de rede na empresa",
+        "Porque assim a internet fica mais rápida para todos",
+        "Porque a lei proíbe usar só um tipo de firewall",
+        "Se uma camada falhar ou o ataque vier de dentro, a outra ainda protege"
+      ],
+      "correta": 3,
+      "explicacao": "É a ideia de camadas de proteção: o de rede barra o que vem da internet; o de host protege cada máquina, inclusive contra outro computador da mesma rede."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas situações é resolvida com uma regra de SAÍDA no firewall?",
+      "alternativas": [
+        "Impedir que visitantes abram a pasta compartilhada do PC",
+        "Impedir que um programa do computador acesse a internet",
+        "Liberar os colegas para abrir o site de teste do PC",
+        "Permitir o acesso remoto ao computador pela porta 3389"
+      ],
+      "correta": 1,
+      "explicacao": "Regra de saída controla o que SAI do computador (o programa tentando falar com a internet). As outras são conexões que chegam: regras de entrada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um computador infectado no laboratório da escola tenta se espalhar para os outros computadores da mesma sala. O que ajuda a barrar isso em cada máquina?",
+      "alternativas": [
+        "O firewall de host bloqueando entradas que não são necessárias",
+        "O firewall de rede da borda, que analisa todo o tráfego da sala",
+        "Um switch mais rápido ligando os computadores da sala",
+        "Um papel de parede avisando os alunos sobre vírus"
+      ],
+      "correta": 0,
+      "explicacao": "Tráfego entre computadores da mesma sala passa pelo switch e não pela borda. Quem barra é o firewall de cada máquina, negando entradas desnecessárias."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre liberar um PROGRAMA e liberar uma PORTA no firewall?",
+      "alternativas": [
+        "Liberar o programa vale para todas as portas de todos os programas",
+        "Liberar a porta só existe no Linux; liberar programa, só no Windows",
+        "O programa liberado vale só para ele; a porta, para qualquer programa",
+        "Não há diferença: as duas opções criam exatamente a mesma regra"
+      ],
+      "correta": 2,
+      "explicacao": "A regra de programa é amarrada ao executável. A regra de porta libera aquele número para qualquer programa que escute nele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No hotel, o servidor de reservas só precisa receber conexões na porta 443. Qual configuração de entrada é a mais adequada?",
+      "alternativas": [
+        "Liberar tudo por padrão e bloquear só a porta 443",
+        "Liberar as portas de 1 a 1024, que são do sistema",
+        "Negar tudo por padrão e liberar só a porta 443",
+        "Desligar o firewall e confiar apenas no antivírus"
+      ],
+      "correta": 2,
+      "explicacao": "Princípio do menor privilégio: abre-se só o necessário. Tudo o mais fica bloqueado pela política padrão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas situações o firewall, sozinho, NÃO consegue impedir?",
+      "alternativas": [
+        "Um computador estranho acessar uma porta sem regra de liberação",
+        "Uma conexão de entrada chegando numa porta bloqueada",
+        "Um funcionário abrir um anexo de e-mail com vírus",
+        "Um acesso remoto vindo de fora numa porta fechada"
+      ],
+      "correta": 2,
+      "explicacao": "O e-mail chega por uma conexão que o próprio usuário abriu (permitida). Abrir o anexo é ação do usuário: aí entram antivírus, atualização e cuidado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A porta 3389/TCP é usada pela Área de Trabalho Remota do Windows. Por que é comum mantê-la bloqueada para a internet?",
+      "alternativas": [
+        "Porque ela deixa a impressão da rede mais lenta",
+        "Porque ela só funciona em redes ligadas por cabo",
+        "Porque permite controlar o computador e é muito atacada",
+        "Porque ela é usada pelo antivírus para se atualizar"
+      ],
+      "correta": 2,
+      "explicacao": "Quem entra pela 3389 controla o computador. Por isso ela é alvo de tentativas de senha; deixá-la aberta para a internet é arriscado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um pacote chega ao computador e não combina com nenhuma regra do firewall. O que acontece com ele?",
+      "alternativas": [
+        "O firewall pergunta ao roteador o que deve fazer",
+        "O pacote é sempre aceito, porque não há regra",
+        "Vale a política padrão definida para aquele sentido",
+        "O computador é desligado para evitar o risco"
+      ],
+      "correta": 2,
+      "explicacao": "Quando nenhuma regra combina, aplica-se a política padrão (por exemplo, negar entrada)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao liberar uma porta no firewall, por que é preciso informar se ela é TCP ou UDP?",
+      "alternativas": [
+        "O protocolo UDP só funciona quando o firewall está todo desligado",
+        "O protocolo TCP só é usado em redes sem fio",
+        "O firewall não aceita números de porta sem letras",
+        "A mesma porta existe nos dois, e a regra vale só para o indicado"
+      ],
+      "correta": 3,
+      "explicacao": "Porta 53/TCP e porta 53/UDP são coisas diferentes. A regra libera só o protocolo informado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na oficina, só o computador do gerente (IP 192.168.1.20) pode acessar o banco de dados que roda no servidor. Como deve ser a regra de entrada no servidor?",
+      "alternativas": [
+        "Liberar a porta do banco para qualquer IP da internet",
+        "Bloquear o IP 192.168.1.20 e liberar os outros IPs",
+        "Liberar a porta do banco somente para o IP 192.168.1.20",
+        "Liberar todas as portas somente para o IP 192.168.1.20"
+      ],
+      "correta": 2,
+      "explicacao": "A regra pode filtrar a origem: libera a porta do banco só para quem precisa. Abrir todas as portas para o gerente é mais do que o necessário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que servem os registros (logs) do firewall?",
+      "alternativas": [
+        "Guardar as senhas dos usuários que usam a rede",
+        "Deixar mais rápidas as conexões que já foram aceitas antes",
+        "Apagar sozinhos as regras mais antigas do sistema",
+        "Ver quais conexões foram bloqueadas ou permitidas, e quando"
+      ],
+      "correta": 3,
+      "explicacao": "O log ajuda a descobrir por que algo não conecta e a perceber tentativas de acesso suspeitas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sistema não conectava; o técnico desligou o firewall, o sistema funcionou e ele deixou assim. Qual foi o erro?",
+      "alternativas": [
+        "Deixar a máquina toda exposta em vez de liberar só o necessário",
+        "Desligar o firewall não muda nada, então o teste não vale",
+        "Ele também deveria ter desligado o antivírus do computador",
+        "Ele deveria ter formatado o computador antes de testar"
+      ],
+      "correta": 0,
+      "explicacao": "Desligar serve no máximo para confirmar a causa. A solução é religar e criar a regra específica (porta/programa) que o sistema precisa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um servidor tem política \"negar entrada\" e uma regra liberando a porta 80/TCP. O firewall está correto, mas o site não abre de outro computador. Qual a causa mais provável?",
+      "alternativas": [
+        "A política negar entrada anula qualquer regra de liberação",
+        "Falta liberar também a porta 80 como saída no cliente",
+        "A porta 80 só funciona com o firewall desligado",
+        "O serviço web não está rodando ou não escuta na porta 80"
+      ],
+      "correta": 3,
+      "explicacao": "Firewall só deixa passar; precisa existir um programa escutando na porta. Se o serviço está parado, a conexão falha mesmo com a regra certa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O usuário abre um site de golpe no navegador e a página tenta enganá-lo. Por que o firewall com \"negar entrada\" não impede isso?",
+      "alternativas": [
+        "A conexão foi iniciada pelo usuário, como saída permitida",
+        "O firewall só analisa conexões feitas por cabo de rede",
+        "Páginas web usam a porta 22, que fica sempre liberada",
+        "O firewall se desliga quando o navegador é aberto"
+      ],
+      "correta": 0,
+      "explicacao": "O navegador abriu a conexão (saída permitida) e a resposta é aceita. Golpes em sites são combatidos com atenção do usuário, filtros e antivírus."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na escola há um firewall de rede entre a internet e o laboratório. Um computador do laboratório ataca outro do MESMO laboratório. Por que o firewall de rede provavelmente não vê isso?",
+      "alternativas": [
+        "O tráfego vai de um computador ao outro pelo switch, sem passar pela borda",
+        "Ele só analisa o tráfego de saída para a internet durante a madrugada",
+        "Ele só consegue proteger redes em que todos os computadores usam Linux",
+        "O ataque usa uma porta que nenhum tipo de firewall consegue filtrar"
+      ],
+      "correta": 0,
+      "explicacao": "O firewall de borda só vê o que passa por ele (rede ↔ internet). Dentro da rede local, quem protege é o firewall de host de cada máquina."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para \"não dar mais problema\", o técnico liberou na entrada todas as portas, de 1 a 65535. Qual é o efeito real?",
+      "alternativas": [
+        "O computador passa a bloquear todas as conexões",
+        "A política de negar entrada deixa, na prática, de proteger",
+        "Só os programas do próprio sistema passam a funcionar",
+        "A rede fica mais rápida e o computador mais seguro"
+      ],
+      "correta": 1,
+      "explicacao": "Liberar tudo equivale a não ter filtro de entrada: qualquer serviço que estiver escutando fica exposto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "ordem-regras",
+      "enunciado": "Num firewall que lê as regras de cima para baixo e para na primeira que combina, a regra 1 libera a porta 22 para todos e a regra 2 bloqueia a porta 22 para o IP 10.0.0.9. O que acontece com uma conexão SSH vinda de 10.0.0.9?",
+      "alternativas": [
+        "É aceita, pois a regra 1 combina antes",
+        "É bloqueada, pois a regra mais específica sempre vence",
+        "É bloqueada, pois bloquear sempre vence liberar",
+        "Depende da regra de saída do computador 10.0.0.9"
+      ],
+      "correta": 0,
+      "explicacao": "Com \"primeira que combina\", a ordem decide: a regra 1 já combina e libera. Para bloquear 10.0.0.9, o bloqueio teria de vir antes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O técnico deu ping num servidor e não teve resposta, mas o site desse servidor abre normalmente. Qual explicação é coerente?",
+      "alternativas": [
+        "O servidor está desligado e o site vem da memória do navegador",
+        "O servidor bloqueia o ping (ICMP), mas libera a porta do site",
+        "O ping só funciona entre computadores com o mesmo sistema",
+        "O ping usa a porta 80, que está ocupada pelo site"
+      ],
+      "correta": 1,
+      "explicacao": "Ping usa ICMP, que muitos firewalls bloqueiam por padrão. Ping sem resposta não prova que o computador está desligado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um programa malicioso já instalado no computador tenta enviar dados para fora pela porta 443. O firewall está com \"negar entrada\" e \"permitir saída\". O que se pode afirmar?",
+      "alternativas": [
+        "A política negar entrada já impede esse envio sem nenhuma regra extra",
+        "Programas maliciosos não conseguem usar a porta 443 do sistema",
+        "Basta bloquear a porta 443 na entrada para o envio parar de vez",
+        "A saída é livre por padrão; uma regra de saída para o programa ajudaria"
+      ],
+      "correta": 3,
+      "explicacao": "Negar entrada não filtra o que o computador envia. Com saída permitida, o programa sai livre; uma regra de saída para ele (e o antivírus) é que ajuda."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O professor pediu que cada aluno explicasse, com suas palavras, o que é o firewall do sistema operacional.\n\nNa sua resposta:\n1. explique o que é um firewall;\n2. dê um exemplo de algo que ele pode bloquear ou permitir.",
+      "respostasAceitas": [
+        "É um filtro de conexões de rede que compara o tráfego com regras e permite ou bloqueia. Ex.: bloqueia um desconhecido tentando acessar a pasta compartilhada; permite os colegas abrirem o site de teste na porta 80."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) filtro que permite/bloqueia conexões por regras; 2) qualquer exemplo coerente de entrada/saída permitida ou bloqueada."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma colega diz que firewall e antivírus \"fazem a mesma coisa\". Explique por que isso não é verdade.\n\nNa sua resposta:\n1. diga o que o firewall controla;\n2. diga o que o antivírus faz.",
+      "respostasAceitas": [
+        "O firewall controla as conexões de rede (o que entra e sai, por porta/programa). O antivírus procura e remove programas maliciosos em arquivos e na memória."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) firewall = tráfego/conexões; 2) antivírus = arquivos/programas maliciosos. São complementares."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre firewall de host e firewall de rede.\n\nNa sua resposta:\n1. diga onde cada um fica (roda);\n2. diga o que cada um protege.",
+      "respostasAceitas": [
+        "O de host roda no sistema operacional do próprio computador e protege só aquela máquina. O de rede é um equipamento (ou servidor) entre a rede e a internet e protege toda a rede de uma vez."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) host no próprio computador / rede na borda; 2) host protege a máquina / rede protege o conjunto."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Dizemos que o Windows e o Linux têm firewall \"nativo\". Explique essa ideia.\n\nNa sua resposta:\n1. diga o que significa ser nativo;\n2. cite a ferramenta usada no Windows e uma usada no Linux.",
+      "respostasAceitas": [
+        "Nativo é o que já vem no sistema, sem instalar nada. No Windows é o Windows Defender Firewall; no Linux usa-se ufw ou iptables (que configuram o filtro do próprio sistema)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) já vem no sistema; 2) Windows Defender Firewall e ufw/iptables. Basta uma ferramenta Linux."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Cite e explique um risco de deixar o firewall desligado num notebook usado em redes Wi-Fi públicas, como a de uma lanchonete.\n\nNa sua resposta:\n1. diga qual é o risco;\n2. explique por que a rede pública aumenta esse risco.",
+      "respostasAceitas": [
+        "Serviços abertos no notebook (pasta compartilhada, acesso remoto) ficam acessíveis a qualquer um. Na rede pública há desconhecidos conectados na mesma rede, que podem tentar invadir."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) exposição de serviços/portas, invasão; 2) rede com pessoas desconhecidas e sem controle."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Nas regras de firewall aparecem números como 22, 80 e 443. Explique o que esses números representam.\n\nNa sua resposta:\n1. diga o que é uma porta;\n2. explique por que o firewall libera ou bloqueia por porta, com um exemplo.",
+      "respostasAceitas": [
+        "Porta é o número que identifica o serviço que recebe a conexão. O firewall usa a porta para liberar só os serviços necessários: ex.: liberar a 443 para o site HTTPS e manter fechadas as outras."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) número que identifica o serviço; 2) filtrar por serviço, com exemplo coerente (22 SSH, 80 HTTP, 443 HTTPS)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na padaria, o computador do caixa está com o firewall na configuração padrão. O funcionário navega normalmente na internet, mas um desconhecido na mesma rede não consegue acessar o computador. Explique por quê.\n\nNa sua resposta:\n1. explique por que a navegação funciona;\n2. explique por que o acesso do desconhecido é barrado.",
+      "respostasAceitas": [
+        "Na configuração padrão a saída é permitida e as respostas das conexões feitas pelo próprio computador são aceitas. Já conexões novas que chegam de fora são negadas por padrão, pois não há regra liberando."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) saída permitida e respostas aceitas; 2) política negar entrada para conexões novas sem regra."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A clínica tem um firewall de rede na entrada da internet. Mesmo assim, o técnico manteve ligado o firewall de cada computador. Justifique essa decisão.\n\nNa sua resposta:\n1. diga o que o firewall de rede não consegue cobrir;\n2. explique o que o firewall de host acrescenta.",
+      "respostasAceitas": [
+        "O firewall de rede não vê o tráfego entre computadores da rede interna e não protege notebooks fora da clínica. O de host protege cada máquina contra outra máquina infectada da rede e em qualquer lugar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) tráfego interno/fora da rede; 2) proteção individual, camada extra."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a política padrão \"negar entrada\" e por que ela é mais segura do que \"liberar tudo e bloquear só o que for perigoso\".\n\nNa sua resposta:\n1. explique o que a política faz;\n2. compare com a outra forma de trabalhar.",
+      "respostasAceitas": [
+        "Negar entrada bloqueia tudo que chega, menos o que foi liberado. É mais segura porque um serviço novo ou esquecido fica bloqueado; na outra forma, tudo que não foi lembrado fica aberto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) bloqueia o que chega sem regra; 2) lista do que é permitido é menor e controlada; esquecimentos não viram brecha."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Toda regra de firewall tem algumas partes: o sentido (entrada ou saída), o que ela filtra (protocolo, porta ou programa) e a ação. Explique a função dessas partes.\n\nNa sua resposta:\n1. explique para que serve o sentido;\n2. explique o que é filtrado e qual é a ação.",
+      "respostasAceitas": [
+        "O sentido diz se a regra vale para o que chega (entrada) ou para o que sai (saída). Protocolo/porta/programa dizem quais conexões combinam com a regra, e a ação diz o que fazer com elas: permitir ou bloquear."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) entrada x saída; 2) critérios de combinação e ação permitir/bloquear."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No servidor de uma loja, o técnico liberou a porta 3306 (banco de dados) para qualquer IP da internet, \"para o sistema funcionar\". Analise essa decisão.\n\nNa sua resposta:\n1. explique o risco;\n2. diga o que seria mais adequado.",
+      "respostasAceitas": [
+        "Qualquer pessoa na internet pode tentar conectar e adivinhar senhas do banco. O adequado é liberar a 3306 só para o IP (ou rede) do sistema que precisa dela, ou não expor o banco à internet."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) exposição do banco, ataques de senha/vazamento; 2) restringir a origem ou deixar só na rede interna."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O firewall do servidor guarda um registro (log) das conexões bloqueadas. Explique como isso ajuda o técnico.\n\nNa sua resposta:\n1. diga o que o log mostra;\n2. dê um exemplo de problema que ele ajuda a descobrir.",
+      "respostasAceitas": [
+        "O log mostra quais conexões foram bloqueadas ou permitidas, de onde vieram, para qual porta e quando. Ex.: o sistema novo não conecta e o log mostra a porta 8080 sendo bloqueada, indicando a regra que falta."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) origem, porta, horário, ação; 2) exemplo de diagnóstico (porta bloqueada ou tentativas suspeitas)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno afirma: \"Com o firewall ligado em negar entrada, meu computador está 100% protegido.\" Analise essa afirmação.\n\nNa sua resposta:\n1. explique contra o que o firewall protege;\n2. dê duas situações que ele não impede.",
+      "respostasAceitas": [
+        "Ele protege contra conexões não autorizadas que chegam ao computador. Não impede, por exemplo, abrir anexo com vírus, cair em site de golpe, usar senha fraca ou rodar programa malicioso baixado pelo próprio usuário."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) filtra conexões de entrada; 2) duas situações coerentes (anexo, golpe, senha fraca, programa baixado, saída permitida)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "ordem-regras",
+      "enunciado": "Num firewall que lê as regras de cima para baixo e para na primeira que combina, existem, nesta ordem: regra 1 — bloquear a porta 22 para toda a rede 192.168.0.x; regra 2 — liberar a porta 22 para o IP 192.168.0.50. O administrador, que usa o IP 192.168.0.50, não consegue entrar por SSH. Explique.\n\nNa sua resposta:\n1. explique por que ele é bloqueado;\n2. diga como a ordem das regras deveria ficar.",
+      "respostasAceitas": [
+        "O IP 192.168.0.50 faz parte da rede bloqueada na regra 1, que combina primeiro; a regra 2 nunca é lida. A liberação do 192.168.0.50 deve vir antes do bloqueio da rede."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) primeira regra que combina decide; 2) regra específica de liberação acima do bloqueio geral."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na empresa, o firewall de rede bloqueia tudo que vem da internet. Um vendedor leva o notebook para casa e o usa no Wi-Fi de uma cafeteria. Explique por que, nessa situação, o firewall de host e o perfil de rede passam a ser decisivos.\n\nNa sua resposta:\n1. diga o que muda ao sair da empresa;\n2. explique o papel do firewall de host e do perfil de rede.",
+      "respostasAceitas": [
+        "Fora da empresa o firewall de rede não protege mais o notebook. Só o firewall do próprio sistema filtra as conexões; o perfil de rede pública aplica regras mais restritivas, escondendo o notebook e bloqueando compartilhamentos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) perde a proteção da borda da empresa; 2) host passa a ser a única barreira e o perfil público endurece as regras."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quais são os três perfis de rede do Windows Defender Firewall?",
+      "alternativas": [
+        "Domínio, Privado e Público",
+        "Casa, Escola e Trabalho",
+        "Entrada, Saída e Encaminhamento",
+        "Administrador, Padrão e Convidado"
+      ],
+      "correta": 0,
+      "explicacao": "O Windows aplica regras diferentes conforme o perfil da rede ativa: Domínio, Privado ou Público."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em casa, no Wi-Fi de confiança da família, qual perfil de rede o Windows deve usar?",
+      "alternativas": [
+        "Privado",
+        "Público",
+        "Domínio",
+        "Convidado"
+      ],
+      "correta": 0,
+      "explicacao": "Rede Privada é a rede confiável (casa, pequeno escritório conhecido). Permite, por exemplo, ver outros aparelhos e compartilhar arquivos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quando o Windows aplica o perfil Domínio?",
+      "alternativas": [
+        "Quando o computador está na rede da empresa, ligado ao domínio",
+        "Quando o usuário abre um site com endereço terminado em .com.br",
+        "Sempre que o computador está ligado à rede por cabo",
+        "Quando o Wi-Fi da rede não pede nenhuma senha"
+      ],
+      "correta": 0,
+      "explicacao": "O perfil Domínio vale quando o computador faz parte de um domínio (rede corporativa) e consegue falar com o controlador desse domínio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Windows 11, onde o usuário confere se o firewall está ligado?",
+      "alternativas": [
+        "No Gerenciador de Dispositivos, em Adaptadores de vídeo",
+        "No Bloco de Notas, no menu Formatar",
+        "Em Segurança do Windows, na área Firewall e proteção de rede",
+        "Em Configurações, na área Personalização"
+      ],
+      "correta": 2,
+      "explicacao": "O app Segurança do Windows tem a área Firewall e proteção de rede, que mostra o estado de cada perfil."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando, digitado no Executar (Win+R), abre o \"Windows Defender Firewall com Segurança Avançada\"?",
+      "alternativas": [
+        "`devmgmt.msc`",
+        "`diskmgmt.msc`",
+        "`wf.msc`",
+        "`services.msc`"
+      ],
+      "correta": 2,
+      "explicacao": "wf.msc abre o console avançado do firewall. devmgmt é o Gerenciador de Dispositivos, diskmgmt o Gerenciamento de Disco e services.msc os Serviços."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao abrir pela primeira vez um jogo em rede, o Windows mostra um aviso perguntando se o programa pode acessar as redes. Ao clicar em Permitir, o que acontece?",
+      "alternativas": [
+        "O firewall fica desligado enquanto o jogo estiver aberto",
+        "Uma nova versão do firewall é instalada no sistema",
+        "O programa passa a ser bloqueado em todas as redes",
+        "O Windows cria uma regra de entrada liberando aquele programa"
+      ],
+      "correta": 3,
+      "explicacao": "O aviso é o firewall pedindo autorização. Permitir cria regras de entrada para aquele programa nos perfis marcados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel do Windows Defender Firewall, qual opção libera um programa de forma simples, marcando-o numa lista?",
+      "alternativas": [
+        "Restaurar padrões do firewall",
+        "Permitir um aplicativo ou recurso através do firewall",
+        "Alterar as configurações de notificação do firewall",
+        "Limpar arquivos temporários do sistema"
+      ],
+      "correta": 1,
+      "explicacao": "Essa opção mostra a lista de aplicativos e caixas para os perfis Privado e Público. Restaurar padrões apaga as regras feitas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na configuração padrão do Windows Defender Firewall, como ficam as conexões?",
+      "alternativas": [
+        "Entrada sem regra é bloqueada; saída é permitida",
+        "Entrada é permitida; saída sem regra é bloqueada",
+        "Entrada e saída ficam sempre bloqueadas",
+        "Entrada e saída ficam sempre permitidas"
+      ],
+      "correta": 0,
+      "explicacao": "O padrão do Windows é bloquear conexões de entrada que não tenham regra e permitir as de saída."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No \"Firewall com Segurança Avançada\", onde ficam as regras que controlam as conexões que CHEGAM ao computador?",
+      "alternativas": [
+        "Regras de Saída",
+        "Regras de Entrada",
+        "Regras de Segurança de Conexão",
+        "Monitoramento"
+      ],
+      "correta": 1,
+      "explicacao": "Regras de Entrada tratam o que chega. Regras de Saída tratam o que o computador envia."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na lista de regras do Firewall com Segurança Avançada, uma regra com o ícone de visto verde indica:",
+      "alternativas": [
+        "Uma regra habilitada que bloqueia a conexão",
+        "Uma regra habilitada que permite a conexão",
+        "Uma regra desabilitada que não faz nada",
+        "Uma regra apagada que some ao reiniciar"
+      ],
+      "correta": 1,
+      "explicacao": "Visto verde = regra ativa de permissão; círculo vermelho = regra ativa de bloqueio; ícone cinza = regra desabilitada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "É possível o firewall do Windows estar ligado no perfil Público e desligado no perfil Privado?",
+      "alternativas": [
+        "Não, ligar um perfil liga todos ao mesmo tempo",
+        "Sim, cada perfil tem sua própria configuração",
+        "Não, o perfil Privado não tem firewall",
+        "Sim, mas só em computadores com Linux"
+      ],
+      "correta": 1,
+      "explicacao": "Cada perfil (Domínio, Privado, Público) pode ser ligado ou desligado e ter configurações próprias."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que o Windows pede a senha de administrador para mudar as regras do firewall?",
+      "alternativas": [
+        "Para conferir se a licença do Windows foi paga corretamente",
+        "Para impedir que qualquer um abra portas sem controle",
+        "Para atualizar o antivírus junto com a nova regra",
+        "Para registrar o computador no provedor de internet"
+      ],
+      "correta": 1,
+      "explicacao": "Regras de firewall afetam a segurança de todo o computador, por isso só um administrador pode alterá-las."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que outro computador use a Área de Trabalho Remota do Windows, qual porta precisa estar liberada na entrada?",
+      "alternativas": [
+        "80/TCP",
+        "53/UDP",
+        "25/TCP",
+        "3389/TCP"
+      ],
+      "correta": 3,
+      "explicacao": "A Área de Trabalho Remota (RDP) usa a porta 3389. 80 é HTTP, 53 é DNS e 25 é envio de e-mail."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que mostra o comando `netsh advfirewall show allprofiles`?",
+      "alternativas": [
+        "A lista de redes Wi-Fi que estão por perto",
+        "O estado e a política do firewall em cada perfil",
+        "Os programas instalados no computador",
+        "O endereço IP de cada placa de rede"
+      ],
+      "correta": 1,
+      "explicacao": "Ele lista os perfis Domínio, Privado e Público com o estado (ON/OFF) e a política de cada um."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Nas configurações de um perfil, existe a opção \"Bloquear todas as conexões de entrada, incluindo as que estão na lista de aplicativos permitidos\". Para que ela serve?",
+      "alternativas": [
+        "Permitir só os aplicativos da lista e bloquear o resto",
+        "Bloquear a saída de todos os programas para a internet",
+        "Desligar o firewall somente naquele perfil de rede",
+        "Bloquear tudo que chega, até o que foi liberado"
+      ],
+      "correta": 3,
+      "explicacao": "É um modo \"blindado\": até os aplicativos liberados deixam de receber conexões. Útil numa rede pública suspeita."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na biblioteca, o sistema do catálogo roda na porta 8080/TCP. No assistente \"Nova Regra de Entrada\", como liberar exatamente essa porta?",
+      "alternativas": [
+        "Tipo Programa, com 8080 no campo do caminho",
+        "Tipo Porta, protocolo TCP e porta local 8080",
+        "Tipo Predefinida, em Compartilhamento de Arquivos",
+        "Tipo Porta, protocolo UDP e porta remota 8080"
+      ],
+      "correta": 1,
+      "explicacao": "Para liberar um número de porta usa-se o tipo Porta, com o protocolo certo (TCP) e a porta LOCAL, que é onde o serviço do computador escuta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao editar uma regra de entrada no Firewall com Segurança Avançada, para que serve a aba \"Escopo\"?",
+      "alternativas": [
+        "Escolher em quais dias da semana a regra funciona",
+        "Definir a velocidade máxima da conexão liberada",
+        "Limitar quais endereços IP podem usar a regra",
+        "Escolher qual antivírus analisa a conexão"
+      ],
+      "correta": 2,
+      "explicacao": "No Escopo informam-se os IPs locais e remotos. Assim a regra pode valer, por exemplo, só para um computador ou uma faixa da rede."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma regra de entrada foi criada marcando só o perfil Privado. O notebook passa a usar uma rede Pública. O que acontece com a regra?",
+      "alternativas": [
+        "Ela passa a valer em dobro na rede Pública",
+        "Ela é apagada automaticamente pelo Windows",
+        "Ela não vale enquanto a rede ativa for Pública",
+        "Ela vira uma regra de saída na rede Pública"
+      ],
+      "correta": 2,
+      "explicacao": "Cada regra vale só nos perfis marcados. Na rede Pública ela fica sem efeito, mas continua existindo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz o comando abaixo, rodado no PowerShell como administrador?\n`New-NetFirewallRule -DisplayName \"Sistema Pet\" -Direction Inbound -Protocol TCP -LocalPort 5000 -Action Allow`",
+      "alternativas": [
+        "Cria uma regra de saída bloqueando a porta 5000/TCP",
+        "Abre o programa Sistema Pet usando a porta 5000",
+        "Cria uma regra de entrada liberando a porta 5000/TCP",
+        "Desliga o firewall apenas para a porta 5000"
+      ],
+      "correta": 2,
+      "explicacao": "Inbound = entrada; Protocol TCP e LocalPort 5000 = porta; Action Allow = permitir. DisplayName é só o nome da regra."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz este comando?\n`netsh advfirewall firewall add rule name=\"Bloqueia FTP\" dir=in action=block protocol=TCP localport=21`",
+      "alternativas": [
+        "Impede o computador de acessar servidores FTP",
+        "Bloqueia conexões que chegam na porta 21/TCP",
+        "Libera conexões que chegam na porta 21/TCP",
+        "Apaga a regra chamada Bloqueia FTP"
+      ],
+      "correta": 1,
+      "explicacao": "dir=in é entrada e action=block é bloquear. Impedir o computador de acessar FTP lá fora seria uma regra de saída (dir=out)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "De outro computador Windows, qual comando testa se a porta 5000 do servidor 192.168.0.10 está acessível?",
+      "alternativas": [
+        "`ping 192.168.0.10 -Port 5000`",
+        "`Test-NetConnection 192.168.0.10 -Port 5000`",
+        "`ipconfig 192.168.0.10 /port 5000`",
+        "`Get-NetFirewallRule -Port 5000`"
+      ],
+      "correta": 1,
+      "explicacao": "Test-NetConnection com -Port tenta conectar na porta e mostra TcpTestSucceeded True ou False. O ping não testa portas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz o comando `netsh advfirewall set allprofiles state off`?",
+      "alternativas": [
+        "Desliga o firewall em todos os perfis",
+        "Desliga apenas o perfil Público",
+        "Mostra o estado de todos os perfis",
+        "Apaga as regras, mas mantém o firewall ligado"
+      ],
+      "correta": 0,
+      "explicacao": "set allprofiles state off desliga Domínio, Privado e Público de uma vez — deixa o computador sem proteção."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na pet shop, o técnico quer parar uma regra por alguns dias, sem perder as configurações dela. O que deve fazer?",
+      "alternativas": [
+        "Excluir a regra",
+        "Restaurar os padrões do firewall",
+        "Desabilitar a regra",
+        "Mover a regra para o perfil Domínio"
+      ],
+      "correta": 2,
+      "explicacao": "Desabilitar deixa a regra guardada, sem efeito, e ela pode ser reativada. Excluir apaga de vez."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Windows Defender Firewall, o que faz a opção \"Restaurar padrões\"?",
+      "alternativas": [
+        "Apaga as regras feitas e volta à configuração original",
+        "Desfaz só a última regra alterada pelo usuário",
+        "Desliga o firewall em todos os perfis de rede do computador",
+        "Atualiza a lista de vírus do antivírus do sistema"
+      ],
+      "correta": 0,
+      "explicacao": "Restaurar padrões apaga as regras criadas depois da instalação. Depois disso, programas liberados podem parar de receber conexões."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A coordenação quer impedir que um jogo instalado nos computadores do laboratório acesse a internet. No Firewall com Segurança Avançada, qual regra usar?",
+      "alternativas": [
+        "Regra de saída do tipo Programa, com ação Bloquear",
+        "Regra de entrada do tipo Programa, com ação Bloquear",
+        "Regra de saída do tipo Porta 443, com ação Permitir",
+        "Regra de entrada do tipo Porta 443, com ação Bloquear"
+      ],
+      "correta": 0,
+      "explicacao": "O jogo é quem inicia a conexão para a internet: é saída. Tipo Programa bloqueia só aquele executável, sem atrapalhar o navegador."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na configuração padrão, um computador Windows não responde ao ping dos colegas. Para que ele responda, qual regra é necessária?",
+      "alternativas": [
+        "Regra de saída permitindo a porta 80/TCP",
+        "Regra de entrada permitindo a porta 3389/TCP (acesso remoto)",
+        "Regra de entrada permitindo ICMPv4 (solicitação de eco)",
+        "Regra de saída bloqueando o ICMPv4"
+      ],
+      "correta": 2,
+      "explicacao": "O ping chega como pedido ICMP (eco). É preciso permitir essa entrada; portas TCP não têm relação com o ping."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao ativar \"Compartilhamento de Arquivos e Impressoras\" para a rede Privada, o que o Windows faz no firewall?",
+      "alternativas": [
+        "Desliga o firewall inteiro no perfil Privado",
+        "Habilita as regras em todos os perfis, até no Público",
+        "Habilita as regras de entrada desse recurso só no Privado",
+        "Cria uma regra de saída bloqueando impressoras"
+      ],
+      "correta": 2,
+      "explicacao": "O Windows já tem regras prontas para esse recurso; ativar o compartilhamento habilita essas regras só no perfil escolhido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O comando `Get-NetFirewallProfile | Select-Object Name, Enabled` mostrou: Domain True, Private True, Public False. O que isso indica?",
+      "alternativas": [
+        "O computador está numa rede Pública agora",
+        "O firewall está desligado no perfil Público",
+        "O perfil Público bloqueia tudo que chega",
+        "Há duas redes Wi-Fi conectadas ao mesmo tempo"
+      ],
+      "correta": 1,
+      "explicacao": "Enabled False = firewall desligado naquele perfil. É um risco: em redes públicas o computador fica sem filtro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Windows, existem duas regras de entrada ativas: uma permite a porta 8080 e outra bloqueia a porta 8080. O que acontece com quem tenta conectar?",
+      "alternativas": [
+        "É liberado, pois a permissão foi criada primeiro",
+        "O Windows alterna entre liberar e bloquear",
+        "As duas se anulam e vale a política de saída",
+        "É bloqueado, pois no Windows o bloqueio tem prioridade"
+      ],
+      "correta": 3,
+      "explicacao": "No Windows Defender Firewall, uma regra de bloqueio vence a de permissão para o mesmo tráfego, independente da ordem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O técnico liberou o programa servidor.exe no firewall. Depois, outro programa passou a escutar na mesma porta e não recebe conexões. Por quê?",
+      "alternativas": [
+        "Só pode haver uma regra de programa por perfil",
+        "O Windows fecha a porta quando outro programa a usa",
+        "Regra de programa só vale até reiniciar o computador",
+        "A regra libera o servidor.exe, não a porta"
+      ],
+      "correta": 3,
+      "explicacao": "Regra do tipo Programa é amarrada ao executável. Para o outro programa é preciso outra regra (de programa ou de porta)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O notebook está numa rede marcada como Pública. Um programa liberado só no perfil Privado não recebe conexões. Qual é a solução mais segura?",
+      "alternativas": [
+        "Se a rede for de confiança, marcá-la como Privada",
+        "Desligar o firewall no perfil Público",
+        "Liberar o programa em todos os perfis de rede",
+        "Desativar o Wi-Fi e usar o perfil Domínio"
+      ],
+      "correta": 0,
+      "explicacao": "Se a rede é confiável, o certo é classificá-la como Privada. Se não for confiável, o programa não deve mesmo receber conexões ali."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O teste `Test-NetConnection 192.168.0.10 -Port 5000` mostrou PingSucceeded: True e TcpTestSucceeded: False. O que se conclui?",
+      "alternativas": [
+        "A porta 5000 está aberta, mas o computador está desligado",
+        "O computador responde, mas a porta 5000 não aceita a conexão",
+        "Não existe nenhuma rota de rede entre os dois computadores",
+        "O teste deu certo e a porta 5000 está liberada"
+      ],
+      "correta": 1,
+      "explicacao": "O ping funcionou, então há rede. A porta falhou: falta regra de entrada no firewall ou o serviço não está escutando nela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num servidor da clínica, a regra libera a porta 1433 com Escopo de IP remoto na faixa 192.168.10.1 a 192.168.10.254. Um computador com IP 192.168.20.5 tenta conectar nessa porta. O que acontece?",
+      "alternativas": [
+        "Conecta, pois a porta 1433 está liberada",
+        "É bloqueado, pois está fora da faixa permitida",
+        "Conecta, pois está na mesma empresa",
+        "É bloqueado, pois a regra vale só para saída"
+      ],
+      "correta": 1,
+      "explicacao": "O Escopo restringe a origem. 192.168.20.5 não está entre 192.168.10.1 e 192.168.10.254, então a regra não se aplica e vale o bloqueio padrão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O técnico criou uma regra de SAÍDA bloqueando a porta 443/TCP para todos os programas. Logo depois, o backup na nuvem parou. Por quê?",
+      "alternativas": [
+        "Regras de saída também bloqueiam a mesma porta na entrada",
+        "O backup usa HTTPS para enviar dados e a saída foi bloqueada",
+        "O backup precisa da porta 443 liberada na entrada do PC",
+        "A porta 443 é usada só por e-mail, não pelo backup"
+      ],
+      "correta": 1,
+      "explicacao": "Serviços na nuvem usam HTTPS (443) e quem inicia a conexão é o computador: tráfego de saída. A regra cortou isso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que o compartilhamento de pastas de um notebook \"para de funcionar\" quando ele entra numa rede Pública?",
+      "alternativas": [
+        "O Windows apaga as pastas compartilhadas em redes Públicas",
+        "As regras de compartilhamento só valem no perfil Privado",
+        "Redes Públicas não usam endereços IP nos aparelhos",
+        "O perfil Público desliga a placa de rede do notebook"
+      ],
+      "correta": 1,
+      "explicacao": "As regras de Compartilhamento de Arquivos e Impressoras ficam ativas só no perfil escolhido (normalmente Privado). Na rede Pública elas não valem."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O Windows Defender Firewall trabalha com três perfis de rede. Explique esses perfis.\n\nNa sua resposta:\n1. diga quais são os três perfis;\n2. explique quando cada um é usado.",
+      "respostasAceitas": [
+        "Domínio: rede da empresa com o computador ligado ao domínio. Privado: rede confiável, como a de casa. Público: rede desconhecida (cafeteria, aeroporto), a mais restritiva."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Domínio, Privado, Público; 2) empresa/domínio, rede confiável, rede desconhecida."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Em casa o notebook usa o perfil Privado; no Wi-Fi do aeroporto, o perfil Público. Explique por que existe essa diferença.\n\nNa sua resposta:\n1. diga o que cada perfil representa;\n2. explique por que o Público é mais restritivo.",
+      "respostasAceitas": [
+        "Privado é para rede confiável e permite descoberta e compartilhamento. Público é para rede com desconhecidos, então bloqueia mais e esconde o computador, reduzindo o risco de ataque."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) confiável x desconhecida; 2) mais bloqueios porque há estranhos na rede."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Ao abrir um programa de chat da escola, o Windows mostrou o aviso \"O Firewall bloqueou alguns recursos deste aplicativo\", com o botão Permitir. Explique como decidir o que fazer.\n\nNa sua resposta:\n1. diga o que o aviso significa;\n2. diga o que considerar antes de clicar em Permitir.",
+      "respostasAceitas": [
+        "O programa quer receber conexões e o firewall bloqueou por falta de regra. Antes de permitir, ver se o programa é confiável e conhecido e em que tipo de rede (marcar só Privada, não Pública)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) firewall bloqueou conexões de entrada do programa; 2) confiança no programa e escolha do perfil."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na loja de roupas há duas situações: (A) o computador do caixa precisa receber pedidos do site pela porta 9000; (B) um programa antigo do computador não deve acessar a internet. Explique que tipo de regra resolve cada uma.\n\nNa sua resposta:\n1. diga o tipo de regra da situação A e por quê;\n2. diga o tipo de regra da situação B e por quê.",
+      "respostasAceitas": [
+        "A: regra de entrada permitindo a porta 9000, porque os pedidos chegam ao computador. B: regra de saída bloqueando o programa, porque é ele quem inicia a conexão para fora."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) entrada/permitir 9000; 2) saída/bloquear o programa."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No Firewall com Segurança Avançada, é possível desabilitar ou excluir uma regra. Explique a diferença.\n\nNa sua resposta:\n1. diga o que acontece ao desabilitar;\n2. diga o que acontece ao excluir.",
+      "respostasAceitas": [
+        "Desabilitar deixa a regra guardada, mas sem efeito, e ela pode ser ligada de novo. Excluir apaga a regra; para voltar seria preciso fazê-la outra vez."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) fica salva e inativa; 2) some de vez."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O Windows Defender Firewall tem a opção \"Restaurar padrões\". Explique essa opção.\n\nNa sua resposta:\n1. diga o que ela faz;\n2. dê uma situação em que faz sentido usá-la.",
+      "respostasAceitas": [
+        "Apaga as regras e ajustes feitos e volta à configuração original do Windows. Faz sentido quando as regras ficaram bagunçadas ou suspeitas (ex.: muitas portas abertas sem saber por quê)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) volta ao padrão e remove regras criadas; 2) situação coerente (bagunça, suspeita de alteração indevida)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No servidor da pet shop, o técnico rodou no PowerShell, como administrador:\n`New-NetFirewallRule -DisplayName \"Agenda Pet\" -Direction Inbound -Protocol TCP -LocalPort 7000 -Action Allow`\nExplique esse comando.\n\nNa sua resposta:\n1. diga o que cada parte indica (sentido, protocolo e porta);\n2. diga qual o efeito final no firewall.",
+      "respostasAceitas": [
+        "Direction Inbound = entrada; Protocol TCP e LocalPort 7000 = conexões TCP que chegam na porta 7000; Action Allow = permitir. Efeito: outros computadores passam a conseguir acessar o serviço da porta 7000."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) entrada, TCP, porta 7000; 2) libera as conexões que chegam nessa porta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O técnico rodou:\n`netsh advfirewall firewall add rule name=\"Sem internet jogo\" dir=out action=block program=\"C:\\Jogos\\jogo.exe\"`\nExplique o que esse comando faz.\n\nNa sua resposta:\n1. diga o efeito do comando;\n2. explique por que a regra é de saída.",
+      "respostasAceitas": [
+        "Cria uma regra que bloqueia o jogo.exe de fazer conexões para fora. É de saída porque é o próprio jogo que inicia a conexão com a internet."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) bloqueia a conexão do jogo; 2) o programa inicia a conexão: dir=out."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num computador da recepção do hotel, `netsh advfirewall show allprofiles` mostrou: Perfil de Domínio — Estado ON; Perfil Privado — Estado ON; Perfil Público — Estado OFF. Interprete esse resultado.\n\nNa sua resposta:\n1. diga qual é o problema;\n2. explique o risco para esse computador.",
+      "respostasAceitas": [
+        "O firewall está desligado no perfil Público. Se o computador for usado numa rede pública (ou a rede for classificada como pública), ele fica sem filtro de entrada, exposto a outros aparelhos dessa rede."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Público desligado; 2) exposição em redes públicas, risco de invasão."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Depois de liberar a porta 5000 no servidor, o técnico foi a OUTRO computador e rodou `Test-NetConnection 192.168.0.10 -Port 5000`, que mostrou TcpTestSucceeded: True. Explique o teste.\n\nNa sua resposta:\n1. diga o que esse resultado significa;\n2. explique por que testar de outro computador, e não do próprio servidor.",
+      "respostasAceitas": [
+        "Significa que a conexão na porta 5000 foi aceita: a regra e o serviço estão funcionando. De outro computador a conexão passa pela regra de entrada; no próprio servidor o teste não mostra se quem está de fora consegue entrar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) porta acessível; 2) teste real da entrada, como o usuário faria."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O sistema da biblioteca é o programa catalogo.exe e ele escuta na porta 8080. O técnico pode liberar pelo programa ou pela porta. Compare as duas opções.\n\nNa sua resposta:\n1. diga uma vantagem de liberar pelo programa;\n2. diga uma vantagem de liberar pela porta.",
+      "respostasAceitas": [
+        "Pelo programa: só o catalogo.exe recebe conexões, mesmo que mude de porta; outro programa na 8080 não fica liberado. Pela porta: regra clara e fácil de testar e conferir, não depende do caminho do executável."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) amarra ao executável, mais restrito; 2) simples/independe do programa. Aceitar outras vantagens coerentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num servidor da escola, a regra da Área de Trabalho Remota (porta 3389) teve o Escopo limitado ao IP do computador do técnico. Justifique essa configuração.\n\nNa sua resposta:\n1. explique o que o Escopo faz nessa regra;\n2. explique por que isso aumenta a segurança.",
+      "respostasAceitas": [
+        "O Escopo faz a regra valer só para conexões vindas do IP do técnico; os outros IPs continuam bloqueados. Assim, outros computadores nem conseguem tentar senhas no acesso remoto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) restringe a origem; 2) reduz quem pode tentar acessar (menor exposição)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No servidor existe a regra \"Permitir 8080\" e, criada por engano, a regra \"Bloquear 8080\", ambas habilitadas. Os usuários não conseguem acessar o sistema. Analise o caso.\n\nNa sua resposta:\n1. explique por que o acesso é bloqueado;\n2. diga como resolver sem diminuir a segurança do servidor.",
+      "respostasAceitas": [
+        "No Windows, a regra de bloqueio tem prioridade sobre a de permissão para o mesmo tráfego, então a 8080 fica bloqueada. Resolve-se desabilitando ou excluindo a regra de bloqueio errada, mantendo o firewall ligado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) bloqueio vence permissão; 2) remover/desabilitar só a regra errada, sem desligar o firewall."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No notebook de um vendedor, as regras do sistema da empresa foram liberadas só no perfil Domínio. No hotel, o notebook usa o perfil Público. O vendedor pede para liberar as mesmas regras no Público. Analise o pedido.\n\nNa sua resposta:\n1. explique o risco de liberar essas regras no perfil Público;\n2. proponha uma alternativa mais segura.",
+      "respostasAceitas": [
+        "No perfil Público o notebook estaria aceitando conexões de desconhecidos da rede do hotel. O mais seguro é não abrir essas entradas ali e usar, por exemplo, VPN da empresa para acessar o sistema, mantendo o perfil Público restritivo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) exposição a estranhos na rede pública; 2) alternativa coerente (VPN, acessar só na empresa, liberar só o mínimo)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Para resolver um problema, um técnico rodou `netsh advfirewall set allprofiles state off` e esqueceu de desfazer. O computador ficou assim por um mês. Analise a situação.\n\nNa sua resposta:\n1. explique os riscos;\n2. descreva o procedimento correto para resolver o problema original.",
+      "respostasAceitas": [
+        "O computador ficou sem filtro em todos os perfis: qualquer serviço escutando ficou exposto, inclusive a ataques vindos de outros computadores da rede. O correto: descobrir a porta/programa necessário, religar o firewall, criar só a regra específica e testar de outro computador."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) exposição total, invasão/propagação; 2) identificar, criar regra específica, testar, manter firewall ligado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Linux, o que é o ufw?",
+      "alternativas": [
+        "Um antivírus que já vem instalado no Ubuntu",
+        "Um editor de textos usado no modo texto",
+        "Um gerenciador de pacotes para instalar programas",
+        "Uma ferramenta simples para configurar o firewall"
+      ],
+      "correta": 3,
+      "explicacao": "ufw (Uncomplicated Firewall) é uma ferramenta de linha de comando que facilita criar regras para o firewall do Linux."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que os comandos do ufw são digitados com `sudo` na frente, como em `sudo ufw status`?",
+      "alternativas": [
+        "Porque o sudo liga a internet antes de rodar o comando",
+        "Porque mexer no firewall exige permissão de administrador",
+        "Porque sem o sudo o comando roda no Windows",
+        "Porque o sudo salva a regra numa pasta na nuvem"
+      ],
+      "correta": 1,
+      "explicacao": "sudo executa o comando como administrador (root). Sem isso, o ufw recusa mudar ou ver as regras."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que o comando `sudo ufw status` mostra?",
+      "alternativas": [
+        "Quais programas estão usando a internet agora",
+        "Se o firewall está ativo e quais regras ele tem",
+        "A velocidade da conexão com a internet",
+        "Os usuários conectados ao computador"
+      ],
+      "correta": 1,
+      "explicacao": "ufw status mostra Status: active/inactive e a lista de regras (porta, ação e origem)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz o comando `sudo ufw disable`?",
+      "alternativas": [
+        "Apaga todas as regras",
+        "Bloqueia toda a entrada",
+        "Desliga o firewall",
+        "Desliga a placa de rede"
+      ],
+      "correta": 2,
+      "explicacao": "disable desativa o ufw (as regras ficam guardadas, mas sem efeito). É o oposto de enable."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num servidor da loja, o técnico rodou `sudo ufw deny 3306/tcp`. O que esse comando faz?",
+      "alternativas": [
+        "Bloqueia conexões que chegam na porta 3306/TCP",
+        "Libera conexões que chegam na porta 3306/TCP",
+        "Desinstala o banco de dados que usa a porta 3306",
+        "Impede o servidor de acessar qualquer banco de dados"
+      ],
+      "correta": 0,
+      "explicacao": "deny cria regra de bloqueio; sem a palavra out, vale para a entrada. 3306 é a porta comum do MySQL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz `sudo ufw default deny incoming`?",
+      "alternativas": [
+        "Bloqueia todas as conexões de saída do servidor",
+        "Apaga todas as regras de entrada já criadas",
+        "Define que toda entrada sem regra é bloqueada",
+        "Libera qualquer conexão que chegue ao servidor"
+      ],
+      "correta": 2,
+      "explicacao": "default define a política padrão. deny incoming = negar entrada: só passa o que tiver regra allow."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é o iptables no Linux?",
+      "alternativas": [
+        "Uma ferramenta de comando para regras de firewall",
+        "Uma tabela com os IPs dos sites que foram visitados",
+        "Um programa gráfico para configurar o Wi-Fi",
+        "Um banco de dados com os usuários do sistema"
+      ],
+      "correta": 0,
+      "explicacao": "iptables é a ferramenta clássica para criar regras no filtro de pacotes do kernel Linux. O ufw é uma forma mais simples de gerar essas regras."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No iptables, qual cadeia (chain) trata os pacotes que CHEGAM ao próprio computador?",
+      "alternativas": [
+        "INPUT",
+        "OUTPUT",
+        "FORWARD",
+        "POSTROUTING"
+      ],
+      "correta": 0,
+      "explicacao": "INPUT = entrada para o próprio computador; OUTPUT = saída; FORWARD = pacotes que só passam pelo computador (roteador)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa regra do iptables, o que o alvo `-j DROP` faz com o pacote?",
+      "alternativas": [
+        "Aceita o pacote e deixa ele passar",
+        "Descarta o pacote sem avisar quem enviou",
+        "Envia o pacote para outro computador",
+        "Guarda o pacote para analisar depois"
+      ],
+      "correta": 1,
+      "explicacao": "DROP joga o pacote fora em silêncio. ACCEPT deixa passar; REJECT descarta e avisa quem enviou."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz o comando `sudo ufw allow https`?",
+      "alternativas": [
+        "Bloqueia todos os sites que usam HTTPS",
+        "Instala um certificado HTTPS no servidor",
+        "Libera a entrada na porta do HTTPS (443/TCP)",
+        "Libera só a saída para sites com HTTPS"
+      ],
+      "correta": 2,
+      "explicacao": "O ufw entende nomes de serviços: https corresponde à porta 443/TCP. allow sem out vale para a entrada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve o comando `sudo iptables -L`?",
+      "alternativas": [
+        "Liberar todas as portas",
+        "Ligar o firewall",
+        "Listar as regras do firewall",
+        "Apagar todas as regras"
+      ],
+      "correta": 2,
+      "explicacao": "-L (list) mostra as regras de cada cadeia. Para apagar seria -F (flush)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando mostra as regras do ufw com um número na frente de cada uma?",
+      "alternativas": [
+        "`sudo ufw list 1`",
+        "`sudo ufw show rules`",
+        "`sudo ufw status numbered`",
+        "`sudo ufw count`"
+      ],
+      "correta": 2,
+      "explicacao": "status numbered numera as regras; o número é usado depois para apagar ou inserir regras numa posição."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de liberar a porta 80 no servidor da padaria, qual é a forma mais simples de testar se a regra funciona?",
+      "alternativas": [
+        "Reiniciar o servidor várias vezes seguidas",
+        "Desligar o firewall e ver se o site continua abrindo",
+        "Olhar se a luz da placa de rede está piscando",
+        "Abrir o site no navegador de outro computador da rede"
+      ],
+      "correta": 3,
+      "explicacao": "O teste certo é acessar o serviço como o usuário faria, de outra máquina. Desligar o firewall não testa a regra."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando mostra, além das regras, a política padrão de entrada e de saída do ufw?",
+      "alternativas": [
+        "`sudo ufw enable verbose`",
+        "`sudo ufw status verbose`",
+        "`sudo ufw default show`",
+        "`sudo ufw reload`"
+      ],
+      "correta": 1,
+      "explicacao": "status verbose mostra linhas como \"Default: deny (incoming), allow (outgoing)\" além das regras."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao rodar `sudo ufw enable` num servidor acessado remotamente por SSH, o ufw avisa que a conexão pode ser interrompida. O que fazer ANTES de confirmar?",
+      "alternativas": [
+        "Liberar a porta do SSH (22/TCP) no ufw",
+        "Desligar o servidor para não perder dados",
+        "Apagar a regra do SSH para evitar conflito",
+        "Rodar `sudo ufw reset` para limpar tudo"
+      ],
+      "correta": 0,
+      "explicacao": "Com negar entrada por padrão, se a 22 não estiver liberada o técnico perde o acesso remoto ao ligar o firewall."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "ufw-allow-from",
+      "enunciado": "O que faz `sudo ufw allow from 192.168.0.30 to any port 22`?",
+      "alternativas": [
+        "Libera o SSH para a rede toda, menos o 192.168.0.30",
+        "Libera o SSH apenas para o computador 192.168.0.30",
+        "Bloqueia o SSH vindo do computador 192.168.0.30",
+        "Faz o servidor acessar o SSH do 192.168.0.30"
+      ],
+      "correta": 1,
+      "explicacao": "from = origem permitida; to any port 22 = qualquer endereço deste servidor, porta 22. Só aquele IP entra pelo SSH."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Após `sudo ufw status numbered`, a regra [3] é a que libera a porta 21. Como apagá-la?",
+      "alternativas": [
+        "`sudo ufw deny 3`",
+        "`sudo ufw remove port 3`",
+        "`sudo ufw delete 3`",
+        "`sudo ufw reset 3`"
+      ],
+      "correta": 2,
+      "explicacao": "ufw delete com o número apaga aquela regra. deny 3 criaria um bloqueio na porta 3."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz `sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT`?",
+      "alternativas": [
+        "Adiciona no início da OUTPUT uma regra bloqueando a 80/TCP",
+        "Adiciona no fim da INPUT uma regra aceitando a porta 80/TCP",
+        "Aceita a saída para a porta 80/TCP de qualquer programa",
+        "Apaga a regra da porta 80/TCP da cadeia INPUT"
+      ],
+      "correta": 1,
+      "explicacao": "-A = adicionar no fim; INPUT = entrada; -p tcp --dport 80 = porta de destino 80/TCP; -j ACCEPT = aceitar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz `sudo iptables -P INPUT DROP`?",
+      "alternativas": [
+        "Descarta só os pacotes que chegam na porta padrão",
+        "Apaga todas as regras da cadeia INPUT",
+        "Aceita a entrada e descarta toda a saída",
+        "Define como descartar a política padrão da entrada"
+      ],
+      "correta": 3,
+      "explicacao": "-P define a política da cadeia: tudo que chega e não combina com nenhuma regra ACCEPT é descartado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz `sudo ufw reset`?",
+      "alternativas": [
+        "Reinicia o ufw mantendo todas as regras",
+        "Volta a última regra que foi apagada",
+        "Libera todas as portas e mantém ligado",
+        "Desliga o ufw e apaga as regras criadas"
+      ],
+      "correta": 3,
+      "explicacao": "reset volta o ufw ao estado de instalação: desativado e sem as regras feitas pelo técnico."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz `sudo ufw limit 22/tcp`?",
+      "alternativas": [
+        "Permite no máximo 22 usuários conectados ao SSH ao mesmo tempo",
+        "Libera o SSH, mas bloqueia IP que tenta conectar muitas vezes",
+        "Libera o SSH somente durante o horário comercial da empresa",
+        "Bloqueia o SSH de todo mundo depois de 22 minutos de uso"
+      ],
+      "correta": 1,
+      "explicacao": "limit permite a porta, mas recusa um IP que faz muitas tentativas em pouco tempo, dificultando quem tenta adivinhar senhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O comando `sudo ufw allow 53`, sem informar o protocolo, libera:",
+      "alternativas": [
+        "A porta 53 em TCP e em UDP",
+        "Só a porta 53 em TCP",
+        "Só a porta 53 em UDP",
+        "As portas de 1 até 53"
+      ],
+      "correta": 0,
+      "explicacao": "Sem /tcp ou /udp, o ufw cria a regra para os dois protocolos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao usar política DROP na entrada do iptables, costuma-se aceitar o tráfego da interface `lo` (`-A INPUT -i lo -j ACCEPT`). Por quê?",
+      "alternativas": [
+        "Ela é a interface do Wi-Fi do computador",
+        "É por ela que chegam as conexões da internet",
+        "Ela guarda o registro (log) do firewall",
+        "Programas do próprio computador usam ela entre si"
+      ],
+      "correta": 3,
+      "explicacao": "lo é a interface de loopback (127.0.0.1). Vários programas do próprio sistema se comunicam por ela; bloqueá-la quebra serviços locais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz o comando `nc -zv 192.168.0.10 22`, rodado de outro computador?",
+      "alternativas": [
+        "Libera a porta 22 no firewall do 192.168.0.10",
+        "Testa se a porta 22 do 192.168.0.10 aceita conexão",
+        "Copia arquivos para o 192.168.0.10 pela porta 22",
+        "Mostra as regras do firewall do 192.168.0.10"
+      ],
+      "correta": 1,
+      "explicacao": "nc (netcat) com -z só testa a conexão e -v mostra o resultado (succeeded ou refused/timeout). Não altera nada no outro computador."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A porta 8080 foi liberada no ufw, mas o teste falha. No servidor, `ss -tln` não mostra nada escutando na 8080. O que isso indica?",
+      "alternativas": [
+        "Não há serviço escutando na 8080; o firewall não é a causa",
+        "O ufw está impedindo o comando ss de mostrar a porta",
+        "A regra deveria ser de saída, e não de entrada, no servidor",
+        "A porta 8080 não pode ser usada no Linux"
+      ],
+      "correta": 0,
+      "explicacao": "ss -tln lista as portas TCP em escuta. Se a 8080 não aparece, não há programa para atender, mesmo com a regra liberada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que mostra o comando `sudo ufw app list`?",
+      "alternativas": [
+        "Todos os programas que usam a internet agora",
+        "Os aplicativos que foram bloqueados pelo antivírus",
+        "Todos os programas instalados pelo apt",
+        "Perfis de programas que o ufw conhece, como OpenSSH"
+      ],
+      "correta": 3,
+      "explicacao": "Alguns pacotes instalam perfis no ufw (ex.: OpenSSH). Com eles dá para liberar pelo nome: `sudo ufw allow OpenSSH`."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz `sudo ufw deny out 25/tcp`?",
+      "alternativas": [
+        "Bloqueia as conexões que chegam na porta 25",
+        "Libera a saída do computador somente pela porta 25",
+        "Impede o computador de abrir conexões para a porta 25",
+        "Desinstala o servidor de e-mail do computador"
+      ],
+      "correta": 2,
+      "explicacao": "out indica regra de saída. A porta 25 é de envio de e-mail; bloquear evita que um programa malicioso mande spam."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "ufw-allow-from",
+      "enunciado": "No servidor de arquivos do escritório, o técnico rodou `sudo ufw allow from 192.168.1.0/24 to any port 445`. O que esse comando faz?",
+      "alternativas": [
+        "Libera a porta 445 para qualquer IP, inclusive da internet",
+        "Bloqueia a porta 445 para os computadores da rede 192.168.1.x",
+        "Libera as portas de 1 a 445 para a rede 192.168.1.x",
+        "Libera o compartilhamento (porta 445) só para a rede 192.168.1.x"
+      ],
+      "correta": 3,
+      "explicacao": "from 192.168.1.0/24 = origem é a rede local 192.168.1.x; port 445 = compartilhamento de arquivos (SMB). Quem está fora dessa rede continua bloqueado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Com `iptables -P INPUT DROP`, o servidor não conseguia baixar atualizações. O que a regra `-A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT` resolve?",
+      "alternativas": [
+        "Aceita qualquer conexão nova vinda da internet",
+        "Libera a saída para os sites de atualização",
+        "Aceita as respostas de conexões que o servidor abriu",
+        "Bloqueia as conexões que já estavam estabelecidas"
+      ],
+      "correta": 2,
+      "explicacao": "As respostas dos sites de atualização chegam pela INPUT. A regra aceita só o que pertence a conexões já abertas pelo servidor; conexões novas continuam bloqueadas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Acessando um servidor remoto por SSH, o técnico rodou `sudo iptables -P INPUT DROP` sem ter nenhuma regra de liberação. O que acontece?",
+      "alternativas": [
+        "Nada, pois o SSH ignora a política padrão",
+        "Ele perde o acesso SSH ao servidor",
+        "O servidor bloqueia só a saída dos usuários",
+        "O iptables pede confirmação e desfaz sozinho"
+      ],
+      "correta": 1,
+      "explicacao": "Sem regra aceitando a porta 22 (nem as conexões estabelecidas), os pacotes da própria sessão SSH passam a ser descartados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "ordem-regras",
+      "enunciado": "A cadeia INPUT tem, nesta ordem: regra 1 `-p tcp --dport 22 -j DROP`; regra 2 `-s 192.168.0.5 -p tcp --dport 22 -j ACCEPT`. O que acontece com o SSH vindo de 192.168.0.5?",
+      "alternativas": [
+        "É descartado, pois a regra 1 combina primeiro",
+        "É aceito, pois a regra 2 é mais específica",
+        "É aceito, pois ACCEPT tem prioridade",
+        "Depende da política padrão da cadeia"
+      ],
+      "correta": 0,
+      "explicacao": "O iptables lê de cima para baixo e para na primeira regra que combina. A regra 1 já combina com qualquer SSH e descarta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No caso em que a regra de bloqueio do SSH vem antes da liberação do IP 192.168.0.5, o que o técnico deve usar para a liberação valer?",
+      "alternativas": [
+        "`-A INPUT`, que adiciona a regra no fim",
+        "`-P INPUT ACCEPT`, que muda a política",
+        "`-I INPUT 1`, que insere a regra no topo",
+        "`-F INPUT`, que reorganiza as regras"
+      ],
+      "correta": 2,
+      "explicacao": "-I insere na posição indicada (1 = topo), antes do bloqueio. -A coloca no fim; -F apaga todas as regras da cadeia."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "De outro computador, a conexão na porta 23 do servidor A fica esperando até dar \"tempo esgotado\"; no servidor B, aparece \"conexão recusada\" na hora. As duas portas estão bloqueadas pelo iptables. Qual explicação combina?",
+      "alternativas": [
+        "A usa DROP (descarta calado) e B usa REJECT (responde recusando)",
+        "A usa REJECT (responde recusando) e B usa DROP (descarta calado)",
+        "A usa ACCEPT (deixa passar) e B usa DROP (descarta calado)",
+        "A usa DROP (descarta calado) e B usa ACCEPT (deixa passar)"
+      ],
+      "correta": 0,
+      "explicacao": "Com DROP o cliente não recebe resposta e espera até o tempo acabar. Com REJECT o servidor avisa na hora que recusou."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O técnico configurou o iptables, reiniciou o servidor e as regras sumiram. Por quê?",
+      "alternativas": [
+        "As regras ficam na memória e precisam ser salvas para voltar",
+        "O iptables apaga as regras que não foram usadas no dia",
+        "Reiniciar desliga o firewall do Linux para sempre",
+        "As regras só valem para o usuário que as criou"
+      ],
+      "correta": 0,
+      "explicacao": "Regras feitas com iptables valem até desligar. Para persistir, salva-se com iptables-save (ou pacote iptables-persistent). O ufw já guarda as regras sozinho."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No ufw, a regra [1] é `DENY IN 192.168.0.50`. Depois o técnico roda `sudo ufw allow from 192.168.0.50 to any port 80`. O IP 192.168.0.50 consegue acessar a porta 80?",
+      "alternativas": [
+        "Sim, a regra mais nova sempre vale mais",
+        "Sim, regra com porta vence regra sem porta",
+        "Não, o ufw não aceita liberar por IP",
+        "Não, o bloqueio vem antes e combina primeiro"
+      ],
+      "correta": 3,
+      "explicacao": "O ufw coloca a regra nova no fim e usa a primeira que combina. Para liberar, seria preciso inserir a regra antes (ufw insert 1 …) ou rever o bloqueio."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Ao preparar o servidor da academia, o técnico rodou:\n`sudo ufw default deny incoming`\n`sudo ufw default allow outgoing`\nExplique esses comandos.\n\nNa sua resposta:\n1. diga o que o primeiro comando faz;\n2. diga o que o segundo comando faz.",
+      "respostasAceitas": [
+        "O primeiro define que toda conexão que chega sem regra é bloqueada. O segundo define que as conexões que o servidor inicia para fora são permitidas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) política negar entrada; 2) política permitir saída."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No servidor do pet shop, `sudo ufw status` mostrou:\n`Status: active`\n`22/tcp  ALLOW  Anywhere`\n`80/tcp  ALLOW  Anywhere`\nInterprete esse resultado.\n\nNa sua resposta:\n1. diga em que estado está o firewall;\n2. explique o que cada linha de regra permite.",
+      "respostasAceitas": [
+        "O firewall está ligado. A primeira regra permite conexões de qualquer origem na porta 22/TCP (SSH); a segunda, na porta 80/TCP (site HTTP)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ativo; 2) SSH e HTTP liberados de qualquer lugar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No Linux é possível configurar o firewall com ufw ou com iptables. Compare essas duas ferramentas.\n\nNa sua resposta:\n1. explique o que cada uma é;\n2. diga por que o ufw costuma ser mais fácil para quem está começando.",
+      "respostasAceitas": [
+        "As duas criam regras para o firewall do Linux. O iptables trabalha direto com cadeias e opções detalhadas; o ufw é uma camada simples por cima, com comandos curtos (allow, deny) e guarda as regras sozinho."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ferramentas de regra do firewall do Linux; 2) ufw tem comandos simples/curtos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num servidor do cinema, um técnico rodou `sudo ufw disable` \"para ver se resolvia\" e foi embora. Analise essa atitude.\n\nNa sua resposta:\n1. diga o que o comando faz;\n2. explique o risco de deixar assim.",
+      "respostasAceitas": [
+        "Desliga o firewall (as regras ficam guardadas, mas sem efeito). O servidor fica sem filtro de entrada: todos os serviços que estiverem escutando ficam expostos a ataques."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) desativa o ufw; 2) exposição de todos os serviços."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O servidor da oficina não usa mais FTP. O técnico rodou `sudo ufw delete allow 21/tcp`. Explique.\n\nNa sua resposta:\n1. diga o que o comando faz;\n2. explique por que é bom fechar portas de serviços sem uso.",
+      "respostasAceitas": [
+        "Apaga a regra que liberava a porta 21/TCP, que volta a ser bloqueada pela política padrão. Porta aberta sem uso é uma porta de entrada a mais para ataques, sem nenhum benefício."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) remove a liberação da 21; 2) reduz a superfície de ataque."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Depois de liberar a porta do sistema no ufw, o técnico precisa ter certeza de que a regra funciona. Explique como testar.\n\nNa sua resposta:\n1. dê uma forma de testar;\n2. explique por que o teste deve ser feito de outro computador.",
+      "respostasAceitas": [
+        "Abrir o sistema no navegador de outro computador, ou usar `nc -zv IP porta` (ou Test-NetConnection no Windows). De outro computador a conexão chega como entrada e passa pela regra, como acontece com o usuário real."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) uma forma coerente de teste; 2) testa a entrada de verdade."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num servidor da escola, foi usado:\n`sudo iptables -A INPUT -p tcp --dport 22 -s 192.168.0.0/24 -j ACCEPT`\nExplique esse comando.\n\nNa sua resposta:\n1. explique o que significam `-A INPUT` e `-p tcp --dport 22`;\n2. explique o que significam `-s 192.168.0.0/24` e `-j ACCEPT`.",
+      "respostasAceitas": [
+        "-A INPUT adiciona a regra no fim da cadeia de entrada; -p tcp --dport 22 combina com conexões TCP para a porta 22 (SSH). -s 192.168.0.0/24 limita a origem à rede 192.168.0.x e -j ACCEPT aceita essas conexões."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) entrada, fim da lista, TCP porta 22; 2) só da rede local, aceitar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O técnico configurou `sudo ufw limit ssh` no servidor da clínica. Explique essa regra.\n\nNa sua resposta:\n1. diga o que ela faz;\n2. dê uma situação em que ela ajuda.",
+      "respostasAceitas": [
+        "Libera o SSH, mas bloqueia temporariamente um IP que tenta conectar muitas vezes em pouco tempo. Ajuda contra robôs que ficam tentando adivinhar a senha."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) permite com limite de tentativas; 2) ataque de força bruta/adivinhação de senha."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No servidor da biblioteca, `sudo ufw status verbose` mostrou `Status: active` e `Default: allow (incoming), allow (outgoing)`. Interprete esse resultado.\n\nNa sua resposta:\n1. diga o que essa política padrão significa;\n2. explique o risco e qual seria a política adequada.",
+      "respostasAceitas": [
+        "Mesmo ligado, o firewall aceita toda conexão que chega sem regra; na prática só bloqueia o que tiver deny. O risco é deixar qualquer serviço exposto; o adequado é deny (incoming) e liberar só o necessário."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) entrada liberada por padrão; 2) exposição; usar negar entrada."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No iptables, uma porta pode ser bloqueada com DROP ou com REJECT. Explique a diferença.\n\nNa sua resposta:\n1. diga o que acontece com o pacote em cada caso;\n2. explique o que o computador que tentou conectar percebe.",
+      "respostasAceitas": [
+        "DROP descarta o pacote sem responder; REJECT descarta e manda uma resposta de recusa. Com DROP o cliente fica esperando até o tempo esgotar; com REJECT recebe \"conexão recusada\" na hora."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) descarta calado x descarta avisando; 2) timeout x recusa imediata."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O técnico configurou várias regras com iptables. Após uma queda de energia, o servidor religou sem nenhuma delas. Explique o que aconteceu.\n\nNa sua resposta:\n1. explique por que as regras sumiram;\n2. diga como evitar que isso se repita.",
+      "respostasAceitas": [
+        "As regras do iptables ficam só na memória e se perdem ao reiniciar. É preciso salvá-las (iptables-save, pacote iptables-persistent) para serem carregadas no boot, ou usar o ufw, que guarda as regras."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) regras em memória; 2) salvar/persistir ou usar ufw."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega usou `sudo ufw allow 80` e outro usou `sudo ufw allow 80/tcp`. Compare os dois comandos.\n\nNa sua resposta:\n1. explique a diferença;\n2. diga qual é mais adequado para um site HTTP e por quê.",
+      "respostasAceitas": [
+        "Sem protocolo, o ufw libera a porta 80 em TCP e em UDP; com /tcp, só em TCP. Para site HTTP o mais adequado é 80/tcp, pois o HTTP usa TCP e liberar UDP seria abrir mais do que o necessário."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) TCP+UDP x só TCP; 2) /tcp, princípio do mínimo necessário."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A porta 8080 foi liberada no ufw, mas o sistema não abre de outro computador. No servidor, `ss -tln` mostra o serviço escutando em `127.0.0.1:8080`. Analise o problema.\n\nNa sua resposta:\n1. explique o que significa o serviço escutar em 127.0.0.1;\n2. explique por que o firewall não é o culpado e o que precisa mudar.",
+      "respostasAceitas": [
+        "127.0.0.1 é o endereço local (loopback): o serviço só aceita conexões do próprio servidor. A regra do firewall está certa, mas não há serviço escutando no IP da rede; é preciso configurar o serviço para escutar no IP da rede (ou 0.0.0.0)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só aceita conexões locais; 2) problema na configuração do serviço, não no firewall."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Conectado por SSH a um servidor remoto, o técnico pretende rodar, nesta ordem, só estes comandos:\n`sudo ufw default deny incoming`\n`sudo ufw enable`\nAnalise o plano.\n\nNa sua resposta:\n1. explique o que vai acontecer com a conexão dele;\n2. diga o que deveria ser feito antes de ligar o firewall.",
+      "respostasAceitas": [
+        "Ao ligar com negar entrada e sem regra para a porta 22, o SSH passa a ser bloqueado e ele pode perder o acesso ao servidor. Antes de ligar, deveria liberar o SSH (porta 22/TCP, de preferência só para o IP dele) e conferir as regras."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) perde o acesso remoto; 2) liberar o SSH antes de habilitar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Firewall nativo do SO",
+      "capacidade": "so.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O servidor de uma loja virtual tem estas regras no iptables:\n`-P INPUT DROP`\n`-A INPUT -i lo -j ACCEPT`\n`-A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT`\n`-A INPUT -p tcp --dport 443 -j ACCEPT`\nExplique o que esse conjunto permite e bloqueia.\n\nNa sua resposta:\n1. diga o que é bloqueado por padrão;\n2. explique o papel de cada uma das três regras ACCEPT.",
+      "respostasAceitas": [
+        "Por padrão toda entrada é descartada. A regra do lo libera a comunicação interna do próprio servidor; a de ESTABLISHED,RELATED aceita respostas de conexões que o servidor abriu (ex.: atualizações); a da 443 libera os clientes acessando a loja por HTTPS."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) entrada negada; 2) loopback, respostas de conexões existentes, HTTPS."
+    }
+  ]
+}
