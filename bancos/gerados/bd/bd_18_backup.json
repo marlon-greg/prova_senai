@@ -1,0 +1,2503 @@
+{
+  "nome": "Banco de Dados — Importação, exportação e backup (a revisar)",
+  "materia": "Banco de Dados",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A padaria Pão Quente guarda pedidos e estoque num banco MySQL. O dono pergunta para que serve fazer backup do banco. Qual é a melhor resposta?",
+      "alternativas": [
+        "Ter uma cópia para recuperar os dados se algo der errado",
+        "Deixar as consultas do dia a dia mais rápidas e leves",
+        "Impedir que pessoas sem senha entrem no banco de dados",
+        "Apagar sozinho os registros antigos que não são mais usados"
+      ],
+      "correta": 0,
+      "explicacao": "Backup é uma cópia de segurança: serve para recuperar os dados depois de uma falha, um erro humano ou um ataque. Não acelera consultas nem controla acesso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas situações é um exemplo de perda de dados que um backup ajudaria a resolver?",
+      "alternativas": [
+        "O professor pediu um SELECT com ORDER BY na aula",
+        "A internet da escola ficou lenta por alguns minutos",
+        "Alguém rodou DELETE sem WHERE e apagou os clientes",
+        "Um aluno esqueceu a senha do seu e-mail pessoal"
+      ],
+      "correta": 2,
+      "explicacao": "Um DELETE sem WHERE apaga dados de verdade. Com um backup recente, dá para restaurar os clientes apagados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O `mysqldump` é um programa que acompanha o MySQL. O que ele gera?",
+      "alternativas": [
+        "Uma imagem do disco inteiro do computador, com sistema e programas",
+        "Um arquivo de texto com SQL que recria as tabelas e os dados",
+        "Uma planilha do Excel com gráficos de cada tabela do banco",
+        "Um diagrama DER desenhado automaticamente a partir das tabelas"
+      ],
+      "correta": 1,
+      "explicacao": "O mysqldump gera um 'dump': um arquivo .sql com CREATE TABLE e INSERT INTO que reconstroem o banco."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Onde o técnico deve digitar o comando `mysqldump -u root -p academia > academia.sql`?",
+      "alternativas": [
+        "Dentro do editor SQL do Workbench, como um SELECT",
+        "No prompt mysql>, depois de entrar com usuário e senha",
+        "No campo de senha da tela de login do Workbench",
+        "No terminal do sistema, como o cmd ou o bash"
+      ],
+      "correta": 3,
+      "explicacao": "mysqldump é um programa separado. Roda no terminal do sistema operacional, e não no prompt mysql> nem no editor SQL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No comando `mysqldump -u root -p biblioteca > biblioteca.sql`, o que faz o sinal `>`?",
+      "alternativas": [
+        "Compara se o banco é maior que o arquivo .sql",
+        "Lê o arquivo biblioteca.sql e envia para o banco",
+        "Manda a saída do mysqldump para o arquivo",
+        "Filtra só as linhas com id maior que zero"
+      ],
+      "correta": 2,
+      "explicacao": "No terminal, > redireciona a saída de um programa para um arquivo. Sem ele, o SQL do dump apareceria na tela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No comando `mysqldump -u root -p petshop > petshop.sql`, o que acontece por causa do `-p`?",
+      "alternativas": [
+        "O programa pede a senha do usuário root antes de começar",
+        "O dump sai compactado em formato .zip",
+        "Só a tabela principal do banco é copiada",
+        "O arquivo é salvo na pasta padrão do MySQL"
+      ],
+      "correta": 0,
+      "explicacao": "-p indica que o usuário tem senha; sem valor colado, o programa pergunta a senha no terminal (sem mostrar na tela)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um técnico abriu no Bloco de Notas um arquivo gerado pelo mysqldump. O que ele deve encontrar lá dentro?",
+      "alternativas": [
+        "Somente os nomes das tabelas, um por linha",
+        "Códigos binários impossíveis de ler",
+        "As senhas de todos os usuários do Windows",
+        "Comandos SQL como CREATE TABLE e INSERT INTO"
+      ],
+      "correta": 3,
+      "explicacao": "O dump é um arquivo de texto com SQL: cria as tabelas (CREATE TABLE) e insere os dados (INSERT INTO)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a extensão de arquivo mais usada para guardar um dump gerado pelo mysqldump?",
+      "alternativas": [
+        ".exe",
+        ".sql",
+        ".docx",
+        ".png"
+      ],
+      "correta": 1,
+      "explicacao": "O dump contém comandos SQL, por isso é salvo normalmente como .sql (pode depois ser compactado em .zip ou .gz)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A oficina Motor Forte quer copiar só a tabela `ordem_servico` (colunas id_os, placa, descricao e valor) do banco `oficina`. Qual comando faz isso?",
+      "alternativas": [
+        "mysqldump -u root -p ordem_servico oficina > os.sql",
+        "mysqldump -u root -p oficina ordem_servico > os.sql",
+        "mysqldump -u root -p oficina > ordem_servico",
+        "mysqldump -u root -p oficina.ordem_servico < os.sql"
+      ],
+      "correta": 1,
+      "explicacao": "A ordem é: mysqldump [opções] banco tabela > arquivo. Primeiro o banco, depois a(s) tabela(s)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que é recomendado fazer um backup antes de rodar um ALTER TABLE ou um UPDATE grande no banco de produção?",
+      "alternativas": [
+        "Porque o ALTER TABLE só é aceito depois de um backup feito",
+        "Porque o backup deixa o UPDATE grande muito mais rápido",
+        "Porque sem backup o MySQL bloqueia o usuário root no servidor",
+        "Se o resultado sair errado, dá para voltar ao estado anterior"
+      ],
+      "correta": 3,
+      "explicacao": "Backup antes de mudança arriscada é uma 'rede de segurança': se algo sair errado, restaura-se o estado anterior."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual programa de linha de comando é usado para RESTAURAR um arquivo .sql com `<`, como em `... clinica < clinica.sql`?",
+      "alternativas": [
+        "mysql",
+        "mysqldump",
+        "mysqladmin",
+        "notepad"
+      ],
+      "correta": 0,
+      "explicacao": "mysql é o cliente que executa SQL; com < ele lê os comandos do arquivo. mysqldump só gera o arquivo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual opção do mysqldump faz o arquivo trazer também as procedures e functions do banco?",
+      "alternativas": [
+        "--no-data",
+        "--no-create-info",
+        "--routines",
+        "--tables"
+      ],
+      "correta": 2,
+      "explicacao": "Por padrão o mysqldump não inclui procedures e functions; --routines (ou -R) as inclui.",
+      "grupo": "routines"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual opção do mysqldump gera um arquivo só com os INSERTs, sem os CREATE TABLE?",
+      "alternativas": [
+        "--no-create-info",
+        "--no-data",
+        "--routines",
+        "--add-drop-table"
+      ],
+      "correta": 0,
+      "explicacao": "--no-create-info (ou -t) tira os comandos de criação das tabelas; fica só o INSERT INTO com os dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um estagiário diz: 'Não preciso de backup porque o servidor é novo.' Qual é o problema dessa ideia?",
+      "alternativas": [
+        "Servidor novo não consegue rodar o mysqldump até passar a garantia",
+        "Backup só é permitido depois de um ano de uso do servidor, por regra",
+        "Perda de dados também vem de erro humano, vírus e falhas de software",
+        "Servidor novo já faz backup sozinho na nuvem, sem nenhuma configuração"
+      ],
+      "correta": 2,
+      "explicacao": "Equipamento novo também falha, e a maior parte das perdas vem de erro humano (DELETE errado), ataque ou defeito de software."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O cinema Cine Estrela tem o banco `cinema` com as tabelas filme, sala e sessao. O comando `mysqldump -u root -p cinema > cinema.sql` foi executado. O que vai para o arquivo?",
+      "alternativas": [
+        "Só a estrutura das três tabelas, sem nenhuma linha de dados dentro delas",
+        "Estrutura e dados das três tabelas, sem procedures e sem CREATE DATABASE",
+        "Só os dados das tabelas, porque a estrutura já está guardada no servidor",
+        "O banco inteiro, incluindo os usuários, as senhas e as permissões de acesso"
+      ],
+      "correta": 1,
+      "explicacao": "Sem opções, o mysqldump de um banco traz CREATE TABLE + INSERT das tabelas. Procedures exigem --routines; CREATE DATABASE exige --databases; usuários ficam no banco mysql."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um técnico digitou `mysqldump -u root -p 1234 hotel > hotel.sql` achando que 1234 era a senha. O que acontece?",
+      "alternativas": [
+        "O dump é feito normalmente, usando 1234 como a senha do root",
+        "O arquivo hotel.sql é apagado e recriado vazio, sem nenhum dado",
+        "O MySQL troca a senha do usuário root para 1234 permanentemente",
+        "Pede a senha e trata 1234 como nome do banco, que não existe"
+      ],
+      "correta": 3,
+      "explicacao": "Com espaço depois do -p, o valor não é a senha: o programa pergunta a senha e entende 1234 como nome do banco. A senha colada seria -p1234 (pouco seguro, fica no histórico)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Dentro do cliente mysql (prompt `mysql>`), um aluno digitou `mysqldump -u root -p loja > loja.sql;` e recebeu erro de sintaxe. Qual é o motivo?",
+      "alternativas": [
+        "Faltou escrever o comando inteiro em letras maiúsculas",
+        "O ponto e vírgula do final deveria ser dois-pontos ali",
+        "mysqldump não é comando SQL; ele roda no terminal do sistema",
+        "O banco loja precisava estar vazio antes de fazer o dump"
+      ],
+      "correta": 2,
+      "explicacao": "mysqldump é um programa do sistema operacional. Dentro do mysql> só se digitam comandos SQL e comandos do cliente (como SOURCE)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um dump gerado com `--no-data` foi restaurado num servidor novo. Como ficam as tabelas lá?",
+      "alternativas": [
+        "Criadas com colunas e chaves, mas sem nenhuma linha",
+        "Criadas e preenchidas com todos os dados",
+        "Não são criadas; só os dados são inseridos",
+        "Criadas só com a primeira linha de cada tabela"
+      ],
+      "correta": 0,
+      "explicacao": "--no-data guarda apenas a estrutura (CREATE TABLE). Restaurando, as tabelas surgem vazias."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A academia Corpo Ativo tem um arquivo gerado com `--no-create-info`. Ao restaurá-lo num banco vazio, aparece o erro `Table 'academia.aluno' doesn't exist`. Por quê?",
+      "alternativas": [
+        "O arquivo foi salvo com a extensão errada",
+        "A opção --no-create-info apaga as tabelas depois de restaurar",
+        "Faltou rodar o comando como administrador do Windows",
+        "O arquivo só tem INSERTs e as tabelas ainda não existem no banco"
+      ],
+      "correta": 3,
+      "explicacao": "--no-create-info tira os CREATE TABLE. O INSERT só funciona se a tabela já existir com a estrutura certa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A loja de games Fase Bônus usa uma procedure `registrar_venda`. Depois de restaurar o banco em outro servidor com um dump feito sem opções extras, o sistema acusa `PROCEDURE registrar_venda does not exist`. O que faltou?",
+      "alternativas": [
+        "Usar --no-data no mysqldump",
+        "Usar --routines no mysqldump",
+        "Restaurar com SOURCE em vez de mysql <",
+        "Usar --no-create-info no mysqldump"
+      ],
+      "correta": 1,
+      "explicacao": "Procedures e functions só vão para o dump com --routines (-R). Sem isso, as tabelas voltam, mas as rotinas não.",
+      "grupo": "routines"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual opção do mysqldump copia TODOS os bancos do servidor de uma vez num só arquivo?",
+      "alternativas": [
+        "--routines",
+        "--all-databases",
+        "--no-create-info",
+        "--single-table"
+      ],
+      "correta": 1,
+      "explicacao": "--all-databases (ou -A) inclui todos os bancos, com CREATE DATABASE e USE de cada um."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O dump de uma clínica tem, antes de cada CREATE TABLE, a linha `DROP TABLE IF EXISTS paciente;`. O que isso causa ao restaurar no banco que já tem a tabela paciente?",
+      "alternativas": [
+        "A restauração para no erro e nada é alterado no banco",
+        "Os dados do backup são somados aos dados que já existem",
+        "Só as linhas novas do backup são inseridas na tabela",
+        "A tabela atual é apagada e trocada pela do backup"
+      ],
+      "correta": 3,
+      "explicacao": "O mysqldump coloca DROP TABLE IF EXISTS por padrão. Restaurar por cima substitui a tabela atual: o que foi gravado depois do backup se perde.",
+      "grupo": "drop-table"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre exportar um banco com mysqldump e exportar o resultado de um SELECT para CSV?",
+      "alternativas": [
+        "O dump recria tabelas e dados; o CSV traz só os valores de um resultado",
+        "O CSV recria as tabelas e os dados; o dump traz só os valores de um SELECT",
+        "Os dois geram o mesmo arquivo, só muda a extensão no final do nome",
+        "O CSV guarda as chaves estrangeiras das tabelas; o dump não guarda"
+      ],
+      "correta": 0,
+      "explicacao": "O dump tem estrutura (tipos, chaves) e dados em SQL. O CSV é só texto separado por vírgula/ponto e vírgula, sem tipos nem chaves.",
+      "grupo": "dump-vs-csv"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um técnico no Windows digitou `mysqldump -u root -p escola > escola.sql` e recebeu `'mysqldump' não é reconhecido como um comando interno`. Qual é a causa mais provável?",
+      "alternativas": [
+        "O banco escola não existe no servidor ou está com outro nome",
+        "A senha do root foi digitada errada no momento do login",
+        "A pasta bin do MySQL não está no PATH do Windows",
+        "O arquivo escola.sql já existia na pasta e não pode ser trocado"
+      ],
+      "correta": 2,
+      "explicacao": "Essa mensagem é do Windows: ele não achou o programa. Basta entrar na pasta bin do MySQL Server ou colocá-la no PATH."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando gera um dump do banco `farmacia` com estrutura, dados, procedures e functions?",
+      "alternativas": [
+        "mysqldump -u root -p --routines farmacia > farmacia.sql",
+        "mysqldump -u root -p --no-data farmacia > farmacia.sql",
+        "mysqldump -u root -p --no-create-info farmacia > farmacia.sql",
+        "mysqldump -u root -p farmacia --routines < farmacia.sql"
+      ],
+      "correta": 0,
+      "explicacao": "--routines acrescenta as rotinas ao dump normal. --no-data tira os dados; --no-create-info tira a estrutura; < é para ler, não para gravar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um backup de um banco de escola contém nomes, CPFs e telefones de alunos. Que cuidado esse arquivo exige?",
+      "alternativas": [
+        "Nenhum, porque um arquivo .sql não pode ser lido por pessoas",
+        "Deixar numa pasta compartilhada para todos acharem fácil",
+        "Guardar com acesso restrito, porque tem dados pessoais",
+        "Apagar o arquivo logo depois de gerado para liberar espaço"
+      ],
+      "correta": 2,
+      "explicacao": "O dump é texto legível com todos os dados. Dados pessoais exigem proteção (LGPD): acesso restrito, de preferência criptografado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um dump de 2 GB precisa ser enviado para outro servidor. Qual atitude é comum e segura para diminuir o tamanho?",
+      "alternativas": [
+        "Apagar metade dos INSERTs do arquivo antes de enviar",
+        "Compactar o .sql (zip ou gzip) antes de enviar",
+        "Trocar a extensão do arquivo de .sql para .txt",
+        "Abrir o arquivo no Excel e salvar como planilha"
+      ],
+      "correta": 1,
+      "explicacao": "O dump é texto e compacta muito bem. Apagar linhas ou converter de formato estraga o backup."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O pet shop Amigo Bicho tem as tabelas tutor, pet e atendimento. O técnico quer só a estrutura de `pet` (colunas id_pet, nome, especie e id_tutor) para mandar a um colega. Qual comando faz isso?",
+      "alternativas": [
+        "mysqldump -u root -p --no-create-info petshop pet > pet.sql",
+        "mysqldump -u root -p petshop > pet.sql",
+        "mysqldump -u root -p --routines petshop pet > pet.sql",
+        "mysqldump -u root -p --no-data petshop pet > pet.sql"
+      ],
+      "correta": 3,
+      "explicacao": "Banco + tabela limita o dump a pet; --no-data deixa só o CREATE TABLE, sem as linhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um técnico gerou um dump às 8h. Às 15h, um erro apagou todos os pedidos e ele restaurou o dump das 8h. O que acontece com os pedidos feitos entre 8h e 15h?",
+      "alternativas": [
+        "Voltam junto, porque o MySQL completa o backup sozinho",
+        "Ficam duplicados na tabela pedido",
+        "Continuam perdidos, porque não estão no backup das 8h",
+        "São restaurados pelo DROP TABLE do dump"
+      ],
+      "correta": 2,
+      "explicacao": "Um dump é uma foto do momento em que foi feito. O que entrou depois só volta se houver outro backup (ou log binário).",
+      "grupo": "momento-backup"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No começo de um dump aparece a linha `/*!40014 SET FOREIGN_KEY_CHECKS=0 */;`. O que ela faz durante a restauração?",
+      "alternativas": [
+        "Desliga a checagem de FK para as tabelas entrarem em qualquer ordem",
+        "É só um comentário de versão e o MySQL a ignora durante a restauração",
+        "Apaga de vez todas as chaves estrangeiras das tabelas do banco restaurado",
+        "Impede a restauração se alguma tabela do arquivo tiver chave estrangeira"
+      ],
+      "correta": 0,
+      "explicacao": "Os comentários /*! ... */ são executados pelo MySQL. O dump desliga a checagem de FK para não dar erro de ordem e religa no fim."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma loja usa tabelas InnoDB e vende o dia todo. Qual opção faz o mysqldump copiar uma 'foto' consistente do banco sem travar as tabelas durante a cópia?",
+      "alternativas": [
+        "--no-create-info",
+        "--routines",
+        "--all-databases",
+        "--single-transaction"
+      ],
+      "correta": 3,
+      "explicacao": "--single-transaction abre uma transação e lê tudo do mesmo instante, sem bloquear as gravações (vale para InnoDB).",
+      "grupo": "single-transaction"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um técnico fez `mysqldump -u root -p --no-data loja > estrutura.sql` e `mysqldump -u root -p --no-create-info loja > dados.sql`. Para recuperar o banco completo num banco vazio, como ele deve restaurar?",
+      "alternativas": [
+        "Primeiro dados.sql e depois estrutura.sql",
+        "Primeiro estrutura.sql e depois dados.sql",
+        "Só dados.sql, porque ele já tem tudo",
+        "Os dois ao mesmo tempo, em dois terminais"
+      ],
+      "correta": 1,
+      "explicacao": "Os INSERTs de dados.sql precisam das tabelas criadas por estrutura.sql. Invertendo, dá erro de tabela inexistente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma empresa faz backup com mysqldump todo dia, mas salva o arquivo no mesmo disco do servidor MySQL. Qual risco continua existindo?",
+      "alternativas": [
+        "O mysqldump não consegue gravar o arquivo no mesmo disco do banco",
+        "O banco e o backup podem se perder juntos se o servidor falhar",
+        "O arquivo de backup fica com os dados embaralhados e ilegíveis",
+        "O banco fica mais lento para sempre por causa do arquivo no disco"
+      ],
+      "correta": 1,
+      "explicacao": "Backup no mesmo lugar do original não protege contra queima de disco, roubo, incêndio ou ransomware. Deve haver cópia fora do servidor.",
+      "grupo": "fora-do-servidor"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um técnico quer o backup só dos pedidos de 2025 de uma tabela `pedido` (colunas id_pedido, data_pedido e valor). Qual opção do mysqldump permite filtrar as linhas?",
+      "alternativas": [
+        "--no-data=\"2025\"",
+        "--routines=\"pedido\"",
+        "--no-create-info=\"YEAR 2025\"",
+        "--where=\"YEAR(data_pedido) = 2025\""
+      ],
+      "correta": 3,
+      "explicacao": "--where aplica um filtro como o WHERE do SELECT; só as linhas que atendem vão para o dump."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um dump foi gerado SEM a opção `--databases`. Para testar o backup sem mexer no banco oficial `hotel`, o técnico quer restaurá-lo num banco `hotel_teste`. Isso funciona?",
+      "alternativas": [
+        "Sim: basta criar hotel_teste e restaurar o arquivo nele",
+        "Não: um dump só pode voltar para o banco que tem o mesmo nome",
+        "Sim, mas só se o arquivo for renomeado antes para hotel_teste.sql",
+        "Não: o mysql recusa nomes de banco que tenham sublinhado"
+      ],
+      "correta": 0,
+      "explicacao": "Sem --databases o dump não tem CREATE DATABASE nem USE; as tabelas vão para o banco indicado no comando mysql.",
+      "grupo": "restaurar-em-outro-banco"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A Biblioteca Ler Mais nunca fez backup do seu banco MySQL. Explique por que o backup é importante para ela.\n\nNa sua resposta:\n1. diga o que é um backup;\n2. cite duas situações que poderiam fazer a biblioteca perder dados.",
+      "respostasAceitas": [
+        "Backup é uma cópia de segurança dos dados para recuperar o banco depois de um problema. Exemplos: defeito no disco do servidor e alguém apagar registros por engano (DELETE sem WHERE); também vírus/ransomware."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cópia de segurança que permite restaurar os dados; 2) duas causas, como falha de hardware, erro humano, vírus/ransomware, roubo, queda de energia."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O técnico da escola rodou no terminal `mysqldump -u root -p escola > escola_2026-11-27.sql`.\n\nNa sua resposta:\n1. diga o que esse comando gera;\n2. explique para que serve o sinal >.",
+      "respostasAceitas": [
+        "Gera um arquivo escola_2026-11-27.sql com os comandos SQL (CREATE TABLE e INSERT) que recriam as tabelas e os dados do banco escola. O > manda a saída do mysqldump para esse arquivo em vez da tela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) um dump/backup do banco escola em SQL; 2) redireciona a saída para o arquivo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre as opções `--no-data` e `--no-create-info` do mysqldump.\n\nNa sua resposta:\n1. diga o que fica no arquivo com cada opção;\n2. dê uma situação em que cada uma é útil.",
+      "respostasAceitas": [
+        "--no-data gera só a estrutura (CREATE TABLE), sem linhas: útil para montar um banco vazio igual em outro lugar. --no-create-info gera só os dados (INSERT): útil para carregar dados num banco que já tem as tabelas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) no-data = estrutura; no-create-info = dados; 2) exemplos coerentes (copiar modelo / repor dados)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um técnico rodou `mysqldump -u root -p petshop atendimento > atendimento.sql` no banco petshop, que tem as tabelas tutor, pet e atendimento.\n\nNa sua resposta:\n1. diga o que esse comando copia;\n2. explique se ele serve como backup completo do petshop.",
+      "respostasAceitas": [
+        "Copia só a tabela atendimento (estrutura e dados). Não é backup completo, porque tutor e pet ficaram de fora."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só a tabela atendimento; 2) não, faltam as outras tabelas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Por que o comando `mysqldump` precisa ser executado no terminal do sistema operacional e não dentro do editor SQL do Workbench?\n\nNa sua resposta:\n1. diga o que é o mysqldump;\n2. explique o que acontece se for digitado no editor SQL.",
+      "respostasAceitas": [
+        "O mysqldump é um programa separado do MySQL, não um comando SQL. No editor SQL ele dá erro de sintaxe, porque o servidor só entende comandos SQL."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) programa/utilitário de linha de comando; 2) erro, não é SQL."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A loja Ponto do Game faz backup do banco toda sexta-feira. Num sábado de vendas fortes, o servidor queimou às 18h.\n\nNa sua resposta:\n1. diga até que momento os dados podem ser recuperados;\n2. explique o que foi perdido.",
+      "respostasAceitas": [
+        "Só até o backup de sexta-feira. Tudo o que foi registrado depois disso, incluindo as vendas de sábado, foi perdido."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) até o último backup (sexta); 2) as alterações posteriores (vendas de sábado).",
+      "grupo": "momento-backup"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A clínica Vida Plena usa procedures para marcar consultas. O técnico fez o backup com `mysqldump -u root -p clinica > clinica.sql` e restaurou num servidor novo. As tabelas voltaram, mas o sistema não consegue marcar consultas.\n\nNa sua resposta:\n1. explique o que ficou faltando no backup;\n2. diga qual opção resolveria.",
+      "respostasAceitas": [
+        "As procedures (e functions) não foram para o arquivo, porque o mysqldump não as inclui por padrão. A opção --routines resolveria."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) rotinas ausentes do dump; 2) --routines (-R).",
+      "grupo": "routines"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O dump da hamburgueria Brasa Viva tem, antes de cada tabela, a linha `DROP TABLE IF EXISTS produto;` seguida do CREATE TABLE.\n\nNa sua resposta:\n1. explique o que essa linha faz na restauração;\n2. diga qual cuidado tomar antes de restaurar por cima do banco em uso.",
+      "respostasAceitas": [
+        "Apaga a tabela se ela existir e depois a recria com os dados do backup. Antes, é bom fazer um backup do estado atual, porque o que foi gravado depois do dump será perdido."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) remove e recria a tabela; 2) restaurar por cima sobrescreve dados novos: fazer backup do atual/conferir o banco de destino.",
+      "grupo": "drop-table"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um técnico digitou `mysqldump -u root -pAula@2026 escola > escola.sql`, com a senha colada no -p.\n\nNa sua resposta:\n1. diga se o comando funciona;\n2. explique o risco de passar a senha desse jeito.",
+      "respostasAceitas": [
+        "Funciona: a senha colada no -p é aceita. O risco é a senha ficar visível na tela, no histórico do terminal ou em scripts, e outra pessoa descobri-la; o próprio MySQL avisa que é inseguro."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) funciona; 2) senha exposta (histórico, tela, arquivo de script)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A academia Força Total quer copiar o banco para um notebook de demonstração, mas sem os dados reais dos alunos, só as tabelas vazias. O técnico usou `mysqldump -u root -p --no-data academia > modelo.sql`.\n\nNa sua resposta:\n1. explique por que esse comando atende o pedido;\n2. diga uma vantagem de não levar os dados reais.",
+      "respostasAceitas": [
+        "--no-data gera só os CREATE TABLE, então as tabelas chegam vazias no notebook. Vantagem: não expõe dados pessoais dos alunos (LGPD) e o arquivo fica pequeno."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só estrutura; 2) proteção de dados pessoais ou arquivo menor."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega diz que 'exportar o resultado de um SELECT para CSV' é a mesma coisa que 'fazer backup do banco'. Explique por que essa ideia está errada.\n\nNa sua resposta:\n1. diga o que o CSV guarda;\n2. diga o que um dump guarda a mais.",
+      "respostasAceitas": [
+        "O CSV guarda só os valores de um resultado, em texto separado por vírgula. O dump guarda a estrutura completa (tabelas, tipos, chaves) e todos os dados, permitindo recriar o banco."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) CSV = só dados de uma consulta/tabela, sem tipos; 2) dump = estrutura + dados de todas as tabelas, recriável.",
+      "grupo": "dump-vs-csv"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O técnico do hotel quer fazer um dump à tarde, com hóspedes fazendo check-in o tempo todo. As tabelas são InnoDB e ele usou `mysqldump -u root -p --single-transaction hotel > hotel.sql`.\n\nNa sua resposta:\n1. explique o que a opção --single-transaction faz;\n2. diga por que ela é útil nesse horário.",
+      "respostasAceitas": [
+        "Ela faz o dump dentro de uma transação, lendo todas as tabelas no mesmo instante. Assim o backup fica consistente e o sistema continua gravando check-ins sem as tabelas ficarem travadas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) foto consistente numa transação; 2) não bloqueia o uso do sistema durante a cópia.",
+      "grupo": "single-transaction"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma empresa faz backup diário, mas grava o arquivo na mesma máquina do MySQL e nunca testou abrir esse backup. Analise essa rotina.\n\nNa sua resposta:\n1. aponte os dois problemas da rotina;\n2. explique o que pode acontecer no dia em que o servidor falhar.",
+      "respostasAceitas": [
+        "Problemas: o backup está no mesmo servidor e nunca foi testado. Se o servidor queimar ou for atacado, o backup se perde junto; e, mesmo que sobre, ele pode estar corrompido ou incompleto e a restauração falhar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sem cópia externa e sem teste de restauração; 2) perda do backup junto com o servidor ou descobrir só na hora que ele não funciona."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O comando `mysqldump -u root -p --no-create-info loja > dados.sql` gerou um arquivo. Depois, o técnico restaurou esse arquivo em um banco que já tinha as mesmas tabelas, com alguns produtos cadastrados.\n\nNa sua resposta:\n1. explique o que o arquivo contém;\n2. diga que erro pode aparecer e por quê.",
+      "respostasAceitas": [
+        "Contém só os INSERTs com os dados, sem CREATE TABLE. Pode dar erro de chave primária duplicada (Duplicate entry), porque linhas com os mesmos ids já existem nas tabelas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só dados (INSERT); 2) Duplicate entry para PK repetida (ou dados misturados)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um técnico restaurou às 16h o backup feito à meia-noite, porque às 15h alguém rodou `DELETE FROM matricula;` sem WHERE.\n\nNa sua resposta:\n1. explique o que foi recuperado;\n2. diga o que foi perdido mesmo assim e uma forma de reduzir essa perda no futuro.",
+      "respostasAceitas": [
+        "Voltaram as matrículas como estavam à meia-noite. Perdeu-se tudo o que foi gravado entre meia-noite e 16h (em todas as tabelas, se o banco inteiro foi restaurado). Para reduzir, fazer backups mais frequentes (ou usar log binário) e restringir quem pode apagar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dados até a meia-noite; 2) alterações do dia perdidas; backups mais frequentes/log binário/permissões.",
+      "grupo": "momento-backup"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando, digitado no terminal, restaura o arquivo `loja.sql` dentro do banco `loja`?",
+      "alternativas": [
+        "mysqldump -u root -p loja < loja.sql",
+        "mysql -u root -p loja > loja.sql",
+        "mysql -u root -p loja < loja.sql",
+        "mysqldump -u root -p loja > loja.sql"
+      ],
+      "correta": 2,
+      "explicacao": "Para restaurar usa-se o cliente mysql lendo o arquivo com <. mysqldump serve para gerar o arquivo, e > grava em vez de ler.",
+      "grupo": "restaurar-mysql"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao restaurar um backup com `mysql -u root -p pizzaria < pizzaria.sql`, qual é o papel do sinal `<`?",
+      "alternativas": [
+        "Entrega o conteúdo do arquivo para o mysql executar",
+        "Grava o banco pizzaria dentro do arquivo pizzaria.sql",
+        "Compara o banco com o arquivo e mostra as diferenças",
+        "Apaga o arquivo pizzaria.sql depois de usá-lo"
+      ],
+      "correta": 0,
+      "explicacao": "< redireciona a ENTRADA: o mysql lê os comandos SQL do arquivo como se fossem digitados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Dentro do cliente de linha de comando, já conectado (`mysql>`), qual comando executa todos os comandos do arquivo `backup.sql`?",
+      "alternativas": [
+        "IMPORT backup.sql;",
+        "LOAD backup.sql;",
+        "SOURCE backup.sql;",
+        "RUN FILE backup.sql;"
+      ],
+      "correta": 2,
+      "explicacao": "SOURCE (ou \\.) é um comando do cliente mysql que lê e executa um arquivo de comandos SQL.",
+      "grupo": "source"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL Workbench, qual tela é usada para RESTAURAR um backup .sql no servidor?",
+      "alternativas": [
+        "Data Export",
+        "Data Import/Restore",
+        "Table Inspector",
+        "Performance Reports"
+      ],
+      "correta": 1,
+      "explicacao": "Data Import/Restore (menu Server) lê os arquivos de dump e executa no servidor. Data Export faz o caminho contrário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Data Export do Workbench, a opção 'Export to Self-Contained File' gera o quê?",
+      "alternativas": [
+        "Uma pasta com um arquivo .sql para cada tabela",
+        "Uma planilha CSV para cada tabela",
+        "Um arquivo de imagem com o diagrama do banco",
+        "Um único arquivo .sql com todas as tabelas escolhidas"
+      ],
+      "correta": 3,
+      "explicacao": "Self-Contained File = um só arquivo .sql com tudo. A outra opção (Dump Project Folder) gera uma pasta com um arquivo por tabela.",
+      "grupo": "workbench-formato"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tela Data Export do Workbench, aparece a lista de bancos e, ao clicar num banco, as tabelas dele. Para que serve essa lista?",
+      "alternativas": [
+        "Escolher a cor de cada tabela no diagrama",
+        "Mostrar quais tabelas estão com erro",
+        "Marcar quais bancos e tabelas vão para o backup",
+        "Definir a senha de cada tabela"
+      ],
+      "correta": 2,
+      "explicacao": "Na Data Export marca-se o banco e, se quiser, só algumas tabelas; apenas o que estiver marcado é exportado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é um arquivo CSV?",
+      "alternativas": [
+        "Texto em que cada linha é um registro, com valores separados por vírgula ou ;",
+        "Um arquivo binário compactado que só o próprio MySQL consegue abrir e ler",
+        "Um arquivo de script com os comandos CREATE TABLE e INSERT INTO do banco",
+        "Um tipo especial de índice que o MySQL usa para acelerar as consultas"
+      ],
+      "correta": 0,
+      "explicacao": "CSV (Comma-Separated Values) é texto simples: uma linha por registro, campos separados por um caractere (vírgula, ponto e vírgula)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Workbench, depois de rodar um SELECT, como exportar o resultado que aparece na grade para um arquivo CSV?",
+      "alternativas": [
+        "Usar Server > Data Export com 'Dump Structure Only'",
+        "Copiar o comando SELECT e colar no Bloco de Notas",
+        "Rodar o SELECT de novo com a palavra CSV no final",
+        "Usar o botão de exportar da grade e escolher CSV"
+      ],
+      "correta": 3,
+      "explicacao": "A grade de resultado tem o botão 'Export recordset to an external file', que salva o resultado em CSV, JSON e outros formatos.",
+      "grupo": "csv-grade"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A secretaria da escola quer abrir no Excel a lista de alunos do 2º ano que está no banco. Qual formato de exportação é o mais prático para isso?",
+      "alternativas": [
+        "Dump .sql",
+        "CSV",
+        "Arquivo .mwb do Workbench",
+        "Log binário do MySQL"
+      ],
+      "correta": 1,
+      "explicacao": "CSV abre direto em planilhas. O dump .sql é para o MySQL recriar o banco, não para leitura em planilha.",
+      "grupo": "csv-grade"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando SQL carrega as linhas de um arquivo CSV para dentro de uma tabela?",
+      "alternativas": [
+        "SELECT ... INTO OUTFILE",
+        "LOAD DATA INFILE",
+        "SOURCE",
+        "mysqldump --no-data"
+      ],
+      "correta": 1,
+      "explicacao": "LOAD DATA INFILE lê um arquivo de texto e insere as linhas na tabela. INTO OUTFILE faz o contrário: grava um SELECT em arquivo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando SQL grava o resultado de um SELECT num arquivo de texto no servidor?",
+      "alternativas": [
+        "LOAD DATA INFILE",
+        "INSERT INTO ... SELECT",
+        "CREATE TABLE ... AS SELECT",
+        "SELECT ... INTO OUTFILE"
+      ],
+      "correta": 3,
+      "explicacao": "SELECT ... INTO OUTFILE 'arquivo' grava as linhas do resultado num arquivo no servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando mostra a pasta em que o MySQL permite ler e gravar arquivos com LOAD DATA e INTO OUTFILE?",
+      "alternativas": [
+        "SHOW VARIABLES LIKE 'secure_file_priv';",
+        "SHOW TABLES LIKE 'secure_file_priv';",
+        "SELECT secure_file_priv FROM mysql;",
+        "DESCRIBE secure_file_priv;"
+      ],
+      "correta": 0,
+      "explicacao": "secure_file_priv é uma variável do servidor; SHOW VARIABLES mostra o valor (a pasta permitida)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para restaurar um dump que NÃO tem CREATE DATABASE com o comando `mysql -u root -p mercado < mercado.sql`, o que precisa existir antes?",
+      "alternativas": [
+        "As tabelas de mercado já com os dados",
+        "Um usuário chamado mercado",
+        "O banco mercado, mesmo vazio",
+        "Uma pasta chamada mercado no disco C:"
+      ],
+      "correta": 2,
+      "explicacao": "O dump sem CREATE DATABASE só cria tabelas dentro do banco indicado; se o banco não existir, dá 'Unknown database'.",
+      "grupo": "banco-destino"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Data Export do Workbench, qual opção deixa o arquivo só com a estrutura das tabelas, sem os dados?",
+      "alternativas": [
+        "Dump Structure Only",
+        "Dump Data Only",
+        "Dump Structure and Data",
+        "Include Create Schema"
+      ],
+      "correta": 0,
+      "explicacao": "Dump Structure Only equivale ao --no-data do mysqldump. Dump Data Only equivale ao --no-create-info."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um técnico rodou `mysql -u root -p oficina < oficina.sql` e recebeu `ERROR 1049 (42000): Unknown database 'oficina'`. Como resolver?",
+      "alternativas": [
+        "Trocar o < por > no comando e rodar outra vez",
+        "Rodar o mysqldump no lugar do cliente mysql",
+        "Criar o banco oficina e rodar o comando de novo",
+        "Renomear o arquivo para oficina.csv e tentar de novo"
+      ],
+      "correta": 2,
+      "explicacao": "O erro diz que o banco não existe. Com CREATE DATABASE oficina; feito antes, a restauração funciona.",
+      "grupo": "banco-destino"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno abriu o terminal do mysql (`mysql>`) e digitou `SOURCE C:/backups/vet.sql;`, mas as tabelas foram parar no banco errado. O que provavelmente faltou?",
+      "alternativas": [
+        "Usar barras invertidas \\ no caminho do arquivo",
+        "Rodar USE vet; antes, pois o arquivo não tem USE",
+        "Escrever o comando SOURCE em letras minúsculas",
+        "Rodar o mysqldump antes de usar o comando SOURCE"
+      ],
+      "correta": 1,
+      "explicacao": "Se o dump não tem CREATE DATABASE/USE, as tabelas são criadas no banco que estiver em uso. Por isso se faz USE vet; antes.",
+      "grupo": "source"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é uma vantagem do 'Dump Project Folder' sobre o 'Self-Contained File' no Workbench?",
+      "alternativas": [
+        "Gera um arquivo só, mais fácil de anexar num e-mail",
+        "Já compacta o backup em formato .zip",
+        "Inclui automaticamente os usuários do servidor",
+        "Permite importar depois só algumas tabelas escolhidas"
+      ],
+      "correta": 3,
+      "explicacao": "Com um arquivo por tabela, o Data Import deixa marcar só as tabelas desejadas. Um arquivo só é a vantagem do Self-Contained File.",
+      "grupo": "workbench-formato"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Data Import do Workbench, um arquivo Self-Contained foi gerado sem o CREATE DATABASE. Que campo deve ser preenchido para dizer em qual banco as tabelas vão entrar?",
+      "alternativas": [
+        "Include Create Schema",
+        "Dump Structure Only",
+        "Default Target Schema",
+        "Export Path"
+      ],
+      "correta": 2,
+      "explicacao": "Default Target Schema é o banco de destino quando o arquivo não diz qual banco usar; o botão New... cria um banco novo ali.",
+      "grupo": "default-target"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Data Export do Workbench, para que serve marcar 'Include Create Schema'?",
+      "alternativas": [
+        "Pôr no arquivo o CREATE DATABASE e o USE do banco",
+        "Exportar só a estrutura das tabelas, sem os dados",
+        "Incluir no arquivo as procedures e as functions",
+        "Gerar um arquivo .sql separado para cada tabela"
+      ],
+      "correta": 0,
+      "explicacao": "Com Include Create Schema o arquivo cria o banco e entra nele; na importação o banco volta com o mesmo nome."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Data Export do Workbench, qual opção corresponde ao `--routines` do mysqldump?",
+      "alternativas": [
+        "Dump Data Only",
+        "Include Create Schema",
+        "Export to Dump Project Folder",
+        "Dump Stored Procedures and Functions"
+      ],
+      "correta": 3,
+      "explicacao": "Essa caixa coloca procedures e functions no backup, como o --routines."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa tabela `produto` (id_produto, nome, preco), o comando `SELECT * FROM produto INTO OUTFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/produtos.csv' FIELDS TERMINATED BY ';';` foi rodado duas vezes. O que acontece na segunda vez?",
+      "alternativas": [
+        "O arquivo é sobrescrito com os dados novos",
+        "Dá erro, porque o arquivo produtos.csv já existe",
+        "As linhas são acrescentadas no fim do arquivo",
+        "Um arquivo produtos(2).csv é criado"
+      ],
+      "correta": 1,
+      "explicacao": "INTO OUTFILE não sobrescreve: se o arquivo já existe, dá erro (File already exists). É preciso apagar ou usar outro nome.",
+      "grupo": "outfile-existe"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno rodou um SELECT ... INTO OUTFILE e recebeu: `The MySQL server is running with the --secure-file-priv option so it cannot execute this statement`. O que isso indica?",
+      "alternativas": [
+        "O SELECT tem um erro de sintaxe na cláusula WHERE ou no FROM",
+        "O caminho está fora da pasta liberada pelo secure_file_priv",
+        "A tabela não tem chave primária e por isso não pode ser exportada",
+        "O arquivo CSV tem acentos e o servidor não aceita gravar acentos"
+      ],
+      "correta": 1,
+      "explicacao": "O servidor só lê/grava arquivos na pasta definida em secure_file_priv. Basta usar um caminho dentro dela.",
+      "grupo": "secure-erro"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um CSV de clientes tem na primeira linha os títulos `id;nome;cidade`. No LOAD DATA INFILE, qual cláusula evita que essa linha entre como cliente?",
+      "alternativas": [
+        "FIELDS TERMINATED BY ';'",
+        "LINES TERMINATED BY '\\n'",
+        "ENCLOSED BY '\"'",
+        "IGNORE 1 LINES"
+      ],
+      "correta": 3,
+      "explicacao": "IGNORE 1 LINES pula a primeira linha do arquivo, que é o cabeçalho.",
+      "grupo": "load-clausulas"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um CSV gerado no Excel brasileiro tem linhas como `12;Ração 10kg;89,90`. No LOAD DATA INFILE, qual cláusula indica o separador certo?",
+      "alternativas": [
+        "FIELDS TERMINATED BY ';'",
+        "FIELDS TERMINATED BY ','",
+        "LINES TERMINATED BY ';'",
+        "IGNORE 1 LINES"
+      ],
+      "correta": 0,
+      "explicacao": "Os campos estão separados por ponto e vírgula, então FIELDS TERMINATED BY ';'. LINES TERMINATED BY fala do fim de cada linha.",
+      "grupo": "load-clausulas"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No LOAD DATA INFILE, o que diz a cláusula `ENCLOSED BY '\"'`?",
+      "alternativas": [
+        "Que cada linha do arquivo termina com aspas duplas",
+        "Que a primeira linha do arquivo deve ser ignorada",
+        "Que os valores podem vir entre aspas, como em \"Silva, João\"",
+        "Que o arquivo foi salvo com a codificação UTF-8"
+      ],
+      "correta": 2,
+      "explicacao": "ENCLOSED BY indica o caractere que envolve os valores; assim uma vírgula dentro das aspas não é tratada como separador.",
+      "grupo": "enclosed"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre `LOAD DATA INFILE` e `LOAD DATA LOCAL INFILE`?",
+      "alternativas": [
+        "Sem LOCAL o arquivo é lido no servidor; com LOCAL, no cliente",
+        "Sem LOCAL só lê arquivos CSV; com LOCAL só lê arquivos JSON",
+        "Sem LOCAL apaga a tabela antes; com LOCAL acrescenta as linhas",
+        "Não há diferença, LOCAL é só um apelido mais curto do comando"
+      ],
+      "correta": 0,
+      "explicacao": "Sem LOCAL, o servidor procura o arquivo no próprio disco (e respeita secure_file_priv). Com LOCAL, o cliente envia o arquivo, se local_infile estiver ligado.",
+      "grupo": "load-local"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um professor rodou `SELECT * FROM aluno INTO OUTFILE ...` no Workbench do seu notebook, conectado a um servidor em outra sala. Onde o arquivo foi gravado?",
+      "alternativas": [
+        "No disco do notebook do professor",
+        "Na pasta Downloads do Workbench",
+        "No disco do servidor MySQL",
+        "Em lugar nenhum, só aparece na tela"
+      ],
+      "correta": 2,
+      "explicacao": "INTO OUTFILE é executado pelo servidor e grava no disco DELE. Para salvar no próprio computador, use a exportação da grade do Workbench.",
+      "grupo": "outfile-servidor"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O valor de `secure_file_priv` apareceu VAZIO (sem nenhuma pasta). O que isso significa?",
+      "alternativas": [
+        "LOAD DATA e INTO OUTFILE estão totalmente bloqueados nesse servidor",
+        "Não há restrição de pasta: o servidor lê e grava onde tiver acesso",
+        "Somente a pasta Uploads, criada na instalação, está liberada para uso",
+        "A variável não existe nessa versão do MySQL e por isso aparece vazia"
+      ],
+      "correta": 1,
+      "explicacao": "Vazio = sem restrição de pasta (pouco seguro). Uma pasta = só ela. NULL = operações com arquivos desligadas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O valor de `secure_file_priv` aparece como NULL. O que acontece ao tentar um LOAD DATA INFILE (sem LOCAL)?",
+      "alternativas": [
+        "Funciona em qualquer pasta do servidor, pois NULL quer dizer sem limite",
+        "Funciona só na pasta do usuário logado no Windows naquele momento",
+        "Funciona normalmente, mas ignora a primeira linha do arquivo",
+        "Falha, porque NULL desliga a leitura e gravação de arquivos"
+      ],
+      "correta": 3,
+      "explicacao": "NULL significa que importação e exportação de arquivos pelo servidor estão desativadas; precisa mudar a configuração e reiniciar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um CSV feito no Windows termina cada linha com `\\r\\n`. O técnico usou `LINES TERMINATED BY '\\n'` no LOAD DATA. Qual problema pode aparecer?",
+      "alternativas": [
+        "A primeira linha do arquivo é ignorada sem nenhum aviso",
+        "Todos os acentos do arquivo são trocados pelo sinal ?",
+        "A última coluna de cada linha fica com um \\r invisível no fim",
+        "As linhas são inseridas na tabela em ordem invertida"
+      ],
+      "correta": 2,
+      "explicacao": "O \\r sobra no último campo (ex.: 'Campinas\\r'), o que estraga comparações e dá aviso em colunas numéricas. Use LINES TERMINATED BY '\\r\\n'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa tabela `produto` (id_produto PK, nome, preco), o técnico rodou `LOAD DATA INFILE '.../novos.csv' REPLACE INTO TABLE produto ...`. O CSV tem um produto com id 5, que já existe. O que acontece com ele?",
+      "alternativas": [
+        "A linha de id 5 é substituída pela do arquivo",
+        "A linha do arquivo é descartada e a antiga fica",
+        "A importação inteira é cancelada",
+        "O produto fica duplicado com id 5"
+      ],
+      "correta": 0,
+      "explicacao": "REPLACE troca a linha que tem a mesma chave. Com IGNORE, a linha do arquivo seria pulada; sem nenhum dos dois, dá erro de chave duplicada.",
+      "grupo": "load-replace"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um CSV para a tabela `paciente` (id_paciente, nome, telefone) tem `\\N` no lugar de alguns telefones. Como o LOAD DATA INFILE trata esse `\\N`?",
+      "alternativas": [
+        "Grava o texto \\N na coluna",
+        "Grava o número zero",
+        "Pula a linha inteira",
+        "Grava NULL na coluna"
+      ],
+      "correta": 3,
+      "explicacao": "No formato padrão do LOAD DATA, \\N representa NULL. Assim se diferencia 'sem valor' de texto vazio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um técnico rodou `LOAD DATA LOCAL INFILE 'C:/dados/clientes.csv' INTO TABLE cliente ...` e recebeu `Loading local data is disabled`. Qual é a causa?",
+      "alternativas": [
+        "O arquivo clientes.csv tem uma linha de cabeçalho",
+        "O local_infile está desligado no servidor ou no cliente",
+        "A tabela cliente não tem nenhuma chave estrangeira",
+        "O caminho usa barras normais em vez de invertidas"
+      ],
+      "correta": 1,
+      "explicacao": "No MySQL 8 o local_infile vem desligado por segurança; precisa ser habilitado no servidor e na conexão do cliente.",
+      "grupo": "load-local"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma loja exportou com `SELECT * FROM venda INTO OUTFILE ...` e quer reimportar esse arquivo depois num banco novo. Que informação NÃO vem nesse arquivo e precisa existir antes?",
+      "alternativas": [
+        "Os valores de cada venda que estava na tabela",
+        "A estrutura da tabela (colunas, tipos e chaves)",
+        "Os textos das colunas do tipo VARCHAR da tabela",
+        "As datas das vendas, gravadas como texto no arquivo"
+      ],
+      "correta": 1,
+      "explicacao": "INTO OUTFILE grava só os valores. A tabela de destino precisa existir antes, com colunas compatíveis."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um dump foi gerado no Workbench com 'Include Create Schema' marcado, a partir do banco `escola`. Na importação, o técnico escolheu Default Target Schema = `escola_teste`. Onde as tabelas tendem a ir parar?",
+      "alternativas": [
+        "No banco escola_teste, porque foi o banco escolhido",
+        "Metade das tabelas em cada banco, em ordem alfabética",
+        "Em nenhum banco, porque a importação é recusada",
+        "No banco escola, porque o arquivo tem USE escola"
+      ],
+      "correta": 3,
+      "explicacao": "O USE escola dentro do arquivo muda o banco atual; o Default Target Schema só vale quando o arquivo não diz qual banco usar. Por isso, cuidado ao testar backups.",
+      "grupo": "restaurar-em-outro-banco"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O técnico rodou `mysql -u root -p restaurante < restaurante.sql`.\n\nNa sua resposta:\n1. diga o que esse comando faz;\n2. explique a diferença entre ele e o mysqldump.",
+      "respostasAceitas": [
+        "Restaura o backup: o cliente mysql lê o arquivo restaurante.sql e executa os comandos no banco restaurante. O mysqldump faz o contrário, gera o arquivo a partir do banco."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) executa o arquivo SQL no banco (restauração/importação); 2) mysqldump exporta, mysql importa.",
+      "grupo": "restaurar-mysql"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No Data Export do MySQL Workbench existem as opções 'Export to Dump Project Folder' e 'Export to Self-Contained File'.\n\nNa sua resposta:\n1. explique o que cada opção gera;\n2. diga em que situação você usaria cada uma.",
+      "respostasAceitas": [
+        "Dump Project Folder gera uma pasta com um arquivo .sql por tabela; Self-Contained File gera um único arquivo .sql. A pasta é útil para restaurar só algumas tabelas; o arquivo único é prático para guardar ou enviar o backup."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) pasta com vários arquivos x arquivo único; 2) escolher tabelas na volta x facilidade de levar/enviar.",
+      "grupo": "workbench-formato"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A secretaria da escola pediu a lista de alunos para abrir numa planilha. O técnico exportou o resultado do SELECT para CSV pelo Workbench.\n\nNa sua resposta:\n1. explique o que é um arquivo CSV;\n2. diga por que ele foi a escolha certa nesse caso.",
+      "respostasAceitas": [
+        "CSV é um arquivo de texto em que cada linha é um registro e os valores são separados por vírgula ou ponto e vírgula. Foi certo porque abre direto em planilhas como o Excel, o que a secretaria precisava."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) texto com valores separados; 2) abre em planilha / fácil de usar fora do MySQL.",
+      "grupo": "csv-grade"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno tentou rodar `SELECT * FROM livro INTO OUTFILE 'C:/temp/livros.csv';` e recebeu um erro citando `secure_file_priv`.\n\nNa sua resposta:\n1. explique para que serve o secure_file_priv;\n2. diga como descobrir a pasta permitida.",
+      "respostasAceitas": [
+        "É uma configuração de segurança que limita em qual pasta o servidor pode ler e gravar arquivos com LOAD DATA e INTO OUTFILE. A pasta aparece com SHOW VARIABLES LIKE 'secure_file_priv';"
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) restringe a pasta de arquivos do servidor (segurança); 2) SHOW VARIABLES LIKE 'secure_file_priv'.",
+      "grupo": "secure-erro"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre restaurar um backup com `mysql -u root -p loja < loja.sql` no terminal e com `SOURCE loja.sql;`.\n\nNa sua resposta:\n1. diga onde cada um é digitado;\n2. explique se o resultado final é diferente.",
+      "respostasAceitas": [
+        "O primeiro é digitado no terminal do sistema; o SOURCE é digitado dentro do cliente mysql, já conectado (e com USE loja antes, se o arquivo não tiver USE). O resultado é o mesmo: os comandos do arquivo são executados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) terminal do sistema x dentro do mysql>; 2) mesmo resultado.",
+      "grupo": "source"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Por que o comando SELECT ... INTO OUTFILE grava o arquivo no computador do SERVIDOR e não no computador de quem digitou o comando?\n\nNa sua resposta:\n1. explique quem executa o comando;\n2. diga uma forma de salvar o resultado no seu próprio computador.",
+      "respostasAceitas": [
+        "Quem executa o SELECT é o servidor MySQL, então ele grava no próprio disco. Para salvar no seu computador, use o botão de exportar da grade de resultado do Workbench."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o servidor executa e grava no disco dele; 2) exportar pela grade do Workbench (ou cliente).",
+      "grupo": "outfile-servidor"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O pet shop vai importar o arquivo `pets.csv` com o comando abaixo, numa tabela `pet` (id_pet, nome, especie):\n`LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/pets.csv' INTO TABLE pet FIELDS TERMINATED BY ';' LINES TERMINATED BY '\\r\\n' IGNORE 1 LINES;`\n\nNa sua resposta:\n1. explique o que significa FIELDS TERMINATED BY ';';\n2. explique para que serve o IGNORE 1 LINES.",
+      "respostasAceitas": [
+        "FIELDS TERMINATED BY ';' diz que os valores de cada linha estão separados por ponto e vírgula. IGNORE 1 LINES pula a primeira linha, que é o cabeçalho com os nomes das colunas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) separador de campos é ;; 2) ignorar o cabeçalho.",
+      "grupo": "load-clausulas"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O técnico importou com o Data Import do Workbench um arquivo Self-Contained que não tinha CREATE DATABASE, e as tabelas foram parar num banco que ele não queria.\n\nNa sua resposta:\n1. explique por que isso aconteceu;\n2. diga como evitar na próxima vez.",
+      "respostasAceitas": [
+        "Sem CREATE DATABASE/USE no arquivo, as tabelas vão para o banco escolhido como Default Target Schema (ou o que estava selecionado). Para evitar, escolher o banco certo em Default Target Schema (ou criar um com New...) antes de importar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o arquivo não diz o banco, usa o padrão escolhido; 2) definir o Default Target Schema correto.",
+      "grupo": "default-target"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Compare exportar uma lista de clientes com `SELECT ... INTO OUTFILE` e com o botão de exportar da grade de resultado do Workbench.\n\nNa sua resposta:\n1. diga onde o arquivo fica em cada caso;\n2. cite uma exigência do INTO OUTFILE que a grade não tem.",
+      "respostasAceitas": [
+        "INTO OUTFILE grava no disco do servidor; a grade do Workbench salva no computador de quem está usando. O INTO OUTFILE exige a pasta liberada pelo secure_file_priv (e permissão FILE) e não sobrescreve arquivo existente."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) servidor x máquina do usuário; 2) secure_file_priv, privilégio FILE ou arquivo não pode existir.",
+      "grupo": "outfile-servidor"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O valor de `secure_file_priv` de um servidor é `C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\`.\n\nNa sua resposta:\n1. explique o que esse valor significa;\n2. diga por que limitar essa pasta deixa o servidor mais seguro.",
+      "respostasAceitas": [
+        "Significa que LOAD DATA INFILE e SELECT ... INTO OUTFILE só podem ler e gravar arquivos dentro dessa pasta Uploads. Limitar impede que alguém use o MySQL para ler ou gravar arquivos em qualquer lugar do servidor, como arquivos do sistema."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só a pasta Uploads é permitida; 2) evita acesso a outros arquivos do servidor."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um técnico rodou duas vezes o mesmo `SELECT * FROM venda INTO OUTFILE '.../Uploads/vendas.csv' ...` e na segunda deu erro dizendo que o arquivo já existe.\n\nNa sua resposta:\n1. explique por que o MySQL se recusa a gravar;\n2. diga duas formas de resolver.",
+      "respostasAceitas": [
+        "O INTO OUTFILE não sobrescreve arquivos, por segurança, para não destruir um arquivo existente. Resolve apagando o arquivo antigo da pasta ou usando outro nome (por exemplo, com a data)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) proteção contra sobrescrever; 2) apagar/renomear o antigo ou usar outro nome.",
+      "grupo": "outfile-existe"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um técnico vai importar `clientes.csv` num servidor em que o valor de `local_infile` está OFF. Ele está em dúvida entre `LOAD DATA INFILE` e `LOAD DATA LOCAL INFILE`.\n\nNa sua resposta:\n1. explique a diferença entre os dois;\n2. diga qual deles vai falhar com local_infile desligado.",
+      "respostasAceitas": [
+        "Sem LOCAL, o servidor lê o arquivo do próprio disco (na pasta do secure_file_priv); com LOCAL, o arquivo é enviado do computador do cliente. Com local_infile OFF, o LOAD DATA LOCAL INFILE falha."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) arquivo no servidor x no cliente; 2) o LOCAL falha.",
+      "grupo": "load-local"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um CSV da loja de games tem linhas como `7,\"Corrida Max, Edição Especial\",199.90`. O técnico importou com `FIELDS TERMINATED BY ','` mas SEM `ENCLOSED BY '\"'`.\n\nNa sua resposta:\n1. explique o que deu errado nessa linha;\n2. explique como o ENCLOSED BY resolveria.",
+      "respostasAceitas": [
+        "Sem ENCLOSED BY, a vírgula dentro do nome é tratada como separador: o nome é cortado em dois campos e as aspas ficam no valor, desalinhando as colunas (o preço vai para o lugar errado). Com ENCLOSED BY '\"', o MySQL entende que o que está entre aspas é um único valor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a vírgula interna quebra o campo e desalinha as colunas; 2) aspas delimitam o valor inteiro.",
+      "grupo": "enclosed"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O técnico importou um CSV de 5.000 produtos com `LOAD DATA INFILE ... REPLACE INTO TABLE produto ...`. A tabela produto (id_produto PK, nome, preco) já tinha 300 produtos com os mesmos ids de alguns do arquivo.\n\nNa sua resposta:\n1. explique o que o REPLACE fez com os produtos repetidos;\n2. diga qual o risco e o que mudaria usando IGNORE.",
+      "respostasAceitas": [
+        "O REPLACE apagou as linhas antigas com o mesmo id e gravou as do arquivo. O risco é perder dados atuais (como preços atualizados) sem perceber. Com IGNORE, as linhas repetidas do arquivo seriam puladas e os dados antigos ficariam."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) substituição pelo arquivo; 2) perda de dados atuais; IGNORE mantém os antigos e descarta os repetidos.",
+      "grupo": "load-replace"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um técnico quer testar se o backup `escola.sql` funciona restaurando num banco `escola_teste`. O arquivo foi gerado com `mysqldump --databases escola`.\n\nNa sua resposta:\n1. explique o que acontece ao restaurar esse arquivo como está;\n2. diga o risco disso para o banco oficial.",
+      "respostasAceitas": [
+        "Com --databases o arquivo traz CREATE DATABASE e USE escola, então as tabelas vão para o banco escola, e não para escola_teste. Como o dump tem DROP TABLE IF EXISTS, ele sobrescreve as tabelas do banco oficial, perdendo o que foi gravado depois do backup."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) vai para o banco escola por causa do USE; 2) sobrescreve o banco de produção.",
+      "grupo": "restaurar-em-outro-banco"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL Workbench, qual ferramenta importa um arquivo CSV para uma tabela clicando com o botão direito na tabela, sem digitar comando?",
+      "alternativas": [
+        "Table Data Import Wizard",
+        "Data Export",
+        "Reverse Engineer",
+        "Server Status"
+      ],
+      "correta": 0,
+      "explicacao": "O Table Data Import Wizard (botão direito na tabela ou no banco, no Navigator) guia a importação de CSV ou JSON."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Table Data Import Wizard, o que o técnico escolhe no primeiro passo?",
+      "alternativas": [
+        "A senha nova do usuário root",
+        "O tipo de índice da chave primária",
+        "O arquivo CSV ou JSON que será importado",
+        "A cor das linhas da grade de resultado"
+      ],
+      "correta": 2,
+      "explicacao": "O primeiro passo pede o caminho do arquivo; depois vêm a tabela de destino, o mapeamento das colunas e a importação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Table Data Import Wizard, o técnico pode mandar os dados para uma tabela que já existe ou...",
+      "alternativas": [
+        "criar uma tabela nova a partir das colunas do arquivo",
+        "mandar os dados direto para uma planilha do Excel",
+        "gerar um dump .sql do banco inteiro com os dados",
+        "apagar o banco atual e começar tudo do zero"
+      ],
+      "correta": 0,
+      "explicacao": "O assistente oferece 'Use existing table' ou 'Create new table'; na nova, ele sugere os tipos pelas colunas do CSV."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um CSV de alunos tem a primeira linha `nome;turma;email`. O que é essa primeira linha?",
+      "alternativas": [
+        "O primeiro aluno cadastrado",
+        "Um comentário que o MySQL sempre ignora",
+        "O cabeçalho, com os nomes das colunas",
+        "A senha do arquivo"
+      ],
+      "correta": 2,
+      "explicacao": "A primeira linha costuma ser o cabeçalho. Na importação ela deve ser pulada ou usada para mapear as colunas, não virar um registro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual conjunto de caracteres do MySQL 8 é o mais indicado para guardar textos com acentos e até emojis?",
+      "alternativas": [
+        "latin1",
+        "utf8mb4",
+        "ascii",
+        "binary"
+      ],
+      "correta": 1,
+      "explicacao": "utf8mb4 é o padrão do MySQL 8 e guarda qualquer caractere Unicode, incluindo acentos e emojis."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um CSV aberto no MySQL mostra 'SÃ£o Paulo' em vez de 'São Paulo'. Qual é a causa mais provável?",
+      "alternativas": [
+        "A coluna cidade é do tipo INT e não consegue guardar acentos",
+        "O separador do arquivo é ponto e vírgula, e não vírgula comum",
+        "O arquivo tem uma linha de cabeçalho com os nomes das colunas",
+        "O arquivo foi lido com codificação diferente da usada para salvá-lo"
+      ],
+      "correta": 3,
+      "explicacao": "Esses caracteres estranhos aparecem quando um texto UTF-8 é lido como latin1 (ou o contrário). É preciso usar a mesma codificação nas duas pontas.",
+      "grupo": "codificacao-acentos"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Excel em português, por que o CSV costuma usar ponto e vírgula `;` como separador?",
+      "alternativas": [
+        "Porque o MySQL não aceita vírgula em nenhum tipo de arquivo",
+        "Porque o ponto e vírgula deixa o arquivo final bem menor",
+        "Porque a vírgula já separa os decimais, como em 12,50",
+        "Porque o Excel só salva arquivos no padrão dos EUA"
+      ],
+      "correta": 2,
+      "explicacao": "No padrão brasileiro a vírgula separa os decimais; para não confundir, o Excel usa ; entre os campos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `pedido` tem uma chave estrangeira para `cliente`. Ao importar CSVs das duas tabelas, qual deve vir primeiro?",
+      "alternativas": [
+        "cliente, porque o pedido precisa de um cliente que já exista",
+        "pedido, porque é a tabela com mais linhas",
+        "Tanto faz, a chave estrangeira não é checada na importação",
+        "As duas juntas, num único arquivo CSV"
+      ],
+      "correta": 0,
+      "explicacao": "A FK só aceita id_cliente que já exista em cliente. Por isso a tabela 'pai' é importada antes da 'filha'.",
+      "grupo": "ordem-fk"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma escola vai trocar o servidor antigo por um novo. Qual é o caminho básico para levar o banco?",
+      "alternativas": [
+        "Copiar só a pasta de instalação do Workbench para o servidor novo",
+        "Reinstalar o MySQL no novo e digitar todos os dados outra vez",
+        "Exportar cada tabela como imagem PNG e importar as imagens no novo",
+        "Dump no servidor antigo, copiar o arquivo e restaurar no novo"
+      ],
+      "correta": 3,
+      "explicacao": "Migração lógica: mysqldump (ou Data Export) no antigo, transferir o .sql e restaurar com mysql < ou Data Import no novo.",
+      "grupo": "migracao-passos"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que é recomendado guardar uma cópia do backup FORA do servidor do banco?",
+      "alternativas": [
+        "Porque o MySQL apaga sozinho os backups guardados nele",
+        "Para não perder o banco e o backup juntos numa falha",
+        "Porque o arquivo fica menor quando está em outra máquina",
+        "Porque só fora do servidor o arquivo .sql pode ser aberto"
+      ],
+      "correta": 1,
+      "explicacao": "Se o backup estiver só no servidor, um defeito, roubo ou ataque leva os dois. A cópia externa (outro disco, nuvem) protege.",
+      "grupo": "fora-do-servidor"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a única forma de ter certeza de que um backup realmente funciona?",
+      "alternativas": [
+        "Ver se o arquivo tem mais de 1 MB de tamanho na pasta",
+        "Restaurá-lo num banco de teste e conferir os dados",
+        "Abrir o arquivo no Bloco de Notas e ler a primeira linha",
+        "Confiar que o mysqldump terminou sem mostrar mensagem"
+      ],
+      "correta": 1,
+      "explicacao": "Um backup só é confiável depois de testado: restaurar num ambiente de teste e conferir tabelas e quantidades.",
+      "grupo": "testar-restauracao"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um técnico salva os dumps com nomes como `loja_2026-11-27.sql`. Qual é a vantagem de colocar a data no nome?",
+      "alternativas": [
+        "Deixar o arquivo mais leve, porque a data é compactada",
+        "Fazer o MySQL restaurar mais rápido os arquivos recentes",
+        "Permitir abrir o arquivo .sql direto no Excel pela data",
+        "Saber de quando é cada backup e não sobrescrever o anterior"
+      ],
+      "correta": 3,
+      "explicacao": "Com a data no nome, cada backup é um arquivo diferente, fácil de achar na hora de restaurar o dia certo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Windows, qual ferramenta pode rodar um script de mysqldump automaticamente todo dia às 23h?",
+      "alternativas": [
+        "Agendador de Tarefas",
+        "Bloco de Notas",
+        "Gerenciador de Dispositivos",
+        "Paint"
+      ],
+      "correta": 0,
+      "explicacao": "O Agendador de Tarefas executa programas e scripts em horários definidos. No Linux, o equivalente é o cron."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `produto` tem a coluna `descricao` em utf8mb4. Um CSV salvo em UTF-8 será importado. O que se deve conferir na importação?",
+      "alternativas": [
+        "Que o arquivo tenha a extensão .sql e não .csv",
+        "Que a tabela de destino não tenha chave primária",
+        "Que a codificação da importação também seja UTF-8",
+        "Que todos os textos do arquivo estejam em maiúsculas"
+      ],
+      "correta": 2,
+      "explicacao": "A codificação do arquivo e a informada na importação precisam bater; assim os acentos chegam corretos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um pet shop vai importar, nesta ordem, os CSVs de `atendimento` (que tem FK para pet), `pet` (que tem FK para tutor) e `tutor`. O que vai acontecer?",
+      "alternativas": [
+        "Erro de FK, porque as tabelas filhas chegam antes das tabelas pai",
+        "Tudo funciona, porque a ordem dos arquivos não faz diferença",
+        "Os dados de tutor são apagados no fim, por terem vindo por último",
+        "O MySQL reordena os arquivos sozinho, colocando os pais primeiro"
+      ],
+      "correta": 0,
+      "explicacao": "A ordem certa é tutor → pet → atendimento. Importar a filha antes dá erro 1452 (Cannot add or update a child row).",
+      "grupo": "ordem-fk"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao importar `item_pedido` (id_item, id_pedido FK, id_produto FK, qtd), apareceu `Cannot add or update a child row: a foreign key constraint fails`. O que isso significa?",
+      "alternativas": [
+        "O arquivo tem uma linha de cabeçalho a mais que o esperado pela tabela",
+        "A coluna qtd recebeu números com acentos ou caracteres especiais",
+        "Algum id_pedido ou id_produto do arquivo não existe na tabela pai",
+        "A tabela item_pedido foi criada sem chave primária e recusou as linhas"
+      ],
+      "correta": 2,
+      "explicacao": "O erro 1452 indica valor de FK sem correspondente na tabela pai: falta importar o pai ou o dado está errado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um CSV de clientes tem a coluna telefone `01198765432`. Depois de abrir e salvar no Excel, ficou `1198765432`. O que causou isso?",
+      "alternativas": [
+        "O MySQL apagou o zero da frente durante a importação",
+        "O Excel tratou o telefone como número e tirou o zero",
+        "A codificação UTF-8 não aceita zero no começo de um texto",
+        "O separador ponto e vírgula apagou o primeiro caractere"
+      ],
+      "correta": 1,
+      "explicacao": "Planilhas convertem textos com só dígitos em número. Telefone, CEP e CPF devem ser texto (e colunas VARCHAR no banco).",
+      "grupo": "zero-esquerda"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um CSV tem o preço `89,90` e a coluna `preco` é DECIMAL(8,2). Qual cuidado é necessário antes de importar?",
+      "alternativas": [
+        "Trocar o tipo da coluna preco para INT",
+        "Colocar cada preço entre parênteses",
+        "Nenhum, o MySQL entende a vírgula decimal",
+        "Trocar a vírgula decimal por ponto (89.90)"
+      ],
+      "correta": 3,
+      "explicacao": "O MySQL usa ponto como separador decimal. '89,90' pode virar 89 ou dar erro; é preciso converter para 89.90.",
+      "grupo": "decimal-data"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um CSV de consultas traz a data como `25/11/2026` e a coluna `data_consulta` é DATE. Qual é o problema?",
+      "alternativas": [
+        "O tipo DATE não aceita anos depois de 2025, então precisa ser texto",
+        "A barra / é proibida em CSV e faz a linha inteira ser descartada",
+        "O MySQL espera AAAA-MM-DD, então a data precisa ser convertida",
+        "O MySQL só aceita datas com mês e ano, sem o dia, no tipo DATE"
+      ],
+      "correta": 2,
+      "explicacao": "DATE no MySQL usa '2026-11-25'. É preciso converter antes (ou usar STR_TO_DATE na importação).",
+      "grupo": "decimal-data"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um CSV de produtos tem as colunas na ordem `nome;preco;id`, mas a tabela `produto` tem `id_produto, nome, preco`. Na importação, o que é preciso fazer?",
+      "alternativas": [
+        "Indicar qual coluna do arquivo vai para cada coluna",
+        "Nada, o MySQL descobre a ordem certa pelos valores",
+        "Apagar a coluna id_produto da tabela antes de importar",
+        "Renomear o arquivo para produto.sql antes de importar"
+      ],
+      "correta": 0,
+      "explicacao": "Sem mapeamento, os valores entram na ordem das colunas da tabela. O Wizard tem a tela de mapeamento; no LOAD DATA, lista-se as colunas no fim."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que o Table Data Import Wizard não é a melhor escolha para importar um CSV de 2 milhões de linhas?",
+      "alternativas": [
+        "Ele só aceita arquivos com até 10 linhas e recusa os maiores que isso",
+        "Ele apaga a tabela inteira antes de importar e os dados antigos somem",
+        "Ele não aceita CSV, apenas JSON, então o arquivo teria de ser convertido",
+        "Ele grava linha por linha e fica lento; LOAD DATA é bem mais rápido"
+      ],
+      "correta": 3,
+      "explicacao": "O Wizard é prático para arquivos pequenos e médios. Para volumes grandes, LOAD DATA INFILE carrega muito mais rápido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sistema foi migrado com um dump só do banco `academia`. No servidor novo, o usuário `app_academia` não consegue conectar. Por quê?",
+      "alternativas": [
+        "O dump apagou o usuário durante a restauração das tabelas",
+        "Usuários e permissões ficam no banco mysql e não vêm no dump",
+        "O usuário do sistema precisa ter o mesmo nome do banco",
+        "O servidor novo não aceita nomes de usuário com sublinhado"
+      ],
+      "correta": 1,
+      "explicacao": "Contas e GRANTs são do servidor, não do banco da aplicação. Precisam ser recriados no servidor novo.",
+      "grupo": "migracao-usuarios"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na regra de backup '3-2-1', o que significa o '1'?",
+      "alternativas": [
+        "Fazer o backup completo apenas uma vez por ano",
+        "Ter ao menos uma cópia fora do local do servidor",
+        "Ter só um backup para não ocupar espaço no disco",
+        "Restaurar cada backup uma única vez e depois apagar"
+      ],
+      "correta": 1,
+      "explicacao": "3-2-1: três cópias dos dados, em dois tipos de mídia diferentes, uma delas fora do local (outro prédio ou nuvem).",
+      "grupo": "regra-321"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Como decidir a frequência de backup de um banco?",
+      "alternativas": [
+        "Sempre uma vez por mês, para qualquer tipo de sistema",
+        "Pelo tamanho do disco onde fica instalado o Workbench",
+        "Pela quantidade de tabelas que existem no banco",
+        "Pelo quanto de dados a empresa aceita perder"
+      ],
+      "correta": 3,
+      "explicacao": "Se o sistema registra vendas o dia todo, perder um dia é grave: backup diário ou mais. Bancos que quase não mudam podem ter backups mais espaçados.",
+      "grupo": "frequencia"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um técnico diz: 'Meu servidor tem dois discos espelhados (RAID 1), então não preciso de backup'. Por que ele está errado?",
+      "alternativas": [
+        "O espelho copia também o erro: um DELETE errado vale nos dois discos",
+        "O RAID 1 deixa o banco somente leitura e impede qualquer restauração",
+        "O RAID 1 só funciona com bancos vazios, sem nenhuma tabela criada",
+        "O espelho apaga o disco principal toda noite para copiar o segundo"
+      ],
+      "correta": 0,
+      "explicacao": "Espelhamento protege contra defeito de UM disco, mas replica na hora apagamentos, vírus e corrupção. Não substitui backup.",
+      "grupo": "raid"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma empresa guarda só o backup mais recente, sobrescrevendo o do dia anterior. Qual é o risco?",
+      "alternativas": [
+        "O arquivo cresce muito com o tempo, porque cada backup é somado ao anterior",
+        "O MySQL não aceita restaurar um arquivo que já foi sobrescrito outras vezes",
+        "Se o erro começou dias antes, o único backup já pode ter os dados errados",
+        "Não há risco, porque só o backup mais recente importa numa restauração"
+      ],
+      "correta": 2,
+      "explicacao": "É bom manter vários backups (retenção): se um erro só for percebido depois, dá para voltar a um dia anterior ao problema.",
+      "grupo": "retencao"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um backup gerado num MySQL 8 foi restaurado num servidor antigo e deu `Unknown collation: 'utf8mb4_0900_ai_ci'`. O que isso indica?",
+      "alternativas": [
+        "O servidor de destino é de versão antiga e não conhece essa collation",
+        "O arquivo foi salvo com a extensão errada e precisa ser renomeado",
+        "As tabelas do backup não têm chave primária e o servidor as recusou",
+        "O backup foi gerado sem a opção --routines e faltaram procedures"
+      ],
+      "correta": 0,
+      "explicacao": "utf8mb4_0900_ai_ci só existe a partir do MySQL 8. Na migração, as versões dos servidores precisam ser compatíveis."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na migração de um banco para um servidor novo, o que o técnico deve fazer logo depois da restauração?",
+      "alternativas": [
+        "Apagar o servidor antigo na mesma hora, para não haver dois bancos",
+        "Rodar DROP DATABASE no servidor novo para limpar o que sobrou da cópia",
+        "Conferir se tabelas, contagens de linhas e rotinas batem com o antigo",
+        "Desligar de vez as chaves estrangeiras para o sistema rodar mais rápido"
+      ],
+      "correta": 2,
+      "explicacao": "Comparar contagens (SELECT COUNT(*)), tabelas e rotinas confirma que nada se perdeu antes de desligar o antigo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para importar CSVs com FKs fora de ordem, um técnico rodou `SET FOREIGN_KEY_CHECKS = 0;` antes e religou depois. Qual risco isso traz?",
+      "alternativas": [
+        "As chaves estrangeiras são apagadas da tabela para sempre",
+        "Linhas com FK para registros inexistentes entram sem aviso",
+        "O MySQL recusa qualquer INSERT enquanto a checagem está desligada",
+        "Os dados do arquivo são importados duas vezes na tabela"
+      ],
+      "correta": 1,
+      "explicacao": "Com a checagem desligada, nada impede órfãos. Ao religar, o MySQL não confere o que já entrou: a integridade pode ficar quebrada.",
+      "grupo": "fk-checks"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A tabela `comentario` tem a coluna `texto` em `utf8mb3` (o antigo utf8). Um CSV em UTF-8 tem comentários com emojis. O que tende a acontecer na importação?",
+      "alternativas": [
+        "Tudo entra certo, porque utf8 e utf8mb4 são exatamente o mesmo conjunto",
+        "Os acentos somem do texto, mas os emojis são gravados sem problema",
+        "A coluna é convertida para utf8mb4 sozinha quando aparece um emoji",
+        "Os emojis dão erro ou viram '?', pois utf8mb3 não guarda 4 bytes"
+      ],
+      "correta": 3,
+      "explicacao": "Emojis ocupam 4 bytes; só utf8mb4 os guarda. Em utf8mb3 dá 'Incorrect string value' ou perda do caractere."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma empresa faz backup diário, guarda cópia na nuvem, mas nunca testou restaurar. No dia de um problema, o arquivo estava vazio porque o script falhava havia meses. Qual prática teria evitado isso?",
+      "alternativas": [
+        "Fazer backup só uma vez por mês, para o script ter mais tempo de rodar",
+        "Guardar o backup no mesmo servidor do banco, onde é fácil de conferir",
+        "Testar a restauração com frequência e conferir o conteúdo do backup",
+        "Usar a opção --no-data no mysqldump, para o arquivo ficar mais leve"
+      ],
+      "correta": 2,
+      "explicacao": "Backup não testado é só esperança. Testes periódicos e alerta de falha do script mostram o problema antes do dia da necessidade.",
+      "grupo": "testar-restauracao"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Windows PowerShell, `mysql -u root -p loja < loja.sql` deu erro dizendo que o operador `<` é reservado. Qual alternativa funciona?",
+      "alternativas": [
+        "Rodar no Prompt de Comando (cmd) ou usar SOURCE no mysql",
+        "Trocar o < por > no PowerShell, que faz a mesma leitura do arquivo",
+        "Usar mysqldump no lugar do mysql, que aceita o < no PowerShell",
+        "Renomear o arquivo para loja.csv, que o PowerShell consegue ler"
+      ],
+      "correta": 0,
+      "explicacao": "O PowerShell não aceita < para redirecionar entrada. No cmd funciona; ou entra-se no mysql e usa-se SOURCE loja.sql;."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma loja vai migrar de servidor num sábado. Por que é recomendado parar as vendas (ou deixar o sistema só leitura) durante o dump final?",
+      "alternativas": [
+        "Porque o mysqldump só roda com o servidor desligado",
+        "Porque o dump apaga as vendas que foram feitas no dia",
+        "Porque o servidor novo não aceita dados de fim de semana",
+        "Para nada gravado após o dump se perder na troca"
+      ],
+      "correta": 3,
+      "explicacao": "O que for gravado no servidor antigo depois do dump final não vai para o novo. Congelar as gravações garante que nada se perde.",
+      "grupo": "migracao-congelar"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um técnico copiou com o Explorador de Arquivos a pasta de dados do MySQL (`C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Data`) com o servidor LIGADO, como backup. Qual é o problema?",
+      "alternativas": [
+        "Essa pasta guarda só configurações, e não os dados dos bancos",
+        "Os arquivos mudam durante a cópia e o backup pode ficar inconsistente",
+        "A cópia feita pelo Explorador apaga os arquivos originais da pasta",
+        "O Windows bloqueia sempre a cópia de arquivos .ibd, nada é copiado"
+      ],
+      "correta": 1,
+      "explicacao": "Com o servidor rodando, os arquivos mudam durante a cópia. O mysqldump gera um backup lógico consistente e portável entre máquinas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um CSV salvo no Excel como 'CSV (separado por vírgulas)' foi importado indicando UTF-8, e os acentos ficaram errados. Qual é a explicação mais provável?",
+      "alternativas": [
+        "O Excel não consegue gravar acentos em nenhum formato",
+        "Esse formato salva em ANSI (Windows-1252), não em UTF-8",
+        "O MySQL não aceita acentos em arquivos do tipo CSV",
+        "A tabela de destino tem chave primária e chave estrangeira"
+      ],
+      "correta": 1,
+      "explicacao": "O Excel tem a opção 'CSV UTF-8'. O CSV comum é salvo em ANSI; lido como UTF-8, os acentos quebram."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A secretaria da escola mandou uma planilha CSV com 300 alunos. O técnico vai usar o Table Data Import Wizard do Workbench.\n\nNa sua resposta:\n1. explique o que essa ferramenta faz;\n2. cite um cuidado com o arquivo antes de importar.",
+      "respostasAceitas": [
+        "Ela importa os dados do CSV para uma tabela (nova ou existente), mapeando as colunas do arquivo para as da tabela. Cuidado: conferir separador, cabeçalho e codificação (UTF-8), ou formato de datas e números."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) importa CSV/JSON para tabela pelo assistente; 2) um cuidado válido (codificação, separador, cabeçalho, formato de data/decimal)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O banco da biblioteca tem as tabelas autor e livro; livro tem chave estrangeira id_autor. O técnico vai importar um CSV de cada.\n\nNa sua resposta:\n1. diga qual tabela deve ser importada primeiro;\n2. explique o motivo.",
+      "respostasAceitas": [
+        "Primeiro autor, depois livro. Cada livro aponta para um id_autor, e a chave estrangeira só aceita autores que já existam na tabela autor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) autor; 2) FK exige o registro pai.",
+      "grupo": "ordem-fk"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um CSV de clientes foi importado e as cidades apareceram como 'SÃ£o JosÃ©' em vez de 'São José'.\n\nNa sua resposta:\n1. explique por que isso aconteceu;\n2. diga como corrigir na próxima importação.",
+      "respostasAceitas": [
+        "A codificação usada para ler o arquivo era diferente da usada para salvá-lo (ex.: UTF-8 lido como latin1). Corrige salvando o arquivo em UTF-8 e escolhendo UTF-8 (utf8mb4) na importação."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) codificação diferente entre arquivo e importação; 2) usar a mesma (UTF-8/utf8mb4).",
+      "grupo": "codificacao-acentos"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a frase: 'backup bom é backup guardado fora do servidor'.\n\nNa sua resposta:\n1. diga o risco de guardar o backup só no servidor;\n2. cite dois lugares melhores para guardar uma cópia.",
+      "respostasAceitas": [
+        "Se o servidor queimar, for roubado ou sofrer ransomware, o banco e o backup se perdem juntos. Melhor guardar cópia em HD externo, outro computador, outro prédio ou na nuvem."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) perde os dois ao mesmo tempo; 2) dois lugares externos.",
+      "grupo": "fora-do-servidor"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A academia Corpo em Forma registra entradas e pagamentos o dia todo e faz backup só uma vez por mês.\n\nNa sua resposta:\n1. explique o problema dessa frequência;\n2. sugira uma frequência melhor e justifique.",
+      "respostasAceitas": [
+        "Se o banco se perder, até um mês de pagamentos e entradas some. Melhor fazer backup diário (ou mais), porque os dados mudam todo dia e não dá para perder isso."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) perda de até um mês de dados; 2) diária ou maior, ligada a quanto se aceita perder.",
+      "grupo": "frequencia"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma escola vai trocar o servidor do sistema de notas por um computador novo.\n\nNa sua resposta:\n1. descreva os passos básicos para levar o banco para o servidor novo;\n2. diga o que conferir no fim.",
+      "respostasAceitas": [
+        "Gerar um dump do banco no servidor antigo (mysqldump ou Data Export), copiar o arquivo para o novo, criar o banco e restaurar (mysql < ou Data Import). No fim, conferir se as tabelas e a quantidade de registros batem com o antigo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) exportar, transferir, importar; 2) conferir tabelas/contagens/rotinas/acesso do sistema.",
+      "grupo": "migracao-passos"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um CSV de produtos gerado no Excel tem a linha `15;Sabonete;3,50;01/12/2026`. A tabela produto tem preco DECIMAL(6,2) e validade DATE.\n\nNa sua resposta:\n1. explique o problema do valor 3,50;\n2. explique o problema da data 01/12/2026.",
+      "respostasAceitas": [
+        "O MySQL usa ponto como separador decimal, então 3,50 precisa virar 3.50 (senão vira 3 ou dá erro). A data precisa estar no formato AAAA-MM-DD (2026-12-01); no formato brasileiro ela é rejeitada ou fica errada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) vírgula decimal x ponto; 2) formato de data DD/MM/AAAA x AAAA-MM-DD.",
+      "grupo": "decimal-data"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um técnico importou o CSV de clientes no Excel e depois no MySQL. Os CPFs que começavam com zero ficaram com um dígito a menos.\n\nNa sua resposta:\n1. explique por que isso aconteceu;\n2. diga como evitar.",
+      "respostasAceitas": [
+        "O Excel tratou o CPF como número e tirou os zeros da esquerda. Evita-se tratando a coluna como texto na planilha (ou não abrindo o CSV no Excel) e usando VARCHAR/CHAR no banco."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) conversão para número remove zeros à esquerda; 2) tratar como texto / coluna texto.",
+      "grupo": "zero-esquerda"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um sistema foi migrado com `mysqldump -u root -p --routines hotel > hotel.sql`. No servidor novo, as tabelas e procedures estão lá, mas o sistema dá erro de acesso negado ao conectar.\n\nNa sua resposta:\n1. explique por que o usuário do sistema não veio;\n2. diga o que o técnico precisa fazer no servidor novo.",
+      "respostasAceitas": [
+        "Usuários e permissões ficam no banco de sistema mysql, não no banco hotel, então não estão no dump. É preciso recriar o usuário e dar os GRANTs no servidor novo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) contas ficam fora do banco exportado; 2) recriar usuário e permissões.",
+      "grupo": "migracao-usuarios"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um técnico diz que o servidor não precisa de backup porque tem dois discos espelhados (RAID 1).\n\nNa sua resposta:\n1. explique contra o que o espelhamento protege;\n2. explique por que ele não substitui o backup.",
+      "respostasAceitas": [
+        "O espelhamento protege contra a queima de um dos discos, porque o outro tem a mesma cópia. Mas ele copia tudo na hora, inclusive um DELETE errado, vírus ou corrupção, então não dá para voltar a um estado anterior; o backup dá."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) falha de um disco; 2) replica erros; backup permite voltar no tempo.",
+      "grupo": "raid"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a regra de backup 3-2-1.\n\nNa sua resposta:\n1. diga o que significa cada número;\n2. explique por que uma cópia fora do local é importante.",
+      "respostasAceitas": [
+        "3 cópias dos dados, em 2 tipos de mídia diferentes, com 1 cópia fora do local (outro prédio ou nuvem). A cópia externa protege contra desastres que atingem o local todo, como incêndio, roubo ou ransomware."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 3 cópias, 2 mídias, 1 fora; 2) proteção contra perda do local inteiro.",
+      "grupo": "regra-321"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O pet shop guarda só o último backup, sobrescrevendo o arquivo toda noite. Numa sexta, descobriram que uma atualização errada na segunda já tinha estragado os preços.\n\nNa sua resposta:\n1. explique por que o backup não ajuda nesse caso;\n2. sugira uma mudança na rotina.",
+      "respostasAceitas": [
+        "O único backup é de quinta à noite, que já tem os preços estragados desde segunda. A rotina deve guardar vários backups (por exemplo, os últimos 7 ou 30 dias, com a data no nome)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) último backup já contém o erro; 2) retenção de vários backups datados.",
+      "grupo": "retencao"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Para importar vários CSVs sem se preocupar com a ordem, um técnico rodou `SET FOREIGN_KEY_CHECKS = 0;`, importou tudo e depois rodou `SET FOREIGN_KEY_CHECKS = 1;`.\n\nNa sua resposta:\n1. explique o que esses comandos fazem;\n2. explique o risco para a integridade dos dados.",
+      "respostasAceitas": [
+        "O primeiro desliga a checagem das chaves estrangeiras e o segundo religa. Enquanto desligada, podem entrar linhas que apontam para registros que não existem (órfãos), e ao religar o MySQL não confere o que já entrou: o banco fica inconsistente."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) desliga/religa a verificação de FK; 2) dados órfãos sem aviso.",
+      "grupo": "fk-checks"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma loja vai migrar o banco para um servidor novo num domingo, mas as vendas online continuam durante a migração.\n\nNa sua resposta:\n1. explique o risco de fazer o dump com as vendas acontecendo;\n2. sugira como fazer a troca sem perder dados.",
+      "respostasAceitas": [
+        "As vendas gravadas no servidor antigo depois do dump não vão para o novo e se perdem na troca. O ideal é parar as gravações (manutenção ou só leitura), fazer o dump final, restaurar no novo, conferir e só então apontar o sistema para o novo servidor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dados gravados após o dump se perdem; 2) janela de manutenção/congelar gravações, conferir, depois trocar.",
+      "grupo": "migracao-congelar"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Importação, exportação e backup",
+      "capacidade": "bd.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma clínica tem backup diário automático, guardado na nuvem, mas ninguém nunca testou restaurar. Avalie se essa rotina é confiável.\n\nNa sua resposta:\n1. explique o que falta na rotina;\n2. descreva como seria um teste de restauração simples.",
+      "respostasAceitas": [
+        "Falta testar: o backup pode estar vazio, incompleto ou corrompido e só se descobre na emergência. Teste simples: baixar o arquivo, restaurar num banco de teste (ex.: clinica_teste) e comparar tabelas e contagens de linhas com o banco oficial."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) teste de restauração (e monitoramento do script); 2) restaurar em banco separado e conferir dados.",
+      "grupo": "testar-restauracao"
+    }
+  ]
+}
