@@ -1,0 +1,2450 @@
+{
+  "nome": "Banco de Dados — Consultas: SELECT, WHERE e ORDER BY (a revisar)",
+  "materia": "Banco de Dados",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa padaria, a tabela `produto` tem as colunas id_produto, nome, preco e estoque. Qual comando mostra só o nome e o preço de todos os produtos?",
+      "alternativas": [
+        "SELECT * FROM produto;",
+        "SHOW nome, preco FROM produto;",
+        "SELECT produto FROM nome, preco;",
+        "SELECT nome, preco FROM produto;"
+      ],
+      "correta": 3,
+      "explicacao": "Depois do SELECT vêm as colunas desejadas, separadas por vírgula, e depois do FROM vem a tabela. SELECT * traria todas as colunas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, a tabela `paciente` tem as colunas id_paciente, nome, telefone e cidade. O que o asterisco significa em `SELECT * FROM paciente;`?",
+      "alternativas": [
+        "Só as linhas que têm algum valor nulo",
+        "Multiplicar os valores das colunas",
+        "Apenas a primeira coluna da tabela",
+        "Todas as colunas da tabela paciente"
+      ],
+      "correta": 3,
+      "explicacao": "O * no SELECT quer dizer \"todas as colunas\". Sem WHERE, também vêm todas as linhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, a tabela `livro` tem as colunas id_livro, titulo, autor e ano. Na consulta `SELECT titulo FROM livro;`, qual parte indica DE QUAL tabela os dados vêm?",
+      "alternativas": [
+        "FROM livro",
+        "SELECT",
+        "titulo",
+        "o ponto e vírgula"
+      ],
+      "correta": 0,
+      "explicacao": "O FROM indica a tabela de origem. O SELECT indica as colunas; o ponto e vírgula só encerra o comando."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de roupas, a tabela `cliente` tem as colunas id_cliente, nome e telefone. Na consulta `SELECT nome AS comprador FROM cliente;`, o que o AS faz?",
+      "alternativas": [
+        "Renomeia a coluna nome na tabela para sempre",
+        "Filtra só os clientes que já compraram",
+        "Cria uma nova tabela chamada comprador",
+        "Dá um apelido à coluna só no resultado"
+      ],
+      "correta": 3,
+      "explicacao": "AS cria um apelido (alias) que aparece no cabeçalho do resultado. A tabela não muda: a coluna continua se chamando nome."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, a tabela `aluno` tem as colunas id_aluno, nome e cidade. Vários alunos moram na mesma cidade. Qual consulta lista cada cidade uma única vez?",
+      "alternativas": [
+        "SELECT cidade FROM aluno;",
+        "SELECT UNIQUE cidade FROM aluno;",
+        "SELECT DISTINCT cidade FROM aluno;",
+        "SELECT cidade FROM aluno ORDER BY cidade;"
+      ],
+      "correta": 2,
+      "explicacao": "DISTINCT remove as linhas repetidas do resultado. UNIQUE é restrição de tabela, não serve no SELECT do MySQL; ORDER BY só ordena, não tira repetidos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes operadores significa \"diferente de\" no MySQL?",
+      "alternativas": [
+        "=!",
+        "=/=",
+        "><",
+        "<>"
+      ],
+      "correta": 3,
+      "explicacao": "<> é o operador padrão de \"diferente\" (o MySQL também aceita !=). Os outros não existem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, a tabela `consulta` tem as colunas id_consulta, paciente e valor. Qual consulta traz só as consultas com valor maior que 150?",
+      "alternativas": [
+        "SELECT * FROM consulta WHERE valor > 150;",
+        "SELECT * FROM consulta WHERE valor >= 150;",
+        "SELECT * FROM consulta IF valor > 150;",
+        "SELECT * FROM consulta WHERE valor < 150;"
+      ],
+      "correta": 0,
+      "explicacao": "O filtro fica no WHERE, e \"maior que\" é >. O >= incluiria também as de valor 150; IF não é cláusula de filtro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em que ordem as cláusulas aparecem numa consulta simples no MySQL?",
+      "alternativas": [
+        "SELECT … WHERE … FROM … ORDER BY …",
+        "SELECT … FROM … ORDER BY … WHERE …",
+        "SELECT … FROM … WHERE … ORDER BY …",
+        "FROM … SELECT … WHERE … ORDER BY …"
+      ],
+      "correta": 2,
+      "explicacao": "A ordem é SELECT (colunas), FROM (tabela), WHERE (filtro) e ORDER BY (ordenação). Fora dessa ordem dá erro de sintaxe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a tabela `aluno` tem as colunas id_aluno, nome e nota. Quais alunos aparecem em `SELECT nome FROM aluno WHERE nota >= 7;`?",
+      "alternativas": [
+        "Os com nota 7 ou maior",
+        "Só os com nota maior que 7",
+        "Os com nota menor que 7",
+        "Só os com nota exatamente 7"
+      ],
+      "correta": 0,
+      "explicacao": ">= quer dizer \"maior ou igual\": entram as notas 7 e as acima de 7."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop, a tabela `pet` tem as colunas id_pet, nome e especie. Como filtrar só os pets cuja espécie é Cachorro?",
+      "alternativas": [
+        "WHERE especie = Cachorro",
+        "WHERE especie == 'Cachorro'",
+        "WHERE 'especie' = Cachorro",
+        "WHERE especie = 'Cachorro'"
+      ],
+      "correta": 3,
+      "explicacao": "Texto vai entre aspas simples e a comparação usa um só sinal de igual. Sem aspas, o MySQL acha que Cachorro é o nome de uma coluna."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual cláusula serve para ordenar as linhas do resultado de uma consulta?",
+      "alternativas": [
+        "SORT BY",
+        "GROUP BY",
+        "ORDER BY",
+        "WHERE"
+      ],
+      "correta": 2,
+      "explicacao": "ORDER BY ordena. GROUP BY agrupa, WHERE filtra e SORT BY não existe no MySQL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de games, a tabela `jogo` tem as colunas id_jogo, titulo e preco. Em `SELECT titulo FROM jogo ORDER BY preco;` (sem ASC nem DESC), como fica a ordem?",
+      "alternativas": [
+        "Decrescente: do mais caro para o mais barato",
+        "Aleatória a cada vez que a consulta roda",
+        "A mesma ordem em que os jogos foram cadastrados",
+        "Crescente: do mais barato para o mais caro"
+      ],
+      "correta": 3,
+      "explicacao": "Sem indicar a direção, o ORDER BY usa ASC (crescente). Para decrescente é preciso escrever DESC."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de games, a tabela `jogo` tem as colunas id_jogo, titulo, plataforma, preco e estoque. Quantas colunas aparecem no resultado de `SELECT titulo, preco FROM jogo;`?",
+      "alternativas": [
+        "Duas: titulo e preco",
+        "Todas as cinco colunas da tabela",
+        "Uma só, com titulo e preco juntos",
+        "Depende de quantas linhas a tabela tem"
+      ],
+      "correta": 0,
+      "explicacao": "Aparecem só as colunas listadas depois do SELECT: titulo e preco. A quantidade de linhas não muda a quantidade de colunas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Sobre as palavras-chave do SQL no MySQL (SELECT, FROM, WHERE), é correto dizer:",
+      "alternativas": [
+        "Precisam ser maiúsculas, senão o MySQL dá erro",
+        "Tanto faz; maiúsculas são só um costume",
+        "Só funcionam se forem escritas em minúsculas",
+        "Devem ficar sempre entre aspas simples"
+      ],
+      "correta": 1,
+      "explicacao": "O MySQL aceita palavras-chave em maiúsculas ou minúsculas. Escrevê-las em maiúsculas é um costume que facilita a leitura."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa oficina, a tabela `servico` tem as colunas id_servico, tipo e valor. O que retorna `SELECT * FROM servico WHERE tipo = 'Revisão' AND valor < 300;`?",
+      "alternativas": [
+        "Serviços de revisão OU com valor abaixo de 300",
+        "Todos os serviços, ordenados pelo valor",
+        "Só os serviços de revisão com valor abaixo de 300",
+        "Serviços que não são revisão e custam menos de 300"
+      ],
+      "correta": 2,
+      "explicacao": "Com AND, a linha só entra se as duas condições forem verdadeiras: ser revisão e custar menos de 300."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "or-mesma-coluna",
+      "enunciado": "Num cinema, a tabela `filme` tem as colunas id_filme, titulo e genero. Qual WHERE traz os filmes de Terror e também os de Comédia?",
+      "alternativas": [
+        "WHERE genero = 'Terror' OR genero = 'Comédia'",
+        "WHERE genero = 'Terror' OR 'Comédia'",
+        "WHERE genero = 'Terror', 'Comédia'",
+        "WHERE genero = 'Terror' AND genero = 'Comédia'"
+      ],
+      "correta": 0,
+      "explicacao": "Cada comparação precisa da coluna: genero = 'Terror' OR genero = 'Comédia'. Com AND, nenhum filme teria os dois gêneros ao mesmo tempo; OR 'Comédia' sozinho não compara nada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "or-mesma-coluna",
+      "enunciado": "Numa escola, a tabela `aluno` tem as colunas id_aluno, nome e turma. Por que `SELECT nome FROM aluno WHERE turma = '1A' AND turma = '1B';` não retorna nenhuma linha?",
+      "alternativas": [
+        "Porque o operador AND não pode ser usado com colunas de texto",
+        "Porque nenhum aluno está nas duas turmas ao mesmo tempo",
+        "Porque faltam parênteses em volta da condição",
+        "Porque o MySQL só aceita um AND por consulta"
+      ],
+      "correta": 1,
+      "explicacao": "Cada linha tem uma única turma. Com AND, ela teria de ser 1A e 1B ao mesmo tempo, o que nunca acontece. Para \"1A ou 1B\" usa-se OR ou IN."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel, a tabela `quarto` tem as colunas numero, tipo e diaria. O que traz `SELECT numero FROM quarto WHERE NOT tipo = 'Luxo';`?",
+      "alternativas": [
+        "Só os quartos do tipo Luxo",
+        "Só os quartos com diária vazia (NULL)",
+        "Nada, pois NOT antes de coluna dá erro",
+        "Os quartos cujo tipo é diferente de Luxo"
+      ],
+      "correta": 3,
+      "explicacao": "NOT inverte a condição: NOT tipo = 'Luxo' é o mesmo que tipo <> 'Luxo'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa lanchonete, a tabela `item_pedido` tem as colunas id_item, produto, preco e qtd. O que mostra `SELECT produto, preco * qtd AS total FROM item_pedido;`?",
+      "alternativas": [
+        "A soma de todos os preços de todos os itens",
+        "Grava na tabela uma coluna nova chamada total",
+        "O produto e o valor do item (preço × quantidade)",
+        "Só os itens em que o preço é igual à quantidade"
+      ],
+      "correta": 2,
+      "explicacao": "A conta é feita linha a linha e aparece numa coluna calculada com o apelido total. Nada é gravado na tabela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "precedencia-and-or",
+      "enunciado": "No MySQL, quando uma condição mistura AND e OR sem parênteses, qual deles é avaliado primeiro?",
+      "alternativas": [
+        "O OR",
+        "O AND",
+        "O que aparecer primeiro, da esquerda para a direita",
+        "O que aparecer por último na linha"
+      ],
+      "correta": 1,
+      "explicacao": "AND tem precedência maior que OR, assim como a multiplicação vem antes da soma. Parênteses mudam essa ordem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "precedencia-and-or",
+      "enunciado": "Numa academia, a tabela `aluno` tem as colunas nome, plano e ativo (1 = ativo, 0 = inativo). Como o MySQL entende `WHERE plano = 'Mensal' OR plano = 'Anual' AND ativo = 1`?",
+      "alternativas": [
+        "plano = 'Mensal' OR (plano = 'Anual' AND ativo = 1)",
+        "(plano = 'Mensal' OR plano = 'Anual') AND ativo = 1",
+        "Dá erro por falta de parênteses",
+        "Considera só a primeira condição"
+      ],
+      "correta": 0,
+      "explicacao": "O AND é resolvido antes do OR. Por isso entram todos do plano Mensal (ativos ou não) e só os do Anual que estão ativos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, a tabela `aluno` tem as colunas id_aluno, nome e idade. Quais idades entram em `WHERE idade BETWEEN 15 AND 18`?",
+      "alternativas": [
+        "16 e 17",
+        "15, 16 e 17",
+        "16, 17 e 18",
+        "15, 16, 17 e 18"
+      ],
+      "correta": 3,
+      "explicacao": "BETWEEN inclui as duas pontas: equivale a idade >= 15 AND idade <= 18."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola técnica, a tabela `turma` tem as colunas id_turma, curso e turno. Qual WHERE dá o mesmo resultado que `WHERE turno IN ('Manhã', 'Tarde')`?",
+      "alternativas": [
+        "WHERE turno = 'Manhã' AND turno = 'Tarde'",
+        "WHERE turno BETWEEN 'Manhã' AND 'Tarde'",
+        "WHERE turno = 'Manhã' OR turno = 'Tarde'",
+        "WHERE turno LIKE 'Manhã%Tarde'"
+      ],
+      "correta": 2,
+      "explicacao": "IN (a, b) equivale a uma série de OR com igualdade: turno = 'Manhã' OR turno = 'Tarde'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, a tabela `paciente` tem as colunas id_paciente e nome. Quais nomes aparecem em `WHERE nome LIKE 'Ana%'`?",
+      "alternativas": [
+        "Só quem se chama exatamente Ana",
+        "Só nomes com Ana no meio, como Mariana Souza",
+        "Nomes que terminam com Ana, como Luciana",
+        "Nomes que começam com Ana, como Ana Clara e Anabela"
+      ],
+      "correta": 3,
+      "explicacao": "O % representa qualquer sequência de caracteres (inclusive nenhuma). 'Ana%' quer dizer \"começa com Ana\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No operador LIKE, o que o sublinhado (_) representa?",
+      "alternativas": [
+        "Exatamente um caractere qualquer",
+        "Qualquer quantidade de caracteres",
+        "Um espaço em branco",
+        "Um dígito de 0 a 9"
+      ],
+      "correta": 0,
+      "explicacao": "_ vale exatamente um caractere. O % é que vale qualquer quantidade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, a tabela `paciente` tem as colunas id_paciente, nome e telefone. Alguns pacientes estão sem telefone (NULL). Qual WHERE encontra esses pacientes?",
+      "alternativas": [
+        "WHERE telefone = NULL",
+        "WHERE telefone IS NULL",
+        "WHERE telefone = ''",
+        "WHERE telefone == NULL"
+      ],
+      "correta": 1,
+      "explicacao": "NULL só é testado com IS NULL. Comparar com = NULL nunca dá verdadeiro, e '' é texto vazio, que é diferente de NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de games, a tabela `jogo` tem as colunas id_jogo, titulo e preco. Como listar os jogos do mais caro para o mais barato?",
+      "alternativas": [
+        "ORDER BY preco ASC",
+        "ORDER BY DESC preco",
+        "ORDER BY preco DESC",
+        "ORDER BY preco DOWN"
+      ],
+      "correta": 2,
+      "explicacao": "DESC (decrescente) vem depois da coluna. ASC seria do mais barato para o mais caro; DOWN não existe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a tabela `aluno` tem as colunas id_aluno, nome e turma. O que faz `SELECT turma, nome FROM aluno ORDER BY turma, nome;`?",
+      "alternativas": [
+        "Ordena por turma e, dentro da mesma turma, por nome",
+        "Ordena só por nome, ignorando a turma",
+        "Ordena por nome e, se empatar, por turma",
+        "Ordena a turma crescente e o nome decrescente"
+      ],
+      "correta": 0,
+      "explicacao": "A primeira coluna do ORDER BY manda; a segunda só desempata as linhas com a mesma turma. As duas ficam em ordem crescente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa empresa, a tabela `funcionario` tem as colunas nome, salario e bonus. O Carlos tem salario 3000 e bonus NULL. O que aparece no total do Carlos em `SELECT nome, salario + bonus AS total FROM funcionario;`?",
+      "alternativas": [
+        "3000, pois NULL vale zero na conta",
+        "NULL",
+        "0",
+        "Dá erro e a consulta inteira para"
+      ],
+      "correta": 1,
+      "explicacao": "Qualquer conta com NULL dá NULL: o valor é desconhecido, então o total também fica desconhecido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "null-comparacao",
+      "enunciado": "Numa loja, a tabela `venda` tem as colunas id_venda, valor e desconto. Algumas vendas têm desconto NULL. Essas vendas aparecem em `SELECT * FROM venda WHERE desconto <> 10;`?",
+      "alternativas": [
+        "Sim, pois NULL é sempre diferente de qualquer número, como 10",
+        "Não, pois <> só funciona com textos",
+        "Sim, mas só se houver ORDER BY",
+        "Não, pois comparar NULL com <> não dá verdadeiro"
+      ],
+      "correta": 3,
+      "explicacao": "Qualquer comparação com NULL (=, <>, >, <) dá \"desconhecido\", e o WHERE só deixa passar o que é verdadeiro. Para incluí-las seria preciso OR desconto IS NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "limit-deslocamento",
+      "enunciado": "Numa loja, a tabela `produto` tem as colunas id_produto, nome e preco (todos os preços diferentes). O que mostra `SELECT nome FROM produto ORDER BY preco DESC LIMIT 2, 3;`?",
+      "alternativas": [
+        "Os 2 mais caros e depois mais 3 quaisquer",
+        "2 produtos, pulando os 3 mais caros",
+        "3 produtos, do 3º ao 5º mais caro",
+        "Do 2º ao 3º produto mais caro"
+      ],
+      "correta": 2,
+      "explicacao": "Em LIMIT a, b o primeiro número é quantas linhas pular e o segundo é quantas mostrar: pula os 2 mais caros e mostra os 3 seguintes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop, a tabela `pet` (id_pet, nome, especie, idade) tem 4 linhas: (1, Thor, Cachorro, 5), (2, Mia, Gato, 2), (3, Bob, Cachorro, 1), (4, Luna, Gato, 7). Quantas linhas retorna `SELECT nome FROM pet WHERE especie = 'Cachorro' OR idade > 4;`?",
+      "alternativas": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "correta": 2,
+      "explicacao": "Entram os cachorros (Thor e Bob) e os de idade acima de 4 (Thor e Luna). Thor conta uma vez só: Thor, Bob e Luna = 3 linhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "precedencia-and-or",
+      "enunciado": "Numa loja de games, a tabela `jogo` (titulo, plataforma, preco) tem: (Corrida X, PC, 80), (Reino Perdido, Console, 150), (Futebol 26, Console, 200), (Puzzle Mix, PC, 30), (Nave Zero, Mobile, 15). Quantas linhas retorna `SELECT titulo FROM jogo WHERE plataforma = 'PC' OR plataforma = 'Console' AND preco > 160;`?",
+      "alternativas": [
+        "1",
+        "2",
+        "3",
+        "5"
+      ],
+      "correta": 2,
+      "explicacao": "O AND vem primeiro: entram todos os de PC (Corrida X e Puzzle Mix) e os de Console acima de 160 (Futebol 26). Total: 3. Com parênteses no OR, seria só 1."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a coluna nome da tabela `aluno` tem: Marcos, Ana, Carla, Paulo e Vanessa. Quais aparecem com `WHERE nome LIKE '_a%'`?",
+      "alternativas": [
+        "Só Ana",
+        "Marcos, Carla, Paulo e Vanessa",
+        "Ana, Carla, Paulo e Vanessa",
+        "Os cinco nomes"
+      ],
+      "correta": 1,
+      "explicacao": "'_a%' quer dizer: um caractere qualquer, depois a letra a, depois qualquer coisa. Ou seja, a segunda letra é a. Ana tem n na segunda letra."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola técnica, a tabela `matricula` (cidade, curso) tem 4 linhas: (Campinas, Informática), (Campinas, Informática), (Campinas, Mecânica), (Sorocaba, Informática). Quantas linhas retorna `SELECT DISTINCT cidade, curso FROM matricula;`?",
+      "alternativas": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "correta": 2,
+      "explicacao": "Com duas colunas, o DISTINCT tira só as linhas em que a combinação cidade + curso se repete. Sobra uma (Campinas, Informática): 3 linhas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, a tabela `aluno` tem 25 colunas (dados pessoais, endereço, responsáveis etc.). A secretaria só precisa da lista de nomes e turmas. Um colega usou `SELECT * FROM aluno;` e outro usou `SELECT nome, turma FROM aluno;`.\n\nNa sua resposta:\n1. diga o que cada consulta mostra;\n2. explique qual é a mais adequada para a secretaria e por quê.",
+      "respostasAceitas": [
+        "A primeira mostra todas as 25 colunas de todos os alunos; a segunda mostra só nome e turma. A segunda é melhor: traz só o necessário, fica mais fácil de ler, trafega menos dados e não expõe informações pessoais à toa."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) * = todas as colunas, a outra só nome e turma; 2) escolher as colunas necessárias (clareza, menos dados, privacidade)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num pet shop, a tabela `pet` tem as colunas id_pet, nome, especie e id_tutor. Há 300 pets cadastrados, quase todos cães e gatos. O que mostra `SELECT DISTINCT especie FROM pet;`?\n\nNa sua resposta:\n1. diga o que a consulta mostra;\n2. explique o que mudaria se não houvesse o DISTINCT.",
+      "respostasAceitas": [
+        "Mostra a lista das espécies atendidas, cada uma uma única vez (Cachorro, Gato…). Sem DISTINCT apareceriam 300 linhas, com a espécie repetida para cada pet."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) lista das espécies sem repetição; 2) sem DISTINCT, uma linha por pet, com repetições."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, o relatório usa `SELECT nome AS 'Nome do cliente', telefone AS Contato FROM cliente;`. A tabela `cliente` tem as colunas id_cliente, nome e telefone.\n\nNa sua resposta:\n1. explique o que o AS faz nessa consulta;\n2. diga se a tabela cliente passa a ter colunas com esses novos nomes.",
+      "respostasAceitas": [
+        "O AS dá apelidos às colunas: no resultado, os cabeçalhos aparecem como 'Nome do cliente' e Contato. A tabela não muda; as colunas continuam se chamando nome e telefone."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) apelido só no resultado (cabeçalho mais claro); 2) a estrutura da tabela continua igual."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num cinema, a tabela `sessao` tem as colunas id_sessao, filme, sala e preco. Compare as consultas `SELECT filme FROM sessao WHERE sala = 2 AND preco < 20;` e `SELECT filme FROM sessao WHERE sala = 2 OR preco < 20;`.\n\nNa sua resposta:\n1. diga o que a primeira consulta traz;\n2. diga o que a segunda traz;\n3. explique qual delas tende a trazer mais linhas.",
+      "respostasAceitas": [
+        "A primeira traz as sessões da sala 2 que custam menos de 20 (as duas condições juntas). A segunda traz as sessões da sala 2 e também todas as de preço abaixo de 20, de qualquer sala (basta uma condição). A com OR tende a trazer mais linhas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) AND exige as duas condições; 2) OR aceita qualquer uma; 3) OR traz mais (ou o mesmo tanto)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, a coordenação quer os alunos em recuperação e usou `SELECT nome FROM aluno WHERE nota BETWEEN 5 AND 7;`. A tabela `aluno` tem as colunas id_aluno, nome e nota. Uma aluna com nota 7 perguntou se ela entra na lista.\n\nNa sua resposta:\n1. diga quais notas a consulta traz;\n2. responda se a aluna com nota 7 aparece e por quê.",
+      "respostasAceitas": [
+        "Traz as notas de 5 até 7, incluindo as duas pontas. A aluna com nota 7 aparece, porque BETWEEN equivale a nota >= 5 AND nota <= 7."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) notas de 5 a 7; 2) sim, o BETWEEN inclui os limites."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa lanchonete, a tabela `item_pedido` tem as colunas id_item, id_pedido, produto, preco e qtd. O caixa usa `SELECT produto, qtd, preco * qtd AS subtotal FROM item_pedido WHERE id_pedido = 15;`.\n\nNa sua resposta:\n1. explique o que aparece na coluna subtotal;\n2. diga se essa consulta grava o subtotal na tabela.",
+      "respostasAceitas": [
+        "Subtotal é o preço multiplicado pela quantidade de cada item do pedido 15, calculado na hora. Não grava nada: o SELECT só mostra o resultado, a tabela não ganha coluna nova."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) preço × quantidade, linha a linha, só do pedido 15; 2) não grava, SELECT só consulta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "null-igual",
+      "enunciado": "Numa clínica, a tabela `paciente` tem as colunas id_paciente, nome e email. A recepção quer achar quem está sem e-mail (NULL) e usou `SELECT nome FROM paciente WHERE email = NULL;`. A consulta não retornou nenhuma linha, mas há pacientes sem e-mail.\n\nNa sua resposta:\n1. explique por que nenhuma linha apareceu;\n2. diga qual operador deveria ser usado no lugar do = NULL.",
+      "respostasAceitas": [
+        "NULL significa valor desconhecido; comparar qualquer coisa com = NULL dá desconhecido, nunca verdadeiro, então nenhuma linha passa no filtro. O certo é usar IS NULL (email IS NULL)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) comparação com NULL nunca é verdadeira; 2) usar IS NULL."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa oficina, a tabela `ordem_servico` tem as colunas id_os, placa, status e valor. Compare `WHERE status IN ('Aberta', 'Em andamento', 'Aguardando peça')` com `WHERE status = 'Aberta' OR status = 'Em andamento' OR status = 'Aguardando peça'`.\n\nNa sua resposta:\n1. diga se as duas trazem as mesmas linhas;\n2. explique qual vantagem o IN tem.",
+      "respostasAceitas": [
+        "Sim, trazem as mesmas linhas: IN é um atalho para vários OR com igualdade na mesma coluna. O IN é mais curto, mais fácil de ler e de acrescentar valores, com menos chance de errar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mesmo resultado; 2) IN é mais curto e legível."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de brinquedos, a tabela `produto` tem as colunas id_produto e nome. Há produtos chamados Bola, Bala, Bolha e Bloco. O vendedor usou `SELECT nome FROM produto WHERE nome LIKE 'B_la';`.\n\nNa sua resposta:\n1. explique o que o _ significa nesse padrão;\n2. diga quais desses nomes aparecem e por quê.",
+      "respostasAceitas": [
+        "O _ vale exatamente um caractere qualquer. O padrão quer nomes de 4 letras: B, uma letra qualquer, l, a. Aparecem Bola e Bala. Bolha tem 5 letras e Bloco não termina em la."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) _ = um caractere; 2) Bola e Bala (Bolha e Bloco não seguem o padrão)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa transportadora, a tabela `entrega` tem as colunas id_entrega, cidade, cliente e valor. O relatório usa `SELECT cidade, cliente, valor FROM entrega ORDER BY cidade ASC, valor DESC;`.\n\nNa sua resposta:\n1. explique como as linhas ficam ordenadas;\n2. diga para que serve a segunda coluna do ORDER BY.",
+      "respostasAceitas": [
+        "As linhas ficam em ordem alfabética de cidade. Dentro de cada cidade, as entregas aparecem da mais cara para a mais barata. A segunda coluna só serve para desempatar as linhas que têm a mesma cidade."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cidade A→Z e, dentro dela, valor do maior para o menor; 2) a segunda coluna desempata."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "limit-sem-order",
+      "enunciado": "Numa escola, a tabela `aluno` tem as colunas id_aluno, nome e nota. Para premiar os 3 melhores alunos, alguém usou `SELECT nome, nota FROM aluno LIMIT 3;`.\n\nNa sua resposta:\n1. diga o que essa consulta realmente mostra;\n2. explique o que falta para ela mostrar os 3 melhores.",
+      "respostasAceitas": [
+        "Mostra só 3 alunos quaisquer, na ordem em que o banco devolver, não necessariamente os melhores. Falta ordenar pela nota do maior para o menor (ORDER BY nota DESC) antes do LIMIT."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 3 linhas sem critério; 2) ordenar por nota decrescente antes de limitar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na biblioteca da escola, a tabela `livro` (id_livro, titulo, ano, emprestado) tem estas linhas: (1, Dom Casmurro, 1899, 0), (2, Capitães da Areia, 1937, 1), (3, Vidas Secas, 1938, 0), (4, O Cortiço, 1890, 1), (5, Iracema, 1865, 0). A coluna emprestado vale 1 quando o livro está emprestado. Veja a consulta `SELECT titulo FROM livro WHERE emprestado = 0 AND ano > 1870 ORDER BY ano DESC;`.\n\nNa sua resposta:\n1. diga quais títulos aparecem e em que ordem;\n2. explique por que Iracema não aparece.",
+      "respostasAceitas": [
+        "Aparecem Vidas Secas e depois Dom Casmurro (ano decrescente: 1938, 1899). Iracema não está emprestado, mas é de 1865, e a condição pede ano maior que 1870; com AND as duas precisam ser verdadeiras."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Vidas Secas, Dom Casmurro; 2) Iracema falha no ano > 1870."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "precedencia-diss",
+      "enunciado": "Numa lanchonete, a tabela `produto` tem as colunas nome, categoria e preco. O gerente queria \"bebidas e doces que custam menos de 5 reais\" e usou `SELECT nome FROM produto WHERE categoria = 'Bebida' OR categoria = 'Doce' AND preco < 5;`. No resultado apareceu um suco de 12 reais.\n\nNa sua resposta:\n1. explique em que ordem o MySQL avaliou o AND e o OR;\n2. diga por que o suco de 12 reais apareceu;\n3. explique onde os parênteses deveriam ficar para atender o gerente.",
+      "respostasAceitas": [
+        "O AND é avaliado antes do OR, então a condição virou: categoria = 'Bebida' OR (categoria = 'Doce' AND preco < 5). Toda bebida entra, de qualquer preço, por isso o suco de 12 apareceu. Os parênteses devem envolver o OR: (categoria = 'Bebida' OR categoria = 'Doce') AND preco < 5."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) AND antes do OR; 2) bebidas entram sem limite de preço; 3) parênteses em volta das duas categorias."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "limit-deslocamento",
+      "enunciado": "Numa loja virtual, a vitrine mostra 10 produtos por página. A página 1 usa `SELECT nome, preco FROM produto ORDER BY nome LIMIT 0, 10;` e a página 3 usa `SELECT nome, preco FROM produto ORDER BY nome LIMIT 20, 10;`.\n\nNa sua resposta:\n1. explique o que significa cada número do LIMIT;\n2. diga quais produtos (por posição na lista) aparecem na página 3;\n3. explique por que o ORDER BY é importante nessa paginação.",
+      "respostasAceitas": [
+        "O primeiro número é quantas linhas pular e o segundo é quantas mostrar. Na página 3 pula 20 e mostra 10: do 21º ao 30º produto em ordem de nome. Sem ORDER BY a ordem não é garantida, e um produto poderia repetir numa página e sumir de outra."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) deslocamento e quantidade; 2) 21º a 30º; 3) ordem fixa garante páginas consistentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa transportadora, a tabela `entrega` tem as colunas id_entrega, cidade e valor (nenhuma cidade é NULL). Para listar as entregas fora da Baixada, uma pessoa usou `WHERE NOT (cidade = 'Santos' OR cidade = 'Guarujá')` e outra usou `WHERE cidade <> 'Santos' AND cidade <> 'Guarujá'`. Uma terceira usou `WHERE cidade <> 'Santos' OR cidade <> 'Guarujá'`.\n\nNa sua resposta:\n1. diga se as duas primeiras trazem o mesmo resultado;\n2. explique o que a terceira traz e por que ela está errada.",
+      "respostasAceitas": [
+        "As duas primeiras são equivalentes: excluem Santos e Guarujá. A terceira traz todas as entregas, porque toda cidade é diferente de pelo menos uma das duas (Santos é diferente de Guarujá), então com OR a condição é sempre verdadeira."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sim, NOT (A OR B) = não A e não B; 2) a terceira sempre é verdadeira e traz tudo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `pedido` tem as colunas id_pedido, cliente e status. O que se pode dizer de `WHERE status != 'Cancelado'` e `WHERE status <> 'Cancelado'` no MySQL?",
+      "alternativas": [
+        "Trazem o mesmo resultado",
+        "A primeira dá erro no MySQL",
+        "A segunda traz só os cancelados",
+        "A primeira inclui os cancelados"
+      ],
+      "correta": 0,
+      "explicacao": "No MySQL, != e <> são o mesmo operador de \"diferente\". <> é a forma do SQL padrão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a tabela `responsavel` tem as colunas id_responsavel e nome. Qual padrão encontra nomes terminados em son, como Robson e Edson?",
+      "alternativas": [
+        "LIKE 'son%'",
+        "LIKE 'son'",
+        "LIKE '_son'",
+        "LIKE '%son'"
+      ],
+      "correta": 3,
+      "explicacao": "O % antes de son aceita qualquer começo e exige que o nome termine em son. 'son%' seria \"começa com son\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `pedido` tem as colunas id_pedido, cliente e valor. O que traz `SELECT * FROM pedido WHERE id_pedido IN (3, 8, 12);`?",
+      "alternativas": [
+        "Os pedidos de número 3 até 12",
+        "Todos os pedidos, menos o 3, o 8 e o 12",
+        "Só os pedidos 3, 8 e 12",
+        "Os pedidos que têm 3, 8 ou 12 itens"
+      ],
+      "correta": 2,
+      "explicacao": "IN compara com cada valor da lista: só entram os pedidos cujo id é 3, 8 ou 12. Não é um intervalo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `cliente` tem as colunas id_cliente, nome e email. Qual WHERE traz só os clientes que têm e-mail cadastrado?",
+      "alternativas": [
+        "WHERE email = NOT NULL",
+        "WHERE email <> NULL",
+        "WHERE NOT email",
+        "WHERE email IS NOT NULL"
+      ],
+      "correta": 3,
+      "explicacao": "IS NOT NULL testa se a coluna tem algum valor. Comparar com <> NULL nunca dá verdadeiro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cinema, a tabela `espectador` tem as colunas id_espectador, nome e idade. Uma criança de 12 anos aparece em `SELECT nome FROM espectador WHERE idade <= 12;`?",
+      "alternativas": [
+        "Sim, pois <= inclui o próprio 12",
+        "Não, pois <= quer dizer só menor que",
+        "Só se a consulta tiver ORDER BY",
+        "Não, pois o limite sempre fica de fora"
+      ],
+      "correta": 0,
+      "explicacao": "<= é \"menor ou igual\": entram as idades até 12, incluindo o 12."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, a tabela `leitor` tem as colunas id_leitor, nome e telefone, com 120 linhas. Quantas linhas retorna `SELECT nome FROM leitor;`?",
+      "alternativas": [
+        "1",
+        "120",
+        "Nenhuma, pois falta o WHERE",
+        "Só as que têm telefone"
+      ],
+      "correta": 1,
+      "explicacao": "Sem WHERE não há filtro: vêm todas as 120 linhas, só com a coluna nome."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num salão de beleza, a tabela `cliente` tem as colunas id_cliente e nome. Como ficam os nomes em `SELECT nome FROM cliente ORDER BY nome DESC;`?",
+      "alternativas": [
+        "De A a Z",
+        "De Z a A",
+        "Do nome mais curto ao mais longo",
+        "Na ordem de cadastro, de trás para frente"
+      ],
+      "correta": 1,
+      "explicacao": "DESC é decrescente; para texto, isso é a ordem alfabética invertida (Z a A)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa farmácia, a tabela `medicamento` tem as colunas id_medicamento, nome e estoque. O que lista `SELECT nome FROM medicamento WHERE estoque = 0;`?",
+      "alternativas": [
+        "Zera o estoque e mostra os medicamentos",
+        "Os medicamentos cadastrados sem nome",
+        "Os medicamentos em falta no estoque",
+        "Os medicamentos com estoque NULL"
+      ],
+      "correta": 2,
+      "explicacao": "O WHERE filtra as linhas com estoque igual a zero, ou seja, os que estão em falta. SELECT não altera dados, e 0 é diferente de NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `venda` tem as colunas id_venda, data_venda e valor. Rodar `SELECT * FROM venda WHERE valor > 100;` altera alguma venda?",
+      "alternativas": [
+        "Não, o SELECT só lê e mostra os dados",
+        "Sim, apaga as vendas acima de 100",
+        "Sim, deixa a tabela ordenada para sempre",
+        "Sim, guarda o filtro dentro da tabela"
+      ],
+      "correta": 0,
+      "explicacao": "SELECT é só consulta: mostra dados e não muda nada na tabela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa padaria, a tabela `produto` tem as colunas id_produto, nome e preco. O que mostra `SELECT nome FROM produto ORDER BY preco LIMIT 1;`?",
+      "alternativas": [
+        "O produto mais caro",
+        "O produto mais barato",
+        "O primeiro produto cadastrado",
+        "Um produto que custa 1 real"
+      ],
+      "correta": 1,
+      "explicacao": "ORDER BY preco ordena do mais barato para o mais caro (ASC) e LIMIT 1 pega só a primeira linha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que o MySQL mostra ao executar `SELECT 12 * 3;`?",
+      "alternativas": [
+        "36",
+        "12 * 3",
+        "Erro, pois falta o FROM",
+        "123"
+      ],
+      "correta": 0,
+      "explicacao": "O SELECT pode calcular expressões sem tabela nenhuma: o resultado é 36."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de calçados, a tabela `produto` tem as colunas nome, preco e desconto (em reais). O que mostra `SELECT nome, preco - desconto AS preco_final FROM produto;`?",
+      "alternativas": [
+        "Grava o preço final dentro da tabela",
+        "O desconto em porcentagem de cada produto",
+        "Só os produtos que têm algum desconto",
+        "O preço de cada produto já sem o desconto"
+      ],
+      "correta": 3,
+      "explicacao": "A coluna calculada preco_final é preço menos desconto, linha a linha. Nada é gravado na tabela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa consulta SELECT, qual cláusula escolhe QUAIS LINHAS aparecem no resultado?",
+      "alternativas": [
+        "SELECT",
+        "FROM",
+        "WHERE",
+        "ORDER BY"
+      ],
+      "correta": 2,
+      "explicacao": "O WHERE filtra as linhas. SELECT escolhe as colunas, FROM a tabela e ORDER BY a ordem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cinema, a tabela `filme` tem as colunas id_filme, titulo e duracao (em minutos). O que traz `SELECT titulo FROM filme WHERE duracao < 90;`?",
+      "alternativas": [
+        "Filmes com mais de 90 minutos",
+        "Filmes com menos de 90 minutos",
+        "Filmes com exatamente 90 minutos",
+        "Filmes com 90 minutos ou menos"
+      ],
+      "correta": 1,
+      "explicacao": "< é \"menor que\": o filme de exatamente 90 minutos fica de fora."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a tabela `aluno` tem as colunas id_aluno, nome e turma. Por que `SELECT * FROM aluno WHERE nome = Maria;` dá erro?",
+      "alternativas": [
+        "Sem aspas, Maria é tratada como nome de coluna",
+        "O sinal de = não funciona com textos",
+        "Falta o ORDER BY no fim do comando",
+        "Nomes próprios só podem ser buscados com LIKE"
+      ],
+      "correta": 0,
+      "explicacao": "Texto precisa de aspas simples ('Maria'). Sem aspas, o MySQL procura uma coluna chamada Maria e dá erro de coluna desconhecida."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `produto` tem as colunas nome e preco. Por que `SELECT nome FROM produto ORDER BY nome WHERE preco > 10;` dá erro?",
+      "alternativas": [
+        "O ORDER BY deveria vir antes do FROM",
+        "Não é possível ordenar por coluna de texto",
+        "Falta um LIMIT no final do comando",
+        "O WHERE tem que vir antes do ORDER BY"
+      ],
+      "correta": 3,
+      "explicacao": "A ordem das cláusulas é fixa: SELECT, FROM, WHERE, ORDER BY, LIMIT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa papelaria, a tabela `produto` tem as colunas nome e preco. Qual WHERE dá o mesmo resultado que `WHERE preco BETWEEN 10 AND 20`?",
+      "alternativas": [
+        "WHERE preco > 10 AND preco < 20",
+        "WHERE preco >= 10 OR preco <= 20",
+        "WHERE preco >= 10 AND preco <= 20",
+        "WHERE preco = 10 OR preco = 20"
+      ],
+      "correta": 2,
+      "explicacao": "BETWEEN inclui as duas pontas, então equivale a >= 10 AND <= 20."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop, a tabela `pet` tem as colunas id_pet, nome e especie. O que traz `WHERE especie NOT IN ('Cachorro', 'Gato')`?",
+      "alternativas": [
+        "Só os cachorros e os gatos",
+        "Os cachorros que não são gatos",
+        "Nada, pois NOT IN não existe no MySQL",
+        "Os pets que não são cachorro nem gato"
+      ],
+      "correta": 3,
+      "explicacao": "NOT IN exclui todos os valores da lista: entram coelhos, pássaros etc."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `produto` tem a coluna nome. O que traz `WHERE nome LIKE '____'` (quatro sublinhados)?",
+      "alternativas": [
+        "Nomes com exatamente 4 caracteres",
+        "Nomes com até 4 caracteres",
+        "Nomes com pelo menos 4 caracteres",
+        "Nomes que começam com 4 espaços"
+      ],
+      "correta": 0,
+      "explicacao": "Cada _ vale exatamente um caractere. Quatro sublinhados e nada mais = exatamente 4 caracteres."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa floricultura, a tabela `arranjo` tem as colunas id_arranjo, descricao e preco. Qual WHERE acha as descrições que têm a palavra verde em qualquer posição?",
+      "alternativas": [
+        "WHERE descricao LIKE 'verde%'",
+        "WHERE descricao LIKE '%verde%'",
+        "WHERE descricao LIKE '%verde'",
+        "WHERE descricao LIKE '_verde_'"
+      ],
+      "correta": 1,
+      "explicacao": "Com % dos dois lados, verde pode estar no começo, no meio ou no fim."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "data-comparacao",
+      "enunciado": "Numa escola, a tabela `aluno` tem as colunas nome e data_nasc (DATE). O que traz `WHERE data_nasc < '2010-01-01'`?",
+      "alternativas": [
+        "Os nascidos a partir de 2010",
+        "Só os nascidos em 1º/01/2010",
+        "Os nascidos antes de 2010",
+        "Dá erro, pois data não leva aspas"
+      ],
+      "correta": 2,
+      "explicacao": "Datas são comparadas pela ordem do calendário e escritas entre aspas no formato 'AAAA-MM-DD'. Menor que 1º/01/2010 = antes de 2010."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, a tabela `consulta` tem as colunas id_consulta, data_consulta (DATE) e valor. Qual WHERE traz as consultas de março de 2026?",
+      "alternativas": [
+        "WHERE data_consulta BETWEEN '2026-03-01' AND '2026-03-31'",
+        "WHERE data_consulta = '2026-03'",
+        "WHERE data_consulta IN ('2026-03-01', '2026-03-31')",
+        "WHERE data_consulta >= '2026-03-01' OR data_consulta <= '2026-03-31'"
+      ],
+      "correta": 0,
+      "explicacao": "BETWEEN com o primeiro e o último dia pega o mês todo (a coluna é DATE, sem hora). O IN pegaria só dois dias, e o OR seria verdadeiro para qualquer data."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `venda` tem as colunas preco e frete. Em `SELECT preco + frete * 2 FROM venda;`, qual conta é feita primeiro?",
+      "alternativas": [
+        "preco + frete",
+        "frete * 2",
+        "Da esquerda para a direita, sem regra",
+        "Nenhuma: dá erro sem parênteses"
+      ],
+      "correta": 1,
+      "explicacao": "Como na matemática, multiplicação vem antes da soma. Para somar antes, seriam necessários parênteses."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "apelido",
+      "enunciado": "Numa loja, a tabela `produto` tem as colunas nome e preco. Por que `SELECT preco AS Preço final FROM produto;` dá erro?",
+      "alternativas": [
+        "Falta o WHERE depois do FROM",
+        "O AS não aceita letras com acento",
+        "preco é uma palavra reservada do MySQL",
+        "Apelido com espaço precisa ficar entre aspas"
+      ],
+      "correta": 3,
+      "explicacao": "Com espaço, o MySQL lê Preço como apelido e não entende a palavra final. O apelido com espaço deve ir entre aspas ou crases."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "apelido",
+      "enunciado": "Numa lanchonete, a tabela `item` tem as colunas produto, preco e qtd. A consulta `SELECT produto, preco * qtd AS total FROM item ORDER BY total DESC;` funciona?",
+      "alternativas": [
+        "Só se total estiver entre aspas duplas",
+        "Não, o ORDER BY só aceita colunas da tabela",
+        "Sim, o ORDER BY aceita o apelido do SELECT",
+        "Só se a consulta também tiver um WHERE"
+      ],
+      "correta": 2,
+      "explicacao": "O ORDER BY é processado depois do SELECT, então conhece o apelido total. (Já o WHERE não conhece.)"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `produto` tem as colunas nome e preco. O que traz `SELECT nome FROM produto WHERE preco * 0.9 < 50;`?",
+      "alternativas": [
+        "Os produtos que custam menos de 50 sem o desconto",
+        "Os produtos cujo preço com 10% de desconto fica abaixo de 50",
+        "Os produtos que têm desconto de 0,9 real",
+        "Aplica 10% de desconto na tabela e mostra os de até 50 reais"
+      ],
+      "correta": 1,
+      "explicacao": "A conta é feita no filtro, linha a linha: preço × 0,9 é o preço com 10% de desconto. Nada é gravado na tabela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, a tabela `checkin` tem as colunas id_checkin, id_aluno e data_hora. O que mostra `SELECT * FROM checkin ORDER BY data_hora DESC LIMIT 1;`?",
+      "alternativas": [
+        "O check-in mais recente",
+        "O check-in mais antigo",
+        "Um check-in qualquer",
+        "Todos os check-ins do dia"
+      ],
+      "correta": 0,
+      "explicacao": "DESC coloca as datas mais novas primeiro e LIMIT 1 fica só com a primeira: o check-in mais recente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa mercearia, a tabela `produto` tem as colunas nome, categoria e preco. Qual consulta mostra os 5 produtos mais baratos da categoria Limpeza?",
+      "alternativas": [
+        "SELECT nome FROM produto WHERE categoria = 'Limpeza' ORDER BY preco DESC LIMIT 5;",
+        "SELECT nome FROM produto WHERE categoria = 'Limpeza' LIMIT 5 ORDER BY preco;",
+        "SELECT nome FROM produto ORDER BY preco WHERE categoria = 'Limpeza' LIMIT 5;",
+        "SELECT nome FROM produto WHERE categoria = 'Limpeza' ORDER BY preco LIMIT 5;"
+      ],
+      "correta": 3,
+      "explicacao": "Ordem correta: WHERE, ORDER BY (crescente para os mais baratos) e LIMIT. Com DESC viriam os 5 mais caros; as outras têm cláusulas fora de ordem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "or-mesma-coluna",
+      "enunciado": "Numa escola, a tabela `aluno` tem a coluna nome. Para achar os nomes que começam com A ou com B, alguém usou `WHERE nome LIKE 'A%' OR 'B%'`. O que acontece?",
+      "alternativas": [
+        "Funciona e traz os nomes com A e os com B",
+        "Traz todos os alunos, pois o OR é sempre verdadeiro",
+        "Só entram nomes com A; 'B%' sozinho não compara coluna",
+        "Só entram nomes com B, pois vale o último padrão"
+      ],
+      "correta": 2,
+      "explicacao": "Cada lado do OR precisa ser uma comparação completa: nome LIKE 'A%' OR nome LIKE 'B%'. O texto 'B%' sozinho vira 0 (falso) no MySQL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "null-order",
+      "enunciado": "Numa biblioteca, a tabela `emprestimo` tem as colunas id_emprestimo, livro e data_devolucao. Livros ainda não devolvidos têm data_devolucao NULL. No MySQL, onde ficam essas linhas em `ORDER BY data_devolucao ASC`?",
+      "alternativas": [
+        "No fim da lista",
+        "Em posição aleatória",
+        "Não aparecem no resultado",
+        "No começo da lista"
+      ],
+      "correta": 3,
+      "explicacao": "No MySQL, NULL é tratado como menor que qualquer valor: aparece primeiro no ASC e por último no DESC."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `produto` tem as colunas nome e preco. Um produto de preço exatamente 10 aparece em `WHERE preco NOT BETWEEN 10 AND 20`?",
+      "alternativas": [
+        "Não: 10 faz parte do intervalo e o NOT o exclui",
+        "Sim, pois 10 está fora do intervalo",
+        "Sim, pois o BETWEEN não inclui as pontas",
+        "Dá erro, pois NOT não combina com BETWEEN"
+      ],
+      "correta": 0,
+      "explicacao": "BETWEEN 10 AND 20 inclui o 10. NOT BETWEEN traz só o que está fora: menor que 10 ou maior que 20."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `produto` tem preços que vão de 5 a 80 reais. Quantas linhas retorna `SELECT * FROM produto WHERE preco BETWEEN 50 AND 10;`?",
+      "alternativas": [
+        "As de preço entre 10 e 50, pois a ordem não importa",
+        "Nenhuma: nenhum preço é >= 50 e <= 10 ao mesmo tempo",
+        "Todas as linhas da tabela",
+        "Só as de preço exatamente 10 ou 50"
+      ],
+      "correta": 1,
+      "explicacao": "BETWEEN a AND b equivale a >= a AND <= b. Com o menor valor no fim, a condição é impossível e nada volta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "virgula-faltando",
+      "enunciado": "Numa loja, a tabela `produto` tem as colunas id_produto, nome e preco. O que acontece em `SELECT nome preco FROM produto;` (faltou a vírgula)?",
+      "alternativas": [
+        "Mostra as colunas nome e preco normalmente",
+        "Dá erro de sintaxe e nada aparece",
+        "Mostra só a coluna nome, com o cabeçalho preco",
+        "Mostra só a coluna preco"
+      ],
+      "correta": 2,
+      "explicacao": "O AS é opcional: nome preco é lido como nome AS preco. Aparece uma só coluna, com os nomes, mas com o título preco."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a coluna bairro da tabela `cliente` tem estes valores: Centro, NULL, Centro, NULL, Jardim. Quantas linhas retorna `SELECT DISTINCT bairro FROM cliente;`?",
+      "alternativas": [
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "correta": 1,
+      "explicacao": "O DISTINCT trata todos os NULL como um valor só. Sobram Centro, NULL e Jardim: 3 linhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a tabela `aluno` (nome, nota) tem: (Carla, 8), (Bruno, 9), (Ana, 9), (Davi, 10). Em que ordem os nomes aparecem em `SELECT nome FROM aluno ORDER BY nota DESC, nome ASC;`?",
+      "alternativas": [
+        "Davi, Ana, Bruno, Carla",
+        "Davi, Bruno, Ana, Carla",
+        "Carla, Ana, Bruno, Davi",
+        "Ana, Bruno, Carla, Davi"
+      ],
+      "correta": 0,
+      "explicacao": "Primeiro pela nota, da maior para a menor (10, 9, 9, 8). Ana e Bruno empatam com 9 e são desempatados pelo nome em ordem alfabética."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa papelaria, a tabela `produto` tem as colunas id_produto, nome e preco. Compare `SELECT nome FROM produto WHERE nome LIKE 'Cad%';` com `SELECT nome FROM produto WHERE nome LIKE '%ão';`.\n\nNa sua resposta:\n1. diga o que cada consulta traz;\n2. dê um exemplo de nome que apareceria em cada uma.",
+      "respostasAceitas": [
+        "A primeira traz nomes que começam com Cad (ex.: Caderno, Caderneta). A segunda traz nomes que terminam em ão (ex.: Cartão, Papelão). O % fica do lado que pode ter qualquer coisa."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) começa com Cad / termina em ão; 2) exemplos coerentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja com 50 mil vendas na tabela `venda` (id_venda, data_venda, cliente, valor), um funcionário roda `SELECT * FROM venda;` e procura na tela as vendas de um cliente. Outro roda `SELECT * FROM venda WHERE cliente = 'Joana Lima';`.\n\nNa sua resposta:\n1. diga o que muda no resultado da segunda consulta;\n2. explique por que usar o WHERE é melhor.",
+      "respostasAceitas": [
+        "A segunda traz só as vendas da Joana Lima, e não as 50 mil. O WHERE deixa o banco filtrar: o resultado é menor, mais rápido de ver e de transferir, e não há risco de deixar passar alguma linha procurando a olho."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só as linhas da cliente; 2) menos dados, mais rápido, sem erro de procura manual."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, o aluno é aprovado com nota 6 ou mais. A tabela `aluno` tem as colunas id_aluno, nome e nota. O professor listou os aprovados com `SELECT nome FROM aluno WHERE nota > 6;`.\n\nNa sua resposta:\n1. diga quais alunos ficam de fora da lista por engano;\n2. explique qual operador deveria ser usado e por quê.",
+      "respostasAceitas": [
+        "Ficam de fora os alunos com nota exatamente 6, que também foram aprovados, porque > é só maior que. O certo é >= (maior ou igual), que inclui o 6."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) os de nota 6; 2) usar >=."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, a tabela `cliente` tem as colunas id_cliente, nome, telefone e cidade. Explique, em palavras simples para o gerente, o que mostra `SELECT nome, telefone FROM cliente WHERE cidade = 'Campinas' ORDER BY nome;`.\n\nNa sua resposta:\n1. diga quais clientes aparecem;\n2. diga quais informações aparecem de cada um;\n3. diga em que ordem a lista vem.",
+      "respostasAceitas": [
+        "Aparecem só os clientes de Campinas, mostrando o nome e o telefone de cada um, em ordem alfabética pelo nome (A a Z)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) clientes de Campinas; 2) nome e telefone; 3) alfabética crescente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, a tabela `cliente` tem as colunas id_cliente, nome, email e whatsapp. Para uma campanha por e-mail, o marketing usou `SELECT nome, email FROM cliente WHERE email IS NOT NULL;`.\n\nNa sua resposta:\n1. diga o que a consulta traz;\n2. explique por que esse filtro é útil para a campanha.",
+      "respostasAceitas": [
+        "Traz o nome e o e-mail só dos clientes que têm e-mail preenchido. Assim a lista não tem clientes sem e-mail, para quem a mensagem não poderia ser enviada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) clientes com e-mail informado; 2) evita linhas inúteis na campanha."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "null-significado",
+      "enunciado": "Numa academia, a tabela `aluno` tem as colunas id_aluno, nome e peso. Alguns alunos estão com peso NULL. Um estagiário disse: \"NULL é a mesma coisa que zero\".\n\nNa sua resposta:\n1. explique o que NULL significa;\n2. diga por que NULL não é o mesmo que 0 nem que um texto vazio.",
+      "respostasAceitas": [
+        "NULL quer dizer que não há valor informado (desconhecido). Zero é um valor (peso 0) e texto vazio também é um valor (''). NULL é a ausência de valor, por isso se testa com IS NULL e não com = 0."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ausência/desconhecido; 2) 0 e '' são valores, NULL não."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa clínica, a tabela `paciente` tem as colunas id_paciente e nome. Um colega diz que `SELECT * FROM paciente WHERE nome LIKE 'Ana';` e `SELECT * FROM paciente WHERE nome = 'Ana';` trazem o mesmo resultado.\n\nNa sua resposta:\n1. explique por que o colega tem razão;\n2. diga o que precisaria mudar no LIKE para trazer também Ana Paula e Ana Clara.",
+      "respostasAceitas": [
+        "Sem % nem _, o LIKE não tem curinga e compara o texto inteiro, igual ao =. Para trazer nomes que começam com Ana, é preciso pôr % no fim do padrão ('Ana%')."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sem curinga, LIKE = igualdade; 2) acrescentar % no fim."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, a tabela `cliente` tem as colunas id_cliente, nome e cidade. Há duas clientes chamadas Júlia Rocha, uma de Santos e outra de Campinas. A consulta `SELECT DISTINCT nome, cidade FROM cliente;` mostrou o nome Júlia Rocha duas vezes.\n\nNa sua resposta:\n1. explique por que o nome apareceu duas vezes mesmo com DISTINCT;\n2. diga em que caso o DISTINCT juntaria as duas linhas.",
+      "respostasAceitas": [
+        "Com duas colunas, o DISTINCT compara a linha inteira (nome + cidade). As linhas são diferentes porque as cidades são diferentes. Ele só juntaria se nome e cidade fossem iguais nas duas, ou se a consulta mostrasse só o nome."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) DISTINCT vale para a combinação de colunas; 2) só junta quando todas as colunas se repetem."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num hotel, a tabela `reserva` (id_reserva, hospede, quarto, checkout) tem: (1, Lia, 101, 2026-05-02), (2, Rui, 205, NULL), (3, Edu, 102, 2026-05-01), (4, Bia, 301, NULL), (5, Gil, 103, 2026-05-03). checkout NULL quer dizer que o hóspede ainda está no hotel. Veja `SELECT hospede, quarto FROM reserva WHERE checkout IS NULL ORDER BY quarto DESC;`.\n\nNa sua resposta:\n1. diga quais linhas aparecem e em que ordem;\n2. explique o que esse resultado significa para a recepção.",
+      "respostasAceitas": [
+        "Aparecem Bia (301) e depois Rui (205), em ordem decrescente de quarto. Significa que esses dois hóspedes ainda não fizeram checkout, ou seja, estão hospedados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Bia 301, Rui 205; 2) hóspedes que ainda estão no hotel."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa academia, a tabela `aluno` (nome, plano, mensalidade) tem: (Ivo, Mensal, 120), (Tati, Anual, 90), (Leo, Trimestral, 100), (Nina, Mensal, 120), (Caio, Anual, 90). Veja `SELECT nome, mensalidade FROM aluno WHERE plano IN ('Anual', 'Trimestral') ORDER BY mensalidade DESC, nome;`.\n\nNa sua resposta:\n1. diga quais alunos aparecem e em que ordem;\n2. explique como foi decidida a ordem entre Tati e Caio.",
+      "respostasAceitas": [
+        "Aparecem Leo (100), Caio (90) e Tati (90). Ivo e Nina ficam fora por serem do plano Mensal. Tati e Caio empatam na mensalidade, então a segunda coluna (nome, crescente) desempata: Caio vem antes de Tati."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Leo, Caio, Tati; 2) empate na mensalidade resolvido pelo nome."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa padaria, a tabela `produto` tem as colunas nome e preco. Um aluno achou que `SELECT nome, preco FROM produto ORDER BY preco;` mostraria só os produtos baratos.\n\nNa sua resposta:\n1. explique o que essa consulta realmente mostra;\n2. diga qual cláusula serve para escolher só alguns produtos e qual serve para ordenar.",
+      "respostasAceitas": [
+        "Mostra todos os produtos, só que ordenados do mais barato para o mais caro. O ORDER BY só ordena; quem escolhe as linhas (filtra) é o WHERE, por exemplo um limite de preço."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) todos, em ordem crescente de preço; 2) WHERE filtra, ORDER BY ordena."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num cinema, a tabela `filme` tem as colunas id_filme, titulo e duracao (em minutos). Veja `SELECT titulo, duracao / 60 AS horas FROM filme WHERE duracao > 120;`.\n\nNa sua resposta:\n1. diga quais filmes aparecem;\n2. explique o que aparece na coluna horas;\n3. diga se a coluna duracao muda na tabela.",
+      "respostasAceitas": [
+        "Aparecem os filmes com mais de 120 minutos (mais de 2 horas). A coluna horas mostra a duração dividida por 60, isto é, em horas (ex.: 150 min → 2,5). A tabela não muda: a conta só aparece no resultado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) filmes acima de 120 min; 2) duração convertida para horas; 3) nada é gravado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "apelido-where",
+      "enunciado": "Numa lanchonete, a tabela `item` tem as colunas produto, preco e qtd. A consulta `SELECT produto, preco * qtd AS total FROM item WHERE total > 100;` dá o erro \"Unknown column 'total' in 'where clause'\". Já `SELECT produto, preco * qtd AS total FROM item ORDER BY total;` funciona.\n\nNa sua resposta:\n1. explique por que o WHERE não reconhece o apelido total;\n2. explique por que o ORDER BY reconhece;\n3. diga o que pode ser usado no WHERE no lugar de total.",
+      "respostasAceitas": [
+        "O WHERE é processado antes do SELECT montar as colunas, então o apelido total ainda não existe. O ORDER BY é processado depois do SELECT, por isso já conhece o apelido. No WHERE, repete-se a conta: preco * qtd > 100."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) WHERE vem antes do SELECT na execução; 2) ORDER BY vem depois; 3) repetir a expressão preco * qtd."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, a tabela `venda` tem as colunas id_venda, valor e data_hora (DATETIME, com data e hora). Para as vendas de janeiro, alguém usou `WHERE data_hora BETWEEN '2026-01-01' AND '2026-01-31'`. Uma venda feita em 31/01/2026 às 15h não apareceu.\n\nNa sua resposta:\n1. explique por que essa venda ficou de fora;\n2. diga como ajustar o limite final para pegar o dia 31 inteiro.",
+      "respostasAceitas": [
+        "Numa coluna DATETIME, '2026-01-31' vale 31/01 à meia-noite (00:00:00); a venda das 15h é maior que esse limite e fica fora. Dá para usar data_hora >= '2026-01-01' AND data_hora < '2026-02-01', ou pôr o fim como '2026-01-31 23:59:59'."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a data sem hora vira 00:00:00; 2) usar < primeiro dia de fevereiro ou 23:59:59."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num hotel, a tabela `quarto` tem a coluna numero do tipo VARCHAR (texto). Os quartos são 1, 2, 10, 11 e 20. A consulta `SELECT numero FROM quarto ORDER BY numero;` mostrou: 1, 10, 11, 2, 20.\n\nNa sua resposta:\n1. explique por que a ordem saiu assim;\n2. diga o que deveria mudar na coluna para a ordem ser 1, 2, 10, 11, 20.",
+      "respostasAceitas": [
+        "Como a coluna é texto, a ordenação é alfabética, caractere por caractere: '10' vem antes de '2' porque '1' vem antes de '2'. A coluna deveria ser numérica (INT) para ordenar pelo valor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ordem de texto compara caractere a caractere; 2) usar tipo numérico."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes operadores significa \"menor ou igual\" no MySQL?",
+      "alternativas": [
+        "=<",
+        "<=",
+        "<>",
+        "!<"
+      ],
+      "correta": 1,
+      "explicacao": "O operador é <= (primeiro o sinal de menor, depois o igual). <> é diferente; =< e !< não existem no MySQL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa oficina, a tabela `veiculo` tem 6 colunas e 40 linhas. O que mostra `SELECT * FROM veiculo;`?",
+      "alternativas": [
+        "40 colunas e 6 linhas",
+        "1 coluna e 40 linhas",
+        "6 colunas e 1 linha",
+        "6 colunas e 40 linhas"
+      ],
+      "correta": 3,
+      "explicacao": "O * traz todas as colunas (6) e, sem WHERE, todas as linhas (40)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num salão de beleza, a tabela `servico` tem as colunas id_servico, nome e preco. Qual é o título da segunda coluna no resultado de `SELECT nome, preco AS valor FROM servico;`?",
+      "alternativas": [
+        "preco",
+        "preco AS valor",
+        "valor",
+        "servico.preco"
+      ],
+      "correta": 2,
+      "explicacao": "O apelido definido com AS substitui o nome da coluna no cabeçalho do resultado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, a tabela `livro` tem as colunas id_livro, titulo e ano. Como aparecem os títulos em `SELECT titulo FROM livro ORDER BY titulo ASC;`?",
+      "alternativas": [
+        "Em ordem alfabética, de Z a A",
+        "Em ordem alfabética, de A a Z",
+        "Do livro mais novo para o mais antigo",
+        "Na ordem do id_livro"
+      ],
+      "correta": 1,
+      "explicacao": "ASC é crescente; para texto, isso é a ordem alfabética de A a Z."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa transportadora, a tabela `motorista` tem as colunas id_motorista, nome e cidade. O que traz `SELECT nome FROM motorista WHERE cidade = 'Recife';`?",
+      "alternativas": [
+        "O nome dos motoristas que moram em Recife",
+        "Todos os motoristas, com os de Recife primeiro",
+        "A cidade de cada motorista cadastrado",
+        "Os motoristas de todas as cidades, menos Recife"
+      ],
+      "correta": 0,
+      "explicacao": "O WHERE deixa só as linhas com cidade igual a Recife, e o SELECT mostra a coluna nome."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No operador LIKE, qual caractere é o curinga que vale \"qualquer quantidade de caracteres\"?",
+      "alternativas": [
+        "*",
+        "?",
+        "_",
+        "%"
+      ],
+      "correta": 3,
+      "explicacao": "No LIKE, % vale qualquer quantidade (inclusive nenhum) e _ vale exatamente um. * e ? não são curingas do LIKE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de uniformes, a tabela `camiseta` tem as colunas id_camiseta, cor e tamanho. Qual WHERE traz as camisetas dos tamanhos P, M ou G?",
+      "alternativas": [
+        "WHERE tamanho BETWEEN 'P' AND 'G'",
+        "WHERE tamanho = 'P', 'M', 'G'",
+        "WHERE tamanho IN ('P', 'M', 'G')",
+        "WHERE tamanho LIKE 'P M G'"
+      ],
+      "correta": 2,
+      "explicacao": "IN compara com uma lista de valores. O = aceita um valor só, e BETWEEN com letras compararia pela ordem alfabética."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que o operador NOT faz numa condição do WHERE?",
+      "alternativas": [
+        "Junta duas condições obrigatórias",
+        "Apaga as linhas que não passam no filtro",
+        "Testa se a coluna está vazia (NULL)",
+        "Inverte a condição: o verdadeiro vira falso"
+      ],
+      "correta": 3,
+      "explicacao": "NOT inverte o resultado da condição. Quem junta condições obrigatórias é o AND; quem testa NULL é o IS NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual cláusula do MySQL limita a quantidade de linhas mostradas no resultado?",
+      "alternativas": [
+        "LIMIT",
+        "WHERE",
+        "DISTINCT",
+        "TOP"
+      ],
+      "correta": 0,
+      "explicacao": "LIMIT define quantas linhas aparecem. TOP é de outro banco de dados, não do MySQL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa empresa, a tabela `funcionario` tem as colunas nome e salario (mensal). O que mostra `SELECT nome, salario * 12 AS anual FROM funcionario;`?",
+      "alternativas": [
+        "O salário de apenas 12 funcionários",
+        "O salário mensal vezes 12, para cada um",
+        "Só quem ganha 12 vezes mais que os outros",
+        "O salário dividido em 12 parcelas"
+      ],
+      "correta": 1,
+      "explicacao": "A conta é feita em cada linha: o salário mensal multiplicado por 12 aparece na coluna anual."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "null-significado",
+      "enunciado": "Numa clínica, a coluna alergia da tabela `paciente` está NULL para alguns pacientes. O que esse NULL quer dizer?",
+      "alternativas": [
+        "Que o valor da alergia é zero",
+        "Que a coluna tem um texto vazio",
+        "Que não há valor informado",
+        "Que o paciente foi apagado"
+      ],
+      "correta": 2,
+      "explicacao": "NULL é ausência de valor (não informado/desconhecido). Não é zero nem texto vazio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa consulta com WHERE, ORDER BY e LIMIT, qual dessas cláusulas é escrita por último?",
+      "alternativas": [
+        "LIMIT",
+        "ORDER BY",
+        "WHERE",
+        "FROM"
+      ],
+      "correta": 0,
+      "explicacao": "A ordem é SELECT … FROM … WHERE … ORDER BY … LIMIT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa sorveteria, a tabela `sabor` (nome, preco) tem: (Morango, 8), (Chocolate, 10), (Pistache, 14), (Limão, 7). Quantas linhas retorna `SELECT nome FROM sabor WHERE preco > 8;`?",
+      "alternativas": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "correta": 1,
+      "explicacao": "Só Chocolate (10) e Pistache (14) custam mais que 8. Morango custa exatamente 8 e fica de fora com >."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a tabela `aluno` tem as colunas id_aluno, nome e turma. O que traz `SELECT nome FROM aluno WHERE turma <> '2B';`?",
+      "alternativas": [
+        "Só os alunos da turma 2B",
+        "Os alunos que não são da turma 2B",
+        "Só os alunos sem turma definida",
+        "Todos os alunos, com a 2B no fim"
+      ],
+      "correta": 1,
+      "explicacao": "<> é \"diferente de\": entram os alunos de todas as outras turmas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca, a tabela `emprestimo` (id, leitor, data_devolucao) tem: (1, Ana, 2026-04-10), (2, Beto, NULL), (3, Caio, 2026-04-12), (4, Duda, NULL). Quais leitores aparecem em `SELECT leitor FROM emprestimo WHERE data_devolucao IS NOT NULL;`?",
+      "alternativas": [
+        "Nenhum leitor",
+        "Beto e Duda",
+        "Ana, Beto, Caio e Duda",
+        "Ana e Caio"
+      ],
+      "correta": 3,
+      "explicacao": "IS NOT NULL deixa passar só as linhas com data preenchida: Ana e Caio (os que já devolveram)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola de dança, a coluna nome da tabela `aluno` tem: Rita, Bruno, Sofia, Hugo e Clara. Quantos nomes aparecem em `WHERE nome LIKE '%o%'`?",
+      "alternativas": [
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "correta": 1,
+      "explicacao": "'%o%' quer dizer \"tem a letra o em qualquer posição\": Bruno, Sofia e Hugo. Rita e Clara não têm o."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "limit-deslocamento",
+      "enunciado": "Numa loja, a tabela `produto` tem as colunas nome e preco (todos os preços diferentes). O que mostra `SELECT nome FROM produto ORDER BY preco LIMIT 5, 1;`?",
+      "alternativas": [
+        "Os 5 produtos mais baratos",
+        "Só o 5º produto mais barato",
+        "Só o 6º produto mais barato",
+        "Do 1º ao 5º produto mais barato"
+      ],
+      "correta": 2,
+      "explicacao": "LIMIT 5, 1 pula 5 linhas e mostra 1: fica só a 6ª da lista ordenada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, a tabela `aluno` tem as colunas nome e ativo, que vale sempre 0 ou 1 (nunca NULL). Qual WHERE é equivalente a `WHERE NOT ativo = 1`?",
+      "alternativas": [
+        "WHERE ativo = 1",
+        "WHERE ativo = 0",
+        "WHERE ativo IS NULL",
+        "WHERE ativo <> 0"
+      ],
+      "correta": 1,
+      "explicacao": "Se só existem 0 e 1, \"não é 1\" é o mesmo que \"é 0\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "data-comparacao",
+      "enunciado": "Numa transportadora, a tabela `entrega` tem as colunas id_entrega, cidade e data_entrega (DATE). O que traz `WHERE data_entrega >= '2026-06-01'`?",
+      "alternativas": [
+        "Entregas de 1º/06/2026 em diante",
+        "Entregas feitas antes de junho de 2026",
+        "Só as entregas de 1º/06/2026",
+        "Entregas de junho, só até o dia 30"
+      ],
+      "correta": 0,
+      "explicacao": ">= inclui o próprio dia e tudo o que vem depois, sem limite final."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de games, a tabela `jogo` (titulo, preco) tem: (Kart Mania, 49.90), (Mundo Aberto, 100.00), (Liga de Heróis, 150.00), (Quebra-Cuca, 99.90), (Estrela Nova, 200.00). Quantas linhas retorna `WHERE preco BETWEEN 100 AND 150`?",
+      "alternativas": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "correta": 1,
+      "explicacao": "Entram Mundo Aberto (100) e Liga de Heróis (150), pois o BETWEEN inclui as pontas. Quebra-Cuca (99,90) fica abaixo de 100."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa doceria, a tabela `produto` tem as colunas nome, preco e custo. O que traz `SELECT nome FROM produto WHERE preco - custo > 20;`?",
+      "alternativas": [
+        "Tira 20 do preço de cada produto",
+        "Os produtos com preço maior que 20",
+        "Os produtos com custo maior que 20",
+        "Os produtos com lucro maior que 20"
+      ],
+      "correta": 3,
+      "explicacao": "preco - custo é o lucro de cada produto; o filtro deixa só os que dão mais de 20 de lucro. Nada é alterado na tabela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel, a tabela `quarto` tem as colunas numero, andar e diaria. De quais andares são os quartos em `WHERE andar IN (1, 3)`?",
+      "alternativas": [
+        "Do 1º ao 3º andar",
+        "Só do 2º andar",
+        "Só do 1º e do 3º andar",
+        "De todos, menos o 1º e o 3º"
+      ],
+      "correta": 2,
+      "explicacao": "IN é uma lista de valores, não um intervalo: o 2º andar não entra."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, a tabela `paciente` tem as colunas nome e convenio. Qual consulta lista, em ordem alfabética, os pacientes sem convênio (convenio NULL)?",
+      "alternativas": [
+        "SELECT nome FROM paciente WHERE convenio IS NOT NULL ORDER BY nome;",
+        "SELECT nome FROM paciente WHERE convenio = NULL ORDER BY nome;",
+        "SELECT nome FROM paciente ORDER BY nome WHERE convenio IS NULL;",
+        "SELECT nome FROM paciente WHERE convenio IS NULL ORDER BY nome;"
+      ],
+      "correta": 3,
+      "explicacao": "NULL se testa com IS NULL, e o WHERE vem antes do ORDER BY. = NULL não traz nada; IS NOT NULL traz quem tem convênio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `cliente` tem as colunas nome e cidade. O que mostra `SELECT DISTINCT cidade FROM cliente ORDER BY cidade;`?",
+      "alternativas": [
+        "Cada cidade uma vez, em ordem alfabética",
+        "Todas as cidades, repetidas, em ordem",
+        "Só a primeira cidade da lista",
+        "Os nomes dos clientes, separados por cidade"
+      ],
+      "correta": 0,
+      "explicacao": "DISTINCT tira as repetições e ORDER BY coloca em ordem crescente (A a Z)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a tabela `aluno` tem as colunas nome e nota. Em `SELECT nome, nota + 1 AS nota_com_bonus FROM aluno WHERE nota < 6;`, o filtro do WHERE usa qual nota?",
+      "alternativas": [
+        "A nota com bônus, calculada no SELECT",
+        "A nota original, gravada na tabela",
+        "As duas: a original e a com bônus",
+        "Nenhuma: a consulta dá erro"
+      ],
+      "correta": 1,
+      "explicacao": "O WHERE olha a coluna nota da tabela. O apelido nota_com_bonus só existe no resultado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa papelaria, a tabela `produto` tem as colunas nome e preco. Qual WHERE traz os preços entre 10 e 20, SEM incluir 10 e 20?",
+      "alternativas": [
+        "WHERE preco >= 10 AND preco <= 20",
+        "WHERE preco BETWEEN 10 AND 20",
+        "WHERE preco > 10 AND preco < 20",
+        "WHERE preco > 10 OR preco < 20"
+      ],
+      "correta": 2,
+      "explicacao": "Para excluir as pontas, usam-se > e <. BETWEEN e >=/<= incluem 10 e 20; com OR, qualquer preço passaria."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa oficina, a tabela `veiculo` tem as colunas placa, modelo e ano. O que mostra `SELECT placa, modelo FROM veiculo WHERE ano >= 2020 AND modelo LIKE '%Flex%' ORDER BY ano DESC;`?",
+      "alternativas": [
+        "De 2020 em diante e com Flex no modelo, do mais novo ao mais antigo",
+        "De 2020 em diante ou com Flex no modelo, do mais novo ao mais antigo",
+        "Anteriores a 2020 e com Flex no modelo, do mais novo ao mais antigo",
+        "De 2020 em diante e com Flex no modelo, do mais antigo ao mais novo"
+      ],
+      "correta": 0,
+      "explicacao": "AND exige as duas condições (ano >= 2020 e Flex em qualquer parte do modelo), e DESC ordena do ano maior para o menor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `produto` tem as colunas id_produto, nome e preco, nessa ordem. Em que ordem as colunas aparecem no resultado de `SELECT preco, nome FROM produto;`?",
+      "alternativas": [
+        "nome e depois preco, como estão na tabela",
+        "preco e depois nome, como escrito no SELECT",
+        "Em ordem alfabética do nome das colunas",
+        "Numa ordem que muda a cada execução"
+      ],
+      "correta": 1,
+      "explicacao": "As colunas saem na ordem em que foram listadas no SELECT, não na ordem da tabela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a tabela `cliente` tem as colunas nome e cidade. Por que `SELECT nome, DISTINCT cidade FROM cliente;` dá erro?",
+      "alternativas": [
+        "A coluna cidade precisaria estar entre aspas",
+        "DISTINCT só funciona com colunas numéricas, não com texto",
+        "Falta um ORDER BY cidade no final do comando",
+        "DISTINCT vem logo após SELECT e vale para todas as colunas"
+      ],
+      "correta": 3,
+      "explicacao": "DISTINCT não se aplica a uma coluna só: ele fica logo depois do SELECT e elimina linhas repetidas considerando todas as colunas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, a coluna complemento da tabela `cliente` tem '' (texto vazio) em algumas linhas e NULL em outras. O que traz `WHERE complemento IS NULL`?",
+      "alternativas": [
+        "As linhas com NULL e as com texto vazio",
+        "Só as linhas com texto vazio",
+        "Só as linhas com NULL",
+        "Nenhuma, pois IS NULL não serve para texto"
+      ],
+      "correta": 2,
+      "explicacao": "Texto vazio ('') é um valor; NULL é ausência de valor. IS NULL pega só as linhas NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "null-order",
+      "enunciado": "Numa transportadora, a tabela `entrega` tem as colunas id_entrega e data_entrega; entregas em andamento têm data_entrega NULL. Para achar a entrega concluída mais antiga, alguém usou `SELECT id_entrega FROM entrega ORDER BY data_entrega LIMIT 1;`. O que pode aparecer?",
+      "alternativas": [
+        "Sempre a entrega concluída mais antiga",
+        "Uma entrega em andamento: NULL vem primeiro no ASC",
+        "A entrega concluída mais recente",
+        "Nada, pois a coluna com NULL impede o ORDER BY de funcionar"
+      ],
+      "correta": 1,
+      "explicacao": "No MySQL, NULL fica antes de todos os valores no ASC. Para evitar isso, seria preciso filtrar com WHERE data_entrega IS NOT NULL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, a tabela `aluno` (nome, pontos) tem: (Rui, 50), (Ana, 80), (Teo, 65), (Lia, 90), (Gil, 70). Quais nomes aparecem em `SELECT nome FROM aluno ORDER BY pontos DESC LIMIT 1, 2;`?",
+      "alternativas": [
+        "Ana e Gil",
+        "Lia e Ana",
+        "Só Ana",
+        "Gil e Teo"
+      ],
+      "correta": 0,
+      "explicacao": "Ordem decrescente: Lia 90, Ana 80, Gil 70, Teo 65, Rui 50. LIMIT 1, 2 pula a primeira (Lia) e mostra 2: Ana e Gil."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, alguém queria os produtos com preço entre 50 e 100 e usou `WHERE preco > 50 OR preco < 100`. O que acontece?",
+      "alternativas": [
+        "Traz só os produtos entre 50 e 100",
+        "Traz só os produtos com preço acima de 100 reais",
+        "Não traz nenhum produto",
+        "Traz todos os produtos com preço preenchido"
+      ],
+      "correta": 3,
+      "explicacao": "Todo preço é maior que 50 ou menor que 100 (ou os dois), então a condição é sempre verdadeira. O certo seria AND."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "null-comparacao",
+      "enunciado": "Numa loja, a tabela `venda` (id_venda, desconto) tem: (1, 5), (2, NULL), (3, 15), (4, 0), (5, NULL). Quantas linhas retorna `SELECT id_venda FROM venda WHERE desconto < 10;`?",
+      "alternativas": [
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "correta": 0,
+      "explicacao": "Só as vendas 1 (5) e 4 (0). As de desconto NULL não entram: comparar NULL com < não dá verdadeiro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a tabela `aluno` tem a coluna nome. Qual padrão traz os nomes com exatamente 5 letras que terminam em a (como Bruna e Lívia)?",
+      "alternativas": [
+        "LIKE '_____a'",
+        "LIKE '%a'",
+        "LIKE '____a'",
+        "LIKE 'a____'"
+      ],
+      "correta": 2,
+      "explicacao": "Quatro _ (quatro letras quaisquer) + a = 5 caracteres. '%a' aceita qualquer tamanho; '_____a' tem 6 caracteres; 'a____' começa com a."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, o gerente quer ver três pedidos específicos e usou `SELECT * FROM pedido WHERE id_pedido IN (105, 230, 412);`. A tabela `pedido` tem as colunas id_pedido, cliente, data_pedido e valor.\n\nNa sua resposta:\n1. diga o que a consulta traz;\n2. explique por que o pedido 200 não aparece, mesmo estando entre 105 e 412.",
+      "respostasAceitas": [
+        "Traz todas as colunas só dos pedidos 105, 230 e 412. O IN compara com cada valor da lista, não é um intervalo; como 200 não está na lista, não aparece."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só os três pedidos; 2) IN é lista, não intervalo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa clínica, um estagiário tem medo de rodar `SELECT nome, telefone FROM paciente WHERE cidade = 'Olinda';` no banco porque \"pode estragar os dados\". A tabela `paciente` tem as colunas id_paciente, nome, telefone e cidade.\n\nNa sua resposta:\n1. explique o que essa consulta faz;\n2. diga se ela altera ou apaga algum dado e por quê.",
+      "respostasAceitas": [
+        "Ela mostra o nome e o telefone dos pacientes de Olinda. Não altera nem apaga nada: o SELECT só lê os dados; quem altera são comandos como UPDATE e DELETE."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) lista nome e telefone dos pacientes de Olinda; 2) SELECT só consulta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na biblioteca da escola, a consulta `SELECT titulo FROM livro;` (tabela `livro` com id_livro, titulo e autor) às vezes mostra os títulos numa ordem diferente da esperada.\n\nNa sua resposta:\n1. explique se um SELECT sem ORDER BY garante alguma ordem;\n2. diga o que usar para os títulos virem sempre em ordem alfabética.",
+      "respostasAceitas": [
+        "Não garante: sem ORDER BY, o banco devolve as linhas na ordem que for mais prática para ele, que pode mudar. Para ordem alfabética, usa-se ORDER BY titulo (ASC)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sem ORDER BY não há ordem garantida; 2) ORDER BY titulo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num pet shop, a tabela `pet` tem as colunas id_pet, nome, especie e id_tutor. Explique o que mostra `SELECT nome, especie FROM pet WHERE especie <> 'Gato' ORDER BY nome;`.\n\nNa sua resposta:\n1. diga quais pets aparecem;\n2. diga em que ordem eles aparecem.",
+      "respostasAceitas": [
+        "Aparecem o nome e a espécie de todos os pets que não são gatos (cães, coelhos etc.), em ordem alfabética de nome (A a Z)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) todos menos os gatos; 2) ordem alfabética pelo nome."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa padaria, a tabela `produto` tem as colunas nome, categoria e preco. Veja `SELECT nome, preco FROM produto WHERE categoria = 'Pão' AND preco BETWEEN 2 AND 5;`.\n\nNa sua resposta:\n1. diga quais produtos aparecem;\n2. responda se um pão de exatamente 5 reais aparece e por quê;\n3. responda se um bolo de 3 reais aparece.",
+      "respostasAceitas": [
+        "Aparecem os produtos da categoria Pão com preço de 2 a 5 reais. O pão de 5 aparece, porque o BETWEEN inclui as pontas. O bolo de 3 não aparece, porque não é da categoria Pão (o AND exige as duas condições)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) pães entre 2 e 5; 2) sim, BETWEEN inclui 5; 3) não, falha na categoria."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, a tabela `cliente` tem as colunas id_cliente, nome e cidade. Para ver os clientes de Natal e os de Recife, alguém usou `SELECT nome FROM cliente WHERE cidade = 'Natal' AND cidade = 'Recife';` e não veio nenhuma linha.\n\nNa sua resposta:\n1. explique por que o resultado veio vazio;\n2. diga qual operador lógico deveria ser usado.",
+      "respostasAceitas": [
+        "Cada cliente tem uma só cidade; com AND, a cidade teria de ser Natal e Recife ao mesmo tempo, o que nunca acontece. O certo é OR (ou IN com as duas cidades)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) AND exige as duas ao mesmo tempo, impossível; 2) OR ou IN."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa farmácia, a tabela `medicamento` tem as colunas id_medicamento, nome e preco. Veja `SELECT nome FROM medicamento WHERE nome LIKE '%vitamina%';`.\n\nNa sua resposta:\n1. diga quais nomes a consulta encontra;\n2. explique por que o % aparece dos dois lados da palavra.",
+      "respostasAceitas": [
+        "Encontra os nomes que têm a palavra vitamina em qualquer posição (ex.: Vitamina C, Complexo vitamina B). O % antes aceita qualquer começo e o % depois aceita qualquer final; sem um deles, a palavra teria de estar no início ou no fim."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nomes que contêm vitamina; 2) % antes e depois = qualquer posição."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num cinema, a tabela `sessao` (filme, sala, horario, preco) tem: (Aventura no Gelo, 1, 14:00, 18), (Noite Sombria, 2, 21:00, 28), (Robôs do Futuro, 1, 19:00, 25), (Risos em Família, 3, 16:00, 20), (Noite Sombria, 3, 23:00, 22). Veja `SELECT filme, horario FROM sessao WHERE sala = 1 OR preco < 21 ORDER BY horario;`.\n\nNa sua resposta:\n1. diga quais sessões aparecem e em que ordem;\n2. explique por que Aventura no Gelo aparece uma vez só, mesmo atendendo às duas condições.",
+      "respostasAceitas": [
+        "Aparecem Aventura no Gelo (14:00), Risos em Família (16:00) e Robôs do Futuro (19:00). Cada linha da tabela é avaliada uma vez: se atende a uma ou às duas condições do OR, entra uma única vez."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Aventura 14h, Risos 16h, Robôs 19h; 2) o OR avalia cada linha uma vez, sem duplicar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa oficina, a tabela `ordem_servico` (id_os, placa, valor, status) tem: (1, ABC1D23, 350, Aberta), (2, XYZ9K88, 1200, Fechada), (3, QWE4R56, 800, Aberta), (4, JKL7M90, 500, Aberta), (5, MNO2P34, 800, Fechada). Veja `SELECT id_os, valor FROM ordem_servico WHERE status = 'Aberta' AND valor BETWEEN 400 AND 800 ORDER BY valor DESC;`.\n\nNa sua resposta:\n1. diga quais linhas aparecem e em que ordem;\n2. explique por que as ordens 1 e 5 não aparecem.",
+      "respostasAceitas": [
+        "Aparecem a ordem 3 (800) e depois a 4 (500). A ordem 1 está aberta mas custa 350, abaixo de 400. A ordem 5 está no intervalo de valor, mas está Fechada; com AND, as duas condições precisam valer."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 3 (800), 4 (500); 2) a 1 falha no valor e a 5 no status."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, a tabela `produto` tem as colunas nome e preco (nenhum preço é NULL). Veja `SELECT nome FROM produto WHERE NOT (preco > 100);`.\n\nNa sua resposta:\n1. diga quais produtos a consulta traz;\n2. explique se um produto de exatamente 100 reais aparece;\n3. diga uma forma de escrever o mesmo filtro sem NOT.",
+      "respostasAceitas": [
+        "Traz os produtos que não custam mais de 100, ou seja, de 100 para baixo. O de 100 aparece, porque 100 > 100 é falso e o NOT transforma em verdadeiro. Sem NOT: preco <= 100."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) preço até 100; 2) sim, 100 entra; 3) preco <= 100."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, a tabela `aluno` tem as colunas id_aluno, nome e nota. Alguns alunos foram apagados, então os ids não são seguidos (1, 4, 7, 8…). Compare `SELECT nome FROM aluno ORDER BY id_aluno LIMIT 3;` com `SELECT nome FROM aluno WHERE id_aluno <= 3;`.\n\nNa sua resposta:\n1. diga o que cada consulta traz;\n2. explique por que elas dão resultados diferentes.",
+      "respostasAceitas": [
+        "A primeira traz os 3 primeiros alunos em ordem de id (ids 1, 4 e 7). A segunda traz só quem tem id até 3, que aqui é só o aluno de id 1. O LIMIT conta linhas do resultado; o WHERE filtra pelo valor da coluna."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) LIMIT = 3 linhas; WHERE = ids até 3; 2) quantidade de linhas × valor da coluna."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa academia, a tabela `aluno` tem as colunas id_aluno, nome e idade. A academia dá desconto para menores de idade e para idosos e usa `SELECT nome, idade FROM aluno WHERE idade < 18 OR idade >= 60;`.\n\nNa sua resposta:\n1. diga quais alunos aparecem;\n2. responda se um aluno de 18 anos aparece;\n3. responda se um aluno de 60 anos aparece.",
+      "respostasAceitas": [
+        "Aparecem os alunos com menos de 18 anos e os com 60 anos ou mais. O de 18 não aparece, porque < 18 não inclui o 18. O de 60 aparece, porque >= inclui o 60."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) menores de 18 e de 60 para cima; 2) não; 3) sim."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa academia, a tabela `aluno` (nome, plano, idade) tem: (Rafa, Mensal, 16), (Gabi, Anual, 15), (Juca, Anual, 35), (Vera, Trimestral, 65), (Otto, Mensal, 70). Veja `SELECT nome FROM aluno WHERE NOT plano = 'Mensal' AND (idade < 18 OR idade > 60);`.\n\nNa sua resposta:\n1. diga quais nomes aparecem;\n2. explique por que Otto e Juca ficam de fora;\n3. diga o que mudaria no resultado se os parênteses fossem retirados.",
+      "respostasAceitas": [
+        "Aparecem Gabi e Vera. Otto fica fora por ser do plano Mensal; Juca não é Mensal, mas tem 35 anos. Sem parênteses, o AND seria avaliado antes do OR: (não Mensal E idade < 18) OU idade > 60, e Otto (70 anos) passaria a aparecer."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Gabi e Vera; 2) Otto pelo plano, Juca pela idade; 3) sem parênteses Otto entra."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "null-comparacao",
+      "enunciado": "Numa assistência técnica, a tabela `chamado` tem as colunas id_chamado, cliente e status. Chamados recém-abertos ficam com status NULL até alguém fazer a triagem. O relatório de \"chamados não concluídos\" usa `SELECT * FROM chamado WHERE status <> 'Concluído';` e os recém-abertos não aparecem.\n\nNa sua resposta:\n1. explique por que os chamados com status NULL ficaram de fora;\n2. explique o que precisa ser acrescentado no filtro para incluí-los.",
+      "respostasAceitas": [
+        "Comparar NULL com <> não dá verdadeiro nem falso, dá desconhecido, e o WHERE só deixa passar o que é verdadeiro. É preciso acrescentar a condição de NULL com OR: status <> 'Concluído' OR status IS NULL."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) comparação com NULL é desconhecida; 2) OR status IS NULL."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Consultas (SELECT, WHERE e ORDER BY)",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "virgula-faltando",
+      "enunciado": "Numa loja, a tabela `produto` tem as colunas id_produto, nome e preco. Um aluno rodou `SELECT nome preco FROM produto;` (esqueceu a vírgula) e o MySQL não deu erro: apareceu uma só coluna, com o título preco, mas cheia de nomes de produtos.\n\nNa sua resposta:\n1. explique por que o MySQL não deu erro;\n2. explique por que a coluna mostra nomes com o título preco.",
+      "respostasAceitas": [
+        "No MySQL o AS é opcional: nome preco foi entendido como nome AS preco. Então a consulta mostrou só a coluna nome, usando preco como apelido no cabeçalho."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) AS opcional, foi lido como apelido; 2) a coluna é nome, preco virou o título."
+    }
+  ]
+}

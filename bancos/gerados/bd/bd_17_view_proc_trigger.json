@@ -1,0 +1,2424 @@
+{
+  "nome": "Banco de Dados — VIEW, procedures, functions, triggers e eventos (a revisar)",
+  "materia": "Banco de Dados",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL, o que é uma VIEW?",
+      "alternativas": [
+        "Uma cópia física dos dados de uma tabela, atualizada toda noite",
+        "Um índice que deixa as buscas numa coluna mais rápidas",
+        "Um usuário especial do banco que só tem permissão de leitura nas tabelas",
+        "Uma consulta salva com um nome, usada como se fosse uma tabela virtual"
+      ],
+      "correta": 3,
+      "explicacao": "A view guarda só a consulta (o SELECT). Quando é consultada, o MySQL roda esse SELECT nas tabelas de origem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa padaria, foi executado:\n```sql\nCREATE VIEW vw_pao_barato AS\nSELECT nome, preco FROM produto WHERE preco < 5;\n```\nA tabela `produto` tem as colunas id_produto, nome e preco. Como a atendente consulta os pães baratos pela view?",
+      "alternativas": [
+        "CALL vw_pao_barato();",
+        "SELECT * FROM vw_pao_barato;",
+        "EXECUTE vw_pao_barato;",
+        "SHOW VIEW vw_pao_barato;"
+      ],
+      "correta": 1,
+      "explicacao": "A view é consultada como uma tabela comum, com SELECT … FROM. CALL serve para procedures."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando apaga a view `vw_relatorio_vendas`?",
+      "alternativas": [
+        "DELETE VIEW vw_relatorio_vendas;",
+        "REMOVE VIEW vw_relatorio_vendas;",
+        "DROP VIEW vw_relatorio_vendas;",
+        "TRUNCATE VIEW vw_relatorio_vendas;"
+      ],
+      "correta": 2,
+      "explicacao": "Objetos do banco são apagados com DROP. DELETE apaga linhas de tabela; TRUNCATE esvazia tabela; REMOVE não existe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca existe a view `vw_livros_disponiveis`, feita a partir da tabela `livro` (id_livro, titulo, emprestado). Onde ficam guardados os dados que a view mostra?",
+      "alternativas": [
+        "Na tabela livro; a view guarda só a consulta",
+        "Dentro da própria view, numa cópia separada",
+        "Num arquivo temporário apagado a cada login",
+        "No computador de quem executou o CREATE VIEW"
+      ],
+      "correta": 0,
+      "explicacao": "View não guarda dados. Ela guarda o SELECT e lê os dados da tabela de origem a cada consulta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve o comando `CREATE OR REPLACE VIEW`?",
+      "alternativas": [
+        "Cria uma cópia da view já existente com outro nome",
+        "Cria a view ou, se já existir, troca a consulta dela",
+        "Apaga os dados guardados na view e insere todos de novo",
+        "Troca o nome da tabela de origem usada pela view"
+      ],
+      "correta": 1,
+      "explicacao": "OR REPLACE evita o erro de 'já existe': se a view existir, a definição é substituída pela nova."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, a view `vw_pacientes_ativos` mostra as linhas da tabela `paciente` (id_paciente, nome, ativo) em que ativo = 1. Logo depois de cadastrarem um paciente novo com ativo = 1, alguém consulta a view. O que acontece?",
+      "alternativas": [
+        "Ele só aparece depois de rodar CREATE OR REPLACE VIEW",
+        "O paciente novo já aparece, pois a view roda a consulta na hora",
+        "Ele só aparece no dia seguinte, quando a view é atualizada",
+        "Ele nunca aparece, pois a view guarda os dados da criação"
+      ],
+      "correta": 1,
+      "explicacao": "Como a view não guarda dados, cada consulta lê a tabela no estado atual."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No comando `CREATE VIEW vw_turma_2a AS SELECT nome FROM aluno WHERE turma = '2A';`, qual parte define QUAIS dados a view vai mostrar?",
+      "alternativas": [
+        "O SELECT escrito depois do AS",
+        "O nome vw_turma_2a",
+        "A palavra CREATE",
+        "O ponto e vírgula do final"
+      ],
+      "correta": 0,
+      "explicacao": "Tudo depois do AS é a consulta da view: ela decide colunas e linhas que aparecem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, a secretaria deve ver só nome e turma dos alunos, sem acesso ao CPF e ao telefone, que estão na mesma tabela `aluno`. Qual recurso resolve isso de forma simples?",
+      "alternativas": [
+        "Uma VIEW com nome e turma, dando permissão só nela",
+        "Um TRIGGER que apaga o CPF depois de cada consulta",
+        "Um EVENT que esconde o CPF todas as noites",
+        "Uma FUNCTION que muda o nome da tabela aluno"
+      ],
+      "correta": 0,
+      "explicacao": "A view mostra só as colunas escolhidas; com GRANT só na view, a secretaria não enxerga o resto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que muitas equipes começam o nome das views com `vw_` (ex.: vw_clientes_vip)?",
+      "alternativas": [
+        "Porque o MySQL exige esse prefixo em toda view",
+        "Porque sem o prefixo a view sempre fica vazia",
+        "Porque o prefixo deixa a consulta da view mais rápida",
+        "Para perceber logo que o objeto é uma view, não uma tabela"
+      ],
+      "correta": 3,
+      "explicacao": "É só uma convenção de nomes, para organizar. O MySQL não exige prefixo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cinema, as tabelas `sessao` (id_sessao, id_filme, horario) e `filme` (id_filme, titulo) precisam ser vistas juntas. A consulta de uma view pode usar JOIN?",
+      "alternativas": [
+        "Não, a view só pode ler uma tabela por vez",
+        "Sim, a consulta da view pode juntar várias tabelas",
+        "Sim, mas só se as tabelas tiverem as mesmas colunas",
+        "Não, JOIN só é permitido dentro de procedures"
+      ],
+      "correta": 1,
+      "explicacao": "A view pode ter qualquer SELECT válido, inclusive com JOIN, WHERE, GROUP BY e ORDER BY."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de games, a equipe roda todo dia o mesmo SELECT longo, com JOIN de três tabelas. Qual a principal vantagem de guardar esse SELECT numa view?",
+      "alternativas": [
+        "O JOIN deixa de ser feito, porque a view já tem os dados",
+        "Os dados passam a ficar copiados e mais protegidos",
+        "Ninguém mais consegue alterar as tabelas de origem",
+        "Basta um SELECT simples na view, sem repetir a consulta longa"
+      ],
+      "correta": 3,
+      "explicacao": "A view simplifica o uso: a consulta complicada fica salva uma vez. O JOIN continua rodando a cada consulta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A view `vw_estoque_baixo` já existe no banco. O que acontece ao rodar de novo `CREATE VIEW vw_estoque_baixo AS SELECT …;` (sem OR REPLACE)?",
+      "alternativas": [
+        "Dá erro avisando que vw_estoque_baixo já existe",
+        "A view antiga é trocada pela nova sem aviso",
+        "Fica uma segunda view com o mesmo nome no banco",
+        "As duas consultas são juntadas numa view só"
+      ],
+      "correta": 0,
+      "explicacao": "Sem OR REPLACE o MySQL recusa o nome repetido. Para trocar a definição usa-se CREATE OR REPLACE VIEW (ou ALTER VIEW)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na loja, foi executado `GRANT SELECT ON loja.vw_vendas_resumo TO 'gerente'@'localhost';`. A view usa a tabela `venda`, e o gerente não tem nenhuma permissão na tabela. O que o gerente consegue fazer?",
+      "alternativas": [
+        "Consultar a view e também apagar linhas da tabela venda",
+        "Alterar a consulta da view com CREATE OR REPLACE",
+        "Consultar a view, sem ler a tabela venda diretamente",
+        "Consultar todas as tabelas e views do banco loja"
+      ],
+      "correta": 2,
+      "explicacao": "A permissão foi dada só na view. Por padrão a view roda com os direitos de quem a definiu, então o gerente vê o resultado dela e nada além."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia existe:\n```sql\nCREATE VIEW vw_total_aluno AS\nSELECT id_aluno, SUM(valor) AS total\nFROM pagamento GROUP BY id_aluno;\n```\nA tabela `pagamento` tem id_pagamento, id_aluno e valor. O que acontece com `SELECT * FROM vw_total_aluno WHERE total > 500;`?",
+      "alternativas": [
+        "Dá erro, porque view não aceita WHERE na consulta",
+        "Dá erro, porque a coluna total não existe em pagamento",
+        "Funciona, mas apaga da tabela os alunos com total menor",
+        "Funciona: a view aceita WHERE como uma tabela comum"
+      ],
+      "correta": 3,
+      "explicacao": "Para quem consulta, a view se comporta como tabela: a coluna total existe nela (é o apelido da soma) e pode ser filtrada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao rodar `SHOW FULL TABLES;` num banco que tem tabelas e views, como se diferencia uma view de uma tabela?",
+      "alternativas": [
+        "A coluna Table_type indica VIEW ou BASE TABLE",
+        "As views aparecem com um asterisco antes do nome",
+        "As views não aparecem em nenhum comando SHOW",
+        "As views aparecem com o tamanho em MB ao lado"
+      ],
+      "correta": 0,
+      "explicacao": "SHOW FULL TABLES traz a coluna Table_type, que indica se o objeto é BASE TABLE ou VIEW."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando mostra a consulta (o SELECT) usada na definição da view `vw_agenda_dia`?",
+      "alternativas": [
+        "SHOW DATA vw_agenda_dia;",
+        "SHOW CREATE VIEW vw_agenda_dia;",
+        "SELECT VIEW vw_agenda_dia;",
+        "DESCRIBE DATABASE vw_agenda_dia;"
+      ],
+      "correta": 1,
+      "explicacao": "SHOW CREATE VIEW devolve o comando completo da view. DESCRIBE vw_agenda_dia mostraria só as colunas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel, foi executado `DROP VIEW vw_hospedes_vip;`. A view lia a tabela `hospede` (id_hospede, nome, vip). O que acontece com a tabela `hospede`?",
+      "alternativas": [
+        "A tabela hospede é apagada junto com a view",
+        "Os hóspedes VIP são apagados da tabela hospede",
+        "Nada: só a view some, a tabela e os dados continuam",
+        "A tabela fica vazia, mas a estrutura continua"
+      ],
+      "correta": 2,
+      "explicacao": "Apagar a view apaga só a consulta salva. Como ela não guarda dados, nada se perde na tabela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve o `IF EXISTS` em `DROP VIEW IF EXISTS vw_promocoes;`?",
+      "alternativas": [
+        "Evitar o erro caso a view não exista",
+        "Apagar a view só se ela estiver vazia",
+        "Apagar também as tabelas de origem, se existirem",
+        "Pedir confirmação antes de apagar"
+      ],
+      "correta": 0,
+      "explicacao": "Com IF EXISTS, se a view não existir o MySQL só dá um aviso, sem erro. Útil em scripts que rodam várias vezes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop, a tabela `animal` tem id_animal, nome e id_dono; a tabela `dono` tem id_dono, nome e telefone. Qual SELECT, usado numa view, mostra o nome de cada animal com o nome do seu dono?",
+      "alternativas": [
+        "SELECT a.nome, d.nome AS dono FROM animal a JOIN dono d ON a.id_dono = d.id_dono",
+        "SELECT a.nome, d.nome FROM animal a JOIN dono d ON a.id_animal = d.id_dono",
+        "SELECT a.nome AS animal, d.nome AS dono FROM animal a WHERE a.id_dono = d.id_dono",
+        "SELECT nome AS animal, nome AS dono FROM animal JOIN dono"
+      ],
+      "correta": 0,
+      "explicacao": "A ligação certa é animal.id_dono = dono.id_dono. Comparar id_animal com id_dono liga as linhas erradas; a terceira usa d sem ter a tabela dono no FROM."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma view junta as tabelas `aluno` e `curso`, e as duas têm uma coluna chamada `nome`. Por que é preciso dar apelidos (AS) a essas colunas no SELECT da view?",
+      "alternativas": [
+        "Porque o apelido faz a view ficar mais rápida",
+        "Porque sem apelido a view mostra só a primeira linha",
+        "Porque o apelido é obrigatório em qualquer SELECT",
+        "Porque a view não pode ter duas colunas com o mesmo nome"
+      ],
+      "correta": 3,
+      "explicacao": "Num SELECT comum dá para repetir o nome da coluna, mas a view precisa de nomes únicos; senão dá erro de coluna duplicada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel, foi executado `CREATE VIEW vw_quarto AS SELECT * FROM quarto;`. Dias depois rodaram `ALTER TABLE quarto ADD andar INT;`. O que mostra agora `SELECT * FROM vw_quarto;`?",
+      "alternativas": [
+        "Todas as colunas da tabela, inclusive a nova coluna andar",
+        "Um erro, até que a tabela quarto seja recriada",
+        "Só as colunas da época da definição; andar não aparece",
+        "Apenas a coluna andar, que é a mais recente"
+      ],
+      "correta": 2,
+      "explicacao": "No MySQL, o * da view é trocado pela lista de colunas no momento da definição. Para incluir andar, é preciso redefinir a view (CREATE OR REPLACE VIEW)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A view `vw_produto_caro` lê a tabela `produto`. Alguém executou `DROP TABLE produto;`. O que acontece ao consultar a view?",
+      "alternativas": [
+        "Dá erro, pois a tabela de origem não existe mais",
+        "Mostra os dados antigos, que ficaram guardados na view",
+        "Mostra a view vazia, sem nenhuma mensagem de erro",
+        "O MySQL recria a tabela produto automaticamente"
+      ],
+      "correta": 0,
+      "explicacao": "A view depende da tabela de origem. Sem a tabela, ela fica inválida e a consulta dá erro; os dados se perderam com o DROP TABLE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Existe a view simples:\n```sql\nCREATE VIEW vw_produto_ativo AS\nSELECT id_produto, nome, preco FROM produto WHERE ativo = 1;\n```\nO produto 3 está ativo. O que faz `UPDATE vw_produto_ativo SET preco = 10 WHERE id_produto = 3;`?",
+      "alternativas": [
+        "Altera o preço na tabela produto, pois a view é atualizável",
+        "Dá erro, porque nunca se pode usar UPDATE numa view",
+        "Altera o preço só na view; a tabela produto continua igual",
+        "Guarda uma cópia da linha 3 dentro da view com preço 10"
+      ],
+      "correta": 0,
+      "explicacao": "View de uma tabela só, sem GROUP BY, DISTINCT ou funções de soma, é atualizável: o UPDATE vai direto para a tabela de origem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa padaria existe:\n```sql\nCREATE VIEW vw_venda_dia AS\nSELECT data_venda, SUM(valor) AS total\nFROM venda GROUP BY data_venda;\n```\nO que acontece com `UPDATE vw_venda_dia SET total = 0 WHERE data_venda = '2026-11-20';`?",
+      "alternativas": [
+        "Zera o valor de todas as vendas daquele dia na tabela",
+        "Zera o valor só da primeira venda daquele dia",
+        "Funciona e muda a soma que fica guardada na view",
+        "Dá erro: view com GROUP BY e SUM não é atualizável"
+      ],
+      "correta": 3,
+      "explicacao": "O total é calculado a partir de várias linhas; o MySQL não tem como saber qual linha mudar. Por isso views com agrupamento não aceitam UPDATE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola existe:\n```sql\nCREATE VIEW vw_aluno_2a AS\nSELECT id_aluno, nome, turma FROM aluno WHERE turma = '2A'\nWITH CHECK OPTION;\n```\nO que acontece com `INSERT INTO vw_aluno_2a (nome, turma) VALUES ('Bia', '3B');`?",
+      "alternativas": [
+        "Insere a aluna normalmente na turma 3B",
+        "Dá erro, pois a linha não atende ao WHERE da view",
+        "Insere a aluna, mas troca a turma dela para 2A",
+        "Insere a aluna só na view, sem mexer na tabela"
+      ],
+      "correta": 1,
+      "explicacao": "WITH CHECK OPTION só deixa inserir ou alterar pela view linhas que continuam aparecendo nela (turma = '2A')."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é uma stored procedure (procedimento armazenado)?",
+      "alternativas": [
+        "Uma tabela temporária que some quando o servidor desliga",
+        "Um bloco de comandos SQL salvo no banco e executado com CALL",
+        "Uma consulta salva que se usa no FROM como se fosse tabela",
+        "Uma regra que dispara sozinha depois de cada INSERT"
+      ],
+      "correta": 1,
+      "explicacao": "A procedure guarda comandos para rodar quando chamada com CALL. A consulta usada no FROM é a view; a regra automática é o trigger."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa ótica existe a procedure `sp_listar_clientes`, sem parâmetros. Como executá-la?",
+      "alternativas": [
+        "CALL sp_listar_clientes();",
+        "SELECT sp_listar_clientes;",
+        "RUN sp_listar_clientes();",
+        "EXEC VIEW sp_listar_clientes;"
+      ],
+      "correta": 0,
+      "explicacao": "No MySQL, procedure se executa com CALL nome(argumentos)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando apaga a procedure `sp_calcular_frete`?",
+      "alternativas": [
+        "DELETE PROCEDURE sp_calcular_frete;",
+        "DROP TABLE sp_calcular_frete;",
+        "REMOVE ROUTINE sp_calcular_frete;",
+        "DROP PROCEDURE sp_calcular_frete;"
+      ],
+      "correta": 3,
+      "explicacao": "Cada objeto tem seu DROP: DROP TABLE, DROP VIEW, DROP PROCEDURE, DROP FUNCTION, DROP TRIGGER, DROP EVENT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que se usa `DELIMITER $$` antes de `CREATE PROCEDURE` no cliente do MySQL?",
+      "alternativas": [
+        "Porque os cifrões deixam a procedure mais rápida ao ser executada",
+        "Porque o MySQL só aceita o corpo de procedures escrito entre cifrões",
+        "Porque o corpo tem vários ; e o cliente encerraria o comando no primeiro",
+        "Porque o DELIMITER dá ao usuário a permissão para salvar procedures"
+      ],
+      "correta": 2,
+      "explicacao": "DELIMITER troca o sinal de fim de comando do cliente. Assim o bloco BEGIN … END inteiro vai de uma vez para o servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca existe `CREATE PROCEDURE sp_buscar_livro(IN p_autor VARCHAR(80)) …`. O que indica o `IN`?",
+      "alternativas": [
+        "O valor sai da procedure de volta para quem chama",
+        "O valor entra na procedure, vindo de quem a chama",
+        "O parâmetro pode ser deixado de fora na chamada",
+        "O parâmetro só aceita números inteiros"
+      ],
+      "correta": 1,
+      "explicacao": "IN é parâmetro de entrada (o padrão). OUT devolve valor; INOUT entra e sai. No MySQL nenhum parâmetro é opcional."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de terminar uma procedure com `END $$`, por que se roda `DELIMITER ;`?",
+      "alternativas": [
+        "Para apagar a procedure que estava em teste",
+        "Para o ponto e vírgula voltar a ser o fim dos comandos",
+        "Para executar a procedure logo em seguida, sem CALL",
+        "Para gravar a procedure no disco do servidor"
+      ],
+      "correta": 1,
+      "explicacao": "A troca do delimitador é só no cliente. Ao voltar para ;, os comandos seguintes funcionam do jeito normal."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Dentro de uma procedure, qual é o papel do `BEGIN … END`?",
+      "alternativas": [
+        "Abrir e confirmar uma transação obrigatória",
+        "Marcar o início e o fim do bloco de comandos",
+        "Declarar os parâmetros de entrada e de saída",
+        "Definir o horário em que a procedure vai rodar"
+      ],
+      "correta": 1,
+      "explicacao": "BEGIN … END agrupa vários comandos num bloco só. Parâmetros vão entre parênteses após o nome; horário é coisa de EVENT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola de idiomas existe `sp_matricular(IN p_aluno INT, IN p_curso INT)`. O que acontece com `CALL sp_matricular(5);`?",
+      "alternativas": [
+        "Dá erro: faltou um dos 2 argumentos",
+        "Matricula o aluno 5 em todos os cursos",
+        "Usa 0 no lugar do curso que faltou",
+        "Usa NULL no lugar do curso que faltou"
+      ],
+      "correta": 0,
+      "explicacao": "No MySQL a chamada precisa ter exatamente a quantidade de argumentos definida; não há valor padrão para parâmetro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa lanchonete existe:\n```sql\nCREATE PROCEDURE sp_total_pedidos(OUT p_total INT)\nBEGIN\n  SELECT COUNT(*) INTO p_total FROM pedido;\nEND\n```\nQual sequência mostra o total de pedidos?",
+      "alternativas": [
+        "SELECT sp_total_pedidos();",
+        "CALL sp_total_pedidos(10); SELECT 10;",
+        "CALL sp_total_pedidos(); SELECT p_total;",
+        "CALL sp_total_pedidos(@t); SELECT @t;"
+      ],
+      "correta": 3,
+      "explicacao": "Parâmetro OUT precisa de uma variável de sessão (@t) para receber o valor. p_total só existe dentro da procedure."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja:\n```sql\nCREATE PROCEDURE sp_dobrar(INOUT p_valor INT)\nBEGIN\n  SET p_valor = p_valor * 2;\nEND\n```\nDepois foram executados `SET @v = 7;`, `CALL sp_dobrar(@v);`, `CALL sp_dobrar(@v);` e `SELECT @v;`. Qual valor aparece?",
+      "alternativas": [
+        "14",
+        "7",
+        "28",
+        "NULL"
+      ],
+      "correta": 2,
+      "explicacao": "INOUT entra e sai: 7 vira 14 na primeira chamada e 28 na segunda."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de games foi executado:\n```sql\nCREATE VIEW vw_jogos_em_falta AS\nSELECT titulo, estoque FROM jogo WHERE estoque = 0;\n```\nA tabela `jogo` tem as colunas id_jogo, titulo, preco e estoque.\n\nNa sua resposta:\n1. diga o que esse comando faz;\n2. explique como a equipe usa essa view no dia a dia.",
+      "respostasAceitas": [
+        "Define uma view (tabela virtual) com título e estoque dos jogos com estoque zero. A equipe consulta com SELECT * FROM vw_jogos_em_falta, como uma tabela, e sempre vê a lista atual."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) guarda a consulta dos jogos sem estoque com o nome vw_jogos_em_falta; 2) basta fazer SELECT na view, que mostra os dados atuais da tabela jogo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega afirmou: “Não vou usar view, porque ela copia os dados da tabela e ocupa o dobro de espaço.”\n\nNa sua resposta:\n1. diga se o colega está certo;\n2. explique onde ficam os dados que a view mostra.",
+      "respostasAceitas": [
+        "Não está certo. A view não copia dados: guarda só a consulta. Os dados ficam nas tabelas de origem e são lidos a cada consulta."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) discordar; 2) a view guarda só o SELECT, os dados continuam nas tabelas (no MySQL não existe view que guarda dados)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa oficina existem a tabela `servico` e a view `vw_servicos_abertos`, feita a partir dela. Compare os comandos `DROP VIEW vw_servicos_abertos;` e `DROP TABLE servico;`.\n\nNa sua resposta:\n1. diga o que cada um apaga;\n2. diga qual deles faz perder dados.",
+      "respostasAceitas": [
+        "DROP VIEW apaga só a view (a consulta salva); DROP TABLE apaga a tabela inteira com os registros. Só o DROP TABLE faz perder dados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) DROP VIEW remove a consulta salva, DROP TABLE remove estrutura e dados; 2) DROP TABLE perde dados (e ainda deixa a view inválida)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, a coordenação usa:\n```sql\nCREATE OR REPLACE VIEW vw_aulas_hoje AS\nSELECT disciplina, sala, horario FROM aula WHERE dia = CURDATE();\n```\n\nNa sua resposta:\n1. explique o que o OR REPLACE faz;\n2. diga o que aconteceria sem ele, se a view já existisse.",
+      "respostasAceitas": [
+        "OR REPLACE troca a definição da view se ela já existir (ou a define se não existir). Sem ele, o MySQL daria erro dizendo que a view já existe."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) substitui a consulta da view existente; 2) só CREATE VIEW daria erro de objeto já existente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa clínica, a tabela `paciente` tem id_paciente, nome, cpf, telefone e diagnostico. Foram executados:\n```sql\nCREATE VIEW vw_paciente_recepcao AS\nSELECT id_paciente, nome, telefone FROM paciente;\nGRANT SELECT ON clinica.vw_paciente_recepcao TO 'recepcao'@'localhost';\n```\n\nNa sua resposta:\n1. diga o que o usuário recepcao consegue ver;\n2. explique por que isso é mais seguro do que dar SELECT na tabela paciente.",
+      "respostasAceitas": [
+        "A recepção vê só id, nome e telefone dos pacientes. É mais seguro porque CPF e diagnóstico ficam escondidos: ela não tem permissão na tabela, só na view."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só as três colunas da view; 2) a view limita o acesso a dados sensíveis (cpf, diagnóstico), seguindo o princípio do menor privilégio."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa oficina mecânica foi definida a view:\n```sql\nCREATE VIEW vw_os_completa AS\nSELECT o.id_os, c.nome AS cliente, v.placa, o.valor\nFROM ordem_servico o\nJOIN cliente c ON o.id_cliente = c.id_cliente\nJOIN veiculo v ON o.id_veiculo = v.id_veiculo;\n```\n\nNa sua resposta:\n1. diga o que a view mostra;\n2. explique uma vantagem de a equipe usar essa view em vez da consulta completa.",
+      "respostasAceitas": [
+        "Mostra cada ordem de serviço com o nome do cliente, a placa do veículo e o valor. Vantagem: a equipe faz um SELECT simples na view sem repetir os JOINs (menos erro, mais rápido de usar)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) junta ordem de serviço, cliente e veículo; 2) simplifica/reaproveita a consulta, padroniza, evita erro nos JOINs (ou permite dar acesso só à view)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa academia existe a view `vw_alunos_ativos`, que mostra os alunos da tabela `aluno` (id_aluno, nome, ativo) com ativo = 1. Às 10h um aluno novo foi cadastrado com ativo = 1. Às 10h05 a recepção consultou a view.\n\nNa sua resposta:\n1. diga se o aluno novo aparece;\n2. justifique explicando como a view funciona.",
+      "respostasAceitas": [
+        "Aparece. A view não guarda uma cópia: a cada consulta ela roda o SELECT na tabela aluno, que já tem o aluno novo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sim; 2) a view executa a consulta na hora, sobre os dados atuais da tabela."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num hotel, foi definida a view `vw_quarto` com `SELECT * FROM quarto`. Semanas depois a tabela ganhou a coluna `andar` (ALTER TABLE quarto ADD andar INT). A recepção reclamou que a view não mostra o andar.\n\nNa sua resposta:\n1. explique por que a coluna andar não aparece;\n2. diga o que precisa ser feito com a view para ela aparecer.",
+      "respostasAceitas": [
+        "No MySQL o * da view vira a lista de colunas que existiam quando ela foi definida; colunas novas não entram sozinhas. É preciso redefinir a view (CREATE OR REPLACE VIEW ou ALTER VIEW)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a lista de colunas fica fixa na definição; 2) redefinir/recriar a view. Aceitar também a ideia de listar as colunas explicitamente na nova definição."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja existem duas views sobre a tabela `produto` (id_produto, nome, preco, categoria):\n```sql\nCREATE VIEW vw_a AS SELECT id_produto, nome, preco FROM produto WHERE categoria = 'bebida';\nCREATE VIEW vw_b AS SELECT categoria, AVG(preco) AS media FROM produto GROUP BY categoria;\n```\nO comando `UPDATE vw_a SET preco = 6 WHERE id_produto = 2;` funcionou, mas um UPDATE parecido em vw_b deu erro.\n\nNa sua resposta:\n1. explique por que o UPDATE em vw_a funcionou;\n2. explique por que vw_b não aceita UPDATE.",
+      "respostasAceitas": [
+        "vw_a é simples: cada linha dela é uma linha da tabela produto, então o UPDATE vai para a tabela. Em vw_b cada linha é uma média de várias linhas (GROUP BY/AVG); não há uma linha da tabela para alterar, então a view não é atualizável."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) view de uma tabela, sem agrupamento, é atualizável e altera a tabela de origem; 2) agrupamento/funções de agregação impedem saber qual linha mudar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num pet shop foi definida a procedure:\n```sql\nDELIMITER $$\nCREATE PROCEDURE sp_cadastrar_pet(IN p_nome VARCHAR(50), IN p_especie VARCHAR(30))\nBEGIN\n  INSERT INTO pet (nome, especie) VALUES (p_nome, p_especie);\nEND $$\nDELIMITER ;\n```\nDepois alguém executou `CALL sp_cadastrar_pet('Thor', 'cachorro');`.\n\nNa sua resposta:\n1. diga o que a procedure faz;\n2. diga o que acontece na tabela pet com esse CALL.",
+      "respostasAceitas": [
+        "A procedure recebe nome e espécie e insere um pet novo na tabela pet. Com o CALL, entra na tabela uma linha com nome Thor e espécie cachorro."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cadastra (INSERT) um pet com os valores recebidos; 2) uma linha nova Thor/cachorro na tabela pet."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa procedure aparecem as linhas `DELIMITER $$` no começo e `DELIMITER ;` no fim.\n\nNa sua resposta:\n1. explique por que se troca o delimitador para $$;\n2. explique por que ele volta para ; no fim.",
+      "respostasAceitas": [
+        "O corpo da procedure tem vários ; e o cliente encerraria o comando no primeiro. Com $$ o bloco inteiro vai junto. No fim volta para ; para os próximos comandos funcionarem normalmente."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) evitar que os ; internos terminem o CREATE PROCEDURE antes da hora; 2) restaurar o delimitador padrão."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa biblioteca foi definida:\n```sql\nCREATE PROCEDURE sp_qtd_livros(IN p_autor VARCHAR(80), OUT p_qtd INT)\nBEGIN\n  SELECT COUNT(*) INTO p_qtd FROM livro WHERE autor = p_autor;\nEND\n```\nE foi usada assim: `CALL sp_qtd_livros('Machado de Assis', @q); SELECT @q;`\n\nNa sua resposta:\n1. explique o papel do parâmetro IN;\n2. explique o papel do parâmetro OUT e como o valor chega a quem chamou.",
+      "respostasAceitas": [
+        "IN p_autor recebe o nome do autor para filtrar. OUT p_qtd devolve a contagem: o SELECT … INTO guarda o resultado em p_qtd, que é copiado para a variável @q; o SELECT @q mostra o número."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) IN = entrada (o autor); 2) OUT = saída, o valor volta numa variável de sessão (@q) passada no CALL."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa padaria, no fim do dia, alguém roda `CALL sp_fechar_caixa();`. A procedure insere uma linha na tabela `caixa` com a soma das vendas do dia e marca as vendas do dia como fechadas (UPDATE). Antes, cada funcionário digitava esses comandos à mão.\n\nNa sua resposta:\n1. diga o que a procedure faz;\n2. cite duas vantagens de guardar esses comandos numa procedure.",
+      "respostasAceitas": [
+        "Registra o total do dia na tabela caixa e marca as vendas como fechadas. Vantagens: todos fazem do mesmo jeito (menos erro de digitação) e basta um CALL; a regra fica num lugar só e pode ser usada por qualquer sistema."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) fecha o caixa (INSERT do total + UPDATE das vendas); 2) duas entre: padronização, menos erro, reuso, menos digitação, regra centralizada no banco, permissão só de EXECUTE."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num cinema existem:\n```sql\nCREATE VIEW vw_sessoes_hoje AS SELECT * FROM sessao WHERE data = CURDATE();\nCREATE PROCEDURE sp_cancelar_sessao(IN p_id INT)\n  UPDATE sessao SET status = 'cancelada' WHERE id_sessao = p_id;\n```\n\nNa sua resposta:\n1. explique a diferença entre o que a view e a procedure guardam/fazem;\n2. diga como cada uma é usada.",
+      "respostasAceitas": [
+        "A view guarda uma consulta e funciona como tabela virtual (só mostra dados). A procedure guarda comandos que executam ações, como o UPDATE. A view é usada com SELECT * FROM vw_sessoes_hoje; a procedure com CALL sp_cancelar_sessao(id)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) view = consulta salva/tabela virtual; procedure = bloco de comandos que pode alterar dados; 2) SELECT … FROM na view, CALL na procedure."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de roupas existe:\n```sql\nDELIMITER $$\nCREATE PROCEDURE sp_reajustar(IN p_id INT, IN p_pct DECIMAL(5,2))\nBEGIN\n  IF p_pct > 20 THEN\n    SELECT 'Reajuste acima do limite' AS aviso;\n  ELSE\n    UPDATE produto SET preco = preco * (1 + p_pct / 100) WHERE id_produto = p_id;\n  END IF;\nEND $$\nDELIMITER ;\n```\n\nNa sua resposta:\n1. diga o que acontece com `CALL sp_reajustar(4, 10);`;\n2. diga o que acontece com `CALL sp_reajustar(4, 35);`;\n3. explique por que colocar essa regra na procedure ajuda a loja.",
+      "respostasAceitas": [
+        "1) O produto 4 tem o preço aumentado em 10%. 2) Nada é alterado; aparece a mensagem 'Reajuste acima do limite'. 3) A regra do limite fica no banco e vale para todos que usam a procedure, evitando aumento errado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) UPDATE de +10% no produto 4; 2) só o aviso, sem UPDATE; 3) regra de negócio centralizada/garantida no banco."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é uma vantagem de usar uma stored procedure?",
+      "alternativas": [
+        "Guardar uma cópia de segurança de todas as tabelas",
+        "Reaproveitar comandos chamando-os só pelo nome",
+        "Ser usada no FROM de um SELECT como tabela virtual",
+        "Rodar sozinha sempre que uma linha é inserida"
+      ],
+      "correta": 1,
+      "explicacao": "A procedure junta comandos para reutilizar com CALL. Tabela virtual é view; rodar sozinha após INSERT é trigger."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Onde fica guardada uma stored procedure depois de definida?",
+      "alternativas": [
+        "No arquivo do programa que a chama",
+        "Na memória do cliente, até fechar a janela",
+        "Dentro de uma das tabelas que ela usa",
+        "No próprio banco de dados, no servidor MySQL"
+      ],
+      "correta": 3,
+      "explicacao": "Ela é um objeto do banco (por isso 'armazenada'): fica no servidor e qualquer programa com permissão pode chamá-la."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa ótica foi executado `CALL sp_buscar_cliente('Ana');`. O que é o valor 'Ana'?",
+      "alternativas": [
+        "O nome da tabela que será consultada",
+        "O nome do usuário que executa a procedure",
+        "O valor passado para o parâmetro de entrada",
+        "O nome de uma nova procedure"
+      ],
+      "correta": 2,
+      "explicacao": "Os valores entre parênteses no CALL são os argumentos, recebidos pelos parâmetros da procedure."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma stored procedure pode ter comandos que alteram dados, como INSERT, UPDATE e DELETE?",
+      "alternativas": [
+        "Não, uma procedure só pode ter comandos SELECT",
+        "Sim, mas só um comando em cada procedure",
+        "Não, ela só aceita comandos de permissão",
+        "Sim, inclusive vários comandos que alteram dados"
+      ],
+      "correta": 3,
+      "explicacao": "A procedure é um bloco de comandos: pode consultar, inserir, alterar, apagar e usar IF, variáveis etc."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando inicia a definição de uma stored procedure no MySQL?",
+      "alternativas": [
+        "CREATE ROUTINE",
+        "NEW PROCEDURE",
+        "MAKE PROCEDURE",
+        "CREATE PROCEDURE"
+      ],
+      "correta": 3,
+      "explicacao": "A sintaxe é CREATE PROCEDURE nome(parâmetros) seguido do corpo. Para função é CREATE FUNCTION."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola foi definida `CREATE PROCEDURE sp_listar_turmas() …`. O que indicam os parênteses vazios?",
+      "alternativas": [
+        "Que a procedure sempre devolve NULL",
+        "Que ela roda sem precisar do CALL",
+        "Que ela aceita qualquer quantidade de valores",
+        "Que a procedure não recebe nenhum parâmetro"
+      ],
+      "correta": 3,
+      "explicacao": "Os parênteses guardam a lista de parâmetros. Vazios = sem parâmetros; a chamada fica CALL sp_listar_turmas();"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Dentro de uma procedure aparece `DECLARE v_total DECIMAL(10,2) DEFAULT 0;`. O que essa linha faz?",
+      "alternativas": [
+        "Acrescenta uma coluna v_total na tabela usada",
+        "Declara uma variável de sessão que dura até o servidor reiniciar",
+        "Declara um parâmetro de saída da procedure",
+        "Declara uma variável local que só existe dentro da procedure"
+      ],
+      "correta": 3,
+      "explicacao": "DECLARE cria variável local do bloco BEGIN … END, aqui começando com 0. Variável de sessão usa @; parâmetro fica entre os parênteses."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa sorveteria existe `CREATE PROCEDURE sp_vendas_hoje() SELECT sabor, qtd FROM venda WHERE data = CURDATE();`. O que aparece ao rodar `CALL sp_vendas_hoje();`?",
+      "alternativas": [
+        "Nada, porque procedure não pode ter SELECT",
+        "Uma view nova chamada sp_vendas_hoje",
+        "Só a primeira linha do resultado",
+        "O resultado do SELECT, como numa consulta comum"
+      ],
+      "correta": 3,
+      "explicacao": "Uma procedure pode devolver o resultado de um SELECT para quem a chamou, com todas as linhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre a variável `@total` e a variável `v_total` declarada com DECLARE dentro de uma procedure?",
+      "alternativas": [
+        "São iguais; só muda o jeito de escrever o nome",
+        "@total vale na sessão toda; v_total só dentro do bloco em que foi declarada",
+        "@total só existe dentro da procedure; v_total vale na sessão toda",
+        "@total é uma coluna de tabela; v_total é uma variável"
+      ],
+      "correta": 1,
+      "explicacao": "Variáveis com @ são de sessão (continuam depois do CALL). As declaradas com DECLARE somem quando o bloco termina."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na loja foi executado `GRANT EXECUTE ON PROCEDURE loja.sp_registrar_venda TO 'caixa'@'localhost';`. O que o usuário caixa passa a poder fazer?",
+      "alternativas": [
+        "Alterar o código dessa procedure",
+        "Apagar essa procedure do banco",
+        "Rodar essa procedure com CALL",
+        "Usar todas as tabelas do banco loja"
+      ],
+      "correta": 2,
+      "explicacao": "EXECUTE é a permissão de executar a rotina. Alterar ou apagar exige ALTER ROUTINE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando lista as procedures existentes no banco `escola`?",
+      "alternativas": [
+        "SHOW TABLES WHERE Type = 'PROCEDURE';",
+        "SHOW PROCEDURE STATUS WHERE Db = 'escola';",
+        "SELECT * FROM PROCEDURE WHERE Db = 'escola';",
+        "DESCRIBE PROCEDURES;"
+      ],
+      "correta": 1,
+      "explicacao": "SHOW PROCEDURE STATUS lista as procedures; o WHERE Db filtra pelo banco. Procedures não aparecem em SHOW TABLES."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja:\n```sql\nCREATE PROCEDURE sp_situacao(IN p_nota DECIMAL(4,1))\nBEGIN\n  IF p_nota >= 6 THEN SELECT 'Aprovado' AS situacao;\n  ELSE SELECT 'Reprovado' AS situacao;\n  END IF;\nEND\n```\nO que aparece com `CALL sp_situacao(5.5);`?",
+      "alternativas": [
+        "Aprovado",
+        "Reprovado",
+        "Um erro, porque 5.5 não é inteiro",
+        "Nada, porque o IF não tem saída"
+      ],
+      "correta": 1,
+      "explicacao": "5.5 não é maior ou igual a 6, então cai no ELSE. DECIMAL(4,1) aceita uma casa decimal."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma equipe quer mudar o código (o corpo) de uma procedure que já existe no MySQL 8. Qual é o caminho correto?",
+      "alternativas": [
+        "Usar CREATE OR REPLACE PROCEDURE com o código novo",
+        "Apagar com DROP PROCEDURE e definir de novo",
+        "Usar UPDATE PROCEDURE passando o código novo",
+        "Usar ALTER PROCEDURE e escrever o corpo novo depois do nome"
+      ],
+      "correta": 1,
+      "explicacao": "O MySQL não tem OR REPLACE para procedures, e ALTER PROCEDURE só muda características (como comentário), não o corpo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja:\n```sql\nCREATE PROCEDURE sp_apagar_cliente(IN nome VARCHAR(60))\nBEGIN\n  DELETE FROM cliente WHERE nome = nome;\nEND\n```\nA tabela `cliente` tem id_cliente e nome. O que acontece com `CALL sp_apagar_cliente('Rui');`?",
+      "alternativas": [
+        "Apaga só os clientes que se chamam Rui na tabela",
+        "Apaga todos os clientes: nome = nome é sempre verdadeiro",
+        "Dá erro de nome ambíguo e não apaga nada",
+        "Não apaga nada, pois a comparação é sempre falsa"
+      ],
+      "correta": 1,
+      "explicacao": "Dentro da rotina, o nome do parâmetro tem prioridade sobre o da coluna. Por isso se usa prefixo (p_nome) nos parâmetros."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num banco de uma cantina escolar existe:\n```sql\nCREATE PROCEDURE sp_transferir(IN p_de INT, IN p_para INT, IN p_valor DECIMAL(10,2))\nBEGIN\n  START TRANSACTION;\n  UPDATE conta SET saldo = saldo - p_valor WHERE id_conta = p_de;\n  UPDATE conta SET saldo = saldo + p_valor WHERE id_conta = p_para;\n  COMMIT;\nEND\n```\nPor que os dois UPDATEs estão dentro de uma transação?",
+      "alternativas": [
+        "Para os dois UPDATEs rodarem ao mesmo tempo e ficarem mais rápidos",
+        "Para as duas alterações valerem juntas, evitando dinheiro sumir no meio",
+        "Porque o MySQL não aceita dois UPDATEs seguidos fora de transação",
+        "Para a procedure poder ser chamada sem o comando CALL"
+      ],
+      "correta": 1,
+      "explicacao": "A transação trata o débito e o crédito como uma coisa só: se algo falhar antes do COMMIT, dá para desfazer tudo (ROLLBACK)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é uma function (função armazenada) no MySQL?",
+      "alternativas": [
+        "Uma rotina que recebe valores e devolve um valor com RETURN",
+        "Uma rotina que só pode ser executada com o comando CALL",
+        "Uma tabela virtual baseada numa consulta SELECT",
+        "Uma rotina que roda sozinha num horário marcado"
+      ],
+      "correta": 0,
+      "explicacao": "A function calcula e devolve um valor. CALL é de procedure; tabela virtual é view; horário marcado é event."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja existe a função `fn_desconto(preco)`. Qual comando a usa corretamente?",
+      "alternativas": [
+        "SELECT nome, fn_desconto(preco) FROM produto;",
+        "CALL fn_desconto(preco) FROM produto;",
+        "EXECUTE fn_desconto ON produto;",
+        "SELECT * FROM fn_desconto WHERE preco > 0;"
+      ],
+      "correta": 0,
+      "explicacao": "A função entra numa expressão, como as nativas (ROUND, UPPER): aqui ela é calculada para o preço de cada produto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em `CREATE FUNCTION fn_imposto(p_valor DECIMAL(10,2)) RETURNS DECIMAL(10,2) …`, o que indica o `RETURNS DECIMAL(10,2)`?",
+      "alternativas": [
+        "Quantas linhas a função devolve",
+        "O tipo do valor que a função devolve",
+        "O maior valor que o parâmetro aceita",
+        "A coluna onde o resultado será salvo"
+      ],
+      "correta": 1,
+      "explicacao": "RETURNS (com S) fica no cabeçalho e diz o tipo do resultado. No corpo, RETURN (sem S) devolve o valor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Dentro do corpo de uma function, qual comando devolve o resultado para quem a chamou?",
+      "alternativas": [
+        "OUTPUT valor;",
+        "EXIT valor;",
+        "RETURN valor;",
+        "SEND valor;"
+      ],
+      "correta": 2,
+      "explicacao": "RETURN encerra a função e devolve o valor, que deve combinar com o tipo do RETURNS."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando apaga a função `fn_calcular_juros`?",
+      "alternativas": [
+        "DROP PROCEDURE fn_calcular_juros;",
+        "DELETE FUNCTION fn_calcular_juros;",
+        "DROP ROUTINE fn_calcular_juros;",
+        "DROP FUNCTION fn_calcular_juros;"
+      ],
+      "correta": 3,
+      "explicacao": "Função se apaga com DROP FUNCTION. DROP PROCEDURE procuraria uma procedure com esse nome."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quantos valores uma function devolve a cada chamada?",
+      "alternativas": [
+        "Um único valor",
+        "Uma linha para cada registro da tabela",
+        "Nenhum, ela só altera tabelas",
+        "Um valor para cada parâmetro"
+      ],
+      "correta": 0,
+      "explicacao": "Função devolve sempre um valor só (um número, um texto, uma data…). Para devolver linhas usa-se procedure ou view."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre `ROUND()` e uma função `fn_imposto()` feita pela equipe da loja?",
+      "alternativas": [
+        "ROUND só funciona dentro de procedures; fn_imposto funciona em qualquer lugar",
+        "fn_imposto só pode ser usada com CALL; ROUND só no SELECT",
+        "ROUND já vem no MySQL; fn_imposto foi definida pela equipe com CREATE FUNCTION",
+        "Não há diferença: as duas já vêm prontas no MySQL"
+      ],
+      "correta": 2,
+      "explicacao": "ROUND é função nativa. fn_imposto é função do usuário, mas as duas são usadas do mesmo jeito em expressões."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Onde uma function definida pelo usuário pode ser usada?",
+      "alternativas": [
+        "Só sozinha, chamada com o comando CALL",
+        "Dentro de expressões, como no SELECT ou no WHERE",
+        "Só dentro de triggers",
+        "Só no FROM, no lugar de uma tabela do banco"
+      ],
+      "correta": 1,
+      "explicacao": "A função devolve um valor, então cabe em qualquer lugar onde caberia um valor: lista do SELECT, WHERE, SET de um UPDATE…"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel existe:\n```sql\nCREATE FUNCTION fn_diarias(p_entrada DATE, p_saida DATE)\nRETURNS INT DETERMINISTIC\nRETURN DATEDIFF(p_saida, p_entrada);\n```\nQual é o resultado de `SELECT fn_diarias('2026-12-01', '2026-12-05');`?",
+      "alternativas": [
+        "5",
+        "-4",
+        "4",
+        "2026"
+      ],
+      "correta": 2,
+      "explicacao": "DATEDIFF(saída, entrada) conta os dias entre as datas: de 1 a 5 de dezembro são 4 dias (4 diárias)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que significa declarar uma função como `DETERMINISTIC`?",
+      "alternativas": [
+        "Que ela só pode ser usada uma vez por dia",
+        "Que ela não pode receber nenhum parâmetro",
+        "Que ela grava o resultado numa tabela",
+        "Que a mesma entrada sempre gera a mesma saída"
+      ],
+      "correta": 3,
+      "explicacao": "Determinística = mesma entrada, mesma saída (ex.: preço × 0,9). Uma função que usa NOW() ou RAND() não é determinística."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a principal diferença entre FUNCTION e PROCEDURE no MySQL?",
+      "alternativas": [
+        "A function pode ter parâmetros OUT; a procedure não aceita parâmetros",
+        "A function roda sozinha num horário; a procedure dispara após um INSERT",
+        "Function devolve um valor e vai em expressões; procedure usa CALL",
+        "Não há diferença: são dois nomes para a mesma coisa"
+      ],
+      "correta": 2,
+      "explicacao": "Function: RETURN de um valor, usada em SELECT/WHERE. Procedure: CALL, pode ter IN/OUT/INOUT e vários comandos de alteração."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa lanchonete existe:\n```sql\nCREATE FUNCTION fn_com_taxa(p_valor DECIMAL(10,2))\nRETURNS DECIMAL(10,2) DETERMINISTIC\nRETURN p_valor * 1.10;\n```\nQual é o resultado de `SELECT fn_com_taxa(50);`?",
+      "alternativas": [
+        "55.00",
+        "50.00",
+        "5.00",
+        "60.00"
+      ],
+      "correta": 0,
+      "explicacao": "50 × 1,10 = 55. O tipo DECIMAL(10,2) mostra duas casas decimais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola existe a função `fn_idade(data_nasc)`, que devolve a idade em anos. O que faz `SELECT nome FROM aluno WHERE fn_idade(data_nasc) >= 18;`?",
+      "alternativas": [
+        "Dá erro, porque função não pode ser usada no WHERE",
+        "Lista os alunos com 18 anos ou mais",
+        "Altera a data de nascimento dos alunos menores",
+        "Lista só o primeiro aluno que for maior de idade"
+      ],
+      "correta": 1,
+      "explicacao": "A função é calculada para cada linha, com a data daquela linha, e o WHERE filtra pelo resultado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja:\n```sql\nCREATE FUNCTION fn_faixa(p_idade INT) RETURNS VARCHAR(10) DETERMINISTIC\nBEGIN\n  IF p_idade < 12 THEN RETURN 'crianca';\n  ELSEIF p_idade < 18 THEN RETURN 'jovem';\n  ELSE RETURN 'adulto';\n  END IF;\nEND\n```\nQual é o resultado de `SELECT fn_faixa(15);`?",
+      "alternativas": [
+        "crianca",
+        "adulto",
+        "jovem",
+        "15"
+      ],
+      "correta": 2,
+      "explicacao": "15 não é menor que 12, mas é menor que 18: cai no ELSEIF e devolve 'jovem'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica existe a função `fn_imc(p_peso, p_altura)`. O que acontece ao executar `CALL fn_imc(70, 1.75);`?",
+      "alternativas": [
+        "Dá erro, porque CALL procura uma procedure com esse nome",
+        "Executa a função e mostra o IMC normalmente",
+        "Executa a função, mas não mostra o resultado",
+        "Transforma a função em procedure automaticamente"
+      ],
+      "correta": 0,
+      "explicacao": "Função se usa em expressão, por exemplo SELECT fn_imc(70, 1.75). CALL só executa procedures."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa transportadora, a tabela `encomenda` tem id_encomenda, destino e peso. O que acontece em `SELECT destino, fn_frete(peso) FROM encomenda;`?",
+      "alternativas": [
+        "A função é calculada uma vez só, com o peso da primeira linha",
+        "A função soma o peso de todas as encomendas",
+        "A função roda uma vez por linha, com o peso daquela linha",
+        "Dá erro, porque coluna não pode ser argumento de função"
+      ],
+      "correta": 2,
+      "explicacao": "Na lista do SELECT, a função roda linha a linha, como ROUND(preco) ou UPPER(nome)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao executar `CREATE FUNCTION fn_dobro(IN p_valor INT) RETURNS INT DETERMINISTIC RETURN p_valor * 2;` o MySQL deu erro de sintaxe. Por quê?",
+      "alternativas": [
+        "Em function os parâmetros já são de entrada; IN não é aceito",
+        "Porque uma function não pode receber nenhum parâmetro",
+        "Porque o parâmetro deveria ser OUT, já que a função devolve um valor",
+        "Porque faltou escrever DELIMITER antes do nome da função"
+      ],
+      "correta": 0,
+      "explicacao": "IN/OUT/INOUT só existem em procedure. Em function os parâmetros são sempre de entrada e o resultado sai pelo RETURN."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MySQL 8, com o log binário ligado (o padrão), definir uma função sem DETERMINISTIC, NO SQL ou READS SQL DATA dá erro. Por que o MySQL faz essa exigência?",
+      "alternativas": [
+        "Porque ele precisa saber se a função é segura para registrar e repetir no log",
+        "Porque sem DETERMINISTIC a função não pode receber nenhum parâmetro",
+        "Porque DETERMINISTIC é o tipo do valor que a função devolve no RETURN",
+        "Porque sem essas palavras a função só pode ser chamada uma única vez"
+      ],
+      "correta": 0,
+      "explicacao": "O log binário é usado em réplicas e recuperação. Se a função não for segura para repetir, o resultado poderia mudar. Por isso se declara o comportamento (ou se muda log_bin_trust_function_creators)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja:\n```sql\nCREATE FUNCTION fn_lista() RETURNS INT READS SQL DATA\nBEGIN\n  SELECT * FROM produto;\n  RETURN 1;\nEND\n```\nO que acontece ao tentar definir essa função?",
+      "alternativas": [
+        "Funciona e, ao ser chamada, mostra todos os produtos",
+        "Dá erro: function não pode devolver linhas, só um valor",
+        "Funciona e devolve o número de produtos da tabela",
+        "Funciona, mas o SELECT só roda quando o valor for 1"
+      ],
+      "correta": 1,
+      "explicacao": "Uma função não pode mandar resultado de SELECT para o cliente. Dentro dela o SELECT precisa usar INTO para guardar o valor numa variável."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num pet shop existe:\n```sql\nCREATE FUNCTION fn_qtd_pets(p_dono INT) RETURNS INT READS SQL DATA\nBEGIN\n  DECLARE v_qtd INT;\n  SELECT COUNT(*) INTO v_qtd FROM pet WHERE id_dono = p_dono;\n  RETURN v_qtd;\nEND\n```\nO que mostra `SELECT nome, fn_qtd_pets(id_dono) FROM dono;`?",
+      "alternativas": [
+        "O nome de cada dono e quantos pets ele tem",
+        "Só o total geral de pets do pet shop",
+        "Um erro, porque function não pode ter SELECT",
+        "O nome de cada dono e o id do último pet dele"
+      ],
+      "correta": 0,
+      "explicacao": "Para cada dono a função conta os pets dele e devolve o número. SELECT … INTO é permitido em função porque não manda linhas para o cliente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola existe:\n```sql\nCREATE PROCEDURE sp_alunos_turma(IN p_turma VARCHAR(5))\n  SELECT nome FROM aluno WHERE turma = p_turma ORDER BY nome;\n```\nA professora executou `CALL sp_alunos_turma('2B');`.\n\nNa sua resposta:\n1. diga o que a procedure faz;\n2. diga o que aparece para a professora.",
+      "respostasAceitas": [
+        "A procedure recebe uma turma e lista os nomes dos alunos dessa turma em ordem alfabética. Aparece a lista dos alunos da turma 2B, em ordem de nome."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) consulta os alunos da turma recebida no parâmetro; 2) os nomes da turma 2B ordenados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um script de instalação do banco de uma academia começa com `DROP PROCEDURE IF EXISTS sp_registrar_treino;` e logo depois define a procedure de novo.\n\nNa sua resposta:\n1. diga o que essa primeira linha faz;\n2. explique por que o IF EXISTS é útil num script que roda várias vezes.",
+      "respostasAceitas": [
+        "Apaga a procedure sp_registrar_treino se ela existir, para poder defini-la de novo. O IF EXISTS evita erro na primeira vez, quando a procedure ainda não existe."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) remove a procedure antiga; 2) sem IF EXISTS o script pararia com erro quando a procedure não existisse."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de materiais de construção, o vendedor não tem permissão de UPDATE na tabela `produto`. O gerente deu a ele só `GRANT EXECUTE ON PROCEDURE loja.sp_dar_baixa TO 'vendedor'@'localhost'`; a procedure diminui o estoque de um produto vendido.\n\nNa sua resposta:\n1. diga o que o vendedor consegue fazer;\n2. explique por que isso é mais seguro do que dar UPDATE na tabela.",
+      "respostasAceitas": [
+        "Ele só consegue rodar a procedure (CALL sp_dar_baixa), que baixa o estoque do jeito programado. É mais seguro porque ele não pode alterar preço ou outros campos livremente: só faz a operação permitida."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) executar a procedure; 2) a procedure limita o que pode ser alterado (menor privilégio, regra controlada)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa oficina existe:\n```sql\nCREATE PROCEDURE sp_apagar_peca(IN descricao VARCHAR(60))\n  DELETE FROM peca WHERE descricao = descricao;\n```\nA tabela `peca` tem id_peca e descricao. Depois de `CALL sp_apagar_peca('filtro de óleo');` a tabela ficou vazia.\n\nNa sua resposta:\n1. explique por que todas as peças foram apagadas;\n2. diga como evitar esse problema.",
+      "respostasAceitas": [
+        "Dentro da procedure, descricao se refere ao parâmetro, não à coluna. Então descricao = descricao compara o valor com ele mesmo e é verdadeiro em todas as linhas. Para evitar, usa-se um nome diferente no parâmetro, como p_descricao (ou peca.descricao)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o parâmetro tem o mesmo nome da coluna e tem prioridade, a condição vira sempre verdadeira; 2) prefixo nos parâmetros (p_) ou qualificar a coluna com o nome da tabela."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de calçados existe:\n```sql\nCREATE FUNCTION fn_desconto(p_preco DECIMAL(10,2))\nRETURNS DECIMAL(10,2) DETERMINISTIC\nRETURN p_preco * 0.90;\n```\nE a consulta `SELECT nome, preco, fn_desconto(preco) FROM produto;`\n\nNa sua resposta:\n1. diga o que a função calcula;\n2. diga o que aparece na consulta.",
+      "respostasAceitas": [
+        "A função devolve o preço com 10% de desconto. A consulta mostra o nome, o preço normal e o preço com desconto de cada produto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 90% do preço (10% de desconto); 2) três colunas por produto, a última calculada pela função."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num código de função aparecem as palavras `RETURNS INT` (no cabeçalho) e `RETURN v_total;` (no corpo).\n\nNa sua resposta:\n1. explique o papel do RETURNS;\n2. explique o papel do RETURN.",
+      "respostasAceitas": [
+        "RETURNS INT diz o tipo do valor que a função devolve (inteiro). RETURN v_total devolve de fato o valor e encerra a função."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) RETURNS = tipo de retorno, no cabeçalho; 2) RETURN = devolve o valor calculado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa clínica existe a função `fn_imc(p_peso, p_altura)`. Um estagiário executou `CALL fn_imc(70, 1.75);` e recebeu erro. Outro colega executou `SELECT fn_imc(70, 1.75);` e funcionou.\n\nNa sua resposta:\n1. explique por que o CALL deu erro;\n2. explique por que o SELECT funcionou.",
+      "respostasAceitas": [
+        "CALL serve só para procedures, e não existe procedure fn_imc. Função devolve um valor e é usada dentro de expressões, como no SELECT, por isso funcionou."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) CALL executa procedure, não função; 2) função é usada em expressão (SELECT, WHERE…)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa transportadora existem:\n```sql\nCREATE FUNCTION fn_frete(p_peso DECIMAL(6,2)) RETURNS DECIMAL(10,2) DETERMINISTIC\n  RETURN 15 + p_peso * 2;\nCREATE PROCEDURE sp_registrar_entrega(IN p_id INT)\n  UPDATE encomenda SET entregue = 1, data_entrega = NOW() WHERE id_encomenda = p_id;\n```\n\nNa sua resposta:\n1. diga o que cada uma faz;\n2. explique a diferença entre elas na forma de usar e no que devolvem.",
+      "respostasAceitas": [
+        "fn_frete calcula o frete (15 + 2 por quilo) e devolve esse valor; sp_registrar_entrega marca a encomenda como entregue com a data. A função é usada num SELECT e devolve um valor; a procedure é executada com CALL e faz a alteração, sem devolver valor pelo RETURN."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cálculo do frete × atualização da entrega; 2) function: em expressão, devolve 1 valor; procedure: CALL, executa ações (pode ter OUT)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa marcenaria existe:\n```sql\nCREATE FUNCTION fn_area(p_larg DECIMAL(6,2), p_comp DECIMAL(6,2))\nRETURNS DECIMAL(10,2) DETERMINISTIC\nRETURN p_larg * p_comp;\n```\n\nNa sua resposta:\n1. explique o que significa DETERMINISTIC;\n2. explique por que essa função pode ser declarada assim.",
+      "respostasAceitas": [
+        "DETERMINISTIC quer dizer que, com as mesmas entradas, a função sempre devolve o mesmo resultado. Aqui é verdade: largura × comprimento só depende dos parâmetros, não de data, sorteio ou dados de tabelas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mesma entrada → mesma saída; 2) o cálculo usa só os parâmetros (não usa NOW, RAND nem lê tabelas que mudam)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, vários relatórios calculam a média do aluno com a mesma fórmula. A equipe guardou a fórmula na função `fn_media(n1, n2, n3)`, que devolve (n1 + n2 + n3) / 3, e passou a usar `SELECT nome, fn_media(nota1, nota2, nota3) FROM boletim;`.\n\nNa sua resposta:\n1. diga o que a consulta mostra;\n2. explique uma vantagem de guardar a fórmula numa função do banco.",
+      "respostasAceitas": [
+        "Mostra o nome de cada aluno com a média das três notas. Vantagem: a fórmula fica num lugar só; se mudar (por exemplo, pesos diferentes), muda-se só a função e todos os relatórios passam a usar a regra nova, sem erro de digitação."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nome e média de cada aluno; 2) reuso, padronização, manutenção em um lugar só."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num clube existe a função `fn_idade(p_nasc DATE)`, que devolve a idade em anos. Foi executado:\n```sql\nSELECT nome FROM socio WHERE fn_idade(data_nasc) >= 60;\n```\nA tabela `socio` tem id_socio, nome e data_nasc.\n\nNa sua resposta:\n1. diga o que a consulta devolve;\n2. explique como a função é usada para cada linha.",
+      "respostasAceitas": [
+        "Devolve os nomes dos sócios com 60 anos ou mais. Para cada linha da tabela, a função recebe a data de nascimento daquela linha, calcula a idade, e o WHERE mantém só quem tem 60 ou mais."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sócios com 60+ anos; 2) a função roda linha a linha com o valor da coluna e o resultado é comparado no WHERE."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa papelaria, a tentativa de definir esta função deu o erro “Not allowed to return a result set from a function”:\n```sql\nCREATE FUNCTION fn_produtos_baratos() RETURNS INT READS SQL DATA\nBEGIN\n  SELECT nome, preco FROM produto WHERE preco < 5;\n  RETURN 1;\nEND\n```\n\nNa sua resposta:\n1. explique por que deu esse erro;\n2. diga que outro recurso do banco serviria para mostrar essa lista de produtos.",
+      "respostasAceitas": [
+        "Função só pode devolver um valor pelo RETURN; um SELECT solto mandaria várias linhas para o cliente, o que não é permitido em função. Para mostrar a lista serve uma procedure (com o SELECT dentro, chamada com CALL) ou uma view."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) function não devolve conjunto de linhas, só um valor (SELECT dentro dela só com INTO); 2) procedure ou view."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa biblioteca existe:\n```sql\nCREATE FUNCTION fn_dias_atraso(p_devolucao DATE) RETURNS INT DETERMINISTIC\n  RETURN DATEDIFF(CURDATE(), p_devolucao);\n```\n\nNa sua resposta:\n1. diga o que a função calcula;\n2. explique por que ela NÃO é determinística de verdade;\n3. diga qual o problema de declarar DETERMINISTIC sem ser.",
+      "respostasAceitas": [
+        "Calcula quantos dias se passaram desde a data de devolução até hoje. Não é determinística porque usa CURDATE(): com a mesma data de entrada, o resultado muda a cada dia. Declarar errado engana o MySQL, que pode reaproveitar ou repetir resultados (ex.: em réplica) e dar valor errado; o certo é NOT DETERMINISTIC."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dias de atraso até hoje; 2) depende da data atual; 3) o MySQL confia na declaração e pode gerar resultado incorreto (otimização/replicação). Aceitar resposta que diga só 'pode dar resultado errado/inconsistente'."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja existe:\n```sql\nCREATE TRIGGER trg_log_cliente\nAFTER DELETE ON cliente\nFOR EACH ROW\n  INSERT INTO log_cliente (id_cliente, nome, apagado_em)\n  VALUES (OLD.id_cliente, OLD.nome, NOW());\n```\n\nNa sua resposta:\n1. diga quando esse trigger dispara;\n2. diga o que ele grava e para que serve.",
+      "respostasAceitas": [
+        "Dispara depois de cada linha apagada da tabela cliente. Grava na tabela log_cliente o id e o nome do cliente apagado e a data/hora. Serve de auditoria: registra quem foi excluído e quando."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) após DELETE em cliente, uma vez por linha; 2) registra os dados antigos (OLD) e a hora — histórico/auditoria."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa academia, a equipe discute se o registro de entrada do aluno deve ser feito por uma procedure `sp_registrar_entrada` ou por um trigger na tabela `catraca`.\n\nNa sua resposta:\n1. explique como a procedure é executada e como o trigger é executado;\n2. dê um exemplo de situação em que o trigger é a melhor escolha.",
+      "respostasAceitas": [
+        "A procedure só roda quando alguém a chama com CALL. O trigger roda sozinho quando acontece o INSERT, UPDATE ou DELETE na tabela dele. Trigger é melhor quando a ação deve acontecer sempre, sem depender de alguém lembrar, como gravar um log ou atualizar um contador a cada entrada na catraca."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) procedure = chamada explícita (CALL); trigger = automático, disparado por evento na tabela; 2) exemplo coerente de ação que deve ocorrer sempre (auditoria, estoque, contador)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é um TRIGGER (gatilho) no MySQL?",
+      "alternativas": [
+        "Uma rotina que só roda quando alguém a chama com o comando CALL",
+        "Uma consulta salva que funciona como tabela virtual",
+        "Um bloco que dispara sozinho com INSERT, UPDATE ou DELETE na tabela",
+        "Uma tarefa que o banco executa sozinho em horários marcados"
+      ],
+      "correta": 2,
+      "explicacao": "O trigger fica ligado a uma tabela e roda automaticamente no evento escolhido. CALL é procedure; tabela virtual é view; horário é event."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quais comandos podem disparar um trigger no MySQL?",
+      "alternativas": [
+        "SELECT, INSERT e CALL",
+        "CREATE, ALTER e DROP",
+        "GRANT e REVOKE",
+        "INSERT, UPDATE e DELETE"
+      ],
+      "correta": 3,
+      "explicacao": "Triggers reagem a mudanças nos dados da tabela. Consultas (SELECT) e comandos de estrutura não disparam trigger."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num trigger definido como `AFTER INSERT ON venda`, quando o corpo do trigger roda?",
+      "alternativas": [
+        "Logo depois de cada linha ser inserida em venda",
+        "Logo antes de cada linha ser inserida em venda",
+        "Uma vez por dia, depois do expediente",
+        "Só quando alguém o chama com CALL"
+      ],
+      "correta": 0,
+      "explicacao": "AFTER = depois do evento; BEFORE = antes. O evento aqui é o INSERT na tabela venda."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num trigger de INSERT, o que representa `NEW`?",
+      "alternativas": [
+        "Os valores antigos da linha, antes da mudança",
+        "Uma tabela nova gerada pelo trigger",
+        "Os valores da linha que está sendo inserida",
+        "O usuário que executou o INSERT"
+      ],
+      "correta": 2,
+      "explicacao": "NEW.coluna dá acesso aos valores da linha nova. Em INSERT não existe OLD, pois não havia linha antes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num trigger de DELETE, o que representa `OLD`?",
+      "alternativas": [
+        "Os valores da próxima linha da tabela",
+        "Os valores da linha que está sendo apagada",
+        "A tabela inteira antes do comando",
+        "A data em que a linha foi inserida"
+      ],
+      "correta": 1,
+      "explicacao": "OLD.coluna traz os valores da linha que está saindo. É assim que um trigger de auditoria guarda o que foi apagado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, sempre que um item é inserido na tabela `item_venda`, o estoque do produto deve diminuir sozinho. Qual recurso faz isso?",
+      "alternativas": [
+        "Um trigger AFTER INSERT na tabela item_venda",
+        "Uma view com o estoque já descontado",
+        "Um event que roda uma vez por semana",
+        "Uma function usada no FROM da consulta"
+      ],
+      "correta": 0,
+      "explicacao": "O trigger reage a cada INSERT e pode dar UPDATE no estoque. Event roda por horário, não por venda."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Como se executa manualmente o trigger `trg_baixa_estoque`?",
+      "alternativas": [
+        "Com CALL trg_baixa_estoque();",
+        "Com SELECT trg_baixa_estoque;",
+        "Com EXECUTE TRIGGER trg_baixa_estoque;",
+        "Não se executa: ele dispara com o evento"
+      ],
+      "correta": 3,
+      "explicacao": "Trigger não é chamado por ninguém. Ele roda quando acontece o INSERT, UPDATE ou DELETE definido nele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando apaga o trigger `trg_log_aluno`?",
+      "alternativas": [
+        "DELETE TRIGGER trg_log_aluno;",
+        "DROP PROCEDURE trg_log_aluno;",
+        "DROP TRIGGER trg_log_aluno;",
+        "DISABLE TRIGGER trg_log_aluno;"
+      ],
+      "correta": 2,
+      "explicacao": "Trigger se apaga com DROP TRIGGER. O MySQL não tem DISABLE TRIGGER; para desligar, apaga-se o trigger."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que significa `FOR EACH ROW` na definição de um trigger?",
+      "alternativas": [
+        "O corpo roda uma vez por comando, com qualquer número de linhas",
+        "O corpo roda uma vez para cada linha afetada pelo comando",
+        "O corpo roda em todas as linhas da tabela, mesmo nas não afetadas",
+        "O corpo roda só na primeira linha afetada"
+      ],
+      "correta": 1,
+      "explicacao": "No MySQL todo trigger é por linha: um UPDATE que muda 10 linhas dispara o corpo 10 vezes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um trigger de auditoria numa clínica grava cada alteração feita na tabela `consulta`. O que é essa auditoria?",
+      "alternativas": [
+        "Uma limpeza dos registros antigos",
+        "Um jeito de deixar as consultas mais rápidas",
+        "Uma cópia de segurança do banco inteiro",
+        "Um histórico de o que foi alterado e quando"
+      ],
+      "correta": 3,
+      "explicacao": "Auditoria = registro de mudanças (valores antigos/novos, data, usuário) para conferir depois o que aconteceu."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num trigger de UPDATE, qual afirmação sobre OLD e NEW está correta?",
+      "alternativas": [
+        "OLD tem os valores depois da alteração e NEW tem os de antes",
+        "Só NEW existe em triggers de UPDATE",
+        "Só OLD existe em triggers de UPDATE",
+        "OLD tem os valores antes da alteração e NEW tem os valores depois"
+      ],
+      "correta": 3,
+      "explicacao": "UPDATE é o único evento com os dois: OLD = como era, NEW = como fica."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num trigger `BEFORE DELETE ON aluno`, o que acontece se o corpo usar `NEW.nome`?",
+      "alternativas": [
+        "NEW.nome traz o mesmo valor de OLD.nome",
+        "NEW.nome vale sempre NULL, sem erro",
+        "Dá erro, porque não existe NEW em trigger de DELETE",
+        "NEW.nome traz o nome do próximo aluno da tabela"
+      ],
+      "correta": 2,
+      "explicacao": "No DELETE não há linha nova, só a que sai (OLD). O MySQL recusa o trigger que usa NEW nesse caso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja existe:\n```sql\nCREATE TRIGGER trg_baixa\nAFTER INSERT ON item_venda FOR EACH ROW\n  UPDATE produto SET estoque = estoque - NEW.quantidade\n  WHERE id_produto = NEW.id_produto;\n```\nO produto 5 tinha estoque 20. Foi inserido um item_venda com id_produto 5 e quantidade 3. Qual é o estoque agora?",
+      "alternativas": [
+        "23",
+        "20",
+        "17",
+        "3"
+      ],
+      "correta": 2,
+      "explicacao": "O trigger subtrai a quantidade do item novo (NEW.quantidade = 3) do produto 5: 20 − 3 = 17."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia existe:\n```sql\nCREATE TRIGGER trg_nome_maiusculo\nBEFORE INSERT ON aluno FOR EACH ROW\n  SET NEW.nome = UPPER(NEW.nome);\n```\nO que fica gravado após `INSERT INTO aluno (nome) VALUES ('ana souza');`?",
+      "alternativas": [
+        "O nome ANA SOUZA, em maiúsculas",
+        "O nome ana souza, como foi digitado",
+        "Uma linha com o nome vazio",
+        "Nenhuma linha, pois o trigger dá erro"
+      ],
+      "correta": 0,
+      "explicacao": "No BEFORE o trigger pode mudar NEW antes da gravação; o nome vai para a tabela já em maiúsculas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma escola quer corrigir um valor da linha (por exemplo, tirar espaços do e-mail) antes de ela ser gravada. Qual momento de trigger usar?",
+      "alternativas": [
+        "AFTER, porque roda antes da gravação e pode mudar o OLD",
+        "AFTER, porque só depois de gravar dá para mudar o NEW",
+        "BEFORE, porque roda antes da gravação e pode mudar o NEW",
+        "BEFORE, porque é o único que consegue mudar o OLD"
+      ],
+      "correta": 2,
+      "explicacao": "Só no BEFORE dá para alterar NEW. OLD nunca pode ser alterado; no AFTER a linha já foi gravada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando lista os triggers do banco de dados em uso?",
+      "alternativas": [
+        "SHOW TABLES TRIGGER;",
+        "SELECT * FROM TRIGGER;",
+        "DESCRIBE TRIGGERS;",
+        "SHOW TRIGGERS;"
+      ],
+      "correta": 3,
+      "explicacao": "SHOW TRIGGERS mostra nome, evento, tabela, momento (BEFORE/AFTER) e o corpo de cada trigger."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa padaria existe:\n```sql\nCREATE TRIGGER trg_hist_preco\nAFTER UPDATE ON produto FOR EACH ROW\n  INSERT INTO historico_preco (id_produto, preco_antigo, preco_novo)\n  VALUES (OLD.id_produto, OLD.preco, NEW.preco);\n```\nO pão de id 1 custava 10 e foi executado `UPDATE produto SET preco = 12 WHERE id_produto = 1;`. O que é gravado em historico_preco?",
+      "alternativas": [
+        "id 1, preço antigo 12 e preço novo 10",
+        "id 1, preço antigo 12 e preço novo 12",
+        "id 1, preço antigo 10 e preço novo 12",
+        "Nada, porque o trigger só roda em INSERT"
+      ],
+      "correta": 2,
+      "explicacao": "OLD.preco é o valor antes do UPDATE (10) e NEW.preco o valor depois (12)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na mesma padaria, com o trigger AFTER UPDATE … FOR EACH ROW que grava uma linha em historico_preco, foi executado um UPDATE que mudou o preço de 4 produtos. Quantas linhas entram no histórico?",
+      "alternativas": [
+        "1",
+        "4",
+        "0",
+        "8"
+      ],
+      "correta": 1,
+      "explicacao": "FOR EACH ROW: o trigger roda uma vez para cada linha alterada, então 4 inserções."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas definições de trigger está na ordem certa?",
+      "alternativas": [
+        "CREATE TRIGGER trg_v ON venda AFTER INSERT FOR EACH ROW …",
+        "CREATE TRIGGER AFTER INSERT trg_v ON venda FOR EACH ROW …",
+        "CREATE TRIGGER trg_v AFTER INSERT ON venda FOR EACH ROW …",
+        "CREATE TRIGGER trg_v FOR EACH ROW ON venda AFTER INSERT …"
+      ],
+      "correta": 2,
+      "explicacao": "A ordem é: nome, momento (BEFORE/AFTER), evento (INSERT/UPDATE/DELETE), ON tabela, FOR EACH ROW, corpo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa biblioteca existe um trigger `AFTER DELETE ON livro` que grava o título do livro apagado numa tabela de log. Qual expressão pega esse título?",
+      "alternativas": [
+        "NEW.titulo",
+        "livro.titulo",
+        "DELETED.titulo",
+        "OLD.titulo"
+      ],
+      "correta": 3,
+      "explicacao": "No DELETE só existe OLD. DELETED é de outro banco de dados (SQL Server), não do MySQL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja:\n```sql\nCREATE TRIGGER trg_desconto\nAFTER INSERT ON pedido FOR EACH ROW\n  SET NEW.valor = NEW.valor * 0.9;\n```\nO que acontece ao tentar definir esse trigger?",
+      "alternativas": [
+        "Funciona e grava o pedido com 10% de desconto",
+        "Funciona, mas o desconto só aparece no próximo pedido",
+        "Dá erro: no AFTER, NEW não pode mais ser alterado",
+        "Funciona e grava duas linhas: com e sem desconto"
+      ],
+      "correta": 2,
+      "explicacao": "Para mudar o valor antes de gravar, o trigger tem de ser BEFORE INSERT. No AFTER, NEW é só leitura."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja existe um trigger `AFTER INSERT ON pedido` cujo corpo faz `UPDATE pedido SET status = 'novo' WHERE id_pedido = NEW.id_pedido;`. O que acontece ao inserir um pedido?",
+      "alternativas": [
+        "Dá erro: o trigger não pode alterar a própria tabela",
+        "O pedido é gravado e o status vira 'novo' normalmente",
+        "O trigger entra em repetição infinita até o servidor parar",
+        "O pedido é gravado duas vezes, uma com cada status"
+      ],
+      "correta": 0,
+      "explicacao": "O MySQL proíbe o trigger de mexer na tabela do comando que o disparou. O certo seria um BEFORE INSERT com SET NEW.status = 'novo'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola existe um trigger `BEFORE DELETE ON aluno` que grava log de cada aluno apagado. Alguém executou `TRUNCATE TABLE aluno;`. O trigger disparou?",
+      "alternativas": [
+        "Sim, uma vez para cada aluno apagado",
+        "Não, porque TRUNCATE não apaga linha por linha",
+        "Sim, mas só uma vez para a tabela inteira",
+        "Não, porque o TRUNCATE dá erro em tabela com trigger"
+      ],
+      "correta": 1,
+      "explicacao": "TRUNCATE esvazia a tabela de uma vez (é tratado como DDL) e não dispara triggers de DELETE. O log fica sem registro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica existe:\n```sql\nCREATE TRIGGER trg_valida_idade\nBEFORE INSERT ON paciente FOR EACH ROW\nBEGIN\n  IF NEW.idade < 0 THEN\n    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Idade inválida';\n  END IF;\nEND\n```\nO que acontece com um INSERT de paciente com idade −3?",
+      "alternativas": [
+        "O paciente é gravado com idade 0 e aparece um aviso",
+        "O paciente é gravado com idade −3 e o erro vai para um log",
+        "O trigger é apagado por ter encontrado um erro",
+        "O INSERT é cancelado e aparece a mensagem Idade inválida"
+      ],
+      "correta": 3,
+      "explicacao": "SIGNAL gera um erro de propósito. Como o trigger é BEFORE, a linha não chega a ser gravada e o comando falha com a mensagem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja (tabelas InnoDB), o INSERT em `item_venda` dispara um trigger AFTER INSERT que atualiza o estoque. Se o UPDATE dentro do trigger der erro, o que acontece com o INSERT em item_venda?",
+      "alternativas": [
+        "O INSERT fica gravado e o erro do trigger é ignorado",
+        "O INSERT fica gravado e o trigger é desativado",
+        "O INSERT é repetido até o trigger funcionar",
+        "O INSERT também é desfeito e o comando termina com erro"
+      ],
+      "correta": 3,
+      "explicacao": "Com tabelas transacionais, o comando e seus triggers são uma unidade: se o trigger falha, o comando inteiro é desfeito."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é um EVENT no MySQL?",
+      "alternativas": [
+        "Uma tarefa agendada que o MySQL roda sozinho",
+        "Um trigger que dispara depois de cada INSERT",
+        "Uma procedure que só roda com CALL",
+        "Uma view que se atualiza sozinha"
+      ],
+      "correta": 0,
+      "explicacao": "O event é o agendador do banco: roda comandos numa data/hora (AT) ou repetidamente (EVERY)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para os eventos agendados rodarem, o que precisa estar ligado no servidor MySQL?",
+      "alternativas": [
+        "O log binário (binlog)",
+        "O modo de atualização segura (safe updates)",
+        "A confirmação automática (autocommit)",
+        "O agendador de eventos (event_scheduler)"
+      ],
+      "correta": 3,
+      "explicacao": "A variável event_scheduler liga ou desliga o agendador. Com ela em OFF, nenhum evento roda."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num evento aparece `ON SCHEDULE EVERY 1 DAY`. O que isso indica?",
+      "alternativas": [
+        "Que o evento roda uma vez só, daqui a um dia",
+        "Que o evento é apagado depois de um dia",
+        "Que o evento roda uma vez por dia",
+        "Que o evento roda a cada minuto durante um dia"
+      ],
+      "correta": 2,
+      "explicacao": "EVERY define repetição (a cada 1 dia). Para rodar uma vez só usa-se AT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando apaga o evento `ev_limpar_carrinho`?",
+      "alternativas": [
+        "DROP EVENT ev_limpar_carrinho;",
+        "DELETE EVENT ev_limpar_carrinho;",
+        "DROP SCHEDULE ev_limpar_carrinho;",
+        "STOP EVENT ev_limpar_carrinho;"
+      ],
+      "correta": 0,
+      "explicacao": "Como os outros objetos, o evento se apaga com DROP EVENT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando liga o agendador de eventos do MySQL?",
+      "alternativas": [
+        "START EVENT SCHEDULER NOW;",
+        "ENABLE ALL EVENTS ON SERVER;",
+        "SET GLOBAL event_scheduler = ON;",
+        "SET GLOBAL events = ENABLED;"
+      ],
+      "correta": 2,
+      "explicacao": "event_scheduler é uma variável global; o valor pode ser conferido com SHOW VARIABLES LIKE 'event_scheduler';"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num evento aparece `ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL 1 HOUR`. O que isso indica?",
+      "alternativas": [
+        "Que o evento roda de hora em hora",
+        "Que o evento roda por uma hora sem parar",
+        "Que o evento roda agora e repete daqui a uma hora",
+        "Que o evento roda uma única vez, daqui a uma hora"
+      ],
+      "correta": 3,
+      "explicacao": "AT marca um momento só (execução única). Repetição usa EVERY."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas tarefas combina melhor com um EVENT?",
+      "alternativas": [
+        "Apagar toda madrugada os carrinhos abandonados há 7 dias",
+        "Diminuir o estoque no momento exato de cada venda",
+        "Mostrar os produtos caros como se fossem uma tabela",
+        "Calcular o desconto de um preço dentro de um SELECT"
+      ],
+      "correta": 0,
+      "explicacao": "Tarefa por horário/repetição é EVENT. Reagir a cada venda é TRIGGER; tabela virtual é VIEW; cálculo em SELECT é FUNCTION."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz `ALTER EVENT ev_resumo_diario DISABLE;`?",
+      "alternativas": [
+        "Apaga o evento do banco",
+        "Roda o evento uma última vez e depois o apaga",
+        "Pausa o evento sem apagá-lo",
+        "Desliga o agendador de todos os eventos"
+      ],
+      "correta": 2,
+      "explicacao": "DISABLE pausa só esse evento; ENABLE o religa. O agendador geral continua funcionando."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja foi agendado `CREATE EVENT ev_fim_promo ON SCHEDULE AT '2026-12-26 00:00:00' DO UPDATE produto SET promocao = 0;`, sem cláusula ON COMPLETION. O que acontece com o evento depois que ele roda?",
+      "alternativas": [
+        "É apagado sozinho (padrão ON COMPLETION NOT PRESERVE)",
+        "Fica guardado e roda de novo no mesmo horário no dia seguinte",
+        "Fica guardado e roda de novo sempre que o servidor reinicia",
+        "Fica guardado, mas o UPDATE é desfeito no fim do dia"
+      ],
+      "correta": 0,
+      "explicacao": "Evento de execução única, por padrão, some depois de rodar. Para mantê-lo (desativado) usa-se ON COMPLETION PRESERVE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel foi definido um evento com `ON SCHEDULE EVERY 1 HOUR`, mas ele nunca rodou. `SHOW VARIABLES LIKE 'event_scheduler';` mostra OFF. Qual é a causa?",
+      "alternativas": [
+        "O evento precisa ser chamado com CALL para começar",
+        "O agendador de eventos está desligado",
+        "Falta um trigger que dispare o evento a cada hora",
+        "Eventos só começam a rodar 24 horas depois de definidos"
+      ],
+      "correta": 1,
+      "explicacao": "Com event_scheduler em OFF nenhum evento é executado. Liga-se com SET GLOBAL event_scheduler = ON (é preciso ter permissão para isso)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de games existe:\n```sql\nCREATE TRIGGER trg_baixa_estoque\nAFTER INSERT ON item_venda\nFOR EACH ROW\n  UPDATE jogo SET estoque = estoque - NEW.quantidade\n  WHERE id_jogo = NEW.id_jogo;\n```\n\nNa sua resposta:\n1. diga quando esse trigger dispara;\n2. explique o que ele faz com o estoque.",
+      "respostasAceitas": [
+        "Dispara depois de cada item inserido em item_venda. Ele diminui o estoque do jogo vendido na quantidade do item (NEW.quantidade), sem ninguém precisar fazer isso à mão."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) após INSERT em item_venda, uma vez por linha; 2) subtrai a quantidade vendida do estoque do jogo certo (NEW.id_jogo)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa empresa de limpeza existe um trigger `AFTER UPDATE ON funcionario` que grava `OLD.salario` e `NEW.salario` numa tabela de histórico.\n\nNa sua resposta:\n1. explique o que é OLD.salario;\n2. explique o que é NEW.salario.",
+      "respostasAceitas": [
+        "OLD.salario é o salário como estava antes do UPDATE. NEW.salario é o salário depois do UPDATE, o valor novo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) valor antigo; 2) valor novo. Os dois juntos mostram a mudança feita."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno perguntou qual a diferença entre um trigger BEFORE INSERT e um trigger AFTER INSERT.\n\nNa sua resposta:\n1. diga quando cada um roda;\n2. dê um exemplo de uso para cada um.",
+      "respostasAceitas": [
+        "BEFORE roda antes de a linha ser gravada; AFTER roda depois. Exemplo BEFORE: corrigir ou validar um valor (deixar nome em maiúsculas, barrar idade negativa). Exemplo AFTER: gravar log ou baixar estoque depois que a venda foi registrada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) antes × depois da gravação; 2) BEFORE para validar/ajustar NEW; AFTER para ações em outras tabelas (log, estoque). Aceitar exemplos coerentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa farmácia existe:\n```sql\nCREATE TRIGGER trg_hist_preco\nAFTER UPDATE ON remedio FOR EACH ROW\n  INSERT INTO hist_preco (id_remedio, preco_antigo, preco_novo, alterado_em)\n  VALUES (OLD.id_remedio, OLD.preco, NEW.preco, NOW());\n```\nO remédio 8 custava 20 e foi executado `UPDATE remedio SET preco = 25 WHERE id_remedio = 8;`.\n\nNa sua resposta:\n1. diga o que fica gravado em hist_preco;\n2. explique por que esse tipo de auditoria é útil.",
+      "respostasAceitas": [
+        "Fica uma linha com id 8, preço antigo 20, preço novo 25 e a data/hora da mudança. É útil para saber quando e como os preços mudaram, conferir erros e ter histórico, sem depender de alguém anotar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 8, 20, 25 e a data/hora; 2) histórico/rastreabilidade das mudanças, conferência, segurança."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola existe:\n```sql\nCREATE TRIGGER trg_email\nBEFORE INSERT ON aluno FOR EACH ROW\n  SET NEW.email = LOWER(TRIM(NEW.email));\n```\n\nNa sua resposta:\n1. diga o que o trigger faz;\n2. explique por que ele precisa ser BEFORE e não AFTER.",
+      "respostasAceitas": [
+        "Antes de gravar o aluno, tira os espaços das pontas do e-mail e deixa tudo em minúsculas, padronizando o dado. Precisa ser BEFORE porque só antes da gravação dá para mudar NEW; no AFTER a linha já foi gravada e NEW não pode ser alterado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) padroniza o e-mail (TRIM + LOWER); 2) alterar NEW só é permitido no BEFORE."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de materiais existe:\n```sql\nCREATE TRIGGER trg_devolve_estoque\nAFTER DELETE ON item_venda FOR EACH ROW\n  UPDATE produto SET estoque = estoque + OLD.quantidade\n  WHERE id_produto = OLD.id_produto;\n```\n\nNa sua resposta:\n1. diga o que o trigger faz;\n2. explique por que ele usa OLD e não NEW.",
+      "respostasAceitas": [
+        "Quando um item de venda é apagado (venda cancelada), devolve a quantidade dele ao estoque do produto. Usa OLD porque no DELETE só existe a linha que está saindo; não há linha nova (NEW)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) soma de volta ao estoque a quantidade do item apagado; 2) em DELETE só existe OLD."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num hotel existe um trigger `AFTER UPDATE ON reserva FOR EACH ROW` que grava uma linha na tabela `log_reserva`. Foi executado um UPDATE que alterou 30 reservas.\n\nNa sua resposta:\n1. diga quantas linhas entram em log_reserva;\n2. explique o que significa FOR EACH ROW.",
+      "respostasAceitas": [
+        "Entram 30 linhas. FOR EACH ROW quer dizer que o trigger roda uma vez para cada linha afetada pelo comando, não uma vez por comando."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 30; 2) execução por linha afetada."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa clínica existe:\n```sql\nCREATE TRIGGER trg_valida_consulta\nBEFORE INSERT ON consulta FOR EACH ROW\nBEGIN\n  IF NEW.data_consulta < CURDATE() THEN\n    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Data no passado';\n  END IF;\nEND\n```\n\nNa sua resposta:\n1. diga o que acontece ao inserir uma consulta para amanhã;\n2. diga o que acontece ao inserir uma consulta para ontem;\n3. explique uma vantagem de fazer essa validação no banco.",
+      "respostasAceitas": [
+        "1) A consulta é gravada normalmente. 2) O INSERT é cancelado com o erro 'Data no passado'. 3) A regra vale para qualquer sistema ou pessoa que grave na tabela; ninguém consegue burlar esquecendo de validar no programa."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) grava; 2) SIGNAL gera erro e a linha não é gravada; 3) regra centralizada no banco, vale para todos os acessos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, a equipe definiu um trigger `AFTER INSERT ON pedido` cujo corpo é `UPDATE pedido SET status = 'novo' WHERE id_pedido = NEW.id_pedido;`. Ao inserir pedidos, aparece o erro “Can't update table 'pedido' in stored function/trigger because it is already used by statement”.\n\nNa sua resposta:\n1. explique por que deu esse erro;\n2. diga como alcançar o objetivo (status 'novo' em todo pedido novo) com um trigger.",
+      "respostasAceitas": [
+        "O MySQL não deixa um trigger alterar a mesma tabela do comando que o disparou. O jeito certo é usar um trigger BEFORE INSERT que faz SET NEW.status = 'novo', ajustando a linha antes de ela ser gravada (ou usar DEFAULT 'novo' na coluna)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) trigger não pode dar UPDATE na própria tabela que o disparou; 2) BEFORE INSERT alterando NEW (aceitar também DEFAULT na coluna)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num site de cursos existe:\n```sql\nCREATE EVENT ev_limpar_log\nON SCHEDULE EVERY 1 DAY\nDO\n  DELETE FROM log_acesso WHERE data_acesso < NOW() - INTERVAL 30 DAY;\n```\n\nNa sua resposta:\n1. diga o que o evento faz;\n2. diga com que frequência ele roda.",
+      "respostasAceitas": [
+        "Apaga da tabela log_acesso os registros com mais de 30 dias. Roda uma vez por dia, automaticamente."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) limpa os logs antigos (mais de 30 dias); 2) diariamente (EVERY 1 DAY)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa academia, o evento `ev_bloquear_inadimplentes` foi definido para rodar todo dia, mas nada acontece. O técnico executou `SHOW VARIABLES LIKE 'event_scheduler';` e o resultado foi OFF.\n\nNa sua resposta:\n1. explique o que é o event_scheduler;\n2. explique por que o evento não está rodando.",
+      "respostasAceitas": [
+        "event_scheduler é o agendador de eventos do MySQL, a parte que roda os eventos na hora marcada. Como está OFF, o agendador está desligado e nenhum evento é executado; é preciso ligá-lo (SET GLOBAL event_scheduler = ON)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o agendador que executa os eventos; 2) desligado = nenhum evento roda."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa padaria, a equipe tem um trigger que baixa o estoque a cada venda e um evento que zera os pedidos não pagos toda meia-noite.\n\nNa sua resposta:\n1. diga o que faz cada um rodar (trigger e evento);\n2. explique por que cada caso usou o recurso certo.",
+      "respostasAceitas": [
+        "O trigger roda quando acontece um INSERT/UPDATE/DELETE na tabela; o evento roda pelo relógio, no horário agendado. Baixar estoque precisa acontecer em cada venda (trigger); zerar pedidos é uma tarefa de horário fixo (evento)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) trigger = mudança nos dados; evento = data/hora agendada; 2) justificativa coerente com cada situação."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de roupas existe:\n```sql\nCREATE EVENT ev_fim_promocao\nON SCHEDULE AT '2026-12-26 00:00:00'\nDO\n  UPDATE produto SET em_promocao = 0;\n```\n\nNa sua resposta:\n1. diga o que o evento faz e quando;\n2. diga quantas vezes ele roda e o que acontece com o evento depois.",
+      "respostasAceitas": [
+        "À meia-noite de 26/12/2026 tira todos os produtos da promoção (em_promocao = 0). Roda uma única vez (AT); depois, por padrão (ON COMPLETION NOT PRESERVE), o evento é apagado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) encerra a promoção na data marcada; 2) uma vez só; depois é removido automaticamente (aceitar 'deixa de existir/some')."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola particular existe:\n```sql\nCREATE EVENT ev_mensalidades\nON SCHEDULE EVERY 1 MONTH STARTS '2026-12-01 06:00:00'\nDO\n  CALL sp_gerar_mensalidades();\n```\n\nNa sua resposta:\n1. diga o que o evento faz e quando;\n2. explique uma vantagem de agendar essa tarefa no próprio banco.",
+      "respostasAceitas": [
+        "A partir de 01/12/2026 às 6h, todo mês, chama a procedure que gera as mensalidades. Vantagem: a tarefa acontece sozinha, no horário certo, sem depender de alguém lembrar ou de um programa externo ficar ligado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mensalmente, a partir da data, executa sp_gerar_mensalidades; 2) automação, sem esquecimento, sem depender de outro sistema."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "VIEW, procedures, functions, triggers e eventos",
+      "capacidade": "bd.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na loja, durante a semana de inventário, o técnico executou `ALTER EVENT ev_resumo_diario DISABLE;` em vez de `DROP EVENT ev_resumo_diario;`.\n\nNa sua resposta:\n1. diga o que o ALTER EVENT … DISABLE faz;\n2. explique a diferença para o DROP EVENT;\n3. explique por que DISABLE foi a melhor escolha nesse caso.",
+      "respostasAceitas": [
+        "DISABLE pausa o evento: ele continua no banco, mas não roda. DROP EVENT apagaria o evento de vez, e seria preciso defini-lo de novo. Como a pausa é só durante o inventário, basta depois um ALTER EVENT … ENABLE para voltar a funcionar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) desativa sem apagar; 2) DROP remove a definição; 3) pausa temporária, religa com ENABLE sem refazer o evento."
+    }
+  ]
+}
