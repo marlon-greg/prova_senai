@@ -1,0 +1,2424 @@
+{
+  "nome": "Programação Back-End — Documentação: diagrama de classes e API (a revisar)",
+  "materia": "Programação Back-End",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que um diagrama de classes UML mostra sobre um sistema?",
+      "alternativas": [
+        "A ordem em que as telas aparecem para o usuário final",
+        "Os passos que o servidor executa em cada requisição",
+        "As classes, com atributos, métodos e relacionamentos",
+        "Os registros que já foram gravados no banco de dados"
+      ],
+      "correta": 2,
+      "explicacao": "O diagrama de classes é estrutural: mostra as classes (nome, atributos, métodos) e como elas se relacionam. Não mostra telas, passos de execução nem dados gravados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na caixa de uma classe do diagrama UML, o que fica no compartimento do meio?",
+      "alternativas": [
+        "Os métodos",
+        "Os atributos",
+        "O nome da classe",
+        "Os relacionamentos"
+      ],
+      "correta": 1,
+      "explicacao": "A caixa tem três partes: em cima o nome, no meio os atributos e embaixo os métodos. Relacionamentos são as linhas entre as caixas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No diagrama de classes, o que indica o sinal `#` antes de um atributo, como em `# salario: number`?",
+      "alternativas": [
+        "Público: acesso liberado para qualquer outra classe",
+        "Privado: acesso somente de dentro da própria classe",
+        "Estático: um só valor compartilhado por todos os objetos",
+        "Protegido: acesso da própria classe e das subclasses"
+      ],
+      "correta": 3,
+      "explicacao": "`#` é protegido (protected): a própria classe e as classes filhas podem usar. `+` é público, `-` é privado e estático é representado sublinhado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa classe `Agenda` aparece o método `+ cadastrar(nome: String): void`. O que o `void` indica?",
+      "alternativas": [
+        "Que o método não devolve nenhum valor",
+        "Que o método é privado",
+        "Que o método não recebe parâmetros",
+        "Que o método ainda não foi programado"
+      ],
+      "correta": 0,
+      "explicacao": "O tipo depois dos dois-pontos, no fim do método, é o tipo de retorno. `void` quer dizer que o método não retorna valor. O método recebe o parâmetro nome e é público (+)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na classe `Aluno` de uma escola aparece o atributo `- idade: int`. O que é o `int` depois dos dois-pontos?",
+      "alternativas": [
+        "O tipo do atributo (número inteiro)",
+        "O valor inicial do atributo",
+        "A visibilidade do atributo",
+        "O nome da classe a que ele pertence"
+      ],
+      "correta": 0,
+      "explicacao": "No formato UML `visibilidade nome: tipo`, o que vem depois dos dois-pontos é o tipo. O `-` é a visibilidade (privado)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num diagrama de classes, qual o significado da multiplicidade `*` na ponta de uma associação?",
+      "alternativas": [
+        "Exatamente um",
+        "Um ou mais",
+        "Zero ou muitos",
+        "No máximo um"
+      ],
+      "correta": 2,
+      "explicacao": "`*` (o mesmo que `0..*`) aceita nenhum, um ou vários. `1` é exatamente um, `1..*` é pelo menos um e `0..1` é no máximo um."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na associação entre `Cliente` e `CartaoFidelidade` de uma padaria, a ponta do cartão tem a multiplicidade `0..1`. O que isso quer dizer?",
+      "alternativas": [
+        "Cada cliente tem exatamente um cartão fidelidade",
+        "Cada cliente tem pelo menos um cartão fidelidade",
+        "Cada cliente pode ter vários cartões fidelidade",
+        "Cada cliente tem nenhum ou um cartão fidelidade"
+      ],
+      "correta": 3,
+      "explicacao": "`0..1` = opcional e no máximo um: o cliente pode não ter cartão, ou ter um só."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No diagrama de uma oficina, a associação `OrdemServico 1 —— 1..* Servico` tem `1..*` do lado de `Servico`. O que isso significa?",
+      "alternativas": [
+        "Cada ordem tem pelo menos um serviço, podendo ter vários",
+        "Cada ordem pode ficar sem nenhum serviço registrado nela",
+        "Cada ordem tem exatamente um serviço, nem mais nem menos",
+        "Cada ordem tem no máximo um serviço, mas pode ter nenhum"
+      ],
+      "correta": 0,
+      "explicacao": "`1..*` = no mínimo um e sem limite máximo. Uma ordem de serviço sem nenhum serviço não seria permitida."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No diagrama de um pet shop, `Cachorro` herda de `Animal`. Para qual classe aponta o triângulo vazio da linha de herança?",
+      "alternativas": [
+        "Para Cachorro, a subclasse",
+        "Para Animal, a superclasse",
+        "Para a classe que tiver mais atributos",
+        "Tanto faz, a direção não importa"
+      ],
+      "correta": 1,
+      "explicacao": "Na herança (generalização) a linha sai da classe filha e o triângulo vazio fica encostado na classe mãe (superclasse)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Que relacionamento é representado por uma linha com um losango VAZIO numa das pontas?",
+      "alternativas": [
+        "Agregação",
+        "Composição",
+        "Herança",
+        "Dependência"
+      ],
+      "correta": 0,
+      "explicacao": "Losango vazio = agregação (a parte pode existir sem o todo). Losango cheio = composição. Triângulo vazio = herança. Linha tracejada com seta = dependência."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Como a dependência entre duas classes costuma ser desenhada no diagrama de classes?",
+      "alternativas": [
+        "Linha cheia com triângulo vazio",
+        "Linha tracejada com seta aberta",
+        "Linha cheia com losango cheio",
+        "Linha cheia sem nada nas pontas"
+      ],
+      "correta": 1,
+      "explicacao": "Dependência = linha tracejada com seta aberta, apontando para a classe usada. Triângulo vazio é herança, losango cheio é composição e a linha simples é associação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No diagrama de uma biblioteca, `Leitor` e `Emprestimo` estão ligados por uma linha cheia simples, sem losango nem triângulo. Que relação é essa?",
+      "alternativas": [
+        "Herança",
+        "Composição",
+        "Agregação",
+        "Associação"
+      ],
+      "correta": 3,
+      "explicacao": "Linha cheia simples é associação: as classes se conhecem/se relacionam. Herança teria triângulo, composição losango cheio e agregação losango vazio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em JavaScript, a classe é `class Cliente { #cpf; constructor(cpf) { this.#cpf = cpf; } }`. No diagrama de classes, como o atributo `cpf` deve aparecer?",
+      "alternativas": [
+        "`# cpf: String`",
+        "`+ cpf: String`",
+        "`cpf(): String`",
+        "`- cpf: String`"
+      ],
+      "correta": 3,
+      "explicacao": "O `#` do JavaScript cria um campo privado, que na UML é `-`. O `#` da UML significa protegido, não privado: é uma pegadinha comum. `cpf()` seria um método."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No diagrama da biblioteca, a classe `Livro` tem `- titulo: String` e `+ getTitulo(): String`. Como outra classe pode saber o título de um livro?",
+      "alternativas": [
+        "Chamando o método getTitulo(), que é público",
+        "Lendo o atributo titulo diretamente, porque ele é visível",
+        "Herdando de Livro, porque o privado passa para as filhas",
+        "Não pode: o título só é usado dentro de Livro"
+      ],
+      "correta": 0,
+      "explicacao": "O atributo é privado (-), então outras classes não o acessam direto (nem as subclasses). O caminho é o método público getTitulo() (+), que devolve o valor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No diagrama de uma clínica: `Paciente 1 —— * Consulta`. Qual a leitura correta?",
+      "alternativas": [
+        "Cada paciente tem exatamente uma consulta cadastrada no sistema",
+        "Um paciente pode ter várias consultas; cada consulta é de um paciente",
+        "Uma consulta pode reunir vários pacientes ao mesmo tempo na sala",
+        "Todo paciente precisa ter pelo menos uma consulta para existir"
+      ],
+      "correta": 1,
+      "explicacao": "O `*` do lado de Consulta diz quantas consultas um paciente tem (zero ou muitas). O `1` do lado de Paciente diz que cada consulta pertence a um paciente. Como `*` aceita zero, o paciente pode não ter consulta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, o diagrama tem `Aluno 1 —— 0..1 Armario`. Um aluno que não alugou armário fere esse diagrama?",
+      "alternativas": [
+        "Sim, porque todo aluno precisa de um armário",
+        "Sim, porque 0..1 obriga pelo menos um armário",
+        "Não, porque 0..1 permite nenhum armário",
+        "Não, porque o diagrama não trata de quantidades"
+      ],
+      "correta": 2,
+      "explicacao": "`0..1` significa nenhum ou um. O aluno sem armário está dentro do permitido; o que o diagrama proíbe é um aluno com dois armários."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No pet shop, `Animal` tem `+ nome: String` e `+ emitirSom(): void`. `Cachorro` herda de `Animal` e tem `+ raca: String`. Um objeto Cachorro tem acesso a quê?",
+      "alternativas": [
+        "Só raca, que é o que está na caixa dele",
+        "Só nome e emitirSom(), herdados de Animal",
+        "nome, emitirSom() e raca",
+        "raca e emitirSom(), mas não nome"
+      ],
+      "correta": 2,
+      "explicacao": "A subclasse recebe os membros públicos (e protegidos) da superclasse e soma os seus. Por isso Cachorro tem nome e emitirSom() de Animal, mais raca."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes pares é mais bem representado por COMPOSIÇÃO (losango cheio)?",
+      "alternativas": [
+        "Turma e os alunos matriculados",
+        "Cliente e os pedidos que ele fez",
+        "NotaFiscal e os itens da nota",
+        "Carro e o motorista que o dirige"
+      ],
+      "correta": 2,
+      "explicacao": "Na composição a parte não existe sem o todo: uma linha de item não faz sentido sem a nota. Alunos existem sem a turma (agregação), pedido e cliente é associação, motorista não é parte do carro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes pares é mais bem representado por AGREGAÇÃO (losango vazio)?",
+      "alternativas": [
+        "Time e Jogador",
+        "Livro e Capitulo",
+        "Predio e Andar",
+        "Pedido e ItemPedido"
+      ],
+      "correta": 0,
+      "explicacao": "O jogador continua existindo se o time acabar (pode ir para outro time): agregação. Capítulo, andar e item de pedido não existem sem o todo: composição."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A classe `RelatorioService` de uma loja tem o método `+ gerar(venda: Venda): String`. Ela usa a venda só dentro desse método e não guarda a venda em nenhum atributo. Qual relação liga RelatorioService a Venda?",
+      "alternativas": [
+        "Composição",
+        "Agregação",
+        "Herança",
+        "Dependência"
+      ],
+      "correta": 3,
+      "explicacao": "Quando uma classe só usa outra de passagem (parâmetro, variável local), sem guardar referência, a relação é dependência (linha tracejada com seta)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No diagrama de uma oficina, o nome da classe `Veiculo` e o método `calcularRevisao()` aparecem em itálico. O que isso indica?",
+      "alternativas": [
+        "Que a classe e o método são privados",
+        "Que a classe e o método são abstratos",
+        "Que a classe e o método são estáticos",
+        "Que a classe e o método estão incompletos por erro"
+      ],
+      "correta": 1,
+      "explicacao": "Em UML, itálico (ou o estereótipo «abstract») indica classe/método abstrato: a classe não é instanciada diretamente e as subclasses implementam o método."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa classe `Pedido`, o atributo `totalPedidos: int` aparece SUBLINHADO no diagrama. O que isso significa?",
+      "alternativas": [
+        "Que é estático: um valor só, da classe, para todos os objetos",
+        "Que é obrigatório e não pode ficar vazio em nenhum objeto",
+        "Que é a chave primária da tabela de pedidos no banco",
+        "Que é herdado de outra classe e não pode ser alterado"
+      ],
+      "correta": 0,
+      "explicacao": "Atributo ou método sublinhado é de classe (static). Existe um só valor para a classe toda, não um por objeto. Chave primária é conceito de banco, não de diagrama de classes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "As classes `Boleto` e `Pix` estão ligadas a `«interface» Pagavel` por linhas TRACEJADAS com triângulo vazio na ponta de Pagavel. O que isso significa?",
+      "alternativas": [
+        "Boleto e Pix herdam atributos de uma classe comum",
+        "Boleto e Pix dependem de Pagavel só como parâmetro",
+        "Boleto e Pix são partes que compõem Pagavel",
+        "Boleto e Pix implementam a interface Pagavel"
+      ],
+      "correta": 3,
+      "explicacao": "Linha tracejada com triângulo vazio = realização (implementação de interface): as classes se comprometem a ter os métodos da interface. Herança usa linha CHEIA com triângulo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel, a classe `Reserva` tem `+ aplicarDesconto(percentual: number): number`. O que esse método recebe e devolve?",
+      "alternativas": [
+        "Recebe uma reserva inteira e não devolve nenhum valor",
+        "Recebe um número (o percentual) e devolve um número",
+        "Não recebe nada e devolve o percentual como um texto",
+        "Recebe um texto com o percentual e devolve um booleano"
+      ],
+      "correta": 1,
+      "explicacao": "Entre parênteses fica o parâmetro com seu tipo (percentual: number). Depois dos dois-pontos finais fica o tipo de retorno (number)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No diagrama de uma loja, a linha entre `Pedido` e `Cliente` tem uma seta aberta apontando para `Cliente`: `Pedido ——> Cliente`. O que essa seta indica?",
+      "alternativas": [
+        "Que Pedido conhece Cliente, mas Cliente não conhece Pedido",
+        "Que Pedido herda todos os atributos e métodos de Cliente",
+        "Que Cliente é apagado junto quando o pedido é apagado",
+        "Que Pedido só usa Cliente como parâmetro de um método"
+      ],
+      "correta": 0,
+      "explicacao": "Seta numa associação de linha cheia é navegabilidade: dá para ir de Pedido até Cliente (Pedido guarda referência ao cliente), não o contrário. Não é herança nem dependência (essa é tracejada)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa empresa, a associação entre `Funcionario` e `Departamento` tem o texto 'trabalha em' escrito sobre a linha. Para que serve esse texto?",
+      "alternativas": [
+        "Explicar o sentido do relacionamento",
+        "Dar o nome de um atributo obrigatório",
+        "Indicar o método que liga as classes",
+        "Mostrar a visibilidade da associação"
+      ],
+      "correta": 0,
+      "explicacao": "O nome da associação descreve o que a ligação significa (funcionário trabalha em departamento). Facilita a leitura do diagrama."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O diagrama mostra `Produto` com `- nome: String`, `- preco: number` e `+ getPreco(): number`. Qual código JavaScript corresponde a ele?",
+      "alternativas": [
+        "`class Produto { nome; preco; getPreco() { return this.preco; } }`",
+        "`class Produto { #nome; #preco; getPreco() { return this.#preco; } }`",
+        "`class Produto { #nome; #preco; #getPreco() { return this.#preco; } }`",
+        "`class Produto { nome; #preco; getPreco() { return this.#preco; } }`"
+      ],
+      "correta": 1,
+      "explicacao": "Atributos `-` (privados) viram campos com `#` no JavaScript, e o método `+` (público) fica sem `#`. As outras opções deixam algo público que era privado ou privam o método público."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O código é `class Funcionario extends Pessoa { }`. Como essa relação aparece no diagrama de classes?",
+      "alternativas": [
+        "Linha de Pessoa até Funcionario com losango cheio em Pessoa",
+        "Linha tracejada de Funcionario até Pessoa com seta aberta",
+        "Linha simples entre as duas com o texto 'extends'",
+        "Linha de Funcionario até Pessoa com triângulo vazio em Pessoa"
+      ],
+      "correta": 3,
+      "explicacao": "`extends` é herança: linha cheia saindo da filha (Funcionario) com triângulo vazio na mãe (Pessoa)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Observe o código: `class Carro { constructor() { this.motor = new Motor(); } }`. O motor é gerado dentro do carro e só existe enquanto o carro existe. Qual relação representa melhor Carro e Motor no diagrama?",
+      "alternativas": [
+        "Agregação, losango vazio do lado de Motor",
+        "Herança, triângulo vazio do lado de Motor",
+        "Dependência, seta tracejada para Carro",
+        "Composição, losango cheio do lado de Carro"
+      ],
+      "correta": 3,
+      "explicacao": "O todo (Carro) cria e controla a vida da parte (Motor): composição, com o losango cheio encostado no todo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Observe o código: `class Turma { constructor(alunos) { this.alunos = alunos; } }`. Os alunos já existem antes e são só recebidos pela turma. Qual a melhor representação?",
+      "alternativas": [
+        "Turma ◆—— * Aluno (composição, losango cheio em Turma)",
+        "Turma ◇—— * Aluno (agregação, losango vazio em Turma)",
+        "Aluno ◆—— 1 Turma (composição, losango cheio em Aluno)",
+        "Turma - - -> Aluno (dependência tracejada)"
+      ],
+      "correta": 1,
+      "explicacao": "Os alunos vêm de fora e continuam existindo sem a turma: agregação, com o losango vazio no todo (Turma) e `*` do lado dos alunos. Não é dependência porque a turma guarda os alunos num atributo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa clínica, o diagrama tem `Medico * —— * Paciente`. O que isso quer dizer?",
+      "alternativas": [
+        "Cada médico atende um único paciente durante todo o tratamento",
+        "Cada paciente tem um único médico, que atende vários pacientes",
+        "Um médico atende vários pacientes e um paciente tem vários médicos",
+        "Médico e paciente precisam sempre ter pelo menos uma ligação"
+      ],
+      "correta": 2,
+      "explicacao": "`*` nas duas pontas é muitos-para-muitos: vale 'vários' para os dois lados (e também zero)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No diagrama de uma empresa, `Gerente` herda de `Funcionario` e, ao mesmo tempo, `Funcionario` herda de `Gerente`. O que há de errado?",
+      "alternativas": [
+        "Nada: herança pode ir nos dois sentidos",
+        "Faltou a multiplicidade nas linhas de herança",
+        "Herança circular: uma classe não pode ser mãe e filha da outra",
+        "As duas classes deveriam usar composição nos dois sentidos"
+      ],
+      "correta": 2,
+      "explicacao": "Herança é uma hierarquia: a filha é um caso particular da mãe. Se cada uma herda da outra não existe ponto de partida. Linha de herança também não leva multiplicidade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Regra da loja: 'um pedido tem pelo menos um item, e cada item pertence a exatamente um pedido; o item não existe sem o pedido'. Qual representação está correta?",
+      "alternativas": [
+        "`Pedido 1 ◆—— 1..* ItemPedido`",
+        "`Pedido * ◆—— 1 ItemPedido`",
+        "`Pedido 1 ◇—— * ItemPedido`",
+        "`Pedido 0..1 ◆—— 0..1 ItemPedido`"
+      ],
+      "correta": 0,
+      "explicacao": "O losango cheio (composição) fica no todo (Pedido). Do lado do item vai `1..*` (pelo menos um por pedido) e do lado do pedido vai `1` (cada item é de um pedido). Losango vazio e `*` permitiriam pedido sem itens."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na classe `Produto` aparece `+ Produto(nome: String, preco: number)`, sem tipo de retorno e com o mesmo nome da classe. O que é esse método?",
+      "alternativas": [
+        "Um método estático de busca",
+        "Um atributo do tipo função",
+        "Um método que apaga o produto",
+        "O construtor da classe"
+      ],
+      "correta": 3,
+      "explicacao": "O método com o mesmo nome da classe e sem tipo de retorno é o construtor: recebe os valores iniciais do objeto. Em JavaScript ele é o `constructor(nome, preco)`."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No diagrama de uma editora: `Autor * —— 1..* Livro` (o `*` está do lado de Autor e o `1..*` do lado de Livro). Qual leitura está correta?",
+      "alternativas": [
+        "Todo livro tem pelo menos um autor; um autor pode ter qualquer número de livros",
+        "Cada autor tem exatamente um livro e cada livro tem um autor",
+        "Todo autor tem pelo menos um livro; um livro pode ter qualquer número de autores",
+        "Cada livro tem exatamente um autor, que pode ter vários livros"
+      ],
+      "correta": 2,
+      "explicacao": "A multiplicidade perto de Livro (1..*) diz quantos livros cada autor tem: pelo menos um. A multiplicidade perto de Autor (*) diz quantos autores cada livro tem: zero ou mais. Inverter o lado de leitura é o erro mais comum."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, o diagrama de classes mostra a associação `Cliente 1 —— 1..* Telefone` (o `1..*` está do lado de Telefone).\n\nNa sua resposta:\n1. explique o que significa o `1` e o que significa o `1..*`;\n2. diga se um cliente pode ser cadastrado sem nenhum telefone.",
+      "respostasAceitas": [
+        "Cada telefone pertence a um único cliente (1) e cada cliente tem pelo menos um telefone, podendo ter vários (1..*). Então o cliente não pode ficar sem telefone."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o 1 indica que cada telefone é de um cliente; o 1..* indica no mínimo um e no máximo vários telefones por cliente; 2) não pode, porque o mínimo é 1."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No diagrama da biblioteca, a classe `Emprestimo` tem o atributo `- dataDevolucao: Date` e o método `+ estaAtrasado(): boolean`.\n\nNa sua resposta:\n1. explique o que o atributo guarda e o que significa o tipo `Date`;\n2. explique o que o método devolve, considerando o tipo `boolean`.",
+      "respostasAceitas": [
+        "O atributo guarda a data em que o livro deve ser devolvido; Date é o tipo data. O método responde verdadeiro ou falso: true se o empréstimo está atrasado, false se não está."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dataDevolucao guarda a data limite, do tipo data; 2) estaAtrasado devolve um booleano (true/false) dizendo se passou da data. Citar que - é privado e + é público é um extra."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma equipe vai fazer o sistema de uma escola de idiomas e o líder pediu o diagrama de classes antes de começar a programar.\n\nNa sua resposta:\n1. cite duas vantagens de ter o diagrama antes do código;\n2. diga quem da equipe usa esse diagrama.",
+      "respostasAceitas": [
+        "O diagrama mostra a estrutura (classes, atributos, métodos e relações) antes do código, evita retrabalho e ajuda a equipe a combinar o que cada classe faz. É usado pelos programadores, analistas e por quem vai dar manutenção depois."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) duas vantagens, como planejar/enxergar a estrutura, achar erros cedo, facilitar a comunicação, servir de documentação; 2) programadores, analistas, novos membros da equipe."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No diagrama de um pet shop, a classe `Animal` tem `+ nome: String` e `+ idade: int`. As classes `Cachorro` (com `+ raca: String`) e `Gato` (com `+ castrado: boolean`) estão ligadas a `Animal` por linhas cheias com um triângulo vazio na ponta de `Animal`.\n\nNa sua resposta:\n1. diga que relacionamento é esse;\n2. diga quais atributos um objeto Gato terá;\n3. explique uma vantagem de organizar assim.",
+      "respostasAceitas": [
+        "É herança: Cachorro e Gato são tipos de Animal. Um Gato terá nome, idade (herdados) e castrado. A vantagem é não repetir nome e idade em cada classe e reaproveitar o que é comum."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) herança/generalização; 2) nome, idade e castrado; 3) reaproveitamento, menos repetição, manutenção num lugar só."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num diagrama de cinema aparecem duas associações: `Sala 1 —— * Sessao` e `Sessao 1 —— 1..* Ingresso`.\n\nNa sua resposta:\n1. explique a diferença entre a multiplicidade `*` e a multiplicidade `1..*`;\n2. diga, por esse diagrama, se pode existir uma sala sem sessões e uma sessão sem ingressos.",
+      "respostasAceitas": [
+        "`*` aceita zero ou muitos; `1..*` exige pelo menos um. Pelo diagrama, uma sala pode ficar sem sessões, mas uma sessão precisa ter pelo menos um ingresso."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) * = 0 ou mais; 1..* = 1 ou mais; 2) sala sem sessão pode; sessão sem ingresso não pode (pelo diagrama). Se o aluno comentar que talvez a regra devesse ser * para ingressos, também é válido."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No diagrama de uma escola, a ligação entre `Turma` e `Aluno` tem um losango VAZIO encostado em `Turma`. Um colega disse: 'pelo diagrama, quando a turma for apagada, os alunos também serão apagados'.\n\nNa sua resposta:\n1. diga que relacionamento o losango vazio representa;\n2. diga se o colega está certo e explique por quê.",
+      "respostasAceitas": [
+        "Losango vazio é agregação. O colega está errado: na agregação a parte (aluno) existe sozinha; apagar a turma não apaga os alunos. Isso aconteceria na composição (losango cheio)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) agregação; 2) o colega confundiu com composição; na agregação o aluno continua existindo sem a turma."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Para representar que o item de pedido não existe sem o pedido, um colega ligou `Pedido` e `ItemPedido` por uma linha com losango CHEIO, mas colocou o losango encostado em `ItemPedido`.\n\nNa sua resposta:\n1. diga que relacionamento o losango cheio representa;\n2. diga se a posição do losango está certa e explique de que lado ele deveria ficar.",
+      "respostasAceitas": [
+        "Losango cheio é composição. A posição está errada: o losango fica do lado do todo, ou seja, encostado em Pedido. Do jeito que está, o diagrama diz que o pedido é parte do item."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) composição; 2) o losango fica no todo (Pedido), não na parte; invertido muda o sentido da frase 'tem como parte'."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O código de uma livraria é:\n`class Livro { #titulo; #autor; constructor(t, a) { this.#titulo = t; this.#autor = a; } getTitulo() { return this.#titulo; } }`\nO diagrama da equipe mostra `Livro` com `+ titulo: String`, `+ autor: String` e `+ getTitulo(): String`.\n\nNa sua resposta:\n1. diga se o diagrama está fiel ao código e aponte a diferença;\n2. diga qual sinal deveria aparecer nos atributos e por quê.",
+      "respostasAceitas": [
+        "Não está fiel: no código titulo e autor são privados (#), mas o diagrama mostra como públicos (+). Os atributos deveriam ter o sinal -, que é privado na UML. getTitulo continua +."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) os atributos estão públicos no diagrama e privados no código; 2) sinal - (privado). Atenção: o # do JavaScript corresponde ao - da UML, não ao # (protegido)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa empresa de boletos, a classe `GeradorPdf` tem o método `+ gerar(boleto: Boleto): void`. Ela recebe o boleto, monta o PDF e não guarda o boleto em nenhum atributo. No diagrama, a ligação entre `GeradorPdf` e `Boleto` é uma linha tracejada com seta apontando para `Boleto`.\n\nNa sua resposta:\n1. diga que relacionamento é esse;\n2. explique por que ele é mais adequado do que uma associação de linha cheia.",
+      "respostasAceitas": [
+        "É dependência. GeradorPdf só usa o Boleto de passagem, como parâmetro do método, sem guardar referência; associação de linha cheia indicaria que um guarda o outro como atributo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dependência; 2) o uso é temporário (parâmetro), não há atributo ligando as classes; a associação indicaria uma ligação duradoura."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O diagrama de uma clínica tem: `Medico 1 —— * Consulta` e `Paciente 1 —— * Consulta` (o `*` está sempre do lado de Consulta).\n\nNa sua resposta:\n1. diga quantos médicos e quantos pacientes participam de cada consulta;\n2. diga se pode existir médico cadastrado sem nenhuma consulta;\n3. explique o papel da classe Consulta nesse diagrama.",
+      "respostasAceitas": [
+        "Cada consulta tem um médico e um paciente. Pode existir médico sem consulta, porque * aceita zero. Consulta liga médico e paciente e guarda os dados do atendimento (data, horário)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) um médico e um paciente por consulta; 2) sim, * inclui zero; 3) Consulta faz a ligação entre médicos e pacientes (que no fim é muitos-para-muitos) e guarda os dados daquele encontro."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num banco digital, a classe `ContaBancaria` tem `- saldo: number`, `+ depositar(valor: number): void` e `+ sacar(valor: number): boolean`. Não existe `setSaldo`.\n\nNa sua resposta:\n1. explique por que o saldo está como privado e só muda pelos métodos;\n2. diga um problema que poderia acontecer se o saldo fosse público.",
+      "respostasAceitas": [
+        "É encapsulamento: o saldo só muda por depositar e sacar, que podem conferir as regras (valor positivo, saldo suficiente). Se fosse público, qualquer parte do código poderia colocar um saldo negativo ou inventado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) encapsulamento/proteger o dado, as regras ficam nos métodos; 2) alteração indevida (saldo negativo, valor sem depósito, fraude). O boolean do sacar pode indicar se deu certo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O diagrama de uma oficina tem a classe `Veiculo` com o nome em itálico e o método `+ calcularRevisao(): number` também em itálico. `Carro` e `Moto` herdam de `Veiculo` e repetem `+ calcularRevisao(): number` em letra normal.\n\nNa sua resposta:\n1. explique o que o itálico indica;\n2. diga se o sistema pode instanciar um objeto só de Veiculo (`new Veiculo()`);\n3. explique por que Carro e Moto repetem o método.",
+      "respostasAceitas": [
+        "Itálico indica classe e método abstratos. Não se instancia Veiculo diretamente, só Carro ou Moto. As subclasses repetem calcularRevisao porque cada uma implementa o cálculo do seu jeito (sobrescrita/polimorfismo)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) abstrato; 2) não, a classe abstrata serve de modelo; 3) cada filha implementa sua própria versão do método. Em JavaScript não existe abstract nativo, mas a ideia de projeto é a mesma."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No diagrama de uma loja aparece `«interface» Pagavel` com `+ pagar(valor: number): boolean`. As classes `Boleto` e `CartaoCredito` estão ligadas a `Pagavel` por linhas TRACEJADAS com triângulo vazio na ponta de `Pagavel`.\n\nNa sua resposta:\n1. explique o que esse desenho significa;\n2. explique a diferença entre essa ligação e a herança comum (linha cheia com triângulo).",
+      "respostasAceitas": [
+        "Boleto e CartaoCredito implementam a interface Pagavel: os dois são obrigados a ter o método pagar, cada um do seu jeito. Na herança comum a filha recebe atributos e métodos prontos da mãe; na interface só existe o compromisso (contrato) de ter os métodos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) realização/implementação de interface; 2) herança transmite atributos e código; interface só define o que deve existir. Linha tracejada x cheia."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No diagrama de um cinema, a associação entre sessão e ingresso está como `Sessao 1 —— 1 Ingresso`.\n\nNa sua resposta:\n1. diga o que essa multiplicidade significa na prática;\n2. diga se ela está certa para um cinema e qual seria a adequada;\n3. explique uma consequência de manter o erro no sistema.",
+      "respostasAceitas": [
+        "Significa que cada sessão tem um único ingresso. Está errado: uma sessão vende vários ingressos, então do lado de Ingresso deveria ser * (ou 0..*), mantendo 1 do lado de Sessao. Com o erro, o sistema só deixaria vender um ingresso por sessão."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) um para um; 2) errado; o correto é Sessao 1 —— * Ingresso; 3) consequência: não vender mais de um ingresso, ou o programador ignorar o diagrama e a documentação ficar falsa."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No diagrama de um hotel: `Hotel 1 ◆—— 1..* Quarto` (losango cheio em Hotel), `Quarto 1 —— * Reserva` e `Hospede 1 —— * Reserva`.\n\nNa sua resposta:\n1. explique o que acontece com os quartos se o hotel deixar de existir no sistema;\n2. diga se pode haver hóspede cadastrado sem reserva;\n3. diga quantos quartos e quantos hóspedes cada reserva tem.",
+      "respostasAceitas": [
+        "Hotel e Quarto é composição: se o hotel deixa de existir, os quartos também deixam. Pode haver hóspede sem reserva, porque * aceita zero. Cada reserva tem um quarto e um hóspede."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) os quartos somem junto (composição); 2) sim, * inclui zero; 3) um quarto e um hóspede por reserva (os 1 do outro lado)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas linhas está no formato UML correto para um atributo de uma classe `Usuario`?",
+      "alternativas": [
+        "`String email -`",
+        "`email(String) -`",
+        "`- email: String`",
+        "`- String = email()`"
+      ],
+      "correta": 2,
+      "explicacao": "O formato do atributo é `visibilidade nome: tipo`. As outras opções invertem a ordem ou misturam com o formato de método."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas linhas está no formato UML correto para um método de uma classe `Entrega`?",
+      "alternativas": [
+        "`+ calcularFrete(cep: String): number`",
+        "`+ number calcularFrete(String cep)`",
+        "`calcularFrete: number (cep) +`",
+        "`+ calcularFrete = number(cep: String)`"
+      ],
+      "correta": 0,
+      "explicacao": "O formato do método é `visibilidade nome(parâmetro: tipo): tipoDeRetorno`. Pôr o tipo antes do nome é o jeito do Java/C, não o da UML."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que aparece num diagrama de classes de um cinema?",
+      "alternativas": [
+        "As classes, como Filme e Sessao, sem valores",
+        "Cada filme cadastrado, com título e horário reais",
+        "As telas do sistema, na ordem em que são usadas",
+        "Os comandos SQL que gravam os filmes no banco"
+      ],
+      "correta": 0,
+      "explicacao": "O diagrama de classes mostra os moldes (classes), não os objetos com valores reais. Objetos com valores aparecem em outro diagrama (de objetos)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O diagrama de classes faz parte de qual linguagem de modelagem?",
+      "alternativas": [
+        "UML",
+        "SQL",
+        "HTML",
+        "JSON"
+      ],
+      "correta": 0,
+      "explicacao": "UML (Linguagem de Modelagem Unificada) reúne vários diagramas, entre eles o de classes. SQL é de banco, HTML é de páginas e JSON é formato de dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na herança, como se chama a classe que herda de outra (a 'filha')?",
+      "alternativas": [
+        "Superclasse",
+        "Interface",
+        "Instância",
+        "Subclasse"
+      ],
+      "correta": 3,
+      "explicacao": "A filha é a subclasse; a mãe é a superclasse. Instância é um objeto criado a partir de uma classe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A classe `Funcionario` tem `# salario: number`. `Gerente` herda de `Funcionario`. Quem pode acessar `salario` diretamente?",
+      "alternativas": [
+        "Só a classe Funcionario",
+        "Qualquer classe do sistema",
+        "Funcionario e suas subclasses, como Gerente",
+        "Só as classes que não herdam de Funcionario"
+      ],
+      "correta": 2,
+      "explicacao": "`#` é protegido: a própria classe e as subclasses acessam. Privado (-) seria só Funcionario; público (+) seria qualquer classe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No diagrama de uma escola, `Professor` e `Aluno` repetem os atributos nome, cpf e email. Qual a melhor mudança no diagrama?",
+      "alternativas": [
+        "Uma composição com losango cheio entre Professor e Aluno, nesta ordem",
+        "Os três atributos copiados também para todas as outras classes do sistema",
+        "Uma superclasse Pessoa com o que é comum, herdada por Professor e Aluno",
+        "Uma associação * —— * entre Professor e Aluno guardando os três atributos"
+      ],
+      "correta": 2,
+      "explicacao": "Atributos repetidos em classes que 'são um tipo de' algo indicam generalização: a superclasse Pessoa reúne o que é comum e as subclasses herdam."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A frase 'um Gerente É UM Funcionário' indica qual relacionamento no diagrama de classes?",
+      "alternativas": [
+        "Composição",
+        "Agregação",
+        "Herança",
+        "Dependência"
+      ],
+      "correta": 2,
+      "explicacao": "'É um' indica herança. 'Tem um/é parte de' indica associação, agregação ou composição."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja virtual, o carrinho guarda vários produtos, e os produtos continuam no catálogo quando o carrinho é esvaziado. Qual relacionamento representa melhor Carrinho e Produto?",
+      "alternativas": [
+        "Composição",
+        "Herança",
+        "Agregação",
+        "Realização"
+      ],
+      "correta": 2,
+      "explicacao": "O produto existe por conta própria, fora do carrinho: agregação (losango vazio no Carrinho). Na composição o produto seria apagado junto com o carrinho."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A classe `Cliente` tem `- nome: String`, `+ getNome(): String` e `+ setNome(nome: String): void`. Para que servem esses dois métodos?",
+      "alternativas": [
+        "Apagar o cliente e cadastrar outro com o mesmo nome no sistema",
+        "Tornar o atributo nome público para todas as outras classes",
+        "Herdar o nome de outra classe que também tenha esse atributo",
+        "Ler e alterar o nome de forma controlada, pois ele é privado"
+      ],
+      "correta": 3,
+      "explicacao": "Getter (get) lê e setter (set) altera um atributo privado. O setter ainda pode validar o valor antes de gravar, o que mantém o encapsulamento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No diagrama de uma faculdade, `Curso 1 —— * Disciplina`, com o `*` encostado em `Disciplina`. O que o `*` informa?",
+      "alternativas": [
+        "Quantos cursos uma disciplina pode ter",
+        "Quantos alunos cada disciplina pode ter",
+        "Quantos atributos a classe Disciplina tem",
+        "Quantas disciplinas um curso pode ter"
+      ],
+      "correta": 3,
+      "explicacao": "A multiplicidade de uma ponta diz quantos objetos daquela ponta se ligam a UM objeto da outra. O `*` perto de Disciplina diz quantas disciplinas cada curso tem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A classe `Funcionario` tem uma associação com ela mesma: numa ponta o papel 'chefe' com `0..1` e na outra o papel 'subordinado' com `*`. O que isso representa?",
+      "alternativas": [
+        "Um funcionário pode ter um chefe (também funcionário), e um chefe pode ter vários subordinados",
+        "Um erro de modelagem, porque uma classe nunca pode se ligar a ela mesma",
+        "Que todo funcionário é obrigatoriamente chefe de si mesmo no sistema",
+        "Que a classe Funcionario herda atributos e métodos dela mesma"
+      ],
+      "correta": 0,
+      "explicacao": "É uma autoassociação (associação reflexiva): objetos da mesma classe se relacionam. 0..1 permite o funcionário sem chefe (o diretor)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No diagrama de uma escola, `Aluno * —— * Disciplina` tem a classe `Matricula` (com `nota` e `frequencia`) presa à linha por um tracejado. Para que serve `Matricula`?",
+      "alternativas": [
+        "Substituir a classe Aluno em todas as partes do sistema",
+        "Indicar que a classe Disciplina herda da classe Aluno",
+        "Guardar dados da relação entre um aluno e uma disciplina",
+        "Mostrar que a associação entre as classes é opcional"
+      ],
+      "correta": 2,
+      "explicacao": "É uma classe associativa: a nota e a frequência não são do aluno sozinho nem da disciplina sozinha, mas daquele aluno naquela disciplina."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "`Forma` tem `+ calcularArea(): number`. `Circulo` e `Retangulo` herdam de `Forma` e também mostram `+ calcularArea(): number`. O que isso indica?",
+      "alternativas": [
+        "Que o diagrama tem um erro, pois o método aparece repetido",
+        "Que Circulo e Retangulo não herdam nenhum membro de Forma",
+        "Que o método só pode ser chamado de dentro da classe Forma",
+        "Que cada subclasse redefine o cálculo da área do seu jeito"
+      ],
+      "correta": 3,
+      "explicacao": "Repetir o método na subclasse indica sobrescrita: cada forma calcula a área com sua fórmula. É a base do polimorfismo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa composição (losango cheio), qual multiplicidade costuma aparecer do lado do TODO?",
+      "alternativas": [
+        "*, porque a parte pode estar em vários todos",
+        "1, porque a parte pertence a exatamente um todo",
+        "0..*, porque a parte pode ficar sem todo",
+        "1..*, porque a parte precisa de vários todos"
+      ],
+      "correta": 1,
+      "explicacao": "Na composição a parte pertence a um único todo e não existe sem ele, por isso o lado do todo é 1 (às vezes 0..1 em casos especiais)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Observe o código: `class Pedido { #itens = []; adicionarItem(produto, qtd) { this.#itens.push(new ItemPedido(produto, qtd)); } }`. O produto vem do catálogo. Quais relações o diagrama deve mostrar?",
+      "alternativas": [
+        "Pedido ◇ Produto (agregação) e ItemPedido herdando de Produto",
+        "Pedido herdando de ItemPedido e Produto herdando de Pedido",
+        "ItemPedido ◆ Pedido (composição) e Produto ◆ ItemPedido (composição)",
+        "Pedido ◆ ItemPedido (composição) e ItemPedido —— Produto (associação)"
+      ],
+      "correta": 3,
+      "explicacao": "O pedido cria e guarda os itens (composição, losango em Pedido). Cada item aponta para um produto que já existia no catálogo (associação). Não há herança."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A classe `Usuario` tem `- senha: String` e `+ verificarSenha(tentativa: String): boolean`, mas não tem `getSenha()`. Por que esse projeto faz sentido?",
+      "alternativas": [
+        "Outras classes conferem a senha sem nunca ler o valor dela",
+        "Assim a senha fica pública para quem chamar verificarSenha",
+        "Sem getSenha a senha nem consegue ser gravada no objeto",
+        "Atributos do tipo String não podem ter método getter na UML"
+      ],
+      "correta": 0,
+      "explicacao": "O método devolve só verdadeiro/falso; a senha nunca sai do objeto. É encapsulamento aplicado à segurança."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num salão de beleza, a classe `Agenda` tem `+ agendar(data: Date, hora: String): boolean`. Quantos parâmetros esse método recebe?",
+      "alternativas": [
+        "Um só: a data, que já inclui a hora dentro dela",
+        "Três: data, hora e o boolean que vem no final",
+        "Dois: data, do tipo Date, e hora, do tipo String",
+        "Nenhum: Date e String são os tipos de retorno"
+      ],
+      "correta": 2,
+      "explicacao": "Os parâmetros ficam entre parênteses, separados por vírgula. O boolean depois dos dois-pontos finais é o retorno."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma caixa de classe tem: em cima `Produto`; no meio `- codigo: int` e `- descricao: String`; embaixo `+ atualizarEstoque(qtd: int): void`. Quantos atributos e métodos ela tem?",
+      "alternativas": [
+        "1 atributo e 2 métodos",
+        "3 atributos e nenhum método",
+        "2 atributos e 1 método",
+        "2 atributos e 2 métodos"
+      ],
+      "correta": 2,
+      "explicacao": "O compartimento do meio tem os atributos (codigo e descricao) e o de baixo os métodos (atualizarEstoque). Produto é o nome."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O diagrama tem `Cliente 1 —— * Pedido`. Quando essas classes forem gravadas num banco relacional, o que normalmente aparece?",
+      "alternativas": [
+        "Uma coluna id_pedido na tabela cliente, como chave estrangeira",
+        "Uma única tabela juntando cliente e pedido",
+        "Nenhuma ligação, porque o diagrama de classes não vale para o banco",
+        "Uma coluna id_cliente na tabela pedido, como chave estrangeira"
+      ],
+      "correta": 3,
+      "explicacao": "No lado 'muitos' (Pedido) fica a chave estrangeira que aponta para o lado '1' (Cliente). Cada pedido sabe de qual cliente é."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é a documentação de uma API?",
+      "alternativas": [
+        "O próprio código-fonte do servidor, que já serve de explicação suficiente",
+        "A lista de tabelas e colunas do banco de dados usado pela aplicação",
+        "Um texto que explica como usar a API: rotas, métodos, envios e respostas",
+        "O manual de instalação do Node.js no computador de cada programador"
+      ],
+      "correta": 2,
+      "explicacao": "A documentação diz a quem vai consumir a API quais rotas existem, com que método, o que enviar e o que volta. O código e o banco não substituem isso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que normalmente é o arquivo README de um projeto de API?",
+      "alternativas": [
+        "Um arquivo de configuração que o Node.js lê sozinho para iniciar o servidor",
+        "Um arquivo onde ficam guardadas as senhas do banco de dados de produção",
+        "Um arquivo na raiz que apresenta o projeto e explica como instalar e rodar",
+        "Um arquivo que registra os erros que o servidor teve durante o uso"
+      ],
+      "correta": 2,
+      "explicacao": "O README é a porta de entrada do projeto: o que é, como instalar, como rodar e onde está a documentação das rotas. Configuração fica em package.json/.env e senhas nunca vão nele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo de apresentação do projeto se chama `README.md`. O que a extensão `.md` indica?",
+      "alternativas": [
+        "Que é um arquivo de banco MySQL",
+        "Que é um módulo do Node.js",
+        "Que o arquivo foi gerado pelo Postman",
+        "Que o texto está em Markdown"
+      ],
+      "correta": 3,
+      "explicacao": "`.md` é Markdown: texto simples com marcações leves (# para título, - para lista, crases para código), que os sites de repositório mostram formatado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na documentação de uma API de biblioteca aparece `GET /livros`. O que é esse conjunto 'método + caminho'?",
+      "alternativas": [
+        "Um atributo da classe Livro",
+        "Uma tabela do banco de dados",
+        "Um pacote instalado pelo npm",
+        "Um endpoint (rota) da API"
+      ],
+      "correta": 3,
+      "explicacao": "Endpoint é o ponto de acesso da API: o método HTTP somado ao caminho. GET /livros e POST /livros são endpoints diferentes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A documentação de um pet shop traz: `POST /clientes` — Corpo (JSON): nome, telefone. O que é o 'corpo' nesse caso?",
+      "alternativas": [
+        "A resposta que o servidor devolve ao cliente",
+        "Os dados enviados junto com a requisição",
+        "O endereço do servidor onde a API está",
+        "O nome do arquivo de rotas do projeto"
+      ],
+      "correta": 1,
+      "explicacao": "O corpo (body) da requisição carrega os dados enviados, normalmente em JSON, em POST, PUT e PATCH."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A documentação de um hotel diz que `POST /reservas` responde com o código 201. O que esse código indica?",
+      "alternativas": [
+        "A reserva não foi encontrada",
+        "A reserva foi criada com sucesso",
+        "Faltou enviar dados obrigatórios",
+        "Houve um erro interno no servidor"
+      ],
+      "correta": 1,
+      "explicacao": "201 Created = algo novo foi criado. Não encontrado é 404, dados inválidos é 400 e erro interno é 500."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A documentação de um pet shop diz: `GET /pets/{id}` — 404 se o pet não existir. Quando o cliente da API recebe 404?",
+      "alternativas": [
+        "Quando pede um id de pet que não está cadastrado",
+        "Quando o pet é encontrado e os dados voltam certinho",
+        "Quando o servidor está fora do ar ou desligado",
+        "Quando o pet acabou de ser cadastrado no sistema"
+      ],
+      "correta": 0,
+      "explicacao": "404 Not Found = o recurso pedido não existe. Sucesso seria 200 e servidor com erro seria 5xx."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa academia, a documentação de `POST /alunos` diz: '400 — quando faltar o campo nome'. O que o código 400 quer dizer?",
+      "alternativas": [
+        "O aluno foi cadastrado com sucesso no banco de dados",
+        "A requisição veio com dados inválidos ou incompletos",
+        "O usuário não tem permissão para acessar essa rota",
+        "O servidor travou ao tentar gravar os dados no banco"
+      ],
+      "correta": 1,
+      "explicacao": "400 Bad Request = o problema está no que o cliente enviou (faltou campo, formato errado). Permissão é 403 e falha do servidor é 500."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na documentação de um cinema: `DELETE /filmes/{id}` — 401 sem login; 403 se o usuário não for administrador. Um atendente logado tenta apagar um filme. O que ele recebe?",
+      "alternativas": [
+        "401, porque ele não fez o login antes",
+        "404, porque o filme some ao ser apagado",
+        "403, porque está logado mas sem permissão",
+        "201, porque a ação foi aceita pela API"
+      ],
+      "correta": 2,
+      "explicacao": "401 = não autenticado (não se identificou). 403 = identificado, mas sem permissão para a ação. O atendente está logado, então é 403."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A documentação de uma loja diz: '500 — erro interno'. De quem é o problema quando a API responde 500?",
+      "alternativas": [
+        "Do cliente, que mandou os dados no formato errado",
+        "Do servidor, que falhou ao processar a requisição",
+        "Do usuário, que não fez login antes de usar a rota",
+        "De ninguém, porque o código 500 significa sucesso"
+      ],
+      "correta": 1,
+      "explicacao": "Códigos 5xx são erros do lado do servidor (bug, banco fora do ar). Códigos 4xx são problemas na requisição do cliente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A documentação de um mercado mostra `GET /produtos?categoria=bebidas`. Como se chama o `categoria=bebidas`?",
+      "alternativas": [
+        "Parâmetro de rota (path)",
+        "Parâmetro de consulta (query string)",
+        "Cabeçalho (header) da requisição",
+        "Corpo (body) da requisição"
+      ],
+      "correta": 1,
+      "explicacao": "O que vem depois do `?` é a query string (parâmetros de consulta), em pares chave=valor. Parâmetro de rota faz parte do caminho, como /produtos/15."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma clínica tem no Express a rota `app.get(\"/consultas/:id\", buscarConsulta)`. Como a documentação deve apresentar o `id`?",
+      "alternativas": [
+        "Como parâmetro de rota, ex.: GET /consultas/12",
+        "Como parâmetro de consulta, ex.: GET /consultas?id=12",
+        "Como campo do corpo JSON da requisição",
+        "Como cabeçalho Authorization"
+      ],
+      "correta": 0,
+      "explicacao": "O `:id` no caminho é parâmetro de rota (lido com req.params.id). Na documentação costuma aparecer como /consultas/{id} ou /consultas/:id."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No código de um cinema está `const pagina = req.query.pagina;` dentro da rota `GET /filmes`. Como alguém chama essa rota pedindo a página 2?",
+      "alternativas": [
+        "GET /filmes/pagina/2",
+        "GET /filmes com pagina=2 no corpo",
+        "GET /filmes com o cabeçalho pagina: 2",
+        "GET /filmes?pagina=2"
+      ],
+      "correta": 3,
+      "explicacao": "`req.query` lê a query string, que vem depois do `?`. Por isso a documentação deve mostrar o exemplo /filmes?pagina=2."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em linguagem simples, o que é OpenAPI?",
+      "alternativas": [
+        "Um banco de dados feito especialmente para guardar APIs",
+        "Um padrão para descrever uma API REST em YAML ou JSON",
+        "Um framework de servidor que substitui o Express",
+        "Uma linguagem de programação própria para servidores"
+      ],
+      "correta": 1,
+      "explicacao": "OpenAPI (antes chamado de especificação Swagger) é um formato padrão para descrever rotas, parâmetros e respostas. Ferramentas como o Swagger UI leem esse arquivo e geram a página de documentação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num arquivo OpenAPI de uma loja, em qual seção ficam descritas as rotas, como `/produtos` e `/produtos/{id}`?",
+      "alternativas": [
+        "`paths`",
+        "`info`",
+        "`servers`",
+        "`tags`"
+      ],
+      "correta": 0,
+      "explicacao": "Em `paths` ficam os caminhos e, dentro de cada um, os métodos (get, post...), parâmetros e respostas. `info` tem título e versão, `servers` os endereços do servidor e `tags` os grupos de rotas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num cinema, a classe `Filme` tem `- titulo: String` e `- duracao: int`. O sistema tem cadastrados os filmes 'Aventura no Cerrado' (110 min) e 'O Mistério da Biblioteca' (95 min).\n\nNa sua resposta:\n1. explique a diferença entre a classe Filme e esses dois filmes;\n2. diga qual dos dois aparece no diagrama de classes.",
+      "respostasAceitas": [
+        "A classe Filme é o molde, que diz que todo filme tem título e duração. Os dois filmes são objetos (instâncias) com valores próprios. No diagrama de classes aparece só a classe Filme, sem os valores."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) classe = molde/modelo; objeto = item concreto com valores; 2) só a classe aparece no diagrama de classes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num sistema de empresa existem duas frases: 'um Gerente é um Funcionário' e 'um Funcionário trabalha num Departamento'.\n\nNa sua resposta:\n1. diga que relacionamento do diagrama de classes cada frase indica;\n2. explique a diferença entre os dois relacionamentos.",
+      "respostasAceitas": [
+        "A primeira é herança (Gerente é um tipo de Funcionário, linha com triângulo). A segunda é associação (linha simples). Na herança a filha recebe atributos e métodos da mãe; na associação as classes só se ligam, sem herdar nada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) herança e associação; 2) herança = 'é um', reaproveita membros; associação = 'se relaciona com', cada uma continua com seus próprios membros."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa agenda de contatos, o código é:\n`class Agenda { constructor() { this.contatos = []; } adicionar(contato) { this.contatos.push(contato); } }`\nOs objetos Contato já existem em outra parte do sistema e são só passados para `adicionar`. Um colega ligou `Agenda` e `Contato` com losango CHEIO em `Agenda`.\n\nNa sua resposta:\n1. diga que relacionamento o colega usou;\n2. diga se ele combina com o código e qual seria o mais adequado.",
+      "respostasAceitas": [
+        "O colega usou composição. Não combina: os contatos já existiam e continuam existindo sem a agenda, então o mais adequado é agregação (losango vazio em Agenda). Composição seria se a agenda gerasse e controlasse a vida dos contatos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) composição; 2) agregação, porque os contatos vêm de fora e não dependem da agenda para existir."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja virtual, a classe `Categoria` tem uma associação com ela mesma: numa ponta o papel 'categoriaPai' com `0..1`, na outra o papel 'subcategorias' com `*`.\n\nNa sua resposta:\n1. explique o que essa ligação representa, com um exemplo de categorias;\n2. explique por que o lado 'categoriaPai' é 0..1 e não 1.",
+      "respostasAceitas": [
+        "É uma autoassociação: uma categoria pode estar dentro de outra, como Celulares dentro de Eletrônicos, e uma categoria pode ter várias subcategorias. É 0..1 porque as categorias principais (como Eletrônicos) não têm categoria pai."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) categoria ligada a categoria, formando uma árvore (exemplo qualquer); 2) as categorias do topo ficam sem pai; com 1 toda categoria precisaria de um pai, o que nunca terminaria."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No diagrama de uma escola: `Pessoa` (`+ nome`, `+ cpf`); `Aluno` herda de Pessoa e tem `+ matricula`; `Professor` herda de Pessoa e tem `+ salario`. Um colega disse: 'pelo diagrama, Professor também tem matrícula'.\n\nNa sua resposta:\n1. diga se o colega está certo;\n2. liste os atributos que Aluno e Professor têm.",
+      "respostasAceitas": [
+        "Está errado: matricula é só de Aluno; irmãs não herdam uma da outra. Aluno tem nome, cpf e matricula; Professor tem nome, cpf e salario."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) errado, a herança vai da mãe para a filha, não entre classes irmãs; 2) Aluno: nome, cpf, matricula; Professor: nome, cpf, salario."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No diagrama de uma escola, `Aluno * —— * Disciplina` tem a classe associativa `Matricula` com `nota` e `frequencia`. Um colega sugeriu tirar Matricula e pôr `nota` direto na classe Aluno.\n\nNa sua resposta:\n1. explique por que a nota não cabe bem na classe Aluno;\n2. explique o papel da classe Matricula.",
+      "respostasAceitas": [
+        "O aluno cursa várias disciplinas e tem uma nota em cada uma; um único atributo nota em Aluno não diz de qual disciplina é. Matricula guarda os dados de cada par aluno-disciplina (nota, frequência)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a nota depende do aluno E da disciplina; em Aluno só caberia uma nota; 2) classe associativa que guarda os dados da relação."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No diagrama de uma loja, `Pagamento` é abstrata e tem `+ processar(): boolean`. `Pix`, `Boleto` e `Cartao` herdam de Pagamento e redefinem `processar()`. No código há:\n`for (const p of pagamentos) { p.processar(); }`\n\nNa sua resposta:\n1. explique o que acontece quando o laço passa por um Pix e depois por um Boleto;\n2. explique a vantagem desse projeto quando a loja aceitar uma nova forma de pagamento.",
+      "respostasAceitas": [
+        "Cada objeto roda a sua própria versão de processar: o Pix processa como Pix e o Boleto como boleto (polimorfismo). Para uma forma nova basta uma nova subclasse com seu processar; o laço não muda."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) polimorfismo, cada classe executa sua versão; 2) extensão fácil sem alterar o código que usa os pagamentos (sem if por tipo)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O diagrama de uma padaria tem `Cliente 1 —— * Pedido`. O sistema vai guardar os dados num banco MySQL.\n\nNa sua resposta:\n1. diga o que a associação significa;\n2. explique como essa ligação costuma aparecer nas tabelas do banco.",
+      "respostasAceitas": [
+        "Um cliente pode ter vários pedidos e cada pedido é de um cliente. No banco, a tabela pedido recebe uma coluna id_cliente como chave estrangeira apontando para cliente."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) um para muitos; 2) chave estrangeira no lado muitos (pedido.id_cliente)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma equipe está publicando a API de um pet shop num repositório e precisa do arquivo README.\n\nNa sua resposta:\n1. cite três informações que costumam estar no README;\n2. diga quem lê esse arquivo.",
+      "respostasAceitas": [
+        "O README diz o que é o projeto, como instalar e rodar (npm install, npm start), quais variáveis de ambiente configurar e onde estão as rotas/documentação. É lido por outros desenvolvedores, pela equipe do front-end e pelo professor/avaliador."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) três itens como descrição, instalação, execução, variáveis de ambiente, lista de rotas, exemplos; 2) desenvolvedores/equipe/quem vai usar ou manter."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A documentação de um pet shop traz:\n`GET /pets/{id}` — Busca um pet.\nRespostas: 200 com o JSON do pet; 404 com `{\"erro\": \"Pet não encontrado\"}`.\n\nNa sua resposta:\n1. explique o que é o `{id}` no caminho;\n2. diga quando a API responde 200 e quando responde 404.",
+      "respostasAceitas": [
+        "{id} é o parâmetro de rota: no lugar dele vai o número do pet, como /pets/7. Responde 200 quando o pet existe e volta os dados dele; 404 quando não existe pet com aquele id."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) parâmetro de rota/identificador do pet; 2) 200 = encontrado; 404 = não encontrado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na documentação de uma API de biblioteca, a rota `POST /emprestimos` tem um 'exemplo de requisição' e um 'exemplo de resposta'.\n\nNa sua resposta:\n1. explique a diferença entre os dois exemplos;\n2. diga por que vale a pena colocar os dois na documentação.",
+      "respostasAceitas": [
+        "O exemplo de requisição mostra o que o cliente envia (método, URL, corpo JSON); o de resposta mostra o que a API devolve (status e JSON). Com os dois, quem consome a API sabe exatamente o que mandar e o que vai receber."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) requisição = ida, o que se envia; resposta = volta, o que se recebe; 2) evita adivinhação e erros de formato, acelera o front-end."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno testou `GET /produtos` digitando o endereço no navegador e funcionou. Para testar `POST /produtos` e `DELETE /produtos/3`, o professor indicou o Postman ou o Insomnia.\n\nNa sua resposta:\n1. explique por que o navegador não basta para testar essas rotas;\n2. diga o que o Postman ou o Insomnia deixam configurar na requisição.",
+      "respostasAceitas": [
+        "Pela barra de endereço o navegador só faz GET; não dá para escolher POST/DELETE nem mandar corpo JSON. O Postman/Insomnia deixam escolher o método, a URL, os cabeçalhos e o corpo, e mostram o status e a resposta."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) navegador pela barra só envia GET, sem corpo; 2) método, URL, headers, body (JSON), e mostra status/resposta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A documentação de `POST /matriculas` de uma escola de música diz que a rota pode responder 201, 400 ou 500.\n\nNa sua resposta:\n1. explique o que cada um desses códigos significa;\n2. diga qual deles indica erro do cliente e qual indica erro do servidor.",
+      "respostasAceitas": [
+        "201: matrícula criada com sucesso. 400: os dados enviados estão errados ou incompletos. 500: falha interna no servidor. O 400 é erro do cliente e o 500 é erro do servidor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 201 criado, 400 requisição inválida, 500 erro interno; 2) 4xx cliente, 5xx servidor."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A documentação de um hotel tem só esta linha: `POST /reservas` — cria uma reserva. O desenvolvedor do aplicativo reclamou que não conseguiu usar a rota.\n\nNa sua resposta:\n1. cite três informações que faltam nessa documentação;\n2. explique o que pode acontecer se o aplicativo for feito sem elas.",
+      "respostasAceitas": [
+        "Faltam os campos do corpo (ex.: id do hóspede, quarto, datas) e quais são obrigatórios, um exemplo de requisição e de resposta, e os códigos de status possíveis (201, 400, 409...). Sem isso o app manda dados no formato errado, recebe erros e não sabe tratá-los."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) três entre corpo/campos, tipos, obrigatórios, exemplos, respostas/status, autenticação; 2) erros de integração, tentativa e erro, perda de tempo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A documentação de um cinema diz: `DELETE /filmes/{id}` — 401 se não estiver logado; 403 se não for administrador; 204 se apagar.\n\nNa sua resposta:\n1. explique a diferença entre 401 e 403;\n2. diga o que recebe um visitante sem login e o que recebe um atendente logado que não é administrador.",
+      "respostasAceitas": [
+        "401 é falta de autenticação (não se identificou); 403 é falta de permissão (se identificou, mas não pode). O visitante sem login recebe 401 e o atendente logado recebe 403."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 401 = quem é você?; 403 = sei quem é, mas não pode; 2) visitante 401, atendente 403."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em que formato de arquivo costuma ser escrita uma especificação OpenAPI?",
+      "alternativas": [
+        "HTML ou CSS",
+        "YAML ou JSON",
+        "SQL ou CSV",
+        "PDF ou DOCX"
+      ],
+      "correta": 1,
+      "explicacao": "O arquivo OpenAPI é texto estruturado em YAML (mais comum) ou JSON, para que ferramentas consigam lê-lo e gerar a documentação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A documentação de um salão diz: `POST /agendamentos` — corpo JSON com cliente, servico e data. Para testar no Insomnia, o que o desenvolvedor precisa configurar?",
+      "alternativas": [
+        "Método GET, com os três campos escritos na barra de endereço",
+        "Só a URL, porque o Insomnia descobre o método sozinho",
+        "Método DELETE, a URL da rota e o corpo da requisição vazio",
+        "Método POST, a URL da rota e o corpo JSON com os três campos"
+      ],
+      "correta": 3,
+      "explicacao": "A requisição de teste precisa reproduzir o que a documentação descreve: método POST, URL e corpo JSON. GET não leva corpo e o Insomnia não adivinha o método."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No exemplo de requisição da documentação aparece o cabeçalho `Content-Type: application/json`. O que ele informa ao servidor?",
+      "alternativas": [
+        "Que o usuário já fez login e está autenticado",
+        "Que a resposta deve voltar em formato HTML",
+        "Que a rota chamada é obrigatoriamente GET",
+        "Que o corpo enviado está no formato JSON"
+      ],
+      "correta": 3,
+      "explicacao": "Content-Type diz o formato do corpo enviado. Com application/json o Express (express.json()) sabe que deve interpretar o corpo como JSON."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A documentação de uma clínica diz: 'Envie o cabeçalho `Authorization: Bearer <token>` em todas as rotas de /prontuarios'. O que o cliente da API precisa fazer?",
+      "alternativas": [
+        "Mandar o token recebido no login no cabeçalho Authorization",
+        "Mandar a palavra Bearer como um campo dentro do corpo JSON",
+        "Pôr o token na URL, logo depois do nome da rota chamada",
+        "Mandar o usuário e a senha dentro do corpo de toda requisição"
+      ],
+      "correta": 0,
+      "explicacao": "Bearer token vai no cabeçalho Authorization. No lugar de <token> entra o valor recebido no login. Token na URL ou senha em todo corpo são práticas inseguras."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve o exemplo de resposta na documentação de uma rota?",
+      "alternativas": [
+        "Mostrar o código-fonte que a rota executa no servidor",
+        "Guardar no banco os dados usados durante os testes",
+        "Substituir o teste da rota no Postman ou no Insomnia",
+        "Mostrar o formato do JSON que o cliente vai receber"
+      ],
+      "correta": 3,
+      "explicacao": "O exemplo de resposta mostra os campos e tipos que voltam. Assim o front-end sabe como ler os dados sem adivinhar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A documentação de uma escola traz apenas: `PUT /alunos/{id}` — Atualiza aluno. O que falta para alguém usar a rota sem precisar perguntar ao back-end?",
+      "alternativas": [
+        "O nome completo do programador que fez essa rota",
+        "Os campos que vão no corpo e o que a rota responde",
+        "A data e a hora em que a rota foi publicada",
+        "A cor e o texto do botão que chama essa rota no app"
+      ],
+      "correta": 1,
+      "explicacao": "Para usar a rota é preciso saber o que enviar (campos, tipos, obrigatórios) e o que volta (status e corpo). Autor e data não ajudam a consumir a API."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API de uma loja tem as rotas em `/api/v1/produtos`. O que o `v1` indica?",
+      "alternativas": [
+        "A versão da API; mudanças grandes podem ir para uma v2",
+        "O número total de produtos cadastrados na loja hoje",
+        "O primeiro produto da lista, que aparece em destaque",
+        "O id do vendedor responsável por cadastrar os produtos"
+      ],
+      "correta": 0,
+      "explicacao": "Versionar a URL permite lançar uma v2 com mudanças incompatíveis sem quebrar quem ainda usa a v1. A documentação deve dizer qual versão descreve."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O back-end de uma academia trocou o campo `nome` por `nomeCompleto` na resposta de `GET /alunos`, e o aplicativo parou de mostrar os nomes. Qual seria o procedimento mais adequado?",
+      "alternativas": [
+        "Deixar a documentação como está, porque o aplicativo se adapta sozinho ao campo",
+        "Apagar a documentação inteira, para que ninguém use mais o campo antigo",
+        "Atualizar a documentação e lançar a mudança numa nova versão ou avisar antes",
+        "Mudar o código de status da rota para 500 até o aplicativo ser corrigido"
+      ],
+      "correta": 2,
+      "explicacao": "Renomear campo é mudança que quebra quem consome a API. O certo é documentar e versionar (ou manter os dois campos por um tempo) e avisar a equipe do app."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quem mais usa a documentação de uma API de delivery?",
+      "alternativas": [
+        "Quem consome a API, como os desenvolvedores do app e do site",
+        "Os clientes que fazem pedidos de comida pelo aplicativo",
+        "Somente o servidor, que lê a documentação toda vez que inicia",
+        "Os entregadores, que usam a documentação para achar endereços"
+      ],
+      "correta": 0,
+      "explicacao": "A documentação é feita para desenvolvedores: os do front-end, do app, de outras empresas e da própria equipe. O usuário final não lê a API."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Postman, o que é uma collection?",
+      "alternativas": [
+        "Uma tabela do banco de dados que o Postman cria sozinho",
+        "Um conjunto de requisições salvas e organizadas, compartilhável",
+        "Um pacote do npm que precisa ser instalado no projeto",
+        "Uma página pública na internet que hospeda a API pronta"
+      ],
+      "correta": 1,
+      "explicacao": "A collection agrupa as requisições do projeto (ex.: todas as rotas de /clientes). Pode ser exportada e compartilhada com a equipe, servindo também de documentação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na collection de uma biblioteca, as URLs estão como `{{baseUrl}}/livros`. Qual a vantagem de usar essa variável?",
+      "alternativas": [
+        "Trocar de servidor (local ou publicado) mudando um valor só",
+        "Fazer cada requisição ficar mais rápida que o normal",
+        "Esconder a rota de quem ainda não fez login na API",
+        "Gerar sozinho o código da rota dentro do servidor Express"
+      ],
+      "correta": 0,
+      "explicacao": "Variáveis de ambiente do Postman/Insomnia guardam valores como a URL base. Basta trocar de ambiente (local, produção) para testar tudo no outro servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas seções é típica do README de uma API em Node.js?",
+      "alternativas": [
+        "A lista de todos os clientes já cadastrados no banco",
+        "Como instalar e rodar (ex.: npm install e npm start)",
+        "A senha do servidor de produção, para facilitar o acesso",
+        "O histórico completo de conversas da equipe no chat"
+      ],
+      "correta": 1,
+      "explicacao": "O README explica instalação e execução, entre outras coisas. Dados de clientes e senhas nunca vão para o README."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API de uma padaria precisa das variáveis DB_HOST, DB_USUARIO e DB_SENHA. O que o README deve trazer sobre elas?",
+      "alternativas": [
+        "As senhas reais do banco, para ninguém errar na hora de configurar",
+        "Nada, porque variáveis de ambiente não podem aparecer em documentação",
+        "Uma cópia exata do arquivo .env usado no servidor de produção",
+        "Os nomes das variáveis, com valores de exemplo, sem senhas reais"
+      ],
+      "correta": 3,
+      "explicacao": "O README lista quais variáveis configurar (muitas vezes com um .env.example), mas dados reais e senhas ficam fora do repositório."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A documentação de uma loja diz que `DELETE /produtos/{id}` responde 204. O que o cliente deve esperar?",
+      "alternativas": [
+        "Que o produto não foi encontrado",
+        "Que o produto foi apagado e a resposta traz a lista completa",
+        "Que o produto foi apagado e a resposta não tem corpo",
+        "Que o pedido de exclusão vai ser analisado depois"
+      ],
+      "correta": 2,
+      "explicacao": "204 No Content = deu certo e não há conteúdo para devolver. É comum em DELETE. Não encontrado seria 404."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao testar `GET /pacientes/999`, a API de uma clínica respondeu status 200 com o corpo `{\"erro\": \"paciente não encontrado\"}`. O que há de errado?",
+      "alternativas": [
+        "O status deveria ser 404, pois o cliente se guia pelo status",
+        "Nada, porque a mensagem de erro no corpo já explica o problema",
+        "O status deveria ser 201, porque a busca foi feita no banco",
+        "O corpo é que deveria vir vazio, mas o 200 está correto"
+      ],
+      "correta": 0,
+      "explicacao": "O código de status é o primeiro sinal para quem consome a API. 200 diz 'sucesso' e o front-end pode tentar mostrar um paciente que não existe. O correto é 404 com a mensagem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No arquivo OpenAPI de uma rota aparece `responses:` e, dentro, `\"200\":` e `\"404\":` com descrições. O que essa parte documenta?",
+      "alternativas": [
+        "Os parâmetros que o cliente precisa enviar na rota",
+        "As tabelas do banco de dados que a rota consulta",
+        "As respostas possíveis da rota, separadas por status",
+        "Os usuários que têm permissão para acessar a rota"
+      ],
+      "correta": 2,
+      "explicacao": "`responses` lista o que a rota pode devolver em cada status (descrição e formato do corpo). Parâmetros ficam em `parameters` e o corpo enviado em `requestBody`."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A documentação de um hotel mostra: `GET /hospedes?cidade=Recife&limite=10`. Quantos parâmetros de consulta há nessa requisição?",
+      "alternativas": [
+        "Dois",
+        "Um",
+        "Três",
+        "Nenhum"
+      ],
+      "correta": 0,
+      "explicacao": "Depois do `?` vêm os pares chave=valor separados por `&`: cidade=Recife e limite=10."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O exemplo de resposta de um pet shop é `{\"id\": 7, \"nome\": \"Ração 10kg\", \"preco\": 89.9}`. De que tipo é o campo preco?",
+      "alternativas": [
+        "Número",
+        "Texto",
+        "Booleano",
+        "Lista"
+      ],
+      "correta": 0,
+      "explicacao": "No JSON, valores sem aspas como 89.9 são números. Texto viria entre aspas, booleano seria true/false e lista viria entre colchetes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A documentação de uma API diz: 'todos os erros voltam no formato `{\"erro\": \"mensagem\"}`'. Qual a vantagem desse padrão?",
+      "alternativas": [
+        "O servidor deixa de ter erros, pois todos ficam com o mesmo formato",
+        "O front-end trata qualquer erro do mesmo jeito, lendo o campo erro",
+        "Os códigos de status deixam de ser necessários nas respostas da API",
+        "As mensagens de erro ficam escondidas do usuário e do desenvolvedor"
+      ],
+      "correta": 1,
+      "explicacao": "Um formato único de erro facilita o tratamento no cliente. Ele complementa os códigos de status, não os substitui."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na documentação de `POST /contatos` de uma agenda: nome (obrigatório), telefone (opcional). O que deve acontecer se a requisição chegar sem o nome?",
+      "alternativas": [
+        "A API cadastra o contato sem nome, como se fosse normal",
+        "A API responde 400 explicando que o nome é obrigatório",
+        "A API responde 201 e inventa um nome para o contato",
+        "A API responde 404 porque não achou o campo nome"
+      ],
+      "correta": 1,
+      "explicacao": "Faltando campo obrigatório, a requisição é inválida: 400 com mensagem clara. Se faltar só o telefone (opcional), o cadastro é aceito."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A documentação de uma biblioteca diz: `GET /livros?pagina=2&porPagina=20` (a página 1 é a primeira). Quais livros da lista ordenada essa chamada devolve?",
+      "alternativas": [
+        "Do 1º ao 20º",
+        "Do 21º ao 40º",
+        "Do 2º ao 20º",
+        "Do 20º ao 40º"
+      ],
+      "correta": 1,
+      "explicacao": "Com 20 por página, a página 1 tem do 1º ao 20º e a página 2 do 21º ao 40º."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A documentação de uma loja traz `GET /produtos/{id}`. Um aluno testou `GET /produto/5` no Postman e recebeu 404, mas o produto 5 existe. Qual a causa mais provável?",
+      "alternativas": [
+        "O produto 5 foi apagado por alguém durante o teste",
+        "O Postman não consegue fazer requisições do tipo GET",
+        "Faltou mandar os dados do produto no corpo da requisição",
+        "A URL está no singular e não bate com a rota documentada"
+      ],
+      "correta": 3,
+      "explicacao": "O 404 veio porque a rota /produto não existe; a documentada é /produtos. Por isso a documentação precisa ser seguida à risca e estar correta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Insomnia, um aluno enviou `POST /clientes` com um JSON no corpo, mas marcou o corpo como texto simples (sem `Content-Type: application/json`). O app usa `express.json()`. O que tende a acontecer?",
+      "alternativas": [
+        "O servidor converte o texto em JSON sozinho e grava normalmente",
+        "A requisição vira GET automaticamente",
+        "O Insomnia recusa enviar e não chega nada ao servidor",
+        "O servidor não interpreta o corpo e req.body fica sem os campos"
+      ],
+      "correta": 3,
+      "explicacao": "express.json() só interpreta o corpo quando o Content-Type é JSON. Sem ele, req.body fica vazio e a rota costuma responder 400 por falta de campos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na página do Swagger UI de uma API, o que faz o botão 'Try it out'?",
+      "alternativas": [
+        "Baixa para o computador o código-fonte da rota escolhida",
+        "Deixa preencher os parâmetros e enviar uma requisição real à API",
+        "Gera automaticamente as tabelas da API no banco de dados",
+        "Apaga a rota escolhida da documentação e do servidor"
+      ],
+      "correta": 1,
+      "explicacao": "O Try it out transforma a documentação em ferramenta de teste: preenche parâmetros, envia e mostra status e resposta reais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual o principal risco de uma documentação de API desatualizada?",
+      "alternativas": [
+        "Quem consome a API usar rotas ou campos que mudaram e dar erro",
+        "O servidor ficar mais lento a cada requisição recebida",
+        "O banco de dados perder registros que já estavam gravados",
+        "A API deixar de aceitar requisições do tipo GET"
+      ],
+      "correta": 0,
+      "explicacao": "Documentação errada leva o front-end a enviar ou esperar dados que não existem mais, gerando erros de integração."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Acima de uma função do back-end há o comentário:\n`/** Busca um cliente pelo id. @param {number} id @returns {Promise<Cliente>} */`\nPara que serve esse comentário?",
+      "alternativas": [
+        "Impedir que a função seja chamada a partir de outros arquivos",
+        "Documentar a função: o que faz, o que recebe e o que devolve",
+        "Fazer a função rodar mais rápido quando o servidor iniciar",
+        "Criar automaticamente a rota GET /clientes no servidor Express"
+      ],
+      "correta": 1,
+      "explicacao": "É um comentário JSDoc. Editores e ferramentas leem essas marcações (@param, @returns) para mostrar ajuda e gerar documentação do código."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa API de cinema, a chamada precisa levar: o token de login, um filtro por gênero e os dados de uma nova avaliação. Onde cada um costuma ir?",
+      "alternativas": [
+        "Token no cabeçalho, gênero na query string e avaliação no corpo",
+        "Token na query string, gênero no corpo e avaliação no cabeçalho",
+        "Token no corpo, gênero no cabeçalho e avaliação na query string",
+        "Os três no corpo, porque a URL não pode ter dados"
+      ],
+      "correta": 0,
+      "explicacao": "Autenticação vai no cabeçalho (Authorization), filtros vão na query (?genero=...) e os dados a gravar vão no corpo JSON."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual descrição de rota está mais clara para quem vai usar a API de uma clínica?",
+      "alternativas": [
+        "`GET /consultas` — rota das consultas da clínica, usada no sistema",
+        "`GET /consultas` — faz o que precisa ser feito com as consultas",
+        "`GET /consultas?data=2026-12-01` — lista as consultas do dia",
+        "`GET /consultas?data=` — usa a data de algum jeito na busca"
+      ],
+      "correta": 2,
+      "explicacao": "A boa descrição diz o que a rota faz e mostra o parâmetro com um exemplo de valor. As outras são vagas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A documentação de um delivery tem `PATCH /pedidos/{id}/status` com o corpo `{\"status\": \"saiu para entrega\"}`. O que essa rota faz?",
+      "alternativas": [
+        "Apaga o pedido e cadastra outro com o novo status",
+        "Lista todos os pedidos com aquele status",
+        "Altera só o status de um pedido, sem mexer no resto",
+        "Substitui todos os dados do pedido pelo corpo enviado"
+      ],
+      "correta": 2,
+      "explicacao": "PATCH faz atualização parcial: só o campo enviado muda. PUT costuma substituir o recurso inteiro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A equipe do aplicativo de uma loja de games quer começar antes do back-end ficar pronto. O que permite isso?",
+      "alternativas": [
+        "Esperar o back-end terminar e só então ler o código das rotas",
+        "Combinar antes a documentação das rotas (contrato), com exemplos",
+        "Pedir que o back-end publique o banco de dados para o aplicativo",
+        "Deixar o app sem tratar erros até a API ficar totalmente pronta"
+      ],
+      "correta": 1,
+      "explicacao": "Com o contrato documentado (por exemplo, num arquivo OpenAPI), o front usa os exemplos e dados simulados enquanto o back-end implementa as mesmas rotas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na documentação de uma API, códigos de status da faixa 2xx (200, 201, 204) indicam:",
+      "alternativas": [
+        "Erro do cliente",
+        "Erro do servidor",
+        "Redirecionamento",
+        "Sucesso"
+      ],
+      "correta": 3,
+      "explicacao": "2xx = sucesso; 3xx = redirecionamento; 4xx = erro na requisição do cliente; 5xx = erro no servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na documentação de uma API, códigos de status da faixa 4xx (400, 401, 404) indicam:",
+      "alternativas": [
+        "Sucesso, com conteúdo no corpo da resposta",
+        "Falha interna no servidor ou no banco",
+        "Que a API mudou de endereço na internet",
+        "Problema na requisição feita pelo cliente"
+      ],
+      "correta": 3,
+      "explicacao": "4xx = o cliente errou algo (dados inválidos, sem login, rota ou recurso inexistente). Falha do servidor é 5xx."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na aba de testes de uma requisição do Postman, a equipe deixou uma verificação de que o status é 200. Para que isso serve?",
+      "alternativas": [
+        "Impedir que a rota consiga responder qualquer outro código",
+        "Conferir automaticamente, a cada envio, se a rota respondeu certo",
+        "Gravar o código de status 200 no banco de dados do projeto",
+        "Trocar sozinho o método da requisição para GET antes de enviar"
+      ],
+      "correta": 1,
+      "explicacao": "Os testes do Postman rodam depois da resposta e avisam se algo fugiu do esperado. Ajudam a perceber quando uma mudança quebrou a API."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num projeto Express, onde o desenvolvedor confere se a documentação lista todas as rotas que existem?",
+      "alternativas": [
+        "No arquivo package-lock.json, que lista todas as rotas",
+        "Na pasta node_modules, onde ficam as rotas instaladas",
+        "Nos arquivos de rotas (app.get, app.post, router.get…)",
+        "No arquivo .gitignore, que guarda as rotas escondidas"
+      ],
+      "correta": 2,
+      "explicacao": "As rotas são declaradas com app.get/app.post/router.get etc. Comparar esses arquivos com a documentação mostra se falta alguma rota."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na documentação de uma biblioteca aparece `GET /livros` — lista os livros. O que o `GET` informa?",
+      "alternativas": [
+        "O nome do banco de dados usado pela biblioteca",
+        "O formato da resposta, que será uma página HTML",
+        "O método HTTP, usado aqui para buscar dados",
+        "A senha necessária para conseguir acessar a rota"
+      ],
+      "correta": 2,
+      "explicacao": "GET é o método HTTP de leitura/busca. Junto com o caminho /livros forma o endpoint."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na documentação de um mercado, o exemplo de requisição de `POST /produtos` tem o cabeçalho `Content-Type: application/json`.\n\nNa sua resposta:\n1. explique o que esse cabeçalho informa;\n2. diga o que pode acontecer se ele não for enviado numa API Express que usa `express.json()`.",
+      "respostasAceitas": [
+        "Informa que o corpo da requisição está em JSON. Sem ele, o express.json() não interpreta o corpo, req.body fica vazio e a rota pode responder erro (400) por falta de dados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) formato do corpo = JSON; 2) o servidor não lê os campos (req.body vazio/indefinido) e a requisição falha."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A documentação de uma loja mostra duas chamadas: `GET /clientes/42` e `GET /clientes?cidade=Natal`.\n\nNa sua resposta:\n1. diga o tipo de parâmetro usado em cada uma;\n2. explique o que cada chamada provavelmente devolve.",
+      "respostasAceitas": [
+        "Na primeira o 42 é parâmetro de rota e identifica um cliente: devolve o cliente de id 42. Na segunda cidade=Natal é parâmetro de consulta (query) e filtra: devolve a lista de clientes de Natal."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) rota (path) x consulta (query string); 2) um único cliente x uma lista filtrada."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na documentação de uma padaria, o exemplo de resposta de `GET /pedidos/3` é:\n`{\"id\": 3, \"cliente\": \"Ana\", \"itens\": [{\"produto\": \"Pão de queijo\", \"qtd\": 6}], \"total\": 21.0, \"pago\": false}`\n\nNa sua resposta:\n1. diga o tipo de cada campo (id, cliente, itens, total, pago);\n2. explique o que o campo itens representa.",
+      "respostasAceitas": [
+        "id é número, cliente é texto, itens é uma lista de objetos, total é número e pago é booleano. itens é a lista de produtos do pedido, cada um com o produto e a quantidade."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) número, texto (string), lista/array, número, booleano; 2) lista dos itens comprados, cada item com produto e qtd."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na reunião, um colega disse: 'OpenAPI e Swagger UI são a mesma coisa'.\n\nNa sua resposta:\n1. explique, com palavras simples, o que é OpenAPI e o que é Swagger UI;\n2. diga uma vantagem de documentar a API desse jeito.",
+      "respostasAceitas": [
+        "OpenAPI é o padrão/arquivo (YAML ou JSON) que descreve as rotas, parâmetros e respostas. Swagger UI é a ferramenta que lê esse arquivo e mostra uma página interativa. Vantagem: documentação organizada, padronizada e que permite testar as rotas pela própria página."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) OpenAPI = especificação/descrição; Swagger UI = página gerada a partir dela; 2) padronização, testar pelo navegador, gerar código/clientes, facilita o front-end."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A documentação de uma loja diz que `GET /produtos/99` responde status 200 com o corpo `{\"mensagem\": \"Produto não existe\"}` quando o produto não é encontrado.\n\nNa sua resposta:\n1. diga se essa resposta está adequada;\n2. explique qual status deveria ser usado e por que o status importa para quem consome a API.",
+      "respostasAceitas": [
+        "Não está adequada: 200 significa sucesso. Deveria ser 404 (não encontrado), mantendo a mensagem. O front-end decide o que fazer pelo status; com 200 ele acha que veio um produto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) inadequada; 2) 404; o cliente usa o código para tratar sucesso e erro."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O README de uma API de academia está assim:\n`Configuração: no .env coloque DB_USUARIO=admin e DB_SENHA=Academia@2026Real`\nA senha é a verdadeira do banco em produção e o repositório é público.\n\nNa sua resposta:\n1. explique o problema;\n2. diga como o README deveria tratar essas variáveis.",
+      "respostasAceitas": [
+        "A senha real ficou exposta para qualquer pessoa que veja o repositório, que pode acessar e apagar o banco. O README deve só citar os nomes das variáveis com valores de exemplo (ou um .env.example), e o .env real fica fora do repositório."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) vazamento de credencial/risco de invasão; 2) listar variáveis com valores fictícios, .env.example, .env no .gitignore, trocar a senha que vazou."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Esta é a rota de uma escola em Express:\n`app.post(\"/alunos\", (req, res) => { const { nome, email, turma } = req.body; if (!nome || !email) return res.status(400).json({ erro: \"nome e email são obrigatórios\" }); const novo = salvar({ nome, email, turma }); res.status(201).json(novo); });`\n\nNa sua resposta:\n1. diga quais campos a documentação deve marcar como obrigatórios e qual como opcional;\n2. diga quais códigos de status a documentação deve listar e quando cada um ocorre.",
+      "respostasAceitas": [
+        "Obrigatórios: nome e email; opcional: turma. Status: 400 quando faltar nome ou email (com a mensagem de erro) e 201 quando o aluno é cadastrado, devolvendo o aluno novo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nome e email obrigatórios, turma opcional; 2) 400 e 201 com seus casos. Citar 500 para falha inesperada é um extra aceitável."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A documentação de uma biblioteca traz: `GET /livros?pagina=3&porPagina=10` (a página 1 é a primeira).\n\nNa sua resposta:\n1. diga quais posições da lista de livros essa chamada devolve;\n2. explique por que uma API divide a lista em páginas.",
+      "respostasAceitas": [
+        "Devolve do 21º ao 30º livro. A paginação evita mandar milhares de registros de uma vez: a resposta fica menor e mais rápida, e a tela mostra aos poucos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 21 a 30; 2) desempenho, menos dados trafegando, menos carga no servidor e no banco."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na collection do Postman de uma clínica, todas as requisições usam `{{baseUrl}}`, como `{{baseUrl}}/pacientes`. Há dois ambientes: 'local' (http://localhost:3000) e 'produção'.\n\nNa sua resposta:\n1. explique o que é o `{{baseUrl}}`;\n2. diga a vantagem de organizar a collection assim.",
+      "respostasAceitas": [
+        "{{baseUrl}} é uma variável de ambiente que é trocada pelo endereço do servidor escolhido. Assim dá para testar as mesmas requisições no local ou na produção só trocando o ambiente, sem editar cada URL."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) variável com o endereço base; 2) trocar de servidor num lugar só, compartilhar a collection, menos erro de digitação."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A documentação de um pet shop diz: `DELETE /pets/{id}` — 204 se apagou; 404 se o pet não existir.\n\nNa sua resposta:\n1. explique o que significa a resposta 204;\n2. explique por que é útil documentar também o 404 nessa rota.",
+      "respostasAceitas": [
+        "204 quer dizer que deu certo e não há corpo na resposta. Documentar o 404 avisa quem consome a API que tentar apagar um id que não existe gera erro, para o app tratar e mostrar uma mensagem."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sucesso sem conteúdo; 2) o cliente sabe tratar o caso de pet inexistente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A API de uma loja de games está em `/api/v1`. A equipe vai mudar a resposta de `GET /jogos`: o campo `preco` (número) passará a ser um objeto `{ \"valor\": 199.9, \"moeda\": \"BRL\" }`.\n\nNa sua resposta:\n1. explique por que essa mudança pode quebrar os aplicativos que já usam a API;\n2. explique como o versionamento (v1, v2) e a documentação ajudam nessa situação.",
+      "respostasAceitas": [
+        "Os apps esperam preco como número; ao receber um objeto vão calcular ou mostrar errado. Lançando a mudança em /api/v2, a v1 continua funcionando para quem não se atualizou, e a documentação explica a diferença para cada um migrar no seu tempo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mudança incompatível de formato/tipo; 2) v1 continua igual, v2 traz a novidade, documentação registra as duas e o que mudou (changelog)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno testou `POST /clientes` no Insomnia com o corpo `{\"nome\": \"Bia\", \"e-mail\": \"bia@exemplo.com\"}` e recebeu 400 com `{\"erro\": \"email é obrigatório\"}`. A documentação da rota cita o campo `email`.\n\nNa sua resposta:\n1. explique a causa do erro;\n2. explique como a documentação, com exemplo de requisição, ajuda a evitar esse tipo de problema.",
+      "respostasAceitas": [
+        "O corpo usou o nome de campo e-mail, mas a API espera email; para o servidor o email não veio, por isso 400. Um exemplo de requisição com os nomes exatos dos campos permite copiar o formato certo e evita erro de digitação."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nome do campo diferente do esperado; 2) exemplo pronto com nomes exatos, lista de campos obrigatórios."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A documentação de uma livraria diz que `GET /livros` devolve cada livro com o campo `autor` (texto). Há um mês o código passou a devolver `autores` (lista de textos), mas ninguém atualizou a documentação.\n\nNa sua resposta:\n1. explique duas consequências desse descuido;\n2. diga o que a equipe deveria fazer sempre que mudar uma rota.",
+      "respostasAceitas": [
+        "Quem segue a documentação vai procurar o campo autor, que não existe mais, e a tela fica sem autor ou o app quebra; novos desenvolvedores perdem tempo e deixam de confiar na documentação. A cada mudança de rota a equipe deve atualizar a documentação junto com o código e avisar quem consome a API."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) duas consequências (erro no app, retrabalho, perda de confiança); 2) atualizar a documentação no mesmo momento da mudança, revisar, avisar/versionar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa empresa, a equipe do back-end e a do aplicativo combinaram primeiro um arquivo OpenAPI com todas as rotas, exemplos e códigos de status, e só depois começaram a programar.\n\nNa sua resposta:\n1. explique por que essa ordem permite que as duas equipes trabalhem ao mesmo tempo;\n2. diga um cuidado necessário para o combinado continuar valendo.",
+      "respostasAceitas": [
+        "O arquivo funciona como contrato: o app usa os exemplos de resposta (dados simulados) enquanto o back-end implementa as rotas iguais ao combinado. O cuidado é seguir o contrato à risca e, se algo mudar, atualizar o OpenAPI e avisar a outra equipe."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) contrato definido antes, cada equipe trabalha contra o contrato; 2) manter o código igual à especificação, comunicar e versionar mudanças."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Documentação: diagrama de classes e API",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O diagrama de classes de um sistema tem `Usuario` com `- id: int`, `- nome: String`, `- email: String` e `- senha: String`. A documentação da API mostra que `GET /usuarios/{id}` devolve só `{\"id\", \"nome\", \"email\"}`.\n\nNa sua resposta:\n1. explique por que a senha não aparece na resposta da API;\n2. diga se é um problema a resposta não ter exatamente os mesmos atributos da classe.",
+      "respostasAceitas": [
+        "A senha é dado sensível e nunca deve sair pela API, nem criptografada. Não é problema: a API expõe só o que o cliente precisa; a classe descreve o objeto inteiro e a resposta é uma visão escolhida dele."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) segurança, a senha não deve ser exposta; 2) não é problema; resposta e classe podem diferir (só os dados necessários e seguros)."
+    }
+  ]
+}
