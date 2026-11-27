@@ -31,7 +31,7 @@
 
 import { temFormato, corrigirFormato, pedidoFormatos, lerRespostaFormatos, contextoDiario } from "./formatos.js";
 import { integracao, buscarEGravar } from "./integracao.js";
-import { corrigirSql, textoParaIA } from "./sql-correcao.js";
+import { corrigirSql, textoParaIA, questaoDaTentativa } from "./sql-correcao.js";
 import { corrigirWeb } from "./web-correcao.js";
 import { corrigirDiagrama, pedidoDiagramaIA, lerRespostaDiagramaIA } from "./diagrama-correcao.js";
 const gabWeb = g => g?.web ? (() => { try { return JSON.parse(g.web); } catch { return {}; } })() : g;
@@ -258,6 +258,8 @@ async function corrigirTentativa(env, usuario, tid) {
     fs.listar(`tentativas/${tid}/respostas`),
     fs.listar(`tentativas/${tid}/correcoes`)
   ]);
+  // SQL com parte das tarefas do cenário (prova.sqlPerguntas): só as sorteadas para este aluno valem
+  for (const qid of ids) { const k = `bancos/${bancoDe(qid)}/questoes/${qid}`; if (docs[k]?.tipo === "sql") docs[k] = questaoDaTentativa(docs[k], qid, t); }
   // aluno com acessibilidade: questões adaptadas em outro formato (V/F, ligar…) usam o gabarito privado, com pontos parciais
   const email = String(t.email || "").toLowerCase();
   if (email && await fs.ler(`acessibilidade/${email}`)) {

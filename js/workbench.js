@@ -2579,6 +2579,7 @@ export function montarBancada(container, opcoes = {}) {
     nExecucoes() { return Object.values(execucoes).reduce((s, l) => s + l.length, 0); },
     async valor() {
       const out = { tarefas: {} };
+      if (Array.isArray(questao.tarefasSorteadas)) out.ids = questao.tarefasSorteadas.slice();   // pergunta com parte das tarefas do cenário
       for (const ed of eds) {
         const sql = ed.ta.value;
         let r;

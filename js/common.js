@@ -10,7 +10,7 @@ import { corrigirSql } from "../servidor/sql-correcao.js";
 import { corrigirWeb } from "../servidor/web-correcao.js";
 import { corrigirDiagrama } from "../servidor/diagrama-correcao.js";
 export { limparTema } from "../servidor/organizar.js";
-import { categoriaSql, coberturaWeb, subtopicosConferiveis, modeloWeb, cobreTags, nTagsCobertas } from "./praticas-categorias.js?v=20261126b";
+import { categoriaSql, coberturaWeb, subtopicosConferiveis, modeloWeb, cobreTags, nTagsCobertas, cenarioAtende, escolherTarefas } from "./praticas-categorias.js?v=20261127a";
 const gabWeb = g => g?.web ? (() => { try { return JSON.parse(g.web); } catch { return {}; } })() : g;
 import { firebaseConfig, SUPER_ADMIN, DOMINIOS_ALUNOS_PADRAO, USAR_EMULADOR, GOOGLE_CLIENT_ID } from "./firebase-config.js";
 
@@ -323,7 +323,7 @@ export async function sortearQuestoes(prova, cota = null, opc = {}) {
     return sortearAleatorio([...pegar(diss, cota.nD), ...pegar(alt, cota.nA)], cota.nA + cota.nD);
   }
   if (nG > diag.length) throw new Error("O banco não tem questões de diagrama suficientes nos temas escolhidos. Avise o professor.");
-  if (nS - nW - nG > sql.length) throw new Error("O banco não tem questões SQL (Bancada) suficientes nos temas escolhidos. Avise o professor.");
+  if (!Array.isArray(prova.sqlPerguntas) && nS - nW - nG > sql.length) throw new Error("O banco não tem questões SQL (Bancada) suficientes nos temas escolhidos. Avise o professor.");
   if (nW > web.length) throw new Error("O banco não tem questões da Bancada Web suficientes nos temas escolhidos. Avise o professor.");
   // diagramas: quantos de cada tipo (prova.diagramasPorTipo); sem isso, nG entre todos os permitidos
   const porTipo = prova.diagramasPorTipo && typeof prova.diagramasPorTipo === "object" ? Object.entries(prova.diagramasPorTipo).filter(([, n]) => Number(n) > 0) : null;
@@ -332,7 +332,25 @@ export async function sortearQuestoes(prova, cota = null, opc = {}) {
   // SQL físico: quantos de cada categoria (DDL/DML/DCL) — prova.sqlPorCategoria; sem isso, entre todas
   const sqlCat = prova.sqlPorCategoria && typeof prova.sqlPorCategoria === "object" ? Object.entries(prova.sqlPorCategoria).filter(([, n]) => Number(n) > 0) : null;
   if (sqlCat) for (const [k, n] of sqlCat) if (sql.filter(id => categoriaSql(dados[id]) === k).length < Number(n)) throw new Error("O banco não tem questões de SQL suficientes de uma das categorias escolhidas. Avise o professor.");
-  const pegarSql = () => sqlCat ? sqlCat.flatMap(([k, n]) => pegar(sql.filter(id => categoriaSql(dados[id]) === k), Number(n))) : pegar(sql, nS - nW - nG);
+  // TAREFAS POR PERGUNTA (prova.sqlPerguntas): cada pergunta pede N tarefas de tipos escolhidos; o cenário sorteado precisa ter
+  // tarefas de cada tipo, e as tarefas sorteadas vão para opc.tarefas[qid] (a tentativa grava em tarefasSorteadas)
+  const perguntas = Array.isArray(prova.sqlPerguntas) && prova.sqlPerguntas.length ? prova.sqlPerguntas.map(p => Array.isArray(p?.tarefas) ? p.tarefas : []) : null;
+  if (perguntas) for (const ped of perguntas) if (!sql.some(id => cenarioAtende(dados[id], ped))) throw new Error("O banco não tem cenário de SQL com as tarefas pedidas numa das perguntas. Avise o professor.");
+  const pegarSqlPerguntas = () => {
+    const sai = [];
+    const exigencia = ped => ped.filter(k => k !== "qualquer").length * 100 + ped.length;
+    for (const ped of [...perguntas].sort((a, b) => exigencia(b) - exigencia(a))) {
+      // o mesmo cenário não entra duas vezes na prova; as perguntas mais exigentes escolhem primeiro (ver ordem abaixo)
+      const id = pegar(sql.filter(x => !sai.includes(x) && cenarioAtende(dados[x], ped)), 1)[0];
+      if (!id) throw new Error("O banco não tem cenários de SQL diferentes suficientes para as perguntas pedidas. Avise o professor.");
+      sai.push(id);
+      if (opc.tarefas) opc.tarefas[id] = escolherTarefas(dados[id], ped) || (dados[id].tarefas || []).map(t => t.id);
+    }
+    return sai;
+  };
+  // somativa antiga (sem sqlPerguntas): cenário grande (banco de tarefas, mais de 5) entra com 4 tarefas sorteadas, de tipos variados
+  const comTarefasPadrao = l => { if (opc.tarefas) for (const id of l) if ((dados[id]?.tarefas || []).length > 5) opc.tarefas[id] = escolherTarefas(dados[id], ["qualquer", "qualquer", "qualquer", "qualquer"]); return l; };
+  const pegarSql = () => perguntas ? pegarSqlPerguntas() : comTarefasPadrao(sqlCat ? sqlCat.flatMap(([k, n]) => pegar(sql.filter(id => categoriaSql(dados[id]) === k), Number(n))) : pegar(sql, nS - nW - nG));
   // página web: só as que têm os subtópicos marcados (se nenhuma tiver todos, as que têm mais); quantas de cada modelo
   const subW = subtopicosConferiveis(prova.webSubtopicos);
   let webPool = web;
@@ -342,7 +360,7 @@ export async function sortearQuestoes(prova, cota = null, opc = {}) {
   if (subW.length) { const n = id => { const c = coberturaWeb(dados[id]); return subW.filter(s => c.has(s)).length; }; const todas = web.filter(id => n(id) === subW.length); webPool = todas.length ? todas : [...web].sort((a, b) => n(b) - n(a)); }
   const webMod = prova.webModelos && typeof prova.webModelos === "object" ? Object.entries(prova.webModelos).filter(([, n]) => Number(n) > 0) : null;
   const pegarWeb = () => webMod ? webMod.flatMap(([m, n]) => pegar(webPool.filter(id => modeloWeb(dados[id]) === m), Number(n))) : pegar(webPool, nW);
-  const comSql = l => nS ? sortearAleatorio([...l, ...pegarSql(), ...pegarWeb(), ...pegarDiag()], l.length + nS) : l;
+  const comSql = l => { if (!nS) return l; const tudo = [...l, ...pegarSql(), ...pegarWeb(), ...pegarDiag()]; return sortearAleatorio(tudo, tudo.length); };
   const nQ = Number(prova.nQuestoes || 0) - nS;
   if (ids.length < nQ) throw new Error("O banco não tem questões suficientes nos temas escolhidos. Avise o professor.");
   const nD = Number(prova.nDissertativas || 0);

@@ -2,7 +2,7 @@
 import { db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, esc, $, toast, dataBR, letra, SUPER_ADMIN, limparTema, apagarTentativaTeste,
          confirmar, modal, traduzirErro, iniciais, temaDe, ordenarTemas, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco,
          rotuloDias, nomeTurma, HORARIO_PADRAO, textoHorario, DIAS_SEMANA_LONGO,
-         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, materiaCorrigida, temasDoAlunoNaRec, bancoDaQuestao, bancosTeoricos, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261126k";
+         semestreDe, rotuloSemestre, semestreVizinho, semestreDaProva, materiaDaProva, materiaCorrigida, temasDoAlunoNaRec, bancoDaQuestao, bancosTeoricos, chaveTexto, dataCurta, semestreCursoAtual, periodoLetivo, cotaDaProva } from "./common.js?v=20261127a";
 import { enviarMaterial, listarMateriais, apagarMaterial, baixarMaterial, tamanhoTexto, MAX_MB, erroMaterial, abrirMaterialEmAba } from "./material.js";
 import { MODELOS_IA, MODELO_PADRAO, lerConfigIA, salvarConfigIA, apagarConfigIA, finalChave, testarChave, corrigirDissertativa } from "./ia.js";
 import { abrirLeitorPdf } from "./leitor-pdf.js";
@@ -10,7 +10,7 @@ import { htmlEditorTopicos, editorTopicos } from "./plano-curso-ui.js?v=20261126
 import { criteriosDaUnidade, codigoCriterio, carregarCriteriosOficiais } from "./plano-ensino.js?v=20261116a";
 import { PLANO_CURSO, unidadeDaMateria, unidadesDoSemestre } from "./plano-curso.js?v=20261113a";
 import { proporCapacidades, capsDoTema } from "./temas-capacidades.js?v=20261126a";
-import { CATEGORIAS_SQL, categoriaSql, MODELOS_WEB, modeloWeb, TAGS_WEB, cobreTags } from "./praticas-categorias.js?v=20261126b";
+import { CATEGORIAS_SQL, categoriaSql, MODELOS_WEB, modeloWeb, TAGS_WEB, cobreTags, TIPOS_TAREFA, tarefasPorTipo, cenarioAtende, textoPedido } from "./praticas-categorias.js?v=20261127a";
 import { iniciarOrganizacao, carregarOrganizacao, listarPlanos, listarCursos, materiasSugeridas, editarTopicosBanco, editarCriteriosBanco, topicosDaMateria } from "./admin-org.js";
 import { iniciarDiario, carregarDiario } from "./admin-diario.js";
 import { iniciarCriterios, carregarCriterios } from "./admin-criterios.js?v=20261116a";
@@ -26,7 +26,7 @@ import { exportarExcel, exportarPDF } from "./exportar-turmas.js?v=20261110b";
 import { tarefa, ligarMenuLateral } from "./ui.js";
 import { ic } from "./icones.js";
 import { REGRAS_NOTA, regraDoTipo, calcNotaFinal } from "./nota-final.js";
-import { textoRespostaSql } from "../servidor/sql-correcao.js?v=20261126a";
+import { textoRespostaSql, tarefasDe } from "../servidor/sql-correcao.js?v=20261127a";
 import { textoRespostaWeb } from "../servidor/web-correcao.js?v=20261125a";
 import { textoRespostaDiagrama, textoGabaritoDiagrama, validarQuestaoDiagrama, NOMES_DIAGRAMA } from "../servidor/diagrama-correcao.js?v=20261126a";
 import { HUMOR } from "./diario-perguntas.js";
@@ -720,7 +720,7 @@ function controleProva(f) {
   const nq = k => $f("Ativa" + k).checked ? Math.max(0, Math.round(Number($f("N" + k).value || 0))) : 0;   // prático desligado = 0
   const pratico = () => PRAT.reduce((s, k) => s + nq(k), 0);
   const somaTudo = () => Number($f("NAlt").value || 0) + Number($f("NDiss").value || 0) + pratico();
-  let praticoAntes = 0, tiposDiag = null, qtdDiag = {}, qtdSql = {}, qtdWeb = {}, webSub = new Set();   // quantos de cada tipo de diagrama / categoria SQL / modelo de página; etiquetas da página
+  let praticoAntes = 0, tiposDiag = null, qtdDiag = {}, qtdSql = {}, qtdWeb = {}, webSub = new Set(), sqlPerg = [];   // sqlPerg: perguntas de SQL, cada uma = lista dos tipos das tarefas   // quantos de cada tipo de diagrama / categoria SQL / modelo de página; etiquetas da página
   let modeloSel = "", outrasMat = false;   // outrasMat: o professor pediu prática de outra matéria (link recolhido)
   // TEORIA: bancos da matéria escolhida; um banco já marcado continua aparecendo
   const bancoVisivel = (b, mat = $f("Materia").value) => (!!mat && chaveTexto(b.materia) === chaveTexto(mat)) || !!sel.get(b.id)?.size;
@@ -739,6 +739,28 @@ function controleProva(f) {
   }
   const qsPrat = tipo => [...praticasSel[tipo]].flatMap(([b, ts]) => (questoesCache[b] || []).filter(q => q.tipo === tipo && q.revisao !== "pendente" && (tipo === "web" || ts.has(temaDe(q)))));
   const dispSql = k => qsPrat("sql").filter(q => categoriaSql(q) === k).length;
+  // ---------- SQL: perguntas montadas pelo professor (quantas tarefas e de que tipo) ----------
+  const cenariosPara = ped => qsPrat("sql").filter(q => cenarioAtende(q, ped)).length;
+  const maxTarefasSql = () => Math.max(0, ...qsPrat("sql").map(q => (q.tarefas || []).length));
+  const tiposSqlTem = () => { const o = {}; for (const q of qsPrat("sql")) for (const k of Object.keys(tarefasPorTipo(q))) o[k] = (o[k] || 0) + 1; return o; };   // tipo -> nº de cenários que têm
+  // dá para dar um cenário DIFERENTE a cada pergunta? (as mais exigentes escolhem primeiro, como no sorteio)
+  function sqlViavel(perg = sqlPerg) {
+    const cen = qsPrat("sql"), usados = new Set();
+    const exig = p => p.filter(k => k !== "qualquer").length * 100 + p.length;
+    for (const [i, p] of perg.map((p, i) => [i, p]).sort((a, b) => exig(b[1]) - exig(a[1]))) {
+      if (!p.length) return `Pergunta ${i + 1} de SQL: escolha pelo menos 1 tarefa.`;
+      const c = cen.find(q => !usados.has(q.id) && cenarioAtende(q, p));
+      if (!c) return cenariosPara(p) ? `SQL: não há cenários diferentes suficientes para todas as perguntas (a pergunta ${i + 1} ficou sem cenário). Diminua as perguntas ou as tarefas.` : `Pergunta ${i + 1} de SQL: nenhum cenário tem ${textoPedido(p)}. Troque algum tipo por "qualquer" ou tire uma tarefa.`;
+      usados.add(c.id);
+    }
+    return "";
+  }
+  // pergunta padrão (modelos e "+ Adicionar pergunta"): consulta + dados + estrutura, trocando o que não existe por "qualquer"
+  function perguntaPadrao(i = 0, n = 3) {
+    const tem = tiposSqlTem(), giro = [["consulta", "dados", "estrutura"], ["consulta", "estrutura", "dados"], ["estrutura", "consulta", "dados"], ["dados", "consulta", "consulta"]][i % 4];
+    const p = Array.from({ length: Math.min(n, Math.max(1, maxTarefasSql())) }, (_, j) => tem[giro[j % 3]] ? giro[j % 3] : "qualquer");
+    return cenariosPara(p) ? p : p.map(() => "qualquer");
+  }
   const dispWeb = m => qsPrat("web").filter(q => modeloWeb(q) === m && cobreTags(q, [...webSub])).length;
   const dispDiagTipo = k => qsPrat("diagrama").filter(q => q.diagrama === k).length;
   const dispPrat = tipo => tipo === "sql" ? qsPrat("sql").length : tipo === "web" ? qsPrat("web").filter(q => cobreTags(q, [...webSub])).length : qsPrat("diagrama").filter(q => !tiposDiag || tiposDiag.has(q.diagrama)).length;
@@ -768,8 +790,8 @@ function controleProva(f) {
   const qtdDe = tipo => tipo === "sql" ? qtdSql : tipo === "web" ? qtdWeb : qtdDiag;
   const KDE = { sql: "Sql", web: "Web", diagrama: "Diag" };
   function sincronizarN(tipo) {
-    const k = KDE[tipo], q = qtdDe(tipo), n = Object.values(q).reduce((s, x) => s + x, 0);
-    $f("N" + k).value = n;
+    const k = KDE[tipo], q = qtdDe(tipo), n = tipo === "sql" ? sqlPerg.length : Object.values(q).reduce((s, x) => s + x, 0);
+    $f("N" + k).value = n;   // SQL: conta só as PERGUNTAS (as tarefas de cada uma não contam como questão)
     if (tipo === "diagrama") tiposDiag = Object.keys(q).length ? new Set(Object.keys(q)) : null;
   }
   // ---------- regra do total: cada prática que entra tira uma teórica (alternativa, alternativa, dissertativa, e repete) ----------
@@ -801,14 +823,19 @@ function controleProva(f) {
     const add = (tipo, k, n) => { const l = linhasDo(tipo).find(x => x.k === k); const m = Math.min(n, l?.disp || 0); if (m > 0) plano.push({ tipo, k, n: m }); return m; };
     const tipo = tiposDaMateria().find(t => fontesDoTipo(t).length);
     if (!tipo) return plano;
-    if (tipo === "sql") { if (so) { if (!add("sql", "misto", 2)) add("sql", "DML", 2); } else { const d = add("sql", "DDL", 1); add("sql", "DML", 3 - d); } }
+    if (!praticasSel[tipo].size) montarFontes(tipo);   // tipo ainda não adicionado: as fontes (bancos da matéria) para calcular o modelo
+    if (tipo === "sql") {
+      const quer = so ? 3 : 2, perg = [];
+      for (let i = 0; i < quer; i++) { const p = perguntaPadrao(i, so ? 4 : 3), teste = [...perg, p]; if (!sqlViavel(teste)) perg.push(p); }
+      if (perg.length) plano.push({ tipo: "sql", k: "perguntas", n: perg.length, perguntas: perg });
+    }
     else if (tipo === "web") { if (so) { if (!add("web", "livre", 1)) add("web", linhasDo("web").find(l => l.disp)?.k, 1); } else if (!add("web", "blocos", 1)) add("web", linhasDo("web").find(l => l.disp)?.k, 1); }
     else { let n = 0; for (const l of linhasDo("diagrama")) if (n < 2 && add("diagrama", l.k, 1)) n++; }
     return plano;
   }
   const NOME_TIPO = { sql: "SQL físico", web: "página web", diagrama: "diagrama" };
   function textoPlano(plano) {
-    return plano.map(p => { const l = linhasDo(p.tipo).find(x => x.k === p.k); return p.tipo === "sql" ? `${p.n} ${l.nome}` : p.tipo === "web" ? `${p.n} página web (${l.nome.toLowerCase()})` : `${p.n} ${l.nome.toLowerCase()}`; }).join(" + ");
+    return plano.map(p => { const l = linhasDo(p.tipo).find(x => x.k === p.k); return p.tipo === "sql" ? `${p.n} ${p.n === 1 ? "pergunta" : "perguntas"} de SQL (${p.perguntas.map(x => x.length).join(" + ")} tarefas)` : p.tipo === "web" ? `${p.n} página web (${l.nome.toLowerCase()})` : `${p.n} ${l.nome.toLowerCase()}`; }).join(" + ");
   }
   function composicaoTeoriaPratica(plano) {   // simula a regra do total a partir de 6 + 4
     let a = 6, d = 4; plano.reduce((s, p) => s + p.n, 0) && [...Array(plano.reduce((s, p) => s + p.n, 0)).keys()].forEach(i => { const quer = ORDEM_TIRAR[i % 3]; if ((quer === "a" && a) || !d) { if (a) a--; } else d--; });
@@ -825,10 +852,10 @@ function controleProva(f) {
   function aplicarModelo(k) {
     if (travado) return;
     const { pTP, pSP } = modelos();
-    qtdSql = {}; qtdWeb = {}; qtdDiag = {}; webSub = new Set(); tiposDiag = null;
+    qtdSql = {}; qtdWeb = {}; qtdDiag = {}; webSub = new Set(); tiposDiag = null; sqlPerg = [];
     PRAT.forEach(x => { $f("Ativa" + x).checked = false; $f("N" + x).value = 0; });
     $f("SemLimite").checked = false; $f("Total").value = 10; $f("NAlt").value = 6; $f("NDiss").value = 4; praticoAntes = 0;
-    const usar = plano => { for (const p of plano) { $f("Ativa" + KDE[p.tipo]).checked = true; montarFontes(p.tipo); qtdDe(p.tipo)[p.k] = p.n; sincronizarN(p.tipo); } };
+    const usar = plano => { for (const p of plano) { $f("Ativa" + KDE[p.tipo]).checked = true; montarFontes(p.tipo); if (p.tipo === "sql") sqlPerg = p.perguntas.map(x => [...x]); else qtdDe(p.tipo)[p.k] = p.n; sincronizarN(p.tipo); } };
     if (k === "tp") { usar(pTP); descontar(); }
     else if (k === "pratica") { usar(pSP); $f("NAlt").value = 0; $f("NDiss").value = 0; $f("Total").value = pratico(); praticoAntes = pratico(); }
     else if (k === "zero") { $f("NAlt").value = 0; $f("NDiss").value = 0; $f("Total").value = 10; }
@@ -872,9 +899,9 @@ function controleProva(f) {
     $f("Praticas").innerHTML = !mat ? "" : tipos.length ? tipos.map(tipo => {
       const [k, titulo, desc] = CARD[tipo], ativo = $f("Ativa" + k).checked, fontes = fontesDoTipo(tipo), q = qtdDe(tipo);
       if (!ativo) return `<div class="qb-pcard"><div class="qb-pcab"><div><b>${titulo}</b><small>${desc}</small></div>${fontes.length ? `<button type="button" class="leve mini" data-padd="${k}"${travado ? " disabled" : ""}>+ Adicionar</button>` : `<span class="pequeno">sem questões ainda</span>`}</div></div>`;
-      const linhas = linhasDo(tipo).map(x => `<div class="qb-linha${x.disp ? "" : " qb-apagada"}"><div><b>${esc(x.nome)}</b><small>${esc(x.desc)} · ${x.disp ? `${x.disp} disponíve${x.disp === 1 ? "l" : "is"}` : "sem questões ainda"}</small></div>${passo(`data-pq="${tipo}|${esc(x.k)}"`, q[x.k] || 0, x.disp ? "" : ' data-sem="1"')}</div>`).join("");
+      const linhas = tipo === "sql" ? htmlPerguntasSql() : linhasDo(tipo).map(x => `<div class="qb-linha${x.disp ? "" : " qb-apagada"}"><div><b>${esc(x.nome)}</b><small>${esc(x.desc)} · ${x.disp ? `${x.disp} disponíve${x.disp === 1 ? "l" : "is"}` : "sem questões ainda"}</small></div>${passo(`data-pq="${tipo}|${esc(x.k)}"`, q[x.k] || 0, x.disp ? "" : ' data-sem="1"')}</div>`).join("");
       const tags = tipo !== "web" ? "" : `<p class="qb-sub">O que a página precisa cobrar</p>` + ["HTML", "CSS"].map(g => `<p class="pequeno" style="margin:6px 0 4px">${g}</p><div class="qb-tags">${TAGS_WEB[g].map(t => `<button type="button" class="qb-tag${webSub.has(t.k) ? " ativo" : ""}" data-tag="${t.k}" aria-pressed="${webSub.has(t.k)}"${travado ? " disabled" : ""}>${esc(t.nome)}</button>`).join("")}</div>`).join("") + `<p class="pequeno" style="margin:6px 0 0">Nada marcado = qualquer página. Só aparecem assuntos que mudam a página sorteada.</p>`;
-      return `<div class="qb-pcard ativo"><div class="qb-pcab"><div><b>${titulo}</b><small>${outrasMat ? `Bancos de ${esc([...new Set(fontes.map(b => b.materia))].join(", "))}` : desc}</small></div><button type="button" class="leve mini" data-prem="${k}"${travado ? " disabled" : ""}>Remover</button></div>
+      return `<div class="qb-pcard ativo${tipo === "sql" ? " qb-largo" : ""}"><div class="qb-pcab"><div><b>${titulo}</b><small>${outrasMat ? `Bancos de ${esc([...new Set(fontes.map(b => b.materia))].join(", "))}` : desc}</small></div><button type="button" class="leve mini" data-prem="${k}"${travado ? " disabled" : ""}>Remover</button></div>
         ${tipo === "web" ? `<p class="qb-sub">Como o aluno faz</p>` : ""}${linhas}${tags}
         <p class="pequeno qb-fonte">As questões vêm sozinhas dos bancos${outrasMat ? "" : ` de ${esc(mat)}`} que têm esse tipo${capsMarcadas.size && tipo !== "web" ? ", nas capacidades marcadas" : ""}. <a href="#" data-pfonte="${tipo}">Ver de onde vêm</a></p></div>`;
     }).join("") : `<p class="pequeno">${esc(mat)} não tem questões práticas nos bancos.</p>`;
@@ -883,16 +910,43 @@ function controleProva(f) {
       (outrasMat ? `<a href="#" data-poutras="0">Voltar a usar só as práticas de ${esc(mat)}</a>` : bancosCache.some(b => !daMateria(b) && ["sql", "web", "diagrama"].some(t => temasDoTipo(b.id, t).length)) ? `<a href="#" data-poutras="1">Usar prática de outra matéria</a>` : "");
     const box = $f("Praticas");
     box.querySelectorAll("[data-padd]").forEach(b => b.onclick = () => { const k = b.dataset.padd; $f("Ativa" + k).checked = true; montarFontes(TIPO_PRAT[k]); modeloSel = ""; atualizar(); });
-    box.querySelectorAll("[data-prem]").forEach(b => b.onclick = () => { const k = b.dataset.prem, tipo = TIPO_PRAT[k]; $f("Ativa" + k).checked = false; Object.keys(qtdDe(tipo)).forEach(x => delete qtdDe(tipo)[x]); if (tipo === "web") webSub = new Set(); sincronizarN(tipo); $f("N" + k).value = 0; descontar(); modeloSel = ""; atualizar(); });
+    box.querySelectorAll("[data-prem]").forEach(b => b.onclick = () => { const k = b.dataset.prem, tipo = TIPO_PRAT[k]; $f("Ativa" + k).checked = false; Object.keys(qtdDe(tipo)).forEach(x => delete qtdDe(tipo)[x]); if (tipo === "web") webSub = new Set(); if (tipo === "sql") sqlPerg = []; sincronizarN(tipo); $f("N" + k).value = 0; descontar(); modeloSel = ""; atualizar(); });
     box.querySelectorAll("[data-pq]").forEach(i => {
       const [tipo, k] = i.dataset.pq.split("|"), st = i.closest(".qb-step"), linha = linhasDo(tipo).find(x => x.k === k);
       const definir = v => { const n = Math.max(0, Math.min(Math.round(Number(v) || 0), linha?.disp || 0)); if (n) qtdDe(tipo)[k] = n; else delete qtdDe(tipo)[k]; sincronizarN(tipo); descontar(); modeloSel = ""; atualizar(); };
       i.onchange = () => definir(i.value);
       st.querySelectorAll("[data-d]").forEach(b => { if (st.dataset.sem && b.dataset.d === "1") b.disabled = true; b.onclick = () => definir((qtdDe(tipo)[k] || 0) + Number(b.dataset.d)); });
     });
+    ligarPerguntasSql(box);
     box.querySelectorAll("[data-tag]").forEach(b => b.onclick = () => { webSub.has(b.dataset.tag) ? webSub.delete(b.dataset.tag) : webSub.add(b.dataset.tag); atualizar(); });
     box.querySelectorAll("[data-pfonte]").forEach(a => a.onclick = e => { e.preventDefault(); verFontes(a.dataset.pfonte); });
     $f("PratNota").querySelectorAll("[data-poutras]").forEach(a => a.onclick = e => { e.preventDefault(); outrasMat = a.dataset.poutras === "1"; atualizar(); });
+  }
+  // SQL: cada pergunta é uma linha com as tarefas dela (tipo de cada uma); a pergunta conta 1 questão na prova
+  function htmlPerguntasSql() {
+    const tem = tiposSqlTem(), maxT = maxTarefasSql(), nCen = qsPrat("sql").length;
+    const opc = sel => [["qualquer", "Qualquer tipo"], ...Object.entries(TIPOS_TAREFA).map(([k, t]) => [k, `${t.curto}${tem[k] ? "" : " — sem cenário"}`])].map(([k, n]) => `<option value="${k}"${k === sel ? " selected" : ""}${k !== "qualquer" && !tem[k] && k !== sel ? " disabled" : ""}>${esc(n)}</option>`).join("");
+    const dis = travado ? " disabled" : "";
+    const linhas = sqlPerg.map((p, i) => { const c = cenariosPara(p);
+      return `<div class="qb-sqlperg${c ? "" : " qb-apagada"}"><div class="qb-sqlcab"><b>Pergunta ${i + 1}</b><small>${p.length} ${p.length === 1 ? "tarefa" : "tarefas"} · ${c ? `${c} ${c === 1 ? "cenário serve" : "cenários servem"}` : "nenhum cenário tem essas tarefas"}</small>
+        <button type="button" class="leve mini" data-sqldel="${i}" aria-label="Remover a pergunta ${i + 1}"${dis}>Remover</button></div>
+        <div class="qb-tarefas">${p.map((k, j) => `<span class="qb-tarefa"><label class="sr-only" for="sqlt_${i}_${j}">Tarefa ${j + 1} da pergunta ${i + 1}</label><span class="pequeno">Tarefa ${j + 1}</span><select id="sqlt_${i}_${j}" data-sqlt="${i}|${j}"${dis}>${opc(k)}</select>${p.length > 1 ? `<button type="button" class="leve mini" data-sqlrem="${i}|${j}" aria-label="Tirar a tarefa ${j + 1} da pergunta ${i + 1}"${dis}>×</button>` : ""}</span>`).join("")}
+        ${p.length < maxT ? `<button type="button" class="leve mini" data-sqladd="${i}"${dis}>+ tarefa</button>` : `<span class="pequeno">máximo: ${maxT} tarefas</span>`}</div></div>`; }).join("");
+    return `<p class="qb-sub">Perguntas de SQL — monte cada uma: quantas tarefas e de que tipo</p>${linhas || `<p class="pequeno">Nenhuma pergunta ainda.</p>`}
+      <button type="button" class="leve mini" data-sqlnova="1"${dis || (sqlPerg.length >= nCen ? " disabled" : "")}>+ Adicionar pergunta de SQL</button>
+      <p class="pequeno" style="margin:6px 0 0">Cada pergunta conta como <b>1 questão</b> na prova, tenha 1 ou 5 tarefas. O aluno recebe um cenário (banco pronto) sorteado e, dentro dele, tarefas sorteadas dos tipos escolhidos. ${nCen} ${nCen === 1 ? "cenário disponível" : "cenários disponíveis"}, até ${maxT} tarefas cada.</p>`;
+  }
+  function ligarPerguntasSql(box) {
+    const mudou = () => { sincronizarN("sql"); descontar(); modeloSel = ""; atualizar(); };
+    box.querySelectorAll("[data-sqlt]").forEach(el => el.onchange = () => { const [i, j] = el.dataset.sqlt.split("|").map(Number); sqlPerg[i][j] = el.value; mudou(); });
+    box.querySelectorAll("[data-sqlrem]").forEach(el => el.onclick = () => { const [i, j] = el.dataset.sqlrem.split("|").map(Number); sqlPerg[i].splice(j, 1); mudou(); });
+    box.querySelectorAll("[data-sqladd]").forEach(el => el.onclick = () => { sqlPerg[Number(el.dataset.sqladd)].push("qualquer"); mudou(); });
+    box.querySelectorAll("[data-sqldel]").forEach(el => el.onclick = () => { sqlPerg.splice(Number(el.dataset.sqldel), 1); mudou(); });
+    // pergunta nova: a padrão; se não sobrar cenário para ela, uma que caiba (tipos "qualquer", menos tarefas)
+    box.querySelectorAll("[data-sqlnova]").forEach(el => el.onclick = () => {
+      const cands = [perguntaPadrao(sqlPerg.length), ...[3, 2, 1].map(n => Array(n).fill("qualquer"))];
+      sqlPerg.push(cands.find(c => !sqlViavel([...sqlPerg, c])) || cands[0]); mudou();
+    });
   }
   // "Ver de onde vêm": bancos e temas usados para um tipo prático (só conferência)
   function verFontes(tipo) {
@@ -904,6 +958,7 @@ function controleProva(f) {
     for (const [k, tipo] of Object.entries(TIPO_PRAT)) {
       if (!$f("Ativa" + k).checked) continue;
       const q = qtdDe(tipo), nome = { sql: "SQL físico", web: "Página web", diagrama: "Diagramas" }[tipo];
+      if (tipo === "sql") { if (!sqlPerg.length) return "SQL físico: adicione pelo menos uma pergunta, ou remova."; const v = sqlViavel(); if (v) return v; continue; }
       if (!Object.keys(q).length && !nq(k)) return `${nome}: escolha quantas questões de cada (−/+), ou remova.`;
       for (const [x, n] of Object.entries(q)) { const l = linhasDo(tipo).find(y => y.k === x); if (l && n > l.disp) return `${nome}: "${l.nome}" pede ${n}, mas só há ${l.disp}${tipo === "web" && webSub.size ? " com os assuntos marcados" : ""}.`; }
     }
@@ -1216,7 +1271,9 @@ function controleProva(f) {
     $f("NSql").value = p.nSql ?? 0; $f("NWeb").value = p.nWeb ?? 0; $f("NDiag").value = p.nDiagramas ?? 0;
     $f("AtivaSql").checked = Number(p.nSql) > 0; $f("AtivaWeb").checked = Number(p.nWeb) > 0; $f("AtivaDiag").checked = Number(p.nDiagramas) > 0;
     tiposDiag = Array.isArray(p.tiposDiagrama) && p.tiposDiagrama.length ? new Set(p.tiposDiagrama) : null;
-    qtdSql = p.sqlPorCategoria && typeof p.sqlPorCategoria === "object" ? { ...p.sqlPorCategoria } : {}; qtdWeb = p.webModelos && typeof p.webModelos === "object" ? { ...p.webModelos } : {}; webSub = new Set(p.webTags || []);
+    qtdSql = {};
+    // perguntas de SQL (tarefas por pergunta); somativa antiga (só a quantidade/categoria) vira perguntas de 3 tarefas de qualquer tipo
+    sqlPerg = Array.isArray(p.sqlPerguntas) ? p.sqlPerguntas.map(x => Array.isArray(x?.tarefas) ? [...x.tarefas] : []) : Array.from({ length: Number(p.nSql || 0) }, () => ["qualquer", "qualquer", "qualquer"]); qtdWeb = p.webModelos && typeof p.webModelos === "object" ? { ...p.webModelos } : {}; webSub = new Set(p.webTags || []);
     qtdDiag = p.diagramasPorTipo && typeof p.diagramasPorTipo === "object" ? { ...p.diagramasPorTipo } : (tiposDiag?.size === 1 && Number(p.nDiagramas) ? { [[...tiposDiag][0]]: Number(p.nDiagramas) } : {});
     $f("SemLimite").checked = false; $f("Total").value = p.nQuestoes ?? 10;
     praticasPendentes = p; autoSel = false; bancosExtras = new Set(); bancosFora = new Set();
@@ -1282,7 +1339,7 @@ function controleProva(f) {
       // bancoId: o 1º da teoria (prova só prática: o 1º prático), porque as regras do Firestore conferem o banco da tentativa
       const bancoPrincipal = bancoIds[0] || Object.values(praticas).flatMap(o => Object.keys(o))[0] || null;
       Object.assign(dados, { praticas, bancoId: bancoPrincipal, bancoIds, temasPorBanco, temas: temasPorBanco[bancoIds[0]] || null, nQuestoes: n, nAlternativas: nAlt, nDissertativas: nDiss, nSql, nWeb, nDiagramas: nDiag, tiposDiagrama: nDiag && tiposDiag ? [...tiposDiag] : null, diagramasPorTipo: nDiag && Object.keys(qtdDiag).length ? { ...qtdDiag } : null,
-        sqlPorCategoria: nSql && Object.keys(qtdSql).length ? { ...qtdSql } : null, webModelos: nWeb && Object.keys(qtdWeb).length ? { ...qtdWeb } : null, webSubtopicos: null, webTags: nWeb && webSub.size ? [...webSub] : null });
+        sqlPerguntas: nSql && sqlPerg.length ? sqlPerg.map(t => ({ tarefas: [...t] })) : null, sqlPorCategoria: null, webModelos: nWeb && Object.keys(qtdWeb).length ? { ...qtdWeb } : null, webSubtopicos: null, webTags: nWeb && webSub.size ? [...webSub] : null });
     }
     return { dados };
   }
@@ -2025,7 +2082,7 @@ $("#btnImportarBanco").onclick = async () => {
   }
   if (b.questoes.some(q => q.tipo === "sql")) {
     $("#msgBanco").textContent = "Rodando os gabaritos das questões SQL…";
-    const { calcularGabarito } = await import("./workbench.js?v=20261126a");
+    const { calcularGabarito } = await import("./workbench.js?v=20261127a");
     for (const [i, q] of b.questoes.entries()) if (q.tipo === "sql") {
       try { gabSql[i] = await calcularGabarito(q, q.gabarito); }
       catch (e) { $("#msgBanco").innerHTML = `❌ Questão ${i + 1}: ${esc(e.message)}`; return false; }
@@ -2042,7 +2099,7 @@ $("#btnImportarBanco").onclick = async () => {
     if (q.tipo === "alternativa") pub.alternativas = q.alternativas;
     if (q.tipo === "diagrama") { pub.diagrama = q.diagrama; if (q.conversao === false) pub.conversao = false; if (q.inicial) pub.inicial = typeof q.inicial === "string" ? q.inicial : JSON.stringify(q.inicial); }
     if (q.tipo === "web") { const { gabarito, tipo, enunciado, peso, tema, ...resto } = q; Object.assign(pub, resto); }
-    if (q.tipo === "sql") { pub.banco = { nome: String(q.banco.nome || "banco"), setup: q.banco.setup }; pub.tarefas = q.tarefas.map(t => ({ id: t.id, texto: t.texto, tipo: t.tipo === "alteracao" ? "alteracao" : "consulta", ...(t.verificacao ? { verificacao: t.verificacao } : {}) })); }
+    if (q.tipo === "sql") { pub.banco = { nome: String(q.banco.nome || "banco"), setup: q.banco.setup }; pub.tarefas = q.tarefas.map(t => ({ id: t.id, texto: t.texto, tipo: t.tipo === "alteracao" ? "alteracao" : "consulta", ...(t.verificacao ? { verificacao: t.verificacao } : {}), ...(t.cat ? { cat: String(t.cat) } : {}) })); }
     lote.set(doc(db, "bancos", ref.id, "questoes", qid), pub);
     const gab = { explicacao: q.explicacao || "" };
     if (q.dica) gab.dica = String(q.dica).slice(0, 400);   // dica pronta (opcional): sem ela, o servidor pede uma à IA
@@ -3287,7 +3344,7 @@ function verAluno(id, rolar = true) {
     const dicaTag = l.t.dicas?.[x.qid] ? ` <span class="tag aviso" title="${esc(l.t.dicas[x.qid].texto || "")}">💡 pediu dica</span>` : "";
     const fmt = temFormato(x.q), bloco = t => `<span class="resp-formato">${esc(t).replace(/\n/g, "<br>")}</span>`;
     const sua = x.perdida ? "<i>perdida por sair da prova</i>" : x.r === undefined ? "<i>não respondida</i>" : x.q.tipo === "sql" ? bloco(textoRespostaSql(x.q, x.r)) : x.q.tipo === "web" ? bloco(textoRespostaWeb(x.q, x.r)) : x.q.tipo === "diagrama" ? bloco(textoRespostaDiagrama(x.q, x.r)) + ` <button type="button" class="leve mini" data-verdiag="${x.qid}">📐 Ver diagrama</button>` : fmt ? bloco(textoResposta(x.q, x.r)) : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.r] ?? x.r) : `<span class="mono">${esc(x.r)}</span>`;
-    const certa = x.q.tipo === "diagrama" ? bloco(textoGabaritoDiagrama(x.q, x.g)) + ` <button type="button" class="leve mini" data-verdiag="${x.qid}" data-gab="1">📐 Ver gabarito</button>` : x.q.tipo === "sql" ? bloco((x.q.tarefas || []).map((t, k) => `Tarefa ${k + 1}: ${x.g.tarefas?.[t.id]?.sql || "—"}`).join("\n")) : fmt ? (x.g.chave ? bloco(textoChave(x.q, x.g)) + ` <span class="tag nota">${FORMATOS[x.q.formato].icone} ${esc(FORMATOS[x.q.formato].nome)}</span>` : "—") : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.g.correta] ?? "—") : esc((x.g.respostasAceitas || [])[0] || (x.g.palavrasChave || []).join(" + "));
+    const certa = x.q.tipo === "diagrama" ? bloco(textoGabaritoDiagrama(x.q, x.g)) + ` <button type="button" class="leve mini" data-verdiag="${x.qid}" data-gab="1">📐 Ver gabarito</button>` : x.q.tipo === "sql" ? bloco(tarefasDe(x.q, x.r).map((t, k) => `Tarefa ${k + 1}: ${x.g.tarefas?.[t.id]?.sql || "—"}`).join("\n")) : fmt ? (x.g.chave ? bloco(textoChave(x.q, x.g)) + ` <span class="tag nota">${FORMATOS[x.q.formato].icone} ${esc(FORMATOS[x.q.formato].nome)}</span>` : "—") : x.q.tipo === "alternativa" ? esc(x.q.alternativas?.[x.g.correta] ?? "—") : esc((x.g.respostasAceitas || [])[0] || (x.g.palavrasChave || []).join(" + "));
     const manual = podeEditar() && ["dissertativa", "sql", "web", "diagrama"].includes(x.q.tipo) && !x.perdida ? `<div class="linha" style="margin-top:6px"><div style="flex:0 0 120px"><label>Pontos (0–${x.peso})</label><input type="number" min="0" max="${x.peso}" step="0.25" value="${x.pontos}" id="pt_${x.qid}"></div><div><label>Comentário para o aluno</label><input type="text" id="cm_${x.qid}" value="${esc(x.comentario)}"></div><div style="flex:0 0 120px;align-self:flex-end"><button class="mini" data-corr="${x.qid}">Salvar</button></div></div>` : "";
     const rot = ROTULOS[x.status] || ROTULOS.revisar;
     return `<div class="feedback bloco ${x.status === "certa" ? "certa" : ["errada", "perdida", "em_branco"].includes(x.status) ? "errada" : "revisar"}"><div class="linha acoes"><b>Q${x.n}</b> <span class="tag ${rot[0]}">${rot[1]} · ${x.pontos}/${x.peso}${x.manual ? " · manual" : ""}</span>${x.ia ? `<span class="tag nota" title="Corrigida pela IA — confira e ajuste se precisar">🤖 IA</span>` : ""}${errosIA.has(l.t.id + "/" + x.qid) ? `<span class="tag erro ia-erro">⚠ IA: ${esc(errosIA.get(l.t.id + "/" + x.qid))}</span>` : ""}${tempo}</div>

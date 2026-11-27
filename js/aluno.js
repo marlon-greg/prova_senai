@@ -2,7 +2,7 @@
 import { ic } from "./icones.js";
 import { temasDoAlunoNaRec, db, auth, entrar, sair, aoMudarLogin, identificar, corrigir, embaralhar, sortearAleatorio, esc, $, toast, dataBR, letra,
          idTentativaTeste, apagarTentativaTeste, confirmar, avisar, traduzirErro, iniciais, fecharModais, temaDe, chaveNome, placar, idsConsulta, bancosDaProva, temasDoBanco, bancoDaQuestao, sortearQuestoes }
-  from "./common.js?v=20261126k";
+  from "./common.js?v=20261127a";
 import { baixarMaterial } from "./material.js";
 import { desenharConquistas } from "./aluno-conquistas.js?v=20261126a";
 import { regraDoTipo, calcNotaFinal } from "./nota-final.js";
@@ -12,7 +12,7 @@ import { iniciarAbas, definirAbasVisiveis, irParaAba, abaAtual } from "./aluno-n
 import { desenharTurma } from "./aluno-social.js";
 import { desenharRecompensas } from "./aluno-recompensas.js";
 let simulacao = false;   // equipe vendo a página como aluno (?simular=1): nada é gravado
-import { lerGamificacao, GAMI_PADRAO } from "./common.js?v=20261126k";
+import { lerGamificacao, GAMI_PADRAO } from "./common.js?v=20261127a";
 let gami = { ...GAMI_PADRAO };   // o que está ligado na gamificação (config/gamificacao)
 import { montarFormato, temFormato, FORMATOS, rotuloFormato, textoParaFalar, textoResposta, textoChave } from "./formatos-ui.js";
 const controles = {};   // qid -> controle do formato adaptado (valor, preencher, travar)
@@ -21,8 +21,8 @@ import { topicosDaProva, htmlConhecimentos, rotuloTec, nivelK } from "./plano-cu
 import { criteriosDaProva, NIVEIS_RUBRICA, carregarCriteriosOficiais } from "./plano-ensino.js?v=20261116a";
 import { toolbar, collapsible, vazio, statTiles, chips } from "./ui.js";
 import { completar, aplicarVisual, mesclarQuestao } from "./acessibilidade.js";
-import { textoRespostaSql } from "../servidor/sql-correcao.js?v=20261126a";
-import { montarBancada } from "./workbench.js?v=20261126a";
+import { textoRespostaSql, questaoDaTentativa } from "../servidor/sql-correcao.js?v=20261127a";
+import { montarBancada } from "./workbench.js?v=20261127a";
 import { montarBancadaWeb } from "./bancada-web.js?v=20261125a";
 import { textoRespostaWeb, respostaEmBranco } from "../servidor/web-correcao.js?v=20261125a";
 import { textoRespostaDiagrama, textoGabaritoDiagrama, respostaVaziaDiagrama, NOMES_DIAGRAMA } from "../servidor/diagrama-correcao.js?v=20261126a";
@@ -570,13 +570,15 @@ $("#btnComecar").onclick = async () => {
       try { contagem = (await comLimiteDeTempo(getDoc(doc(db, "sorteios", provaAtual.id)), 4000))?.data()?.c || {}; } catch (e) { /* sorteia sem a contagem */ }
       if (provaAtual.provaOrigemId) { try { const o = await comLimiteDeTempo(getDoc(doc(db, "tentativas", `${eu.uid}_${provaAtual.provaOrigemId}`)), 4000); if (o?.exists()) evitar = new Set(o.data().questoesIds || []); } catch (e) { /* sem a origem */ } }
     }
-    const sorteadas = Array.isArray(pre) && pre.length ? pre.slice() : await sortearQuestoes(provaAtual, null, { incluirRevisar: modoTeste, contagem, evitar, preferirTemas: provaAtual.temasPorAluno?.[String(eu.email || "").toLowerCase()] || null });
+    const tarefasSorteadas = {};
+    const sorteadas = Array.isArray(pre) && pre.length ? pre.slice() : await sortearQuestoes(provaAtual, null, { tarefas: tarefasSorteadas, incluirRevisar: modoTeste, contagem, evitar, preferirTemas: provaAtual.temasPorAluno?.[String(eu.email || "").toLowerCase()] || null });
     const tid = idTentativa(provaAtual.id);
     const dados = {
       uid: eu.uid, email: eu.email, nome: eu.nome, provaId: provaAtual.id, bancoId: provaAtual.bancoId,
       questoesIds: sorteadas, iniciadaEm: serverTimestamp(), finalizadaEm: null, indiceAtual: 0, trocasDeAba: 0, notaPrevia: null, aguardandoCorrecao: 0,
       saidasTelaCheia: 0, tentativasColar: 0
     };
+    if (Object.keys(tarefasSorteadas).length) dados.tarefasSorteadas = tarefasSorteadas;   // SQL: tarefas de cada pergunta
     if (!modoTeste) dados.sessao = ID_DISPOSITIVO;   // sessão única: este computador
     if (modoTeste) dados.teste = true;
     if (codigo) dados.codigoInformado = codigo;   // as regras conferem com o código da prova
@@ -606,9 +608,11 @@ async function carregarTentativa(opc = {}) {
   if (opc.retomando && !modoTeste) retomarSaida();
 }
 async function carregarTentativaBase() {
+  limparEstacionadas();
   questoes = {}; respostas = {}; tentouEnviar.clear(); rascunhos.clear(); erroEnvio = false;
   const docsQ = await Promise.all(tentativa.questoesIds.map(q => getDoc(doc(db, "bancos", bancoDaQuestao(q, tentativa.bancoId), "questoes", q))));
-  docsQ.forEach(d => { if (d.exists()) questoes[d.id] = { id: d.id, ...d.data() }; });
+  // SQL com parte das tarefas do cenário (prova.sqlPerguntas): só as sorteadas para este aluno
+  docsQ.forEach(d => { if (d.exists()) questoes[d.id] = questaoDaTentativa({ id: d.id, ...d.data() }, d.id, tentativa); });
   await aplicarQuestoesAdaptadas();
   const rs = await getDocs(collection(db, "tentativas", tentativa.id, "respostas"));
   rs.forEach(d => respostas[d.id] = d.data());
@@ -774,6 +778,18 @@ function criarCartaoQuestao(qid, i, unica) {
 
 // Bancada SQL de cada questão SQL (qid -> { valor(), destruir() })
 const bancadas = {};
+// cartões práticos (SQL, Web, diagrama) fora da tela no modo "uma por vez": continuam vivos aqui
+const estacionadas = new Map();
+function estacionarCartoes() {
+  let box = document.getElementById("qEstacionadas");
+  if (!box) { box = document.createElement("div"); box.id = "qEstacionadas"; box.hidden = true; box.setAttribute("aria-hidden", "true"); document.body.append(box); }
+  for (const c of [...document.querySelectorAll("#qLista .questao[data-qid]")])
+    if (["sql", "web", "diagrama"].includes(questoes[c.dataset.qid]?.tipo)) { estacionadas.set(c.dataset.qid, c); box.append(c); }
+}
+function limparEstacionadas() {
+  for (const [qid, c] of estacionadas) { bancadas[qid]?.destruir?.(); delete bancadas[qid]; c.remove(); }
+  estacionadas.clear();
+}
 const textosSql = card => { const o = { tarefas: {} }; card.querySelectorAll("textarea[data-tarefa]").forEach(t => { o.tarefas[t.dataset.tarefa] = { sql: t.value }; }); return o; };
 const valoresDiag = {};   // último valor (JSON) de cada editor de diagrama
 const valoresWeb = {};   // último valor de cada Bancada Web (o valor dela é calculado de forma assíncrona)
@@ -843,7 +859,12 @@ function mostrarQuestao() {
   $("#btnProxima").classList.toggle("oculto", !voltar || i >= total - 1);
   $("#btnFinalizar").classList.toggle("oculto", !voltar);
   clearTimeout(timerApoio);
-  const card = criarCartaoQuestao(qid, i, true);
+  // Bancada SQL/Web e diagramas não são desmontados ao trocar de questão: ficam estacionados (escondidos) e voltam iguais,
+  // com as tabelas criadas, os dados e o histórico (antes, voltar recriava a Bancada do zero e o aluno perdia o que fez)
+  estacionarCartoes();
+  let card = estacionadas.get(qid);
+  if (card && card.dataset.i === String(i)) estacionadas.delete(qid);
+  else { if (card) { estacionadas.delete(qid); card.remove(); } card = criarCartaoQuestao(qid, i, true); card.dataset.i = String(i); }
   $("#qLista").replaceChildren(card);
   card.querySelector(".acoes-questao")?.append($("#btnAnterior"), $("#btnProxima"), $("#btnFinalizar"));
   // sem voltar: questão já enviada (ex.: o tempo de mostrar o botão passou) mostra o próximo passo
@@ -2084,7 +2105,7 @@ async function verResultado() {
   const grupoSt = st => st === "certa" ? "certas" : ["parcial", "revisar"].includes(st) ? "parciais" : "erradas";
   const contagem = { certas: 0, parciais: 0, erradas: 0 };
   ids.forEach((qid, i) => {
-    const q = { id: qid, ...(qgs[i].q || {}) }, g = qgs[i].g || {};
+    const q = questaoDaTentativa({ id: qid, ...(qgs[i].q || {}) }, qid, tentativa), g = qgs[i].g || {};
     const r = resp[qid]?.resposta ?? undefined, perdida = resp[qid]?.perdida === true, peso = Number(q.peso || 1); max += peso;
     let c = corrigir(q, g, r, perdida);
     let obs = "";

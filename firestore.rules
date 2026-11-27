@@ -389,7 +389,7 @@ service cloud.firestore {
                                                  'iniciadaEm', 'finalizadaEm', 'indiceAtual', 'trocasDeAba',
                                                  'notaPrevia', 'aguardandoCorrecao',
                                                  'saidasTelaCheia', 'tentativasColar', 'tempoTotalSegundos',
-                                                 'encerradaPor', 'trocasDeAbaTotal', 'codigoInformado', 'sessao'])
+                                                 'encerradaPor', 'trocasDeAbaTotal', 'codigoInformado', 'sessao', 'tarefasSorteadas'])
         && prova(request.resource.data.provaId).liberada == true
         // barrado pelo professor não começa; com a entrada fechada (na hora ou pelo horário), só quem ele deixou entrar
         && !(email().lower() in prova(request.resource.data.provaId).get('bloqueados', []))

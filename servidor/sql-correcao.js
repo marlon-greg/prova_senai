@@ -6,8 +6,28 @@
 // Tarefa com o MESMO resultado do gabarito = certa, sem gastar IA. Resultado diferente (ou erro) = "revisar":
 // a IA do servidor (ou o professor) dá a nota parcial dessa tarefa. Cada tarefa vale peso ÷ nº de tarefas.
 
+// TAREFAS SORTEADAS: a pergunta pode usar só algumas tarefas do cenário (prova.sqlPerguntas). A lista fica na tentativa
+// (tentativa.tarefasSorteadas[qid]) e vai junto da resposta (resposta.ids). Sem lista = todas as tarefas do cenário.
+export function soTarefas(questao, ids) {
+  if (!questao || !Array.isArray(ids) || !ids.length || !Array.isArray(questao.tarefas)) return questao;
+  const l = questao.tarefas.filter(t => ids.includes(t.id));
+  return l.length ? { ...questao, tarefas: l, tarefasSorteadas: ids } : questao;
+}
+export function tarefasDe(questao, resposta) {
+  const todas = Array.isArray(questao?.tarefas) ? questao.tarefas : [];
+  if (Array.isArray(questao?.tarefasSorteadas)) return todas;   // já filtrada
+  const ids = Array.isArray(resposta?.ids) ? resposta.ids : null;
+  const l = ids ? todas.filter(t => ids.includes(t.id)) : [];
+  return l.length ? l : todas;
+}
+// questão com as tarefas que valem nesta tentativa
+export function questaoDaTentativa(questao, qid, tentativa) {
+  const ids = tentativa?.tarefasSorteadas?.[qid];
+  return Array.isArray(ids) && ids.length ? soTarefas(questao, ids) : questao;
+}
+
 export function corrigirSql(questao, gabarito, resposta, peso = Number(questao?.peso || 1)) {
-  const tarefas = Array.isArray(questao?.tarefas) ? questao.tarefas : [];
+  const tarefas = tarefasDe(questao, resposta);
   const gt = gabarito?.tarefas || {};
   const r = resposta && typeof resposta === "object" ? (resposta.tarefas || {}) : {};
   if (!tarefas.length) return { pontos: 0, status: "revisar", porTarefa: {} };
@@ -45,7 +65,7 @@ export function comoAcertou(a, g) {
 
 // texto para a IA corrigir as tarefas que não bateram com o gabarito
 export function textoParaIA(questao, gabarito, resposta, peso) {
-  const tarefas = questao.tarefas || [], gt = gabarito?.tarefas || {}, r = resposta?.tarefas || {};
+  const tarefas = tarefasDe(questao, resposta), gt = gabarito?.tarefas || {}, r = resposta?.tarefas || {};
   const valor = Math.round(peso / tarefas.length * 100) / 100;
   const limpa = s => String(s ?? "").replace(/<\/?sql_do_aluno/gi, "‹sql_do_aluno").slice(0, 4000);
   return `Questão prática de SQL (sintaxe MySQL). Cada tarefa vale ${valor} ponto(s).\n\n<enunciado>\n${questao.enunciado || ""}\n</enunciado>\n\n` +
@@ -63,7 +83,7 @@ export function textoParaIA(questao, gabarito, resposta, peso) {
 // resposta da questão SQL em texto (telas de resultado, PDF, relatórios), com as tentativas que deram erro na Bancada
 export function textoRespostaSql(questao, resposta) {
   const r = resposta?.tarefas || {};
-  return (questao?.tarefas || []).map((t, i) => {
+  return tarefasDe(questao, resposta).map((t, i) => {
     const a = r[t.id] || {}, ex = Array.isArray(a.execucoes) ? a.execucoes : [], erros = ex.filter(x => x.erro);
     const hist = ex.length ? `\n▶ Executou ${ex.length} vez(es)${erros.length ? `, ${erros.length} com erro:` : ", sem erros."}` +
       erros.slice(-8).map(x => `\n   ✖ ${x.h || ""}  ${String(x.sql || "").replace(/\s+/g, " ").slice(0, 160)}\n      → ${x.erro}`).join("") : "";

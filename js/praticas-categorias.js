@@ -28,6 +28,70 @@ export function categoriaSql(q) {
   return cats.size > 1 ? "misto" : [...cats][0] || "DML";
 }
 
+// ---------- TAREFAS POR PERGUNTA (SQL) ----------
+// Cada cenário SQL (base + várias tarefas) é um "banco de tarefas". Na Nova somativa o professor monta cada pergunta:
+// quantas tarefas ela tem e de que tipo é cada uma (prova.sqlPerguntas = [{ tarefas: ["consulta", "estrutura", "qualquer"] }, …]).
+// O sorteio escolhe um cenário que tenha tarefas suficientes de cada tipo e sorteia as tarefas dentro dele.
+// As tarefas são independentes: cada uma é corrigida a partir da base original do cenário.
+export const TIPOS_TAREFA = {
+  consulta: { curto: "Consulta (SELECT)", nome: "Consulta", cmd: "SELECT", sigla: "DML", desc: "SELECT, WHERE, ORDER BY, JOIN, GROUP BY" },
+  dados: { curto: "Dados (INSERT, UPDATE, DELETE)", nome: "Inserir, alterar ou apagar dados", cmd: "INSERT, UPDATE, DELETE", sigla: "DML", desc: "INSERT, UPDATE, DELETE" },
+  estrutura: { curto: "Tabela (CREATE, ALTER)", nome: "Criar ou alterar tabela", cmd: "CREATE, ALTER, DROP", sigla: "DDL", desc: "CREATE TABLE, ALTER TABLE, chaves, índices" },
+  permissao: { curto: "Permissões (GRANT, REVOKE)", nome: "Usuários e permissões", cmd: "GRANT, REVOKE", sigla: "DCL", desc: "CREATE USER, GRANT, REVOKE" }
+};
+export const QUALQUER_TAREFA = "qualquer";
+// tipo da tarefa: campo "cat" (se o banco já diz) ou pelo jeito da tarefa (consulta/alteração, verificação e texto)
+export function tipoTarefa(t) {
+  if (TIPOS_TAREFA[t?.cat]) return t.cat;
+  if (t?.tipo !== "alteracao") return "consulta";
+  const v = sem(t.verificacao), txt = sem(t.texto);
+  if (/^\s*show grants\b|mysql\.user/.test(v) || /\b(grant|revoke|create user|drop user)\b|permiss|privilegi/.test(txt)) return "permissao";
+  if (/^\s*(describe|desc|show (full )?columns|show create|show index|show tables)\b|information_schema/.test(v)) return "estrutura";
+  if (catDeTexto(t.texto) === "DDL") return "estrutura";
+  return "dados";
+}
+// quantas tarefas de cada tipo o cenário tem: { consulta: 4, dados: 3, … }
+export function tarefasPorTipo(q) {
+  const c = {};
+  for (const t of q?.tarefas || []) { const k = tipoTarefa(t); c[k] = (c[k] || 0) + 1; }
+  return c;
+}
+// lista de pedidos de uma pergunta → { consulta: 1, qualquer: 2 }
+const contarPedido = pedido => (pedido || []).reduce((o, k) => (o[TIPOS_TAREFA[k] ? k : QUALQUER_TAREFA] = (o[TIPOS_TAREFA[k] ? k : QUALQUER_TAREFA] || 0) + 1, o), {});
+// o cenário consegue atender a pergunta? (tipos pedidos e o total)
+export function cenarioAtende(q, pedido) {
+  const tem = tarefasPorTipo(q), quer = contarPedido(pedido);
+  const total = (q?.tarefas || []).length;
+  for (const [k, n] of Object.entries(quer)) if (k !== QUALQUER_TAREFA && (tem[k] || 0) < n) return false;
+  return total >= (pedido || []).length;
+}
+// sorteia as tarefas do cenário para a pergunta (ids na ordem do pedido); null se não der.
+// rnd: função () => [0,1) (Math.random por padrão)
+export function escolherTarefas(q, pedido, rnd = Math.random) {
+  if (!cenarioAtende(q, pedido)) return null;
+  const embaralha = l => { const a = [...l]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const livres = embaralha(q.tarefas || []), usados = new Set(), sai = [];
+  // primeiro os tipos definidos, depois "qualquer" (preferindo um tipo que ainda não saiu, para variar)
+  const ordem = (pedido || []).map((k, i) => ({ k: TIPOS_TAREFA[k] ? k : QUALQUER_TAREFA, i })).sort((a, b) => (a.k === QUALQUER_TAREFA) - (b.k === QUALQUER_TAREFA));
+  const porPos = [];
+  for (const { k, i } of ordem) {
+    const jaSaiu = new Set(sai.map(t => tipoTarefa(t)));
+    const cand = livres.filter(t => !usados.has(t.id) && (k === QUALQUER_TAREFA || tipoTarefa(t) === k));
+    const t = k === QUALQUER_TAREFA ? (cand.find(x => !jaSaiu.has(tipoTarefa(x))) || cand[0]) : cand[0];
+    if (!t) return null;
+    usados.add(t.id); sai.push(t); porPos[i] = t.id;
+  }
+  // a ordem final segue a ordem das tarefas no cenário (fica mais natural de ler)
+  const pos = Object.fromEntries((q.tarefas || []).map((t, i) => [t.id, i]));
+  return porPos.filter(Boolean).sort((a, b) => pos[a] - pos[b]);
+}
+// texto curto do pedido de uma pergunta: "3 tarefas: consulta, criar tabela, qualquer"
+export function textoPedido(pedido) {
+  const n = (pedido || []).length;
+  const nomes = (pedido || []).map(k => TIPOS_TAREFA[k] ? TIPOS_TAREFA[k].curto : "qualquer tipo");
+  return `${n} tarefa${n === 1 ? "" : "s"}${n ? ` (${nomes.join(" · ")})` : ""}`;
+}
+
 // subtópicos (nível 2) de HTML (marc.k4) e CSS (marc.k5), com os itens de nível 3 como dica
 const PISTAS_WEB = {
   "marc.k4.3": /<(html|head|title|body|meta)\b/i, "marc.k4.4": /<(header|nav|main|section|article|footer|aside)\b/i,
