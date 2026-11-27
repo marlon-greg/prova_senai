@@ -1,0 +1,2428 @@
+{
+  "nome": "Programação Back-End — Persistência de dados (a revisar)",
+  "materia": "Programação Back-End",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual pacote do npm é usado nas aulas para uma API em Node.js conversar com um banco MySQL?",
+      "alternativas": [
+        "mysql2",
+        "express",
+        "dotenv",
+        "nodemon"
+      ],
+      "correta": 0,
+      "explicacao": "O mysql2 é o driver que conecta o Node.js ao MySQL. Express cria as rotas, dotenv lê o .env e nodemon reinicia o servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num arquivo `.env` da API de uma padaria aparece a linha `DB_PASSWORD=pao123`. Depois de carregar o dotenv, como o código lê esse valor?",
+      "alternativas": [
+        "`require('.env').DB_PASSWORD`",
+        "`req.body.DB_PASSWORD`",
+        "`env.read('DB_PASSWORD')`",
+        "`process.env.DB_PASSWORD`"
+      ],
+      "correta": 3,
+      "explicacao": "O dotenv coloca as variáveis do .env em process.env. req.body traz dados enviados pelo cliente, não configuração."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que o arquivo `.env`, que guarda a senha do banco da API, deve estar listado no `.gitignore`?",
+      "alternativas": [
+        "Para o Node.js carregar o arquivo mais rápido",
+        "Porque o Git não aceita arquivos que começam com ponto",
+        "Para a senha não ir parar no repositório (GitHub)",
+        "Para o banco criar as tabelas sozinho"
+      ],
+      "correta": 2,
+      "explicacao": "O .gitignore impede que o arquivo seja enviado ao repositório; assim a senha não fica exposta para quem vê o código."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a porta padrão do servidor MySQL, usada na configuração de conexão quando nada foi alterado?",
+      "alternativas": [
+        "80",
+        "3000",
+        "5432",
+        "3306"
+      ],
+      "correta": 3,
+      "explicacao": "O MySQL usa a porta 3306 por padrão. 80 é do HTTP, 3000 é comum para a própria API em Node e 5432 é do PostgreSQL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A rota `PUT /animais/:id` da API de um pet shop altera o cadastro de um animal. Qual comando SQL essa rota executa no banco?",
+      "alternativas": [
+        "SELECT",
+        "UPDATE",
+        "INSERT",
+        "DELETE"
+      ],
+      "correta": 1,
+      "explicacao": "PUT altera um recurso que já existe, o que corresponde ao UPDATE. SELECT lê, INSERT cria e DELETE apaga."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API de uma biblioteca (tabela `livro` com as colunas id, titulo e autor), o código faz `const [linhas] = await pool.query('SELECT * FROM livro');`. O que fica na variável `linhas`?",
+      "alternativas": [
+        "O texto do comando SQL executado",
+        "Um array de objetos, um por livro",
+        "A quantidade de livros da tabela",
+        "Só o título do primeiro livro"
+      ],
+      "correta": 1,
+      "explicacao": "No mysql2, o SELECT devolve as linhas como um array de objetos; cada objeto tem as colunas id, titulo e autor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na rota `POST /alunos` de uma academia, depois de gravar o novo aluno no banco com sucesso, qual status HTTP é o mais adequado na resposta?",
+      "alternativas": [
+        "201 Created",
+        "200 OK",
+        "404 Not Found",
+        "500 Internal Server Error"
+      ],
+      "correta": 0,
+      "explicacao": "201 indica que um recurso novo foi criado. 404 é para algo não encontrado e 500 para erro no servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que o método `createConnection` do mysql2 faz?",
+      "alternativas": [
+        "Abre uma conexão com o servidor MySQL",
+        "Cria uma tabela nova no banco",
+        "Cadastra um usuário no MySQL",
+        "Gera o arquivo .env com os dados do projeto"
+      ],
+      "correta": 0,
+      "explicacao": "createConnection abre uma conexão usando host, usuário, senha e banco informados. Não cria tabelas nem usuários."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No objeto de configuração `{ host, user, password, database }` passado ao mysql2, o que vai na propriedade `database`?",
+      "alternativas": [
+        "O endereço do servidor",
+        "O nome do usuário que entra no MySQL",
+        "A porta do servidor",
+        "O nome do banco que a API vai usar"
+      ],
+      "correta": 3,
+      "explicacao": "database é o nome do banco (schema) usado nas consultas. O endereço vai em host, o usuário em user e a porta em port."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na rota `DELETE /reservas/:id` da API de um hotel, de onde o código tira o número da reserva que será apagada?",
+      "alternativas": [
+        "`process.env.id`",
+        "`req.body.id`",
+        "`res.params.id`",
+        "`req.params.id`"
+      ],
+      "correta": 3,
+      "explicacao": "O :id faz parte do caminho da URL, e o Express o coloca em req.params.id. req.body é o corpo enviado; process.env é configuração."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual linha costuma ficar no começo do arquivo principal da API para carregar as variáveis do `.env`?",
+      "alternativas": [
+        "`require('dotenv').config();`",
+        "`app.use(express.env());`",
+        "`require('mysql2').loadEnv();`",
+        "`process.load('.env');`"
+      ],
+      "correta": 0,
+      "explicacao": "require('dotenv').config() lê o arquivo .env e preenche process.env. As outras linhas não existem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para usar `await` com o mysql2 (em vez de funções de callback), de onde o pacote costuma ser importado?",
+      "alternativas": [
+        "`mysql2/promise`",
+        "`mysql2/async`",
+        "`mysql2/sync`",
+        "`mysql2/await`"
+      ],
+      "correta": 0,
+      "explicacao": "A versão com Promises do pacote é importada de mysql2/promise; com ela dá para usar await nas consultas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API de uma clínica, a rota `GET /consultas/:id` fez o SELECT e o array de resultado veio vazio. Qual resposta é a mais adequada?",
+      "alternativas": [
+        "Status 201 com o array vazio",
+        "Status 404 com a mensagem 'não encontrado'",
+        "Status 500 com o erro do servidor",
+        "Status 200 com a mensagem 'apagado com sucesso'"
+      ],
+      "correta": 1,
+      "explicacao": "Array vazio quer dizer que não existe consulta com aquele id, então 404 (não encontrado). Não houve erro no servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No mysql2, qual propriedade do resultado de um INSERT informa o id gerado pelo AUTO_INCREMENT?",
+      "alternativas": [
+        "`lastId`",
+        "`insertId`",
+        "`newId`",
+        "`autoId`"
+      ],
+      "correta": 1,
+      "explicacao": "O resultado de um INSERT traz insertId (id gerado) e affectedRows (linhas gravadas)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a principal vantagem de usar `mysql.createPool(...)` em vez de `createConnection(...)` numa API que recebe muitas requisições ao mesmo tempo?",
+      "alternativas": [
+        "Reaproveita um grupo de conexões abertas",
+        "Cria as tabelas que faltarem",
+        "Dispensa informar usuário e senha do banco",
+        "Impede SQL Injection sozinho"
+      ],
+      "correta": 0,
+      "explicacao": "O pool mantém várias conexões abertas e as empresta às requisições, sem abrir e fechar uma conexão a cada pedido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na configuração `mysql.createPool({ ..., connectionLimit: 10 })` da API de uma loja de games, o que significa `connectionLimit: 10`?",
+      "alternativas": [
+        "A API aceita no máximo 10 requisições por dia",
+        "No máximo 10 conexões abertas ao mesmo tempo",
+        "Cada consulta devolve no máximo 10 linhas",
+        "O banco pode ter no máximo 10 tabelas"
+      ],
+      "correta": 1,
+      "explicacao": "connectionLimit é o número máximo de conexões que o pool mantém ao mesmo tempo; pedidos a mais esperam uma conexão livre."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja a rota da API de um cinema (tabela `filme` com id, titulo e duracao):\n`app.get('/filmes', async (req, res) => {\n  const [filmes] = await pool.query('SELECT * FROM filme');\n  res.json(filmes);\n});`\nO que o cliente recebe?",
+      "alternativas": [
+        "Só o número de filmes cadastrados no banco",
+        "Um JSON com o array de todos os filmes",
+        "Uma página HTML com a tabela",
+        "O texto 'SELECT * FROM filme'"
+      ],
+      "correta": 1,
+      "explicacao": "A consulta devolve as linhas em filmes, e res.json envia esse array convertido para JSON."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num UPDATE feito pela API de uma oficina, o resultado do mysql2 veio com `affectedRows: 0`. O que isso indica?",
+      "alternativas": [
+        "O UPDATE teve erro de sintaxe",
+        "Todas as linhas da tabela foram alteradas",
+        "Nenhuma linha atendeu ao WHERE",
+        "A conexão com o banco caiu"
+      ],
+      "correta": 2,
+      "explicacao": "Com erro de sintaxe ou queda de conexão o mysql2 lança erro. affectedRows 0 significa que o WHERE não encontrou nenhuma linha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na rota `PUT /produtos/:id` de uma padaria, o código é `pool.query('UPDATE produto SET preco = ? WHERE id = ?', [req.body.preco, req.params.id])`. Por que a ordem dos valores no array importa?",
+      "alternativas": [
+        "O MySQL ordena os valores por nome",
+        "O array deve estar em ordem crescente",
+        "O primeiro valor sempre vira o id",
+        "Cada ? recebe o valor da mesma posição"
+      ],
+      "correta": 3,
+      "explicacao": "Os ? são preenchidos na ordem: o 1º ? recebe o 1º valor (preço) e o 2º ? recebe o 2º (id). Trocar a ordem troca os dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API de uma escola tem a rota `POST /alunos`, que recebe `{ \"nome\": \"Bia\", \"turma\": \"2B\" }` no corpo. Sem qual linha o `req.body` chega `undefined` e o INSERT não tem dados?",
+      "alternativas": [
+        "`app.use(express.static('public'));`",
+        "`require('dotenv').config();`",
+        "`app.listen(3000);`",
+        "`app.use(express.json());`"
+      ],
+      "correta": 3,
+      "explicacao": "express.json() é o middleware que lê o corpo JSON e preenche req.body. Sem ele, req.body fica undefined."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa rota, o código pega uma conexão do pool com `const conn = await pool.getConnection();`. O que precisa ser feito com ela quando o trabalho termina?",
+      "alternativas": [
+        "Chamar `conn.drop()` para limpar o banco",
+        "Nada: ela é fechada sozinha após a consulta",
+        "Chamar `pool.createConnection()` de novo no fim",
+        "Chamar `conn.release()` para devolvê-la ao pool"
+      ],
+      "correta": 3,
+      "explicacao": "Conexão pega com getConnection precisa ser devolvida com release(); senão o pool fica sem conexões livres."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num arquivo `db.js` da API de uma biblioteca, o pool é criado e exportado com `module.exports = pool;`. Qual é a vantagem disso?",
+      "alternativas": [
+        "Cada rota cria seu próprio servidor MySQL",
+        "O pool deixa de precisar do .env",
+        "O db.js passa a guardar os dados de todos os livros",
+        "As rotas usam o mesmo pool, sem repetir código"
+      ],
+      "correta": 3,
+      "explicacao": "Centralizar a conexão num módulo evita repetir host, usuário e senha em cada arquivo e faz todas as rotas usarem o mesmo pool."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao iniciar, a API de uma clínica mostra o erro `ER_ACCESS_DENIED_ERROR`. Qual é a causa mais provável?",
+      "alternativas": [
+        "Usuário ou senha do banco errados no .env",
+        "A tabela consulta ainda não foi criada no banco",
+        "A rota usa o método HTTP errado",
+        "Falta o express.json() no app"
+      ],
+      "correta": 0,
+      "explicacao": "Access denied é recusa de login no MySQL: usuário ou senha incorretos (ou sem permissão)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API de uma academia mostra o erro `ER_BAD_DB_ERROR: Unknown database 'academia'`. O que está errado?",
+      "alternativas": [
+        "A senha do usuário está errada",
+        "O servidor MySQL está desligado na máquina",
+        "O banco informado em database não existe",
+        "A tabela aluno está vazia"
+      ],
+      "correta": 2,
+      "explicacao": "Unknown database: o login funcionou, mas não existe banco com o nome configurado em database."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao iniciar a API de um hotel aparece `Error: connect ECONNREFUSED 127.0.0.1:3306`. O que esse erro indica?",
+      "alternativas": [
+        "O MySQL não está rodando nessa porta",
+        "A senha do banco está errada",
+        "O SELECT da rota tem um erro de sintaxe",
+        "O hóspede não foi encontrado"
+      ],
+      "correta": 0,
+      "explicacao": "ECONNREFUSED é conexão recusada: nada está atendendo em 127.0.0.1:3306 (servidor desligado ou em outra porta)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A rota `GET /pets?especie=gato` de um pet shop filtra com `SELECT * FROM pet WHERE especie = ?`. De onde vem, no Express, o valor que vai no lugar do `?`",
+      "alternativas": [
+        "`req.query.especie`",
+        "`req.params.especie`",
+        "`req.body.especie`",
+        "`req.headers.especie`"
+      ],
+      "correta": 0,
+      "explicacao": "O que vem depois do ? na URL (query string) fica em req.query. req.params é para partes do caminho como /pets/:id."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo `.env.example`, sem as senhas de verdade, é enviado ao repositório da equipe. Para que ele serve?",
+      "alternativas": [
+        "Para mostrar quais variáveis cada um deve criar no .env",
+        "Para o servidor de produção usar essas senhas de exemplo",
+        "Para substituir o .gitignore do projeto",
+        "Para o MySQL ler a configuração dele"
+      ],
+      "correta": 0,
+      "explicacao": "O .env.example é um modelo: lista os nomes das variáveis (DB_HOST, DB_USER…) sem valores secretos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na rota `POST /vendas` de uma loja, o código faz `const [r] = await pool.query('INSERT INTO venda (produto, valor) VALUES (?, ?)', [produto, valor]);` e responde `res.status(201).json({ id: r.insertId });`. O que o cliente recebe?",
+      "alternativas": [
+        "A lista de todas as vendas",
+        "O valor total vendido no dia",
+        "O id da venda que acabou de ser criada",
+        "Um erro, porque INSERT não devolve nada"
+      ],
+      "correta": 2,
+      "explicacao": "r.insertId é o id gerado para a nova venda; a rota devolve esse id com status 201."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Com o mysql2/promise, por que se escreve `const [linhas] = await pool.query(...)` com colchetes?",
+      "alternativas": [
+        "O retorno é um array [linhas, campos]",
+        "Os colchetes evitam SQL Injection",
+        "O resultado sempre tem uma linha só",
+        "O await só funciona com arrays"
+      ],
+      "correta": 0,
+      "explicacao": "query devolve um array de dois itens: as linhas e os dados das colunas (fields). Os colchetes pegam só o primeiro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API de um cinema, a rota `GET /sessoes/:id` busca com `WHERE id = ?` e responde `res.json(linhas)` em vez de `res.json(linhas[0])`. O que o cliente recebe quando a sessão existe?",
+      "alternativas": [
+        "Um array com uma sessão dentro",
+        "Só a primeira coluna da sessão",
+        "Um erro 500 do servidor",
+        "O texto do comando SELECT"
+      ],
+      "correta": 0,
+      "explicacao": "linhas é sempre um array, mesmo com um resultado só. Para mandar só o objeto, usa-se linhas[0]."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na rota `DELETE /alunos/:id` de uma escola, a tabela `matricula` (id, id_aluno, id_curso) tem chave estrangeira para `aluno`. O DELETE falhou com `ER_ROW_IS_REFERENCED_2`. O que aconteceu?",
+      "alternativas": [
+        "O id informado não existe na tabela aluno",
+        "A senha do banco expirou no .env",
+        "Há matrículas ligadas a esse aluno (FK)",
+        "A rota DELETE não aceita :id"
+      ],
+      "correta": 2,
+      "explicacao": "O erro diz que a linha é referenciada por outra tabela: a FK impede apagar o aluno enquanto houver matrículas dele. Id inexistente daria affectedRows 0, sem erro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que é má ideia abrir uma conexão nova com `createConnection` dentro de cada rota e nunca fechá-la?",
+      "alternativas": [
+        "As conexões se acumulam até o MySQL recusar novas",
+        "O MySQL apaga as tabelas antigas",
+        "O Express deixa de aceitar JSON",
+        "As consultas passam a devolver só texto, sem objetos"
+      ],
+      "correta": 0,
+      "explicacao": "Cada conexão aberta ocupa recursos no servidor; sem fechar, elas se acumulam até o erro de 'too many connections'. O pool resolve isso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa reserva de hotel, o código chama `await conn.beginTransaction()`, faz dois INSERTs (reserva e pagamento) e, no `catch`, chama `await conn.rollback()`. Se o segundo INSERT falhar, o que acontece com o primeiro?",
+      "alternativas": [
+        "Fica gravado no banco e só o segundo falha",
+        "É desfeito: nenhum dos dois fica gravado",
+        "É gravado duas vezes no banco",
+        "O banco inteiro é apagado"
+      ],
+      "correta": 1,
+      "explicacao": "Na transação, rollback desfaz tudo o que foi feito desde o beginTransaction; só o commit confirma as gravações."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API de uma loja de games lê `const porta = process.env.DB_PORT;` e recebe o valor `'3306'`. O que é verdade sobre os valores lidos do `.env`?",
+      "alternativas": [
+        "Chegam sempre como texto (string)",
+        "Chegam criptografados pelo dotenv",
+        "Só podem ser lidos uma única vez",
+        "Chegam já convertidos para number"
+      ],
+      "correta": 0,
+      "explicacao": "Tudo em process.env é string. Se o código precisa de número, converte com Number(process.env.DB_PORT)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na rota `GET /produtos`, o código usa `pool.query('SELECT * FROM produto ORDER BY ?', [req.query.ordem])` e, com `ordem=preco`, a lista não sai ordenada por preço. Por quê?",
+      "alternativas": [
+        "O ? vira um texto ('preco'), não uma coluna",
+        "O ? só pode ser usado em comandos INSERT e UPDATE",
+        "ORDER BY não funciona com mysql2",
+        "req.query não existe no Express"
+      ],
+      "correta": 0,
+      "explicacao": "O ? coloca o valor como dado entre aspas: fica ORDER BY 'preco', que ordena por um texto fixo. Nome de coluna não pode ir no ?; deve vir de uma lista permitida no código."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A API de uma padaria tem um arquivo `.env` com `DB_HOST=localhost`, `DB_USER=padaria`, `DB_PASSWORD=pao123` e `DB_NAME=padaria_db`. Por que esses dados ficam no .env e não escritos direto no código?\n\nNa sua resposta:\n1. diga o que é guardado nesse arquivo;\n2. explique o risco de deixar a senha escrita no código;\n3. diga por que o .env vai no .gitignore.",
+      "respostasAceitas": [
+        "Ficam os dados de conexão com o banco (servidor, usuário, senha e nome do banco). Senha no código vai junto para o repositório e qualquer um que veja o código descobre. No .gitignore, o .env não é enviado ao GitHub."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dados de conexão/configuração; 2) senha exposta a quem acessa o código/repositório; 3) o .gitignore impede o envio do .env ao repositório."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A API de um pet shop tem as rotas `GET /pets`, `POST /pets`, `PUT /pets/:id` e `DELETE /pets/:id`. Relacione cada rota com o comando SQL que ela executa.\n\nNa sua resposta:\n1. diga o comando SQL de cada rota;\n2. diga o que cada uma faz com os dados.",
+      "respostasAceitas": [
+        "GET → SELECT (lista os pets); POST → INSERT (cadastra um pet); PUT → UPDATE (altera o pet do id); DELETE → DELETE (apaga o pet do id)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se a relação GET/SELECT, POST/INSERT, PUT/UPDATE, DELETE/DELETE e o efeito de cada uma (ler, criar, alterar, apagar)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que faz a linha `const pool = mysql.createPool({ host: process.env.DB_HOST, user: process.env.DB_USER, password: process.env.DB_PASSWORD, database: process.env.DB_NAME });`?\n\nNa sua resposta:\n1. diga o que é criado;\n2. explique de onde vêm os valores usados.",
+      "respostasAceitas": [
+        "Cria um pool (grupo de conexões) com o MySQL para a API usar nas consultas. Os valores vêm das variáveis de ambiente, carregadas do arquivo .env."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) um pool de conexões com o banco; 2) vêm de process.env, ou seja, do .env."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre `createConnection` e `createPool` no mysql2.\n\nNa sua resposta:\n1. diga o que cada um cria;\n2. diga qual é mais indicado para uma API com muitos acessos e por quê.",
+      "respostasAceitas": [
+        "createConnection abre uma única conexão; createPool cria um grupo de conexões reaproveitadas. Para muitos acessos o pool é melhor, porque atende várias requisições ao mesmo tempo sem abrir uma conexão nova a cada pedido."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) uma conexão x várias conexões reaproveitáveis; 2) pool, por atender requisições simultâneas e reaproveitar conexões."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja a rota de uma clínica:\n`app.get('/medicos/:id', async (req, res) => {\n  const [r] = await pool.query('SELECT * FROM medico WHERE id = ?', [req.params.id]);\n  if (r.length === 0) return res.status(404).json({ erro: 'Médico não encontrado' });\n  res.json(r[0]);\n});`\nO que acontece quando o id pedido não existe?\n\nNa sua resposta:\n1. diga o que o teste `r.length === 0` verifica;\n2. diga o que o cliente recebe nesse caso;\n3. diga o que o cliente recebe quando o médico existe.",
+      "respostasAceitas": [
+        "O teste verifica se a consulta não achou nenhuma linha. Nesse caso o cliente recebe status 404 com a mensagem 'Médico não encontrado'. Se existe, recebe o objeto do médico (r[0]) em JSON."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) se o array veio vazio; 2) 404 com a mensagem de erro; 3) os dados do médico em JSON."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Depois do `POST /livros`, a API de uma biblioteca respondeu com status 201 e o corpo `{ \"id\": 12 }`. Interprete essa resposta.\n\nNa sua resposta:\n1. diga o que o status 201 informa;\n2. diga de onde vem o número 12.",
+      "respostasAceitas": [
+        "201 informa que o livro foi criado com sucesso. O 12 é o id gerado pelo AUTO_INCREMENT no INSERT (insertId)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) recurso criado; 2) id gerado pelo banco (insertId)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa API de academia, a conexão com o banco fica num arquivo `db.js` separado, e as rotas fazem `const pool = require('./db');`. Por que separar assim?\n\nNa sua resposta:\n1. explique a vantagem de ter a conexão num só lugar;\n2. diga o que precisaria mudar se o banco fosse para outro servidor.",
+      "respostasAceitas": [
+        "A configuração fica num lugar só e todas as rotas usam o mesmo pool, sem repetir código. Se o servidor mudar, basta trocar o DB_HOST no .env (ou o db.js), sem mexer nas rotas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) evita repetição e centraliza/reaproveita o pool; 2) só a configuração (.env/db.js) muda."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na API de uma oficina, a rota `DELETE /carros/:id` usa `DELETE FROM carro WHERE id = ?`. Um colega sugeriu tirar o `WHERE id = ?` \"para simplificar\". O que aconteceria?\n\nNa sua resposta:\n1. diga o que o comando faz com o WHERE;\n2. explique o que ele faria sem o WHERE.",
+      "respostasAceitas": [
+        "Com o WHERE, apaga só o carro do id recebido na URL. Sem o WHERE, apagaria todos os carros da tabela a cada chamada da rota."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) apaga apenas o carro indicado; 2) sem WHERE apaga todos os registros."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O `.env` da API de um cinema tem `DB_NAME=cinema`, mas o código de conexão usa `database: process.env.DB_DATABASE`. O que vai acontecer?\n\nNa sua resposta:\n1. diga que valor a propriedade database recebe;\n2. explique o erro provável e como perceber a causa.",
+      "respostasAceitas": [
+        "database recebe undefined, porque a variável DB_DATABASE não existe. A conexão abre sem banco escolhido e as consultas falham (erro de nenhum banco selecionado). Dá para perceber comparando o nome no código com o do .env ou imprimindo o valor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) undefined (nomes diferentes); 2) consultas falham por falta de banco selecionado; conferir os nomes das variáveis."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A API de uma escola tem a rota `GET /alunos`, que faz `SELECT * FROM aluno` (tabela com id, nome, email e senha_hash) e devolve o resultado direto com `res.json`. Que problema há nisso?\n\nNa sua resposta:\n1. diga o que o cliente recebe;\n2. explique por que isso é um problema;\n3. diga, em palavras, como resolver.",
+      "respostasAceitas": [
+        "O cliente recebe todas as colunas, inclusive senha_hash. Isso expõe dado sensível sem necessidade. Basta selecionar só as colunas necessárias (id, nome, email) no SELECT."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) todos os campos, inclusive o hash da senha; 2) vazamento de dado sensível; 3) listar só as colunas necessárias no SELECT (não usar *)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A rota `GET /treinos` de uma academia fica lenta e depois para de responder em horário de pico. No código, cada requisição abre uma conexão nova com `createConnection` e não a fecha. Explique o problema.\n\nNa sua resposta:\n1. diga por que a API fica lenta e depois para;\n2. diga o que deveria ser usado no lugar.",
+      "respostasAceitas": [
+        "Abrir conexão custa tempo, e conexões nunca fechadas se acumulam até o MySQL recusar novas (limite de conexões). O certo é usar um pool (createPool), que reaproveita conexões."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) custo de abrir conexões e acúmulo até o limite do MySQL; 2) pool de conexões (ou fechar a conexão)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na rota `POST /jogos` de uma loja de games, a tabela `jogo` tem a coluna `codigo` como UNIQUE. Quando chega um código repetido, o MySQL devolve o erro `ER_DUP_ENTRY` e a rota responde 500 com o erro inteiro. Como deveria ser?\n\nNa sua resposta:\n1. explique por que o erro aconteceu;\n2. diga que resposta (status e mensagem) seria melhor e por quê.",
+      "respostasAceitas": [
+        "Aconteceu porque já existe um jogo com aquele código e a coluna não aceita repetidos. O melhor é capturar esse erro e responder 409 (ou 400) com uma mensagem clara, como 'Código já cadastrado', porque o erro foi do dado enviado, não do servidor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) violação do UNIQUE; 2) status de erro do cliente (409/400) e mensagem amigável, sem expor o erro interno. Aceitar 400 ou 409."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa API de hotel, reservar um quarto exige dois comandos: `INSERT INTO reserva ...` e `UPDATE quarto SET ocupado = 1 WHERE id = ?`. O código usa `beginTransaction`, `commit` e `rollback`. Explique esse cuidado.\n\nNa sua resposta:\n1. explique por que os dois comandos devem ficar numa transação;\n2. diga quando o commit e o rollback são chamados.",
+      "respostasAceitas": [
+        "Os dois precisam acontecer juntos: se a reserva for gravada e o quarto não for marcado (ou o contrário), os dados ficam errados. O commit é chamado quando os dois deram certo; o rollback, no catch, quando algum falhou, desfazendo o que já tinha sido feito."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) tudo ou nada, evitar dados inconsistentes; 2) commit no sucesso, rollback no erro."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na API de um cinema, depois de `const [r] = await pool.query('UPDATE sessao SET sala = ? WHERE id = ?', [2, 4]);` o resultado traz `affectedRows` e `changedRows`. A sessão 4 já estava na sala 2.\n\nNa sua resposta:\n1. diga o que affectedRows e changedRows informam;\n2. diga os valores prováveis neste caso e por quê.",
+      "respostasAceitas": [
+        "affectedRows conta as linhas que o WHERE encontrou; changedRows conta as que realmente mudaram de valor. Aqui a sessão 4 foi encontrada (affectedRows 1), mas já estava na sala 2, então nada mudou (changedRows 0)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) encontradas x realmente alteradas; 2) affectedRows 1 e changedRows 0, pois o valor já era 2. (Comportamento padrão do mysql2.)"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma API de academia usa `createPool` com `connectionLimit: 5`. Em horário de pico, as rotas que usam `pool.getConnection()` travam e nunca respondem. No código, algumas rotas só chamam `conn.release()` no fim do `try`, e não quando dá erro.\n\nNa sua resposta:\n1. explique por que as rotas travam;\n2. diga como o bloco finally resolve isso.",
+      "respostasAceitas": [
+        "Quando dá erro, a conexão não é devolvida ao pool. Depois de 5 erros, todas as conexões estão presas e as novas requisições ficam esperando para sempre. Colocando o release() no finally, ele roda com ou sem erro, e a conexão sempre volta ao pool."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) conexões não devolvidas esgotam o pool; 2) finally executa sempre e garante o release."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é SQL Injection?",
+      "alternativas": [
+        "Um tipo de JOIN entre tabelas",
+        "Ataque que injeta SQL pelo dado digitado",
+        "Comando para inserir dados em lote",
+        "Ferramenta que cria índices no banco de dados"
+      ],
+      "correta": 1,
+      "explicacao": "No SQL Injection o atacante digita trechos de SQL num campo; se o código junta esse texto ao comando, o banco executa o que ele mandou."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa consulta parametrizada do mysql2, qual símbolo marca o lugar onde o valor será colocado com segurança?",
+      "alternativas": [
+        "`#`",
+        "`?`",
+        "`&`",
+        "`$`"
+      ],
+      "correta": 1,
+      "explicacao": "No mysql2 o marcador é o ?, e os valores vão num array separado: query('... WHERE id = ?', [id])."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma função declarada com `async` sempre devolve:",
+      "alternativas": [
+        "Um número",
+        "undefined",
+        "Uma Promise",
+        "Um array"
+      ],
+      "correta": 2,
+      "explicacao": "Toda função async devolve uma Promise; o valor do return vira o resultado dessa Promise."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve o `await` antes de `pool.query(...)`?",
+      "alternativas": [
+        "Cancelar a consulta se ela demorar demais no banco",
+        "Esperar a consulta terminar e pegar o resultado",
+        "Rodar a consulta duas vezes",
+        "Esconder a senha do banco"
+      ],
+      "correta": 1,
+      "explicacao": "pool.query devolve uma Promise; o await espera ela terminar e entrega o resultado da consulta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num bloco `try { ... } catch (erro) { ... }`, quando o código do `catch` é executado?",
+      "alternativas": [
+        "Sempre, logo depois do try",
+        "Nunca: ele serve de comentário",
+        "Só quando o try devolve um array",
+        "Só quando acontece um erro no try"
+      ],
+      "correta": 3,
+      "explicacao": "O catch só roda se algum comando do try lançar erro; o erro chega na variável do catch."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é um ORM, como o Sequelize ou o Prisma?",
+      "alternativas": [
+        "Um banco de dados que substitui o MySQL",
+        "Um tipo especial de chave estrangeira",
+        "Biblioteca que trata tabelas como objetos",
+        "Um editor visual de diagramas ER"
+      ],
+      "correta": 2,
+      "explicacao": "ORM (mapeamento objeto-relacional) liga tabelas a classes/objetos do código; o banco continua sendo MySQL, SQLite etc."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Sequelize, qual método busca todos os registros de um model `Produto`?",
+      "alternativas": [
+        "`Produto.selectAll()`",
+        "`Produto.getRows()`",
+        "`Produto.findAll()`",
+        "`Produto.query('*')`"
+      ],
+      "correta": 2,
+      "explicacao": "findAll() busca todos os registros (gera um SELECT). Os outros métodos não existem no Sequelize."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Sequelize, qual método grava um novo registro no model `Cliente`?",
+      "alternativas": [
+        "`Cliente.insert({...})`",
+        "`Cliente.push({...})`",
+        "`Cliente.create({...})`",
+        "`Cliente.add({...})`"
+      ],
+      "correta": 2,
+      "explicacao": "create({...}) monta e executa o INSERT com os dados do objeto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Prisma, os models (as tabelas e suas colunas) ficam descritos em qual arquivo?",
+      "alternativas": [
+        "`package.json`",
+        "`schema.prisma`",
+        "`.env`",
+        "`index.html`"
+      ],
+      "correta": 1,
+      "explicacao": "O Prisma usa o arquivo schema.prisma para descrever os models. O .env guarda só a URL de conexão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas chamadas da API de uma escola está protegida contra SQL Injection?",
+      "alternativas": [
+        "`query('SELECT * FROM aluno WHERE id = ' + id)`",
+        "`query('SELECT * FROM aluno WHERE id = ?', [id])`",
+        "`query('SELECT * FROM aluno WHERE id = \"' + id + '\"')`",
+        "`query('SELECT * FROM aluno WHERE id = ?'.replace('?', id))`"
+      ],
+      "correta": 1,
+      "explicacao": "Só a versão com ? e array envia o valor separado do comando. Trocar o ? com replace é o mesmo que concatenar o texto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num arquivo comum do Node.js (CommonJS), onde o `await` pode ser usado?",
+      "alternativas": [
+        "Em qualquer linha do código",
+        "Só dentro do arquivo .env",
+        "Só dentro de uma função async",
+        "Só em arquivos HTML"
+      ],
+      "correta": 2,
+      "explicacao": "O await só é aceito dentro de funções marcadas com async (fora disso, só em módulos ES no nível do arquivo)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na rota de uma academia, o `catch` faz `res.status(500).json({ erro: 'Erro no servidor' })`. O que o status 500 indica?",
+      "alternativas": [
+        "O recurso não foi encontrado",
+        "O cliente não está autenticado na API",
+        "Houve um erro interno no servidor",
+        "O recurso foi criado"
+      ],
+      "correta": 2,
+      "explicacao": "500 é erro interno do servidor, como uma falha no banco. 404 é não encontrado, 401 é não autenticado e 201 é criado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Prisma, como se buscam todos os registros do model `Livro`?",
+      "alternativas": [
+        "`prisma.livro.all()`",
+        "`prisma.select('livro')`",
+        "`prisma.livro.getAll()`",
+        "`prisma.livro.findMany()`"
+      ],
+      "correta": 3,
+      "explicacao": "No Prisma, findMany() busca vários registros; findUnique() busca um pela chave."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas é uma vantagem de usar um ORM?",
+      "alternativas": [
+        "Dispensa saber qualquer coisa de banco",
+        "Elimina a necessidade de um servidor MySQL",
+        "Deixa toda consulta mais rápida",
+        "Escreve o CRUD em JavaScript, com menos SQL"
+      ],
+      "correta": 3,
+      "explicacao": "O ORM permite fazer o CRUD com métodos e objetos. Ainda é preciso entender banco, e ele não deixa tudo mais rápido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No login de uma clínica, o código monta `\"SELECT * FROM usuario WHERE login = '\" + login + \"' AND senha = '\" + senha + \"'\"`. Um atacante digita no campo senha: `' OR '1'='1`. O que acontece?",
+      "alternativas": [
+        "O banco dá erro e ninguém consegue entrar",
+        "A senha do atacante é cadastrada",
+        "A condição fica sempre verdadeira",
+        "A tabela usuario é apagada"
+      ],
+      "correta": 2,
+      "explicacao": "O SQL vira ... AND senha = '' OR '1'='1', e como '1'='1' é sempre verdadeiro, a consulta devolve usuários sem conferir a senha.",
+      "grupo": "injecao-login"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas medidas, sozinha, NÃO protege a API contra SQL Injection?",
+      "alternativas": [
+        "Esconder o campo do formulário com CSS",
+        "Usar o método execute do mysql2",
+        "Usar consultas com ? e array de valores",
+        "Usar métodos do ORM com where: { id }"
+      ],
+      "correta": 0,
+      "explicacao": "Esconder o campo não impede ninguém de mandar uma requisição direto à API. As outras opções mandam o valor separado do comando."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é impresso?\n`async function teste() { return 5; }\nconsole.log(teste());`",
+      "alternativas": [
+        "5",
+        "undefined",
+        "Promise { 5 }",
+        "Erro de sintaxe"
+      ],
+      "correta": 2,
+      "explicacao": "Função async devolve uma Promise. Sem await (ou .then), o console mostra a Promise, não o número."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o trecho:\n`app.get('/livros', (req, res) => {\n  const [livros] = await pool.query('SELECT * FROM livro');\n  res.json(livros);\n});`\nPor que ele dá erro?",
+      "alternativas": [
+        "O SELECT precisa de WHERE",
+        "res.json não aceita arrays",
+        "A função da rota não é async",
+        "livros é palavra reservada"
+      ],
+      "correta": 2,
+      "explicacao": "await só pode ser usado dentro de função async; falta async antes de (req, res)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja a rota de uma loja (pool do `mysql2/promise`):\n`app.get('/produtos', async (req, res) => {\n  const resultado = pool.query('SELECT * FROM produto');\n  res.json(resultado);\n});`\nQual é o problema?",
+      "alternativas": [
+        "Falta o .env na pasta",
+        "Falta um WHERE no SELECT",
+        "A rota deveria usar o método POST",
+        "Falta await antes de pool.query"
+      ],
+      "correta": 3,
+      "explicacao": "Sem await, resultado é uma Promise ainda não resolvida, e não as linhas do banco."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve o `finally` em `try { ... } catch (e) { ... } finally { conn.release(); }`?",
+      "alternativas": [
+        "Roda sempre, com erro ou sem erro",
+        "Roda só quando o try termina sem erro",
+        "Roda só quando há erro",
+        "Repete o bloco try"
+      ],
+      "correta": 0,
+      "explicacao": "O finally executa nos dois casos; por isso é o lugar certo para devolver a conexão ao pool."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Dentro do `try` de uma rota de estoque, o código executa `throw new Error('Estoque insuficiente');`. Para onde vai a execução?",
+      "alternativas": [
+        "Para o bloco catch, com esse erro",
+        "Para a próxima rota do arquivo",
+        "Para o arquivo .env do projeto",
+        "Para a linha seguinte ao throw"
+      ],
+      "correta": 0,
+      "explicacao": "throw interrompe o try e passa o erro para o catch, que recebe o objeto Error na variável."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Sequelize, o que faz `await Aluno.findByPk(7)`?",
+      "alternativas": [
+        "Busca o aluno com chave primária 7",
+        "Busca os 7 primeiros alunos",
+        "Apaga o aluno de número 7",
+        "Conta quantos alunos existem na tabela"
+      ],
+      "correta": 0,
+      "explicacao": "findByPk busca um registro pela chave primária (Primary Key); se não existir, devolve null."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Sequelize, `await Produto.destroy({ where: { id: 3 } })` equivale a qual comando SQL?",
+      "alternativas": [
+        "`DROP TABLE produto`",
+        "`UPDATE produto SET id = 3`",
+        "`DELETE FROM produto WHERE id = 3`",
+        "`SELECT * FROM produto WHERE id = 3`"
+      ],
+      "correta": 2,
+      "explicacao": "destroy com where apaga as linhas que atendem à condição (DELETE ... WHERE). DROP TABLE apagaria a tabela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Prisma, o que faz `await prisma.cliente.create({ data: { nome: 'Rui', cidade: 'Natal' } })`?",
+      "alternativas": [
+        "Cria a tabela cliente no banco",
+        "Muda o nome de um cliente para Rui",
+        "Busca no banco todos os clientes da cidade de Natal",
+        "Insere um cliente com nome Rui e cidade Natal"
+      ],
+      "correta": 3,
+      "explicacao": "create com data insere um registro novo (INSERT) com os valores informados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O método `execute` do mysql2 (no lugar de `query`) usa prepared statements. O que isso quer dizer?",
+      "alternativas": [
+        "O comando e os valores vão separados ao banco",
+        "O SQL fica salvo num arquivo .sql",
+        "A consulta é feita sem conexão aberta",
+        "O comando roda duas vezes no banco para conferir"
+      ],
+      "correta": 0,
+      "explicacao": "No prepared statement o servidor recebe o comando com os marcadores e, depois, os valores, que nunca viram parte do SQL."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Sequelize, o código `const Livro = sequelize.define('Livro', { titulo: DataTypes.STRING, paginas: DataTypes.INTEGER });` representa:",
+      "alternativas": [
+        "Uma rota GET da API",
+        "Um livro já gravado no banco, com título e páginas",
+        "A tabela de livros, com colunas titulo e paginas",
+        "Uma consulta SELECT pronta"
+      ],
+      "correta": 2,
+      "explicacao": "define cria um model: a representação da tabela no código, com suas colunas e tipos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz `await sequelize.sync()` num projeto com Sequelize?",
+      "alternativas": [
+        "Cria as tabelas dos models que faltam",
+        "Apaga todos os dados das tabelas",
+        "Envia o .env para o GitHub",
+        "Faz um backup completo do banco de dados"
+      ],
+      "correta": 0,
+      "explicacao": "sync() cria no banco as tabelas dos models que ainda não existem (com opções como force pode recriá-las)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual afirmação sobre ORM é verdadeira?",
+      "alternativas": [
+        "Com ORM o banco para de usar SQL",
+        "O ORM gera o SQL a partir dos métodos",
+        "ORM só funciona com banco em memória",
+        "ORM impede qualquer erro de banco"
+      ],
+      "correta": 1,
+      "explicacao": "O ORM traduz chamadas como findAll e create em comandos SQL, que o banco executa normalmente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja duas versões numa API de cinema:\nA) `pool.query('SELECT * FROM filme WHERE genero = ?', [genero])`\nB) `pool.query(\"SELECT * FROM filme WHERE genero = '\" + genero + \"'\")`\nSe `genero` for `x' OR 1=1 -- `, o que acontece?",
+      "alternativas": [
+        "Ambas devolvem todos os filmes",
+        "Ambas apagam a tabela filme",
+        "A dá erro; B não acha nada",
+        "A não acha nada; B devolve todos"
+      ],
+      "correta": 3,
+      "explicacao": "Em A o texto inteiro é tratado como valor (nenhum gênero com esse nome). Em B o OR 1=1 vira parte do SQL e o -- comenta o resto: todos os filmes voltam."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja a função:\n`async function buscar() {\n  try {\n    const [r] = await pool.query('SELECT * FROM pet');\n    return r;\n  } catch (e) {\n    console.log('falhou');\n  }\n}`\nSe a consulta falhar, com que valor a Promise de `buscar()` termina?",
+      "alternativas": [
+        "Um array vazio",
+        "O erro, lançado de novo",
+        "undefined",
+        "O texto 'falhou'"
+      ],
+      "correta": 2,
+      "explicacao": "O catch só imprime e não tem return; a função termina sem valor, então resolve com undefined. O erro foi 'engolido'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma rota faz `ids.forEach(async id => { await pool.query('DELETE FROM item WHERE id = ?', [id]); });` e logo depois `res.json({ ok: true })`. Por que isso é arriscado?",
+      "alternativas": [
+        "O forEach não aceita funções",
+        "Dá erro de sintaxe usar await ali",
+        "A resposta sai antes de as consultas acabarem",
+        "O pool só aceita uma consulta por vez na rota"
+      ],
+      "correta": 2,
+      "explicacao": "O forEach não espera as funções async; a resposta 'ok' é enviada mesmo que os DELETEs ainda estejam rodando ou falhem. Usa-se for...of com await ou Promise.all."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Duas consultas independentes do relatório de uma academia são feitas com `const [a, b] = await Promise.all([pool.query(q1), pool.query(q2)]);`. Qual a vantagem sobre dois awaits seguidos?",
+      "alternativas": [
+        "Evita SQL Injection nas duas",
+        "As duas rodam ao mesmo tempo",
+        "Vira uma transação automática",
+        "Dispensa o uso de try/catch"
+      ],
+      "correta": 1,
+      "explicacao": "Promise.all dispara as duas e espera ambas; como rodam em paralelo, o tempo total tende a ser menor. Não cria transação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Sequelize, `Produto.findAll({ where: { categoria: req.query.cat } })` recebe o texto `' OR 1=1 --` em cat. O que acontece?",
+      "alternativas": [
+        "Devolve todos os produtos da loja",
+        "Apaga a tabela de produtos",
+        "Procura esse texto como categoria",
+        "Gera erro de sintaxe no SQL"
+      ],
+      "correta": 2,
+      "explicacao": "Os métodos do ORM enviam os valores de forma parametrizada; o texto é comparado como dado e nenhum produto tem essa categoria."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Mesmo usando um ORM, qual situação ainda pode abrir brecha para SQL Injection?",
+      "alternativas": [
+        "Usar findAll com where",
+        "Usar create com um objeto",
+        "Juntar texto do usuário numa consulta raw",
+        "Usar findByPk com o id que veio na URL da rota"
+      ],
+      "correta": 2,
+      "explicacao": "Consultas 'cruas' (raw) do ORM executam o SQL como foi escrito; se o texto do usuário for concatenado, o risco volta.",
+      "grupo": "orm-raw"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o trecho:\n`try {\n  const [r] = await pool.query('INSERT INTO aluno (email) VALUES (?)', [email]);\n  res.status(201).json({ id: r.insertId });\n} catch (e) {\n  if (e.code === 'ER_DUP_ENTRY') return res.status(409).json({ erro: 'E-mail já cadastrado' });\n  res.status(500).json({ erro: 'Erro interno' });\n}`\nSe o e-mail já existe (coluna UNIQUE), o que o cliente recebe?",
+      "alternativas": [
+        "201 com o id do aluno",
+        "409 com 'E-mail já cadastrado'",
+        "500 com 'Erro interno'",
+        "404 com 'Aluno não encontrado'"
+      ],
+      "correta": 1,
+      "explicacao": "O INSERT falha com ER_DUP_ENTRY, o catch reconhece o código e responde 409. O return impede que o 500 também seja enviado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique, com suas palavras, o que é SQL Injection.\n\nNa sua resposta:\n1. diga o que o atacante faz;\n2. diga uma consequência possível para o sistema.",
+      "respostasAceitas": [
+        "O atacante digita trechos de SQL num campo (login, busca) e, se o código junta esse texto ao comando, o banco executa o SQL dele. Ele pode entrar sem senha, ver dados de outros ou apagar tabelas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) envia SQL dentro de um dado que é concatenado ao comando; 2) acesso indevido, vazamento ou perda de dados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na rota de uma padaria há o trecho `try { const [r] = await pool.query('SELECT * FROM pao'); res.json(r); } catch (erro) { res.status(500).json({ erro: 'Falha ao listar' }); }`. Explique o papel do try/catch.\n\nNa sua resposta:\n1. diga o que fica dentro do try;\n2. diga quando o catch é executado;\n3. diga o que o cliente recebe se der erro.",
+      "respostasAceitas": [
+        "No try fica a consulta e a resposta normal. O catch roda se algo der erro, como o banco fora do ar. Aí o cliente recebe status 500 com a mensagem 'Falha ao listar'."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o código que pode falhar (consulta); 2) quando ocorre erro no try; 3) status 500 com a mensagem."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que muda quando se coloca `await` antes de `pool.query(...)` numa rota?\n\nNa sua resposta:\n1. diga o que o await faz;\n2. diga o que a variável recebe com e sem o await.",
+      "respostasAceitas": [
+        "O await espera a consulta terminar. Com ele, a variável recebe o resultado (as linhas); sem ele, recebe uma Promise ainda pendente."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) espera a Promise terminar; 2) com await o resultado, sem await uma Promise."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique o que é um ORM e cite um exemplo usado com Node.js.\n\nNa sua resposta:\n1. diga o que o ORM faz;\n2. cite um ORM;\n3. diga uma vantagem.",
+      "respostasAceitas": [
+        "O ORM liga as tabelas do banco a objetos/classes do código e gera o SQL a partir de métodos. Exemplos: Sequelize, Prisma. Vantagem: menos SQL repetido e valores já parametrizados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mapeia tabelas para objetos e gera o SQL; 2) Sequelize, Prisma, TypeORM ou outro; 3) qualquer vantagem coerente (produtividade, menos SQL, segurança, troca de banco)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de games, o model Sequelize `Jogo` representa a tabela `jogo` (id, nome, plataforma). Interprete: `const jogos = await Jogo.findAll({ where: { plataforma: 'PC' } });`\n\nNa sua resposta:\n1. diga o que é buscado;\n2. diga a que comando SQL isso corresponde.",
+      "respostasAceitas": [
+        "Busca todos os jogos cuja plataforma é 'PC' e guarda a lista em jogos. Corresponde a SELECT * FROM jogo WHERE plataforma = 'PC'."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) os jogos da plataforma PC; 2) um SELECT com WHERE."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa API de clínica, por que a função da rota precisa ser `async` para usar `await pool.query(...)`?\n\nNa sua resposta:\n1. diga a regra do await;\n2. diga o que acontece se esquecer o async.",
+      "respostasAceitas": [
+        "O await só pode ser usado dentro de uma função async. Sem o async, o Node dá erro de sintaxe e a API nem inicia."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) await só dentro de função async; 2) erro (SyntaxError) ao rodar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No login de uma loja de games, o código monta `\"SELECT * FROM usuario WHERE login = '\" + login + \"' AND senha = '\" + senha + \"'\"`. Um atacante digita `admin' -- ` no login e qualquer coisa na senha.\n\nNa sua resposta:\n1. explique como fica o SQL montado;\n2. explique por que ele entra sem a senha;\n3. diga como evitar.",
+      "respostasAceitas": [
+        "O SQL fica: SELECT * FROM usuario WHERE login = 'admin' -- ' AND senha = '...'. O -- transforma o resto em comentário, então a senha não é conferida e ele entra como admin. Evita-se com consulta parametrizada (?), que trata o texto só como dado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o login fecha a aspa e o -- comenta o resto; 2) a condição da senha some; 3) consultas parametrizadas/ORM.",
+      "grupo": "injecao-login"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Compare as duas buscas de uma biblioteca:\nA) `pool.query('SELECT * FROM livro WHERE autor = ?', [autor])`\nB) `Livro.findAll({ where: { autor } })` (Sequelize)\n\nNa sua resposta:\n1. diga o que as duas fazem;\n2. cite uma vantagem de cada forma.",
+      "respostasAceitas": [
+        "As duas buscam os livros do autor informado, de forma parametrizada. A (SQL direto) dá controle total do comando e é simples de entender; B (ORM) evita escrever SQL e trabalha com objetos/models."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mesma busca; 2) uma vantagem coerente de cada (controle/desempenho x produtividade/menos SQL)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na rota de uma clínica, o código tem `catch (e) { console.log(e); }` e não envia nenhuma resposta. O que o cliente da API percebe quando dá erro?\n\nNa sua resposta:\n1. diga o que acontece com a requisição;\n2. explique o que falta no catch.",
+      "respostasAceitas": [
+        "A requisição fica sem resposta: o cliente espera até dar tempo esgotado (timeout). Falta responder no catch, por exemplo com status 500 e uma mensagem de erro."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) fica pendurada até o timeout; 2) enviar res.status(500) com mensagem."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja: `async function total() { const [r] = await pool.query('SELECT COUNT(*) AS n FROM pet'); return r[0].n; }` e depois `console.log(total());`. O que aparece e por quê?\n\nNa sua resposta:\n1. diga o que é impresso;\n2. explique por que não aparece o número;\n3. diga, em palavras, como obter o número.",
+      "respostasAceitas": [
+        "Aparece Promise { <pending> }. Função async devolve uma Promise e o console.log não esperou. Para ter o número é preciso esperar: usar await total() dentro de outra função async (ou .then)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) uma Promise (pendente); 2) async devolve Promise e não houve espera; 3) usar await ou then."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega diz: \"Minha API usa ORM, então nunca vou ter SQL Injection\". Ele está certo?\n\nNa sua resposta:\n1. diga se concorda;\n2. explique em que caso o risco continua.",
+      "respostasAceitas": [
+        "Não totalmente. Os métodos normais do ORM parametrizam os valores, mas se ele usar consultas raw (SQL cru) juntando o texto do usuário, o SQL Injection continua possível."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) não (ou 'em parte'); 2) consultas raw/concatenação de texto do usuário dentro do ORM.",
+      "grupo": "orm-raw"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na rota de uma oficina, o `catch` faz `console.error(erro)` e responde `res.status(500).json({ erro: 'Não foi possível salvar' })`, sem mandar o erro inteiro ao cliente. Explique essa escolha.\n\nNa sua resposta:\n1. diga que informação o erro completo pode revelar;\n2. explique por que isso ajuda um atacante;\n3. diga onde o desenvolvedor vê o erro completo.",
+      "respostasAceitas": [
+        "O erro completo pode mostrar o SQL, nomes de tabelas e colunas, versão do banco. Isso ajuda o atacante a planejar um ataque. O desenvolvedor vê o erro no console/log do servidor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) detalhes internos (SQL, tabelas, caminhos); 2) facilita ataques; 3) no console/log do servidor."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja a rota de uma escola, sem try/catch:\n`app.post('/notas', async (req, res) => {\n  const [r] = await pool.query('INSERT INTO nota (id_aluno, valor) VALUES (?, ?)', [req.body.id_aluno, req.body.valor]);\n  res.status(201).json({ id: r.insertId });\n});`\nO que acontece se o banco estiver fora do ar?\n\nNa sua resposta:\n1. diga o que acontece com o erro;\n2. diga o que o cliente percebe;\n3. explique como o try/catch melhoraria.",
+      "respostasAceitas": [
+        "O await lança o erro e ninguém o trata (Promise rejeitada sem tratamento). No Express 4 o cliente fica sem resposta até o timeout, e o Node pode até encerrar o processo. Com try/catch o erro é capturado e a rota responde 500 com uma mensagem clara."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) erro não tratado (rejeição); 2) cliente sem resposta/timeout ou erro genérico (depende da versão do Express); 3) capturar e responder 500. Aceitar respostas que citem a versão do Express."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A busca de uma biblioteca usa `\"SELECT * FROM livro WHERE titulo LIKE '%\" + termo + \"%'\"`. O formulário HTML tem `maxlength` e um JavaScript que bloqueia aspas.\n\nNa sua resposta:\n1. diga qual é o risco;\n2. explique por que a validação do formulário não basta;\n3. diga qual é a proteção correta no back-end.",
+      "respostasAceitas": [
+        "O risco é SQL Injection, porque o termo é juntado ao comando. A validação no navegador pode ser desligada ou ignorada: basta mandar a requisição direto para a API (Postman, curl). A proteção correta é usar consulta parametrizada no servidor, com o ? e o termo no array."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) SQL Injection; 2) o cliente controla o front e pode chamar a API direto; 3) consulta parametrizada (ou ORM) no back-end."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma equipe discute se usa SQL direto com mysql2 ou um ORM (Sequelize/Prisma) no sistema de uma oficina.\n\nNa sua resposta:\n1. cite uma vantagem do ORM;\n2. cite uma desvantagem ou limite do ORM;\n3. diga em que caso o SQL direto ainda é útil.",
+      "respostasAceitas": [
+        "Vantagem: escreve o CRUD com métodos e objetos, menos SQL repetido e valores já parametrizados. Limite: mais uma ferramenta para aprender e o SQL gerado pode ficar menos eficiente ou fora do controle. SQL direto é útil em relatórios e consultas complexas (vários JOINs, GROUP BY)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se uma vantagem, uma desvantagem e um caso coerentes (ex.: relatórios/consultas complexas ou desempenho)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No formulário HTML de um pet shop que envia a foto do animal para a API, qual campo permite escolher o arquivo?",
+      "alternativas": [
+        "`<input type=\"text\" name=\"foto\">`",
+        "`<input type=\"file\" name=\"foto\">`",
+        "`<input type=\"image\" name=\"foto\">`",
+        "`<input type=\"upload\" name=\"foto\">`"
+      ],
+      "correta": 1,
+      "explicacao": "type=\"file\" abre a janela para escolher o arquivo. type=\"image\" é um botão de envio com imagem e type=\"upload\" não existe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API de uma loja recebe a foto de cada produto. Qual é a prática mais comum em relação ao banco de dados?",
+      "alternativas": [
+        "Guardar a foto inteira dentro do arquivo .env",
+        "Guardar só o caminho do arquivo na tabela",
+        "Guardar a imagem num VARCHAR(20)",
+        "Deixar a foto só no navegador"
+      ],
+      "correta": 1,
+      "explicacao": "O arquivo vai para uma pasta (ex.: uploads/) e a tabela guarda só o caminho ou o nome dele, um texto curto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Com o Multer configurado como `multer({ dest: 'uploads/' })` e a rota usando `upload.single('foto')`, onde ficam as informações do arquivo recebido?",
+      "alternativas": [
+        "`req.body.foto`",
+        "`res.file`",
+        "`req.params.foto`",
+        "`req.file`"
+      ],
+      "correta": 3,
+      "explicacao": "Com single, o Multer coloca os dados do arquivo (nome, tipo, tamanho, caminho) em req.file. Os campos de texto ficam em req.body."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na rota de upload de uma escola, o que `upload.array('documentos', 3)` permite?",
+      "alternativas": [
+        "3 tentativas de envio por aluno",
+        "Arquivos de no máximo 3 KB",
+        "Só arquivos cujo nome tem até 3 letras",
+        "Até 3 arquivos, que ficam em req.files"
+      ],
+      "correta": 3,
+      "explicacao": "array recebe vários arquivos do mesmo campo, até o máximo informado, e os coloca no array req.files."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que é arriscado salvar o arquivo enviado com o nome original escolhido pelo usuário (ex.: `foto.jpg`)?",
+      "alternativas": [
+        "O Node não aceita nomes com ponto",
+        "O banco não grava textos com .jpg",
+        "Arquivos com o mesmo nome se sobrescrevem",
+        "O navegador apaga o arquivo depois do envio"
+      ],
+      "correta": 2,
+      "explicacao": "Dois usuários podem mandar foto.jpg e um arquivo substitui o outro. Por isso se gera um nome único (data, número aleatório)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma clínica recebe exames em PDF pela API. O que a opção `limits: { fileSize: 2 * 1024 * 1024 }` do Multer faz?",
+      "alternativas": [
+        "Comprime o arquivo para 2 MB",
+        "Recusa arquivos maiores que 2 MB",
+        "Guarda o arquivo por 2 dias",
+        "Aceita só 2 arquivos por envio"
+      ],
+      "correta": 1,
+      "explicacao": "fileSize é o tamanho máximo em bytes; 2 * 1024 * 1024 bytes = 2 MB. Arquivos maiores geram erro e não são salvos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de salvar as fotos em `uploads/`, o que a linha `app.use('/uploads', express.static('uploads'))` permite?",
+      "alternativas": [
+        "Apagar as fotos pela própria URL",
+        "Gravar as fotos dentro do banco",
+        "Enviar fotos para a API sem usar formulário",
+        "Abrir as fotos pelo endereço /uploads/..."
+      ],
+      "correta": 3,
+      "explicacao": "express.static serve os arquivos da pasta; assim o navegador abre http://servidor/uploads/nome-do-arquivo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma loja aceita a foto do produto conferindo apenas se o nome termina em `.jpg`. Por que essa verificação é fraca?",
+      "alternativas": [
+        "Arquivos .jpg são proibidos no Express",
+        "Qualquer arquivo pode ser renomeado para .jpg",
+        "O Multer não consegue ler extensões de arquivo",
+        "Fotos .jpg não podem ser servidas"
+      ],
+      "correta": 1,
+      "explicacao": "O nome é escolhido pelo usuário. É preciso também checar o tipo do arquivo (mimetype/conteúdo) e limitar o tamanho."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa tabela `animal` (id, nome, foto), qual tipo de coluna é adequado para guardar o caminho `uploads/1732650000-gato.jpg`?",
+      "alternativas": [
+        "INT",
+        "VARCHAR(255)",
+        "BOOLEAN",
+        "DATE"
+      ],
+      "correta": 1,
+      "explicacao": "O caminho é um texto; VARCHAR(255) comporta nomes de arquivo com folga."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O aluno foi apagado com `DELETE FROM aluno WHERE id = ?`, mas a foto dele continua na pasta `uploads/`. Por quê?",
+      "alternativas": [
+        "O MySQL refaz a foto pelo backup",
+        "O Multer recria o arquivo sozinho",
+        "O DELETE só vale depois de 24 horas",
+        "O banco não mexe nos arquivos da pasta"
+      ],
+      "correta": 3,
+      "explicacao": "O banco guardava só o caminho; apagar a linha não apaga o arquivo do disco. A rota precisa apagar o arquivo também (ex.: fs.unlink)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A rota `GET /relatorios/vendas-por-dia` de uma padaria precisa somar o valor das vendas de cada dia. Que recurso do SQL faz isso?",
+      "alternativas": [
+        "`ORDER BY data, valor`",
+        "`COUNT(DISTINCT data)`",
+        "`SUM(valor)` com `GROUP BY data`",
+        "`MAX(valor)` com `ORDER BY data`"
+      ],
+      "correta": 2,
+      "explicacao": "GROUP BY junta as linhas de cada data e SUM soma os valores de cada grupo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é um arquivo CSV, muito usado para exportar relatórios?",
+      "alternativas": [
+        "Uma imagem compactada",
+        "Texto com valores separados por vírgula",
+        "Um banco de dados do MySQL",
+        "Uma versão antiga e mais leve do formato PDF"
+      ],
+      "correta": 1,
+      "explicacao": "CSV é texto puro: cada linha é um registro e os valores são separados por vírgula (ou ponto e vírgula). Abre em planilhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para o navegador baixar o relatório CSV como arquivo, em vez de mostrar o texto na tela, qual cabeçalho a API envia?",
+      "alternativas": [
+        "`Content-Disposition: attachment; filename=\"vendas.csv\"`",
+        "`Content-Type: application/json; charset=utf-8`",
+        "`Content-Location: attachment; filename=\"vendas.csv\"`",
+        "`Cache-Control: no-store, max-age=0`"
+      ],
+      "correta": 0,
+      "explicacao": "Content-Disposition com attachment manda o navegador baixar o arquivo com o nome indicado. Accept é enviado pelo cliente, não pela API."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa tabela `atendimento` (id, veterinario, valor) de um pet shop, o relatório usa `SELECT veterinario, COUNT(*) AS total FROM atendimento GROUP BY veterinario HAVING COUNT(*) > 10`. O que ele mostra?",
+      "alternativas": [
+        "Todos os veterinários em ordem",
+        "Os 10 primeiros atendimentos de cada veterinário",
+        "Atendimentos com valor acima de 10",
+        "Veterinários com mais de 10 atendimentos"
+      ],
+      "correta": 3,
+      "explicacao": "GROUP BY conta os atendimentos de cada veterinário e o HAVING mantém só os grupos com contagem maior que 10."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API de uma oficina gera um relatório em PDF. Como isso costuma ser feito no Node.js?",
+      "alternativas": [
+        "O próprio MySQL gera o PDF",
+        "O navegador converte JSON em PDF sozinho",
+        "Uma biblioteca monta o PDF com os dados",
+        "O PDF fica guardado no .env"
+      ],
+      "correta": 2,
+      "explicacao": "A API faz a consulta e usa uma biblioteca (ex.: PDFKit) para desenhar o PDF com os dados, enviando-o com Content-Type application/pdf."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O relatório CSV de uma escola é aberto no Excel em português e todas as informações aparecem numa coluna só. Qual é a causa mais provável?",
+      "alternativas": [
+        "Faltou um GROUP BY na consulta SQL que gera o relatório",
+        "O arquivo CSV foi gerado totalmente vazio",
+        "Arquivos CSV só abrem no Bloco de Notas",
+        "Separador vírgula; o Excel BR espera ponto e vírgula"
+      ],
+      "correta": 3,
+      "explicacao": "No Brasil a vírgula é separador decimal, então o Excel em português costuma esperar ; como separador de colunas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa tabela `venda` (id, vendedor, valor), um colega escreveu `SELECT vendedor, SUM(valor) FROM venda WHERE SUM(valor) > 1000 GROUP BY vendedor` para o relatório. O que está errado?",
+      "alternativas": [
+        "Falta um ORDER BY no final",
+        "SUM não existe no MySQL",
+        "Filtro sobre a soma vai no HAVING, não no WHERE",
+        "O GROUP BY deveria vir antes do FROM na consulta"
+      ],
+      "correta": 2,
+      "explicacao": "WHERE filtra linhas antes do agrupamento e não aceita SUM. Condição sobre o total do grupo vai no HAVING SUM(valor) > 1000."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes trechos é um JSON válido?",
+      "alternativas": [
+        "`{ nome: 'Ana', idade: 16 }`",
+        "`{ 'nome': 'Ana', 'idade': 16 }`",
+        "`{ \"nome\": \"Ana\", \"idade\": 16, }`",
+        "`{ \"nome\": \"Ana\", \"idade\": 16 }`"
+      ],
+      "correta": 3,
+      "explicacao": "Em JSON as chaves e os textos usam aspas duplas e não pode haver vírgula sobrando no fim."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é o formato mais usado hoje nas APIs REST feitas em Node.js para trocar dados com o front-end?",
+      "alternativas": [
+        "XML",
+        "JSON",
+        "CSV",
+        "PDF"
+      ],
+      "correta": 1,
+      "explicacao": "JSON é leve e lido direto pelo JavaScript (JSON.parse). XML ainda aparece em sistemas antigos e documentos fiscais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em XML, como aparece o nome de um aluno?",
+      "alternativas": [
+        "`<nome>Ana</nome>`",
+        "`nome = Ana;`",
+        "`[nome: Ana]`",
+        "`\"nome\": \"Ana\"`"
+      ],
+      "correta": 0,
+      "explicacao": "XML usa tags de abertura e fechamento ao redor do valor. \"nome\": \"Ana\" é a forma do JSON."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Comparando o mesmo dado de um hotel nos formatos `{\"quarto\": 12}` e `<quarto>12</quarto>`, qual afirmação é correta?",
+      "alternativas": [
+        "JSON é mais curto e lido direto pelo JS",
+        "XML não pode ser lido por programas",
+        "JSON só aceita valores do tipo texto (string)",
+        "XML não usa tags para os dados"
+      ],
+      "correta": 0,
+      "explicacao": "Os dois são formatos de troca legíveis por programas; JSON costuma ser menor e vira objeto com JSON.parse. JSON aceita números, booleanos etc."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual cabeçalho informa que a resposta da API está em XML?",
+      "alternativas": [
+        "`Content-Type: application/json`",
+        "`Content-Type: application/xml`",
+        "`Accept-Language: xml`",
+        "`Content-Length: xml`"
+      ],
+      "correta": 1,
+      "explicacao": "Content-Type diz o formato do corpo: application/xml para XML e application/json para JSON."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é impresso?\n`console.log(JSON.stringify({ nome: 'Rex', dono: undefined, idade: 3 }));`",
+      "alternativas": [
+        "`{\"nome\":\"Rex\",\"dono\":undefined,\"idade\":3}`",
+        "`{\"nome\":\"Rex\",\"idade\":3}`",
+        "`{\"nome\":\"Rex\",\"dono\":null,\"idade\":3}`",
+        "Um erro, pois undefined não é aceito"
+      ],
+      "correta": 1,
+      "explicacao": "JSON não tem undefined; o JSON.stringify simplesmente omite propriedades com esse valor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API de uma clínica devolve uma consulta com a coluna DATE `data_consulta`. No JSON enviado, como essa data chega ao cliente?",
+      "alternativas": [
+        "Como texto, pois JSON não tem tipo data",
+        "Como um objeto Date do JavaScript, pronto para uso",
+        "Como número inteiro de dias",
+        "Não chega: JSON ignora datas"
+      ],
+      "correta": 0,
+      "explicacao": "JSON só tem texto, número, booleano, null, array e objeto. A data é convertida em texto (ex.: \"2026-11-27T03:00:00.000Z\")."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No SQLite, o que acontece com os dados de um banco aberto com `':memory:'` quando o programa termina?",
+      "alternativas": [
+        "Somem junto com o programa",
+        "Ficam salvos em memory.db",
+        "São copiados para o MySQL",
+        "Ficam guardados no .env"
+      ],
+      "correta": 0,
+      "explicacao": "O banco :memory: existe só na memória RAM enquanto a conexão está aberta; ao encerrar, tudo é perdido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Nos testes automáticos de uma API, um banco SQLite em memória é criado e preenchido antes de cada teste (`beforeEach`). Qual é a vantagem?",
+      "alternativas": [
+        "Os dados vão para a produção depois",
+        "O banco real é limpo a cada teste",
+        "Os testes dispensam as verificações",
+        "Cada teste começa com os mesmos dados"
+      ],
+      "correta": 3,
+      "explicacao": "Recriar o banco antes de cada teste garante o mesmo ponto de partida; um teste não interfere no outro e o banco real não é tocado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Com o pacote better-sqlite3, o código abre `new Database(':memory:')` duas vezes, em `db1` e `db2`. Uma tabela criada em `db1` aparece em `db2`?",
+      "alternativas": [
+        "Sim, a memória é a mesma",
+        "Sim, depois de reiniciar o Node",
+        "Não: cada uma é um banco separado",
+        "Não: SQLite em memória não tem tabelas"
+      ],
+      "correta": 2,
+      "explicacao": "Cada conexão com ':memory:' cria um banco novo e independente, que existe só naquela conexão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre `new Database('loja.db')` e `new Database(':memory:')` no SQLite?",
+      "alternativas": [
+        "O 1º é MySQL; o 2º é SQLite",
+        "Não há nenhuma diferença prática entre os dois",
+        "O 1º grava em arquivo; o 2º só na RAM",
+        "O 2º protege contra SQL Injection"
+      ],
+      "correta": 2,
+      "explicacao": "Com nome de arquivo, o SQLite grava os dados em loja.db no disco; com :memory:, os dados ficam só na memória."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa migration, para que serve a função `down`?",
+      "alternativas": [
+        "Baixar o banco da internet",
+        "Desligar o servidor MySQL",
+        "Rodar a migration mais rápido",
+        "Desfazer o que a up fez"
+      ],
+      "correta": 3,
+      "explicacao": "up aplica a mudança (ex.: cria a tabela) e down desfaz (ex.: apaga a tabela), permitindo voltar a versão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Os arquivos de migration têm data ou número no nome (ex.: `20261120_cria_tabela_cliente.js`). Por quê?",
+      "alternativas": [
+        "Para o Git aceitar os arquivos",
+        "Para ficarem escondidas",
+        "Para o MySQL fazer backup",
+        "Para rodarem na ordem certa"
+      ],
+      "correta": 3,
+      "explicacao": "A data no nome define a ordem: uma tabela precisa ser criada antes de outra migration alterá-la."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Como uma ferramenta de migrations (Knex, Sequelize CLI, Prisma) sabe quais migrations já rodaram num banco?",
+      "alternativas": [
+        "Pergunta ao desenvolvedor toda vez",
+        "Registra numa tabela de controle do banco",
+        "Lê o histórico do navegador",
+        "Compara os nomes com a data atual do computador"
+      ],
+      "correta": 1,
+      "explicacao": "Ela mantém uma tabela no próprio banco (ex.: knex_migrations, SequelizeMeta) com as migrations já aplicadas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma migration já aplicada no banco de produção precisa de uma coluna nova. Qual é o jeito certo?",
+      "alternativas": [
+        "Editar a migration antiga já aplicada",
+        "Mudar na mão sem registrar nada",
+        "Apagar o banco de produção e recriar",
+        "Criar uma migration nova com a coluna"
+      ],
+      "correta": 3,
+      "explicacao": "Migration já aplicada não roda de novo; editar não muda nada nos bancos que já a aplicaram. Cria-se outra migration (ex.: ALTER TABLE ADD COLUMN)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando do Knex aplica todas as migrations que ainda não rodaram?",
+      "alternativas": [
+        "`npx knex migrate:latest`",
+        "`npx knex seed:clean`",
+        "`npm start migrate`",
+        "`npx knex migrate:delete`"
+      ],
+      "correta": 0,
+      "explicacao": "migrate:latest roda as pendentes; migrate:rollback desfaz o último lote. Os outros comandos não existem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre migration e seed?",
+      "alternativas": [
+        "São nomes diferentes da mesma coisa",
+        "Migration muda estrutura; seed põe dados",
+        "Seed cria tabelas; migration põe dados",
+        "Migration só funciona com SQLite"
+      ],
+      "correta": 1,
+      "explicacao": "Migration altera a estrutura (tabelas, colunas); seed insere dados iniciais ou de exemplo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Três alunos trabalham na API de uma biblioteca, cada um com seu MySQL na própria máquina. Que problema as migrations resolvem nesse caso?",
+      "alternativas": [
+        "Fazem o upload das capas dos livros",
+        "Deixam todas as consultas mais rápidas",
+        "Escondem a senha do banco quando o código vai ao Git",
+        "Deixam a estrutura igual em todas as máquinas"
+      ],
+      "correta": 3,
+      "explicacao": "As migrations ficam no Git com o código; cada um roda as pendentes e todos os bancos chegam à mesma estrutura."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No cadastro de um pet shop, a foto do animal é salva na pasta `uploads/` e a tabela `animal` (id, nome, foto) guarda só `uploads/rex-1732.jpg` na coluna foto. Explique essa escolha.\n\nNa sua resposta:\n1. diga o que fica na pasta e o que fica na tabela;\n2. explique por que não guardar a imagem inteira no banco.",
+      "respostasAceitas": [
+        "Na pasta fica o arquivo da imagem; na tabela, só o caminho (texto). Guardar a imagem no banco o deixa muito grande e lento para consultas e backup; o caminho é leve e o servidor entrega o arquivo da pasta."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) arquivo na pasta, caminho na tabela; 2) banco pesado/lento, arquivos ficam melhor no disco."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na rota de upload de uma escola, o Multer entregou o objeto `req.file` abaixo:\n`{ originalname: 'boletim.pdf', mimetype: 'application/pdf', size: 84512, filename: 'a1b2c3', path: 'uploads/a1b2c3' }`\nInterprete esse objeto.\n\nNa sua resposta:\n1. diga o nome que o arquivo tinha no computador do aluno;\n2. diga o tipo e o tamanho;\n3. diga onde ele foi salvo no servidor.",
+      "respostasAceitas": [
+        "O nome original era boletim.pdf. É um PDF (application/pdf) com 84512 bytes (cerca de 83 KB). Foi salvo em uploads/a1b2c3, com um nome gerado pelo Multer."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) boletim.pdf; 2) PDF, 84512 bytes; 3) uploads/a1b2c3."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Interprete o JSON devolvido pela API de um hotel:\n`{ \"hotel\": \"Mar Azul\", \"quartos\": [ { \"numero\": 101, \"livre\": true }, { \"numero\": 102, \"livre\": false } ] }`\n\nNa sua resposta:\n1. diga quantos quartos aparecem;\n2. diga qual está livre;\n3. diga que tipos de valor aparecem.",
+      "respostasAceitas": [
+        "Aparecem 2 quartos. O 101 está livre (true); o 102, não. Há texto (\"Mar Azul\"), números (101, 102), verdadeiro/falso (true/false), lista (array de quartos) e objetos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dois; 2) o 101; 3) texto, número, booleano, array/objeto."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma equipe testa a API de uma biblioteca usando SQLite com `:memory:` e, na versão final, usa MySQL. Explique por que essa combinação faz sentido.\n\nNa sua resposta:\n1. diga onde fica o banco em memória e o que acontece no fim do teste;\n2. diga por que o MySQL é usado na versão final.",
+      "respostasAceitas": [
+        "O banco :memory: fica na RAM, é rápido e some quando o teste termina, sem sujar o banco real. Na versão final os dados precisam ficar gravados e ser acessados por vários usuários, por isso o MySQL."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) na memória, apagado ao fim; 2) persistência dos dados de verdade e servidor para vários acessos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que é uma migration e por que ela fica no Git junto com o código da API?\n\nNa sua resposta:\n1. diga o que uma migration descreve;\n2. explique a vantagem de guardá-la no Git.",
+      "respostasAceitas": [
+        "Migration é um arquivo que descreve uma mudança na estrutura do banco (criar tabela, adicionar coluna), com como aplicar e desfazer. No Git, todos da equipe e o servidor aplicam as mesmas mudanças, na ordem, e há histórico do banco."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mudança de estrutura do banco versionada; 2) equipe/servidores com o mesmo banco e histórico."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O relatório de uma loja de games usa `SELECT categoria, COUNT(*) AS qtd FROM produto GROUP BY categoria;` numa tabela `produto` (id, nome, categoria). O que ele mostra?\n\nNa sua resposta:\n1. diga o que aparece em cada linha do resultado;\n2. explique o papel do GROUP BY.",
+      "respostasAceitas": [
+        "Cada linha mostra uma categoria e quantos produtos ela tem (qtd). O GROUP BY junta os produtos da mesma categoria para o COUNT contar por grupo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) categoria e quantidade de produtos; 2) agrupar por categoria para contar cada grupo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Compare os dois formatos com o mesmo dado de um cinema:\nJSON: `{ \"filme\": \"Aurora\", \"sala\": 3 }`\nXML: `<sessao><filme>Aurora</filme><sala>3</sala></sessao>`\n\nNa sua resposta:\n1. diga uma diferença na forma de escrever;\n2. diga uma vantagem do JSON numa API em JavaScript;\n3. diga onde o XML ainda aparece.",
+      "respostasAceitas": [
+        "JSON usa chaves e pares nome: valor; XML usa tags de abertura e fechamento. JSON é mais curto e vira objeto direto com JSON.parse. XML ainda aparece em sistemas antigos, serviços SOAP e documentos como a nota fiscal eletrônica."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) chaves/pares x tags; 2) mais leve/nativo do JS; 3) sistemas legados, SOAP, NF-e ou outro exemplo coerente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A rota de upload de uma clínica usa `upload.single('exame')` com um `fileFilter` que aceita só PDF e `limits: { fileSize: 5 * 1024 * 1024 }`.\n\nNa sua resposta:\n1. explique o que o fileFilter faz;\n2. explique o que o limite de tamanho faz;\n3. diga por que essas proteções são importantes.",
+      "respostasAceitas": [
+        "O fileFilter recusa arquivos que não sejam PDF. O limite recusa arquivos acima de 5 MB. Sem isso, alguém poderia enviar arquivos perigosos (ex.: scripts) ou enormes, enchendo o disco do servidor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) aceita só o tipo permitido; 2) bloqueia arquivos acima de 5 MB; 3) segurança e evitar lotar o disco/derrubar o servidor."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A API de uma padaria tem a rota `GET /relatorios/vendas`. Sem parâmetro ela responde em JSON; com `?formato=csv`, responde um arquivo CSV.\n\nNa sua resposta:\n1. diga quem costuma usar a versão JSON;\n2. diga quem costuma usar a versão CSV;\n3. diga o que muda no cabeçalho da resposta entre as duas.",
+      "respostasAceitas": [
+        "O JSON é usado pelo front-end ou outro sistema, que monta tabelas e gráficos. O CSV é para o usuário baixar e abrir numa planilha. Muda o Content-Type (application/json x text/csv), e o CSV costuma ter Content-Disposition: attachment."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) programas/front-end; 2) pessoas, planilha (Excel); 3) Content-Type diferente (e Content-Disposition no CSV)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma migration do Knex tem a função `up` que cria a tabela `reserva` e a função `down` que apaga essa tabela. Explique o que acontece ao rodar `npx knex migrate:latest` e depois `npx knex migrate:rollback`.\n\nNa sua resposta:\n1. diga o que o migrate:latest faz;\n2. diga o que o migrate:rollback faz;\n3. diga o que acontece com os dados da tabela no rollback.",
+      "respostasAceitas": [
+        "migrate:latest roda o up das migrations pendentes e cria a tabela reserva, registrando que rodou. migrate:rollback roda o down do último lote e apaga a tabela. Os dados que estavam nela são perdidos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) aplica (up) e cria a tabela; 2) desfaz (down) e apaga a tabela; 3) os dados se perdem."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique o resultado de `JSON.parse('{\"preco\": 9.5, \"ativo\": true}')` e por que `JSON.parse(\"{ preco: 9.5 }\")` dá erro.\n\nNa sua resposta:\n1. diga o que o primeiro devolve;\n2. explique por que o segundo é inválido.",
+      "respostasAceitas": [
+        "O primeiro devolve um objeto JavaScript com preco 9.5 (número) e ativo true (booleano). O segundo dá erro porque em JSON o nome da chave precisa estar entre aspas duplas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) objeto com preco e ativo; 2) chave sem aspas duplas não é JSON válido."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na API de uma academia, o aluno troca a foto de perfil. A rota grava a nova foto em `uploads/` e faz `UPDATE aluno SET foto = ? WHERE id = ?`. Um colega percebeu que a pasta uploads só cresce.\n\nNa sua resposta:\n1. explique por que a pasta só cresce;\n2. diga o que a rota deveria fazer com a foto antiga.",
+      "respostasAceitas": [
+        "O UPDATE troca só o caminho na tabela; o arquivo antigo continua no disco, sem nenhuma linha apontando para ele. A rota deveria buscar o caminho antigo antes do UPDATE e apagar esse arquivo depois de salvar o novo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) arquivos antigos ficam órfãos no disco; 2) apagar o arquivo antigo (ex.: fs.unlink) após a troca."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O relatório de uma oficina usa a tabela `servico` (id, mecanico, valor, data). O código busca TODOS os serviços com `SELECT * FROM servico` e soma os valores de cada mecânico num laço em JavaScript.\n\nNa sua resposta:\n1. explique o problema quando a tabela fica grande;\n2. diga, em palavras, como o banco poderia fazer esse trabalho;\n3. diga uma vantagem disso.",
+      "respostasAceitas": [
+        "Com muitos serviços, todas as linhas vão do banco para a API, gastando memória, rede e tempo. O banco poderia agrupar por mecânico e somar (SUM com GROUP BY) e devolver só os totais. Vantagem: menos dados trafegados e resposta mais rápida, pois o banco é otimizado para isso."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) muitos dados transferidos/lentidão/memória; 2) consulta agregada SUM + GROUP BY; 3) mais rápido/menos tráfego/código mais simples."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Dois alunos alteraram a mesma tabela `cliente`: um mudou direto no MySQL da sua máquina; o outro criou uma migration. No servidor da escola, só a mudança da migration apareceu.\n\nNa sua resposta:\n1. explique por que a mudança feita à mão não apareceu;\n2. explique por que não se deve editar uma migration que já rodou.",
+      "respostasAceitas": [
+        "A mudança manual ficou só no banco daquele aluno: não há arquivo no Git para os outros aplicarem. A migration, versionada, foi aplicada no servidor. Uma migration já rodada fica registrada como aplicada e não roda de novo; editar o arquivo deixa os bancos diferentes entre si. O certo é criar uma migration nova."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mudança manual não fica registrada/versionada; 2) a ferramenta não reexecuta migrations aplicadas, gerando bancos diferentes; criar outra migration."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "back.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A API de uma loja salva os arquivos enviados usando o nome original escolhido pelo usuário, dentro de `uploads/`. Um usuário envia um arquivo chamado `../index.js`.\n\nNa sua resposta:\n1. explique o risco desse nome;\n2. explique por que gerar um nome novo resolve;\n3. cite outra proteção importante no upload.",
+      "respostasAceitas": [
+        "O ../ faz o caminho sair da pasta uploads; o arquivo pode substituir o index.js da própria API (ou outros arquivos). Gerando um nome próprio (data + número aleatório), o servidor decide onde e com que nome salvar, sem usar o texto do usuário. Outras proteções: aceitar só tipos permitidos e limitar o tamanho."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sair da pasta e sobrescrever arquivos do servidor; 2) o nome deixa de ser controlado pelo usuário; 3) filtro de tipo, limite de tamanho ou outra coerente."
+    }
+  ]
+}
