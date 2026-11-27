@@ -1,0 +1,2424 @@
+{
+  "nome": "Programação Back-End — Web Services: REST, JSON e XML (a revisar)",
+  "materia": "Programação Back-End",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa escola, o site de notas e o aplicativo de celular buscam as notas no mesmo servidor, chamando endereços HTTP que devolvem só os dados (sem página pronta). Esse servidor está oferecendo:",
+      "alternativas": [
+        "um banco de dados instalado em cada celular",
+        "um web service, ou seja, uma API acessada pela rede",
+        "uma página HTML estática, igual para todos",
+        "um sistema operacional para os aparelhos"
+      ],
+      "correta": 1,
+      "explicacao": "Um web service é uma API disponível pela rede (normalmente via HTTP) que entrega dados para outros programas, como o site e o app."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que significa a sigla API?",
+      "alternativas": [
+        "Aplicação de Protocolo da Internet",
+        "Arquivo de Programação Integrada",
+        "Acesso Público à Informação",
+        "Interface de Programação de Aplicações"
+      ],
+      "correta": 3,
+      "explicacao": "API (Application Programming Interface) é a interface que um programa oferece para outros programas usarem seus recursos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual afirmação sobre API e web service está correta?",
+      "alternativas": [
+        "Todo web service é uma API usada pela rede, mas nem toda API é um web service",
+        "Toda API é um web service, pois toda API precisa de internet",
+        "API e web service são nomes diferentes para um banco de dados",
+        "Web service é só a parte visual do site, e API é o servidor"
+      ],
+      "correta": 0,
+      "explicacao": "API é qualquer interface entre programas (até uma biblioteca local tem API). Web service é a API acessada pela rede, por HTTP."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é REST?",
+      "alternativas": [
+        "Uma linguagem de programação própria para servidores web",
+        "Um banco de dados que guarda as informações em formato JSON",
+        "Um estilo de arquitetura de APIs baseado em recursos e no HTTP",
+        "Um programa do Node.js que instala as dependências do projeto"
+      ],
+      "correta": 2,
+      "explicacao": "REST não é linguagem nem programa: é um conjunto de princípios para organizar a API em recursos acessados com os métodos do HTTP."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API de um pet shop, qual URI segue a convenção REST para a coleção de animais cadastrados?",
+      "alternativas": [
+        "/getAnimais",
+        "/listarAnimal",
+        "/animais",
+        "/animal/listar"
+      ],
+      "correta": 2,
+      "explicacao": "Em REST a URI nomeia o recurso com substantivo no plural; a ação (listar) é dada pelo método GET."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API de uma loja, um colega criou as rotas `/cadastrarCliente`, `/apagarCliente` e `/buscarClientes`. Qual é o problema, pensando em REST?",
+      "alternativas": [
+        "A ação vem do método HTTP; a URI deveria ser /clientes",
+        "As rotas deveriam ser escritas em letras maiúsculas para serem REST",
+        "REST proíbe usar o nome do recurso cliente dentro da URI",
+        "Falta a extensão .json no final de cada rota para ser REST"
+      ],
+      "correta": 0,
+      "explicacao": "Em REST os verbos ficam no método (POST, DELETE, GET) e a URI é o substantivo: POST /clientes, DELETE /clientes/:id, GET /clientes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API de uma academia, qual método HTTP é usado para ler a lista de alunos em `/alunos`?",
+      "alternativas": [
+        "POST",
+        "PUT",
+        "DELETE",
+        "GET"
+      ],
+      "correta": 3,
+      "explicacao": "GET serve para buscar/ler dados sem alterar nada no servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No sistema de uma clínica, qual método HTTP se usa para cancelar (remover) o agendamento 12 em `/agendamentos/12`?",
+      "alternativas": [
+        "GET",
+        "DELETE",
+        "POST",
+        "PATCH"
+      ],
+      "correta": 1,
+      "explicacao": "DELETE remove o recurso indicado na URI."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API de um hotel, a recepção quer mudar só o telefone do hóspede 4, sem reenviar os outros campos. Qual método é o mais indicado?",
+      "alternativas": [
+        "PUT",
+        "POST",
+        "GET",
+        "PATCH"
+      ],
+      "correta": 3,
+      "explicacao": "PATCH faz alteração parcial (só os campos enviados). PUT substitui o recurso inteiro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre os métodos PUT e PATCH numa API REST?",
+      "alternativas": [
+        "PUT cria um recurso novo; PATCH apaga o recurso indicado",
+        "PUT substitui o recurso inteiro; PATCH altera só os campos enviados",
+        "PUT só funciona com XML; PATCH só funciona com JSON",
+        "PUT é usado pelo navegador; PATCH só por apps de celular"
+      ],
+      "correta": 1,
+      "explicacao": "Os dois atualizam: PUT manda a representação completa, PATCH manda só o que muda."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em REST, dizer que a comunicação é \"sem estado\" (stateless) significa que:",
+      "alternativas": [
+        "o servidor fica proibido de guardar dados no banco de dados",
+        "a API não pode devolver códigos de status nas respostas",
+        "cada requisição traz tudo de que o servidor precisa",
+        "o cliente só pode fazer uma requisição por vez ao servidor"
+      ],
+      "correta": 2,
+      "explicacao": "Sem estado: o servidor não guarda a \"conversa\" com o cliente entre requisições; cada uma é completa por si. O banco de dados continua existindo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API de um cinema guarda na memória do servidor \"quem está logado\" e, nas requisições seguintes, o app não manda nenhuma identificação. Quando a equipe colocou dois servidores para dividir o acesso, os usuários começaram a aparecer como deslogados. Qual princípio REST foi ignorado?",
+      "alternativas": [
+        "Ausência de estado: cada requisição deve trazer o token",
+        "URIs no plural: a rota de login deveria se chamar /logins",
+        "Representação em JSON: a sessão deveria ser enviada em XML",
+        "Separação de verbos: o login deveria usar o método PUT"
+      ],
+      "correta": 0,
+      "explicacao": "Como o estado ficou na memória de um servidor, o outro servidor não conhecia o usuário. Em REST cada requisição traz o token e qualquer servidor consegue atender."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em REST, o mesmo recurso \"produto 3\" pode ser entregue em JSON ou em XML. Cada um desses formatos é chamado de:",
+      "alternativas": [
+        "representação do recurso",
+        "rota do recurso",
+        "método do recurso",
+        "estado do servidor"
+      ],
+      "correta": 0,
+      "explicacao": "O recurso é a coisa (o produto 3); JSON e XML são representações dele enviadas na resposta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sistema antigo de uma clínica só entende XML. A API aceita entregar JSON ou XML. Como esse sistema pede `/consultas/8` em XML?",
+      "alternativas": [
+        "Trocando o método GET pelo método POST na requisição",
+        "Enviando o cabeçalho `Authorization: xml` na requisição",
+        "Enviando o cabeçalho `Accept: application/xml` na requisição",
+        "Pedindo a URI `/consultas/8` duas vezes seguidas"
+      ],
+      "correta": 2,
+      "explicacao": "O cabeçalho Accept diz qual representação o cliente aceita receber (negociação de conteúdo)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API de uma biblioteca, qual das opções é um exemplo de recurso?",
+      "alternativas": [
+        "O método DELETE",
+        "Os empréstimos de livros",
+        "O código de status 404",
+        "O cabeçalho Content-Type"
+      ],
+      "correta": 1,
+      "explicacao": "Recurso é a \"coisa\" de que a API trata (livros, empréstimos, leitores). Métodos, status e cabeçalhos são partes do HTTP."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API de uma padaria, qual rota REST lista todos os produtos?",
+      "alternativas": [
+        "POST /produtos",
+        "GET /produtos/:id",
+        "DELETE /produtos",
+        "GET /produtos"
+      ],
+      "correta": 3,
+      "explicacao": "GET na coleção (/produtos) devolve a lista; GET /produtos/:id devolve um só."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na rota `GET /produtos/:id`, o trecho `:id` indica:",
+      "alternativas": [
+        "que a rota só aceita a palavra \"id\" escrita na URI",
+        "um parâmetro de rota, como o 5 em /produtos/5",
+        "um campo obrigatório que deve vir no corpo em JSON",
+        "um filtro de query string, igual a escrever ?id="
+      ],
+      "correta": 1,
+      "explicacao": "Os dois-pontos marcam um parâmetro de rota: em /produtos/5 o id vale \"5\" (no Express, em req.params.id)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O aplicativo de uma loja de games precisa atualizar todos os dados do jogo 9 (nome, preço e estoque). Qual rota REST usar?",
+      "alternativas": [
+        "POST /jogos/9/atualizar",
+        "GET /jogos/9",
+        "DELETE /jogos/9",
+        "PUT /jogos/9"
+      ],
+      "correta": 3,
+      "explicacao": "PUT na URI do recurso substitui seus dados pelos enviados. Ação na URI (/atualizar) foge do padrão REST."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que a API de uma lanchonete usa `POST /pedidos` (e não `POST /pedidos/15`) para criar um pedido novo?",
+      "alternativas": [
+        "Porque normalmente é o servidor que gera o id do novo pedido",
+        "Porque o método POST não aceita números dentro da URI",
+        "Porque a URI /pedidos/15 só funcionaria com respostas em XML",
+        "Porque o id do pedido deve ir no cabeçalho Accept"
+      ],
+      "correta": 0,
+      "explicacao": "O cliente envia os dados para a coleção; o banco/servidor cria o id e costuma devolvê-lo na resposta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A rota `DELETE /reservas/3` de um hotel apagou a reserva e não devolve nenhum corpo na resposta. Qual código de status combina melhor com isso?",
+      "alternativas": [
+        "201 Created",
+        "404 Not Found",
+        "204 No Content",
+        "302 Found"
+      ],
+      "correta": 2,
+      "explicacao": "204 indica sucesso sem corpo de resposta. 201 é para criação; 404 é recurso inexistente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas requisições, se repetida três vezes seguidas por engano, pode criar três registros diferentes?",
+      "alternativas": [
+        "PUT /matriculas/4",
+        "DELETE /matriculas/4",
+        "POST /matriculas",
+        "GET /matriculas"
+      ],
+      "correta": 2,
+      "explicacao": "POST não é idempotente: cada envio cria um novo recurso. PUT e DELETE repetidos deixam o mesmo resultado; GET não altera nada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API de um pet shop, qual forma REST é a mais comum para listar só os produtos da categoria ração?",
+      "alternativas": [
+        "GET /produtos?categoria=racao",
+        "POST /produtos/filtrar",
+        "GET /produtosDaCategoriaRacao",
+        "DELETE /produtos?categoria=racao"
+      ],
+      "correta": 0,
+      "explicacao": "Filtros de uma listagem costumam ir na query string, sobre a mesma coleção /produtos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma API de cinema em Express tem a rota `app.get('/filmes/:id', ...)`. O app chama `GET /filmes/7?legenda=sim`. Onde ficam os valores 7 e sim?",
+      "alternativas": [
+        "7 em req.query.id e sim em req.params.legenda",
+        "7 e sim ficam os dois em req.body",
+        "7 e sim ficam os dois em req.headers",
+        "7 em req.params.id e sim em req.query.legenda"
+      ],
+      "correta": 3,
+      "explicacao": "Parâmetro de rota (:id) vai para req.params; o que vem depois do ? vai para req.query. GET não costuma ter corpo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual método HTTP não deveria alterar nenhum dado no servidor?",
+      "alternativas": [
+        "POST",
+        "GET",
+        "PUT",
+        "DELETE"
+      ],
+      "correta": 1,
+      "explicacao": "GET é só leitura. POST cria, PUT altera, DELETE apaga."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API de uma escola tem a rota `GET /alunos/apagar/10`, que apaga o aluno 10. Qual é o problema?",
+      "alternativas": [
+        "Falta colocar o número do aluno no corpo da requisição",
+        "O nome do recurso deveria estar no singular: /aluno",
+        "O método GET só pode ser usado com respostas em XML",
+        "Usa GET para apagar; o correto em REST seria DELETE /alunos/10"
+      ],
+      "correta": 3,
+      "explicacao": "GET deve ser seguro (só leitura). Apagar é papel do DELETE, e a ação não deve aparecer na URI."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma API de hotel segue o PUT à risca (troca o recurso inteiro pelo que foi enviado). O app chama `PUT /hospedes/4` enviando só `{ \"telefone\": \"9999-0000\" }`. O que pode acontecer?",
+      "alternativas": [
+        "Só o telefone muda, porque PUT sempre funciona igual ao PATCH",
+        "Os outros campos do hóspede podem ficar vazios",
+        "A API cria automaticamente um novo hóspede com o id 5",
+        "A requisição é convertida em GET e nada é alterado"
+      ],
+      "correta": 1,
+      "explicacao": "PUT envia a representação completa. Mandar só um campo num PUT pode apagar os demais; para alterar um campo, use PATCH."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma rede de farmácias tem site, app Android e app iPhone usando os mesmos dados de estoque. Qual é a vantagem de ter uma única API para todos?",
+      "alternativas": [
+        "Cada aplicativo passa a ter seu próprio banco de dados separado",
+        "Os aplicativos deixam de precisar de internet para funcionar",
+        "Os três usam os mesmos dados e as mesmas regras",
+        "Os três precisam ser escritos na mesma linguagem de programação"
+      ],
+      "correta": 2,
+      "explicacao": "A API centraliza dados e regras de negócio; cada plataforma só consome as rotas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que um app escrito em Kotlin e um site em JavaScript conseguem usar a mesma API feita em Node.js?",
+      "alternativas": [
+        "Porque conversam por HTTP trocando texto num formato padrão, como JSON",
+        "Porque o servidor converte o código Kotlin em JavaScript antes de rodar",
+        "Porque a API instala o Node.js dentro do celular do usuário",
+        "Porque as duas linguagens usam o mesmo compilador do Node.js"
+      ],
+      "correta": 0,
+      "explicacao": "A integração não depende da linguagem: HTTP e JSON/XML são padrões que qualquer plataforma lê e escreve."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sistema de entregas consulta uma API pública de CEP que devolve o endereço completo. Isso é um exemplo de:",
+      "alternativas": [
+        "integração entre sistemas por meio de um web service",
+        "persistência de dados em arquivo local",
+        "criação de um banco de dados relacional",
+        "publicação de um site estático"
+      ],
+      "correta": 0,
+      "explicacao": "Um sistema usa os dados de outro pela rede, via API: é integração com web service."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sistema antigo de um hospital usa SOAP. Qual comparação com uma API REST está correta?",
+      "alternativas": [
+        "SOAP só funciona sem internet; REST só funciona com internet",
+        "REST só aceita XML e SOAP só aceita JSON nas mensagens",
+        "SOAP usa mensagens XML num envelope; REST usa métodos HTTP sobre recursos",
+        "SOAP é um banco de dados e REST é uma linguagem de programação"
+      ],
+      "correta": 2,
+      "explicacao": "SOAP é um protocolo de web service com mensagens XML (envelope). REST é um estilo que aproveita o próprio HTTP e aceita várias representações."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa API de loja, como costuma ser escrita a URI do recurso \"formas de pagamento\"?",
+      "alternativas": [
+        "/Formas De Pagamento",
+        "/formas-pagamento",
+        "/getFormasPagamento",
+        "/forma_pagamento/listar"
+      ],
+      "correta": 1,
+      "explicacao": "URIs REST: minúsculas, sem espaços, substantivo no plural, palavras separadas por hífen, sem verbo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em REST, os nomes usados nas URIs devem ser:",
+      "alternativas": [
+        "verbos que dizem a ação, como /salvar e /excluir",
+        "sempre escritos em letras maiúsculas",
+        "só números, sem nenhum nome",
+        "substantivos, de preferência no plural"
+      ],
+      "correta": 3,
+      "explicacao": "A URI identifica o recurso (substantivo); quem diz a ação é o método HTTP."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API de uma papelaria responde `200 OK` com o corpo `{ \"erro\": \"produto não encontrado\" }` quando o produto não existe. Qual crítica, pensando em REST, é correta?",
+      "alternativas": [
+        "O corpo deveria estar em XML, porque JSON não serve para mensagens de erro",
+        "O status deveria indicar o erro (404), pois o cliente decide pelo código de status",
+        "Em REST, respostas de erro nunca podem ter corpo",
+        "O status certo seria 201, pois a busca foi criada"
+      ],
+      "correta": 1,
+      "explicacao": "REST usa a semântica do HTTP: o código de status (404) avisa o problema; o corpo pode trazer a mensagem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de uma escola envia `POST /alunos` com um JSON sem o campo obrigatório `nome`. Qual código de status a API deve devolver?",
+      "alternativas": [
+        "201 Created",
+        "404 Not Found",
+        "500 Internal Server Error",
+        "400 Bad Request"
+      ],
+      "correta": 3,
+      "explicacao": "400 indica que a requisição do cliente veio com dados inválidos. 500 é erro do servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas ligações entre operação do CRUD e método HTTP está correta?",
+      "alternativas": [
+        "Update → PUT ou PATCH",
+        "Create → GET",
+        "Read → DELETE",
+        "Delete → POST"
+      ],
+      "correta": 0,
+      "explicacao": "Create → POST, Read → GET, Update → PUT/PATCH, Delete → DELETE."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma forma comum de explicar API é o garçom de um restaurante: o cliente faz o pedido, o garçom leva até a cozinha e traz o prato pronto. Explique o que é uma API usando essa comparação.\n\nNa sua resposta:\n1. diga quem seria o cliente, o garçom e a cozinha num sistema com app e servidor;\n2. explique por que o cliente não precisa saber como a cozinha funciona.",
+      "respostasAceitas": [
+        "O cliente é o app/site, o garçom é a API e a cozinha é o servidor com o banco de dados. O app só faz pedidos no formato combinado (rotas) e recebe a resposta, sem conhecer o código interno do servidor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) app = cliente, API = garçom, servidor/banco = cozinha; 2) a API esconde a implementação: basta seguir o \"cardápio\" (rotas e formato)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na API de uma academia existem as rotas `GET /alunos` e `GET /alunos/12`. Qual é a diferença entre elas?\n\nNa sua resposta:\n1. diga o que cada rota devolve;\n2. explique o papel do número 12.",
+      "respostasAceitas": [
+        "GET /alunos devolve a lista (coleção) de todos os alunos; GET /alunos/12 devolve só o aluno de id 12. O 12 é o identificador do recurso, um parâmetro de rota."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) coleção x um item; 2) 12 identifica qual aluno (id)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Por que, em REST, a URI `/produtos` é preferível a `/listarProdutos`?\n\nNa sua resposta:\n1. explique quem indica a ação na requisição;\n2. diga o que a URI deve representar.",
+      "respostasAceitas": [
+        "Em REST a ação vem do método HTTP (GET para listar), então não precisa de verbo na URI. A URI deve representar o recurso, com substantivo no plural (/produtos), e a mesma URI serve para listar (GET) e cadastrar (POST)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o método HTTP diz a ação; 2) a URI nomeia o recurso (substantivo, plural)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique o que significa uma API REST ser sem estado (stateless).\n\nNa sua resposta:\n1. diga o que cada requisição precisa levar;\n2. cite uma vantagem disso para o servidor.",
+      "respostasAceitas": [
+        "Cada requisição precisa trazer tudo de que o servidor precisa para atendê-la (por exemplo, o token do usuário), pois o servidor não guarda a sessão entre uma requisição e outra. Vantagem: qualquer servidor pode atender qualquer requisição, o que facilita ter vários servidores e escalar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) requisição completa, com identificação/token; 2) facilita escalar, menos memória, qualquer servidor responde. Aceitar qualquer vantagem coerente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma padaria tem estas rotas para os produtos: `GET /produtos`, `GET /produtos/:id`, `POST /produtos`, `PUT /produtos/:id` e `DELETE /produtos/:id`. Relacione essas rotas com o CRUD.\n\nNa sua resposta:\n1. diga qual rota corresponde a Create, Read, Update e Delete;\n2. explique por que existem duas rotas de leitura.",
+      "respostasAceitas": [
+        "Create = POST /produtos; Read = GET /produtos e GET /produtos/:id; Update = PUT /produtos/:id; Delete = DELETE /produtos/:id. Há duas leituras porque uma lista todos os produtos e a outra busca um só pelo id."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a relação correta das cinco rotas; 2) lista completa x um item."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na API de um hotel, explique a diferença entre `PUT /quartos/3` e `PATCH /quartos/3`.\n\nNa sua resposta:\n1. diga o que cada uma faz com o quarto 3;\n2. dê uma situação em que PATCH é a melhor escolha.",
+      "respostasAceitas": [
+        "PUT substitui os dados do quarto 3 pela representação completa enviada; PATCH altera só os campos enviados. PATCH é melhor, por exemplo, para mudar só a situação do quarto para \"em limpeza\" sem mandar todos os outros dados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) PUT = troca completa, PATCH = alteração parcial; 2) qualquer exemplo de mudança de um ou poucos campos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega fez a rota `GET /clientes/excluir/8` para apagar clientes de uma loja. Um robô de busca, que visita todos os links que encontra, acabou apagando vários clientes. Explique o que aconteceu.\n\nNa sua resposta:\n1. diga qual regra de REST/HTTP foi quebrada;\n2. explique por que o robô apagou os dados;\n3. indique o método e a URI que seriam corretos.",
+      "respostasAceitas": [
+        "Foi usado GET para uma ação que apaga dados, mas GET deve ser só leitura (seguro). O robô só faz GET nos links que encontra, achando que não muda nada, e por isso disparou as exclusões. O correto seria DELETE /clientes/8."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) GET não pode alterar dados / verbo na URI; 2) robôs e navegadores chamam GET livremente; 3) DELETE /clientes/8."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que é integração entre plataformas por meio de uma API? Use como exemplo uma escola que tem site, aplicativo de celular e um sistema da secretaria.\n\nNa sua resposta:\n1. explique o papel da API entre esses três sistemas;\n2. cite uma vantagem dessa integração.",
+      "respostasAceitas": [
+        "A API fica no servidor e oferece rotas que o site, o app e o sistema da secretaria chamam para ler e gravar os mesmos dados (notas, faltas, matrículas). Vantagem: os dados ficam iguais em todos, sem cadastro repetido, e as regras ficam num lugar só."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) API como ponto único de acesso aos dados; 2) dados consistentes, sem retrabalho, regras centralizadas, independência de linguagem."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Em REST, o que significa dizer que um recurso tem \"representações\"? Use como exemplo o recurso `/livros/4` de uma biblioteca.\n\nNa sua resposta:\n1. explique a diferença entre recurso e representação;\n2. cite dois formatos possíveis de representação.",
+      "respostasAceitas": [
+        "O recurso é o livro 4 em si (a informação guardada no servidor); a representação é a forma como ele é enviado na resposta. O mesmo livro pode ser representado em JSON ou em XML."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) recurso = a coisa; representação = o formato enviado; 2) JSON e XML (aceitar também HTML, CSV etc.)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de um pet shop, quando o usuário clica duas vezes no botão \"Agendar\", o app envia `POST /agendamentos` duas vezes e surgem dois agendamentos iguais. Já quando ele clica duas vezes em \"Salvar alterações\", que envia `PUT /agendamentos/5`, nada de errado acontece. Explique essa diferença.\n\nNa sua resposta:\n1. explique por que o POST repetido criou um registro duplicado;\n2. explique por que o PUT repetido deixa o mesmo resultado.",
+      "respostasAceitas": [
+        "Cada POST na coleção cria um recurso novo, então dois envios criam dois agendamentos (POST não é idempotente). O PUT substitui o agendamento 5 pelos mesmos dados: repetir só grava de novo o mesmo conteúdo, o resultado final é igual (PUT é idempotente)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) POST cria a cada chamada; 2) PUT sobrescreve o mesmo recurso com os mesmos dados. Não é obrigatório usar a palavra \"idempotente\"."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A API de um cinema tem a rota Express `app.delete('/filmes/:id', ...)`. O que acontece quando o app chama `DELETE /filmes/20`?\n\nNa sua resposta:\n1. diga qual operação do CRUD essa rota faz;\n2. diga de onde a rota tira o número 20.",
+      "respostasAceitas": [
+        "É o Delete do CRUD: a rota remove o filme de id 20. O número vem da própria URI, pelo parâmetro de rota :id, que no Express fica em req.params.id."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) exclusão do filme 20; 2) parâmetro de rota (req.params.id)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A API de uma oficina devolve sempre o status 200, até quando o carro não existe ou quando falta um campo obrigatório; o erro aparece só num texto do corpo. Por que isso é ruim?\n\nNa sua resposta:\n1. explique para que servem os códigos de status;\n2. cite o código adequado para \"o carro não existe\" e para \"faltou um campo obrigatório\".",
+      "respostasAceitas": [
+        "O código de status é o jeito padrão de o cliente saber se deu certo ou errado sem ler o texto; com 200 sempre, o app trata o erro como sucesso. Carro inexistente: 404; campo obrigatório faltando: 400."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) status informa o resultado de forma padronizada; 2) 404 e 400 (aceitar 422 para dados inválidos)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na API de uma loja de games, por que se usa `GET /jogos?genero=corrida&ordem=preco` em vez de ter uma rota `/jogosDeCorridaOrdenadosPorPreco`?\n\nNa sua resposta:\n1. explique para que serve a query string nessa requisição;\n2. cite uma vantagem dessa escolha.",
+      "respostasAceitas": [
+        "A query string (depois do ?) passa filtros e opções para a mesma coleção /jogos: aqui, gênero corrida e ordenação por preço. Vantagem: uma única rota atende qualquer combinação de filtros, sem criar uma rota nova para cada caso."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) filtros/opções da listagem; 2) menos rotas, flexível, mantém o padrão REST."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Qual é a diferença entre um site comum e um web service?\n\nNa sua resposta:\n1. diga o que um site comum devolve ao navegador;\n2. diga o que um web service devolve e quem costuma usar essa resposta.",
+      "respostasAceitas": [
+        "O site devolve páginas (HTML, CSS, imagens) para uma pessoa ver no navegador. O web service devolve dados (JSON ou XML) para outros programas, como apps, sites e sistemas, usarem."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) páginas para pessoas; 2) dados estruturados para programas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma empresa de entregas integra seu sistema com a API de várias lojas. Uma das lojas trocou a rota `/pedidos` por `/encomendas` sem avisar ninguém, e a integração parou de funcionar.\n\nNa sua resposta:\n1. explique por que a integração parou;\n2. cite uma prática que evitaria esse problema.",
+      "respostasAceitas": [
+        "O sistema de entregas chama a rota combinada (/pedidos); como ela não existe mais, recebe 404 e não consegue os dados. Evitaria: versionar a API (/v1/pedidos e /v2/encomendas, mantendo a antiga por um tempo), documentar e avisar as mudanças."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a rota é um contrato; mudou, o cliente quebra; 2) versionamento, manter a rota antiga, documentação ou aviso prévio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que significa a sigla JSON?",
+      "alternativas": [
+        "Java Standard Object Network",
+        "JavaScript Online Node",
+        "JavaScript Object Notation",
+        "Java Serialized Object Name"
+      ],
+      "correta": 2,
+      "explicacao": "JSON é a notação de objetos do JavaScript, usada como formato de texto para troca de dados entre sistemas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em JSON, os nomes dos campos (chaves) devem ser escritos:",
+      "alternativas": [
+        "entre aspas simples",
+        "sem aspas",
+        "entre aspas duplas",
+        "entre crases"
+      ],
+      "correta": 2,
+      "explicacao": "Em JSON toda chave é uma string entre aspas duplas: { \"nome\": \"Ana\" }."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes é um valor booleano válido em JSON?",
+      "alternativas": [
+        "true",
+        "\"true\"",
+        "1",
+        "\"sim\""
+      ],
+      "correta": 0,
+      "explicacao": "Os booleanos JSON são true e false, em minúsculas e sem aspas. \"true\" com aspas é uma string."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em JSON, quais símbolos delimitam um objeto e um array?",
+      "alternativas": [
+        "Objeto entre [ ] e array entre { }",
+        "Objeto e array entre ( )",
+        "Objeto entre < > e array entre { }",
+        "Objeto entre { } e array entre [ ]"
+      ],
+      "correta": 3,
+      "explicacao": "Chaves para objeto (pares chave/valor) e colchetes para array (lista de valores)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Este JSON de um pet shop tem um erro: `{ \"nome\": \"Rex\", \"idade\": 3, }`. Qual é?",
+      "alternativas": [
+        "O número 3 deveria estar entre aspas",
+        "A vírgula depois do último campo",
+        "Falta ponto e vírgula no final do objeto",
+        "Objetos JSON não podem ter campos numéricos"
+      ],
+      "correta": 1,
+      "explicacao": "JSON não aceita vírgula sobrando depois do último item (vírgula final)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é o problema deste JSON de uma padaria: `{ 'produto': 'pão', 'preco': 0.8 }`?",
+      "alternativas": [
+        "O preço deveria ser escrito 0,8",
+        "Faltam colchetes em volta do objeto",
+        "A palavra pão tem acento e JSON não aceita",
+        "Usa aspas simples; JSON exige aspas duplas"
+      ],
+      "correta": 3,
+      "explicacao": "JSON só aceita aspas duplas. O número com ponto (0.8) está certo, e acentos são permitidos dentro de strings."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Como se escreve, como número em JSON, o preço de doze reais e cinquenta centavos?",
+      "alternativas": [
+        "12,50",
+        "12.5",
+        "R$ 12,50",
+        "\"12,50\""
+      ],
+      "correta": 1,
+      "explicacao": "Números em JSON usam ponto decimal e não levam símbolo de moeda. \"12,50\" entre aspas seria texto, não número."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em JSON, qual valor indica de propósito que um campo está sem valor?",
+      "alternativas": [
+        "undefined",
+        "NULL()",
+        "null",
+        "vazio"
+      ],
+      "correta": 2,
+      "explicacao": "null é o valor nulo do JSON. undefined existe no JavaScript, mas não é válido em JSON."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma clínica precisa enviar a data de uma consulta num JSON. Como a data costuma ir, já que JSON não tem um tipo próprio para datas?",
+      "alternativas": [
+        "Como texto, por exemplo \"2026-03-15\"",
+        "Sem aspas, por exemplo 2026-03-15",
+        "Como objeto JavaScript, por exemplo new Date(2026, 2, 15)",
+        "Sem aspas, por exemplo 15/03/2026"
+      ],
+      "correta": 0,
+      "explicacao": "JSON não tem tipo data: ela vai como string, normalmente no formato ano-mês-dia (ISO 8601)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o código: `const dados = JSON.parse('{\"aluno\": {\"nome\": \"Bia\", \"notas\": [7, 9, 8]}}');`. Qual é o valor de `dados.aluno.notas[1]`?",
+      "alternativas": [
+        "9",
+        "7",
+        "8",
+        "undefined"
+      ],
+      "correta": 0,
+      "explicacao": "O índice de array começa em 0: notas[0] = 7, notas[1] = 9, notas[2] = 8."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual método do JavaScript transforma um objeto em texto JSON para enviar ao servidor?",
+      "alternativas": [
+        "JSON.parse()",
+        "JSON.toObject()",
+        "JSON.stringify()",
+        "JSON.read()"
+      ],
+      "correta": 2,
+      "explicacao": "stringify gera a string JSON a partir do objeto; parse faz o caminho contrário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual método do JavaScript transforma o texto JSON recebido de uma API em objeto para o código usar?",
+      "alternativas": [
+        "JSON.stringify()",
+        "JSON.parse()",
+        "JSON.text()",
+        "JSON.write()"
+      ],
+      "correta": 1,
+      "explicacao": "JSON.parse lê o texto e devolve o objeto (ou array) correspondente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o código: `const t = JSON.stringify({ sala: 3, livre: true });`. Qual é o resultado de `typeof t`?",
+      "alternativas": [
+        "\"object\"",
+        "\"boolean\"",
+        "\"number\"",
+        "\"string\""
+      ],
+      "correta": 3,
+      "explicacao": "JSON.stringify sempre devolve texto (string), mesmo que o objeto tenha números e booleanos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o código de um mercadinho: `const p = JSON.parse('{\"preco\": \"10\"}'); console.log(p.preco + 1);`. O que aparece no console?",
+      "alternativas": [
+        "11",
+        "101",
+        "NaN",
+        "Um erro de sintaxe"
+      ],
+      "correta": 1,
+      "explicacao": "O preço veio entre aspas, então é string. String + número junta os textos: \"10\" + 1 = \"101\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que acontece ao rodar `JSON.parse(\"{ nome: 'Leo' }\")`?",
+      "alternativas": [
+        "Devolve o objeto { nome: \"Leo\" } normalmente",
+        "Devolve a string \"Leo\"",
+        "Devolve null, sem mostrar erro",
+        "Dá erro (SyntaxError), pois o texto não é JSON válido"
+      ],
+      "correta": 3,
+      "explicacao": "Chave sem aspas e aspas simples não são JSON. JSON.parse lança SyntaxError; por isso costuma ficar dentro de try/catch."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o código: `JSON.stringify({ nome: \"Caio\", apelido: undefined, idade: 16 })`. Qual texto é gerado?",
+      "alternativas": [
+        "{\"nome\":\"Caio\",\"idade\":16}",
+        "{\"nome\":\"Caio\",\"apelido\":undefined,\"idade\":16}",
+        "{\"nome\":\"Caio\",\"apelido\":null,\"idade\":16}",
+        "{nome:\"Caio\",idade:16}"
+      ],
+      "correta": 0,
+      "explicacao": "Propriedades com valor undefined (e funções) são deixadas de fora por JSON.stringify, pois undefined não existe em JSON."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve o terceiro argumento em `JSON.stringify(produto, null, 2)`?",
+      "alternativas": [
+        "Limita o texto às duas primeiras propriedades do objeto",
+        "Converte o objeto para a versão 2 do formato JSON",
+        "Formata o texto com quebras de linha e recuo de 2 espaços",
+        "Repete o texto JSON duas vezes no resultado"
+      ],
+      "correta": 2,
+      "explicacao": "O terceiro argumento define a indentação (formatação); o resultado continua sendo o mesmo JSON."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma API de cinema devolve vários filmes. Qual é a estrutura JSON adequada?",
+      "alternativas": [
+        "Um objeto com chaves repetidas: { \"titulo\": \"A\", \"titulo\": \"B\" }",
+        "Vários objetos soltos: { \"titulo\": \"A\" } { \"titulo\": \"B\" }",
+        "Um array de objetos: [ { \"titulo\": \"A\" }, { \"titulo\": \"B\" } ]",
+        "Um texto separado por vírgulas: \"A\", \"B\""
+      ],
+      "correta": 2,
+      "explicacao": "Coleção de objetos JSON é um array de objetos. Dois objetos soltos não formam um JSON único válido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o JSON de uma academia: `{ \"aluno\": \"Rui\", \"treinos\": [\"perna\", \"costas\"], \"plano\": { \"tipo\": \"mensal\", \"valor\": 90 } }`. Quantos campos tem o objeto principal?",
+      "alternativas": [
+        "3",
+        "2",
+        "4",
+        "5"
+      ],
+      "correta": 0,
+      "explicacao": "O objeto principal tem aluno, treinos e plano. Os itens do array e os campos de plano pertencem a eles, não ao objeto principal."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em JSON, um texto (string) deve ser escrito:",
+      "alternativas": [
+        "entre aspas simples, como 'Maria'",
+        "sem aspas, como Maria",
+        "entre parênteses, como (Maria)",
+        "entre aspas duplas, como \"Maria\""
+      ],
+      "correta": 3,
+      "explicacao": "Strings JSON sempre ficam entre aspas duplas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas linhas é um JSON válido?",
+      "alternativas": [
+        "{ \"itens\": [ , ], \"total\": 0 }",
+        "{ \"itens\": [] , \"total\": 0 }",
+        "{ \"itens\": [], \"total\": 0, }",
+        "{ itens: [], total: 0 }"
+      ],
+      "correta": 1,
+      "explicacao": "Array vazio [] é válido. Vírgula sem item, vírgula final e chave sem aspas não são."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que o JSON `{ \"telefone\": 011987654321 }` é inválido?",
+      "alternativas": [
+        "Números em JSON só podem ter até 6 dígitos",
+        "O nome do campo deveria estar sem aspas",
+        "Faltam colchetes porque telefone é uma lista",
+        "Número JSON não pode começar com zero"
+      ],
+      "correta": 3,
+      "explicacao": "Número com zero à esquerda é inválido em JSON. Telefone, CEP e documentos vão como string, pois não se faz conta com eles e o zero importa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em JSON, como se representa uma lista com os tamanhos P, M e G de uma camiseta?",
+      "alternativas": [
+        "\"tamanhos\": {\"P\", \"M\", \"G\"}",
+        "\"tamanhos\": [\"P\", \"M\", \"G\"]",
+        "\"tamanhos\": (\"P\", \"M\", \"G\")",
+        "\"tamanhos\": \"P\" \"M\" \"G\""
+      ],
+      "correta": 1,
+      "explicacao": "Listas de valores ficam em array, entre colchetes, com os itens separados por vírgula."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa API de biblioteca, por que o campo `\"disponivel\": false` é melhor que `\"disponivel\": \"nao\"`?",
+      "alternativas": [
+        "Porque JSON não aceita strings com menos de quatro letras",
+        "Porque false é a única forma de escrever texto em JSON",
+        "Porque o código testa o booleano direto, sem comparar textos",
+        "Porque \"nao\" precisaria de aspas simples para funcionar"
+      ],
+      "correta": 2,
+      "explicacao": "Usar o tipo certo evita erros (\"não\", \"Nao\", \"NÃO\"...) e permite testar if (livro.disponivel)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma API de loja devolve `{ \"id\": 1, \"nome\": \"Mouse\", \"id\": 2 }`. Qual é o problema desse JSON?",
+      "alternativas": [
+        "A chave id se repete; vale só o último valor (2)",
+        "JSON não aceita números como valor de id",
+        "Os objetos JSON devem ter no máximo dois campos",
+        "O nome deveria estar em maiúsculas"
+      ],
+      "correta": 0,
+      "explicacao": "Chave repetida é um erro de modelagem: JSON.parse não reclama, mas a última ocorrência sobrescreve a anterior."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que aparece dentro de um objeto JSON?",
+      "alternativas": [
+        "Pares de chave e valor, separados por vírgula",
+        "Só valores soltos, sem nomes",
+        "Comandos que o servidor executa",
+        "Tags de abertura e de fechamento"
+      ],
+      "correta": 0,
+      "explicacao": "Objeto JSON = { \"chave\": valor, \"outra\": valor }. Tags são do XML."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um colega colocou um comentário dentro do arquivo JSON de configuração: `{ \"porta\": 3000 // porta do servidor }`. O que acontece ao ler esse arquivo com JSON.parse?",
+      "alternativas": [
+        "Funciona, pois JSON aceita comentários com //",
+        "Funciona, mas a porta vira texto",
+        "Dá erro, pois JSON não aceita comentários",
+        "Funciona, mas o comentário vira um novo campo"
+      ],
+      "correta": 2,
+      "explicacao": "O formato JSON não tem comentários; o texto deixa de ser JSON válido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o código: `const lista = JSON.parse('[{\"nome\":\"Pipoca\"},{\"nome\":\"Refri\"}]'); console.log(lista.length);`. O que aparece?",
+      "alternativas": [
+        "1",
+        "2",
+        "4",
+        "undefined"
+      ],
+      "correta": 1,
+      "explicacao": "O texto é um array com dois objetos; depois do parse, lista.length vale 2."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o código: `const a = { titulo: \"Noite Azul\" }; const b = JSON.parse(JSON.stringify(a)); b.titulo = \"Rio Claro\"; console.log(a.titulo);`. O que aparece?",
+      "alternativas": [
+        "Rio Claro",
+        "undefined",
+        "Dá erro de sintaxe",
+        "Noite Azul"
+      ],
+      "correta": 3,
+      "explicacao": "stringify seguido de parse cria uma cópia nova do objeto; alterar b não muda a."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual afirmação sobre JSON está correta?",
+      "alternativas": [
+        "Só pode ser lido por programas escritos em JavaScript",
+        "É um formato de texto, que qualquer linguagem consegue ler e gerar",
+        "É um tipo de banco de dados relacional",
+        "É um arquivo binário, que não dá para abrir num editor de texto"
+      ],
+      "correta": 1,
+      "explicacao": "Apesar do nome, JSON é independente de linguagem: Java, Python, PHP, C# e outras leem e geram JSON."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num JSON de hotel, `\"hospedes\": 2` e `\"hospedes\": \"2\"` são diferentes porque:",
+      "alternativas": [
+        "o primeiro é texto e o segundo é número",
+        "os dois são iguais em JSON",
+        "o segundo é um booleano",
+        "o primeiro é número e o segundo é texto (string)"
+      ],
+      "correta": 3,
+      "explicacao": "Com aspas é string; sem aspas é número."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No JSON `{ \"cliente\": { \"nome\": \"Lia\", \"endereco\": { \"cidade\": \"Recife\" } } }`, como o JavaScript acessa a cidade depois do parse (objeto guardado em `d`)?",
+      "alternativas": [
+        "d.cliente.endereco.cidade",
+        "d.cidade",
+        "d.cliente.cidade",
+        "d[\"endereco\"].cidade"
+      ],
+      "correta": 0,
+      "explicacao": "Cada nível de objeto aninhado é acessado com um ponto: cliente → endereco → cidade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma API de escola devolve `{ \"alunos\": [ { \"nome\": \"Ana\", \"notas\": [8, 6] }, { \"nome\": \"Davi\", \"notas\": [5, 9] } ] }` guardado em `r`. Qual expressão dá a segunda nota do Davi?",
+      "alternativas": [
+        "r.alunos[2].notas[2]",
+        "r.alunos.Davi.notas[1]",
+        "r.alunos[1].notas[1]",
+        "r.notas[1][1]"
+      ],
+      "correta": 2,
+      "explicacao": "Davi é o segundo aluno (índice 1) e a segunda nota tem índice 1. Arrays começam em 0."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas extensões de arquivo é usada para arquivos JSON?",
+      "alternativas": [
+        ".jsn",
+        ".js",
+        ".json",
+        ".xml"
+      ],
+      "correta": 2,
+      "explicacao": "Arquivos JSON usam .json (por exemplo, package.json). .js é código JavaScript."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa API Express de uma papelaria, a rota termina com `res.json({ ok: true });`. O que o `res.json` faz?",
+      "alternativas": [
+        "Envia o objeto convertido em JSON, com o Content-Type certo",
+        "Grava o objeto num arquivo .json dentro da pasta do servidor",
+        "Converte o objeto em XML antes de enviar a resposta ao cliente",
+        "Envia o objeto como uma página HTML pronta para o navegador"
+      ],
+      "correta": 0,
+      "explicacao": "res.json faz o JSON.stringify do objeto, coloca Content-Type: application/json e envia a resposta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma API de pet shop devolveu `{ \"nome\": \"Mel\", \"especie\": \"gato\", \"vacinado\": true, \"peso\": 4.2, \"tutor\": null }`. Explique os tipos de dados que aparecem nesse JSON.\n\nNa sua resposta:\n1. diga o tipo de cada um dos cinco valores;\n2. explique o que o null indica no campo tutor.",
+      "respostasAceitas": [
+        "nome e especie são strings (texto), vacinado é booleano, peso é número e tutor é null. O null indica que o campo existe, mas está sem valor (o animal ainda não tem tutor cadastrado)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) string, string, booleano, número, null; 2) ausência de valor de propósito."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Qual é a diferença entre um objeto JSON e um array JSON? Use como exemplo os dados de uma biblioteca.\n\nNa sua resposta:\n1. explique o que cada um guarda e com quais símbolos é escrito;\n2. diga quando a API usaria cada um.",
+      "respostasAceitas": [
+        "O objeto, entre { }, guarda pares chave/valor que descrevem uma coisa, como um livro. O array, entre [ ], guarda uma lista ordenada de valores. A API usaria um objeto para devolver um livro só e um array de objetos para devolver a lista de livros."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) objeto = chave/valor com { }; array = lista com [ ]; 2) um item x coleção."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno escreveu o JSON `{ 'curso': 'Desenvolvimento', 'vagas': 30, }` e a API recusou. Explique os erros.\n\nNa sua resposta:\n1. aponte os dois erros desse texto;\n2. explique por que a API não consegue ler o texto mesmo com \"só\" esses detalhes.",
+      "respostasAceitas": [
+        "Os erros são as aspas simples (JSON exige aspas duplas) e a vírgula depois do último campo. A API usa um leitor (como JSON.parse) que segue a regra do formato à risca; qualquer desvio deixa o texto inválido e gera erro de sintaxe."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) aspas simples e vírgula sobrando; 2) o formato é rígido, o parse falha (SyntaxError/400)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de uma lanchonete aparecem as linhas `const corpo = JSON.stringify(pedido);` (antes de enviar) e `const pedido = JSON.parse(texto);` (ao receber). Explique o papel de cada uma.\n\nNa sua resposta:\n1. diga o que entra e o que sai de cada método;\n2. explique por que é preciso fazer essa conversão para trocar dados pela rede.",
+      "respostasAceitas": [
+        "JSON.stringify recebe o objeto pedido e devolve um texto JSON; JSON.parse recebe o texto JSON e devolve o objeto. Pela rede só trafega texto, então o objeto precisa virar texto para ser enviado e o texto precisa virar objeto para o programa usar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) stringify objeto→texto; parse texto→objeto; 2) HTTP transporta texto, não objetos da memória."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja o código de um mercadinho: `const item = JSON.parse('{\"qtd\": \"3\", \"preco\": 2}'); console.log(item.qtd * item.preco, item.qtd + item.preco);`. O console mostra `6 32`. Explique esse resultado.\n\nNa sua resposta:\n1. explique por que a multiplicação deu 6;\n2. explique por que a soma deu 32;\n3. diga como o JSON deveria vir para evitar o problema.",
+      "respostasAceitas": [
+        "qtd veio entre aspas, então é a string \"3\". Na multiplicação o JavaScript converte a string em número e faz 3 * 2 = 6. Na soma, o + com string junta textos: \"3\" + 2 = \"32\". O JSON deveria trazer \"qtd\": 3, sem aspas, como número."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) conversão automática para número no *; 2) concatenação no +; 3) qtd como número no JSON."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Por que JSON virou o formato mais usado nas APIs REST?\n\nNa sua resposta:\n1. cite duas características do JSON que ajudam nisso;\n2. diga por que ele combina bem com aplicações em JavaScript.",
+      "respostasAceitas": [
+        "Porque é texto simples, leve e fácil de ler por pessoas e programas, e quase toda linguagem tem leitor de JSON. Combina com JavaScript porque a sintaxe é a mesma dos objetos da linguagem e o JSON.parse converte direto em objeto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) leve, legível, independente de linguagem, suporte em todas as linguagens; 2) sintaxe derivada dos objetos JavaScript."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma API de clínica envia o CEP como número: `\"cep\": 01310100`. Explique o problema dessa escolha.\n\nNa sua resposta:\n1. diga o que acontece com esse valor no JSON;\n2. explique qual tipo seria o certo para CEP e telefone, e por quê.",
+      "respostasAceitas": [
+        "Número com zero à esquerda é inválido em JSON (e, se o zero fosse tirado, o CEP mudaria para 1310100). CEP e telefone devem ser strings, porque não se faz conta com eles e os zeros e o formato precisam ser mantidos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) JSON inválido / perde o zero; 2) string, pois é um código e não uma quantidade."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Interprete este JSON de uma loja de games: `{ \"jogos\": [ { \"titulo\": \"Corrida X\", \"preco\": 89.9 }, { \"titulo\": \"Fazenda Feliz\", \"preco\": 49.9 } ], \"total\": 2 }`.\n\nNa sua resposta:\n1. diga quantos jogos vieram e como você sabe;\n2. explique o que é o campo jogos.",
+      "respostasAceitas": [
+        "Vieram 2 jogos: o array jogos tem dois objetos, e o campo total confirma 2. O campo jogos é um array de objetos, em que cada objeto é um jogo com título e preço."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dois, pelos itens do array ou pelo total; 2) coleção (array) de objetos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma API Express recebe dados de um formulário e usa `const dados = JSON.parse(texto);` sem nenhum tratamento. Um cliente mandou um texto com vírgula sobrando e o servidor caiu. Explique o que aconteceu.\n\nNa sua resposta:\n1. explique o que JSON.parse faz quando o texto é inválido;\n2. diga como o servidor deveria tratar isso e qual status devolver.",
+      "respostasAceitas": [
+        "Com texto inválido, JSON.parse lança um erro (SyntaxError); como ninguém capturou o erro, a aplicação parou. O servidor deveria colocar o parse num try/catch (ou usar o express.json, que já trata) e responder 400 Bad Request, dizendo que o JSON é inválido."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) lança exceção; 2) try/catch e status 400."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num app de academia, o professor quer guardar os exercícios do treino de um aluno. Um colega sugeriu `\"exercicios\": \"agachamento, supino, remada\"` e outro sugeriu `\"exercicios\": [\"agachamento\", \"supino\", \"remada\"]`. Compare as duas opções.\n\nNa sua resposta:\n1. diga o tipo de dado de cada opção;\n2. explique qual é melhor para o programa e por quê.",
+      "respostasAceitas": [
+        "A primeira é uma string única; a segunda é um array de strings. O array é melhor: o programa acessa cada exercício pelo índice, conta com length e percorre a lista, sem precisar cortar o texto pelas vírgulas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) string x array; 2) array, pois cada item é separado e fácil de percorrer."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O texto JSON `{ \"nome\": \"Ana\", \"turma\": \"2B\" }` e o objeto JavaScript `{ nome: \"Ana\", turma: \"2B\" }` parecem iguais. Explique a diferença entre eles.\n\nNa sua resposta:\n1. diga o que cada um é (onde e como existe);\n2. cite uma diferença na forma de escrever.",
+      "respostasAceitas": [
+        "O JSON é um texto (uma string) usado para guardar ou enviar dados; o objeto JavaScript existe na memória do programa e pode ser usado direto no código. Na escrita, o JSON exige aspas duplas nas chaves, e o objeto JavaScript aceita chaves sem aspas (e aspas simples nos textos)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) JSON = texto/formato de troca; objeto = estrutura na memória; 2) chaves com aspas duplas obrigatórias no JSON (aceitar também: JSON não aceita funções, undefined nem comentários)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma API de biblioteca pode devolver a busca de livros só como array `[ {...}, {...} ]` ou como objeto `{ \"total\": 2, \"pagina\": 1, \"livros\": [ {...}, {...} ] }`. Compare as duas formas.\n\nNa sua resposta:\n1. diga o que o app recebe a mais na segunda forma;\n2. explique uma situação em que a segunda forma ajuda.",
+      "respostasAceitas": [
+        "Na segunda forma, além da lista de livros, o app recebe informações sobre a busca (total de resultados e página atual). Isso ajuda, por exemplo, quando a lista é dividida em páginas: o app sabe quantos livros existem e pode mostrar \"página 1 de 5\" sem baixar tudo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) metadados (total, página); 2) paginação, mostrar contagem, crescer a resposta sem quebrar o app."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Por que um JSON com uma função, como `{ \"calcular\": function() { return 1; } }`, não é válido?\n\nNa sua resposta:\n1. explique o que o JSON foi feito para representar;\n2. diga o que o JSON.stringify faz com funções de um objeto.",
+      "respostasAceitas": [
+        "JSON representa só dados (texto, números, booleanos, null, objetos e arrays), não código, porque precisa ser lido por qualquer linguagem. O JSON.stringify ignora as funções: elas não aparecem no texto gerado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) formato só de dados, independente de linguagem; 2) funções são omitidas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma API de hotel devolve `{ \"reservas\": [] }` para um hóspede sem reservas, e outra versão da API devolve `{ \"reservas\": null }`. O app quebrou com a segunda versão na linha `reservas.length`. Explique.\n\nNa sua resposta:\n1. explique a diferença entre array vazio e null;\n2. explique por que o app quebrou com null.",
+      "respostasAceitas": [
+        "[] é uma lista que existe e não tem itens (length 0). null significa ausência de valor: não é lista. Ao fazer null.length o JavaScript gera erro (TypeError), pois null não tem propriedades. Por isso a API deve devolver [] para listas vazias."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) lista vazia x sem valor; 2) null não tem length, gera erro."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No terminal aparece o resultado de `console.log(JSON.stringify({ filme: \"Noite Azul\", sala: 2 }, null, 2));`. Explique para que serve o `null, 2` nesse comando.\n\nNa sua resposta:\n1. diga o que o número 2 muda no texto gerado;\n2. diga se os dados mudam com isso.",
+      "respostasAceitas": [
+        "O 2 faz o texto sair formatado, com quebras de linha e recuo de 2 espaços, mais fácil de ler. O null indica que não há filtro de campos. Os dados não mudam: é o mesmo JSON, só mais legível."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) indentação/quebra de linha; 2) os dados continuam iguais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que significa a sigla XML?",
+      "alternativas": [
+        "eXternal Machine Language (linguagem externa de máquina)",
+        "eXecutable Module List (lista de módulos executáveis)",
+        "eXtra Media Link (ligação extra de mídia)",
+        "eXtensible Markup Language (linguagem de marcação extensível)"
+      ],
+      "correta": 3,
+      "explicacao": "XML é uma linguagem de marcação em que quem cria o documento define as próprias tags."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em XML, como os dados ficam organizados?",
+      "alternativas": [
+        "Entre chaves e colchetes, como { \"nome\": \"Ana\" }",
+        "Entre tags de abertura e de fechamento, como <nome>Ana</nome>",
+        "Entre aspas simples, como 'nome: Ana'",
+        "Entre parênteses, como (nome = Ana)"
+      ],
+      "correta": 1,
+      "explicacao": "XML usa elementos marcados por tags; chaves e colchetes são do JSON."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Todo documento XML bem formado precisa ter:",
+      "alternativas": [
+        "pelo menos dois elementos raiz lado a lado",
+        "um array principal escrito entre colchetes",
+        "uma linha de código JavaScript no começo",
+        "um único elemento raiz que envolve todos os outros"
+      ],
+      "correta": 3,
+      "explicacao": "O XML tem uma só raiz (por exemplo, <biblioteca>), e todos os outros elementos ficam dentro dela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual trecho XML está bem formado?",
+      "alternativas": [
+        "<livro><titulo>Iracema</livro></titulo>",
+        "<livro><titulo>Iracema</titulo></livro>",
+        "<livro><titulo>Iracema</titulo>",
+        "<livro titulo=Iracema></livro>"
+      ],
+      "correta": 1,
+      "explicacao": "As tags precisam fechar na ordem certa (a última aberta fecha primeiro), toda tag aberta precisa fechar e valor de atributo vai entre aspas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que `<Produto>Café</produto>` está errado em XML?",
+      "alternativas": [
+        "O XML não aceita acentos no texto entre as tags",
+        "Faltam aspas em volta da palavra Café",
+        "O XML diferencia maiúsculas de minúsculas nas tags",
+        "A tag de fechamento deveria ser escrita <produto/>"
+      ],
+      "correta": 2,
+      "explicacao": "<Produto> e </produto> são nomes diferentes para o XML, então o elemento não foi fechado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No XML `<aluno matricula=\"123\">Bia</aluno>`, o que é `matricula`?",
+      "alternativas": [
+        "Um atributo do elemento aluno",
+        "A tag de fechamento do elemento",
+        "O elemento raiz do documento",
+        "Um comentário dentro da tag"
+      ],
+      "correta": 0,
+      "explicacao": "Atributos ficam dentro da tag de abertura, no formato nome=\"valor\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é o erro em `<quarto numero=12>Luxo</quarto>`, num XML de hotel?",
+      "alternativas": [
+        "O valor do atributo deveria estar entre aspas: numero=\"12\"",
+        "Atributos em XML não podem guardar números",
+        "O nome da tag deveria começar com letra maiúscula",
+        "O texto Luxo deveria estar entre aspas duplas"
+      ],
+      "correta": 0,
+      "explicacao": "Em XML, todo valor de atributo fica entre aspas (duplas ou simples)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num XML de mercadinho aparece `<preco>12.50</preco>`. Para o XML puro (sem esquema), qual é o tipo desse valor?",
+      "alternativas": [
+        "Número decimal, porque o valor tem ponto",
+        "Booleano, porque o elemento tem um valor só",
+        "Texto; o XML puro não tem tipos de dados",
+        "Data, porque tem dois números separados por ponto"
+      ],
+      "correta": 2,
+      "explicacao": "Diferente do JSON, o XML não tem tipos nativos: tudo é texto. O programa converte (por exemplo, com Number) ou um esquema XSD define o tipo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual linha costuma aparecer no começo de um arquivo XML, indicando a versão e a codificação?",
+      "alternativas": [
+        "<!DOCTYPE html>",
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
+        "{ \"xml\": \"1.0\", \"encoding\": \"UTF-8\" }",
+        "#include <xml.h>"
+      ],
+      "correta": 1,
+      "explicacao": "É a declaração (prólogo) do XML. <!DOCTYPE html> é do HTML."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Como se escreve um comentário em XML?",
+      "alternativas": [
+        "// texto do comentário",
+        "/* texto do comentário */",
+        "# texto do comentário",
+        "<!-- texto do comentário -->"
+      ],
+      "correta": 3,
+      "explicacao": "XML usa a mesma forma de comentário do HTML: <!-- ... -->."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual JSON representa os mesmos dados de `<filme><titulo>Noite Azul</titulo><ano>2021</ano></filme>`?",
+      "alternativas": [
+        "[ \"filme\", \"titulo\", \"Noite Azul\", \"ano\", 2021 ]",
+        "{ \"filme\": { \"titulo\": \"Noite Azul\", \"ano\": 2021 } }",
+        "{ \"filme\": \"titulo\", \"Noite Azul\": 2021 }",
+        "{ \"titulo\": { \"Noite Azul\": { \"ano\": 2021 } } }"
+      ],
+      "correta": 1,
+      "explicacao": "O elemento filme vira um objeto, e os filhos titulo e ano viram seus campos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num XML de padaria, o nome de um produto é `Pão & Leite`. Como o caractere & deve ser escrito dentro do texto?",
+      "alternativas": [
+        "&&",
+        "\\&",
+        "\"&\"",
+        "&amp;"
+      ],
+      "correta": 3,
+      "explicacao": "& e < têm significado especial no XML; no texto são escritos como &amp; e &lt; (entidades)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em qual situação o XML ainda é muito usado no Brasil?",
+      "alternativas": [
+        "Na nota fiscal eletrônica (NF-e), enviada aos sistemas do governo",
+        "Nas páginas que o navegador mostra ao usuário",
+        "Nos arquivos package.json dos projetos Node.js",
+        "Nas consultas SQL ao banco de dados MySQL"
+      ],
+      "correta": 0,
+      "explicacao": "A NF-e é um documento XML padronizado. package.json é JSON; páginas são HTML."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em XML, o que significa `<foto/>`?",
+      "alternativas": [
+        "Um erro, porque falta a tag de fechamento",
+        "Um comentário que o programa ignora",
+        "Um elemento vazio, o mesmo que <foto></foto>",
+        "Um atributo chamado foto sem valor"
+      ],
+      "correta": 2,
+      "explicacao": "A barra antes do > fecha o elemento na mesma tag: é um elemento sem conteúdo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Como o XML representa uma lista com três telefones de um cliente?",
+      "alternativas": [
+        "Colocando os três telefones entre colchetes dentro de uma única tag",
+        "Repetindo três vezes o atributo telefone=\"…\" na mesma tag",
+        "Repetindo o elemento telefone dentro de um elemento telefones",
+        "Não é possível: o XML não consegue representar listas"
+      ],
+      "correta": 2,
+      "explicacao": "XML não tem array: a lista é feita repetindo elementos dentro de um elemento pai. Atributo repetido na mesma tag é inválido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num XML de biblioteca, `<livro><autor>Machado de Assis</autor></livro>`, qual é o elemento filho de livro?",
+      "alternativas": [
+        "autor",
+        "livro",
+        "Machado de Assis",
+        "xml"
+      ],
+      "correta": 0,
+      "explicacao": "autor está dentro de livro, então é filho dele. \"Machado de Assis\" é o conteúdo (texto) do elemento autor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No JavaScript do navegador, qual função faz uma requisição HTTP para uma API?",
+      "alternativas": [
+        "console.log()",
+        "JSON.parse()",
+        "alert()",
+        "fetch()"
+      ],
+      "correta": 3,
+      "explicacao": "fetch envia a requisição e devolve uma Promise com a resposta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quando não se informa o método, `fetch(url)` faz uma requisição do tipo:",
+      "alternativas": [
+        "POST",
+        "GET",
+        "PUT",
+        "DELETE"
+      ],
+      "correta": 1,
+      "explicacao": "O método padrão do fetch é GET; para outros, usa-se a opção method."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o código: `const resp = await fetch('/api/livros'); const livros = await resp.json();`. Para que serve `resp.json()`?",
+      "alternativas": [
+        "Envia o array livros de volta para o servidor",
+        "Converte a resposta da API em XML",
+        "Confere se a URL da requisição termina em .json",
+        "Converte o JSON do corpo da resposta em objeto"
+      ],
+      "correta": 3,
+      "explicacao": "resp.json() lê o corpo e faz o parse do JSON (é como um JSON.parse do corpo)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de escola, o código faz `const resp = await fetch('/api/turmas'); const dados = resp.json(); console.log(dados.length);`. O que acontece?",
+      "alternativas": [
+        "dados recebe o array normalmente e o console mostra a quantidade",
+        "dados recebe uma Promise, não o array, e o console mostra undefined",
+        "o navegador faz uma segunda requisição para a API",
+        "dá erro de sintaxe no JSON da resposta"
+      ],
+      "correta": 1,
+      "explicacao": "resp.json() também é assíncrono: sem await, dados é uma Promise, que não tem length."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app chama `fetch('/api/produtos/999')` e a API responde 404. O que acontece com o fetch?",
+      "alternativas": [
+        "O fetch lança um erro e o código cai direto no catch",
+        "O fetch repete a requisição até receber o status 200",
+        "Resolve normalmente; o código deve conferir resp.ok",
+        "O navegador recarrega a página automaticamente"
+      ],
+      "correta": 2,
+      "explicacao": "O fetch só rejeita em falha de rede. Respostas 404 ou 500 chegam normalmente e o código precisa testar resp.ok."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na resposta do fetch, o que indica a propriedade `resp.ok`?",
+      "alternativas": [
+        "É true quando o status está entre 200 e 299",
+        "É true quando o JSON tem um campo chamado ok",
+        "É true quando o computador está ligado à internet",
+        "É true quando a resposta veio em formato XML"
+      ],
+      "correta": 0,
+      "explicacao": "resp.ok resume se o status é de sucesso (2xx)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja: `fetch('/api/clientes', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(cliente) })`. Por que usar JSON.stringify no body?",
+      "alternativas": [
+        "Porque o corpo da requisição precisa ir como texto JSON",
+        "Porque o fetch só aceita números no body",
+        "Para criptografar os dados antes de enviar",
+        "Para transformar a resposta da API em objeto"
+      ],
+      "correta": 0,
+      "explicacao": "O corpo trafega como texto; o objeto cliente precisa virar string JSON antes do envio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno escreveu o fetch de cadastro com `body: cliente` (o objeto, sem JSON.stringify). O que o servidor tende a receber?",
+      "alternativas": [
+        "O cliente em JSON, convertido sozinho pelo fetch",
+        "O cliente convertido em XML pelo navegador",
+        "O texto \"[object Object]\", e não os dados do cliente",
+        "Um array com os nomes das propriedades do cliente"
+      ],
+      "correta": 2,
+      "explicacao": "O fetch converte o objeto em texto com toString, que gera \"[object Object]\"; o JSON fica inválido e os dados se perdem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No fetch, qual opção define o método HTTP da requisição?",
+      "alternativas": [
+        "type",
+        "method",
+        "verb",
+        "action"
+      ],
+      "correta": 1,
+      "explicacao": "Exemplo: fetch(url, { method: 'PUT' })."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que se usa `await` antes do `fetch`?",
+      "alternativas": [
+        "Porque sem await o fetch faz automaticamente um POST",
+        "Porque o await converte a resposta em JSON",
+        "Porque o await deixa a conexão com a internet mais rápida",
+        "Porque o código precisa esperar a resposta chegar pela rede"
+      ],
+      "correta": 3,
+      "explicacao": "fetch é assíncrono: devolve uma Promise. O await espera a resposta sem travar a página."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja: `fetch('/api/filmes').then(r => r.json()).then(f => console.log(f.length));`. A API devolve um array com 4 filmes. O que aparece no console?",
+      "alternativas": [
+        "1",
+        "4",
+        "undefined",
+        "O texto JSON completo"
+      ],
+      "correta": 1,
+      "explicacao": "O primeiro then converte a resposta em array; o segundo recebe o array e mostra seu tamanho."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um site aberto em `http://localhost:5500` chama, com fetch, a API em `http://localhost:3000`, e o navegador bloqueia com erro de CORS. Qual é a solução mais adequada?",
+      "alternativas": [
+        "Trocar o fetch por JSON.parse no código do site",
+        "Mudar todas as rotas da API para o método POST",
+        "Converter todas as respostas da API de JSON para XML",
+        "Liberar essa origem na API, por exemplo com o pacote cors"
+      ],
+      "correta": 3,
+      "explicacao": "Origens diferentes (outra porta) exigem que o servidor libere o acesso com cabeçalhos CORS."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que a função `fetch()` devolve logo que é chamada?",
+      "alternativas": [
+        "Uma Promise da resposta",
+        "O JSON já convertido em objeto",
+        "Um número com o código de status",
+        "O HTML da página da API"
+      ],
+      "correta": 0,
+      "explicacao": "A Promise é resolvida quando a resposta chega; depois é preciso ler o corpo (resp.json())."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No código `try { const r = await fetch(url); /* ... */ } catch (e) { /* ... */ }`, quando o catch costuma ser executado por causa do fetch?",
+      "alternativas": [
+        "Sempre que a API devolve o status 404",
+        "Sempre que a API devolve o status 201",
+        "Quando há falha de rede, como estar sem internet",
+        "Quando o JSON da resposta tem muitos campos"
+      ],
+      "correta": 2,
+      "explicacao": "O fetch rejeita a Promise só em falha de rede; status de erro HTTP não cai no catch sozinho."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um site de cinema mostra a previsão do tempo da cidade usando dados de outro serviço. Como isso costuma ser feito?",
+      "alternativas": [
+        "O site copia o banco de dados inteiro do serviço de clima",
+        "Um funcionário digita a previsão à mão todos os dias",
+        "O site consome a API do serviço de clima e mostra os dados recebidos",
+        "O site instala o servidor do serviço de clima na sua máquina"
+      ],
+      "correta": 2,
+      "explicacao": "Consumir uma API: chamar as rotas do outro serviço e usar os dados que voltam."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Muitas APIs públicas exigem uma chave (API key). Para que ela serve?",
+      "alternativas": [
+        "Para identificar quem usa a API e controlar o acesso",
+        "Para converter as respostas de JSON em XML",
+        "Para deixar as respostas da API mais rápidas",
+        "Para escolher o método HTTP da requisição"
+      ],
+      "correta": 0,
+      "explicacao": "A chave identifica o cliente: permite liberar, limitar ou bloquear o uso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é uma vantagem de separar front-end e back-end por meio de uma API?",
+      "alternativas": [
+        "O front-end passa a acessar o banco de dados diretamente",
+        "Não é mais preciso validar os dados no servidor",
+        "A aplicação deixa de usar o protocolo HTTP",
+        "O mesmo back-end pode atender o site, o app e outros sistemas"
+      ],
+      "correta": 3,
+      "explicacao": "Com a API, o back-end é um só e vários clientes o consomem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma API antiga de fornecedor devolve XML, mas o app novo de uma loja só trabalha com JSON. Qual é uma solução comum?",
+      "alternativas": [
+        "Pedir que cada usuário converta os dados à mão",
+        "O back-end da loja converte o XML em JSON para o app",
+        "Trocar o protocolo HTTP por envio de e-mail",
+        "Salvar o XML como imagem e mostrar no app"
+      ],
+      "correta": 1,
+      "explicacao": "O back-end faz a integração: consome um formato e oferece outro (conversão de representação)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de um pet shop aparece `fetch('/api/animais/3', { method: 'DELETE' })`. O que esse código pede à API?",
+      "alternativas": [
+        "Que liste todos os animais",
+        "Que cadastre o animal de número 3",
+        "Que mostre os dados só do animal 3",
+        "Que remova o animal de id 3"
+      ],
+      "correta": 3,
+      "explicacao": "DELETE na URI do recurso pede a exclusão daquele item."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Interprete este XML de uma lanchonete: `<?xml version=\"1.0\" encoding=\"UTF-8\"?><pedido numero=\"45\"><cliente>Rita</cliente><item qtd=\"2\">Pão de queijo</item></pedido>`.\n\nNa sua resposta:\n1. diga qual é o elemento raiz;\n2. cite um atributo e um elemento do XML e diga o que cada um guarda.",
+      "respostasAceitas": [
+        "A raiz é pedido. Atributos: numero=\"45\" (número do pedido) e qtd=\"2\" (quantidade do item). Elementos: cliente (Rita) e item (Pão de queijo)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) pedido; 2) qualquer atributo (numero, qtd) e qualquer elemento (cliente, item) com o significado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O mesmo produto de uma papelaria aparece em XML como `<preco>15.9</preco>` e em JSON como `\"preco\": 15.9`. Explique como cada formato trata o tipo desse valor.\n\nNa sua resposta:\n1. diga qual é o tipo do preço no XML e no JSON;\n2. explique o que o programa que lê o XML precisa fazer antes de calcular com o preço.",
+      "respostasAceitas": [
+        "No XML o 15.9 é texto, pois o XML não tem tipos (só com um esquema XSD). No JSON, sem aspas, ele já é número. O programa que lê o XML precisa converter o texto em número (por exemplo, com Number ou parseFloat) antes de fazer contas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) XML = texto; JSON = número; 2) converter para número."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num XML de escola aparece `<aluno matricula=\"77\"><nome>Leo</nome></aluno>`. Explique a diferença entre atributo e elemento.\n\nNa sua resposta:\n1. diga o que é atributo e o que é elemento nesse exemplo;\n2. explique uma regra prática para escolher entre os dois.",
+      "respostasAceitas": [
+        "matricula é atributo (fica dentro da tag de abertura) e nome é elemento (tem tags próprias e conteúdo). Regra prática: atributo para informações curtas sobre o elemento, como identificadores; elemento para os dados principais, textos longos ou que podem se repetir e ter filhos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) identificar matricula (atributo) e nome (elemento); 2) qualquer regra coerente (id/metadado em atributo; dado principal, repetível ou com estrutura em elemento)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um XML precisa ser \"bem formado\" para ser lido por um programa. Explique isso.\n\nNa sua resposta:\n1. cite três regras de um XML bem formado;\n2. diga o que acontece se uma delas não for seguida.",
+      "respostasAceitas": [
+        "Regras: ter um único elemento raiz; toda tag aberta deve ser fechada; as tags devem fechar na ordem certa (sem cruzar); nomes iguais nas tags de abertura e fechamento (maiúsculas contam); valores de atributo entre aspas. Se uma regra não for seguida, o leitor de XML acusa erro e não lê o documento."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) três regras quaisquer da lista; 2) o documento é rejeitado/dá erro."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site de uma escola técnica aparecem as linhas `const r = await fetch('/api/cursos');` e `const cursos = await r.json();`. Explique o que elas fazem.\n\nNa sua resposta:\n1. explique o que a primeira linha faz;\n2. explique o que a segunda linha faz e o que fica guardado em cursos.",
+      "respostasAceitas": [
+        "A primeira faz uma requisição GET para a rota /api/cursos e espera a resposta chegar. A segunda lê o corpo da resposta e converte o JSON em objeto/array; cursos fica com a lista de cursos que a API devolveu."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) GET para a API e espera a resposta; 2) converte o JSON do corpo; cursos = dados (lista)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O app de uma clínica cadastra consultas com `fetch('/api/agendamentos', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(agendamento) })`. Explique cada parte da configuração.\n\nNa sua resposta:\n1. diga o que a opção method define;\n2. diga o que o cabeçalho Content-Type informa ao servidor;\n3. diga o que vai no body e por que ele passa pelo JSON.stringify.",
+      "respostasAceitas": [
+        "method: 'POST' diz que é um cadastro (criação). O Content-Type: application/json avisa ao servidor que o corpo está em JSON, para ele saber como ler. O body leva os dados do agendamento convertidos em texto JSON, porque pela rede o corpo vai como texto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) método POST/criação; 2) formato do corpo; 3) dados em texto JSON."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno escreveu: `try { const r = await fetch('/api/produtos/50'); const p = await r.json(); mostrar(p.nome); } catch (e) { alert('Produto não encontrado'); }`. O produto 50 não existe: a API responde 404 com `{ \"erro\": \"não encontrado\" }`. O alerta nunca aparece e a tela mostra \"undefined\". Explique.\n\nNa sua resposta:\n1. explique por que o catch não foi executado;\n2. explique por que apareceu undefined;\n3. diga o que o código deveria verificar antes de usar os dados.",
+      "respostasAceitas": [
+        "O fetch não lança erro em resposta 404: a Promise é resolvida normalmente e o catch só roda em falha de rede. O corpo { \"erro\": \"não encontrado\" } foi convertido em p, que não tem o campo nome, então p.nome é undefined. O código deveria verificar r.ok (ou r.status) e tratar o 404 antes de usar os dados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) fetch não rejeita por status HTTP; 2) o objeto de erro não tem nome; 3) testar r.ok/r.status."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma loja tem site e app que usam a mesma API. Explique o caminho de \"ver a lista de produtos\", desde o toque do usuário no app até a lista aparecer.\n\nNa sua resposta:\n1. diga qual requisição o app envia;\n2. diga o que a API faz;\n3. diga o que volta para o app e o que ele faz com isso.",
+      "respostasAceitas": [
+        "O app envia GET /produtos para a API. A API busca os produtos no banco de dados e monta a resposta. Volta o status 200 com um array de produtos em JSON; o app converte o JSON e mostra os produtos na tela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) GET /produtos; 2) consulta o banco/aplica regras; 3) JSON (array) que o app converte e exibe."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um site aberto em `http://localhost:5500` chama a API em `http://localhost:3000` com fetch e o navegador mostra erro de CORS. A mesma rota funciona normalmente no Postman. Explique a situação.\n\nNa sua resposta:\n1. explique por que o navegador bloqueou a resposta;\n2. explique por que no Postman funciona;\n3. diga o que precisa mudar na API.",
+      "respostasAceitas": [
+        "Para o navegador, porta diferente é outra origem; por segurança, ele só entrega a resposta ao site se a API disser que aquela origem é permitida (cabeçalhos CORS). O Postman não é navegador e não aplica essa regra. A API precisa liberar a origem, por exemplo com o middleware cors no Express."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) política de mesma origem do navegador; 2) Postman não aplica CORS; 3) habilitar CORS para a origem do site."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Hoje a maioria das APIs usa JSON, mas o XML continua em uso. Em que casos o XML ainda é escolhido?\n\nNa sua resposta:\n1. cite uma situação em que o XML é usado;\n2. explique uma característica do XML que ajuda nessa situação.",
+      "respostasAceitas": [
+        "Exemplos: nota fiscal eletrônica (NF-e), sistemas antigos com SOAP, integrações bancárias e de governo, arquivos de configuração. O XML permite validar o documento com um esquema (XSD), usar atributos e namespaces, o que ajuda em documentos oficiais que precisam seguir um padrão rígido."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) qualquer uso real coerente (NF-e, SOAP, sistemas legados, configuração); 2) validação por esquema, padrão rígido, atributos, legibilidade de documentos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O que significa \"consumir uma API\"? Use como exemplo um app que mostra a previsão do tempo.\n\nNa sua resposta:\n1. explique o que é consumir uma API;\n2. cite duas informações que o app precisa saber sobre a API para usá-la.",
+      "respostasAceitas": [
+        "Consumir uma API é o programa fazer requisições às rotas dela e usar os dados que voltam. O app de clima chama a API de previsão e mostra a temperatura na tela. Ele precisa saber a URL da rota, o método, os parâmetros (como a cidade), o formato da resposta (JSON) e, se houver, a chave de acesso."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) fazer requisições e usar a resposta; 2) duas informações quaisquer: URL, método, parâmetros, formato, autenticação/chave."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma API pública de CEP exige uma chave de acesso e permite só 100 consultas por dia para cada chave. Explique por que APIs fazem isso.\n\nNa sua resposta:\n1. explique para que serve a chave;\n2. explique por que a API limita o número de consultas.",
+      "respostasAceitas": [
+        "A chave identifica quem está usando a API, para liberar ou bloquear o acesso e saber o consumo de cada cliente. O limite protege o servidor contra excesso de uso ou abuso (por exemplo, um robô fazendo milhares de chamadas), garantindo que a API continue funcionando para todos (e, em alguns casos, separa planos gratuitos e pagos)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) identificação/controle de acesso; 2) proteger o servidor, evitar abuso, dividir recursos de forma justa."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma padaria precisa enviar seus dados de vendas em XML para um sistema da prefeitura e também quer mostrar os mesmos dados em JSON no app dos clientes. Explique como uma só API REST pode atender os dois.\n\nNa sua resposta:\n1. explique o que é a representação de um recurso;\n2. diga como cada cliente pode pedir o formato que quer;\n3. explique por que os dados continuam os mesmos.",
+      "respostasAceitas": [
+        "O recurso (as vendas) é um só; a representação é o formato em que ele é enviado (XML ou JSON). Cada cliente pede o formato pelo cabeçalho Accept (application/xml ou application/json) e a API monta a resposta naquele formato. Os dados vêm do mesmo banco e das mesmas regras; só muda a forma de escrever."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) recurso x representação; 2) cabeçalho Accept (aceitar também rotas/parâmetros de formato); 3) mesma fonte de dados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Por que o XML é chamado de linguagem \"extensível\"?\n\nNa sua resposta:\n1. explique quem define os nomes das tags num XML;\n2. dê exemplo de duas tags que poderiam ser criadas para os dados de uma clínica.",
+      "respostasAceitas": [
+        "Porque o XML não tem tags prontas, como o HTML: quem cria o documento inventa as tags conforme os dados. Para uma clínica, por exemplo, <paciente> e <consulta> (ou <medico>, <data>)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o autor/sistema define as tags; 2) duas tags coerentes com o contexto."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Services: REST, JSON e XML",
+      "capacidade": "back.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Interprete o código de um site de biblioteca: `fetch('/api/livros?autor=Machado').then(r => r.json()).then(lista => console.log(lista.length));`. Considere que a API devolve um array com os livros encontrados.\n\nNa sua resposta:\n1. diga qual requisição é feita (método, rota e filtro);\n2. diga o que aparece no console.",
+      "respostasAceitas": [
+        "É feita uma requisição GET para /api/livros com o filtro autor=Machado na query string. O primeiro then converte a resposta JSON em array, e o segundo mostra no console a quantidade de livros desse autor que a API encontrou."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) GET, /api/livros, query autor=Machado; 2) o número de livros encontrados (tamanho do array)."
+    }
+  ]
+}
