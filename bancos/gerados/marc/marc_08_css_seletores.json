@@ -1,0 +1,2456 @@
+{
+  "nome": "Linguagem de Marcação — CSS: seletores, formatação e validação (a revisar)",
+  "materia": "Linguagem de Marcação",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site de uma padaria, o HTML monta o conteúdo (títulos, parágrafos, imagens). Qual é o papel do CSS nessa página?",
+      "alternativas": [
+        "Definir a aparência: cores, fontes e espaçamentos",
+        "Guardar os pedidos e os dados dos clientes num banco de dados",
+        "Criar a estrutura de títulos, parágrafos e listas",
+        "Enviar os dados do formulário para o servidor"
+      ],
+      "correta": 0,
+      "explicacao": "CSS (folhas de estilo em cascata) cuida da apresentação. A estrutura é do HTML; banco e envio de dados são de outras tecnologias."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que significa a sigla CSS?",
+      "alternativas": [
+        "Computer Style System (sistema de estilo do computador)",
+        "Cascading Style Sheets (folhas de estilo em cascata)",
+        "Creative Site Structure (estrutura criativa do site)",
+        "Content Source Script (script de origem do conteúdo)"
+      ],
+      "correta": 1,
+      "explicacao": "CSS = Cascading Style Sheets. O \"cascata\" indica que várias regras podem se aplicar e existe uma ordem para decidir qual vale."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma escola tem 40 páginas HTML que usam o mesmo arquivo `estilo.css`. A direção pediu para trocar a cor de todos os títulos. Qual a principal vantagem de o CSS estar nesse arquivo separado?",
+      "alternativas": [
+        "O arquivo separado faz o HTML não precisar mais de tags de título",
+        "O navegador passa a ignorar os erros de digitação do HTML",
+        "Basta mudar a regra uma vez e todas as páginas mudam",
+        "Cada página passa a ter uma cor diferente automaticamente"
+      ],
+      "correta": 2,
+      "explicacao": "Separar conteúdo (HTML) e apresentação (CSS) num arquivo externo permite mudar o visual do site inteiro num só lugar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na página de um pet shop aparece: `<p style=\"color: green;\">Banho e tosa</p>`. Que forma de aplicar CSS é essa?",
+      "alternativas": [
+        "CSS interno (dentro da tag <style> no <head>)",
+        "CSS externo (arquivo .css ligado com <link>)",
+        "CSS importado pelo atributo class da tag",
+        "CSS inline (no atributo style da própria tag)"
+      ],
+      "correta": 3,
+      "explicacao": "O atributo `style` dentro da tag é o CSS inline: vale só para aquele elemento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual linha, colocada no `<head>`, liga corretamente o arquivo `estilos.css` à página?",
+      "alternativas": [
+        "`<link rel=\"stylesheet\" href=\"estilos.css\">`",
+        "`<style src=\"estilos.css\"></style>`",
+        "`<script type=\"text/css\" href=\"estilos.css\"></script>`",
+        "`<css link=\"estilos.css\">`"
+      ],
+      "correta": 0,
+      "explicacao": "A tag `<link>` com `rel=\"stylesheet\"` e `href` apontando para o arquivo é a forma de ligar um CSS externo. `<style>` não tem `src`.",
+      "grupo": "link-externo"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Onde fica o CSS interno (também chamado de incorporado) de uma página?",
+      "alternativas": [
+        "No atributo `style` de cada uma das tags do `<body>`",
+        "Na tag `<style>`, em geral no `<head>`",
+        "Num arquivo `.css` ligado pela tag `<link>`",
+        "Dentro da tag `<script>` no fim do `<body>`"
+      ],
+      "correta": 1,
+      "explicacao": "CSS interno é escrito entre `<style>` e `</style>`, em geral dentro do `<head>`, e vale só para aquela página."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma clínica tem esta situação: no `estilo.css` (ligado com `<link>`) há `p { color: blue; }`; no `<style>` da página, que vem DEPOIS do `<link>`, há `p { color: gray; }`; e um parágrafo tem `style=\"color: red;\"`. De que cor fica esse parágrafo?",
+      "alternativas": [
+        "Azul, porque o arquivo externo sempre vence",
+        "Cinza, porque o `<style>` sempre vence o inline",
+        "Vermelho, porque o estilo inline tem prioridade",
+        "Preto, porque as regras se anulam e volta ao padrão"
+      ],
+      "correta": 2,
+      "explicacao": "O inline (atributo style) vence regras de seletores do arquivo externo e do `<style>`. Só `!important` passaria por cima dele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No `<head>` de uma página de cinema há, nesta ordem: `<style> h1 { color: red; } </style>` e depois `<link rel=\"stylesheet\" href=\"cine.css\">`, e o `cine.css` tem `h1 { color: yellow; }`. De que cor fica o `h1`?",
+      "alternativas": [
+        "Vermelho, porque o `<style>` sempre vence o arquivo externo",
+        "Vermelho, porque a primeira regra lida é a que vale",
+        "Laranja, porque o navegador mistura as duas cores",
+        "Amarelo, porque a regra do arquivo foi lida por último"
+      ],
+      "correta": 3,
+      "explicacao": "Interno e externo têm o mesmo peso; com seletores iguais, vale a regra que aparece por último. Aqui o `<link>` vem depois do `<style>`.",
+      "grupo": "ordem-interno-externo"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No `<head>` de uma página de hotel o `<link>` para `hotel.css` vem ANTES do `<style>`. O arquivo tem `#reserva { color: green; }` e o `<style>` tem `p { color: purple; }`. O parágrafo é `<p id=\"reserva\">`. De que cor ele fica?",
+      "alternativas": [
+        "Verde, porque id é mais específico que elemento",
+        "Roxo, porque o `<style>` foi lido depois do arquivo",
+        "Roxo, porque o CSS interno sempre vence o externo",
+        "Verde, porque o arquivo externo sempre vence o CSS interno"
+      ],
+      "correta": 0,
+      "explicacao": "A ordem só desempata regras de mesma especificidade. `#reserva` (id) é mais específico que `p` (elemento), então o verde vence mesmo vindo antes.",
+      "grupo": "ordem-interno-externo"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que usar muito CSS inline (atributo `style` em cada tag) é considerado má prática num site grande?",
+      "alternativas": [
+        "O navegador não aceita mais o atributo `style` no HTML5",
+        "Mistura aparência e conteúdo; muda-se tag por tag",
+        "O inline só funciona em títulos, não em parágrafos",
+        "O inline deixa a página sem acentos e sem caracteres especiais"
+      ],
+      "correta": 1,
+      "explicacao": "O atributo style funciona, mas espalha o visual pelo HTML; para mudar algo é preciso editar cada tag. O arquivo externo centraliza."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na regra `h2 { color: navy; }`, o que é `h2`?",
+      "alternativas": [
+        "A propriedade (indica qual característica visual será mudada)",
+        "O valor (indica como vai ficar)",
+        "O seletor (indica quais elementos recebem o estilo)",
+        "A declaração completa da regra"
+      ],
+      "correta": 2,
+      "explicacao": "Numa regra CSS, o seletor vem antes das chaves; dentro delas ficam as declarações propriedade: valor;"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na declaração `font-size: 18px;`, o que é `18px`?",
+      "alternativas": [
+        "O seletor que escolhe os elementos",
+        "O nome da propriedade",
+        "Um comentário do CSS",
+        "O valor atribuído à propriedade"
+      ],
+      "correta": 3,
+      "explicacao": "Em `propriedade: valor;`, `font-size` é a propriedade e `18px` é o valor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual regra está escrita com a sintaxe correta?",
+      "alternativas": [
+        "`p { color: red; font-size: 16px; }`",
+        "`p ( color = red, font-size = 16px )`",
+        "`p { color red; font-size 16px }`",
+        "`<p> color: red; font-size: 16px; </p>`"
+      ],
+      "correta": 0,
+      "explicacao": "Seletor, chaves, e dentro delas propriedade, dois-pontos, valor e ponto e vírgula entre as declarações."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno da oficina de informática escreveu:\n```css\nh1 {\n  color: blue\n  font-size: 30px;\n}\n```\nO título ficou sem a cor e sem o tamanho. Qual o erro?",
+      "alternativas": [
+        "Faltam aspas em volta de `blue`",
+        "Falta o ponto e vírgula depois de `blue`",
+        "O seletor `h1` deveria ter um ponto antes",
+        "As chaves deveriam ser parênteses"
+      ],
+      "correta": 1,
+      "explicacao": "Sem `;`, o navegador lê `blue font-size: 30px` como um valor só de `color`, que é inválido, e descarta essa declaração inteira.",
+      "grupo": "falta-ponto-virgula"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Como se escreve um comentário dentro de um arquivo CSS?",
+      "alternativas": [
+        "`<!-- comentário -->`",
+        "`// comentário` (só esse tipo é aceito)",
+        "`/* comentário */`",
+        "`# comentário`"
+      ],
+      "correta": 2,
+      "explicacao": "No CSS o comentário é entre `/*` e `*/`. `<!-- -->` é comentário de HTML; `//` não é comentário válido em CSS."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No arquivo de uma biblioteca há:\n```css\n/* p { color: red; } */\np { color: brown; }\n```\nDe que cor ficam os parágrafos?",
+      "alternativas": [
+        "Vermelho, porque a primeira regra vence",
+        "Preto, porque o comentário anula o arquivo todo",
+        "Marrom e vermelho alternados",
+        "Marrom, porque a primeira regra está comentada"
+      ],
+      "correta": 3,
+      "explicacao": "Tudo entre `/*` e `*/` é ignorado pelo navegador, então só a regra marrom vale."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na loja de games, o arquivo tem:\n```css\np { color: red; fonte-size: 20px; text-align: center; }\n```\nO que acontece com os parágrafos?",
+      "alternativas": [
+        "Vermelhos e centralizados; só a declaração errada é ignorada",
+        "Nada é aplicado, porque um erro invalida a regra inteira",
+        "Ficam vermelhos, mas todo o resto do arquivo CSS deixa de funcionar",
+        "O navegador corrige `fonte-size` e aplica os 20px"
+      ],
+      "correta": 0,
+      "explicacao": "O navegador ignora apenas a declaração que não entende (`fonte-size` não existe) e aplica as outras da mesma regra.",
+      "grupo": "declaracao-invalida"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na regra `footer { background: black; color: white; }`, o que fica entre as chaves?",
+      "alternativas": [
+        "O nome do arquivo CSS que será carregado",
+        "As declarações, no formato propriedade: valor;",
+        "Os seletores que escolhem os elementos",
+        "O conteúdo de texto que vai aparecer dentro do rodapé"
+      ],
+      "correta": 1,
+      "explicacao": "Entre as chaves ficam as declarações (propriedade: valor;). O seletor vem antes das chaves."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual seletor atinge TODOS os parágrafos da página?",
+      "alternativas": [
+        "`.p`",
+        "`#p`",
+        "`p`",
+        "`<p>`"
+      ],
+      "correta": 2,
+      "explicacao": "O seletor de elemento (tipo) usa só o nome da tag. Ponto é classe, # é id e o sinal de menor/maior não se usa em CSS."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na academia, vários cartões têm `class=\"plano\"`. Qual seletor estiliza todos eles?",
+      "alternativas": [
+        "`#plano`",
+        "`plano`",
+        "`*plano`",
+        "`.plano`"
+      ],
+      "correta": 3,
+      "explicacao": "Classe se seleciona com ponto antes do nome. `plano` sem ponto procuraria uma tag `<plano>`."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz a regra `* { margin: 0; }`?",
+      "alternativas": [
+        "Tira a margem de todos os elementos",
+        "Tira a margem só do primeiro elemento",
+        "Tira a margem só dos elementos que têm alguma classe",
+        "Dá erro, porque `*` não é seletor válido"
+      ],
+      "correta": 0,
+      "explicacao": "`*` é o seletor universal: atinge todos os elementos. É comum para \"zerar\" margens padrão do navegador."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual a diferença principal entre `class` e `id` no HTML, pensando no CSS?",
+      "alternativas": [
+        "O id pode se repetir em vários elementos; a classe deve ser única na página",
+        "Classe pode se repetir em vários elementos; id deve ser único",
+        "Classe só funciona em `div` e id só funciona em `p`",
+        "Não há diferença: `.` e `#` selecionam a mesma coisa"
+      ],
+      "correta": 1,
+      "explicacao": "Classe é para grupos de elementos com o mesmo estilo; id identifica um único elemento na página."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um elemento tem `<p class=\"preco promocao\">`. Isso é válido?",
+      "alternativas": [
+        "Não: cada elemento só pode ter uma classe",
+        "Sim, mas só a primeira classe (`preco`) é aplicada ao elemento",
+        "Sim: são duas classes separadas por espaço",
+        "Não: classes devem ser separadas por vírgula"
+      ],
+      "correta": 2,
+      "explicacao": "O atributo class aceita várias classes separadas por espaço. As regras de `.preco` e de `.promocao` valem para ele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual seletor atinge apenas os `<li>` que estão DENTRO de um elemento com `class=\"cardapio\"` (em qualquer nível)?",
+      "alternativas": [
+        "`.cardapio, li`",
+        "`li.cardapio`",
+        "`#cardapio li`",
+        "`.cardapio li`"
+      ],
+      "correta": 3,
+      "explicacao": "O espaço entre seletores é o seletor descendente. Vírgula seria grupo; `li.cardapio` é um li que tem a classe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual a diferença entre `p.destaque` e `p .destaque` (com espaço)?",
+      "alternativas": [
+        "`p.destaque`: p com a classe; `p .destaque`: algo com a classe dentro de um p",
+        "Não há diferença, o espaço é ignorado pelo navegador",
+        "`p.destaque` é inválido; só o segundo funciona",
+        "`p .destaque` seleciona todos os parágrafos e também todos os elementos .destaque"
+      ],
+      "correta": 0,
+      "explicacao": "Sem espaço, os dois seletores se referem ao mesmo elemento. Com espaço, é descendente: um elemento .destaque dentro de um p."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel o menu é:\n```html\n<nav class=\"menu\">\n  <ul>\n    <li><a href=\"#\">Quartos</a></li>\n  </ul>\n</nav>\n```\nQual seletor NÃO atinge o `<a>`?",
+      "alternativas": [
+        "`.menu a`",
+        "`.menu > a`",
+        "`nav ul li a`",
+        "`li > a`"
+      ],
+      "correta": 1,
+      "explicacao": "`>` é o seletor de filho direto. O `a` não é filho direto do nav (está dentro de ul e li), então `.menu > a` não pega. Os outros pegam.",
+      "grupo": "filho-direto"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual seletor estiliza somente os campos `<input type=\"email\">`?",
+      "alternativas": [
+        "`input.email`",
+        "`input#email`",
+        "`input[type=\"email\"]`",
+        "`input(type=\\\"email\\\")`"
+      ],
+      "correta": 2,
+      "explicacao": "Colchetes formam o seletor de atributo: escolhe elementos pelo valor de um atributo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No formulário da clínica há `input[type=\"text\"] { border: 1px solid gray; }`. Quais campos recebem a borda?",
+      "alternativas": [
+        "Todos os inputs do formulário, de qualquer tipo que for",
+        "Os inputs de texto e também os de senha",
+        "Só os inputs que têm a classe text",
+        "Só os inputs com type igual a \"text\""
+      ],
+      "correta": 3,
+      "explicacao": "O seletor de atributo compara o valor: só `type=\"text\"`. Senha (`password`) e e-mail não entram."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O código é:\n```html\n<div class=\"card\">\n  <p>Ração</p>\n  <section>\n    <p>Brinquedo</p>\n  </section>\n</div>\n```\ne o CSS é `.card > p { color: orange; }`. Quais textos ficam laranja?",
+      "alternativas": [
+        "Só \"Ração\"",
+        "Só \"Brinquedo\"",
+        "\"Ração\" e \"Brinquedo\"",
+        "Nenhum, porque o seletor é inválido"
+      ],
+      "correta": 0,
+      "explicacao": "`>` pega só filhos diretos. \"Brinquedo\" está dentro de section, então é neto do .card, não filho.",
+      "grupo": "filho-direto"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num site de oficina há a regra `section p, .card { font-weight: bold; }`. Quais elementos recebem negrito diretamente por essa regra?",
+      "alternativas": [
+        "Só os parágrafos que estão dentro de uma section com a classe card",
+        "Todo p dentro de section e todo elemento .card",
+        "Só os elementos que são section e p e card ao mesmo tempo",
+        "Nenhum, porque não se mistura vírgula com espaço"
+      ],
+      "correta": 1,
+      "explicacao": "A vírgula separa dois seletores independentes: `section p` (descendente) e `.card`. Cada um atinge seus próprios elementos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na loja de games há `<a class=\"botao\" id=\"comprar\">`. Qual seletor atinge esse link?",
+      "alternativas": [
+        "`a #comprar .botao`",
+        "`a.comprar#botao`",
+        "`a#comprar.botao`",
+        "`#botao.comprar a`"
+      ],
+      "correta": 2,
+      "explicacao": "Juntos sem espaço, os seletores descrevem o mesmo elemento: tag a, id comprar e classe botao. Com espaço viraria descendente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual seletor de grupo aplica o mesmo estilo a `h1`, a `h2` e aos elementos da classe `.titulo`?",
+      "alternativas": [
+        "`h1 h2 .titulo`",
+        "`h1 + h2 + .titulo`",
+        "`h1.h2.titulo`",
+        "`h1, h2, .titulo`"
+      ],
+      "correta": 3,
+      "explicacao": "Vírgula agrupa seletores. Espaço seria descendente e juntar sem espaço exigiria tudo no mesmo elemento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma pessoa escreveu `.Destaque { color: red; }` no CSS, mas o HTML tem `<span class=\"destaque\">`. O que acontece?",
+      "alternativas": [
+        "Não fica vermelho: classe diferencia maiúsculas",
+        "O span fica vermelho, porque o CSS ignora maiúsculas em tudo",
+        "O navegador mostra um aviso na tela do usuário",
+        "O span fica vermelho só no celular"
+      ],
+      "correta": 0,
+      "explicacao": "Nomes de classe e id diferenciam maiúsculas de minúsculas: `Destaque` e `destaque` são classes diferentes.",
+      "grupo": "maiusculas-classe"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No CSS da biblioteca há `#aviso { color: red; }` e o HTML tem `<p class=\"aviso\">Devolva o livro</p>`. Por que o texto não fica vermelho?",
+      "alternativas": [
+        "Falta escrever `p#aviso` para a regra funcionar com parágrafo",
+        "Usou # (id), mas o HTML tem class: seria `.aviso`",
+        "A cor red não funciona em parágrafos",
+        "O id precisa vir com aspas no CSS: `#\"aviso\"`"
+      ],
+      "correta": 1,
+      "explicacao": "`#` seleciona id; para a classe é ponto. Erro comum de trocar os dois."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas regras tem um seletor INVÁLIDO para o CSS (o navegador ignora a regra)?",
+      "alternativas": [
+        "`.duas-colunas { width: 50%; }`",
+        "`.coluna_2 { width: 50%; }`",
+        "`.2colunas { width: 50%; }`",
+        "`.coluna2 { width: 50%; }`"
+      ],
+      "correta": 2,
+      "explicacao": "Uma classe no seletor não pode começar com número (precisaria de escape). Hífen, sublinhado e número no meio/fim são permitidos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma professora disse que \"HTML é o esqueleto e CSS é a roupa\" de uma página.\n\nNa sua resposta:\n1. explique o que o HTML faz numa página;\n2. explique o que o CSS faz e dê um exemplo de algo que ele muda.",
+      "respostasAceitas": [
+        "O HTML monta o conteúdo e a estrutura (títulos, parágrafos, imagens). O CSS define a aparência, por exemplo cor, fonte e tamanho do texto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) HTML = estrutura/conteúdo; 2) CSS = apresentação, com um exemplo (cor, fonte, tamanho, espaçamento)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site de uma padaria aparece a linha `<link rel=\"stylesheet\" href=\"padaria.css\">` dentro do `<head>`.\n\nNa sua resposta:\n1. diga o que essa linha faz;\n2. diga uma vantagem de usar o CSS num arquivo separado.",
+      "respostasAceitas": [
+        "Liga o arquivo externo padaria.css à página, para aplicar os estilos dele. Vantagem: várias páginas usam o mesmo arquivo e uma mudança vale para todas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) liga/carrega o CSS externo; 2) reaproveitamento/manutenção centralizada (ou HTML mais limpo, cache)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja a regra:\n```css\n.preco {\n  color: green;\n  font-weight: bold;\n}\n```\nExplique as partes dessa regra.\n\nNa sua resposta:\n1. diga qual é o seletor e quais elementos ele atinge;\n2. diga quais são as propriedades e os valores e o efeito delas.",
+      "respostasAceitas": [
+        "Seletor .preco: todos os elementos com class=\"preco\". Propriedades color (valor green, texto verde) e font-weight (valor bold, negrito)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) seletor de classe .preco; 2) color: green deixa verde, font-weight: bold deixa em negrito."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num arquivo CSS de uma academia aparece: `/* Cores do cabeçalho - não mudar sem falar com o designer */`.\n\nNa sua resposta:\n1. diga o que é esse trecho e se o navegador aplica algo dele;\n2. explique para que serve na manutenção do código.",
+      "respostasAceitas": [
+        "É um comentário: o navegador ignora. Serve para explicar ou avisar quem for mexer no código depois."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) comentário CSS, ignorado; 2) documentar/organizar/avisar outros programadores."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre os seletores `p`, `.p` e `#p`.\n\nNa sua resposta:\n1. diga o que cada um seleciona;\n2. diga quantos elementos o `#p` deveria atingir numa página correta.",
+      "respostasAceitas": [
+        "p seleciona todas as tags <p>; .p os elementos com class=\"p\"; #p o elemento com id=\"p\". Como id é único, #p deve atingir só um."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) elemento / classe / id; 2) um só (id não se repete)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa página de cinema está a regra `* { box-sizing: border-box; margin: 0; }`.\n\nNa sua resposta:\n1. diga quais elementos o seletor `*` atinge;\n2. diga por que essa regra costuma ficar no começo do arquivo.",
+      "respostasAceitas": [
+        "O * (universal) atinge todos os elementos. Fica no começo para servir de base (zerar padrões do navegador); regras mais específicas depois ajustam o que precisar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) todos os elementos; 2) é uma base/reset e as regras seguintes podem sobrescrever (ordem e especificidade baixa)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno colocou `style=\"color: red;\"` em 30 parágrafos de várias páginas de uma loja. O professor pediu para trocar por uma classe no arquivo externo.\n\nNa sua resposta:\n1. explique por que o inline espalhado dificulta a manutenção;\n2. explique como a classe no arquivo externo resolve o problema.",
+      "respostasAceitas": [
+        "Com inline, para mudar a cor é preciso editar os 30 parágrafos, um por um. Com uma classe (ex.: .alerta) no CSS externo, basta mudar a regra uma vez e todos mudam."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) repetição e edição tag por tag, mistura conteúdo e estilo; 2) uma regra central reaproveitada."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja:\n```css\nh1 {\n  color: blue\n  text-align: center;\n}\n```\nO título não ficou azul nem centralizado.\n\nNa sua resposta:\n1. aponte o erro de sintaxe;\n2. explique por que as duas propriedades deixaram de funcionar, e não só a cor.",
+      "respostasAceitas": [
+        "Falta o ponto e vírgula depois de blue. Sem ele, o navegador lê \"blue text-align: center\" como valor de color, que é inválido, e descarta essa declaração inteira."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) falta ; após blue; 2) as duas linhas viram uma declaração só, inválida, e ela é ignorada.",
+      "grupo": "falta-ponto-virgula"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No CSS de uma pet shop há: `.produtos li { color: brown; }`.\n\nNa sua resposta:\n1. explique o que significa o espaço entre `.produtos` e `li`;\n2. diga se um `li` fora do elemento `.produtos` fica marrom e por quê.",
+      "respostasAceitas": [
+        "O espaço é o seletor descendente: pega os li que estão dentro de um elemento com class produtos, em qualquer nível. Um li fora dele não fica marrom."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) descendente (dentro de); 2) não, porque não está dentro de .produtos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Compare os seletores `.menu a` e `.menu > a`.\n\nNa sua resposta:\n1. explique o que cada um seleciona;\n2. dê um exemplo de link que o primeiro pega e o segundo não.",
+      "respostasAceitas": [
+        ".menu a pega todo link dentro do .menu, em qualquer nível. .menu > a só os links filhos diretos. Um a dentro de um li dentro do .menu é pego só pelo primeiro."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) descendente x filho direto; 2) exemplo de link aninhado (ex.: .menu > ul > li > a).",
+      "grupo": "filho-direto"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num formulário de inscrição da escola existe a regra `input[type=\"password\"] { background: #fff3cd; }`.\n\nNa sua resposta:\n1. explique como funciona o seletor de atributo;\n2. diga quais campos ficam com esse fundo.",
+      "respostasAceitas": [
+        "Os colchetes escolhem elementos pelo valor de um atributo. Só os input com type=\"password\" (campos de senha) ficam com o fundo amarelado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) seleciona pelo atributo e valor; 2) só os campos de senha."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma clínica tem a mesma regra `p { color: gray; }` no arquivo externo e `p { color: black; }` no `<style>` da página, e o `<style>` vem depois do `<link>`.\n\nNa sua resposta:\n1. diga de que cor ficam os parágrafos;\n2. explique o critério que decidiu.",
+      "respostasAceitas": [
+        "Pretos. As duas regras têm o mesmo seletor (mesma especificidade) e o mesmo peso, então vence a que foi lida por último, a do <style>."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) preto; 2) empate de especificidade, vence a última (ordem no código).",
+      "grupo": "ordem-interno-externo"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma regra no arquivo da oficina é:\n```css\np { color: navy; fonte-weight: bold; text-align: right; }\n```\nO parágrafo fica azul-marinho e à direita, mas sem negrito.\n\nNa sua resposta:\n1. explique por que só o negrito não funcionou;\n2. explique como o navegador trata uma declaração que ele não reconhece.",
+      "respostasAceitas": [
+        "A propriedade está escrita errado (fonte-weight em vez de font-weight). O navegador ignora só a declaração que não entende e aplica as outras da regra normalmente."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nome da propriedade errado; 2) ignora só aquela declaração, sem quebrar a regra nem o arquivo.",
+      "grupo": "declaracao-invalida"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O HTML de uma loja de games é `<p class=\"Promo\">50% off</p>` e o CSS é `.promo { color: red; }`.\n\nNa sua resposta:\n1. explique por que o texto não ficou vermelho;\n2. dê uma boa prática para evitar esse tipo de erro.",
+      "respostasAceitas": [
+        "Nomes de classe diferenciam maiúsculas e minúsculas: Promo e promo são classes diferentes. Boa prática: usar sempre minúsculas e hífen (ex.: promo, preco-antigo)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) diferença de maiúscula/minúscula; 2) padronizar nomes (minúsculas, hífen) ou copiar o nome exato.",
+      "grupo": "maiusculas-classe"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a regra `nav ul li a, footer a { text-decoration: none; }`.\n\nNa sua resposta:\n1. diga quais links são atingidos pela parte antes da vírgula;\n2. diga quais são atingidos pela parte depois da vírgula e o efeito da regra.",
+      "respostasAceitas": [
+        "Antes da vírgula: links dentro de li, dentro de ul, dentro de nav. Depois: qualquer link dentro de footer. O efeito é tirar o sublinhado desses links."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) descendentes encadeados no nav; 2) links do footer; text-decoration: none remove o sublinhado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No arquivo da padaria há, nesta ordem:\n```css\nh1 { color: brown; }\nh1 { color: orange; }\n```\nDe que cor fica o `h1`?",
+      "alternativas": [
+        "Marrom, porque a primeira regra escrita vence",
+        "Marrom, porque cores escuras têm prioridade",
+        "Nenhuma, porque as duas regras se anulam",
+        "Laranja, porque a última regra igual vence"
+      ],
+      "correta": 3,
+      "explicacao": "Com seletores iguais (mesma especificidade), vence a regra que aparece por último: é a \"cascata\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que a palavra \"cascata\" do nome CSS quer dizer?",
+      "alternativas": [
+        "Várias regras podem valer para um elemento e há critérios para decidir qual vence",
+        "O CSS só funciona se os arquivos estiverem guardados em pastas uma dentro da outra",
+        "As regras são aplicadas de baixo para cima, da última tag até a primeira",
+        "O estilo cai do `<body>` para o `<head>` da página"
+      ],
+      "correta": 0,
+      "explicacao": "A cascata é o conjunto de critérios (origem, especificidade, ordem, !important) que decide qual regra vale quando há conflito."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site da escola há `body { color: darkblue; }` e nenhuma outra regra de cor. De que cor fica o texto de um `<p>` dentro do body?",
+      "alternativas": [
+        "Preto, porque a regra vale só para o body",
+        "Azul-escuro, pois a cor é herdada",
+        "Azul-escuro só se o p tiver uma classe",
+        "Preto, porque o p precisa sempre de regra própria"
+      ],
+      "correta": 1,
+      "explicacao": "A propriedade color é herdada: os elementos de dentro recebem o valor do pai quando não têm regra própria.",
+      "grupo": "heranca-basica"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na clínica há `div.ficha { border: 2px solid red; }`. Dentro da div há dois parágrafos sem nenhuma regra. O que acontece com eles?",
+      "alternativas": [
+        "Cada parágrafo ganha também a sua própria borda vermelha",
+        "Os parágrafos ficam com o texto vermelho",
+        "Não ganham borda: border não é herdada",
+        "A borda some da div e vai para os parágrafos"
+      ],
+      "correta": 2,
+      "explicacao": "Borda, margem, padding e fundo não são herdados. Já cor e fonte do texto são.",
+      "grupo": "heranca-basica"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas propriedades é HERDADA pelos elementos filhos?",
+      "alternativas": [
+        "`border`",
+        "`margin`",
+        "`padding`",
+        "`font-family`"
+      ],
+      "correta": 3,
+      "explicacao": "Propriedades de texto (color, font-family, font-size, line-height, text-align) são herdadas. Caixa (border, margin, padding) não."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na academia: `section { font-size: 20px; color: green; }` e `p { color: black; }`. Um `<p>` dentro da section fica como?",
+      "alternativas": [
+        "Com 20px e texto preto",
+        "Com 20px e texto verde",
+        "Com o tamanho padrão e texto preto",
+        "Com o tamanho padrão e texto verde"
+      ],
+      "correta": 0,
+      "explicacao": "O p herda o font-size da section (não tem regra própria de tamanho), mas tem regra própria de cor, que vence a herança."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na biblioteca: `#principal { color: red; }` e `p { color: blue; }`. O HTML é `<div id=\"principal\"><p>Acervo</p></div>`. De que cor fica \"Acervo\"?",
+      "alternativas": [
+        "Vermelho, porque o seletor de id é sempre mais específico que o seletor p",
+        "Azul: regra que atinge o p vence o valor herdado",
+        "Vermelho, porque a div vem antes do p no HTML",
+        "Roxo, porque o navegador mistura as duas cores"
+      ],
+      "correta": 1,
+      "explicacao": "Especificidade só compara regras que atingem o MESMO elemento. `#principal` atinge a div; o p só herdaria. Como `p` atinge o p diretamente, o azul vence."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No CSS, o que é herança?",
+      "alternativas": [
+        "Um arquivo CSS copia todas as regras de outro arquivo CSS da pasta",
+        "A última regra do arquivo apaga as regras anteriores",
+        "Alguns estilos do pai passam para os elementos de dentro",
+        "Uma classe passa a valer também para os ids da página"
+      ],
+      "correta": 2,
+      "explicacao": "Herança: propriedades como color e font-family passam do pai para os filhos que não têm regra própria."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual seletor tem MAIS especificidade (mais \"força\")?",
+      "alternativas": [
+        "`.topo`",
+        "`div`",
+        "`*`",
+        "`#topo`"
+      ],
+      "correta": 3,
+      "explicacao": "Ordem de força: id > classe (e atributo, pseudo-classe) > elemento > universal (força zero)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O botão é `<button class=\"comprar\">` e há `button { color: white; }` e `.comprar { color: yellow; }`. De que cor fica o texto?",
+      "alternativas": [
+        "Amarelo: classe é mais específica que elemento",
+        "Branco, porque seletor de tag sempre vence",
+        "Branco, porque a regra do button vem primeiro no arquivo",
+        "Amarelo só se a regra .comprar vier antes"
+      ],
+      "correta": 0,
+      "explicacao": "Classe tem mais especificidade que o nome da tag, então vence independente da ordem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O parágrafo é `<p id=\"aviso\" class=\"alerta\">`. As regras, nesta ordem, são `#aviso { color: green; }` e `.alerta { color: red; }`. Qual cor vence?",
+      "alternativas": [
+        "Vermelho, porque a regra .alerta veio por último",
+        "Verde, porque id vence classe mesmo vindo antes",
+        "Vermelho, porque classe vence id",
+        "Verde só se não houver a classe alerta"
+      ],
+      "correta": 1,
+      "explicacao": "Ordem só desempata especificidades iguais. Id (1,0,0) vence classe (0,1,0).",
+      "grupo": "id-vs-classe"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual dos seletores abaixo é o MAIS específico?",
+      "alternativas": [
+        "`.menu .item a`",
+        "`nav ul li a`",
+        "`ul#menu li`",
+        "`.menu li`"
+      ],
+      "correta": 2,
+      "explicacao": "Contando (id, classes, elementos): ul#menu li = (1,0,2); .menu .item a = (0,2,1); nav ul li a = (0,0,4); .menu li = (0,1,1). Um id já vence qualquer número de classes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No pet shop: `.card p { color: gray; }` e `p { color: black; }` (nesta ordem). Para um `<p>` dentro de `.card`, qual vence?",
+      "alternativas": [
+        "`p`, porque foi escrita por último",
+        "`p`, porque seletor curto é mais forte",
+        "Nenhuma: dá empate e o texto fica preto padrão",
+        "`.card p`, porque tem uma classe a mais"
+      ],
+      "correta": 3,
+      "explicacao": "`.card p` tem especificidade (0,1,1), maior que `p` (0,0,1). A ordem não importa nesse caso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em `<li class=\"item ativo\">`, as regras são `.item.ativo { color: blue; }` e `ul .ativo { color: red; }`, nesta ordem. Qual cor vence?",
+      "alternativas": [
+        "Azul: duas classes pesam mais que classe + elemento",
+        "Vermelho, porque a regra foi escrita por último",
+        "Vermelho, porque ul .ativo é um seletor descendente e por isso vence",
+        "Azul só se o li não estiver dentro de um ul"
+      ],
+      "correta": 0,
+      "explicacao": ".item.ativo = (0,2,0); ul .ativo = (0,1,1). Duas classes vencem; a ordem não chega a ser usada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Cinema: `.filme h2 { color: white; }` e `section h2 { color: gold; }`, nesta ordem. O HTML é `<section class=\"filme\"><h2>Estreia</h2></section>`. Qual cor vence?",
+      "alternativas": [
+        "Dourado, porque a regra section h2 foi lida por último no arquivo",
+        "Branco: classe + elemento é mais específico",
+        "Dourado, porque section é a tag do pai",
+        "Branco, porque é a primeira regra do arquivo"
+      ],
+      "correta": 1,
+      "explicacao": ".filme h2 = (0,1,1) e section h2 = (0,0,2). Classe pesa mais que qualquer quantidade de elementos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um campo é `<input type=\"text\" class=\"campo\">`. As regras são `input[type=\"text\"] { border-color: blue; }` e `.campo { border-color: gray; }`, nesta ordem. Qual vence?",
+      "alternativas": [
+        "Cinza: os dois empatam e .campo veio por último",
+        "Cinza: classe sempre vence seletor de atributo",
+        "Azul: elemento + atributo pesa mais que só uma classe",
+        "Azul: o seletor de atributo pesa o mesmo que um seletor de id"
+      ],
+      "correta": 2,
+      "explicacao": "Atributo pesa como classe. input[type=\"text\"] = (0,1,1): um atributo + um elemento; .campo = (0,1,0). O primeiro é mais específico, então a ordem nem conta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz o `!important` em `color: red !important;`?",
+      "alternativas": [
+        "Mostra um aviso vermelho para o usuário",
+        "Torna a regra obrigatória para passar no validador do W3C",
+        "Deixa o texto em negrito além de vermelho",
+        "Faz a declaração vencer as regras normais"
+      ],
+      "correta": 3,
+      "explicacao": "!important passa a declaração na frente das normais na cascata. Deve ser usado raramente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que o professor pede para EVITAR `!important` no dia a dia?",
+      "alternativas": [
+        "Quebra a especificidade: para mudar depois, só com outro !important",
+        "Ele deixa o site bem mais lento para carregar nos celulares e tablets",
+        "Ele só funciona no navegador instalado no computador da escola",
+        "Ele apaga as outras regras do arquivo ao ser lido"
+      ],
+      "correta": 0,
+      "explicacao": "Usar !important vira uma \"briga\": para sobrescrever, só outro !important. O código fica difícil de manter."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Oficina: `#titulo { color: blue; }` e `h1 { color: red !important; }`. O HTML é `<h1 id=\"titulo\">`. Qual cor fica?",
+      "alternativas": [
+        "Azul, porque o id sempre vence",
+        "Vermelho: !important vence a especificidade do id",
+        "Azul, porque o !important só vale para seletores de classe",
+        "Vermelho, porque h1 vem depois no HTML"
+      ],
+      "correta": 1,
+      "explicacao": "Declarações com !important ficam acima das normais, independente da especificidade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Hotel: o parágrafo tem `style=\"color: green;\"` e o arquivo tem `p { color: gray !important; }`. Qual cor fica?",
+      "alternativas": [
+        "Verde, porque o estilo inline sempre vence qualquer outra regra",
+        "Verde, porque o arquivo externo é lido antes",
+        "Cinza: !important vence até o inline normal",
+        "Cinza só se o p também tiver uma classe"
+      ],
+      "correta": 2,
+      "explicacao": "O inline vence regras normais, mas uma declaração com !important na folha de estilo passa à frente do inline sem !important.",
+      "grupo": "important-inline"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas é uma unidade ABSOLUTA (tamanho fixo) no CSS?",
+      "alternativas": [
+        "`em`",
+        "`rem`",
+        "`%`",
+        "`px`"
+      ],
+      "correta": 3,
+      "explicacao": "px é fixo. em, rem e % são relativos a outro tamanho."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por padrão, os navegadores usam 16px como tamanho do texto da raiz (`html`). Quanto vale `font-size: 2rem;`?",
+      "alternativas": [
+        "32px",
+        "16px",
+        "2px",
+        "18px"
+      ],
+      "correta": 0,
+      "explicacao": "rem é relativo à fonte do elemento raiz: 2 × 16px = 32px.",
+      "grupo": "unidade-calc"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma `div` tem `font-size: 20px` e um `<p>` dentro dela tem `font-size: 1.5em`. Qual o tamanho da fonte do parágrafo?",
+      "alternativas": [
+        "24px",
+        "30px",
+        "20px",
+        "1.5px"
+      ],
+      "correta": 1,
+      "explicacao": "Em font-size, em é relativo à fonte do pai: 1,5 × 20px = 30px.",
+      "grupo": "unidade-calc"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A `section` tem `font-size: 18px` e o `<p>` de dentro tem `font-size: 50%`. Qual o tamanho do parágrafo?",
+      "alternativas": [
+        "18px",
+        "50px",
+        "9px",
+        "8px"
+      ],
+      "correta": 2,
+      "explicacao": "Em font-size, porcentagem é relativa ao tamanho da fonte do pai: 50% de 18px = 9px."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O `html` tem 16px. Uma `div` tem `font-size: 2em` e dentro dela um `span` tem `font-size: 1rem`. Qual o tamanho do span?",
+      "alternativas": [
+        "32px",
+        "64px",
+        "2px",
+        "16px"
+      ],
+      "correta": 3,
+      "explicacao": "rem ignora o pai e olha só para a raiz (16px): 1rem = 16px, mesmo dentro da div de 32px."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que muitos sites usam `rem` em vez de `px` para tamanhos de texto?",
+      "alternativas": [
+        "Porque acompanha a fonte que o usuário configurou no navegador",
+        "Porque rem deixa o arquivo CSS menor e a página bem mais rápida de abrir",
+        "Porque px não funciona em telas de celular",
+        "Porque rem dispensa o uso de font-family"
+      ],
+      "correta": 0,
+      "explicacao": "rem é relativo à raiz: se a pessoa aumenta a fonte padrão do navegador, o texto acompanha. Ajuda na acessibilidade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual código de cor hexadecimal representa o BRANCO?",
+      "alternativas": [
+        "`#000000`",
+        "`#ffffff`",
+        "`#ff0000`",
+        "`#0000ff`"
+      ],
+      "correta": 1,
+      "explicacao": "No hexadecimal #RRGGBB, ff em todos os canais = branco; 00 em todos = preto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas declarações deixa o texto vermelho?",
+      "alternativas": [
+        "`color: rgb(0, 0, 255);`",
+        "`color: rgb(0, 255, 0);`",
+        "`color: rgb(255, 0, 0);`",
+        "`color: rgb(0, 0, 0);`"
+      ],
+      "correta": 2,
+      "explicacao": "rgb(vermelho, verde, azul): 255 no primeiro e 0 nos outros = vermelho puro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que o quarto número faz em `background-color: rgba(0, 0, 0, 0.5);`?",
+      "alternativas": [
+        "Define o brilho da cor em porcentagem, de 0 a 100",
+        "Define a espessura da borda em pixels",
+        "Define a quantidade de amarelo da cor",
+        "A transparência (0 transparente, 1 opaco)"
+      ],
+      "correta": 3,
+      "explicacao": "O a de rgba é alfa (opacidade): 0.5 = preto meio transparente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O código `#333` (com 3 dígitos) equivale a qual código de 6 dígitos?",
+      "alternativas": [
+        "`#333333`",
+        "`#330000`",
+        "`#000333`",
+        "`#303030`"
+      ],
+      "correta": 0,
+      "explicacao": "Na forma curta, cada dígito é duplicado: #333 = #333333 (cinza escuro)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual a diferença entre `color` e `background-color`?",
+      "alternativas": [
+        "color muda o fundo; background-color muda o texto",
+        "color muda o texto; background-color muda o fundo",
+        "As duas mudam a cor do texto, mas background-color só funciona em títulos",
+        "color é para HTML e background-color é para CSS"
+      ],
+      "correta": 1,
+      "explicacao": "color = cor do texto (primeiro plano); background-color = cor de fundo da caixa do elemento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas NÃO é uma forma válida de escrever cor em CSS?",
+      "alternativas": [
+        "`color: teal;`",
+        "`color: #1a2b3c;`",
+        "`color: #12345;`",
+        "`color: rgb(10, 20, 30);`"
+      ],
+      "correta": 2,
+      "explicacao": "Hexadecimal precisa de 3, 4, 6 ou 8 dígitos; com 5 é inválido. Nome, hex de 6 dígitos e rgb são válidos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A loja de games usa texto `#777777` sobre fundo `#888888`. Qual o problema, segundo boas práticas de acessibilidade?",
+      "alternativas": [
+        "Hexadecimal com dígitos repetidos é inválido no W3C",
+        "Cinza não pode ser usado como cor de texto",
+        "O fundo precisa ser escrito em rgb, e não em código hexadecimal",
+        "Contraste baixo: os dois cinzas são quase iguais"
+      ],
+      "correta": 3,
+      "explicacao": "Os dois cinzas são muito parecidos: pouco contraste dificulta a leitura, principalmente para quem tem baixa visão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site do cinema, um aluno escreveu `color: #ff00ff;`. Que cor aparece?",
+      "alternativas": [
+        "Magenta (vermelho e azul no máximo)",
+        "Verde, porque ff está nas pontas",
+        "Amarelo (vermelho e verde no máximo, sem azul)",
+        "Ciano (verde e azul no máximo)"
+      ],
+      "correta": 0,
+      "explicacao": "#ff00ff: R=ff, G=00, B=ff. Vermelho + azul = magenta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em `rgb(120, 200, 50)`, o que significam os três números?",
+      "alternativas": [
+        "A largura, a altura e a espessura da borda do elemento em pixels",
+        "A quantidade de vermelho, verde e azul, cada uma de 0 a 255",
+        "A cor do texto, a cor do fundo e a cor da borda",
+        "O brilho, a transparência e o contraste, de 0 a 100"
+      ],
+      "correta": 1,
+      "explicacao": "rgb mistura luz vermelha, verde e azul; cada canal vai de 0 (nada) a 255 (máximo)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na padaria há `body { font-family: Arial, sans-serif; color: #333; }` e nenhum outro estilo de fonte ou cor.\n\nNa sua resposta:\n1. diga se os parágrafos e títulos dentro do body recebem essa fonte e essa cor;\n2. explique o conceito que faz isso acontecer.",
+      "respostasAceitas": [
+        "Sim. font-family e color são herdadas: os elementos dentro do body recebem esses valores quando não têm regra própria."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sim, recebem; 2) herança (propriedades de texto passam do pai para os filhos). Aceitar se citar que h1 continua com tamanho/negrito próprios."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a frase: \"no CSS, quando dois seletores iguais definem a mesma propriedade, vale o último\".\n\nNa sua resposta:\n1. dê um exemplo com duas regras para o mesmo seletor;\n2. diga qual valor fica e por quê.",
+      "respostasAceitas": [
+        "Ex.: p { color: red; } e depois p { color: blue; }. Fica azul, porque as duas têm a mesma especificidade e a última lida vence (cascata)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) exemplo coerente; 2) a última vence por empate de especificidade."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma pessoa usa `color: rgb(0, 128, 0);` e outra usa `color: green;` no site da academia.\n\nNa sua resposta:\n1. explique como funciona o rgb (o que são os três números);\n2. diga uma vantagem do código numérico em relação ao nome da cor.",
+      "respostasAceitas": [
+        "rgb(vermelho, verde, azul), cada um de 0 a 255; aqui só verde (128). Os códigos (rgb/hex) permitem milhões de tons exatos, enquanto há poucos nomes de cor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) três canais R, G, B de 0 a 255; 2) precisão/variedade de tons (ex.: seguir a cor da identidade visual)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre `px` e `rem` para o tamanho de fonte.\n\nNa sua resposta:\n1. diga a que cada unidade é relativa (ou se é fixa);\n2. diga quantos pixels vale 1.5rem quando a raiz tem 16px.",
+      "respostasAceitas": [
+        "px é fixo; rem é relativo ao tamanho da fonte do elemento raiz (html). Com a raiz em 16px, 1.5rem = 24px."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) px fixo, rem relativo à raiz; 2) 24px."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma loja escreveu `background-color: rgba(255, 255, 255, 0.8);` numa faixa sobre uma foto.\n\nNa sua resposta:\n1. diga que cor é essa;\n2. explique o efeito do 0.8 sobre a foto de fundo.",
+      "respostasAceitas": [
+        "É branco. O 0.8 é a opacidade (alfa): a faixa fica 80% opaca, então a foto aparece um pouco por trás."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) branco; 2) transparência parcial (alfa), a foto aparece levemente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No CSS de uma pet shop alguém escreveu `color: #fff;` e outra pessoa `color: #ffffff;`.\n\nNa sua resposta:\n1. diga se as duas são a mesma cor e qual é;\n2. explique a regra da forma curta de 3 dígitos.",
+      "respostasAceitas": [
+        "Sim, as duas são branco. Na forma curta cada dígito é repetido: #fff vira #ffffff."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mesma cor, branco; 2) duplica cada dígito."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na escola: `nav a { color: white; }` vem antes de `a { color: blue; }` no arquivo. Os links do menu ficaram brancos, mesmo a regra azul vindo depois.\n\nNa sua resposta:\n1. explique por que o branco venceu;\n2. diga quando a ordem das regras passaria a decidir.",
+      "respostasAceitas": [
+        "nav a tem especificidade maior (dois elementos) que a (um elemento), então vence mesmo vindo antes. A ordem só decide quando a especificidade é igual."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) especificidade maior; 2) só em empate de especificidade."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na clínica, `.ficha { border: 1px solid gray; color: navy; }`. Dentro da `.ficha` há parágrafos sem regras próprias.\n\nNa sua resposta:\n1. diga o que os parágrafos herdam e o que não herdam;\n2. explique a diferença entre os dois tipos de propriedade.",
+      "respostasAceitas": [
+        "Herdam a cor navy (texto), mas não ganham borda própria. Propriedades de texto como color e font são herdadas; propriedades da caixa como border, margin e padding não."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) herda color, não herda border; 2) texto herdado x caixa não herdada.",
+      "grupo": "heranca-basica"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma `div` com `font-size: 20px` contém um `p` com `font-size: 1.2em`, e dentro do p há um `span` com `font-size: 1.2em`.\n\nNa sua resposta:\n1. calcule o tamanho do p e do span;\n2. explique por que o em \"acumula\" quando os elementos ficam um dentro do outro.",
+      "respostasAceitas": [
+        "p = 1,2 × 20 = 24px; span = 1,2 × 24 = 28,8px. O em é relativo à fonte do pai, então cada nível multiplica o tamanho do nível de cima."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 24px e 28,8px; 2) em depende do pai, efeito em cadeia (diferente de rem, que olha só a raiz).",
+      "grupo": "unidade-calc"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega resolveu todos os conflitos do CSS da loja colocando `!important` em quase todas as declarações.\n\nNa sua resposta:\n1. explique o que o !important faz;\n2. explique por que isso vai atrapalhar a manutenção do site.",
+      "respostasAceitas": [
+        "Faz a declaração vencer as declarações normais, mesmo as mais específicas. Se todas têm !important, volta a briga de especificidade entre elas e, para mudar algo, é preciso outro !important; o código fica confuso."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) vence as regras normais; 2) quebra a lógica da cascata, efeito bola de neve, difícil sobrescrever e manter."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja:\n```css\n#cardapio p { color: brown; }\n.destaque { color: red; }\n```\nO HTML é `<div id=\"cardapio\"><p class=\"destaque\">Pão de queijo</p></div>`. O texto ficou marrom, mas a pessoa queria vermelho.\n\nNa sua resposta:\n1. explique por que ficou marrom;\n2. sugira uma forma de deixar vermelho sem usar !important.",
+      "respostasAceitas": [
+        "#cardapio p tem um id (1,0,1), mais forte que .destaque (0,1,0). Solução: aumentar a especificidade, por exemplo #cardapio .destaque ou #cardapio p.destaque."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) id pesa mais que classe; 2) seletor mais específico (ex.: #cardapio .destaque) ou evitar id no estilo.",
+      "grupo": "id-vs-classe"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um designer escolheu texto amarelo-claro sobre fundo branco no site de um hotel.\n\nNa sua resposta:\n1. explique o problema dessa combinação;\n2. diga quem é mais prejudicado e uma forma de corrigir.",
+      "respostasAceitas": [
+        "Baixo contraste: o texto fica difícil de ler. Prejudica principalmente pessoas com baixa visão ou quem usa o celular no sol. Corrigir escurecendo o texto ou o fundo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) contraste baixo; 2) pessoas com baixa visão/daltonismo/tela com reflexo; usar cores com mais contraste."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Biblioteca:\n```css\n#lista li { color: black; }\nli.atrasado { color: red; }\n```\nHTML: `<ul id=\"lista\"><li class=\"atrasado\">Dom Casmurro</li></ul>`.\n\nNa sua resposta:\n1. diga a cor do item e compare a especificidade das duas regras;\n2. explique por que escrever a segunda regra depois não resolveu.",
+      "respostasAceitas": [
+        "Fica preto. #lista li = (1,0,1); li.atrasado = (0,1,1). O id vence. A ordem só desempata quando a especificidade é igual, o que não é o caso."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) preto, contagem id x classe; 2) ordem só vale em empate.",
+      "grupo": "id-vs-classe"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na oficina: `body { color: gray; }`, `.box { color: blue; }` e o HTML `<div class=\"box\"><p>Revisão</p></div>`.\n\nNa sua resposta:\n1. diga a cor de \"Revisão\";\n2. explique de onde vem essa cor, considerando herança.",
+      "respostasAceitas": [
+        "Azul. O p não tem regra própria de cor, então herda do pai mais próximo, a div .box, que é azul. O cinza do body só chegaria se a div não tivesse cor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) azul; 2) herda do pai mais próximo (a div), não do body."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Hotel: `p { color: black !important; }` no arquivo e `<p style=\"color: green;\">Check-in às 14h</p>`.\n\nNa sua resposta:\n1. diga a cor final do texto;\n2. explique por que o inline, que normalmente vence, perdeu aqui.",
+      "respostasAceitas": [
+        "Preto. O inline vence as regras normais, mas uma declaração com !important fica acima das normais, inclusive do inline sem !important."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) preto; 2) !important passa à frente do inline normal (nível de importância antes da especificidade).",
+      "grupo": "important-inline"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual propriedade muda o tipo de letra (a fonte) do texto?",
+      "alternativas": [
+        "`font-style`",
+        "`text-transform`",
+        "`font-family`",
+        "`font-weight`"
+      ],
+      "correta": 2,
+      "explicacao": "font-family escolhe a fonte. font-style é itálico, font-weight é peso (negrito) e text-transform muda maiúsculas/minúsculas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz `font-weight: bold;`?",
+      "alternativas": [
+        "Deixa o texto em itálico",
+        "Aumenta o tamanho do texto",
+        "Sublinha o texto",
+        "Deixa o texto em negrito"
+      ],
+      "correta": 3,
+      "explicacao": "font-weight controla a espessura (peso) da letra; bold = negrito (equivale a 700)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual declaração deixa o texto em itálico?",
+      "alternativas": [
+        "`font-style: italic;`",
+        "`font-weight: italic;`",
+        "`text-style: italic;`",
+        "`font-family: italic;`"
+      ],
+      "correta": 0,
+      "explicacao": "Itálico é com font-style. As outras propriedades não aceitam esse valor ou não existem (text-style)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na regra `body { font-family: Verdana, Arial, sans-serif; }`, para que servem `Arial` e `sans-serif`?",
+      "alternativas": [
+        "Fazem o navegador misturar as três fontes no mesmo texto da página",
+        "São reservas, usadas se a anterior não existir",
+        "Deixam o texto em negrito e itálico ao mesmo tempo",
+        "São ignoradas, porque só a primeira fonte vale"
+      ],
+      "correta": 1,
+      "explicacao": "A lista é de prioridade: usa a primeira disponível. A família genérica no fim (sans-serif) garante alguma fonte parecida.",
+      "grupo": "fonte-reserva"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual declaração de fonte está escrita da forma recomendada?",
+      "alternativas": [
+        "`font-family: Times New Roman serif;`",
+        "`font-family: \"Times New Roman, serif\";`",
+        "`font-family: \"Times New Roman\", serif;`",
+        "`font-family = Times New Roman, serif;`"
+      ],
+      "correta": 2,
+      "explicacao": "Nome com espaços vai entre aspas, as fontes são separadas por vírgula e termina com a família genérica. Aspas em volta da lista inteira viram uma fonte só, que não existe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que se coloca uma família genérica como `serif` ou `sans-serif` no FIM da lista do `font-family`?",
+      "alternativas": [
+        "Para o validador do W3C aceitar a propriedade",
+        "Para o texto ficar em negrito sempre que a fonte escolhida falhar",
+        "Para carregar a fonte da internet automaticamente",
+        "Garantir uma fonte parecida se as citadas faltarem"
+      ],
+      "correta": 3,
+      "explicacao": "Famílias genéricas sempre existem no navegador. Se todas as fontes citadas faltarem, ele usa uma do mesmo estilo.",
+      "grupo": "fonte-reserva"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site da escola há `font-family: Fredoka, cursive;`, mas o computador da secretaria não tem a fonte Fredoka e o site não carrega nenhuma fonte externa. O que acontece?",
+      "alternativas": [
+        "Usa uma fonte cursiva genérica do computador",
+        "O texto não aparece até a fonte ser instalada",
+        "O navegador baixa a Fredoka sozinho da internet e instala no computador",
+        "O validador impede a página de abrir"
+      ],
+      "correta": 0,
+      "explicacao": "Sem a fonte nem link para baixá-la, o navegador passa para o próximo item da lista: a família genérica cursive."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual propriedade centraliza o texto de um parágrafo?",
+      "alternativas": [
+        "`font-align: center;`",
+        "`text-align: center;`",
+        "`align: center;`",
+        "`text-position: middle;`"
+      ],
+      "correta": 1,
+      "explicacao": "Alinhamento horizontal do texto é text-align (left, right, center, justify)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na página da biblioteca, `p { text-align: justify; }` faz o quê?",
+      "alternativas": [
+        "Centraliza o texto no meio da largura da página",
+        "Alinha o texto só à direita",
+        "Alinha o texto pelas duas margens",
+        "Deixa a primeira linha com recuo"
+      ],
+      "correta": 2,
+      "explicacao": "justify estica os espaços entre palavras para as linhas encostarem nos dois lados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Como tirar o sublinhado padrão dos links de um menu?",
+      "alternativas": [
+        "`text-transform: none;`",
+        "`font-style: none;`",
+        "`link-style: none;`",
+        "`text-decoration: none;`"
+      ],
+      "correta": 3,
+      "explicacao": "text-decoration controla sublinhado, risco e linha em cima; none remove."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual valor de `text-decoration` faz um texto aparecer riscado (como um preço antigo)?",
+      "alternativas": [
+        "`line-through`",
+        "`underline`",
+        "`overline`",
+        "`strikethrough`"
+      ],
+      "correta": 0,
+      "explicacao": "line-through risca o meio do texto. underline sublinha, overline coloca linha em cima; strike não é valor válido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz `text-transform: uppercase;`?",
+      "alternativas": [
+        "Aumenta o tamanho da fonte",
+        "Mostra o texto em letras maiúsculas",
+        "Deixa o texto em negrito",
+        "Muda a fonte para uma decorativa e bem maior"
+      ],
+      "correta": 1,
+      "explicacao": "uppercase exibe tudo em maiúsculas sem mudar o texto escrito no HTML."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O HTML do cinema tem `<h2>sessão de terror</h2>` e o CSS `h2 { text-transform: capitalize; }`. Como o título aparece?",
+      "alternativas": [
+        "Tudo em maiúsculas: SESSÃO DE TERROR",
+        "Só a primeira letra da frase toda: Sessão de terror",
+        "Iniciais maiúsculas: Sessão De Terror",
+        "Sem nenhuma mudança: sessão de terror"
+      ],
+      "correta": 2,
+      "explicacao": "capitalize deixa a primeira letra de cada palavra maiúscula, inclusive \"De\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno usou `text-transform: uppercase;` no título da loja. O que acontece com o texto que está no HTML?",
+      "alternativas": [
+        "É reescrito em maiúsculas dentro do arquivo HTML",
+        "É apagado e trocado por uma imagem",
+        "Fica em maiúsculas também no banco de dados",
+        "Continua escrito como estava; só a exibição muda"
+      ],
+      "correta": 3,
+      "explicacao": "CSS só muda a apresentação. O conteúdo do HTML não é alterado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O parágrafo tem `font-size: 16px; line-height: 1.5;`. Qual a altura de cada linha?",
+      "alternativas": [
+        "24px",
+        "16px",
+        "1.5px",
+        "17.5px"
+      ],
+      "correta": 0,
+      "explicacao": "line-height sem unidade multiplica o tamanho da fonte: 1,5 × 16px = 24px."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve `letter-spacing: 3px;`?",
+      "alternativas": [
+        "Aumentar o espaço entre as linhas",
+        "Aumentar o espaço entre as letras",
+        "Aumentar o espaço entre as palavras",
+        "Aumentar a margem em volta do parágrafo"
+      ],
+      "correta": 1,
+      "explicacao": "letter-spacing = espaço entre letras. Entre linhas é line-height; entre palavras, word-spacing."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num aviso da clínica, o texto ficou muito \"apertado\", com as linhas quase encostando. Qual propriedade resolve melhor?",
+      "alternativas": [
+        "`letter-spacing`",
+        "`font-weight`",
+        "`line-height`",
+        "`text-indent`"
+      ],
+      "correta": 2,
+      "explicacao": "line-height controla a altura da linha (espaço entre linhas). Valores de 1.4 a 1.6 deixam a leitura confortável."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual declaração deixa o texto com peso normal (tira o negrito de um título)?",
+      "alternativas": [
+        "`font-style: normal;`",
+        "`text-decoration: none;`",
+        "`font-weight: 900;`",
+        "`font-weight: normal;`"
+      ],
+      "correta": 3,
+      "explicacao": "Títulos já vêm em negrito; font-weight: normal (400) tira. font-style mexe no itálico, e 900 é o mais grosso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na loja, `.preco-antigo { text-decoration: line-through; color: gray; font-size: 80%; }` é aplicada a um `<span>` dentro de um `<p>` de 20px. Como o span aparece?",
+      "alternativas": [
+        "Riscado, cinza e com 16px",
+        "Sublinhado, cinza e com 80px",
+        "Riscado, cinza e com 20px",
+        "Riscado, preto e com 16px"
+      ],
+      "correta": 0,
+      "explicacao": "line-through risca; 80% de 20px (fonte do pai) = 16px; a cor é cinza."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O `<p>` tem `font-size: 20px; line-height: 2em;` e dentro dele um `<span>` com `font-size: 10px`. Qual line-height o span herda?",
+      "alternativas": [
+        "20px, porque o em é recalculado usando a fonte de 10px do span",
+        "40px: o em é calculado no p e só depois herdado",
+        "2, porque o span recebe o número sem unidade",
+        "Nenhum, porque line-height não é herdada"
+      ],
+      "correta": 1,
+      "explicacao": "Com unidade (em, px), o filho herda o valor já calculado: 2 × 20 = 40px. Por isso se recomenda line-height sem unidade (ex.: 2), que é recalculado em cada elemento.",
+      "grupo": "lineheight-heranca"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para usar uma fonte do Google Fonts numa página, o que normalmente se faz?",
+      "alternativas": [
+        "Baixa a fonte e escreve o nome dela dentro de uma tag `<p>` da página",
+        "Escreve o endereço do site no atributo `class` da tag body da página",
+        "Põe no `<head>` o `<link>` gerado e usa o nome no font-family",
+        "Instala um programa no computador de cada visitante"
+      ],
+      "correta": 2,
+      "explicacao": "O Google Fonts gera um `<link>` (ou @import) que carrega a fonte pela internet; depois basta usar `font-family: 'Nome', sans-serif;`."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A página da academia usa uma fonte do Google Fonts carregada por `<link>`, com `font-family: \"Poppins\", sans-serif;`. Se o visitante estiver sem internet, o que acontece com o texto?",
+      "alternativas": [
+        "Não aparece nenhum texto na página",
+        "Aparece com a Poppins mesmo assim, porque fica no HTML",
+        "Aparece só em maiúsculas",
+        "Aparece com uma fonte sem serifa do próprio computador"
+      ],
+      "correta": 3,
+      "explicacao": "A fonte vem da internet; se não carregar, o navegador usa a reserva da lista (sans-serif)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno colou o `<link>` do Google Fonts para a fonte \"Lato\", mas escreveu `font-family: \"Lato Regular\";` no CSS. O texto não ficou com a Lato. Por quê?",
+      "alternativas": [
+        "Deve usar o nome da família (\"Lato\"), não do estilo",
+        "O Google Fonts só funciona se o link ficar no fim do body, e não no head",
+        "Fontes da internet precisam de !important para funcionar",
+        "O CSS não aceita aspas no nome de fontes"
+      ],
+      "correta": 0,
+      "explicacao": "A família carregada se chama Lato; \"Lato Regular\" não existe como família. O peso se escolhe com font-weight."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve o serviço de validação de CSS do W3C (jigsaw)?",
+      "alternativas": [
+        "Hospedar o site gratuitamente na internet com um endereço próprio",
+        "Conferir se o CSS segue o padrão e apontar erros",
+        "Deixar o CSS menor, removendo os espaços e as linhas em branco",
+        "Transformar o CSS em HTML automaticamente"
+      ],
+      "correta": 1,
+      "explicacao": "O validador do W3C lê o CSS (por endereço, arquivo ou texto colado) e lista erros e avisos em relação ao padrão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é o W3C?",
+      "alternativas": [
+        "Um navegador usado pelos professores para testar sites",
+        "Uma linguagem de programação usada para criar estilos de páginas",
+        "A organização que mantém os padrões da web",
+        "Um programa para desenhar layouts"
+      ],
+      "correta": 2,
+      "explicacao": "W3C (World Wide Web Consortium) publica as recomendações dos padrões web e oferece validadores."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao validar o CSS da padaria no W3C, apareceu um erro na linha `color: verde;`. O que o validador está dizendo?",
+      "alternativas": [
+        "Que a propriedade color não existe",
+        "Que faltou fechar a tag `<p>`",
+        "Que o arquivo precisa estar em inglês nos comentários",
+        "Que `verde` não é um valor de cor válido em CSS"
+      ],
+      "correta": 3,
+      "explicacao": "Os nomes de cor do CSS são em inglês (green). `verde` é valor inválido, e o navegador ignora a declaração."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quais são as formas de enviar um CSS para o validador do W3C?",
+      "alternativas": [
+        "Por URL, por envio do arquivo ou colando o código",
+        "Só pelo endereço do site já publicado na internet",
+        "Só mandando o arquivo por e-mail para a equipe do W3C conferir",
+        "Só instalando uma extensão no editor"
+      ],
+      "correta": 0,
+      "explicacao": "O jigsaw aceita validação por URI, por upload de arquivo e por entrada direta (colar o texto)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um CSS passou no validador do W3C sem nenhum erro. O que isso garante?",
+      "alternativas": [
+        "Que a página vai ficar igual em todos os navegadores e tamanhos de tela",
+        "Que segue o padrão, não que o visual esteja certo",
+        "Que o site está acessível e com bom contraste de cores",
+        "Que as classes usadas no CSS existem no HTML"
+      ],
+      "correta": 1,
+      "explicacao": "O validador confere o padrão (sintaxe, propriedades, valores). Ele não avalia layout, acessibilidade ou se o seletor bate com o HTML."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O validador do W3C mostrou um erro em `width: 300 px;` (com espaço). Qual a correção?",
+      "alternativas": [
+        "Colocar aspas: `width: \"300 px\";`",
+        "Trocar por `width = 300px;`",
+        "Tirar o espaço: `width: 300px;`",
+        "Colocar o valor entre parênteses: `width: (300)px;`"
+      ],
+      "correta": 2,
+      "explicacao": "Número e unidade ficam juntos. Com espaço, o valor fica inválido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O validador acusou erro em `margin: 10;` (sem unidade). Mas não acusou em `margin: 0;`. Por quê?",
+      "alternativas": [
+        "O validador só confere valores maiores que zero",
+        "Margin com 10 precisa estar entre aspas",
+        "O 0 é tratado como texto, e o validador do W3C ignora valores de texto",
+        "Zero dispensa unidade; 10 precisa dizer se é px, em…"
+      ],
+      "correta": 3,
+      "explicacao": "Medidas diferentes de zero exigem unidade. 0 é o único comprimento aceito sem unidade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No site da clínica, qual nome de classe segue a boa prática de dizer o SIGNIFICADO, não a aparência?",
+      "alternativas": [
+        "`.alerta-alergia`",
+        "`.texto-vermelho`",
+        "`.negrito-grande`",
+        "`.fonte-20`"
+      ],
+      "correta": 0,
+      "explicacao": "O nome deve dizer o que o elemento é. Se a cor mudar de vermelho para laranja, `.texto-vermelho` vira um nome mentiroso.",
+      "grupo": "nome-semantico"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na loja de games, a classe `.azul` é usada nos preços. A empresa mudou a identidade e os preços agora são verdes. Qual o problema?",
+      "alternativas": [
+        "O navegador não aceita mudar a cor de uma classe chamada azul",
+        "O nome `.azul` fica enganoso; melhor seria `.preco`",
+        "É preciso apagar a classe e escrever style inline em cada um dos preços",
+        "O validador do W3C reprova classes com nome de cor"
+      ],
+      "correta": 1,
+      "explicacao": "Nome de classe pela aparência envelhece mal. Pelo significado (`.preco`) o nome continua certo quando o visual muda.",
+      "grupo": "nome-semantico"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual escolha segue melhor as boas práticas para os estilos de um site com várias páginas?",
+      "alternativas": [
+        "Atributo style em cada tag, para ver o estilo junto do conteúdo",
+        "Um `<style>` diferente e repetido em cada página",
+        "Um arquivo CSS externo, com classes de nomes significativos",
+        "Tags antigas de aparência, como `<font>` e `<center>`"
+      ],
+      "correta": 2,
+      "explicacao": "CSS externo e nomes significativos facilitam manutenção. `<font>` e `<center>` são obsoletas no HTML5: aparência é papel do CSS."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno usou `<h1>` em todos os textos que queria grandes, mesmo os que não eram títulos. Qual a orientação correta?",
+      "alternativas": [
+        "Continuar com h1, porque é a forma oficial do HTML de aumentar um texto",
+        "Trocar por `<big>`, que é a tag certa para aumentar letras",
+        "Colocar todo o texto dentro de um `<h6>` e aumentar com zoom",
+        "Usar a tag pelo significado e o tamanho no CSS"
+      ],
+      "correta": 3,
+      "explicacao": "Semântica do W3C: a tag diz o que o conteúdo é. Aparência (tamanho) é responsabilidade do CSS."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um projeto tem as classes `.margem-10`, `.cor-1` e `.caixa-da-direita`. Numa revisão, qual crítica faz mais sentido?",
+      "alternativas": [
+        "Não dizem o que o conteúdo é; mudando o layout, enganam",
+        "Classes não podem ter números nem hífens, então são inválidas",
+        "Classes com hífen não funcionam em todos os navegadores",
+        "Os nomes estão certos, porque descrevem exatamente a aparência e a posição"
+      ],
+      "correta": 0,
+      "explicacao": "Números e hífens são permitidos (só não no começo). O problema é semântico: nomes ligados à posição/aparência deixam de fazer sentido quando o visual muda."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na padaria: `h1 { font-family: \"Comic Neue\", Arial, sans-serif; }`.\n\nNa sua resposta:\n1. explique por que há três nomes de fonte;\n2. explique por que \"Comic Neue\" está entre aspas.",
+      "respostasAceitas": [
+        "É uma lista de reserva: usa a primeira que existir; se faltar, tenta Arial e, por fim, qualquer sans-serif. As aspas são porque o nome tem espaço."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) fontes reserva em ordem de prioridade; 2) nome com espaço vai entre aspas.",
+      "grupo": "fonte-reserva"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No menu de uma academia está a regra `nav a { text-decoration: none; text-transform: uppercase; }`.\n\nNa sua resposta:\n1. diga o efeito de cada declaração;\n2. diga se o texto escrito no HTML muda.",
+      "respostasAceitas": [
+        "text-decoration: none tira o sublinhado dos links; text-transform: uppercase mostra em maiúsculas. O texto do HTML continua igual; muda só a exibição."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sem sublinhado e em maiúsculas; 2) não muda o HTML, só a aparência."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre `font-weight`, `font-style` e `font-size`.\n\nNa sua resposta:\n1. diga o que cada propriedade muda;\n2. dê um valor de exemplo para cada uma.",
+      "respostasAceitas": [
+        "font-weight muda a espessura (ex.: bold); font-style muda a inclinação (ex.: italic); font-size muda o tamanho (ex.: 18px)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) peso, estilo/itálico, tamanho; 2) valores coerentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O professor pediu para validar o CSS do trabalho no validador do W3C (jigsaw) antes de entregar.\n\nNa sua resposta:\n1. explique o que o validador faz;\n2. dê um exemplo de erro que ele encontraria.",
+      "respostasAceitas": [
+        "Confere se o CSS segue o padrão e mostra erros e avisos com a linha. Ex.: propriedade escrita errado (colr) ou valor inválido (color: verde; width: 10 px)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) verifica o código contra o padrão W3C; 2) qualquer erro de sintaxe/propriedade/valor."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site da clínica alguém criou a classe `.vermelho` para os avisos importantes.\n\nNa sua resposta:\n1. explique por que esse nome não é uma boa prática;\n2. sugira um nome melhor e justifique.",
+      "respostasAceitas": [
+        "O nome descreve a aparência; se a cor do aviso mudar, o nome fica errado. Melhor .aviso ou .alerta, que dizem o que o elemento é."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nome pela aparência fica enganoso; 2) nome pelo significado (aviso, alerta, importante).",
+      "grupo": "nome-semantico"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa página de notícias da escola: `p { text-align: justify; line-height: 1.6; }`.\n\nNa sua resposta:\n1. diga o efeito de cada declaração;\n2. explique por que isso ajuda na leitura.",
+      "respostasAceitas": [
+        "justify alinha o texto nas duas margens; line-height 1.6 deixa as linhas com 1,6 vez a altura da fonte. Fica organizado e as linhas não ficam grudadas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) justificado e espaçamento entre linhas; 2) leitura mais confortável/organizada."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um site de pet shop carrega a fonte \"Nunito\" do Google Fonts com um `<link>` no `<head>` e usa `font-family: \"Nunito\", sans-serif;`.\n\nNa sua resposta:\n1. explique de onde a fonte vem quando a página abre;\n2. explique o que acontece se a fonte não carregar e por que o sans-serif está ali.",
+      "respostasAceitas": [
+        "A fonte é baixada pela internet do servidor do Google Fonts, indicado no link. Se não carregar (ex.: sem internet), o navegador usa uma fonte sans-serif do próprio aparelho, a reserva."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) carregada da internet pelo link; 2) usa a reserva genérica, que garante um estilo parecido."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No validador do W3C apareceu: erro em `font-size: 18;` e erro em `color: #12g45b;`.\n\nNa sua resposta:\n1. explique o problema de cada linha;\n2. diga o que o navegador faz com essas declarações erradas.",
+      "respostasAceitas": [
+        "18 sem unidade não é válido para font-size (precisa de px, rem…). #12g45b tem a letra g, que não é hexadecimal (0-9, a-f). O navegador ignora as duas declarações."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) falta unidade; caractere inválido no hex; 2) ignora as declarações (o resto continua)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre validar o HTML (validator.w3.org) e validar o CSS (jigsaw.w3.org) de um site.\n\nNa sua resposta:\n1. diga o que cada validador confere;\n2. explique por que vale a pena usar os dois.",
+      "respostasAceitas": [
+        "O de HTML confere a estrutura: tags, atributos, fechamento. O de CSS confere regras, propriedades e valores de estilo. São linguagens diferentes; um não encontra os erros do outro."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) HTML = marcação/estrutura; CSS = estilos; 2) cada um pega erros de uma linguagem."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um texto tem `font-size: 16px; line-height: 1.5; letter-spacing: 1px;`.\n\nNa sua resposta:\n1. diga a altura de cada linha;\n2. explique a diferença entre line-height e letter-spacing.",
+      "respostasAceitas": [
+        "Cada linha tem 24px (1,5 × 16). line-height é o espaço vertical entre linhas; letter-spacing é o espaço horizontal entre as letras."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 24px; 2) linhas x letras."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno fez um título usando `<p><b><font size=\"7\">Promoção</font></b></p>`. O professor disse que não segue a semântica do W3C.\n\nNa sua resposta:\n1. explique o problema de usar p, b e font para fazer um título;\n2. diga como fazer da forma recomendada, sem escrever o código, só explicando.",
+      "respostasAceitas": [
+        "O texto é um título, então deveria estar numa tag de título (h1/h2); <font> é obsoleta e mistura aparência no HTML. O certo é usar a tag pelo significado e definir tamanho/negrito no CSS."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) tag não diz o significado; font obsoleta; aparência no HTML; 2) tag de título + estilo no CSS."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na loja: `.preco-antigo { text-decoration: line-through; color: gray; }` e `.preco-novo { font-weight: bold; color: green; }`.\n\nNa sua resposta:\n1. descreva como cada preço aparece;\n2. explique por que esses nomes de classe são boa prática.",
+      "respostasAceitas": [
+        "O preço antigo aparece riscado e cinza; o novo em negrito e verde. Os nomes dizem o que o conteúdo é (preço antigo/novo), não a aparência, e continuam certos se o visual mudar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) riscado/cinza e negrito/verde; 2) nomes semânticos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um CSS passou no validador do W3C sem erros, mas a página continuou com o texto sem estilo. O link é `<link rel=\"stylesheet\" href=\"css/estilo.css\">` e o arquivo está em `estilos/estilo.css`.\n\nNa sua resposta:\n1. explique por que o validador não encontrou o problema;\n2. explique qual é o problema real.",
+      "respostasAceitas": [
+        "O validador só confere se o CSS segue o padrão; não sabe se o HTML encontra o arquivo. O problema é o caminho: o link aponta para a pasta css, mas o arquivo está em estilos, então não é carregado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) validador não testa ligação nem visual; 2) caminho do href errado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um `div` tem `font-size: 20px; line-height: 1.5em;` e um `h2` dentro dele tem `font-size: 40px` sem line-height próprio. As linhas do título ficaram encavaladas.\n\nNa sua resposta:\n1. explique qual line-height o h2 herdou e por que ficou apertado;\n2. explique por que `line-height: 1.5` (sem unidade) resolveria.",
+      "respostasAceitas": [
+        "Com em, o valor é calculado na div (1,5 × 20 = 30px) e o h2 herda 30px, menos que a fonte de 40px. Sem unidade, o h2 herda o fator 1,5 e recalcula: 1,5 × 40 = 60px."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) herdou 30px fixo, menor que a fonte; 2) número sem unidade é recalculado em cada elemento.",
+      "grupo": "lineheight-heranca"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — seletores, formatação e validação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Compare duas formas de deixar avisos em destaque no site de um hotel: (A) `style=\"color: red; font-weight: bold;\"` em cada aviso; (B) a classe `.aviso` no arquivo externo com essas declarações.\n\nNa sua resposta:\n1. compare as duas quanto à manutenção e à prioridade na cascata;\n2. diga qual segue as boas práticas do W3C e por quê.",
+      "respostasAceitas": [
+        "A (inline) repete o estilo em cada tag e tem prioridade alta, difícil de sobrescrever; B centraliza numa regra, muda tudo de uma vez e tem especificidade normal de classe. B segue as boas práticas: separa conteúdo e apresentação e usa nome pelo significado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) inline repetido e forte na cascata x classe central e fácil de ajustar; 2) B, separação HTML/CSS e nome semântico."
+    }
+  ]
+}
