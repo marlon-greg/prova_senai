@@ -1,0 +1,2437 @@
+{
+  "nome": "Internet das Coisas — Protocolos de comunicação (a revisar)",
+  "materia": "Internet das Coisas",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "porta-mqtt",
+      "enunciado": "Um técnico vai configurar um sensor da padaria para falar com um broker MQTT sem criptografia. Qual é a porta padrão do MQTT nesse caso?",
+      "alternativas": [
+        "8883",
+        "80",
+        "22",
+        "1883"
+      ],
+      "correta": 3,
+      "explicacao": "A porta padrão do MQTT sem criptografia é 1883. A 8883 é usada pelo MQTT com TLS; 80 é do HTTP e 22 do SSH."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "porta-mqtt",
+      "enunciado": "A academia vai proteger as mensagens MQTT das esteiras com TLS (criptografia). Qual porta padrão costuma ser usada pelo broker nesse caso?",
+      "alternativas": [
+        "1883",
+        "8883",
+        "443",
+        "21"
+      ],
+      "correta": 1,
+      "explicacao": "MQTT com TLS usa por padrão a porta 8883. A 1883 é o MQTT sem criptografia, 443 é do HTTPS e 21 do FTP."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No MQTT, o que é a mensagem de \"última vontade\" (Last Will and Testament, LWT)?",
+      "alternativas": [
+        "Uma mensagem que o broker publica em nome do cliente se ele cair sem avisar",
+        "Uma mensagem que o cliente publica sozinho antes de desligar normalmente",
+        "A última leitura guardada no tópico para quem assinar depois",
+        "Uma mensagem que só pode ser enviada com QoS 2"
+      ],
+      "correta": 0,
+      "explicacao": "A LWT é combinada na conexão; se o cliente sumir sem enviar DISCONNECT, o broker publica essa mensagem por ele. Guardar a última leitura para novos assinantes é o retain."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O sensor do forno de uma padaria tem uma mensagem de última vontade \"forno1 offline\". Em qual situação o broker publica essa mensagem?",
+      "alternativas": [
+        "Quando o sensor envia DISCONNECT antes de uma manutenção",
+        "Toda vez que o sensor publica uma nova leitura",
+        "Quando o sensor perde energia e para de responder",
+        "Quando um novo assinante entra no tópico do forno"
+      ],
+      "correta": 2,
+      "explicacao": "A última vontade só é publicada em desconexão inesperada (queda de energia, perda de Wi-Fi). Se o cliente se desconecta corretamente com DISCONNECT, ela é descartada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em que momento um cliente MQTT informa ao broker qual é a sua mensagem de última vontade?",
+      "alternativas": [
+        "Ao se conectar ao broker",
+        "Ao se desconectar normalmente",
+        "Ao assinar cada tópico",
+        "Ao publicar uma mensagem retida"
+      ],
+      "correta": 0,
+      "explicacao": "Tópico, conteúdo, QoS e retain da última vontade vão no pedido de conexão (CONNECT). Depois disso o broker guarda e só usa se o cliente cair."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sensor de uma câmara fria foi configurado com keep alive de 60 segundos no MQTT. Para que serve esse valor?",
+      "alternativas": [
+        "Faz o sensor publicar automaticamente uma nova leitura a cada 60 segundos",
+        "Se o broker ficar esse tempo sem ouvir o cliente, considera que ele caiu",
+        "Apaga as mensagens retidas do tópico do sensor depois de 60 segundos",
+        "Encerra a conexão do sensor depois de 60 segundos, mesmo funcionando"
+      ],
+      "correta": 1,
+      "explicacao": "Keep alive é o intervalo máximo sem comunicação; se não houver mensagens, o cliente manda um PINGREQ. Sem notícias por cerca de 1,5 vez esse tempo, o broker considera o cliente desconectado (e publica a LWT, se houver)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno tentou publicar uma leitura no tópico casa/+/temperatura, achando que ela iria para todos os cômodos. O que acontece?",
+      "alternativas": [
+        "A leitura é entregue em todos os cômodos de uma vez",
+        "O broker troca o + pelo nome do primeiro cômodo cadastrado",
+        "Não é permitido: os curingas + e # só podem ser usados para assinar",
+        "A mensagem fica guardada até alguém assinar o tópico"
+      ],
+      "correta": 2,
+      "explicacao": "No MQTT a publicação é sempre num tópico exato. Curingas (+ e #) existem só na assinatura, para receber de vários tópicos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de games, os tópicos seguem o padrão loja/<setor>/vendas. Qual das assinaturas abaixo é INVÁLIDA no MQTT?",
+      "alternativas": [
+        "loja/#",
+        "loja/+/vendas",
+        "#",
+        "loja/#/vendas"
+      ],
+      "correta": 3,
+      "explicacao": "O curinga # vale para \"todos os níveis daqui para baixo\" e precisa ser o último nível. Em loja/#/vendas ele está no meio, o que não é permitido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sensor publica em Academia/Esteira1/velocidade, mas o painel assinou academia/esteira1/velocidade. O painel recebe as leituras?",
+      "alternativas": [
+        "Sim, porque o broker ignora maiúsculas e minúsculas",
+        "Não, porque o MQTT diferencia maiúsculas de minúsculas nos tópicos",
+        "Sim, mas só se as duas pontas usarem QoS 2",
+        "Não, porque um tópico não pode ter mais de dois níveis"
+      ],
+      "correta": 1,
+      "explicacao": "Os tópicos MQTT são sensíveis a maiúsculas/minúsculas: Academia e academia são tópicos diferentes. Por isso se combina um padrão, de preferência tudo minúsculo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sensor de umidade publica com QoS 2, e o painel assinou o mesmo tópico com QoS 0. Com qual QoS o broker entrega a mensagem para o painel?",
+      "alternativas": [
+        "QoS 0, o menor entre o da publicação e o da assinatura",
+        "QoS 2, porque vale sempre o QoS de quem publica",
+        "QoS 1, porque o broker usa um valor intermediário",
+        "Nenhum, porque os dois QoS precisam ser iguais"
+      ],
+      "correta": 0,
+      "explicacao": "O QoS vale em cada trecho: do publicador até o broker vale o QoS da publicação; do broker até o assinante vale o menor entre o publicado e o assinado. Aqui, 0."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No cinema, um sensor na catraca publica \"entrou\" com QoS 1 a cada pessoa. Às vezes o painel conta a mesma entrada duas vezes. Qual a explicação?",
+      "alternativas": [
+        "QoS 1 só entrega para quem estava conectado desde o início",
+        "QoS 1 divide cada mensagem em duas partes no caminho",
+        "QoS 1 garante entrega ao menos uma vez e pode reenviar a mesma mensagem",
+        "QoS 1 não usa nenhuma confirmação de recebimento"
+      ],
+      "correta": 2,
+      "explicacao": "No QoS 1, se a confirmação (PUBACK) não chega a tempo, a mensagem é reenviada; o destino pode recebê-la duplicada. Para contar sem duplicar seria QoS 2 ou tratar repetição no painel."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual nível de QoS do MQTT troca mais mensagens de controle a cada publicação, por isso é o mais \"caro\"?",
+      "alternativas": [
+        "QoS 0",
+        "QoS 1",
+        "Todos trocam a mesma quantidade",
+        "QoS 2"
+      ],
+      "correta": 3,
+      "explicacao": "O QoS 2 usa um aperto de mão em quatro etapas para entregar exatamente uma vez. O QoS 1 usa uma confirmação e o QoS 0 nenhuma."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O tópico biblioteca/aviso tem uma mensagem retida antiga que não deve mais aparecer para quem assinar. Como apagar essa mensagem retida?",
+      "alternativas": [
+        "Assinar o tópico com QoS 0 e depois cancelar a assinatura",
+        "Publicar nesse tópico uma mensagem vazia com retain ativado",
+        "Desconectar do broker o cliente que publicou a mensagem",
+        "Publicar a mesma mensagem de novo, agora com QoS 2"
+      ],
+      "correta": 1,
+      "explicacao": "Uma publicação retida com conteúdo vazio (zero bytes) faz o broker descartar a mensagem retida daquele tópico."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O painel da portaria de um hotel precisa mostrar, assim que é aberto, se o portão está aberto ou fechado, sem esperar a próxima mudança. Qual recurso do MQTT resolve isso?",
+      "alternativas": [
+        "Assinar o tópico com QoS 0",
+        "Usar o curinga # no tópico do portão",
+        "Publicar o estado do portão com retain",
+        "Aumentar o keep alive do portão"
+      ],
+      "correta": 2,
+      "explicacao": "Com retain, o broker guarda a última mensagem do tópico e a entrega imediatamente a quem assinar depois."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O leitor de cartões da biblioteca publica \"online\" com retain em biblioteca/leitor1/status ao conectar, e tem como última vontade \"offline\" com retain no mesmo tópico. O leitor perdeu energia e, depois, um painel foi aberto. O que o painel mostra?",
+      "alternativas": [
+        "offline, porque a última vontade retida substituiu o online",
+        "online, porque foi a primeira mensagem retida do tópico",
+        "nada, porque as retidas somem quando o cliente cai",
+        "online e offline, na ordem em que foram publicadas"
+      ],
+      "correta": 0,
+      "explicacao": "O broker guarda só UMA mensagem retida por tópico, a mais recente. Quando o leitor caiu, a LWT \"offline\" (retida) foi publicada e substituiu o \"online\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Dois ESP32 de uma oficina foram programados com o mesmo Client ID e ligados ao mesmo broker MQTT. O que acontece?",
+      "alternativas": [
+        "Os dois funcionam normalmente e dividem as mensagens",
+        "O broker junta os dois e trata como um só dispositivo",
+        "O primeiro só publica e o segundo só consegue assinar",
+        "O broker derruba um quando o outro conecta, e isso se repete"
+      ],
+      "correta": 3,
+      "explicacao": "O Client ID identifica a sessão; o broker aceita só uma conexão por ID e desconecta a anterior. Cada dispositivo precisa de um ID único."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa rede MQTT de uma escola, qual peça precisa estar funcionando o tempo todo para que sensores e painéis troquem mensagens?",
+      "alternativas": [
+        "O painel que assina",
+        "O broker",
+        "O sensor que publica",
+        "O módulo Bluetooth"
+      ],
+      "correta": 1,
+      "explicacao": "Toda mensagem passa pelo broker. Sensores e painéis podem ligar e desligar, mas sem broker ninguém recebe nada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A bomba d'água de um sítio recebe comandos \"ligar\" e \"desligar\" por MQTT e também informa se está funcionando. Um mesmo cliente MQTT pode fazer as duas coisas?",
+      "alternativas": [
+        "Não, cada cliente só pode publicar ou só pode assinar",
+        "Só se a bomba for o próprio broker da rede",
+        "Sim, ele assina o tópico de comando e publica no tópico de estado",
+        "Só se as mensagens forem enviadas com QoS 2"
+      ],
+      "correta": 2,
+      "explicacao": "Qualquer cliente MQTT pode publicar e assinar ao mesmo tempo. É comum separar tópicos de comando e de estado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O MQTT exige um formato específico para o conteúdo (payload) das mensagens?",
+      "alternativas": [
+        "Não; pode ser texto, número ou JSON, combinado entre as partes",
+        "Sim, ele só aceita mensagens no formato JSON padrão",
+        "Sim, ele só aceita mensagens no formato XML com cabeçalho",
+        "Sim, ele só aceita números inteiros de até 4 bytes"
+      ],
+      "correta": 0,
+      "explicacao": "O broker apenas repassa bytes. Quem publica e quem assina combinam o formato; JSON é muito usado, mas não é obrigatório."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um broker MQTT de uma clínica foi deixado aberto na internet, sem usuário e senha. Qual é o principal risco?",
+      "alternativas": [
+        "O broker passa a aceitar apenas mensagens enviadas com QoS 0",
+        "As mensagens retidas passam a ser apagadas a cada minuto",
+        "Os sensores deixam de usar o keep alive e caem sem parar",
+        "Qualquer um pode assinar # e ler tudo, ou publicar comandos falsos"
+      ],
+      "correta": 3,
+      "explicacao": "Sem autenticação, um estranho pode assinar # (todos os tópicos) e publicar em tópicos de comando. Usa-se usuário/senha, TLS e permissões por tópico."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Os tópicos /escola/lab e escola/lab, no MQTT, são:",
+      "alternativas": [
+        "Iguais, porque o broker ignora a barra do começo",
+        "Iguais, mas o primeiro só aceita assinaturas",
+        "Diferentes: a barra inicial cria um primeiro nível vazio",
+        "Diferentes, porque o primeiro é sempre retido"
+      ],
+      "correta": 2,
+      "explicacao": "A barra no início cria um nível vazio antes de escola, então são tópicos distintos. Por isso se recomenda não começar tópico com /."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O celular do dono de uma padaria fica desligado à noite. Ele quer, ao ligar de manhã, receber os alertas MQTT de QoS 1 publicados de madrugada. O que o app precisa usar?",
+      "alternativas": [
+        "Sessão limpa (clean session ligada) e assinatura com QoS 0",
+        "Sessão persistente (clean session desligada) e assinatura com QoS 1",
+        "O curinga # no lugar do nome do tópico do alerta",
+        "Um keep alive bem curto, de poucos segundos"
+      ],
+      "correta": 1,
+      "explicacao": "Com sessão persistente e assinatura QoS 1 ou 2, o broker guarda as mensagens enquanto o cliente está fora e entrega quando ele volta, desde que use o mesmo Client ID."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No HTTP, quem inicia a comunicação?",
+      "alternativas": [
+        "O servidor, que avisa o cliente quando há dado novo",
+        "O broker, que repassa a mensagem aos assinantes",
+        "Qualquer um, porque não há cliente nem servidor",
+        "O cliente, que envia uma requisição ao servidor"
+      ],
+      "correta": 3,
+      "explicacao": "O HTTP segue requisição-resposta: o cliente pede e o servidor responde. O servidor não envia nada sem ser chamado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O aplicativo de um açougue quer consultar na API a última temperatura da câmara fria, sem alterar nada. Qual método HTTP é o adequado?",
+      "alternativas": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ],
+      "correta": 0,
+      "explicacao": "GET serve para ler um recurso sem modificá-lo. POST cria, PUT substitui/atualiza e DELETE apaga."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-status",
+      "enunciado": "Um ESP32 pede GET /api/sensores/99 e recebe o código 404. O que isso significa?",
+      "alternativas": [
+        "O recurso não foi encontrado: não existe o sensor 99",
+        "A leitura foi gravada com sucesso no servidor",
+        "Aconteceu um erro interno no programa do servidor",
+        "Faltou enviar a chave de acesso da API"
+      ],
+      "correta": 0,
+      "explicacao": "404 (Not Found) indica que o endereço/recurso pedido não existe. Sucesso seria 2xx, erro do servidor 5xx e falta de credencial 401."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-status",
+      "enunciado": "A balança de um pet shop envia o peso para a API da nuvem e recebe o código 401. Qual é a causa mais provável?",
+      "alternativas": [
+        "O registro foi criado e o servidor confirmou",
+        "Faltou uma credencial válida, como a chave ou o token",
+        "O servidor está desligado ou fora do ar",
+        "O JSON enviado tem um campo a mais"
+      ],
+      "correta": 1,
+      "explicacao": "401 (Unauthorized) indica falta de autenticação válida. Servidor fora do ar não responderia, e JSON errado costuma gerar 400."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "http-status",
+      "enunciado": "Depois de um POST com uma nova leitura, a API da estufa responde 201. O que isso indica?",
+      "alternativas": [
+        "O pedido foi recusado pelo servidor",
+        "O recurso pedido não existe",
+        "O novo registro foi criado",
+        "A requisição precisa ser repetida"
+      ],
+      "correta": 2,
+      "explicacao": "201 (Created) é o sucesso típico de um POST que criou um novo recurso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa API REST de uma escola, o limite de temperatura do sensor 3 precisa ser trocado (atualizar um recurso que já existe). Qual método HTTP é o mais indicado?",
+      "alternativas": [
+        "GET",
+        "DELETE",
+        "HEAD",
+        "PUT"
+      ],
+      "correta": 3,
+      "explicacao": "PUT (ou PATCH) atualiza um recurso existente. GET lê, DELETE apaga e HEAD pede só os cabeçalhos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um ESP32 envia leituras em JSON por POST. Qual cabeçalho HTTP informa ao servidor o formato do corpo da requisição?",
+      "alternativas": [
+        "Accept-Language: pt-BR",
+        "Host: application/json",
+        "Content-Type: application/json",
+        "Connection: json"
+      ],
+      "correta": 2,
+      "explicacao": "Content-Type diz o tipo do conteúdo enviado. Accept-Language é idioma preferido, Host é o nome do servidor e Connection controla a conexão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa API REST de coleiras com GPS de um pet shop, qual requisição segue o estilo REST para buscar os dados da coleira 7?",
+      "alternativas": [
+        "POST /buscarColeira7",
+        "GET /coleiras/apagar/7",
+        "DELETE /coleiras?buscar=7",
+        "GET /coleiras/7"
+      ],
+      "correta": 3,
+      "explicacao": "No REST o endereço aponta o recurso (/coleiras/7) e o método diz a ação (GET = buscar). Verbos na URL ou método errado fogem do estilo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app consulta a API a cada 2 segundos para saber se a porta da loja abriu (polling). Qual é a desvantagem disso em relação a usar MQTT?",
+      "alternativas": [
+        "O HTTP não consegue transportar mensagens no formato JSON",
+        "Muitas consultas inúteis gastam bateria e dados, e o aviso atrasa",
+        "O HTTP só funciona dentro da rede local da loja, sem internet",
+        "O polling obriga o uso de QoS 2 em cada uma das consultas"
+      ],
+      "correta": 1,
+      "explicacao": "No polling o cliente pergunta repetidamente; a maioria das respostas é \"nada mudou\". No MQTT o broker empurra a mensagem ao assinante quando ela acontece."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Dizer que o HTTP é um protocolo \"sem estado\" (stateless) significa que:",
+      "alternativas": [
+        "cada requisição é independente; o servidor não lembra das anteriores",
+        "o servidor não pode guardar nenhum dado em banco de dados",
+        "a comunicação acontece sem usar nenhuma conexão TCP com o servidor",
+        "as respostas do servidor nunca trazem um código de status"
+      ],
+      "correta": 0,
+      "explicacao": "Cada requisição precisa levar tudo o que o servidor precisa (ex.: a chave de acesso). Isso não impede o servidor de gravar dados em banco."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um ESP32 roda um pequeno servidor HTTP na rede da casa, no IP 192.168.0.50. Fora de casa, no 4G, o celular não consegue abrir esse endereço. Por quê?",
+      "alternativas": [
+        "O ESP32 não consegue responder requisições do tipo GET vindas do 4G",
+        "192.168.0.50 é IP privado e não pode ser alcançado direto pela internet",
+        "O HTTP só funciona quando o celular está ligado por cabo de rede",
+        "A rede 4G bloqueia qualquer resposta em formato HTML vinda de casa"
+      ],
+      "correta": 1,
+      "explicacao": "Endereços 192.168.x.x são privados, válidos só dentro da rede local. Para acessar de fora usa-se uma nuvem/broker na internet ou redirecionamento de porta no roteador."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que é recomendado usar HTTPS, e não HTTP, para enviar leituras de um sensor para a nuvem?",
+      "alternativas": [
+        "Porque deixa as mensagens bem menores que as do HTTP comum",
+        "Porque dispensa a conexão Wi-Fi do dispositivo com o roteador",
+        "Porque transforma o HTTP em um protocolo publish/subscribe",
+        "Porque criptografa os dados, impedindo que alguém leia no caminho"
+      ],
+      "correta": 3,
+      "explicacao": "HTTPS é HTTP com TLS: protege os dados (e a chave da API) contra quem estiver no meio do caminho. Não muda o tamanho nem o modelo de comunicação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é uma vantagem de usar HTTP/REST, e não MQTT, para um dispositivo IoT mandar dados à nuvem?",
+      "alternativas": [
+        "O cabeçalho do HTTP é bem menor que o cabeçalho do MQTT",
+        "O servidor consegue chamar o dispositivo sozinho, sem pedido",
+        "Qualquer servidor web e linguagem já entende, sem precisar de broker",
+        "Funciona mesmo sem internet e sem nenhuma rede local"
+      ],
+      "correta": 2,
+      "explicacao": "HTTP é universal: APIs, navegadores e plataformas de nuvem já o aceitam. Em troca, tem cabeçalhos maiores e segue requisição-resposta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um alarme de uma loja publica o tópico loja/alarme/estado com retain. Um técnico quer que o painel mostre o estado, mas o painel abre e nada aparece por horas. Qual é a causa mais provável?",
+      "alternativas": [
+        "O painel assinou um tópico diferente do publicado, como loja/Alarme/estado",
+        "A mensagem foi publicada com retain, e o retain atrasa a entrega",
+        "O broker só entrega as mensagens retidas uma vez por dia",
+        "O alarme precisa usar QoS 0 para que a mensagem fique retida"
+      ],
+      "correta": 0,
+      "explicacao": "Com retain, quem assina o tópico certo recebe a última mensagem na hora. Se nada chega, o mais provável é o tópico estar diferente (MQTT diferencia maiúsculas)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No sistema de alertas de um hotel, a última vontade de um sensor é \"sensor-quarto12 caiu\". O que acontece com essa mensagem se o sensor se desconectar normalmente, enviando DISCONNECT?",
+      "alternativas": [
+        "Ela é publicada imediatamente pelo broker",
+        "Ela é descartada e não é publicada",
+        "Ela é guardada e publicada na próxima conexão",
+        "Ela é enviada só para o próprio sensor"
+      ],
+      "correta": 1,
+      "explicacao": "DISCONNECT avisa que a saída foi intencional; o broker apaga a última vontade sem publicá-la."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sensor de uma estufa desconectou e, no lugar de \"offline\", o painel continua mostrando \"online\" por quase dois minutos. O keep alive é 60 s. Isso é esperado?",
+      "alternativas": [
+        "Não, a última vontade deveria aparecer no mesmo segundo",
+        "Não, o keep alive faz o broker publicar o status a cada segundo",
+        "Sim, o broker só percebe a queda depois de cerca de 1,5 vez o keep alive",
+        "Sim, porque a última vontade só sai depois de o sensor voltar"
+      ],
+      "correta": 2,
+      "explicacao": "Sem DISCONNECT, o broker só descobre a queda quando o prazo do keep alive (com tolerância de 1,5x) estoura; só então publica a LWT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre os curingas + e # numa assinatura MQTT?",
+      "alternativas": [
+        "+ vale para um só nível; # vale para todos os níveis seguintes",
+        "+ vale para todos os níveis seguintes; # vale para um só nível",
+        "+ serve para publicar e # serve para assinar tópicos",
+        "+ e # fazem a mesma coisa e podem ser trocados à vontade"
+      ],
+      "correta": 0,
+      "explicacao": "Em hotel/+/temperatura o + vale para um nível (o quarto). Em hotel/# o # vale para tudo abaixo de hotel."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sensor envia leituras de temperatura com QoS 0 por uma rede Wi-Fi fraca. O que pode acontecer com algumas leituras?",
+      "alternativas": [
+        "Podem chegar duplicadas, porque são reenviadas",
+        "Ficam retidas no broker até o Wi-Fi melhorar",
+        "São convertidas para QoS 2 pelo próprio broker",
+        "Podem se perder, porque não há confirmação nem reenvio"
+      ],
+      "correta": 3,
+      "explicacao": "QoS 0 é \"no máximo uma vez\": sem confirmação, uma mensagem perdida no caminho não é reenviada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sensor de uma padaria manda POST para a API, mas a resposta é 400 Bad Request. O mesmo código funcionava ontem. O que é mais provável?",
+      "alternativas": [
+        "O corpo da requisição veio fora do formato esperado pela API",
+        "O servidor da API está completamente desligado",
+        "A chave de acesso expirou e precisa ser renovada",
+        "A leitura foi gravada e o 400 indica sucesso"
+      ],
+      "correta": 0,
+      "explicacao": "400 indica requisição malformada (ex.: JSON quebrado, campo faltando ou valor inválido). Chave expirada geraria 401/403; servidor desligado não responderia."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em qual protocolo os clientes se comunicam por meio de um broker, usando tópicos?",
+      "alternativas": [
+        "HTTP",
+        "MQTT",
+        "Bluetooth Classic",
+        "DHCP"
+      ],
+      "correta": 1,
+      "explicacao": "O MQTT usa publish/subscribe com broker e tópicos. O HTTP usa requisição-resposta entre cliente e servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma lâmpada inteligente expõe a API REST: GET /lampadas/4 devolve {\"estado\":\"desligada\"}. O app envia PUT /lampadas/4 com {\"estado\":\"ligada\"} e recebe 200. Em seguida, um novo GET /lampadas/4 deve devolver:",
+      "alternativas": [
+        "{\"estado\":\"desligada\"}",
+        "Código 404, pois a lâmpada foi apagada",
+        "Código 201, pois a lâmpada foi criada",
+        "{\"estado\":\"ligada\"}"
+      ],
+      "correta": 3,
+      "explicacao": "PUT atualizou o recurso e o 200 confirmou. O GET seguinte lê o estado novo: ligada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas tarefas combina melhor com HTTP do que com MQTT num projeto IoT?",
+      "alternativas": [
+        "O sensor avisar na hora, para vários painéis, que a porta abriu",
+        "Vários dispositivos receberem um comando ao mesmo tempo",
+        "O app pedir, quando o usuário abre a tela, o histórico de leituras do mês",
+        "O broker avisar que um sensor caiu sem aviso"
+      ],
+      "correta": 2,
+      "explicacao": "Buscar um histórico sob demanda é requisição-resposta típica (GET). Avisos instantâneos para vários interessados e detecção de queda são pontos fortes do MQTT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No sistema da lavanderia de um hotel, as máquinas publicam em hotel/lavanderia/maquina1/estado, hotel/lavanderia/maquina2/estado e hotel/lavanderia/maquina1/temperatura. Um painel assina hotel/lavanderia/+/estado. O que ele recebe?",
+      "alternativas": [
+        "Os dois tópicos de estado, das máquinas 1 e 2",
+        "Os três tópicos, incluindo a temperatura",
+        "Só o estado da máquina 1",
+        "Nada, porque o + precisa ficar no fim"
+      ],
+      "correta": 0,
+      "explicacao": "O + substitui um nível (máquina1 ou máquina2) e o último nível precisa ser estado. A temperatura não combina."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa sorveteria, um sensor MQTT monitora o freezer e tem configurada uma mensagem de última vontade (LWT) \"freezer offline\" no tópico sorveteria/freezer/status.\n\nNa sua resposta:\n1. explique o que é a mensagem de última vontade e quando o broker a publica;\n2. explique por que esse recurso é útil para o dono da sorveteria.",
+      "respostasAceitas": [
+        "É uma mensagem combinada na conexão que o broker publica no lugar do sensor se ele cair sem avisar (falta de energia, Wi-Fi). Assim o dono sabe que o freezer parou de ser monitorado, em vez de achar que está tudo bem."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mensagem definida ao conectar, publicada pelo broker em desconexão inesperada; 2) avisa que o sensor parou, evitando confiar em dado antigo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um sensor de uma estufa usa MQTT com keep alive de 30 s e última vontade \"estufa offline\". O roteador Wi-Fi desligou de repente.\n\nNa sua resposta:\n1. explique como o broker descobre que o sensor caiu, se o sensor não avisou;\n2. explique o que o broker faz depois de descobrir.",
+      "respostasAceitas": [
+        "O broker espera mensagens ou pings do sensor dentro do keep alive; passando cerca de 1,5 x 30 s sem nada, considera a conexão perdida. Então publica a última vontade \"estufa offline\" no tópico combinado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) estouro do prazo do keep alive (com tolerância) sem PINGREQ/mensagens; 2) publica a LWT para os assinantes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa caixa d'água de um condomínio, o sensor publica o nível a cada 30 minutos, sem retain. O síndico abre o painel e fica vendo \"--\" por muito tempo até aparecer o primeiro valor.\n\nNa sua resposta:\n1. explique por que o painel começa vazio;\n2. explique qual opção do MQTT resolveria e como.",
+      "respostasAceitas": [
+        "Sem retain, o broker não guarda a última leitura; o painel só recebe a próxima publicação, que pode demorar até 30 min. Publicando com retain, o broker guarda a última leitura e entrega na hora a quem assinar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mensagens não retidas só chegam a quem já estava assinando; 2) retain faz o broker guardar e entregar a última mensagem imediatamente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega quer usar QoS 2 em todas as mensagens MQTT de um projeto de academia (batimentos a cada segundo, comandos para o ar-condicionado e registro de pagamento da mensalidade) \"para garantir\".\n\nNa sua resposta:\n1. explique qual é o custo de usar QoS 2;\n2. diga em qual dessas mensagens o QoS 2 vale a pena e por quê.",
+      "respostasAceitas": [
+        "QoS 2 troca mais mensagens de confirmação, gasta mais rede, bateria e tempo. Vale para o pagamento, que não pode chegar duplicado; batimentos a cada segundo podem usar QoS 0 e comandos QoS 1."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mais tráfego, atraso e consumo (quatro etapas); 2) pagamento (exatamente uma vez). Aceitar justificativas coerentes para os demais."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa escola, os sensores publicam em tópicos como escola/bloco1/sala3/temperatura, escola/bloco1/sala3/umidade e escola/bloco2/sala1/temperatura. O painel A assina escola/bloco1/# e o painel B assina escola/+/+/temperatura.\n\nNa sua resposta:\n1. explique o que o painel A recebe;\n2. explique o que o painel B recebe.",
+      "respostasAceitas": [
+        "A recebe tudo do bloco 1 (temperatura e umidade de todas as salas). B recebe só temperatura, de qualquer bloco e sala (inclusive bloco2/sala1)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) # pega todos os níveis abaixo de bloco1; 2) cada + vale um nível (bloco e sala), terminando em temperatura."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma clínica descobriu que o broker MQTT dos sensores de geladeira de vacinas estava aberto na internet, sem usuário e senha e na porta 1883.\n\nNa sua resposta:\n1. explique dois riscos dessa situação;\n2. cite duas medidas para proteger o broker.",
+      "respostasAceitas": [
+        "Qualquer pessoa pode ler todos os dados assinando # e publicar comandos ou leituras falsas. Medidas: exigir usuário e senha, usar TLS (porta 8883) e limitar quem pode publicar/assinar cada tópico."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) vazamento de dados e mensagens/comandos falsos; 2) autenticação, criptografia TLS, controle de acesso por tópico ou firewall."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa oficina, dois sensores MQTT ficam caindo e reconectando sem parar. O técnico percebe que os dois foram gravados com o mesmo código, inclusive o Client ID \"sensor-oficina\".\n\nNa sua resposta:\n1. explique por que eles ficam se derrubando;\n2. diga como resolver.",
+      "respostasAceitas": [
+        "O broker aceita só uma conexão por Client ID; quando um conecta, o outro é desconectado, e os dois ficam reconectando. Basta dar um Client ID diferente para cada sensor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ID duplicado faz o broker encerrar a sessão anterior; 2) Client ID único por dispositivo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O dono de uma padaria desliga o celular à noite. De manhã, o app MQTT não mostra os alertas de QoS 1 sobre o forno publicados de madrugada, embora o app assine o tópico certo.\n\nNa sua resposta:\n1. explique por que os alertas não chegaram;\n2. explique o que precisa ser configurado para recebê-los.",
+      "respostasAceitas": [
+        "Com sessão limpa, o broker esquece o cliente quando ele sai e não guarda mensagens para ele. Usando sessão persistente (clean session desligada), o mesmo Client ID e assinatura QoS 1, o broker guarda os alertas e entrega quando o app voltar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mensagens só vão para quem está conectado, se a sessão não é persistente; 2) sessão persistente + QoS 1/2 + mesmo Client ID. Retain guardaria só a última, não todas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um ESP32 de uma clínica envia a temperatura da sala de vacinas para uma API na nuvem usando HTTP.\n\nNa sua resposta:\n1. explique quem é o cliente e quem é o servidor nessa comunicação;\n2. explique o que o servidor devolve depois de receber a leitura.",
+      "respostasAceitas": [
+        "O ESP32 é o cliente, que faz a requisição com a leitura; a API na nuvem é o servidor. O servidor devolve uma resposta com um código de status (ex.: 201 criado ou um erro)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cliente = dispositivo que pede; servidor = API; 2) resposta com código de status (e, se houver, um corpo)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma estufa envia a requisição `POST /api/leituras` com o corpo {\"sensor\":\"estufa1\",\"umidade\":62} e recebe a resposta `201 Created`.\n\nNa sua resposta:\n1. explique o que essa requisição pede ao servidor;\n2. explique o que significa a resposta 201.",
+      "respostasAceitas": [
+        "Pede para a API registrar uma nova leitura: umidade 62 do sensor estufa1. O 201 indica que deu certo e um novo registro foi criado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) POST cria um recurso novo com os dados do corpo JSON; 2) 201 = criado com sucesso."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma campainha inteligente deve avisar no celular, na hora, quando alguém aperta o botão. A primeira versão usa HTTP: o app pergunta à API a cada 5 segundos se houve toque.\n\nNa sua resposta:\n1. explique por que essa forma (polling) é ruim nesse caso;\n2. explique como o MQTT resolveria melhor.",
+      "respostasAceitas": [
+        "O app faz muitas requisições sem novidade, gastando bateria e dados, e o aviso pode atrasar até 5 s. Com MQTT, o app assina um tópico e o broker entrega a mensagem assim que a campainha publica."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) desperdício de requisições e atraso; 2) publish/subscribe: o broker empurra a mensagem na hora."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma API de caixa d'água tem duas rotas: `GET /api/nivel` e `POST /api/nivel`.\n\nNa sua resposta:\n1. explique para que serve cada uma;\n2. diga quem normalmente chama cada rota: o sensor ou o app.",
+      "respostasAceitas": [
+        "GET lê o nível atual sem alterar nada; POST envia uma nova leitura para ser gravada. Normalmente o sensor faz o POST e o app faz o GET."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) GET consulta, POST registra; 2) sensor envia (POST), app consulta (GET)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No código de um sensor aparece a requisição `GET http://api.exemplo.com/leituras?chave=AB12CD` para enviar dados à plataforma.\n\nNa sua resposta:\n1. explique o risco de mandar a chave assim, usando http;\n2. explique como deixar esse envio mais seguro.",
+      "respostasAceitas": [
+        "Sem criptografia, qualquer um na rede pode ver a chave e usar a conta; além disso, a chave na URL costuma ficar em logs. O certo é usar HTTPS e mandar a chave num cabeçalho, e usar POST para enviar dados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) chave exposta (sem TLS, em URL/logs); 2) HTTPS, chave em cabeçalho, POST para dados. Aceitar outras medidas coerentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A API de lâmpadas de um hotel tem as rotas: `GET /lampadas`, `GET /lampadas/4`, `PUT /lampadas/4` (com {\"estado\":\"ligada\"}) e `DELETE /lampadas/4`.\n\nNa sua resposta:\n1. explique o que faz cada uma das quatro requisições;\n2. explique por que se diz que essa API segue o estilo REST.",
+      "respostasAceitas": [
+        "Lista todas as lâmpadas; mostra a lâmpada 4; atualiza a lâmpada 4 para ligada; remove a lâmpada 4 do cadastro. É REST porque o endereço indica o recurso e o método HTTP indica a ação."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) listar, consultar uma, atualizar, apagar; 2) recursos na URL + métodos HTTP como verbos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um sensor de uma padaria envia dados para a API. Algumas vezes recebe o código 400 e, em outras, o código 500.\n\nNa sua resposta:\n1. explique a diferença entre esses dois códigos;\n2. diga de quem é a correção em cada caso: do dispositivo ou do servidor.",
+      "respostasAceitas": [
+        "400 indica requisição errada (formato ou dado inválido) e quem corrige é o dispositivo. 500 indica erro interno no servidor e quem corrige é a equipe da API."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 4xx erro do cliente, 5xx erro do servidor; 2) 400: ajustar o envio no dispositivo; 500: corrigir o servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma caixa de som portátil toca músicas do celular sem parar, com boa qualidade de áudio. Qual tecnologia é tradicionalmente usada para esse fluxo contínuo?",
+      "alternativas": [
+        "Bluetooth Low Energy (BLE)",
+        "Bluetooth Clássico",
+        "Zigbee",
+        "LoRaWAN"
+      ],
+      "correta": 1,
+      "explicacao": "O Bluetooth Clássico foi feito para fluxo contínuo de dados, como áudio. O BLE é pensado para pacotes pequenos e baixo consumo; Zigbee e LoRaWAN têm taxa baixa demais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a principal diferença do Bluetooth Low Energy (BLE) em relação ao Bluetooth Clássico?",
+      "alternativas": [
+        "Alcança vários quilômetros em campo aberto sem gateway",
+        "Usa a rede da operadora de celular, com chip",
+        "Gasta bem menos energia, enviando pequenos dados de vez em quando",
+        "Transmite vídeo em alta qualidade com mais velocidade"
+      ],
+      "correta": 2,
+      "explicacao": "O BLE fica a maior parte do tempo dormindo e manda pacotes curtos, por isso uma pilha dura meses. O alcance continua de dezenas de metros."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em qual faixa de frequência funcionam o Bluetooth Clássico e o BLE?",
+      "alternativas": [
+        "915 MHz",
+        "5,8 GHz",
+        "700 MHz da rede celular",
+        "2,4 GHz"
+      ],
+      "correta": 3,
+      "explicacao": "Os dois usam a faixa livre de 2,4 GHz, a mesma do Wi-Fi 2,4 GHz e do Zigbee. 915 MHz é usada pelo LoRaWAN no Brasil."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve o pareamento entre um celular e uma balança Bluetooth?",
+      "alternativas": [
+        "Para aumentar o alcance da balança até um quilômetro de distância",
+        "Para converter as medidas da balança em mensagens MQTT",
+        "Para os aparelhos se reconhecerem e combinarem uma chave de segurança",
+        "Para ligar a balança na rede da operadora de celular"
+      ],
+      "correta": 2,
+      "explicacao": "No pareamento os dispositivos trocam e guardam chaves; nas próximas vezes se reconectam sozinhos com a comunicação protegida."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um termômetro BLE de uma clínica precisa mandar as leituras para uma plataforma na nuvem. O que ele normalmente precisa?",
+      "alternativas": [
+        "Nada, pois o BLE já acessa a internet sozinho, sem ajuda",
+        "Um chip de operadora encaixado dentro do próprio módulo BLE",
+        "Um broker MQTT instalado dentro do próprio termômetro",
+        "Um intermediário com internet, como um celular ou um gateway"
+      ],
+      "correta": 3,
+      "explicacao": "O BLE é de curto alcance e não fala IP direto com a internet; um celular, hub ou ESP32 faz a ponte até a nuvem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num museu, pequenos aparelhos BLE emitem sinais periódicos, e o app do visitante mostra informações da obra mais próxima. Esses aparelhos são:",
+      "alternativas": [
+        "Gateways LoRaWAN, que recebem sinais de longe",
+        "Beacons, que enviam anúncios (advertising) BLE",
+        "Coordenadores Zigbee, que criam uma malha",
+        "Brokers MQTT, que distribuem os tópicos"
+      ],
+      "correta": 1,
+      "explicacao": "Beacons só anunciam um identificador de tempos em tempos, sem conexão; o app usa a força do sinal para estimar a proximidade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa conexão BLE entre um celular e uma cinta que mede batimentos, normalmente quem tem qual papel?",
+      "alternativas": [
+        "O celular é o central e a cinta é o periférico",
+        "A cinta é a central e o celular é o periférico",
+        "Os dois funcionam como brokers da conexão",
+        "Os dois funcionam como coordenadores da rede"
+      ],
+      "correta": 0,
+      "explicacao": "No BLE, o periférico (sensor) anuncia e oferece dados; o central (celular) procura, conecta e lê."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No BLE, os dados de um sensor de temperatura ficam organizados em serviços e características (perfil GATT). O que o app precisa ler para obter a temperatura?",
+      "alternativas": [
+        "O tópico MQTT em que o sensor publica a temperatura",
+        "O endereço IP que o roteador deu para o sensor",
+        "O canal de rádio LoRa usado pelo sensor",
+        "A característica de temperatura, dentro do serviço do sensor"
+      ],
+      "correta": 3,
+      "explicacao": "No GATT, um serviço agrupa características; cada característica guarda um valor (como a temperatura) que o central pode ler ou receber por notificação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sensor BLE no fundo de um galpão de 80 m, cheio de prateleiras de metal, não chega até o celular na entrada. Qual é a explicação?",
+      "alternativas": [
+        "O alcance do BLE é de dezenas de metros, e metal e paredes o reduzem",
+        "O BLE só funciona se o sensor estiver ligado por cabo USB",
+        "O BLE precisa de um chip de operadora para ir além de 10 m",
+        "O BLE só funciona quando o celular está parado e na horizontal"
+      ],
+      "correta": 0,
+      "explicacao": "O alcance típico do BLE é de 10 a algumas dezenas de metros, e obstáculos (metal, concreto) atenuam o sinal de 2,4 GHz."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que uma fechadura Bluetooth de um hotel não deve aceitar pareamento de qualquer aparelho sem confirmação?",
+      "alternativas": [
+        "A bateria da fechadura passaria a durar só algumas horas",
+        "Um estranho por perto poderia parear e mandar o comando de abrir",
+        "O alcance da fechadura passaria a ser de vários quilômetros",
+        "A fechadura deixaria de funcionar com o padrão BLE"
+      ],
+      "correta": 1,
+      "explicacao": "Sem confirmação (senha, código ou botão), qualquer um no alcance do rádio poderia se conectar. O pareamento seguro protege o acesso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que um sensor BLE de porta consegue funcionar mais de um ano com uma pilha do tipo moeda?",
+      "alternativas": [
+        "Ele usa a energia que recebe do sinal de rádio do celular",
+        "Ele transmite com potência maior que um roteador Wi-Fi",
+        "Ele dorme quase o tempo todo e só acorda para enviar pacotes pequenos",
+        "O pareamento com o celular recarrega a pilha do sensor"
+      ],
+      "correta": 2,
+      "explicacao": "O baixo consumo do BLE vem de passar quase todo o tempo em repouso e transmitir rajadas curtas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O Zigbee é baseado em qual padrão de rádio?",
+      "alternativas": [
+        "IEEE 802.11 (Wi-Fi)",
+        "IEEE 802.3 (Ethernet)",
+        "IEEE 802.15.4",
+        "LTE da rede celular"
+      ],
+      "correta": 2,
+      "explicacao": "O Zigbee usa o rádio IEEE 802.15.4, de baixa potência e baixa taxa, e acrescenta por cima a rede em malha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa rede Zigbee de uma casa, qual dispositivo inicia a rede e existe só um por rede?",
+      "alternativas": [
+        "O roteador",
+        "O coordenador",
+        "O dispositivo final",
+        "O beacon"
+      ],
+      "correta": 1,
+      "explicacao": "O coordenador cria a rede e controla a entrada de dispositivos; normalmente fica dentro do hub. Pode haver vários roteadores e dispositivos finais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa rede Zigbee, as lâmpadas e tomadas inteligentes costumam funcionar como roteadores. Por quê?",
+      "alternativas": [
+        "Ficam sempre na energia e podem repassar as mensagens dos outros",
+        "Têm bateria grande e conseguem dormir por mais tempo",
+        "São os únicos dispositivos que alcançam quilômetros",
+        "São obrigatoriamente o coordenador da rede Zigbee"
+      ],
+      "correta": 0,
+      "explicacao": "Para repassar mensagens, o roteador precisa ficar acordado o tempo todo; por isso aparelhos ligados na tomada fazem esse papel."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sensor de janela Zigbee que funciona a pilha normalmente é qual tipo de dispositivo na rede?",
+      "alternativas": [
+        "Roteador, que repassa mensagens o tempo todo",
+        "Coordenador, que cria e controla a rede",
+        "Gateway, que leva a rede para a internet",
+        "Dispositivo final, que dorme para economizar energia"
+      ],
+      "correta": 3,
+      "explicacao": "Dispositivos a bateria são dispositivos finais (end devices): dormem e falam só com um \"pai\" (roteador ou coordenador)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na malha Zigbee de uma pousada, uma lâmpada que funcionava como roteador queimou. O que acontece com os sensores que passavam por ela?",
+      "alternativas": [
+        "Todos os sensores param até a lâmpada ser trocada",
+        "A rede procura outro caminho, por outros roteadores",
+        "Os sensores passam a usar a rede 4G sozinhos",
+        "O coordenador desliga a rede inteira por segurança"
+      ],
+      "correta": 1,
+      "explicacao": "A malha é autorregenerável: se um caminho cai, as mensagens passam por outros roteadores ao alcance."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que as lâmpadas Zigbee de uma casa precisam de um hub (gateway) para serem controladas pelo celular, de qualquer lugar?",
+      "alternativas": [
+        "O Zigbee só funciona com cabo e o hub faz a parte sem fio",
+        "O celular não tem Wi-Fi, e o hub empresta o Wi-Fi para ele",
+        "O hub aumenta o alcance de cada lâmpada para dez quilômetros",
+        "O Zigbee não usa IP; o hub traduz entre a malha e a rede/internet"
+      ],
+      "correta": 3,
+      "explicacao": "O celular não fala Zigbee. O hub é coordenador da malha e, ao mesmo tempo, está na rede IP (Wi-Fi/cabo), fazendo a tradução."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a taxa de dados máxima típica do Zigbee na faixa de 2,4 GHz?",
+      "alternativas": [
+        "250 kbps",
+        "1 Gbps",
+        "100 Mbps",
+        "54 Mbps"
+      ],
+      "correta": 0,
+      "explicacao": "Zigbee chega a cerca de 250 kbps: suficiente para comandos e leituras, não para áudio ou vídeo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa casa, a rede Zigbee e o Wi-Fi estão em canais que se sobrepõem na faixa de 2,4 GHz, e alguns sensores falham de vez em quando. Qual medida ajuda?",
+      "alternativas": [
+        "Trocar todos os sensores da casa por sensores LoRaWAN",
+        "Configurar QoS 2 nas mensagens dos sensores Zigbee",
+        "Escolher canais de Zigbee e de Wi-Fi que não se sobreponham",
+        "Ligar o hub Zigbee por Bluetooth Clássico ao roteador"
+      ],
+      "correta": 2,
+      "explicacao": "Zigbee e Wi-Fi dividem os 2,4 GHz; separar os canais reduz a interferência entre eles."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sensor Zigbee está a 40 m do hub, atrás de várias paredes, e não consegue entrar na rede. Sem trocar o sensor, qual solução combina com o funcionamento do Zigbee?",
+      "alternativas": [
+        "Colocar um segundo coordenador na mesma rede Zigbee",
+        "Mudar o canal do Zigbee para a faixa de 915 MHz",
+        "Ativar a opção retain nas mensagens do sensor",
+        "Colocar uma tomada inteligente Zigbee no meio do caminho"
+      ],
+      "correta": 3,
+      "explicacao": "Na malha, cada roteador repassa as mensagens; um aparelho na tomada no meio do caminho cria uma ponte até o hub. Só existe um coordenador por rede."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que significa dizer que uma rede Zigbee é em malha?",
+      "alternativas": [
+        "Os aparelhos podem repassar mensagens uns dos outros até o destino",
+        "Todos os aparelhos falam somente direto com o coordenador",
+        "Cada aparelho tem um chip de operadora para se comunicar",
+        "A rede só funciona com os aparelhos ligados por cabo"
+      ],
+      "correta": 0,
+      "explicacao": "Na malha, roteadores repassam mensagens, aumentando o alcance e criando caminhos alternativos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Brasil, qual faixa de frequência é usada pelo LoRaWAN?",
+      "alternativas": [
+        "2,4 GHz",
+        "915 a 928 MHz",
+        "5 GHz",
+        "60 GHz"
+      ],
+      "correta": 1,
+      "explicacao": "O LoRaWAN usa faixas sub-GHz não licenciadas; no Brasil, a de 915–928 MHz. Frequências mais baixas alcançam mais longe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é o papel do gateway numa rede LoRaWAN?",
+      "alternativas": [
+        "Gerar as leituras que os sensores vão enviar para a plataforma",
+        "Funcionar como o chip de operadora dentro de cada um dos sensores",
+        "Receber o rádio dos sensores e repassar ao servidor pela internet",
+        "Fazer o pareamento dos sensores com o celular, como no Bluetooth"
+      ],
+      "correta": 2,
+      "explicacao": "O gateway é a ponte: escuta os sensores pelo rádio LoRa e envia os pacotes ao servidor de rede pela internet (cabo, Wi-Fi ou celular)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "lora-taxa",
+      "enunciado": "Um sítio já tem gateway LoRaWAN e quer instalar uma câmera de vigilância no curral usando essa mesma rede. Por que isso não funciona?",
+      "alternativas": [
+        "O alcance do LoRaWAN é de poucos metros no campo",
+        "O LoRaWAN gasta energia demais para uma câmera",
+        "A taxa do LoRaWAN é muito baixa, só para pequenos pacotes",
+        "O LoRaWAN só funciona com cabo até o gateway"
+      ],
+      "correta": 2,
+      "explicacao": "O LoRaWAN troca velocidade por alcance: poucos kbps e mensagens de dezenas de bytes. Vídeo exige Mbps."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre LoRa e LoRaWAN?",
+      "alternativas": [
+        "LoRa é a modulação de rádio; LoRaWAN é o protocolo de rede sobre ela",
+        "LoRaWAN é a modulação de rádio; LoRa é o protocolo de rede sobre ela",
+        "São dois nomes para exatamente a mesma tecnologia",
+        "LoRaWAN é a versão do LoRa que usa a rede 4G"
+      ],
+      "correta": 0,
+      "explicacao": "LoRa é a camada física (como o sinal é modulado). LoRaWAN define a rede: gateways, servidor de rede, classes, segurança."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma cooperativa rural instalou seus próprios gateways LoRaWAN e não paga a nenhuma operadora pelo uso do rádio. Isso é possível porque:",
+      "alternativas": [
+        "o LoRaWAN usa a rede 4G da operadora, que já está paga no plano",
+        "o LoRaWAN usa uma faixa não licenciada, com limites de potência",
+        "o LoRa não usa ondas de rádio, e sim os cabos da rede elétrica",
+        "o gateway gera a sua própria internet por meio de satélite"
+      ],
+      "correta": 1,
+      "explicacao": "Faixas não licenciadas (ISM) podem ser usadas sem outorga, respeitando regras de potência e tempo de uso. Já NB-IoT e LTE-M usam faixa licenciada da operadora."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sensor LoRaWAN de classe A num silo só abre janela para receber dados logo depois de enviar uma mensagem. Ele envia a cada 1 hora. Qual consequência disso?",
+      "alternativas": [
+        "O sensor recebe comandos na hora, a qualquer momento",
+        "O sensor fica proibido de enviar leituras ao gateway",
+        "O sensor gasta mais bateria que um de classe C",
+        "Um comando da nuvem pode esperar até o próximo envio do sensor"
+      ],
+      "correta": 3,
+      "explicacao": "Na classe A, as janelas de recepção abrem só após cada envio; é a classe mais econômica, mas um comando pode esperar até o próximo envio (aqui, até 1 hora)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa rede LoRaWAN, a mesma mensagem de um sensor foi recebida por dois gateways. Quem descarta a cópia repetida?",
+      "alternativas": [
+        "O próprio sensor que enviou",
+        "O aplicativo no celular do usuário",
+        "O coordenador Zigbee mais próximo",
+        "O servidor de rede (network server)"
+      ],
+      "correta": 3,
+      "explicacao": "Os gateways só repassam o que ouvem; o servidor de rede junta as cópias, elimina duplicadas e entrega uma só à aplicação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é o alcance típico de um sensor LoRaWAN em área rural aberta?",
+      "alternativas": [
+        "Vários quilômetros, como de 2 a 15 km",
+        "Até uns 10 metros, como um fone sem fio",
+        "Até uns 100 metros, como um Wi-Fi forte",
+        "Só dentro do mesmo cômodo da casa"
+      ],
+      "correta": 0,
+      "explicacao": "Com frequência baixa e modulação robusta, o LoRaWAN alcança quilômetros; em cidade, com prédios, o alcance cai."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "lora-taxa",
+      "enunciado": "Qual tipo de dado combina com o tamanho de mensagem do LoRaWAN?",
+      "alternativas": [
+        "Um arquivo com dezenas de fotos de vários megabytes",
+        "Uma leitura curta, como o nível de um tanque em poucos bytes",
+        "Um vídeo ao vivo de uma câmera de segurança do curral",
+        "Uma atualização de sistema de 1 GB para o sensor"
+      ],
+      "correta": 1,
+      "explicacao": "As mensagens LoRaWAN são de poucas dezenas de bytes; servem para leituras e comandos simples."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma academia usa fones sem fio para música e cintas BLE para medir batimentos.\n\nNa sua resposta:\n1. explique por que o fone usa Bluetooth Clássico;\n2. explique por que a cinta de batimentos usa BLE.",
+      "respostasAceitas": [
+        "O fone precisa de fluxo contínuo e maior taxa para o áudio, o que o Bluetooth Clássico oferece. A cinta manda poucos dados de tempos em tempos e precisa durar com bateria pequena, por isso usa BLE."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) áudio contínuo, taxa maior; 2) dados pequenos e baixo consumo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Ao ligar uma balança BLE nova pela primeira vez, o app do celular pede para parear e mostra um código de 6 dígitos que precisa ser igual ao da tela da balança.\n\nNa sua resposta:\n1. explique o que é o pareamento;\n2. explique por que conferir o código aumenta a segurança.",
+      "respostasAceitas": [
+        "Pareamento é o processo em que os dois aparelhos se reconhecem e combinam chaves para se conectarem com segurança. Conferir o código garante que o celular está pareando com a balança certa, e não com um aparelho intruso no meio."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) reconhecimento e troca de chaves para conexões futuras; 2) evita pareamento com dispositivo errado/intruso."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um restaurante colocou um termômetro BLE na câmara fria. Ele só mostra a temperatura quando alguém está perto, com o celular. O dono quer receber alerta mesmo em casa.\n\nNa sua resposta:\n1. explique por que só o BLE não resolve;\n2. explique uma solução para o alerta chegar pela internet.",
+      "respostasAceitas": [
+        "O BLE tem alcance curto e não fala direto com a internet; precisa de um aparelho por perto. Solução: um gateway (ex.: ESP32 ou hub) ao lado da câmara lê o BLE e envia pela internet (Wi-Fi) para a nuvem, que manda o alerta."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) curto alcance e ausência de IP; 2) gateway/ponte BLE→Wi-Fi→nuvem. Aceitar trocar o sensor por um com Wi-Fi."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma loja de games quer saber em qual corredor o cliente está para mostrar ofertas no app. A ideia é espalhar beacons BLE pela loja.\n\nNa sua resposta:\n1. explique como os beacons permitem estimar a posição do cliente;\n2. cite uma limitação dessa solução.",
+      "respostasAceitas": [
+        "Cada beacon anuncia periodicamente seu identificador; o app do celular ouve e usa a força do sinal para saber de qual está mais perto. Limitação: a força do sinal varia com pessoas, prateleiras e o jeito de segurar o celular, então a posição é aproximada (e exige app e Bluetooth ligados)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) anúncios BLE + intensidade do sinal; 2) imprecisão, dependência de app/Bluetooth ligado, bateria dos beacons."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa casa com rede Zigbee há: o hub, as lâmpadas ligadas na energia e os sensores de porta a pilha.\n\nNa sua resposta:\n1. diga qual é o papel do coordenador e qual aparelho o faz;\n2. diga o papel dos roteadores e dos dispositivos finais e quem faz cada um.",
+      "respostasAceitas": [
+        "O coordenador cria e controla a rede; fica no hub. Roteadores repassam mensagens e ficam sempre ligados: as lâmpadas. Dispositivos finais só enviam/recebem e dormem para economizar: os sensores a pilha."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) coordenador = hub; 2) roteadores = lâmpadas (na tomada), dispositivos finais = sensores a bateria."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa pousada, os sensores Zigbee continuam funcionando mesmo quando uma das lâmpadas inteligentes do corredor é desligada no interruptor.\n\nNa sua resposta:\n1. explique o que é uma rede em malha autorregenerável;\n2. explique por que isso mantém os sensores funcionando.",
+      "respostasAceitas": [
+        "É uma rede em que os aparelhos repassam mensagens e, se um caminho cai, a rede descobre outro. Com a lâmpada desligada, as mensagens dos sensores passam por outros roteadores até o hub."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) vários caminhos e reorganização automática; 2) rotas alternativas por outros roteadores."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um técnico montou uma rede Zigbee num hotel. Os sensores a pilha ficam nos quartos e só há duas tomadas inteligentes, as duas na recepção. Os sensores dos quartos do fim do corredor perdem conexão.\n\nNa sua resposta:\n1. explique por que um sensor a pilha não serve para repassar mensagens;\n2. explique onde deveriam ficar os roteadores e por quê.",
+      "respostasAceitas": [
+        "Sensores a pilha são dispositivos finais: dormem para economizar e não repassam mensagens. Os roteadores (aparelhos na tomada) devem ficar espalhados pelo caminho até o fim do corredor, para a malha alcançar os quartos distantes."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dispositivo final dorme e não roteia; 2) distribuir roteadores ao longo do percurso para formar a malha."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um hotel quer instalar 30 sensores de porta a pilha. O técnico sugere Zigbee em vez de Wi-Fi.\n\nNa sua resposta:\n1. explique duas vantagens do Zigbee nesse caso;\n2. explique o que é preciso para os dados chegarem ao sistema do hotel.",
+      "respostasAceitas": [
+        "Zigbee gasta pouca energia (pilhas duram muito) e forma malha, cobrindo o prédio e suportando muitos dispositivos sem sobrecarregar o Wi-Fi. É preciso um hub/coordenador ligado à rede do hotel, que traduz para IP."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) baixo consumo, malha/alcance, muitos dispositivos; 2) hub/gateway Zigbee ligado à rede IP."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa fazenda, sensores de umidade do solo usam LoRaWAN. Os dados aparecem num painel na internet.\n\nNa sua resposta:\n1. explique o papel do gateway;\n2. explique o caminho do dado do sensor até o painel.",
+      "respostasAceitas": [
+        "O gateway recebe pelo rádio os sinais dos sensores e repassa pela internet. Caminho: sensor → (rádio LoRa) gateway → (internet) servidor de rede → aplicação/painel."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ponte rádio-internet; 2) sensor, gateway, servidor de rede, aplicação."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Dizem que o LoRaWAN tem longo alcance e baixo consumo, mas \"paga\" isso com outra coisa.\n\nNa sua resposta:\n1. explique o que o LoRaWAN sacrifica para ter essas vantagens;\n2. dê um exemplo de dado adequado e outro inadequado para ele.",
+      "respostasAceitas": [
+        "Ele sacrifica a taxa de dados: transmite devagar e mensagens pequenas. Adequado: nível de um reservatório a cada hora. Inadequado: vídeo de câmera ou foto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) taxa baixa/mensagens pequenas; 2) exemplos coerentes (leituras pequenas x vídeo/áudio/arquivos)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um pecuarista tem LoRaWAN na fazenda para sensores de cocho e quer usar a mesma rede para mandar fotos do gado a cada 5 minutos.\n\nNa sua resposta:\n1. explique por que o LoRaWAN não atende esse pedido;\n2. sugira outra forma de enviar as fotos e justifique.",
+      "respostasAceitas": [
+        "Fotos têm centenas de KB e o LoRaWAN só manda dezenas de bytes por mensagem, com taxa baixa e limite de tempo no ar. Para fotos, usar 4G/LTE (rede celular) ou Wi-Fi de longo alcance, que têm taxa suficiente; o LoRaWAN continua para os sensores."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) taxa e tamanho de mensagem incompatíveis; 2) tecnologia de banda maior (4G, Wi-Fi, rádio ponto a ponto). Aceitar soluções coerentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No sistema de irrigação de um sítio, a válvula usa LoRaWAN classe A e envia seu estado a cada 1 hora. O dono mandou \"fechar válvula\" pelo app e ela só fechou 50 minutos depois.\n\nNa sua resposta:\n1. explique por que o comando demorou;\n2. explique o que poderia ser mudado para o comando chegar mais rápido e qual o custo disso.",
+      "respostasAceitas": [
+        "Na classe A o dispositivo só escuta logo após enviar; o comando ficou esperando o próximo envio. Pode-se usar classe C (escuta quase sempre) ou enviar com mais frequência, mas isso gasta mais energia."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) janela de recepção só após o uplink; 2) classe C/B ou envios mais frequentes, com mais consumo de bateria."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O LoRaWAN usa uma faixa de rádio não licenciada, enquanto o NB-IoT usa a faixa licenciada da operadora.\n\nNa sua resposta:\n1. explique uma vantagem de usar faixa não licenciada;\n2. explique uma desvantagem ou limitação.",
+      "respostasAceitas": [
+        "Vantagem: qualquer um pode instalar gateways e ter rede própria, sem pagar operadora. Limitação: a faixa é compartilhada, pode ter interferência, e há regras de potência e tempo de transmissão."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) rede própria sem mensalidade/outorga; 2) interferência, limites de potência/tempo no ar, sem garantia de serviço."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa casa, um técnico compara BLE e Zigbee para instalar sensores em vários cômodos.\n\nNa sua resposta:\n1. explique a diferença de topologia entre os dois (como os aparelhos se ligam);\n2. explique qual cobre melhor uma casa grande e por quê.",
+      "respostasAceitas": [
+        "No BLE comum o sensor fala direto com um central (ponto a ponto). No Zigbee os aparelhos formam malha e repassam mensagens. A malha Zigbee cobre melhor a casa grande, porque os roteadores estendem o alcance."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ponto a ponto/estrela x malha; 2) Zigbee, pela malha. Aceitar menção ao Bluetooth Mesh como ressalva."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um sensor BLE foi instalado numa sala a 30 m do celular, atrás de duas paredes de concreto, e a conexão cai o tempo todo.\n\nNa sua resposta:\n1. explique por que isso acontece;\n2. cite duas soluções.",
+      "respostasAceitas": [
+        "O BLE tem alcance de dezenas de metros em campo livre, e concreto atenua muito o sinal de 2,4 GHz. Soluções: aproximar o receptor ou colocar um gateway perto do sensor, ou trocar por tecnologia de maior alcance/malha."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) alcance curto + atenuação; 2) aproximar, gateway/repetidor, mudar tecnologia. Aceitar soluções coerentes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "NB-IoT e LTE-M usam qual infraestrutura para se comunicar?",
+      "alternativas": [
+        "Gateways próprios instalados numa faixa livre",
+        "Uma malha formada por lâmpadas e tomadas",
+        "A rede celular da operadora, com um chip (SIM)",
+        "O pareamento direto com o celular do usuário"
+      ],
+      "correta": 2,
+      "explicacao": "NB-IoT e LTE-M são tecnologias celulares para IoT: usam as antenas e a faixa licenciada da operadora, e cada dispositivo tem um chip/eSIM."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um medidor de água fica no subsolo de um prédio, sem Wi-Fi, e precisa mandar uma leitura por dia pela rede da operadora. Qual tecnologia é a mais indicada, por penetrar bem em locais fechados?",
+      "alternativas": [
+        "Bluetooth Clássico",
+        "NB-IoT",
+        "Zigbee",
+        "Wi-Fi de 5 GHz"
+      ],
+      "correta": 1,
+      "explicacao": "O NB-IoT foi feito para poucos dados, baixo consumo e boa cobertura em locais difíceis, como subsolos. Bluetooth e Zigbee são de curto alcance; Wi-Fi 5 GHz atravessa mal paredes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "lte-movimento",
+      "enunciado": "Qual é uma diferença importante entre o LTE-M e o NB-IoT?",
+      "alternativas": [
+        "O NB-IoT é o mais indicado para veículos em alta velocidade",
+        "O LTE-M não precisa de operadora nem de chip para funcionar",
+        "O NB-IoT tem taxa alta o bastante para transmitir vídeo",
+        "O LTE-M tem taxa maior e lida melhor com aparelhos em movimento"
+      ],
+      "correta": 3,
+      "explicacao": "O LTE-M chega a cerca de 1 Mbps, suporta troca de antena em movimento e até voz. O NB-IoT tem taxa menor e é melhor para aparelhos parados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma clínica geriátrica quer uma pulseira com GPS e botão de emergência que, ao ser apertado, abre uma ligação de voz com a enfermagem, mesmo fora da clínica. Qual tecnologia celular para IoT atende a voz?",
+      "alternativas": [
+        "LTE-M",
+        "NB-IoT",
+        "LoRaWAN",
+        "Zigbee"
+      ],
+      "correta": 0,
+      "explicacao": "O LTE-M suporta voz (VoLTE) e mobilidade. NB-IoT não suporta voz, e LoRaWAN e Zigbee não são redes celulares."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "custo-operadora",
+      "enunciado": "Que custo recorrente o NB-IoT costuma ter e que uma rede LoRaWAN própria normalmente não tem?",
+      "alternativas": [
+        "Uma licença paga a cada pareamento Bluetooth",
+        "Uma taxa mensal por cada broker MQTT usado",
+        "A mensalidade do plano da operadora para cada chip",
+        "Um pagamento anual por cada coordenador Zigbee"
+      ],
+      "correta": 2,
+      "explicacao": "NB-IoT usa a rede da operadora, cobrada por chip/plano. Numa rede LoRaWAN própria, paga-se o gateway, mas não há mensalidade por sensor para o rádio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sensor NB-IoT de um reservatório usa o modo de economia de energia (PSM) entre um envio e outro. O que isso significa?",
+      "alternativas": [
+        "Ele fica conectado o tempo todo transmitindo dados em alta velocidade",
+        "Ele se descadastra da operadora e precisa ser ativado de novo",
+        "Ele passa a repassar as mensagens dos outros sensores próximos",
+        "Ele dorme sem escutar a rede, mas continua registrado, e acorda para enviar"
+      ],
+      "correta": 3,
+      "explicacao": "No PSM o aparelho desliga o rádio por longos períodos sem perder o registro na rede; por isso a bateria pode durar anos. Em troca, não recebe nada enquanto dorme."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é uma vantagem do NB-IoT em relação ao LoRaWAN para uma empresa que tem sensores espalhados por uma cidade?",
+      "alternativas": [
+        "Usa as antenas da operadora, sem precisar instalar gateways próprios",
+        "Funciona sem nenhuma antena, nem da operadora nem própria",
+        "É sempre gratuito, sem custo de chip ou de plano mensal",
+        "Tem taxa suficiente para mandar vídeo em alta qualidade"
+      ],
+      "correta": 0,
+      "explicacao": "Onde há cobertura da operadora, o NB-IoT dispensa infraestrutura própria. O LoRaWAN exige gateways (próprios ou de uma rede pública)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma fazenda fica numa região sem sinal de celular e quer instalar sensores de umidade a vários quilômetros da sede. O NB-IoT é uma boa escolha?",
+      "alternativas": [
+        "Sim, pois o NB-IoT funciona mesmo onde não há rede de operadora",
+        "Não, pois depende da cobertura da operadora; LoRaWAN com gateway próprio atende",
+        "Sim, pois o NB-IoT passa a usar satélite sozinho quando falta sinal",
+        "Não, pois o NB-IoT só funciona dentro de prédios e casas"
+      ],
+      "correta": 1,
+      "explicacao": "NB-IoT só funciona onde a operadora tem cobertura. Sem sinal, uma rede LoRaWAN própria, com gateway na sede, alcança os sensores."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a ordem de grandeza da taxa de dados do NB-IoT?",
+      "alternativas": [
+        "Alguns Gbps, para fibra óptica",
+        "Uns 100 Mbps, como um 4G rápido",
+        "Dezenas de kbps, para poucos dados",
+        "Igual ao 4G comum, para vídeo"
+      ],
+      "correta": 2,
+      "explicacao": "O NB-IoT trabalha com dezenas de kbps (até poucas centenas): é feito para mensagens pequenas e economia de energia."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "lte-movimento",
+      "enunciado": "Uma empresa de entregas quer rastrear motos que cruzam a cidade, trocando de antena da operadora o tempo todo. Por que o LTE-M costuma ser preferido ao NB-IoT?",
+      "alternativas": [
+        "O NB-IoT tem alcance de poucos metros e perde o sinal entre as antenas",
+        "O LTE-M usa faixa livre, então não depende da cobertura da operadora",
+        "O NB-IoT lida mal com troca de antena em movimento; o LTE-M foi feito para isso",
+        "O LTE-M não usa chip, então não há custo mensal para cada moto"
+      ],
+      "correta": 2,
+      "explicacao": "O NB-IoT é otimizado para aparelhos parados e tem suporte limitado à mobilidade. O LTE-M mantém a conexão durante a troca de antena."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "LoRaWAN, NB-IoT e LTE-M fazem parte de qual grupo de tecnologias?",
+      "alternativas": [
+        "LPWAN: redes de longa distância e baixo consumo",
+        "PAN: redes pessoais de curto alcance",
+        "LAN: redes locais de alta velocidade",
+        "WLAN: redes locais sem fio, como o Wi-Fi"
+      ],
+      "correta": 0,
+      "explicacao": "LPWAN (Low Power Wide Area Network) reúne tecnologias de longo alcance e baixo consumo, com baixa taxa. Bluetooth é PAN; Wi-Fi é WLAN."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Entre as tecnologias abaixo, qual tem o MAIOR alcance sem depender da rede de uma operadora?",
+      "alternativas": [
+        "Bluetooth Low Energy",
+        "Zigbee",
+        "Wi-Fi",
+        "LoRaWAN"
+      ],
+      "correta": 3,
+      "explicacao": "O LoRaWAN alcança quilômetros com gateway próprio. BLE, Zigbee (por salto) e Wi-Fi ficam em dezenas de metros."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual sequência está em ordem do MENOR para o MAIOR alcance típico?",
+      "alternativas": [
+        "LoRaWAN, Bluetooth, Wi-Fi",
+        "Bluetooth, Wi-Fi, LoRaWAN",
+        "Wi-Fi, LoRaWAN, Bluetooth",
+        "Bluetooth, LoRaWAN, Wi-Fi"
+      ],
+      "correta": 1,
+      "explicacao": "Bluetooth: cerca de 10 m (até dezenas); Wi-Fi doméstico: dezenas de metros; LoRaWAN: quilômetros."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Entre as tecnologias abaixo, qual oferece a MAIOR taxa de dados?",
+      "alternativas": [
+        "LoRaWAN",
+        "Wi-Fi",
+        "Zigbee",
+        "NB-IoT"
+      ],
+      "correta": 1,
+      "explicacao": "O Wi-Fi chega a dezenas ou centenas de Mbps. LoRaWAN, Zigbee e NB-IoT ficam em kbps."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sensor a pilha precisa mandar uma leitura por hora para uma central a 5 km, numa área sem cobertura de celular. Qual tecnologia gasta menos energia e alcança essa distância?",
+      "alternativas": [
+        "Wi-Fi",
+        "Bluetooth Clássico",
+        "LoRaWAN",
+        "Zigbee com um único salto"
+      ],
+      "correta": 2,
+      "explicacao": "LoRaWAN junta longo alcance e baixo consumo. Wi-Fi gasta muito e não chega a 5 km; Bluetooth e um salto de Zigbee alcançam dezenas de metros."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "tabela-tec",
+      "enunciado": "Numa tabela de comparação, a tecnologia X aparece com: alcance de 10 a 50 m, consumo muito baixo, taxa de cerca de 1 Mbps e nenhum custo de rede. Qual é X?",
+      "alternativas": [
+        "BLE",
+        "LoRaWAN",
+        "NB-IoT",
+        "Wi-Fi"
+      ],
+      "correta": 0,
+      "explicacao": "Curto alcance, baixíssimo consumo e cerca de 1 Mbps sem mensalidade descrevem o BLE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "tabela-tec",
+      "enunciado": "Numa tabela de comparação, a tecnologia Y aparece com: alcance de quilômetros, uso de chip e operadora, taxa de até cerca de 1 Mbps, suporte a movimento e a voz. Qual é Y?",
+      "alternativas": [
+        "NB-IoT",
+        "Zigbee",
+        "LoRaWAN",
+        "LTE-M"
+      ],
+      "correta": 3,
+      "explicacao": "Rede celular com mobilidade, voz e cerca de 1 Mbps é o LTE-M. O NB-IoT não tem voz e tem taxa menor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "tabela-tec",
+      "enunciado": "Numa tabela de comparação, a tecnologia Z aparece com: rede em malha, 2,4 GHz, cerca de 250 kbps, baixo consumo e um coordenador. Qual é Z?",
+      "alternativas": [
+        "Zigbee",
+        "LoRaWAN",
+        "LTE-M",
+        "Wi-Fi"
+      ],
+      "correta": 0,
+      "explicacao": "Malha, coordenador, 250 kbps e baixo consumo em 2,4 GHz são marcas do Zigbee."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual afirmação compara corretamente o MQTT e o Zigbee?",
+      "alternativas": [
+        "Os dois são tecnologias de rádio de 2,4 GHz que formam rede em malha",
+        "Zigbee usa broker e tópicos, e o MQTT usa coordenador e roteadores",
+        "MQTT é protocolo de mensagens sobre IP; Zigbee é tecnologia de rádio e rede local",
+        "MQTT forma malha entre sensores, e o Zigbee precisa de internet para tudo"
+      ],
+      "correta": 2,
+      "explicacao": "MQTT define como as mensagens são trocadas (precisa de uma rede IP: Wi-Fi, cabo, celular). Zigbee define o rádio e a rede entre os aparelhos. Um hub pode ligar os dois."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que sensores de porta a pilha raramente usam Wi-Fi?",
+      "alternativas": [
+        "Porque o Wi-Fi não alcança nem 5 metros dentro de casa",
+        "Porque o Wi-Fi gasta bem mais energia para conectar e manter a conexão",
+        "Porque o Wi-Fi não consegue transmitir números, só textos",
+        "Porque o Wi-Fi exige um chip de operadora em cada sensor"
+      ],
+      "correta": 1,
+      "explicacao": "O Wi-Fi consome muito mais que BLE ou Zigbee; com pilha, duraria pouco. Por isso sensores a pilha preferem tecnologias de baixo consumo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sensor NB-IoT a bateria envia leituras por HTTP com cabeçalhos grandes. Por que trocar por um protocolo mais leve (como o MQTT) ajuda?",
+      "alternativas": [
+        "Porque o NB-IoT bloqueia requisições HTTP e só deixa passar MQTT",
+        "Porque o MQTT aumenta a taxa do NB-IoT para a mesma do Wi-Fi",
+        "Porque o HTTP não funciona em nenhuma rede celular de operadora",
+        "Mensagens menores ficam menos tempo no ar, poupando bateria e dados"
+      ],
+      "correta": 3,
+      "explicacao": "No NB-IoT a taxa é baixa e o rádio ligado gasta bateria; mensagens menores ficam menos tempo no ar e podem custar menos no plano de dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O ar-condicionado de uma sala de aula fica ligado na tomada, dentro do alcance do Wi-Fi da escola, e envia leituras a cada minuto para a nuvem. Qual é a opção mais simples?",
+      "alternativas": [
+        "LoRaWAN, com um gateway próprio",
+        "Wi-Fi, com MQTT ou HTTP",
+        "NB-IoT, com um chip de operadora",
+        "BLE, falando direto com a nuvem"
+      ],
+      "correta": 1,
+      "explicacao": "Com energia da tomada e Wi-Fi disponível, não há motivo para outra rede: o Wi-Fi já leva os dados à internet."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Lixeiras inteligentes a pilha, espalhadas por uma cidade, avisam quando estão cheias. A prefeitura não quer instalar nenhuma antena própria, e há boa cobertura de operadora. Qual tecnologia atende?",
+      "alternativas": [
+        "Zigbee",
+        "Bluetooth Low Energy",
+        "NB-IoT",
+        "Wi-Fi"
+      ],
+      "correta": 2,
+      "explicacao": "Sem infraestrutura própria e com cobertura de operadora, o NB-IoT leva poucos dados com baixo consumo. Zigbee, BLE e Wi-Fi não cobrem a cidade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma etiqueta para bagagem de hotel deve avisar o app do hóspede quando a mala estiver a poucos metros dele, com bateria que dure meses. Qual tecnologia combina?",
+      "alternativas": [
+        "BLE",
+        "LoRaWAN",
+        "NB-IoT",
+        "Wi-Fi"
+      ],
+      "correta": 0,
+      "explicacao": "Curta distância até o celular e baixo consumo: BLE, que o celular já tem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um condomínio horizontal grande, com 2 km de extensão, quer ler os hidrômetros a pilha de 200 casas uma vez por dia, com rede própria e sem mensalidade por aparelho. Qual tecnologia atende?",
+      "alternativas": [
+        "NB-IoT, com um chip por casa",
+        "Wi-Fi, com um roteador por casa",
+        "Bluetooth Clássico, com pareamento",
+        "LoRaWAN, com gateway próprio"
+      ],
+      "correta": 3,
+      "explicacao": "LoRaWAN cobre quilômetros com poucos gateways, baixo consumo e sem mensalidade de operadora por sensor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma câmera de segurança da garagem de uma oficina precisa enviar vídeo ao vivo para o celular do dono. Qual tecnologia de conexão é adequada?",
+      "alternativas": [
+        "Wi-Fi",
+        "LoRaWAN",
+        "Zigbee",
+        "NB-IoT"
+      ],
+      "correta": 0,
+      "explicacao": "Vídeo exige alta taxa (Mbps); o Wi-Fi oferece isso. LoRaWAN, Zigbee e NB-IoT ficam em kbps."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num ginásio, 40 luminárias Wi-Fi precisam receber o comando \"apagar\" ao mesmo tempo, enviado pelo painel do zelador. Qual forma é a mais adequada?",
+      "alternativas": [
+        "HTTP, com uma requisição para cada luminária, uma por vez",
+        "BLE, pareando o painel com cada luminária antes do comando",
+        "MQTT, com todas as luminárias assinando o mesmo tópico",
+        "LoRaWAN classe A, esperando cada luminária enviar algo"
+      ],
+      "correta": 2,
+      "explicacao": "Com publish/subscribe, uma única publicação chega a todos os assinantes do tópico ao mesmo tempo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa indústria, um sensor de vibração num motor gera 1000 amostras por segundo, que precisam ir para um computador na própria fábrica. Qual opção é adequada?",
+      "alternativas": [
+        "LoRaWAN, por causa do longo alcance",
+        "NB-IoT, por causa do baixo consumo",
+        "Zigbee, por causa da rede em malha",
+        "Wi-Fi ou cabo de rede, por causa da alta taxa"
+      ],
+      "correta": 3,
+      "explicacao": "Mil amostras por segundo é um fluxo contínuo alto; LoRaWAN, NB-IoT e Zigbee têm taxa baixa demais. O motor está perto e tem energia: Wi-Fi ou cabo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num projeto de feira de ciências, um ESP32 deve mostrar a temperatura no celular a 2 m de distância, sem internet e sem roteador. Qual tecnologia é a mais simples?",
+      "alternativas": [
+        "LoRaWAN",
+        "BLE",
+        "NB-IoT",
+        "LTE-M"
+      ],
+      "correta": 1,
+      "explicacao": "BLE liga direto o ESP32 ao celular, sem infraestrutura. As outras exigem gateway ou operadora."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O app de uma academia deve mostrar, quando o aluno abre a tela, o relatório de treinos do mês, guardado na API da nuvem. Qual protocolo é o mais natural para isso?",
+      "alternativas": [
+        "MQTT, publicando com QoS 2",
+        "LoRaWAN, com um gateway na academia",
+        "HTTP, com uma requisição GET",
+        "Zigbee, com um coordenador no app"
+      ],
+      "correta": 2,
+      "explicacao": "Buscar um dado sob demanda é requisição-resposta: GET na API. MQTT é melhor para eventos contínuos; LoRaWAN e Zigbee são redes de rádio, não a forma de o app consultar a API."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "NB-IoT e LTE-M são duas tecnologias celulares para IoT.\n\nNa sua resposta:\n1. explique o que as duas têm em comum;\n2. explique uma diferença entre elas.",
+      "respostasAceitas": [
+        "As duas usam a rede da operadora (chip e antenas), têm longo alcance e baixo consumo. Diferença: LTE-M tem taxa maior, suporta movimento e voz; NB-IoT tem taxa menor e é ideal para aparelhos parados em locais difíceis."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) rede celular/operadora, baixo consumo; 2) taxa, mobilidade, voz ou penetração. Basta uma diferença correta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma companhia de água quer instalar medidores em subsolos de prédios de vários bairros, com uma leitura por dia e bateria de anos. A proposta é usar NB-IoT.\n\nNa sua resposta:\n1. explique duas razões para o NB-IoT servir bem nesse caso;\n2. explique um custo ou cuidado que a companhia precisa considerar.",
+      "respostasAceitas": [
+        "NB-IoT penetra bem em subsolos, gasta pouca energia com poucos dados por dia e usa as antenas da operadora, sem instalar gateways. Cuidado: há custo de chip/plano por medidor e é preciso confirmar a cobertura da operadora em cada local."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) penetração, baixo consumo, sem infraestrutura própria; 2) mensalidade por chip, dependência da cobertura."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma pet shop quer vender uma coleira com GPS que mostre no app a localização do cachorro fugido pela cidade, e que também possa tocar um alerta sonoro remoto. Estão em dúvida entre LTE-M e NB-IoT.\n\nNa sua resposta:\n1. diga qual das duas você escolheria;\n2. justifique pela mobilidade e pela taxa.",
+      "respostasAceitas": [
+        "LTE-M. O cachorro se move pela cidade e o LTE-M mantém a conexão trocando de antena; além disso, tem taxa e resposta melhores para enviar localização com frequência e receber comandos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) LTE-M; 2) suporte a mobilidade/handover e taxa/latência melhores que o NB-IoT."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma cooperativa vai instalar 500 sensores a pilha em lavouras próprias. Opção A: LoRaWAN com gateways próprios. Opção B: NB-IoT com um chip por sensor. A cobertura de celular na região é incerta.\n\nNa sua resposta:\n1. compare as duas opções quanto ao custo ao longo do tempo;\n2. diga qual você escolheria e justifique pela cobertura.",
+      "respostasAceitas": [
+        "A LoRaWAN tem custo inicial dos gateways, mas sem mensalidade por sensor; o NB-IoT dispensa gateways, mas cobra plano de cada um dos 500 chips todo mês. Com cobertura incerta, LoRaWAN é mais seguro, porque a cooperativa controla a própria rede."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) investimento inicial x mensalidade por chip; 2) LoRaWAN, por não depender da operadora. Aceitar NB-IoT se o aluno condicionar a cobertura confirmada."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja, a câmera de segurança usa Wi-Fi, mas os sensores de porta a pilha usam Zigbee.\n\nNa sua resposta:\n1. explique por que o Wi-Fi serve para a câmera;\n2. explique por que o Wi-Fi não é bom para os sensores a pilha.",
+      "respostasAceitas": [
+        "A câmera precisa de alta taxa para vídeo e fica ligada na tomada, e o Wi-Fi oferece isso. Os sensores a pilha precisam gastar pouco; o Wi-Fi consome muita energia e acabaria com a pilha rápido."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) alta taxa e energia da tomada; 2) alto consumo do Wi-Fi."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Observe a tabela (valores típicos): BLE — alcance 10–50 m, consumo muito baixo, taxa ~1 Mbps, sem custo de rede. Zigbee — 10–100 m por salto em malha, consumo baixo, 250 kbps, sem custo de rede. LoRaWAN — 2–15 km, consumo muito baixo, 0,3–50 kbps, gateway próprio. NB-IoT — km, consumo baixo, dezenas de kbps, plano por chip. Wi-Fi — até ~50 m, consumo alto, dezenas a centenas de Mbps, sem custo extra.\n\nNa sua resposta:\n1. usando a tabela, diga qual escolheria para 60 sensores de temperatura a pilha num hotel de 4 andares, com um hub;\n2. usando a tabela, diga qual escolheria para um sensor de nível num tanque a 6 km da sede, sem sinal de celular, e justifique as duas escolhas.",
+      "respostasAceitas": [
+        "Hotel: Zigbee, porque a malha cobre os andares com baixo consumo e não tem custo de rede. Tanque: LoRaWAN, porque alcança 6 km com consumo muito baixo e não depende de operadora (NB-IoT não teria sinal)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Zigbee (malha, baixo consumo, muitos dispositivos); 2) LoRaWAN (alcance, consumo, sem operadora)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno diz: \"no meu projeto vou usar MQTT ou NB-IoT, tanto faz, os dois são protocolos de IoT\".\n\nNa sua resposta:\n1. explique por que MQTT e NB-IoT não são alternativas do mesmo tipo;\n2. explique como eles podem ser usados juntos no mesmo projeto.",
+      "respostasAceitas": [
+        "MQTT é um protocolo de mensagens (como os dados são organizados e trocados); NB-IoT é a tecnologia de rede/rádio que leva os dados. Juntos: o sensor se conecta pela rede NB-IoT e, por ela, publica as leituras num broker MQTT."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) camada de aplicação/mensagens x camada de rede/rádio; 2) MQTT trafegando sobre a conexão NB-IoT (ou Wi-Fi etc.)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Ao comparar tecnologias de IoT, um professor diz que alcance, consumo e taxa de dados funcionam como um \"cobertor curto\": não dá para ter os três no máximo ao mesmo tempo.\n\nNa sua resposta:\n1. explique o que ele quer dizer, usando duas tecnologias como exemplo;\n2. explique por que isso obriga a escolher a tecnologia a partir da necessidade do projeto.",
+      "respostasAceitas": [
+        "Melhorar um ponto costuma piorar outro: o Wi-Fi tem taxa alta, mas gasta muita energia e alcança pouco; o LoRaWAN alcança quilômetros e gasta pouco, mas tem taxa baixíssima. Por isso escolhe-se pelo que o projeto mais precisa (ex.: vídeo pede taxa; sensor no campo pede alcance e bateria)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) troca entre características com exemplos corretos; 2) a escolha parte dos requisitos do projeto (dados, distância, energia, custo)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um pet shop quer duas coisas: saber se cada cachorro está dentro do canil da loja e localizar na rua um cachorro que fugiu.\n\nNa sua resposta:\n1. diga qual tecnologia usaria para saber se o cachorro está no canil e por quê;\n2. diga qual tecnologia usaria para localizar o cachorro na rua e por quê.",
+      "respostasAceitas": [
+        "No canil, BLE: curta distância, baixo consumo e um receptor na loja basta. Na rua, GPS com LTE-M (rede celular), porque precisa de alcance pela cidade e funciona em movimento."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) BLE (curto alcance, baixo consumo); 2) rede celular (LTE-M/NB-IoT) com GPS, pelo alcance e mobilidade. Aceitar NB-IoT com justificativa."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num prédio residencial de 15 andares, o síndico quer sensores de vazamento a pilha em 120 apartamentos, com aviso na portaria. As opções são Wi-Fi, Zigbee e LoRaWAN.\n\nNa sua resposta:\n1. escolha uma das três opções;\n2. justifique comparando com pelo menos uma das outras duas.",
+      "respostasAceitas": [
+        "LoRaWAN com um gateway na portaria: atravessa os andares com longo alcance e as pilhas duram anos. O Wi-Fi gastaria muita pilha e depende da rede de cada apartamento; o Zigbee exigiria muitos roteadores espalhados nos andares."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) escolha; 2) justificativa coerente por alcance, consumo e infraestrutura. Aceitar Zigbee se justificar a malha com roteadores nas áreas comuns."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No cinema, as luzes de cada sala são controladas por um app no tablet do gerente, e todos os aparelhos estão no Wi-Fi. Um técnico quer usar HTTP; outro prefere MQTT.\n\nNa sua resposta:\n1. explique uma vantagem do MQTT nesse caso;\n2. explique uma vantagem do HTTP nesse caso.",
+      "respostasAceitas": [
+        "MQTT: o app recebe na hora o estado das luzes e um comando pode ir para várias salas de uma vez por tópico. HTTP: é simples, não precisa de broker e qualquer servidor ou navegador entende."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) tempo real, publish/subscribe, vários destinos, estado retido; 2) simplicidade, universalidade, sem broker."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A horta de uma escola fica a 300 m do prédio, sem Wi-Fi no local nem tomada. O sensor de umidade funciona a pilha e envia uma leitura a cada 30 minutos.\n\nNa sua resposta:\n1. escolha uma tecnologia de comunicação para o sensor;\n2. justifique pela distância e pelo consumo;\n3. cite uma limitação da sua escolha.",
+      "respostasAceitas": [
+        "LoRaWAN, com o gateway no prédio da escola: alcança 300 m com folga e gasta pouquíssima energia. Limitação: taxa muito baixa (só leituras pequenas) e é preciso instalar o gateway."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) LoRaWAN (ou NB-IoT, se houver cobertura); 2) alcance e baixo consumo; 3) limitação coerente (taxa, gateway, mensalidade se NB-IoT)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O dono de uma padaria pergunta por que não usar 4G comum em todos os 20 sensores do estabelecimento, \"já que funciona em qualquer lugar\".\n\nNa sua resposta:\n1. explique um problema de custo dessa ideia;\n2. explique um problema de consumo de energia.",
+      "respostasAceitas": [
+        "Cada sensor precisaria de um chip com plano mensal, multiplicando o custo por 20. Além disso, o 4G comum gasta muita energia, e sensores a pilha durariam pouco."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mensalidade por chip; 2) alto consumo do rádio 4G comum (NB-IoT/LTE-M foram criados para reduzir isso)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa academia, as esteiras ficam ligadas na tomada, perto do roteador, e enviam velocidade e tempo de treino para o app a cada segundo. O técnico escolheu Wi-Fi com MQTT.\n\nNa sua resposta:\n1. explique por que o Wi-Fi é adequado aqui;\n2. explique por que LoRaWAN ou BLE seriam escolhas piores.",
+      "respostasAceitas": [
+        "Há energia da tomada e Wi-Fi no local, e ele tem taxa de sobra para leituras a cada segundo, levando direto à internet. LoRaWAN tem taxa baixa e limite de envios; BLE precisaria de um intermediário para chegar à internet e tem alcance curto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) energia disponível, taxa, acesso direto à internet; 2) LoRaWAN: taxa/limite de envio; BLE: alcance e falta de IP."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Protocolos de comunicação",
+      "capacidade": "iot.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma empresa de bicicletas compartilhadas quer saber, várias vezes por hora, a posição de cada bicicleta pela cidade. Estão em dúvida entre LTE-M e LoRaWAN com gateways próprios.\n\nNa sua resposta:\n1. diga uma vantagem do LTE-M nesse caso;\n2. diga uma vantagem do LoRaWAN nesse caso e qual você escolheria.",
+      "respostasAceitas": [
+        "LTE-M: usa a cobertura da operadora em toda a cidade e funciona bem em movimento, sem instalar antenas. LoRaWAN: sem mensalidade por bicicleta e com consumo muito baixo, mas exige gateways espalhados. Escolha justificada, por exemplo LTE-M pela cobertura e mobilidade."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cobertura/mobilidade sem infraestrutura; 2) sem mensalidade/baixo consumo; escolha coerente com a justificativa."
+    }
+  ]
+}
