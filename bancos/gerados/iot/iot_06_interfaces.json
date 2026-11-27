@@ -1,0 +1,2424 @@
+{
+  "nome": "Internet das Coisas — Interfaces visuais interativas (a revisar)",
+  "materia": "Internet das Coisas",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num painel web de uma estufa de mudas, uma linguagem define a estrutura da página: títulos, cards de leitura e botões. Qual é essa linguagem?",
+      "alternativas": [
+        "CSS",
+        "MQTT",
+        "HTML",
+        "JSON"
+      ],
+      "correta": 2,
+      "explicacao": "HTML monta a estrutura (o que existe na página). CSS cuida da aparência, MQTT é protocolo de mensagens e JSON é formato de dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel de uma padaria, o técnico quer deixar os cards com bordas arredondadas, fundo claro e o número da temperatura bem grande. Qual linguagem ele usa para isso?",
+      "alternativas": [
+        "HTML",
+        "JavaScript",
+        "SQL",
+        "CSS"
+      ],
+      "correta": 3,
+      "explicacao": "Aparência (cores, tamanhos, bordas, espaçamento) é papel do CSS. O HTML só cria os elementos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel de uma academia é preciso um elemento clicável com o texto \"Ligar ventilador\". Qual tag HTML é a mais adequada?",
+      "alternativas": [
+        "<span>",
+        "<label>",
+        "<button>",
+        "<h2>"
+      ],
+      "correta": 2,
+      "explicacao": "<button> é o elemento próprio para ações de clique e já funciona com teclado e leitor de tela. <span>, <label> e <h2> são textos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel de um pet shop há a linha `btnRacao.addEventListener('click', liberarRacao);`. Quando a função liberarRacao é executada?",
+      "alternativas": [
+        "Quando o usuário clica no botão btnRacao",
+        "Assim que a página termina de carregar",
+        "A cada segundo, enquanto a página estiver aberta",
+        "Quando o mouse passa por cima de qualquer card"
+      ],
+      "correta": 0,
+      "explicacao": "addEventListener('click', …) registra a função para rodar no clique daquele botão. Não roda sozinha nem em intervalos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O painel de uma biblioteca tem `<span id='umidade'>--</span>`. O que retorna `document.getElementById('umidade')`?",
+      "alternativas": [
+        "O valor atual de umidade lido pelo sensor",
+        "O elemento da página que tem id igual a umidade",
+        "Uma lista com todos os elementos span da página",
+        "O texto \"umidade\" escrito no código"
+      ],
+      "correta": 1,
+      "explicacao": "getElementById devolve o ELEMENTO com aquele id. O valor do sensor é colocado depois, por exemplo com textContent."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A página de um painel IoT tem, no `<head>`, a linha `<meta name='viewport' content='width=device-width, initial-scale=1'>`. Para que ela serve?",
+      "alternativas": [
+        "Atualizar os dados do painel automaticamente a cada segundo",
+        "Ajustar a página à largura da tela do celular",
+        "Conectar a página ao broker MQTT pela rede Wi-Fi",
+        "Esconder o painel de quem não tem senha de acesso"
+      ],
+      "correta": 1,
+      "explicacao": "Sem a meta viewport o celular desenha a página como se fosse de computador e encolhe tudo. Ela é a base de um painel que funciona no celular."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O servidor de uma clínica responde à requisição do painel com `{\"temp\": 5.2, \"porta\": \"fechada\"}`. Depois de `const dados = await resposta.json();`, como o JavaScript acessa o estado da porta?",
+      "alternativas": [
+        "dados.porta",
+        "dados[porta]",
+        "dados.json.porta",
+        "resposta.porta"
+      ],
+      "correta": 0,
+      "explicacao": "Depois de converter o JSON, cada campo vira propriedade do objeto: dados.porta. Sem aspas, dados[porta] procuraria uma variável chamada porta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel de uma câmara fria, quando a temperatura volta ao normal, o código roda `card.classList.remove('alerta');`. O que isso faz?",
+      "alternativas": [
+        "Apaga o card inteiro da página do painel",
+        "Tira a classe alerta só desse card",
+        "Desliga o alarme sonoro do equipamento físico",
+        "Remove a regra .alerta do arquivo CSS"
+      ],
+      "correta": 1,
+      "explicacao": "classList.remove tira a classe só daquele elemento. A regra continua no CSS, pronta para ser usada de novo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel de uma oficina, a variável t vale 22 e o código executa `el.textContent = t + ' °C';`. O que aparece no elemento?",
+      "alternativas": [
+        "t °C",
+        "22",
+        "°C 22",
+        "22 °C"
+      ],
+      "correta": 3,
+      "explicacao": "O operador + junta o valor de t com o texto ' °C', formando \"22 °C\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um painel de casa inteligente quer deixar o usuário regular o brilho de uma lâmpada de 0 a 100% arrastando uma barrinha. Qual elemento HTML faz isso?",
+      "alternativas": [
+        "<input type='text' maxlength='100'>",
+        "<progress value='0' max='100'>",
+        "<input type='range' min='0' max='100'>",
+        "<select size='100'>"
+      ],
+      "correta": 2,
+      "explicacao": "O range é o controle deslizante (slider). O <progress> só MOSTRA um valor, não deixa o usuário mudar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No CSS de um painel de hotel existe `.card { transition: background-color 0.4s; }`. Qual o efeito quando o JavaScript muda a cor de fundo do card?",
+      "alternativas": [
+        "A cor só muda depois de 4 segundos parada",
+        "O card some e reaparece com a nova cor",
+        "A cor muda suavemente, em 0,4 segundo",
+        "A cor fica piscando sem parar"
+      ],
+      "correta": 2,
+      "explicacao": "transition anima a troca de valor de uma propriedade. Aqui a troca de fundo acontece de forma suave em 0,4 s."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num painel de cinema, o código usa `document.querySelectorAll('.card')`. O que ele obtém?",
+      "alternativas": [
+        "Apenas o primeiro elemento da classe card",
+        "O elemento cujo id é card",
+        "Uma lista com todos os elementos da classe card",
+        "O texto escrito dentro do primeiro card"
+      ],
+      "correta": 2,
+      "explicacao": "querySelectorAll devolve TODOS os elementos que batem com o seletor. querySelector (sem All) devolve só o primeiro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel de uma loja de games, o valor da temperatura do servidor está com `font-size: 3rem` e o nome \"Temperatura\" com `font-size: 1rem`. Qual o motivo dessa escolha?",
+      "alternativas": [
+        "Fazer a página carregar mais rápido no celular",
+        "Destacar o número, que é a informação principal do card",
+        "Deixar o título invisível para quem não é técnico",
+        "Cumprir uma regra do HTML que exige isso"
+      ],
+      "correta": 1,
+      "explicacao": "Em painel, o valor é o que se quer ler de longe e rápido; o rótulo pode ser menor. É uma escolha de usabilidade, não regra da linguagem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel de uma escola há uma animação CSS `@keyframes pisca` aplicada ao card só quando o nível de gás está perigoso. Qual a intenção?",
+      "alternativas": [
+        "Economizar bateria do celular do usuário",
+        "Chamar a atenção para uma situação crítica",
+        "Mostrar que o card está sendo atualizado normalmente",
+        "Enfeitar o painel quando está tudo bem"
+      ],
+      "correta": 1,
+      "explicacao": "Movimento chama muita atenção; por isso deve ser reservado para o crítico. Se tudo piscar, nada chama atenção."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel de um pet shop há `<progress id='racao' value='35' max='100'></progress>`. O que o usuário vê?",
+      "alternativas": [
+        "O número 35 escrito sem nenhuma barra",
+        "Uma barra cheia, já que o valor é menor que o máximo",
+        "Um botão para mudar o nível de ração para 35",
+        "Uma barra com cerca de um terço preenchido"
+      ],
+      "correta": 3,
+      "explicacao": "<progress> desenha uma barra proporcional a value/max: 35 de 100, cerca de 1/3. Ele só mostra, não controla nada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para mostrar a umidade de uma estufa (de 0 a 100%), com indicação de faixa baixa e alta, qual elemento HTML foi feito para medidas dentro de uma faixa conhecida?",
+      "alternativas": [
+        "<progress>",
+        "<output>",
+        "<meter>",
+        "<data>"
+      ],
+      "correta": 2,
+      "explicacao": "<meter> representa uma medida numa faixa (min, max, low, high). <progress> é pensado para andamento de uma tarefa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O CSS de um painel de academia tem `.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }`. O que acontece quando a tela fica estreita, como no celular?",
+      "alternativas": [
+        "Os cards ficam com 220 px e aparece rolagem para o lado",
+        "O grid é desligado e os cards se sobrepõem",
+        "Os cards somem até a tela ficar larga de novo",
+        "Cabem menos cards por linha e os outros descem"
+      ],
+      "correta": 3,
+      "explicacao": "auto-fit com minmax põe quantas colunas couberem com no mínimo 220 px. Em tela estreita sobra 1 coluna e os cards se empilham."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num painel de hotel existe `@media (max-width: 600px) { .cards { grid-template-columns: 1fr; } }`. Quando essa regra vale?",
+      "alternativas": [
+        "Quando a tela tem mais de 600 px: os cards ficam em uma coluna",
+        "Sempre, mas só depois de 600 milissegundos de carga",
+        "Só quando o painel é impresso em papel",
+        "Quando a tela tem até 600 px de largura: os cards ficam em uma coluna"
+      ],
+      "correta": 3,
+      "explicacao": "max-width: 600px liga a regra em telas de ATÉ 600 px, típico de celular. Ali os cards passam a ocupar uma coluna."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O sensor de uma câmara fria manda 4.4567. O painel mostra `t.toFixed(1)`. O que aparece?",
+      "alternativas": [
+        "4.4",
+        "4.4567",
+        "4",
+        "4.5"
+      ],
+      "correta": 3,
+      "explicacao": "toFixed(1) arredonda para 1 casa decimal: 4,4567 vira \"4.5\". Mostrar casas demais só polui o painel."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No CSS de um painel de clínica há a regra `.card.alerta { border: 3px solid #c62828; }`. Em quais elementos ela é aplicada?",
+      "alternativas": [
+        "Nos elementos que têm ao mesmo tempo as classes card e alerta",
+        "Em todos os elementos card e também em todos os alerta",
+        "Nos elementos alerta que estão dentro de um card",
+        "Só no primeiro card que tiver erro"
+      ],
+      "correta": 0,
+      "explicacao": "Classes coladas (.card.alerta) significam o MESMO elemento com as duas classes. Com espaço (.card .alerta) seria um alerta dentro de um card."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel de uma casa, o botão da luz da varanda executa `botao.classList.toggle('ligado');` a cada clique. O que essa linha faz?",
+      "alternativas": [
+        "Adiciona a classe ligado de novo a cada clique, acumulando",
+        "Remove todas as classes do botão e deixa só ligado",
+        "Põe a classe ligado se ela não existir e tira se já existir",
+        "Liga a lâmpada física sem precisar de MQTT"
+      ],
+      "correta": 2,
+      "explicacao": "toggle alterna: põe quando falta, tira quando tem. Ele só muda a aparência; o comando ao dispositivo é outra parte do código."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao clicar em \"Abrir portão\", o painel de um condomínio roda `botao.disabled = true;` e só reativa o botão quando chega a confirmação do dispositivo. Por quê?",
+      "alternativas": [
+        "Para o usuário não repetir o comando várias vezes",
+        "Para o portão abrir mais rápido do que abriria normalmente",
+        "Para esconder o botão de usuários sem permissão",
+        "Para o navegador guardar o comando se faltar internet"
+      ],
+      "correta": 0,
+      "explicacao": "Botão desativado durante a espera é feedback e proteção: o usuário vê que algo está acontecendo e não repete o comando."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel de uma oficina, o vetor leituras guarda as medições em ordem de chegada. O que obtém `leituras[leituras.length - 1]`?",
+      "alternativas": [
+        "A leitura mais recente",
+        "A primeira leitura recebida no dia",
+        "A quantidade de leituras guardadas",
+        "A leitura de número 1 em diante"
+      ],
+      "correta": 0,
+      "explicacao": "O último índice de um vetor é length - 1. Como as leituras entram em ordem de chegada, essa é a mais recente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O painel de uma escola recebe pelo MQTT o texto \"23.5\". Antes de comparar com o limite de 30 graus, o código faz `const t = parseFloat(msg);`. Por quê?",
+      "alternativas": [
+        "Porque parseFloat arredonda o valor para inteiro",
+        "Porque a mensagem chega como texto e precisa virar número",
+        "Porque sem isso o painel não se conecta ao broker",
+        "Porque parseFloat converte de Fahrenheit para Celsius"
+      ],
+      "correta": 1,
+      "explicacao": "Mensagens chegam como texto (bytes). parseFloat transforma \"23.5\" no número 23.5, que pode ser comparado e calculado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel de um restaurante há botões como `<button data-topico='cozinha/exaustor'>Exaustor</button>`. Como o JavaScript lê o valor desse atributo?",
+      "alternativas": [
+        "botao.dataset.topico",
+        "botao.topico",
+        "botao.data.topico",
+        "botao.getElementById('topico')"
+      ],
+      "correta": 0,
+      "explicacao": "Atributos data-* ficam em elemento.dataset, sem o prefixo data-. Assim um mesmo código serve para vários botões."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O CSS de um painel tem `:root { --cor-alerta: #c62828; }` e usa `var(--cor-alerta)` em vários lugares. Qual a vantagem?",
+      "alternativas": [
+        "Fazer o alerta aparecer sem precisar de JavaScript",
+        "Mudar a cor de alerta do painel todo numa linha só",
+        "Deixar a página mais leve para carregar no celular",
+        "Impedir que o usuário mude as cores do navegador"
+      ],
+      "correta": 1,
+      "explicacao": "Variável CSS centraliza o valor: muda em um lugar, muda em todos. Ajuda a manter as cores de alerta padronizadas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O painel de uma loja guarda a escolha do usuário com `localStorage.setItem('tema', 'escuro');`. O que acontece quando ele abre o painel no dia seguinte, no mesmo navegador?",
+      "alternativas": [
+        "O valor continua salvo e o tema pode ser reaplicado",
+        "O valor é apagado ao fechar a aba e o tema volta ao padrão",
+        "O tema escuro passa a valer em todos os celulares da loja",
+        "O valor é enviado ao broker MQTT para o dispositivo"
+      ],
+      "correta": 0,
+      "explicacao": "localStorage guarda dados no próprio navegador mesmo depois de fechar. Não é compartilhado com outros aparelhos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num painel de biblioteca, o usuário escolhe a sala em `<select id='sala'>` e o painel deve trocar os cards. Qual evento é o mais indicado para perceber essa escolha?",
+      "alternativas": [
+        "click",
+        "load",
+        "change",
+        "submit"
+      ],
+      "correta": 2,
+      "explicacao": "change dispara quando o valor do select muda. click dispararia até ao só abrir a lista."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel de um galpão está escrito `const resp = await fetch('/api/temp'); const dados = resp.json(); card.textContent = dados.valor;`. O card mostra \"undefined\". Qual é a causa?",
+      "alternativas": [
+        "O fetch precisa de dois awaits seguidos na mesma linha",
+        "Faltou await antes de resp.json()",
+        "textContent não aceita números vindos de uma API",
+        "O endereço /api/temp precisa terminar em .json"
+      ],
+      "correta": 1,
+      "explicacao": "resp.json() é assíncrono: sem await, dados é uma Promise e dados.valor é undefined. O certo é const dados = await resp.json();"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel de uma casa, o slider do brilho usa `slider.addEventListener('input', enviar)` e cada chamada publica uma mensagem MQTT. Ao arrastar de 0 a 100, o que acontece?",
+      "alternativas": [
+        "Sai uma única mensagem, quando o usuário solta o slider",
+        "Nenhuma mensagem sai até o usuário clicar em um botão",
+        "Sai uma mensagem a cada 5 segundos enquanto arrasta",
+        "Saem dezenas de mensagens, uma a cada movimento"
+      ],
+      "correta": 3,
+      "explicacao": "O evento input dispara a cada movimento. Para mandar só o valor final, usa-se change, que dispara ao soltar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O painel de uma câmara fria tem `if (t > 8) card.classList.add('alerta'); else card.classList.add('normal');`. Depois de a temperatura subir e voltar ao normal, o card continua com cara de alerta. Por quê?",
+      "alternativas": [
+        "A classe alerta nunca é retirada do card",
+        "A comparação t > 8 só funciona com números inteiros",
+        "classList.add apaga as classes anteriores do card",
+        "O else só roda na primeira leitura recebida"
+      ],
+      "correta": 0,
+      "explicacao": "add só acrescenta. Ao voltar ao normal, alerta continua lá. É preciso remover a classe oposta (ou usar toggle com condição)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel de uma estufa, a mensagem MQTT chega como texto e o código compara direto: `if (msg > '30') alertar();`. Com msg igual a \"9\", o alerta dispara. Por quê?",
+      "alternativas": [
+        "Porque 9 graus é mesmo um valor acima do limite de 30",
+        "Porque o JavaScript sempre trata mensagens MQTT como zero",
+        "Textos são comparados caractere a caractere",
+        "Porque o operador > não funciona com o número 30"
+      ],
+      "correta": 2,
+      "explicacao": "Comparando textos, \"9\" > \"30\" é verdadeiro (compara o primeiro caractere). Convertendo para número antes, 9 > 30 é falso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O painel de uma academia tem `setInterval(atualizar(), 5000);`. Os cards só são atualizados uma vez. Qual é o erro?",
+      "alternativas": [
+        "O intervalo deveria ser escrito em segundos, e não em milissegundos",
+        "setInterval só funciona com funções criadas com function",
+        "A função atualizar precisa estar dentro de um botão",
+        "Os parênteses executam atualizar na hora e passam o resultado, não a função"
+      ],
+      "correta": 3,
+      "explicacao": "atualizar() roda uma vez e devolve undefined para o setInterval. O correto é passar a função sem parênteses: setInterval(atualizar, 5000)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel de uma oficina há `const maior = Math.max(...leituras.map(l => l.temp));`. O que fica em maior?",
+      "alternativas": [
+        "A maior temperatura entre todas as leituras",
+        "A temperatura da última leitura recebida",
+        "A quantidade de leituras acima da média",
+        "Um vetor com todas as temperaturas em ordem"
+      ],
+      "correta": 0,
+      "explicacao": "map pega só as temperaturas, ... espalha o vetor como argumentos e Math.max devolve o maior. Útil para mostrar o pico do dia."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O gráfico do painel de uma padaria é desenhado com `leituras.slice(-20)`. Qual o efeito?",
+      "alternativas": [
+        "Apaga as 20 primeiras leituras do vetor original",
+        "Usa só as 20 leituras mais recentes",
+        "Desenha as leituras com valor menor que -20",
+        "Divide o vetor em 20 partes iguais para o gráfico"
+      ],
+      "correta": 1,
+      "explicacao": "slice com número negativo pega a partir do fim: as últimas 20. Não altera o vetor original e mantém o gráfico legível."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No painel de uma estufa existe este trecho: `<div class='card'><h2>Temperatura</h2><span id='temp'>--</span> °C</div>`.\n\nNa sua resposta:\n1. diga o que o usuário vê nesse card quando a página abre;\n2. explique para que serve o id temp e por que começar com \"--\".",
+      "respostasAceitas": [
+        "Um card com o título Temperatura e o valor \"-- °C\". O id temp permite ao JavaScript achar o span e trocar o \"--\" pela leitura; o \"--\" mostra que ainda não chegou dado (em vez de um número falso)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) card com título e \"-- °C\"; 2) id é o endereço para o JS atualizar o valor; \"--\" indica sem leitura ainda, evita mostrar 0 como se fosse real."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O dono de uma pizzaria abre no celular o painel do forno e vê tudo minúsculo, como se fosse a tela do computador encolhida. O técnico diz que faltou a linha `<meta name='viewport' content='width=device-width, initial-scale=1'>`.\n\nNa sua resposta:\n1. explique o que essa linha faz;\n2. diga por que ela é importante para um painel IoT.",
+      "respostasAceitas": [
+        "Ela faz o navegador do celular usar a largura real da tela em vez de simular uma tela de computador. Painel IoT é muito consultado no celular; sem ela o texto fica pequeno e os botões difíceis de tocar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ajusta a página à largura do aparelho; 2) painéis são vistos no celular, precisa ser legível e tocável."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No painel de uma clínica veterinária há `btnLuz.addEventListener('click', alternarLuz);`.\n\nNa sua resposta:\n1. explique o que é um evento de clique;\n2. diga o que acontece quando o usuário toca no botão.",
+      "respostasAceitas": [
+        "Evento é algo que acontece na página (aqui, o clique) e que o JavaScript pode escutar. Ao tocar no botão btnLuz, a função alternarLuz é executada, por exemplo mandando o comando de ligar ou desligar a luz."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) evento = ação do usuário detectada pelo JS; 2) o clique executa alternarLuz."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No pet shop, o nível de ração do comedouro automático aparece de duas formas possíveis: só o texto \"35%\" ou uma barra `<progress value='35' max='100'>` com o texto ao lado.\n\nNa sua resposta:\n1. diga qual das duas formas você escolheria;\n2. justifique pensando em quem olha o painel rapidamente.",
+      "respostasAceitas": [
+        "A barra com o texto ao lado. A barra mostra de relance o quanto falta (um terço cheio) e o número dá a precisão; quem passa correndo entende sem ler com atenção."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) barra (com texto); 2) leitura rápida/visual da proporção. Aceitar texto só se bem justificado (ex.: espaço muito pequeno)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A API de um hotel devolve para o painel a leitura `{\"quarto\": \"204\", \"temp\": 23.4, \"hora\": \"14:05\"}`.\n\nNa sua resposta:\n1. explique o que significa cada um dos três campos;\n2. diga como o painel pode usar essas informações em um card.",
+      "respostasAceitas": [
+        "quarto é qual quarto mediu, temp é a temperatura (23,4 °C) e hora é quando a leitura foi feita. O card pode ter o título \"Quarto 204\", o valor \"23.4 °C\" em destaque e \"atualizado às 14:05\" embaixo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) identificação, valor e horário; 2) título, valor com unidade e horário da última atualização."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No painel de uma cervejaria artesanal, o técnico colocou o valor da temperatura do tanque em letra bem grande e a palavra \"Tanque 1\" em letra pequena.\n\nNa sua resposta:\n1. explique o motivo dessa escolha;\n2. diga o que poderia acontecer se fosse o contrário.",
+      "respostasAceitas": [
+        "O valor é a informação principal, precisa ser lido de longe e num olhar. Se o rótulo fosse grande e o número pequeno, o operador teria que chegar perto ou poderia ler errado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) destacar a informação mais importante; 2) leitura difícil/lenta, risco de erro."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O CSS de um painel de academia tem `.cards { display: grid; grid-template-columns: repeat(3, 1fr); }` e também `@media (max-width: 600px) { .cards { grid-template-columns: 1fr; } }`.\n\nNa sua resposta:\n1. explique como os cards aparecem no computador;\n2. explique como aparecem no celular e por que isso é bom.",
+      "respostasAceitas": [
+        "No computador ficam 3 cards por linha, dividindo a largura. Em telas de até 600 px a regra da media query vale e fica 1 card por linha, um embaixo do outro; assim os cards não ficam espremidos e dá para ler no celular."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) três colunas iguais; 2) uma coluna em tela até 600 px, legível no celular."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No painel de uma casa, o botão da bomba d'água tem este código: `btn.addEventListener('click', () => { ligada = !ligada; btn.textContent = ligada ? 'Desligar bomba' : 'Ligar bomba'; btn.classList.toggle('ligado', ligada); });`.\n\nNa sua resposta:\n1. explique o que acontece com a variável ligada a cada clique;\n2. explique o que muda no texto e na aparência do botão.",
+      "respostasAceitas": [
+        "A cada clique ligada inverte (true vira false e vice-versa). Se ficar true, o botão passa a dizer \"Desligar bomba\" e ganha a classe ligado; se ficar false, diz \"Ligar bomba\" e perde a classe."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ! inverte o valor; 2) texto mostra a próxima ação e a classe ligado acompanha o estado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um painel de câmara fria mostra a temperatura com `card.textContent = t.toFixed(1) + ' °C';`. Antes, mostrava apenas `card.textContent = t;` e aparecia algo como 4.4567.\n\nNa sua resposta:\n1. explique o que mudou na forma de mostrar o valor;\n2. diga por que a nova forma é melhor para quem usa o painel.",
+      "respostasAceitas": [
+        "Agora o valor é arredondado para 1 casa decimal e ganha a unidade °C (ex.: \"4.5 °C\"). Fica mais limpo e o usuário sabe que é grau Celsius; casas a mais não ajudam a decidir nada e confundem."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) arredonda para 1 casa e acrescenta unidade; 2) leitura mais fácil, sem ambiguidade de unidade."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um painel tem quatro cards (temperatura, umidade, luminosidade e CO2) e uma única função usada por todos: `function atualizarCard(id, valor, unidade) { document.getElementById(id).textContent = valor + ' ' + unidade; }`.\n\nNa sua resposta:\n1. explique o que a função faz;\n2. diga uma vantagem de usar uma função só em vez de repetir o código para cada card.",
+      "respostasAceitas": [
+        "Ela procura o elemento pelo id e escreve nele o valor com a unidade. Com uma função só, o código fica menor e, se for preciso mudar o formato (ex.: acrescentar casas decimais), muda-se em um lugar e vale para todos os cards."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) acha o elemento e escreve valor + unidade; 2) reaproveitamento, manutenção em um só lugar, menos erros."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No painel de um restaurante, todos os botões são assim: `<button data-topico='cozinha/exaustor'>Exaustor</button>`, e o JavaScript tem `document.querySelectorAll('button[data-topico]').forEach(b => b.addEventListener('click', () => publicar(b.dataset.topico, 'TOGGLE')));`.\n\nNa sua resposta:\n1. explique o que esse trecho faz com os botões;\n2. diga a vantagem de guardar o tópico no próprio botão.",
+      "respostasAceitas": [
+        "Ele pega todos os botões que têm data-topico e põe em cada um um evento de clique que publica \"TOGGLE\" no tópico escrito no botão. Para colocar um equipamento novo basta criar outro botão com outro data-topico, sem mexer no JavaScript."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) registra clique em todos os botões, cada um publicando no seu tópico; 2) fácil de acrescentar botões, código único."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O painel de uma lanchonete mostra no rodapé \"Atualizado às 14:32:10\", gerado com `new Date().toLocaleTimeString('pt-BR')` sempre que chega uma leitura.\n\nNa sua resposta:\n1. explique o que esse código mostra;\n2. diga por que essa informação é útil para quem acompanha o freezer pelo painel.",
+      "respostasAceitas": [
+        "Mostra a hora atual no formato brasileiro, gravada no momento em que chegou a leitura. Assim o usuário sabe se o dado é recente; se a hora parou, ele percebe que o sensor ou a conexão caiu, em vez de confiar num valor velho."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) hora da última leitura em formato pt-BR; 2) saber se o dado está atualizado e perceber falhas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno colocou `<script src='painel.js'></script>` dentro do `<head>`, antes dos cards. No console aparece \"Cannot set properties of null (setting 'textContent')\" na linha `document.getElementById('temp').textContent = '--';`.\n\nNa sua resposta:\n1. explique por que getElementById devolveu null;\n2. diga duas formas de resolver, sem precisar reescrever o código.",
+      "respostasAceitas": [
+        "O script roda enquanto o navegador lê o head, antes de o span temp existir; por isso não acha o elemento e devolve null. Resolve colocando o script no fim do body ou usando o atributo defer (ou esperando o evento DOMContentLoaded)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) script executado antes do HTML do card ser criado; 2) mover o script para o fim do body e/ou defer/DOMContentLoaded."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num painel de oficina, o nome do sensor vem do próprio dispositivo e é mostrado com `card.innerHTML = dados.nome;`. Um colega sugere trocar por `card.textContent = dados.nome;`.\n\nNa sua resposta:\n1. explique a diferença entre innerHTML e textContent nesse caso;\n2. diga qual risco a troca evita.",
+      "respostasAceitas": [
+        "innerHTML interpreta o texto como HTML; textContent mostra exatamente o texto. Se alguém gravar no dispositivo um nome com tags ou script, com innerHTML isso seria executado no painel (injeção de código); com textContent aparece só como texto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) innerHTML interpreta HTML, textContent não; 2) evita injeção de HTML/script vinda de dado externo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No painel de um aquário, a cor do nível de água vem desta função: `function cor(n) { if (n < 20) return 'vermelho'; if (n < 50) return 'amarelo'; return 'verde'; }`.\n\nNa sua resposta:\n1. explique qual cor aparece para os níveis 10, 35 e 80;\n2. explique o que daria errado se a ordem dos dois if fosse invertida.",
+      "respostasAceitas": [
+        "10 é vermelho, 35 é amarelo e 80 é verde. Se o teste n < 50 viesse primeiro, o 10 também seria menor que 50 e voltaria amarelo; o vermelho nunca apareceria, escondendo o nível crítico."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 10 vermelho, 35 amarelo, 80 verde; 2) invertendo, valores baixos param no amarelo e o alerta crítico some."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um técnico vai montar o painel de uma horta usando o Node-RED. O que é o Node-RED?",
+      "alternativas": [
+        "Uma ferramenta visual que liga blocos em fluxos",
+        "Um sensor de umidade que se liga direto no Wi-Fi",
+        "Uma placa de desenvolvimento parecida com o Arduino",
+        "Um aplicativo de celular que só lê QR Code"
+      ],
+      "correta": 0,
+      "explicacao": "Node-RED roda no navegador e programa ligando nós (blocos) com fios. É muito usado para integrar dispositivos IoT e montar painéis."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Node-RED, como se chamam os blocos que o técnico arrasta e liga com fios para montar a lógica do painel?",
+      "alternativas": [
+        "Tags, que ligadas formam uma página",
+        "Nós (nodes), que ligados formam um fluxo",
+        "Tópicos, que ligados formam um broker",
+        "Pinos, que ligados formam um circuito"
+      ],
+      "correta": 1,
+      "explicacao": "Cada bloco é um nó; nós ligados por fios formam um fluxo (flow). Tópicos são do MQTT, pinos são do hardware."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de criar um painel com o pacote clássico node-red-dashboard num computador de IP 192.168.0.50, em qual endereço o painel costuma abrir no navegador?",
+      "alternativas": [
+        "http://192.168.0.50:1880/ui",
+        "http://192.168.0.50:1883/ui",
+        "http://192.168.0.50/painel.mqtt",
+        "mqtt://192.168.0.50:1880"
+      ],
+      "correta": 0,
+      "explicacao": "O Node-RED usa a porta 1880 e o dashboard clássico fica em /ui. A porta 1883 é a do broker MQTT."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Node-RED Dashboard, qual nó mostra o valor atual com um ponteiro ou arco, como o velocímetro de um carro?",
+      "alternativas": [
+        "gauge",
+        "chart",
+        "button",
+        "text input"
+      ],
+      "correta": 0,
+      "explicacao": "gauge é o medidor. chart desenha o histórico, button envia comando e text input recebe digitação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel de uma câmara de vacinas, o técnico quer ver como a temperatura variou nas últimas 24 horas. Qual nó do Node-RED Dashboard usar?",
+      "alternativas": [
+        "chart (gráfico)",
+        "gauge (medidor)",
+        "switch (interruptor)",
+        "notification (aviso)"
+      ],
+      "correta": 0,
+      "explicacao": "Variação ao longo do tempo pede gráfico de linha. O gauge mostra só o valor de agora."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel de uma loja, o letreiro luminoso deve ser ligado e desligado, e o painel precisa mostrar se ele está ligado ou não. Qual nó do Dashboard é o mais adequado?",
+      "alternativas": [
+        "slider",
+        "gauge",
+        "chart",
+        "switch"
+      ],
+      "correta": 3,
+      "explicacao": "O switch tem dois estados (ligado/desligado) e mostra a posição atual. O slider é para valores numa faixa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O gerente de uma rede de lavanderias quer comparar o consumo de energia das 5 máquinas no mês. Qual gráfico é o mais adequado?",
+      "alternativas": [
+        "Gráfico de barras, uma barra por máquina",
+        "Medidor (gauge) de uma das máquinas",
+        "Gráfico de linha com uma única linha",
+        "Um número só com a soma das máquinas"
+      ],
+      "correta": 0,
+      "explicacao": "Para comparar quantidades entre itens, barras lado a lado são o mais claro. Linha mostra evolução no tempo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O painel de uma biblioteca precisa mostrar se a porta do arquivo está aberta ou fechada. Qual elemento visual é o mais simples de entender?",
+      "alternativas": [
+        "Um gráfico de linha com 0 e 1 ao longo do dia",
+        "Um medidor (gauge) de 0 a 100",
+        "Um indicador com ícone, cor e texto",
+        "Um gráfico de pizza com aberta e fechada"
+      ],
+      "correta": 2,
+      "explicacao": "Estado de dois valores (aberta/fechada) se mostra com indicador simples. Gauge e pizza são para quantidades."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Node-RED, qual nó recebe as mensagens publicadas em um tópico, como `escola/sala3/temperatura`?",
+      "alternativas": [
+        "mqtt out",
+        "http response",
+        "mqtt in",
+        "debug"
+      ],
+      "correta": 2,
+      "explicacao": "mqtt in assina o tópico e entrega as mensagens para o fluxo. mqtt out faz o contrário: publica."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No fluxo de um aviário, um botão do Dashboard deve mandar \"ON\" para o tópico `aviario/ventilador/cmd`. Qual nó vai ligado depois do botão?",
+      "alternativas": [
+        "mqtt in",
+        "gauge",
+        "inject",
+        "mqtt out"
+      ],
+      "correta": 3,
+      "explicacao": "Para enviar (publicar) no broker usa-se mqtt out. mqtt in é para receber."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Node-RED, as mensagens que passam pelos fios são objetos chamados msg. Em qual propriedade fica, normalmente, o valor principal (como a leitura do sensor)?",
+      "alternativas": [
+        "msg.topic",
+        "msg.payload",
+        "msg.node",
+        "msg.flow"
+      ],
+      "correta": 1,
+      "explicacao": "msg.payload carrega o conteúdo principal. msg.topic costuma guardar o tópico ou um nome para a mensagem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A dona de uma sorveteria quer acompanhar a temperatura do freezer quando está em casa. Qual a principal vantagem de ter o painel acessível pelo celular?",
+      "alternativas": [
+        "Deixar o freezer mais frio sem gastar energia",
+        "Dispensar o sensor de temperatura no freezer",
+        "Fazer o freezer funcionar mesmo sem energia",
+        "Ver o estado e receber avisos de qualquer lugar"
+      ],
+      "correta": 3,
+      "explicacao": "O painel no celular leva a informação até a pessoa onde ela estiver. Ele não substitui sensor nem muda o equipamento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O Node-RED acabou de ser instalado e não aparecem os nós gauge e chart. Como o técnico costuma acrescentar o pacote de dashboard?",
+      "alternativas": [
+        "Instalando o pacote pelo menu Manage palette",
+        "Reinstalando o Arduino IDE com outra versão",
+        "Ligando o sensor em outro pino do ESP32",
+        "Trocando a porta do broker de 1883 para 1880"
+      ],
+      "correta": 0,
+      "explicacao": "Pacotes extras de nós são instalados pela paleta (Manage palette > Install). Não tem relação com o hardware."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Node-RED, o nó debug está ligado depois do nó mqtt in. Onde aparecem as mensagens que ele recebe?",
+      "alternativas": [
+        "Na aba debug da barra lateral do editor",
+        "No visor LCD ligado ao ESP32",
+        "Num arquivo enviado por e-mail ao técnico",
+        "No gráfico do painel, junto das leituras"
+      ],
+      "correta": 0,
+      "explicacao": "O debug mostra as mensagens na barra lateral do editor. É a principal ferramenta para testar o fluxo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O sensor de uma estufa manda `{\"temp\": 26.1, \"umid\": 70}`, que já chega como objeto no nó function. Ele tem `msg.payload = msg.payload.temp; return msg;` e está ligado a um gauge. O que o gauge recebe?",
+      "alternativas": [
+        "O objeto inteiro com temp e umid",
+        "Apenas o número 70",
+        "Apenas o número 26.1",
+        "O texto \"temp\""
+      ],
+      "correta": 2,
+      "explicacao": "A função troca o payload pelo campo temp. Assim o gauge, que espera um número, recebe só 26.1."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num fluxo de câmara fria, o nó function tem `if (msg.payload > 8) { return msg; } return null;` e vai para um nó de notificação. O que acontece?",
+      "alternativas": [
+        "Só passam as leituras acima de 8; as outras são descartadas",
+        "Todas as leituras passam, mas as acima de 8 em vermelho",
+        "Só passam as leituras iguais ou abaixo de 8",
+        "O fluxo para de vez na primeira leitura acima de 8"
+      ],
+      "correta": 0,
+      "explicacao": "return null descarta a mensagem. Assim a notificação só recebe leituras acima do limite: é um filtro de alerta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um nó function tem `msg.payload = msg.payload * 9 / 5 + 32; return msg;`. O sensor mandou 25. Que valor segue para o painel?",
+      "alternativas": [
+        "45",
+        "25",
+        "57",
+        "77"
+      ],
+      "correta": 3,
+      "explicacao": "É a conversão de Celsius para Fahrenheit: 25 × 9 / 5 + 32 = 45 + 32 = 77. O rótulo do painel precisa dizer °F."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O gauge de umidade de uma adega foi configurado com faixas de cor: 0–55 amarelo, 55–75 verde, 75–100 vermelho. O que essas faixas comunicam?",
+      "alternativas": [
+        "A velocidade com que o painel se atualiza",
+        "Quantos sensores estão ligados ao mesmo tempo",
+        "Se a umidade está boa ou fora da faixa ideal",
+        "A força do sinal Wi-Fi do sensor"
+      ],
+      "correta": 2,
+      "explicacao": "As faixas de cor dão o significado do valor: verde é o ideal, amarelo/vermelho pedem atenção. Bom para leitura rápida."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No nó chart do Node-RED, o técnico limitou o eixo X para mostrar só a última 1 hora no painel de uma academia. Qual o motivo mais provável?",
+      "alternativas": [
+        "Fazer o sensor medir só uma vez por hora",
+        "Manter o gráfico legível e leve",
+        "Apagar do banco de dados as leituras mais antigas",
+        "Deixar o gráfico mais preciso que o sensor"
+      ],
+      "correta": 1,
+      "explicacao": "Mostrar dias de dados num gráfico pequeno vira um borrão e pesa no celular. Limitar o período foca no que importa agora."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Node-RED, a mensagem do mqtt in chega como o texto `{\"nivel\": 62}`, e o nó function tenta usar `msg.payload.nivel`, que dá undefined. Qual nó resolve, colocado entre os dois?",
+      "alternativas": [
+        "debug, que mostra a mensagem na tela",
+        "delay, que segura a mensagem um tempo",
+        "json, que converte o texto em objeto",
+        "gauge, que exibe o valor numérico"
+      ],
+      "correta": 2,
+      "explicacao": "O nó json converte texto JSON em objeto (ou o contrário). Depois disso msg.payload.nivel existe. O mqtt in também pode ser configurado para já entregar objeto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um switch do Dashboard envia true/false, mas o ESP32 do aquário só entende \"ON\" e \"OFF\". Qual é a solução mais simples no Node-RED?",
+      "alternativas": [
+        "Trocar o switch por um gauge com os valores ON e OFF",
+        "Mudar a porta do broker para o ESP32 aceitar true",
+        "Ligar um nó debug entre o switch e o mqtt out",
+        "Configurar no switch os valores ON e OFF"
+      ],
+      "correta": 3,
+      "explicacao": "O switch permite escolher o payload de ligado e de desligado. Assim ele já manda o que o dispositivo espera."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Node-RED Dashboard, um painel de hotel tem páginas (abas) separadas para Recepção, Cozinha e Piscina, e grupos dentro de cada uma. Para que serve essa organização?",
+      "alternativas": [
+        "Fazer cada aba usar um broker MQTT diferente",
+        "Separar as informações por área do hotel",
+        "Impedir que o painel funcione no celular",
+        "Deixar o fluxo mais rápido no processador"
+      ],
+      "correta": 1,
+      "explicacao": "Abas e grupos organizam o painel para o usuário: cada um acha logo o que é da sua área."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma pequena clínica quer acompanhar a geladeira de vacinas pelo celular e tem pouco dinheiro. Qual a vantagem de um painel web responsivo em relação a um app nativo?",
+      "alternativas": [
+        "Recebe notificação mesmo com o celular desligado",
+        "Abre no navegador de qualquer celular, sem instalar",
+        "Funciona sem nenhuma conexão com a rede ou internet",
+        "É sempre mais rápido do que um app nativo"
+      ],
+      "correta": 1,
+      "explicacao": "Painel web responsivo roda em qualquer navegador e é um só código. App nativo exige instalar e manter versões, mas aproveita melhor recursos como notificações."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de celular de uma granja, o alerta de \"temperatura alta no galpão\" chega como notificação push. Qual a vantagem em relação a um aviso só dentro do painel?",
+      "alternativas": [
+        "O aviso abaixa a temperatura do galpão sozinho",
+        "O aviso chega mesmo com o app fechado",
+        "O aviso não precisa de internet para chegar",
+        "O aviso dispensa o sensor de temperatura"
+      ],
+      "correta": 1,
+      "explicacao": "A notificação push aparece no celular sem a pessoa estar olhando o painel. Um aviso só no painel depende de alguém abrir a tela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel de uma usina de reciclagem, o botão \"Abrir comporta\" pede \"Tem certeza?\" antes de enviar o comando. Por que pôr essa confirmação?",
+      "alternativas": [
+        "Um toque acidental numa ação de risco causa estrago",
+        "Para o comando chegar mais rápido ao dispositivo",
+        "Porque todo botão de painel precisa de confirmação",
+        "Para o painel gastar menos dados da rede móvel"
+      ],
+      "correta": 0,
+      "explicacao": "Confirmação é para ações perigosas ou difíceis de desfazer. Em todo botão ela só atrapalha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Sem ter o sensor de nível em mãos, o técnico quer testar se o gauge e o alerta do painel de uma caixa d'água funcionam. Qual nó do Node-RED ajuda a simular leituras?",
+      "alternativas": [
+        "inject, com valores escolhidos",
+        "mqtt out, publicando no tópico de comando",
+        "chart, desenhando uma linha de exemplo",
+        "switch, ligando e desligando a bomba"
+      ],
+      "correta": 0,
+      "explicacao": "O inject envia uma mensagem com o valor que você definir, ao clicar. Dá para testar valor normal, baixo e alto sem hardware."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um painel de condomínio vai mostrar o nível das 8 caixas d'água ao mesmo tempo, para o síndico comparar. Por que 8 medidores (gauges) não são a melhor escolha?",
+      "alternativas": [
+        "Porque o gauge não aceita valores em porcentagem",
+        "Porque o gauge só funciona com um sensor por painel",
+        "Porque o gauge não pode ter cores de alerta",
+        "Ocupam espaço e dificultam a comparação entre caixas"
+      ],
+      "correta": 3,
+      "explicacao": "Gauge é bom para UM valor atual. Para comparar vários itens, barras alinhadas mostram a diferença de relance e cabem melhor na tela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O texto \"Última leitura: 14:32\" do painel de uma estufa aparece num nó do Dashboard que só exibe texto, sem deixar o usuário digitar. Qual nó é esse?",
+      "alternativas": [
+        "text",
+        "text input",
+        "form",
+        "button"
+      ],
+      "correta": 0,
+      "explicacao": "O nó text só mostra um valor. text input e form são para o usuário digitar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O gauge do painel de uma padaria fica parado, sem mostrar valor. O debug mostra que ele recebe `msg.payload = \"23.5 °C\"`. Qual é o problema mais provável?",
+      "alternativas": [
+        "O gauge espera número e recebe texto com unidade",
+        "O gauge só aceita valores inteiros, sem casas decimais",
+        "O tópico precisa ter o mesmo nome do gauge",
+        "O gauge só mostra valores enviados pelo nó inject"
+      ],
+      "correta": 0,
+      "explicacao": "O gauge precisa de número. A unidade deve ser configurada no próprio gauge; o payload fica só 23.5."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um único nó chart recebe as temperaturas da sala e da cozinha de um restaurante. Para desenhar duas linhas separadas, o que deve ser diferente nas mensagens?",
+      "alternativas": [
+        "msg.payload, que deve ser um texto e não número",
+        "A porta do broker usada por cada sensor",
+        "msg.topic, que dá o nome da linha (série) no gráfico",
+        "A cor do nó chart dentro do editor"
+      ],
+      "correta": 2,
+      "explicacao": "O chart separa as séries pelo msg.topic: cada tópico diferente vira uma linha com legenda própria."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um nó function de um painel de estufa tem `if (msg.payload < 30) { msg.payload = 'Solo seco'; }`, sem nenhum return. O nó de notificação nunca recebe nada. Por quê?",
+      "alternativas": [
+        "O texto \"Solo seco\" é longo demais para a notificação",
+        "O nó function só funciona com valores maiores que 30",
+        "Falta um nó debug entre a função e a notificação",
+        "Sem return msg, nada sai do nó function"
+      ],
+      "correta": 3,
+      "explicacao": "No nó function, o que segue para o próximo nó é o que for retornado. Sem return, nada sai."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O gauge de temperatura de uma oficina foi configurado de 0 a 50 °C, mas o sensor foi trocado e agora manda o valor em °F. Num dia de 25 °C, o que o painel mostra?",
+      "alternativas": [
+        "O valor 25 normalmente, porque o gauge converte sozinho",
+        "O ponteiro no máximo, com o valor 77",
+        "O valor 0, porque o gauge não aceita Fahrenheit",
+        "Um erro no editor, impedindo o fluxo de rodar"
+      ],
+      "correta": 1,
+      "explicacao": "O gauge não sabe a unidade: recebe 77 e mostra 77, acima do máximo de 50. Unidade trocada gera alerta falso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No nó chart do Node-RED Dashboard, o que acontece quando ele recebe `msg.payload = []` (um vetor vazio)?",
+      "alternativas": [
+        "Desenha um ponto com valor zero no gráfico",
+        "Ignora a mensagem e mantém o gráfico como estava",
+        "Trava o painel até o Node-RED reiniciar",
+        "Apaga os dados já desenhados e o gráfico recomeça"
+      ],
+      "correta": 3,
+      "explicacao": "No chart do dashboard clássico, um vetor vazio limpa o gráfico. É usado, por exemplo, num botão \"Limpar gráfico\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O switch \"Bomba\" do painel de um sítio muda de posição assim que é tocado. Às vezes o comando se perde e a bomba não liga, mas o switch continua mostrando ligado. Qual configuração deixa o painel mais confiável?",
+      "alternativas": [
+        "O switch mostrar o estado informado pela bomba",
+        "Colocar dois switches iguais para a mesma bomba",
+        "Aumentar o tamanho do switch na tela do celular",
+        "Trocar o switch por um gauge com 0 e 1"
+      ],
+      "correta": 0,
+      "explicacao": "O switch pode ser atualizado pela mensagem de estado que o dispositivo publica (sem passar direto a própria entrada). Assim ele mostra o real, não o pedido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Duas atendentes de um pet shop abrem o mesmo painel do Node-RED Dashboard, cada uma no seu celular. Uma desliga a fonte do aquário. O que acontece no celular da outra?",
+      "alternativas": [
+        "Nada muda até ela apagar o histórico do navegador",
+        "O celular dela passa a mostrar erro de conexão",
+        "A fonte volta a ligar porque o painel dela ficou ligado",
+        "O switch dela também muda para desligado"
+      ],
+      "correta": 3,
+      "explicacao": "O dashboard clássico conversa com os navegadores por WebSocket e envia a mesma atualização a todos que estão com o painel aberto."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No Node-RED de uma estufa existe o fluxo: [mqtt in: estufa/umidade] → [gauge \"Umidade do solo\", 0 a 100 %].\n\nNa sua resposta:\n1. explique o papel de cada um dos dois nós;\n2. diga o que o usuário vê quando o sensor publica 64.",
+      "respostasAceitas": [
+        "O mqtt in assina o tópico estufa/umidade e recebe as leituras; o gauge exibe o valor recebido num medidor. Com 64, o ponteiro fica em 64 % na escala de 0 a 100."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mqtt in recebe do broker, gauge mostra; 2) ponteiro/valor em 64 %."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No Node-RED Dashboard existem os nós button e switch. Um técnico usou button para \"Tocar campainha\" e switch para \"Luz do quintal\".\n\nNa sua resposta:\n1. explique a diferença entre os dois nós;\n2. diga por que cada escolha combina com o equipamento.",
+      "respostasAceitas": [
+        "O button manda uma mensagem a cada toque e não guarda estado; o switch tem dois estados e mostra se está ligado ou desligado. A campainha é uma ação momentânea; a luz fica ligada ou desligada, então precisa mostrar o estado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) button = ação única; switch = liga/desliga com estado; 2) campainha é momentânea, luz tem estado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O dono de uma padaria passou a receber no celular a temperatura da câmara fria e um aviso quando ela passa de 5 °C.\n\nNa sua resposta:\n1. cite duas vantagens desse acompanhamento pelo celular;\n2. dê um exemplo de prejuízo que ele pode evitar.",
+      "respostasAceitas": [
+        "Ele vê a temperatura de qualquer lugar e é avisado na hora, sem ficar indo olhar o termômetro. Pode agir antes de perder os frios e laticínios se a câmara estragar de madrugada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) acesso remoto, aviso imediato (ou histórico); 2) perda de produtos, multa da vigilância etc."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No painel de uma academia, o técnico quer mostrar a temperatura do salão de duas formas: o valor de agora e como ela mudou durante o dia.\n\nNa sua resposta:\n1. diga qual elemento visual usar para o valor de agora;\n2. diga qual usar para a variação no dia e por quê.",
+      "respostasAceitas": [
+        "Para o valor de agora, um medidor (gauge) ou número grande. Para a variação no dia, um gráfico de linha, que mostra o valor subindo e descendo com o tempo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) gauge/número; 2) gráfico de linha porque mostra evolução no tempo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Antes de entregar o painel de um viveiro, o técnico ligou nós inject com os valores 10, 50 e 95 no fluxo e observou o resultado no nó debug e no gauge.\n\nNa sua resposta:\n1. explique para que servem os nós inject e debug nesse teste;\n2. diga por que testar com valores baixo, médio e alto.",
+      "respostasAceitas": [
+        "O inject simula leituras do sensor quando quisermos; o debug mostra o que passou pelo fluxo. Testar baixo, médio e alto confere se o gauge mostra certo e se o alerta aparece e some nas faixas certas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) inject simula entrada, debug mostra a saída; 2) ver comportamento em cada faixa/alerta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No Node-RED, uma mensagem que sai do mqtt in de uma cozinha industrial é assim: `{ topic: 'cozinha/forno/temp', payload: 180 }`.\n\nNa sua resposta:\n1. explique o que guarda msg.topic;\n2. explique o que guarda msg.payload.",
+      "respostasAceitas": [
+        "msg.topic guarda de qual tópico a mensagem veio (forno da cozinha, temperatura). msg.payload guarda o conteúdo, a leitura de 180 graus."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) topic = origem/nome do tópico; 2) payload = valor/conteúdo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num fluxo do Node-RED de uma vinícola, o nó function tem: `const t = msg.payload.temp; msg.payload = t; msg.alerta = t > 18; return msg;`.\n\nNa sua resposta:\n1. explique o que acontece com msg.payload;\n2. explique o que fica guardado em msg.alerta e como o painel pode usar isso.",
+      "respostasAceitas": [
+        "O payload, que era um objeto, passa a ser só a temperatura. msg.alerta fica true quando a temperatura passa de 18 e false caso contrário; o painel pode usar para pintar o card de vermelho ou mandar um aviso."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) payload vira só o número da temperatura; 2) alerta é verdadeiro/falso conforme o limite, usado para cor/aviso."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A geladeira de vacinas de um posto de saúde precisa ficar entre 2 °C e 8 °C. O gauge do painel vai de -5 a 15 °C com as faixas: abaixo de 2 azul, de 2 a 8 verde, acima de 8 vermelho.\n\nNa sua resposta:\n1. explique por que essas faixas foram escolhidas;\n2. diga por que as duas pontas (frio demais e quente demais) são destacadas.",
+      "respostasAceitas": [
+        "A faixa verde é exatamente a temperatura correta das vacinas, então quem olha sabe na hora se está tudo bem. As pontas são destacadas porque frio demais (congelar) e calor demais estragam as vacinas: os dois lados são problema."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) faixas seguem o limite exigido; 2) congelar e esquentar estragam, os dois precisam de alerta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um pet shop pequeno quer acompanhar os aquários. Um técnico propõe um app nativo para Android e iPhone; outro, um painel web responsivo.\n\nNa sua resposta:\n1. compare as duas opções em custo e manutenção;\n2. diga qual você escolheria para esse pet shop e por quê.",
+      "respostasAceitas": [
+        "App nativo exige desenvolver, instalar e manter versões para cada sistema, mas faz notificações melhor. O painel web é um código só, abre em qualquer navegador e é mais barato. Para um pet shop pequeno, o painel web costuma bastar (com aviso por outro meio, se precisar)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nativo mais caro/trabalhoso, web único e barato; 2) escolha justificada (aceitar nativo se justificar por notificações)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num fluxo de comedouro automático, o nó function tem: `if (msg.payload.nivel < 20) { msg.payload = 'Ração acabando: ' + msg.payload.nivel + '%'; return msg; } return null;` e está ligado a um nó de notificação.\n\nNa sua resposta:\n1. explique quando a notificação aparece e qual texto mostra;\n2. explique o papel do return null.",
+      "respostasAceitas": [
+        "A notificação aparece só quando o nível fica abaixo de 20 %, com o texto \"Ração acabando: 15%\" (por exemplo). O return null descarta as leituras normais, para não avisar o tempo todo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) abaixo de 20 %, mensagem com o nível; 2) return null bloqueia as outras mensagens (filtro)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No painel de uma marcenaria, o botão \"Ligar serra\" pede confirmação, mas o botão \"Atualizar leituras\" não pede.\n\nNa sua resposta:\n1. explique por que a confirmação faz sentido no primeiro botão;\n2. explique por que ela atrapalharia no segundo.",
+      "respostasAceitas": [
+        "Ligar a serra é perigoso: alguém pode estar perto, e um toque acidental no celular poderia causar acidente. Atualizar leituras não muda nada no mundo real; pedir confirmação ali só deixaria o uso lento e faria a pessoa clicar em \"sim\" sem ler."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ação de risco/irreversível; 2) ação inofensiva, confirmação vira incômodo e perde efeito."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No fluxo de uma estufa há: [mqtt in] → [json] → [function] → [gauge]. O sensor publica o texto `{\"umid\": 58}`.\n\nNa sua resposta:\n1. explique o que o nó json faz nesse fluxo;\n2. diga o que aconteceria na função se ele fosse retirado.",
+      "respostasAceitas": [
+        "O nó json transforma o texto recebido em objeto, para a função ler msg.payload.umid. Sem ele, o payload continua sendo texto e msg.payload.umid fica undefined, então o gauge não recebe o valor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) converte texto JSON em objeto; 2) campo não existe (undefined), gauge sem valor. Aceitar citar a opção do mqtt in de já converter."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No painel de um sítio, o switch \"Bomba\" mostra \"ligada\" logo depois do toque. Num dia, o Wi-Fi do ESP32 caiu, a bomba não ligou e a plantação ficou sem água, mas o painel mostrava \"ligada\" o tempo todo.\n\nNa sua resposta:\n1. explique por que o painel mostrou uma informação falsa;\n2. proponha, em palavras, como o painel deveria saber o estado real da bomba.",
+      "respostasAceitas": [
+        "O switch mostrou o que o usuário pediu, não o que aconteceu; ninguém confirmou que o comando chegou. O ESP32 deveria publicar o estado real da bomba num tópico de estado (ex.: sitio/bomba/estado) e o painel mostrar esse estado, indicando também quando o dispositivo está offline."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) painel mostrava o comando, sem confirmação; 2) dispositivo publica estado real e painel exibe isso (e/ou indicação de offline/LWT)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um sensor de vibração de uma fábrica de móveis publica uma leitura a cada 100 milissegundos, e o nó chart do painel recebe todas. O gráfico ficou travando no celular.\n\nNa sua resposta:\n1. explique por que isso pesa no painel;\n2. proponha, em palavras, duas formas de resolver sem perder a informação importante.",
+      "respostasAceitas": [
+        "São 10 pontos por segundo, 36 mil por hora: o navegador do celular tem que redesenhar o gráfico sem parar. Pode-se mandar para o gráfico a média (ou o máximo) a cada alguns segundos, limitar a taxa de mensagens (nó delay/rate limit) e/ou encurtar o período mostrado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) excesso de pontos/redesenho; 2) duas entre: média/agrupar, limitar taxa, período menor, guardar o detalhe em banco e mostrar resumo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O fluxo de uma câmara fria manda notificação quando a temperatura passa de 5 °C. Numa noite, a temperatura ficou oscilando entre 4,9 e 5,1 °C e o celular do dono recebeu dezenas de avisos.\n\nNa sua resposta:\n1. explique por que isso aconteceu;\n2. proponha, em palavras, uma forma de evitar os avisos repetidos sem esconder um problema real.",
+      "respostasAceitas": [
+        "A cada vez que a leitura cruza 5 °C para cima, sai um novo aviso; oscilando em cima do limite, ele cruza várias vezes. Pode-se avisar só na mudança de estado (normal para alerta) e voltar ao normal só abaixo de um valor menor, como 4,5 °C (histerese), ou exigir que fique acima do limite por alguns minutos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) oscilação em torno do limite gera um aviso a cada cruzamento; 2) histerese, aviso só na mudança de estado, tempo mínimo ou intervalo entre avisos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O painel de uma escola pergunta ao servidor, a cada 10 segundos, qual é a temperatura das salas. Como se chama essa forma de atualizar?",
+      "alternativas": [
+        "Push (envio pelo servidor)",
+        "Broker (intermediário)",
+        "Polling (consulta periódica)",
+        "Firmware (programa da placa)"
+      ],
+      "correta": 2,
+      "explicacao": "Polling é o cliente perguntar de tempos em tempos, mesmo que nada tenha mudado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O painel de uma academia mantém uma conexão sempre aberta com o servidor, e o servidor manda cada leitura nova assim que ela chega. Que tecnologia permite isso no navegador?",
+      "alternativas": [
+        "Polling com setInterval",
+        "Cookie de sessão",
+        "WebSocket",
+        "Arquivo CSS externo"
+      ],
+      "correta": 2,
+      "explicacao": "WebSocket deixa um canal aberto nos dois sentidos; o servidor envia sem o navegador precisar perguntar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O JavaScript do painel de um galpão conecta ao broker com `mqtt.connect('ws://192.168.0.10:9001')`. O que o início ws:// indica?",
+      "alternativas": [
+        "Conexão por WebSocket com criptografia",
+        "Conexão MQTT direta pela porta 1883",
+        "Conexão por WebSocket sem criptografia",
+        "Conexão por cabo USB com o ESP32"
+      ],
+      "correta": 2,
+      "explicacao": "ws:// é WebSocket comum; wss:// é a versão segura (com TLS). O navegador não fala MQTT pelo TCP puro, por isso usa WebSocket."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O painel de uma clínica foi publicado na internet e conecta ao broker por `wss://`. Qual a diferença em relação a `ws://`?",
+      "alternativas": [
+        "A conexão fica mais rápida que a rede local",
+        "Dispensa ter um broker MQTT no caminho",
+        "Os dados vão criptografados, como no HTTPS",
+        "Só funciona com celulares, nunca no computador"
+      ],
+      "correta": 2,
+      "explicacao": "O s de wss vem de secure: WebSocket sobre TLS, que protege os dados no caminho, como o HTTPS."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na maioria dos painéis de monitoramento, o que a cor vermelha costuma indicar?",
+      "alternativas": [
+        "Que o equipamento está desligado de propósito",
+        "Que o painel está sendo atualizado",
+        "Que o valor está dentro do normal",
+        "Situação crítica, que pede ação"
+      ],
+      "correta": 3,
+      "explicacao": "Por convenção: verde normal, amarelo atenção, vermelho crítico. Usar vermelho para outra coisa confunde o usuário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O card do painel de uma lavanderia mostra só \"62\", sem mais nada. Qual é o principal problema?",
+      "alternativas": [
+        "O número deveria aparecer com três casas decimais",
+        "O card deveria estar sempre na cor vermelha",
+        "Falta a unidade, então o número não diz nada",
+        "O valor deveria estar escrito por extenso"
+      ],
+      "correta": 2,
+      "explicacao": "Sem unidade (e sem nome da medida), o número não tem significado: 62 °C e 62 % são situações bem diferentes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num painel de hotel, onde deve ficar a informação mais importante (por exemplo, um alarme de incêndio ativo)?",
+      "alternativas": [
+        "No rodapé, depois de todos os gráficos",
+        "Numa aba separada, que se abre com um clique",
+        "Escondida num menu, para não assustar",
+        "No topo da tela, em destaque"
+      ],
+      "correta": 3,
+      "explicacao": "As pessoas olham primeiro o topo. O que exige ação precisa ser visto sem rolar nem clicar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O sensor de umidade de uma estufa desconectou. O que é melhor o card mostrar?",
+      "alternativas": [
+        "O valor 0 %, como se o solo estivesse seco",
+        "Um aviso como \"sem dados\" ou \"--\"",
+        "O último valor, sem nenhum aviso",
+        "Um valor aleatório até o sensor voltar"
+      ],
+      "correta": 1,
+      "explicacao": "Mostrar 0 ou um valor velho como se fosse atual engana o usuário. Melhor deixar claro que não há leitura."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O painel de uma oficina vai ser usado no celular, às vezes com luva. Como devem ser os botões de comando?",
+      "alternativas": [
+        "Pequenos, para caber o maior número na tela",
+        "Colados uns nos outros, formando uma barra",
+        "Só com ícones bem pequenos e sem texto",
+        "Grandes e com espaço entre eles"
+      ],
+      "correta": 3,
+      "explicacao": "No toque o dedo é impreciso. Botões grandes e separados evitam acionar o equipamento errado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Antes de entregar o painel de uma pizzaria, o técnico abriu a página no próprio celular e no tablet do dono. O que ele está testando?",
+      "alternativas": [
+        "Se o sensor do forno mede a temperatura certa",
+        "Se o broker aceita mais de um usuário",
+        "Se o painel fica legível em telas diferentes",
+        "Se o Wi-Fi alcança a cozinha"
+      ],
+      "correta": 2,
+      "explicacao": "É um teste da interface: layout, tamanho de texto e toque em telas reais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao abrir o painel de uma biblioteca, os dados demoram uns segundos para chegar. Qual feedback é o mais adequado nesse tempo?",
+      "alternativas": [
+        "Mostrar zeros em todos os cards até os dados chegarem",
+        "Um indicador como \"Carregando…\"",
+        "Deixar a tela totalmente em branco",
+        "Mostrar uma mensagem de erro logo de início"
+      ],
+      "correta": 1,
+      "explicacao": "O indicador de carregamento diz ao usuário que algo está acontecendo. Zeros parecem leituras reais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um funcionário de um hortifrúti não distingue bem vermelho de verde. Como o painel pode mostrar alerta de forma que ele também entenda?",
+      "alternativas": [
+        "Usar tons de vermelho e verde ainda mais fortes",
+        "Usar, além da cor, um ícone e um texto como \"ALERTA\"",
+        "Tirar as cores e deixar tudo em cinza",
+        "Mostrar o alerta só com um som"
+      ],
+      "correta": 1,
+      "explicacao": "Cor não pode ser a única pista. Ícone e texto funcionam para todos, inclusive daltônicos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel de uma granja há `client.on('message', (topico, msg) => { ... });`. Quando o código dentro das chaves é executado?",
+      "alternativas": [
+        "Só uma vez, quando a página termina de abrir",
+        "A cada mensagem de um tópico assinado",
+        "A cada segundo, mesmo sem mensagens novas",
+        "Quando o usuário clica em algum botão"
+      ],
+      "correta": 1,
+      "explicacao": "on('message') registra a função para rodar a cada mensagem recebida dos tópicos que o cliente assinou."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel de uma loja de games, os números estão em cinza bem claro sobre fundo branco. Qual o problema?",
+      "alternativas": [
+        "Cinza deixa o painel mais lento para carregar",
+        "Fundo branco não funciona em celular",
+        "Números cinza não aceitam casas decimais",
+        "Pouco contraste, o que dificulta a leitura"
+      ],
+      "correta": 3,
+      "explicacao": "Texto precisa contrastar com o fundo. Cinza claro no branco some, principalmente em celular ao ar livre."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel de uma estufa, a mensagem MQTT recebida pelo MQTT.js é usada com `const valor = msg.toString();`. Por que o toString?",
+      "alternativas": [
+        "Porque o MQTT só aceita mensagens em letras maiúsculas",
+        "Porque toString converte direto para número com casas",
+        "Porque a mensagem chega como bytes e precisa virar texto",
+        "Porque sem ele a conexão com o broker cai"
+      ],
+      "correta": 2,
+      "explicacao": "O payload chega como sequência de bytes. toString transforma em texto; depois, se for número, usa-se parseFloat."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um painel por polling consulta a API a cada 1 segundo. Ele fica aberto o dia todo em 50 celulares de funcionários de um supermercado, e a temperatura das geladeiras muda devagar. Qual o problema?",
+      "alternativas": [
+        "As geladeiras passam a gastar mais energia por causa do painel",
+        "Excesso de requisições, sobrecarregando servidor e rede sem necessidade",
+        "Os dados ficam mais precisos do que o sensor permite",
+        "Nenhum, pois quanto menor o intervalo, melhor sempre"
+      ],
+      "correta": 1,
+      "explicacao": "50 celulares × 1 por segundo = 50 requisições por segundo à toa. O intervalo deve combinar com a velocidade com que o dado muda."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um painel de detector de fumaça numa escola precisa mostrar o alarme no mesmo instante. Polling a cada 60 s ou MQTT sobre WebSocket: qual escolher?",
+      "alternativas": [
+        "Polling a cada 60 s, que consome menos bateria e é mais seguro",
+        "Polling a cada 60 s, porque WebSocket não funciona em escolas",
+        "MQTT sobre WebSocket, que entrega a mensagem logo que é publicada",
+        "Tanto faz, pois os dois mostram o alarme no mesmo instante"
+      ],
+      "correta": 2,
+      "explicacao": "Com polling de 60 s o alarme pode demorar até 1 minuto para aparecer. Com WebSocket o servidor empurra a mensagem na hora."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em qual situação o polling por HTTP é uma escolha razoável para o painel?",
+      "alternativas": [
+        "Alarme de invasão que precisa aparecer no mesmo segundo",
+        "Nível de uma caixa d'água, a cada 5 minutos",
+        "Controle de um braço robótico movido pelo celular",
+        "Jogo em que o sensor de movimento controla o personagem"
+      ],
+      "correta": 1,
+      "explicacao": "Polling é simples e serve bem para dado lento. Para tempo real (alarme, controle fino), o atraso do polling atrapalha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O ESP32 de uma clínica publica a temperatura com a opção retain (mensagem retida). O que o painel ganha quando é aberto?",
+      "alternativas": [
+        "Recebe na hora o último valor publicado",
+        "Recebe todas as leituras do dia, desde a meia-noite",
+        "Fica impedido de mandar comandos ao ESP32",
+        "Passa a funcionar sem conexão com o broker"
+      ],
+      "correta": 0,
+      "explicacao": "O broker guarda a última mensagem retida do tópico e a entrega a quem assina. O card não fica vazio esperando."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para o painel no navegador falar com o broker Mosquitto de uma escola, o técnico acrescentou na configuração `listener 9001` e `protocol websockets`. Para que serve isso?",
+      "alternativas": [
+        "Abrir uma porta de MQTT sobre WebSocket",
+        "Trocar o MQTT por HTTP em todos os dispositivos",
+        "Fazer o ESP32 publicar mais rápido pela porta 9001",
+        "Bloquear o acesso de navegadores ao broker"
+      ],
+      "correta": 0,
+      "explicacao": "O navegador não abre conexão TCP pura na 1883. A porta extra com protocolo websockets permite o MQTT.js conectar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O ESP32 do portão de um condomínio se conecta ao broker com Last Will (\"última vontade\") = \"offline\" no tópico `portao/status`. Como o painel aproveita isso?",
+      "alternativas": [
+        "Abre o portão sozinho quando a energia acaba",
+        "Apaga as leituras antigas do portão no broker",
+        "Impede que outro dispositivo use o mesmo tópico",
+        "Mostra \"offline\" quando o ESP32 cai"
+      ],
+      "correta": 3,
+      "explicacao": "Se o cliente cai de forma inesperada, o broker publica a mensagem de última vontade. O painel assina o tópico e mostra o estado offline."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O painel de uma câmara fria marca o card como \"sem comunicação\" se passar mais de 2 minutos sem leitura nova, sabendo que o sensor manda a cada 30 s. Por que essa regra é útil?",
+      "alternativas": [
+        "Faz o sensor mandar leituras mais rápido",
+        "Reduz o consumo de bateria do celular",
+        "Corrige o valor lido pelo sensor",
+        "Não deixa um valor velho parecer atual"
+      ],
+      "correta": 3,
+      "explicacao": "Sem essa regra o card ficaria parado no último valor e pareceria normal mesmo com o sensor desligado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num painel de fábrica, numa tela o amarelo significa \"atenção\" e, em outra, \"máquina desligada\". Qual o problema?",
+      "alternativas": [
+        "O amarelo não aparece direito na tela do celular",
+        "Cada tela precisa obrigatoriamente de uma cor diferente",
+        "As cores perdem o significado para o operador",
+        "Não há problema, desde que haja legenda em uma das telas"
+      ],
+      "correta": 2,
+      "explicacao": "Cores de alerta precisam ter o mesmo significado no painel inteiro; senão o usuário aprende errado e reage errado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O gráfico de consumo de água de uma lavanderia tem o eixo vertical sem título nem unidade. O que deve ser acrescentado?",
+      "alternativas": [
+        "O nome e a unidade, como \"Consumo (L)\"",
+        "Mais linhas de grade, uma a cada unidade",
+        "Uma cor diferente para cada ponto",
+        "O código-fonte do sensor de vazão"
+      ],
+      "correta": 0,
+      "explicacao": "Sem a unidade, quem lê não sabe se são litros, metros cúbicos ou porcentagem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Sem ter vários celulares, o técnico quer ver como o painel de uma loja fica em telas de tamanhos diferentes. Qual recurso do navegador ajuda?",
+      "alternativas": [
+        "O histórico de navegação do navegador",
+        "A opção de salvar a página como PDF",
+        "O modo responsivo do DevTools (F12)",
+        "O gerenciador de senhas do navegador"
+      ],
+      "correta": 2,
+      "explicacao": "As ferramentas do desenvolvedor simulam larguras de tela de celulares e tablets. Mesmo assim, vale testar num aparelho real."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O técnico vai testar o botão \"Ligar exaustor\" de uma cozinha industrial, mas não quer ligar o exaustor de verdade ainda. Qual é a forma segura?",
+      "alternativas": [
+        "Desligar o broker e clicar várias vezes no botão",
+        "Trocar o relé por um LED durante o teste",
+        "Testar direto no exaustor, com gente trabalhando",
+        "Apagar o botão do painel até o dia da entrega"
+      ],
+      "correta": 1,
+      "explicacao": "Simular o atuador com LED ou mensagem permite testar o caminho do comando sem risco."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O painel do operador de uma panificadora mostra 40 números ao mesmo tempo, entre eles a versão do firmware e o endereço MAC dos sensores. Qual a melhor decisão?",
+      "alternativas": [
+        "Manter tudo na tela principal para ninguém reclamar de falta de dado",
+        "Deixar na tela principal só o que o operador usa",
+        "Aumentar a fonte de todos os 40 números",
+        "Trocar todos os números por gráficos de pizza"
+      ],
+      "correta": 1,
+      "explicacao": "Painel bom mostra o necessário para quem usa. Excesso de informação esconde o que importa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um painel de condomínio gera cerca de 50 alertas amarelos por dia, e quase nenhum exige ação. Com o tempo, os porteiros param de olhar. Como se chama esse problema?",
+      "alternativas": [
+        "Latência de rede",
+        "Perda de pacotes",
+        "Fadiga de alertas",
+        "Sobrecarga do broker"
+      ],
+      "correta": 2,
+      "explicacao": "Alertas demais e sem importância acostumam as pessoas a ignorar, inclusive o que é sério. Limites e prioridades precisam ser revistos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O painel de uma estufa usa `setInterval(atualizar, 2000)`, e atualizar faz um fetch. Quando a rede fica lenta, cada resposta demora 6 s. O que acontece e qual alternativa é melhor?",
+      "alternativas": [
+        "As requisições se acumulam; use setTimeout após a resposta",
+        "O setInterval espera a resposta sozinho; não há problema nenhum",
+        "O navegador cancela o fetch; melhor diminuir para 500 ms",
+        "As respostas chegam na ordem certa; basta aumentar a fonte"
+      ],
+      "correta": 0,
+      "explicacao": "setInterval não espera o fetch terminar: começam várias requisições ao mesmo tempo. Agendar a próxima ao fim da anterior evita o acúmulo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O painel de uma granja usa MQTT.js e tem `client.on('offline', () => status.textContent = 'Reconectando…')` e `client.on('connect', () => status.textContent = 'Online')`. Qual o objetivo?",
+      "alternativas": [
+        "Fazer o ESP32 reconectar ao Wi-Fi mais rápido",
+        "Avisar que a conexão caiu e os dados pararam",
+        "Impedir que o broker aceite outros painéis",
+        "Reenviar ao ESP32 os comandos já executados"
+      ],
+      "correta": 1,
+      "explicacao": "Sem esse aviso, os cards ficariam com os últimos valores como se estivessem atualizados. É feedback do estado da conexão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O painel de uma clínica foi publicado em https://, mas o console mostra erro ao conectar em `ws://broker.clinica.local:9001`. Qual a causa mais provável?",
+      "alternativas": [
+        "O broker MQTT não aceita conexões vindas de celulares",
+        "A porta 9001 só funciona dentro do Node-RED",
+        "O WebSocket só funciona em páginas abertas pelo arquivo local",
+        "Página https não pode usar ws://; precisa de wss://"
+      ],
+      "correta": 3,
+      "explicacao": "Navegadores bloqueiam conteúdo misto: página HTTPS conectando em ws:// (sem TLS). A solução é wss:// com certificado no broker."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O card de umidade relativa do ar de um museu mostra 150 %. O que o painel deveria fazer com esse valor?",
+      "alternativas": [
+        "Mostrar normalmente, já que veio do sensor",
+        "Arredondar para 100 % e não avisar ninguém",
+        "Disparar o alarme de umidade alta em todo o prédio",
+        "Tratar como leitura inválida (falha do sensor)"
+      ],
+      "correta": 3,
+      "explicacao": "Umidade relativa vai de 0 a 100 %. Valor impossível indica sensor com defeito ou erro na conversão, e não umidade alta de verdade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O código de alerta de uma câmara fria é `if (t > 5) alarme = true; if (t < 4.5) alarme = false;`. Se a temperatura fica oscilando entre 4,8 e 5,2 °C, o que acontece?",
+      "alternativas": [
+        "O alarme fica ligado até cair abaixo de 4,5",
+        "O alarme liga e desliga a cada leitura que cruza 5 °C",
+        "O alarme nunca liga, porque 4,8 está abaixo do limite",
+        "O alarme só liga se a temperatura passar de 5,2 °C"
+      ],
+      "correta": 0,
+      "explicacao": "Limites diferentes para ligar e desligar (histerese) evitam o pisca-pisca do alerta perto do limite."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um painel por polling usa `fetch('/api/nivel')`, mas, em um celular, o valor não muda nunca, mesmo com a caixa enchendo. O servidor responde com cabeçalhos que permitem cache. Qual ajuste resolve?",
+      "alternativas": [
+        "Trocar fetch por setInterval com o mesmo endereço",
+        "Usar fetch('/api/nivel', { cache: 'no-store' })",
+        "Aumentar o intervalo do polling para 1 hora",
+        "Converter a resposta com toString em vez de json"
+      ],
+      "correta": 1,
+      "explicacao": "Com cache, o navegador pode devolver a resposta guardada sem ir ao servidor. no-store (ou ajustar o cabeçalho no servidor) força buscar o valor atual."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O card de temperatura de uma granja assina `granja/#` e mostra toda mensagem que chega. Às vezes aparece \"ON\" no lugar da temperatura. Por quê?",
+      "alternativas": [
+        "O # só recebe mensagens de texto, nunca números",
+        "O broker troca números por ON quando a rede está lenta",
+        "O card só aceita mensagens retidas pelo broker",
+        "O # recebe todos os subtópicos, inclusive comandos e estados"
+      ],
+      "correta": 3,
+      "explicacao": "# é o curinga de vários níveis: pega tudo abaixo de granja/. O card deveria assinar só o tópico da temperatura ou filtrar pelo tópico."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um técnico explica que o painel de uma escola pode se atualizar por polling ou por WebSocket.\n\nNa sua resposta:\n1. explique como funciona o polling;\n2. explique como funciona o WebSocket e qual a principal diferença para o polling.",
+      "respostasAceitas": [
+        "No polling o navegador pergunta ao servidor de tempos em tempos se há dado novo. No WebSocket fica uma conexão aberta e o servidor manda o dado assim que ele chega; a diferença é quem toma a iniciativa e a rapidez (WebSocket quase instantâneo, sem perguntas à toa)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) consulta periódica do cliente; 2) conexão aberta, servidor envia; diferença de iniciativa/atraso/tráfego."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No painel de uma piscina aparecem os cards \"Água: 28\" e \"Cloro: 2\", sem unidades.\n\nNa sua resposta:\n1. explique por que a falta de unidade é um problema;\n2. diga como os cards deveriam aparecer.",
+      "respostasAceitas": [
+        "Sem unidade o usuário não sabe o que o número significa e pode decidir errado (28 °C ou 28 °F? 2 mg/L ou 2 %?). O certo é \"Água: 28 °C\" e \"Cloro: 2 mg/L\" (ou ppm)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ambiguidade e risco de erro; 2) valores com unidade. Aceitar ppm para o cloro."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O painel de uma lava-rápido será usado pelos funcionários no celular, muitas vezes com as mãos molhadas.\n\nNa sua resposta:\n1. explique como devem ser os botões de comando;\n2. diga um problema que botões pequenos e colados poderiam causar.",
+      "respostasAceitas": [
+        "Grandes, com bom espaço entre eles e com texto claro. Botões pequenos e colados fazem o funcionário tocar no errado, por exemplo ligando a bomba de espuma em vez da de água."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) grandes, espaçados, rótulo claro; 2) acionar o equipamento errado / dificuldade de uso."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O painel de um frigorífico usa verde para normal, amarelo para atenção e vermelho para crítico. Um funcionário daltônico tem dificuldade com essas cores.\n\nNa sua resposta:\n1. explique o que cada cor comunica;\n2. diga como o painel pode ajudar quem não diferencia bem as cores.",
+      "respostasAceitas": [
+        "Verde: tudo certo; amarelo: valor perto do limite, ficar de olho; vermelho: fora do limite, agir já. Para ajudar, além da cor usar ícone e texto (\"OK\", \"ATENÇÃO\", \"CRÍTICO\")."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) significado das três cores; 2) não depender só da cor: texto, ícone, forma."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No painel de uma casa, ao tocar em \"Ligar ar-condicionado\", o botão mostra \"Enviando…\" e, quando o aparelho confirma, passa a mostrar \"Ligado\" com um sinal de certo.\n\nNa sua resposta:\n1. explique o que o usuário entende em cada etapa;\n2. diga o que poderia acontecer se o painel não mostrasse nada.",
+      "respostasAceitas": [
+        "\"Enviando…\" mostra que o toque foi recebido e o comando está a caminho; \"Ligado\" confirma que o aparelho obedeceu. Sem feedback, o usuário acha que não funcionou e toca de novo, podendo desligar o aparelho sem querer, ou fica sem saber se ligou."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) recebido/aguardando e depois confirmado; 2) toques repetidos, dúvida, comando duplicado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O técnico vai entregar o painel de monitoramento de uma creche (temperatura das salas e da geladeira do lactário).\n\nNa sua resposta:\n1. cite dois testes que ele deveria fazer antes de entregar;\n2. explique o que cada teste confere.",
+      "respostasAceitas": [
+        "Testar no celular e no computador, para ver se fica legível e os botões funcionam; e simular uma temperatura fora do limite, para ver se o alerta aparece e some na hora certa. Também vale desligar um sensor e ver se o painel avisa \"sem dados\"."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: dois testes coerentes (telas diferentes, valores extremos/alerta, sensor desligado, conexão caindo, botão de comando) com o que cada um confere."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O painel de uma estufa tem: `const client = mqtt.connect('wss://broker.estufa.local:8884'); client.on('connect', () => client.subscribe('estufa/umidade')); client.on('message', (t, m) => { umid.textContent = m.toString() + ' %'; });`.\n\nNa sua resposta:\n1. explique o que acontece ao conectar;\n2. explique o que acontece a cada mensagem que chega.",
+      "respostasAceitas": [
+        "O painel conecta ao broker por WebSocket seguro e, ao conectar, assina o tópico estufa/umidade. A cada mensagem desse tópico, converte os bytes em texto e mostra o valor com \" %\" no elemento umid."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) conexão wss e assinatura do tópico; 2) atualiza o elemento com o valor recebido + unidade."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O painel da caixa d'água de um sítio usa `setInterval(async () => { const r = await fetch('/api/nivel'); const d = await r.json(); nivel.textContent = d.nivel + ' %'; }, 300000);`.\n\nNa sua resposta:\n1. explique o que o código faz e de quanto em quanto tempo;\n2. explique por que o polling é aceitável nesse caso.",
+      "respostasAceitas": [
+        "A cada 300 000 ms (5 minutos) busca o nível na API, converte o JSON e mostra o valor com %. É aceitável porque o nível da caixa muda devagar: uma atualização a cada 5 minutos basta e o código fica simples, sem precisar de broker no navegador."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) busca e mostra o nível a cada 5 min; 2) dado lento, simplicidade, pouco tráfego."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O sensor de temperatura de uma farmácia publica a cada 10 minutos. Quando alguém abria o painel, os cards ficavam com \"--\" por vários minutos. O técnico passou a publicar com retain.\n\nNa sua resposta:\n1. explique o que é uma mensagem retida no MQTT;\n2. explique por que isso resolveu o problema do painel.",
+      "respostasAceitas": [
+        "É uma mensagem que o broker guarda como último valor do tópico. Quem assinar depois recebe esse valor na hora; por isso o painel passa a mostrar a última temperatura logo ao abrir, sem esperar a próxima publicação."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) broker guarda a última mensagem do tópico; 2) painel recebe ao assinar, não fica vazio."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O painel de um supermercado gera mais de 60 alertas amarelos por dia, a maioria sem importância. Os funcionários passaram a ignorá-los, e na semana passada um alerta vermelho de freezer foi ignorado também.\n\nNa sua resposta:\n1. explique por que isso aconteceu;\n2. proponha duas mudanças no painel para resolver.",
+      "respostasAceitas": [
+        "Com alertas demais e sem importância, as pessoas se acostumam e deixam de ler todos (fadiga de alertas). Pode-se rever os limites para só alertar o que exige ação, separar bem o crítico (cor, som, notificação) do aviso leve e agrupar avisos repetidos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) fadiga de alertas/excesso; 2) duas mudanças coerentes: revisar limites, priorizar, destacar crítico, agrupar, resumo diário."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O ESP32 de uma câmara de vacinas se conecta ao broker com Last Will = \"offline\" no tópico `vacinas/status` e, ao conectar, publica \"online\" no mesmo tópico.\n\nNa sua resposta:\n1. explique quando o broker publica a mensagem \"offline\";\n2. explique como o painel usa essas mensagens e por que isso é importante.",
+      "respostasAceitas": [
+        "O broker publica \"offline\" quando o ESP32 cai sem se despedir (falta de energia, Wi-Fi). O painel assina vacinas/status e mostra online/offline; assim ninguém confia numa temperatura velha quando o dispositivo parou de mandar dados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) desconexão inesperada; 2) indicador de status, evita confiar em dado parado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O painel do operador de uma oficina mecânica vai ter estas informações possíveis: temperatura da estufa de pintura, pressão do compressor, endereço IP de cada sensor, alerta de vazamento de gás, versão do firmware e consumo de energia do mês.\n\nNa sua resposta:\n1. diga quais você colocaria na tela principal do operador;\n2. justifique a escolha e diga onde ficariam as outras.",
+      "respostasAceitas": [
+        "Na tela principal: temperatura da estufa, pressão do compressor e alerta de gás (com destaque), pois o operador usa no dia a dia e para agir. IP, versão do firmware ficam numa tela técnica; consumo do mês numa tela de relatório para o gerente."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) itens operacionais e de segurança; 2) critério: o que exige ação; técnicos e gerenciais em outra tela. Aceitar variações bem justificadas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O painel web de uma academia conecta ao broker com `mqtt.connect('wss://broker.academia.com:8884', { username: 'admin', password: 'admin123' })`, e esse arquivo JavaScript é público.\n\nNa sua resposta:\n1. explique por que isso é um risco;\n2. proponha, em palavras, como reduzir o problema.",
+      "respostasAceitas": [
+        "Qualquer um pode abrir o código-fonte da página e ver usuário e senha; com o admin, pode publicar comandos e ligar ou desligar equipamentos. O painel deve usar um usuário só com as permissões necessárias (ACL, por exemplo só ler leituras e publicar em poucos tópicos), exigir login do usuário no painel e não usar a conta de administrador."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) credenciais expostas no navegador, controle indevido; 2) usuário limitado/ACL, login, senha forte, não usar admin."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma rede de lojas tem 200 sensores, que mandam leitura a cada 5 s, e cerca de 30 pessoas olhando o painel ao mesmo tempo. A primeira versão usa polling de 2 em 2 segundos por HTTP.\n\nNa sua resposta:\n1. explique os problemas do polling nesse cenário;\n2. decida se trocaria por MQTT sobre WebSocket e justifique.",
+      "respostasAceitas": [
+        "30 painéis perguntando a cada 2 s geram muitas requisições, a maioria sem novidade, e ainda podem atrasar a informação. Com MQTT sobre WebSocket cada painel mantém uma conexão e recebe só quando há leitura nova, com menos atraso e menos tráfego à toa; por isso eu trocaria (cuidando de autenticação e reconexão)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) excesso de requisições/carga, atraso; 2) decisão justificada (push, menos tráfego, tempo real). Aceitar manter polling se justificar com intervalo maior e cache, mas citando o custo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Interfaces visuais interativas",
+      "capacidade": "iot.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O gráfico de temperatura de um data center mostra uma linha que sobe e desce muito, e o gerente ficou preocupado. Olhando o eixo vertical, ele vai de 24,9 °C a 25,1 °C (escala automática).\n\nNa sua resposta:\n1. explique por que o gráfico passa uma impressão errada;\n2. diga como configurar o eixo para mostrar a situação real.",
+      "respostasAceitas": [
+        "A escala automática ampliou uma variação de só 0,2 °C até ocupar o gráfico inteiro, parecendo grande. O eixo deveria ter uma faixa fixa e coerente, por exemplo de 15 a 35 °C, com as linhas de limite marcadas, para a variação aparecer do tamanho real."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) escala automática exagera variação pequena; 2) eixo com mínimo/máximo fixos e coerentes, limites marcados."
+    }
+  ]
+}
