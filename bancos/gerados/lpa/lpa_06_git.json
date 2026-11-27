@@ -1,0 +1,2424 @@
+{
+  "nome": "Lógica de Programação e Algoritmos — Git — controle de versões (a revisar)",
+  "materia": "Lógica de Programação e Algoritmos",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na aula, o professor perguntou o que é um sistema de controle de versões. Qual resposta está correta?",
+      "alternativas": [
+        "Um programa que compacta os arquivos do projeto para ocuparem menos espaço no disco do computador.",
+        "Um serviço que publica automaticamente o site na internet sempre que um arquivo é salvo pelo editor.",
+        "Uma ferramenta que registra as mudanças nos arquivos ao longo do tempo e permite voltar a versões anteriores.",
+        "Um editor de código que corrige sozinho os erros de digitação do programa antes de ele ser executado no computador."
+      ],
+      "correta": 2,
+      "explicacao": "Controle de versões guarda o histórico das mudanças (quem, quando, o quê) e permite comparar e voltar versões. Compactar, publicar site ou corrigir erros não é a função dele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O Git foi criado em 2005 por Linus Torvalds. Para qual projeto ele foi feito inicialmente?",
+      "alternativas": [
+        "Para controlar as versões do sistema operacional Windows.",
+        "Para o desenvolvimento do núcleo (kernel) do Linux.",
+        "Para guardar os arquivos da primeira versão do GitHub.",
+        "Para organizar os arquivos de jogos de videogame."
+      ],
+      "correta": 1,
+      "explicacao": "O Git nasceu em 2005 para controlar as versões do kernel do Linux, quando a equipe perdeu o acesso gratuito à ferramenta que usava. O GitHub surgiu depois e usa o Git."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em um sistema de controle de versões centralizado (como o SVN), onde fica o histórico completo do projeto?",
+      "alternativas": [
+        "Em arquivos de texto escondidos dentro de cada pasta do projeto.",
+        "Em um pendrive que passa de mão em mão entre os colegas.",
+        "No computador de cada desenvolvedor, completo e independente.",
+        "Em um único servidor central, ao qual todos precisam se conectar."
+      ],
+      "correta": 3,
+      "explicacao": "No modelo centralizado o histórico fica só no servidor. Ter o histórico completo em cada computador é justamente a característica dos sistemas distribuídos, como o Git."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Durante uma viagem de ônibus sem internet, Bruno quer registrar commits no sistema da biblioteca, que usa Git. Isso é possível?",
+      "alternativas": [
+        "Sim, porque o commit é gravado no repositório local, que fica no próprio computador.",
+        "Sim, mas só se ele rodar o comando git status antes de cada um dos commits.",
+        "Não, porque o Git só funciona dentro de um navegador conectado à internet.",
+        "Não, porque todo commit precisa ser enviado ao servidor no mesmo instante em que é feito."
+      ],
+      "correta": 0,
+      "explicacao": "No Git (distribuído) o repositório completo fica no computador: commit, log e diff funcionam sem internet. A internet só é necessária para enviar ou receber de um servidor remoto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A equipe da oficina usa Git e guarda o projeto também num servidor. O servidor quebrou e perdeu tudo. O que permite recuperar o projeto com o histórico?",
+      "alternativas": [
+        "O repositório de qualquer colega, que tem o histórico completo.",
+        "Nada, pois o histórico dos commits existia apenas dentro do servidor.",
+        "O arquivo .gitignore, que guarda uma cópia de cada versão dos arquivos.",
+        "A mensagem do último commit, que contém dentro dela todos os arquivos."
+      ],
+      "correta": 0,
+      "explicacao": "Como o Git é distribuído, cada repositório local é uma cópia completa do projeto e do histórico. O .gitignore só lista o que não deve ser rastreado e a mensagem de commit é só texto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual frase descreve corretamente a relação entre Git e GitHub?",
+      "alternativas": [
+        "Git e GitHub são o mesmo programa, apenas com nomes diferentes em cada sistema operacional.",
+        "GitHub é instalado no computador e o Git existe apenas na internet, dentro do navegador.",
+        "Git é a ferramenta de versionamento; GitHub é um serviço online que guarda repositórios Git.",
+        "Git serve só para guardar imagens e o GitHub serve só para guardar o código-fonte dos programas."
+      ],
+      "correta": 2,
+      "explicacao": "O Git roda no computador e controla as versões. O GitHub (assim como Bitbucket e Azure Repos) é um serviço online que guarda repositórios Git."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "De forma geral, como o Git guarda cada commit?",
+      "alternativas": [
+        "Como um arquivo de texto com a lista dos comandos digitados no terminal naquele dia.",
+        "Apenas como a lista dos nomes dos arquivos alterados, sem guardar o conteúdo deles.",
+        "Como uma cópia compactada do disco inteiro do computador, com os programas instalados.",
+        "Como uma foto (snapshot) dos arquivos rastreados; os que não mudaram são só referenciados."
+      ],
+      "correta": 3,
+      "explicacao": "Cada commit é um retrato do projeto naquele momento. Para não duplicar dados, arquivos iguais aos do commit anterior não são copiados de novo, só apontados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No `git log`, cada commit aparece com um código como `3f9a2c1e7b...`. O que é esse código?",
+      "alternativas": [
+        "Um identificador único do commit (hash), calculado a partir do conteúdo dele.",
+        "A senha do usuário que fez o commit, guardada de forma criptografada pelo Git.",
+        "A data e a hora em que o commit foi feito, escritas em forma de código.",
+        "O número de linhas alteradas naquele commit, escrito no sistema hexadecimal."
+      ],
+      "correta": 0,
+      "explicacao": "O hash identifica cada commit de forma única e é usado em comandos como git diff e git show. Não é senha, contagem de linhas nem data (a data aparece em outra linha do log)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No pet shop, a pasta `sistema-petshop` ainda não usa Git. Estando dentro dela no terminal, qual comando a transforma em um repositório Git?",
+      "alternativas": [
+        "git status",
+        "git init",
+        "git start",
+        "git commit"
+      ],
+      "correta": 1,
+      "explicacao": "git init cria o repositório na pasta atual. git start não existe; git commit e git status só funcionam numa pasta que já é repositório."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de rodar `git init` na pasta do projeto, o que aparece de novo dentro dela?",
+      "alternativas": [
+        "A pasta oculta `.git`, que guarda o histórico e as configurações.",
+        "Uma pasta `backup` com uma cópia de todos os arquivos do projeto.",
+        "Um arquivo `README.md` com a descrição do projeto já preenchida.",
+        "Um primeiro commit com todos os arquivos da pasta já registrados."
+      ],
+      "correta": 0,
+      "explicacao": "git init só cria a pasta oculta .git. Nenhum commit é feito: os arquivos continuam não rastreados até git add e git commit."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno apagou sem querer a pasta oculta `.git` do projeto da academia. Os arquivos .js continuam na pasta. O que foi perdido?",
+      "alternativas": [
+        "Só o último commit; os commits anteriores continuam salvos.",
+        "Todo o histórico; a pasta deixou de ser um repositório Git.",
+        "Nada, pois o histórico fica guardado dentro de cada arquivo .js.",
+        "Só a configuração de nome e e-mail do usuário no computador."
+      ],
+      "correta": 1,
+      "explicacao": "O histórico inteiro mora na pasta .git. Sem ela, sobram só os arquivos atuais. A configuração global (nome/e-mail) fica em outro lugar, na pasta do usuário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Sem perceber, Caio rodou `git init` na pasta pessoal do usuário (onde ficam Documentos, Downloads e Imagens), e não na pasta do projeto. Qual é o problema?",
+      "alternativas": [
+        "O Git apaga os arquivos que não são de código, como fotos e músicas.",
+        "Nenhum: o Git encontra sozinho a pasta do projeto e cria o repositório nela.",
+        "O comando falha, porque o Git só aceita pastas que contenham arquivos .js.",
+        "O Git passa a tratar todas as pastas do usuário como um único repositório."
+      ],
+      "correta": 3,
+      "explicacao": "O repositório vale para a pasta onde git init foi rodado e tudo abaixo dela. Rodar na pasta pessoal faz o git status listar tudo do usuário. O Git não apaga arquivos nem exige .js."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Estando na pasta Documentos, a aluna rodou `git init loja-games`. O que esse comando faz?",
+      "alternativas": [
+        "Cria um primeiro commit com a mensagem loja-games.",
+        "Renomeia a pasta Documentos para loja-games e cria o repositório nela.",
+        "Baixa da internet um projeto pronto chamado loja-games.",
+        "Cria a pasta loja-games (se não existir) e a transforma em repositório Git."
+      ],
+      "correta": 3,
+      "explicacao": "git init aceita o nome de uma pasta: cria a pasta, se preciso, e o .git dentro dela. Não renomeia nada, não baixa projeto e não faz commit."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre `git config --global user.name \"Ana\"` e `git config user.name \"Ana\"` (sem --global) rodado dentro de um repositório?",
+      "alternativas": [
+        "Com --global vale para todos os repositórios do usuário; sem ele, só para aquele repositório.",
+        "Sem --global o nome passa a valer para todos os usuários que usam aquele computador.",
+        "Com --global o nome é enviado ao GitHub; sem ele, o nome fica guardado só no computador.",
+        "Não há diferença: as duas formas gravam a configuração exatamente no mesmo lugar."
+      ],
+      "correta": 0,
+      "explicacao": "--global grava na configuração do usuário (vale para todos os repositórios dele). Sem a opção, grava na configuração local do repositório (.git/config)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para conferir quais configurações o Git está usando (nome, e-mail e outras), qual comando é usado?",
+      "alternativas": [
+        "git status --config",
+        "git config --list",
+        "git log --config",
+        "git init --list"
+      ],
+      "correta": 1,
+      "explicacao": "git config --list mostra todas as configurações em uso. As outras opções não existem com esse sentido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Paulo fez commits no computador do laboratório e, no `git log`, o autor aparece como \"Aluno Lab01\". Por que isso aconteceu?",
+      "alternativas": [
+        "O Git sempre usa o nome do computador como autor, e não existe forma de mudar isso.",
+        "O commit foi feito por outro aluno que usou a mesma pasta antes de Paulo chegar.",
+        "O user.name configurado naquele computador era \"Aluno Lab01\", e o Git usa esse nome.",
+        "O GitHub trocou o nome do autor porque o repositório pertence à escola, e não ao aluno."
+      ],
+      "correta": 2,
+      "explicacao": "O autor do commit vem de user.name e user.email. Se o computador já estava configurado com outro nome, é ele que aparece. Paulo deveria ter rodado git config com os dados dele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que o Git pede nome e e-mail antes do primeiro commit?",
+      "alternativas": [
+        "Para criar uma conta no GitHub de forma automática.",
+        "Para enviar um e-mail de aviso a cada commit feito.",
+        "Para registrar em cada commit quem foi o autor da mudança.",
+        "Para proteger o repositório local com uma senha."
+      ],
+      "correta": 2,
+      "explicacao": "Nome e e-mail ficam gravados em cada commit como autoria. Não criam conta, não enviam e-mail e não são senha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O professor pediu que todos rodassem `git config --global init.defaultBranch main`. Qual é o efeito desse comando?",
+      "alternativas": [
+        "A branch master é apagada de todos os repositórios do computador.",
+        "Todas as branches de todos os repositórios existentes são renomeadas para main.",
+        "Os próximos repositórios criados com git init terão a branch inicial chamada main.",
+        "O Git passa a enviar todos os commits automaticamente para o GitHub."
+      ],
+      "correta": 2,
+      "explicacao": "init.defaultBranch define o nome da primeira branch dos repositórios novos. Não mexe nos repositórios que já existem nem envia nada para a internet."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve o comando `git status`?",
+      "alternativas": [
+        "Mostrar a situação dos arquivos: o que mudou, o que está preparado e o que é novo.",
+        "Mostrar o histórico de todos os commits, com autor, data e mensagem de cada um.",
+        "Mostrar qual versão do Git está instalada no computador e se há atualização.",
+        "Salvar as alterações no repositório junto com uma mensagem que explica a mudança."
+      ],
+      "correta": 0,
+      "explicacao": "git status mostra o estado atual do diretório de trabalho e da área de preparação. O histórico é o git log, salvar é o git commit e a versão é git --version."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de um commit, o `git status` mostrou `nothing to commit, working tree clean`. O que isso significa?",
+      "alternativas": [
+        "Os arquivos foram apagados e precisam ser restaurados.",
+        "O Git não conseguiu ler a pasta do projeto.",
+        "O repositório está vazio e não tem nenhum arquivo dentro.",
+        "Não há mudanças: os arquivos estão iguais ao último commit."
+      ],
+      "correta": 3,
+      "explicacao": "\"Working tree clean\" quer dizer diretório de trabalho limpo: nada modificado, nada preparado e nada novo para registrar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O `git status` do sistema da padaria mostrou:\n```\nChanges to be committed:\n  modified:   estoque.js\n```\nO que isso indica sobre `estoque.js`?",
+      "alternativas": [
+        "É um arquivo novo que o Git ainda não está rastreando.",
+        "Foi alterado e já está preparado para o próximo commit.",
+        "Foi alterado, mas ainda não foi adicionado com o comando git add.",
+        "Já foi salvo em um commit e não precisa de mais nenhum comando."
+      ],
+      "correta": 1,
+      "explicacao": "\"Changes to be committed\" lista o que já está preparado (staged). Alterado mas não adicionado aparece em \"Changes not staged for commit\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de apagar o arquivo `antigo.js` pelo explorador de arquivos, o `git status` mostra `deleted: antigo.js` em \"Changes not staged for commit\". O que isso significa?",
+      "alternativas": [
+        "O arquivo sumiu da pasta, mas a remoção ainda não foi preparada nem registrada.",
+        "O Git recuperou o arquivo sozinho e o colocou de volta na lixeira do computador.",
+        "O arquivo foi apagado também de todos os commits anteriores do histórico.",
+        "A remoção já foi registrada em commit e não aparece mais no histórico."
+      ],
+      "correta": 0,
+      "explicacao": "Apagar um arquivo é uma mudança como outra qualquer: precisa ser preparada (git add) e registrada (git commit). Os commits antigos continuam com o arquivo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No `git status -s` (formato curto) aparece a linha `?? relatorio.js`. O que significam os `??`?",
+      "alternativas": [
+        "Que relatorio.js tem erros de sintaxe que o Git não conseguiu entender.",
+        "Que relatorio.js foi modificado e já está na área de preparação.",
+        "Que relatorio.js foi apagado da pasta, mas continua no último commit.",
+        "Que relatorio.js não é rastreado: o Git ainda não acompanha esse arquivo."
+      ],
+      "correta": 3,
+      "explicacao": "No formato curto, ?? marca arquivo não rastreado (untracked). O Git não analisa a sintaxe do código."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No `git status -s` aparecem as linhas `M  vendas.js` e ` M clientes.js` (a letra M em colunas diferentes). O que isso indica?",
+      "alternativas": [
+        "clientes.js está preparado e vendas.js ainda não foi adicionado.",
+        "vendas.js: modificado e preparado; clientes.js: modificado e não preparado.",
+        "Os dois estão na mesma situação: o espaço antes da letra é só formatação visual.",
+        "vendas.js foi movido de pasta e clientes.js foi apagado do projeto."
+      ],
+      "correta": 1,
+      "explicacao": "A coluna da esquerda mostra a área de preparação e a da direita o diretório de trabalho. M na esquerda = mudança preparada; M na direita = mudança ainda não adicionada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O `git status` mostra `cardapio.js` ao mesmo tempo em \"Changes to be committed\" e em \"Changes not staged for commit\". Como isso é possível?",
+      "alternativas": [
+        "Foi adicionado com git add e alterado de novo; só a primeira mudança está preparada.",
+        "O Git duplicou o arquivo por um erro interno e uma das duas cópias precisa ser apagada.",
+        "Um commit anterior foi feito pela metade e precisa ser desfeito antes de continuar.",
+        "O arquivo tem duas versões no GitHub, uma guardada em cada branch do repositório."
+      ],
+      "correta": 0,
+      "explicacao": "O git add guarda a versão daquele momento. Mudanças feitas depois ficam fora da preparação até um novo git add."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz o comando `git add login.js`?",
+      "alternativas": [
+        "Coloca as mudanças de login.js na área de preparação.",
+        "Envia o arquivo login.js para o repositório guardado no GitHub.",
+        "Grava login.js definitivamente no histórico junto com uma mensagem.",
+        "Cria um arquivo novo e vazio chamado login.js na pasta do projeto."
+      ],
+      "correta": 0,
+      "explicacao": "git add prepara (staging). Quem grava no histórico é o git commit; quem envia para o servidor é o git push."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz `git add .` rodado na pasta principal do projeto?",
+      "alternativas": [
+        "Adiciona ao repositório somente um arquivo cujo nome é exatamente um ponto.",
+        "Prepara todas as mudanças (novos, alterados e apagados) da pasta atual e subpastas.",
+        "Prepara somente os arquivos que já existiam no último commit, ignorando os novos.",
+        "Tira da área de preparação todos os arquivos que tinham sido adicionados antes dele."
+      ],
+      "correta": 1,
+      "explicacao": "O ponto representa a pasta atual. git add . prepara tudo o que mudou nela e abaixo dela (respeitando o .gitignore)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Rafael alterou `caixa.js` e rodou `git commit -m \"Corrige troco\"` sem usar `git add` antes. O que acontece?",
+      "alternativas": [
+        "O commit é criado normalmente com a alteração de caixa.js.",
+        "O Git cria um commit vazio e descarta a alteração de caixa.js.",
+        "O Git faz sozinho o git add de todos os arquivos e cria o commit.",
+        "O Git avisa que não há mudanças preparadas e o commit não é criado."
+      ],
+      "correta": 3,
+      "explicacao": "O commit grava só o que está na área de preparação. Sem git add, o Git responde algo como \"no changes added to commit\"."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz o comando `git add css/` no projeto do site do cinema?",
+      "alternativas": [
+        "Coloca a pasta css na lista de arquivos ignorados pelo Git.",
+        "Prepara apenas o primeiro arquivo encontrado dentro da pasta css.",
+        "Cria uma pasta nova chamada css dentro do repositório do projeto.",
+        "Prepara as mudanças dos arquivos que estão dentro da pasta css."
+      ],
+      "correta": 3,
+      "explicacao": "git add aceita um caminho de pasta: prepara tudo que mudou dentro dela. Não cria pasta e não mexe no .gitignore."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é o caminho normal de uma mudança no Git, do começo ao fim?",
+      "alternativas": [
+        "Área de preparação → repositório (commit) → diretório de trabalho.",
+        "Diretório de trabalho → área de preparação → repositório (commit).",
+        "Diretório de trabalho → repositório (commit) → área de preparação.",
+        "Repositório (commit) → diretório de trabalho → área de preparação."
+      ],
+      "correta": 1,
+      "explicacao": "Você edita no diretório de trabalho, prepara com git add e registra com git commit."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ana criou a pasta vazia `imagens/` no projeto e rodou `git status`, mas a pasta não aparece. Por quê?",
+      "alternativas": [
+        "A pasta foi bloqueada pelo sistema operacional e o Git não tem permissão para vê-la.",
+        "Pastas com nomes em português não são aceitas pelo Git e ficam sempre escondidas.",
+        "O Git rastreia arquivos, não pastas; a pasta vazia só aparece quando tiver um arquivo.",
+        "O Git só mostra pastas novas depois que o primeiro commit do projeto é feito."
+      ],
+      "correta": 2,
+      "explicacao": "O Git guarda conteúdo de arquivos; pastas existem só como caminho deles. Por isso muita gente coloca um arquivo (ex.: .gitkeep) para versionar uma pasta vazia."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual sequência representa a evolução das formas de controlar versões de projetos?",
+      "alternativas": [
+        "Sistemas distribuídos (Git) → sistemas centralizados (SVN) → cópias manuais de pastas no disco.",
+        "Sistemas centralizados (Git) → sistemas distribuídos (SVN) → sistemas locais (CVS).",
+        "Cópias manuais e sistemas locais → sistemas centralizados (CVS, SVN) → sistemas distribuídos (Git).",
+        "Git → GitHub → SVN, cada um substituindo o anterior porque era mais simples de usar."
+      ],
+      "correta": 2,
+      "explicacao": "Primeiro vieram cópias de pastas e sistemas locais, depois servidores centrais (CVS, SVN) e por fim os distribuídos (Git), em que cada um tem o histórico completo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na turma, cada aluno roda `git log` no próprio computador, sem internet, e vê o histórico completo do projeto. Isso acontece porque:",
+      "alternativas": [
+        "cada repositório local guarda uma cópia completa do histórico.",
+        "o histórico fica gravado dentro do código de cada arquivo .js.",
+        "o git log mostra apenas os commits feitos pelo próprio aluno.",
+        "o Git baixa o histórico do servidor em segundo plano, mesmo sem rede."
+      ],
+      "correta": 0,
+      "explicacao": "No modelo distribuído o histórico inteiro está na pasta .git de cada um. Sem rede não há download, e o git log mostra os commits de todos os autores."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Onde se digitam comandos do Git como `git status` e `git add`?",
+      "alternativas": [
+        "Dentro do arquivo .gitignore, uma linha para cada comando.",
+        "Dentro do arquivo .js, junto com o código do programa.",
+        "Na barra de endereço do navegador, como se fosse um site.",
+        "No terminal (prompt de comando), dentro da pasta do projeto."
+      ],
+      "correta": 3,
+      "explicacao": "Os comandos do Git rodam no terminal (pode ser o terminal integrado da IDE), estando na pasta do repositório."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No projeto da padaria, o aluno abriu o terminal na pasta do projeto e rodou `git init`. O que esse comando faz?\n\nNa sua resposta:\n1. diga o que o comando faz com a pasta;\n2. diga o que é criado dentro dela e para que serve.",
+      "respostasAceitas": [
+        "Transforma a pasta em um repositório Git. Cria a pasta oculta .git, onde o Git guarda o histórico (commits) e as configurações do repositório."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a pasta passa a ser um repositório (o Git começa a poder controlar as versões); 2) cria a pasta oculta .git, que guarda histórico e configurações. Não precisa citar que nenhum commit é feito."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Observe os comandos rodados num computador novo:\n```\ngit config --global user.name \"Marina Souza\"\ngit config --global user.email \"marina@escola.com\"\n```\nPara que servem esses comandos?\n\nNa sua resposta:\n1. diga o que cada comando define;\n2. diga onde essas informações vão aparecer depois.",
+      "respostasAceitas": [
+        "Definem o nome e o e-mail da autora no Git (para todos os repositórios do usuário, por causa do --global). Eles aparecem como autor em cada commit, por exemplo no git log."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o primeiro define o nome e o segundo o e-mail de quem faz os commits; 2) aparecem na autoria dos commits (git log). Citar o efeito do --global é um bônus, não obrigatório."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique com suas palavras a diferença entre um sistema de controle de versões centralizado (como o SVN) e um distribuído (como o Git).\n\nNa sua resposta:\n1. diga onde fica o histórico em cada um;\n2. dê uma vantagem do sistema distribuído.",
+      "respostasAceitas": [
+        "No centralizado o histórico fica só num servidor central; no distribuído cada desenvolvedor tem uma cópia completa do histórico. Vantagem: dá para fazer commit e ver o histórico sem internet, e o projeto não se perde se o servidor cair."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) centralizado = histórico no servidor; distribuído = histórico completo em cada computador; 2) uma vantagem: trabalhar offline, mais rapidez ou segurança contra perda do servidor."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Antes do primeiro commit do sistema da clínica, a aluna rodou `git add .`. O que esse comando faz?\n\nNa sua resposta:\n1. diga o que o comando faz;\n2. cite um cuidado que ela deve ter ao usá-lo.",
+      "respostasAceitas": [
+        "Prepara (coloca na área de preparação) todas as mudanças da pasta atual e subpastas. Cuidado: pode incluir arquivos que não deveriam ir para o repositório (senhas, node_modules, arquivos temporários); é bom conferir com git status e usar .gitignore."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) prepara todos os arquivos novos/alterados/apagados da pasta; 2) cuidado com arquivos indesejados: conferir com git status antes do commit ou configurar o .gitignore."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Conte resumidamente como surgiu o Git.\n\nNa sua resposta:\n1. diga quem criou o Git e em que ano;\n2. diga para qual projeto ele foi criado.",
+      "respostasAceitas": [
+        "Foi criado por Linus Torvalds em 2005, para controlar as versões do kernel (núcleo) do Linux, depois que a equipe perdeu a ferramenta que usava antes."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Linus Torvalds, 2005; 2) desenvolvimento do kernel do Linux. Aceitar ano aproximado (meados dos anos 2000)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No sistema de agendamento do salão, o `git status` mostrou:\n```\nOn branch main\nChanges not staged for commit:\n  modified:   agenda.js\nUntracked files:\n  fotos.js\n```\nInterprete essa saída.\n\nNa sua resposta:\n1. diga a situação de agenda.js;\n2. diga a situação de fotos.js.",
+      "respostasAceitas": [
+        "agenda.js já é rastreado e foi modificado depois do último commit, mas a mudança ainda não foi preparada (falta git add). fotos.js é um arquivo novo que o Git ainda não rastreia."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) agenda.js modificado e não preparado; 2) fotos.js novo/não rastreado. Citar que os dois precisam de git add para entrar no próximo commit é um bônus."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Lucas rodou estes comandos, nesta ordem:\n```\ngit add estoque.js\n(editou estoque.js de novo e salvou)\ngit commit -m \"Atualiza estoque\"\n```\nO que foi registrado no commit?\n\nNa sua resposta:\n1. diga qual versão de estoque.js entrou no commit;\n2. explique o que ele deveria ter feito para incluir a última edição.",
+      "respostasAceitas": [
+        "Entrou a versão de estoque.js do momento do git add; a edição feita depois ficou fora (aparece como modificada no git status). Ele deveria ter rodado git add estoque.js de novo antes do commit."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) entra a versão preparada no git add, não a última; 2) rodar git add novamente depois da edição (ou fazer outro commit com a nova mudança)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma desenvolvedora usa o mesmo notebook na escola e no estágio. Ela rodou `git config --global user.email \"bia@escola.com\"` e, só dentro do repositório do estágio, `git config user.email \"bia@clinica.com\"`.\n\nNa sua resposta:\n1. diga qual e-mail aparece nos commits do repositório do estágio e qual aparece nos outros projetos;\n2. explique por que isso acontece.",
+      "respostasAceitas": [
+        "No repositório do estágio aparece bia@clinica.com; nos outros projetos, bia@escola.com. A configuração local (sem --global) vale só para aquele repositório e tem prioridade sobre a global."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) estágio = clinica, demais = escola; 2) configuração local vale só no repositório e prevalece sobre a global."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Por que o Git tem uma área de preparação (staging) entre o diretório de trabalho e o commit, em vez de gravar direto tudo o que mudou?\n\nNa sua resposta:\n1. explique para que serve a área de preparação;\n2. dê um exemplo de situação em que ela ajuda.",
+      "respostasAceitas": [
+        "Serve para escolher quais mudanças entram em cada commit. Exemplo: alterei o cadastro e o relatório, mas quero um commit só para a correção do cadastro e outro para o relatório."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) selecionar/organizar o que vai no próximo commit; 2) exemplo coerente de separar mudanças de assuntos diferentes em commits diferentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No Git, um arquivo pode estar \"não rastreado\", \"modificado\" ou \"preparado\". Explique cada um desses estados.\n\nNa sua resposta:\n1. explique o que é um arquivo não rastreado;\n2. explique o que é um arquivo modificado;\n3. explique o que é um arquivo preparado.",
+      "respostasAceitas": [
+        "Não rastreado: arquivo novo que o Git ainda não acompanha (nunca foi adicionado). Modificado: arquivo rastreado que mudou desde o último commit, mas não foi adicionado. Preparado: mudança já colocada na área de preparação com git add, pronta para o commit."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) novo, fora do controle do Git; 2) já rastreado, alterado e ainda não adicionado; 3) adicionado com git add, vai no próximo commit."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No projeto da loja de games, o `git status -s` mostrou:\n```\nM  vendas.js\n M clientes.js\n?? cupom.js\n```\nInterprete cada linha.\n\nNa sua resposta:\n1. diga a situação de vendas.js;\n2. diga a situação de clientes.js;\n3. diga a situação de cupom.js.",
+      "respostasAceitas": [
+        "vendas.js: modificado e já preparado (vai no próximo commit). clientes.js: modificado, mas não preparado. cupom.js: arquivo novo não rastreado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) M na coluna da esquerda = preparado; 2) M na coluna da direita = alterado sem git add; 3) ?? = não rastreado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um técnico rodou `git init` numa pasta que já era repositório com vários commits e apareceu `Reinitialized existing Git repository`.\n\nNa sua resposta:\n1. diga o que essa mensagem quer dizer;\n2. diga se os commits anteriores foram perdidos e por quê.",
+      "respostasAceitas": [
+        "Quer dizer que a pasta já era um repositório e o Git apenas reinicializou o existente. Os commits não foram perdidos: o git init não apaga o histórico que já está na pasta .git."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o repositório já existia; 2) nada se perde, o histórico continua. Resposta curta que diga isso vale nota cheia."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega diz: \"Não preciso de Git, eu já salvo o arquivo com Ctrl+S\". Explique por que salvar o arquivo não é o mesmo que fazer um commit.\n\nNa sua resposta:\n1. diga o que o Ctrl+S guarda;\n2. diga o que o commit guarda a mais.",
+      "respostasAceitas": [
+        "O Ctrl+S grava só a versão atual do arquivo no disco, substituindo a anterior. O commit registra uma versão do projeto no histórico, com autor, data e mensagem, e permite ver as diferenças e voltar a versões antigas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Ctrl+S salva só o estado atual, sem histórico; 2) commit cria um ponto no histórico com autor, data, mensagem e possibilidade de comparar/voltar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma aluna guarda o projeto da academia numa pasta sincronizada com a nuvem e acha que isso substitui o Git.\n\nNa sua resposta:\n1. explique o que a pasta sincronizada faz;\n2. cite duas coisas que o Git oferece e a pasta sincronizada não oferece.",
+      "respostasAceitas": [
+        "A pasta sincronizada só mantém uma cópia atual dos arquivos em outro lugar. O Git guarda o histórico de versões com mensagem e autor, mostra o que mudou entre versões, permite voltar e trabalhar em branches separadas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a pasta sincronizada copia o estado atual (backup); 2) duas entre: histórico com mensagens e autores, comparar versões (diff), voltar versões, branches, escolher o que entra em cada versão."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A empresa usava um sistema centralizado. Num dia em que o servidor ficou fora do ar, ninguém conseguiu registrar versões. Depois mudaram para o Git.\n\nNa sua resposta:\n1. explique por que no sistema centralizado ninguém conseguiu registrar versões;\n2. explique o que muda com o Git numa situação igual.",
+      "respostasAceitas": [
+        "No centralizado o histórico e os commits ficam só no servidor, então sem ele não dá para registrar versões. No Git cada um tem o repositório completo no computador: continua fazendo commits e vendo o histórico, e envia ao servidor quando ele voltar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dependência do servidor central; 2) no Git os commits são locais, o trabalho continua e depois é sincronizado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No comando `git commit -m \"Adiciona tela de login\"`, para que serve a opção `-m`?",
+      "alternativas": [
+        "Incluir no commit todos os arquivos modificados.",
+        "Marcar o commit como o principal da branch main.",
+        "Informar a mensagem do commit direto no comando.",
+        "Enviar o commit para o servidor remoto."
+      ],
+      "correta": 2,
+      "explicacao": "-m (message) recebe a mensagem do commit. Incluir arquivos modificados é a opção -a; enviar ao servidor é git push."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Com mudanças já preparadas, o que acontece ao rodar `git commit -m \"Cadastra novos sabores\"`?",
+      "alternativas": [
+        "Os arquivos do projeto são enviados para o repositório no GitHub.",
+        "O Git cria uma branch nova com o mesmo nome da mensagem.",
+        "As mudanças preparadas são registradas no histórico local.",
+        "As mudanças são apagadas da área de preparação e também do disco."
+      ],
+      "correta": 2,
+      "explicacao": "O commit grava no repositório local um novo ponto do histórico com o que estava preparado. Nada é enviado à internet e nada é apagado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No sistema da loja, foi corrigido o cálculo do desconto para compras acima de R$ 100. Qual mensagem de commit é a mais adequada?",
+      "alternativas": [
+        "Corrige desconto em compras acima de R$ 100",
+        "Versão final agora vai, não mexer mais nisso",
+        "Várias alterações em vários arquivos do projeto",
+        "Atualização feita hoje à tarde no laboratório"
+      ],
+      "correta": 0,
+      "explicacao": "Uma boa mensagem diz o que a mudança faz. As outras não explicam nada sobre a alteração e não ajudam quem lê o histórico."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que acontece ao rodar apenas `git commit` (sem a opção -m), com mudanças preparadas?",
+      "alternativas": [
+        "O Git abre um editor para a pessoa escrever a mensagem.",
+        "O Git usa o nome do arquivo alterado como mensagem do commit.",
+        "O Git mostra um erro e esvazia a área de preparação.",
+        "O commit é registrado sem nenhuma mensagem."
+      ],
+      "correta": 0,
+      "explicacao": "Sem -m o Git abre o editor configurado para escrever a mensagem. Se a mensagem ficar vazia, o commit é cancelado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz o comando `git commit -am \"Ajusta horários das aulas\"`?",
+      "alternativas": [
+        "Prepara e registra as mudanças dos arquivos já rastreados, com a mensagem informada.",
+        "Apaga o último commit e cria outro no lugar dele com a mensagem informada.",
+        "Registra o mesmo commit em todas as branches do repositório ao mesmo tempo.",
+        "Prepara e registra todos os arquivos da pasta, inclusive os novos não rastreados."
+      ],
+      "correta": 0,
+      "explicacao": "-a prepara automaticamente os arquivos já rastreados que foram modificados ou apagados; -m dá a mensagem. Arquivos novos continuam precisando de git add."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Clara criou o arquivo novo `pagamento.js` e alterou `pedido.js`, que já era rastreado. Depois rodou `git commit -am \"Pagamento\"`. O que entra no commit?",
+      "alternativas": [
+        "Nenhum, porque -a e -m não podem ser usados juntos.",
+        "Só pagamento.js, porque o -a serve para arquivos novos.",
+        "Os dois arquivos, porque -a adiciona tudo que existe na pasta.",
+        "Só a alteração de pedido.js; pagamento.js continua não rastreado."
+      ],
+      "correta": 3,
+      "explicacao": "O -a só pega arquivos que o Git já rastreia. pagamento.js precisaria de git add antes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Logo depois de um commit, que ainda não foi enviado a nenhum servidor, Igor percebeu que escreveu a mensagem errada. O que faz `git commit --amend -m \"Corrige validação do CPF\"`?",
+      "alternativas": [
+        "Cria um novo commit vazio que contém apenas a nova mensagem.",
+        "Troca a mensagem de todos os commits do histórico de uma vez.",
+        "Substitui o último commit por um igual, mas com a nova mensagem.",
+        "Apaga o último commit e todas as mudanças que ele registrou."
+      ],
+      "correta": 2,
+      "explicacao": "--amend refaz o último commit (com o que está preparado) e permite trocar a mensagem. Por mudar o commit, só deve ser usado antes de compartilhá-lo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Segundo as boas práticas, como deve ser a primeira linha da mensagem de um commit?",
+      "alternativas": [
+        "Sempre com a data e a hora do commit, para deixar o histórico organizado.",
+        "Longa, com o trecho de código alterado copiado dentro da própria mensagem.",
+        "Curta e clara, dizendo o que a mudança faz, como \"Adiciona filtro por data\".",
+        "Sempre com o nome do autor, para todos saberem quem fez a alteração."
+      ],
+      "correta": 2,
+      "explicacao": "Data, hora e autor o Git já registra sozinho. A mensagem deve resumir a mudança em poucas palavras."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a melhor prática sobre o tamanho dos commits?",
+      "alternativas": [
+        "Fazer um commit a cada linha de código digitada no editor.",
+        "Juntar correções de assuntos diferentes no mesmo commit.",
+        "Fazer commits pequenos, cada um com mudanças de um só assunto.",
+        "Fazer um único commit no fim do projeto, com tudo já pronto."
+      ],
+      "correta": 2,
+      "explicacao": "Commits pequenos e de um assunto só deixam o histórico fácil de ler e permitem desfazer uma mudança sem mexer nas outras."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O histórico do sistema da biblioteca tem as mensagens `ajustes`, `ajustes 2` e `agora vai`. Qual é o principal problema delas?",
+      "alternativas": [
+        "Repetem palavras, e o Git recusa commits que têm mensagens muito parecidas.",
+        "São curtas demais, e o Git exige mensagens com pelo menos 50 caracteres.",
+        "Não dizem o que mudou, então o histórico não ajuda a achar as alterações.",
+        "Estão em português, e o Git aceita mensagens escritas apenas em inglês."
+      ],
+      "correta": 2,
+      "explicacao": "O Git aceita essas mensagens, mas elas não informam nada. Na hora de procurar quando um erro entrou, o histórico fica inútil."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando mostra o histórico de commits do repositório?",
+      "alternativas": [
+        "git history",
+        "git diff",
+        "git status",
+        "git log"
+      ],
+      "correta": 3,
+      "explicacao": "git log lista os commits. git status mostra o estado atual, git diff mostra diferenças e git history não existe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por padrão, quais informações o `git log` mostra de cada commit?",
+      "alternativas": [
+        "O código completo de todos os arquivos.",
+        "Só os nomes dos arquivos alterados.",
+        "Apenas a quantidade total de commits.",
+        "Hash, autor, data e mensagem."
+      ],
+      "correta": 3,
+      "explicacao": "Cada entrada do git log traz o hash, o autor (nome e e-mail), a data e a mensagem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em que ordem o `git log` mostra os commits, por padrão?",
+      "alternativas": [
+        "Do mais recente para o mais antigo.",
+        "Em ordem alfabética das mensagens.",
+        "Agrupados pelo nome de cada autor.",
+        "Do mais antigo para o mais recente."
+      ],
+      "correta": 0,
+      "explicacao": "O commit mais novo aparece primeiro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que mostra o comando `git log -3`?",
+      "alternativas": [
+        "Os commits dos últimos 3 dias.",
+        "Somente o terceiro commit do histórico.",
+        "Só os 3 commits mais recentes.",
+        "Os 3 primeiros commits do projeto."
+      ],
+      "correta": 2,
+      "explicacao": "-n (aqui -3) limita a quantidade de commits mostrados, a partir do mais recente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No projeto da escola, o que faz `git log --author=\"Ana\"`?",
+      "alternativas": [
+        "Troca o autor de todos os commits do histórico para Ana.",
+        "Mostra os commits que têm a palavra Ana na mensagem.",
+        "Configura Ana como autora dos próximos commits.",
+        "Mostra só os commits cuja autoria contém o nome Ana."
+      ],
+      "correta": 3,
+      "explicacao": "--author filtra o histórico pelo autor. Para trocar o autor dos próximos commits usa-se git config user.name; para buscar na mensagem, --grep."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre `git log --stat` e `git log -p`?",
+      "alternativas": [
+        "--stat mostra as próprias linhas alteradas; -p mostra só quais arquivos mudaram e quantas linhas.",
+        "--stat mostra quais arquivos mudaram e quantas linhas; -p mostra as próprias linhas alteradas.",
+        "--stat mostra só os autores dos commits; -p mostra só as datas em que foram feitos.",
+        "Os dois mostram exatamente a mesma coisa; apenas a cor da saída no terminal é diferente."
+      ],
+      "correta": 1,
+      "explicacao": "--stat é um resumo (arquivos e contagem de linhas). -p (patch) mostra o diff completo de cada commit."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que a opção `--graph` acrescenta em `git log --oneline --graph`?",
+      "alternativas": [
+        "As estatísticas de linhas adicionadas e removidas em cada arquivo.",
+        "Um gráfico de barras com a quantidade de commits feitos por dia.",
+        "Uma imagem PNG do histórico salva dentro da pasta do projeto.",
+        "Um desenho em texto mostrando como os commits e as branches se ligam."
+      ],
+      "correta": 3,
+      "explicacao": "--graph desenha, com caracteres como * e |, as linhas do histórico, mostrando onde branches se separam e se juntam."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve o comando `git diff`?",
+      "alternativas": [
+        "Mostrar as diferenças (linhas adicionadas e removidas) entre versões.",
+        "Desfazer as mudanças dos arquivos e voltar para a versão do último commit.",
+        "Juntar duas versões diferentes de um arquivo em uma versão só.",
+        "Mostrar a lista de pastas e subpastas que existem dentro do repositório."
+      ],
+      "correta": 0,
+      "explicacao": "diff = diferença. Ele compara versões e mostra linha a linha o que mudou. Desfazer é git restore; juntar branches é git merge."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Rodado sem nenhuma opção, o que o `git diff` compara?",
+      "alternativas": [
+        "O repositório do seu computador com o repositório do GitHub.",
+        "O último commit do histórico com o penúltimo commit do histórico.",
+        "O diretório de trabalho com a área de preparação.",
+        "A branch em que você está com a branch main do repositório."
+      ],
+      "correta": 2,
+      "explicacao": "git diff puro mostra o que mudou e ainda não foi preparado com git add."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que mostra o comando `git diff --staged`?",
+      "alternativas": [
+        "A lista de arquivos que estão sendo ignorados por causa do .gitignore.",
+        "As diferenças entre a branch atual e todas as outras branches do projeto.",
+        "As mudanças preparadas em relação ao último commit (o que vai no commit).",
+        "As mudanças feitas nos arquivos que ainda não foram preparadas com git add."
+      ],
+      "correta": 2,
+      "explicacao": "--staged (ou --cached) compara a área de preparação com o último commit. É uma boa conferência antes do git commit."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Larissa alterou `turma.js`, rodou `git add turma.js` e depois `git diff`, que não mostrou nada. Por quê?",
+      "alternativas": [
+        "O git diff só funciona depois que o commit é feito, comparando dois commits.",
+        "O git add desfez a alteração do arquivo e ele voltou a ser igual ao do último commit.",
+        "O arquivo turma.js passou a ser ignorado pelo .gitignore depois do git add.",
+        "A mudança já foi preparada, e o git diff sem opções só mostra o que não foi adicionado."
+      ],
+      "correta": 3,
+      "explicacao": "Depois do git add, a diferença está entre a preparação e o último commit: aparece em git diff --staged."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na saída do `git diff`, o que indicam as linhas que começam com `+` e com `-`?",
+      "alternativas": [
+        "+ é uma linha removida e - é uma linha adicionada.",
+        "+ e - indicam somas e subtrações feitas no código.",
+        "+ é uma linha adicionada e - é uma linha removida.",
+        "+ é uma linha com erro e - é uma linha correta."
+      ],
+      "correta": 2,
+      "explicacao": "No diff, - mostra o que saiu e + mostra o que entrou. Uma linha alterada aparece como uma - (antiga) e uma + (nova)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No sistema do hotel, o `git diff` mostrou:\n```\n-const taxa = 5;\n+const taxa = 7;\n```\nO que aconteceu com essa linha?",
+      "alternativas": [
+        "A linha foi apagada e o arquivo ficou sem taxa.",
+        "Foi criada uma segunda constante taxa, com valor 7.",
+        "O valor da taxa foi trocado de 5 para 7.",
+        "A taxa passou a valer 12, a soma de 5 e 7."
+      ],
+      "correta": 2,
+      "explicacao": "A linha antiga (-) saiu e a nova (+) entrou no lugar: o valor mudou de 5 para 7."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz o comando `git diff a1b2c3d e4f5a6b`, usando os hashes de dois commits?",
+      "alternativas": [
+        "Apaga todos os commits que existem entre os dois.",
+        "Junta os dois commits em um único commit novo.",
+        "Troca a ordem dos dois commits no histórico.",
+        "Mostra o que mudou entre esses dois commits."
+      ],
+      "correta": 3,
+      "explicacao": "git diff com dois commits compara as duas versões do projeto. Ele só mostra, não altera o histórico."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz o comando `git restore menu.js`?",
+      "alternativas": [
+        "Cria uma cópia de segurança de menu.js na pasta.",
+        "Recupera menu.js da lixeira do sistema operacional.",
+        "Prepara menu.js para entrar no próximo commit.",
+        "Descarta as alterações não adicionadas de menu.js."
+      ],
+      "correta": 3,
+      "explicacao": "git restore volta o arquivo para a versão guardada pelo Git (a preparada ou a do último commit), descartando as mudanças não adicionadas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Joana adicionou por engano o arquivo `teste.js` com `git add`. O que faz `git restore --staged teste.js`?",
+      "alternativas": [
+        "Desfaz as alterações de teste.js e também o tira da preparação.",
+        "Tira teste.js da preparação, mas mantém as alterações no arquivo.",
+        "Faz um commit contendo apenas o arquivo teste.js, sem mensagem.",
+        "Apaga o arquivo teste.js da pasta do projeto e do computador."
+      ],
+      "correta": 1,
+      "explicacao": "--staged só mexe na área de preparação: o arquivo deixa de estar preparado, mas o conteúdo no disco continua igual."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que é preciso cuidado antes de rodar `git restore relatorio.js` num arquivo com alterações?",
+      "alternativas": [
+        "O comando remove o arquivo relatorio.js do repositório e também da pasta do projeto.",
+        "As alterações que não estão em commit são descartadas e o Git não consegue recuperá-las.",
+        "O comando envia a versão antiga do arquivo para o servidor e apaga a versão de lá.",
+        "O comando apaga todos os commits anteriores em que o arquivo relatorio.js aparece."
+      ],
+      "correta": 1,
+      "explicacao": "Mudanças nunca registradas não existem no histórico; ao descartá-las, o Git não tem de onde trazê-las de volta. Os commits antigos não são afetados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em tutoriais antigos aparece `git checkout -- index.js` para descartar alterações de um arquivo. Qual comando mais recente tem o mesmo efeito?",
+      "alternativas": [
+        "git restore index.js",
+        "git add index.js",
+        "git switch index.js",
+        "git branch index.js"
+      ],
+      "correta": 0,
+      "explicacao": "O git restore foi criado para separar essa função do checkout. git switch troca de branch, git add prepara e git branch cria branch."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Git, o que é o HEAD?",
+      "alternativas": [
+        "O primeiro commit feito no repositório, quando o projeto começou.",
+        "Uma referência ao commit (e à branch) em que você está agora.",
+        "O servidor onde fica guardado o repositório remoto da equipe.",
+        "O arquivo principal do projeto, como o index.js ou o main.js."
+      ],
+      "correta": 1,
+      "explicacao": "HEAD aponta para onde você está: normalmente a branch atual, e por ela o último commit dessa branch."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando mostra os detalhes e as mudanças de um commit específico, a partir do hash dele?",
+      "alternativas": [
+        "git init a1b2c3d",
+        "git status a1b2c3d",
+        "git show a1b2c3d",
+        "git add a1b2c3d"
+      ],
+      "correta": 2,
+      "explicacao": "git show exibe autor, data, mensagem e o diff de um commit."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual sequência registra no histórico uma alteração feita no arquivo `horario.js`?",
+      "alternativas": [
+        "git commit -m \"Atualiza horário\" e depois git add horario.js",
+        "git add horario.js e depois git commit -m \"Atualiza horário\"",
+        "git init e depois git status",
+        "git status e depois git log"
+      ],
+      "correta": 1,
+      "explicacao": "Primeiro prepara (add), depois registra (commit). Fazer o commit antes do add não registra a alteração."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de fazer um commit, Diego avisou o professor que o código já estava no GitHub. Por que ele estava enganado?",
+      "alternativas": [
+        "O GitHub só mostra commits que alteram mais de dez arquivos.",
+        "O commit fica só no repositório local; falta enviá-lo (push).",
+        "O commit vai para o GitHub, mas só aparece lá no dia seguinte.",
+        "O GitHub só aceita commits com mensagens escritas em inglês."
+      ],
+      "correta": 1,
+      "explicacao": "O commit grava no repositório do próprio computador. Enviar ao serviço remoto é outro passo (git push)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que o `git log` mostra num repositório recém-criado com `git init`, que ainda não tem nenhum commit?",
+      "alternativas": [
+        "Uma mensagem dizendo que a branch ainda não tem commits.",
+        "Um commit automático que o git init criou sozinho.",
+        "A lista de todos os arquivos que existem na pasta.",
+        "O histórico dos outros projetos do mesmo computador."
+      ],
+      "correta": 0,
+      "explicacao": "Sem commits não há histórico: o Git avisa que a branch atual ainda não tem commits. O git init não cria commit."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que mostra o comando `git log -- precos.js`?",
+      "alternativas": [
+        "O conteúdo atual do arquivo precos.js, linha por linha.",
+        "Todos os commits, menos os que alteraram precos.js.",
+        "O histórico de precos.js, apagando os commits antigos.",
+        "Só os commits que alteraram o arquivo precos.js."
+      ],
+      "correta": 3,
+      "explicacao": "Passar um caminho depois de -- filtra o histórico pelos commits que mexeram naquele arquivo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre `git diff` e `git diff HEAD`?",
+      "alternativas": [
+        "Não há diferença, porque HEAD é só um apelido para a área de preparação do projeto.",
+        "git diff mostra o que não foi adicionado; git diff HEAD mostra tudo que mudou desde o último commit.",
+        "git diff mostra tudo que mudou desde o último commit; git diff HEAD mostra só o primeiro commit.",
+        "git diff compara com o GitHub; git diff HEAD compara apenas com o computador do colega."
+      ],
+      "correta": 1,
+      "explicacao": "git diff compara trabalho × preparação. git diff HEAD compara trabalho × último commit, então inclui mudanças preparadas e não preparadas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No projeto do pet shop, a aluna rodou `git commit -m \"Adiciona cadastro de pets\"`.\n\nNa sua resposta:\n1. diga o que o comando faz;\n2. explique para que serve a mensagem entre aspas.",
+      "respostasAceitas": [
+        "Registra no histórico (repositório local) as mudanças que estavam preparadas, criando uma nova versão. A mensagem descreve o que foi feito, para quem ler o histórico entender a mudança."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) grava as mudanças preparadas como novo commit; 2) a mensagem explica a mudança no histórico. Não precisa citar autor/data."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Compare duas mensagens de commit para a mesma mudança no carrinho da loja: `arrumei` e `Corrige soma do total no carrinho`.\n\nNa sua resposta:\n1. diga qual mensagem é melhor;\n2. explique por quê.",
+      "respostasAceitas": [
+        "A segunda é melhor, porque diz exatamente o que foi mudado. Quem ler o histórico depois entende a alteração sem precisar abrir o código; \"arrumei\" não informa nada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a segunda; 2) é clara/específica, ajuda a entender e localizar a mudança no histórico."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O professor rodou `git log` no projeto da biblioteca e apareceu:\n```\ncommit 9c41e2a7d0...\nAuthor: Rita Lima <rita@escola.com>\nDate:   Mon Nov 23 10:15 2026\n\n    Adiciona lista de livros emprestados\n```\nInterprete essa saída.\n\nNa sua resposta:\n1. diga quem fez o commit e quando;\n2. diga o que foi feito;\n3. diga o que é o código da primeira linha.",
+      "respostasAceitas": [
+        "Rita Lima fez o commit em 23/11/2026, às 10h15. Ela adicionou a lista de livros emprestados. O código é o hash, o identificador único do commit."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Rita Lima, 23/11 às 10:15; 2) adicionou a lista de livros emprestados; 3) hash/identificador do commit."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No sistema da academia, o `git diff` mostrou:\n```\n-const horario = \"08:00\";\n+const horario = \"07:30\";\n+const intervalo = 15;\n```\nInterprete essa saída.\n\nNa sua resposta:\n1. diga o que foi alterado;\n2. diga o que foi acrescentado.",
+      "respostasAceitas": [
+        "O horário mudou de 08:00 para 07:30 (linha antiga removida e nova adicionada). Foi acrescentada uma nova constante intervalo com valor 15."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) horario de \"08:00\" para \"07:30\"; 2) nova linha const intervalo = 15."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A coordenadora pediu para ver só o que o aluno Davi fez no projeto. O técnico rodou `git log --author=\"Davi\"`.\n\nNa sua resposta:\n1. diga o que esse comando mostra;\n2. diga em que situação ele é útil.",
+      "respostasAceitas": [
+        "Mostra apenas os commits feitos por Davi (cujo autor contém esse nome). É útil para acompanhar o trabalho de uma pessoa, por exemplo para avaliar a participação num projeto em grupo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) filtra o histórico pelos commits do autor Davi; 2) exemplo coerente (avaliar participação, achar mudanças de uma pessoa)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Antes de fazer o commit, o técnico da oficina sempre roda `git diff`. Por que esse hábito é bom?\n\nNa sua resposta:\n1. diga o que o git diff mostra;\n2. explique por que vale a pena conferir antes do commit.",
+      "respostasAceitas": [
+        "Mostra as linhas que foram alteradas (adicionadas e removidas) e ainda não foram preparadas. Conferir evita colocar no commit coisas indesejadas, como teste esquecido ou erro, e ajuda a escrever uma mensagem correta."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mostra as diferenças linha a linha; 2) revisar o que vai ser registrado, evitar erros/sujeira no commit."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre os comandos `git commit -m \"Ajusta menu\"` e `git commit -am \"Ajusta menu\"`.\n\nNa sua resposta:\n1. diga o que cada um registra;\n2. explique por que um arquivo novo não entra com o -am.",
+      "respostasAceitas": [
+        "O -m registra só o que já foi preparado com git add. O -am prepara automaticamente os arquivos já rastreados que foram modificados e registra. Arquivo novo não é rastreado ainda, então o -a não o pega: precisa de git add."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) -m = só o preparado; -am = prepara e registra os rastreados modificados; 2) arquivo novo não é rastreado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na equipe da clínica, a regra é: `git commit --amend` só pode ser usado em commits que ainda não foram enviados ao servidor.\n\nNa sua resposta:\n1. diga o que o comando faz;\n2. explique por que existe essa regra.",
+      "respostasAceitas": [
+        "Refaz o último commit, trocando a mensagem e/ou incluindo o que está preparado; na prática cria um commit novo no lugar do antigo. Se o commit já foi compartilhado, os colegas têm a versão antiga e os históricos ficam diferentes, causando confusão."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) altera/substitui o último commit; 2) reescreve o histórico; se já foi enviado, desalinha com o dos colegas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre `git diff` e `git diff --staged`.\n\nNa sua resposta:\n1. diga o que cada um mostra;\n2. diga quando usar o segundo.",
+      "respostasAceitas": [
+        "git diff mostra as mudanças que ainda não foram preparadas (trabalho × preparação). git diff --staged mostra o que já foi preparado em relação ao último commit. Use o segundo antes do commit para conferir exatamente o que vai ser registrado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) não preparado × preparado; 2) antes do commit, para revisar o que vai entrar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno fez um único commit, chamado \"projeto todo\", no último dia do semestre.\n\nNa sua resposta:\n1. explique o problema dessa forma de trabalhar;\n2. diga como ele deveria ter feito.",
+      "respostasAceitas": [
+        "O histórico fica sem utilidade: não dá para ver a evolução, achar quando um erro entrou nem voltar uma parte. Ele deveria fazer commits pequenos e frequentes, cada um com uma mudança e uma mensagem clara."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) perde o histórico/evolução, não dá para voltar versões intermediárias nem localizar mudanças; 2) commits pequenos, frequentes e com mensagens claras."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno colocou na área de preparação o arquivo `senha.txt` sem querer e depois rodou `git restore --staged senha.txt`.\n\nNa sua resposta:\n1. diga o que aconteceu com o arquivo na área de preparação;\n2. diga o que aconteceu com o conteúdo do arquivo no computador.",
+      "respostasAceitas": [
+        "O arquivo saiu da área de preparação e não vai entrar no próximo commit. O conteúdo no computador continua igual; nada foi apagado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) deixou de estar preparado; 2) conteúdo intacto. Sugerir colocar o arquivo no .gitignore é um bônus."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No sistema de entregas, o `git log --stat` mostrou:\n```\na1b2c3d Ajusta cálculo do frete\n frete.js | 4 ++--\n 1 file changed, 2 insertions(+), 2 deletions(-)\n```\nInterprete essa saída.\n\nNa sua resposta:\n1. diga qual arquivo foi alterado;\n2. diga quantas linhas foram adicionadas e removidas;\n3. diga o que provavelmente foi feito, pela mensagem.",
+      "respostasAceitas": [
+        "Foi alterado o arquivo frete.js, com 2 linhas adicionadas e 2 removidas. Pela mensagem, foi um ajuste no cálculo do frete (provavelmente 2 linhas trocadas por versões novas)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) frete.js; 2) 2 adicionadas e 2 removidas; 3) ajuste no cálculo do frete."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Bianca rodou `git restore relatorio.js` para \"limpar\" o arquivo e perdeu duas horas de trabalho que não estavam em nenhum commit.\n\nNa sua resposta:\n1. explique o que o comando fez;\n2. explique por que o Git não consegue recuperar esse trabalho;\n3. diga o que ela poderia ter feito antes para não perder.",
+      "respostasAceitas": [
+        "O restore descartou as alterações não registradas e voltou o arquivo à versão guardada pelo Git. Essas alterações nunca entraram em commit, então não existem no histórico. Ela deveria ter feito commit (ou conferido com git diff/git status) antes."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) descartou mudanças e voltou à última versão do Git; 2) o que não está em commit não fica no histórico; 3) fazer commit antes / conferir com git status ou git diff."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No sistema da loja, o desconto funcionava na segunda e parou de funcionar na quarta. A equipe usa Git com commits frequentes.\n\nNa sua resposta:\n1. explique como o git log ajuda a investigar o problema;\n2. explique como o git diff ajuda depois disso.",
+      "respostasAceitas": [
+        "Com o git log a equipe vê os commits feitos entre segunda e quarta (autores, datas, mensagens) e encontra os suspeitos. Com o git diff entre um commit em que funcionava e outro em que não funcionava, vê exatamente quais linhas mudaram."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) log para listar/achar os commits do período; 2) diff entre commits para ver as linhas alteradas. Mencionar git show ou log -p também vale."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No `git log --oneline` aparece `7f3c2d1 (HEAD -> main) Adiciona tela de reservas`.\n\nNa sua resposta:\n1. explique o que é o HEAD;\n2. explique o que significa HEAD -> main nessa linha.",
+      "respostasAceitas": [
+        "HEAD é a referência que indica onde você está no histórico. HEAD -> main quer dizer que você está na branch main e que o commit 7f3c2d1 é o último dessa branch."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) referência à posição atual (branch/commit); 2) está na branch main, cujo último commit é esse."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Git, o que é uma branch?",
+      "alternativas": [
+        "Uma linha de desenvolvimento separada da principal.",
+        "Um commit especial que nunca pode ser apagado nem alterado.",
+        "Um arquivo de configuração onde ficam o nome e o e-mail do autor.",
+        "Uma cópia do projeto guardada no computador de outro colega da equipe."
+      ],
+      "correta": 0,
+      "explicacao": "Branch (ramo) é uma linha independente de commits. Permite criar algo novo sem atrapalhar a versão principal."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que mostra o comando `git branch`, rodado sem mais nada?",
+      "alternativas": [
+        "O histórico de commits de todas as branches juntas.",
+        "A lista de branches, com * na branch atual.",
+        "Os arquivos que mudaram desde a criação da branch.",
+        "Uma branch nova criada com um nome automático."
+      ],
+      "correta": 1,
+      "explicacao": "Sem argumentos, git branch só lista as branches locais e marca com * aquela em que você está."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Estando na main, o aluno rodou `git branch promocao`. O que aconteceu?",
+      "alternativas": [
+        "A branch main foi renomeada para promocao.",
+        "Foi criada a branch promocao e ele já passou para ela.",
+        "As mudanças da branch promocao foram juntadas na main.",
+        "Foi criada a branch promocao, mas ele continua na main."
+      ],
+      "correta": 3,
+      "explicacao": "git branch <nome> só cria a branch. Para passar para ela é preciso git switch promocao (ou criar e trocar com git switch -c)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A branch `relatorio` já existe. Qual comando faz o aluno passar a trabalhar nela?",
+      "alternativas": [
+        "git branch relatorio",
+        "git merge relatorio",
+        "git add relatorio",
+        "git switch relatorio"
+      ],
+      "correta": 3,
+      "explicacao": "git switch troca de branch. git branch relatorio tentaria criar uma branch que já existe; git merge juntaria; git add prepara arquivos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz o comando `git switch -c cardapio-novo`?",
+      "alternativas": [
+        "Cria a branch cardapio-novo e já passa para ela.",
+        "Faz um commit com a mensagem cardapio-novo.",
+        "Copia todos os arquivos para uma pasta cardapio-novo.",
+        "Apaga a branch cardapio-novo, se ela existir."
+      ],
+      "correta": 0,
+      "explicacao": "-c (create) cria a branch e troca para ela no mesmo comando."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em tutoriais aparece `git checkout -b relatorio`. Qual comando mais recente faz a mesma coisa?",
+      "alternativas": [
+        "git restore relatorio",
+        "git merge -b relatorio",
+        "git branch -d relatorio",
+        "git switch -c relatorio"
+      ],
+      "correta": 3,
+      "explicacao": "checkout -b cria a branch e troca para ela, assim como switch -c. branch -d apaga; restore mexe em arquivos; merge -b não existe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O `git branch` mostrou:\n```\n* main\n  login\n  relatorio\n```\nEm qual branch o aluno está agora?",
+      "alternativas": [
+        "login",
+        "main",
+        "Em nenhuma das três",
+        "relatorio"
+      ],
+      "correta": 1,
+      "explicacao": "O asterisco marca a branch atual."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de juntar a branch `login` na main, a aluna rodou `git branch -d login`. O que acontece?",
+      "alternativas": [
+        "A branch login é apagada; os commits dela continuam na main por causa do merge.",
+        "Os arquivos criados na branch login são apagados da pasta do projeto.",
+        "A branch login e todos os commits feitos nela são apagados do histórico da main.",
+        "A branch login é renomeada para main e a main antiga é apagada."
+      ],
+      "correta": 0,
+      "explicacao": "-d apaga só o nome da branch. Como ela já foi juntada, os commits estão no histórico da main."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Igor rodou `git branch -d teste-cupom`, mas essa branch tinha commits que nunca foram juntados a outra branch. O que acontece?",
+      "alternativas": [
+        "O Git apaga a branch e junta os commits dela na main sozinho.",
+        "O Git transforma a branch em uma pasta comum dentro do projeto.",
+        "O Git recusa, avisando que a branch não foi juntada (-D forçaria).",
+        "O Git apaga a branch sem aviso e os commits vão para a lixeira."
+      ],
+      "correta": 2,
+      "explicacao": "-d é a forma segura: só apaga branch já juntada. -D força a exclusão, e os commits que só existiam ali deixam de aparecer no histórico."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve o comando `git merge`?",
+      "alternativas": [
+        "Juntar na branch atual as mudanças de outra branch.",
+        "Criar uma branch nova a partir da branch atual.",
+        "Trocar de uma branch para outra sem fazer commit.",
+        "Mostrar as diferenças entre dois arquivos da pasta."
+      ],
+      "correta": 0,
+      "explicacao": "merge = juntar. Ele traz para a branch em que você está os commits de outra branch."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A funcionalidade de pagamento ficou pronta na branch `pagamento`. Qual sequência leva essas mudanças para a main?",
+      "alternativas": [
+        "git merge main e depois git switch pagamento",
+        "git switch main e depois git merge pagamento",
+        "git switch pagamento e depois git merge pagamento",
+        "git branch main e depois git merge main"
+      ],
+      "correta": 1,
+      "explicacao": "O merge traz a outra branch para a atual. Por isso primeiro se vai para a main (destino) e depois se faz o merge da pagamento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao rodar `git merge cadastro` na main, o Git mostrou `Fast-forward`. O que isso significa?",
+      "alternativas": [
+        "A main não tinha commits novos, então o Git só avançou a main até o último commit de cadastro.",
+        "O merge foi feito pela metade e precisa ser completado com outro comando depois.",
+        "O Git criou um commit de junção vazio para marcar o lugar onde as branches se encontraram.",
+        "O Git juntou as branches mais rápido porque apagou os commits repetidos das duas branches."
+      ],
+      "correta": 0,
+      "explicacao": "No fast-forward a main ficou parada desde a criação da branch: basta mover a main para frente, sem criar commit de junção."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois que a branch `estoque` foi criada, foram feitos commits nela e também na main. O que o `git merge estoque`, rodado na main, normalmente faz?",
+      "alternativas": [
+        "Apaga os commits da branch estoque e mantém apenas os commits da main.",
+        "Cria um commit de junção que une os dois caminhos do histórico.",
+        "Apaga os commits da main e deixa só os commits feitos na branch estoque.",
+        "Recusa a junção, porque só é possível juntar branches sem commits novos."
+      ],
+      "correta": 1,
+      "explicacao": "Quando as duas branches andaram, o Git cria um commit de junção com dois \"pais\". Se as mesmas linhas foram alteradas nas duas, pode haver conflito a resolver."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao rodar `git switch tema-escuro`, o arquivo `estilo.css` aberto no editor mudou de conteúdo. Por quê?",
+      "alternativas": [
+        "O Git juntou o conteúdo das duas branches dentro de estilo.css.",
+        "O git switch desfaz o último commit da branch para onde você foi.",
+        "O editor de código perdeu o arquivo e baixou uma cópia antiga da internet.",
+        "Ao trocar de branch, a pasta passa a mostrar os arquivos daquela branch."
+      ],
+      "correta": 3,
+      "explicacao": "A pasta de trabalho passa a mostrar o último commit da branch escolhida. Voltando para a outra branch, o conteúdo volta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Fernanda alterou `menu.js` sem fazer commit e tentou `git switch promocao`. Nessa branch, `menu.js` é diferente. O Git interrompeu a troca. Por quê?",
+      "alternativas": [
+        "Porque o git switch só funciona logo depois de um git log ser executado no terminal.",
+        "Porque a branch promocao foi apagada quando o arquivo menu.js foi alterado.",
+        "Para não sobrescrever as alterações não registradas de menu.js.",
+        "Porque não é permitido trocar de branch em projetos que têm arquivos .js."
+      ],
+      "correta": 2,
+      "explicacao": "Se a troca fosse feita, a versão de menu.js da outra branch apagaria o trabalho não registrado. O Git avisa e para."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em qual arquivo se listam os arquivos e pastas que o Git não deve rastrear?",
+      "alternativas": [
+        ".gitignore",
+        ".gitkeep",
+        "README.md",
+        "package.json"
+      ],
+      "correta": 0,
+      "explicacao": "O .gitignore guarda os padrões de arquivos ignorados. README descreve o projeto, package.json lista dependências e .gitkeep é só um arquivo vazio usado para versionar pastas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No `.gitignore` do projeto Node.js aparece a linha `node_modules/`. O que ela faz?",
+      "alternativas": [
+        "Faz o Git rastrear somente a pasta node_modules.",
+        "Instala os módulos do Node.js sempre que o Git é usado.",
+        "Faz o Git ignorar a pasta node_modules inteira.",
+        "Apaga a pasta node_modules do computador a cada commit."
+      ],
+      "correta": 2,
+      "explicacao": "Uma linha terminada em / indica uma pasta a ignorar. O .gitignore não apaga nem instala nada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que a linha `*.log` faz num arquivo `.gitignore`?",
+      "alternativas": [
+        "Ignora todos os arquivos cujo nome termina em .log.",
+        "Ignora apenas um arquivo chamado exatamente *.log.",
+        "Rastreia somente os arquivos que terminam em .log.",
+        "Apaga do disco os arquivos que terminam em .log."
+      ],
+      "correta": 0,
+      "explicacao": "O * vale qualquer sequência de caracteres: todos os arquivos .log (erros.log, acesso.log…) passam a ser ignorados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No sistema do hotel, o arquivo `.env` guarda a senha do banco de dados. Por que ele deve estar no `.gitignore`?",
+      "alternativas": [
+        "Para a senha não entrar no histórico e ser compartilhada.",
+        "Para o Git criptografar a senha antes de cada commit.",
+        "Para o arquivo ficar mais rápido de abrir no editor de código.",
+        "Para o arquivo ser copiado automaticamente para todos os colegas."
+      ],
+      "correta": 0,
+      "explicacao": "Tudo que entra num commit fica no histórico e vai junto quando o repositório é compartilhado. Senhas e chaves não devem ser versionadas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo `config.json` já estava em commits anteriores. Depois, a equipe colocou `config.json` no `.gitignore`, mas as mudanças nele continuam aparecendo no `git status`. Por quê?",
+      "alternativas": [
+        "O nome config.json é reservado pelo Git e nunca pode ser ignorado no .gitignore.",
+        "O .gitignore não vale para arquivo já rastreado; é preciso usar git rm --cached.",
+        "O .gitignore só passa a funcionar depois que o computador é reiniciado pelo usuário.",
+        "O .gitignore precisa ficar dentro da pasta .git para ter efeito no repositório."
+      ],
+      "correta": 1,
+      "explicacao": "Arquivos já rastreados continuam rastreados. git rm --cached config.json para de rastreá-lo sem apagar o arquivo do disco; depois disso o .gitignore passa a valer."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um `.gitignore` tem as linhas `*.log` e, logo abaixo, `!importante.log`. Qual é o efeito?",
+      "alternativas": [
+        "Só importante.log é ignorado; os outros .log continuam rastreados.",
+        "Todos os .log são ignorados, menos importante.log.",
+        "Nenhum .log é ignorado, porque as duas linhas se anulam.",
+        "Todos os .log são ignorados, inclusive importante.log, que é apagado."
+      ],
+      "correta": 1,
+      "explicacao": "O ! cria uma exceção a uma regra anterior: aquele arquivo volta a ser considerado pelo Git."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Normalmente, onde fica o arquivo `.gitignore` de um projeto?",
+      "alternativas": [
+        "Na pasta de instalação do Git no computador.",
+        "Na pasta principal (raiz) do repositório.",
+        "Dentro da pasta node_modules do projeto.",
+        "Dentro da pasta oculta .git do repositório."
+      ],
+      "correta": 1,
+      "explicacao": "O .gitignore costuma ficar na raiz, ao lado dos arquivos do projeto, e vale para ela e as subpastas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo `.gitignore` deve ser incluído em commit?",
+      "alternativas": [
+        "Não, porque o Git apaga o .gitignore a cada commit que é feito.",
+        "Não, porque ele contém as senhas do projeto e precisa ficar oculto.",
+        "Sim, mas só se o projeto tiver menos de dez arquivos no total.",
+        "Sim, para toda a equipe usar as mesmas regras do que ignorar."
+      ],
+      "correta": 3,
+      "explicacao": "O .gitignore é parte do projeto: versionado, garante que todos ignorem os mesmos arquivos. Ele não guarda senhas, só os nomes/padrões."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A equipe adicionou a linha `*.tmp` ao `.gitignore`. O que muda no `git status`?",
+      "alternativas": [
+        "O git status passa a mostrar só os arquivos .tmp.",
+        "Todos os arquivos .tmp são apagados da pasta do projeto.",
+        "Os arquivos .tmp passam a aparecer como preparados.",
+        "Arquivos .tmp novos deixam de aparecer como não rastreados."
+      ],
+      "correta": 3,
+      "explicacao": "Arquivos ignorados não aparecem em \"Untracked files\" e não entram com git add . — o que limpa a saída do git status."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em muitos projetos novos, como costuma se chamar a branch principal?",
+      "alternativas": [
+        "head",
+        "main",
+        "staging",
+        "commit"
+      ],
+      "correta": 1,
+      "explicacao": "Hoje a branch principal costuma se chamar main (em projetos antigos, master). HEAD é uma referência, commit é um registro e staging é a área de preparação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre `git switch` e `git checkout`?",
+      "alternativas": [
+        "switch é mais novo e só troca de branch; checkout faz isso e outras tarefas.",
+        "switch troca de branch e faz commit automático; checkout só troca sem commit.",
+        "Não há diferença, os dois foram criados juntos com os mesmos recursos.",
+        "switch só funciona no GitHub; checkout só funciona no computador local."
+      ],
+      "correta": 0,
+      "explicacao": "O checkout fazia muitas coisas (trocar branch, restaurar arquivo). Por isso surgiram git switch (branches) e git restore (arquivos), mais fáceis de entender."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Bruno queria levar a branch `promocao` para a main. Estando na branch `promocao`, rodou `git merge main`. O que aconteceu?",
+      "alternativas": [
+        "Ele levou as mudanças da promocao para a main, como queria.",
+        "Ele trouxe a main para a branch promocao; a main não mudou.",
+        "Ele apagou a main e deixou só a branch promocao.",
+        "Ele trocou o nome da branch promocao para main."
+      ],
+      "correta": 1,
+      "explicacao": "O merge sempre junta na branch atual. Para mudar a main, ele precisava estar nela (git switch main) e rodar git merge promocao."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando mostra em qual branch você está, junto com a situação dos arquivos?",
+      "alternativas": [
+        "git status",
+        "git log -1",
+        "git diff",
+        "git config --list"
+      ],
+      "correta": 0,
+      "explicacao": "A primeira linha do git status é algo como \"On branch main\". git branch também indica a branch atual com *."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Criar uma branch no Git faz uma cópia de todos os arquivos do projeto?",
+      "alternativas": [
+        "Sim; mas só dos arquivos .js, os demais continuam compartilhados.",
+        "Não; a branch fica vazia e os arquivos precisam ser adicionados de novo.",
+        "Não; a branch é só um ponteiro para um commit, por isso é criada na hora.",
+        "Sim; o Git copia os arquivos para uma pasta nova com o nome da branch."
+      ],
+      "correta": 2,
+      "explicacao": "Uma branch é apenas um nome que aponta para um commit. Nada é copiado; os commits novos é que fazem a branch andar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Bia fez 3 commits na branch `tema-escuro` e depois rodou `git switch main`. O que ela vê na main?",
+      "alternativas": [
+        "A main vazia, porque os arquivos ficaram presos na outra branch.",
+        "Uma mensagem de erro, porque a main ficou desatualizada.",
+        "A main sem as mudanças do tema escuro, até que seja feito o merge.",
+        "A main já com o tema escuro, porque os commits valem para todas as branches."
+      ],
+      "correta": 2,
+      "explicacao": "Commits feitos numa branch só aparecem nela. A main só recebe essas mudanças com git merge tema-escuro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual nome de branch é o mais adequado para desenvolver o filtro de busca de produtos?",
+      "alternativas": [
+        "branch-nova-ana-hoje-tarde",
+        "filtro-busca-produtos",
+        "teste123",
+        "coisas da ana"
+      ],
+      "correta": 1,
+      "explicacao": "Um bom nome diz o que está sendo feito, é curto e não tem espaços. \"coisas da ana\" nem é aceito como está, por causa dos espaços."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao terminar uma tarefa, qual ordem de comandos é a mais comum e segura para registrar o trabalho?",
+      "alternativas": [
+        "git diff, git commit, git status, git add",
+        "git add, git commit, git diff, git status",
+        "git commit, git add, git status, git diff",
+        "git status, git diff, git add, git commit"
+      ],
+      "correta": 3,
+      "explicacao": "Primeiro confere o que mudou (status e diff), depois prepara (add) e registra (commit)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois do merge da branch `cadastro` na main, o que aparece no `git log` da main?",
+      "alternativas": [
+        "Nada muda no git log, porque o merge só altera os arquivos da pasta.",
+        "Só um commit com a mensagem cadastro, e os commits da branch são apagados.",
+        "O histórico da main é apagado e substituído pelo histórico da cadastro.",
+        "Os commits feitos na branch cadastro passam a fazer parte do histórico da main."
+      ],
+      "correta": 3,
+      "explicacao": "Com o merge, os commits da branch entram no histórico da main (e, se não for fast-forward, aparece também o commit de junção)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Estando na main, no commit chamado C3, Lia rodou `git switch -c relatorio`. A branch relatorio começa a partir de onde?",
+      "alternativas": [
+        "Do último commit de outra branch qualquer.",
+        "Do commit C3, o commit atual da main.",
+        "Do primeiro commit do repositório.",
+        "De um commit vazio, sem nenhum arquivo."
+      ],
+      "correta": 1,
+      "explicacao": "Uma branch nova nasce no commit em que você está (HEAD). A partir daí as duas podem seguir caminhos diferentes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A branch `login` já existe no repositório. O que acontece se o aluno rodar `git switch -c login`?",
+      "alternativas": [
+        "O Git apaga a branch login antiga e cria outra vazia no lugar.",
+        "O Git junta a branch login com a branch atual automaticamente.",
+        "O Git mostra um erro dizendo que já existe uma branch com esse nome.",
+        "O Git cria uma segunda branch login, e as duas ficam juntas."
+      ],
+      "correta": 2,
+      "explicacao": "-c serve para criar. Se o nome já existe, o Git recusa; para só trocar de branch basta git switch login."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa pasta com os arquivos `index.js` e `dados.js`, a aluna rodou `git init` e, em seguida, `git status`. O que aparece?",
+      "alternativas": [
+        "Nenhum arquivo, porque o git status só funciona depois do primeiro commit.",
+        "Os dois arquivos como já registrados no primeiro commit criado pelo git init.",
+        "Os dois como não rastreados, com o aviso de que ainda não há commits.",
+        "Os dois arquivos como preparados, prontos para entrar no primeiro commit."
+      ],
+      "correta": 2,
+      "explicacao": "O git init não adiciona nem registra nada: os arquivos existentes aparecem em \"Untracked files\" e o Git avisa \"No commits yet\"."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No projeto da escola, o `git branch` mostrou:\n```\n  main\n* login\n  relatorio\n```\nInterprete essa saída.\n\nNa sua resposta:\n1. diga quantas branches existem e quais são;\n2. diga em qual branch o aluno está e como você sabe.",
+      "respostasAceitas": [
+        "Existem 3 branches: main, login e relatorio. O aluno está na login, marcada com o asterisco."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) três: main, login, relatorio; 2) login, por causa do *."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Para começar a promoção de Natal, a aluna rodou `git switch -c promocao-natal`.\n\nNa sua resposta:\n1. diga o que o comando faz;\n2. diga a diferença para o comando git branch promocao-natal.",
+      "respostasAceitas": [
+        "Cria a branch promocao-natal e já passa a trabalhar nela. O git branch promocao-natal só criaria a branch, deixando a aluna na branch em que estava."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cria e troca para a branch; 2) git branch só cria, não troca."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Observe o `.gitignore` do sistema da loja:\n```\nnode_modules/\n.env\n*.log\n```\nExplique o que cada linha faz.\n\nNa sua resposta:\n1. explique a primeira linha;\n2. explique a segunda linha;\n3. explique a terceira linha.",
+      "respostasAceitas": [
+        "node_modules/: ignora a pasta de dependências do Node. .env: ignora o arquivo de configurações com senhas/chaves. *.log: ignora todos os arquivos terminados em .log (registros de execução)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) pasta node_modules; 2) arquivo .env (dados sensíveis); 3) qualquer arquivo .log. Não exigir o motivo de cada um."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na equipe da padaria, a regra é: \"funcionalidade nova se faz numa branch, nunca direto na main\".\n\nNa sua resposta:\n1. explique o que é uma branch;\n2. dê uma vantagem dessa regra.",
+      "respostasAceitas": [
+        "Branch é uma linha de desenvolvimento separada. Vantagem: a main continua funcionando enquanto a novidade é feita e testada; se der errado, a main não é afetada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) linha/ramo separado de commits; 2) proteger a main, testar sem atrapalhar, trabalhar em paralelo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Observe os comandos:\n```\ngit switch main\ngit merge cardapio\n```\nO que acontece?\n\nNa sua resposta:\n1. diga o que cada comando faz;\n2. diga o resultado final.",
+      "respostasAceitas": [
+        "O primeiro troca para a branch main. O segundo junta na main as mudanças da branch cardapio. No fim, a main passa a ter o novo cardápio."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) switch vai para a main; merge traz a cardapio para a atual; 2) main com as mudanças de cardapio."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Depois de juntar a branch `login` na main, o aluno rodou `git branch -d login`.\n\nNa sua resposta:\n1. diga o que o comando faz;\n2. diga se o trabalho feito na branch login foi perdido e por quê.",
+      "respostasAceitas": [
+        "Apaga a branch login. O trabalho não foi perdido, porque os commits dela já entraram na main pelo merge."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) apaga a branch (o nome); 2) não perde, os commits estão na main."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um tutorial usa `git checkout -b relatorio` e outro usa `git switch -c relatorio`.\n\nNa sua resposta:\n1. diga o que os dois comandos fazem;\n2. explique por que o git switch foi criado.",
+      "respostasAceitas": [
+        "Os dois criam a branch relatorio e passam para ela. O git switch foi criado porque o checkout fazia coisas demais (trocar branch e restaurar arquivos), o que confundia; o switch cuida só das branches."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) criam e trocam para a branch; 2) separar funções do checkout, deixar mais claro (switch para branches, restore para arquivos)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno fez commit do arquivo `.env`, com a senha do banco de dados do pet shop, e no commit seguinte apagou o arquivo.\n\nNa sua resposta:\n1. explique por que a senha ainda está exposta;\n2. explique o que deveria ter sido feito desde o começo.",
+      "respostasAceitas": [
+        "O commit antigo continua no histórico com o .env dentro; qualquer um com o repositório pode ver a senha nesse commit. Desde o começo, o .env deveria estar no .gitignore para nunca ser versionado (e a senha agora deveria ser trocada)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o histórico guarda o commit antigo com o arquivo; 2) colocar .env no .gitignore antes do primeiro commit. Citar troca da senha é bônus."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No projeto Node.js da clínica, a pasta `node_modules` tem milhares de arquivos e está no `.gitignore`.\n\nNa sua resposta:\n1. explique por que ela é ignorada;\n2. explique como um colega consegue essa pasta no computador dele.",
+      "respostasAceitas": [
+        "É muito grande e pode ser recriada, então não faz sentido guardar no histórico. O colega roda npm install, que baixa as dependências listadas no package.json (que é versionado)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) pasta grande, gerada automaticamente/recriável; 2) npm install a partir do package.json."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Ao rodar `git merge cadastro` na main, apareceu:\n```\nUpdating 3a1f2c0..8d4e9b7\nFast-forward\n cadastro.js | 25 +++++++++++\n```\nInterprete essa saída.\n\nNa sua resposta:\n1. explique o que significa Fast-forward;\n2. diga o que mudou na main.",
+      "respostasAceitas": [
+        "Fast-forward significa que a main não tinha commits novos desde a criação da branch, então o Git só avançou a main até o último commit de cadastro, sem commit de junção. A main recebeu as mudanças de cadastro.js (25 linhas adicionadas)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a main só foi avançada, sem commit de junção; 2) passou a ter as alterações de cadastro.js (25 linhas)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Ana fez commits do tema escuro na branch `tema-escuro`. Ao rodar `git switch main`, ela achou que tinha perdido tudo, porque o site voltou ao tema claro.\n\nNa sua resposta:\n1. explique por que as mudanças \"sumiram\";\n2. diga como levar o tema escuro para a main.",
+      "respostasAceitas": [
+        "Não sumiram: estão nos commits da branch tema-escuro. Ao trocar para a main, a pasta mostra a versão da main, que ainda não tem essas mudanças. Para levar, estando na main, roda git merge tema-escuro."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cada branch tem sua versão; a main ainda não tem os commits; 2) merge da tema-escuro estando na main."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O `.gitignore` do sistema da academia tem:\n```\n*.log\n!importante.log\n```\nExplique o efeito dessas linhas.\n\nNa sua resposta:\n1. explique a primeira linha;\n2. explique a segunda linha e o resultado final.",
+      "respostasAceitas": [
+        "A primeira ignora todos os arquivos terminados em .log. A segunda cria uma exceção: importante.log não é ignorado. Resultado: todos os .log são ignorados, menos importante.log."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ignora todos .log; 2) o ! é exceção, importante.log continua rastreado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O arquivo `config.json` já estava em vários commits. A equipe colocou `config.json` no `.gitignore`, mas o `git status` continua mostrando as alterações dele.\n\nNa sua resposta:\n1. explique por que o .gitignore não teve efeito;\n2. explique o que precisa ser feito para o Git parar de rastrear o arquivo sem apagá-lo do computador.",
+      "respostasAceitas": [
+        "O .gitignore só vale para arquivos que ainda não são rastreados; config.json já era rastreado. É preciso rodar git rm --cached config.json e fazer commit: o arquivo deixa de ser rastreado, continua no disco e passa a ser ignorado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) arquivo já rastreado não é afetado pelo .gitignore; 2) git rm --cached + commit. Aceitar descrição equivalente (\"tirar do controle do Git sem apagar\")."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Bruno queria levar a branch `promocao` para a main. Ele estava na branch `promocao` e rodou `git merge main`.\n\nNa sua resposta:\n1. explique o que realmente aconteceu;\n2. explique o que ele deveria ter feito.",
+      "respostasAceitas": [
+        "Ele trouxe as mudanças da main para a branch promocao; a main continuou igual. O merge sempre junta na branch atual. Ele deveria ter ido para a main (git switch main) e rodado git merge promocao."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a promocao recebeu a main, a main não mudou; 2) trocar para a main e fazer merge da promocao."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Git — controle de versões",
+      "capacidade": "lpa.ct14",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Observe o fluxo usado no sistema da loja:\n```\ngit switch -c desconto\n(edita desconto.js)\ngit add desconto.js\ngit commit -m \"Adiciona desconto progressivo\"\ngit switch main\ngit merge desconto\ngit branch -d desconto\n```\nExplique esse fluxo.\n\nNa sua resposta:\n1. explique para que servem a criação da branch e o commit;\n2. explique para que servem o merge e o git branch -d;\n3. diga como fica a main no final.",
+      "respostasAceitas": [
+        "Cria a branch desconto para trabalhar separado da main e registra a mudança em desconto.js num commit. Depois volta para a main e junta a branch nela; como a branch já foi juntada, ela é apagada. No final, a main tem o desconto progressivo e a branch não existe mais."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) branch isola o trabalho, commit registra a mudança; 2) merge leva para a main, -d apaga a branch já juntada; 3) main com o desconto, sem a branch."
+    }
+  ]
+}
