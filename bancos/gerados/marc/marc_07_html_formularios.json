@@ -1,0 +1,2503 @@
+{
+  "nome": "Linguagem de Marcação — HTML: formulários (a revisar)",
+  "materia": "Linguagem de Marcação",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na página de uma padaria há o trecho `<form action=\"encomenda.php\" method=\"post\">`. O que o atributo `action` informa?",
+      "alternativas": [
+        "Para onde os dados vão ao serem enviados",
+        "Qual botão envia os dados do formulário",
+        "Qual cor o formulário terá na página",
+        "Quantos campos o formulário pode ter"
+      ],
+      "correta": 0,
+      "explicacao": "action indica o endereço (página ou script) que vai receber os dados quando o formulário for enviado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um formulário de busca de livros da biblioteca usa `<form action=\"busca.php\" method=\"get\">`. Onde os dados digitados aparecem ao enviar?",
+      "alternativas": [
+        "Escondidos no corpo da requisição",
+        "Numa janela de alerta do navegador",
+        "Na barra de endereço, depois do sinal ?",
+        "Gravados direto num arquivo do servidor"
+      ],
+      "correta": 2,
+      "explicacao": "Com GET os dados vão na URL (query string), por exemplo busca.php?titulo=Dom+Casmurro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma academia tem uma tela de login com usuário e senha. Qual `method` é o mais indicado para esse `<form>`?",
+      "alternativas": [
+        "get, para a senha ficar salva no histórico",
+        "post, para os dados não aparecerem na URL",
+        "get, porque é o único que envia senha",
+        "post, porque deixa o site mais rápido"
+      ],
+      "correta": 1,
+      "explicacao": "POST envia os dados no corpo da requisição; com GET a senha apareceria na URL e no histórico do navegador."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cadastro da clínica há o campo `<input type=\"text\" id=\"nome\">`, sem o atributo `name`. O que acontece com o valor digitado ao enviar o formulário?",
+      "alternativas": [
+        "É enviado com o nome \"nome\", tirado do id",
+        "É enviado com o nome \"text\", tirado do type",
+        "O formulário não deixa enviar e mostra um erro",
+        "Não é enviado, porque o campo não tem name"
+      ],
+      "correta": 3,
+      "explicacao": "Só campos com name entram nos dados enviados. O id serve para label, CSS e JavaScript, não para o envio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "email-basico",
+      "enunciado": "No cadastro de um pet shop aparece `<input type=\"email\" name=\"email\">`. O que esse type faz de diferente de `type=\"text\"`?",
+      "alternativas": [
+        "O navegador envia uma mensagem para o endereço",
+        "O campo passa a esconder os caracteres digitados",
+        "O campo só aceita letras minúsculas e números",
+        "O navegador confere o formato de e-mail"
+      ],
+      "correta": 3,
+      "explicacao": "type=\"email\" ativa a validação nativa do formato (algo@algo) e, no celular, mostra um teclado com @."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual campo é o certo para o cliente digitar a senha na área do cliente de um hotel, mostrando bolinhas no lugar das letras?",
+      "alternativas": [
+        "`<input type=\"hidden\" name=\"senha\">`",
+        "`<input type=\"password\" name=\"senha\">`",
+        "`<input type=\"secret\" name=\"senha\">`",
+        "`<input type=\"text\" name=\"senha\" hide>`"
+      ],
+      "correta": 1,
+      "explicacao": "type=\"password\" mascara o texto na tela. hidden não aparece para o usuário, e secret e hide não existem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na ficha de matrícula de uma escola, o campo de data de nascimento é `<input type=\"date\" name=\"nascimento\">`. O que o aluno vê na maioria dos navegadores?",
+      "alternativas": [
+        "Um campo com seletor de calendário",
+        "Uma caixa de texto livre sem ajuda",
+        "Três listas: dia, mês e ano separadas",
+        "Um relógio para escolher a hora"
+      ],
+      "correta": 0,
+      "explicacao": "type=\"date\" mostra um seletor de data (calendário) e envia o valor no formato aaaa-mm-dd."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma loja de games quer que o cliente escolha a quantidade de controles com setinhas para subir e descer. Qual type de input usar?",
+      "alternativas": [
+        "range",
+        "text",
+        "number",
+        "tel"
+      ],
+      "correta": 2,
+      "explicacao": "type=\"number\" aceita só números e mostra setas de incremento. range mostra uma barra deslizante."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No formulário de avaliação de um cinema há `<input type=\"range\" name=\"nota\" min=\"0\" max=\"10\">`. Como esse campo aparece?",
+      "alternativas": [
+        "Como uma caixa onde se digita a nota",
+        "Como dez botões de opção lado a lado",
+        "Como uma barra deslizante de valores",
+        "Como uma lista que abre para baixo"
+      ],
+      "correta": 2,
+      "explicacao": "range mostra um controle deslizante entre min e max; o valor exato não aparece escrito por padrão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma gráfica quer que o cliente escolha a cor do convite numa paleta. Qual campo faz isso?",
+      "alternativas": [
+        "`<input type=\"color\" name=\"cor\">`",
+        "`<input type=\"palette\" name=\"cor\">`",
+        "`<input type=\"range\" name=\"cor\">`",
+        "`<input type=\"text\" name=\"cor\" color>`"
+      ],
+      "correta": 0,
+      "explicacao": "type=\"color\" abre o seletor de cores do sistema e envia o valor como #rrggbb."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na página de uma oficina, o cliente precisa anexar a foto do carro. Qual input permite escolher um arquivo do computador ou do celular?",
+      "alternativas": [
+        "`<input type=\"image\" name=\"foto\">`",
+        "`<input type=\"upload\" name=\"foto\">`",
+        "`<input type=\"photo\" name=\"foto\">`",
+        "`<input type=\"file\" name=\"foto\">`"
+      ],
+      "correta": 3,
+      "explicacao": "type=\"file\" abre a janela para escolher arquivos. type=\"image\" é um botão de envio em forma de imagem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "hidden-basico",
+      "enunciado": "O que faz o campo `<input type=\"hidden\" name=\"loja\" value=\"centro\">` num formulário de pedido?",
+      "alternativas": [
+        "Mostra a palavra centro em cinza dentro do campo",
+        "Envia loja=centro sem mostrar o campo na tela",
+        "Impede que o pedido seja enviado para a loja",
+        "Cria um campo que só aparece ao passar o mouse"
+      ],
+      "correta": 1,
+      "explicacao": "hidden não aparece na página, mas o par name=value vai junto com os outros dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No cadastro de uma clínica, qual type de input faz o celular abrir o teclado numérico de telefone?",
+      "alternativas": [
+        "number",
+        "tel",
+        "phone",
+        "celular"
+      ],
+      "correta": 1,
+      "explicacao": "type=\"tel\" mostra o teclado de telefone no celular. phone e celular não existem como type."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa pesquisa de satisfação do restaurante, o campo `<input type=\"text\" name=\"prato\" value=\"Feijoada\">` aparece assim ao abrir a página:",
+      "alternativas": [
+        "Vazio, com Feijoada aparecendo só ao enviar",
+        "Com Feijoada em cinza que some ao digitar",
+        "Travado com Feijoada, sem poder alterar",
+        "Já preenchido com Feijoada, podendo editar"
+      ],
+      "correta": 3,
+      "explicacao": "value define o valor inicial do campo. O texto cinza que some ao digitar é o placeholder."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "url-get",
+      "enunciado": "Um formulário de busca de uma pet shop é `<form action=\"busca.php\" method=\"get\">` com `<input name=\"raca\">` e `<input name=\"porte\">`. A pessoa digita Poodle e pequeno. Qual endereço é aberto?",
+      "alternativas": [
+        "busca.php/raca/Poodle/porte/pequeno",
+        "busca.php?Poodle&pequeno",
+        "busca.php?raca=Poodle&porte=pequeno",
+        "busca.php#raca=Poodle,porte=pequeno"
+      ],
+      "correta": 2,
+      "explicacao": "GET monta a query string: ? depois do action e pares name=valor separados por &."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno escreveu `<form action=\"salvar.php\">`, sem o atributo `method`. Qual método o navegador usa?",
+      "alternativas": [
+        "GET, que é o padrão",
+        "POST, que é o padrão",
+        "Nenhum: o formulário não é enviado",
+        "O navegador pergunta ao usuário"
+      ],
+      "correta": 0,
+      "explicacao": "Sem method, o formulário usa GET."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um formulário sem o atributo `action` é enviado. Para onde vão os dados?",
+      "alternativas": [
+        "Para a própria página do formulário",
+        "Para a página inicial do site",
+        "Para lugar nenhum: o envio é cancelado",
+        "Para o e-mail do dono do site"
+      ],
+      "correta": 0,
+      "explicacao": "Sem action, o navegador envia para a URL da própria página."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "file-enctype",
+      "enunciado": "A secretaria da escola quer que o professor envie a planilha de notas por um formulário com `<input type=\"file\" name=\"planilha\">`. O que precisa estar no `<form>` para o arquivo chegar ao servidor?",
+      "alternativas": [
+        "method=\"get\" e enctype=\"text/plain\"",
+        "method=\"file\" e action=\"upload\"",
+        "method=\"post\" e enctype=\"multipart/form-data\"",
+        "Nada: o type=\"file\" já resolve sozinho"
+      ],
+      "correta": 2,
+      "explicacao": "Para enviar o conteúdo do arquivo é preciso POST com enctype multipart/form-data; sem isso só o nome do arquivo seria enviado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "disabled-readonly",
+      "enunciado": "Num formulário de uma loja, o campo `<input type=\"text\" name=\"cupom\" disabled value=\"PROMO10\">` está dentro do `<form>`. Ao enviar, o que acontece com o cupom?",
+      "alternativas": [
+        "É enviado normalmente como cupom=PROMO10",
+        "Não é enviado, pois está disabled",
+        "É enviado vazio, como cupom=",
+        "O formulário inteiro fica bloqueado"
+      ],
+      "correta": 1,
+      "explicacao": "Campos disabled não podem ser editados nem são enviados. Para mostrar travado e enviar, usa-se readonly."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "disabled-readonly",
+      "enunciado": "Na reserva de um hotel há `<input type=\"text\" name=\"quarto\" value=\"204\" readonly>`. Qual é o efeito?",
+      "alternativas": [
+        "O campo some da tela, mas o valor é enviado",
+        "O hóspede edita o campo, mas o valor não é enviado",
+        "O campo não é editado nem enviado",
+        "O hóspede não edita o campo, mas o valor é enviado"
+      ],
+      "correta": 3,
+      "explicacao": "readonly impede a edição pelo usuário e o valor continua sendo enviado (diferente de disabled)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "number-minmax",
+      "enunciado": "No pedido de uma pizzaria, `<input type=\"number\" name=\"qtd\" min=\"1\" max=\"5\">` recebe o valor 8 e o cliente clica em enviar. O que o navegador faz?",
+      "alternativas": [
+        "Envia 5 no lugar de 8 sem avisar",
+        "Envia 8 e deixa o servidor decidir",
+        "Apaga o campo e envia vazio",
+        "Bloqueia o envio e mostra um aviso"
+      ],
+      "correta": 3,
+      "explicacao": "max é uma validação nativa: valor acima do máximo impede o envio e mostra mensagem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num formulário de frete, o campo `<input type=\"number\" name=\"peso\" step=\"0.1\">` está presente. Qual valor o navegador aceita?",
+      "alternativas": [
+        "2.55",
+        "2.5",
+        "dois e meio",
+        "2,5 kg"
+      ],
+      "correta": 1,
+      "explicacao": "step=\"0.1\" aceita números de uma casa decimal; 2.55 quebra o passo. Texto não é aceito em number."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num formulário de evento, `<input type=\"date\" name=\"dia\" min=\"2026-12-01\">`. Qual data o navegador bloqueia?",
+      "alternativas": [
+        "2026-11-30",
+        "2026-12-01",
+        "2026-12-15",
+        "2027-01-10"
+      ],
+      "correta": 0,
+      "explicacao": "min define a data mínima. 30/11/2026 é anterior a 01/12/2026, então é inválida."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na página de inscrição de uma academia, o campo `<input type=\"range\" name=\"intensidade\">` não tem min, max nem value. Que valor vai se o aluno não mexer na barra?",
+      "alternativas": [
+        "0",
+        "100",
+        "50",
+        "Nada é enviado"
+      ],
+      "correta": 2,
+      "explicacao": "range tem min 0 e max 100 por padrão, e o valor inicial fica no meio: 50."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O campo `<input type=\"color\" name=\"tema\">` sem value é enviado sem que o usuário escolha nada. Qual valor vai?",
+      "alternativas": [
+        "#ffffff",
+        "vazio",
+        "#000000",
+        "transparent"
+      ],
+      "correta": 2,
+      "explicacao": "O valor padrão do input color é preto, #000000."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "hidden-inseguro",
+      "enunciado": "Uma biblioteca usa `<input type=\"hidden\" name=\"preco\" value=\"0\">` para registrar que o empréstimo é grátis. Por que isso não é seguro como única garantia?",
+      "alternativas": [
+        "O usuário pode mudar o valor no navegador",
+        "O hidden apaga o valor antes de enviar",
+        "O hidden só funciona com method get",
+        "O servidor não consegue ler campos hidden"
+      ],
+      "correta": 0,
+      "explicacao": "hidden só esconde da tela. O valor está no HTML e pode ser alterado; o servidor precisa conferir."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num formulário de uma lanchonete enviado com GET, o campo `<input name=\"obs\">` recebe o texto sem cebola. Como esse texto costuma aparecer na URL?",
+      "alternativas": [
+        "obs=sem cebola",
+        "obs=\"sem cebola\"",
+        "obs=sem/cebola",
+        "obs=sem+cebola"
+      ],
+      "correta": 3,
+      "explicacao": "Na query string os espaços são codificados, normalmente como + (ou %20)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em `<input type=\"email\" name=\"contato\" multiple>`, o que o atributo `multiple` permite?",
+      "alternativas": [
+        "Criar vários campos de e-mail na tela",
+        "Digitar vários e-mails, com vírgula",
+        "Enviar o formulário para vários servidores",
+        "Aceitar qualquer texto, mesmo sem @"
+      ],
+      "correta": 1,
+      "explicacao": "Em type=\"email\", multiple aceita uma lista de endereços separados por vírgula, cada um validado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "maxlength-number",
+      "enunciado": "Um aluno quer limitar o CEP a 8 dígitos e escreveu `<input type=\"number\" name=\"cep\" maxlength=\"8\">`. O que acontece?",
+      "alternativas": [
+        "O campo aceita no máximo o número 8",
+        "maxlength é ignorado em number",
+        "O campo aceita exatamente 8 dígitos",
+        "O navegador troca o type para text sozinho"
+      ],
+      "correta": 1,
+      "explicacao": "maxlength só vale para campos de texto (text, tel, email, password…). Em number ele é ignorado; para CEP o melhor é text/tel com pattern."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "get-post-uso",
+      "enunciado": "Na loja de games, um formulário de busca usa GET e o de compra usa POST. Por que essa divisão faz sentido?",
+      "alternativas": [
+        "Busca é mais rápida com GET e compra só funciona com POST",
+        "GET não envia texto e POST não envia números",
+        "GET é para celular e POST é para computador",
+        "Busca é só consulta e a compra altera dados"
+      ],
+      "correta": 3,
+      "explicacao": "GET é bom para consultas (URL favoritável, sem efeito colateral). POST é usado quando o envio altera algo no servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "senha-get",
+      "enunciado": "Uma clínica usa `<form action=\"login.php\" method=\"get\">` com `<input type=\"password\" name=\"senha\">`. Qual é o problema principal?",
+      "alternativas": [
+        "O type password não funciona com o método get",
+        "A senha é enviada criptografada e o servidor não lê",
+        "A senha fica visível na URL e no histórico",
+        "O navegador bloqueia formulários com senha via get"
+      ],
+      "correta": 2,
+      "explicacao": "password só esconde na tela; com GET a senha vai na URL e fica gravada em histórico e logs."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "file-enctype",
+      "enunciado": "Um formulário tem `<input type=\"file\" name=\"laudo\">` mas o `<form>` só tem `method=\"post\"`, sem `enctype`. O que o servidor recebe?",
+      "alternativas": [
+        "Só o nome do arquivo, sem conteúdo",
+        "O arquivo completo normalmente",
+        "Nada: o formulário não é enviado",
+        "O arquivo convertido em texto"
+      ],
+      "correta": 0,
+      "explicacao": "Sem enctype=\"multipart/form-data\", o envio usa o formato padrão e manda só o nome do arquivo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O trecho é `<input type=\"number\" name=\"idade\" pattern=\"[0-9]{2}\">`. O que o `pattern` faz aqui?",
+      "alternativas": [
+        "Nada: pattern não vale para number",
+        "Obriga a idade a ter exatamente 2 dígitos",
+        "Aceita só os números 0 e 9",
+        "Bloqueia qualquer idade acima de 29"
+      ],
+      "correta": 0,
+      "explicacao": "pattern vale para text, tel, email, url, password e search. Em number ele é ignorado; usa-se min e max."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um formulário de sorteio tem `<input type=\"text\" name=\"cpf\" value=\"\">` e o usuário não digita nada. Ao enviar com GET, o que aparece na URL para esse campo?",
+      "alternativas": [
+        "Nada: campo vazio nunca é enviado",
+        "cpf=null",
+        "cpf= (nome com valor vazio)",
+        "cpf=undefined"
+      ],
+      "correta": 2,
+      "explicacao": "Campo de texto com name é sempre enviado, mesmo vazio. Quem some quando não marcado é checkbox/radio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na loja, `<input type=\"file\" name=\"fotos\" accept=\"image/*\" multiple>`. O que esse campo permite?",
+      "alternativas": [
+        "Escolher uma imagem e redimensionar antes de enviar",
+        "Escolher vários arquivos, filtrando imagens",
+        "Enviar fotos sem precisar de method post",
+        "Escolher qualquer arquivo e convertê-lo em imagem"
+      ],
+      "correta": 1,
+      "explicacao": "accept filtra o tipo sugerido no seletor e multiple permite escolher vários arquivos. Ainda precisa de POST e multipart."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O formulário de pedido de uma sorveteria tem o campo `<input type=\"text\" name=\"sabor\" value=\"Morango\">`. Explique o papel dos atributos name e value nesse campo.\n\nNa sua resposta:\n1. diga para que serve o name;\n2. diga o que o value faz e o que é enviado se o cliente não mudar nada.",
+      "respostasAceitas": [
+        "name é o nome do dado no envio (o servidor recebe sabor=…). value é o valor inicial: o campo já abre com Morango. Se o cliente não mudar, é enviado sabor=Morango."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) name identifica o dado enviado; 2) value = valor inicial; envia sabor=Morango."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na página de uma padaria, o campo `<input type=\"text\" id=\"cliente\">` está dentro do `<form>`, mas o dono diz que o nome do cliente nunca chega ao servidor. Por que isso acontece?\n\nNa sua resposta:\n1. diga qual atributo está faltando;\n2. explique para que serve esse atributo no envio.",
+      "respostasAceitas": [
+        "Falta o atributo name. O navegador só envia campos com name, no formato name=valor; o id não serve para o envio."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) falta name; 2) name é o nome do dado enviado (par name=valor); sem ele o campo é ignorado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Compare os campos `<input type=\"text\" name=\"senha\">` e `<input type=\"password\" name=\"senha\">` na tela de login de uma academia.\n\nNa sua resposta:\n1. diga o que muda para quem está digitando;\n2. diga se o type password protege a senha durante o envio.",
+      "respostasAceitas": [
+        "Com password os caracteres aparecem como bolinhas, então quem olha a tela não vê. Mas o valor é enviado igual; o type não criptografa nada (a proteção no envio vem do HTTPS)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) password mascara na tela; 2) não protege o envio, só esconde na tela."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "email-basico",
+      "enunciado": "Na ficha de cadastro de uma clínica veterinária, o desenvolvedor trocou `<input type=\"text\" name=\"email\">` por `<input type=\"email\" name=\"email\">`. Que vantagens essa troca traz?\n\nNa sua resposta:\n1. cite o que o navegador passa a conferir;\n2. cite uma vantagem para quem usa celular.",
+      "respostasAceitas": [
+        "O navegador passa a verificar se o texto tem formato de e-mail antes de enviar. No celular, aparece um teclado com @ e ponto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) validação do formato; 2) teclado próprio para e-mail no celular."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "hidden-basico",
+      "enunciado": "Um formulário de pedido de uma lanchonete tem `<input type=\"hidden\" name=\"unidade\" value=\"centro\">`. Para que serve esse campo?\n\nNa sua resposta:\n1. diga se o cliente vê esse campo na página;\n2. diga o que é enviado ao servidor por causa dele.",
+      "respostasAceitas": [
+        "O cliente não vê o campo. Mesmo assim, ao enviar, vai junto unidade=centro, indicando de qual unidade veio o pedido."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) não aparece na tela; 2) envia unidade=centro junto com os outros dados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "number-minmax",
+      "enunciado": "Uma livraria tem o campo `<input type=\"number\" name=\"exemplares\" min=\"1\" max=\"3\">` no formulário de reserva. O que esse trecho define?\n\nNa sua resposta:\n1. diga que tipo de valor o campo aceita;\n2. explique o papel de min e max.",
+      "respostasAceitas": [
+        "O campo aceita só números. min=1 e max=3 limitam a quantidade: o navegador não envia se o valor for menor que 1 ou maior que 3."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só números; 2) min e max são o menor e o maior valor permitidos, conferidos antes do envio."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "get-post-uso",
+      "enunciado": "Uma loja de roupas tem dois formulários: `<form action=\"busca.php\" method=\"get\">` para pesquisar produtos e `<form action=\"pagar.php\" method=\"post\">` para pagamento. Por que cada um usa um método diferente?\n\nNa sua resposta:\n1. explique onde os dados ficam em cada método;\n2. justifique a escolha de get para a busca e de post para o pagamento.",
+      "respostasAceitas": [
+        "GET coloca os dados na URL; POST manda no corpo da requisição. A busca pode usar GET porque é só consulta e a URL pode ser salva ou compartilhada. O pagamento usa POST porque altera dados e tem informação sensível que não deve aparecer na URL."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) GET na URL, POST no corpo; 2) busca = consulta compartilhável; pagamento = altera dados e é sensível."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "url-get",
+      "enunciado": "Ao enviar a busca de um cinema, abriu o endereço `filmes.php?genero=terror&sessao=noite`. Interprete essa URL.\n\nNa sua resposta:\n1. diga qual método o formulário usou;\n2. diga quais campos (name) e valores foram enviados.",
+      "respostasAceitas": [
+        "Foi usado GET, porque os dados aparecem na URL depois do ?. Foram enviados o campo genero com valor terror e o campo sessao com valor noite."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) GET; 2) genero=terror e sessao=noite (pares name=valor separados por &)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "disabled-readonly",
+      "enunciado": "Num cadastro de hotel há `<input name=\"cidade\" value=\"Santos\" readonly>` e `<input name=\"estado\" value=\"SP\" disabled>`. Compare os dois campos.\n\nNa sua resposta:\n1. diga se o hóspede pode editar cada campo;\n2. diga quais deles são enviados ao servidor.",
+      "respostasAceitas": [
+        "Nenhum dos dois pode ser editado pelo hóspede. O readonly (cidade) é enviado; o disabled (estado) não é enviado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) os dois travam a edição; 2) readonly é enviado, disabled não."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "file-enctype",
+      "enunciado": "A escola criou um formulário para o aluno enviar o trabalho em PDF: `<form action=\"enviar.php\" method=\"post\">` com `<input type=\"file\" name=\"trabalho\">`. O professor diz que só chega o nome do arquivo. Explique o problema.\n\nNa sua resposta:\n1. diga o que está faltando no form;\n2. explique por que o arquivo não chega sem isso.",
+      "respostasAceitas": [
+        "Falta enctype=\"multipart/form-data\" no form. Sem ele, o formulário usa a codificação padrão, que só envia texto, então vai apenas o nome do arquivo e não o conteúdo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) falta enctype multipart/form-data; 2) a codificação padrão só manda texto/nome do arquivo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "hidden-inseguro",
+      "enunciado": "Uma doceria guarda o preço do bolo em `<input type=\"hidden\" name=\"preco\" value=\"45.00\">` e o servidor usa esse valor para cobrar. Analise essa decisão.\n\nNa sua resposta:\n1. explique por que isso é arriscado;\n2. diga como o servidor deveria obter o preço.",
+      "respostasAceitas": [
+        "O hidden só some da tela; qualquer pessoa pode mudar o valor pelas ferramentas do navegador e pagar menos. O servidor deve buscar o preço no próprio banco de dados pelo código do produto, sem confiar no valor enviado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o usuário pode alterar o hidden; 2) o servidor busca o preço no banco a partir do id do produto."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma academia trocou o campo de peso `<input type=\"text\" name=\"peso\">` por `<input type=\"number\" name=\"peso\" min=\"30\" max=\"200\" step=\"0.1\">`. O que muda com essa troca?\n\nNa sua resposta:\n1. diga o que o campo passa a aceitar;\n2. explique o papel do step=\"0.1\".",
+      "respostasAceitas": [
+        "O campo passa a aceitar só números entre 30 e 200, conferidos pelo navegador antes de enviar. O step 0.1 permite uma casa decimal (ex.: 72.5) e recusa valores como 72.55."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só números de 30 a 200; 2) step define o passo, aceitando uma casa decimal."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "maxlength-number",
+      "enunciado": "Um aluno quer limitar o CEP de um cadastro e escreveu `<input type=\"number\" name=\"cep\" maxlength=\"8\">`. Na prática, o campo aceita mais de 8 dígitos e apaga o zero do começo de CEPs como 01310-100. Explique o que está errado.\n\nNa sua resposta:\n1. explique por que o maxlength não funciona aqui;\n2. explique por que number não é um bom type para CEP e diga um type melhor.",
+      "respostasAceitas": [
+        "maxlength só vale para campos de texto; em number é ignorado. CEP não é uma quantidade: não se faz conta com ele, pode começar com zero e ter hífen. O melhor é type text (ou tel) com maxlength/pattern."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) maxlength é ignorado em number; 2) CEP é código, não número para cálculo; usar text ou tel com pattern."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "senha-get",
+      "enunciado": "Na página de login de uma clínica, o formulário é `<form action=\"entrar.php\" method=\"get\">` e a página não usa HTTPS. Um colega diz: \"Tudo bem, o campo é type password, a senha fica protegida\". Avalie essa afirmação.\n\nNa sua resposta:\n1. explique o que o type password protege e o que não protege;\n2. explique os dois problemas desse formulário e como corrigi-los.",
+      "respostasAceitas": [
+        "O password só esconde os caracteres na tela. Com GET a senha vai na URL e fica no histórico e nos registros; sem HTTPS ela trafega sem criptografia. O certo é usar method post e HTTPS."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) password só mascara na tela; 2) GET expõe na URL e sem HTTPS trafega aberto; corrigir com post + HTTPS."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "checkbox-desmarcado",
+      "enunciado": "Um formulário de sorteio de uma loja tem `<input type=\"text\" name=\"nome\">` e `<input type=\"checkbox\" name=\"newsletter\" value=\"sim\">`. O cliente deixa o nome vazio e não marca a caixa. Ao enviar com GET, a URL fica `sorteio.php?nome=`. Explique esse resultado.\n\nNa sua resposta:\n1. explique por que nome aparece mesmo vazio;\n2. explique por que newsletter não aparece.",
+      "respostasAceitas": [
+        "Campo de texto com name é sempre enviado, mesmo sem valor, por isso aparece nome=. Checkbox só é enviado quando está marcado; como não foi marcado, newsletter não vai."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) texto com name sempre vai, mesmo vazio; 2) checkbox desmarcado não é enviado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "label-basico",
+      "enunciado": "No cadastro de uma biblioteca há `<label for=\"leitor\">Nome do leitor</label>` e `<input type=\"text\" id=\"leitor\" name=\"leitor\">`. O que liga o label ao campo?",
+      "alternativas": [
+        "O texto do label igual ao name do input",
+        "O label estar escrito antes do input",
+        "O for do label igual ao type do input",
+        "O for do label igual ao id do input"
+      ],
+      "correta": 3,
+      "explicacao": "O atributo for do label aponta para o id do campo. É isso que faz a ligação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num formulário de uma pet shop, o texto Nome do pet está num `<label>` ligado ao campo. O que acontece quando a pessoa clica nesse texto?",
+      "alternativas": [
+        "O formulário é enviado na hora",
+        "O texto do label é copiado para o campo",
+        "O campo ligado ao label é apagado",
+        "O cursor vai para o campo ligado"
+      ],
+      "correta": 3,
+      "explicacao": "Clicar no label coloca o foco no campo ligado (ou marca o checkbox/radio), o que facilita o uso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No campo `<input type=\"text\" name=\"busca\" placeholder=\"Digite o nome do filme\">` do site de um cinema, o que é o placeholder?",
+      "alternativas": [
+        "O valor que é enviado se o campo ficar vazio",
+        "Uma dica que some ao começar a digitar",
+        "O nome do campo usado no envio dos dados",
+        "Um texto fixo que aparece acima do campo"
+      ],
+      "correta": 1,
+      "explicacao": "placeholder é só uma dica dentro do campo vazio; não é enviado e some ao digitar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "required-basico",
+      "enunciado": "No agendamento de uma clínica, o campo `<input type=\"text\" name=\"paciente\" required>` é deixado vazio e o usuário clica em enviar. O que acontece?",
+      "alternativas": [
+        "O navegador impede o envio e avisa",
+        "O formulário é enviado com o campo vazio",
+        "O campo é preenchido com a palavra required",
+        "A página é recarregada e os dados somem"
+      ],
+      "correta": 0,
+      "explicacao": "required torna o campo obrigatório na validação nativa do navegador."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual elemento cria uma lista que abre para escolher o estado (SP, RJ, MG…) no cadastro de uma loja?",
+      "alternativas": [
+        "`<input type=\"list\">` com vários `<item>`",
+        "`<textarea>` com vários `<option>`",
+        "`<select>` com vários `<option>`",
+        "`<fieldset>` com vários `<legend>`"
+      ],
+      "correta": 2,
+      "explicacao": "select cria a caixa de seleção e cada option é uma escolha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para o cliente de uma oficina escrever uma descrição longa do problema do carro, em várias linhas, qual elemento usar?",
+      "alternativas": [
+        "`<input type=\"text\">`",
+        "`<input type=\"long\">`",
+        "`<textarea>`",
+        "`<label>`"
+      ],
+      "correta": 2,
+      "explicacao": "textarea é o campo de texto com várias linhas. input text tem uma linha só."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O campo `<input type=\"text\" name=\"apelido\" maxlength=\"10\">` está no cadastro de uma lan house. O que o `maxlength` faz?",
+      "alternativas": [
+        "Limita o campo a 10 caracteres",
+        "Exige no mínimo 10 caracteres",
+        "Aceita só apelidos com número 10",
+        "Deixa o campo com 10 cm de largura"
+      ],
+      "correta": 0,
+      "explicacao": "maxlength limita a quantidade máxima de caracteres que podem ser digitados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "option-value",
+      "enunciado": "Numa lista de sabores de sorvete, `<option value=\"choc\">Chocolate</option>` é escolhida. O que vai para o servidor?",
+      "alternativas": [
+        "O texto: Chocolate",
+        "Os dois: choc e Chocolate",
+        "A posição da opção na lista",
+        "O value, choc"
+      ],
+      "correta": 3,
+      "explicacao": "Quando o option tem value, é ele que vai no envio; o texto é só o que a pessoa vê."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No `<select name=\"turno\">` de uma escola, qual atributo faz a opção Manhã já vir escolhida ao abrir a página?",
+      "alternativas": [
+        "`checked` na `<option>` de Manhã",
+        "`selected` na `<option>` de Manhã",
+        "`value` no `<select>`",
+        "`required` na `<option>` de Manhã"
+      ],
+      "correta": 1,
+      "explicacao": "selected marca a opção inicial do select. checked é usado em radio e checkbox."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na ficha de um hotel, a textarea de observações deve começar com 4 linhas visíveis. Qual atributo faz isso?",
+      "alternativas": [
+        "lines=\"4\"",
+        "rows=\"4\"",
+        "cols=\"4\"",
+        "maxlength=\"4\""
+      ],
+      "correta": 1,
+      "explicacao": "rows define quantas linhas aparecem; cols define a largura em caracteres."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que é importante ligar cada `<label>` ao seu campo num formulário?",
+      "alternativas": [
+        "O formulário passa a ser enviado mais rápido",
+        "O campo passa a ser obrigatório",
+        "O label passa a ser enviado ao servidor",
+        "O leitor de tela anuncia o campo certo"
+      ],
+      "correta": 3,
+      "explicacao": "A ligação label-campo informa a quem usa leitor de tela o que o campo pede e aumenta a área de clique."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cadastro de academia, o campo é `<input type=\"password\" name=\"senha\" minlength=\"6\">`. O que o navegador exige?",
+      "alternativas": [
+        "No máximo 6 caracteres na senha",
+        "Exatamente 6 números na senha",
+        "Pelo menos 6 caracteres na senha",
+        "Que a senha tenha 6 letras maiúsculas"
+      ],
+      "correta": 2,
+      "explicacao": "minlength define a quantidade mínima de caracteres, conferida antes do envio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "optgroup",
+      "enunciado": "Num `<select>` de cidades, o que faz o elemento `<optgroup label=\"Litoral\">`?",
+      "alternativas": [
+        "Agrupa opções sob um título",
+        "Cria uma opção chamada Litoral",
+        "Envia Litoral junto com a cidade",
+        "Esconde as opções do litoral"
+      ],
+      "correta": 0,
+      "explicacao": "optgroup agrupa options com um título; o título não pode ser escolhido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma forma de ligar o label ao campo sem usar for e id é:",
+      "alternativas": [
+        "Colocar o input dentro do label",
+        "Colocar o label depois do input",
+        "Dar ao label o mesmo name do input",
+        "Colocar o label dentro do input"
+      ],
+      "correta": 0,
+      "explicacao": "O input dentro do label cria a ligação implícita: `<label>Nome <input name=\"nome\"></label>`."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "label-for-id",
+      "enunciado": "Um aluno escreveu `<label for=\"email\">E-mail</label>` e `<input type=\"email\" name=\"email\" id=\"mail\">`. Ao clicar no texto E-mail, o cursor não vai para o campo. Por quê?",
+      "alternativas": [
+        "O for deveria apontar para o type do campo",
+        "O label precisa ficar depois do input",
+        "O for é email, mas o id é mail",
+        "O type email não aceita ser ligado a label"
+      ],
+      "correta": 2,
+      "explicacao": "for deve ser igual ao id do campo, não ao name. Aqui for=\"email\" e id=\"mail\" não batem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "placeholder-label",
+      "enunciado": "O formulário de uma lanchonete tem só campos com placeholder e nenhum label. Qual é o problema?",
+      "alternativas": [
+        "O placeholder é enviado junto e suja os dados",
+        "A dica some ao digitar e a pessoa se perde",
+        "O placeholder impede o uso de required",
+        "Campos com placeholder não podem ter name"
+      ],
+      "correta": 1,
+      "explicacao": "placeholder some ao digitar, costuma ter pouco contraste e não substitui o label para leitores de tela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No cadastro de uma loja, `<input type=\"text\" name=\"cep\" pattern=\"[0-9]{5}-[0-9]{3}\">`. Qual valor passa na validação?",
+      "alternativas": [
+        "01310100",
+        "0131-0100",
+        "01310-10a",
+        "01310-100"
+      ],
+      "correta": 3,
+      "explicacao": "O pattern pede 5 dígitos, hífen e 3 dígitos, cobrindo o valor inteiro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na escola, `<input type=\"text\" name=\"turma\" pattern=\"[A-Z]{2}\">`. O aluno digita DSA. O que acontece?",
+      "alternativas": [
+        "É aceito, porque as duas primeiras letras batem",
+        "É aceito, porque pattern só olha letras maiúsculas",
+        "É convertido para DS automaticamente",
+        "É recusado: o pattern vale para o valor todo"
+      ],
+      "correta": 3,
+      "explicacao": "O pattern precisa casar com o valor completo: [A-Z]{2} aceita exatamente 2 letras maiúsculas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "select-vazio",
+      "enunciado": "Num select obrigatório de tamanho de camiseta, a primeira opção é `<option value=\"\">Escolha...</option>` e o select tem `required`. Se o cliente não mudar nada:",
+      "alternativas": [
+        "É enviado Escolha... como tamanho",
+        "O envio é bloqueado pelo required",
+        "É enviado o primeiro tamanho real da lista",
+        "O select fica sem opções e o envio continua"
+      ],
+      "correta": 1,
+      "explicacao": "Com required, a opção de value vazio funciona como placeholder do select e impede o envio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A opção `<option>Margherita</option>` não tem atributo value. Se for escolhida, o que é enviado?",
+      "alternativas": [
+        "O texto Margherita",
+        "Um valor vazio",
+        "O número da posição da opção",
+        "A palavra option"
+      ],
+      "correta": 0,
+      "explicacao": "Sem value, o navegador envia o texto da opção."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "select-multiple",
+      "enunciado": "Em `<select name=\"cursos\" multiple>`, o que o atributo `multiple` muda?",
+      "alternativas": [
+        "Repete a lista várias vezes na tela",
+        "Obriga a escolher todas as opções",
+        "Permite escolher mais de uma opção",
+        "Transforma as opções em botões de rádio"
+      ],
+      "correta": 2,
+      "explicacao": "multiple permite selecionar várias opções (com Ctrl ou toque) e cada uma é enviada com o mesmo name."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno escreveu `<textarea name=\"obs\" value=\"Sem observações\"></textarea>`. O que aparece no campo?",
+      "alternativas": [
+        "Sem observações, como texto inicial",
+        "Sem observações, como placeholder em cinza",
+        "Nada: textarea não usa value",
+        "Um erro na página no lugar do campo"
+      ],
+      "correta": 2,
+      "explicacao": "O valor inicial da textarea é o conteúdo entre <textarea> e </textarea>; o atributo value não existe nela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "textarea-recuo",
+      "enunciado": "O trecho `<textarea name=\"msg\">\n    Olá\n</textarea>` foi escrito com recuo. O que aparece dentro do campo?",
+      "alternativas": [
+        "Olá precedido pelos espaços do recuo",
+        "Só a palavra Olá, sem espaços",
+        "Nada, porque o texto está em outra linha",
+        "A palavra Olá como placeholder em cinza"
+      ],
+      "correta": 0,
+      "explicacao": "Tudo entre as tags da textarea vira conteúdo, inclusive os espaços do recuo e a quebra final (só a primeira quebra logo após a tag é ignorada); por isso não se recua o texto ali."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cadastro de pet shop, `<input type=\"text\" name=\"nome\" required minlength=\"3\">` recebe Lu. Ao enviar:",
+      "alternativas": [
+        "O envio passa porque o campo não está vazio",
+        "O navegador completa o nome com espaços",
+        "O envio passa e o servidor corta o nome",
+        "O envio é bloqueado pelo minlength"
+      ],
+      "correta": 3,
+      "explicacao": "required e minlength são conferidos juntos: o campo foi preenchido, mas com menos de 3 caracteres."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num formulário de academia, o campo tem `pattern=\"[0-9]{11}\"` e `title=\"Digite os 11 números do CPF, sem pontos\"`. Para que serve o title aqui?",
+      "alternativas": [
+        "Muda o nome do campo no envio dos dados",
+        "Explica o formato na mensagem de erro",
+        "Mostra o texto como placeholder no campo",
+        "Desliga a validação do pattern"
+      ],
+      "correta": 1,
+      "explicacao": "Os navegadores costumam mostrar o title junto da mensagem de formato inválido, explicando o que se espera."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "id-repetido",
+      "enunciado": "O formulário de uma doceria tem `<input id=\"tel\" name=\"tel\">` e outro campo, mais abaixo, também com `id=\"tel\"`. O label `<label for=\"tel\">` vai se ligar a qual campo?",
+      "alternativas": [
+        "Aos dois campos ao mesmo tempo",
+        "Ao primeiro campo com esse id",
+        "Ao último campo com esse id",
+        "A nenhum, e a página não carrega"
+      ],
+      "correta": 1,
+      "explicacao": "id precisa ser único na página. Repetido, o label se liga ao primeiro, e o segundo fica sem rótulo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num site de hotel, `<input type=\"email\" name=\"email\" placeholder=\"seu@email.com\" required>` está vazio. Ao enviar:",
+      "alternativas": [
+        "É enviado seu@email.com como e-mail",
+        "É enviado e o servidor usa o placeholder",
+        "O placeholder vira value e o campo passa",
+        "O envio é bloqueado: o campo está vazio"
+      ],
+      "correta": 3,
+      "explicacao": "placeholder não é valor. O campo está vazio, então o required bloqueia."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em `<select name=\"lanche\"><optgroup label=\"Salgados\"><option>Coxinha</option></optgroup></select>`, o que acontece se o usuário tentar escolher Salgados?",
+      "alternativas": [
+        "Escolhe todos os salgados de uma vez",
+        "Envia Salgados como valor do lanche",
+        "Não consegue: é só um título",
+        "Abre uma nova lista só com salgados"
+      ],
+      "correta": 2,
+      "explicacao": "O rótulo do optgroup não é selecionável; serve para organizar as opções."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "placeholder-label",
+      "enunciado": "Uma clínica usa `<input type=\"text\" name=\"nome\" placeholder=\"Nome completo\">` sem label. Qual problema de acessibilidade é o mais sério?",
+      "alternativas": [
+        "Fica sem nome para o leitor de tela",
+        "O campo não aceita nomes com acento",
+        "O placeholder impede o uso do teclado",
+        "O campo não pode ser usado no celular"
+      ],
+      "correta": 0,
+      "explicacao": "Sem label o campo fica sem nome acessível garantido; o placeholder não é lido de forma confiável e some ao digitar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O campo `<input type=\"text\" name=\"placa\" pattern=\"[A-Z]{3}[0-9][A-Z0-9][0-9]{2}\" required>` é de uma oficina. Qual placa passa?",
+      "alternativas": [
+        "BRA2E19",
+        "BRA2EE9",
+        "BRA-2E19",
+        "BR2E19"
+      ],
+      "correta": 0,
+      "explicacao": "O pattern pede 3 letras maiúsculas, 1 dígito, 1 letra ou dígito e 2 dígitos, sem hífen. BRA2EE9 falha porque a 6ª posição exige dígito."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "pattern-vazio",
+      "enunciado": "Um formulário tem `<input type=\"text\" name=\"cupom\" pattern=\"[A-Z]{5}\">`, sem required, e o campo fica vazio. Ao enviar:",
+      "alternativas": [
+        "O envio é bloqueado, porque vazio não tem 5 letras",
+        "O navegador preenche AAAAA para casar com o pattern",
+        "O envio passa: o pattern não checa vazio",
+        "O envio passa, mas o campo não vai nos dados"
+      ],
+      "correta": 2,
+      "explicacao": "pattern só é conferido quando há valor. Para obrigar o preenchimento é preciso required."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "select-multiple",
+      "enunciado": "Num `<select name=\"adicionais\" multiple>` de uma hamburgueria, o cliente escolhe bacon e cheddar. Enviando com GET, como a URL fica?",
+      "alternativas": [
+        "adicionais=bacon,cheddar",
+        "adicionais=bacon&adicionais=cheddar",
+        "adicionais=[bacon,cheddar]",
+        "adicionais=cheddar (só o último)"
+      ],
+      "correta": 1,
+      "explicacao": "Cada opção escolhida vira um par separado com o mesmo name."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "label-for-id",
+      "enunciado": "O formulário de uma escola tem `<label for=\"ra\">RA</label>` e o campo `<input name=\"ra\">` sem id. O que acontece?",
+      "alternativas": [
+        "O label se liga pelo name, que é igual",
+        "O label se liga ao campo mais próximo dele",
+        "O navegador cria o id ra automaticamente",
+        "O label fica sem ligação com o campo"
+      ],
+      "correta": 3,
+      "explicacao": "for compara com id, nunca com name. Sem id o campo fica sem rótulo ligado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cadastro, `<input type=\"text\" name=\"usuario\" maxlength=\"8\" minlength=\"4\" value=\"ana\">`. O usuário não mexe no campo e envia. O que costuma acontecer?",
+      "alternativas": [
+        "O envio é bloqueado por ana ter só 3 letras",
+        "O campo é cortado para 8 letras e enviado",
+        "O navegador completa ana até 4 letras",
+        "O envio passa: o valor não foi editado"
+      ],
+      "correta": 3,
+      "explicacao": "minlength e maxlength só valem para o que o usuário digitou; um value inicial que nunca foi editado não é barrado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um formulário de pesquisa usa `<label>Você tem pet? <input type=\"checkbox\" name=\"pet\"></label>`. Qual é a vantagem desse jeito de escrever?",
+      "alternativas": [
+        "O checkbox passa a ser enviado mesmo desmarcado",
+        "Clicar no texto também marca a caixa",
+        "O texto do label passa a ser o value do checkbox",
+        "O checkbox fica obrigatório sem usar required"
+      ],
+      "correta": 1,
+      "explicacao": "Com o campo dentro do label a ligação é implícita: o texto inteiro vira área de clique."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "label-basico",
+      "enunciado": "Num cadastro de biblioteca, o trecho é `<label for=\"leitor\">Nome</label> <input type=\"text\" id=\"leitor\" name=\"leitor\">`. Explique como esse label funciona.\n\nNa sua resposta:\n1. diga o que liga o label ao campo;\n2. cite uma vantagem dessa ligação para quem usa o formulário.",
+      "respostasAceitas": [
+        "O for=\"leitor\" do label é igual ao id=\"leitor\" do input, e isso liga os dois. Assim, clicar no texto leva o cursor ao campo e o leitor de tela anuncia o nome do campo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) for igual ao id; 2) clique no texto foca o campo e/ou leitor de tela lê o rótulo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "placeholder-label",
+      "enunciado": "Um site de cinema trocou os labels por placeholders: `<input name=\"email\" placeholder=\"E-mail\">`. Explique a diferença entre placeholder e label.\n\nNa sua resposta:\n1. diga o que é cada um;\n2. diga por que o placeholder não deve substituir o label.",
+      "respostasAceitas": [
+        "label é o nome fixo do campo, ligado a ele. placeholder é uma dica dentro do campo vazio. O placeholder some quando se digita, então a pessoa pode esquecer o que o campo pedia, e leitores de tela podem não lê-lo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) label = rótulo fixo; placeholder = dica temporária; 2) some ao digitar e prejudica acessibilidade."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "required-basico",
+      "enunciado": "No formulário de matrícula de uma escola de música, o campo `<input type=\"text\" name=\"responsavel\" required>` foi deixado vazio. O que acontece ao clicar em enviar?\n\nNa sua resposta:\n1. diga o que o navegador faz;\n2. diga o que o atributo required significa.",
+      "respostasAceitas": [
+        "O navegador não envia e mostra uma mensagem pedindo para preencher o campo. required quer dizer que o campo é obrigatório."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) bloqueia o envio e avisa; 2) required = obrigatório."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "option-value",
+      "enunciado": "Uma pizzaria usa `<select name=\"tamanho\">` com as opções `<option value=\"P\">Pequena</option>` e `<option value=\"G\">Grande</option>`. O cliente escolhe Grande.\n\nNa sua resposta:\n1. diga o que o cliente vê na lista;\n2. diga o que é enviado ao servidor.",
+      "respostasAceitas": [
+        "O cliente vê os textos Pequena e Grande. É enviado o value da opção escolhida: tamanho=G."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) vê o texto das options; 2) envia tamanho=G (o value)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na página de contato de um pet shop há `<input type=\"text\" name=\"assunto\">` e `<textarea name=\"mensagem\" rows=\"5\"></textarea>`. Explique por que foram usados elementos diferentes.\n\nNa sua resposta:\n1. diga a diferença entre input text e textarea;\n2. diga o que o rows=\"5\" faz.",
+      "respostasAceitas": [
+        "O input text tem uma linha só, bom para textos curtos como assunto. A textarea tem várias linhas, para mensagens longas. rows=\"5\" mostra 5 linhas de altura."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) input = uma linha; textarea = várias linhas; 2) rows define a altura em linhas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "optgroup",
+      "enunciado": "Um formulário de loja tem `<select name=\"cidade\">` com `<optgroup label=\"Litoral\">` (Santos, Ubatuba) e `<optgroup label=\"Interior\">` (Campinas, Bauru). Para que servem os optgroup?\n\nNa sua resposta:\n1. diga o que o optgroup faz na lista;\n2. diga se Litoral ou Interior podem ser escolhidos.",
+      "respostasAceitas": [
+        "optgroup organiza as opções em grupos com um título, facilitando a leitura. Os títulos Litoral e Interior não podem ser escolhidos, só as cidades."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) agrupa options com título; 2) o título do grupo não é selecionável."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "label-for-id",
+      "enunciado": "Um aluno escreveu `<label for=\"cpf\">CPF</label>` e `<input type=\"text\" name=\"cpf\" id=\"documento\">`. Clicar em CPF não leva o cursor ao campo. Explique o erro.\n\nNa sua resposta:\n1. diga por que a ligação não funciona;\n2. diga qual valor deveria mudar para funcionar.",
+      "respostasAceitas": [
+        "O for do label precisa ser igual ao id do campo, não ao name. Aqui for=\"cpf\" e id=\"documento\" são diferentes. Basta deixar os dois iguais (for=\"documento\" ou id=\"cpf\")."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) for compara com id e eles não batem; 2) igualar for e id (qualquer um dos dois)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um cadastro tem `<input type=\"text\" name=\"cep\" pattern=\"[0-9]{5}-[0-9]{3}\" required>`. Interprete o pattern e diga o que acontece com os valores 13560-000 e 13560000.\n\nNa sua resposta:\n1. explique o formato que o pattern exige;\n2. diga qual dos dois valores é aceito e por quê.",
+      "respostasAceitas": [
+        "O pattern exige 5 dígitos, um hífen e 3 dígitos, no texto inteiro. 13560-000 é aceito. 13560000 é recusado porque não tem o hífen."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 5 dígitos + hífen + 3 dígitos; 2) aceita 13560-000; recusa 13560000 (falta hífen)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "select-vazio",
+      "enunciado": "Numa loja de roupas, o select obrigatório de tamanho começa com `<option value=\"\">Escolha o tamanho</option>` e o `<select>` tem required. Explique por que a primeira opção tem value vazio.\n\nNa sua resposta:\n1. diga o que acontece se o cliente não trocar a opção;\n2. diga o que aconteceria se essa opção tivesse value=\"Escolha\".",
+      "respostasAceitas": [
+        "Com value vazio, o navegador entende que nada foi escolhido e bloqueia o envio por causa do required. Se o value fosse Escolha, contaria como escolha válida e o pedido iria sem tamanho real."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) bloqueia o envio; 2) com value preenchido, o required seria satisfeito com uma opção falsa."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "textarea-recuo",
+      "enunciado": "Na página de uma oficina, o campo de descrição foi escrito assim, com recuo: `<textarea name=\"defeito\">` numa linha, o texto Barulho no freio na linha de baixo e `</textarea>` em outra linha. O cliente reclama que o campo já vem com espaços. Explique.\n\nNa sua resposta:\n1. diga o que a textarea usa como valor inicial;\n2. explique de onde vêm os espaços e como evitar.",
+      "respostasAceitas": [
+        "O valor inicial da textarea é tudo que está entre as tags, inclusive os espaços de recuo e a quebra de linha antes de </textarea> (só a primeira quebra logo após a tag de abertura é ignorada). Por isso o campo vem com espaços. Para evitar, o texto deve ficar colado nas tags, sem recuo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o conteúdo entre as tags; 2) recuo/quebras viram conteúdo; escrever o texto junto às tags."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num cadastro de academia, o apelido tem `minlength=\"3\" maxlength=\"15\"`. Explique o que acontece com os apelidos Bia, Jo e um apelido de 20 letras.\n\nNa sua resposta:\n1. diga qual é aceito e qual é recusado;\n2. explique a diferença de comportamento entre minlength e maxlength.",
+      "respostasAceitas": [
+        "Bia é aceito (3 letras). Jo é recusado no envio por ter menos de 3. O de 20 letras nem consegue ser digitado inteiro: o campo para em 15. minlength é conferido ao enviar; maxlength impede de digitar além do limite."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Bia aceito, Jo recusado, o de 20 é cortado em 15; 2) minlength bloqueia o envio; maxlength trava a digitação."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "select-multiple",
+      "enunciado": "Uma hamburgueria usa `<select name=\"molhos\" multiple>` com as opções Barbecue, Mostarda e Maionese. O cliente escolhe duas. Analise esse campo.\n\nNa sua resposta:\n1. explique o que o atributo multiple muda;\n2. diga como os dois molhos são enviados ao servidor.",
+      "respostasAceitas": [
+        "multiple permite escolher mais de uma opção da lista. Cada opção escolhida é enviada como um par com o mesmo name, por exemplo molhos=Barbecue&molhos=Mostarda."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) permite várias escolhas; 2) vai um par molhos=… para cada opção escolhida."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "acess-erro-cor",
+      "enunciado": "Um formulário de clínica só tem campos assim: `<input name=\"nome\" placeholder=\"Nome\">`, sem label, e as mensagens de erro aparecem só pintando a borda de vermelho. Avalie a acessibilidade desse formulário.\n\nNa sua resposta:\n1. aponte dois problemas para pessoas com deficiência;\n2. explique o que deveria ser mudado em cada um.",
+      "respostasAceitas": [
+        "Sem label, o leitor de tela pode não dizer o que cada campo pede, e a dica some ao digitar. Erro mostrado só por cor não é percebido por quem não enxerga ou não distingue cores. Deve-se usar label ligado a cada campo e mensagem de erro em texto, perto do campo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) falta de label e erro só por cor; 2) label com for/id e mensagem escrita (não só cor)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "pattern-vazio",
+      "enunciado": "O campo de cupom é `<input type=\"text\" name=\"cupom\" pattern=\"[A-Z]{5}\">`, sem required. Um cliente envia o formulário com o cupom vazio e passa; outro digita promo e é barrado. Explique os dois resultados.\n\nNa sua resposta:\n1. explique por que o campo vazio passou;\n2. explique por que promo foi barrado e o que o pattern exige.",
+      "respostasAceitas": [
+        "pattern só é conferido quando o campo tem algum valor; sem required, vazio é aceito. promo foi barrado porque o pattern exige exatamente 5 letras maiúsculas, e a validação diferencia maiúsculas de minúsculas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) vazio não passa pelo pattern sem required; 2) promo está em minúsculas e o pattern pede [A-Z]{5}."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "id-repetido",
+      "enunciado": "Um formulário tem dois campos com `id=\"tel\"` (telefone residencial e celular), cada um com seu `<label for=\"tel\">`. Clicar no segundo label leva o cursor ao primeiro campo. Explique o problema.\n\nNa sua resposta:\n1. explique a regra do id que foi quebrada;\n2. explique o efeito disso nos labels e para quem usa leitor de tela.",
+      "respostasAceitas": [
+        "id deve ser único na página. Com dois iguais, o for=\"tel\" sempre aponta para o primeiro campo. O segundo label leva ao campo errado e o celular fica sem rótulo, então o leitor de tela não anuncia o que ele pede."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) id não pode repetir; 2) os dois labels ligam ao primeiro; o segundo campo fica sem nome acessível."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "radio-mesmo-name",
+      "enunciado": "Na pesquisa de um restaurante, as opções de nota são `<input type=\"radio\" name=\"nota\" value=\"1\">`, `<input type=\"radio\" name=\"nota\" value=\"2\">` e `<input type=\"radio\" name=\"nota\" value=\"3\">`. Quantas o cliente consegue marcar ao mesmo tempo?",
+      "alternativas": [
+        "Só uma, porque o name é igual",
+        "Todas, porque cada uma tem um value",
+        "Duas, que é o limite do radio",
+        "Nenhuma, porque falta o checked"
+      ],
+      "correta": 0,
+      "explicacao": "Radios com o mesmo name formam um grupo: marcar um desmarca o outro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "radio-x-checkbox",
+      "enunciado": "Uma pizzaria quer que o cliente marque vários ingredientes extras (borda, catupiry, bacon). Qual type de input usar?",
+      "alternativas": [
+        "radio",
+        "select",
+        "checkbox",
+        "range"
+      ],
+      "correta": 2,
+      "explicacao": "checkbox permite marcar várias opções independentes; radio permite só uma do grupo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "fieldset-basico",
+      "enunciado": "Num formulário de hotel, qual é a função de `<fieldset>` com `<legend>Dados do hóspede</legend>`?",
+      "alternativas": [
+        "Enviar só os campos que estão dentro dele",
+        "Esconder os campos até a pessoa clicar",
+        "Agrupar campos relacionados com um título",
+        "Deixar os campos obrigatórios"
+      ],
+      "correta": 2,
+      "explicacao": "fieldset agrupa campos e legend dá o título do grupo (com uma borda por padrão)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz o botão `<input type=\"reset\" value=\"Limpar\">` num cadastro de academia?",
+      "alternativas": [
+        "Volta os campos aos valores iniciais",
+        "Envia o formulário e depois limpa a tela",
+        "Apaga o formulário inteiro da página",
+        "Recarrega o site na página inicial"
+      ],
+      "correta": 0,
+      "explicacao": "reset devolve cada campo ao valor que tinha quando a página carregou."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual atributo deixa um radio ou checkbox já marcado quando a página abre?",
+      "alternativas": [
+        "selected",
+        "marked",
+        "value",
+        "checked"
+      ],
+      "correta": 3,
+      "explicacao": "checked marca radio/checkbox no carregamento. selected é para option."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No formulário de uma livraria, o botão é `<input type=\"submit\" value=\"Reservar\">`. O que o value faz nesse caso?",
+      "alternativas": [
+        "Define o endereço para onde os dados vão",
+        "Define o texto que aparece no botão",
+        "Define quantas vezes o botão pode ser clicado",
+        "Define a cor de fundo do botão"
+      ],
+      "correta": 1,
+      "explicacao": "Em input submit, value é o texto exibido no botão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um `<button>` escrito dentro de um `<form>` sem o atributo type, como `<button>Enviar</button>`, faz o quê ao ser clicado?",
+      "alternativas": [
+        "Nada, pois o type padrão é button",
+        "Envia o formulário (padrão submit)",
+        "Limpa os campos, pois o type padrão é reset",
+        "Abre uma janela perguntando o que fazer"
+      ],
+      "correta": 1,
+      "explicacao": "Dentro de um form, button sem type funciona como submit."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual `<button>` não envia o formulário e serve para acionar algo com JavaScript, como mostrar a senha?",
+      "alternativas": [
+        "`<button type=\"submit\">`",
+        "`<button type=\"reset\">`",
+        "`<button type=\"none\">`",
+        "`<button type=\"button\">`"
+      ],
+      "correta": 3,
+      "explicacao": "type=\"button\" não tem ação padrão; ele só faz o que o JavaScript mandar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "checkbox-required",
+      "enunciado": "Num cadastro de clínica, a caixa `<input type=\"checkbox\" name=\"termos\" required>` aceita os termos de uso. O que o required faz aqui?",
+      "alternativas": [
+        "Marca a caixa sozinho ao abrir a página",
+        "Envia termos=required para o servidor",
+        "Só envia com a caixa marcada",
+        "Impede que a caixa seja desmarcada"
+      ],
+      "correta": 2,
+      "explicacao": "Em checkbox, required obriga a marcar a caixa antes de enviar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que um site não pode confiar só na validação do navegador (required, pattern, min…)?",
+      "alternativas": [
+        "Porque ela pode ser desligada ou burlada",
+        "Porque ela só funciona em computadores, não em celulares",
+        "Porque ela deixa o envio dos dados mais lento",
+        "Porque ela apaga os dados digitados com erro"
+      ],
+      "correta": 0,
+      "explicacao": "A validação nativa ajuda o usuário, mas pode ser burlada; o servidor sempre precisa validar de novo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "checkbox-value",
+      "enunciado": "Num formulário de cinema, o checkbox `<input type=\"checkbox\" name=\"pipoca\" value=\"sim\">` é marcado. O que é enviado?",
+      "alternativas": [
+        "pipoca=sim",
+        "pipoca=on",
+        "pipoca=true",
+        "checkbox=sim"
+      ],
+      "correta": 0,
+      "explicacao": "Marcado, o checkbox envia seu name com o value definido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual elemento dá o título visível de um `<fieldset>`?",
+      "alternativas": [
+        "`<label>`",
+        "`<caption>`",
+        "`<legend>`",
+        "`<title>`"
+      ],
+      "correta": 2,
+      "explicacao": "legend é o título do fieldset. caption é título de tabela e title é da página."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que o usuário com teclado consiga usar bem um formulário, o que é importante?",
+      "alternativas": [
+        "Ter todos os campos com a mesma cor de fundo",
+        "Passar pelos campos com Tab em ordem",
+        "Colocar todos os campos numa única linha",
+        "Usar só imagens no lugar dos textos dos botões"
+      ],
+      "correta": 1,
+      "explicacao": "Acessibilidade de formulário inclui navegar por Tab na ordem certa, com foco visível."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num formulário de pet shop, as opções Cão, Gato e Ave são radios com o mesmo name. Qual atributo diferencia o que será enviado?",
+      "alternativas": [
+        "id do formulário",
+        "type de cada radio",
+        "placeholder de cada radio",
+        "value de cada radio"
+      ],
+      "correta": 3,
+      "explicacao": "O grupo usa o mesmo name e cada radio tem seu value; vai o value do marcado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "radio-name-diferente",
+      "enunciado": "Um aluno fez as opções de turno assim: `<input type=\"radio\" name=\"manha\">` e `<input type=\"radio\" name=\"tarde\">`. O que acontece?",
+      "alternativas": [
+        "Só uma pode ser marcada, como esperado",
+        "Nenhuma pode ser marcada sem o checked",
+        "O formulário não pode ser enviado",
+        "Dá para marcar as duas ao mesmo tempo"
+      ],
+      "correta": 3,
+      "explicacao": "Radios só se excluem quando têm o mesmo name; com names diferentes viram grupos separados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "checkbox-value",
+      "enunciado": "Um checkbox `<input type=\"checkbox\" name=\"lembrar\">` sem value é marcado e o formulário é enviado com GET. O que aparece na URL?",
+      "alternativas": [
+        "lembrar=true",
+        "lembrar=on",
+        "lembrar=1",
+        "lembrar="
+      ],
+      "correta": 1,
+      "explicacao": "Checkbox marcado sem value envia o valor padrão on."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "button-sem-type",
+      "enunciado": "Num formulário de inscrição de curso há um botão `<button>Ver regulamento</button>` que só deveria abrir um texto com JavaScript, mas ao clicar o formulário é enviado. Como corrigir?",
+      "alternativas": [
+        "Colocar type=\"button\" no botão",
+        "Colocar type=\"reset\" no botão",
+        "Tirar o botão de dentro do label",
+        "Colocar method=\"get\" no form"
+      ],
+      "correta": 0,
+      "explicacao": "Sem type, o button dentro do form é submit. type=\"button\" tira a ação de envio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num formulário com `<input type=\"radio\" name=\"pagamento\" value=\"pix\" required>` e outros radios de mesmo name, quando o required é satisfeito?",
+      "alternativas": [
+        "Só quando o radio pix está marcado",
+        "Quando todos os radios estão marcados",
+        "Com um radio do grupo marcado",
+        "Nunca, required não vale para radio"
+      ],
+      "correta": 2,
+      "explicacao": "Em radio, required vale para o grupo inteiro: basta uma opção marcada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "novalidate",
+      "enunciado": "Um formulário de agendamento começa com `<form action=\"agendar.php\" method=\"post\" novalidate>`. O que o `novalidate` faz?",
+      "alternativas": [
+        "Liga a validação no servidor automaticamente",
+        "Impede que o formulário seja enviado",
+        "Desliga a validação nativa do navegador",
+        "Valida só os campos dentro de fieldset"
+      ],
+      "correta": 2,
+      "explicacao": "novalidate faz o navegador enviar sem checar required, pattern, min etc."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "fieldset-disabled",
+      "enunciado": "Num `<fieldset disabled>` que contém três campos de endereço, o que acontece com esses campos?",
+      "alternativas": [
+        "Ficam desabilitados e não são enviados",
+        "Ficam somente leitura, mas são enviados",
+        "Somem da tela, mas continuam enviados",
+        "Só o primeiro campo fica desabilitado"
+      ],
+      "correta": 0,
+      "explicacao": "disabled no fieldset desabilita todos os campos dentro dele, e campos desabilitados não são enviados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cadastro de academia, o cliente aperta Enter dentro do campo de nome (um input text). O que costuma acontecer?",
+      "alternativas": [
+        "O cursor desce para uma nova linha no campo",
+        "O campo é apagado e o cursor volta ao início",
+        "Nada acontece, Enter não funciona em formulários",
+        "O formulário é enviado ao servidor"
+      ],
+      "correta": 3,
+      "explicacao": "Enter num input de uma linha faz o envio implícito do formulário, se houver botão de envio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um checkbox de interesses é escrito três vezes com `name=\"interesse\"` e values esporte, música e leitura. O aluno marca esporte e leitura. Com GET, o que vai na URL?",
+      "alternativas": [
+        "interesse=esporte,leitura",
+        "interesse=esporte&interesse=leitura",
+        "interesse=leitura (só o último)",
+        "interesse=esporte (só o primeiro)"
+      ],
+      "correta": 1,
+      "explicacao": "Cada checkbox marcado envia seu próprio par, mesmo com o name repetido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num cadastro de hotel, o hóspede já preencheu tudo e clica num `<button type=\"reset\">` que estava ao lado do Enviar. Por que esse botão costuma ser desaconselhado?",
+      "alternativas": [
+        "Ele envia os dados duas vezes ao servidor",
+        "Pode apagar tudo por um clique errado",
+        "Ele só funciona se o form usar method post",
+        "Ele desliga a validação do navegador"
+      ],
+      "correta": 1,
+      "explicacao": "Reset perto do envio causa perda de dados por clique errado; por isso muitos guias evitam usá-lo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num formulário de escola, `<button type=\"submit\" formnovalidate>Salvar rascunho</button>`. O que o formnovalidate faz nesse botão?",
+      "alternativas": [
+        "Bloqueia o envio quando esse botão é usado",
+        "Desliga a validação para todos os botões",
+        "Valida o formulário no servidor antes de enviar",
+        "Pula a validação só quando esse é o botão"
+      ],
+      "correta": 3,
+      "explicacao": "formnovalidate pula a validação nativa apenas no envio feito por aquele botão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "fieldset-radios",
+      "enunciado": "Qual é a forma mais acessível de dar um título à pergunta Forma de pagamento, que tem três radios (Pix, Cartão, Dinheiro)?",
+      "alternativas": [
+        "Escrever Forma de pagamento num parágrafo acima",
+        "Colocar Forma de pagamento no placeholder do primeiro radio",
+        "Usar fieldset com legend Forma de pagamento",
+        "Colocar Forma de pagamento no name dos radios"
+      ],
+      "correta": 2,
+      "explicacao": "O legend é anunciado pelo leitor de tela junto de cada radio do grupo, dando contexto à pergunta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um botão `<button type=\"submit\" form=\"cadastro\">Salvar</button>` está fora do `<form id=\"cadastro\">`. O que acontece ao clicar?",
+      "alternativas": [
+        "O form cadastro é enviado normalmente",
+        "Nada, porque o botão está fora do form",
+        "Abre uma nova página chamada cadastro",
+        "Só o botão é enviado, sem os campos"
+      ],
+      "correta": 0,
+      "explicacao": "O atributo form liga o controle ao formulário com aquele id, mesmo fora dele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "acess-erro-cor",
+      "enunciado": "Um site de pet shop mostra o erro O e-mail precisa ter @ só pintando a borda do campo de vermelho. Que grupo de usuários fica mais prejudicado?",
+      "alternativas": [
+        "Daltônicos e quem usa leitor de tela",
+        "Pessoas que acessam pelo computador de casa",
+        "Pessoas que digitam muito rápido",
+        "Pessoas que usam o modo escuro"
+      ],
+      "correta": 0,
+      "explicacao": "Só a cor não informa o erro a quem não distingue cores ou não enxerga; o erro precisa estar em texto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um formulário tem um `<form>` dentro de outro `<form>`. O que se pode dizer?",
+      "alternativas": [
+        "É o jeito certo de dividir um cadastro grande",
+        "Só o form de dentro é enviado ao servidor",
+        "Não é permitido: form não vai dentro de form",
+        "Os dois são enviados juntos num só clique"
+      ],
+      "correta": 2,
+      "explicacao": "HTML não permite form aninhado; o navegador ignora a tag interna. Para separar partes usa-se fieldset."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "validacao-servidor",
+      "enunciado": "Uma loja valida o CPF com `pattern` no HTML e o servidor grava o que chegar, sem conferir. Qual é o risco?",
+      "alternativas": [
+        "O pattern deixa o envio do formulário muito mais lento",
+        "Dados inválidos podem chegar direto ao servidor",
+        "O navegador grava o CPF no banco antes do servidor",
+        "O CPF chega criptografado e o servidor não lê"
+      ],
+      "correta": 1,
+      "explicacao": "A validação do navegador pode ser removida ou ignorada (ferramentas, outro programa enviando a requisição). O servidor precisa validar sempre."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "checkbox-desmarcado",
+      "enunciado": "Um aluno fez `<input type=\"checkbox\" name=\"aceito\" value=\"sim\">` e, no servidor, testa se aceito vale \"nao\" para saber que o cliente recusou. Por que esse teste nunca funciona?",
+      "alternativas": [
+        "Checkbox desmarcado envia sempre off",
+        "Checkbox desmarcado envia o value vazio",
+        "O servidor não recebe checkbox, só radio",
+        "Desmarcado, o checkbox não é enviado"
+      ],
+      "correta": 3,
+      "explicacao": "Desmarcado, o campo simplesmente não aparece nos dados; o servidor deve testar se ele existe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num grupo de radios de tamanho, nenhum tem checked e não há required. O cliente não escolhe nada. O que é enviado para esse name?",
+      "alternativas": [
+        "O value do primeiro radio do grupo",
+        "O name com valor on",
+        "O name com valor vazio",
+        "Nada: o grupo não é enviado"
+      ],
+      "correta": 3,
+      "explicacao": "Se nenhum radio do grupo está marcado, o grupo não é enviado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "fieldset-disabled",
+      "enunciado": "Num formulário com `<fieldset disabled>`, um aluno colocou dentro dele o botão de envio. O que acontece?",
+      "alternativas": [
+        "Só o botão continua funcionando dentro do fieldset",
+        "O botão também fica desabilitado e não envia",
+        "O botão envia, mas sem os campos do fieldset",
+        "O fieldset ignora disabled quando tem botão"
+      ],
+      "correta": 1,
+      "explicacao": "disabled no fieldset desabilita todos os controles dentro dele, inclusive botões (exceto os do legend)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um formulário tem um campo `<input type=\"email\" name=\"email\" required>` e o usuário digita ana@escola. O navegador aceita?",
+      "alternativas": [
+        "Sim: não é preciso ponto no domínio",
+        "Não: falta o .com para ser e-mail válido",
+        "Não: falta o .br para ser e-mail válido",
+        "Sim, mas troca para ana@escola.com"
+      ],
+      "correta": 0,
+      "explicacao": "A validação de type email exige algo@algo e não exige ponto no domínio. Regras mais rígidas ficam com pattern e com o servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma pesquisa tem radios sem label: `<input type=\"radio\" name=\"nota\" value=\"5\"> Ótimo`. O texto Ótimo está solto ao lado. Qual é a consequência?",
+      "alternativas": [
+        "O radio fica impossível de ser marcado",
+        "O value enviado passa a ser Ótimo",
+        "Clicar em Ótimo não marca o radio",
+        "O radio deixa de fazer parte do grupo nota"
+      ],
+      "correta": 2,
+      "explicacao": "Texto solto não é rótulo: a área de clique é só a bolinha e o radio fica sem nome acessível."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "botao-acao",
+      "enunciado": "No cadastro, o botão de enviar é `<input type=\"submit\" name=\"acao\" value=\"Salvar\">` e há outro `<input type=\"submit\" name=\"acao\" value=\"Excluir\">`. Ao clicar em Excluir, o que o servidor recebe sobre o botão?",
+      "alternativas": [
+        "acao=Salvar e acao=Excluir juntos",
+        "Nada sobre os botões, só os campos",
+        "acao=Excluir, só do botão clicado",
+        "acao=Salvar, porque é o primeiro"
+      ],
+      "correta": 2,
+      "explicacao": "Só o botão de envio usado entra nos dados (se tiver name), o que permite saber qual ação foi escolhida."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "radio-mesmo-name",
+      "enunciado": "Na pesquisa de um cinema, os radios são `<input type=\"radio\" name=\"sessao\" value=\"tarde\">` e `<input type=\"radio\" name=\"sessao\" value=\"noite\">`. Explique por que os dois usam o mesmo name.\n\nNa sua resposta:\n1. diga o que o mesmo name faz com os radios;\n2. diga o que é enviado se o cliente marcar noite.",
+      "respostasAceitas": [
+        "O mesmo name junta os radios num grupo, então só um pode ficar marcado. Se marcar noite, é enviado sessao=noite."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mesmo name = grupo com uma escolha só; 2) envia sessao=noite."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "radio-x-checkbox",
+      "enunciado": "Uma pizzaria usa radio para o tamanho e checkbox para os ingredientes extras. Explique essa escolha.\n\nNa sua resposta:\n1. diga a diferença entre radio e checkbox;\n2. justifique o uso de cada um nesse pedido.",
+      "respostasAceitas": [
+        "Radio permite escolher só uma opção do grupo; checkbox permite marcar várias. A pizza tem um tamanho só, então radio. Os extras podem ser vários, então checkbox."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) radio = uma opção; checkbox = várias; 2) tamanho único e extras múltiplos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "fieldset-basico",
+      "enunciado": "Num cadastro de hotel, os campos foram separados em `<fieldset><legend>Dados pessoais</legend>…</fieldset>` e `<fieldset><legend>Pagamento</legend>…</fieldset>`. Para que servem esses elementos?\n\nNa sua resposta:\n1. diga o que fieldset e legend fazem;\n2. cite uma vantagem para quem preenche o formulário.",
+      "respostasAceitas": [
+        "fieldset agrupa campos relacionados e legend dá o título do grupo. O formulário fica organizado em partes, e o leitor de tela anuncia o título do grupo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) agrupar + título; 2) organização visual e/ou acessibilidade."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um formulário de oficina tem `<button type=\"submit\">Enviar</button>`, `<button type=\"reset\">Limpar</button>` e `<button type=\"button\">Calcular orçamento</button>`. Explique o que cada um faz.\n\nNa sua resposta:\n1. diga o que acontece ao clicar em cada botão;\n2. diga qual deles precisa de JavaScript para fazer algo.",
+      "respostasAceitas": [
+        "submit envia o formulário; reset volta os campos aos valores iniciais; button não faz nada sozinho. O Calcular orçamento (type button) precisa de JavaScript."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) submit envia, reset limpa/volta ao inicial, button não tem ação; 2) o type button depende de JavaScript."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "validacao-servidor",
+      "enunciado": "Um site de academia valida o formulário com required e type email no HTML e também confere tudo de novo no servidor. Por que validar nos dois lugares?\n\nNa sua resposta:\n1. diga para que serve a validação do navegador;\n2. diga por que o servidor também precisa validar.",
+      "respostasAceitas": [
+        "A validação do navegador avisa o usuário na hora, antes de enviar. O servidor valida de novo porque a do navegador pode ser desligada ou burlada, e os dados podem ser enviados sem o formulário."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) aviso rápido ao usuário; 2) a do navegador pode ser burlada; o servidor é a garantia."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "checkbox-required",
+      "enunciado": "No formulário de inscrição de um torneio de xadrez, a caixa `<input type=\"checkbox\" name=\"regulamento\" required>` vem com o texto Li e aceito o regulamento. O que esse trecho faz?\n\nNa sua resposta:\n1. diga o que o required faz num checkbox;\n2. diga o que acontece se o aluno não marcar e tentar enviar.",
+      "respostasAceitas": [
+        "Em checkbox, required obriga a caixa a estar marcada. Se não marcar, o navegador bloqueia o envio e mostra um aviso."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) obriga a marcar; 2) o envio é bloqueado com mensagem."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "radio-name-diferente",
+      "enunciado": "Na inscrição de um curso, os turnos foram escritos assim: `<input type=\"radio\" name=\"manha\" value=\"manha\">` e `<input type=\"radio\" name=\"tarde\" value=\"tarde\">`. Os alunos conseguem marcar os dois turnos. Explique o erro.\n\nNa sua resposta:\n1. diga por que os dois podem ser marcados;\n2. diga o que deve mudar para permitir só uma escolha.",
+      "respostasAceitas": [
+        "Radios só se excluem quando têm o mesmo name. Com names diferentes, cada um é um grupo próprio. Os dois devem ter o mesmo name, por exemplo name=\"turno\", com values diferentes."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) names diferentes = grupos diferentes; 2) mesmo name para os dois, values diferentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "button-sem-type",
+      "enunciado": "Num formulário de inscrição há o botão `<button>Mostrar regras</button>` dentro do `<form>`, que deveria só abrir um texto. Ao clicar, o formulário é enviado com campos vazios. Explique.\n\nNa sua resposta:\n1. explique por que o formulário foi enviado;\n2. diga como resolver só com HTML.",
+      "respostasAceitas": [
+        "Um button sem type dentro de um form é do tipo submit por padrão, então envia o formulário. Basta colocar type=\"button\", que não tem ação de envio."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o type padrão é submit; 2) usar type=\"button\"."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "checkbox-desmarcado",
+      "enunciado": "Um aluno colocou `<input type=\"checkbox\" name=\"newsletter\" value=\"sim\">` e diz que, quando o cliente não marca, o servidor deveria receber newsletter=nao. Avalie essa ideia.\n\nNa sua resposta:\n1. explique o que é enviado quando o checkbox está desmarcado;\n2. diga como o servidor deve descobrir que o cliente não quis.",
+      "respostasAceitas": [
+        "Checkbox desmarcado não é enviado: o name nem aparece nos dados, então nunca chega nao. O servidor deve verificar se newsletter existe nos dados recebidos; se não existir, o cliente não marcou."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) desmarcado não é enviado; 2) o servidor testa a ausência do campo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "novalidate",
+      "enunciado": "Um formulário de matrícula começa com `<form action=\"matricula.php\" method=\"post\" novalidate>`. Os campos têm required e pattern, mas o formulário envia mesmo vazio. Explique.\n\nNa sua resposta:\n1. explique o que o novalidate faz;\n2. diga em que situação ele pode ser útil e qual cuidado o servidor deve ter.",
+      "respostasAceitas": [
+        "novalidate desliga a validação nativa do navegador, então required e pattern não bloqueiam o envio. Pode ser útil quando o site faz a própria validação com JavaScript ou para testes. O servidor precisa validar tudo, porque os dados podem chegar errados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) desliga a validação nativa; 2) uso com validação própria/testes; o servidor valida sempre."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "fieldset-radios",
+      "enunciado": "Na pesquisa de uma biblioteca, a pergunta Com que frequência você lê? tem 4 radios e o texto da pergunta está num `<p>` acima deles. Um usuário de leitor de tela ouve só Diariamente, Semanalmente… sem saber a pergunta. Analise.\n\nNa sua resposta:\n1. explique por que a pergunta não é anunciada;\n2. diga qual estrutura HTML resolveria isso.",
+      "respostasAceitas": [
+        "O <p> não tem ligação com os radios, então o leitor de tela não sabe que é a pergunta do grupo. Os radios devem ficar dentro de um fieldset com a pergunta no legend, e cada radio com seu label."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o <p> não se liga ao grupo; 2) fieldset + legend com a pergunta (e label em cada radio)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "botao-acao",
+      "enunciado": "Na loja, o formulário tem `<input type=\"submit\" name=\"acao\" value=\"Salvar\">` e `<input type=\"submit\" name=\"acao\" value=\"Salvar e sair\">`. Explique como o servidor sabe qual botão foi clicado.\n\nNa sua resposta:\n1. diga o que é enviado sobre os botões;\n2. explique por que os dois botões têm name.",
+      "respostasAceitas": [
+        "Só o botão de envio clicado entra nos dados, com seu name e value: acao=Salvar ou acao=Salvar e sair. O name é necessário para o value do botão ser enviado; sem name, o servidor não saberia qual foi usado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) vai só o par do botão clicado; 2) sem name o botão não envia seu valor."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "validacao-servidor",
+      "enunciado": "Uma loja de games valida no HTML a quantidade com `<input type=\"number\" name=\"qtd\" min=\"1\" max=\"3\">` e o servidor grava o pedido sem conferir. Um usuário mal-intencionado consegue comprar -5 unidades e receber crédito. Explique como isso é possível.\n\nNa sua resposta:\n1. explique por que a validação do navegador não impediu;\n2. diga o que o servidor deveria fazer.",
+      "respostasAceitas": [
+        "A validação do navegador roda no computador do usuário: ele pode remover min/max pelas ferramentas do navegador ou mandar a requisição direto, sem o formulário. O servidor deve conferir de novo se a quantidade está entre 1 e 3 (e é número) antes de gravar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a validação nativa pode ser alterada/burlada; 2) o servidor repete a validação e recusa valores inválidos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "fieldset-disabled",
+      "enunciado": "Um formulário de cadastro de clínica tem os dados do convênio dentro de `<fieldset disabled>` para quem marca Particular. O atendente estranha que, mesmo preenchidos antes, os dados do convênio não chegam ao servidor. Explique.\n\nNa sua resposta:\n1. explique o efeito do disabled no fieldset sobre os campos;\n2. diga a diferença entre desabilitar e deixar somente leitura nesse caso.",
+      "respostasAceitas": [
+        "disabled no fieldset desabilita todos os campos dentro dele, e campo desabilitado não é editado nem enviado. Com readonly nos campos, eles ficariam travados mas seriam enviados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) todos os campos ficam desabilitados e não são enviados; 2) readonly trava, mas envia."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "HTML — formulários",
+      "capacidade": "marc.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "acess-erro-cor",
+      "enunciado": "Avalie a acessibilidade deste trecho de um formulário de hotel: `<p>Tipo de quarto</p> <input type=\"radio\" name=\"quarto\" value=\"s\"> Solteiro <input type=\"radio\" name=\"quarto\" value=\"c\"> Casal`, com o erro mostrado só deixando o texto vermelho.\n\nNa sua resposta:\n1. aponte os problemas de acessibilidade do trecho;\n2. explique como cada problema seria resolvido com HTML.",
+      "respostasAceitas": [
+        "Os textos Solteiro e Casal não são labels, então clicar neles não marca e o leitor de tela não anuncia; a pergunta num <p> não se liga ao grupo; o erro só por cor não é percebido por todos. Solução: label em cada radio, fieldset com legend Tipo de quarto e mensagem de erro escrita em texto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sem label, pergunta solta, erro só por cor; 2) label, fieldset+legend e mensagem em texto."
+    }
+  ]
+}
