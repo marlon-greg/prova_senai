@@ -76,7 +76,10 @@ export function textoParaIA(questao, gabarito, resposta, peso) {
       const st = !String(a.sql || "").trim() ? "EM BRANCO (vale 0)" : tarefaCerta(a, g) ? "RESULTADO IGUAL AO DO GABARITO (já vale a nota cheia)" : a.erro ? `DEU ERRO AO RODAR: ${a.erro}` : "RODOU, MAS O RESULTADO FICOU DIFERENTE DO GABARITO";
       const exec = (Array.isArray(a.execucoes) ? a.execucoes : []).filter(x => !x.erro && String(x.sql || "").trim()).slice(-8);
       const execTxt = exec.length ? `\nComandos que o aluno EXECUTOU sem erro na Bancada (também valem como resposta se algum resolver a tarefa):\n<sql_do_aluno>\n${exec.map(x => limpa(x.sql)).join("\n---\n")}\n</sql_do_aluno>` : "";
-      return `### Tarefa ${t.id} (${i + 1})\n${t.texto}\nGabarito do professor:\n${g.sql || "(sem gabarito)"}\nSituação: ${st}${muitos}\n<sql_do_aluno>\n${limpa(a.sql)}\n</sql_do_aluno>${execTxt}`;
+      // tentativas EXECUTADAS que deram erro (as 6 últimas): mostram o que o aluno tentou; a IA avalia pelo MELHOR que ele mostrou
+      const comErro = (Array.isArray(a.execucoes) ? a.execucoes : []).filter(x => x.erro && String(x.sql || "").trim()).slice(-6);
+      const errTxt = comErro.length ? `\nTentativas que o aluno EXECUTOU e DERAM ERRO (mostram o que ele tentou fazer):\n<sql_do_aluno>\n${comErro.map(x => limpa(x.sql) + "\n→ erro: " + String(x.erro).slice(0, 200)).join("\n---\n")}\n</sql_do_aluno>` : "";
+      return `### Tarefa ${t.id} (${i + 1})\n${t.texto}\nGabarito do professor:\n${g.sql || "(sem gabarito)"}\nSituação: ${st}${muitos}\n<sql_do_aluno>\n${limpa(a.sql)}\n</sql_do_aluno>${execTxt}${errTxt}`;
     }).join("\n\n");
 }
 

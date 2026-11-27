@@ -3801,6 +3801,9 @@ async function processarFilaIA({ silencioso = false } = {}) {
         const porIA = String(atual.data()?.corrigidoPor || "").startsWith("ia:");
         if (atual.exists() && (!porIA || !it.refazer)) { filaIA.shift(); emFilaIA.delete(k); continue; }
         const r = await corrigirDissertativa({ chave: iaCfg.chave, modelo: iaCfg.modelo, q: it.q, g: it.g, resposta: it.resposta });
+        // RECORREÇÃO (pente fino) nunca baixa nota: se a nova ficou menor, continua valendo a anterior (o aluno vê a anterior o tempo todo)
+        const antes = atual.exists() ? Number(atual.data()?.pontos) : NaN;
+        if (it.refazer && Number.isFinite(antes) && r.pontos < antes) { errosIA.delete(k); iaFeitas++; filaIA.shift(); emFilaIA.delete(k); continue; }
         await setDoc(ref, { pontos: r.pontos, comentario: r.justificativa, corrigidoPor: "ia:" + iaCfg.modelo, corrigidoEm: serverTimestamp(),
                             deslize: r.deslize, pontosBase: r.pontos, comentarioBase: r.justificativa, peso: Number(it.q.peso || 1) });
         await ajustarDeslizes(it.tid).catch(e => console.warn("deslizes", e));
