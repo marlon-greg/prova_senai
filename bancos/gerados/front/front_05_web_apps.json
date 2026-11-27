@@ -1,0 +1,2424 @@
+{
+  "nome": "Programação Front-End — Web Apps (a revisar)",
+  "materia": "Programação Front-End",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A padaria do bairro tem um site de encomendas. O dono quer que os clientes possam \"instalar\" o site no celular, com ícone na tela inicial, sem publicar nada em loja de aplicativos. Que tipo de solução atende esse pedido?",
+      "alternativas": [
+        "Trocar o site por um arquivo PDF com o cardápio",
+        "Colocar o site dentro de um iframe em outra página",
+        "Transformar o site numa PWA (Progressive Web App)",
+        "Hospedar o site num pendrive entregue aos clientes"
+      ],
+      "correta": 2,
+      "explicacao": "Uma PWA é um site que pode ser instalado pelo navegador, ganha ícone na tela inicial e abre como aplicativo, sem passar por loja."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve o arquivo `manifest.json` numa PWA?",
+      "alternativas": [
+        "Descrever o app ao navegador: nome, ícones, cores e modo de abertura",
+        "Guardar as senhas dos usuários do site com segurança, já criptografadas",
+        "Listar as tabelas e colunas do banco de dados usado pelo site",
+        "Substituir o index.html como primeira página carregada no site"
+      ],
+      "correta": 0,
+      "explicacao": "O manifesto é um arquivo JSON com informações do app (nome, ícones, cor, start_url, display) que o navegador usa para instalar a PWA."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Como a página da academia informa ao navegador onde está o manifesto da PWA?",
+      "alternativas": [
+        "Com `<script src=\"/manifest.json\"></script>` no fim do `<body>`",
+        "Com `<link rel=\"manifest\" href=\"/manifest.json\">` no `<head>`",
+        "Com `<meta name=\"manifest\" content=\"sim\">` no `<body>`",
+        "Com `<a href=\"/manifest.json\">Instalar</a>` no menu"
+      ],
+      "correta": 1,
+      "explicacao": "O manifesto é ligado à página por uma tag link com rel=\"manifest\" dentro do head."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No `manifest.json` de um app de biblioteca aparece `\"short_name\": \"Biblio\"`. Onde esse nome curto costuma aparecer?",
+      "alternativas": [
+        "No título de cada livro cadastrado no sistema da biblioteca",
+        "Na barra de endereço do navegador, no lugar do domínio do site",
+        "No nome do arquivo de backup gerado pelo banco de dados",
+        "Embaixo do ícone na tela inicial, onde há pouco espaço"
+      ],
+      "correta": 3,
+      "explicacao": "short_name é usado onde o espaço é pequeno, como o rótulo do ícone na tela inicial. O name completo aparece onde cabe mais texto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O manifesto de um app de pet shop tem `\"display\": \"standalone\"`. Como o app abre depois de instalado?",
+      "alternativas": [
+        "Dentro de uma aba comum, com todas as barras do navegador",
+        "Somente quando o celular estiver sem internet",
+        "Como um arquivo para download no computador",
+        "Numa janela própria, sem a barra de endereço do navegador"
+      ],
+      "correta": 3,
+      "explicacao": "standalone faz a PWA abrir como um aplicativo, em janela própria e sem a interface do navegador (barra de endereço, abas)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve a chave `\"start_url\"` no `manifest.json`?",
+      "alternativas": [
+        "Informar o endereço do servidor de banco de dados usado pelo app",
+        "Definir qual imagem é carregada primeiro em todas as páginas",
+        "Indicar a página que abre ao tocar no ícone do app instalado",
+        "Marcar a data e a hora em que o app foi publicado na internet"
+      ],
+      "correta": 2,
+      "explicacao": "start_url é o endereço aberto quando o app instalado é iniciado pelo ícone."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No manifesto de uma PWA, qual chave define a lista de imagens usadas como ícone do app, em vários tamanhos?",
+      "alternativas": [
+        "images",
+        "icons",
+        "logo",
+        "favicon_list"
+      ],
+      "correta": 1,
+      "explicacao": "A chave icons recebe uma lista de objetos com src, sizes e type, para o navegador escolher o tamanho certo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O manifesto do app de uma clínica tem `\"theme_color\": \"#0a7d5a\"` e `\"background_color\": \"#ffffff\"`. Qual a diferença entre as duas?",
+      "alternativas": [
+        "theme_color colore a barra do sistema; background_color, a tela de abertura",
+        "theme_color é a cor de todos os textos; background_color, a dos botões",
+        "São iguais; o navegador usa a que vier primeiro no arquivo do manifesto",
+        "theme_color só vale no computador e background_color só vale no celular"
+      ],
+      "correta": 0,
+      "explicacao": "theme_color colore elementos da interface ao redor do app (barra de status, barra de título). background_color é usada na tela de abertura (splash) enquanto o app carrega."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno abriu o site do cinema da escola no celular e o navegador não mostrou a opção de instalar, embora o `manifest.json` esteja correto. O site é acessado por `http://` num servidor da internet. Qual a causa mais provável?",
+      "alternativas": [
+        "O manifesto precisa se chamar index.json",
+        "Falta colocar o CSS dentro do manifesto",
+        "O celular precisa estar sem internet para instalar",
+        "O site não usa HTTPS, e a instalação exige conexão segura"
+      ],
+      "correta": 3,
+      "explicacao": "Recursos de PWA (instalação e service worker) só funcionam em contexto seguro: HTTPS (ou localhost no computador do desenvolvedor)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual valor de `display` no manifesto faz o app ocupar a tela inteira, escondendo até a barra de status do celular, como um jogo?",
+      "alternativas": [
+        "standalone",
+        "minimal-ui",
+        "fullscreen",
+        "browser"
+      ],
+      "correta": 2,
+      "explicacao": "fullscreen usa toda a tela. standalone parece app mas mantém a barra de status; minimal-ui deixa poucos controles; browser abre como aba comum."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que o manifesto de uma PWA costuma trazer ícones de 192x192 e de 512x512 pixels?",
+      "alternativas": [
+        "O navegador usa tamanhos diferentes na tela inicial e na de abertura",
+        "O ícone maior é usado no computador e o menor só em impressoras de rede",
+        "O navegador junta os dois ícones numa única imagem antes de instalar o app",
+        "Sem dois ícones de tamanhos diferentes o site não consegue carregar o CSS"
+      ],
+      "correta": 0,
+      "explicacao": "Cada lugar (tela inicial, tela de abertura, lista de apps) precisa de um tamanho. 192 e 512 são os tamanhos pedidos pelos navegadores para instalar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Comparando uma PWA com um aplicativo nativo de loja, qual afirmação está correta?",
+      "alternativas": [
+        "A PWA só funciona em celulares de uma única marca e de um único modelo",
+        "A PWA se atualiza ao publicar no servidor, sem baixar versão na loja",
+        "A PWA precisa ser reescrita numa linguagem diferente para cada sistema",
+        "A PWA não pode ser aberta pelo navegador, somente pela loja de aplicativos"
+      ],
+      "correta": 1,
+      "explicacao": "A PWA é feita com HTML, CSS e JavaScript e roda no navegador; quando o site é atualizado no servidor, o app recebe a versão nova."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas características NÃO faz parte da ideia de uma PWA?",
+      "alternativas": [
+        "Poder ser adicionada à tela inicial do celular",
+        "Funcionar, ao menos em parte, sem internet",
+        "Abrir numa janela própria, parecida com um app",
+        "Exigir que o usuário baixe um instalador .exe do site"
+      ],
+      "correta": 3,
+      "explicacao": "PWA é instalada pelo próprio navegador, sem instalador .exe. Tela inicial, uso offline e janela própria são características de PWA."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No manifesto do app da loja de games está `\"scope\": \"/loja/\"` e `\"start_url\": \"/loja/inicio.html\"`. Com o app instalado, o usuário clica num link para `/blog/novidades.html`. O que tende a acontecer?",
+      "alternativas": [
+        "Sai do escopo do app e abre com a interface do navegador",
+        "O app se desinstala automaticamente do celular do usuário",
+        "A página do blog é bloqueada pelo navegador e mostra erro 404",
+        "O app passa a considerar /blog/ como o seu novo start_url"
+      ],
+      "correta": 0,
+      "explicacao": "scope define quais endereços pertencem ao app. Ao navegar para fora dele, o navegador mostra a página fora do modo app (com barra ou em aba comum)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um técnico diz: \"basta colocar o manifest.json para o site funcionar sem internet\". O que está errado nessa afirmação?",
+      "alternativas": [
+        "O manifesto só funciona se o seu conteúdo estiver dentro do arquivo CSS",
+        "Para funcionar sem internet, o site precisa ser reescrito na linguagem PHP",
+        "O manifesto só descreve o app; o offline vem do service worker com cache",
+        "Nada está errado: o manifesto guarda uma cópia de todas as páginas do site"
+      ],
+      "correta": 2,
+      "explicacao": "O manifesto informa nome, ícones e forma de abrir. Responder sem internet depende de um service worker que guarda arquivos no cache."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Antes de registrar o service worker, o código da escola faz `if ('serviceWorker' in navigator) { ... }`. Por que esse teste?",
+      "alternativas": [
+        "Para descobrir se o usuário já está logado no sistema da escola",
+        "Para só registrar se o navegador suportar service worker",
+        "Para verificar se o arquivo CSS da página já terminou de carregar",
+        "Para saber se a página está aberta em tela cheia no celular"
+      ],
+      "correta": 1,
+      "explicacao": "Nem todo navegador tem suporte. O teste evita erro em navegadores antigos: o site continua funcionando, só sem os recursos extras."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um service worker é um script JavaScript que roda:",
+      "alternativas": [
+        "Dentro do servidor de banco de dados, no lugar dos comandos SQL",
+        "Somente quando o usuário clica num botão da página, e depois para",
+        "Dentro do arquivo HTML, junto com as tags do body, linha por linha",
+        "Em segundo plano, separado da página, interceptando requisições"
+      ],
+      "correta": 3,
+      "explicacao": "O service worker roda em segundo plano, numa thread separada da página, e fica entre o site e a rede, podendo responder às requisições."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas ações um service worker NÃO consegue fazer diretamente?",
+      "alternativas": [
+        "Mudar o texto de um parágrafo com document.querySelector",
+        "Interceptar uma requisição feita pela página que ele controla",
+        "Guardar arquivos da página usando a Cache API do navegador",
+        "Receber um evento de push enviado pelo servidor do site"
+      ],
+      "correta": 0,
+      "explicacao": "O service worker não tem acesso ao DOM (não existe document lá). Para mudar a página, ele precisa mandar uma mensagem e a página faz a alteração."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em qual destes endereços o registro de um service worker funciona?",
+      "alternativas": [
+        "http://padaria-exemplo.com.br",
+        "file:///C:/sites/padaria/index.html",
+        "https://padaria-exemplo.com.br",
+        "ftp://padaria-exemplo.com.br"
+      ],
+      "correta": 2,
+      "explicacao": "Service worker exige contexto seguro: HTTPS. A exceção é localhost, usado no desenvolvimento. http comum, file:// e ftp:// não servem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Durante o desenvolvimento, o aluno testa o service worker em `http://localhost:5500` e funciona, mesmo sem HTTPS. Por quê?",
+      "alternativas": [
+        "A porta 5500 já é criptografada pelo sistema operacional",
+        "O navegador trata localhost como seguro para testes",
+        "O service worker ignora o endereço da página onde é registrado",
+        "O VS Code instala HTTPS automaticamente em todos os sites"
+      ],
+      "correta": 1,
+      "explicacao": "localhost é considerado contexto seguro pelos navegadores, então APIs que exigem HTTPS funcionam ali para testes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual evento do service worker é usado para responder às requisições da página, por exemplo devolvendo um arquivo do cache?",
+      "alternativas": [
+        "fetch",
+        "click",
+        "load",
+        "submit"
+      ],
+      "correta": 0,
+      "explicacao": "O evento fetch dispara a cada requisição feita pelas páginas controladas; com event.respondWith o service worker decide a resposta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na ordem normal do ciclo de vida de um service worker novo, qual é a sequência?",
+      "alternativas": [
+        "activate → registro → install → fetch",
+        "fetch → install → registro → activate",
+        "install → fetch → registro → activate",
+        "registro → install → activate → controla as páginas (fetch)"
+      ],
+      "correta": 3,
+      "explicacao": "Primeiro a página registra; o navegador instala (install), depois ativa (activate) e só então o service worker passa a receber fetch das páginas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que o código abaixo faz?\n\n```js\nnavigator.serviceWorker.register('/sw.js')\n  .then(reg => console.log('ok', reg.scope))\n  .catch(err => console.log('falhou', err));\n```",
+      "alternativas": [
+        "Baixa o sw.js e executa ele dentro da própria página, uma única vez",
+        "Pede o registro do sw.js e mostra no console se deu certo ou não",
+        "Apaga o service worker antigo do site e não registra nenhum novo",
+        "Cria um arquivo sw.js novo e vazio dentro do servidor do site"
+      ],
+      "correta": 1,
+      "explicacao": "register devolve uma Promise: then recebe o registro (com o escopo) se deu certo; catch recebe o erro se falhou."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que é comum registrar o service worker dentro de `window.addEventListener('load', ...)`?",
+      "alternativas": [
+        "Porque o service worker só pode ser registrado depois de 1 minuto",
+        "Para que o service worker consiga acessar o DOM da página",
+        "Para não disputar rede e processamento com o carregamento inicial da página",
+        "Porque o evento load é o único que funciona em HTTPS"
+      ],
+      "correta": 2,
+      "explicacao": "Esperar o load deixa a primeira exibição da página mais rápida; o registro e o download do service worker acontecem depois."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo do service worker da clínica está em `/js/sw.js` e foi registrado sem opções. Quais páginas ele pode controlar?",
+      "alternativas": [
+        "Todas as páginas do site, de qualquer pasta, sem nenhuma exceção",
+        "Só a página index.html que estiver na raiz do site publicado",
+        "Nenhuma, pois o arquivo de service worker não pode ficar em pasta",
+        "Só as páginas em /js/, pois o escopo padrão é a pasta do arquivo"
+      ],
+      "correta": 3,
+      "explicacao": "O escopo padrão é a pasta onde o arquivo está. Por isso o sw.js costuma ficar na raiz do site, para controlar todas as páginas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No evento `install`, o código usa `event.waitUntil(promessa)`. Para que serve o `waitUntil`?",
+      "alternativas": [
+        "Pausa a página do usuário até ele clicar em OK numa janela de aviso",
+        "Repete a instalação do service worker a cada 10 segundos, sem parar",
+        "Faz o navegador esperar a promessa antes de concluir a instalação",
+        "Impede que o service worker use a internet enquanto estiver ativo"
+      ],
+      "correta": 2,
+      "explicacao": "waitUntil estende o evento: a instalação só termina quando a promessa (por exemplo, guardar arquivos no cache) termina. Se ela falhar, a instalação falha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um service worker novo foi instalado, mas a página continua usando o antigo. No painel do navegador ele aparece como \"waiting\" (esperando). Por quê?",
+      "alternativas": [
+        "O arquivo novo do service worker está com erro de sintaxe",
+        "O novo só assume quando as abas com o antigo forem fechadas",
+        "O navegador só ativa service workers novos no dia seguinte",
+        "O site perdeu o certificado HTTPS durante a atualização"
+      ],
+      "correta": 1,
+      "explicacao": "Por segurança, o service worker novo espera até nenhuma aba usar o antigo, para não misturar versões. self.skipWaiting() pode pular essa espera."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve chamar `self.skipWaiting()` dentro do evento `install`?",
+      "alternativas": [
+        "Ativar logo o service worker novo, sem esperar as abas antigas",
+        "Pular o download dos arquivos que seriam guardados no cache",
+        "Cancelar a instalação do service worker e voltar à versão anterior",
+        "Fazer o navegador ignorar todos os eventos fetch daquela versão"
+      ],
+      "correta": 0,
+      "explicacao": "skipWaiting faz a versão nova passar direto para activate. Deve ser usado com cuidado, pois páginas abertas passam a ser atendidas pela versão nova."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Que tarefa normalmente é feita no evento `activate` do service worker?",
+      "alternativas": [
+        "Apagar caches de versões antigas do app",
+        "Pedir permissão para enviar notificações",
+        "Registrar o próprio service worker de novo",
+        "Mostrar a página inicial ao usuário"
+      ],
+      "correta": 0,
+      "explicacao": "O activate acontece quando a versão nova assume; é o momento certo para limpar caches antigos que ela não usa mais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na primeira visita ao site da biblioteca, o service worker é registrado e ativado, mas as requisições daquela página ainda não passam por ele. Por quê?",
+      "alternativas": [
+        "O service worker só funciona no computador e nunca em navegadores de celular",
+        "Ela abriu antes dele existir; só fica controlada ao recarregar ou com clients.claim()",
+        "O HTTPS bloqueia o service worker na primeira visita do usuário ao site, por segurança",
+        "O service worker só intercepta requisições de imagens, nunca de páginas HTML"
+      ],
+      "correta": 1,
+      "explicacao": "Uma página é controlada pelo service worker que existia quando ela abriu. Na primeira visita, só a próxima navegação (ou clients.claim()) passa a ser controlada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes armazenamentos o service worker pode usar para guardar dados de pedidos?",
+      "alternativas": [
+        "localStorage",
+        "sessionStorage",
+        "document.cookie",
+        "IndexedDB"
+      ],
+      "correta": 3,
+      "explicacao": "localStorage, sessionStorage e document.cookie são APIs síncronas da página e não existem no service worker. Ele usa IndexedDB e Cache API."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O programador alterou uma linha do `sw.js` e publicou. Como o navegador do usuário percebe que existe uma versão nova?",
+      "alternativas": [
+        "O usuário precisa desinstalar o app e instalar de novo pela loja de aplicativos",
+        "O servidor envia um e-mail ao navegador do usuário avisando que houve uma mudança",
+        "O navegador baixa o sw.js ao abrir o site, compara e, se mudou, instala o novo",
+        "O navegador nunca percebe; o primeiro sw.js instalado fica valendo para sempre"
+      ],
+      "correta": 2,
+      "explicacao": "O navegador confere o arquivo do service worker nas navegações. Se houver diferença em algum byte, começa a instalação da versão nova (install → waiting → activate)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No evento `install`, o service worker guarda 5 arquivos com `cache.addAll([...])`, mas um deles não existe no servidor (erro 404). O que acontece?",
+      "alternativas": [
+        "A promessa falha e a instalação do service worker não é concluída",
+        "Os 4 arquivos certos são guardados e o erro é ignorado",
+        "O navegador cria um arquivo vazio no lugar do que falta",
+        "O service worker é instalado, mas sem o evento fetch"
+      ],
+      "correta": 0,
+      "explicacao": "addAll é tudo ou nada: se um arquivo falha, nada é guardado e a promessa é rejeitada. Dentro do waitUntil, isso faz a instalação falhar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma página quer avisar o service worker para limpar o cache. Como a página e o service worker se comunicam?",
+      "alternativas": [
+        "Lendo as mesmas variáveis globais do JavaScript da página",
+        "Usando document.getElementById dentro do service worker",
+        "Trocando mensagens com postMessage e o evento message",
+        "Chamando funções do service worker como se fossem da página"
+      ],
+      "correta": 2,
+      "explicacao": "Página e service worker rodam separados e não compartilham variáveis. A comunicação é por mensagens (postMessage / evento message)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O service worker do hotel ficou sem eventos por algum tempo e o navegador o encerrou. Uma variável global `let contador = 0` era incrementada a cada fetch. O que acontece com ela?",
+      "alternativas": [
+        "Continua com o último valor, salvo automaticamente no disco",
+        "É copiada para o localStorage da página que estava aberta",
+        "Fica travada e impede que novos eventos fetch aconteçam",
+        "Volta ao valor inicial quando ele é iniciado de novo"
+      ],
+      "correta": 3,
+      "explicacao": "O navegador pode parar o service worker quando ele está ocioso e iniciá-lo de novo no próximo evento. Variáveis globais se perdem; dados que precisam durar vão para IndexedDB ou Cache API."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma loja de roupas do bairro está em dúvida entre pagar um aplicativo nativo para Android e iPhone ou transformar o site em PWA.\n\nNa sua resposta:\n1. cite uma vantagem da PWA nesse caso;\n2. cite uma limitação ou cuidado que a loja deve considerar.",
+      "respostasAceitas": [
+        "Vantagem: um só código (HTML/CSS/JS) serve para todos os aparelhos, sem loja e com atualização direta pelo servidor. Limitação: alguns recursos do aparelho e notificações têm suporte menor em certos sistemas/navegadores."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) custo menor, um só código, sem loja, atualização simples; 2) suporte desigual entre navegadores/sistemas (ex.: push e sync), menos acesso a recursos nativos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Observe o trecho de manifesto de um app de academia:\n\n```json\n{ \"name\": \"Academia Força Total\", \"short_name\": \"Força\", \"start_url\": \"/treinos.html\", \"display\": \"standalone\" }\n```\n\nNa sua resposta:\n1. explique o que significam name e short_name e onde cada um aparece;\n2. diga o que acontece quando o aluno toca no ícone do app instalado.",
+      "respostasAceitas": [
+        "name é o nome completo, usado onde há espaço (instalação, tela de abertura); short_name é o nome curto do ícone na tela inicial. Ao tocar no ícone abre /treinos.html numa janela própria, sem barra de endereço."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) name completo x short_name curto para espaço pequeno; 2) abre a start_url (/treinos.html) em modo standalone."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega diz que \"PWA é só um site que funciona no celular\".\n\nNa sua resposta:\n1. diga por que essa frase está incompleta;\n2. cite as três peças que normalmente transformam um site em PWA.",
+      "respostasAceitas": [
+        "Todo site responsivo funciona no celular; a PWA vai além: pode ser instalada, abre como app e funciona offline. Peças: manifest.json, service worker e HTTPS."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) diferença entre site responsivo e app instalável/offline; 2) manifesto, service worker, HTTPS."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O manifesto do app de uma pizzaria foi publicado com `\"display\": \"browser\"`. Depois de instalado, o app abre com a barra de endereço e as abas do navegador, e o dono reclamou.\n\nNa sua resposta:\n1. explique por que isso acontece;\n2. diga qual valor de display resolve e o que muda para o cliente.",
+      "respostasAceitas": [
+        "Com display browser o app abre como uma aba comum do navegador. Usando standalone ele abre em janela própria, sem barra de endereço, parecendo um aplicativo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) browser = abre como aba normal; 2) standalone (ou fullscreen/minimal-ui com justificativa) dá aparência de app."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O site da clínica tem manifesto e service worker corretos, mas foi publicado num servidor só com `http://`. No celular, o botão de instalar não aparece e o service worker não registra.\n\nNa sua resposta:\n1. explique por que os navegadores exigem HTTPS para service worker e PWA;\n2. diga por que no computador do programador, em localhost, funcionava.",
+      "respostasAceitas": [
+        "O service worker intercepta todas as requisições; sem HTTPS alguém na rede poderia trocar o script e controlar o site. localhost é tratado como seguro para permitir testes no desenvolvimento."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) segurança: o service worker tem muito poder, HTTPS evita script adulterado (ataque no meio do caminho); 2) exceção de localhost para desenvolvimento."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma escola quer que a agenda de provas \"funcione sem internet\". O estagiário adicionou só o `manifest.json` e o ícone apareceu na tela inicial, mas sem internet aparece a tela de erro do navegador.\n\nNa sua resposta:\n1. explique por que o manifesto não resolveu o problema;\n2. diga o que falta e como essa peça permite abrir a agenda offline.",
+      "respostasAceitas": [
+        "O manifesto só descreve o app (nome, ícone, como abre). Falta um service worker que guarde as páginas e arquivos no cache e, sem internet, responda às requisições com o que está no cache."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) manifesto não guarda arquivos; 2) service worker + Cache API interceptando fetch e respondendo do cache."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O manifesto de um app de hotel está assim:\n\n```json\n{ \"name\": \"Hotel Serra\", \"start_url\": \"/reservas/\", \"scope\": \"/reservas/\", \"display\": \"standalone\" }\n```\n\nO botão \"Ver passeios\" leva para `/passeios/lista.html`, e o hóspede reclama que nessa hora \"o app virou site\" (apareceu a barra do navegador).\n\nNa sua resposta:\n1. explique por que isso acontece;\n2. proponha uma mudança no manifesto e diga um cuidado ao aplicá-la.",
+      "respostasAceitas": [
+        "A página /passeios/ está fora do scope /reservas/, então sai do modo app. Mudar o scope para \"/\" incluiria as duas pastas; cuidado: o app passa a abranger todo o site, e o service worker também precisa ter escopo compatível."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) navegação para fora do scope abre com interface do navegador; 2) ampliar o scope (ex.: \"/\") ou mover a página; cuidado com abranger páginas indesejadas/escopo do service worker."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno pergunta por que o service worker é chamado de \"intermediário\" (proxy) entre o site e a internet.\n\nNa sua resposta:\n1. explique o que o service worker faz com as requisições da página;\n2. dê um exemplo de uso dessa capacidade num site de cardápio.",
+      "respostasAceitas": [
+        "Ele intercepta as requisições (evento fetch) e decide a resposta: buscar na rede, no cache ou montar outra. Exemplo: mostrar o cardápio guardado no cache quando o cliente estiver sem internet."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) intercepta fetch e decide a resposta; 2) exemplo coerente (offline, carregar mais rápido do cache)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Observe o código:\n\n```js\nif ('serviceWorker' in navigator) {\n  navigator.serviceWorker.register('/sw.js');\n}\n```\n\nNa sua resposta:\n1. explique o que cada parte faz;\n2. diga o que acontece num navegador antigo, sem suporte.",
+      "respostasAceitas": [
+        "O if verifica se o navegador tem suporte a service worker; se tiver, register pede para registrar o arquivo /sw.js. Num navegador sem suporte o if é falso, nada é registrado e o site continua funcionando normalmente, só sem os recursos offline."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) teste de suporte + registro do arquivo; 2) sem suporte, não dá erro e o site funciona sem os extras (melhoria progressiva)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um service worker tem estes três eventos: `install`, `activate` e `fetch`.\n\nNa sua resposta:\n1. diga em que momento cada um acontece;\n2. cite uma tarefa típica feita em cada um.",
+      "respostasAceitas": [
+        "install: logo após o registro/atualização, uma vez por versão — guardar arquivos básicos no cache. activate: quando a versão assume — apagar caches antigos. fetch: a cada requisição das páginas — responder do cache ou da rede."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) momentos corretos do ciclo de vida; 2) tarefas: pré-cache no install, limpeza no activate, responder requisições no fetch."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O programador da loja de games publicou uma versão nova do `sw.js`, mas os usuários com a loja aberta em várias abas continuam vendo a versão antiga. No painel do navegador, o novo service worker aparece como \"waiting\".\n\nNa sua resposta:\n1. explique por que o navegador deixa o novo esperando;\n2. diga quando ele vai assumir e uma forma de antecipar isso.",
+      "respostasAceitas": [
+        "O navegador evita que abas abertas misturem duas versões (por exemplo, cache novo com página antiga). O novo assume quando todas as abas com a versão antiga forem fechadas; dá para antecipar com self.skipWaiting() (e clients.claim()) ou pedindo ao usuário para recarregar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) evitar mistura de versões/consistência; 2) ao fechar todas as abas; skipWaiting/clients.claim ou aviso \"nova versão, recarregar\"."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno tentou mudar o título da página dentro do service worker com `document.title = 'Offline'` e recebeu erro.\n\nNa sua resposta:\n1. explique por que esse código não funciona no service worker;\n2. diga como o service worker pode fazer a página mudar o título.",
+      "respostasAceitas": [
+        "O service worker roda separado da página e não tem acesso ao DOM (não existe document nele). Ele pode mandar uma mensagem com postMessage para a página, que escuta o evento message e muda o título."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sem DOM/document no service worker, thread separada; 2) comunicação por postMessage/evento message."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O sw.js da clínica foi colocado na pasta `/scripts/sw.js` e registrado assim: `navigator.serviceWorker.register('/scripts/sw.js')`. As páginas `/agenda.html` e `/index.html` não funcionam offline.\n\nNa sua resposta:\n1. explique o que é o escopo do service worker e por que essas páginas não foram controladas;\n2. diga a solução mais simples.",
+      "respostasAceitas": [
+        "O escopo é o conjunto de endereços que o service worker controla; por padrão é a pasta do arquivo, aqui /scripts/. As páginas da raiz ficaram fora. Solução: mover o sw.js para a raiz do site (/sw.js)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) escopo padrão = pasta do script; 2) colocar o arquivo na raiz (ou configurar escopo com cabeçalho Service-Worker-Allowed, opcional)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja o trecho do service worker de uma papelaria:\n\n```js\nself.addEventListener('install', event => {\n  event.waitUntil(\n    caches.open('papelaria-v3').then(c => c.addAll(['/', '/css/app.css', '/js/app.js', '/img/logo.png']))\n  );\n});\n```\n\nO arquivo `/img/logo.png` foi renomeado no servidor e não existe mais.\n\nNa sua resposta:\n1. explique o que acontece com a instalação desse service worker;\n2. diga por que esse comportamento \"tudo ou nada\" é útil.",
+      "respostasAceitas": [
+        "addAll falha porque um arquivo dá erro; a promessa do waitUntil é rejeitada e a instalação não termina, então a versão v3 não é ativada (a anterior continua). É útil porque evita ativar um app offline incompleto, com arquivos faltando."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) addAll falha por inteiro, install falha, versão nova não assume; 2) garante cache completo e consistente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um programador guardava a lista de pedidos pendentes numa variável global do service worker (`let pendentes = []`). Às vezes a lista \"some\" sem ninguém apagar.\n\nNa sua resposta:\n1. explique por que a lista se perde;\n2. diga onde guardar esses dados e por quê.",
+      "respostasAceitas": [
+        "O navegador encerra o service worker quando ele fica sem eventos e o reinicia depois; a memória (variáveis globais) é perdida. Os dados devem ir para IndexedDB (ou Cache API), que guardam no disco e estão disponíveis no service worker."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) service worker é parado/reiniciado pelo navegador, estado em memória some; 2) IndexedDB, armazenamento persistente acessível no service worker (localStorage não existe nele)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Onde o programador confere se o service worker do site foi registrado e está ativo, usando o Chrome?",
+      "alternativas": [
+        "No menu Imprimir do navegador, na opção de visualizar a página",
+        "Nas DevTools (F12), na aba Application, em Service workers",
+        "No Gerenciador de Tarefas do Windows, na lista de Serviços",
+        "No arquivo manifest.json, olhando o valor da chave status"
+      ],
+      "correta": 1,
+      "explicacao": "A aba Application (Aplicativo) das DevTools mostra o service worker, seu estado, o cache e permite simular offline."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A Cache API permite ao site:",
+      "alternativas": [
+        "Guardar as senhas do usuário de forma criptografada no servidor",
+        "Aumentar a velocidade da conexão de internet do próprio usuário",
+        "Criar tabelas e executar consultas SQL direto no navegador",
+        "Guardar pares de requisição e resposta para usar até sem internet"
+      ],
+      "correta": 3,
+      "explicacao": "A Cache API guarda respostas (HTML, CSS, imagens, JSON) ligadas às requisições, para o site reaproveitar sem buscar de novo na rede."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando abre (ou cria, se não existir) um cache chamado `cardapio-v1`?",
+      "alternativas": [
+        "`caches.open('cardapio-v1')`",
+        "`localStorage.getItem('cardapio-v1')`",
+        "`fetch('cardapio-v1')`",
+        "`document.cache('cardapio-v1')`"
+      ],
+      "correta": 0,
+      "explicacao": "caches.open devolve uma Promise com o cache daquele nome; se ele não existe, é criado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que `caches.match(event.request)` devolve quando a requisição NÃO está guardada no cache?",
+      "alternativas": [
+        "Um erro que trava o service worker",
+        "A página da internet automaticamente",
+        "Uma promessa que resolve com undefined",
+        "Uma resposta vazia com status 200"
+      ],
+      "correta": 2,
+      "explicacao": "match resolve com a resposta guardada ou com undefined se não encontrar. Por isso o código costuma fazer `resposta || fetch(event.request)`."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na estratégia **cache-first** (primeiro o cache), o que o service worker faz a cada requisição?",
+      "alternativas": [
+        "Vai sempre à rede e ignora o cache",
+        "Procura no cache; só vai à rede se não encontrar",
+        "Vai à rede e, se falhar, mostra erro sem olhar o cache",
+        "Apaga o cache e baixa tudo de novo"
+      ],
+      "correta": 1,
+      "explicacao": "Cache-first responde do cache quando existe; a rede é usada só para o que não está guardado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na estratégia **network-first** (primeiro a rede), o que acontece quando o usuário está sem internet?",
+      "alternativas": [
+        "A página fica em branco, pois nessa estratégia o cache nunca é usado",
+        "O navegador espera a internet voltar sem mostrar nada na tela",
+        "A rede falha e o service worker entrega a cópia do cache",
+        "O service worker baixa o mesmo arquivo de outro site parecido"
+      ],
+      "correta": 2,
+      "explicacao": "Network-first tenta a rede para ter o dado mais novo; se falhar (offline), usa o que está no cache."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para o logotipo e o arquivo CSS de um pet shop, que quase nunca mudam, qual estratégia é mais indicada?",
+      "alternativas": [
+        "network-only",
+        "network-first",
+        "nenhum cache",
+        "cache-first"
+      ],
+      "correta": 3,
+      "explicacao": "Arquivos estáticos que mudam pouco ficam ótimos com cache-first: carregam rápido e funcionam offline."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O site de uma lanchonete mostra o \"prato do dia\", que muda todos os dias. O cliente quer sempre ver o mais atual, mas ainda ver algo sem internet. Qual estratégia combina com isso?",
+      "alternativas": [
+        "cache-only",
+        "network-first",
+        "cache-first sem nunca atualizar",
+        "apagar o cache a cada clique"
+      ],
+      "correta": 1,
+      "explicacao": "Network-first traz o dado novo quando há rede e, sem rede, mostra a última versão guardada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz este código no service worker?\n\n```js\nself.addEventListener('fetch', event => {\n  event.respondWith(\n    caches.match(event.request).then(r => r || fetch(event.request))\n  );\n});\n```",
+      "alternativas": [
+        "Responde com a cópia do cache e, se não houver, busca na rede",
+        "Busca o arquivo na rede e depois guarda a resposta no cache",
+        "Apaga do cache tudo o que vier da rede durante a navegação",
+        "Responde sempre com o que vem da rede e ignora o que há no cache"
+      ],
+      "correta": 0,
+      "explicacao": "É a estratégia cache-first: caches.match procura; se r for undefined, faz fetch na rede."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual a diferença entre `cache.add(url)` e `cache.put(requisicao, resposta)`?",
+      "alternativas": [
+        "add apaga a URL que estava no cache; put adiciona uma URL nova nele",
+        "add só funciona com imagens; put só funciona com páginas em HTML",
+        "Não há diferença nenhuma: put é apenas um apelido para o método add",
+        "add busca a URL na rede e guarda; put grava uma resposta já obtida"
+      ],
+      "correta": 3,
+      "explicacao": "add faz o fetch e guarda o resultado. put recebe uma resposta já obtida (por exemplo, no network-first) e grava no cache."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No network-first, o código faz `cache.put(event.request, resposta.clone())` e devolve `resposta` à página. Por que o `clone()`?",
+      "alternativas": [
+        "Para deixar a resposta menor e mais rápida de chegar ao usuário",
+        "Porque o cache só aceita guardar respostas que estejam em formato JSON",
+        "O corpo da resposta só pode ser lido uma vez: uma cópia vai ao cache",
+        "Para criptografar o conteúdo da resposta antes de guardar no cache"
+      ],
+      "correta": 2,
+      "explicacao": "O corpo (body) de um Response é um fluxo que só pode ser consumido uma vez. Clonando, uma cópia é gravada e a outra é entregue."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que é comum colocar a versão no nome do cache, como `loja-v1`, `loja-v2`?",
+      "alternativas": [
+        "Porque o navegador só aceita nomes de cache que tenham números",
+        "Para ter um cache novo por versão e apagar os antigos no activate",
+        "Para o cache expirar sozinho depois de uma semana de uso",
+        "Para o usuário escolher, num menu, qual versão do app quer usar"
+      ],
+      "correta": 1,
+      "explicacao": "Ao mudar arquivos, o service worker novo usa um nome de cache novo e, no activate, apaga os que não são da versão atual."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Itens guardados com a Cache API são apagados automaticamente depois de algum tempo?",
+      "alternativas": [
+        "Não; ficam até o código apagar ou o navegador liberar espaço",
+        "Sim, sempre depois de 24 horas, contadas a partir de quando foram salvos",
+        "Sim, sempre que a página é recarregada pelo usuário no navegador",
+        "Sim, sempre que o service worker recebe um novo evento fetch da página"
+      ],
+      "correta": 0,
+      "explicacao": "A Cache API não tem validade automática: o programador controla quando apagar. O navegador só remove se faltar espaço ou o usuário limpar os dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual estratégia responde na hora com a cópia do cache e, ao mesmo tempo, busca a versão nova na rede para atualizar o cache?",
+      "alternativas": [
+        "stale-while-revalidate",
+        "network-only",
+        "cache-only",
+        "network-first"
+      ],
+      "correta": 0,
+      "explicacao": "Stale-while-revalidate entrega rápido a versão guardada (talvez um pouco velha) e atualiza o cache em segundo plano para a próxima vez."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de uma loja, a requisição que finaliza o pagamento (POST) deve usar qual estratégia?",
+      "alternativas": [
+        "cache-first, para ser mais rápida",
+        "network-only, sem guardar no cache",
+        "cache-only, para funcionar offline",
+        "stale-while-revalidate, para responder na hora"
+      ],
+      "correta": 1,
+      "explicacao": "Pagamento precisa chegar ao servidor de verdade e não pode ser respondido com uma cópia antiga. Além disso, a Cache API não guarda requisições POST."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve, no service worker, guardar uma página `offline.html` no install e entregá-la quando a rede falhar numa navegação?",
+      "alternativas": [
+        "Fazer o celular reconectar à internet sozinho, sem o usuário fazer nada",
+        "Enviar ao servidor um aviso de que o usuário saiu do site",
+        "Impedir que o usuário navegue para outras páginas do site enquanto isso",
+        "Mostrar uma página amigável em vez do erro do navegador"
+      ],
+      "correta": 3,
+      "explicacao": "A página de fallback offline explica ao usuário que ele está sem conexão, mantendo a cara do site."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual código lista os nomes de todos os caches do site, para depois apagar os antigos?",
+      "alternativas": [
+        "`caches.match()`",
+        "`cache.addAll()`",
+        "`caches.keys()`",
+        "`caches.open()`"
+      ],
+      "correta": 2,
+      "explicacao": "caches.keys() resolve com um array com os nomes dos caches; com ele, o activate apaga os que não são da versão atual."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o activate do service worker:\n\n```js\nconst ATUAL = 'escola-v4';\nself.addEventListener('activate', e => {\n  e.waitUntil(caches.keys().then(nomes =>\n    Promise.all(nomes.filter(n => n !== ATUAL).map(n => caches.delete(n)))));\n});\n```\n\nExistem os caches `escola-v2`, `escola-v3` e `escola-v4`. O que sobra?",
+      "alternativas": [
+        "Somente escola-v2",
+        "escola-v2 e escola-v3",
+        "Somente escola-v4",
+        "Nenhum cache"
+      ],
+      "correta": 2,
+      "explicacao": "O filter seleciona os nomes diferentes de ATUAL (v2 e v3) e cada um é apagado com caches.delete. Sobra só o escola-v4."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O site do cinema usa cache-first para `/js/app.js` e o nome do cache nunca muda. O programador corrigiu um bug no app.js e publicou. O que os usuários que já visitaram o site veem?",
+      "alternativas": [
+        "Recebem o app.js novo automaticamente, na mesma hora da publicação",
+        "Seguem com o app.js antigo, com o bug, pois vem do cache",
+        "Recebem uma mensagem de erro, porque o cache detecta a mudança no arquivo",
+        "O navegador apaga o cache sozinho assim que percebe que há um bug"
+      ],
+      "correta": 1,
+      "explicacao": "Em cache-first, se o arquivo já está no cache, a rede nem é consultada. Sem trocar a versão do cache (ou do nome do arquivo), a cópia velha continua sendo entregue."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de notícias escolar usa network-first para as notícias. Em lugares com internet muito lenta (rede que não cai, mas demora 20 segundos), qual é o problema dessa estratégia?",
+      "alternativas": [
+        "O usuário espera a rede lenta antes de ver a cópia do cache",
+        "O cache é apagado toda vez que a rede está lenta",
+        "As notícias são enviadas duas vezes ao servidor",
+        "O navegador bloqueia o service worker por lentidão"
+      ],
+      "correta": 0,
+      "explicacao": "Network-first só cai no cache quando a rede falha. Com rede lenta ela não falha, só demora. Uma solução é usar um tempo limite (timeout) para cair no cache."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual afirmação sobre a Cache API e o cache HTTP comum do navegador está correta?",
+      "alternativas": [
+        "Os dois são exatamente a mesma coisa, só que com nomes diferentes em cada navegador",
+        "A Cache API só existe no servidor do site e o cache HTTP só existe no celular",
+        "O cache HTTP funciona sem internet e a Cache API nunca funciona sem internet",
+        "Na Cache API o código do site decide; o cache HTTP segue cabeçalhos do servidor"
+      ],
+      "correta": 3,
+      "explicacao": "Na Cache API o JavaScript decide o que guardar, quando usar e quando apagar. O cache HTTP é automático e segue cabeçalhos como Cache-Control."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de cardápio guarda no cache, durante o install, 300 fotos grandes de pratos. Qual é o risco disso?",
+      "alternativas": [
+        "As fotos ficam com as cores trocadas quando são guardadas no cache",
+        "O service worker passa a ter acesso ao DOM das páginas do cardápio",
+        "O site perde o certificado HTTPS por causa do excesso de arquivos",
+        "Instalação lenta e muito uso de espaço e de dados móveis"
+      ],
+      "correta": 3,
+      "explicacao": "Pré-cache deve ter só o essencial (o \"esqueleto\" do app). Fotos podem ser guardadas sob demanda, quando o usuário as vê."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual comando JavaScript pede ao usuário permissão para o site mostrar notificações?",
+      "alternativas": [
+        "`Notification.requestPermission()`",
+        "`navigator.geolocation.getCurrentPosition()`",
+        "`window.alert('Permitir?')`",
+        "`localStorage.setItem('notificar', true)`"
+      ],
+      "correta": 0,
+      "explicacao": "Notification.requestPermission() abre o pedido do navegador e devolve a resposta do usuário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quais são os três valores possíveis de `Notification.permission`?",
+      "alternativas": [
+        "sim, não e talvez",
+        "granted, denied e default",
+        "true, false e null",
+        "on, off e pending"
+      ],
+      "correta": 1,
+      "explicacao": "granted = permitido; denied = bloqueado; default = o usuário ainda não decidiu."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao abrir pela primeira vez o site de uma loja, antes de qualquer clique, aparece o pedido \"Permitir notificações?\". Por que isso é considerado má prática?",
+      "alternativas": [
+        "Porque o pedido só funciona depois de 5 minutos na página",
+        "Porque notificações só podem ser pedidas na página de contato",
+        "O usuário ainda não sabe por que receberia avisos e tende a bloquear",
+        "Porque o pedido apaga o cache do site"
+      ],
+      "correta": 2,
+      "explicacao": "O melhor é pedir após uma ação do usuário e explicando o benefício (ex.: \"Avise-me quando o pedido sair\"). Pedido sem contexto costuma ser recusado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de clínica quer lembrar o paciente da consulta mesmo com o site fechado. Qual a função do service worker nisso?",
+      "alternativas": [
+        "Ficar com a página do site aberta, escondida, o tempo todo no celular",
+        "Enviar uma mensagem SMS para o paciente pela operadora do celular",
+        "Receber o push em segundo plano e mostrar a notificação",
+        "Guardar o dia e a hora da consulta dentro do arquivo manifest.json"
+      ],
+      "correta": 2,
+      "explicacao": "O push chega ao service worker mesmo com a página fechada; ele trata o evento push e mostra a notificação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual a diferença entre a **Push API** e a **Notifications API**?",
+      "alternativas": [
+        "Push recebe a mensagem do servidor; Notifications mostra o aviso na tela",
+        "Push mostra o aviso; Notifications recebe a mensagem do servidor",
+        "As duas servem para guardar arquivos no cache",
+        "Push é para computador e Notifications é para celular"
+      ],
+      "correta": 0,
+      "explicacao": "A Push API entrega a mensagem vinda do servidor ao service worker. A Notifications API exibe a notificação para o usuário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O usuário clicou em \"Bloquear\" no pedido de notificações do site da academia. O que acontece se o site chamar `Notification.requestPermission()` de novo?",
+      "alternativas": [
+        "O pedido aparece de novo, maior e em vermelho",
+        "O navegador libera as notificações depois de 3 pedidos",
+        "O site é desinstalado automaticamente",
+        "O navegador não pergunta outra vez; a resposta continua denied"
+      ],
+      "correta": 3,
+      "explicacao": "Depois de denied, o site não consegue perguntar de novo. Só o usuário pode mudar nas configurações do navegador."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Dentro do service worker, qual código mostra uma notificação quando chega um push?",
+      "alternativas": [
+        "`window.alert('Pedido pronto, retire no balcão da loja')`",
+        "`self.registration.showNotification('Pronto', { body: 'Retire' })`",
+        "`document.body.innerHTML = '<p>Pedido pronto, retire</p>'`",
+        "`console.log('Pedido pronto', { body: 'Retire no balcão' })`"
+      ],
+      "correta": 1,
+      "explicacao": "No service worker a notificação é exibida com registration.showNotification. alert e document não existem lá, e console.log não aparece para o usuário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve o objeto devolvido por `registration.pushManager.subscribe(...)` (a inscrição, com um `endpoint`)?",
+      "alternativas": [
+        "Mostrar a notificação na tela do usuário imediatamente, sem servidor",
+        "Guardar as fotos e os arquivos do usuário no cache do service worker",
+        "Ir ao servidor do site, que o usa para mandar mensagens a esse navegador",
+        "Pedir ao usuário permissão para usar a localização do celular"
+      ],
+      "correta": 2,
+      "explicacao": "A inscrição identifica aquele navegador no serviço de push. O servidor do site guarda e usa o endpoint para enviar mensagens."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No service worker, qual evento é disparado quando o usuário clica na notificação \"Seu pet está pronto para buscar\"?",
+      "alternativas": [
+        "push",
+        "notificationclick",
+        "fetch",
+        "install"
+      ],
+      "correta": 1,
+      "explicacao": "notificationclick permite, por exemplo, abrir a página do pedido com clients.openWindow e fechar a notificação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um site de loja de games envia 6 notificações de promoção por dia. Qual a consequência mais provável?",
+      "alternativas": [
+        "Os usuários se irritam e bloqueiam as notificações do site",
+        "O site sobe nas buscas por enviar muitos avisos",
+        "O celular passa a carregar o site mais rápido",
+        "O navegador transforma o site em app nativo"
+      ],
+      "correta": 0,
+      "explicacao": "Notificação deve ser útil e no momento certo. Excesso vira incômodo e leva ao bloqueio, perdendo o canal de vez."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O site de uma pizzaria pede `Notification.requestPermission()` dentro de um `setTimeout` de 10 segundos após abrir a página, e em alguns navegadores o pedido nem aparece. Por quê?",
+      "alternativas": [
+        "O setTimeout desativa o HTTPS da página enquanto o tempo está contando",
+        "O pedido de permissão só pode ser feito de dentro do arquivo manifest.json",
+        "Notificações só podem ser pedidas dentro do evento activate do service worker",
+        "Navegadores exigem que o pedido venha de uma ação do usuário"
+      ],
+      "correta": 3,
+      "explicacao": "Para evitar abuso, vários navegadores só mostram o pedido quando ele é disparado por um gesto do usuário (clique, toque)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na inscrição de push, o código usa `{ userVisibleOnly: true }`. O que essa opção promete ao navegador?",
+      "alternativas": [
+        "Que só o usuário logado no sistema verá as páginas do site",
+        "Que as notificações ficarão invisíveis para não incomodar o usuário",
+        "Que o push só vai funcionar enquanto a página estiver aberta na tela",
+        "Que todo push recebido vai gerar uma notificação visível"
+      ],
+      "correta": 3,
+      "explicacao": "Com userVisibleOnly: true o site se compromete a mostrar notificação a cada push, impedindo mensagens silenciosas escondidas do usuário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para enviar um push para o navegador de um cliente, por onde a mensagem passa?",
+      "alternativas": [
+        "Servidor do site → arquivo manifest.json → página aberta no celular",
+        "Servidor do site → serviço de push do navegador → service worker",
+        "Página do cliente → servidor do site → Cache API do navegador do cliente",
+        "Serviço de e-mail → localStorage da página → service worker do cliente"
+      ],
+      "correta": 1,
+      "explicacao": "O servidor do site envia para o serviço de push do fabricante do navegador (endereço do endpoint), que entrega ao service worker no aparelho."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Durante os testes, o aluno marca a opção \"Offline\" na aba Application das ferramentas do desenvolvedor e recarrega o site da biblioteca.\n\nNa sua resposta:\n1. explique para que serve esse teste;\n2. diga o que ele deve observar para saber se o service worker está funcionando.",
+      "respostasAceitas": [
+        "Serve para simular o usuário sem internet sem desligar a rede de verdade. Se o service worker e o cache estiverem certos, a página abre normalmente (vindo do cache) em vez da tela de erro do navegador."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) simular falta de conexão; 2) a página carrega a partir do service worker/cache (ou mostra a página offline própria)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um site de academia tem: (A) o arquivo de estilos `estilo.css`, que muda poucas vezes por ano; (B) a lista de horários das aulas de hoje, que muda todo dia.\n\nNa sua resposta:\n1. diga qual estratégia de cache usaria para A e para B;\n2. justifique cada escolha.",
+      "respostasAceitas": [
+        "A: cache-first, pois quase não muda e assim carrega rápido e offline. B: network-first, para mostrar sempre o horário atualizado e, sem internet, a última versão guardada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) A cache-first, B network-first (stale-while-revalidate aceitável para B com justificativa); 2) justificativas ligadas à frequência de mudança e à atualização."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique, com suas palavras, a ideia das estratégias **cache-first** e **network-first**.\n\nNa sua resposta:\n1. diga o que cada uma tenta primeiro e o que faz se falhar;\n2. cite a principal vantagem de cada uma.",
+      "respostasAceitas": [
+        "Cache-first olha primeiro o cache e só vai à rede se não achar; vantagem: rapidez e funcionar offline. Network-first vai primeiro à rede e, se falhar, usa o cache; vantagem: dado sempre atualizado quando há conexão."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ordem de cada estratégia e plano B; 2) velocidade/offline x dados atualizados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Observe o trecho do service worker de uma pizzaria:\n\n```js\nself.addEventListener('install', e => {\n  e.waitUntil(caches.open('pizza-v1').then(c => c.addAll(['/', '/cardapio.html', '/css/site.css'])));\n});\n```\n\nNa sua resposta:\n1. explique o que esse código faz e em que momento;\n2. diga que vantagem o cliente tem por causa dele.",
+      "respostasAceitas": [
+        "Na instalação do service worker, abre o cache pizza-v1 e guarda a página inicial, o cardápio e o CSS. Assim o cliente consegue abrir essas páginas rapidamente e até sem internet."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) pré-cache dos arquivos no install; 2) carregamento rápido/uso offline."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja o fetch do service worker de um app de notícias da escola:\n\n```js\nevent.respondWith(\n  fetch(event.request)\n    .then(resp => { const copia = resp.clone(); caches.open('noticias').then(c => c.put(event.request, copia)); return resp; })\n    .catch(() => caches.match(event.request))\n);\n```\n\nNa sua resposta:\n1. diga qual estratégia é essa e explique o caminho com e sem internet;\n2. explique por que a resposta é clonada.",
+      "respostasAceitas": [
+        "É network-first: com internet busca na rede, guarda uma cópia no cache e entrega a resposta; sem internet o fetch falha e o catch entrega a cópia do cache. Clona porque o corpo da resposta só pode ser lido uma vez: uma cópia vai para o cache e a outra para a página."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) network-first com atualização do cache e fallback; 2) corpo do Response só pode ser consumido uma vez."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O programador de um pet shop atualizou o CSS do site, mas os clientes continuam vendo o visual antigo. O service worker usa cache-first e o nome do cache é sempre `petshop`.\n\nNa sua resposta:\n1. explique por que o CSS novo não aparece;\n2. descreva como versionar o cache resolve o problema.",
+      "respostasAceitas": [
+        "Em cache-first o arquivo é entregue do cache e a rede não é consultada, então o CSS velho continua. Trocando o nome para petshop-v2 no sw.js, o service worker novo é instalado, guarda os arquivos novos nesse cache e no activate apaga o cache antigo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cache-first entrega cópia velha; 2) mudar versão do cache/sw.js → novo install com arquivos novos → activate apaga o antigo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega acha que basta usar cache-first em tudo, \"porque é mais rápido\", inclusive na tela que mostra o saldo de pontos do cliente de uma loja.\n\nNa sua resposta:\n1. explique o problema de usar cache-first nessa tela;\n2. sugira uma estratégia melhor e justifique.",
+      "respostasAceitas": [
+        "Com cache-first o cliente veria um saldo antigo, que já mudou no servidor. Melhor network-first (ou network-only): busca o saldo atual e, se estiver offline, mostra o último guardado avisando que pode estar desatualizado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dado desatualizado/errado; 2) network-first ou network-only, com justificativa de dado que muda."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A estratégia **stale-while-revalidate** é usada na lista de produtos de uma papelaria.\n\nNa sua resposta:\n1. explique como ela funciona;\n2. diga uma vantagem e uma desvantagem para o cliente.",
+      "respostasAceitas": [
+        "Responde na hora com a cópia do cache e, ao mesmo tempo, busca na rede a versão nova para atualizar o cache. Vantagem: abre rápido. Desvantagem: o cliente pode ver preço ou produto desatualizado até a próxima visita."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cache imediato + atualização em segundo plano; 2) rapidez x pode mostrar dado um pouco velho."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de hotel guarda no cache todas as páginas que o hóspede visita, para sempre, e nunca apaga nada. Depois de meses, alguns usuários reclamam de pouco espaço e de ver páginas com preços antigos.\n\nNa sua resposta:\n1. explique por que isso acontece com a Cache API;\n2. proponha duas medidas para corrigir.",
+      "respostasAceitas": [
+        "A Cache API não expira sozinha: o que é guardado fica até o código apagar. Medidas: versionar o cache e apagar os antigos no activate; limitar a quantidade ou idade dos itens guardados; usar network-first em páginas de preço."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sem expiração automática, controle é do programador; 2) duas medidas coerentes (versionar/limpar no activate, limite de itens, estratégia adequada para dados que mudam)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de cardápio usa network-first. Na lanchonete, o Wi-Fi às vezes fica \"pendurado\": não cai, mas a resposta demora uns 30 segundos, e o cliente fica olhando uma tela vazia.\n\nNa sua resposta:\n1. explique por que o network-first não usa o cache nessa situação;\n2. proponha uma melhoria e diga o que ela muda para o cliente.",
+      "respostasAceitas": [
+        "Network-first só usa o cache quando a requisição falha; rede lenta não falha, só demora. Melhoria: colocar um tempo limite (ex.: 3 s) e, passando disso, responder com o cache; ou usar stale-while-revalidate. O cliente vê o cardápio rápido, mesmo que um pouco desatualizado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) fallback só em falha, não em lentidão; 2) timeout ou stale-while-revalidate, com efeito na experiência."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O site de uma oficina mecânica quer avisar o cliente quando o carro estiver pronto. O programador colocou o pedido de permissão logo que a página abre.\n\nNa sua resposta:\n1. explique por que esse momento não é bom;\n2. sugira um momento melhor para pedir a permissão.",
+      "respostasAceitas": [
+        "Na abertura o cliente não sabe para que servem as notificações e tende a bloquear. Melhor pedir depois que ele deixar o carro, num botão como \"Quero ser avisado quando o carro ficar pronto\"."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sem contexto, alta chance de bloqueio; 2) após ação do usuário, explicando o benefício."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Observe:\n\n```js\nNotification.requestPermission().then(r => {\n  if (r === 'granted') { avisar.disabled = false; }\n});\n```\n\nNa sua resposta:\n1. explique o que o código faz;\n2. diga o que acontece se o usuário negar.",
+      "respostasAceitas": [
+        "Pede ao usuário permissão para notificações; quando ele responde, se a resposta for granted, habilita o botão avisar. Se negar, a resposta é denied, o botão continua desabilitado e o site não pode mostrar notificações (nem perguntar de novo)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) pedido de permissão e reação ao granted; 2) denied: nada é habilitado, site fica sem notificações."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique o caminho de uma notificação push: o servidor da clínica quer lembrar um paciente da consulta de amanhã, e o site do paciente está fechado.\n\nNa sua resposta:\n1. descreva as etapas, desde a inscrição até a notificação aparecer;\n2. diga por que o service worker é necessário nesse caminho.",
+      "respostasAceitas": [
+        "O site pede permissão, inscreve o navegador (pushManager.subscribe) e manda a inscrição ao servidor. Depois o servidor envia a mensagem ao serviço de push do navegador, que entrega ao service worker; ele trata o evento push e chama showNotification. O service worker é necessário porque roda em segundo plano, mesmo com a página fechada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) permissão → inscrição → servidor guarda → envia via serviço de push → evento push → showNotification; 2) segundo plano sem página aberta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um cliente bloqueou as notificações do app da academia e agora quer recebê-las. O programador tenta chamar `Notification.requestPermission()` de novo, mas nada aparece.\n\nNa sua resposta:\n1. explique por que o pedido não aparece mais;\n2. diga o que o site pode fazer para ajudar o cliente.",
+      "respostasAceitas": [
+        "Depois de denied o navegador não deixa o site perguntar de novo, para evitar insistência. O site pode mostrar uma mensagem explicando como liberar nas configurações do navegador (ícone do cadeado/configurações do site)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) denied é definitivo para o site; 2) orientar o usuário a mudar nas configurações."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma loja online quer usar push para \"aumentar as vendas\" e planeja mandar uma notificação a cada nova promoção, umas 8 por dia.\n\nNa sua resposta:\n1. explique o impacto desse plano na experiência do usuário;\n2. proponha dois critérios para decidir o que vale uma notificação.",
+      "respostasAceitas": [
+        "Excesso de avisos incomoda, interrompe o usuário e leva ao bloqueio das notificações ou à desinstalação, perdendo o canal. Critérios: ser útil e pessoal (pedido do cliente, item que ele seguiu) e no momento certo, com frequência limitada e opção de escolher os tipos de aviso."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) incômodo, bloqueio, perda do canal; 2) critérios como relevância, personalização, frequência, horário, preferência do usuário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Antes de mostrar o botão \"Ativar avisos\", o site da escola confere `Notification.permission`. Se o valor for `default`, o que isso significa?",
+      "alternativas": [
+        "O usuário ainda não respondeu ao pedido de permissão",
+        "O usuário já permitiu as notificações",
+        "O usuário bloqueou as notificações",
+        "O navegador não tem suporte a notificações"
+      ],
+      "correta": 0,
+      "explicacao": "default indica que a pergunta ainda não foi respondida; granted = permitido; denied = bloqueado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No `notificationclick` do service worker de um delivery está `event.waitUntil(clients.openWindow('/pedido/123'))`. O que acontece quando o cliente toca na notificação?",
+      "alternativas": [
+        "O pedido 123 é cancelado no servidor",
+        "A notificação é enviada de novo para outro cliente",
+        "Abre a página do pedido 123 no navegador ou no app",
+        "O service worker é desinstalado"
+      ],
+      "correta": 2,
+      "explicacao": "clients.openWindow abre uma janela/aba com o endereço indicado, levando o usuário direto ao assunto da notificação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um garçom anota um pedido no app da lanchonete, mas o Wi-Fi caiu. Com Background Sync, o que acontece com o pedido?",
+      "alternativas": [
+        "É apagado e o garçom precisa anotar o pedido inteiro de novo",
+        "É enviado automaticamente por SMS para o celular da cozinha",
+        "Fica guardado e é enviado sozinho quando a conexão voltar",
+        "Fica preso no aparelho até o garçom reinstalar o aplicativo"
+      ],
+      "correta": 2,
+      "explicacao": "Background Sync adia a tarefa até haver conexão; o navegador dispara o evento sync no service worker e o envio é feito."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual código, na página, pede ao navegador uma sincronização com o nome `enviar-pedidos`?",
+      "alternativas": [
+        "`Notification.requestPermission('enviar-pedidos')`",
+        "`registration.sync.register('enviar-pedidos')`",
+        "`caches.open('enviar-pedidos')`",
+        "`navigator.geolocation.watch('enviar-pedidos')`"
+      ],
+      "correta": 1,
+      "explicacao": "Com o registro do service worker, sync.register agenda uma sincronização com aquela etiqueta (tag)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em qual evento do service worker o código de envio do Background Sync é executado?",
+      "alternativas": [
+        "sync",
+        "install",
+        "notificationclick",
+        "load"
+      ],
+      "correta": 0,
+      "explicacao": "Quando a conexão volta, o navegador dispara o evento sync no service worker, com a tag registrada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas situações é um bom uso para Background Sync?",
+      "alternativas": [
+        "Mostrar uma animação quando o mouse passa no botão",
+        "Trocar o tema do site de claro para escuro",
+        "Calcular a soma de dois números num formulário",
+        "Enviar a avaliação de um curso escrita no ônibus, sem sinal"
+      ],
+      "correta": 3,
+      "explicacao": "Background Sync serve para tarefas que precisam de rede e podem esperar a conexão voltar, como enviar dados digitados offline."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No service worker está:\n\n```js\nself.addEventListener('sync', e => {\n  if (e.tag === 'enviar-fotos') e.waitUntil(enviarFotos());\n});\n```\n\nPor que o teste `e.tag === 'enviar-fotos'`?",
+      "alternativas": [
+        "Para conferir se o usuário deu permissão de uso da câmera do celular",
+        "Para saber se a página do app ainda está aberta em alguma aba",
+        "Para rodar o envio certo, já que pode haver várias sincronizações",
+        "Para apagar do cache as fotos que já foram enviadas ao servidor"
+      ],
+      "correta": 2,
+      "explicacao": "Cada sync.register tem uma tag. O mesmo evento sync é usado para todas, então o código confere qual tag chegou."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No evento sync, a função `enviarPedidos()` devolveu uma promessa que falhou (o servidor estava fora do ar). O que o navegador faz?",
+      "alternativas": [
+        "Tenta de novo mais tarde, um número limitado de vezes",
+        "Apaga a sincronização e mostra erro ao usuário",
+        "Envia os pedidos por e-mail ao dono do site",
+        "Repete a cada segundo para sempre"
+      ],
+      "correta": 0,
+      "explicacao": "Se a promessa do waitUntil é rejeitada, o navegador agenda novas tentativas, com intervalos e limite."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Antes de registrar a sincronização, onde o app de vistoria de uma oficina deve guardar os dados do formulário preenchido offline?",
+      "alternativas": [
+        "Numa variável da página, que some ao fechar a aba",
+        "No localStorage, que o service worker lê diretamente",
+        "No manifest.json do app",
+        "No IndexedDB, que o service worker também consegue ler"
+      ],
+      "correta": 3,
+      "explicacao": "O evento sync roda no service worker, que não acessa localStorage nem variáveis da página. O IndexedDB é compartilhado e persistente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Antes de usar Background Sync, o código testa `'SyncManager' in window`. Por quê?",
+      "alternativas": [
+        "Porque o SyncManager só existe em sites que não usam HTTPS",
+        "Porque nem todos os navegadores suportam Background Sync",
+        "Para saber se o usuário está logado antes de enviar os dados",
+        "Para verificar se a página tem um manifest.json configurado"
+      ],
+      "correta": 1,
+      "explicacao": "O suporte a Background Sync é limitado (principalmente navegadores baseados em Chromium). Sem suporte, o site precisa de um plano B, como tentar enviar quando a página reabrir."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual a diferença entre usar Background Sync e um `setInterval` na página que tenta reenviar os dados a cada minuto?",
+      "alternativas": [
+        "O setInterval funciona sem internet e o Background Sync nunca funciona assim",
+        "Não há diferença nenhuma, porque os dois rodam dentro do service worker",
+        "O sync pode rodar após fechar a aba; o setInterval para junto com a página",
+        "O sync só funciona com a aba aberta e o setInterval só com a aba fechada"
+      ],
+      "correta": 2,
+      "explicacao": "O setInterval vive na página: fechou a aba, acabou. O Background Sync fica com o navegador e o service worker, que podem executar depois."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No app de enquetes da escola, o aluno votou offline e o voto foi guardado no IndexedDB com sync registrado. Quando a conexão volta, o evento sync envia o voto com sucesso. O que o código deve fazer em seguida?",
+      "alternativas": [
+        "Registrar outra sincronização com a mesma tag, por garantia",
+        "Remover o voto do IndexedDB para não reenviá-lo depois",
+        "Guardar uma cópia do voto também no arquivo manifest.json",
+        "Pedir permissão de notificação ao aluno antes de apagar o voto"
+      ],
+      "correta": 1,
+      "explicacao": "Depois do envio confirmado, o item pendente deve sair da fila; senão, outro sync poderia mandar o mesmo voto de novo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de academia quer atualizar a lista de treinos uma vez por dia em segundo plano, mesmo sem o aluno pedir. Qual recurso é pensado para isso?",
+      "alternativas": [
+        "Periodic Background Sync (sincronização periódica)",
+        "Background Sync comum, registrado uma vez",
+        "Notification.requestPermission",
+        "loading=\"lazy\" nas imagens"
+      ],
+      "correta": 0,
+      "explicacao": "O Background Sync comum dispara uma vez quando a conexão volta. A sincronização periódica (periodicsync) é a variação para atualizar dados de tempos em tempos; seu suporte é ainda mais limitado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz o atributo `loading=\"lazy\"` em `<img src=\"gato.jpg\" loading=\"lazy\" alt=\"Gato\">`?",
+      "alternativas": [
+        "Deixa a imagem em preto e branco para o arquivo pesar menos",
+        "Faz a imagem carregar antes de todo o resto do conteúdo da página",
+        "Impede que a imagem seja copiada ou salva pelo usuário do site",
+        "Adia o download da imagem até ela chegar perto da tela"
+      ],
+      "correta": 3,
+      "explicacao": "Lazy loading (carregamento preguiçoso) só baixa a imagem quando o usuário rola até perto dela, economizando dados e tempo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na página de um pet shop com 80 fotos de produtos em lista, qual o benefício de usar `loading=\"lazy\"` nas fotos?",
+      "alternativas": [
+        "Fazer as 80 fotos aparecerem todas ao mesmo tempo, já no primeiro segundo",
+        "Baixar primeiro o visível e poupar dados de quem não rola até o fim",
+        "Aumentar automaticamente a qualidade das fotos quando abertas no celular",
+        "Guardar as 80 fotos no cache do navegador para sempre, sem nunca apagar"
+      ],
+      "correta": 1,
+      "explicacao": "Só as fotos visíveis são baixadas no início; as outras vêm conforme a rolagem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é **minificar** um arquivo CSS ou JavaScript?",
+      "alternativas": [
+        "Diminuir o tamanho das letras que aparecem na página",
+        "Apagar as funções que o programador não sabe explicar",
+        "Transformar o arquivo de código em uma imagem compactada",
+        "Tirar espaços, quebras de linha e comentários do arquivo"
+      ],
+      "correta": 3,
+      "explicacao": "A minificação tira tudo o que o navegador não precisa (espaços, comentários) e encurta nomes, sem mudar o funcionamento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um arquivo chamado `app.min.js` geralmente é:",
+      "alternativas": [
+        "A versão minificada do app.js, própria para publicar",
+        "Uma versão do app.js com menos funções e recursos",
+        "Um arquivo só com os testes automáticos do app",
+        "A versão do app feita só para celulares de tela pequena"
+      ],
+      "correta": 0,
+      "explicacao": "O sufixo .min indica arquivo minificado: mesmo código, sem espaços e comentários, usado em produção."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é o **Lighthouse**?",
+      "alternativas": [
+        "Um servidor que hospeda sites de graça para estudantes e pequenas empresas",
+        "Um editor de imagens usado para criar os ícones e a tela de abertura de PWAs",
+        "Ferramenta que audita a página e dá notas de desempenho, acessibilidade e SEO",
+        "Uma biblioteca de componentes de interface prontos, como botões e menus"
+      ],
+      "correta": 2,
+      "explicacao": "O Lighthouse (nas ferramentas do desenvolvedor do Chrome) faz uma auditoria da página e sugere melhorias."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num relatório do Lighthouse, a nota de Desempenho do site do cinema foi 35, em vermelho. Como interpretar?",
+      "alternativas": [
+        "O site está ótimo, porque nesse relatório a nota vai de 0 a 40",
+        "O site tem exatamente 35 erros de HTML que precisam ser corrigidos",
+        "35% dos usuários do site acessam a página pelo celular",
+        "O desempenho está ruim e o carregamento precisa melhorar"
+      ],
+      "correta": 3,
+      "explicacao": "As notas vão de 0 a 100: 90 ou mais é bom (verde), 50 a 89 precisa melhorar (laranja) e abaixo de 50 é ruim (vermelho)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O **LCP** (Largest Contentful Paint), um dos Core Web Vitals, mede:",
+      "alternativas": [
+        "Quanto tempo leva para o maior conteúdo visível aparecer",
+        "Quantos cliques e toques o usuário dá na página durante a visita",
+        "Quantas linhas de código CSS e JavaScript a página carrega no total",
+        "Quanto a página inteira pesa em megabytes, somando todos os arquivos"
+      ],
+      "correta": 0,
+      "explicacao": "LCP mede a velocidade com que o conteúdo principal aparece. Bom: até 2,5 segundos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao abrir o site da padaria, o usuário vai tocar em \"Pedir\", mas uma propaganda carrega em cima e o botão desce; ele toca no lugar errado. Qual métrica dos Core Web Vitals mede esse problema?",
+      "alternativas": [
+        "LCP (Largest Contentful Paint), tempo do maior conteúdo",
+        "INP (Interaction to Next Paint), resposta às interações",
+        "CLS (Cumulative Layout Shift), mudança de layout",
+        "TTL (Time To Live), tempo de vida de um pacote na rede"
+      ],
+      "correta": 2,
+      "explicacao": "CLS mede o quanto os elementos \"pulam\" de lugar durante o carregamento. Bom: até 0,1."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual tag pede ao navegador que já resolva o endereço (DNS) do domínio do servidor de imagens, que a página vai usar logo?",
+      "alternativas": [
+        "`<link rel=\"stylesheet\" href=\"https://img.exemplo.com\">`",
+        "`<link rel=\"dns-prefetch\" href=\"https://img.exemplo.com\">`",
+        "`<meta name=\"dns\" content=\"img.exemplo.com\">`",
+        "`<a rel=\"next\" href=\"https://img.exemplo.com\">`"
+      ],
+      "correta": 1,
+      "explicacao": "dns-prefetch adianta a consulta DNS do domínio, ganhando alguns milissegundos na primeira requisição a ele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na página 1 de um tutorial, o programador coloca `<link rel=\"prefetch\" href=\"/pagina2.html\">`. Qual a intenção?",
+      "alternativas": [
+        "Carregar a página 2 inteira dentro da página 1, num quadro",
+        "Impedir que a página 2 seja aberta antes de ler a página 1",
+        "Baixar a página 2 antes de todos os arquivos da página 1",
+        "Baixar com baixa prioridade a provável próxima página"
+      ],
+      "correta": 3,
+      "explicacao": "prefetch busca, quando o navegador estiver livre, um recurso provável da próxima navegação, para ela abrir mais rápido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O **INP** (Interaction to Next Paint), dos Core Web Vitals, avalia:",
+      "alternativas": [
+        "Quanto tempo a primeira imagem da página leva para aparecer",
+        "Quanto a página demora para reagir a cliques e toques",
+        "Quanto os elementos da página mudam de lugar enquanto carregam",
+        "Quantos visitantes diferentes o site recebe a cada dia"
+      ],
+      "correta": 1,
+      "explicacao": "INP mede a responsividade: o atraso entre a interação e a próxima atualização da tela. Bom: até 200 ms. Ele substituiu o antigo FID."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual atitude ajuda a reduzir o CLS na página de produtos de uma loja?",
+      "alternativas": [
+        "Colocar loading=\"lazy\" em todas as fontes usadas na página",
+        "Minificar o arquivo HTML para tirar os espaços e os comentários",
+        "Informar width e height nas imagens para reservar o espaço",
+        "Colocar mais propagandas no topo para ocupar o espaço vazio"
+      ],
+      "correta": 2,
+      "explicacao": "Com largura e altura definidas, o navegador já reserva o espaço da imagem e o conteúdo não pula quando ela chega."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A foto grande de destaque no topo da página inicial do hotel recebeu `loading=\"lazy\"`. Qual o efeito mais provável?",
+      "alternativas": [
+        "Piora o LCP: a imagem principal começa a baixar mais tarde",
+        "Melhora o LCP, porque toda imagem lazy sempre carrega mais rápido",
+        "Não muda nada, pois o atributo lazy só vale para vídeos e iframes",
+        "Diminui o CLS da página para zero, automaticamente, em qualquer caso"
+      ],
+      "correta": 0,
+      "explicacao": "Lazy loading é para o que fica fora da tela. Na imagem principal, visível de início, atrasa o download e piora o LCP."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual a diferença entre minificar o JavaScript e ativar compressão gzip/brotli no servidor?",
+      "alternativas": [
+        "Minificar é feito pelo navegador ao receber; a compressão é feita pelo programador à mão",
+        "As duas são exatamente a mesma técnica, só que com nomes diferentes em cada ferramenta",
+        "A compressão apaga os comentários do código; a minificação compacta tudo num arquivo ZIP",
+        "Minificar muda o arquivo publicado; a compressão age no envio e é desfeita no navegador"
+      ],
+      "correta": 3,
+      "explicacao": "Minificação gera um arquivo menor no build. A compressão é feita pelo servidor no envio. As duas se somam."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual a diferença entre `<link rel=\"preload\">` e `<link rel=\"dns-prefetch\">`?",
+      "alternativas": [
+        "preload baixa um arquivo desta página; dns-prefetch só resolve o domínio",
+        "preload só resolve o DNS do domínio; dns-prefetch baixa o arquivo inteiro",
+        "Os dois baixam a próxima página que o usuário vai abrir, com baixa prioridade",
+        "preload só serve para imagens e dns-prefetch só serve para arquivos de texto"
+      ],
+      "correta": 0,
+      "explicacao": "preload pede o download antecipado de um recurso necessário agora. dns-prefetch só adianta a consulta do domínio, sem baixar nada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tag `<link rel=\"preload\" href=\"/fontes/titulo.woff2\" as=\"font\" type=\"font/woff2\" crossorigin>`, para que serve o atributo `as`?",
+      "alternativas": [
+        "Dar um apelido ao arquivo para ele poder ser chamado pelo nome no CSS",
+        "Indicar ao navegador que o arquivo deve ser minificado antes de ser usado",
+        "Dizer o tipo do recurso, para dar a prioridade certa e não baixar duas vezes",
+        "Informar ao navegador o tamanho da fonte, em pixels, para os títulos"
+      ],
+      "correta": 2,
+      "explicacao": "Sem o as, o navegador não sabe o que é o recurso, pode dar prioridade errada e baixar duas vezes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que o resultado do Lighthouse pode mudar um pouco de uma execução para outra, na mesma página?",
+      "alternativas": [
+        "Porque o Lighthouse sorteia parte da nota a cada execução",
+        "Variações da rede e do processador durante o teste",
+        "Porque a nota depende do horário e do dia em que o teste é feito",
+        "Porque o Lighthouse altera o código da página a cada vez que roda"
+      ],
+      "correta": 1,
+      "explicacao": "É um teste de laboratório: carga do computador, extensões e rede influenciam. Por isso convém repetir e testar em janela anônima."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma página carrega `<script src=\"app.js\"></script>` no `<head>` e demora para mostrar o conteúdo. Qual ajuste ajuda o carregamento?",
+      "alternativas": [
+        "Repetir a tag `<script src=\"app.js\"></script>` duas vezes no head",
+        "Usar `<script src=\"app.js\" defer></script>`",
+        "Trocar por `<link rel=\"stylesheet\" href=\"app.js\">` no head",
+        "Usar `<script src=\"app.js\" loading=\"lazy\"></script>` no head"
+      ],
+      "correta": 1,
+      "explicacao": "Script comum no head bloqueia a leitura do HTML. Com defer ele baixa em paralelo e executa após o HTML ser lido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O relatório do Lighthouse da loja de games mostra: LCP 5,8 s; CLS 0,02; tudo mais verde. Qual ação ataca o problema principal?",
+      "alternativas": [
+        "Definir width e height em todas as imagens para evitar os saltos de layout",
+        "Tirar todos os comentários e espaços do arquivo HTML da página inicial",
+        "Pedir a permissão de notificação mais cedo, logo ao abrir a página",
+        "Otimizar a imagem principal do topo e priorizar o seu download"
+      ],
+      "correta": 3,
+      "explicacao": "O LCP de 5,8 s está ruim (bom é até 2,5 s); o CLS está bom. Melhorar o LCP pede deixar o maior conteúdo mais leve e mais cedo (comprimir, tamanho certo, preload, sem lazy)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um botão \"Calcular frete\" demora quase 1 segundo para reagir ao clique, porque o JavaScript faz um cálculo pesado de uma vez. Qual métrica fica ruim e qual a linha de melhoria?",
+      "alternativas": [
+        "CLS; colocar width e height nas imagens que ficam dentro do botão",
+        "LCP; aplicar loading=\"lazy\" ao botão para ele carregar mais tarde",
+        "INP; dividir ou adiar o trabalho pesado para a tela reagir logo",
+        "INP; minificar o HTML da página para o botão ficar mais leve e rápido"
+      ],
+      "correta": 2,
+      "explicacao": "INP mede a demora para a tela responder à interação. Tarefas longas de JavaScript travam a página; dividi-las ou mostrar uma resposta visual imediata ajuda."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O site da clínica busca dados de `https://api.clinica-exemplo.com` logo no início. Que tag adianta DNS, conexão e HTTPS com esse domínio, indo além do dns-prefetch?",
+      "alternativas": [
+        "`<link rel=\"preconnect\" href=\"https://api.clinica-exemplo.com\">`",
+        "`<link rel=\"prefetch\" href=\"https://api.clinica-exemplo.com\">`",
+        "`<link rel=\"manifest\" href=\"https://api.clinica-exemplo.com\">`",
+        "`<img loading=\"lazy\" src=\"https://api.clinica-exemplo.com\">`"
+      ],
+      "correta": 0,
+      "explicacao": "preconnect faz a consulta DNS, abre a conexão e negocia o HTTPS antes. dns-prefetch faz só a etapa do DNS."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que preencher a página com muitos `<link rel=\"preload\">` (15 arquivos) pode piorar o carregamento?",
+      "alternativas": [
+        "Todos disputam a rede com prioridade alta e atrasam o essencial",
+        "O navegador só aceita um preload por página e ignora o resto do HTML",
+        "Cada preload apaga o cache do service worker antes de baixar o arquivo",
+        "Cada preload abre uma nova aba escondida no navegador para baixar o arquivo"
+      ],
+      "correta": 0,
+      "explicacao": "Preload é para poucos recursos críticos. Se tudo é prioridade, nada é: a banda fica dividida e o conteúdo principal demora."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique a diferença entre **Push API** e **Notifications API**, usando o exemplo de um app de biblioteca que avisa que o livro reservado chegou.\n\nNa sua resposta:\n1. diga o papel de cada API nesse aviso;\n2. diga em qual parte do app (página ou service worker) a mensagem chega com o site fechado.",
+      "respostasAceitas": [
+        "A Push API recebe a mensagem enviada pelo servidor da biblioteca (\"livro chegou\"); a Notifications API mostra esse aviso na tela. Com o site fechado, a mensagem chega ao service worker, que chama showNotification."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) push = receber do servidor; notifications = exibir; 2) service worker."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja o trecho do service worker de um delivery:\n\n```js\nself.addEventListener('push', e => {\n  const dados = e.data.json();\n  e.waitUntil(self.registration.showNotification(dados.titulo, { body: dados.texto, icon: '/img/icone-192.png' }));\n});\n```\n\nNa sua resposta:\n1. explique o que acontece quando chega um push;\n2. explique por que o waitUntil é usado.",
+      "respostasAceitas": [
+        "Quando chega o push, o service worker lê os dados da mensagem em JSON e mostra uma notificação com o título, o texto e o ícone recebidos. O waitUntil faz o navegador manter o service worker vivo até a notificação ser exibida (até a promessa terminar)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) lê o JSON e exibe notificação com título/corpo/ícone; 2) manter o evento ativo até a promessa terminar, senão o service worker pode ser encerrado antes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma escola usa um app para os professores lançarem a chamada. Em algumas salas o Wi-Fi não funciona.\n\nNa sua resposta:\n1. explique o que é Background Sync;\n2. explique como ele ajuda nessa situação.",
+      "respostasAceitas": [
+        "Background Sync é um recurso do service worker que adia uma tarefa de rede até haver conexão. O professor lança a chamada offline, os dados ficam guardados e, quando a internet volta, o navegador envia sozinho, mesmo com o app fechado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) adiar envio até a conexão voltar, via service worker; 2) chamada salva e enviada automaticamente depois."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno diz que o Background Sync é \"igual a guardar no localStorage e mandar quando o usuário abrir o site de novo\".\n\nNa sua resposta:\n1. aponte a principal diferença;\n2. diga uma vantagem disso para o usuário.",
+      "respostasAceitas": [
+        "Com Background Sync o envio é feito pelo service worker quando a conexão volta, mesmo que o usuário não abra o site de novo; a outra solução depende do usuário voltar à página. Vantagem: o dado chega ao servidor mais cedo, sem o usuário lembrar de nada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o sync roda em segundo plano, sem depender de a página ser aberta; 2) envio garantido/rápido sem ação do usuário."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O fluxo de Background Sync do app de vistoria de uma oficina é: (1) o mecânico preenche o formulário offline; (2) os dados vão para o IndexedDB; (3) a página chama `registration.sync.register('vistorias')`; (4) no service worker, o evento sync com essa tag envia os dados e apaga do IndexedDB.\n\nNa sua resposta:\n1. explique por que os dados vão para o IndexedDB e não ficam numa variável da página;\n2. explique por que apagar do IndexedDB só depois do envio dar certo.",
+      "respostasAceitas": [
+        "A página pode ser fechada e o evento sync roda no service worker, que não vê as variáveis da página nem o localStorage; o IndexedDB é persistente e acessível aos dois. Apagar só depois do sucesso evita perder dados se o envio falhar e evita reenviar o que já foi."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) persistência e acesso pelo service worker; 2) não perder em caso de falha e não duplicar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O site de uma loja usa Background Sync para enviar avaliações. Um cliente usa um navegador sem suporte a `SyncManager`.\n\nNa sua resposta:\n1. explique por que o código deve testar o suporte antes;\n2. proponha um plano B para esse navegador.",
+      "respostasAceitas": [
+        "Background Sync não existe em todos os navegadores; chamar sem testar daria erro e a avaliação se perderia. Plano B: guardar a avaliação e tentar enviar quando a página detectar que voltou a conexão (evento online) ou na próxima abertura do site."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) suporte limitado, evitar erro/perda; 2) plano B coerente (evento online, reenvio ao abrir, envio direto com aviso)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No app de pedidos de uma lanchonete, o evento sync envia os pedidos pendentes. Num dia, o servidor estava fora do ar e a função de envio capturava o erro com `catch` e terminava normalmente, sem rejeitar a promessa. Os pedidos nunca chegaram.\n\nNa sua resposta:\n1. explique por que o navegador não tentou de novo;\n2. diga o que deveria acontecer com a promessa quando o envio falha.",
+      "respostasAceitas": [
+        "O navegador decide repetir olhando a promessa entregue ao waitUntil; como ela terminou com sucesso (o catch engoliu o erro), ele entendeu que a sincronização deu certo. Quando o envio falha, a promessa deve ser rejeitada (relançar o erro) para o navegador agendar nova tentativa."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) promessa resolvida = sucesso para o navegador; 2) rejeitar/relançar o erro para haver nova tentativa."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A página de galeria de uma escola tem 120 fotos de eventos e demora muito no celular. O professor sugere `loading=\"lazy\"` nas imagens.\n\nNa sua resposta:\n1. explique o que muda no carregamento;\n2. diga qual imagem NÃO deveria receber lazy e por quê.",
+      "respostasAceitas": [
+        "Com lazy, o navegador baixa só as fotos perto da área visível e as outras conforme a rolagem, deixando a abertura mais rápida e gastando menos dados. A imagem do topo, visível logo ao abrir, não deve ser lazy, pois atrasaria o conteúdo principal (piora o LCP)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) baixa sob demanda, mais rápido/menos dados; 2) imagens visíveis de início (topo/principal)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Compare os dois trechos do mesmo CSS:\n\n```css\n/* botão principal */\n.botao {\n  color: white;\n  background: green;\n}\n```\n\n```css\n.botao{color:#fff;background:green}\n```\n\nNa sua resposta:\n1. diga o que foi feito no segundo trecho e se o visual muda;\n2. explique por que se publica a versão do segundo tipo e se edita a do primeiro.",
+      "respostasAceitas": [
+        "O segundo é a versão minificada: sem comentário, espaços e quebras, e com cor abreviada; o visual é o mesmo. Publica-se a minificada porque é menor e carrega mais rápido; edita-se a original porque é legível para o programador."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) minificação, mesmo resultado; 2) menor para o usuário, legível para manutenção."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Explique com suas palavras as três métricas dos **Core Web Vitals** para o dono de uma padaria que não é da área.\n\nNa sua resposta:\n1. diga o que LCP, INP e CLS medem, em linguagem simples;\n2. diga por que elas importam para o cliente que entra no site.",
+      "respostasAceitas": [
+        "LCP: quanto tempo o conteúdo principal demora para aparecer. INP: quanto a página demora para reagir quando o cliente toca ou clica. CLS: quanto as coisas pulam de lugar na tela durante o carregamento. Importam porque site lento, travado ou que pula faz o cliente errar o toque e desistir da compra."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) carregar / responder / estabilidade visual; 2) impacto na experiência e nas vendas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Observe:\n\n```html\n<link rel=\"dns-prefetch\" href=\"https://fotos.exemplo.com\">\n<link rel=\"preload\" href=\"/css/principal.css\" as=\"style\">\n<link rel=\"prefetch\" href=\"/carrinho.html\">\n```\n\nNa sua resposta:\n1. explique o que cada linha pede ao navegador;\n2. diga qual delas é para a página atual e qual é para uma próxima página.",
+      "respostasAceitas": [
+        "dns-prefetch adianta a consulta do domínio de fotos; preload baixa logo, com prioridade alta, o CSS principal desta página; prefetch baixa com baixa prioridade a página do carrinho. preload é para a página atual; prefetch é para a próxima navegação."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) DNS antecipado / download prioritário / download antecipado de baixa prioridade; 2) preload = atual, prefetch = próxima."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O Lighthouse do site de uma academia deu: Desempenho 48, Acessibilidade 95, Boas práticas 92, SEO 90. Uma sugestão apontada foi \"Imagens sem dimensões explícitas\" e outra \"Reduza o JavaScript não usado\".\n\nNa sua resposta:\n1. interprete as notas: o que está bom e o que precisa de atenção;\n2. explique como cada sugestão ajuda o usuário.",
+      "respostasAceitas": [
+        "Acessibilidade, boas práticas e SEO estão verdes (90+); o desempenho, abaixo de 50, está ruim. Dar width e height às imagens evita que a página pule (CLS); reduzir JavaScript não usado diminui o download e o processamento, deixando a página carregar e responder mais rápido."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) desempenho ruim, demais bons; 2) dimensões → estabilidade (CLS); menos JS → carregamento/resposta mais rápidos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um site de notícias de bairro coloca uma faixa de propaganda no topo que só aparece 2 segundos depois de a página abrir, empurrando o texto para baixo. O CLS medido foi 0,32.\n\nNa sua resposta:\n1. explique o que esse número indica e por que acontece;\n2. sugira uma correção sem tirar a propaganda.",
+      "respostasAceitas": [
+        "CLS 0,32 é ruim (bom é até 0,1): o layout muda de forma inesperada porque a faixa chega depois e empurra o conteúdo. Correção: reservar o espaço da faixa desde o início (altura fixa no CSS), para que nada se mova quando ela carregar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) instabilidade visual alta causada por conteúdo inserido tarde; 2) reservar espaço (min-height/dimensões) ou colocar a faixa em local que não empurre o conteúdo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um colega afirma: \"Meu site tirou 100 no Lighthouse no meu computador, então está rápido para todos os clientes\".\n\nNa sua resposta:\n1. explique por que essa conclusão pode estar errada;\n2. diga como ter uma visão mais realista do desempenho.",
+      "respostasAceitas": [
+        "O Lighthouse é um teste de laboratório numa máquina e rede específicas; clientes com celular simples e internet lenta podem ter outra experiência. Para ser mais realista: testar simulando celular e rede lenta, repetir os testes e olhar dados de campo (de usuários reais) dos Core Web Vitals."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) teste de laboratório ≠ experiência real (aparelho, rede); 2) simular celular/rede lenta, repetir, usar dados de campo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Web Apps",
+      "capacidade": "front.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na página inicial de uma loja, a foto do banner principal tem 4 MB, recebeu `loading=\"lazy\"` e o LCP medido foi 6 segundos.\n\nNa sua resposta:\n1. explique as duas causas do LCP alto nesse caso;\n2. proponha duas mudanças e diga o efeito de cada uma.",
+      "respostasAceitas": [
+        "Causas: a foto é muito pesada e, por ser lazy, só começa a baixar tarde, mesmo sendo o maior conteúdo visível. Mudanças: tirar o lazy (e até usar preload) para começar o download cedo; reduzir e comprimir a imagem (tamanho certo, formato como WebP) para baixar mais rápido. As duas reduzem o tempo até o banner aparecer."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) peso e lazy no elemento principal; 2) remover lazy/preload e otimizar a imagem, ambos reduzindo o LCP."
+    }
+  ]
+}
