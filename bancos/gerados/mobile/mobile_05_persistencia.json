@@ -1,0 +1,2424 @@
+{
+  "nome": "Programação para Dispositivos Móveis — Persistência de dados (a revisar)",
+  "materia": "Programação para Dispositivos Móveis",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No contexto de apps, o que significa \"persistir\" um dado?",
+      "alternativas": [
+        "Mostrar o dado na tela enquanto o usuário estiver olhando para ela",
+        "Manter o dado só numa variável enquanto a função está rodando",
+        "Gravar o dado para ele continuar existindo após fechar o app",
+        "Enviar o dado para outra tela usando parâmetros de navegação"
+      ],
+      "correta": 2,
+      "explicacao": "Persistir é gravar em algum armazenamento (preferências, arquivo, banco) para o dado sobreviver ao fechamento do app ou ao desligar do aparelho."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de academia guarda o número de treinos da semana numa variável comum (`let treinos = 3`). O aparelho reinicia. O que acontece com esse valor?",
+      "alternativas": [
+        "Ele se perde, porque variáveis ficam só na memória RAM enquanto o app roda",
+        "Ele continua salvo, porque toda variável do app é gravada no aparelho sozinha",
+        "Ele vai para o armazenamento externo e volta quando o app abrir",
+        "Ele fica guardado no cache e é restaurado automaticamente"
+      ],
+      "correta": 0,
+      "explicacao": "Variável vive na memória do processo. Fechou o app ou reiniciou o aparelho, o valor some; para manter é preciso gravar em armazenamento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é um armazenamento do tipo chave-valor, como o AsyncStorage (React Native) ou o SharedPreferences (Android)?",
+      "alternativas": [
+        "Um banco com várias tabelas ligadas entre si por chaves estrangeiras e índices",
+        "Uma pasta onde o app grava fotos e vídeos do usuário",
+        "Um servidor na internet que guarda os dados do app",
+        "Um local onde cada valor é guardado e buscado por um nome (a chave)"
+      ],
+      "correta": 3,
+      "explicacao": "Chave-valor funciona como um dicionário: salva 'tema' → 'escuro' e depois busca pelo nome 'tema'. Não tem tabelas nem relacionamentos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes dados combina MELHOR com um armazenamento chave-valor (preferências)?",
+      "alternativas": [
+        "O histórico com milhares de vendas de uma padaria",
+        "O idioma escolhido pelo usuário nas configurações do app",
+        "As fotos de todos os pets atendidos num pet shop",
+        "A lista de produtos com preço, estoque e categoria de uma loja"
+      ],
+      "correta": 1,
+      "explicacao": "Preferências servem para dados pequenos e simples (idioma, tema, volume). Muitos registros com filtros pedem banco; fotos pedem arquivos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o código de um app de biblioteca:\n\n`await AsyncStorage.setItem('ultimaBusca', 'dom casmurro');`\n\nO que esse comando faz?",
+      "alternativas": [
+        "Busca na internet o livro com o nome 'dom casmurro' e mostra o resultado",
+        "Cria uma tabela chamada ultimaBusca no banco SQLite",
+        "Grava o texto 'dom casmurro' no aparelho com a chave 'ultimaBusca'",
+        "Apaga do aparelho o valor guardado na chave 'ultimaBusca'"
+      ],
+      "correta": 2,
+      "explicacao": "setItem(chave, valor) salva o valor com aquele nome. Para ler usa-se getItem e para apagar removeItem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de cinema, o código `const p = await AsyncStorage.getItem('poltrona');` roda na primeira vez que o app é aberto, antes de qualquer gravação. Qual o valor de `p`?",
+      "alternativas": [
+        "null, porque ainda não existe nada salvo com essa chave",
+        "0, porque o AsyncStorage começa todas as chaves com zero",
+        "Uma string vazia '' criada automaticamente na instalação",
+        "Um erro que fecha o app, porque a chave não existe"
+      ],
+      "correta": 0,
+      "explicacao": "getItem devolve null quando a chave não existe. Por isso é comum testar: se for null, usar um valor padrão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de hotel salva o número de diárias assim: `await AsyncStorage.setItem('diarias', String(3));`. Depois lê com `const d = await AsyncStorage.getItem('diarias');` e faz `d + 1`. Qual o resultado?",
+      "alternativas": [
+        "4, porque o AsyncStorage devolve o número original",
+        "NaN, porque não é possível somar um valor que foi lido do aparelho",
+        "3, porque o valor lido não pode ser alterado",
+        "'31', porque o valor volta como texto e o + junta os textos"
+      ],
+      "correta": 3,
+      "explicacao": "AsyncStorage guarda e devolve strings. '3' + 1 em JavaScript concatena e dá '31'. É preciso converter com Number(d) antes de somar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de pet shop quer salvar o objeto `{ nome: 'Thor', idade: 4 }` no AsyncStorage. Qual é a forma correta?",
+      "alternativas": [
+        "Salvar o objeto direto, porque o AsyncStorage aceita qualquer tipo de dado",
+        "Converter para texto com JSON.stringify antes de salvar e usar JSON.parse ao ler",
+        "Salvar cada letra do objeto numa chave diferente para não perder nenhuma parte",
+        "Converter para número com Number() antes de salvar o objeto"
+      ],
+      "correta": 1,
+      "explicacao": "O AsyncStorage só guarda strings. JSON.stringify transforma o objeto em texto; JSON.parse reconstrói o objeto na leitura."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o código de um app de academia:\n\n`const salvo = await AsyncStorage.getItem('meta');\nconst meta = salvo !== null ? Number(salvo) : 10;`\n\nO que acontece se o usuário nunca definiu uma meta?",
+      "alternativas": [
+        "A variável meta recebe null e o app trava",
+        "A variável meta recebe 0, porque Number(null) é usado",
+        "A variável meta recebe 10, o valor padrão",
+        "O app pede para o usuário digitar a meta obrigatoriamente"
+      ],
+      "correta": 2,
+      "explicacao": "Sem gravação anterior, getItem devolve null; o operador ternário então usa o valor padrão 10."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual método do AsyncStorage é usado para apagar um único dado salvo, como o rascunho de uma mensagem já enviada?",
+      "alternativas": [
+        "removeItem",
+        "setItem",
+        "getItem",
+        "mergeItem"
+      ],
+      "correta": 0,
+      "explicacao": "removeItem(chave) apaga só aquela chave. setItem grava, getItem lê, mergeItem mescla objetos JSON já salvos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que os métodos do AsyncStorage são usados com `await`?",
+      "alternativas": [
+        "Porque o await deixa os dados criptografados antes de chegar ao aparelho",
+        "Porque sem await os dados vão para a internet em vez de ficar no aparelho",
+        "Porque o await obriga o usuário a confirmar cada gravação numa janela",
+        "Porque ler e gravar é assíncrono e não deve travar a tela"
+      ],
+      "correta": 3,
+      "explicacao": "Acesso a disco é lento comparado à memória. As funções devolvem Promise; o await espera o resultado sem bloquear a interface."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de oficina, o botão Logout chama `AsyncStorage.clear()`. Que efeito colateral isso pode ter?",
+      "alternativas": [
+        "Apagar só a chave do usuário logado, deixando o resto igual",
+        "Apagar todas as chaves do app, até preferências como o tema",
+        "Apagar os dados de todos os outros apps instalados no aparelho",
+        "Desinstalar o app e limpar a memória RAM do celular"
+      ],
+      "correta": 1,
+      "explicacao": "clear() limpa todo o armazenamento chave-valor do app. Para logout é melhor remover só as chaves da sessão (removeItem ou multiRemove)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Android, as SharedPreferences ficam gravadas em que lugar?",
+      "alternativas": [
+        "Num cartão de memória acessível por qualquer app",
+        "Na memória RAM, sendo apagadas ao fechar o app",
+        "Num arquivo dentro da área interna e privada do app",
+        "Num servidor da loja de aplicativos"
+      ],
+      "correta": 2,
+      "explicacao": "SharedPreferences são salvas num arquivo XML na pasta privada do app (armazenamento interno). Outros apps não acessam."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Android, ao salvar com SharedPreferences, existem os métodos `apply()` e `commit()`. Qual a diferença entre eles?",
+      "alternativas": [
+        "apply() grava em segundo plano; commit() grava na hora e diz se deu certo",
+        "apply() grava só na memória RAM; commit() grava no cartão de memória do aparelho",
+        "apply() apaga o valor anterior; commit() mantém os dois valores salvos",
+        "apply() funciona só offline; commit() precisa de internet para gravar"
+      ],
+      "correta": 0,
+      "explicacao": "Os dois persistem no arquivo. apply() é assíncrono (não trava a tela, sem retorno); commit() é síncrono e devolve true/false."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de escola quer mostrar a tela de boas-vindas só na primeira vez que for aberto. Qual a solução mais simples?",
+      "alternativas": [
+        "Criar um banco SQLite com uma tabela de aberturas para cada dia",
+        "Pedir ao servidor da escola, a cada abertura, se é a primeira vez",
+        "Gravar uma foto no armazenamento externo como marcador",
+        "Salvar uma chave como 'jaAbriu' = 'sim' nas preferências e testar ao abrir"
+      ],
+      "correta": 3,
+      "explicacao": "Um sinalizador simples (flag) em preferências resolve: se a chave não existe, mostra as boas-vindas e grava a chave."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno guardou a lista inteira de 5 mil produtos de uma loja de games numa única chave do AsyncStorage, como texto JSON. Qual o principal problema dessa escolha?",
+      "alternativas": [
+        "O AsyncStorage não aceita textos com acentos ou números",
+        "Para mudar um produto é preciso ler e regravar a lista toda",
+        "Os dados são enviados para a internet toda vez que o app abre",
+        "Não é possível ler essa chave depois que o app é fechado"
+      ],
+      "correta": 1,
+      "explicacao": "Chave-valor não filtra nem atualiza parte do conteúdo. Com muitos registros, um banco como o SQLite faz buscas e alterações pontuais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de clínica gera um PDF com o comprovante da consulta. Qual a forma mais adequada de guardar esse documento no aparelho?",
+      "alternativas": [
+        "Como valor numa chave das preferências",
+        "Como linha numa tabela de preferências do sistema",
+        "Como arquivo no armazenamento do app",
+        "Numa variável global que fica sempre aberta"
+      ],
+      "correta": 2,
+      "explicacao": "Documentos, imagens e áudios são arquivos. O banco ou as preferências guardam, no máximo, o caminho até o arquivo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de pet shop, cada pet tem uma foto. Qual é a prática mais comum para guardar isso com SQLite?",
+      "alternativas": [
+        "Salvar a imagem como arquivo e guardar na tabela só o caminho até ela",
+        "Salvar a imagem inteira numa chave do AsyncStorage",
+        "Salvar a foto em várias linhas da tabela, um pedaço por linha",
+        "Não salvar a foto e baixá-la de novo pela câmera toda vez"
+      ],
+      "correta": 0,
+      "explicacao": "Arquivos grandes dentro do banco deixam as consultas pesadas. O comum é a tabela ter uma coluna como caminho_foto TEXT apontando para o arquivo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença básica entre armazenamento interno e externo, do ponto de vista de privacidade?",
+      "alternativas": [
+        "O interno é visto por todos os apps; o externo é privado do app",
+        "Os dois são iguais, só muda o tamanho máximo dos arquivos",
+        "O interno fica na nuvem; o externo fica no próprio aparelho",
+        "O interno é privado; o externo pode ser visto por outros apps"
+      ],
+      "correta": 3,
+      "explicacao": "Na área interna, só o app acessa. O externo (pastas compartilhadas, cartão) pode ser lido por outros apps e pelo usuário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de fotos de uma escola quer que as fotos tiradas nos eventos apareçam também na galeria do celular. Onde elas devem ser salvas?",
+      "alternativas": [
+        "Na pasta interna e privada do app, junto com o banco de dados",
+        "Numa pasta compartilhada de mídia (armazenamento externo)",
+        "No cache do app, que é limpo pelo sistema",
+        "Nas preferências do app, junto com o tema"
+      ],
+      "correta": 1,
+      "explicacao": "A galeria lê as pastas compartilhadas de mídia. O que fica na área interna do app não aparece para outros apps."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de cinema baixa trailers enormes e os salva no armazenamento externo compartilhado. O usuário desinstala o app. O que tende a acontecer com esses arquivos?",
+      "alternativas": [
+        "São apagados sempre, junto com tudo que o app criou em qualquer pasta",
+        "Viram arquivos protegidos que só o sistema consegue abrir",
+        "Podem ficar no aparelho, pois estão fora da área do app",
+        "São enviados automaticamente para a loja de aplicativos"
+      ],
+      "correta": 2,
+      "explicacao": "Ao desinstalar, o sistema apaga a área do app. Arquivos gravados em pastas compartilhadas (como Downloads ou Filmes) podem ficar para trás."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para gravar arquivos numa pasta compartilhada do armazenamento externo, o que o app geralmente precisa considerar?",
+      "alternativas": [
+        "Pedir permissão ao usuário, conforme a versão do sistema exigir",
+        "Desligar o Wi-Fi do aparelho enquanto grava",
+        "Criar antes uma tabela no SQLite com o nome da pasta",
+        "Guardar a senha do usuário junto com o arquivo"
+      ],
+      "correta": 0,
+      "explicacao": "Acessar áreas compartilhadas envolve permissões do sistema (as regras mudam por versão). A área interna do app não exige permissão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Onde um app deve guardar o token de login de um usuário?",
+      "alternativas": [
+        "Num arquivo de texto comum no armazenamento externo",
+        "Numa chave comum do AsyncStorage, sem proteção",
+        "Numa tabela do SQLite chamada senhas, sem criptografia",
+        "No armazenamento seguro do sistema (Keychain/Keystore)"
+      ],
+      "correta": 3,
+      "explicacao": "Tokens e senhas são dados sensíveis. O armazenamento seguro guarda os dados criptografados com chaves protegidas pelo sistema."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que NÃO se deve guardar a senha do usuário em AsyncStorage ou SharedPreferences comuns?",
+      "alternativas": [
+        "Porque eles só aceitam números e a senha tem letras",
+        "Porque eles não criptografam: quem acessar os arquivos lê a senha",
+        "Porque eles apagam todas as chaves salvas depois de 24 horas de uso do app",
+        "Porque eles enviam os dados para a internet sem avisar"
+      ],
+      "correta": 1,
+      "explicacao": "Esses armazenamentos gravam texto puro. Num aparelho com root, backup sem proteção ou falha, a senha ficaria exposta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de academia faz login com usuário e senha e recebe um token do servidor. Qual é a prática MAIS adequada para manter o aluno logado?",
+      "alternativas": [
+        "Guardar a senha em texto nas preferências e logar de novo sempre",
+        "Guardar a senha e o token numa tabela do SQLite sem criptografia",
+        "Guardar só o token no armazenamento seguro e não guardar a senha",
+        "Guardar o token numa foto escondida na galeria"
+      ],
+      "correta": 2,
+      "explicacao": "O token permite manter a sessão sem guardar a senha. Ele vai para o armazenamento seguro; a senha não precisa ficar no aparelho."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de clínica salva no armazenamento seguro o token de acesso. Mesmo assim, o servidor dá a esse token um prazo de validade. Por que isso é importante?",
+      "alternativas": [
+        "Se o token vazar, ele deixa de funcionar logo e o estrago é menor",
+        "Porque o armazenamento seguro apaga qualquer dado depois de um dia",
+        "Porque tokens com validade ocupam menos espaço no aparelho",
+        "Porque, sem prazo de validade, o app não consegue abrir quando está offline"
+      ],
+      "correta": 0,
+      "explicacao": "Segurança em camadas: mesmo bem guardado, um token pode vazar. A validade curta e a renovação reduzem o tempo de uso indevido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes dados NÃO precisa ir para o armazenamento seguro?",
+      "alternativas": [
+        "O token de acesso à conta",
+        "A senha do cartão de crédito salvo",
+        "A chave de API privada do usuário",
+        "O tamanho da fonte escolhido pelo usuário"
+      ],
+      "correta": 3,
+      "explicacao": "Tamanho de fonte é preferência comum, sem risco. Tokens, senhas e chaves privadas são sensíveis e pedem armazenamento seguro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é cache num app?",
+      "alternativas": [
+        "Um banco principal que guarda dados que nunca podem ser perdidos",
+        "Uma cópia temporária de dados para abrir mais rápido",
+        "Um armazenamento seguro para senhas e tokens",
+        "Um backup automático dos dados na nuvem"
+      ],
+      "correta": 1,
+      "explicacao": "Cache guarda cópias que podem ser refeitas (imagens baixadas, respostas da API). Ajuda a velocidade e a economia de internet."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de cardápio de padaria guarda as fotos dos pães na pasta de cache. Num dia em que o celular fica com pouco espaço, o que pode acontecer?",
+      "alternativas": [
+        "O sistema transforma as fotos do cache em preferências para economizar espaço",
+        "O app é desinstalado para liberar espaço para as fotos",
+        "O sistema pode apagar o cache e o app baixará as fotos de novo",
+        "As fotos são movidas para o armazenamento seguro"
+      ],
+      "correta": 2,
+      "explicacao": "A pasta de cache pode ser limpa pelo sistema ou pelo usuário. Por isso só se coloca nela o que pode ser recuperado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que o pedido de um cliente que ainda não foi enviado NÃO deve ficar só no cache?",
+      "alternativas": [
+        "Porque o cache pode ser apagado e o pedido se perderia",
+        "Porque o cache só aceita imagens e arquivos de vídeo, não textos",
+        "Porque o cache é visível para todos os outros apps",
+        "Porque o cache fica no servidor e não no aparelho"
+      ],
+      "correta": 0,
+      "explicacao": "Dado que não pode ser refeito (pedido não enviado) precisa de armazenamento persistente, como banco ou arquivo interno."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de notícias de uma escola guarda em cache a lista de avisos com a hora em que foi baixada. Ao abrir, mostra a lista do cache e só pede ao servidor se ela tiver mais de 30 minutos. Qual a vantagem dessa regra?",
+      "alternativas": [
+        "Garante que o aluno nunca veja um aviso desatualizado",
+        "Dispensa o servidor, já que o cache passa a ser a fonte oficial",
+        "Impede que o sistema apague o cache por falta de espaço",
+        "Abre rápido e gasta menos internet, mas atualiza a cada 30 minutos"
+      ],
+      "correta": 3,
+      "explicacao": "É um prazo de validade do cache: o dado pode ficar até 30 minutos desatualizado, em troca de rapidez e menos requisições."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No menu de configurações do celular existem as opções \"Limpar cache\" e \"Limpar dados\" de um app. Qual delas apaga também o login e as preferências do usuário?",
+      "alternativas": [
+        "Limpar cache",
+        "Limpar dados",
+        "As duas apagam só as imagens",
+        "Nenhuma delas apaga nada do app"
+      ],
+      "correta": 1,
+      "explicacao": "Limpar cache remove só arquivos temporários. Limpar dados apaga todo o armazenamento do app, como se ele fosse recém-instalado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma loja de games quer: (1) lembrar o último filtro escolhido; (2) guardar as capas baixadas para abrir rápido; (3) guardar o token de login. Qual combinação é a mais adequada?",
+      "alternativas": [
+        "(1) cache, (2) armazenamento seguro, (3) preferências",
+        "(1) armazenamento seguro, (2) preferências, (3) cache",
+        "(1) preferências, (2) cache, (3) armazenamento seguro",
+        "(1) banco SQLite, (2) preferências, (3) cache"
+      ],
+      "correta": 2,
+      "explicacao": "Filtro é preferência simples; capas baixadas podem ser refeitas (cache); token é sensível (armazenamento seguro)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de biblioteca guarda tudo (preferências, empréstimos e token) num único arquivo de texto no armazenamento externo. Qual problema NÃO é causado por essa escolha?",
+      "alternativas": [
+        "O app deixar de funcionar quando o aparelho fica sem internet",
+        "Outros apps poderem ler o token do usuário",
+        "Ter que ler e regravar o arquivo inteiro para mudar um empréstimo",
+        "Os dados poderem ficar para trás depois da desinstalação"
+      ],
+      "correta": 0,
+      "explicacao": "Um arquivo local funciona sem internet. Os outros três são problemas reais: exposição do token, lentidão para alterar e sobra após desinstalar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de lista de tarefas da escola guarda as tarefas só em variáveis. Os alunos reclamam que, ao reabrir o app, a lista aparece vazia.\n\nNa sua resposta:\n1. explique por que a lista some;\n2. diga o que o app precisa fazer para manter as tarefas.",
+      "respostasAceitas": [
+        "As variáveis ficam só na memória enquanto o app roda; fechou, perdeu. O app precisa gravar as tarefas num armazenamento persistente (banco SQLite, arquivo ou chave-valor) e carregá-las ao abrir."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) memória RAM é temporária, o app fechado perde as variáveis; 2) persistir em armazenamento do aparelho e ler na abertura."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num app de pet shop, o dono do pet escolhe se quer receber lembretes de vacina (sim ou não). O desenvolvedor salvou essa escolha com AsyncStorage.\n\nNa sua resposta:\n1. explique por que o armazenamento chave-valor é adequado para esse dado;\n2. dê outro exemplo de dado do mesmo app que também combinaria com chave-valor.",
+      "respostasAceitas": [
+        "É um dado pequeno e simples, uma escolha só, que se busca por um nome (chave). Outro exemplo: o idioma ou o tema do app."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dado pequeno, simples, uma chave e um valor, sem busca ou relacionamento; 2) qualquer preferência simples (tema, idioma, último pet visto, aceitou termos)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja o trecho de um app de hotel:\n\n`await AsyncStorage.setItem('reserva', JSON.stringify({ quarto: 12, noites: 2 }));\nconst r = JSON.parse(await AsyncStorage.getItem('reserva'));`\n\nNa sua resposta:\n1. explique para que servem o JSON.stringify e o JSON.parse nesse código;\n2. diga o que aconteceria se o app tentasse salvar o objeto sem o JSON.stringify.",
+      "respostasAceitas": [
+        "O AsyncStorage só guarda texto: stringify transforma o objeto em texto JSON para salvar e parse transforma o texto de volta em objeto. Sem stringify o objeto não seria salvo corretamente (vira algo como \"[object Object]\" ou dá erro), e os dados se perdem."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) converter objeto ↔ texto, porque o armazenamento só aceita string; 2) o dado não seria gravado como esperado (erro ou texto inútil)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de academia guarda a senha do aluno em texto puro no AsyncStorage, para fazer login automático.\n\nNa sua resposta:\n1. explique o risco dessa escolha;\n2. diga qual seria a forma mais segura de manter o aluno logado.",
+      "respostasAceitas": [
+        "O AsyncStorage não criptografa: quem tiver acesso aos arquivos do aparelho (root, backup, falha) lê a senha, que muitas vezes é a mesma de outros serviços. O certo é guardar só um token de sessão no armazenamento seguro do sistema (Keychain/Keystore) e não guardar a senha."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dado sensível sem criptografia, pode vazar e ser reaproveitado; 2) token no armazenamento seguro, sem guardar a senha."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Compare o armazenamento interno e o externo de um aparelho Android.\n\nNa sua resposta:\n1. diga quem pode acessar os dados em cada um;\n2. dê um exemplo de dado que deve ir para cada um.",
+      "respostasAceitas": [
+        "O interno é privado do app: só ele acessa. O externo tem áreas compartilhadas que outros apps e o usuário podem ver. Interno: o banco de dados de pedidos. Externo: uma foto que o usuário quer ver na galeria."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) interno = privado do app; externo = compartilhado/visível; 2) exemplos coerentes (dados do app no interno; mídia para o usuário no externo)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de cardápio de restaurante salva as imagens dos pratos na pasta de cache, enquanto os pedidos ainda não enviados ficam no banco SQLite.\n\nNa sua resposta:\n1. explique por que as imagens podem ficar no cache;\n2. explique por que os pedidos não podem ficar no cache.",
+      "respostasAceitas": [
+        "As imagens podem ser baixadas de novo se o sistema limpar o cache; o cache só acelera e economiza internet. Os pedidos não enviados só existem no aparelho: se o cache for limpo, o pedido se perde para sempre, então precisam de armazenamento persistente."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dado recuperável, o cache pode ser apagado sem prejuízo; 2) dado único, perderia o pedido se fosse limpo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de oficina baixa a tabela de preços de peças (cerca de 2 mil itens) toda vez que é aberto. Os mecânicos usam o app numa garagem com internet fraca e reclamam da demora.\n\nNa sua resposta:\n1. explique como o uso de cache ou de dados guardados no aparelho ajudaria;\n2. aponte um cuidado necessário para os preços não ficarem errados.",
+      "respostasAceitas": [
+        "O app pode guardar a tabela no aparelho e abrir mostrando a cópia local, sem esperar a internet. Cuidado: os preços mudam, então é preciso atualizar de tempos em tempos (validade, data da última atualização) ou avisar que o preço pode estar desatualizado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mostrar a cópia local, rapidez e funcionamento com internet fraca; 2) estratégia de atualização/validade para não mostrar preço velho."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de escola tem três dados: o tema escolhido (claro/escuro), o token de login e as fotos baixadas do mural.\n\nNa sua resposta:\n1. diga onde guardar cada um;\n2. justifique a escolha para o token.",
+      "respostasAceitas": [
+        "Tema: preferências chave-valor. Token: armazenamento seguro do sistema. Fotos do mural: cache (ou arquivos). O token é sensível e dá acesso à conta, por isso precisa ficar criptografado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) tema em preferências, token em armazenamento seguro, fotos em cache/arquivos; 2) token sensível, precisa de proteção/criptografia."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No Android, o usuário pode tocar em \"Limpar cache\" ou em \"Limpar dados\" de um app de biblioteca.\n\nNa sua resposta:\n1. explique o que cada opção apaga;\n2. diga o que o usuário vai perceber ao abrir o app depois de \"Limpar dados\".",
+      "respostasAceitas": [
+        "Limpar cache apaga só os arquivos temporários (capas, respostas guardadas), que o app baixa de novo. Limpar dados apaga tudo do app: banco, preferências, login. Depois disso o app abre como se fosse recém-instalado, pedindo login e com as configurações padrão."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cache = temporários; dados = tudo; 2) app volta ao estado de instalação nova (login, preferências perdidas)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de cinema gera um ingresso em PDF depois da compra. O desenvolvedor salvou o PDF como arquivo e, no banco SQLite, guardou só o caminho até ele.\n\nNa sua resposta:\n1. explique por que não guardar o PDF inteiro dentro de uma chave das preferências;\n2. explique para que serve guardar o caminho no banco.",
+      "respostasAceitas": [
+        "Preferências são feitas para valores pequenos e simples; um PDF é um arquivo grande. Guardar o caminho no banco permite saber qual arquivo pertence a qual compra e abri-lo depois."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) preferências são para dados pequenos; arquivo grande deixa lento/inadequado; 2) o caminho liga o registro da compra ao arquivo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma desenvolvedora decidiu limpar todo o AsyncStorage com `AsyncStorage.clear()` quando o usuário sai da conta num app de loja.\n\nNa sua resposta:\n1. explique o que esse comando apaga;\n2. diga por que talvez fosse melhor apagar só algumas chaves.",
+      "respostasAceitas": [
+        "clear() apaga todas as chaves do app. Isso remove também preferências que não têm a ver com a conta, como tema e idioma. Apagar só as chaves da sessão (token, dados do usuário) mantém o resto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) apaga tudo que o app guardou no AsyncStorage; 2) preferências gerais seriam perdidas sem necessidade."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de clínica guarda o token de acesso no armazenamento seguro. Mesmo assim, o servidor define que esse token vale só por 1 hora e precisa ser renovado.\n\nNa sua resposta:\n1. explique por que o armazenamento seguro sozinho não elimina o risco;\n2. explique como o prazo de validade ajuda.",
+      "respostasAceitas": [
+        "O token ainda pode vazar (aparelho comprometido, falha no app, alguém usando o celular desbloqueado). Com validade curta, um token roubado deixa de funcionar logo, limitando o estrago."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ainda existe risco de vazamento/uso indevido; 2) validade limita o tempo em que o token roubado funciona."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de lojinha de bairro guarda o carrinho de compras numa única chave do AsyncStorage, como texto JSON com todos os itens. O carrinho chega a ter mais de 300 itens e o app fica lento ao adicionar um produto.\n\nNa sua resposta:\n1. explique por que fica lento;\n2. sugira outra forma de guardar os itens e justifique.",
+      "respostasAceitas": [
+        "A cada item adicionado o app lê o texto inteiro, converte, altera e grava tudo de novo. Com um banco SQLite, cada item vira uma linha e o app insere ou altera só aquela linha, com consultas rápidas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) leitura/regravação completa a cada mudança; 2) banco (SQLite) com uma linha por item, alterações pontuais e buscas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num app de hotel, o hóspede escolhe o idioma (português ou inglês). Na próxima vez que abre o app, o idioma volta para português.\n\nNa sua resposta:\n1. diga a causa mais provável do problema;\n2. diga como corrigir.",
+      "respostasAceitas": [
+        "A escolha não foi gravada em armazenamento persistente, ficou só em memória. Corrige-se salvando o idioma numa preferência (chave-valor) e lendo esse valor quando o app abre."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a escolha não foi persistida; 2) salvar em preferências e ler na abertura."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de academia baixa vídeos de treino e os salva numa pasta compartilhada de Downloads. O aluno desinstala o app, mas percebe que a memória do celular continua cheia.\n\nNa sua resposta:\n1. explique por que os vídeos continuaram no aparelho;\n2. diga onde o app deveria ter salvo os vídeos e o que muda com isso.",
+      "respostasAceitas": [
+        "A desinstalação apaga só a área do app; arquivos em pastas compartilhadas ficam. Se os vídeos fossem salvos na área do próprio app (interna ou pasta específica do app), seriam apagados junto na desinstalação, sem deixar lixo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) pasta compartilhada não pertence ao app, não é apagada; 2) área do app; os vídeos seriam removidos na desinstalação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é o SQLite, muito usado em apps Android e iOS?",
+      "alternativas": [
+        "Um servidor de banco de dados que precisa estar ligado na internet",
+        "Um armazenamento chave-valor para guardar só preferências",
+        "Uma pasta de cache que o sistema apaga quando falta espaço",
+        "Um banco relacional guardado num arquivo no próprio aparelho"
+      ],
+      "correta": 3,
+      "explicacao": "SQLite é um banco relacional embutido: não tem servidor, o banco inteiro é um arquivo na área do app e funciona offline."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas situações pede um banco de dados interno como o SQLite, e não só preferências?",
+      "alternativas": [
+        "Lembrar se o som do app está ligado ou desligado",
+        "Guardar as consultas de uma clínica e buscar as do dia por médico",
+        "Guardar a data da última vez que o app foi aberto",
+        "Lembrar o nome do usuário para mostrar \"Olá, Ana\" na tela inicial do app"
+      ],
+      "correta": 1,
+      "explicacao": "Muitos registros, com filtros e ordenação, pedem banco. Os outros são valores únicos e simples, bons para chave-valor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um colega diz que o app vai precisar de internet para usar o SQLite. Por que ele está errado?",
+      "alternativas": [
+        "Porque o SQLite usa o Bluetooth para trocar dados com o servidor",
+        "Porque o SQLite guarda tudo só na memória RAM e não grava nada no aparelho",
+        "Porque o SQLite roda dentro do app e grava num arquivo local, sem servidor",
+        "Porque o SQLite só funciona quando o aparelho está em modo avião"
+      ],
+      "correta": 2,
+      "explicacao": "O SQLite é uma biblioteca embutida no app; o banco é um arquivo local. Não depende de rede."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de biblioteca, o banco SQLite tem uma tabela `livro` com as colunas id, titulo, autor e emprestado. O que representa cada LINHA dessa tabela?",
+      "alternativas": [
+        "Um livro cadastrado, com seus dados",
+        "Uma coluna nova criada a cada empréstimo",
+        "Um usuário diferente do aplicativo",
+        "Um arquivo de imagem da capa do livro"
+      ],
+      "correta": 0,
+      "explicacao": "Na tabela, cada linha (registro) é um item cadastrado; as colunas são os dados de cada item."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o comando executado ao abrir um app de pet shop pela primeira vez:\n\n`CREATE TABLE IF NOT EXISTS pet (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT NOT NULL, peso REAL);`\n\nPara que serve o `IF NOT EXISTS`?",
+      "alternativas": [
+        "Para apagar a tabela antiga e criar de novo, vazia, toda vez",
+        "Para permitir que a coluna nome fique sem valor",
+        "Para criar a tabela só quando o aparelho estiver sem conexão com a internet",
+        "Para criar a tabela só se ela não existir, sem erro ao reabrir"
+      ],
+      "correta": 3,
+      "explicacao": "O comando roda em toda abertura; sem IF NOT EXISTS, a segunda vez daria erro de tabela já existente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `pet (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT NOT NULL, peso REAL)` de um app de pet shop, qual tipo do SQLite guarda o peso 12.5?",
+      "alternativas": [
+        "TEXT",
+        "REAL",
+        "INTEGER",
+        "BLOB"
+      ],
+      "correta": 1,
+      "explicacao": "REAL guarda números com casas decimais. INTEGER é inteiro, TEXT é texto e BLOB guarda bytes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `aluno (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT NOT NULL)` de um app escolar, o que o AUTOINCREMENT faz na coluna id?",
+      "alternativas": [
+        "Obriga o app a digitar o id de cada aluno manualmente",
+        "Permite que dois alunos tenham o mesmo id",
+        "Gera o número do id sozinho, um a mais a cada novo aluno",
+        "Apaga o id do aluno quando ele é atualizado"
+      ],
+      "correta": 2,
+      "explicacao": "Com AUTOINCREMENT o banco gera o id automaticamente ao inserir. Assim o app não precisa calcular o próximo número."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na tabela `produto (id INTEGER PRIMARY KEY, nome TEXT NOT NULL, preco REAL)` de uma padaria, o app tenta inserir um produto sem nome. O que acontece?",
+      "alternativas": [
+        "O banco recusa a inserção, porque a coluna nome é NOT NULL",
+        "O banco grava o produto com o nome 'sem nome' automaticamente",
+        "O banco grava o produto e apaga a coluna nome da tabela",
+        "O banco grava o produto no cache em vez da tabela"
+      ],
+      "correta": 0,
+      "explicacao": "NOT NULL obriga a coluna a ter valor. Sem nome, a inserção dá erro e nada é gravado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "SQLite não tem um tipo próprio para verdadeiro/falso. Num app de tarefas, como costuma ser guardada a coluna concluida?",
+      "alternativas": [
+        "Como REAL, com 0.5 para tarefas pela metade",
+        "Como BLOB, com uma imagem de um sinal de certo",
+        "Como uma tabela separada para cada valor",
+        "Como INTEGER, com 0 para falso e 1 para verdadeiro"
+      ],
+      "correta": 3,
+      "explicacao": "Em SQLite, booleano é guardado como inteiro: 0 = falso, 1 = verdadeiro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de clínica existem as tabelas `paciente (id INTEGER PRIMARY KEY, nome TEXT)` e `consulta (id INTEGER PRIMARY KEY, data TEXT, id_paciente INTEGER REFERENCES paciente(id))`. O que a coluna id_paciente representa?",
+      "alternativas": [
+        "O número de consultas que cada paciente já teve",
+        "A ligação de cada consulta com o paciente dono dela (chave estrangeira)",
+        "Uma cópia do nome do paciente, para não precisar consultar a outra tabela",
+        "A ordem de chegada do paciente na sala de espera"
+      ],
+      "correta": 1,
+      "explicacao": "id_paciente guarda o id de uma linha da tabela paciente. É a chave estrangeira que relaciona consulta → paciente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de cinema, a tabela `filme (id, titulo, genero, duracao)` guarda os filmes em cartaz. O que retorna `SELECT titulo FROM filme WHERE genero = 'animação';`?",
+      "alternativas": [
+        "Todas as colunas de todos os filmes",
+        "Quantos filmes de animação existem",
+        "Os títulos dos filmes do gênero animação",
+        "Os gêneros de todos os filmes, sem repetir"
+      ],
+      "correta": 2,
+      "explicacao": "SELECT titulo traz só a coluna título; WHERE filtra os filmes cujo gênero é 'animação'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de academia, a tabela `treino (id, aluno, data, minutos)` guarda os treinos. O que retorna `SELECT * FROM treino ORDER BY data DESC LIMIT 5;`?",
+      "alternativas": [
+        "Os 5 treinos mais recentes, com todas as colunas",
+        "Os 5 primeiros treinos já cadastrados no app",
+        "Os treinos que duraram mais de 5 minutos",
+        "A soma dos minutos dos últimos 5 dias"
+      ],
+      "correta": 0,
+      "explicacao": "ORDER BY data DESC ordena do mais novo para o mais antigo e LIMIT 5 pega só os 5 primeiros dessa ordem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de mercadinho, a tabela `item_lista (id, produto, quantidade, comprado)` usa comprado 0 ou 1. O que retorna `SELECT COUNT(*) FROM item_lista WHERE comprado = 0;`?",
+      "alternativas": [
+        "A lista com os nomes dos itens já comprados",
+        "A soma das quantidades de todos os itens",
+        "O primeiro item da lista que foi comprado",
+        "Quantos itens da lista ainda não foram comprados"
+      ],
+      "correta": 3,
+      "explicacao": "COUNT(*) conta linhas; o WHERE comprado = 0 deixa só os itens ainda não comprados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de hotel, a tabela `reserva (id, hospede, quarto, noites)`. O que faz `UPDATE reserva SET noites = 4 WHERE id = 7;`?",
+      "alternativas": [
+        "Cria uma nova reserva de 4 noites com id 7",
+        "Muda para 4 o número de noites só da reserva de id 7",
+        "Muda para 4 as noites de todas as reservas",
+        "Apaga a reserva 7 e cria outra com 4 noites"
+      ],
+      "correta": 1,
+      "explicacao": "UPDATE altera linhas existentes; o WHERE id = 7 limita a mudança àquela reserva."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de oficina, a tabela `servico (id, carro, descricao, finalizado)`. Um aluno rodou `DELETE FROM servico;` para apagar um serviço errado. O que aconteceu?",
+      "alternativas": [
+        "Só o último serviço cadastrado foi apagado",
+        "A tabela servico foi apagada junto com sua estrutura",
+        "Todos os serviços da tabela foram apagados, porque faltou o WHERE",
+        "Nada aconteceu, porque o DELETE exige confirmação do usuário"
+      ],
+      "correta": 2,
+      "explicacao": "Sem WHERE, o DELETE apaga todas as linhas. A tabela continua existindo, mas vazia."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de escola, a tabela `nota (id, aluno, materia, valor)`. Qual comando acrescenta uma nova nota?",
+      "alternativas": [
+        "INSERT INTO nota (aluno, materia, valor) VALUES ('Bia', 'Mobile', 8.5);",
+        "UPDATE nota SET aluno = 'Bia', materia = 'Mobile', valor = 8.5;",
+        "SELECT nota FROM aluno WHERE valor = 8.5;",
+        "CREATE TABLE nota (aluno 'Bia', materia 'Mobile', valor 8.5);"
+      ],
+      "correta": 0,
+      "explicacao": "INSERT INTO acrescenta uma linha. UPDATE altera linhas existentes (aqui, todas), SELECT consulta e CREATE TABLE cria estrutura."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de clínica, com `paciente (id, nome)` e `consulta (id, data, id_paciente)`, o que retorna a consulta abaixo?\n\n`SELECT p.nome, c.data FROM consulta c JOIN paciente p ON p.id = c.id_paciente WHERE c.data = '2026-12-01';`",
+      "alternativas": [
+        "Todos os pacientes, mesmo os que não têm consulta em 01/12/2026",
+        "A quantidade de consultas de cada paciente no mês de dezembro",
+        "Os pacientes cadastrados no app no dia 01/12/2026",
+        "O nome do paciente e a data de cada consulta marcada para 01/12/2026"
+      ],
+      "correta": 3,
+      "explicacao": "O JOIN liga cada consulta ao seu paciente pelo id; o WHERE deixa só as consultas da data indicada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de loja de games, a tabela `jogo (id, nome, preco)`. O que retorna `SELECT nome FROM jogo WHERE nome LIKE '%corrida%';`?",
+      "alternativas": [
+        "Só os jogos cujo nome é exatamente 'corrida'",
+        "Os jogos que têm a palavra 'corrida' em qualquer parte do nome",
+        "Os jogos que começam com a letra c",
+        "Os jogos com preço parecido com o do jogo chamado corrida, na mesma faixa"
+      ],
+      "correta": 1,
+      "explicacao": "LIKE com % antes e depois busca o trecho em qualquer posição do texto. É o jeito comum de fazer um campo de busca."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de biblioteca, a busca foi feita assim:\n\n`db.executeSql(\"SELECT * FROM livro WHERE titulo = '\" + textoDigitado + \"'\");`\n\nQual o problema de montar a consulta juntando o texto digitado?",
+      "alternativas": [
+        "A consulta vai sempre para a internet em vez de ficar no aparelho",
+        "O SQLite não aceita consultas com a palavra WHERE",
+        "O texto digitado pode mudar o comando (injeção de SQL) ou quebrá-lo",
+        "O app passa a guardar todo texto digitado no armazenamento seguro do sistema"
+      ],
+      "correta": 2,
+      "explicacao": "Concatenar entrada do usuário abre espaço para injeção de SQL e erros com aspas (ex.: \"Olho d'água\"). Use parâmetros com ?."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o código de um app de pet shop:\n\n`db.executeSql('INSERT INTO pet (nome, peso) VALUES (?, ?)', [nome, peso]);`\n\nO que significam os pontos de interrogação?",
+      "alternativas": [
+        "Lugares que o banco preenche com os valores da lista",
+        "São colunas que o banco ainda não sabe o nome",
+        "São avisos de que os valores enviados podem estar errados ou vazios",
+        "São valores aleatórios que o SQLite gera sozinho"
+      ],
+      "correta": 0,
+      "explicacao": "São parâmetros: o banco troca cada ? pelo valor correspondente da lista, tratando-os como dados e não como parte do comando."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de mercadinho importa 3 mil produtos de uma vez. Feito com um INSERT por vez, demora muito. A equipe passou a fazer todos os INSERT dentro de uma transação (BEGIN ... COMMIT). Qual o ganho?",
+      "alternativas": [
+        "Os produtos passam a ser salvos na nuvem em vez de ficarem no aparelho",
+        "O banco deixa de verificar NOT NULL e chave primária",
+        "Os produtos ficam guardados no cache até o próximo dia",
+        "Fica mais rápido e, se der erro no meio, nada fica pela metade"
+      ],
+      "correta": 3,
+      "explicacao": "Na transação o banco grava tudo de uma vez no COMMIT (mais rápido) e é tudo-ou-nada: um erro desfaz o lote (ROLLBACK)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de banco de horas da escola, ao transferir 2 horas de um professor para outro é preciso tirar de um e somar no outro. Por que usar uma transação?",
+      "alternativas": [
+        "Para que o app possa fazer a transferência sem precisar de uma tabela",
+        "Para as duas alterações acontecerem juntas, ou nenhuma",
+        "Para que cada alteração seja gravada num arquivo diferente",
+        "Para que o professor confirme a transferência pelo e-mail"
+      ],
+      "correta": 1,
+      "explicacao": "Transação garante tudo-ou-nada: se o app fechar entre as duas alterações, nada fica pela metade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app que usa SQLite, onde fica o arquivo do banco de dados?",
+      "alternativas": [
+        "Num servidor da empresa que publicou o app",
+        "Na pasta de cache, que o sistema limpa quando quer",
+        "Na área interna e privada do app, no próprio aparelho",
+        "Na galeria de fotos, junto com as imagens"
+      ],
+      "correta": 2,
+      "explicacao": "Por padrão, o arquivo .db fica na pasta privada do app, no armazenamento interno."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na versão 1 de um app de academia, a tabela era `aluno (id, nome)`. Na versão 2, o app precisa da coluna telefone. Os alunos que atualizarem o app já têm dados salvos. Qual a forma correta de tratar isso?",
+      "alternativas": [
+        "Fazer uma migração (ALTER TABLE) que mantém os dados",
+        "Apagar o banco antigo e criar tudo de novo na versão 2",
+        "Pedir que os alunos desinstalem e instalem o app de novo",
+        "Salvar o telefone nas preferências para não mexer na tabela"
+      ],
+      "correta": 0,
+      "explicacao": "Migração altera a estrutura preservando os dados. Recriar o banco ou reinstalar faria o usuário perder tudo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que o app costuma guardar um número de versão do banco de dados (por exemplo, com `PRAGMA user_version`)?",
+      "alternativas": [
+        "Para mostrar ao usuário quantas vezes ele abriu o app",
+        "Para limitar quantas linhas cada tabela pode ter",
+        "Para criptografar o banco com uma senha diferente a cada nova versão do app",
+        "Para saber quais migrações ainda precisam rodar quando o app é atualizado"
+      ],
+      "correta": 3,
+      "explicacao": "Comparando a versão salva com a versão esperada pelo código, o app sabe que alterações aplicar (1→2, 2→3…)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é um ORM, usado em apps com banco de dados?",
+      "alternativas": [
+        "Um tipo de armazenamento seguro para guardar tokens e senhas",
+        "Uma ferramenta que liga classes do código a tabelas do banco",
+        "Um formato de arquivo para guardar fotos no armazenamento externo",
+        "Um servidor que mantém os dados do app sempre na nuvem"
+      ],
+      "correta": 1,
+      "explicacao": "ORM (mapeamento objeto-relacional) transforma objetos em linhas e linhas em objetos. Exemplos no Android: Room; em JavaScript há vários."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de biblioteca com ORM, existe a classe `Livro` com os atributos id, titulo e autor. Como o ORM geralmente representa isso no banco?",
+      "alternativas": [
+        "Um arquivo de texto para cada livro no armazenamento externo",
+        "Uma única chave no armazenamento chave-valor, com o nome Livro e todos os dados",
+        "Uma tabela livro: cada atributo vira coluna e cada objeto, uma linha",
+        "Uma tabela para cada atributo: uma de títulos e outra de autores"
+      ],
+      "correta": 2,
+      "explicacao": "No mapeamento comum: classe → tabela, atributo → coluna, objeto → linha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é uma vantagem de usar um ORM num app de pet shop?",
+      "alternativas": [
+        "Trabalhar com objetos, como pet.salvar(), sem montar SQL à mão",
+        "O app deixa de precisar de banco de dados no aparelho",
+        "Os dados passam a ser criptografados sem nenhuma configuração",
+        "O app passa a funcionar sem nunca precisar de atualização na loja de aplicativos"
+      ],
+      "correta": 0,
+      "explicacao": "O ORM esconde boa parte do SQL e trabalha com objetos. O banco continua existindo por baixo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma equipe usa ORM num app de loja e uma tela de relatório ficou muito lenta: o ORM está fazendo uma consulta para cada produto da lista. Qual conclusão é correta?",
+      "alternativas": [
+        "ORM sempre gera o SQL mais rápido possível, então o problema é o aparelho",
+        "Com ORM não é possível fazer consultas com filtros",
+        "O problema some se os produtos forem salvos nas preferências",
+        "Mesmo com ORM, é preciso entender o SQL gerado e otimizar se precisar"
+      ],
+      "correta": 3,
+      "explicacao": "ORM facilita, mas pode gerar consultas ruins (muitas pequenas). Conhecer SQL ajuda a perceber e corrigir."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de escola, a tabela `aviso (id, titulo, lido)` tem 3 avisos e o app executou `SELECT * FROM aviso WHERE lido = 1;`. Nenhum aviso foi lido ainda. Qual o resultado?",
+      "alternativas": [
+        "Os 3 avisos, porque o WHERE é ignorado sem dados",
+        "Nenhuma linha, porque nenhum aviso tem lido = 1",
+        "Um erro, porque a coluna lido está toda com 0",
+        "O número 0 dentro de uma única linha"
+      ],
+      "correta": 1,
+      "explicacao": "Quando o filtro não encontra linhas, o SELECT devolve um resultado vazio (sem erro). COUNT(*) é que devolveria 0."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de cinema, a tabela `ingresso (id, filme, sessao, poltrona)`. Qual comando cancela (apaga) só o ingresso de id 15?",
+      "alternativas": [
+        "DELETE FROM ingresso;",
+        "DROP TABLE ingresso WHERE id = 15;",
+        "DELETE FROM ingresso WHERE id = 15;",
+        "UPDATE ingresso SET id = 0;"
+      ],
+      "correta": 2,
+      "explicacao": "DELETE com WHERE id = 15 apaga só aquela linha. DROP TABLE apagaria a tabela inteira e não aceita WHERE."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de hotel, a tabela `quarto (numero, andar, ocupado)`. O que retorna `SELECT andar, COUNT(*) FROM quarto WHERE ocupado = 0 GROUP BY andar;`?",
+      "alternativas": [
+        "Quantos quartos livres existem em cada andar",
+        "Quantos andares tem o hotel",
+        "Os números dos quartos ocupados, andar por andar",
+        "O andar com mais quartos ocupados"
+      ],
+      "correta": 0,
+      "explicacao": "GROUP BY andar agrupa por andar e COUNT(*) conta as linhas de cada grupo; o WHERE deixa só os quartos livres."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de oficina precisa listar os serviços de um carro, ordenados por data, e filtrar os não finalizados. Por que um banco SQLite é melhor que um arquivo de texto simples para isso?",
+      "alternativas": [
+        "Porque o banco guarda os dados na nuvem e o arquivo não",
+        "Porque o arquivo de texto some sempre que o app é fechado ou o celular reinicia",
+        "Porque só o banco aceita textos com números e datas",
+        "Porque o banco filtra e ordena com uma consulta, sem tratar tudo no código"
+      ],
+      "correta": 3,
+      "explicacao": "Com SQL, filtros (WHERE) e ordenação (ORDER BY) são feitos pelo banco. Num arquivo, o app teria que ler tudo e filtrar no código."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de controle de empréstimos de uma biblioteca escolar guarda centenas de empréstimos e precisa buscar os que estão atrasados.\n\nNa sua resposta:\n1. explique por que um banco SQLite é mais adequado que o armazenamento chave-valor nesse caso;\n2. diga onde fica o banco SQLite.",
+      "respostasAceitas": [
+        "São muitos registros com buscas e filtros (atrasados, por aluno); o SQLite faz isso com consultas SQL, enquanto chave-valor só lê valores por nome. O banco é um arquivo na área interna do app, no próprio aparelho."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) muitos registros, filtros e consultas; chave-valor não filtra; 2) arquivo local, na área interna/privada do app (não precisa de servidor)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num app de pet shop, ao abrir o app sempre é executado:\n\n`CREATE TABLE IF NOT EXISTS vacina (id INTEGER PRIMARY KEY AUTOINCREMENT, id_pet INTEGER NOT NULL, nome TEXT NOT NULL, data TEXT);`\n\nNa sua resposta:\n1. explique o papel do IF NOT EXISTS;\n2. explique o que significa o NOT NULL nas colunas id_pet e nome.",
+      "respostasAceitas": [
+        "IF NOT EXISTS faz a tabela ser criada só na primeira vez; nas próximas aberturas o comando não dá erro nem apaga nada. NOT NULL obriga essas colunas a ter valor: toda vacina precisa estar ligada a um pet e ter um nome."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cria só se não existir, evita erro ao rodar de novo; 2) campo obrigatório, não aceita vazio."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num app de academia, a tabela `treino (id, aluno, data, minutos)` guarda os treinos. Foi executado:\n\n`SELECT data, minutos FROM treino WHERE aluno = 'Caio' ORDER BY data;`\n\nNa sua resposta:\n1. diga o que essa consulta mostra;\n2. explique o papel do ORDER BY.",
+      "respostasAceitas": [
+        "Mostra a data e os minutos de cada treino do aluno Caio. O ORDER BY data coloca os treinos em ordem de data, do mais antigo para o mais recente."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) data e minutos dos treinos do Caio; 2) ordena por data (crescente)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num app de oficina, a tabela `servico (id, carro, descricao, finalizado)`. Um estagiário rodou `UPDATE servico SET finalizado = 1;` querendo finalizar o serviço do carro de placa ABC1D23.\n\nNa sua resposta:\n1. explique o que o comando realmente fez;\n2. explique o que faltou no comando.",
+      "respostasAceitas": [
+        "Marcou TODOS os serviços da tabela como finalizados. Faltou o WHERE para limitar a alteração ao serviço daquele carro (por exemplo, pelo id do serviço ou pela placa)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) alterou todas as linhas; 2) faltou WHERE filtrando o serviço certo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num app de loja, a busca de produtos foi feita juntando o texto digitado direto no SQL:\n\n`\"SELECT * FROM produto WHERE nome = '\" + busca + \"'\"`\n\nOutra versão usa parâmetros:\n\n`db.executeSql('SELECT * FROM produto WHERE nome = ?', [busca]);`\n\nNa sua resposta:\n1. explique o risco da primeira versão;\n2. explique por que a segunda versão resolve o problema.",
+      "respostasAceitas": [
+        "Na primeira, o que o usuário digita vira parte do comando: um apóstrofo quebra a consulta e um texto malicioso pode alterar o SQL (injeção de SQL). Com parâmetros, o banco trata o valor só como dado, nunca como comando."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) injeção de SQL / erro com aspas; 2) o ? separa dado do comando, o banco trata o valor com segurança."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num app de clínica existem as tabelas `paciente (id, nome, telefone)` e `consulta (id, data, id_paciente)`. Uma aluna sugeriu guardar o nome e o telefone do paciente dentro de cada consulta, para não precisar de duas tabelas.\n\nNa sua resposta:\n1. explique para que serve a coluna id_paciente;\n2. explique um problema de repetir nome e telefone em cada consulta.",
+      "respostasAceitas": [
+        "id_paciente liga a consulta ao paciente (chave estrangeira). Repetindo os dados, se o paciente trocar de telefone será preciso alterar todas as consultas; se esquecer alguma, os dados ficam diferentes (inconsistentes), além de ocupar mais espaço."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) relaciona consulta e paciente; 2) repetição gera inconsistência/trabalho para atualizar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um professor explicou que, com um ORM, a classe `Produto` (id, nome, preco) do app de padaria vira uma tabela no banco.\n\nNa sua resposta:\n1. explique com suas palavras o que um ORM faz;\n2. diga como ficam os atributos e os objetos da classe no banco.",
+      "respostasAceitas": [
+        "O ORM faz a ponte entre as classes do código e as tabelas do banco, salvando e lendo objetos sem que o programador escreva todo o SQL. Cada atributo vira uma coluna e cada objeto salvo vira uma linha da tabela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mapeia objetos ↔ tabelas, evita escrever SQL à mão; 2) atributo = coluna, objeto = linha."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na versão 1 de um app de biblioteca, a tabela era `livro (id, titulo)`. Na versão 2, a equipe precisa da coluna autor. Um desenvolvedor sugeriu: \"é só apagar o banco e recriá-lo já com a coluna nova\".\n\nNa sua resposta:\n1. explique o problema dessa sugestão para quem já usa o app;\n2. explique o que é uma migração e como ela resolve isso.",
+      "respostasAceitas": [
+        "Apagar o banco faria os usuários perderem todos os livros já cadastrados. Migração é um passo que altera a estrutura do banco existente (ex.: ALTER TABLE livro ADD COLUMN autor TEXT) mantendo os dados; o app guarda a versão do banco para saber que migrações rodar ao ser atualizado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) perda dos dados dos usuários; 2) alterar a estrutura preservando dados, controlando a versão do banco."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de estoque de uma lojinha importa 2 mil produtos de uma planilha. Na primeira versão, se o app fechasse no meio, ficavam só parte dos produtos. Na segunda, todos os INSERT foram colocados dentro de uma transação.\n\nNa sua resposta:\n1. explique o que a transação garante;\n2. cite um outro ganho de usar a transação nessa importação.",
+      "respostasAceitas": [
+        "A transação é tudo-ou-nada: ou os 2 mil produtos são gravados, ou nenhum (se der erro, desfaz). Outro ganho: fica bem mais rápido, porque o banco grava tudo de uma vez no final em vez de gravar a cada inserção."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) atomicidade (tudo ou nada, sem importação pela metade); 2) desempenho."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num app de hotel, a tabela `quarto (numero, andar, ocupado)`, onde ocupado é 0 ou 1. Foi executado:\n\n`SELECT COUNT(*) FROM quarto WHERE ocupado = 0 AND andar = 2;`\n\nNa sua resposta:\n1. diga o que essa consulta responde;\n2. explique por que a coluna ocupado usa 0 e 1.",
+      "respostasAceitas": [
+        "Responde quantos quartos livres existem no 2º andar. SQLite não tem tipo booleano próprio, então verdadeiro/falso é guardado como inteiro: 1 = ocupado, 0 = livre."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) quantidade de quartos livres no andar 2; 2) booleano guardado como inteiro no SQLite."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num app de cinema foi executado:\n\n`DELETE FROM ingresso WHERE id = 42;`\n\nNa sua resposta:\n1. diga o que o comando faz;\n2. explique o que aconteceria se o WHERE fosse esquecido.",
+      "respostasAceitas": [
+        "Apaga só o ingresso de id 42. Sem o WHERE, todos os ingressos da tabela seriam apagados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) apaga a linha de id 42; 2) sem WHERE apaga tudo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct11",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma equipe usa ORM num app de mercadinho. A tela que mostra os pedidos e os itens de cada pedido ficou lenta. Ao olhar o registro de consultas, viram que o ORM faz 1 consulta para os pedidos e mais 1 consulta para cada pedido buscar seus itens.\n\nNa sua resposta:\n1. explique por que isso deixa a tela lenta;\n2. explique por que, mesmo usando ORM, o programador precisa entender SQL.",
+      "respostasAceitas": [
+        "Com 200 pedidos, são 201 consultas ao banco em vez de uma ou duas; cada ida ao banco tem custo e a soma pesa. O ORM gera o SQL por trás; sem entender SQL o programador não percebe consultas ruins nem sabe pedir ao ORM (ou escrever) uma consulta com JOIN que traga tudo de uma vez."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) muitas consultas pequenas, custo somado; 2) ORM gera SQL, conhecer SQL ajuda a otimizar/diagnosticar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num app de escola, a tabela `nota (id, aluno, materia, valor)`. Foi executado:\n\n`SELECT AVG(valor) FROM nota WHERE aluno = 'Lia';`\n\nNa sua resposta:\n1. diga o que a consulta responde;\n2. diga o que mudaria se o WHERE fosse retirado.",
+      "respostasAceitas": [
+        "Responde a média das notas da aluna Lia. Sem o WHERE, calcularia a média de todas as notas de todos os alunos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) média das notas da Lia; 2) média geral da tabela."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num app de pet shop, cada pet tem uma foto. A tabela é `pet (id, nome, caminho_foto)` e as imagens ficam como arquivos na pasta do app.\n\nNa sua resposta:\n1. explique por que não se guarda a foto dentro da tabela;\n2. explique um cuidado ao apagar um pet.",
+      "respostasAceitas": [
+        "Imagens são grandes e deixariam o banco pesado e as consultas lentas; guardar só o caminho mantém o banco leve. Ao apagar o pet, é preciso apagar também o arquivo da foto, senão ele fica ocupando espaço sem uso."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) arquivo grande pesa o banco, guarda-se só o caminho; 2) apagar o arquivo junto (evitar arquivo órfão)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num app de clínica, com `paciente (id, nome)` e `consulta (id, data, id_paciente)`, foi executado:\n\n`SELECT p.nome, COUNT(c.id) FROM paciente p JOIN consulta c ON c.id_paciente = p.id GROUP BY p.nome;`\n\nNa sua resposta:\n1. diga o que a consulta mostra;\n2. explique por que pacientes sem nenhuma consulta não aparecem no resultado.",
+      "respostasAceitas": [
+        "Mostra o nome de cada paciente e quantas consultas ele tem. O JOIN (INNER) só junta linhas que têm par nas duas tabelas; paciente sem consulta não tem par e fica de fora (para aparecer com 0 seria preciso LEFT JOIN)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) quantidade de consultas por paciente; 2) o JOIN só traz quem tem correspondência."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que quer dizer um app \"funcionar offline\"?",
+      "alternativas": [
+        "Funcionar só quando o celular está desligado",
+        "Continuar funcionando sem internet, com dados no aparelho",
+        "Ficar escondido da loja de aplicativos",
+        "Mostrar só uma mensagem de erro quando cai a internet"
+      ],
+      "correta": 1,
+      "explicacao": "Offline = sem conexão. O app lê e grava no armazenamento local e, quando a internet volta, troca dados com o servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um vendedor de uma distribuidora de bebidas anota pedidos no app em sítios sem sinal. Qual é o comportamento esperado de um app offline?",
+      "alternativas": [
+        "Recusar o pedido até o vendedor encontrar um lugar com sinal de internet",
+        "Enviar o pedido por SMS sem avisar o vendedor",
+        "Salvar o pedido no aparelho e enviar ao servidor quando a conexão voltar",
+        "Guardar o pedido só na memória e apagar ao fechar o app"
+      ],
+      "correta": 2,
+      "explicacao": "O pedido é gravado localmente (ex.: SQLite) e fica pendente; a sincronização envia quando houver internet."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de coleta de dados de uma ONG, cada cadastro feito offline vai para a tabela `cadastro` com a coluna `sincronizado` (0 ou 1). Para que serve essa coluna?",
+      "alternativas": [
+        "Para saber quais cadastros ainda precisam ser enviados ao servidor",
+        "Para impedir que o usuário edite cadastros antigos",
+        "Para contar quantas vezes o app foi aberto sem internet",
+        "Para apagar os cadastros assim que o celular fica offline"
+      ],
+      "correta": 0,
+      "explicacao": "Os registros com sincronizado = 0 formam a fila de envio. Depois que o servidor confirma, o app marca 1."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de pedidos, a sincronização roda: `SELECT * FROM pedido WHERE sincronizado = 0;`, envia cada pedido e, se o servidor responder OK, faz `UPDATE pedido SET sincronizado = 1 WHERE id = ?`. Por que marcar só DEPOIS da resposta do servidor?",
+      "alternativas": [
+        "Para o servidor não precisar guardar o pedido",
+        "Para economizar espaço no banco do aparelho",
+        "Para que o pedido seja apagado do servidor depois",
+        "Para não dar como enviado um pedido que falhou"
+      ],
+      "correta": 3,
+      "explicacao": "Se a internet cair no envio, o pedido continua com 0 e será tentado de novo. Marcar antes faria o pedido sumir da fila sem chegar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de pedidos offline, a internet caiu logo depois que o servidor gravou o pedido, mas antes da resposta chegar. O app tentou de novo e o pedido ficou duplicado no servidor. Qual solução evita isso?",
+      "alternativas": [
+        "Usar AUTOINCREMENT no aparelho e mandar o id 1, 2, 3 para o servidor",
+        "Gerar um código único por pedido no aparelho; o servidor ignora repetidos",
+        "Nunca reenviar pedidos que falharam, para não arriscar duplicar nada no servidor",
+        "Apagar o banco do aparelho depois de cada envio"
+      ],
+      "correta": 1,
+      "explicacao": "Com um identificador único gerado no aparelho (ex.: UUID), o reenvio é reconhecido como o mesmo pedido. Ids sequenciais locais se repetem entre aparelhos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Dois atendentes de uma clínica editam offline o telefone do mesmo paciente, cada um no seu tablet. Ao sincronizar, o servidor recebe dois valores diferentes. Como se chama essa situação?",
+      "alternativas": [
+        "Injeção de SQL",
+        "Migração de banco",
+        "Conflito de sincronização",
+        "Limpeza de cache"
+      ],
+      "correta": 2,
+      "explicacao": "Conflito: a mesma informação foi alterada em dois lugares. O sistema precisa de uma regra (ex.: vale a mais recente, ou pedir para alguém decidir)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma regra comum para resolver conflitos é \"a última alteração vence\". Qual é a desvantagem dessa regra?",
+      "alternativas": [
+        "Uma alteração feita antes pode ser perdida sem ninguém perceber",
+        "O app passa a exigir internet o tempo todo",
+        "O banco do aparelho fica com o dobro do tamanho depois de cada sincronização",
+        "As alterações deixam de ser gravadas no aparelho"
+      ],
+      "correta": 0,
+      "explicacao": "É simples, mas descarta a outra alteração. Em dados importantes, pode ser melhor avisar o usuário ou juntar as mudanças."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que um app de lista de chamada da escola deve mostrar os alunos mesmo quando a internet da escola cai?",
+      "alternativas": [
+        "Porque os apps são proibidos de usar internet dentro da escola",
+        "Porque a internet só é usada para baixar atualizações do app",
+        "Porque a chamada é salva apenas no cache do servidor",
+        "Porque a lista está no aparelho e a chamada não pode parar"
+      ],
+      "correta": 3,
+      "explicacao": "Guardar a lista no aparelho mantém o app útil sem rede; as presenças são enviadas depois."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de entregas, quando o celular volta a ter internet, o app começa a enviar os dados pendentes. Que informação o app precisa ter para saber que a conexão voltou?",
+      "alternativas": [
+        "A quantidade de bateria do aparelho",
+        "O estado de conexão de rede informado pelo sistema",
+        "A posição do GPS do entregador",
+        "O tamanho da tela do celular"
+      ],
+      "correta": 1,
+      "explicacao": "O sistema informa se há rede e avisa quando muda; o app usa isso para disparar a sincronização."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de cardápio de lanchonete mostra os produtos guardados no aparelho e, quando há internet, baixa as novidades do servidor. Esse comportamento chama-se:",
+      "alternativas": [
+        "Criptografia",
+        "Desinstalação",
+        "Sincronização",
+        "Compilação"
+      ],
+      "correta": 2,
+      "explicacao": "Sincronizar é manter os dados do aparelho e do servidor em acordo, enviando e recebendo mudanças."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de estoque, depois de sincronizar, o app guarda a data e a hora da última sincronização. Para que isso serve na próxima vez?",
+      "alternativas": [
+        "Para pedir só o que mudou depois dessa data, sem baixar tudo",
+        "Para apagar do aparelho todos os produtos cadastrados antes dessa data",
+        "Para impedir o uso do app até o dia seguinte",
+        "Para mostrar ao usuário a hora certa no relógio"
+      ],
+      "correta": 0,
+      "explicacao": "Sincronização incremental: com a última data, o servidor devolve só as alterações novas, economizando dados e tempo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de vendas offline, o vendedor apagou um cliente no aparelho. Na próxima sincronização, o cliente reaparece. Qual a causa mais provável?",
+      "alternativas": [
+        "O SQLite não permite apagar linhas de tabelas",
+        "O AUTOINCREMENT do SQLite recriou o cliente apagado sozinho, com outro número",
+        "O cache do aparelho tem prioridade sobre o banco",
+        "A exclusão foi feita só no aparelho e não foi enviada ao servidor"
+      ],
+      "correta": 3,
+      "explicacao": "Para sincronizar exclusões, o app precisa marcar o registro como excluído (ou guardar numa fila) e avisar o servidor; senão, o servidor manda o cliente de volta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quais dados um app de anotações escolares deve guardar no aparelho para ser útil offline?",
+      "alternativas": [
+        "Só o logotipo da escola, porque o resto vem do servidor",
+        "As anotações do aluno, para ler e editar sem internet",
+        "Nenhum dado, porque offline o app não deve abrir",
+        "Só a senha do aluno, em texto puro"
+      ],
+      "correta": 1,
+      "explicacao": "Para funcionar offline, os dados que o usuário usa precisam estar salvos localmente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de academia sincroniza os treinos com o servidor. Qual é a ordem mais segura quando o aluno registra um treino sem internet?",
+      "alternativas": [
+        "Mostrar na tela, esperar a internet voltar e só então gravar no aparelho",
+        "Enviar ao servidor primeiro e, se falhar, descartar o treino",
+        "Gravar no aparelho, marcar como pendente e enviar quando houver conexão",
+        "Gravar no cache e torcer para não ser limpo"
+      ],
+      "correta": 2,
+      "explicacao": "Gravar primeiro no aparelho garante que nada se perca; o status pendente informa o usuário; o envio acontece depois."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um usuário desinstala um app de receitas que guardava as receitas favoritas num banco SQLite interno. O que acontece com essas receitas?",
+      "alternativas": [
+        "São apagadas junto com o app, porque estavam na área interna dele",
+        "Ficam salvas no aparelho até alguém apagá-las à mão",
+        "São enviadas automaticamente para a loja de aplicativos",
+        "Passam para o armazenamento seguro do sistema"
+      ],
+      "correta": 0,
+      "explicacao": "A desinstalação remove a área privada do app: banco, preferências, arquivos internos e cache."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de diário pessoal guarda tudo só no aparelho. Que aviso é importante a equipe dar ao usuário?",
+      "alternativas": [
+        "Que o app vai parar de funcionar sem internet",
+        "Que outros apps instalados no celular vão conseguir ler o diário do usuário",
+        "Que o diário será apagado toda noite para liberar espaço",
+        "Que, sem backup, desinstalar ou perder o celular apaga as anotações"
+      ],
+      "correta": 3,
+      "explicacao": "Dado só local depende do aparelho. Sem backup ou sincronização, desinstalar, trocar ou perder o celular leva os dados junto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes itens de um app NÃO é apagado quando o app é desinstalado?",
+      "alternativas": [
+        "O banco SQLite da área interna do app",
+        "Uma cópia dos dados enviada para o servidor da empresa",
+        "As preferências salvas pelo app",
+        "O cache de imagens que o app baixou para abrir mais rápido"
+      ],
+      "correta": 1,
+      "explicacao": "O que está no servidor fica guardado lá. Tudo o que está na área do app no aparelho é removido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de hotel apaga a área interna ao ser desinstalado. Mesmo assim, ao reinstalar, o hóspede já aparece logado. Qual explicação é possível?",
+      "alternativas": [
+        "O banco SQLite não é apagado na desinstalação",
+        "O token ficou guardado no cache, que nunca é apagado pelo sistema operacional",
+        "O backup automático do sistema restaurou os dados do app",
+        "O app lê o login pela câmera do aparelho"
+      ],
+      "correta": 2,
+      "explicacao": "Alguns sistemas fazem backup automático dos dados do app e restauram ao reinstalar. Por isso o app deve decidir o que entra (ou não) no backup."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve o backup dos dados de um app?",
+      "alternativas": [
+        "Para ter uma cópia e recuperar os dados se algo der errado",
+        "Para deixar o app mais rápido ao abrir, guardando tudo na memória RAM",
+        "Para apagar os dados antigos automaticamente",
+        "Para impedir que o app funcione sem internet"
+      ],
+      "correta": 0,
+      "explicacao": "Backup é cópia de segurança, guardada em outro lugar (nuvem, computador, arquivo exportado), para restaurar quando preciso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de controle de gastos sem login, qual opção permite ao usuário levar seus dados para um celular novo?",
+      "alternativas": [
+        "Limpar o cache do app antes de trocar de celular",
+        "Desinstalar o app no aparelho antigo antes de trocar",
+        "Salvar os gastos nas preferências em vez do banco, para ocupar menos espaço",
+        "Exportar os dados para um arquivo e importar no outro aparelho"
+      ],
+      "correta": 3,
+      "explicacao": "Exportar/importar um arquivo é uma forma simples de backup quando não há conta na nuvem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Os sistemas móveis podem fazer backup automático dos dados de um app. Qual dado é recomendado EXCLUIR desse backup?",
+      "alternativas": [
+        "As preferências de idioma do usuário",
+        "O token de acesso, que é ligado ao aparelho e sensível",
+        "As anotações criadas pelo usuário",
+        "As receitas favoritas salvas no banco"
+      ],
+      "correta": 1,
+      "explicacao": "Tokens e chaves não devem ser copiados para outro aparelho; o ideal é o usuário fazer login de novo. Dados do usuário são justamente o que se quer guardar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de clínica guarda prontuários no aparelho e faz backup num arquivo no armazenamento externo compartilhado, sem proteção. Qual o principal problema?",
+      "alternativas": [
+        "O backup deixa o app sem funcionar offline",
+        "O arquivo de backup some sempre que o celular é reiniciado pelo usuário",
+        "Dados de saúde, que são sensíveis, ficam expostos",
+        "O backup impede que o banco seja atualizado"
+      ],
+      "correta": 2,
+      "explicacao": "Dados de saúde são sensíveis (LGPD). Backup em área compartilhada e sem criptografia expõe os pacientes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de fotos de formatura guarda as fotos só no aparelho. O celular cai na água e para de funcionar. Sem backup, o que acontece?",
+      "alternativas": [
+        "As fotos são perdidas",
+        "As fotos voltam ao instalar o app em outro celular",
+        "As fotos ficam salvas no cache do servidor",
+        "As fotos são recuperadas pelo SQLite"
+      ],
+      "correta": 0,
+      "explicacao": "Sem cópia em outro lugar, o que estava só no aparelho se perde junto com ele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a diferença entre sincronizar com a nuvem e fazer um backup?",
+      "alternativas": [
+        "Sincronizar só funciona offline; o backup só funciona com internet",
+        "Sincronizar apaga os dados que estão no aparelho; o backup apaga os que estão no servidor",
+        "Não há diferença: os dois nomes significam a mesma coisa",
+        "Sincronizar mantém os lados iguais sempre; backup é uma cópia para restaurar"
+      ],
+      "correta": 3,
+      "explicacao": "A sincronização é contínua e reflete mudanças (inclusive exclusões). O backup é uma foto do momento, útil para voltar atrás."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de tarefas sincroniza tudo com a nuvem. Um aluno apagou sem querer todas as tarefas no celular, e elas sumiram também no computador. Por que a sincronização não serviu como backup?",
+      "alternativas": [
+        "Porque a sincronização só funciona no primeiro dia de uso",
+        "Porque a sincronização copia também a exclusão para os outros aparelhos",
+        "Porque a nuvem guarda só as preferências do usuário, e não as tarefas criadas",
+        "Porque o SQLite impede que dados apagados sejam sincronizados"
+      ],
+      "correta": 1,
+      "explicacao": "Sincronizar replica mudanças, inclusive apagar. Backup guarda uma cópia antiga que permite restaurar o que foi perdido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de loja, qual destes dados deve ir para o banco de dados interno (SQLite)?",
+      "alternativas": [
+        "O tema claro ou escuro escolhido pelo cliente",
+        "O token de acesso à conta do cliente",
+        "O histórico de compras do cliente, com data, itens e valores",
+        "As fotos dos produtos baixadas para abrir mais rápido"
+      ],
+      "correta": 2,
+      "explicacao": "Histórico com muitos registros e campos pede banco. Tema vai para preferências, token para armazenamento seguro, fotos para cache."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de pet shop guarda o CPF e o endereço dos clientes no aparelho do atendente. Pensando em privacidade, qual cuidado é adequado?",
+      "alternativas": [
+        "Guardar só o necessário, proteger o acesso e apagar o que não for usado",
+        "Copiar os dados para o armazenamento externo para não perder",
+        "Mostrar o CPF completo em todas as telas do app para facilitar a conferência",
+        "Guardar os dados no cache, porque ele é apagado sozinho"
+      ],
+      "correta": 0,
+      "explicacao": "Boas práticas de privacidade: mínimo necessário, proteção, e não manter dados pessoais sem necessidade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de biblioteca, o aluno marca um livro como favorito. O app grava essa informação no SQLite. Quando o aluno abrir o app amanhã, o favorito:",
+      "alternativas": [
+        "Some, porque o SQLite apaga os dados toda noite",
+        "Só aparece se o aluno estiver com internet",
+        "Vai para o cache e pode virar outro livro",
+        "Continua marcado, porque foi salvo no aparelho"
+      ],
+      "correta": 3,
+      "explicacao": "Dados gravados no banco interno permanecem entre aberturas do app."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma equipe quer testar se a função `salvarTarefa()` de um app escolar realmente grava no banco. Qual é um bom teste?",
+      "alternativas": [
+        "Abrir o app e olhar se a tela tem a cor correta",
+        "Salvar a tarefa, buscá-la no banco e conferir se os dados batem",
+        "Chamar salvarTarefa() e conferir só se nenhuma mensagem de erro apareceu",
+        "Desinstalar o app e conferir se a tarefa continua no aparelho"
+      ],
+      "correta": 1,
+      "explicacao": "O teste grava e lê de volta, comparando o resultado com o esperado. Não dar erro não prova que gravou certo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Nos testes automáticos de um app de oficina, cada teste grava serviços no banco. Um teste passa sozinho, mas falha quando roda depois dos outros. Qual a causa mais provável?",
+      "alternativas": [
+        "O SQLite só aceita um teste por dia",
+        "Testes automáticos não conseguem ler bancos SQLite que já tenham dados gravados",
+        "Os testes usam o mesmo banco sem limpar, e um interfere no outro",
+        "A ordem dos testes muda o tipo das colunas da tabela"
+      ],
+      "correta": 2,
+      "explicacao": "Testes de persistência devem começar com o banco num estado conhecido (banco de teste novo ou limpo antes de cada teste)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de hotel quer guardar a data do check-in no SQLite. Qual formato de texto facilita ordenar as datas corretamente?",
+      "alternativas": [
+        "'2026-12-05' (ano-mês-dia)",
+        "'05/12/2026' (dia/mês/ano)",
+        "'dezembro, dia 5' (por extenso)",
+        "'5-12' (dia-mês, sem ano)"
+      ],
+      "correta": 0,
+      "explicacao": "No formato ano-mês-dia, a ordem alfabética do texto coincide com a ordem das datas, então ORDER BY funciona."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de cinema quer guardar a última sessão que o usuário viu, a lista completa de sessões da semana e a senha do cartão. Qual combinação é a mais adequada?",
+      "alternativas": [
+        "Tudo no AsyncStorage, numa única chave",
+        "Última sessão no banco, sessões no armazenamento seguro e senha do cartão nas preferências comuns",
+        "Tudo no cache, para abrir rápido",
+        "Última sessão em preferências, sessões no SQLite, senha em armazenamento seguro"
+      ],
+      "correta": 3,
+      "explicacao": "Cada dado tem o lugar certo: preferência simples, muitos registros em banco e dado sensível protegido (o melhor é nem guardar a senha do cartão)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas é uma vantagem de guardar dados no próprio aparelho?",
+      "alternativas": [
+        "Os dados ficam disponíveis em todos os aparelhos do usuário sozinhos",
+        "O app abre e mostra os dados rápido, mesmo sem internet",
+        "Os dados nunca podem ser perdidos",
+        "Os dados não ocupam nenhum espaço no celular"
+      ],
+      "correta": 1,
+      "explicacao": "Dado local é rápido e disponível offline, mas ocupa espaço, pode ser perdido com o aparelho e não aparece em outros aparelhos sem sincronizar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de academia, os dados dos treinos ficam só no celular do aluno. Ele compra um celular novo e instala o app. O que ele vai encontrar?",
+      "alternativas": [
+        "Todos os treinos, porque o SQLite copia sozinho para o novo celular",
+        "Os treinos de outros alunos da mesma academia",
+        "O app vazio, sem os treinos, se não houver backup ou sincronização",
+        "Só os treinos das últimas 24 horas"
+      ],
+      "correta": 2,
+      "explicacao": "Dados locais ficam no aparelho antigo. Para levá-los é preciso backup, exportação ou sincronização com servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de pedidos offline, onde a fila de pedidos pendentes deve ficar guardada?",
+      "alternativas": [
+        "Num armazenamento persistente, como uma tabela no SQLite",
+        "Numa variável, para ser enviada mais rápido",
+        "Na pasta de cache, porque são dados temporários",
+        "Na memória RAM até a internet voltar"
+      ],
+      "correta": 0,
+      "explicacao": "A fila precisa sobreviver ao fechamento do app e a reinícios; variáveis e cache podem perder os pedidos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de estoque usado em vários celulares, os produtos criados offline recebiam id pelo AUTOINCREMENT do SQLite local. Ao sincronizar, dois celulares mandaram produtos diferentes com o mesmo id 25. Por que isso aconteceu?",
+      "alternativas": [
+        "O AUTOINCREMENT gera números aleatórios que às vezes se repetem",
+        "O servidor apagou o id original dos produtos e gerou outro número para eles",
+        "O SQLite reinicia a contagem toda vez que o app é fechado",
+        "Cada aparelho tem seu banco e sua própria contagem, que se repete"
+      ],
+      "correta": 3,
+      "explicacao": "A sequência é local. Em sistemas com vários aparelhos offline, usa-se um identificador único global (ex.: UUID) ou o id do servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num app de chamados de manutenção da escola, o técnico abre um chamado offline. A tela mostra um ícone de relógio ao lado dele. O que esse ícone deve comunicar?",
+      "alternativas": [
+        "Que o chamado foi apagado do aparelho, mas ainda pode ser recuperado",
+        "Que o chamado está salvo no aparelho, mas ainda não foi enviado",
+        "Que o chamado já foi resolvido pelo técnico",
+        "Que o aparelho está sem bateria"
+      ],
+      "correta": 1,
+      "explicacao": "Mostrar o status de sincronização evita que o usuário pense que o servidor já recebeu o dado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um app de pesquisa de satisfação de um restaurante grava cada resposta no SQLite e nunca apaga nada, mesmo depois de enviar ao servidor. Após um ano, o que tende a acontecer?",
+      "alternativas": [
+        "O SQLite apaga sozinho as respostas mais antigas",
+        "As respostas passam a ser guardadas no cache",
+        "O banco cresce sem parar, ocupando espaço e ficando mais lento",
+        "O app perde a capacidade de funcionar offline, já que o banco fica cheio"
+      ],
+      "correta": 2,
+      "explicacao": "Dado já sincronizado e sem uso pode ser removido (ou ter limite). Acumular tudo pesa no armazenamento e no desempenho."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de vistoria de uma imobiliária é usado em casas sem internet. O vistoriador preenche os dados e tira fotos.\n\nNa sua resposta:\n1. explique por que o app precisa guardar os dados no aparelho;\n2. diga o que o app deve fazer quando a internet voltar.",
+      "respostasAceitas": [
+        "Sem internet, se o app dependesse do servidor, perderia a vistoria; guardando localmente o trabalho continua. Quando a conexão voltar, o app envia ao servidor os dados pendentes (sincroniza) e marca como enviados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) trabalhar sem internet sem perder dados; 2) sincronizar/enviar os pendentes e marcar como enviados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num app de pedidos, a tabela `pedido` tem a coluna `sincronizado` (0 ou 1). A rotina de envio pega os pedidos com 0, manda ao servidor e só depois de uma resposta de sucesso muda para 1.\n\nNa sua resposta:\n1. explique para que serve a coluna sincronizado;\n2. explique por que só se muda para 1 depois da resposta do servidor.",
+      "respostasAceitas": [
+        "A coluna separa os pedidos ainda não enviados (0) dos já enviados (1), formando a fila de envio. Só se marca 1 depois da confirmação para não perder pedidos: se a internet cair no meio, o pedido continua 0 e é reenviado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) identificar pendentes/fila; 2) garantir que o pedido chegou; falha → tenta de novo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Duas recepcionistas de um hotel, cada uma num tablet sem internet, alteraram o mesmo hóspede: uma mudou o quarto para 12, a outra para 15. Ao sincronizar, o sistema usa a regra \"a última alteração vence\".\n\nNa sua resposta:\n1. explique o que é um conflito de sincronização usando esse exemplo;\n2. diga uma vantagem e uma desvantagem da regra usada.",
+      "respostasAceitas": [
+        "Conflito é quando o mesmo dado foi mudado em dois lugares de formas diferentes antes de sincronizar: o hóspede ficou com quarto 12 num tablet e 15 no outro. A regra é simples e automática (vantagem), mas descarta a outra alteração sem avisar, podendo deixar o quarto errado (desvantagem)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mesmo dado alterado em dois lugares; 2) vantagem: simples/automática; desvantagem: perde uma alteração sem ninguém decidir."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de receitas guarda as receitas favoritas num banco SQLite interno, sem conta e sem servidor.\n\nNa sua resposta:\n1. diga o que acontece com as receitas se o usuário desinstalar o app;\n2. sugira uma forma de não perder as receitas.",
+      "respostasAceitas": [
+        "As receitas são apagadas junto com o app, porque ficam na área interna dele. Para não perder: oferecer backup (exportar para um arquivo, backup na nuvem) ou sincronizar com uma conta."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) são apagadas; 2) backup/exportação/sincronização."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Os aparelhos podem fazer backup automático dos dados de um app e restaurar ao reinstalar. Num app de banco digital, a equipe decidiu excluir o token de acesso desse backup.\n\nNa sua resposta:\n1. explique por que excluir o token do backup;\n2. diga que tipo de dado faz sentido deixar no backup.",
+      "respostasAceitas": [
+        "O token é sensível e ligado àquele aparelho; copiado para outro lugar, poderia ser usado indevidamente. É mais seguro o usuário logar de novo. Faz sentido no backup: preferências e dados criados pelo usuário que ele não quer perder."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dado sensível, risco de acesso indevido, melhor logar de novo; 2) preferências/dados do usuário."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno diz: \"meu app de notas salva tudo no celular, então não preciso de backup\".\n\nNa sua resposta:\n1. explique por que essa ideia está errada;\n2. dê um exemplo de situação em que ele perderia os dados.",
+      "respostasAceitas": [
+        "Dado só no celular depende do aparelho: se ele for perdido, roubado, quebrar ou o app for desinstalado, os dados vão junto. Exemplo: o celular cai na água e não liga mais."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o aparelho é ponto único de falha; 2) perda/roubo/quebra/desinstalação."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno ativou a sincronização com a nuvem no app de tarefas e acha que isso é o mesmo que ter backup. Um dia apagou todas as tarefas por engano e elas sumiram também no notebook.\n\nNa sua resposta:\n1. explique por que as tarefas sumiram nos dois aparelhos;\n2. explique a diferença entre sincronização e backup.",
+      "respostasAceitas": [
+        "A sincronização copia todas as mudanças, inclusive a exclusão, para os outros aparelhos. Sincronizar mantém os dois lados iguais o tempo todo; backup é uma cópia guardada de um momento, que permite voltar ao estado anterior."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a exclusão foi sincronizada; 2) sincronização = espelho atual; backup = cópia para restaurar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num app de estoque usado em 5 celulares offline, cada produto novo recebia o id pelo AUTOINCREMENT do SQLite do próprio celular. Ao sincronizar, apareceram produtos diferentes com o mesmo id.\n\nNa sua resposta:\n1. explique por que os ids se repetiram;\n2. explique como um identificador único gerado no aparelho (como um UUID) resolve o problema.",
+      "respostasAceitas": [
+        "Cada celular tem seu próprio banco e conta 1, 2, 3… sozinho, sem saber dos outros; por isso o mesmo número aparece em aparelhos diferentes. Um UUID é um código praticamente impossível de repetir, gerado sem consultar ninguém, então cada produto tem uma identidade única em qualquer aparelho e no servidor."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sequência local independente por aparelho; 2) código globalmente único, sem coordenação."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de academia mostra os treinos guardados no celular mesmo sem internet.\n\nNa sua resposta:\n1. cite uma vantagem de guardar os dados no aparelho;\n2. cite uma desvantagem ou um risco de guardar só no aparelho.",
+      "respostasAceitas": [
+        "Vantagem: o app abre rápido e funciona sem internet. Desvantagem: se o aparelho for perdido ou o app desinstalado, os dados se perdem; também não aparecem em outro aparelho sem sincronizar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) rapidez/offline; 2) perda com o aparelho, ocupa espaço, não compartilha entre aparelhos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num app de vendas offline, o vendedor apaga um cliente no celular. Na sincronização seguinte, o cliente volta a aparecer, porque veio de novo do servidor.\n\nNa sua resposta:\n1. explique por que o cliente reapareceu;\n2. explique o que o app deveria registrar ao apagar para a exclusão chegar ao servidor.",
+      "respostasAceitas": [
+        "O app só apagou a linha local; o servidor não ficou sabendo e, ao sincronizar, mandou o cliente de volta. O app deveria registrar a exclusão (marcar como excluído ou pôr numa fila de pendências) e enviá-la ao servidor na sincronização."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o servidor não recebeu a exclusão; 2) marcar/registrar a exclusão como pendente e enviar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de clube de leitura guarda as resenhas no banco SQLite do aparelho e também envia cada uma para o servidor do clube.\n\nNa sua resposta:\n1. diga o que acontece com as resenhas se o app for desinstalado;\n2. explique por que elas podem ser recuperadas depois.",
+      "respostasAceitas": [
+        "As cópias no aparelho são apagadas junto com o app. Como também foram enviadas ao servidor, ao reinstalar e entrar na conta o app pode baixá-las de novo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a cópia local é apagada; 2) existe cópia no servidor, basta baixar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma equipe testou a função `salvarAgendamento()` de um app de salão de beleza só verificando se ela não dava erro.\n\nNa sua resposta:\n1. explique por que esse teste é fraco;\n2. descreva o que um teste melhor deveria verificar.",
+      "respostasAceitas": [
+        "Não dar erro não prova que os dados foram gravados certos (podem ter ido com valores errados ou nem ter ido). Um teste melhor salva um agendamento conhecido, lê de volta do banco e compara campo a campo com o esperado, partindo de um banco limpo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ausência de erro não garante gravação correta; 2) gravar, ler e comparar com o esperado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de clínica guarda no aparelho do médico os dados de saúde dos pacientes atendidos no dia.\n\nNa sua resposta:\n1. explique por que esses dados exigem cuidado especial;\n2. cite um cuidado que o app deve ter ao guardá-los.",
+      "respostasAceitas": [
+        "São dados pessoais sensíveis (saúde), protegidos pela LGPD; um vazamento expõe os pacientes. Cuidados: criptografar ou usar armazenamento protegido, não salvar em área compartilhada, guardar só o necessário e apagar quando não precisar mais."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dado sensível/LGPD/risco ao paciente; 2) qualquer cuidado válido (criptografia, área privada, mínimo necessário, apagar depois)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um app de catálogo de uma loja de material de construção guarda a data da última sincronização. Na próxima vez, pede ao servidor \"só o que mudou depois dessa data\".\n\nNa sua resposta:\n1. explique a vantagem de pedir só o que mudou;\n2. diga o que poderia dar errado se o app perdesse essa data.",
+      "respostasAceitas": [
+        "Baixa menos dados, fica mais rápido e gasta menos internet do que baixar o catálogo inteiro. Se perdesse a data, o app não saberia o que é novo: teria que baixar tudo de novo (ou, se usasse uma data errada, poderia deixar de receber mudanças)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) economia de dados/tempo; 2) precisaria baixar tudo ou perderia alterações."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Persistência de dados",
+      "capacidade": "mobile.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num app de chamada escolar, o professor registra presenças sem internet e o app mostra um ícone de \"pendente\" ao lado de cada chamada ainda não enviada.\n\nNa sua resposta:\n1. explique para que serve esse ícone;\n2. diga quando ele deve desaparecer.",
+      "respostasAceitas": [
+        "Mostra ao professor que a chamada está salva no aparelho, mas o servidor ainda não recebeu; assim ele não acha que já foi enviada. Deve sumir quando o servidor confirmar o recebimento na sincronização."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) informar que ainda não foi enviado; 2) após confirmação do servidor."
+    }
+  ]
+}
