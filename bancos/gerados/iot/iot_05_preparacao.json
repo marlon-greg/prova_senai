@@ -1,0 +1,2426 @@
+{
+  "nome": "Internet das Coisas — Preparação de dispositivo IoT (a revisar)",
+  "materia": "Internet das Coisas",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O roteador de uma padaria cria duas redes: \"Padaria_2G\" (2,4 GHz) e \"Padaria_5G\" (5 GHz). Em qual delas um ESP32 comum consegue se conectar?",
+      "alternativas": [
+        "Somente na Padaria_5G, de 5 GHz",
+        "Somente na Padaria_2G, de 2,4 GHz",
+        "Nas duas, escolhendo a mais rápida",
+        "Em nenhuma, pois o ESP32 só usa cabo"
+      ],
+      "correta": 1,
+      "explicacao": "O Wi-Fi do ESP32 comum funciona apenas na faixa de 2,4 GHz. Ele nem enxerga a rede de 5 GHz."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No programa de um sensor da biblioteca aparece a linha `WiFi.begin(ssid, senha);`. O que ela faz?",
+      "alternativas": [
+        "Cria uma rede Wi-Fi nova com esse nome e senha, para outros aparelhos entrarem",
+        "Envia a senha da rede para a plataforma de nuvem",
+        "Mostra no Monitor Serial as redes disponíveis",
+        "Inicia a conexão do ESP32 com a rede Wi-Fi informada"
+      ],
+      "correta": 3,
+      "explicacao": "`WiFi.begin` faz o ESP32 tentar entrar na rede cujo nome (SSID) e senha foram passados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No código de uma estufa, o teste `WiFi.status() == WL_CONNECTED` dá verdadeiro. O que isso quer dizer?",
+      "alternativas": [
+        "O sensor de umidade está ligado certo",
+        "A plataforma recebeu a última leitura",
+        "O ESP32 está conectado à rede Wi-Fi",
+        "O cabo USB está ligado ao computador"
+      ],
+      "correta": 2,
+      "explicacao": "`WL_CONNECTED` é o estado de \"conectado\" do Wi-Fi. Ele não diz nada sobre o sensor nem sobre a plataforma."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em projetos IoT fala-se muito em \"plataforma IoT\" (como ThingSpeak, Blynk ou Adafruit IO). O que é, em linguagem simples, uma plataforma IoT?",
+      "alternativas": [
+        "Um serviço que recebe, guarda e mostra os dados dos dispositivos",
+        "Um tipo de sensor que mede várias grandezas ao mesmo tempo",
+        "O cabo especial que liga o ESP32 ao roteador da casa",
+        "Um modelo de placa mais potente que substitui o ESP32 em projetos grandes"
+      ],
+      "correta": 0,
+      "explicacao": "A plataforma IoT fica na nuvem (ou num servidor) e recebe os dados, guarda o histórico, mostra painéis e pode disparar alertas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No ThingSpeak, cada canal tem campos numerados (field1, field2…). Um ESP32 numa horta envia temperatura e umidade do solo. Qual organização está correta?",
+      "alternativas": [
+        "As duas no field1, separadas por vírgula",
+        "Temperatura no field1 e umidade no field2",
+        "Um canal novo para cada leitura enviada",
+        "Umidade no nome do canal e temperatura no field1"
+      ],
+      "correta": 1,
+      "explicacao": "Cada grandeza vai num campo próprio. Assim a plataforma faz um gráfico para cada uma."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num projeto com Blynk, o ESP32 executa `Blynk.virtualWrite(V0, temperatura);`. O que é o V0?",
+      "alternativas": [
+        "O pino físico GPIO0 da placa, onde fica o sensor",
+        "A versão zero da biblioteca Blynk instalada",
+        "Um pino virtual ligado a um elemento do painel",
+        "A tensão de 0 volt aplicada no sensor"
+      ],
+      "correta": 2,
+      "explicacao": "Pinos virtuais (V0, V1…) não existem na placa: são \"canais\" que ligam um valor do código a um widget do app/painel."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um professor diz que vai usar o Node-RED para tratar os dados dos sensores da escola. O que é o Node-RED?",
+      "alternativas": [
+        "Uma ferramenta visual que liga blocos (nós) em fluxos",
+        "Uma placa microcontroladora com Wi-Fi e Bluetooth embutidos",
+        "Um sensor de temperatura e umidade de cor vermelha",
+        "Um protocolo de rádio de longo alcance para sensores"
+      ],
+      "correta": 0,
+      "explicacao": "O Node-RED é uma ferramenta visual: você arrasta nós (entrada MQTT, função, gráfico…) e liga uns aos outros num fluxo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma rede de supermercados usa um serviço de nuvem de um grande provedor (como o AWS IoT) para ligar milhares de sensores de geladeiras. Em linguagem simples, esse serviço:",
+      "alternativas": [
+        "substitui o ESP32, de modo que as geladeiras dispensam qualquer placa",
+        "funciona apenas sem internet, dentro da rede local de cada loja do supermercado",
+        "serve só para gravar o programa nas placas pelo cabo USB",
+        "recebe as mensagens dos aparelhos com segurança e as repassa a outros serviços"
+      ],
+      "correta": 3,
+      "explicacao": "O AWS IoT Core é um \"ponto de chegada\" seguro na nuvem: autentica cada aparelho, recebe as mensagens (geralmente MQTT) e as encaminha para bancos de dados, painéis e regras."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para entrar na rede Wi-Fi de uma oficina mecânica, quais dados o ESP32 precisa ter no programa (ou na configuração)?",
+      "alternativas": [
+        "A chave da API e o número do canal",
+        "O número de série e o modelo do roteador",
+        "O e-mail e o CPF do dono da oficina",
+        "O nome da rede (SSID) e a senha"
+      ],
+      "correta": 3,
+      "explicacao": "Para o Wi-Fi bastam SSID e senha. Chave da API e canal são credenciais da plataforma, usadas depois, para enviar os dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é a chave de API (API key) de uma plataforma IoT?",
+      "alternativas": [
+        "O nome público do projeto que aparece no topo do painel",
+        "A senha da rede Wi-Fi do local onde o dispositivo está instalado",
+        "Um código secreto que autoriza quem envia ou lê os dados",
+        "O número que identifica o modelo do sensor usado"
+      ],
+      "correta": 2,
+      "explicacao": "A chave funciona como uma senha do projeto na plataforma: quem a tem pode gravar (ou ler) dados naquele canal."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O ESP32 de um pet shop fica preso neste trecho, mostrando pontinhos sem parar no Monitor Serial:\n\n```\nWiFi.begin(ssid, senha);\nwhile (WiFi.status() != WL_CONNECTED) {\n  delay(500);\n  Serial.print(\".\");\n}\n```\n\nQual é a causa mais provável?",
+      "alternativas": [
+        "Nome da rede ou senha errados, ou rede fora do alcance",
+        "A chave da API da plataforma está incorreta",
+        "O sensor de temperatura está desconectado",
+        "O Monitor Serial está na velocidade errada"
+      ],
+      "correta": 0,
+      "explicacao": "O laço só termina quando o Wi-Fi conecta. Se nunca conecta, o problema está na rede: SSID/senha errados, rede de 5 GHz ou sinal fraco."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de conectado, o programa mostra no Monitor Serial o valor de `WiFi.localIP()`. O que aparece?",
+      "alternativas": [
+        "O endereço do servidor da plataforma de nuvem",
+        "O endereço IP que o roteador deu ao ESP32",
+        "A senha da rede Wi-Fi em texto aberto",
+        "O nome do canal criado na plataforma"
+      ],
+      "correta": 1,
+      "explicacao": "`localIP()` é o IP do próprio ESP32 na rede local, normalmente entregue pelo roteador (DHCP)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O dono de uma academia quer ver a temperatura da sala de musculação pelo celular, de qualquer lugar. Por que enviar os dados do sensor para a nuvem?",
+      "alternativas": [
+        "Para o sensor medir a temperatura com mais precisão",
+        "Para o ESP32 funcionar sem precisar de energia elétrica nem de bateria",
+        "Para os dados ficarem acessíveis pela internet, fora da academia",
+        "Para a leitura chegar ao celular sem usar nenhuma rede"
+      ],
+      "correta": 2,
+      "explicacao": "Na nuvem os dados ficam disponíveis pela internet. A precisão depende do sensor, não do lugar onde o dado é guardado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno vai publicar no GitHub o código do sensor da sala de aula. Qual destas informações NÃO é segredo e pode aparecer no código publicado?",
+      "alternativas": [
+        "O número do pino em que o sensor está ligado",
+        "A senha da rede Wi-Fi da escola",
+        "A Write API Key do canal na plataforma",
+        "O token de autenticação do Blynk"
+      ],
+      "correta": 0,
+      "explicacao": "Pino é detalhe de montagem. Senha do Wi-Fi, chave de escrita e token são credenciais e devem ficar fora do código publicado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O ThingSpeak fornece uma Write API Key e uma Read API Key para cada canal. Qual delas o ESP32 que envia as leituras de uma câmara fria precisa usar?",
+      "alternativas": [
+        "A Read API Key, porque o ESP32 lê o sensor",
+        "As duas juntas, em todas as mensagens enviadas",
+        "Nenhuma, pois canal privado aceita qualquer envio",
+        "A Write API Key, que permite gravar dados no canal"
+      ],
+      "correta": 3,
+      "explicacao": "Quem grava dados usa a chave de escrita. A de leitura serve para painéis ou apps que só consultam os dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A Write API Key do canal de uma clínica veterinária foi parar num grupo de mensagens. Qual deve ser a primeira providência?",
+      "alternativas": [
+        "Trocar a senha do Wi-Fi da clínica e manter a chave antiga no aparelho",
+        "Gerar uma nova chave na plataforma e atualizar o dispositivo",
+        "Apagar a mensagem do grupo e continuar usando a mesma chave",
+        "Mudar o nome do canal para que ninguém o encontre"
+      ],
+      "correta": 1,
+      "explicacao": "Chave vazada deve ser trocada (regenerada): a antiga deixa de valer. Apagar a mensagem não garante que ninguém a copiou."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um ESP32 instalado no fundo do depósito de uma loja mostra `WiFi.RSSI()` igual a -88. O que esse valor indica?",
+      "alternativas": [
+        "Sinal fraco, com risco de quedas na conexão",
+        "Sinal excelente, típico de quem está ao lado do roteador",
+        "Que a senha da rede foi digitada errada",
+        "Que o ESP32 está usando 88% da bateria"
+      ],
+      "correta": 0,
+      "explicacao": "RSSI é a força do sinal em dBm (negativo). Perto de -30 é ótimo, -67 é bom, abaixo de -80 já é fraco e instável."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num projeto com Blynk, o `loop()` tem `Blynk.run();` seguido de `delay(10000);`. Qual o problema?",
+      "alternativas": [
+        "Nenhum, o Blynk funciona melhor quando há pausas longas dentro do loop",
+        "A pausa longa trava o Blynk, que pode perder a conexão com o servidor",
+        "O delay apaga o token de autenticação da memória",
+        "O Blynk.run() só pode ser chamado dentro do setup()"
+      ],
+      "correta": 1,
+      "explicacao": "O Blynk precisa que `Blynk.run()` seja chamado o tempo todo. Para tarefas periódicas usa-se um temporizador (BlynkTimer) em vez de delay."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No código de um projeto Blynk aparece `#define BLYNK_AUTH_TOKEN \"...\"`. Para que serve esse valor?",
+      "alternativas": [
+        "Definir a senha da rede Wi-Fi onde a placa está",
+        "Escolher as cores dos widgets no aplicativo",
+        "Identificar o dispositivo na conta e autorizar a conexão",
+        "Indicar qual pino físico está ligado ao sensor"
+      ],
+      "correta": 2,
+      "explicacao": "O token liga a placa ao dispositivo cadastrado na conta Blynk. Sem ele (ou com ele errado) o servidor recusa a conexão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um pet shop instalou o Node-RED num Raspberry Pi dentro da própria loja, recebendo os dados dos sensores pela rede local. Que vantagem isso traz?",
+      "alternativas": [
+        "Os sensores deixam de precisar de qualquer rede",
+        "Os dados ficam visíveis de qualquer lugar sem configurar nada",
+        "O ESP32 passa a medir sem precisar de energia",
+        "Os fluxos continuam funcionando na loja mesmo sem internet"
+      ],
+      "correta": 3,
+      "explicacao": "Rodando localmente, o Node-RED não depende da internet. Por outro lado, para ver de fora da loja é preciso configurar acesso externo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um fluxo do Node-RED está ligado assim: [mqtt in] → [function] → [gauge]. O que acontece com cada mensagem?",
+      "alternativas": [
+        "Chega pelo MQTT, é tratada na função e aparece num medidor",
+        "Sai do medidor, passa pela função e depois é publicada de volta no MQTT",
+        "Fica parada na função até alguém clicar nela",
+        "É apagada pela função antes de chegar ao medidor"
+      ],
+      "correta": 0,
+      "explicacao": "No Node-RED a mensagem anda da esquerda para a direita: entra no nó MQTT, é processada no nó function e é exibida no gauge."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No AWS IoT, uma política diz que o dispositivo \"sensor-cozinha\" só pode publicar no tópico restaurante/cozinha. O que acontece se ele tentar publicar em restaurante/caixa?",
+      "alternativas": [
+        "A mensagem é aceita e copiada para os dois tópicos",
+        "A publicação é negada, pois a política não permite",
+        "O dispositivo ganha a permissão automaticamente",
+        "O tópico restaurante/caixa é apagado da conta"
+      ],
+      "correta": 1,
+      "explicacao": "Políticas limitam o que cada dispositivo pode fazer. Assim, um aparelho invadido não consegue mexer em tudo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O ESP32 de um hotel envia as leituras acessando `http://servidor.exemplo/update?api_key=ABC123&field1=25`. Qual o risco de usar http em vez de https?",
+      "alternativas": [
+        "A temperatura chega arredondada para número inteiro",
+        "A plataforma recusa números decimais pelo http",
+        "A chave expira depois de cada envio pelo http",
+        "A chave viaja sem criptografia e pode ser lida na rede"
+      ],
+      "correta": 3,
+      "explicacao": "No http tudo vai em texto aberto, inclusive a chave na URL. O https criptografa a comunicação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma empresa vai vender um termômetro Wi-Fi para várias casas. A rede de cada cliente é diferente. Qual é a solução comum para configurar o Wi-Fi?",
+      "alternativas": [
+        "Gravar no código a senha de todas as redes do bairro",
+        "Usar sempre a rede aberta mais próxima, sem senha",
+        "Abrir uma rede própria para o cliente informar o Wi-Fi",
+        "Ligar o aparelho ao roteador da casa pelo cabo de carregar"
+      ],
+      "correta": 2,
+      "explicacao": "É o \"modo de configuração\": o ESP32 cria uma rede (ponto de acesso) com uma página onde o cliente escolhe a rede e digita a senha, que fica salva."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O ESP32 de uma estufa acessa `https://api.thingspeak.com/update?api_key=XYZ&field1=27&field2=55`. O que essa requisição faz?",
+      "alternativas": [
+        "Grava 27 no campo 1 e 55 no campo 2 do canal",
+        "Lê os últimos 27 valores guardados no campo 1",
+        "Cria um canal novo com 55 campos diferentes",
+        "Apaga as leituras dos campos 1 e 2 do canal"
+      ],
+      "correta": 0,
+      "explicacao": "O endereço /update com a chave de escrita grava um novo registro, com os valores informados em cada campo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma escola quer apenas um gráfico simples da temperatura do laboratório na web, sem custo e sem programar o painel. Qual escolha é a mais simples?",
+      "alternativas": [
+        "Um servidor próprio, com o painel programado do zero",
+        "Um serviço industrial com certificado digital para cada sensor instalado",
+        "Uma plataforma pronta, como o ThingSpeak, que já gera gráficos",
+        "Guardar os dados num cartão SD e imprimir toda semana"
+      ],
+      "correta": 2,
+      "explicacao": "Para um gráfico simples, plataformas prontas resolvem com poucos cliques. Soluções industriais ou servidor próprio dão mais trabalho."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve a linha `WiFi.mode(WIFI_STA);` no início do programa?",
+      "alternativas": [
+        "Faz o ESP32 criar a sua própria rede Wi-Fi para outros aparelhos entrarem",
+        "Desliga o Wi-Fi para economizar energia da bateria",
+        "Ativa a faixa de 5 GHz no rádio da placa",
+        "Faz o ESP32 agir como estação, entrando na rede de um roteador"
+      ],
+      "correta": 3,
+      "explicacao": "STA = station (estação): o ESP32 se conecta a um roteador, como um celular. O modo AP é o que cria uma rede própria."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O código de um sensor de uma loja de games tem `WiFi.begin(\"Loja Games\", \"jogos2026\");`, mas a rede verdadeira se chama \"loja games\". O que acontece?",
+      "alternativas": [
+        "Conecta, pois o ESP32 ignora maiúsculas no nome",
+        "Não conecta, pois o nome da rede difere em maiúsculas",
+        "Conecta, mas só envia dados à noite",
+        "Conecta na rede mais forte que encontrar"
+      ],
+      "correta": 1,
+      "explicacao": "O SSID diferencia maiúsculas de minúsculas. Um detalhe assim já impede a conexão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sensor a bateria de um estacionamento usa:\n\n```\nWiFi.begin(ssid, senha);\nwhile (WiFi.status() != WL_CONNECTED) {\n  delay(500);\n}\n```\n\nNum dia em que o roteador queimou, a bateria acabou em poucas horas. Qual melhoria resolve isso?",
+      "alternativas": [
+        "Trocar o delay(500) por delay(1), para a conexão ser feita mais rápido",
+        "Limitar o tempo de espera e, se falhar, dormir e tentar mais tarde",
+        "Tirar o laço while e enviar os dados mesmo sem conexão",
+        "Chamar WiFi.begin() de novo a cada volta do laço"
+      ],
+      "correta": 1,
+      "explicacao": "Sem limite de tempo, o laço fica tentando para sempre com o rádio ligado, gastando bateria. O certo é desistir após alguns segundos e voltar a dormir."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Dois ESP32 de uma fazenda foram programados com o mesmo Client ID (\"sensor1\") e se conectam ao mesmo broker MQTT. O que acontece?",
+      "alternativas": [
+        "O broker soma as mensagens dos dois num único tópico compartilhado",
+        "O broker troca o nome de um deles automaticamente",
+        "Um derruba o outro, e os dois ficam caindo e voltando",
+        "Nada muda, pois o Client ID é só um apelido"
+      ],
+      "correta": 2,
+      "explicacao": "O Client ID deve ser único. Quando um cliente conecta com um ID já em uso, o broker desconecta o anterior; com reconexão automática, eles se derrubam sem parar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um ESP32 envia leituras para o ThingSpeak (conta gratuita) a cada 5 segundos. Muitas respostas do servidor vêm com o número 0. Qual a explicação mais provável?",
+      "alternativas": [
+        "O número 0 é a confirmação de que a gravação deu certo no canal",
+        "O sensor está lendo 0 °C nesses momentos",
+        "O canal foi apagado e recriado a cada envio",
+        "Envios acima do limite da conta gratuita são recusados"
+      ],
+      "correta": 3,
+      "explicacao": "No ThingSpeak a resposta é o número do registro gravado; 0 significa que não gravou. Na conta gratuita o intervalo mínimo entre gravações é de cerca de 15 s."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num hotel, o ESP32 conecta no Wi-Fi dos hóspedes e recebe IP, mas nenhuma leitura chega à plataforma. No celular, essa rede abre uma página pedindo número do quarto antes de liberar a internet. Por que o ESP32 falha?",
+      "alternativas": [
+        "A rede exige um login numa página web, que o ESP32 não faz",
+        "O ESP32 não aceita redes com muitos usuários ao mesmo tempo",
+        "O IP entregue pelo hotel é de uma rede de 5 GHz",
+        "A chave da API só funciona em redes domésticas"
+      ],
+      "correta": 0,
+      "explicacao": "É um \"portal cativo\": a internet só é liberada após login numa página. O ESP32 entra no Wi-Fi, mas fica sem internet. O ideal é uma rede própria para os dispositivos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um dispositivo conecta ao serviço de nuvem por MQTT com TLS na porta 8883. Na casa do técnico funciona; na rede da empresa cliente, o Wi-Fi conecta mas o MQTT não. Qual é a causa mais provável?",
+      "alternativas": [
+        "O TLS só funciona em redes domésticas",
+        "A porta 8883 é exclusiva de redes de 5 GHz",
+        "O firewall da empresa pode estar bloqueando a porta 8883",
+        "O certificado do aparelho muda sozinho sempre que a rede Wi-Fi muda"
+      ],
+      "correta": 2,
+      "explicacao": "Redes corporativas costumam liberar só algumas portas (como 80 e 443). Se a 8883 estiver bloqueada, o Wi-Fi funciona mas a conexão MQTT não."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um fabricante gravou a mesma chave de API em todos os termostatos que vendeu. Qual é o maior risco dessa decisão?",
+      "alternativas": [
+        "Os aparelhos ficam mais lentos para conectar ao Wi-Fi da casa",
+        "A plataforma cobra mais por chave repetida",
+        "Os aparelhos não conseguem enviar ao mesmo tempo",
+        "Quem extrair a chave de um aparelho acessa os dados de todos"
+      ],
+      "correta": 3,
+      "explicacao": "Com uma chave única para todos, um aparelho comprometido compromete o sistema inteiro, e não há como bloquear só ele. O certo é uma credencial por dispositivo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No `setup()` de um sensor de cinema está:\n\n```\nWiFi.begin(ssid, senha);\nenviarLeitura();\n```\n\nO primeiro envio, logo após ligar, sempre falha; os seguintes (no loop) funcionam. Por quê?",
+      "alternativas": [
+        "O envio é feito antes de a conexão Wi-Fi terminar",
+        "O sensor precisa de um envio de teste para aquecer",
+        "A plataforma sempre recusa a primeira mensagem do dia",
+        "O `setup()` não permite usar funções de envio"
+      ],
+      "correta": 0,
+      "explicacao": "`WiFi.begin` só inicia a conexão, que leva alguns segundos. É preciso esperar `WL_CONNECTED` (com limite de tempo) antes de enviar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja o trecho do `setup()` de um sensor de uma biblioteca:\n\n```\nWiFi.begin(\"Biblioteca\", \"livros2026\");\nwhile (WiFi.status() != WL_CONNECTED) {\n  delay(500);\n  Serial.print(\".\");\n}\nSerial.println(\"Conectado!\");\n```\n\nNa sua resposta:\n1. diga o que a primeira linha faz;\n2. explique para que serve o laço while e quando aparece \"Conectado!\".",
+      "respostasAceitas": [
+        "A primeira linha manda o ESP32 entrar na rede \"Biblioteca\" com a senha informada. O while fica esperando (mostrando pontos) até o Wi-Fi conectar; quando conecta, sai do laço e mostra \"Conectado!\"."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) inicia a conexão com a rede (SSID e senha); 2) o laço aguarda o status virar conectado, imprimindo pontos; \"Conectado!\" só aparece depois disso."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um técnico tentou ligar o ESP32 de um cinema na rede \"Cinema_5G\", com a senha certa, e não conseguiu. No celular a rede funciona normalmente.\n\nNa sua resposta:\n1. explique por que o ESP32 não conectou;\n2. diga o que o técnico pode fazer para resolver.",
+      "respostasAceitas": [
+        "O ESP32 comum só usa Wi-Fi de 2,4 GHz e a rede é de 5 GHz. A solução é usar uma rede de 2,4 GHz do roteador (ou ativar essa faixa)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o ESP32 só trabalha em 2,4 GHz; 2) conectar numa rede 2,4 GHz (criar/ativar no roteador)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O sensor da cozinha de um restaurante manda a temperatura para uma plataforma IoT na nuvem.\n\nNa sua resposta:\n1. explique o que é uma plataforma IoT;\n2. cite duas coisas que ela faz com os dados recebidos.",
+      "respostasAceitas": [
+        "É um serviço na internet que recebe os dados dos dispositivos. Ela guarda o histórico, mostra gráficos/painéis e pode mandar alertas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) serviço (na nuvem) que recebe dados dos dispositivos; 2) duas entre guardar, mostrar em gráfico/painel, gerar alertas, aplicar regras, controlar dispositivos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Para um ESP32 de uma loja de roupas mandar a temperatura do provador para o ThingSpeak, o programa usa três informações: o nome da rede, a senha da rede e a Write API Key do canal.\n\nNa sua resposta:\n1. diga para que servem o nome e a senha da rede;\n2. diga para que serve a Write API Key.",
+      "respostasAceitas": [
+        "Nome e senha da rede servem para o ESP32 entrar no Wi-Fi e ter internet. A Write API Key identifica o canal e autoriza o ESP32 a gravar dados nele."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) SSID e senha = acesso ao Wi-Fi; 2) chave de escrita = autoriza gravar no canal certo da plataforma."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num fluxo do Node-RED de uma escola, três nós estão ligados nesta ordem: [inject: a cada 1 minuto] → [http request: busca a temperatura no ESP32] → [debug].\n\nNa sua resposta:\n1. explique o que o fluxo faz a cada minuto;\n2. diga para que serve o nó debug no final.",
+      "respostasAceitas": [
+        "A cada minuto o inject dispara e o http request pede a temperatura ao ESP32. O debug mostra a resposta na aba de depuração, para conferir se chegou."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a cada 1 min busca a leitura do ESP32 via HTTP; 2) debug exibe a mensagem recebida para conferência."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um hotel pensa em duas opções para a temperatura das câmaras frias: (A) mostrar o valor só num visor LCD ao lado da câmara; (B) enviar o valor para uma plataforma na nuvem.\n\nNa sua resposta:\n1. diga uma vantagem da opção B;\n2. diga do que a opção B depende para funcionar e a A não.",
+      "respostasAceitas": [
+        "Na B dá para ver de qualquer lugar, guardar histórico e receber alertas. Mas ela depende de Wi-Fi/internet; o visor funciona sem rede."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) acesso remoto, histórico, gráfico ou alerta; 2) dependência de rede/internet (e da plataforma)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno organizou o código assim: o arquivo principal tem `#include \"segredos.h\"` e o arquivo segredos.h guarda o nome da rede, a senha e a chave da API. O segredos.h está listado no `.gitignore`.\n\nNa sua resposta:\n1. explique por que separar essas informações num arquivo próprio;\n2. explique o efeito de colocá-lo no .gitignore.",
+      "respostasAceitas": [
+        "Separar deixa as credenciais num lugar só e fora do código que será compartilhado. Com o .gitignore o Git não envia esse arquivo ao repositório, então a senha e a chave não ficam públicas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) isolar credenciais do código; facilita trocar e compartilhar; 2) o Git ignora o arquivo, que não vai para o GitHub."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma pequena escola usa o ThingSpeak no laboratório. Uma grande rede de farmácias, com 3 mil geladeiras de vacinas, escolheu um serviço como o AWS IoT, em que cada aparelho tem seu próprio certificado.\n\nNa sua resposta:\n1. explique por que a plataforma simples atende bem a escola;\n2. explique por que a rede de farmácias precisa de algo como o AWS IoT.",
+      "respostasAceitas": [
+        "A escola tem poucos sensores e quer só gráficos rápidos e grátis. A rede de farmácias tem milhares de aparelhos e precisa de segurança por aparelho (certificados), escala e integração com outros sistemas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) poucos sensores, simples, gráfico pronto, sem custo; 2) muitos dispositivos, segurança individual, escala/confiabilidade, integração."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Para o projeto de uma horta escolar, um grupo compara o ThingSpeak (na nuvem) e o Node-RED rodando num computador do laboratório.\n\nNa sua resposta:\n1. diga onde cada um roda;\n2. dê uma vantagem de cada um para esse projeto.",
+      "respostasAceitas": [
+        "O ThingSpeak roda na nuvem e o Node-RED no computador da escola. ThingSpeak: dá para ver de casa e já tem gráficos prontos. Node-RED: funciona sem internet e permite montar a lógica do jeito que quiser."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nuvem x computador local; 2) ThingSpeak: acesso remoto/gráficos prontos; Node-RED: independe da internet, flexível para fluxos e regras."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O Monitor Serial de um sensor de uma padaria mostra:\n\n```\nConectando ao Wi-Fi..........\nConectado! IP: 192.168.0.23\nEnviando leitura...\nResposta HTTP: 401\n```\n\nNa sua resposta:\n1. diga o que deu certo nessa sequência;\n2. explique o que o código 401 indica e o que verificar.",
+      "respostasAceitas": [
+        "O Wi-Fi conectou e o ESP32 ganhou IP, e conseguiu falar com o servidor. O 401 é \"não autorizado\": a chave/token está errada ou ausente; verificar a chave da API."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) conectou ao Wi-Fi, recebeu IP, alcançou o servidor; 2) 401 = credencial recusada; conferir chave/token."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um técnico vai instalar sensores em 20 salas de uma escola, todos mandando dados para a mesma plataforma. Ele pode usar uma única chave para todos ou uma chave (credencial) diferente para cada aparelho.\n\nNa sua resposta:\n1. diga qual opção você escolheria;\n2. justifique pensando no caso de um aparelho ser roubado.",
+      "respostasAceitas": [
+        "Uma credencial para cada aparelho. Se um for roubado, basta bloquear a chave dele; os outros 19 continuam funcionando e seguros."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) credencial por dispositivo; 2) revogar só a do aparelho roubado, sem expor nem parar os outros."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Antes de instalar o sensor de uma oficina, o técnico mediu o sinal Wi-Fi (RSSI) em três pontos: bancada = -48 dBm; depósito = -72 dBm; pátio dos fundos = -91 dBm.\n\nNa sua resposta:\n1. diga qual ponto tem o melhor e qual tem o pior sinal;\n2. diga o que pode acontecer se o sensor ficar no pátio e uma solução.",
+      "respostasAceitas": [
+        "Melhor na bancada (-48), pior no pátio (-91). No pátio a conexão vai cair muito e dados se perdem; a solução é mudar o local ou pôr um repetidor/antena."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) quanto mais perto de zero, melhor: bancada melhor, pátio pior; 2) quedas/perda de envios; repetidor, mudar posição ou roteador mais perto."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um sensor a bateria de uma estação de chuva usa este trecho:\n\n```\nWiFi.begin(ssid, senha);\nunsigned long inicio = millis();\nwhile (WiFi.status() != WL_CONNECTED && millis() - inicio < 10000) {\n  delay(200);\n}\nif (WiFi.status() != WL_CONNECTED) {\n  dormir(15); // dorme 15 minutos e tenta de novo\n}\n```\n\nNa sua resposta:\n1. explique o que esse trecho faz quando a rede não está disponível;\n2. explique por que isso é melhor do que esperar sem limite.",
+      "respostasAceitas": [
+        "Tenta conectar por no máximo 10 s; se não conseguir, desiste e dorme 15 minutos antes de tentar de novo. Assim não fica com o rádio ligado para sempre, o que acabaria com a bateria."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) limite de 10 s (millis), e se falhar vai dormir 15 min; 2) evita travar e gastar bateria com o Wi-Fi ligado tentando sem parar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma empresa vende sensores de umidade para clientes. Ela pode (A) gravar o Wi-Fi do cliente no código antes de entregar ou (B) usar um modo de configuração: na primeira vez o aparelho abre uma rede própria com uma página onde o cliente escolhe a rede e informa a senha.\n\nNa sua resposta:\n1. compare A e B quando o cliente troca a senha do Wi-Fi;\n2. aponte um cuidado de segurança necessário na opção B.",
+      "respostasAceitas": [
+        "Na A é preciso regravar o programa quando a senha muda; na B o cliente reconfigura sozinho. Na B a rede/página de configuração deve ter senha e só ficar ativa na configuração, para ninguém trocar as credenciais."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) A exige regravar; B permite reconfigurar pelo próprio cliente; 2) proteger a rede de configuração (senha, tempo limitado, botão para ativar)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um dispositivo de uma rede de farmácias se conecta a um serviço de nuvem com este trecho:\n\n```\ncliente.setCACert(certificadoServidor);\ncliente.setCertificate(certificadoDispositivo);\ncliente.setPrivateKey(chavePrivada);\nmqtt.setServer(enderecoNuvem, 8883);\n```\n\nNa sua resposta:\n1. explique para que servem o certificado do servidor e o certificado do dispositivo;\n2. explique por que a chave privada nunca deve sair do aparelho.",
+      "respostasAceitas": [
+        "O certificado do servidor permite ao aparelho confirmar que fala com a nuvem verdadeira; o do dispositivo prova à nuvem quem é o aparelho. A chave privada é o que prova essa identidade: quem a copiar se passa pelo aparelho."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) CA/servidor = aparelho confere a nuvem; certificado do dispositivo = nuvem confere o aparelho (autenticação dos dois lados, TLS na 8883); 2) a chave privada permite se passar pelo aparelho."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um ESP32 de uma sorveteria vai mandar a temperatura do freezer e a umidade em JSON. Qual destas mensagens é um JSON válido?",
+      "alternativas": [
+        "`{'temp': -18.5, 'umid': 61}`",
+        "`{\"temp\": -18.5, \"umid\": 61}`",
+        "`{\"temp\": -18.5, \"umid\": 61,}`",
+        "`{temp = -18.5; umid = 61}`"
+      ],
+      "correta": 1,
+      "explicacao": "Em JSON os nomes vão entre aspas duplas, os pares são separados por vírgula, sem vírgula sobrando no fim, e usa-se dois-pontos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A temperatura de uma sala de aula muda devagar ao longo do dia. Qual intervalo de envio para a nuvem faz mais sentido?",
+      "alternativas": [
+        "A cada 5 minutos",
+        "A cada 10 milissegundos",
+        "Uma vez por ano",
+        "Só quando o ESP32 for reiniciado"
+      ],
+      "correta": 0,
+      "explicacao": "Para grandezas que mudam devagar, alguns minutos bastam: mostra a variação sem gastar rede, energia e limite da plataforma à toa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que se usa `millis()` em vez de `delay()` para controlar o intervalo de envio no `loop()`?",
+      "alternativas": [
+        "Porque o millis() criptografa os dados antes de cada envio para a nuvem",
+        "Porque o programa continua fazendo outras tarefas enquanto espera",
+        "Porque o delay() não existe nas placas ESP32",
+        "Porque o millis() diminui o tamanho da mensagem JSON"
+      ],
+      "correta": 1,
+      "explicacao": "O `delay()` para tudo. Com `millis()` o programa só confere quanto tempo passou e segue lendo botões, sensores etc."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num sensor de uma lavanderia, o loop é:\n\n```\nunsigned long ultimo = 0;\nconst unsigned long INTERVALO = 60000;\n\nvoid loop() {\n  if (millis() - ultimo >= INTERVALO) {\n    ultimo = millis();\n    enviarLeitura();\n  }\n}\n```\n\nDe quanto em quanto tempo `enviarLeitura()` é chamada?",
+      "alternativas": [
+        "A cada 60 milissegundos",
+        "A cada 6 segundos",
+        "Só uma vez, ao ligar a placa",
+        "A cada 60 segundos"
+      ],
+      "correta": 3,
+      "explicacao": "`millis()` conta em milissegundos: 60000 ms = 60 s = 1 minuto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sensor de uma sala de reuniões envia `{\"sala\": \"B2\", \"temp\": 22.1, \"porta_aberta\": false}`. Qual é o tipo do valor de porta_aberta?",
+      "alternativas": [
+        "Texto (string), pois é uma palavra",
+        "Número decimal",
+        "Booleano (true/false)",
+        "Lista de valores"
+      ],
+      "correta": 2,
+      "explicacao": "`true` e `false`, sem aspas, são valores booleanos em JSON."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Antes de enviar a leitura por HTTP, o código executa `http.addHeader(\"Content-Type\", \"application/json\");`. Para que serve essa linha?",
+      "alternativas": [
+        "Converte a leitura do sensor para o formato JSON",
+        "Avisa ao servidor que o corpo da mensagem está em JSON",
+        "Criptografa o corpo da mensagem antes do envio",
+        "Define o intervalo entre um envio e outro"
+      ],
+      "correta": 1,
+      "explicacao": "O cabeçalho Content-Type informa o formato do conteúdo. Montar o JSON e criptografar são outras etapas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O Wi-Fi de uma padaria caiu por 10 minutos. O sensor envia a cada minuto e o código não tem nenhum tratamento para falhas. O que acontece com as leituras desse período?",
+      "alternativas": [
+        "Ficam guardadas na plataforma automaticamente",
+        "São enviadas pela rede elétrica da padaria",
+        "São perdidas, pois não havia como enviá-las",
+        "São recuperadas pelo roteador quando a internet volta"
+      ],
+      "correta": 2,
+      "explicacao": "Sem guardar as leituras localmente, o que não foi enviado se perde. A plataforma só guarda o que recebe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No `loop()` de um sensor está `if (WiFi.status() != WL_CONNECTED) { WiFi.reconnect(); }`. Para que serve esse trecho?",
+      "alternativas": [
+        "Tentar voltar à rede quando a conexão cai",
+        "Trocar a senha da rede de tempos em tempos",
+        "Desligar o Wi-Fi quando ele está funcionando",
+        "Enviar cada leitura duas vezes por segurança"
+      ],
+      "correta": 0,
+      "explicacao": "O teste confere se perdeu a conexão e, nesse caso, pede para reconectar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa horta, a regra é: \"se a umidade do solo ficar abaixo de 30%, ligar a irrigação\". Nessa regra, qual é a condição e qual é a ação?",
+      "alternativas": [
+        "Condição: ligar a irrigação; ação: umidade abaixo de 30%",
+        "Condição: umidade acima de 30%; ação: desligar a irrigação",
+        "Não há condição; a irrigação fica sempre ligada",
+        "Condição: umidade abaixo de 30%; ação: ligar a irrigação"
+      ],
+      "correta": 3,
+      "explicacao": "A condição é o \"se\" (o que é testado). A ação é o que acontece quando a condição é verdadeira."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A bomba de uma caixa de água deve desligar quando a caixa enche, mesmo se a internet cair. Onde essa lógica deve ficar?",
+      "alternativas": [
+        "Só na plataforma de nuvem, que manda o comando",
+        "No celular do dono, que desliga pelo aplicativo",
+        "No próprio ESP32, que lê o sensor e desliga a bomba",
+        "No roteador Wi-Fi, que corta a energia da bomba"
+      ],
+      "correta": 2,
+      "explicacao": "Lógica de segurança deve rodar no dispositivo (local). Se dependesse da nuvem, sem internet a caixa transbordaria.",
+      "grupo": "logica-local-nuvem"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve incluir o horário da leitura na mensagem, como em `{\"temp\": 24.0, \"hora\": \"2026-11-27T10:15:00\"}`?",
+      "alternativas": [
+        "Saber quando a leitura foi feita, mesmo se chegar atrasada",
+        "Fazer a mensagem chegar mais rápido ao servidor da plataforma",
+        "Substituir a chave da API na autenticação",
+        "Deixar a medida do sensor mais precisa"
+      ],
+      "correta": 0,
+      "explicacao": "Com o horário da medição, a plataforma coloca cada ponto no momento certo do gráfico, mesmo que o envio atrase."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um ESP32 de uma estufa lê temperatura, umidade e luminosidade. Qual a vantagem de mandar as três num único JSON, em vez de três mensagens?",
+      "alternativas": [
+        "O sensor passa a medir mais rápido",
+        "A plataforma deixa de exigir a chave",
+        "Os valores ficam criptografados",
+        "Menos envios, economizando rede e energia"
+      ],
+      "correta": 3,
+      "explicacao": "Cada envio gasta tempo de rádio, energia e dados. Juntar as leituras numa mensagem reduz isso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No código de um sensor, `int codigo = http.POST(json);` retornou 200. O que isso indica?",
+      "alternativas": [
+        "A conexão Wi-Fi caiu durante o envio",
+        "O servidor recebeu e aceitou a requisição",
+        "A chave da API foi recusada pelo servidor",
+        "O JSON enviado tinha 200 caracteres"
+      ],
+      "correta": 1,
+      "explicacao": "200 (OK) é o código HTTP de sucesso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um ESP32 de uma clínica envia `{\"id\": \"consultorio-3\", \"temp\": 23.4}`. Por que incluir o campo \"id\"?",
+      "alternativas": [
+        "Para deixar a temperatura com mais casas decimais",
+        "Para a mensagem ser aceita sem a chave da API",
+        "Para saber de qual aparelho/sala veio a leitura",
+        "Para o Wi-Fi reconectar mais rápido"
+      ],
+      "correta": 2,
+      "explicacao": "Com vários sensores mandando para o mesmo lugar, o identificador diz de onde veio cada leitura."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No sensor de uma loja, `http.POST(json)` retornou -1. O que isso indica?",
+      "alternativas": [
+        "O servidor aceitou e gravou o registro número 1",
+        "A temperatura enviada era um valor negativo",
+        "O JSON foi enviado duas vezes seguidas",
+        "Não conseguiu conectar ao servidor (falha de rede)"
+      ],
+      "correta": 3,
+      "explicacao": "Na biblioteca HTTPClient do ESP32, números negativos são erros do próprio envio (ex.: conexão recusada), e não respostas do servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O ESP32 de uma oficina recebe a resposta HTTP 404 ao enviar as leituras. O que verificar primeiro?",
+      "alternativas": [
+        "A senha da rede Wi-Fi",
+        "O endereço (URL) usado no envio",
+        "A carga da bateria da placa",
+        "A velocidade do Monitor Serial"
+      ],
+      "correta": 1,
+      "explicacao": "404 = \"não encontrado\": o servidor respondeu, mas o caminho pedido não existe. Se houve resposta, o Wi-Fi está funcionando."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para não perder leituras quando a internet de uma fazenda cai, qual é uma boa solução no dispositivo?",
+      "alternativas": [
+        "Guardar as leituras e enviá-las quando a conexão voltar",
+        "Aumentar o brilho do LED que indica a conexão com a internet",
+        "Enviar cada leitura três vezes seguidas",
+        "Desligar o sensor até a internet voltar"
+      ],
+      "correta": 0,
+      "explicacao": "Guardar localmente (buffer, memória flash, cartão SD) e enviar depois evita a perda. Repetir o envio sem rede não adianta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um código chama `WiFi.reconnect()` em toda volta do `loop()`, sem pausa, enquanto a rede está fora. Por que isso é ruim?",
+      "alternativas": [
+        "Apaga a senha da rede que estava gravada na memória da placa",
+        "Faz o roteador trocar a senha da rede sozinho",
+        "Aumenta a precisão do sensor, gerando dados falsos",
+        "Ocupa o programa e não dá tempo de a conexão completar"
+      ],
+      "correta": 3,
+      "explicacao": "Reconectar leva alguns segundos. Pedir sem parar reinicia a tentativa e ocupa o programa; o correto é tentar em intervalos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Após cada falha de conexão, um sensor espera o dobro do tempo antes de tentar de novo: 5 s, 10 s, 20 s, 40 s… até um máximo. Qual a vantagem?",
+      "alternativas": [
+        "Garante que a conexão volte sempre em até 5 segundos depois da queda",
+        "Evita sobrecarregar a rede e o servidor em quedas longas",
+        "Faz as leituras chegarem na ordem certa ao servidor",
+        "Dispensa o uso da senha nas próximas tentativas"
+      ],
+      "correta": 1,
+      "explicacao": "Esse \"recuo exponencial\" tenta rápido no começo e, se a queda for longa, espaça as tentativas, poupando energia e o servidor."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No `loop()` de um sensor MQTT está:\n\n```\nif (!cliente.connected()) {\n  reconectarBroker();\n}\ncliente.loop();\n```\n\nPor que verificar `cliente.connected()`, se o Wi-Fi já está conectado?",
+      "alternativas": [
+        "O Wi-Fi pode estar bem e a conexão com o broker ter caído",
+        "O connected() verifica se o sensor está ligado ao pino",
+        "Sem essa linha a mensagem JSON fica inválida",
+        "O broker só aceita quem ainda não está conectado"
+      ],
+      "correta": 0,
+      "explicacao": "São duas conexões diferentes: a rede (Wi-Fi) e a sessão com o broker MQTT. A segunda pode cair mesmo com Wi-Fi funcionando."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O sensor de uma câmara fria usa MQTT com \"última vontade\" (Last Will): a mensagem \"offline\" no tópico camara/status. Quando o broker publica essa mensagem?",
+      "alternativas": [
+        "Toda vez que a temperatura da câmara sobe acima do limite configurado",
+        "Sempre que o dispositivo envia uma leitura",
+        "Quando o dispositivo cai sem se desconectar normalmente",
+        "Quando alguém abre o painel no celular"
+      ],
+      "correta": 2,
+      "explicacao": "A Last Will é registrada na conexão. Se o aparelho some (queda de energia, rede), o broker publica a mensagem por ele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Compare as mensagens `{\"temperatura_da_sala_de_reunioes_em_graus\": 23}` e `{\"temp\": 23}`. O que é correto dizer?",
+      "alternativas": [
+        "A primeira não é JSON válido, pois o nome do campo é comprido demais",
+        "A segunda é menor e gasta menos dados na rede",
+        "A segunda perde a precisão do número 23",
+        "As duas ocupam o mesmo tamanho quando enviadas"
+      ],
+      "correta": 1,
+      "explicacao": "Nomes longos aumentam cada mensagem. Nomes curtos e combinados com a plataforma economizam dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A plataforma recebe `{\"temp\": \"23.5\"}` e não consegue gerar o gráfico de temperatura. Qual a causa provável?",
+      "alternativas": [
+        "Falta uma vírgula depois do valor 23.5",
+        "O nome temp é proibido em JSON",
+        "O ponto decimal deveria ser uma vírgula",
+        "O valor foi enviado como texto, entre aspas"
+      ],
+      "correta": 3,
+      "explicacao": "Entre aspas o valor é uma string. Para cálculos e gráficos, o número deve ir sem aspas: `{\"temp\": 23.5}`."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sensor envia `{\"temp\": null, \"umid\": 58}`. O que o valor null indica?",
+      "alternativas": [
+        "Que não havia valor válido de temperatura nessa leitura",
+        "Que a temperatura medida foi exatamente zero grau",
+        "Que a temperatura estava negativa, abaixo de zero, naquele momento",
+        "Que a mensagem é um JSON inválido"
+      ],
+      "correta": 0,
+      "explicacao": "`null` é válido em JSON e significa \"sem valor\". É melhor do que mandar 0, que seria confundido com uma leitura real."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sensor de temperatura de um estoque envia quando a leitura muda mais de 0,5 °C ou, no máximo, a cada 15 minutos. Qual a vantagem?",
+      "alternativas": [
+        "Garante leituras com mais casas decimais",
+        "Elimina a necessidade de Wi-Fi no estoque durante o dia",
+        "Reduz os envios sem perder as mudanças importantes",
+        "Faz o painel atualizar a cada segundo"
+      ],
+      "correta": 2,
+      "explicacao": "Envia só quando há novidade e, mesmo sem mudança, manda um \"sinal de vida\" periódico."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A regra de um restaurante é: \"ligar o exaustor SE a temperatura for maior que 30 °C E a porta estiver fechada\". Agora a temperatura é 32 °C e a porta está aberta. O que acontece?",
+      "alternativas": [
+        "Não liga, pois só uma das condições é verdadeira",
+        "Liga, pois a temperatura passou de 30 °C",
+        "Liga, pois a porta está aberta",
+        "Desliga o sensor de temperatura"
+      ],
+      "correta": 0,
+      "explicacao": "Com E, as duas condições precisam ser verdadeiras. A porta aberta torna a segunda falsa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O alarme de um depósito segue a regra: \"disparar SE houver fumaça OU a temperatura passar de 60 °C\". Não há fumaça e a temperatura está em 65 °C. O que acontece?",
+      "alternativas": [
+        "Não dispara, pois falta a fumaça",
+        "Dispara, pois basta uma condição ser verdadeira",
+        "Não dispara, pois o OU exige as duas condições",
+        "Dispara só depois que aparecer fumaça"
+      ],
+      "correta": 1,
+      "explicacao": "Com OU, uma condição verdadeira já basta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de uma atualização, o sensor passou a enviar `{\"temperatura\": 25.3, \"umid\": 58}` em vez de `{\"temp\": 25.3, \"umid\": 58}`. O gráfico de umidade continua, mas o de temperatura parou. Por quê?",
+      "alternativas": [
+        "O valor 25.3 é alto demais para o gráfico",
+        "O JSON ficou inválido por ter um nome longo",
+        "O nome do campo mudou e a plataforma ainda procura \"temp\"",
+        "A umidade passou a ocupar o lugar da temperatura no gráfico do painel"
+      ],
+      "correta": 2,
+      "explicacao": "A plataforma liga cada gráfico a um nome de campo. Mudou o nome, o gráfico não encontra mais o dado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O controle de irrigação de uma horta usa:\n\n```\nif (umidade < 30) {\n  digitalWrite(BOMBA, HIGH);   // liga\n} else if (umidade > 60) {\n  digitalWrite(BOMBA, LOW);    // desliga\n}\n```\n\nCom umidade 45, o que acontece com a bomba?",
+      "alternativas": [
+        "Liga, pois 45 é menor que 60",
+        "Desliga, pois 45 é maior que 30",
+        "O programa trava, pois falta um else no final para os outros casos",
+        "Continua como estava, pois nenhuma condição é verdadeira"
+      ],
+      "correta": 3,
+      "explicacao": "Entre 30 e 60 nenhum if é verdadeiro e o pino não é alterado: a bomba mantém o estado anterior. Isso evita liga-desliga constante."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de cerca de 49 dias ligado, o `millis()` volta a zero. Qual teste continua funcionando certo nessa virada?",
+      "alternativas": [
+        "`if (millis() >= ultimo + INTERVALO)`",
+        "Os dois falham da mesma forma na virada",
+        "`if (millis() - ultimo >= INTERVALO)`",
+        "Nenhum falha, pois o millis() nunca volta a zero"
+      ],
+      "correta": 2,
+      "explicacao": "Com números sem sinal (unsigned long), a subtração \"dá a volta\" e continua dando o tempo decorrido certo. A forma com soma falha perto da virada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para não perder dados, um ESP32 guarda as leituras num vetor de 100 posições, uma leitura por minuto, enquanto está sem internet. A internet ficou fora por 3 horas. O que acontece?",
+      "alternativas": [
+        "As 180 leituras são enviadas normalmente quando a internet volta",
+        "Cabem só 100 leituras; parte das 180 é perdida ou sobrescrita",
+        "O vetor cresce sozinho até caber todas as leituras",
+        "O ESP32 para de medir e depois recupera o que faltou"
+      ],
+      "correta": 1,
+      "explicacao": "3 h = 180 leituras, mas o vetor tem 100 posições. É preciso decidir: descartar as mais antigas, guardar médias ou usar memória maior."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um ESP32 guardou as leituras enquanto estava sem internet, mas SEM o horário de cada uma. Ao voltar, enviou todas de uma vez. Como elas aparecem no gráfico da plataforma?",
+      "alternativas": [
+        "Cada uma no horário certo, automaticamente",
+        "Nenhuma aparece, pois a plataforma recusa leituras atrasadas",
+        "Todas com valor zero, por chegarem juntas",
+        "Todas no horário do envio, distorcendo a linha do tempo"
+      ],
+      "correta": 3,
+      "explicacao": "Sem o horário da medição, a plataforma usa o horário em que recebeu. Por isso leituras guardadas devem levar o horário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num aquário, a regra \"se a água passar de 30 °C, desligar o aquecedor\" está configurada só na plataforma de nuvem. A internet caiu por uma tarde. O que pode acontecer?",
+      "alternativas": [
+        "O aquecedor pode continuar ligado, pois a regra depende da nuvem",
+        "A regra passa a rodar sozinha dentro do sensor",
+        "O aquecedor desliga sozinho ao perder a internet",
+        "A plataforma desliga o aquecedor pela rede elétrica, sem precisar de internet"
+      ],
+      "correta": 0,
+      "explicacao": "Sem internet o comando da nuvem não chega. Regras de segurança devem estar também no dispositivo.",
+      "grupo": "logica-local-nuvem"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um forno de padaria tem um ESP32 com esta parte no `loop()`:\n\n```\nwhile (!cliente.connected()) {\n  reconectarBroker();\n  delay(5000);\n}\nverificarTemperaturaMaxima(); // corta o forno se passar do limite\n```\n\nQual o problema durante uma queda longa da rede?",
+      "alternativas": [
+        "O forno liga e desliga a cada 5 segundos enquanto a rede está fora",
+        "A proteção do forno não roda enquanto tenta reconectar",
+        "O broker recebe leituras falsas do forno",
+        "A temperatura máxima é apagada da memória"
+      ],
+      "correta": 1,
+      "explicacao": "O while prende o programa até reconectar. Enquanto isso, nada depois dele roda, nem a proteção. A reconexão não deve bloquear o resto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um contador de visitantes de um museu envia a mensagem \"entrou mais 1\" a cada pessoa. Em quedas de conexão, às vezes a mesma mensagem é reenviada e a plataforma conta duas vezes. Qual formato de mensagem evita esse erro?",
+      "alternativas": [
+        "Enviar o total acumulado, como `{\"total\": 152}`",
+        "Enviar \"entrou mais 1\" em letras maiúsculas",
+        "Enviar só o número 1, sem usar JSON",
+        "Aumentar o tempo entre as reconexões"
+      ],
+      "correta": 0,
+      "explicacao": "Se a mensagem traz o total, receber a mesma duas vezes não muda o resultado. \"Mais 1\" repetido soma duas vezes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O `loop()` de um sensor de uma farmácia tem este trecho:\n\n```\nif (WiFi.status() != WL_CONNECTED) {\n  Serial.println(\"Wi-Fi caiu, reconectando...\");\n  WiFi.reconnect();\n}\n```\n\nNa sua resposta:\n1. explique o que o trecho faz;\n2. explique por que ele fica no loop() e não só no setup().",
+      "respostasAceitas": [
+        "Confere se o Wi-Fi caiu e, se caiu, avisa no Monitor Serial e tenta reconectar. Fica no loop porque a queda pode acontecer a qualquer momento, não só ao ligar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) verifica a conexão e tenta reconectar; 2) o loop roda sempre; o setup só uma vez, ao ligar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O sensor de um açougue envia a temperatura do freezer a cada minuto. Numa tarde, o Wi-Fi ficou fora do ar por 20 minutos e o programa não tem nenhum tratamento para isso.\n\nNa sua resposta:\n1. diga o que aconteceu com as leituras desses 20 minutos;\n2. sugira uma forma de não perder essas leituras.",
+      "respostasAceitas": [
+        "Foram perdidas, pois não havia como enviar. Para evitar, guardar as leituras na memória do ESP32 e mandar quando a conexão voltar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) perdidas (cerca de 20 leituras); 2) guardar localmente (buffer, flash, cartão SD) e enviar depois."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num condomínio foi configurada a regra: \"se o nível da caixa de água ficar abaixo de 20%, ligar a bomba e enviar um aviso ao zelador\".\n\nNa sua resposta:\n1. diga qual é a condição da regra;\n2. diga quais são as ações.",
+      "respostasAceitas": [
+        "A condição é o nível da caixa abaixo de 20%. As ações são ligar a bomba e mandar o aviso ao zelador."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nível < 20%; 2) duas ações: ligar bomba e avisar o zelador."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma escola tem 10 sensores de temperatura, um em cada sala, todos mandando para o mesmo canal. Cada mensagem é assim: `{\"sala\": \"lab-2\", \"temp\": 26.8}`.\n\nNa sua resposta:\n1. explique para que serve o campo \"sala\";\n2. diga o que aconteceria se as mensagens tivessem só a temperatura.",
+      "respostasAceitas": [
+        "O campo sala diz de onde veio a leitura. Sem ele, todas as temperaturas se misturariam e não daria para saber qual sala está quente."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) identificar a origem da leitura; 2) dados misturados, sem saber a sala."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um ESP32 de uma loja tem um botão de emergência e envia a temperatura a cada minuto. O loop é:\n\n```\nvoid loop() {\n  enviarTemperatura();\n  delay(60000);\n  if (digitalRead(BOTAO) == LOW) alarme();\n}\n```\n\nNa sua resposta:\n1. explique o problema do delay(60000) nesse programa;\n2. diga o que pode ser usado no lugar do delay.",
+      "respostasAceitas": [
+        "O delay para o programa por 1 minuto; nesse tempo o botão não é lido e o alarme pode demorar ou nem disparar. No lugar, usar millis() para contar o tempo sem travar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) delay bloqueia, botão fica sem ser verificado; 2) controle de tempo com millis()."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O envio da leitura de um sensor de uma academia é feito assim:\n\n```\nhttp.begin(\"https://api.exemplo.com/leituras\");\nhttp.addHeader(\"Content-Type\", \"application/json\");\nint codigo = http.POST(\"{\\\"temp\\\": 27.1}\");\nhttp.end();\n```\n\nNa sua resposta:\n1. diga o que fazem as linhas begin e addHeader;\n2. diga o que é enviado no POST e o que fica guardado na variável codigo.",
+      "respostasAceitas": [
+        "begin define o endereço para onde vai a requisição e addHeader avisa que o conteúdo é JSON. O POST envia o JSON com a temperatura 27,1 e codigo guarda a resposta do servidor (ex.: 200 se deu certo)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) begin = URL de destino; addHeader = tipo do conteúdo (JSON); 2) envia {\"temp\": 27.1}; codigo = código HTTP de resposta (ou negativo se falhou a conexão)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O sensor de uma estufa lê a temperatura a cada 2 segundos, mas só envia para a nuvem a média das leituras a cada 5 minutos.\n\nNa sua resposta:\n1. explique por que ler com frequência e enviar menos vezes;\n2. explique por que enviar a média é melhor do que enviar uma leitura solta.",
+      "respostasAceitas": [
+        "Ler é barato, enviar gasta rede, energia e limite da plataforma; por isso envia menos. A média suaviza ruídos e picos falsos, mostrando o valor real do período."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) leitura local é barata; envio custa (energia, dados, limites); 2) média reduz ruído e representa o intervalo todo."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno montou a mensagem de um sensor assim: `{\"temp\": 23,5, \"umid\": 60,}`. A plataforma recusou a mensagem.\n\nNa sua resposta:\n1. aponte os dois erros da mensagem;\n2. explique por que cada um deixa o JSON inválido.",
+      "respostasAceitas": [
+        "O decimal usa vírgula (23,5) e há vírgula sobrando no fim. Em JSON a vírgula separa campos, então 23,5 vira coisa sem nome; e a vírgula final espera outro campo que não vem. O certo é 23.5 e sem a última vírgula."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) vírgula decimal e vírgula final sobrando; 2) decimal em JSON é com ponto; a vírgula só separa pares e não pode terminar o objeto."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja a lógica de reconexão de um sensor de um posto de saúde:\n\n```\nunsigned long espera = 5000;\n// a cada falha:\nespera = espera * 2;\nif (espera > 300000) espera = 300000;\n```\n\nNa sua resposta:\n1. explique como o tempo de espera muda a cada falha;\n2. explique por que existe o limite de 300000.",
+      "respostasAceitas": [
+        "A espera dobra a cada falha: 5 s, 10 s, 20 s, 40 s... Assim tenta rápido no começo e menos vezes numa queda longa. O limite de 300000 ms (5 min) evita que a espera cresça demais e o aparelho demore horas para voltar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dobra a cada falha (recuo exponencial); 2) teto de 5 minutos para não ficar tempo demais sem tentar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa estufa de mudas, a irrigação é ligada pela umidade do solo, e o dono quer receber um aviso no celular quando a umidade ficar crítica. Um colega sugere colocar toda a lógica na nuvem.\n\nNa sua resposta:\n1. diga onde deve ficar a lógica de ligar a irrigação e por quê;\n2. diga onde faz sentido ficar o aviso ao celular e por quê.",
+      "respostasAceitas": [
+        "Ligar a irrigação deve ficar no ESP32, para funcionar mesmo sem internet. O aviso pode ficar na nuvem, que já tem os dados e consegue mandar mensagem ao celular."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) controle local no dispositivo, independente da internet; 2) alerta na plataforma, que se comunica com o celular e guarda o histórico."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O sensor de uma câmara fria se conecta ao broker MQTT com a \"última vontade\" (Last Will) `camara/status = offline` e, logo após conectar, publica `camara/status = online`.\n\nNa sua resposta:\n1. explique quando o broker publica o \"offline\";\n2. explique como o painel usa esse tópico.",
+      "respostasAceitas": [
+        "O broker publica \"offline\" sozinho quando o sensor cai sem se desconectar (falta de energia, rede). O painel assina camara/status e mostra se o sensor está online ou offline."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) Last Will publicada pelo broker na queda inesperada; 2) painel mostra o estado do dispositivo (e pode alertar)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O Monitor Serial do sensor de uma oficina mostrou:\n\n```\n10:00 Enviado (200)\n10:01 Enviado (200)\n10:02 Falha (-1) - guardado\n10:03 Wi-Fi caiu, reconectando...\n10:04 Reconectado\n10:04 Enviando 2 leituras guardadas... (200)\n```\n\nNa sua resposta:\n1. conte o que aconteceu entre 10:02 e 10:04;\n2. diga se alguma leitura foi perdida e por quê.",
+      "respostasAceitas": [
+        "Às 10:02 o envio falhou e a leitura foi guardada; às 10:03 o Wi-Fi caiu e o aparelho tentou reconectar; às 10:04 voltou e mandou as 2 leituras guardadas. Nenhuma foi perdida, pois foram guardadas e enviadas depois."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) falha, queda, reconexão, envio do que estava guardado; 2) nenhuma perdida graças ao armazenamento local."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um sensor de um sítio sem internet confiável pode ficar dias desconectado. Ele tem pouca memória e envia a temperatura a cada 5 minutos quando conectado.\n\nNa sua resposta:\n1. explique por que cada leitura guardada precisa levar o horário;\n2. explique uma estratégia para caber dias de dados na pouca memória.",
+      "respostasAceitas": [
+        "Sem horário, as leituras apareceriam todas no momento do envio e o gráfico ficaria errado. Para caber, guardar médias por hora (ou mínimo e máximo), ou descartar as mais antigas quando encher."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) horário da medição para o gráfico ficar correto; 2) agregar (médias/mín/máx), espaçar leituras offline ou fila que descarta as antigas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O ESP32 da geladeira de vacinas de uma clínica tem esta regra:\n\n```\nif (temp > 8 && portaAberta == false) {\n  alerta(\"Geladeira quente!\");\n}\n```\n\nNa sua resposta:\n1. explique por que o programador incluiu a condição da porta fechada;\n2. aponte uma situação perigosa que essa regra deixa sem alerta.",
+      "respostasAceitas": [
+        "Com a porta aberta a temperatura sobe por pouco tempo de forma normal, então ele evitou alarmes falsos. Mas se a porta ficar esquecida aberta por muito tempo, as vacinas esquentam e nenhum alerta é dado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) evitar alerta falso durante abertura normal; 2) porta esquecida aberta (deveria haver alerta de porta aberta por muito tempo)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um sensor de uma fazenda usa um chip 4G com pacote de 100 MB por mês. Cada envio gasta cerca de 500 bytes. O técnico compara enviar a cada 10 segundos ou a cada 1 minuto (considere 30 dias).\n\nNa sua resposta:\n1. estime o consumo mensal de cada opção;\n2. diga qual opção cabe no pacote e justifique.",
+      "respostasAceitas": [
+        "A cada 10 s: 8640 envios/dia × 500 B ≈ 4,3 MB/dia ≈ 130 MB/mês. A cada 1 min: 1440 × 500 B ≈ 0,72 MB/dia ≈ 22 MB/mês. Só a de 1 minuto cabe nos 100 MB."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ~130 MB/mês (10 s) e ~22 MB/mês (1 min); 2) a de 1 min cabe com folga; a de 10 s estoura o pacote. Aceitar contas aproximadas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que significa atualizar o programa de um ESP32 por OTA (Over-The-Air)?",
+      "alternativas": [
+        "Trocar o chip da placa por um modelo mais novo",
+        "Atualizar só o painel da plataforma na nuvem",
+        "Gravar o programa a partir de um cartão de memória",
+        "Enviar o novo programa pela rede Wi-Fi, sem cabo"
+      ],
+      "correta": 3,
+      "explicacao": "OTA = \"pelo ar\": o programa novo chega pela rede e é gravado na placa sem precisar ligar o cabo USB."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um galpão tem 30 sensores presos no teto, a 8 metros de altura. Qual a principal vantagem de prepará-los para atualização OTA?",
+      "alternativas": [
+        "Fazer os sensores medirem com mais precisão",
+        "Dispensar o uso de Wi-Fi no galpão",
+        "Atualizar o programa sem subir até cada aparelho",
+        "Fazer a bateria nunca precisar de troca"
+      ],
+      "correta": 2,
+      "explicacao": "Com OTA as correções e melhorias chegam pela rede, sem acesso físico a cada placa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma câmera Wi-Fi comprada para a recepção de uma clínica veio com usuário \"admin\" e senha \"1234\". O que deve ser feito na instalação?",
+      "alternativas": [
+        "Manter a senha, pois o fabricante sabe a melhor",
+        "Trocar a senha padrão por uma senha forte",
+        "Anotar a senha numa etiqueta na própria câmera",
+        "Desligar a câmera à noite para ninguém entrar"
+      ],
+      "correta": 1,
+      "explicacao": "Senhas padrão são conhecidas e publicadas na internet. Trocá-las é o primeiro passo de segurança."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é o modo deep sleep (sono profundo) do ESP32?",
+      "alternativas": [
+        "Um modo em que quase tudo desliga para gastar pouquíssima energia",
+        "Um modo que aumenta a velocidade do processador",
+        "Um modo de proteção que apaga o programa gravado quando a bateria acaba",
+        "Um modo em que o Wi-Fi fica ligado o tempo todo"
+      ],
+      "correta": 0,
+      "explicacao": "No deep sleep o processador e o Wi-Fi ficam desligados; só um pequeno circuito (RTC) fica ativo para acordar a placa depois."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sensor de estacionamento termina o ciclo com:\n\n```\nesp_sleep_enable_timer_wakeup(600 * 1000000ULL);\nesp_deep_sleep_start();\n```\n\nO valor está em microssegundos. Por quanto tempo a placa dorme?",
+      "alternativas": [
+        "600 milissegundos",
+        "1 minuto",
+        "600 horas",
+        "10 minutos"
+      ],
+      "correta": 3,
+      "explicacao": "600 × 1.000.000 µs = 600 s = 10 minutos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O painel de um estoque precisa mostrar, de forma rápida, a umidade atual do ambiente. Qual elemento é o mais direto?",
+      "alternativas": [
+        "Um gráfico de pizza com o histórico",
+        "Uma tabela com as leituras do ano",
+        "Um medidor (gauge) com o valor atual",
+        "Um mapa com a localização do estoque"
+      ],
+      "correta": 2,
+      "explicacao": "O medidor mostra \"quanto está agora\". Histórico fica melhor num gráfico de linha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O gerente de uma escola quer comparar o consumo médio de energia de 5 salas no mês. Qual gráfico é o mais adequado?",
+      "alternativas": [
+        "Gráfico de barras, uma barra por sala",
+        "Gráfico de linha de uma única sala",
+        "Um medidor com o valor de agora",
+        "Um único número com o total da escola"
+      ],
+      "correta": 0,
+      "explicacao": "Barras facilitam comparar categorias (salas) entre si."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O Monitor Serial de um sensor de temperatura mostra `Temperatura: nan`. O que isso indica?",
+      "alternativas": [
+        "A temperatura medida é exatamente zero grau",
+        "A temperatura está alta demais para o sensor",
+        "O Wi-Fi caiu no momento da leitura",
+        "A leitura do sensor falhou e não gerou um número"
+      ],
+      "correta": 3,
+      "explicacao": "NaN = \"not a number\". Sensores como o DHT devolvem NaN quando a leitura falha (fio solto, sensor com defeito, pino errado)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O painel de uma biblioteca mostra a umidade relativa do ar em 140%. O que concluir?",
+      "alternativas": [
+        "O ar está muito seco e a sala precisa de um umidificador",
+        "Leitura com erro: umidade relativa vai de 0 a 100%",
+        "É um dia de chuva forte, valor normal",
+        "A biblioteca está com 40% a mais de livros"
+      ],
+      "correta": 1,
+      "explicacao": "Umidade relativa não passa de 100%. Valor fora da faixa possível indica defeito, ligação errada ou erro de conversão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa farmácia foi configurado: \"se a temperatura da geladeira de vacinas passar de 8 °C, enviar mensagem ao responsável\". Para que servem alertas como esse?",
+      "alternativas": [
+        "Desenhar o gráfico de temperatura do dia",
+        "Guardar a senha da geladeira com segurança",
+        "Avisar alguém na hora em que algo sai do normal",
+        "Aumentar o intervalo de envio das leituras"
+      ],
+      "correta": 2,
+      "explicacao": "O alerta chama a atenção sem ninguém precisar ficar olhando o painel o tempo todo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O endereço da plataforma usada por um sensor começa com https. O que o \"s\" indica na comunicação?",
+      "alternativas": [
+        "Que o site é mais rápido que os outros",
+        "Que a comunicação é criptografada (protegida)",
+        "Que o servidor é pequeno (small)",
+        "Que cada dado é salvo duas vezes"
+      ],
+      "correta": 1,
+      "explicacao": "HTTPS = HTTP com TLS: os dados (e a chave) viajam criptografados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num sensor a bateria que envia dados por Wi-Fi, qual parte do ESP32 costuma gastar mais energia?",
+      "alternativas": [
+        "O LED que indica que a placa está ligada",
+        "O botão de reset da placa",
+        "O rádio Wi-Fi quando está transmitindo",
+        "O pino de terra (GND)"
+      ],
+      "correta": 2,
+      "explicacao": "Transmitindo, o Wi-Fi consome bem mais de 100 mA. Por isso se reduz o tempo com o rádio ligado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um gráfico de linha no painel de uma padaria não mostra a unidade da medida nem os horários. Qual o problema?",
+      "alternativas": [
+        "Não se sabe o que o valor significa nem quando foi medido",
+        "O gráfico fica mais rápido de carregar no celular do dono da padaria",
+        "A linha passa a mostrar valores errados",
+        "O sensor deixa de enviar as leituras"
+      ],
+      "correta": 0,
+      "explicacao": "Sem unidade (°C, %) e sem tempo no eixo, a leitura do gráfico fica ambígua."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct6",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O painel de um hotel mostra \"Temperatura da câmara: 22 °C — última leitura há 3 dias\". O que se deve concluir?",
+      "alternativas": [
+        "A temperatura ficou estável em 22 °C durante os 3 dias inteiros",
+        "O painel só atualiza a cada 3 dias",
+        "A câmara está funcionando perfeitamente",
+        "O aparelho pode ter parado de enviar; o dado está velho"
+      ],
+      "correta": 3,
+      "explicacao": "O horário da última leitura mostra que o dado é antigo. É sinal de aparelho desligado, sem rede ou com defeito."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num programa preparado para OTA, o `loop()` chama `ArduinoOTA.handle();`. Para que serve essa linha?",
+      "alternativas": [
+        "Verificar se chegou uma atualização pela rede e tratá-la",
+        "Enviar a leitura do sensor para a plataforma",
+        "Conectar o ESP32 ao Wi-Fi pela primeira vez, logo depois de ligar",
+        "Colocar a placa em sono profundo"
+      ],
+      "correta": 0,
+      "explicacao": "Sem chamar `ArduinoOTA.handle()` com frequência, a placa não \"escuta\" os pedidos de atualização."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O código de um sensor de uma loja tem `ArduinoOTA.setPassword(\"Ot@2026!loja\");`. Qual o objetivo?",
+      "alternativas": [
+        "Definir a senha da rede Wi-Fi da loja para a placa conectar",
+        "Criptografar as leituras enviadas à nuvem",
+        "Proteger o Monitor Serial contra leitura",
+        "Impedir que qualquer um na rede grave outro programa"
+      ],
+      "correta": 3,
+      "explicacao": "Sem senha, qualquer pessoa na mesma rede poderia enviar um programa por OTA para a placa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sensor de chuva dorme em deep sleep 59 minutos de cada hora. O técnico tenta enviar uma atualização OTA e a placa nunca aparece. Por quê?",
+      "alternativas": [
+        "O deep sleep apaga a função de OTA da memória",
+        "Dormindo, o Wi-Fi fica desligado e não recebe nada",
+        "A atualização OTA só funciona com o cabo USB ligado ao computador",
+        "O sensor de chuva bloqueia o Wi-Fi da placa"
+      ],
+      "correta": 1,
+      "explicacao": "Placa dormindo não está na rede. É preciso prever uma janela acordada (ex.: um botão ou um aviso da nuvem) para atualizar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um ESP32 conta quantas vezes acordou numa variável global comum, mas depois de cada deep sleep o contador volta a 0. Por quê?",
+      "alternativas": [
+        "O sensor zera todas as variáveis ao acordar",
+        "O Wi-Fi apaga as variáveis do programa sempre que reconecta à rede",
+        "A memória comum se apaga no deep sleep e o programa recomeça",
+        "O contador só funciona com o cabo USB ligado"
+      ],
+      "correta": 2,
+      "explicacao": "Ao acordar do deep sleep o ESP32 reinicia. Para manter o valor usa-se a memória RTC (`RTC_DATA_ATTR`) ou a flash."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num sensor que usa deep sleep, onde costumam ficar a leitura e o envio dos dados?",
+      "alternativas": [
+        "No loop(), que continua de onde tinha parado antes de dormir",
+        "Numa função que só roda quando o cabo USB é ligado",
+        "No setup(), que roda a cada despertar, terminando com o sono",
+        "Dentro do próprio sensor, sem passar pelo programa"
+      ],
+      "correta": 2,
+      "explicacao": "A cada despertar a placa reinicia e roda o setup(). O padrão é: acorda, lê, envia, dorme — e o loop() nem chega a rodar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual configuração deixa a conexão MQTT de um sensor criptografada?",
+      "alternativas": [
+        "Usar MQTT com TLS, normalmente na porta 8883",
+        "Usar a porta 1883 com uma senha curta",
+        "Enviar as mensagens em letras maiúsculas",
+        "Aumentar o QoS da mensagem para 2"
+      ],
+      "correta": 0,
+      "explicacao": "A porta 1883 é MQTT sem criptografia. Com TLS (8883) os dados e a senha vão protegidos. QoS trata entrega, não segurança."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma clínica colocou as câmeras e sensores IoT numa rede Wi-Fi separada da rede dos computadores com os prontuários. Qual a vantagem?",
+      "alternativas": [
+        "Os sensores passam a medir com mais precisão",
+        "Os computadores ficam mais rápidos para navegar",
+        "Os aparelhos IoT deixam de precisar de senha, pois a rede é só deles",
+        "Uma invasão num aparelho IoT não alcança tão fácil os computadores"
+      ],
+      "correta": 3,
+      "explicacao": "Separar redes limita o estrago: aparelhos IoT costumam ser alvos fáceis e não devem ter acesso aos dados sensíveis."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O sensor de nível de uma caixa de água de 120 cm às vezes mostra picos isolados de 400 cm no gráfico. O que reduz esse problema?",
+      "alternativas": [
+        "Enviar os dados para a nuvem com mais frequência, a cada meio segundo",
+        "Descartar valores impossíveis e usar a média de algumas leituras",
+        "Trocar o gráfico de linha por um gráfico de pizza",
+        "Desligar o alerta de nível baixo da caixa"
+      ],
+      "correta": 1,
+      "explicacao": "Valor maior que a própria caixa é impossível: deve ser filtrado. A média de várias leituras suaviza ruídos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O sensor de temperatura à prova de água do aquário de um pet shop passou a mostrar -127 °C. O que isso indica?",
+      "alternativas": [
+        "A água do aquário congelou durante a noite",
+        "O aquecedor está ligado no máximo",
+        "A temperatura é normal para peixes de água fria, nada a verificar",
+        "O sensor está desconectado ou não responde (valor de erro)"
+      ],
+      "correta": 3,
+      "explicacao": "Sensores do tipo DS18B20 devolvem -127 °C quando não são encontrados (fio solto, mau contato)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sensor de umidade do solo, ligado no pino analógico do ESP32 (leitura de 0 a 4095), mostra sempre 4095, mesmo regando ou deixando secar. O que é mais provável?",
+      "alternativas": [
+        "Leitura travada no máximo; provável fio solto ou ligação errada",
+        "O solo está sempre na umidade ideal para a planta, sem precisar de rega",
+        "O Wi-Fi está interferindo na leitura analógica",
+        "A plataforma arredonda todos os valores para 4095"
+      ],
+      "correta": 0,
+      "explicacao": "Valor preso no limite e que não muda com a realidade indica problema de ligação ou sensor, não uma leitura verdadeira."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O gráfico de umidade de uma estufa mostra exatamente 55,0% durante 2 dias, sem nenhuma variação. O que se deve suspeitar?",
+      "alternativas": [
+        "Estufa perfeitamente controlada, sem nada a verificar",
+        "Gráfico configurado com cor errada",
+        "Sensor travado ou envio repetindo um valor antigo",
+        "Plataforma guardando dados em dobro"
+      ],
+      "correta": 2,
+      "explicacao": "Ambientes reais sempre variam um pouco. Uma linha totalmente reta por muito tempo é sinal de leitura congelada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Como a plataforma pode avisar que o sensor de uma câmara fria parou de mandar dados?",
+      "alternativas": [
+        "Alerta quando a temperatura recebida for igual a 0 °C ou abaixo",
+        "Alerta se nenhuma leitura chegar em um tempo, como 15 minutos",
+        "Alerta quando o gráfico mudar de cor sozinho",
+        "Alerta sempre que chegar uma leitura nova"
+      ],
+      "correta": 1,
+      "explicacao": "Um \"alerta de ausência de dados\" detecta aparelho desligado, sem rede ou travado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No painel de um condomínio, o botão \"Abrir portão\" só muda para \"aberto\" quando o ESP32 publica a confirmação. Por que fazer assim?",
+      "alternativas": [
+        "Para o portão abrir mais rápido",
+        "Para economizar a bateria do celular do morador enquanto espera o portão",
+        "Para mostrar o estado real, e não só que o comando foi enviado",
+        "Para o comando não precisar de internet"
+      ],
+      "correta": 2,
+      "explicacao": "O comando pode não chegar. A confirmação do dispositivo (feedback) garante que o painel mostra o que aconteceu de fato."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct2",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na leitura de um sensor de uma cafeteria está:\n\n```\nfloat t = dht.readTemperature();\nif (isnan(t)) {\n  Serial.println(\"Falha no sensor\");\n  return;\n}\nenviar(t);\n```\n\nQual o efeito do `return` nesse trecho?",
+      "alternativas": [
+        "Não envia a leitura com falha e espera a próxima",
+        "Reinicia o ESP32 para corrigir o sensor",
+        "Envia o valor 0 no lugar da leitura com falha",
+        "Desliga o sensor até alguém religar a placa"
+      ],
+      "correta": 0,
+      "explicacao": "O return sai da função antes de `enviar(t)`: a leitura inválida não vai para a nuvem e o loop tenta de novo depois."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma regra manda mensagem ao dono a cada leitura (uma por minuto) enquanto o freezer de uma sorveteria estiver acima de -10 °C. O freezer ficou 2 horas quente. O que acontece e qual a melhoria?",
+      "alternativas": [
+        "Só 1 mensagem; a regra já evita repetição",
+        "Cerca de 120 mensagens; melhor avisar quando o estado muda",
+        "Cerca de 2 mensagens; melhor avisar a cada leitura",
+        "Nenhuma mensagem; a regra só vale abaixo de -10 °C"
+      ],
+      "correta": 1,
+      "explicacao": "2 h = 120 leituras = 120 mensagens. Excesso faz o dono ignorar os avisos. O ideal é avisar ao entrar no estado de alerta (e talvez ao sair)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um sensor a bateria acorda a cada 10 minutos, conecta ao Wi-Fi (cerca de 3 s), envia uma leitura e volta a dormir. Qual mudança mais economiza bateria?",
+      "alternativas": [
+        "Apagar as mensagens do Monitor Serial, que gastam muita energia",
+        "Trocar o JSON por um texto em letras maiúsculas",
+        "Diminuir o tempo de sono para 1 minuto",
+        "Enviar várias leituras juntas, ligando o Wi-Fi menos vezes"
+      ],
+      "correta": 3,
+      "explicacao": "O que mais gasta é o Wi-Fi ligado. Ligar o rádio menos vezes (enviando lotes ou espaçando os envios) traz a maior economia."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma atualização OTA com erro faz o ESP32 de uma estação no meio de uma plantação travar antes de conectar ao Wi-Fi. Por que isso é grave?",
+      "alternativas": [
+        "Sem Wi-Fi não chega outra atualização; é preciso ir ao local",
+        "O erro se espalha pelo rádio para todos os outros sensores da plantação",
+        "A plataforma apaga o canal do dispositivo travado",
+        "O ESP32 passa a consumir energia da rede elétrica"
+      ],
+      "correta": 0,
+      "explicacao": "O OTA depende do próprio programa estar funcionando. Por isso se testa antes, atualiza poucos aparelhos primeiro e usa recursos de volta à versão anterior (rollback)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O gráfico de umidade de um museu tem o eixo vertical de 54% a 56%. A linha parece \"despencar\" de 55,8% para 54,6%. Como interpretar?",
+      "alternativas": [
+        "A umidade caiu pela metade em poucos minutos, sinal de problema sério",
+        "A escala estreita exagera uma variação de pouco mais de 1 ponto",
+        "O sensor quebrou, pois o valor saiu da escala",
+        "A variação é grande, pois ocupou o gráfico todo"
+      ],
+      "correta": 1,
+      "explicacao": "Eixo com faixa estreita amplia visualmente pequenas mudanças. É preciso olhar os números do eixo antes de concluir."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct2",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Dois sensores iguais na mesma sala de um escritório marcam 23,1 °C e 25,4 °C. Um deles fica perto da janela, pegando sol da tarde. Qual a interpretação mais provável?",
+      "alternativas": [
+        "Um dos sensores certamente está quebrado",
+        "A diferença é causada pelo Wi-Fi mais fraco",
+        "O local influencia: o sensor ao sol mede o próprio aquecimento",
+        "A sala tem sempre duas temperaturas diferentes ao mesmo tempo, normal"
+      ],
+      "correta": 2,
+      "explicacao": "Sol direto, calor de aparelhos ou correntes de ar alteram a leitura. A posição do sensor faz parte da instalação correta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em São Paulo (horário de Brasília, UTC-3), o termômetro de uma loja mostra o pico de calor às 12h, mas o gráfico da plataforma mostra esse pico às 15h. Qual a causa mais provável?",
+      "alternativas": [
+        "O sensor demorou 3 horas para mandar a leitura",
+        "O gráfico desenha a linha com atraso proposital",
+        "O ESP32 mede a temperatura 3 horas depois",
+        "A plataforma exibe o horário em UTC, 3 horas à frente"
+      ],
+      "correta": 3,
+      "explicacao": "12h em Brasília = 15h em UTC. É preciso configurar o fuso horário da plataforma ou do painel."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma loja trocou a senha padrão da câmera Wi-Fi, mas o programa (firmware) dela é de 4 anos atrás e nunca foi atualizado. Que medida de segurança ainda falta?",
+      "alternativas": [
+        "Trocar a senha de novo, agora a cada semana",
+        "Atualizar o firmware para corrigir falhas já conhecidas",
+        "Desligar a criptografia para a câmera ficar mais rápida",
+        "Tirar a câmera do Wi-Fi e ligá-la só na tomada"
+      ],
+      "correta": 1,
+      "explicacao": "Firmware antigo tem falhas públicas que permitem invasão mesmo com senha forte. Atualizar é parte da configuração segura."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um hotel tem um sensor de temperatura em cada um dos 40 quartos. O técnico preparou todos para receber atualização OTA.\n\nNa sua resposta:\n1. explique o que é atualização OTA;\n2. dê uma vantagem do OTA nesse hotel.",
+      "respostasAceitas": [
+        "OTA é mandar o programa novo pela rede Wi-Fi, sem cabo. No hotel dá para corrigir ou melhorar os 40 sensores sem entrar em cada quarto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) atualização do firmware pela rede (sem cabo); 2) não precisar ir a cada quarto, economia de tempo, sem incomodar hóspedes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O roteador e as câmeras de uma loja de games foram instalados com o usuário \"admin\" e a senha \"admin\", que vieram de fábrica.\n\nNa sua resposta:\n1. explique por que isso é perigoso;\n2. diga o que deve ser feito.",
+      "respostasAceitas": [
+        "Senhas de fábrica são conhecidas e estão na internet; qualquer um pode entrar e ver as câmeras ou mudar o roteador. Deve-se trocar por senhas fortes e diferentes."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) senha padrão é pública/fácil de adivinhar, permite invasão; 2) trocar por senha forte (e única)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No fim do `setup()` de um sensor a pilha de uma horta estão as linhas:\n\n```\nesp_sleep_enable_timer_wakeup(15 * 60 * 1000000ULL);\nesp_deep_sleep_start();\n```\n\nNa sua resposta:\n1. explique o que essas linhas fazem;\n2. explique por que isso é útil num sensor a pilha.",
+      "respostasAceitas": [
+        "Programam a placa para acordar depois de 15 minutos e a colocam em sono profundo. Dormindo, ela gasta muito pouco e a pilha dura muito mais."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) configura o despertador (15 min) e entra em deep sleep; 2) economia de energia, maior duração da pilha."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct2",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O Monitor Serial do sensor de uma sala de aula mostra várias vezes: `Temperatura: nan °C`.\n\nNa sua resposta:\n1. explique o que significa \"nan\";\n2. cite duas causas possíveis.",
+      "respostasAceitas": [
+        "nan quer dizer que não veio um número: a leitura falhou. Pode ser fio solto ou mau contato, pino errado no código ou sensor com defeito."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) leitura inválida (\"não é um número\"); 2) duas entre: fio solto, pino errado, sensor queimado, falta de alimentação, leituras rápidas demais."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma farmácia tem um painel com o gráfico da geladeira de vacinas. O gerente quer também um alerta por mensagem quando a temperatura passar de 8 °C.\n\nNa sua resposta:\n1. explique por que só o gráfico não basta;\n2. diga quem deve receber o alerta e por quê.",
+      "respostasAceitas": [
+        "Ninguém fica olhando o gráfico o tempo todo; o problema pode passar despercebido. O alerta deve ir para quem pode agir na hora, como o farmacêutico responsável."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) gráfico exige alguém olhando; alerta avisa na hora; 2) responsável que pode resolver (farmacêutico/gerente)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O sensor de uma clínica envia leituras e a chave da plataforma usando http (sem o \"s\").\n\nNa sua resposta:\n1. explique o risco de usar http;\n2. diga o que muda ao usar https.",
+      "respostasAceitas": [
+        "No http os dados e a chave vão sem proteção e alguém na rede pode ler ou alterar. No https a comunicação é criptografada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dados e chave em texto aberto, podem ser capturados; 2) https criptografa (TLS)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O sensor de uma trilha de parque usa deep sleep e guarda quantas vezes acordou:\n\n```\nRTC_DATA_ATTR int despertares = 0;\n\nvoid setup() {\n  despertares++;\n  Serial.println(despertares);\n  // lê, envia e volta a dormir\n}\n```\n\nNa sua resposta:\n1. explique o que o RTC_DATA_ATTR faz com a variável;\n2. diga o que apareceria se a variável fosse uma global comum.",
+      "respostasAceitas": [
+        "Guarda a variável na memória RTC, que não é apagada no deep sleep; então o número aumenta a cada despertar (1, 2, 3...). Se fosse comum, ela seria zerada a cada reinício e apareceria sempre 1."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mantém o valor durante o deep sleep (memória RTC); 2) variável comum é perdida: mostraria sempre 1."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um sensor de uma oficina foi preparado assim:\n\n```\nvoid setup() {\n  conectarWiFi();\n  ArduinoOTA.setPassword(\"S3nh@Forte\");\n  ArduinoOTA.begin();\n}\nvoid loop() {\n  ArduinoOTA.handle();\n  lerEEnviar();\n  delay(30000);\n}\n```\n\nNa sua resposta:\n1. explique para que servem a senha e o handle();\n2. explique por que o delay(30000) atrapalha o OTA.",
+      "respostasAceitas": [
+        "A senha impede que qualquer um na rede grave outro programa, e o handle() verifica se chegou atualização. Com delay de 30 s, o handle() quase nunca roda, e a atualização pode falhar ou demorar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) senha = só quem sabe atualiza; handle = escuta pedidos de OTA; 2) o loop fica parado e não atende o OTA (usar millis)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O gráfico de 24 horas de uma estufa mostra: de madrugada, cerca de 18 °C; entre 8h e 14h sobe até 35 °C; à noite cai de novo. Às 3h aparece um único ponto de 85 °C, e o seguinte volta a 18 °C.\n\nNa sua resposta:\n1. interprete o comportamento ao longo do dia;\n2. explique o ponto de 85 °C e o que fazer com ele.",
+      "respostasAceitas": [
+        "A temperatura acompanha o sol: sobe de manhã até o começo da tarde e cai à noite. O ponto de 85 °C de madrugada é um pico isolado impossível, ou seja, erro de leitura; deve ser descartado/filtrado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ciclo diário normal (aquecimento pelo sol); 2) leitura errada isolada; filtrar valores fora da faixa, conferir o sensor."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na plataforma de uma sorveteria há duas opções de alerta para o freezer: (A) mandar mensagem a cada leitura acima de -10 °C; (B) mandar mensagem quando a temperatura passa de -10 °C e outra quando volta ao normal.\n\nNa sua resposta:\n1. diga o que acontece com a opção A num problema de várias horas;\n2. explique por que a B é melhor.",
+      "respostasAceitas": [
+        "Na A chegam dezenas ou centenas de mensagens repetidas e o dono passa a ignorar. A B avisa só quando o estado muda: começou o problema e acabou, sem encher de mensagens."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) excesso de mensagens/“fadiga de alerta”; 2) alerta por mudança de estado é claro e não é ignorado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num condomínio há dois projetos: um sensor de umidade do jardim, a pilha, que mede a cada 30 minutos; e o controle do portão, que precisa abrir na hora em que o morador aperta o botão no celular.\n\nNa sua resposta:\n1. diga em qual dos dois o deep sleep faz sentido;\n2. explique por que no outro ele atrapalha.",
+      "respostasAceitas": [
+        "No sensor do jardim, que só precisa acordar de vez em quando. No portão, a placa dormindo fica sem Wi-Fi e não recebe o comando na hora; ele precisa ficar sempre conectado (ligado na tomada)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sensor periódico a pilha = deep sleep; 2) portão precisa responder a qualquer momento; dormindo não recebe comandos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct5",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na revisão de um projeto de uma escola foram encontrados: a chave da API escrita no código publicado no GitHub; o envio feito por http; e o roteador com a senha de fábrica.\n\nNa sua resposta:\n1. escolha dois desses problemas e explique o risco de cada um;\n2. diga a correção de cada um dos dois.",
+      "respostasAceitas": [
+        "Chave no GitHub: qualquer um usa a conta; correção: gerar nova chave e tirar do código (arquivo de segredos). Http: dados e chave podem ser lidos; usar https. Senha de fábrica: invasão do roteador; trocar por senha forte."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dois riscos coerentes; 2) correções: regenerar e esconder a chave, usar https/TLS, trocar senha padrão."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma empresa tem 200 sensores espalhados em fazendas, alguns a horas de distância, e vai atualizá-los por OTA.\n\nNa sua resposta:\n1. explique o risco de mandar uma atualização com erro para todos ao mesmo tempo;\n2. cite duas precauções para diminuir esse risco.",
+      "respostasAceitas": [
+        "Se a versão travar a placa ou o Wi-Fi, os 200 param e não recebem outra atualização; seria preciso ir a cada fazenda. Precauções: testar antes em bancada, atualizar poucos primeiro, ter volta automática à versão anterior (rollback), proteger o OTA com senha."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) todos param e não dá para corrigir pela rede; 2) duas entre: testar antes, atualização em etapas, rollback, verificação da versão, senha/assinatura."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um sensor gasta cerca de 100 mA acordado e 0,01 mA em deep sleep. Usa uma bateria de 2000 mAh. Opção A: fica sempre acordado. Opção B: acorda a cada 10 minutos, fica 5 segundos acordado e dorme o resto do tempo.\n\nNa sua resposta:\n1. estime quanto tempo a bateria dura na opção A;\n2. explique, com uma conta aproximada, por que a opção B dura muito mais.",
+      "respostasAceitas": [
+        "A: 2000 / 100 = cerca de 20 horas. B: fica acordado 5 s de cada 600 s (menos de 1% do tempo), então a média fica perto de 1 mA; a bateria dura na ordem de 2000 h, uns 80 a 100 dias."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ~20 h; 2) fração acordada ~0,8% → consumo médio ~0,85 mA → ~2.300 h (~3 meses). Aceitar contas aproximadas e o raciocínio da média."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Preparação de dispositivo IoT",
+      "capacidade": "iot.ct6",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No painel de uma câmara fria, o gráfico de temperatura mostra uma linha reta ligando -18 °C às 14h a -17 °C às 17h. Ao verificar, descobriu-se que o sensor ficou sem enviar nada nessas 3 horas.\n\nNa sua resposta:\n1. explique por que essa linha reta engana quem olha o painel;\n2. diga que alerta ou ajuste no painel evitaria isso.",
+      "respostasAceitas": [
+        "O gráfico liga os dois pontos e parece que a temperatura ficou estável, mas nesse tempo não houve medição; a câmara pode ter esquentado. O painel deveria alertar quando passar um tempo sem dados e mostrar o intervalo sem leituras (falha no gráfico)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a linha sugere dado que não existe; o período foi desconhecido; 2) alerta de ausência de dados e/ou mostrar o buraco no gráfico."
+    }
+  ]
+}
