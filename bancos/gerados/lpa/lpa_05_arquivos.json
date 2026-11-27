@@ -1,0 +1,2456 @@
+{
+  "nome": "Lógica de Programação e Algoritmos — Manipulação de arquivos (a revisar)",
+  "materia": "Lógica de Programação e Algoritmos",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para usar as funções readFileSync e writeFileSync num programa Node.js, qual linha costuma aparecer no início do arquivo?",
+      "alternativas": [
+        "const fs = new File('fs');",
+        "const fs = require('fs');",
+        "const fs = document.getElementById('fs');",
+        "const fs = prompt('fs');"
+      ],
+      "correta": 1,
+      "explicacao": "O módulo fs (file system) já vem com o Node.js e é carregado com require('fs'). As outras linhas não carregam o módulo de arquivos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O sistema da sorveteria executa `fs.writeFileSync('sabores.txt', 'Morango')` e o arquivo sabores.txt ainda não existe na pasta. O que acontece?",
+      "alternativas": [
+        "O arquivo sabores.txt é criado com o texto Morango.",
+        "O programa para com o erro ENOENT (arquivo não encontrado).",
+        "O Node pergunta no terminal se pode criar o arquivo.",
+        "O texto Morango aparece no console e nada é gravado."
+      ],
+      "correta": 0,
+      "explicacao": "writeFileSync cria o arquivo quando ele não existe. O erro ENOENT na gravação só acontece quando a PASTA do caminho não existe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual função do módulo fs acrescenta texto no FINAL de um arquivo, mantendo o que já estava gravado?",
+      "alternativas": [
+        "fs.readFileSync",
+        "fs.writeFileSync",
+        "fs.existsSync",
+        "fs.appendFileSync"
+      ],
+      "correta": 3,
+      "explicacao": "append = acrescentar. writeFileSync substitui o conteúdo, readFileSync lê e existsSync só verifica se o arquivo existe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A academia grava a lista de presença com appendFileSync, um aluno por vez. Para que cada nome fique em uma linha separada, o que deve ser colocado no final de cada texto gravado?",
+      "alternativas": [
+        "'\\t' (tabulação)",
+        "' ' (um espaço em branco)",
+        "'\\n' (quebra de linha)",
+        "'//' (sinal de comentário)"
+      ],
+      "correta": 2,
+      "explicacao": "'\\n' é o caractere de quebra de linha. Sem ele, os nomes ficam grudados na mesma linha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na linha `fs.writeFileSync('recibo.txt', texto)`, o que representa o primeiro argumento, 'recibo.txt'?",
+      "alternativas": [
+        "O texto que será gravado dentro do arquivo.",
+        "O nome (caminho) do arquivo onde o conteúdo será gravado.",
+        "A codificação usada para gravar os acentos.",
+        "A pasta onde o Node.js foi instalado."
+      ],
+      "correta": 1,
+      "explicacao": "O primeiro argumento é o caminho do arquivo; o segundo (texto) é o conteúdo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em `fs.appendFileSync('pedidos.txt', 'Pizza calabresa\\n')`, qual é a função do segundo argumento?",
+      "alternativas": [
+        "É o nome do arquivo que será criado.",
+        "É o texto que será acrescentado no final do arquivo.",
+        "É a linha do arquivo onde o texto será inserido.",
+        "É a codificação de caracteres do arquivo."
+      ],
+      "correta": 1,
+      "explicacao": "O segundo argumento é o conteúdo a acrescentar. A função sempre grava no final; não se escolhe a linha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A loja de games gera todo dia um arquivo `relatorio.txt` novo, que deve SUBSTITUIR o relatório do dia anterior. Qual função é a indicada?",
+      "alternativas": [
+        "fs.appendFileSync",
+        "fs.writeFileSync",
+        "fs.readFileSync",
+        "fs.existsSync"
+      ],
+      "correta": 1,
+      "explicacao": "writeFileSync troca todo o conteúdo do arquivo pelo novo texto, que é o desejado aqui."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual codificação é usada nos exemplos de aula para gravar e ler textos com acentos e cedilha (ç, ã, é) sem que eles fiquem trocados por símbolos estranhos?",
+      "alternativas": [
+        "'ascii'",
+        "'utf8'",
+        "'base64'",
+        "'hex'"
+      ],
+      "correta": 1,
+      "explicacao": "UTF-8 representa todos os caracteres do português. ascii não tem acentos; base64 e hex são formas de codificar bytes, não texto legível."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo fila.txt tem 20 nomes. O programa executa `fs.writeFileSync('fila.txt', '')`. Como fica o arquivo?",
+      "alternativas": [
+        "É apagado do disco.",
+        "Continua existindo, mas fica vazio.",
+        "Continua com os 20 nomes, pois o texto é vazio.",
+        "Fica com a palavra vazio escrita dentro."
+      ],
+      "correta": 1,
+      "explicacao": "writeFileSync substitui o conteúdo pelo texto informado; como ele é vazio, o arquivo fica vazio (mas não é excluído)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo log.txt começou vazio. O programa executou três vezes a linha `fs.appendFileSync('log.txt', 'Login de Ana\\n')`. Quantas linhas com Login de Ana o arquivo tem?",
+      "alternativas": [
+        "1",
+        "3",
+        "0",
+        "6"
+      ],
+      "correta": 1,
+      "explicacao": "Cada appendFileSync acrescenta uma linha no final, sem apagar as anteriores: 3 linhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A variável `pontos` guarda o número 150. Qual linha grava esse valor como texto no arquivo placar.txt?",
+      "alternativas": [
+        "fs.writeFileSync('placar.txt', String(pontos));",
+        "fs.readFileSync('placar.txt', String(pontos));",
+        "fs.writeFileSync(String(pontos));",
+        "fs.existsSync('placar.txt', pontos);"
+      ],
+      "correta": 0,
+      "explicacao": "O conteúdo gravado deve ser texto, por isso String(pontos). readFileSync lê, existsSync verifica, e writeFileSync precisa do nome do arquivo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No VS Code, o programa acabou de criar o arquivo vendas.txt na pasta do projeto. Onde o aluno vê esse arquivo novo para abri-lo?",
+      "alternativas": [
+        "No painel de Extensões do VS Code.",
+        "No console do navegador (F12).",
+        "No Explorador de arquivos, no painel lateral do VS Code.",
+        "Na barra de status, no canto inferior."
+      ],
+      "correta": 2,
+      "explicacao": "O Explorador (painel lateral) mostra os arquivos e pastas do projeto, inclusive os criados pelo programa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que indica a palavra Sync no nome da função writeFileSync?",
+      "alternativas": [
+        "Que o programa espera a gravação terminar antes de seguir para a próxima linha.",
+        "Que o arquivo é sincronizado com a nuvem automaticamente.",
+        "Que o arquivo é gravado em todos os computadores da rede.",
+        "Que a gravação só acontece quando há internet."
+      ],
+      "correta": 0,
+      "explicacao": "Sync = síncrona: a execução fica parada até a operação terminar. Não tem relação com nuvem ou rede."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a principal diferença entre gravar um texto no arquivo e mostrá-lo com console.log?",
+      "alternativas": [
+        "O console.log grava no disco e o arquivo só mostra na tela.",
+        "Os dois guardam o texto no disco da mesma forma.",
+        "O arquivo guarda o texto no disco; o console.log só exibe na tela durante a execução.",
+        "O console.log grava o texto num arquivo chamado console.txt."
+      ],
+      "correta": 2,
+      "explicacao": "console.log só mostra no terminal; ao fechar, nada fica guardado. O arquivo permanece no disco."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O programa está em C:\\padaria\\caixa.js e é executado com `node caixa.js` no terminal aberto na pasta C:\\padaria. A linha `fs.writeFileSync('vendas.txt', 'ok')` cria o arquivo em qual pasta?",
+      "alternativas": [
+        "C:\\padaria (a pasta onde o terminal estava ao rodar o node)",
+        "Na pasta Documentos do usuário",
+        "Na pasta onde o Node.js foi instalado",
+        "Na Área de Trabalho do Windows"
+      ],
+      "correta": 0,
+      "explicacao": "Um caminho relativo ('vendas.txt') é resolvido a partir da pasta atual do terminal (de onde o node foi executado)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O cinema grava cada horário com `fs.appendFileSync('sessoes.txt', sessao)`, SEM '\\n'. Depois de gravar '14h', '16h' e '18h' num arquivo vazio, o conteúdo fica:",
+      "alternativas": [
+        "14h, 16h e 18h, cada um em uma linha",
+        "14h16h18h",
+        "Só 18h, o último gravado",
+        "14h 16h 18h, separados por espaço"
+      ],
+      "correta": 1,
+      "explicacao": "appendFileSync não acrescenta quebra de linha sozinho: os textos ficam colados um após o outro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na pet shop há o vetor `const nomes = ['Rex', 'Mel', 'Thor'];` e o código `fs.writeFileSync('pets.txt', nomes.join('\\n'));`. Como fica o arquivo pets.txt?",
+      "alternativas": [
+        "Rex, Mel e Thor, cada um em uma linha",
+        "Rex,Mel,Thor em uma única linha",
+        "['Rex', 'Mel', 'Thor'] escrito em uma linha",
+        "Somente Thor, o último do vetor"
+      ],
+      "correta": 0,
+      "explicacao": "join('\\n') junta os elementos do vetor num único texto, colocando quebra de linha entre eles."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na oficina, `nome = 'Pedro'`, `placa = 'ABC1D23'` e `valor = 150`. Qual expressão gera o texto `Pedro;ABC1D23;150` para gravar no CSV?",
+      "alternativas": [
+        "[nome, placa, valor].join(';')",
+        "nome + placa + valor",
+        "nome.split(';') + placa + valor",
+        "[nome, placa, valor].join()"
+      ],
+      "correta": 0,
+      "explicacao": "join(';') junta os itens com ponto e vírgula. nome + placa + valor fica tudo colado; join() sem argumento usa vírgula."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "object-object",
+      "enunciado": "Considere o código:\n\n```\nconst cliente = { nome: 'Lia', idade: 16 };\nfs.writeFileSync('cliente.txt', 'Dados: ' + cliente);\n```\n\nO que fica gravado no arquivo?",
+      "alternativas": [
+        "Dados: Lia 16",
+        "Dados: [object Object]",
+        "Dados: { nome: 'Lia', idade: 16 }",
+        "Nada, o arquivo fica vazio"
+      ],
+      "correta": 1,
+      "explicacao": "Ao concatenar um objeto com texto, o JavaScript o transforma em '[object Object]'. Para gravar os dados do objeto, use JSON.stringify(cliente)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "pasta-inexistente",
+      "enunciado": "O hotel executa `fs.writeFileSync('relatorios/janeiro.txt', texto)`, mas a pasta relatorios ainda não existe. O que acontece?",
+      "alternativas": [
+        "A pasta relatorios é criada automaticamente com o arquivo dentro.",
+        "O arquivo janeiro.txt é criado na pasta atual, sem a pasta.",
+        "O texto é gravado na Área de Trabalho por segurança.",
+        "Dá erro ENOENT: writeFileSync cria o arquivo, mas não cria pastas."
+      ],
+      "correta": 3,
+      "explicacao": "writeFileSync só cria o arquivo; se a pasta do caminho não existe, ocorre o erro ENOENT. A pasta precisa ser criada antes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No primeiro acesso do dia, o sistema da biblioteca executa `fs.appendFileSync('acessos.txt', 'Acesso 1\\n')`, e o arquivo acessos.txt ainda não existe. O que acontece?",
+      "alternativas": [
+        "Dá erro, porque só se pode acrescentar em arquivo que já existe.",
+        "Nada acontece até o arquivo ser criado com writeFileSync.",
+        "O texto é acrescentado no final do próprio programa .js.",
+        "O arquivo é criado já com a linha Acesso 1."
+      ],
+      "correta": 3,
+      "explicacao": "appendFileSync cria o arquivo se ele não existir e grava o texto nele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é o conteúdo final do arquivo notas.txt depois de executar o código abaixo?\n\n```\nfs.writeFileSync('notas.txt', '8\\n');\nfs.appendFileSync('notas.txt', '7\\n');\nfs.writeFileSync('notas.txt', '10\\n');\n```",
+      "alternativas": [
+        "Só a linha 10",
+        "As linhas 8, 7 e 10",
+        "As linhas 8 e 7",
+        "As linhas 7 e 10"
+      ],
+      "correta": 0,
+      "explicacao": "As instruções rodam em sequência: o último writeFileSync substitui tudo o que havia antes, sobrando só 10."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A clínica cria consultas.csv gravando a linha de cabeçalho `paciente;data;horario` com writeFileSync, e depois cada consulta com appendFileSync. Por que essa combinação?",
+      "alternativas": [
+        "O cabeçalho começa o arquivo do zero uma vez; as consultas são acrescentadas abaixo dele sem apagá-lo.",
+        "writeFileSync só aceita cabeçalhos e appendFileSync só aceita números.",
+        "O cabeçalho precisa de writeFileSync porque appendFileSync não grava ponto e vírgula.",
+        "Assim o arquivo fica protegido contra alterações de outros programas."
+      ],
+      "correta": 0,
+      "explicacao": "writeFileSync cria (ou zera) o arquivo com o cabeçalho; appendFileSync acrescenta as linhas seguintes sem apagar o que já foi gravado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em `fs.writeFileSync('cardapio.txt', texto, 'utf8')`, qual é o papel do terceiro argumento?",
+      "alternativas": [
+        "Informar a codificação dos caracteres, para os acentos ficarem certos.",
+        "Limitar o arquivo a 8 linhas de texto.",
+        "Indicar a pasta onde o arquivo será gravado.",
+        "Mandar acrescentar o texto no final do arquivo."
+      ],
+      "correta": 0,
+      "explicacao": "O terceiro argumento é a codificação. 'utf8' já é o padrão na gravação, mas deixá-lo explícito deixa o código mais claro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A lanchonete calcula `total = 7.5` e grava `fs.writeFileSync('conta.txt', 'Total: R$ ' + total.toFixed(2))`. O que aparece no arquivo?",
+      "alternativas": [
+        "Total: R$ 7,50",
+        "Total: R$ 7.50",
+        "Total: R$ 7.5",
+        "Total: R$ 8"
+      ],
+      "correta": 1,
+      "explicacao": "toFixed(2) gera um texto com duas casas decimais e usa ponto como separador: '7.50'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Cada linha do log da farmácia é gravada assim: `fs.appendFileSync('log.txt', new Date().toLocaleString('pt-BR') + ' - venda\\n')`. O que a primeira parte acrescenta na linha?",
+      "alternativas": [
+        "O nome do funcionário que fez a venda.",
+        "A data e a hora do momento da venda, no formato brasileiro.",
+        "O número da linha dentro do arquivo.",
+        "O valor total da venda em reais."
+      ],
+      "correta": 1,
+      "explicacao": "new Date() pega o momento atual e toLocaleString('pt-BR') o transforma em texto como 27/11/2026, 14:30:00."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct11",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No programa do mercadinho, o texto 'estoque.csv' aparece escrito em 6 lugares diferentes do código. Qual melhoria segue as boas práticas de código limpo?",
+      "alternativas": [
+        "Trocar o nome do arquivo para e.csv, que é mais curto.",
+        "Guardar o nome numa constante, como ARQUIVO_ESTOQUE, e usá-la nos 6 lugares.",
+        "Colocar um comentário ao lado de cada uma das 6 linhas.",
+        "Copiar o código do arquivo inteiro para cada função."
+      ],
+      "correta": 1,
+      "explicacao": "Uma constante evita repetição: se o nome do arquivo mudar, troca-se em um lugar só e não há risco de erro de digitação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "tabuada-linhas",
+      "enunciado": "O arquivo tabuada.txt não existe. O programa abaixo é executado UMA vez. Quantas linhas o arquivo terá?\n\n```\nfor (let i = 1; i <= 10; i++) {\n  fs.appendFileSync('tabuada.txt', '7 x ' + i + ' = ' + (7 * i) + '\\n');\n}\n```",
+      "alternativas": [
+        "1",
+        "7",
+        "70",
+        "10"
+      ],
+      "correta": 3,
+      "explicacao": "O laço roda 10 vezes (i de 1 a 10) e cada volta acrescenta uma linha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "tabuada-linhas",
+      "enunciado": "O programa da tabuada abaixo foi executado DUAS vezes seguidas (o arquivo tabuada.txt não existia antes da primeira). Quantas linhas o arquivo terá no fim?\n\n```\nfor (let i = 1; i <= 10; i++) {\n  fs.appendFileSync('tabuada.txt', '7 x ' + i + ' = ' + (7 * i) + '\\n');\n}\n```",
+      "alternativas": [
+        "10",
+        "20",
+        "1",
+        "Dá erro na segunda execução"
+      ],
+      "correta": 1,
+      "explicacao": "appendFileSync não apaga o que já existe: a segunda execução acrescenta mais 10 linhas às 10 primeiras."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O programa da cantina deveria gravar todos os produtos, mas o arquivo termina só com Suco. Qual correção resolve?\n\n```\nconst produtos = ['Pastel', 'Coxinha', 'Suco'];\nfor (const p of produtos) {\n  fs.writeFileSync('produtos.txt', p + '\\n');\n}\n```",
+      "alternativas": [
+        "Trocar o for...of por um while com a mesma lógica.",
+        "Colocar readFileSync dentro do laço antes do writeFileSync.",
+        "Gravar o arquivo com a extensão .csv em vez de .txt.",
+        "Acumular os textos numa variável dentro do laço e gravá-la uma vez depois do for."
+      ],
+      "correta": 3,
+      "explicacao": "A cada volta o writeFileSync substitui o conteúdo. Montar o texto todo e gravar uma vez no fim (ou usar appendFileSync) mantém os três produtos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "caminho-barra-invertida",
+      "enunciado": "O programa do Windows tem a linha `fs.writeFileSync('C:\\novo\\teste.txt', 'oi')` escrita com uma barra invertida em cada lugar, e não grava onde deveria. Por quê?",
+      "alternativas": [
+        "O Windows não permite pastas com o nome novo.",
+        "Dentro do texto, \\n vira quebra de linha e \\t vira tabulação; é preciso usar \\\\ ou /.",
+        "writeFileSync não aceita caminhos que começam com C:.",
+        "Faltou o terceiro argumento 'utf8' para o caminho funcionar."
+      ],
+      "correta": 1,
+      "explicacao": "Em strings JavaScript a barra invertida inicia sequências especiais (\\n, \\t). O caminho deve ser 'C:\\\\novo\\\\teste.txt' ou 'C:/novo/teste.txt'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é o conteúdo final do arquivo estoque.csv depois do código abaixo?\n\n```\nlet texto = 'produto;qtd\\n';\nconst itens = [['Pão', 10], ['Leite', 4]];\nfor (const item of itens) {\n  texto += item.join(';') + '\\n';\n}\nfs.writeFileSync('estoque.csv', texto);\n```",
+      "alternativas": [
+        "Duas linhas: Pão;10 e Leite;4",
+        "Uma linha: produto;qtd;Pão;10;Leite;4",
+        "Só a linha Leite;4, a última do laço",
+        "Três linhas: produto;qtd, Pão;10 e Leite;4"
+      ],
+      "correta": 3,
+      "explicacao": "texto começa com o cabeçalho e recebe uma linha a cada volta (+=). Só depois do laço o arquivo é gravado, uma vez, com as três linhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que fica gravado no arquivo após `fs.writeFileSync('conta.txt', 'Total: ' + 2 + 3)`?",
+      "alternativas": [
+        "Total: 5",
+        "Total: 2 + 3",
+        "Total: 23",
+        "Dá erro, pois não se soma texto com número"
+      ],
+      "correta": 2,
+      "explicacao": "A expressão é avaliada da esquerda para a direita: 'Total: ' + 2 vira 'Total: 2' (texto), e + 3 concatena. Para somar, use 'Total: ' + (2 + 3)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A papelaria grava os preços com `preco.toLocaleString('pt-BR')`, gerando linhas como `Caneta;7,5`. Mais tarde, outro programa lê o arquivo e faz `Number(campos[1])`. Qual é o resultado?",
+      "alternativas": [
+        "NaN, porque Number não entende a vírgula como separador decimal.",
+        "7.5, porque Number entende o formato brasileiro.",
+        "75, porque a vírgula é ignorada.",
+        "7, porque Number descarta o que vem depois da vírgula."
+      ],
+      "correta": 0,
+      "explicacao": "Number('7,5') é NaN. Para o programa ler de volta com facilidade, é melhor gravar o número com ponto (7.5) ou trocar a vírgula por ponto antes de converter."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "escrita-assincrona",
+      "enunciado": "Em que ordem as mensagens aparecem no terminal?\n\n```\nconsole.log('início');\nfs.writeFile('a.txt', 'x', () => console.log('gravado'));\nconsole.log('fim');\n```",
+      "alternativas": [
+        "início, fim, gravado",
+        "início, gravado, fim",
+        "gravado, início, fim",
+        "início, fim (gravado nunca aparece)"
+      ],
+      "correta": 0,
+      "explicacao": "writeFile (sem Sync) é assíncrona: o programa não espera e já mostra 'fim'. A função passada só roda quando a gravação termina."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A academia tem dois arquivos: `treino_do_dia.txt`, que é refeito do zero toda manhã, e `historico.txt`, que acumula todos os treinos já feitos.\n\nNa sua resposta:\n1. diga qual função do fs usar para gravar em cada arquivo;\n2. justifique a escolha de cada uma.",
+      "respostasAceitas": [
+        "treino_do_dia.txt: writeFileSync, porque substitui o conteúdo do dia anterior. historico.txt: appendFileSync, porque acrescenta no final sem apagar o que já existe."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) writeFileSync no treino do dia e appendFileSync no histórico; 2) um substitui tudo, o outro acrescenta mantendo o anterior."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O sistema de presença da escola usa a linha `fs.appendFileSync('presenca.txt', nome + '\\n');` para cada aluno que chega.\n\nNa sua resposta:\n1. explique para que serve o + '\\n';\n2. diga o que acontece se o arquivo presenca.txt ainda não existir.",
+      "respostasAceitas": [
+        "O '\\n' é a quebra de linha: cada nome fica numa linha. Se o arquivo não existir, appendFileSync cria o arquivo e grava o nome."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) quebra de linha, um nome por linha (sem ela os nomes ficam colados); 2) o arquivo é criado automaticamente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No jogo de perguntas da feira de ciências, o botão Zerar placar executa `fs.writeFileSync('placar.txt', '');`.\n\nNa sua resposta:\n1. diga o que essa linha faz com o arquivo;\n2. explique por que ela serve para zerar o placar.",
+      "respostasAceitas": [
+        "Ela substitui todo o conteúdo do arquivo por um texto vazio; o arquivo continua existindo, mas sem nenhuma pontuação, então o placar recomeça do zero."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o arquivo fica vazio (não é apagado); 2) writeFileSync substitui tudo, então as pontuações antigas somem."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O programa do restaurante tem a linha `fs.writeFileSync('cardapio.txt', texto, 'utf8');`.\n\nNa sua resposta:\n1. diga o que é cada um dos três argumentos;\n2. diga o que acontece com o conteúdo antigo do arquivo.",
+      "respostasAceitas": [
+        "'cardapio.txt' é o arquivo, texto é o conteúdo a gravar e 'utf8' é a codificação (para os acentos). O conteúdo antigo é substituído pelo novo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) caminho do arquivo, conteúdo, codificação; 2) o conteúdo anterior é apagado/substituído."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na floricultura, o código abaixo grava as flores do dia:\n\n```\nconst flores = ['Rosa', 'Lírio', 'Girassol'];\nfs.writeFileSync('flores.txt', flores.join('\\n'));\n```\n\nNa sua resposta:\n1. explique o que o join('\\n') faz com o vetor;\n2. diga como fica o arquivo flores.txt.",
+      "respostasAceitas": [
+        "O join junta os itens do vetor num único texto, colocando uma quebra de linha entre eles. O arquivo fica com Rosa, Lírio e Girassol, um em cada linha."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) transforma o vetor em um texto separando com quebra de linha; 2) três linhas, uma flor em cada."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O professor explicou que o programa abaixo só mostra Pronto depois que o arquivo já foi gravado:\n\n```\nfs.writeFileSync('lista.txt', texto);\nconsole.log('Pronto');\n```\n\nNa sua resposta:\n1. explique o que significa o Sync em writeFileSync;\n2. diga por que isso garante que Pronto só aparece depois da gravação.",
+      "respostasAceitas": [
+        "Sync quer dizer síncrona: o programa para e espera a gravação terminar. Só então passa para a linha seguinte, que mostra Pronto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) operação síncrona, o programa espera terminar; 2) a próxima linha só roda depois da gravação."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O sistema de vendas do lava-jato começa sempre assim, toda vez que é aberto:\n\n```\nfs.writeFileSync('vendas.csv', 'placa;servico;valor\\n');\n// ... depois, a cada venda:\nfs.appendFileSync('vendas.csv', linha + '\\n');\n```\n\nNa sua resposta:\n1. explique por que o cabeçalho é gravado com writeFileSync e as vendas com appendFileSync;\n2. diga o que acontece com as vendas de ontem quando o programa é aberto de novo hoje.",
+      "respostasAceitas": [
+        "O writeFileSync cria o arquivo começando pelo cabeçalho e o appendFileSync acrescenta cada venda abaixo. Mas, ao abrir o programa de novo, o writeFileSync substitui tudo: as vendas de ontem são perdidas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cabeçalho uma vez no início, vendas acrescentadas sem apagar; 2) a nova execução zera o arquivo e as vendas anteriores somem (seria preciso gravar o cabeçalho só se o arquivo não existir)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "object-object",
+      "enunciado": "O programa grava `fs.writeFileSync('aluno.txt', 'Aluno: ' + aluno);`, sendo aluno o objeto `{ nome: 'Caio', turma: '1A' }`. O arquivo ficou com `Aluno: [object Object]`.\n\nNa sua resposta:\n1. explique por que apareceu [object Object];\n2. diga o que poderia ser usado para gravar os dados do objeto.",
+      "respostasAceitas": [
+        "Ao juntar um objeto com texto, o JavaScript converte o objeto para o texto padrão '[object Object]'. Para gravar os dados, use JSON.stringify(aluno) ou junte os campos (aluno.nome, aluno.turma)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) conversão automática do objeto para texto dá [object Object]; 2) JSON.stringify ou usar as propriedades do objeto."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "pasta-inexistente",
+      "enunciado": "A transportadora executa `fs.writeFileSync('entregas/hoje.txt', texto);` e recebe o erro `ENOENT: no such file or directory`, mesmo sabendo que writeFileSync cria arquivos.\n\nNa sua resposta:\n1. explique a causa do erro;\n2. diga o que fazer para a gravação funcionar.",
+      "respostasAceitas": [
+        "writeFileSync cria o arquivo, mas não a pasta. Como a pasta entregas não existe, dá ENOENT. É preciso criar a pasta antes (pelo explorador ou com fs.mkdirSync) ou gravar numa pasta existente."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a pasta entregas não existe; 2) criar a pasta antes de gravar (manual ou mkdirSync)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno gravou as notas da turma assim: `Ana 8`, `João Pedro 7`, `Bia 10`. Outro aluno gravou assim: `Ana;8`, `João Pedro;7`, `Bia;10`.\n\nNa sua resposta:\n1. diga qual dos formatos é melhor para o programa ler os dados depois;\n2. explique o problema do outro formato usando o exemplo do João Pedro.",
+      "respostasAceitas": [
+        "O formato com ponto e vírgula é melhor: basta usar split(';') e o nome fica separado da nota. Com espaço, 'João Pedro 7' seria quebrado em três partes, porque o nome também tem espaço."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o formato com separador próprio (;); 2) o espaço aparece dentro do nome, então separar por espaço quebra o nome em pedaços."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A sorveteria grava cada venda com `fs.appendFileSync('caixa.txt', 'Venda: R$ ' + valor.toFixed(2) + '\\n');`, sendo valor o número 12.\n\nNa sua resposta:\n1. diga o que o toFixed(2) faz e o texto que fica gravado;\n2. explique por que isso é útil num arquivo de valores em dinheiro.",
+      "respostasAceitas": [
+        "toFixed(2) transforma o número em texto com duas casas decimais: grava 'Venda: R$ 12.00'. Assim todos os valores ficam padronizados com centavos."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) duas casas decimais, grava Venda: R$ 12.00; 2) padroniza os valores em dinheiro (centavos), facilitando ler e conferir."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O sistema do estacionamento grava cada entrada de carro assim:\n\n```\nconst agora = new Date().toLocaleString('pt-BR');\nfs.appendFileSync('entradas.log', agora + ';' + placa + '\\n');\n```\n\nNa sua resposta:\n1. explique por que é útil gravar a data e a hora em cada linha;\n2. explique por que foi usada appendFileSync e não writeFileSync.",
+      "respostasAceitas": [
+        "A data e hora mostram quando cada carro entrou (para cobrar e conferir). appendFileSync acrescenta a nova entrada sem apagar as anteriores; writeFileSync deixaria só a última."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) registrar o momento de cada entrada (histórico, cobrança); 2) append mantém o histórico, write substituiria."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "caminho-barra-invertida",
+      "enunciado": "No Windows, o programa tem a linha `fs.writeFileSync('C:\\novo\\teste.txt', 'oi');`, escrita com UMA barra invertida em cada lugar. O arquivo não é criado na pasta C:\\novo.\n\nNa sua resposta:\n1. explique o que acontece com \\n e \\t dentro desse texto;\n2. diga duas formas de escrever o caminho corretamente.",
+      "respostasAceitas": [
+        "Na string, \\n vira quebra de linha e \\t vira tabulação, então o caminho fica errado. Corrige-se dobrando as barras ('C:\\\\novo\\\\teste.txt') ou usando barras normais ('C:/novo/teste.txt')."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) barra invertida forma caracteres especiais (\\n quebra de linha, \\t tab); 2) usar \\\\ ou /; aceitar também path.join."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "escrita-assincrona",
+      "enunciado": "O programa abaixo mostra no terminal início, fim e só depois gravado:\n\n```\nconsole.log('início');\nfs.writeFile('backup.txt', dados, () => console.log('gravado'));\nconsole.log('fim');\n```\n\nNa sua resposta:\n1. explique por que fim aparece antes de gravado;\n2. compare com o que aconteceria usando writeFileSync.",
+      "respostasAceitas": [
+        "writeFile é assíncrona: o programa não espera a gravação e segue para a próxima linha; a função com 'gravado' só roda quando a gravação termina. Com writeFileSync o programa esperaria, e a ordem seria início, (gravação) e fim."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) operação assíncrona, a função de retorno roda depois; 2) a versão Sync bloqueia até terminar, então a gravação ocorre antes do fim."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A padaria grava os produtos num CSV separado por vírgula. Uma linha ficou assim: `Bolo de cenoura, com cobertura,25.00,3` (nome, preço e quantidade). Quando o programa lê e faz `linha.split(',')`, o preço sai errado.\n\nNa sua resposta:\n1. explique por que o split separou os campos de forma errada;\n2. proponha uma forma de evitar o problema na hora de gravar.",
+      "respostasAceitas": [
+        "O nome do produto contém uma vírgula, que também é o separador: o split gera 4 partes e o preço vai para a posição errada. Pode-se usar outro separador (como ;) que não aparece nos dados, ou tirar/trocar a vírgula do nome antes de gravar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a vírgula do nome é confundida com separador, criando um campo a mais; 2) usar ; como separador, ou limpar o texto (ou colocar entre aspas)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual função do módulo fs lê de uma vez todo o conteúdo de um arquivo?",
+      "alternativas": [
+        "fs.writeFileSync",
+        "fs.appendFileSync",
+        "fs.existsSync",
+        "fs.readFileSync"
+      ],
+      "correta": 3,
+      "explicacao": "read = ler. writeFileSync e appendFileSync gravam; existsSync só diz se o arquivo existe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo aviso.txt contém a frase Feriado na sexta. Depois de `const texto = fs.readFileSync('aviso.txt', 'utf8');`, que tipo de valor fica na variável texto?",
+      "alternativas": [
+        "Um número com a quantidade de letras",
+        "Um texto (string) com a frase",
+        "Um vetor com uma palavra em cada posição",
+        "Um valor booleano true"
+      ],
+      "correta": 1,
+      "explicacao": "Com 'utf8', readFileSync devolve o conteúdo do arquivo como uma string. Para separar em partes é preciso usar split."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num arquivo CSV de alunos, o que costuma ficar na primeira linha?",
+      "alternativas": [
+        "O total de alunos cadastrados no arquivo",
+        "O cabeçalho, com o nome de cada coluna (ex.: nome;idade;turma)",
+        "A data em que o arquivo foi criado",
+        "O nome do programa que criou o arquivo"
+      ],
+      "correta": 1,
+      "explicacao": "A primeira linha do CSV normalmente é o cabeçalho, que diz o que cada campo representa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é o resultado de `'Ana;16;1A'.split(';')`?",
+      "alternativas": [
+        "['Ana', '16', '1A']",
+        "'Ana 16 1A'",
+        "['Ana;16;1A']",
+        "['A', 'n', 'a']"
+      ],
+      "correta": 0,
+      "explicacao": "split(';') quebra o texto em cada ponto e vírgula e devolve um vetor com as partes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de `const campos = 'Rex;cachorro;5'.split(';');`, qual valor está em campos[1]?",
+      "alternativas": [
+        "'Rex'",
+        "'5'",
+        "'cachorro'",
+        "';'"
+      ],
+      "correta": 2,
+      "explicacao": "Os índices começam em 0: campos[0] é 'Rex', campos[1] é 'cachorro' e campos[2] é '5'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O vetor linhas tem as linhas lidas de um arquivo. Qual trecho mostra cada linha no console?",
+      "alternativas": [
+        "if (linhas) { console.log(linha); }",
+        "const linha = linhas; console.log(linha[linha]);",
+        "while (false) { console.log(linhas); }",
+        "for (const linha of linhas) { console.log(linha); }"
+      ],
+      "correta": 3,
+      "explicacao": "for...of percorre o vetor e, em cada volta, linha recebe um elemento. if não repete e while(false) nunca entra."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo produtos.txt tem 5 produtos, um por linha, e NÃO termina com linha vazia. Depois de `const linhas = texto.split('\\n');`, quanto vale linhas.length?",
+      "alternativas": [
+        "1",
+        "5",
+        "4",
+        "6"
+      ],
+      "correta": 1,
+      "explicacao": "Cada linha vira um elemento do vetor: 5 linhas, 5 elementos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que o método trim() faz com uma linha lida do arquivo?",
+      "alternativas": [
+        "Remove espaços e quebras de linha do início e do fim do texto.",
+        "Remove todas as vogais do texto.",
+        "Corta o texto pela metade.",
+        "Transforma o texto em número."
+      ],
+      "correta": 0,
+      "explicacao": "trim() limpa os espaços em branco (inclusive \\r e \\n) das pontas, sem mexer no meio do texto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A loja guarda o nome e o telefone da empresa no arquivo config.txt, e o programa lê esse arquivo ao iniciar. Qual é a vantagem disso?",
+      "alternativas": [
+        "O programa fica impossível de ser copiado.",
+        "O programa deixa de precisar de variáveis.",
+        "Dá para trocar esses dados editando o arquivo, sem mexer no código.",
+        "O arquivo deixa o programa rodar sem o Node.js."
+      ],
+      "correta": 2,
+      "explicacao": "Separar dados de configuração do código permite alterá-los sem editar e testar o programa de novo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual expressão transforma o texto '42', lido de um arquivo, no número 42?",
+      "alternativas": [
+        "String('42')",
+        "'42'.split('')",
+        "'42'.length",
+        "Number('42')"
+      ],
+      "correta": 3,
+      "explicacao": "Number converte texto em número. String mantém texto, split gera vetor e length dá a quantidade de caracteres (2)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo clientes.csv tem cabeçalho. Depois de `const linhas = texto.split('\\n');`, o que fica em linhas[0]?",
+      "alternativas": [
+        "O primeiro cliente cadastrado",
+        "O último cliente cadastrado",
+        "A linha do cabeçalho",
+        "A quantidade de linhas do arquivo"
+      ],
+      "correta": 2,
+      "explicacao": "linhas[0] é a primeira linha do arquivo, que no CSV com cabeçalho é a linha com os nomes das colunas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que acontece com o arquivo quando o programa o lê com readFileSync?",
+      "alternativas": [
+        "Nada: o arquivo continua igual, ele só é lido.",
+        "O arquivo é apagado depois da leitura.",
+        "O conteúdo do arquivo é zerado.",
+        "O arquivo é movido para a pasta do programa."
+      ],
+      "correta": 0,
+      "explicacao": "Ler não altera o arquivo. Só as funções de escrita (writeFileSync, appendFileSync) mudam o conteúdo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Cada linha do arquivo de cobranças da academia termina com pago ou pendente. Qual expressão verifica se a variável linha contém a palavra pago?",
+      "alternativas": [
+        "linha.length('pago')",
+        "linha.split('pago') == true",
+        "linha.includes('pago')",
+        "linha + 'pago'"
+      ],
+      "correta": 2,
+      "explicacao": "includes devolve true se o texto contém o trecho procurado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A lista de convidados da festa da escola tem um nome por linha, sem linha vazia no fim. Depois de `const linhas = texto.split('\\n');`, qual valor mostra quantos convidados há?",
+      "alternativas": [
+        "linhas.length",
+        "texto.length",
+        "linhas[0]",
+        "linhas.length - 1"
+      ],
+      "correta": 0,
+      "explicacao": "linhas.length é a quantidade de linhas (um convidado por linha). texto.length conta caracteres, não nomes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "linha-vazia-final",
+      "enunciado": "O arquivo nomes.txt tem o conteúdo `Ana\\nBia\\nCaio\\n` (termina com uma quebra de linha). Quantos elementos tem o vetor gerado por `texto.split('\\n')`?",
+      "alternativas": [
+        "3",
+        "2",
+        "4",
+        "1"
+      ],
+      "correta": 2,
+      "explicacao": "Depois do último \\n ainda existe um pedaço vazio: ['Ana', 'Bia', 'Caio', '']. São 4 elementos, o último é texto vazio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual linha remove do vetor linhas as linhas vazias (inclusive as que só têm espaços)?",
+      "alternativas": [
+        "linhas.filter(l => l === '')",
+        "linhas.filter(l => l.trim() !== '')",
+        "linhas.map(l => l.trim())",
+        "linhas.join('')"
+      ],
+      "correta": 1,
+      "explicacao": "filter mantém só quem passa no teste; l.trim() !== '' descarta as vazias. Testar l === '' faria o contrário (manteria só as vazias); map não remove nada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo vendas.csv tem cabeçalho na primeira linha. Qual expressão pega só as linhas de dados, sem o cabeçalho?",
+      "alternativas": [
+        "linhas.slice(0)",
+        "linhas[1]",
+        "linhas.length - 1",
+        "linhas.slice(1)"
+      ],
+      "correta": 3,
+      "explicacao": "slice(1) devolve um novo vetor a partir do índice 1. linhas[1] seria só uma linha, e linhas.length - 1 é um número."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct3",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo precos.txt tem as linhas 12.50, 7.50 e 10 (sem linha vazia). Qual valor é mostrado?\n\n```\nconst linhas = fs.readFileSync('precos.txt', 'utf8').split('\\n');\nlet total = 0;\nfor (const l of linhas) {\n  total += Number(l);\n}\nconsole.log(total);\n```",
+      "alternativas": [
+        "12.507.5010",
+        "3",
+        "30",
+        "NaN"
+      ],
+      "correta": 2,
+      "explicacao": "Cada linha é convertida com Number antes de somar: 12.5 + 7.5 + 10 = 30."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct6",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo notas.txt tem as linhas 8, 6 e 10 (sem linha vazia). O programa soma as notas convertidas com Number numa variável soma. Qual expressão calcula a média?",
+      "alternativas": [
+        "soma * linhas.length",
+        "soma / 2",
+        "linhas.length / soma",
+        "soma / linhas.length"
+      ],
+      "correta": 3,
+      "explicacao": "Média = soma das notas dividida pela quantidade de notas: 24 / 3 = 8."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de `const [nome, raca, idade] = 'Mel;gato;3'.split(';');`, qual é o valor de raca?",
+      "alternativas": [
+        "'Mel'",
+        "'gato'",
+        "'3'",
+        "['Mel', 'gato', '3']"
+      ],
+      "correta": 1,
+      "explicacao": "A desestruturação pega os elementos do vetor em ordem: nome = 'Mel', raca = 'gato', idade = '3'."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo mensalidades.txt tem 4 linhas: Ana;pago, Bia;pendente, Caio;pago e Davi;pendente. Qual valor é mostrado?\n\n```\nlet qtd = 0;\nfor (const linha of linhas) {\n  if (linha.includes('pendente')) {\n    qtd++;\n  }\n}\nconsole.log(qtd);\n```",
+      "alternativas": [
+        "4",
+        "1",
+        "0",
+        "2"
+      ],
+      "correta": 3,
+      "explicacao": "Só as linhas de Bia e Davi contêm 'pendente'; qtd é incrementado duas vezes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O sistema transforma cada linha de produtos.csv (ex.: `Arroz;25.90`) assim: `const c = linha.split(';'); const p = { nome: c[0], preco: Number(c[1]) };`. Qual é o tipo de p.preco?",
+      "alternativas": [
+        "string (texto)",
+        "number (número)",
+        "boolean (lógico)",
+        "array (vetor)"
+      ],
+      "correta": 1,
+      "explicacao": "Number(c[1]) converte o texto '25.90' no número 25.9, então p.preco é number e pode ser usado em contas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na busca de clientes do salão de beleza, o atendente digita joão, mas no arquivo está João Silva. Qual teste encontra o cliente ignorando maiúsculas e minúsculas?",
+      "alternativas": [
+        "linha.includes(busca)",
+        "linha === busca",
+        "linha.toUpperCase().includes(busca)",
+        "linha.toLowerCase().includes(busca.toLowerCase())"
+      ],
+      "correta": 3,
+      "explicacao": "Passando os dois textos para minúsculas, 'joão silva' contém 'joão'. Passar só a linha para maiúsculas não resolve, porque a busca continua minúscula."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual expressão pega a ÚLTIMA linha do vetor linhas (supondo que não há linha vazia no fim)?",
+      "alternativas": [
+        "linhas[linhas.length - 1]",
+        "linhas[linhas.length]",
+        "linhas[0]",
+        "linhas[-1]"
+      ],
+      "correta": 0,
+      "explicacao": "Os índices vão de 0 até length - 1. linhas[linhas.length] e linhas[-1] dão undefined em JavaScript."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O cabeçalho do arquivo livros.csv da biblioteca é `codigo;titulo;autor;ano`. Depois de `const c = linha.split(';');`, em qual posição está o ano?",
+      "alternativas": [
+        "c[3]",
+        "c[4]",
+        "c[0]",
+        "c[ano]"
+      ],
+      "correta": 0,
+      "explicacao": "Contando a partir de 0: codigo é 0, titulo 1, autor 2 e ano 3."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No estacionamento, `const achou = linhas.find(l => l.startsWith('ABC1D23'));`. Nenhuma linha começa com essa placa. Qual é o valor de achou?",
+      "alternativas": [
+        "undefined",
+        "0",
+        "''",
+        "false"
+      ],
+      "correta": 0,
+      "explicacao": "find devolve o primeiro elemento que passa no teste; se nenhum passa, devolve undefined."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo turma.csv tem uma linha de cabeçalho e uma linha por aluno, sem linha vazia no fim. linhas.length deu 31. Quantos alunos há no arquivo?",
+      "alternativas": [
+        "31",
+        "32",
+        "30",
+        "29"
+      ],
+      "correta": 2,
+      "explicacao": "Das 31 linhas, uma é o cabeçalho: sobram 30 alunos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma linha do arquivo de estoque é `  Caneta azul  ` (com espaços nas pontas). O programa compara `linha === 'Caneta azul'` e dá false. O que resolve?",
+      "alternativas": [
+        "Comparar linha == 'Caneta azul'",
+        "Comparar linha.length === 'Caneta azul'",
+        "Comparar linha.trim() === 'Caneta azul'",
+        "Comparar linha.split(' ') === 'Caneta azul'"
+      ],
+      "correta": 2,
+      "explicacao": "Os espaços nas pontas fazem os textos serem diferentes. trim() remove esses espaços; == não ignora espaços."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "quebra-linha-windows",
+      "enunciado": "Um arquivo criado no Bloco de Notas do Windows tem as linhas Ana e Bia. Após `split('\\n')`, o teste `linhas[0] === 'Ana'` dá false. Qual é a causa mais provável?",
+      "alternativas": [
+        "O Windows grava os nomes de trás para frente.",
+        "O split('\\n') não funciona em arquivos do Windows.",
+        "O operador === não compara textos lidos de arquivo.",
+        "As linhas terminam com \\r\\n no Windows; sobra um \\r no fim de cada linha."
+      ],
+      "correta": 3,
+      "explicacao": "No Windows a quebra de linha é \\r\\n. Separando por \\n, fica 'Ana\\r'. Resolve com trim() ou split(/\\r?\\n/)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "comparar-texto-numero",
+      "enunciado": "O programa procura a maior idade no arquivo, mas mostra 9 em vez de 10. O arquivo tem as linhas 9 e 10. Por quê?\n\n```\nlet maior = linhas[0];\nfor (const l of linhas) {\n  if (l > maior) maior = l;\n}\nconsole.log(maior);\n```",
+      "alternativas": [
+        "O laço for...of pula sempre a última linha.",
+        "O operador > só funciona com números inteiros pares.",
+        "linhas[0] deveria ser linhas[1] para começar.",
+        "As idades são textos; na comparação de textos, '9' é maior que '10'."
+      ],
+      "correta": 3,
+      "explicacao": "Textos são comparados caractere a caractere: '9' > '1', então '9' > '10'. É preciso converter com Number antes de comparar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct10",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "linha-vazia-final",
+      "enunciado": "O arquivo notas.txt tem o conteúdo `8\\n6\\n10\\n` (termina com quebra de linha). Qual valor o programa mostra?\n\n```\nconst linhas = fs.readFileSync('notas.txt', 'utf8').split('\\n');\nlet soma = 0;\nfor (const l of linhas) soma += Number(l);\nconsole.log(soma / linhas.length);\n```",
+      "alternativas": [
+        "6",
+        "8",
+        "NaN",
+        "24"
+      ],
+      "correta": 0,
+      "explicacao": "O split gera ['8', '6', '10', '']. Number('') é 0, então a soma é 24, mas a divisão é por 4: 24 / 4 = 6. As linhas vazias devem ser removidas antes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma linha do arquivo do mercadinho tem o campo `12 unidades`. Qual expressão devolve o número 12?",
+      "alternativas": [
+        "Number('12 unidades')",
+        "'12 unidades' * 1",
+        "Number('12 unidades'.length)",
+        "parseInt('12 unidades')"
+      ],
+      "correta": 3,
+      "explicacao": "parseInt lê os dígitos do começo e para no primeiro caractere que não é número. Number e * 1 dão NaN; length daria 11."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct3",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo do hortifruti tem as linhas Banana;5.50, Uva;12.90 e Maçã;8.00. Qual é a saída?\n\n```\nlet caro = '';\nlet maior = 0;\nfor (const l of linhas) {\n  const [nome, preco] = l.split(';');\n  if (Number(preco) > maior) {\n    maior = Number(preco);\n    caro = nome;\n  }\n}\nconsole.log(caro, maior);\n```",
+      "alternativas": [
+        "Maçã 8",
+        "Banana 5.5",
+        "Uva 12.90",
+        "Uva 12.9"
+      ],
+      "correta": 3,
+      "explicacao": "maior guarda o maior preço visto até agora; Uva (12.9) é o maior. Como é um número, aparece 12.9, sem o zero final."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo da pizzaria é separado por ponto e vírgula e os preços usam vírgula decimal, como `Calabresa;42,50`. Number(campos[1]) dá NaN. Qual correção funciona?",
+      "alternativas": [
+        "Number(campos[1].replace(',', '.'))",
+        "Number(campos[1].split(','))",
+        "parseInt(campos[1])",
+        "Number(campos[1].trim())"
+      ],
+      "correta": 0,
+      "explicacao": "Number só entende ponto decimal; trocar a vírgula por ponto gera '42.50' e o número 42.5. parseInt daria 42, perdendo os centavos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct1",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo f.txt não existia. Qual é a saída do código abaixo?\n\n```\nfs.writeFileSync('f.txt', 'A\\n');\nconst t = fs.readFileSync('f.txt', 'utf8');\nfs.appendFileSync('f.txt', 'B\\n');\nconsole.log(t);\n```",
+      "alternativas": [
+        "A e B, porque t acompanha o arquivo",
+        "Só A, porque o texto foi lido antes de B ser acrescentado",
+        "Só B, porque o append substitui o conteúdo",
+        "Nada, porque o arquivo foi alterado depois"
+      ],
+      "correta": 1,
+      "explicacao": "readFileSync copia o conteúdo daquele momento para a variável t. Alterar o arquivo depois não muda t."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct3",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O sistema de senhas da clínica mostra a fila com o código abaixo:\n\n```\nconst linhas = fs.readFileSync('fila.txt', 'utf8').split('\\n');\nfor (let i = 0; i < linhas.length; i++) {\n  console.log((i + 1) + 'º: ' + linhas[i]);\n}\n```\n\nNa sua resposta:\n1. diga o que o programa mostra na tela;\n2. explique por que foi usado i + 1 e não apenas i.",
+      "respostasAceitas": [
+        "Mostra cada nome da fila numerado: 1º: nome, 2º: nome… Usa i + 1 porque os índices começam em 0, e a fila deve começar no 1º."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) lista os nomes da fila numerados, um por linha; 2) índice começa em 0, a numeração para pessoas começa em 1."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A biblioteca tem um programa que só consulta o arquivo de livros (readFileSync) e outro que cadastra livros novos (appendFileSync).\n\nNa sua resposta:\n1. explique a diferença entre ler e gravar um arquivo;\n2. diga qual dos dois programas pode mudar o conteúdo do arquivo.",
+      "respostasAceitas": [
+        "Ler só copia o conteúdo do arquivo para o programa, sem alterá-lo; gravar muda o arquivo. Só o programa de cadastro (appendFileSync) muda o arquivo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) leitura traz os dados sem modificar, gravação altera o arquivo; 2) o de cadastro."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O arquivo alunos.csv da escola começa com a linha `nome;idade;turma` e depois vem uma linha por aluno, como `Ana;16;1A`.\n\nNa sua resposta:\n1. diga o que é a primeira linha e para que ela serve;\n2. diga o que fica em cada campo da linha Ana;16;1A.",
+      "respostasAceitas": [
+        "A primeira linha é o cabeçalho: diz o nome de cada coluna. Em Ana;16;1A, Ana é o nome, 16 a idade e 1A a turma."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cabeçalho com os nomes das colunas, para saber o que é cada campo; 2) nome, idade e turma."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O programa da loja lê cada linha do arquivo e usa `linha.trim()` antes de comparar com o que o usuário digitou.\n\nNa sua resposta:\n1. explique o que o trim() faz;\n2. diga por que isso evita erros na comparação.",
+      "respostasAceitas": [
+        "trim() remove os espaços e quebras de linha do começo e do fim do texto. Assim, 'Caneta ' com espaço sobrando fica igual a 'Caneta' e a comparação dá certo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) tira espaços/quebras das pontas; 2) espaços invisíveis fariam os textos serem diferentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O arquivo convidados.txt tem um nome por linha. Depois de lê-lo em texto e fazer `const linhas = texto.split('\\n');`, um aluno usou `texto.length` para contar os convidados e outro usou `linhas.length`.\n\nNa sua resposta:\n1. diga o que cada um desses valores conta;\n2. diga qual deles mostra o número de convidados.",
+      "respostasAceitas": [
+        "texto.length conta os caracteres do arquivo (letras, espaços, quebras); linhas.length conta os elementos do vetor, ou seja, as linhas. O número de convidados é linhas.length."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) caracteres x linhas; 2) linhas.length (desconsiderando eventual linha vazia no fim)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No pet shop, a linha `Thor;cachorro;4;vacinado` foi separada com `const campos = linha.split(';');`.\n\nNa sua resposta:\n1. diga o que fica em campos[0] e em campos[2];\n2. explique por que o primeiro campo é o de índice 0.",
+      "respostasAceitas": [
+        "campos[0] é 'Thor' e campos[2] é '4' (um texto). Em JavaScript os índices dos vetores começam em 0, então a primeira posição é 0."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 'Thor' e '4'; 2) a contagem de índices começa em zero."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "linha-vazia-final",
+      "enunciado": "O arquivo pedidos.txt termina com uma quebra de linha. Ao fazer `texto.split('\\n')`, o vetor ficou com um elemento a mais, vazio, no final.\n\nNa sua resposta:\n1. explique por que aparece esse elemento vazio;\n2. diga uma forma de tratar isso antes de processar as linhas.",
+      "respostasAceitas": [
+        "Depois da última quebra de linha não há texto, e o split cria um elemento vazio para esse pedaço. Pode-se removê-lo com filter (linhas não vazias) ou usar trim() no texto antes do split."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a quebra final gera um pedaço vazio; 2) filter(l => l.trim() !== ''), trim no texto, ou ignorar linhas vazias no laço."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O programa da academia lê alunos.csv (que tem cabeçalho) e faz `const dados = linhas.slice(1);` antes de calcular a média de idade.\n\nNa sua resposta:\n1. explique o que slice(1) faz;\n2. diga o que daria errado na média se o cabeçalho não fosse retirado.",
+      "respostasAceitas": [
+        "slice(1) cria um vetor com as linhas a partir da segunda, deixando o cabeçalho de fora. Se ele ficasse, o campo idade do cabeçalho ('idade') viraria NaN ao converter, e a média sairia NaN (além de contar uma linha a mais)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) pula a primeira linha (cabeçalho); 2) converter o texto do cabeçalho dá NaN e estraga a conta / conta uma linha a mais."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O programa da escola de idiomas conta os alunos com mensalidade pendente:\n\n```\nlet qtd = 0;\nfor (const linha of linhas) {\n  if (linha.includes('pendente')) qtd++;\n}\n```\n\nNa sua resposta:\n1. explique o que o laço e o if fazem juntos;\n2. diga o que qtd guarda no final.",
+      "respostasAceitas": [
+        "O laço passa por todas as linhas e o if testa se a linha contém 'pendente'; quando contém, soma 1 em qtd. No final, qtd tem quantos alunos estão pendentes."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) percorre cada linha e testa a condição, contando; 2) a quantidade de linhas com pendente."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O sistema do hotel transforma cada linha de quartos.csv (ex.: `101;casal;250`) em um objeto:\n\n```\nconst quartos = linhas.map(l => {\n  const c = l.split(';');\n  return { numero: c[0], tipo: c[1], diaria: Number(c[2]) };\n});\n```\n\nNa sua resposta:\n1. explique o que esse código produz;\n2. diga uma vantagem de usar quarto.diaria em vez de c[2] no resto do programa.",
+      "respostasAceitas": [
+        "Produz um vetor de objetos, um por quarto, com número, tipo e diária (já como número). Usar quarto.diaria deixa claro o que é o dado e já está convertido para contas; c[2] não diz o que é."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) vetor de objetos a partir das linhas; 2) nomes claros (legibilidade) e valor já convertido em número."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na busca de produtos da papelaria, o usuário digitou CADERNO e o arquivo tem caderno espiral. O programa usa:\n\n```\nif (linha.toLowerCase().includes(busca.toLowerCase())) {\n  console.log(linha);\n}\n```\n\nNa sua resposta:\n1. explique por que as duas partes são passadas para minúsculas;\n2. diga o que aconteceria sem o toLowerCase.",
+      "respostasAceitas": [
+        "Passando os dois textos para minúsculas, a comparação não depende de como o usuário digitou: 'caderno espiral' contém 'caderno'. Sem isso, includes diferencia maiúsculas de minúsculas e não encontraria o produto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ignorar a diferença de maiúsculas/minúsculas; 2) a busca falharia porque 'CADERNO' ≠ 'caderno'."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A oficina quer guardar, para cada cliente, nome, telefone, placa e modelo do carro. Um aluno sugeriu um arquivo .txt com só o nome em cada linha; outro sugeriu um CSV com cabeçalho `nome;telefone;placa;modelo`.\n\nNa sua resposta:\n1. diga qual formato atende melhor a oficina;\n2. explique como o programa recuperaria a placa de um cliente nesse formato.",
+      "respostasAceitas": [
+        "O CSV, porque guarda vários dados por cliente, cada um numa coluna. O programa lê a linha, faz split(';') e pega a posição da placa (índice 2)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) CSV (vários campos por registro); 2) ler a linha, separar com split(';') e usar o campo da placa (c[2])."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "quebra-linha-windows",
+      "enunciado": "O arquivo foi criado no Bloco de Notas do Windows. O programa faz `split('\\n')` e depois `if (linha === 'Ana')`, mas a condição nunca é verdadeira, embora Ana esteja no arquivo.\n\nNa sua resposta:\n1. explique o que sobra no fim de cada linha e por quê;\n2. diga uma forma de corrigir.",
+      "respostasAceitas": [
+        "No Windows, a quebra de linha é \\r\\n. Separando só por \\n, cada linha fica com um \\r invisível no fim ('Ana\\r'), que é diferente de 'Ana'. Corrige-se com linha.trim() ou separando com split(/\\r?\\n/)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sobra o \\r da quebra de linha do Windows; 2) trim() ou split(/\\r?\\n/)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "comparar-texto-numero",
+      "enunciado": "O arquivo idades.txt tem as linhas 9, 15 e 10. O programa compara as linhas direto com `>` para achar a maior idade e mostra 9.\n\nNa sua resposta:\n1. explique por que 9 foi considerado o maior;\n2. diga o que mudar para o resultado ser 15.",
+      "respostasAceitas": [
+        "As linhas são textos, e textos são comparados caractere a caractere: '9' vem depois de '1', então '9' > '15' e '9' > '10'. É preciso converter cada linha com Number antes de comparar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) comparação de strings é alfabética, pelo primeiro caractere; 2) converter para número (Number/parseInt)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O programa soma a coluna valor de caixa.csv (que tem cabeçalho `data;valor`) percorrendo TODAS as linhas com `total += Number(c[1])`. O resultado mostrado é NaN.\n\nNa sua resposta:\n1. explique de onde vem o NaN;\n2. explique por que um único NaN estraga o total inteiro e como evitar.",
+      "respostasAceitas": [
+        "No cabeçalho, c[1] é o texto 'valor', e Number('valor') é NaN. Qualquer conta com NaN dá NaN, então o total inteiro vira NaN. Evita-se pulando o cabeçalho (slice(1)) e ignorando linhas vazias ou inválidas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) converter o texto do cabeçalho dá NaN; 2) NaN contamina a soma; pular o cabeçalho/validar com isNaN."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo pets.json foi lido como texto. Qual função transforma esse texto em objetos e vetores do JavaScript?",
+      "alternativas": [
+        "JSON.stringify",
+        "String",
+        "split",
+        "JSON.parse"
+      ],
+      "correta": 3,
+      "explicacao": "JSON.parse converte o texto JSON em valores do JavaScript. JSON.stringify faz o caminho contrário."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O sistema da escola tem o objeto `aluno` e quer gravá-lo em aluno.json. Qual função transforma o objeto em texto JSON antes do writeFileSync?",
+      "alternativas": [
+        "JSON.parse(aluno)",
+        "aluno.split(';')",
+        "JSON.stringify(aluno)",
+        "Number(aluno)"
+      ],
+      "correta": 2,
+      "explicacao": "writeFileSync grava texto; JSON.stringify gera o texto JSON a partir do objeto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes textos é um JSON válido?",
+      "alternativas": [
+        "{'nome': 'Ana', 'idade': 16}",
+        "{\"nome\": \"Ana\", \"idade\": 16}",
+        "{nome: \"Ana\", idade: 16}",
+        "{\"nome\" = \"Ana\", \"idade\" = 16}"
+      ],
+      "correta": 1,
+      "explicacao": "Em JSON, chaves e textos usam aspas duplas e os pares usam dois-pontos. Aspas simples e chaves sem aspas não são aceitas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual extensão de arquivo é usada para guardar dados no formato JSON?",
+      "alternativas": [
+        ".js",
+        ".csv",
+        ".exe",
+        ".json"
+      ],
+      "correta": 3,
+      "explicacao": ".json é a extensão padrão. .js é código JavaScript, .csv é texto separado por vírgula ou ponto e vírgula."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que devolve `fs.existsSync('clientes.json')`?",
+      "alternativas": [
+        "O conteúdo do arquivo clientes.json",
+        "O número de linhas do arquivo",
+        "true se o arquivo existe e false se não existe",
+        "Um arquivo novo e vazio chamado clientes.json"
+      ],
+      "correta": 2,
+      "explicacao": "existsSync só verifica a existência e devolve um valor lógico, ótimo para usar num if."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao ler um arquivo, o programa mostrou o erro `ENOENT: no such file or directory`. O que esse erro indica?",
+      "alternativas": [
+        "Que o arquivo está com acentos errados.",
+        "Que o arquivo é grande demais para ser lido.",
+        "Que o arquivo (ou a pasta) do caminho não foi encontrado.",
+        "Que o computador está sem internet."
+      ],
+      "correta": 2,
+      "explicacao": "ENOENT significa que não existe arquivo ou pasta com aquele caminho: nome errado, pasta errada ou arquivo ainda não criado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve colocar o readFileSync dentro de um bloco try/catch?",
+      "alternativas": [
+        "Para tratar o erro (ex.: arquivo inexistente) sem o programa parar de repente.",
+        "Para o arquivo ser lido duas vezes mais rápido.",
+        "Para criar o arquivo automaticamente se ele faltar.",
+        "Para esconder o conteúdo do arquivo do usuário."
+      ],
+      "correta": 0,
+      "explicacao": "Se o readFileSync der erro, a execução vai para o catch, onde o programa pode mostrar uma mensagem e seguir. Ele não cria o arquivo sozinho."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct10",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo pets.json contém `[{\"nome\": \"Rex\"}, {\"nome\": \"Mel\"}]`. Após `const pets = JSON.parse(texto);`, quanto vale pets.length?",
+      "alternativas": [
+        "1",
+        "4",
+        "2",
+        "29"
+      ],
+      "correta": 2,
+      "explicacao": "O JSON é um vetor com dois objetos, então pets.length é 2."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo filme.json contém `{\"titulo\": \"A Viagem\", \"sala\": 3}`. Após `const filme = JSON.parse(texto);`, como se obtém o título?",
+      "alternativas": [
+        "filme[0]",
+        "texto.titulo",
+        "filme.titulo",
+        "filme.split('titulo')"
+      ],
+      "correta": 2,
+      "explicacao": "Depois do parse, filme é um objeto e a propriedade é acessada com ponto. texto continua sendo só um texto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual linha carrega o módulo do Node.js que ajuda a montar caminhos de arquivos?",
+      "alternativas": [
+        "const path = require('fs').path();",
+        "const path = new Path();",
+        "const path = require('path');",
+        "const path = './';"
+      ],
+      "correta": 2,
+      "explicacao": "O módulo path vem com o Node.js e é carregado com require('path')."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz `path.join('dados', 'clientes.txt')`?",
+      "alternativas": [
+        "Junta o conteúdo de dois arquivos em um só.",
+        "Cria a pasta dados e o arquivo clientes.txt.",
+        "Junta as partes num caminho, usando a barra certa do sistema.",
+        "Lê o arquivo clientes.txt que está em dados."
+      ],
+      "correta": 2,
+      "explicacao": "path.join só monta o texto do caminho (dados/clientes.txt ou dados\\clientes.txt no Windows); não cria nem lê nada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No caminho `./notas.txt`, o que significa o `./`?",
+      "alternativas": [
+        "A pasta acima da atual",
+        "A raiz do disco C:",
+        "A pasta atual",
+        "A pasta do Node.js"
+      ],
+      "correta": 2,
+      "explicacao": "./ indica a pasta atual. A pasta acima é indicada por ../."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O programa está na pasta projeto/src e o arquivo está em projeto/dados. Qual caminho relativo, a partir de src, chega ao arquivo vendas.csv?",
+      "alternativas": [
+        "./dados/vendas.csv",
+        "dados/../vendas.csv",
+        "../dados/vendas.csv",
+        "/src/dados/vendas.csv"
+      ],
+      "correta": 2,
+      "explicacao": "../ sobe de src para projeto; depois entra em dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em `JSON.stringify(dados, null, 2)`, para que serve o número 2?",
+      "alternativas": [
+        "Para gravar só os 2 primeiros itens.",
+        "Para gravar o JSON indentado com 2 espaços, fácil de ler.",
+        "Para gravar o arquivo 2 vezes.",
+        "Para arredondar os números com 2 casas."
+      ],
+      "correta": 1,
+      "explicacao": "O terceiro argumento define a indentação. Sem ele, o JSON sai todo numa linha só."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O sistema da biblioteca vai cadastrar um livro novo em livros.json (um vetor). Qual é a ordem correta dos passos?",
+      "alternativas": [
+        "JSON.parse, ler o arquivo, gravar, push do livro, JSON.stringify",
+        "push do livro, gravar, ler o arquivo, JSON.stringify, JSON.parse",
+        "Ler o arquivo, push do livro, gravar, JSON.parse, JSON.stringify",
+        "Ler o arquivo, JSON.parse, push do livro, JSON.stringify, gravar"
+      ],
+      "correta": 3,
+      "explicacao": "Primeiro se lê o texto e converte em vetor; depois se altera o vetor; por fim se converte de volta em texto e se grava."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo produto.json tem `{\"nome\": \"Arroz\", \"preco\": 25.9}`. Após o JSON.parse, qual é o tipo de produto.preco?",
+      "alternativas": [
+        "string (texto), precisa de Number",
+        "number (número), sem precisar converter",
+        "boolean (lógico)",
+        "undefined, pois JSON não guarda números"
+      ],
+      "correta": 1,
+      "explicacao": "No JSON, números sem aspas voltam como number. É uma vantagem sobre o CSV, em que todo campo vem como texto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "json-vazio",
+      "enunciado": "O arquivo pedidos.json existe, mas está vazio (0 caracteres). O que acontece em `JSON.parse(fs.readFileSync('pedidos.json', 'utf8'))`?",
+      "alternativas": [
+        "Devolve um vetor vazio [].",
+        "Devolve um objeto vazio {}.",
+        "Devolve o número 0.",
+        "Dá erro (SyntaxError), porque texto vazio não é um JSON válido."
+      ],
+      "correta": 3,
+      "explicacao": "JSON.parse('') gera erro de sintaxe. Por isso o arquivo deve começar com [] ou o erro deve ser tratado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo config.json foi editado à mão e ficou `{'loja': 'Pet Feliz'}`. O que acontece no JSON.parse?",
+      "alternativas": [
+        "Funciona normalmente, pois JavaScript aceita aspas simples.",
+        "Funciona, mas o nome da loja vem vazio.",
+        "Dá erro, porque JSON exige aspas duplas.",
+        "As aspas simples são trocadas por duplas automaticamente."
+      ],
+      "correta": 2,
+      "explicacao": "Em código JavaScript as aspas simples valem, mas no formato JSON só aspas duplas são aceitas; o parse gera SyntaxError."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No catch abaixo, para que serve o teste `err.code === 'ENOENT'`?\n\n```\ntry {\n  texto = fs.readFileSync('agenda.json', 'utf8');\n} catch (err) {\n  if (err.code === 'ENOENT') texto = '[]';\n}\n```",
+      "alternativas": [
+        "Para apagar o arquivo agenda.json quando houver erro.",
+        "Para converter o texto lido em número.",
+        "Para tratar só o caso de arquivo inexistente, começando com uma agenda vazia.",
+        "Para verificar se o arquivo tem acentos."
+      ],
+      "correta": 2,
+      "explicacao": "err.code identifica o tipo de erro. ENOENT = arquivo não encontrado; nesse caso o programa começa com uma lista vazia."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "criar-json-vazio",
+      "enunciado": "Ao iniciar, o sistema do pet shop executa a linha abaixo. Por que gravar '[]'?\n\n```\nif (!fs.existsSync('pets.json')) fs.writeFileSync('pets.json', '[]');\n```",
+      "alternativas": [
+        "Porque writeFileSync não aceita texto vazio.",
+        "Para apagar os pets cadastrados toda vez que o programa abre.",
+        "Para o arquivo começar como um vetor JSON vazio, que o JSON.parse consegue ler.",
+        "Porque [] desliga a verificação de erros do JSON."
+      ],
+      "correta": 2,
+      "explicacao": "Só grava se o arquivo não existe. '[]' é um JSON válido (vetor vazio), então a leitura seguinte funciona e o push pode ser feito."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "caminho-dirname",
+      "enunciado": "Num programa Node.js (CommonJS), o que guarda a variável __dirname?",
+      "alternativas": [
+        "O caminho da pasta de onde o terminal executou o node",
+        "O nome do arquivo .js que está rodando",
+        "O caminho da pasta onde está o arquivo .js que está rodando",
+        "O caminho da pasta de instalação do Node.js"
+      ],
+      "correta": 2,
+      "explicacao": "__dirname é a pasta do próprio arquivo de código, que não muda conforme a pasta do terminal."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "caminho-dirname",
+      "enunciado": "Qual é a vantagem de ler com `fs.readFileSync(path.join(__dirname, 'dados.json'), 'utf8')` em vez de só `'dados.json'`?",
+      "alternativas": [
+        "Encontra o arquivo ao lado do .js, mesmo que o node seja executado de outra pasta.",
+        "Lê o arquivo mais rápido porque usa duas funções.",
+        "Cria o arquivo dados.json se ele não existir.",
+        "Converte o conteúdo em objeto sem precisar de JSON.parse."
+      ],
+      "correta": 0,
+      "explicacao": "Um caminho só com o nome é relativo à pasta do terminal; com __dirname o caminho fica preso à pasta do programa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "codificacao-trocada",
+      "enunciado": "O programa leu o arquivo de clientes e os nomes apareceram como `JoÃ£o` e `ConceiÃ§Ã£o`. Qual é a causa mais provável?",
+      "alternativas": [
+        "Os nomes foram digitados errado pelo atendente.",
+        "O arquivo tem linhas demais para o programa.",
+        "O split separou os nomes no lugar errado.",
+        "O arquivo foi gravado em uma codificação e lido em outra (ex.: UTF-8 lido como latin1)."
+      ],
+      "correta": 3,
+      "explicacao": "Quando a codificação da leitura é diferente da gravação, os acentos viram símbolos estranhos. Use a mesma codificação (utf8) nos dois lados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct10",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo livros.json tem 3 livros, e só 1 tem `\"disponivel\": true`. Quantos itens tem `livros.filter(l => l.disponivel)`?",
+      "alternativas": [
+        "3",
+        "2",
+        "0",
+        "1"
+      ],
+      "correta": 3,
+      "explicacao": "filter mantém só os livros em que disponivel é true."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Depois de `const texto = JSON.stringify(['Ana', 'Bia']);`, qual é o valor de `typeof texto`?",
+      "alternativas": [
+        "'string'",
+        "'object'",
+        "'array'",
+        "'number'"
+      ],
+      "correta": 0,
+      "explicacao": "JSON.stringify sempre devolve um texto, no caso '[\"Ana\",\"Bia\"]'. Por isso pode ser gravado com writeFileSync."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é o resultado de `path.extname('fotos/cachorro.png')`?",
+      "alternativas": [
+        "'png'",
+        "'.png'",
+        "'cachorro'",
+        "'fotos'"
+      ],
+      "correta": 1,
+      "explicacao": "extname devolve a extensão do arquivo, incluindo o ponto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é o resultado de `path.basename('C:/loja/notas/janeiro.txt')`?",
+      "alternativas": [
+        "'C:/loja/notas'",
+        "'notas'",
+        "'.txt'",
+        "'janeiro.txt'"
+      ],
+      "correta": 3,
+      "explicacao": "basename devolve só o nome do arquivo (a última parte do caminho)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo cardapio.txt NÃO existe. O que aparece no terminal?\n\n```\ntry {\n  const t = fs.readFileSync('cardapio.txt', 'utf8');\n  console.log(t);\n} catch (err) {\n  console.log('Cardápio não encontrado');\n}\nconsole.log('Fim');\n```",
+      "alternativas": [
+        "Cardápio não encontrado e depois Fim",
+        "Só o erro ENOENT, e o programa para",
+        "Só Fim",
+        "Uma linha vazia e depois Fim"
+      ],
+      "correta": 0,
+      "explicacao": "O erro faz a execução pular para o catch, que mostra a mensagem; depois o programa continua normalmente e mostra Fim."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo alunos.json ficou assim depois de uma edição à mão: `[{\"nome\": \"Ana\"}, {\"nome\": \"Bia\"},]`. O que acontece no JSON.parse?",
+      "alternativas": [
+        "Dá erro de sintaxe por causa da vírgula depois do último item.",
+        "Funciona e devolve um vetor com 3 itens, o último vazio.",
+        "Funciona e a vírgula final é ignorada.",
+        "Funciona, mas só o primeiro aluno é lido."
+      ],
+      "correta": 0,
+      "explicacao": "No JSON não pode haver vírgula sobrando depois do último item (mesmo que o JavaScript aceite isso em código)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "data-json",
+      "enunciado": "O sistema grava `{ cliente: 'Ana', data: new Date() }` com JSON.stringify. Ao ler de volta com JSON.parse, `reserva.data.getFullYear()` dá erro. Por quê?",
+      "alternativas": [
+        "JSON não consegue gravar datas, então data volta undefined.",
+        "getFullYear só funciona com datas do ano atual.",
+        "JSON.parse transforma a data em número de milissegundos.",
+        "A data foi gravada como texto e volta como string, não como Date."
+      ],
+      "correta": 3,
+      "explicacao": "JSON não tem tipo data: stringify grava algo como \"2026-11-27T13:00:00.000Z\" e parse devolve esse texto. É preciso fazer new Date(reserva.data)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O programa abaixo roda sem erro, mas o novo produto não aparece no arquivo. Por quê?\n\n```\nconst lista = JSON.parse(fs.readFileSync('produtos.json', 'utf8'));\nlista.push({ nome: 'Suco', preco: 6 });\nconsole.log(lista.length);\n```",
+      "alternativas": [
+        "push não funciona em vetores vindos de JSON.parse.",
+        "O arquivo precisa ser lido sem 'utf8' para aceitar push.",
+        "console.log desfaz as alterações feitas no vetor.",
+        "O vetor foi alterado só na memória; faltou gravar com writeFileSync(JSON.stringify(lista))."
+      ],
+      "correta": 3,
+      "explicacao": "lista é uma cópia em memória do conteúdo do arquivo. O arquivo só muda quando o texto atualizado é gravado de novo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "append-json-invalido",
+      "enunciado": "A cada venda, a sorveteria faz `fs.appendFileSync('vendas.json', JSON.stringify(venda))`. Depois de duas vendas, o JSON.parse do arquivo dá erro. Por quê?",
+      "alternativas": [
+        "appendFileSync não grava aspas duplas.",
+        "JSON.stringify só pode ser usado uma vez por arquivo.",
+        "O arquivo fica com dois objetos colados ({...}{...}), que não formam um JSON válido.",
+        "JSON.parse só lê arquivos com uma linha."
+      ],
+      "correta": 2,
+      "explicacao": "Um arquivo JSON precisa ser um único valor (por exemplo, um vetor). O certo é ler o vetor, dar push e regravar tudo com writeFileSync."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "relancar-erro",
+      "enunciado": "O arquivo tarefas.json EXISTE, mas tem conteúdo inválido. O que acontece com o código abaixo?\n\n```\nlet tarefas;\ntry {\n  tarefas = JSON.parse(fs.readFileSync('tarefas.json', 'utf8'));\n} catch (err) {\n  if (err.code === 'ENOENT') tarefas = [];\n  else throw err;\n}\n```",
+      "alternativas": [
+        "O erro de sintaxe não é ENOENT, então é lançado de novo e o programa para.",
+        "tarefas recebe [] porque houve um erro.",
+        "tarefas fica com o texto inválido do arquivo.",
+        "O arquivo é apagado e recriado vazio."
+      ],
+      "correta": 0,
+      "explicacao": "O SyntaxError do JSON.parse não tem code 'ENOENT'; cai no else e o throw repassa o erro, encerrando o programa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo app.js lê `fs.readFileSync('dados.json', 'utf8')` e os dois ficam na pasta projeto. Rodando `node app.js` dentro de projeto funciona, mas rodando `node projeto/app.js` da pasta acima dá ENOENT. Por quê?",
+      "alternativas": [
+        "O caminho relativo é procurado a partir da pasta do terminal, que agora é a de cima.",
+        "O Node só executa arquivos que estão na pasta atual.",
+        "O arquivo dados.json é bloqueado quando o node roda de outra pasta.",
+        "A barra em projeto/app.js deveria ser invertida."
+      ],
+      "correta": 0,
+      "explicacao": "'dados.json' é relativo à pasta de onde o node foi executado. Com path.join(__dirname, 'dados.json') o problema some."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo estoque.json contém `{\"qtd\": \"5\"}`. Qual é o resultado de `JSON.parse(texto).qtd + 1`?",
+      "alternativas": [
+        "6",
+        "'51'",
+        "NaN",
+        "Dá erro no JSON.parse"
+      ],
+      "correta": 1,
+      "explicacao": "O 5 está entre aspas no JSON, então volta como texto; texto + 1 concatena e dá '51'. No JSON, número deve ser gravado sem aspas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O arquivo pets.json do pet shop contém:\n\n```\n[\n  { \"nome\": \"Rex\", \"especie\": \"cachorro\", \"idade\": 3 },\n  { \"nome\": \"Mel\", \"especie\": \"gato\", \"idade\": 5 }\n]\n```\n\nNa sua resposta:\n1. diga o que esse arquivo representa (o que são os colchetes e as chaves);\n2. diga como o programa transforma esse texto em dados que possa usar.",
+      "respostasAceitas": [
+        "É um vetor (colchetes) com dois objetos (chaves), um por pet, cada um com nome, espécie e idade. O programa lê o texto com readFileSync e converte com JSON.parse."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) lista/vetor de objetos, cada objeto um pet com seus campos; 2) readFileSync + JSON.parse."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O programa da biblioteca tem o trecho:\n\n```\ntry {\n  const texto = fs.readFileSync('emprestimos.txt', 'utf8');\n  console.log(texto);\n} catch (err) {\n  console.log('Nenhum empréstimo registrado ainda.');\n}\n```\n\nNa sua resposta:\n1. explique o que acontece se o arquivo existir;\n2. explique o que acontece se o arquivo não existir.",
+      "respostasAceitas": [
+        "Se existir, o conteúdo é lido e mostrado. Se não existir, o readFileSync gera erro, a execução vai para o catch e aparece a mensagem, sem o programa travar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) lê e mostra o conteúdo; 2) o erro é tratado no catch, mostra a mensagem e o programa não para."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct8",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O sistema da academia começa com `if (fs.existsSync('alunos.json')) { ... } else { ... }`.\n\nNa sua resposta:\n1. explique o que existsSync verifica e o que ele devolve;\n2. dê um exemplo do que fazer no else.",
+      "respostasAceitas": [
+        "existsSync verifica se o arquivo existe e devolve true ou false. No else (não existe) o programa pode criar o arquivo com '[]' ou avisar que não há alunos cadastrados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) existência do arquivo, true/false; 2) criar o arquivo vazio/padrão ou mostrar aviso."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct11",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um aluno gravou o cadastro com `JSON.stringify(dados)` e outro com `JSON.stringify(dados, null, 2)`. Os dois arquivos funcionam no programa.\n\nNa sua resposta:\n1. explique a diferença entre os dois arquivos gravados;\n2. diga quando a segunda forma é mais útil.",
+      "respostasAceitas": [
+        "O primeiro fica todo numa linha só; o segundo fica indentado, com 2 espaços e um item por linha. A segunda forma é melhor quando uma pessoa vai abrir, conferir ou editar o arquivo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) uma linha x formatado com indentação; 2) facilita a leitura humana/edição/conferência."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O programa está em loja/src/app.js e lê o arquivo com o caminho `'../dados/precos.csv'`.\n\nNa sua resposta:\n1. explique o que significa o ../ no caminho;\n2. diga em qual pasta fica o arquivo precos.csv.",
+      "respostasAceitas": [
+        "../ quer dizer subir uma pasta. Saindo de src, sobe para loja e entra em dados: o arquivo está em loja/dados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) pasta acima (pasta pai); 2) loja/dados. (Considerando que o terminal está em src; aceitar se o aluno lembrar que o relativo depende da pasta do terminal.)"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Ao rodar o programa do cinema, apareceu: `Error: ENOENT: no such file or directory, open 'sessoes.txt'`.\n\nNa sua resposta:\n1. explique o que a mensagem quer dizer;\n2. cite duas causas possíveis para esse erro.",
+      "respostasAceitas": [
+        "O programa tentou abrir sessoes.txt e não encontrou. Causas: o nome do arquivo está escrito diferente (ex.: sessao.txt), o arquivo ainda não foi criado ou o programa foi executado de outra pasta."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) arquivo/pasta não encontrado; 2) nome errado, arquivo inexistente, pasta errada/terminal em outra pasta."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct1",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O sistema da clínica cadastra pacientes assim:\n\n```\nconst pacientes = JSON.parse(fs.readFileSync('pacientes.json', 'utf8'));\npacientes.push({ nome: 'Rita', idade: 70 });\nfs.writeFileSync('pacientes.json', JSON.stringify(pacientes, null, 2));\n```\n\nNa sua resposta:\n1. explique o que cada uma das três linhas faz;\n2. explique por que não basta acrescentar o novo paciente com appendFileSync.",
+      "respostasAceitas": [
+        "1ª lê o arquivo e converte o texto em vetor; 2ª acrescenta o paciente no vetor; 3ª converte o vetor em texto e regrava o arquivo inteiro. Com appendFileSync o objeto ficaria fora dos colchetes do vetor e o JSON ficaria inválido."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) ler+parse, push, stringify+gravar; 2) o JSON precisa continuar sendo um único vetor; colar texto no fim o estraga."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct8",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "criar-json-vazio",
+      "enunciado": "O sistema da borracharia tem, antes de qualquer leitura:\n\n```\nif (!fs.existsSync('servicos.json')) {\n  fs.writeFileSync('servicos.json', '[]');\n}\n```\n\nNa sua resposta:\n1. explique quando a gravação acontece;\n2. explique por que o conteúdo gravado é '[]' e não um texto vazio.",
+      "respostasAceitas": [
+        "Só grava quando o arquivo ainda não existe (primeira execução), sem apagar dados existentes. '[]' é um vetor JSON vazio, que o JSON.parse lê sem erro; texto vazio daria erro no parse."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) só quando o arquivo não existe; 2) [] é JSON válido (vetor vazio), '' faria o JSON.parse falhar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "caminho-dirname",
+      "enunciado": "O programa da gráfica lê os pedidos com `fs.readFileSync(path.join(__dirname, 'pedidos.json'), 'utf8')`.\n\nNa sua resposta:\n1. explique o que é __dirname e o que path.join faz aqui;\n2. explique a vantagem em relação a usar só 'pedidos.json'.",
+      "respostasAceitas": [
+        "__dirname é a pasta onde está o arquivo .js, e path.join junta essa pasta com o nome do arquivo usando a barra certa. Assim o arquivo é achado mesmo se o node for executado de outra pasta; só 'pedidos.json' depende da pasta do terminal."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) pasta do script + montagem do caminho; 2) funciona independente da pasta de onde se roda o node."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A loja guarda o mesmo produto de duas formas: no CSV, a linha `Arroz;25.90`; no JSON, `{\"nome\": \"Arroz\", \"preco\": 25.9}`.\n\nNa sua resposta:\n1. diga qual é o tipo do preço depois de ler cada formato;\n2. diga o que isso muda na hora de somar os preços.",
+      "respostasAceitas": [
+        "No CSV, depois do split, o preço é texto ('25.90'); no JSON, depois do parse, é número (25.9). No CSV é preciso converter com Number antes de somar, senão os textos são concatenados; no JSON a soma funciona direto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) CSV = string, JSON = number; 2) CSV exige conversão para não concatenar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "codificacao-trocada",
+      "enunciado": "O arquivo de clientes foi gravado por um programa antigo e, ao ser lido pelo sistema novo, o nome Conceição apareceu como ConceiÃ§Ã£o.\n\nNa sua resposta:\n1. explique o que causou a troca dos acentos;\n2. diga o que fazer para evitar esse problema.",
+      "respostasAceitas": [
+        "O arquivo foi gravado numa codificação e lido em outra (por exemplo, gravado em UTF-8 e lido como latin1, ou o contrário), então os bytes dos acentos foram interpretados errado. Deve-se gravar e ler usando a mesma codificação, de preferência 'utf8'."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) codificações diferentes na gravação e na leitura; 2) usar a mesma codificação (utf8) nos dois lados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct9",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "json-vazio",
+      "enunciado": "O sistema da escola de idiomas cria turmas.json vazio (0 caracteres) e, ao abrir, faz `JSON.parse(fs.readFileSync('turmas.json', 'utf8'))`. O programa para com `SyntaxError: Unexpected end of JSON input`.\n\nNa sua resposta:\n1. explique por que o erro aconteceu, mesmo com o arquivo existindo;\n2. diga duas formas de evitar o problema.",
+      "respostasAceitas": [
+        "Texto vazio não é um JSON válido, então o JSON.parse falha. Pode-se criar o arquivo já com '[]' ou tratar o erro com try/catch (ou testar se o texto está vazio antes do parse)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) arquivo vazio não é JSON válido; 2) começar com '[]', try/catch, ou verificar texto vazio."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "append-json-invalido",
+      "enunciado": "A cada pedido, o delivery da pizzaria faz `fs.appendFileSync('pedidos.json', JSON.stringify(pedido));`. No dia seguinte, o relatório que faz JSON.parse do arquivo dá erro.\n\nNa sua resposta:\n1. explique por que o arquivo deixou de ser um JSON válido;\n2. descreva a forma correta de acrescentar um pedido num arquivo JSON.",
+      "respostasAceitas": [
+        "Cada append cola um objeto depois do outro ({...}{...}), e isso não é um único valor JSON. O certo é ler o arquivo, fazer JSON.parse para ter o vetor, dar push no pedido, e regravar tudo com writeFileSync(JSON.stringify(vetor))."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) objetos colados não formam um JSON (precisa ser um único vetor/objeto); 2) ler, parse, push, stringify, writeFileSync. Aceitar também alternativa de um JSON por linha se bem justificada."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct8",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "relancar-erro",
+      "enunciado": "O programa da loja de games lê o estoque assim:\n\n```\nlet estoque;\ntry {\n  estoque = JSON.parse(fs.readFileSync('estoque.json', 'utf8'));\n} catch (err) {\n  if (err.code === 'ENOENT') estoque = [];\n  else throw err;\n}\n```\n\nNa sua resposta:\n1. explique o que acontece se o arquivo não existir;\n2. explique o que acontece se o arquivo existir com conteúdo inválido, e por que essa escolha é sensata.",
+      "respostasAceitas": [
+        "Se não existir, o erro é ENOENT e o estoque começa vazio. Se o conteúdo for inválido, o erro é de sintaxe (sem code ENOENT), cai no else e é lançado de novo, parando o programa. É sensato porque começar vazio por cima de um arquivo estragado poderia apagar os dados ao gravar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) estoque = [] e segue; 2) o erro é relançado e o programa para; evita sobrescrever/perder dados de um arquivo corrompido sem avisar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Manipulação de arquivos",
+      "capacidade": "lpa.ct12",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "data-json",
+      "enunciado": "O hotel grava reservas com JSON.stringify. Uma reserva tinha `entrada: new Date(2026, 11, 20)`. Depois de ler o arquivo com JSON.parse, `reserva.entrada.getDate()` dá erro: getDate is not a function.\n\nNa sua resposta:\n1. explique em que tipo a data se transformou após gravar e ler;\n2. diga como recuperar a data para usar os métodos de Date.",
+      "respostasAceitas": [
+        "JSON não tem tipo data: o stringify grava a data como texto (ex.: \"2026-12-20T03:00:00.000Z\") e o parse devolve esse texto (string), que não tem getDate. Recupera-se com new Date(reserva.entrada)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a data vira string no formato ISO; 2) converter com new Date(texto)."
+    }
+  ]
+}
