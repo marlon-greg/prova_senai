@@ -1,0 +1,2459 @@
+{
+  "nome": "Linguagem de Marcação — CSS: box model e diagramação (a revisar)",
+  "materia": "Linguagem de Marcação",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No box model do CSS, qual é a ordem das camadas de uma caixa, de dentro para fora?",
+      "alternativas": [
+        "content, margin, border, padding",
+        "padding, content, border, margin",
+        "content, padding, border, margin",
+        "margin, border, padding, content"
+      ],
+      "correta": 2,
+      "explicacao": "De dentro para fora: o conteúdo (content), o espaço interno (padding), a borda (border) e o espaço externo (margin)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No cardápio digital de uma padaria, o texto de cada cartão está grudado na borda. Qual propriedade cria espaço entre o texto e a borda, por dentro da caixa?",
+      "alternativas": [
+        "margin",
+        "padding",
+        "outline",
+        "gap"
+      ],
+      "correta": 1,
+      "explicacao": "O padding é o espaço interno, entre o conteúdo e a borda. A margin fica do lado de fora da borda."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na página de uma biblioteca, os cartões de livros estão encostados uns nos outros. Qual propriedade afasta cada cartão dos vizinhos, criando espaço do lado de fora da borda?",
+      "alternativas": [
+        "padding",
+        "border",
+        "width",
+        "margin"
+      ],
+      "correta": 3,
+      "explicacao": "A margin é o espaço externo da caixa, que a separa das caixas vizinhas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na regra `.aviso { border: 3px dashed blue; }`, o que significa a palavra `dashed`?",
+      "alternativas": [
+        "A borda é desenhada tracejada",
+        "A borda é desenhada dupla",
+        "A borda é desenhada pontilhada",
+        "A borda tem os cantos arredondados"
+      ],
+      "correta": 0,
+      "explicacao": "dashed = tracejada. Pontilhada é dotted, dupla é double; cantos arredondados vêm de border-radius."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num site de academia, `.card { width: 300px; padding: 20px; border: 2px solid gray; margin: 10px; }` usa o box-sizing padrão (`content-box`). Quanto espaço horizontal o card ocupa na página, contando também a margin?",
+      "alternativas": [
+        "364px",
+        "344px",
+        "300px",
+        "332px"
+      ],
+      "correta": 0,
+      "explicacao": "300 (conteúdo) + 20 + 20 (padding) + 2 + 2 (borda) + 10 + 10 (margin) = 364px. Sem a margin seriam 344px."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa galeria de pet shop, `.foto { box-sizing: border-box; width: 250px; padding: 15px; border: 5px solid black; }`. Qual a largura visível da caixa, de borda a borda?",
+      "alternativas": [
+        "290px",
+        "270px",
+        "250px",
+        "230px"
+      ],
+      "correta": 2,
+      "explicacao": "Com border-box, o width já inclui padding e borda: a caixa mede 250px de borda a borda. O conteúdo é que encolhe (250 − 30 − 10 = 210px)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma caixa tem `box-sizing: border-box; width: 400px; padding: 20px; border: 4px solid;`. Qual a largura que sobra para o conteúdo?",
+      "alternativas": [
+        "400px",
+        "360px",
+        "392px",
+        "352px"
+      ],
+      "correta": 3,
+      "explicacao": "Com border-box, o conteúdo fica com o que sobra: 400 − 20 − 20 (padding) − 4 − 4 (borda) = 352px."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que muda quando uma caixa recebe `box-sizing: border-box;`?",
+      "alternativas": [
+        "O width passa a incluir o padding e a borda",
+        "O width passa a incluir também a margin",
+        "A borda da caixa é removida",
+        "Todas as caixas da página ganham borda"
+      ],
+      "correta": 0,
+      "explicacao": "Com border-box, o valor de width/height conta conteúdo + padding + borda. A margin continua fora da conta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num site de clínica, o botão tem `margin: 10px 20px;`. Como essa margem é distribuída?",
+      "alternativas": [
+        "10px à esquerda e 20px à direita da caixa",
+        "10px em cima e embaixo; 20px nas laterais",
+        "10px em cima e 20px embaixo do botão",
+        "10px em todos os lados e 20px entre botões"
+      ],
+      "correta": 1,
+      "explicacao": "Com dois valores, o primeiro vale para cima e baixo e o segundo para as laterais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na regra `.box { padding: 5px 10px 15px 20px; }`, qual é o padding do lado esquerdo?",
+      "alternativas": [
+        "20px",
+        "5px",
+        "10px",
+        "15px"
+      ],
+      "correta": 0,
+      "explicacao": "Com quatro valores a ordem é horária: cima (5px), direita (10px), baixo (15px), esquerda (20px)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O site de um hotel tem `.conteudo { width: 800px; margin: 0 auto; }`. O que acontece com a caixa `.conteudo` numa tela larga?",
+      "alternativas": [
+        "O texto dentro dela fica centralizado",
+        "Fica centralizada na horizontal",
+        "Fica centralizada na vertical",
+        "Ocupa toda a largura da tela"
+      ],
+      "correta": 1,
+      "explicacao": "margin auto nas laterais divide o espaço que sobra igualmente dos dois lados, centralizando a caixa na horizontal. O texto interno não é afetado (isso seria text-align)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno colocou `margin: 0 auto;` numa `div` sem width, e ela não ficou centralizada. Qual o motivo?",
+      "alternativas": [
+        "margin auto só funciona junto com position: absolute",
+        "O valor 0 cancela o auto das duas laterais",
+        "margin auto só centraliza imagens, não divs",
+        "Sem width, a div já ocupa toda a largura do pai"
+      ],
+      "correta": 3,
+      "explicacao": "Uma div é de bloco e, sem width, ocupa 100% do pai. Não há espaço livre nas laterais, então o auto vira 0."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "colapso-margens",
+      "enunciado": "Num texto de cinema, o primeiro parágrafo tem `margin-bottom: 30px` e o segundo, logo abaixo, tem `margin-top: 20px`. Os dois são blocos comuns, um embaixo do outro. Qual a distância entre eles?",
+      "alternativas": [
+        "50px",
+        "20px",
+        "10px",
+        "30px"
+      ],
+      "correta": 3,
+      "explicacao": "Margens verticais de blocos vizinhos colapsam (se juntam): fica valendo só a maior, 30px, e não a soma."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é o colapso de margens no CSS?",
+      "alternativas": [
+        "Margens verticais vizinhas se juntam e vale a maior",
+        "Margens horizontais de itens vizinhos sempre se somam",
+        "A margem desaparece quando a tela fica pequena",
+        "A borda passa a ocupar o lugar da margem"
+      ],
+      "correta": 0,
+      "explicacao": "Colapso de margens: a margem de baixo de um bloco e a de cima do próximo viram uma só, com o tamanho da maior."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Dois itens estão lado a lado dentro de um contêiner com `display: flex`. O primeiro tem `margin-right: 15px` e o segundo `margin-left: 10px`. Qual a distância entre eles?",
+      "alternativas": [
+        "15px",
+        "25px",
+        "10px",
+        "5px"
+      ],
+      "correta": 1,
+      "explicacao": "O colapso só acontece com margens verticais de blocos no fluxo normal. Margens horizontais (e itens flex) se somam: 15 + 10 = 25px."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual propriedade arredonda os cantos de um botão de \"Comprar\" numa loja de games?",
+      "alternativas": [
+        "border-style",
+        "corner-radius",
+        "border-radius",
+        "border-round"
+      ],
+      "correta": 2,
+      "explicacao": "border-radius arredonda os cantos da caixa. corner-radius e border-round não existem no CSS."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma caixa tem `background-color: yellow; padding: 20px; margin: 20px;`. Onde aparece o amarelo?",
+      "alternativas": [
+        "Só no conteúdo, sem pintar o padding em volta",
+        "No conteúdo, no padding e também na margin",
+        "No conteúdo e no padding; a margin fica transparente",
+        "Só na margem, formando uma faixa em volta da caixa"
+      ],
+      "correta": 2,
+      "explicacao": "O fundo pinta a área de dentro da borda (conteúdo + padding). A margin é sempre transparente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num site de oficina, `.aviso { height: 100px; padding: 10px; border: 1px solid red; }` usa o box-sizing padrão. Qual a altura visível do aviso, de borda a borda?",
+      "alternativas": [
+        "100px",
+        "120px",
+        "122px",
+        "111px"
+      ],
+      "correta": 2,
+      "explicacao": "Com content-box: 100 + 10 + 10 (padding) + 1 + 1 (borda) = 122px."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Muitos projetos começam o CSS com `*, *::before, *::after { box-sizing: border-box; }`. Por quê?",
+      "alternativas": [
+        "Para width e height já incluírem padding e borda",
+        "Para zerar as margens de todos os elementos da página",
+        "Para centralizar todos os elementos na tela",
+        "Para que todas as caixas ganhem uma borda visível"
+      ],
+      "correta": 0,
+      "explicacao": "Com border-box em tudo, a largura definida é a largura real da caixa, o que facilita as contas do leiaute."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "porcentagem-padding",
+      "enunciado": "Num site de escola, `.coluna { float: left; width: 50%; padding: 10px; }` foi aplicado a duas colunas (box-sizing padrão). A segunda coluna caiu para baixo da primeira. Por quê?",
+      "alternativas": [
+        "O float não aceita largura definida em porcentagem",
+        "O padding deveria estar em porcentagem também",
+        "O float sempre coloca a segunda caixa embaixo da primeira",
+        "Cada uma mede 50% + 20px, e juntas passam de 100%"
+      ],
+      "correta": 3,
+      "explicacao": "Em content-box o padding soma ao width: 50% + 20px cada, total maior que 100%. Com box-sizing: border-box as duas cabem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes elementos é de bloco (`display: block`) por padrão?",
+      "alternativas": [
+        "<span>",
+        "<p>",
+        "<a>",
+        "<strong>"
+      ],
+      "correta": 1,
+      "explicacao": "Parágrafos, divs, títulos e seções são de bloco. span, a e strong são inline."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes elementos é inline (`display: inline`) por padrão?",
+      "alternativas": [
+        "<span>",
+        "<div>",
+        "<h1>",
+        "<section>"
+      ],
+      "correta": 0,
+      "explicacao": "span é inline: fica na mesma linha do texto. div, h1 e section são de bloco."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um `<span class=\"etiqueta\">` recebeu `width: 120px; height: 40px;`, mas o tamanho não mudou. Por quê?",
+      "alternativas": [
+        "Faltou usar a unidade % nos dois valores",
+        "O span não aceita receber classes no CSS",
+        "Faltou colocar !important nos dois valores",
+        "O span é inline, e inline ignora width e height"
+      ],
+      "correta": 3,
+      "explicacao": "Elementos inline ocupam só o tamanho do conteúdo e ignoram width/height. Com display: inline-block ou block o tamanho passa a valer."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual valor de `display` deixa os elementos na mesma linha, um ao lado do outro, e ainda faz width e height funcionarem?",
+      "alternativas": [
+        "inline",
+        "inline-block",
+        "block",
+        "none"
+      ],
+      "correta": 1,
+      "explicacao": "inline-block fica na linha como o inline, mas aceita width, height e padding/margin vertical como um bloco."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que acontece com um elemento que recebe `display: none;`?",
+      "alternativas": [
+        "Some da tela e deixa de ocupar espaço",
+        "Some da tela, mas o espaço fica vazio",
+        "Fica meio transparente na tela",
+        "É apagado do arquivo HTML"
+      ],
+      "correta": 0,
+      "explicacao": "display: none tira o elemento da renderização: ele não aparece e não ocupa espaço. O HTML continua igual."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja de games, o banner de promoção recebe `visibility: hidden;`. O que acontece na página?",
+      "alternativas": [
+        "O banner some, mas o espaço dele fica reservado",
+        "O banner some e o conteúdo de baixo sobe para o lugar",
+        "O banner fica cinza e não pode ser clicado",
+        "O banner é removido do código HTML da página"
+      ],
+      "correta": 0,
+      "explicacao": "visibility: hidden esconde o elemento, mas ele continua ocupando o lugar. Quem tira o espaço é display: none."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "none-hidden",
+      "enunciado": "Três caixas de bloco, A, B e C, estão empilhadas, cada uma com 100px de altura e sem margens. A caixa B recebe `visibility: hidden;`. A quantos pixels do topo começa a caixa C?",
+      "alternativas": [
+        "100px",
+        "200px",
+        "300px",
+        "0px"
+      ],
+      "correta": 1,
+      "explicacao": "Com visibility: hidden, B continua ocupando os 100px dela: C começa em 100 + 100 = 200px. Com display: none começaria em 100px."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um link `<a>` (inline) dentro de um parágrafo recebe `padding: 10px; margin: 20px;`. O que acontece no sentido vertical?",
+      "alternativas": [
+        "Padding e margin verticais funcionam igual a um bloco",
+        "Nem o padding nem a margin têm efeito visível na tela",
+        "Só a margin vertical funciona, e o padding é ignorado",
+        "O fundo cresce com o padding, mas a margin vertical é ignorada"
+      ],
+      "correta": 3,
+      "explicacao": "Em inline, o padding vertical aparece (o fundo cresce), mas não empurra as linhas, e a margin vertical é ignorada. Nas laterais os dois funcionam."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Sem nenhuma largura definida, quanto da largura um elemento de bloco ocupa?",
+      "alternativas": [
+        "Só a largura do texto que está dentro dele",
+        "Metade da largura da tela",
+        "Exatamente 100px, o valor padrão",
+        "Toda a largura disponível do elemento pai"
+      ],
+      "correta": 3,
+      "explicacao": "Um bloco se estica por toda a largura do pai e começa em uma nova linha."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No menu de um pet shop, cada `<li>` aparece um embaixo do outro. Qual regra deixa os itens na mesma linha, mantendo width e padding funcionando?",
+      "alternativas": [
+        "li { display: block; }",
+        "li { display: inline-block; }",
+        "li { position: static; }",
+        "li { margin: 0 auto; }"
+      ],
+      "correta": 1,
+      "explicacao": "inline-block coloca os itens lado a lado e aceita largura e padding. block mantém um embaixo do outro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A declaração `border: 2px solid red;` define quais três coisas da borda?",
+      "alternativas": [
+        "Largura da caixa, altura e cor",
+        "Margem, padding e cor",
+        "Espessura, estilo e cor",
+        "Espessura, sombra e cor"
+      ],
+      "correta": 2,
+      "explicacao": "O atalho border junta border-width (2px), border-style (solid) e border-color (red)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual regra coloca espaço interno só na parte de cima de uma caixa?",
+      "alternativas": [
+        "padding: 12px;",
+        "margin-top: 12px;",
+        "padding-top: 12px;",
+        "padding: 0 12px;"
+      ],
+      "correta": 2,
+      "explicacao": "padding-top age só em cima. padding: 12px vale para os quatro lados; margin-top é espaço externo; padding: 0 12px só nas laterais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma caixa tem `box-sizing: border-box; width: 100px; padding: 40px; border: 10px solid;`. Qual a largura do conteúdo?",
+      "alternativas": [
+        "0px",
+        "20px",
+        "100px",
+        "200px"
+      ],
+      "correta": 0,
+      "explicacao": "100 − 40 − 40 − 10 − 10 = 0. Padding e borda já gastam os 100px, e o conteúdo não fica com nada (não existe largura negativa)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No menu lateral de uma biblioteca, os links têm `display: block`. Para aumentar a área em que o usuário pode clicar em cada link, qual propriedade usar?",
+      "alternativas": [
+        "margin",
+        "border-spacing",
+        "z-index",
+        "padding"
+      ],
+      "correta": 3,
+      "explicacao": "O padding faz parte da caixa do link, então a área clicável cresce. A margin é espaço fora do link e não é clicável."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "porcentagem-padding",
+      "enunciado": "Num contêiner de 800px, cada coluna tem `box-sizing: border-box; width: 25%; padding: 10px;`. Qual a largura visível de cada coluna?",
+      "alternativas": [
+        "220px",
+        "180px",
+        "200px",
+        "25px"
+      ],
+      "correta": 2,
+      "explicacao": "25% de 800 = 200px, e com border-box o padding já está dentro desses 200px."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na galeria de fotos de um hotel, cada quadro usa a regra `.quadro { padding: 15px; border: 4px solid brown; margin: 30px; }`.\n\nNa sua resposta:\n1. diga o que o padding faz nesse quadro;\n2. diga o que a border faz;\n3. diga o que a margin faz.",
+      "respostasAceitas": [
+        "O padding cria 15px de espaço entre a foto e a moldura (por dentro). A border desenha uma moldura marrom sólida de 4px. A margin afasta cada quadro 30px dos outros quadros (por fora)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) padding = espaço interno entre conteúdo e borda; 2) border = linha marrom de 4px em volta; 3) margin = espaço externo que separa os quadros."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "none-hidden",
+      "enunciado": "No site de uma clínica, um aviso pode ser escondido de duas formas: `.aviso { display: none; }` ou `.aviso { visibility: hidden; }`.\n\nNa sua resposta:\n1. explique o que acontece na tela com display: none;\n2. explique o que acontece com visibility: hidden;\n3. diga qual é a diferença principal entre os dois.",
+      "respostasAceitas": [
+        "Com display: none o aviso some e não ocupa espaço (o conteúdo de baixo sobe). Com visibility: hidden ele some, mas o espaço dele fica vazio, reservado. A diferença é se o espaço continua ocupado ou não."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) some e libera o espaço; 2) some e mantém o espaço vazio; 3) diferença = ocupar ou não o espaço."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma escola usa no seu site a regra `.pagina { width: 960px; margin: 0 auto; }`.\n\nNa sua resposta:\n1. diga o que acontece com a caixa .pagina numa tela de 1400px;\n2. explique por que é preciso definir o width para isso funcionar.",
+      "respostasAceitas": [
+        "A caixa fica centralizada na horizontal: os 440px que sobram são divididos, 220px de cada lado. Sem width a div ocuparia toda a largura e não sobraria espaço para o auto dividir."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) centraliza na horizontal (margens laterais iguais); 2) sem largura definida o bloco ocupa 100% e não há sobra."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num site de cinema, o banner tem `.banner { width: 600px; padding: 30px; border: 5px solid black; margin: 20px; }` com o box-sizing padrão (content-box).\n\nNa sua resposta:\n1. calcule a largura visível do banner, de borda a borda, mostrando a conta;\n2. calcule o espaço horizontal total que ele ocupa contando a margin.",
+      "respostasAceitas": [
+        "Largura visível: 600 + 30 + 30 + 5 + 5 = 670px. Com a margin: 670 + 20 + 20 = 710px."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 670px (conteúdo + padding dos dois lados + borda dos dois lados); 2) 710px somando a margem dos dois lados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "colapso-margens",
+      "enunciado": "Numa página de padaria, duas seções seguidas têm `section { margin-top: 40px; margin-bottom: 40px; }`. O aluno esperava 80px entre elas, mas o navegador mostrou só 40px.\n\nNa sua resposta:\n1. diga o nome desse comportamento;\n2. explique por que a distância ficou 40px.",
+      "respostasAceitas": [
+        "É o colapso de margens. A margem de baixo de uma seção e a de cima da próxima são verticais e vizinhas, então se juntam numa só e fica valendo a maior (40px), em vez da soma."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) colapso de margens; 2) margens verticais de blocos vizinhos não se somam, vale a maior."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No menu vertical de uma biblioteca foi usada a regra `nav a { display: block; padding: 12px; }`. Antes, os links eram inline.\n\nNa sua resposta:\n1. diga o que muda na posição dos links;\n2. explique o que muda na área clicável de cada link.",
+      "respostasAceitas": [
+        "Os links passam a ficar um embaixo do outro, cada um ocupando toda a largura do menu. Como viraram blocos com padding, a área clicável é a faixa inteira (largura toda e 12px a mais em volta do texto), e não só o texto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) um por linha, ocupando a largura toda; 2) área clicável maior, porque o padding passa a valer em todos os lados e o bloco ocupa a linha."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um botão de pet shop tem `.botao { padding: 10px 20px; }`.\n\nNa sua resposta:\n1. diga quanto de padding fica em cima e embaixo;\n2. diga quanto fica à esquerda e à direita;\n3. explique o que acontece com o tamanho do botão.",
+      "respostasAceitas": [
+        "Ficam 10px em cima e 10px embaixo, e 20px à esquerda e 20px à direita. O botão fica maior que o texto: 20px mais alto e 40px mais largo (no box-sizing padrão)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 10px em cima/embaixo; 2) 20px nas laterais; 3) o botão cresce em volta do texto."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa loja de games, o card tem `.card { box-sizing: border-box; width: 300px; padding: 20px; border: 5px solid; }`.\n\nNa sua resposta:\n1. diga a largura visível do card, de borda a borda;\n2. calcule a largura que sobra para o conteúdo, mostrando a conta;\n3. diga qual seria a largura visível se o box-sizing fosse o padrão (content-box).",
+      "respostasAceitas": [
+        "Com border-box o card mede 300px de borda a borda. O conteúdo fica com 300 − 40 − 10 = 250px. Em content-box o card mediria 300 + 40 + 10 = 350px."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 300px; 2) 250px (tira padding e borda dos dois lados); 3) 350px em content-box."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num site de academia, o HTML tem duas `div` seguidas e, dentro de um parágrafo, dois `span` seguidos. As divs aparecem uma embaixo da outra e os spans ficam na mesma linha.\n\nNa sua resposta:\n1. explique por que as divs ficam uma embaixo da outra;\n2. explique por que os spans ficam na mesma linha.",
+      "respostasAceitas": [
+        "A div é de bloco: começa numa linha nova e ocupa toda a largura, então a próxima vai para baixo. O span é inline: ocupa só o tamanho do conteúdo e fica no meio do texto, na mesma linha."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) div = block (linha nova, largura toda); 2) span = inline (só o tamanho do conteúdo, na mesma linha)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num site de oficina, os avisos usam `.aviso { border-left: 6px solid orange; padding-left: 12px; }`.\n\nNa sua resposta:\n1. diga o que aparece na tela por causa do border-left;\n2. diga para que serve o padding-left nessa regra.",
+      "respostasAceitas": [
+        "Aparece uma faixa laranja de 6px só do lado esquerdo do aviso (os outros lados ficam sem borda). O padding-left afasta o texto 12px dessa faixa, para ele não ficar grudado na borda."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) borda só à esquerda, laranja, sólida, 6px; 2) espaço interno entre a faixa e o texto."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma galeria de miniaturas de um hotel usa `.mini { display: inline-block; width: 120px; height: 90px; margin: 5px; }`.\n\nNa sua resposta:\n1. explique por que foi usado inline-block e não inline;\n2. explique por que foi usado inline-block e não block.",
+      "respostasAceitas": [
+        "Com inline o width e o height seriam ignorados, e as miniaturas não teriam o tamanho certo. Com block cada miniatura ficaria numa linha, uma embaixo da outra. O inline-block deixa lado a lado e respeita o tamanho."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) inline ignora width/height; 2) block empilha, inline-block coloca na mesma linha."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "colapso-margens",
+      "enunciado": "Num site de escola, `h2 { margin-bottom: 24px; }` e `p { margin-top: 16px; }`, e um parágrafo vem logo depois de um h2.\n\nNa sua resposta:\n1. diga qual é a distância entre o h2 e o parágrafo, e por quê;\n2. diga qual seria a distância se os dois fossem itens de um contêiner com display: flex e flex-direction: column.",
+      "respostasAceitas": [
+        "A distância é 24px: as margens verticais colapsam e vale a maior. Como itens flex as margens não colapsam, então se somam: 24 + 16 = 40px."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 24px, por colapso de margens (vale a maior); 2) 40px, porque em flex as margens não colapsam."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Ao inspecionar um card (tecla F12), o navegador mostra o desenho do box model: quatro retângulos, um dentro do outro, com números em cada lado.\n\nNa sua resposta:\n1. diga o que cada um dos quatro retângulos representa;\n2. explique como esse desenho ajuda a descobrir por que o card ficou mais largo do que o esperado.",
+      "respostasAceitas": [
+        "Do centro para fora: conteúdo, padding, borda e margin. O desenho mostra quantos pixels cada parte tem, então dá para ver que padding ou borda estão somando na largura além do width."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) content, padding, border, margin; 2) dá para ver de onde vem cada pixel da largura total."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "porcentagem-padding",
+      "enunciado": "No celular, a página de um restaurante ganhou rolagem para os lados. A regra do formulário é `.campo { width: 100%; padding: 0 16px; }` (box-sizing padrão).\n\nNa sua resposta:\n1. explique por que o campo ficou mais largo que a tela;\n2. explique como `box-sizing: border-box` resolve o problema.",
+      "respostasAceitas": [
+        "Em content-box os 100% valem só para o conteúdo, e o padding (32px) é somado por fora, então o campo passa da largura da tela. Com border-box o padding entra dentro dos 100% e o campo cabe."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 100% + 32px de padding passa da largura do pai; 2) border-box faz o width incluir o padding."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na página de uma loja de roupas, a foto quadrada do perfil tem `.avatar { width: 120px; height: 120px; border-radius: 50%; }`.\n\nNa sua resposta:\n1. diga que forma a foto passa a ter na tela;\n2. explique o que o border-radius faz com os cantos da caixa.",
+      "respostasAceitas": [
+        "A foto fica redonda (um círculo). O border-radius arredonda os cantos; com 50% numa caixa quadrada, o arredondamento vai até o meio de cada lado e forma um círculo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) círculo; 2) border-radius arredonda os cantos, e 50% num quadrado vira círculo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na diagramação de uma página, para que serve a tag `<div>`?",
+      "alternativas": [
+        "Criar um título de destaque no topo da página",
+        "Inserir uma imagem a partir de um arquivo",
+        "Agrupar elementos numa caixa para o CSS organizar",
+        "Criar um link que leva para outra página"
+      ],
+      "correta": 2,
+      "explicacao": "A div é um contêiner genérico de bloco, sem significado próprio: serve para agrupar e montar as áreas do leiaute com CSS."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma caixa com `width: 50%;` está dentro de um contêiner de 600px de largura. Qual a largura dela?",
+      "alternativas": [
+        "300px",
+        "50px",
+        "600px",
+        "Metade da largura da tela, sempre"
+      ],
+      "correta": 0,
+      "explicacao": "A porcentagem do width é calculada sobre a largura do elemento pai: 50% de 600px = 300px."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "max-width",
+      "enunciado": "O site de uma clínica usa `.conteudo { width: 100%; max-width: 1000px; }`. Qual a largura de `.conteudo` numa tela de 1400px e numa de 700px?",
+      "alternativas": [
+        "1000px e 700px",
+        "1400px e 700px",
+        "1000px e 1000px",
+        "1000px e 350px"
+      ],
+      "correta": 0,
+      "explicacao": "A caixa tenta ocupar 100%, mas nunca passa de 1000px. Na tela de 1400px fica com 1000px; na de 700px fica com 700px."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma caixa tem `height: 80px;` e o texto dentro dela não cabe. Sem nenhuma regra de overflow, o que acontece?",
+      "alternativas": [
+        "O texto vaza para fora da caixa",
+        "A caixa cresce sozinha para caber o texto",
+        "O texto que sobra é cortado",
+        "Aparece uma barra de rolagem"
+      ],
+      "correta": 0,
+      "explicacao": "O valor padrão é overflow: visible: com altura fixa, o que não cabe aparece para fora da caixa, por cima do que vem depois."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A caixa de mensagens de um chat tem `height: 300px; overflow: auto;`. O que acontece quando chegam muitas mensagens?",
+      "alternativas": [
+        "A barra de rolagem aparece sempre, mesmo com pouco texto",
+        "As mensagens que sobram são cortadas sem barra",
+        "A caixa aumenta a altura para caber tudo",
+        "Aparece barra de rolagem só quando as mensagens não cabem"
+      ],
+      "correta": 3,
+      "explicacao": "overflow: auto mostra a barra de rolagem apenas quando o conteúdo passa do tamanho da caixa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um card de produto tem `height: 200px; overflow: hidden;` e uma descrição grande. O que acontece com o texto que passa da altura?",
+      "alternativas": [
+        "Vaza para fora do card",
+        "Ganha barra de rolagem",
+        "É cortado e não aparece",
+        "Diminui de tamanho para caber"
+      ],
+      "correta": 2,
+      "explicacao": "overflow: hidden esconde tudo o que passa dos limites da caixa, sem barra de rolagem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma tabela larga de horários de academia fica dentro de `.tabela-wrap { overflow-x: auto; }`. Como ela aparece num celular?",
+      "alternativas": [
+        "A tabela é cortada e as últimas colunas somem da tela",
+        "A página inteira passa a rolar para os lados no celular",
+        "A tabela pode ser rolada para os lados dentro da caixa",
+        "A tabela é empilhada automaticamente em uma coluna só"
+      ],
+      "correta": 2,
+      "explicacao": "overflow-x: auto cria rolagem horizontal só dentro da caixa .tabela-wrap quando a tabela não cabe, sem estragar o resto da página."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é o valor padrão da propriedade `position` de um elemento?",
+      "alternativas": [
+        "relative",
+        "absolute",
+        "static",
+        "fixed"
+      ],
+      "correta": 2,
+      "explicacao": "Todo elemento começa com position: static, ficando no fluxo normal da página."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um selo tem `position: relative; top: 10px; left: 20px;`. O que acontece com ele?",
+      "alternativas": [
+        "Sobe 10px e vai 20px para a esquerda, a partir da posição normal",
+        "Vai para 10px do topo e 20px da esquerda da tela, fora do fluxo",
+        "Desce 10px e vai 20px para a direita; o lugar original fica reservado",
+        "Desce 10px e vai 20px para a direita; o lugar original some"
+      ],
+      "correta": 2,
+      "explicacao": "Em relative, top: 10px empurra para baixo e left: 20px empurra para a direita, a partir da posição normal. O espaço original continua ocupado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "absolute-ref",
+      "enunciado": "Num site de pet shop, `.card { position: relative; }` e, dentro dele, `.etiqueta { position: absolute; top: 0; right: 0; }`. Onde fica a etiqueta?",
+      "alternativas": [
+        "No canto superior direito da tela",
+        "No canto superior esquerdo do card",
+        "Logo depois do texto do card",
+        "No canto superior direito do card"
+      ],
+      "correta": 3,
+      "explicacao": "O absolute se posiciona em relação ao ancestral posicionado mais próximo, que é o card (relative). top: 0; right: 0 = canto superior direito dele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "absolute-ref",
+      "enunciado": "Um card NÃO tem position definido (fica static). Dentro dele, `.etiqueta { position: absolute; top: 0; right: 0; }`, e nenhum outro ancestral tem position. Onde a etiqueta aparece?",
+      "alternativas": [
+        "No canto superior direito do card",
+        "No mesmo lugar, pois o absolute é ignorado",
+        "No canto inferior direito do card",
+        "No canto superior direito da página"
+      ],
+      "correta": 3,
+      "explicacao": "Sem ancestral posicionado, o absolute usa a própria página (o bloco inicial) como referência: a etiqueta vai para o canto superior direito da página."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "fixed-cobre",
+      "enunciado": "Num site de cinema, o cabeçalho recebeu `header { position: fixed; top: 0; width: 100%; }`. Depois disso, o começo do conteúdo sumiu atrás do cabeçalho. Por quê?",
+      "alternativas": [
+        "O fixed tira o header do fluxo, e o conteúdo sobe",
+        "O fixed aumenta a altura do header até cobrir a página",
+        "O top: 0 empurra todo o conteúdo para cima da tela",
+        "O width: 100% faz o header passar por cima de tudo"
+      ],
+      "correta": 0,
+      "explicacao": "Com fixed, o header não ocupa mais espaço no fluxo: o conteúdo sobe e fica por baixo dele. Resolve-se dando um padding-top no body igual à altura do header."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa tabela de preços de um hotel, a linha de títulos deve rolar com a página e, ao chegar no topo da tela, ficar grudada ali. Qual valor de position usar?",
+      "alternativas": [
+        "fixed",
+        "absolute",
+        "sticky",
+        "relative"
+      ],
+      "correta": 2,
+      "explicacao": "sticky se comporta como relative até atingir o limite (ex.: top: 0) e então gruda. fixed ficaria parado desde o início."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno colocou `position: sticky;` no menu, sem nenhuma outra propriedade, e o menu não gruda no topo ao rolar. O que falta?",
+      "alternativas": [
+        "Um z-index maior que o dos outros elementos da página",
+        "Trocar a largura do menu para 100% da tela",
+        "Colocar display: block no menu de navegação",
+        "Um limite como top: 0, para dizer onde o menu deve grudar"
+      ],
+      "correta": 3,
+      "explicacao": "sticky precisa de pelo menos um valor de top, bottom, left ou right para saber em que ponto deve grudar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve a propriedade `z-index`?",
+      "alternativas": [
+        "Definir o zoom aplicado ao elemento na tela",
+        "Definir quem fica na frente quando há sobreposição",
+        "Definir a ordem dos elementos no código HTML",
+        "Definir a altura do elemento dentro da página"
+      ],
+      "correta": 1,
+      "explicacao": "z-index controla a ordem de empilhamento: quem tem valor maior fica na frente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num site de loja de games, uma janela de aviso (modal) tem `z-index: 10` e aparece atrás do cabeçalho fixo, que tem `z-index: 100`. O que resolve?",
+      "alternativas": [
+        "Dar ao modal um z-index menor que 10",
+        "Trocar o modal para position: static",
+        "Aumentar a largura do modal",
+        "Dar ao modal um z-index maior que 100"
+      ],
+      "correta": 3,
+      "explicacao": "Fica na frente quem tem o z-index maior. O modal precisa de um valor acima de 100 (ex.: 1000)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno deu `z-index: 999` para uma div com `position: static`, mas ela continua atrás de outra caixa. Por quê?",
+      "alternativas": [
+        "z-index não tem efeito em elemento com position: static",
+        "999 passa do valor máximo que o z-index aceita na página",
+        "z-index só aceita valores negativos, como -1 ou -10",
+        "O z-index só funciona junto com display: none no elemento"
+      ],
+      "correta": 0,
+      "explicacao": "z-index só vale em elementos posicionados (relative, absolute, fixed, sticky) ou itens de flex/grid. Num elemento static ele é ignorado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Ao colocar `position: absolute` numa imagem, o texto que estava embaixo dela subiu para o lugar da imagem. Por quê?",
+      "alternativas": [
+        "O absolute diminui a altura da imagem para zero pixels",
+        "O texto sempre fica por cima de imagens posicionadas",
+        "O absolute tira a imagem do fluxo normal da página",
+        "O absolute faz a imagem virar um elemento inline"
+      ],
+      "correta": 2,
+      "explicacao": "Elemento absolute sai do fluxo normal: os outros elementos passam a se comportar como se ele não existisse."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual valor de position desloca o elemento com top/left e ainda mantém o espaço original dele reservado na página?",
+      "alternativas": [
+        "absolute",
+        "fixed",
+        "relative",
+        "absolute e fixed"
+      ],
+      "correta": 2,
+      "explicacao": "relative move o elemento visualmente, mas o espaço original continua ocupado. absolute e fixed tiram o elemento do fluxo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "float-texto",
+      "enunciado": "Numa notícia de um site de escola, a foto tem `float: left;`. O que acontece com o texto que vem depois?",
+      "alternativas": [
+        "A foto fica por cima do texto, cobrindo as palavras",
+        "A foto fica centralizada e o texto vai para baixo dela",
+        "A foto fica parada na tela enquanto a página rola",
+        "A foto vai para a esquerda e o texto a contorna"
+      ],
+      "correta": 3,
+      "explicacao": "float joga a imagem para um lado e o texto seguinte se acomoda ao redor dela, do outro lado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "clear",
+      "enunciado": "Num leiaute com duas colunas usando float, o rodapé subiu e ficou ao lado das colunas. Qual regra faz o rodapé ir para baixo delas?",
+      "alternativas": [
+        "footer { float: both; }",
+        "footer { position: static; }",
+        "footer { clear: both; }",
+        "footer { display: inline; }"
+      ],
+      "correta": 2,
+      "explicacao": "clear: both faz o elemento descer até passar de todos os floats anteriores, dos dois lados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "clear",
+      "enunciado": "Uma div contêiner com borda tem dentro só duas colunas com float. A borda aparece achatada, quase sem altura, em cima das colunas. Por quê?",
+      "alternativas": [
+        "A borda do contêiner não pode passar de 1px de altura",
+        "As colunas com float ficam sempre com altura zero",
+        "Os floats saem do fluxo e o pai não conta a altura deles",
+        "O contêiner precisa de float: none para mostrar a borda"
+      ],
+      "correta": 2,
+      "explicacao": "Elementos flutuantes não entram na altura do pai. Resolve-se com display: flow-root, overflow: hidden ou um elemento com clear no fim."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "float-texto",
+      "enunciado": "Uma caixa de dica tem `float: right;`. Onde ela vai parar?",
+      "alternativas": [
+        "No canto direito da tela, parada mesmo ao rolar a página",
+        "Na direita, por cima de todo o conteúdo que vem depois",
+        "Embaixo de todo o conteúdo, alinhada à direita da página",
+        "Na direita, com o conteúdo seguinte à esquerda dela"
+      ],
+      "correta": 3,
+      "explicacao": "float: right desloca a caixa para a direita do contêiner, e o conteúdo que vem depois ocupa o espaço à esquerda."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que hoje se prefere flexbox ou grid, e não float, para montar colunas de uma página?",
+      "alternativas": [
+        "Float não funciona mais nos navegadores atuais e foi removido do CSS",
+        "Flex e grid deixam a página muito mais rápida de carregar na internet",
+        "Float só funciona com imagens, e não funciona com divs ou seções",
+        "Flex e grid foram feitos para leiaute; float, para texto ao redor de imagem"
+      ],
+      "correta": 3,
+      "explicacao": "Float ainda funciona, mas exige clear e truques para o pai. Flex e grid foram criados para alinhar e distribuir caixas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual unidade faz a largura de uma caixa acompanhar a largura do elemento pai?",
+      "alternativas": [
+        "px",
+        "%",
+        "cm",
+        "pt"
+      ],
+      "correta": 1,
+      "explicacao": "Porcentagem é relativa ao pai. px, cm e pt são medidas fixas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O site de uma padaria usa `img { max-width: 100%; }`. O que acontece com uma foto de 1200px dentro de um contêiner de 400px?",
+      "alternativas": [
+        "A foto mantém 1200px e é cortada nas laterais",
+        "A foto encolhe para 400px e não passa do contêiner",
+        "A foto fica com 100px de largura",
+        "A foto estica para a largura da tela inteira"
+      ],
+      "correta": 1,
+      "explicacao": "max-width: 100% limita a imagem à largura do pai: encolhe quando é maior, mas não aumenta além do tamanho real."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "porcentagem-padding",
+      "enunciado": "Numa tela de 360px, `.caixa { width: 100%; padding: 0 16px; }` está direto no body (sem margens, box-sizing padrão). Qual a largura total da caixa?",
+      "alternativas": [
+        "392px",
+        "360px",
+        "376px",
+        "328px"
+      ],
+      "correta": 0,
+      "explicacao": "Em content-box: 100% (360px) + 16 + 16 de padding = 392px, maior que a tela, causando rolagem para os lados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "absolute-ref",
+      "enunciado": "Num card com `position: relative`, o preço tem `position: absolute; bottom: 10px; right: 10px;`. Onde o preço fica?",
+      "alternativas": [
+        "No canto superior direito do card, a 10px das bordas",
+        "No canto inferior direito do card, a 10px das bordas",
+        "No canto inferior direito da tela, a 10px das bordas",
+        "No canto inferior esquerdo do card, a 10px das bordas"
+      ],
+      "correta": 1,
+      "explicacao": "bottom e right medem a distância da base e da lateral direita do ancestral posicionado (o card)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Três cards se sobrepõem, todos com `position: relative`: A tem `z-index: 1`, B tem `z-index: 3` e C tem `z-index: 2`. Qual a ordem, da frente para trás?",
+      "alternativas": [
+        "A, B, C",
+        "C, B, A",
+        "B, C, A",
+        "A, C, B"
+      ],
+      "correta": 2,
+      "explicacao": "Maior z-index fica na frente: B (3), depois C (2), por último A (1)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual propriedade controla o que acontece quando o conteúdo é maior que a caixa?",
+      "alternativas": [
+        "float",
+        "overflow",
+        "z-index",
+        "display"
+      ],
+      "correta": 1,
+      "explicacao": "overflow define se o excesso aparece, é cortado ou ganha rolagem."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma div sem height definido tem três parágrafos dentro. Qual será a altura dela?",
+      "alternativas": [
+        "Zero, porque nenhum height foi definido",
+        "A suficiente para caber os três parágrafos",
+        "100px, que é a altura padrão de uma div",
+        "A altura total da tela do navegador"
+      ],
+      "correta": 1,
+      "explicacao": "Com height automático (padrão), o bloco cresce de acordo com o conteúdo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um botão tem `position: fixed; bottom: 20px; right: 20px;` e está dentro de uma div com `position: relative`. Onde ele aparece?",
+      "alternativas": [
+        "No canto inferior direito da janela, ignorando a div",
+        "No canto inferior direito da div que está em volta",
+        "No canto superior esquerdo da div que está em volta",
+        "No fim da página, depois de todo o conteúdo"
+      ],
+      "correta": 0,
+      "explicacao": "fixed se posiciona em relação à janela do navegador (viewport), e não ao pai relative."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma caixa recebe `position: relative;` sem top, left, right ou bottom. O que muda?",
+      "alternativas": [
+        "Ela vai para o canto superior esquerdo do elemento pai",
+        "Ela sai do fluxo e o conteúdo que está embaixo sobe",
+        "Ela fica parada no mesmo lugar da tela ao rolar a página",
+        "Nada visualmente, mas vira referência para filhos absolute"
+      ],
+      "correta": 3,
+      "explicacao": "Sem deslocamento, relative não move a caixa. O uso mais comum é servir de referência para elementos absolute dentro dela."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa loja, o selo \"Promoção\" deve ficar sobre a foto do produto, no canto. Qual combinação de position usar?",
+      "alternativas": [
+        "Pai com absolute e selo com static",
+        "Pai com relative e selo com absolute",
+        "Pai com static e selo com static",
+        "Pai com fixed e selo com float"
+      ],
+      "correta": 1,
+      "explicacao": "O pai relative vira a referência, e o selo absolute pode ser colocado em qualquer canto dele com top/right/bottom/left."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "max-width",
+      "enunciado": "Qual a diferença entre `width: 800px` e `max-width: 800px` numa tela de 500px?",
+      "alternativas": [
+        "Com width fica 800px e passa da tela; com max-width encolhe",
+        "As duas deixam a caixa com 800px e criam rolagem lateral",
+        "Com max-width fica 800px; com width a caixa encolhe na tela",
+        "As duas deixam a caixa com 500px de largura nessa tela"
+      ],
+      "correta": 0,
+      "explicacao": "width fixa o tamanho. max-width só limita o máximo: num pai menor (bloco sem width), a caixa encolhe e cabe na tela."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num site de pizzaria, o submenu tem `.submenu { position: absolute; z-index: 50; }` e o banner logo abaixo do menu tem `.banner { position: relative; z-index: 100; }`. Ao abrir, o submenu aparece atrás do banner.\n\nNa sua resposta:\n1. explique por que o submenu fica atrás do banner;\n2. diga o que mudar para ele aparecer na frente.",
+      "respostasAceitas": [
+        "O banner tem z-index 100, maior que o 50 do submenu, então fica na frente. É preciso dar ao submenu um z-index maior que 100 (ou baixar o do banner)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) maior z-index fica na frente; 2) aumentar o z-index do submenu acima de 100 (ou diminuir o do banner)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num card de pet shop, a foto tem `position: relative; top: 15px;` e o selo de desconto tem `position: absolute; top: 0; left: 0;` (o card tem position: relative).\n\nNa sua resposta:\n1. explique o que acontece com a foto;\n2. explique onde fica o selo;\n3. diga qual dos dois continua ocupando seu espaço original no fluxo.",
+      "respostasAceitas": [
+        "A foto desce 15px a partir de onde estaria. O selo vai para o canto superior esquerdo do card. A foto (relative) continua ocupando seu espaço; o selo (absolute) sai do fluxo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) relative desloca a partir da posição normal; 2) absolute vai para o canto do card; 3) só o relative mantém o espaço."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A área de recados de uma clínica tem `.recados { height: 300px; overflow: auto; }`.\n\nNa sua resposta:\n1. explique o que acontece quando há poucos recados;\n2. explique o que acontece quando há muitos recados.",
+      "respostasAceitas": [
+        "Com poucos recados, tudo cabe e não aparece barra. Com muitos, a caixa continua com 300px e aparece uma barra de rolagem dentro dela para ver o resto."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) sem barra quando cabe; 2) barra de rolagem interna, sem a caixa crescer."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O site de uma biblioteca usa `.container { width: 90%; max-width: 1100px; margin: 0 auto; }`.\n\nNa sua resposta:\n1. diga qual a largura do container numa tela de 1920px;\n2. diga qual a largura numa tela de 800px;\n3. explique o papel do margin: 0 auto.",
+      "respostasAceitas": [
+        "Em 1920px, 90% daria 1728px, mas o max-width limita a 1100px. Em 800px fica com 90% = 720px. O margin: 0 auto centraliza o container, dividindo a sobra entre os lados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 1100px (limitado pelo max-width); 2) 720px; 3) centraliza na horizontal."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "fixed-cobre",
+      "enunciado": "Num site de academia, `header { position: fixed; top: 0; height: 70px; }` fez o título da primeira seção ficar escondido atrás do cabeçalho.\n\nNa sua resposta:\n1. explique por que o título ficou escondido;\n2. explique por que `body { padding-top: 70px; }` resolve.",
+      "respostasAceitas": [
+        "Com fixed o header sai do fluxo, então o conteúdo começa no topo da página, por baixo dele. O padding-top de 70px empurra o conteúdo para baixo exatamente a altura do header."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) fixed não ocupa espaço no fluxo; 2) o padding-top reserva os 70px."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site de um cinema, a equipe discute se o menu deve ter `position: fixed; top: 0;` ou `position: sticky; top: 0;`. O menu fica logo abaixo de um banner grande.\n\nNa sua resposta:\n1. explique como o menu se comporta com fixed;\n2. explique como ele se comporta com sticky.",
+      "respostasAceitas": [
+        "Com fixed o menu fica sempre preso no topo da janela desde o início, sai do fluxo e pode cobrir o banner. Com sticky ele fica no lugar normal, abaixo do banner, e só gruda no topo quando a rolagem chega nele."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) fixed = sempre preso à janela, fora do fluxo; 2) sticky = rola normal e gruda ao atingir o top."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "clear",
+      "enunciado": "Num site de oficina, as colunas são feitas com `.lateral { float: left; width: 30%; }` e `.principal { float: left; width: 70%; }`. O rodapé, que vem depois, apareceu colado no topo, atrás das colunas.\n\nNa sua resposta:\n1. explique por que o rodapé subiu;\n2. explique o que a regra `footer { clear: both; }` faz.",
+      "respostasAceitas": [
+        "As colunas com float saem do fluxo normal, então o rodapé ocupa o espaço como se elas não existissem. O clear: both obriga o rodapé a descer até passar de todos os floats anteriores."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) floats saem do fluxo; 2) clear: both empurra o rodapé para baixo dos floats."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Numa receita de bolo, a foto tem `img { float: right; margin-left: 15px; }`.\n\nNa sua resposta:\n1. diga onde a foto fica;\n2. diga o que acontece com o texto da receita;\n3. explique para que serve o margin-left.",
+      "respostasAceitas": [
+        "A foto vai para a direita. O texto contorna a foto pelo lado esquerdo. A margin-left afasta o texto 15px da foto, para não ficar grudado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) à direita; 2) texto ao redor, do lado esquerdo; 3) espaço entre foto e texto."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O wireframe de um site de escola tem topo, menu lateral, conteúdo e rodapé. O HTML foi feito com `<div class=\"topo\">`, `<div class=\"lateral\">`, `<div class=\"principal\">` e `<div class=\"rodape\">`.\n\nNa sua resposta:\n1. explique para que servem essas divs com classes na diagramação;\n2. diga quais tags semânticas do HTML5 poderiam substituí-las.",
+      "respostasAceitas": [
+        "Cada div é uma caixa que agrupa um bloco do wireframe, e a classe permite posicionar e estilizar cada área no CSS. Poderiam ser header, aside (ou nav), main e footer."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) agrupar áreas do leiaute para o CSS posicionar; 2) header, aside/nav, main, footer."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Para centralizar uma janela de aviso, um aluno usou `.aviso { position: absolute; top: 50%; left: 50%; width: 300px; }` dentro de um pai com `position: relative`. A janela ficou deslocada para baixo e para a direita.\n\nNa sua resposta:\n1. explique qual ponto da janela foi colocado no centro do pai;\n2. explique por que a janela não ficou centralizada.",
+      "respostasAceitas": [
+        "O top e o left posicionam o canto superior esquerdo da janela no centro do pai. Como a janela tem largura e altura, ela se estende a partir do centro para a direita e para baixo; seria preciso recuar metade do tamanho dela (ex.: transform: translate(-50%, -50%))."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) o canto superior esquerdo fica no centro; 2) falta descontar metade da largura e da altura da janela."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No formulário de cadastro de uma clínica, o campo de nome tinha `width: 400px` e passava da tela do celular. Foi trocado para `width: 100%`.\n\nNa sua resposta:\n1. explique por que 400px dava problema no celular;\n2. explique o que muda com 100%.",
+      "respostasAceitas": [
+        "Uma tela de celular pode ter menos de 400px, então o campo ficava maior que a tela. Com 100% o campo acompanha a largura do pai e se ajusta a qualquer tela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) medida fixa maior que a tela; 2) porcentagem acompanha o tamanho do pai."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num site de hotel, o card tem `border-radius: 12px; overflow: hidden;` e dentro dele há uma caixinha de dica com position: absolute que deveria sair para fora do card. A dica aparece cortada.\n\nNa sua resposta:\n1. explique por que a dica foi cortada;\n2. diga para que o overflow: hidden provavelmente foi colocado no card.",
+      "respostasAceitas": [
+        "O overflow: hidden corta tudo o que passa dos limites do card, inclusive a dica absoluta que saía dele. Provavelmente foi colocado para a foto do card respeitar os cantos arredondados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) overflow: hidden esconde o que sai da caixa; 2) para cortar a imagem nos cantos arredondados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num site de loja de games, o fundo escuro atrás de uma janela de aviso usa `.fundo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; }`.\n\nNa sua resposta:\n1. explique o que position: fixed com top: 0 e left: 0 faz aqui;\n2. explique o papel de width e height em 100%;\n3. explique por que o z-index é alto.",
+      "respostasAceitas": [
+        "O fixed com top/left 0 prende o fundo no canto da janela, sem rolar. Com width e height 100% ele cobre a janela inteira. O z-index 1000 coloca o fundo na frente de todo o resto da página."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) preso à janela a partir do canto; 2) cobre a tela inteira; 3) fica na frente dos outros elementos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No site de uma padaria, todas as fotos ganharam `img { max-width: 100%; }`.\n\nNa sua resposta:\n1. explique o que acontece com uma foto maior que o contêiner;\n2. explique o que acontece com uma foto menor que o contêiner.",
+      "respostasAceitas": [
+        "A foto maior encolhe até a largura do contêiner e não passa dele. A foto menor fica no tamanho real, sem esticar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) encolhe para caber; 2) não aumenta, mantém o tamanho original."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma equipe precisa colocar três colunas de produtos lado a lado. Uma pessoa sugere `float: left` em cada coluna; outra sugere `display: flex` no contêiner.\n\nNa sua resposta:\n1. cite um problema comum do float nesse caso;\n2. explique por que o flex é a escolha mais indicada hoje.",
+      "respostasAceitas": [
+        "Com float o contêiner pode ficar sem altura e o conteúdo seguinte sobe, sendo preciso usar clear; também é difícil alinhar alturas. O flex foi feito para leiaute: coloca lado a lado, alinha e distribui espaço sem precisar de clear."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) pai sem altura/necessidade de clear/alinhamento difícil; 2) flex foi criado para distribuir e alinhar caixas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para colocar os cards de uma página lado a lado com flexbox, em qual elemento vai o `display: flex;`?",
+      "alternativas": [
+        "Em cada card (filho), separadamente",
+        "No contêiner (pai) que envolve os cards",
+        "Sempre no body da página",
+        "Só nas imagens dentro dos cards"
+      ],
+      "correta": 1,
+      "explicacao": "display: flex é colocado no pai. Os filhos diretos dele viram itens flex e são organizados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num contêiner com `display: flex;` e nenhuma outra regra, como os itens ficam?",
+      "alternativas": [
+        "Um embaixo do outro, em coluna",
+        "Numa grade de duas colunas",
+        "Sobrepostos, um em cima do outro",
+        "Lado a lado, em uma linha"
+      ],
+      "correta": 3,
+      "explicacao": "O padrão de flex-direction é row: os itens ficam em linha, da esquerda para a direita."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No menu de um app de academia, o contêiner tem `display: flex; flex-direction: column;`. Como ficam os itens?",
+      "alternativas": [
+        "Lado a lado, da esquerda para a direita",
+        "Lado a lado, da direita para a esquerda",
+        "Escondidos até passar o mouse",
+        "Empilhados, um embaixo do outro"
+      ],
+      "correta": 3,
+      "explicacao": "flex-direction: column organiza os itens na vertical, um abaixo do outro."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num contêiner com `display: flex` (direção padrão, em linha), qual propriedade centraliza os itens na horizontal?",
+      "alternativas": [
+        "justify-content: center",
+        "align-items: center",
+        "text-align: center",
+        "flex-direction: center"
+      ],
+      "correta": 0,
+      "explicacao": "Em linha, o eixo principal é horizontal, e justify-content alinha nesse eixo. align-items cuida do eixo vertical."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um cabeçalho com `display: flex; height: 80px;` tem logo e menu com alturas diferentes. Qual propriedade alinha os dois pelo meio, na vertical?",
+      "alternativas": [
+        "justify-content: center",
+        "vertical-align: center",
+        "flex-wrap: center",
+        "align-items: center"
+      ],
+      "correta": 3,
+      "explicacao": "Em linha, align-items alinha no eixo cruzado (vertical). center deixa os itens no meio da altura."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "column-justify",
+      "enunciado": "Uma caixa tem `display: flex; flex-direction: column; justify-content: center; height: 400px;`. O que o justify-content faz aqui?",
+      "alternativas": [
+        "Centraliza os itens na horizontal",
+        "Centraliza os itens na vertical",
+        "Não faz nada em coluna",
+        "Espalha os itens até as bordas"
+      ],
+      "correta": 1,
+      "explicacao": "Em column, o eixo principal vira vertical. justify-content: center centraliza os itens na altura de 400px."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "space-between",
+      "enunciado": "Uma barra de um site de cinema tem três botões em flex. O primeiro deve ficar na ponta esquerda, o último na ponta direita e o do meio no centro. Qual valor de justify-content usar?",
+      "alternativas": [
+        "space-between",
+        "space-around",
+        "center",
+        "flex-start"
+      ],
+      "correta": 0,
+      "explicacao": "space-between põe o primeiro e o último nas pontas e divide igualmente o espaço entre eles. space-around deixa espaço também nas pontas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual propriedade cria 16px de espaço entre os itens de um contêiner flex, sem colocar espaço nas pontas?",
+      "alternativas": [
+        "padding: 16px;",
+        "margin: 16px;",
+        "gap: 16px;",
+        "border-spacing: 16px;"
+      ],
+      "correta": 2,
+      "explicacao": "gap cria espaço só entre os itens. padding e margin também colocariam espaço nas bordas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "wrap",
+      "enunciado": "Uma loja tem 8 cards de 250px dentro de um contêiner de 800px com `display: flex;`, sem flex-wrap. O que acontece?",
+      "alternativas": [
+        "Ficam todos numa linha só, encolhendo para caber",
+        "Quebram sozinhos em três linhas de cards",
+        "Só os três primeiros cards aparecem na tela",
+        "Ficam empilhados, um embaixo do outro"
+      ],
+      "correta": 0,
+      "explicacao": "O padrão é flex-wrap: nowrap: tudo fica numa linha só, e os itens encolhem (ou vazam) para tentar caber."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "wrap",
+      "enunciado": "O que faz `flex-wrap: wrap;` num contêiner flex com muitos cards?",
+      "alternativas": [
+        "Os cards encolhem até caber todos em uma linha",
+        "Os cards que não cabem passam para a linha de baixo",
+        "Os cards que não cabem são escondidos",
+        "Os cards passam a ficar em coluna"
+      ],
+      "correta": 1,
+      "explicacao": "wrap permite que os itens quebrem em várias linhas quando não cabem na largura."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um contêiner de 700px tem `display: flex; flex-wrap: wrap; gap: 20px;` e cards com `width: 200px` (sem margin, box-sizing border-box). Quantos cards cabem por linha?",
+      "alternativas": [
+        "3",
+        "4",
+        "2",
+        "5"
+      ],
+      "correta": 0,
+      "explicacao": "3 cards: 600px + 2 gaps de 20px = 640px (cabe). 4 cards: 800px + 60px = 860px (não cabe)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No cabeçalho de uma clínica, o menu tem `display: flex;` e os links devem ficar encostados no lado direito. Qual regra usar no menu?",
+      "alternativas": [
+        "align-items: flex-end;",
+        "justify-content: flex-end;",
+        "flex-direction: right;",
+        "float: flex-end;"
+      ],
+      "correta": 1,
+      "explicacao": "Em linha, justify-content: flex-end empurra os itens para o fim do eixo principal (direita)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num contêiner flex em linha, sem align-items definido, cards com textos de tamanhos diferentes ficam todos com a mesma altura. Por quê?",
+      "alternativas": [
+        "O flex sempre copia a altura do primeiro item da linha",
+        "O gap iguala automaticamente a altura de todos os itens",
+        "Os textos são cortados para todos terem o mesmo tamanho",
+        "O padrão de align-items é stretch, que estica os itens"
+      ],
+      "correta": 3,
+      "explicacao": "align-items começa como stretch: os itens esticam até a altura da linha (a do maior card)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma galeria de hotel usa `display: grid; grid-template-columns: 1fr 1fr 1fr;`. Como ficam as fotos?",
+      "alternativas": [
+        "Em três linhas de mesma altura",
+        "Em uma coluna com três fotos",
+        "Em três colunas de mesma largura",
+        "Em três colunas de 1px cada"
+      ],
+      "correta": 2,
+      "explicacao": "Três valores em grid-template-columns = três colunas. 1fr para todas = larguras iguais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um contêiner de 900px, sem gap, tem `display: grid; grid-template-columns: 2fr 1fr;`. Qual a largura de cada coluna?",
+      "alternativas": [
+        "600px e 300px",
+        "450px e 450px",
+        "300px e 600px",
+        "2px e 1px"
+      ],
+      "correta": 0,
+      "explicacao": "O espaço é dividido em 3 partes (2 + 1) de 300px: a primeira coluna fica com 2 partes (600px) e a segunda com 1 (300px)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "fr-gap",
+      "enunciado": "Um contêiner de 960px tem `display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px;`. Qual a largura de cada coluna?",
+      "alternativas": [
+        "320px",
+        "290px",
+        "300px",
+        "280px"
+      ],
+      "correta": 2,
+      "explicacao": "Dois espaços de 30px = 60px. Sobram 900px, divididos por 3 = 300px cada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num painel de biblioteca, `.layout { display: grid; grid-template-columns: 200px 1fr; }` está num contêiner de 1000px, sem gap. Qual a largura da segunda coluna?",
+      "alternativas": [
+        "800px",
+        "200px",
+        "1000px",
+        "500px"
+      ],
+      "correta": 0,
+      "explicacao": "A primeira coluna é fixa (200px); o 1fr fica com todo o resto: 1000 − 200 = 800px."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma grade com `grid-template-columns: repeat(3, 1fr);` recebe 7 cards de produtos. Quantas linhas a grade terá?",
+      "alternativas": [
+        "3",
+        "2",
+        "7",
+        "1"
+      ],
+      "correta": 0,
+      "explicacao": "3 cards por linha: 3 + 3 + 1. A terceira linha fica com um card só."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que significa `grid-template-columns: repeat(4, 1fr);`?",
+      "alternativas": [
+        "Uma coluna repetida em quatro páginas",
+        "Quatro colunas de mesma largura",
+        "Quatro linhas de mesma altura",
+        "Uma coluna com 4px de largura"
+      ],
+      "correta": 1,
+      "explicacao": "repeat(4, 1fr) é o mesmo que escrever 1fr quatro vezes: quatro colunas iguais."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "fr-gap",
+      "enunciado": "Um contêiner de 1000px tem `display: grid; grid-template-columns: 250px 1fr 1fr; gap: 20px;`. Qual a largura de cada coluna 1fr?",
+      "alternativas": [
+        "375px",
+        "355px",
+        "365px",
+        "333px"
+      ],
+      "correta": 1,
+      "explicacao": "Tira a coluna fixa e os dois gaps: 1000 − 250 − 40 = 710px. Dividido por 2 = 355px."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que significa a regra `@media (max-width: 600px) { ... }`?",
+      "alternativas": [
+        "As regras de dentro valem só em telas a partir de 600px",
+        "As regras de dentro valem só em telas de até 600px de largura",
+        "As regras de dentro valem só na impressão da página",
+        "A página passa a ter no máximo 600px de largura"
+      ],
+      "correta": 1,
+      "explicacao": "max-width: 600px = largura da tela menor ou igual a 600px. É o jeito comum de ajustar o leiaute para celulares."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma loja usa `.cards { display: grid; grid-template-columns: repeat(3, 1fr); }` e `@media (max-width: 600px) { .cards { grid-template-columns: 1fr; } }`. Como os cards aparecem num celular de 400px?",
+      "alternativas": [
+        "Em três colunas mais estreitas",
+        "Em duas colunas",
+        "Escondidos, até girar o celular",
+        "Em uma coluna, um embaixo do outro"
+      ],
+      "correta": 3,
+      "explicacao": "Em 400px a media query vale e troca a grade para uma coluna só (1fr)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "As media queries de um site estão corretas, mas no celular a página aparece como no computador, só que bem pequena. O que provavelmente falta no HTML?",
+      "alternativas": [
+        "<meta charset=\"UTF-8\"> logo no começo do head da página",
+        "<link rel=\"stylesheet\" href=\"estilo-celular.css\" media=\"mobile\">",
+        "<meta name=\"description\" content=\"loja de roupas e acessórios\">",
+        "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
+      ],
+      "correta": 3,
+      "explicacao": "Sem a meta viewport, o celular finge ter uma tela larga (cerca de 980px) e as media queries de 600px não são ativadas."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O CSS tem primeiro `@media (max-width: 600px) { .menu { display: none; } }` e, mais abaixo, `.menu { display: flex; }`. No celular, o menu continua aparecendo. Por quê?",
+      "alternativas": [
+        "A media query só funciona se estiver no arquivo HTML",
+        "Com o mesmo seletor, vale a regra que vem por último",
+        "O display: none não funciona dentro de um @media",
+        "O display: flex sempre ganha de um display: none"
+      ],
+      "correta": 1,
+      "explicacao": "A media query não aumenta a força da regra. Com o mesmo seletor, vale a que vem por último. Por isso as media queries costumam ficar no fim do CSS."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa tela de exatamente 600px de largura, as regras de `@media (max-width: 600px)` valem?",
+      "alternativas": [
+        "Sim, porque max-width inclui o próprio valor de 600px",
+        "Não, elas só valem em telas menores que 600px",
+        "Não, elas só valem em telas maiores que 600px",
+        "Só valem se o celular estiver deitado na horizontal"
+      ],
+      "correta": 0,
+      "explicacao": "max-width: 600px significa largura menor ou igual a 600px."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um site de pizzaria tem `@media (max-width: 600px) { .menu { flex-direction: column; } }`, sendo .menu um contêiner flex. O que muda no celular?",
+      "alternativas": [
+        "Os itens do menu ficam lado a lado",
+        "Os itens do menu ficam um embaixo do outro",
+        "O menu desaparece da tela",
+        "O menu passa a ter só uma opção"
+      ],
+      "correta": 1,
+      "explicacao": "Em telas de até 600px a direção vira coluna e os itens são empilhados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é um leiaute responsivo?",
+      "alternativas": [
+        "Um leiaute que se adapta ao tamanho da tela",
+        "Um site que carrega rápido em qualquer internet",
+        "Um site que responde a formulários",
+        "Um leiaute que só funciona no celular"
+      ],
+      "correta": 0,
+      "explicacao": "Responsivo = o leiaute se ajusta a celulares, tablets e computadores, usando medidas flexíveis e media queries."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa grade, o que significa `gap: 10px 20px;`?",
+      "alternativas": [
+        "10px entre as colunas e 20px entre as linhas",
+        "10px em cima e 20px embaixo da grade",
+        "10px entre as linhas e 20px entre as colunas",
+        "10px nas bordas e 20px entre os itens"
+      ],
+      "correta": 2,
+      "explicacao": "Com dois valores, o primeiro é o espaço entre linhas (row-gap) e o segundo entre colunas (column-gap)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma caixa com `display: flex; height: 300px;` tem um único botão dentro. Qual combinação deixa o botão exatamente no meio da caixa?",
+      "alternativas": [
+        "justify-content: center; flex-wrap: wrap;",
+        "align-items: center; flex-direction: column;",
+        "justify-content: center; align-items: center;",
+        "text-align: center; vertical-align: middle;"
+      ],
+      "correta": 2,
+      "explicacao": "justify-content centraliza no eixo principal (horizontal) e align-items no eixo cruzado (vertical)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "column-justify",
+      "enunciado": "Uma caixa tem `display: flex; flex-direction: column; justify-content: center;` e nenhuma altura definida. O justify-content parece não fazer nada. Por quê?",
+      "alternativas": [
+        "justify-content não funciona com flex-direction: column",
+        "Sem height, não sobra espaço vertical para distribuir",
+        "Em coluna, é preciso usar text-align no lugar dele",
+        "Os itens precisam de float para conseguir se mover"
+      ],
+      "correta": 1,
+      "explicacao": "Sem height, a caixa tem exatamente a altura do conteúdo. Não há espaço livre para centralizar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual valor de `display` transforma um elemento num contêiner de grade (linhas e colunas)?",
+      "alternativas": [
+        "flex",
+        "block",
+        "inline",
+        "grid"
+      ],
+      "correta": 3,
+      "explicacao": "display: grid cria um contêiner de grade, organizado com grid-template-columns e gap."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em qual situação o grid costuma ser mais indicado que o flexbox?",
+      "alternativas": [
+        "Quando os itens devem ficar só em uma linha",
+        "Quando há só um item para centralizar na caixa",
+        "Quando o leiaute não precisa ter colunas",
+        "Quando há linhas e colunas ao mesmo tempo"
+      ],
+      "correta": 3,
+      "explicacao": "Grid organiza em duas dimensões (linhas e colunas). Flex organiza em uma direção por vez (linha ou coluna)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual a diferença entre `@media (max-width: 600px)` e `@media (min-width: 600px)`?",
+      "alternativas": [
+        "max-width vale a partir de 600px; min-width vale até 600px",
+        "max-width vale até 600px; min-width vale a partir de 600px",
+        "As duas valem só em telas de exatamente 600px",
+        "max-width é para celular deitado; min-width para em pé"
+      ],
+      "correta": 1,
+      "explicacao": "max-width = no máximo 600px (telas pequenas). min-width = no mínimo 600px (telas maiores)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "space-between",
+      "enunciado": "No cabeçalho de um pet shop, a logo deve ficar na esquerda e o menu na direita. O header tem `display: flex;`. Qual regra completa isso?",
+      "alternativas": [
+        "align-items: space-between;",
+        "flex-direction: column;",
+        "justify-content: space-between;",
+        "flex-wrap: wrap;"
+      ],
+      "correta": 2,
+      "explicacao": "Com dois itens, space-between coloca um em cada ponta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "grupo": "mq-cascata",
+      "enunciado": "Um CSS tem `@media (max-width: 900px) { .grade { grid-template-columns: repeat(2, 1fr); } }` e, depois, `@media (max-width: 600px) { .grade { grid-template-columns: 1fr; } }`. Numa tela de 500px, quantas colunas a grade terá?",
+      "alternativas": [
+        "2",
+        "3",
+        "1",
+        "Depende do navegador"
+      ],
+      "correta": 2,
+      "explicacao": "Em 500px as duas media queries valem. Como têm o mesmo seletor, vale a que vem depois: 1 coluna."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O cabeçalho de um pet shop usa `header { display: flex; justify-content: space-between; align-items: center; }`, com a logo e o menu dentro.\n\nNa sua resposta:\n1. explique o que o display: flex faz com a logo e o menu;\n2. explique o que o justify-content: space-between faz;\n3. explique o que o align-items: center faz.",
+      "respostasAceitas": [
+        "O flex coloca a logo e o menu lado a lado. O space-between joga a logo para a esquerda e o menu para a direita, com o espaço livre entre eles. O align-items: center alinha os dois pelo meio, na vertical."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) lado a lado; 2) um em cada ponta; 3) centralizados na vertical."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No celular, o menu de uma escola usa `.menu { display: flex; flex-direction: column; }`.\n\nNa sua resposta:\n1. diga como os itens do menu ficam na tela;\n2. explique por que isso costuma ser melhor no celular.",
+      "respostasAceitas": [
+        "Os itens ficam um embaixo do outro. No celular a tela é estreita, então empilhar evita que os links fiquem espremidos ou saiam da tela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) empilhados; 2) tela estreita, mais espaço para cada item."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num site de academia, o CSS tem `@media (max-width: 600px) { .lateral { display: none; } }`.\n\nNa sua resposta:\n1. diga em quais telas essa regra vale;\n2. diga o que acontece com a .lateral nessas telas.",
+      "respostasAceitas": [
+        "Vale em telas de até 600px de largura (celulares). Nelas a barra lateral some e não ocupa espaço; em telas maiores ela aparece normalmente."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) largura até 600px; 2) a lateral é escondida sem ocupar espaço."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A galeria de um hotel usa `.galeria { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }`.\n\nNa sua resposta:\n1. diga quantas colunas a galeria tem e como é a largura delas;\n2. explique o que o gap faz.",
+      "respostasAceitas": [
+        "São três colunas de mesma largura (1fr cada). O gap coloca 20px de espaço entre as fotos, tanto entre colunas quanto entre linhas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) três colunas iguais; 2) espaço de 20px entre os itens."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "fr-gap",
+      "enunciado": "Num leiaute de duas colunas com `gap: 20px`, uma pessoa usou `grid-template-columns: 66% 34%;` e apareceu rolagem para os lados. Outra pessoa trocou para `grid-template-columns: 2fr 1fr;` e o problema sumiu.\n\nNa sua resposta:\n1. explique por que 66% + 34% com gap causa rolagem;\n2. explique por que 2fr 1fr não causa.",
+      "respostasAceitas": [
+        "As porcentagens somam 100% da largura e o gap de 20px é somado por cima, passando do contêiner. O fr divide só o espaço que sobra depois do gap, então as colunas sempre cabem."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 100% + 20px passa da largura; 2) fr reparte o espaço livre já descontando o gap."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "wrap",
+      "enunciado": "A vitrine de uma loja de games tem `.vitrine { display: flex; flex-wrap: wrap; gap: 16px; }` com cards de 220px.\n\nNa sua resposta:\n1. explique o que o flex-wrap: wrap faz quando a tela fica estreita;\n2. diga o que aconteceria sem o flex-wrap.",
+      "respostasAceitas": [
+        "Com wrap, os cards que não cabem na linha descem para a linha seguinte, mantendo o tamanho. Sem ele, todos ficariam numa linha só, encolhendo ou vazando para fora da tela."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) quebra em várias linhas; 2) tudo numa linha, encolhido ou vazando."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "mq-cascata",
+      "enunciado": "Um site de livraria usa `.lista { display: grid; grid-template-columns: repeat(4, 1fr); }`, depois `@media (max-width: 900px) { .lista { grid-template-columns: repeat(2, 1fr); } }` e, por último, `@media (max-width: 600px) { .lista { grid-template-columns: 1fr; } }`.\n\nNa sua resposta:\n1. diga quantas colunas aparecem numa tela de 1200px;\n2. diga quantas aparecem numa tela de 800px;\n3. diga quantas aparecem numa tela de 400px e por quê.",
+      "respostasAceitas": [
+        "Em 1200px: 4 colunas (nenhuma media query vale). Em 800px: 2 colunas. Em 400px: 1 coluna; as duas media queries valem, mas a última, que vem depois, ganha."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 4; 2) 2; 3) 1, porque a regra de 600px vem depois e sobrescreve a de 900px."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O HTML de um site de clínica tem, no head, `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">`.\n\nNa sua resposta:\n1. explique o que essa linha faz no celular;\n2. explique o que acontece com as media queries sem ela.",
+      "respostasAceitas": [
+        "Ela faz a página usar a largura real da tela do aparelho, sem zoom inicial. Sem ela o celular simula uma tela larga e mostra o site encolhido, e as media queries de telas pequenas não são ativadas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) usa a largura real do dispositivo; 2) sem ela as media queries para celular não funcionam como esperado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Uma equipe vai organizar a página inteira de um hotel (topo, lateral, conteúdo, rodapé) e também a barra de botões do topo.\n\nNa sua resposta:\n1. diga se usaria grid ou flex para a página inteira, e por quê;\n2. diga se usaria grid ou flex para a barra de botões, e por quê.",
+      "respostasAceitas": [
+        "Para a página inteira, grid, porque o leiaute tem linhas e colunas ao mesmo tempo. Para a barra de botões, flex, porque os itens ficam numa direção só e o flex alinha e distribui bem esse espaço."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) grid = duas dimensões; 2) flex = uma dimensão (fila de itens). Aceitar justificativas coerentes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num contêiner flex com cards de uma padaria, alguém usou `margin-right: 16px` em cada card, e o último card ficou com um espaço sobrando na direita. Outra pessoa trocou por `gap: 16px` no contêiner.\n\nNa sua resposta:\n1. explique por que a margin deixou espaço sobrando no último card;\n2. explique por que o gap resolve.",
+      "respostasAceitas": [
+        "A margin é aplicada a todos os cards, inclusive o último, então sobra espaço depois dele. O gap só cria espaço entre os itens, sem colocar nada nas pontas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a margem vale para todos, até o último; 2) gap é só entre os itens."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "eixos",
+      "enunciado": "Num contêiner com `display: flex;` (direção padrão), um aluno confunde `justify-content` com `align-items`.\n\nNa sua resposta:\n1. explique em que direção o justify-content alinha os itens;\n2. explique em que direção o align-items alinha os itens.",
+      "respostasAceitas": [
+        "Com a direção padrão (linha), o justify-content alinha no eixo principal, que é o horizontal. O align-items alinha no eixo cruzado, que é o vertical."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) horizontal (eixo principal); 2) vertical (eixo cruzado)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "grupo": "eixos",
+      "enunciado": "Um contêiner tem `display: flex; justify-content: center; height: 500px;` e os itens estavam centralizados na horizontal. Depois foi colocado `flex-direction: column;`.\n\nNa sua resposta:\n1. explique o que muda no efeito do justify-content: center;\n2. diga qual propriedade passaria a centralizar na horizontal.",
+      "respostasAceitas": [
+        "Em coluna o eixo principal fica vertical, então o justify-content: center passa a centralizar os itens na vertical (no meio dos 500px). Para centralizar na horizontal passa a ser o align-items: center."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) passa a agir na vertical; 2) align-items: center."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na página de uma oficina, os cards de serviços estão em `display: flex;` e todos ficaram com a altura do card de texto mais longo.\n\nNa sua resposta:\n1. explique por que isso acontece;\n2. diga o que mudar para cada card ter só a altura do próprio conteúdo.",
+      "respostasAceitas": [
+        "O padrão do align-items é stretch, que estica os itens até a altura da linha, igual à do maior card. Com align-items: flex-start (ou center) cada card fica só com a altura do seu conteúdo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) align-items padrão = stretch; 2) trocar para flex-start (ou center/outro valor)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O painel de uma biblioteca usa `.painel { display: grid; grid-template-columns: 250px 1fr; }`.\n\nNa sua resposta:\n1. explique a largura da primeira coluna;\n2. explique a largura da segunda coluna quando a tela aumenta.",
+      "respostasAceitas": [
+        "A primeira coluna tem sempre 250px, fixa. A segunda (1fr) fica com todo o espaço que sobra, então cresce quando a tela aumenta e diminui quando a tela diminui."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) fixa em 250px; 2) 1fr ocupa o resto e acompanha a tela."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "CSS — box model e diagramação",
+      "capacidade": "marc.ct4",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Um painel de pet shop usa `.layout { display: grid; grid-template-columns: 220px 1fr; }` e `@media (max-width: 600px) { .layout { grid-template-columns: 1fr; } .lateral { display: none; } }`.\n\nNa sua resposta:\n1. diga como o leiaute fica numa tela de computador;\n2. diga como ele fica num celular de 400px.",
+      "respostasAceitas": [
+        "No computador há duas colunas: a lateral de 220px e o conteúdo ocupando o resto. No celular a grade vira uma coluna só e a lateral é escondida, então o conteúdo ocupa a largura toda."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) duas colunas (220px + resto); 2) uma coluna, sem a lateral, conteúdo em largura total."
+    }
+  ]
+}

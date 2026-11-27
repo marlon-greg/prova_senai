@@ -2145,7 +2145,8 @@ const BANCOS_MARC_150 = [
   ["marc_05_html_textos_links", "HTML: textos, cores, imagens e links"],
   ["marc_06_html_listas_tabelas", "HTML: listas e tabelas"],
   ["marc_07_html_formularios", "HTML: formulários"],
-  ["marc_08_css_seletores", "CSS: seletores, formatação e validação"]
+  ["marc_08_css_seletores", "CSS: seletores, formatação e validação"],
+  ["marc_09_css_box_model", "CSS: box model e diagramação"]
 ].map(([arq, tema]) => ({ arquivo: `bancos/gerados/marc/${arq}.json`, icone: "🏷", titulo: `Linguagem de Marcação — ${tema} (150 questões)`,
   desc: "105 alternativas + 45 dissertativas (sem pedir código), dificuldade balanceada. Todas \"a revisar\": só caem na Área de testes até você aprovar.", provas: [] }));
 const BANCOS_PRONTOS = [
