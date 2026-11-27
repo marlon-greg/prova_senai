@@ -1,0 +1,2444 @@
+{
+  "nome": "Programação Back-End — Padrão MVC e design patterns (a revisar)",
+  "materia": "Programação Back-End",
+  "revisao": "pendente",
+  "versao": "2026-11-27",
+  "contexto": "150 questões novas (105 alternativas + 45 dissertativas), padrão de 27/11.",
+  "questoes": [
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No padrão MVC, qual é a responsabilidade da camada View?",
+      "alternativas": [
+        "Gravar e buscar os dados no banco",
+        "Apresentar os dados para quem usa o sistema",
+        "Decidir qual regra de negócio aplicar a cada pedido",
+        "Abrir a conexão com o MySQL"
+      ],
+      "correta": 1,
+      "explicacao": "A View cuida da apresentação (tela ou resposta). Gravar dados é do Model; decidir o fluxo é do Controller."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num site de cinema em que o servidor monta as páginas HTML com um template, o arquivo `sessoes.ejs` desenha a lista de sessões do dia. Esse arquivo pertence a qual camada do MVC?",
+      "alternativas": [
+        "Model",
+        "Controller",
+        "Service",
+        "View"
+      ],
+      "correta": 3,
+      "explicacao": "Template que monta a página mostrada ao usuário é View."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa API Express organizada em pastas, um arquivo contém apenas linhas como `router.get('/livros', livroController.listar);`. Em qual pasta esse arquivo costuma ficar?",
+      "alternativas": [
+        "routes/",
+        "models/",
+        "services/",
+        "config/"
+      ],
+      "correta": 0,
+      "explicacao": "Arquivos que só ligam URL + método HTTP a uma função do controller ficam em routes/."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num projeto Express em camadas, o que normalmente fica na pasta `controllers/`?",
+      "alternativas": [
+        "As tabelas do banco de dados, com as colunas e os tipos de cada uma",
+        "Os pacotes baixados pelo npm install, como o express e o mysql2",
+        "Funções que recebem req e res, chamam o necessário e devolvem a resposta",
+        "Os arquivos CSS, as imagens e os scripts usados em todas as páginas do site"
+      ],
+      "correta": 2,
+      "explicacao": "O controller trata a requisição e a resposta HTTP. Tabelas ficam no banco; pacotes em node_modules."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API de uma escola, o controller tem o trecho abaixo.\n```\nasync function listar(req, res) {\n  const alunos = await alunoService.listar();\n  res.json(alunos);\n}\n```\nQual linha faz o papel da \"View\", entregando o resultado ao cliente?",
+      "alternativas": [
+        "async function listar(req, res) {",
+        "const alunos = await alunoService.listar();",
+        "res.json(alunos);",
+        "Nenhuma, pois API não tem View"
+      ],
+      "correta": 2,
+      "explicacao": "Numa API REST a resposta JSON é a forma de apresentação: res.json(alunos) monta e envia essa resposta."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A academia trocou todo o visual das telas do sistema, mas as regras de matrícula e os dados continuaram iguais. Num sistema MVC bem separado, quais partes precisaram mudar?",
+      "alternativas": [
+        "Só a View",
+        "O Model e o Controller inteiros",
+        "Apenas as tabelas do banco de dados",
+        "Todos os arquivos do projeto"
+      ],
+      "correta": 0,
+      "explicacao": "Mudança só de aparência fica na View; é justamente a vantagem da separação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num projeto com as pastas routes, controllers, services e models, onde costuma ficar a regra \"aluno com mensalidade atrasada não pode fazer check-in na academia\"?",
+      "alternativas": [
+        "routes/",
+        "views/",
+        "public/",
+        "services/"
+      ],
+      "correta": 3,
+      "explicacao": "Regra de negócio fica na camada de serviço (services), que o controller chama."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que quer dizer \"separação de responsabilidades\" na organização de um sistema?",
+      "alternativas": [
+        "Cada programador só pode mexer em um arquivo",
+        "Cada parte do código cuida de uma tarefa bem definida",
+        "Todo o código fica num arquivo só, para ser fácil de achar",
+        "O banco de dados faz todas as validações"
+      ],
+      "correta": 1,
+      "explicacao": "Separar responsabilidades é dividir o código para que cada parte tenha uma função clara."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na clínica, o arquivo `models/Paciente.js` tem as funções `buscarPorId` e `salvar`, que leem e gravam na tabela `paciente` (id_paciente, nome, telefone). A que camada do MVC esse arquivo pertence?",
+      "alternativas": [
+        "Model",
+        "View",
+        "Controller",
+        "Rota"
+      ],
+      "correta": 0,
+      "explicacao": "Quem representa os dados e conversa com a tabela é o Model."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Numa API Express organizada em camadas, qual é o caminho mais comum que uma requisição percorre na ida?",
+      "alternativas": [
+        "model → rota → controller → service",
+        "controller → model → rota → service",
+        "rota → controller → service → model",
+        "service → rota → model → controller"
+      ],
+      "correta": 2,
+      "explicacao": "A rota encaminha para o controller, que chama o service, que usa o model para chegar aos dados.",
+      "grupo": "fluxo-camadas"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na pasta `config/` de um projeto Express costuma ficar:",
+      "alternativas": [
+        "A regra de desconto da loja",
+        "A configuração de conexão com o banco",
+        "As rotas de cada recurso que a API oferece",
+        "As telas HTML do sistema"
+      ],
+      "correta": 1,
+      "explicacao": "config/ guarda configurações (conexão, variáveis); regras ficam em services e rotas em routes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A rota `GET /livros/:id` da biblioteca foi chamada com `/livros/7`. Em uma organização MVC, quem lê o valor 7 em `req.params.id`?",
+      "alternativas": [
+        "O model",
+        "O banco de dados",
+        "A view",
+        "O controller"
+      ],
+      "correta": 3,
+      "explicacao": "Ler dados da requisição (req) é tarefa do controller; o model recebe só o id já lido."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas é uma vantagem do MVC para o trabalho em equipe?",
+      "alternativas": [
+        "O sistema deixa de precisar de um banco de dados para guardar tudo",
+        "Pessoas diferentes podem mexer em camadas diferentes ao mesmo tempo",
+        "O código não precisa mais ser testado depois de pronto pela equipe",
+        "O código do servidor passa a rodar direto no navegador de cada um"
+      ],
+      "correta": 1,
+      "explicacao": "Com camadas separadas, um mexe na View, outro no Model, com menos conflitos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No pet shop, a função `calcularPrecoBanho(porte)` define o preço do banho conforme o porte do animal (pequeno, médio, grande). Essa função representa:",
+      "alternativas": [
+        "Um detalhe de apresentação",
+        "Uma configuração do servidor",
+        "Uma rota da API",
+        "Uma regra de negócio"
+      ],
+      "correta": 3,
+      "explicacao": "Preço por porte é decisão do negócio do pet shop: regra de negócio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No arquivo de rotas da escola há a linha:\n```\nrouter.post('/matriculas', matriculaController.criar);\n```\nO que essa linha faz?",
+      "alternativas": [
+        "Liga o POST em /matriculas à função criar do controller",
+        "Cria a tabela matriculas no banco de dados",
+        "Executa a função criar uma única vez quando o servidor sobe",
+        "Envia uma matrícula pronta para o cliente"
+      ],
+      "correta": 0,
+      "explicacao": "A rota só registra: quando chegar POST /matriculas, o Express chama matriculaController.criar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o controller da API de um cinema:\n```\nasync function emCartaz(req, res) {\n  const filmes = await filmeService.emCartaz();\n  res.json(filmes);\n}\n```\nO que esse controller faz?",
+      "alternativas": [
+        "Consulta o banco direto, com um SELECT escrito ali dentro",
+        "Monta uma página HTML com os filmes",
+        "Pede ao service os filmes em cartaz e os devolve em JSON",
+        "Cadastra um filme novo no sistema"
+      ],
+      "correta": 2,
+      "explicacao": "O controller delega ao service e só formata a resposta com res.json."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No pet shop, `petModel.buscarPorId(40)` devolveu `null` porque não existe pet 40. Numa organização MVC, quem deve decidir responder com status 404?",
+      "alternativas": [
+        "O model, chamando res.status(404)",
+        "O banco, enviando o 404 sozinho",
+        "O controller, que conhece a requisição HTTP",
+        "O arquivo de rotas, antes de chamar o controller"
+      ],
+      "correta": 2,
+      "explicacao": "O model só devolve dados (ou null). Quem traduz isso para HTTP (404) é o controller."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que não é uma boa ideia passar o objeto `req` inteiro do Express para uma função do Model?",
+      "alternativas": [
+        "O Model fica preso ao HTTP e não pode ser reaproveitado fora dele",
+        "O req é grande demais e trava o banco de dados a cada consulta",
+        "O Express proíbe passar o req como parâmetro para outra função",
+        "O req só existe no front-end e nunca chega ao código do servidor"
+      ],
+      "correta": 0,
+      "explicacao": "Model que depende de req só funciona dentro de uma requisição; recebendo dados simples, serve para scripts, testes etc."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual das tarefas abaixo é regra de negócio e, por isso, deveria ficar no service?",
+      "alternativas": [
+        "Ler o id que veio em req.params da rota",
+        "Responder com o status 201 após cadastrar",
+        "Converter o corpo JSON da requisição em objeto",
+        "Cliente com 10 compras ganha 5% de desconto"
+      ],
+      "correta": 3,
+      "explicacao": "Desconto por fidelidade é decisão do negócio. As outras são detalhes de HTTP, do controller ou do Express."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O pet shop vai ganhar o cadastro de veterinários na API, que já é organizada em routes, controllers, services e models. O que normalmente se cria?",
+      "alternativas": [
+        "Um arquivo só, veterinario.js, com rotas, SQL e regras todos juntos",
+        "Uma rota, um controller, um service e um model para veterinário",
+        "Um arquivo HTML e outro CSS na pasta do servidor para cada tela",
+        "Uma nova conexão com o banco em config/veterinarioConexao.js"
+      ],
+      "correta": 1,
+      "explicacao": "Cada recurso segue a mesma estrutura de camadas; a conexão com o banco é reaproveitada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é o papel da camada service, que muitos projetos colocam entre o controller e o model?",
+      "alternativas": [
+        "Concentrar as regras de negócio",
+        "Guardar imagens e arquivos estáticos",
+        "Substituir o banco de dados",
+        "Definir as URLs da API"
+      ],
+      "correta": 0,
+      "explicacao": "O service guarda as regras; o controller fica só com o HTTP e o model com os dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que se quer dizer com \"controller magro\"?",
+      "alternativas": [
+        "Controller com no máximo 10 linhas em cada uma das funções",
+        "Controller que não usa nenhum try/catch",
+        "Controller que só recebe, chama o service e responde",
+        "Controller escrito sem async e sem await"
+      ],
+      "correta": 2,
+      "explicacao": "Controller magro não tem SQL nem regra: delega e responde. O tamanho exato não é a questão."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A API da padaria só devolve JSON, e quem mostra as telas é um aplicativo separado. Olhando o sistema inteiro, onde estão as telas?",
+      "alternativas": [
+        "Na pasta models da API, junto das tabelas",
+        "No aplicativo, que consome o JSON da API",
+        "No controller, que monta o HTML das telas",
+        "No banco de dados, nas tabelas da padaria"
+      ],
+      "correta": 1,
+      "explicacao": "Numa API REST as telas ficam no cliente (app/front-end); a API entrega dados."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na volta da requisição, depois que os dados foram buscados no banco, qual é o caminho até o cliente?",
+      "alternativas": [
+        "controller → model → service → resposta JSON",
+        "service → rota → model → resposta JSON",
+        "model → rota → banco → resposta JSON",
+        "model → service → controller → resposta JSON"
+      ],
+      "correta": 3,
+      "explicacao": "Os dados sobem pelas camadas na ordem inversa da ida e o controller envia a resposta.",
+      "grupo": "fluxo-camadas"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A escola decidiu trocar o MySQL por outro banco de dados. Num projeto em camadas bem separado, qual camada é a principal a mudar?",
+      "alternativas": [
+        "Os controllers",
+        "A camada de acesso a dados (model)",
+        "As rotas",
+        "O formato do JSON enviado nas respostas"
+      ],
+      "correta": 1,
+      "explicacao": "Só quem fala com o banco precisa mudar; controller e rotas nem sabem qual banco existe."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o model de uma loja, com a tabela `produto` (id_produto, nome, preco):\n```\nasync function listar(res) {\n  const [linhas] = await db.query('SELECT * FROM produto');\n  res.json(linhas);\n}\n```\nQual é o problema de organização?",
+      "alternativas": [
+        "SQL nunca pode ficar dentro do model",
+        "Funções de model não podem ser async",
+        "db.query só funciona dentro do arquivo de rotas",
+        "O model está respondendo HTTP, papel do controller"
+      ],
+      "correta": 3,
+      "explicacao": "O model deveria apenas devolver linhas; quem chama res.json é o controller."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que tirar a regra de desconto do controller e colocá-la num service facilita os testes?",
+      "alternativas": [
+        "Dá para testar a função direto, sem servidor nem requisição HTTP",
+        "O service roda os testes sozinho toda vez que o arquivo é salvo",
+        "Código que fica num service não precisa mais de nenhum teste",
+        "O Express testa os services automaticamente ao iniciar a API"
+      ],
+      "correta": 0,
+      "explicacao": "Uma função de service recebe dados e devolve resultado: basta chamá-la num teste."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Em que pasta normalmente fica uma função como `autenticar(req, res, next)`, usada antes de várias rotas?",
+      "alternativas": [
+        "models/",
+        "services/",
+        "middlewares/",
+        "views/"
+      ],
+      "correta": 2,
+      "explicacao": "Funções com (req, res, next) que rodam antes das rotas são middlewares."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No arquivo de rotas da escola alguém escreveu:\n```\nrouter.post('/matriculas', matriculaController.criar());\n```\nQual é o erro?",
+      "alternativas": [
+        "Faltou escrever await antes de matriculaController na linha",
+        "router.post não aceita receber funções vindas de um controller",
+        "Os parênteses executam criar na hora, e o Express recebe o retorno",
+        "O caminho da rota deveria ser '/matriculas/criar' e não '/matriculas'"
+      ],
+      "correta": 2,
+      "explicacao": "Com () a função roda ao carregar o arquivo. O Express precisa da referência: matriculaController.criar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o controller e a rota:\n```\nclass AlunoController {\n  constructor(service) { this.service = service; }\n  async listar(req, res) { res.json(await this.service.listar()); }\n}\nconst alunoController = new AlunoController(alunoService);\nrouter.get('/alunos', alunoController.listar);\n```\nAo chamar GET /alunos aparece \"Cannot read properties of undefined (reading 'service')\". Por quê?",
+      "alternativas": [
+        "O método foi passado solto ao Express e perdeu o this",
+        "O alunoService não foi instalado antes com o npm",
+        "Faltou colocar o await antes da chamada router.get",
+        "Classes não podem ser usadas como controller no Express"
+      ],
+      "correta": 0,
+      "explicacao": "Passando alunoController.listar sem bind, this fica undefined. Usar .bind(alunoController) ou uma arrow function resolve."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na loja de games, o cálculo de frete está copiado no PedidoController e no CarrinhoController. O frete mudou e só um dos dois foi atualizado. Qual solução segue a ideia de camadas?",
+      "alternativas": [
+        "Copiar o código novo também no outro controller",
+        "Passar o cálculo do frete para o front-end",
+        "Criar um arquivo de rotas só para o frete",
+        "Mover o cálculo para um service usado pelos dois"
+      ],
+      "correta": 3,
+      "explicacao": "Regra num lugar só (service) evita versões diferentes da mesma regra."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No sistema do hotel, o `reservaService` importa o `reservaController` para usar o `res` dele. O que está errado?",
+      "alternativas": [
+        "Services não podem importar nenhum outro arquivo do projeto",
+        "A dependência ficou invertida: o service não deve conhecer o controller",
+        "O correto seria o model importar o controller, e não o service fazer isso",
+        "Não há erro nenhum, desde que o objeto res seja exportado junto"
+      ],
+      "correta": 1,
+      "explicacao": "As camadas de cima chamam as de baixo. Service dependendo do controller (e do HTTP) quebra a separação."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O service da loja faz `throw new Error('Estoque insuficiente')`. Onde é melhor transformar esse erro numa resposta HTTP (por exemplo, status 409)?",
+      "alternativas": [
+        "No controller ou num middleware de erro",
+        "No próprio service, chamando res.status",
+        "No model, antes de executar o SQL",
+        "No banco, com uma mensagem do MySQL"
+      ],
+      "correta": 0,
+      "explicacao": "O service só sinaliza a regra violada; quem conhece HTTP (controller/middleware de erro) escolhe o status."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um colega diz que \"MVC\" e a organização \"rota/controller/service/model\" são ideias opostas. Qual afirmação está correta?",
+      "alternativas": [
+        "O service substitui o controller do MVC, que deixa de existir",
+        "O MVC proíbe criar qualquer camada além de model, view e controller",
+        "O service é um refinamento: service e model juntos fazem o papel do M",
+        "O service é uma forma de View, pois prepara o que será exibido"
+      ],
+      "correta": 2,
+      "explicacao": "Separar regras (service) do acesso a dados (model) é uma divisão a mais dentro do Model do MVC."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No hotel, a regra \"o mesmo quarto não pode ter duas reservas na mesma data\" foi conferida só no JavaScript da tela. Por que isso não basta?",
+      "alternativas": [
+        "O navegador não executa o código JavaScript das telas",
+        "A requisição pode chegar direto à API, sem passar pela tela",
+        "A tela é mais lenta do que o servidor para conferir datas",
+        "O front-end não consegue mostrar mensagens de erro ao usuário"
+      ],
+      "correta": 1,
+      "explicacao": "Qualquer um pode chamar a API (Postman, outro app). A regra precisa estar no back-end; no front ela é só conforto.",
+      "grupo": "regra-so-no-front"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A API da biblioteca tem as pastas `routes/`, `controllers/`, `services/`, `models/` e `config/`. Um aluno novo na equipe quer entender o projeto.\n\nNa sua resposta:\n1. diga o que se espera encontrar na pasta controllers;\n2. diga o que se espera encontrar na pasta models.",
+      "respostasAceitas": [
+        "controllers: funções que recebem a requisição, chamam o service e devolvem a resposta. models: o acesso aos dados, as funções que leem e gravam nas tabelas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) controllers tratam req/res e chamam as camadas de baixo; 2) models representam os dados e falam com o banco."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A academia pediu para mudar só a aparência das telas, e o desenvolvedor mexeu em poucos arquivos porque o sistema segue o MVC.\n\nNa sua resposta:\n1. explique o que é separação de responsabilidades;\n2. dê um exemplo de mudança que mexe em uma só camada.",
+      "respostasAceitas": [
+        "Cada parte cuida de uma tarefa: tela, controle ou dados. Ex.: trocar as cores e o layout mexe só na View."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cada camada tem uma função própria; 2) exemplo coerente (layout → View; trocar banco → Model etc.)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No arquivo de rotas do pet shop está a linha:\n```\nrouter.get('/pets', petController.listar);\n```\nO que essa linha faz?\n\nNa sua resposta:\n1. diga o que ela liga a quê;\n2. explique por que o arquivo de rotas não deve ter SQL nem regra de negócio.",
+      "respostasAceitas": [
+        "Liga o GET em /pets à função listar do controller. A rota só encaminha; SQL vai no model e regra no service, senão tudo se mistura."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) associa método+caminho à função do controller; 2) separação de responsabilidades / manutenção."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na API do cinema, chega a requisição `GET /sessoes/3`, e o projeto é organizado em rota, controller, service e model.\n\nNa sua resposta:\n1. diga o que cada camada faz nesse caminho;\n2. diga em que formato a resposta volta ao cliente.",
+      "respostasAceitas": [
+        "A rota encaminha ao controller; o controller lê o id 3 e chama o service; o service usa o model, que busca a sessão no banco. Volta em JSON."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) rota encaminha, controller lê req e chama, service aplica regras, model busca dados; 2) JSON."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja o final de um controller da clínica:\n```\nconst nova = await consultaService.agendar(req.body);\nres.status(201).json(nova);\n```\nO que esse trecho faz?\n\nNa sua resposta:\n1. diga o que acontece nas duas linhas;\n2. explique o que significa o status 201.",
+      "respostasAceitas": [
+        "Pede ao service para agendar a consulta com os dados enviados e devolve a consulta criada em JSON. 201 = recurso criado."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) delega ao service e responde com o resultado em JSON; 2) 201 Created."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No sistema da padaria aparecem duas coisas: \"pão francês custa R$ 0,90 e, acima de 20 unidades, sai por R$ 0,80\" e \"o preço aparece em negrito e verde na tela\".\n\nNa sua resposta:\n1. diga qual das duas é regra de negócio e qual é detalhe de apresentação;\n2. diga em que camada cada uma deve ficar.",
+      "respostasAceitas": [
+        "O preço por quantidade é regra de negócio (service/back-end); negrito e verde é apresentação (View/tela)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) preço = regra, cor = apresentação; 2) regra no service; aparência na View."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja a função de model de uma loja:\n```\nasync function listar(res) {\n  const [linhas] = await db.query('SELECT * FROM produto');\n  res.json(linhas);\n}\n```\nEla funciona, mas a organização está errada.\n\nNa sua resposta:\n1. diga qual camada está fazendo o trabalho de outra;\n2. explique como a função deveria terminar e quem chamaria res.json.",
+      "respostasAceitas": [
+        "O model está respondendo HTTP, que é papel do controller. O model deveria só devolver as linhas (return linhas) e o controller faria res.json."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) model fazendo papel do controller; 2) model retorna os dados, controller responde."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na API da escola, o `notaService.lancar(req, res)` recebe o req e o res do Express.\n\nNa sua resposta:\n1. explique por que o service não deveria receber req e res;\n2. diga o que ele deveria receber e devolver.",
+      "respostasAceitas": [
+        "Assim o service fica preso ao HTTP e não dá para reaproveitar nem testar fácil. Deve receber dados simples (aluno, nota) e devolver o resultado ou lançar erro."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) acoplamento ao HTTP/Express, dificulta reuso e teste; 2) recebe valores, devolve dado ou lança erro, e o controller responde."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na biblioteca, a regra \"cada aluno pode ter no máximo 3 livros emprestados\" foi colocada só no JavaScript da tela, e a API grava qualquer empréstimo que recebe.\n\nNa sua resposta:\n1. explique o risco dessa escolha;\n2. diga onde a regra precisa estar.",
+      "respostasAceitas": [
+        "Alguém pode chamar a API direto (Postman, outro app) e pegar mais livros. A regra tem de estar no back-end, no service; na tela é só um aviso a mais."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a regra pode ser burlada chamando a API; 2) no back-end (service).",
+      "grupo": "regra-so-no-front"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na escola, os testes automáticos precisam rodar sem MySQL, usando dados num arquivo. O projeto é em camadas e só o model foi trocado por outro que lê o arquivo.\n\nNa sua resposta:\n1. explique por que controllers e services não precisaram mudar;\n2. diga qual vantagem do MVC isso mostra.",
+      "respostasAceitas": [
+        "Porque eles só chamam as funções do model (listar, salvar) e não sabem como o dado é guardado. Mostra a separação de responsabilidades / baixo acoplamento."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dependem só da interface do model; 2) facilidade de manutenção/troca de partes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "O controller de pedidos da lanchonete tem 300 linhas, com vários `if` de desconto, frete e estoque, além do `res.json` no final.\n\nNa sua resposta:\n1. explique por que esse controller é um problema;\n2. diga para onde as regras deveriam ir e o que sobraria no controller.",
+      "respostasAceitas": [
+        "Mistura HTTP com regra de negócio, fica difícil de ler, testar e mudar. As regras vão para services; o controller só lê a requisição, chama o service e responde."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) controller gordo, difícil de manter/testar; 2) regras no service, controller magro."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Compare estas duas linhas que podem aparecer num controller da pizzaria:\n```\nres.render('cardapio', { itens });\nres.json(itens);\n```\n\n\nNa sua resposta:\n1. diga o que cada uma devolve ao cliente;\n2. diga qual delas combina com uma API REST e por quê.",
+      "respostasAceitas": [
+        "render monta uma página HTML pelo template cardapio; json devolve os dados em JSON. A API REST usa res.json, pois entrega dados para outro programa mostrar."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) HTML (View de template) x JSON; 2) res.json para API REST."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja o controller da loja:\n```\nasync function comprar(req, res) {\n  try {\n    const pedido = await pedidoService.comprar(req.body);\n    res.status(201).json(pedido);\n  } catch (e) {\n    res.status(409).json({ erro: e.message });\n  }\n}\n```\nO service lança `Error('Estoque insuficiente')` quando falta produto.\n\nNa sua resposta:\n1. diga o que o cliente recebe quando há estoque e quando não há;\n2. explique por que é bom o service lançar o erro e o controller escolher o status.",
+      "respostasAceitas": [
+        "Com estoque: 201 e o pedido em JSON. Sem estoque: 409 com { erro: 'Estoque insuficiente' }. O service cuida da regra sem saber de HTTP; o controller traduz para HTTP."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 201+pedido / 409+mensagem; 2) separação: regra no service, HTTP no controller."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num projeto MVC da academia, o model `Aluno` passou a importar o `alunoController` para chamar uma função dele.\n\nNa sua resposta:\n1. explique qual deve ser a direção das chamadas entre as camadas;\n2. diga que problema essa importação cria.",
+      "respostasAceitas": [
+        "Quem está em cima chama quem está embaixo: rota → controller → service → model. O model importando o controller inverte isso, prende o model ao HTTP e pode criar importação circular."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) de cima para baixo; 2) acoplamento/dependência invertida (e possível ciclo de import)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na pet shop, as rotas de banho e de tosa repetem dentro de si o mesmo trecho:\n```\nlet total = preco;\nif (cliente.plano === 'ouro') total = total * 0.85;\n```\nAgora o desconto do plano ouro vai passar para 20%.\n\nNa sua resposta:\n1. explique o problema de a regra estar repetida nas rotas;\n2. diga como a organização em camadas resolve isso.",
+      "respostasAceitas": [
+        "É preciso lembrar de mudar em todos os lugares; se esquecer um, o cliente paga preços diferentes. Pondo a regra num service usado pelas duas rotas, muda-se num lugar só."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) duplicação → inconsistência e retrabalho; 2) regra centralizada num service."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O padrão Singleton garante que:",
+      "alternativas": [
+        "Cada requisição crie seu próprio objeto novo e separado",
+        "Uma classe não possa ter nenhum método",
+        "Uma classe tenha uma única instância, compartilhada",
+        "Um objeto seja copiado a cada uso"
+      ],
+      "correta": 2,
+      "explicacao": "Singleton = uma instância só, acessada por todo o sistema (ex.: a conexão com o banco)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve um DAO (Data Access Object) num sistema?",
+      "alternativas": [
+        "Concentrar o acesso ao banco de uma entidade",
+        "Desenhar as telas de cadastro do sistema",
+        "Conferir o token do usuário que está logado",
+        "Definir as URLs e os métodos HTTP da API"
+      ],
+      "correta": 0,
+      "explicacao": "O DAO reúne buscar, inserir, atualizar e apagar de uma entidade, isolando o SQL do resto."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na oficina, o sistema cria um objeto `Carro`, `Moto` ou `Caminhao` conforme o tipo informado, tudo dentro da função `criarVeiculo(tipo)`. Que padrão é esse?",
+      "alternativas": [
+        "Singleton",
+        "Observer",
+        "Middleware",
+        "Factory"
+      ],
+      "correta": 3,
+      "explicacao": "Uma função que decide qual objeto criar e o devolve pronto é uma fábrica (Factory)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A clínica tem a classe `ConsultaRepository` com os métodos `buscarPorId`, `listarPorMedico` e `salvar`. Que padrão ela segue?",
+      "alternativas": [
+        "Factory",
+        "Repository",
+        "Observer",
+        "Singleton"
+      ],
+      "correta": 1,
+      "explicacao": "Classe que reúne as operações de leitura e gravação de uma entidade é um Repository."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que é uma regra de negócio?",
+      "alternativas": [
+        "Uma regra de sintaxe da linguagem JavaScript",
+        "Uma regra de estilo de uma folha CSS",
+        "A porta em que o servidor fica rodando",
+        "Uma regra que vem do funcionamento da empresa"
+      ],
+      "correta": 3,
+      "explicacao": "Ex.: \"sócio da academia com mensalidade atrasada não entra\". Vem do negócio, não da tecnologia."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas frases é uma regra de negócio de um hotel?",
+      "alternativas": [
+        "O servidor da API do hotel usa a porta 3000",
+        "O check-out só é liberado depois do pagamento",
+        "O JSON de resposta usa aspas duplas nos nomes",
+        "A rota que lista os quartos usa o método GET"
+      ],
+      "correta": 1,
+      "explicacao": "A liberação do check-out depende do processo do hotel. As outras são detalhes técnicos.",
+      "grupo": "exemplo-regra"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que a regra de negócio não deve ficar espalhada pelas rotas?",
+      "alternativas": [
+        "Se a regra mudar, é preciso caçá-la em vários lugares",
+        "As rotas do Express não aceitam o comando if",
+        "As rotas rodam no navegador do usuário",
+        "O Express apaga o código das rotas toda vez que reinicia"
+      ],
+      "correta": 0,
+      "explicacao": "Regra espalhada gera retrabalho e versões diferentes da mesma regra."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que é melhor ter uma única conexão (ou pool) com o banco, compartilhada pela API, em vez de abrir uma nova em cada requisição?",
+      "alternativas": [
+        "Deixa os comandos SQL imunes a qualquer erro",
+        "Dispensa o usuário e a senha do banco",
+        "Evita abrir conexões demais e esgotar o limite do banco",
+        "Faz o banco guardar todos os dados para sempre na memória"
+      ],
+      "correta": 2,
+      "explicacao": "Cada conexão custa recursos e o MySQL tem limite; reaproveitar evita esse problema."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destes métodos faz sentido num `ProdutoDAO` de uma loja?",
+      "alternativas": [
+        "enviarEmailPromocao(listaClientes)",
+        "buscarPorCategoria(idCategoria)",
+        "renderizarVitrine(produtos)",
+        "conferirTokenDeLogin(token)"
+      ],
+      "correta": 1,
+      "explicacao": "O DAO só lê e grava dados de produto; e-mail, tela e login são de outras partes."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual é a vantagem de uma equipe usar nomes de padrões conhecidos, como Singleton e Factory?",
+      "alternativas": [
+        "O código passa a compilar e rodar bem mais rápido no servidor",
+        "O npm instala os padrões automaticamente junto com o Express",
+        "Todos entendem a solução pelo nome, como um vocabulário comum",
+        "Os padrões dispensam a equipe de testar o código que escreve"
+      ],
+      "correta": 2,
+      "explicacao": "Design patterns são soluções conhecidas; o nome comunica a ideia rapidamente."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas frases é uma regra de negócio de uma biblioteca escolar?",
+      "alternativas": [
+        "A API responde os dados sempre em formato JSON",
+        "O servidor foi feito com Node.js e com o Express",
+        "O banco de dados do sistema se chama biblioteca_db",
+        "O empréstimo dura 7 dias e pode ser renovado uma vez"
+      ],
+      "correta": 3,
+      "explicacao": "Prazo e renovação vêm do funcionamento da biblioteca; os demais são escolhas técnicas.",
+      "grupo": "exemplo-regra"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Com um Repository, o service da escola chama `alunoRepository.buscarPorEmail(email)` em vez de escrever o SQL. Qual a vantagem?",
+      "alternativas": [
+        "O service não precisa saber como o dado é buscado",
+        "O SQL some do projeto inteiro e não é mais usado",
+        "O banco de dados passa a responder mais rápido",
+        "O e-mail passa a ser validado sozinho pelo banco"
+      ],
+      "correta": 0,
+      "explicacao": "O SQL continua existindo, mas fica escondido no repository; o service só pede o que precisa."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja a classe:\n```\nclass Conexao {\n  static #instancia;\n  static obter() {\n    if (!Conexao.#instancia) Conexao.#instancia = new Conexao();\n    return Conexao.#instancia;\n  }\n}\nconst a = Conexao.obter();\nconst b = Conexao.obter();\n```\nO que se pode dizer de `a` e `b`?",
+      "alternativas": [
+        "São dois objetos diferentes",
+        "b é undefined, pois só pode chamar uma vez",
+        "São o mesmo objeto",
+        "A segunda chamada dá erro"
+      ],
+      "correta": 2,
+      "explicacao": "Na primeira chamada a instância é criada; na segunda, a mesma é devolvida. É um Singleton (a === b)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na lanchonete, quem chama `criarPagamento('pix')` recebe um objeto pronto para pagar. Quem chama precisa saber qual classe foi usada para criar o objeto?",
+      "alternativas": [
+        "Não, só informa o tipo e recebe o objeto",
+        "Sim, precisa importar todas as classes",
+        "Sim, precisa usar new em cada uma",
+        "Não, porque a fábrica não devolve nada"
+      ],
+      "correta": 0,
+      "explicacao": "A Factory esconde a escolha da classe concreta; quem chama só diz o tipo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O arquivo `config/db.js` faz `module.exports = pool;` e cinco models fazem `require('../config/db')`. Quantos pools de conexão existem?",
+      "alternativas": [
+        "Cinco, um para cada require",
+        "Nenhum até alguém chamar new",
+        "Dois: um para leitura e outro para escrita",
+        "Um só, pois o Node guarda o módulo em cache"
+      ],
+      "correta": 3,
+      "explicacao": "O Node executa o módulo uma vez e devolve o mesmo objeto em todo require: na prática, um Singleton."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na biblioteca, a tabela `livro` tem as colunas id_livro, titulo e autor. Veja o DAO:\n```\nasync buscarPorId(id) {\n  const [linhas] = await db.query('SELECT * FROM livro WHERE id_livro = ?', [id]);\n  return linhas[0];\n}\n```\nO que `buscarPorId(5)` devolve se não existir livro 5?",
+      "alternativas": [
+        "Um erro de SQL",
+        "undefined",
+        "Um array vazio",
+        "null"
+      ],
+      "correta": 1,
+      "explicacao": "Sem resultado, linhas é []; linhas[0] é undefined."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que o DAO usa `?` no SQL e passa o valor num array, como em `db.query('... WHERE id_livro = ?', [id])`?",
+      "alternativas": [
+        "Para o SQL rodar duas vezes mais rápido no MySQL",
+        "Porque o MySQL não aceita números escritos no WHERE",
+        "Para o resultado já vir ordenado pelo id do livro",
+        "Para o driver tratar o valor e evitar SQL injection"
+      ],
+      "correta": 3,
+      "explicacao": "Com parâmetros, o valor nunca vira parte do comando; texto malicioso não muda o SQL.",
+      "grupo": "sql-injection"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja a fábrica:\n```\nfunction criarNotificacao(tipo) {\n  if (tipo === 'email') return new NotificacaoEmail();\n  if (tipo === 'sms') return new NotificacaoSms();\n  throw new Error('Tipo desconhecido');\n}\n```\nO que acontece com `criarNotificacao('whatsapp')`?",
+      "alternativas": [
+        "Devolve uma NotificacaoEmail por padrão",
+        "Lança o erro 'Tipo desconhecido'",
+        "Devolve undefined sem erro",
+        "Cria uma NotificacaoWhatsapp sozinha"
+      ],
+      "correta": 1,
+      "explicacao": "Nenhum if casa, então a última linha lança o erro.",
+      "grupo": "fabrica-notificacao"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na mesma fábrica `criarNotificacao(tipo)`, que cria e-mail ou SMS, a escola quer o tipo 'whatsapp'. O que muda?",
+      "alternativas": [
+        "Cria-se a classe nova e mais um caso na fábrica",
+        "Todo código que chama a fábrica precisa ser reescrito",
+        "A fábrica é trocada por um Singleton",
+        "Cada tela passa a usar new direto"
+      ],
+      "correta": 0,
+      "explicacao": "Só a fábrica (e a nova classe) mudam; quem chama continua passando o tipo.",
+      "grupo": "fabrica-notificacao"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o service da biblioteca:\n```\nasync function emprestar(idAluno, idLivro) {\n  const qtd = await emprestimoRepo.contarAtivos(idAluno);\n  if (qtd >= 3) throw new Error('Limite de 3 empréstimos');\n  return emprestimoRepo.registrar(idAluno, idLivro);\n}\n```\nUm aluno com 3 empréstimos ativos pede mais um. O que acontece?",
+      "alternativas": [
+        "O empréstimo é gravado e depois apagado",
+        "O repositório ignora o limite e grava",
+        "O service lança o erro e nada é gravado",
+        "O quarto empréstimo é gravado sem erro"
+      ],
+      "correta": 2,
+      "explicacao": "qtd é 3, então o throw acontece antes de chamar registrar.",
+      "grupo": "service-emprestar"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No service `emprestar`, a conferência do limite de 3 livros fica no service e não no `emprestimoRepo`. Por quê?",
+      "alternativas": [
+        "O repository não consegue usar if dentro dos métodos",
+        "O repository só lê e grava; o limite é regra de negócio",
+        "O service é a única camada que pode acessar o banco",
+        "Regras de negócio sempre devem ficar dentro do SQL"
+      ],
+      "correta": 1,
+      "explicacao": "Cada um na sua: repository = dados, service = regras.",
+      "grupo": "service-emprestar"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No nível do curso, o que Repository e DAO têm em comum?",
+      "alternativas": [
+        "Os dois criam objetos de classes diferentes pelo tipo",
+        "Os dois avisam vários objetos quando ocorre um evento",
+        "Os dois isolam o acesso aos dados do resto do sistema",
+        "Os dois garantem que exista uma única instância no sistema"
+      ],
+      "correta": 2,
+      "explicacao": "Repository e DAO escondem o SQL atrás de métodos. Criar objetos é Factory; avisar é Observer; instância única é Singleton."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O service do salão lança \"Horário já reservado\" quando duas clientes tentam o mesmo horário. Qual status HTTP o controller deve usar?",
+      "alternativas": [
+        "200 OK",
+        "500 Internal Server Error",
+        "404 Not Found",
+        "409 Conflict"
+      ],
+      "correta": 3,
+      "explicacao": "Conflito com o estado atual (horário ocupado) é 409. 500 é falha do servidor, não regra violada."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na sorveteria, a regra \"10% de desconto no pagamento à vista\" está no service da API, usada pelo site e pelo aplicativo. Qual a vantagem?",
+      "alternativas": [
+        "Site e aplicativo seguem a mesma regra, pois ela está num só lugar",
+        "O desconto passa a valer só para quem usa o aplicativo no celular",
+        "Cada front-end pode ter um desconto diferente, conforme preferir",
+        "O desconto deixa de depender do back-end e fica mais rápido"
+      ],
+      "correta": 0,
+      "explicacao": "Regra no back-end vale para todos os clientes da API."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num teste do service da escola, o professor troca o `alunoRepository` real por um falso, que guarda os alunos num array. Por que isso é possível?",
+      "alternativas": [
+        "O array é mais rápido que o MySQL",
+        "O service não usa o repositório para nada",
+        "O service depende só dos métodos do repositório",
+        "Arrays e tabelas são a mesma coisa em JavaScript"
+      ],
+      "correta": 2,
+      "explicacao": "Se o objeto falso tem os mesmos métodos (buscar, salvar), o service funciona igual."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o arquivo de configuração da academia:\n```\n// config/db.js\nconst mysql = require('mysql2/promise');\nconst pool = mysql.createPool({ host: 'localhost', user: 'app', database: 'academia' });\nmodule.exports = pool;\n```\nComo todo `require` recebe o mesmo pool, que padrão esse arquivo aplica na prática?",
+      "alternativas": [
+        "Singleton",
+        "Observer",
+        "Repository",
+        "Middleware"
+      ],
+      "correta": 0,
+      "explicacao": "Um só objeto de conexão compartilhado por todo o sistema é a ideia do Singleton."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na pizzaria, `new PizzaCalabresa()`, `new PizzaMussarela()` e os mesmos `if` para escolher o sabor aparecem em 12 arquivos. Que padrão ajuda a organizar isso?",
+      "alternativas": [
+        "Observer",
+        "Singleton",
+        "Middleware",
+        "Factory"
+      ],
+      "correta": 3,
+      "explicacao": "Uma fábrica centraliza a escolha de qual classe criar."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na escola, o service exige que a nota seja de 0 a 10 antes de gravar. O DAO de notas grava qualquer número que recebe. Isso está certo?",
+      "alternativas": [
+        "Não: o DAO deveria repetir a mesma regra",
+        "Sim: a regra fica no service e o DAO só grava",
+        "Não: a regra deveria ficar no arquivo de rotas",
+        "Sim, mas só se a nota for um número inteiro"
+      ],
+      "correta": 1,
+      "explicacao": "Cada camada tem seu papel; repetir a regra no DAO cria duas fontes da verdade."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um colega guardou `usuarioLogado` como propriedade do Singleton de configuração da API. Qual é o risco?",
+      "alternativas": [
+        "O Singleton deixa de ser criado quando alguém faz login no sistema",
+        "O banco perde a conexão toda vez que um novo usuário faz login",
+        "O Node passa a criar automaticamente um Singleton separado para cada usuário",
+        "Requisições de pessoas diferentes passam a compartilhar o mesmo usuário"
+      ],
+      "correta": 3,
+      "explicacao": "O Singleton é único para o servidor inteiro; dado de um usuário ali vaza para as requisições dos outros."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na API da escola, todo controller chama a função abaixo no começo de cada requisição:\n```\nfunction getConexao() {\n  return mysql.createPool({ host: 'localhost', user: 'app', database: 'escola' });\n}\n```\nO que acontece com o tempo?",
+      "alternativas": [
+        "O mesmo pool é reaproveitado, pois a configuração é sempre igual",
+        "Um pool novo é criado a cada chamada e as conexões se acumulam",
+        "O Node apaga os pools antigos sozinho e só sobra o último criado",
+        "O MySQL junta todos os pools num só e nada de diferente acontece"
+      ],
+      "correta": 1,
+      "explicacao": "Isso não é Singleton: cada chamada cria outro pool, podendo esgotar as conexões do banco.",
+      "grupo": "conexao-por-requisicao"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No pet shop, o `PetRepository.listar()` devolve as linhas do MySQL como vieram, com a coluna `nome_pet`, e o service usa `pet.nome_pet` em 20 lugares. A coluna foi renomeada para `nome`. Onde seria melhor tratar essa mudança?",
+      "alternativas": [
+        "No repository, convertendo a linha num objeto do sistema",
+        "Nos 20 pontos do service, trocando nome_pet um por um",
+        "No controller, renomeando o campo antes de chamar o service",
+        "No front-end, que é quem mostra o nome do pet na tela"
+      ],
+      "correta": 0,
+      "explicacao": "Se o repository entrega objetos com nomes próprios do sistema, mudar a coluna mexe só nele."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "A fábrica `criarFrete(tipo)` devolve objetos `FreteMoto`, `FreteCarro` ou `FreteCorreio`, e todos têm o método `calcular(pedido)`. Por que é importante todos terem o mesmo método?",
+      "alternativas": [
+        "O JavaScript proíbe métodos com nomes diferentes",
+        "Assim a fábrica consegue criar um objeto só que serve para tudo",
+        "Quem chama usa qualquer um sem saber qual classe recebeu",
+        "Métodos iguais deixam o cálculo mais rápido"
+      ],
+      "correta": 2,
+      "explicacao": "Com o mesmo método, quem chama só faz frete.calcular(pedido), seja qual for o tipo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na clínica, uma consulta só pode ser desmarcada até 24 h antes. O controller usa a data que o aplicativo manda em `req.body.agora` para conferir. Qual o problema?",
+      "alternativas": [
+        "O req.body nunca traz datas, só textos e números",
+        "O cliente pode mandar uma data falsa para burlar a regra",
+        "O controller não tem permissão para ler o req.body",
+        "Datas só podem ser conferidas dentro do banco de dados"
+      ],
+      "correta": 1,
+      "explicacao": "Dado vindo do cliente não é confiável para regra de negócio; o back-end deve usar o próprio relógio."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na loja, o desconto de fidelidade está no service (10%) e também numa trigger do banco (15%). O que isso mostra?",
+      "alternativas": [
+        "Uma proteção dupla correta, sem nenhum problema",
+        "Um uso correto do padrão Observer entre camadas",
+        "Duas fontes da mesma regra, que já estão diferentes",
+        "Uma forma de deixar o cálculo do desconto mais rápido"
+      ],
+      "correta": 2,
+      "explicacao": "A regra deve ter um lugar oficial; duplicada, uma versão acaba diferente da outra."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o DAO de pedidos de uma lanchonete, com a tabela `pedido` (id_pedido, cliente, total):\n```\nasync inserir(pedido) {\n  if (pedido.total > 500) pedido.total = pedido.total * 0.9;\n  await db.query('INSERT INTO pedido (cliente, total) VALUES (?, ?)', [pedido.cliente, pedido.total]);\n}\n```\nQual é o problema?",
+      "alternativas": [
+        "O INSERT deveria concatenar os valores",
+        "O DAO não pode usar await",
+        "Faltou o id_pedido no INSERT",
+        "Há uma regra de desconto dentro do DAO"
+      ],
+      "correta": 3,
+      "explicacao": "O DAO deveria só gravar; o desconto é regra de negócio e vai para o service. id_pedido pode ser AUTO_INCREMENT."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja a classe da API de um hotel:\n```\nclass Conexao {\n  static #instancia;\n  static obter() {\n    if (!Conexao.#instancia) Conexao.#instancia = new Conexao();\n    return Conexao.#instancia;\n  }\n}\n```\n\n\nNa sua resposta:\n1. diga o que o método obter garante;\n2. explique por que isso é útil para a conexão com o banco.",
+      "respostasAceitas": [
+        "Garante que exista um só objeto Conexao: cria na primeira vez e depois devolve o mesmo. Assim a API inteira usa uma conexão só, sem abrir várias."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) instância única (Singleton); 2) economiza/evita excesso de conexões."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A loja tem um `ProdutoDAO` com os métodos `listar()`, `buscarPorId(id)`, `inserir(produto)` e `remover(id)`.\n\nNa sua resposta:\n1. diga o que é esse DAO;\n2. explique uma vantagem de usá-lo em vez de escrever SQL nos controllers.",
+      "respostasAceitas": [
+        "É a classe que reúne o acesso à tabela de produtos. O SQL fica num lugar só: se mudar a tabela, muda só o DAO."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) objeto de acesso a dados de produto; 2) SQL centralizado / manutenção / controllers limpos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No pet shop, existe a regra \"cliente com vacina do animal vencida não pode agendar hospedagem\".\n\nNa sua resposta:\n1. explique por que isso é uma regra de negócio;\n2. diga em que camada do back-end ela deve ficar.",
+      "respostasAceitas": [
+        "Vem do funcionamento do pet shop, não da tecnologia. Fica no service (back-end)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) regra do negócio/empresa; 2) service."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja a fábrica da escola:\n```\nfunction criarNotificacao(tipo) {\n  if (tipo === 'email') return new NotificacaoEmail();\n  if (tipo === 'sms') return new NotificacaoSms();\n  throw new Error('Tipo desconhecido');\n}\n```\n\n\nNa sua resposta:\n1. diga o que acontece com criarNotificacao('sms') e com criarNotificacao('fax');\n2. explique a vantagem para quem chama a função.",
+      "respostasAceitas": [
+        "'sms' devolve um objeto NotificacaoSms; 'fax' lança o erro Tipo desconhecido. Quem chama não precisa saber as classes, só o tipo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) objeto SMS / erro; 2) escolha da classe centralizada, quem chama não usa new.",
+      "grupo": "fabrica-notificacao"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A API da academia tem `matriculaService` e `matriculaRepository`.\n\nNa sua resposta:\n1. diga o que fica no service;\n2. diga o que fica no repository.",
+      "respostasAceitas": [
+        "No service ficam as regras (ex.: não matricular quem está em atraso). No repository fica o acesso ao banco (buscar e gravar matrículas)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) regras de negócio; 2) leitura/gravação de dados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na API da loja, duas conferências acontecem ao cadastrar um pedido: \"o campo quantidade veio vazio\" e \"cliente bloqueado por falta de pagamento não pode comprar\".\n\nNa sua resposta:\n1. diga qual é validação de dados de entrada e qual é regra de negócio;\n2. explique a diferença entre as duas.",
+      "respostasAceitas": [
+        "Quantidade vazia é validação de entrada; cliente bloqueado é regra de negócio. A validação confere o formato do dado; a regra depende de como a loja funciona."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) quantidade = validação, bloqueio = regra; 2) formato do dado x decisão do negócio."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na academia, o arquivo `config/db.js` cria um pool e faz `module.exports = pool;`. Cinco models fazem `require('../config/db')`.\n\nNa sua resposta:\n1. diga quantos pools existem e por quê;\n2. explique por que isso funciona como um Singleton.",
+      "respostasAceitas": [
+        "Existe um só: o Node roda o módulo uma vez e guarda em cache, devolvendo o mesmo objeto em todo require. Assim todos usam a mesma instância."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) um, por causa do cache de módulos; 2) instância única compartilhada."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja o service da biblioteca:\n```\nasync function emprestar(idAluno, idLivro) {\n  const qtd = await emprestimoRepo.contarAtivos(idAluno);\n  if (qtd >= 3) throw new Error('Limite de 3 empréstimos');\n  return emprestimoRepo.registrar(idAluno, idLivro);\n}\n```\n\n\nNa sua resposta:\n1. explique o que acontece para um aluno com 1 empréstimo e para um com 3;\n2. diga por que o service lança erro em vez de responder HTTP.",
+      "respostasAceitas": [
+        "Com 1, o empréstimo é criado. Com 3, lança o erro e nada é gravado. O service não conhece HTTP: lança o erro e o controller decide o status."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cria / lança erro; 2) separação de camadas.",
+      "grupo": "service-emprestar"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Nos testes do service da escola, o professor usa um `alunoRepository` falso, que guarda os alunos num array, no lugar do repositório real com MySQL.\n\nNa sua resposta:\n1. explique por que o service funciona com o repositório falso;\n2. diga uma vantagem disso para os testes.",
+      "respostasAceitas": [
+        "O service só chama métodos como buscar e salvar; se o falso tem os mesmos métodos, funciona. O teste fica rápido e não precisa de banco."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) depende só da interface/métodos; 2) testes rápidos, sem banco, previsíveis."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Compare as duas linhas de um DAO de clientes:\n```\ndb.query(\"SELECT * FROM cliente WHERE cpf = '\" + cpf + \"'\");\ndb.query('SELECT * FROM cliente WHERE cpf = ?', [cpf]);\n```\n\n\nNa sua resposta:\n1. explique a diferença entre as duas;\n2. diga qual o risco da primeira.",
+      "respostasAceitas": [
+        "A primeira cola o valor no texto do SQL; a segunda passa o valor separado para o driver tratar. A primeira permite SQL injection."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) concatenação x parâmetro; 2) SQL injection.",
+      "grupo": "sql-injection"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A sorveteria tem um site e um aplicativo. Hoje o desconto à vista está programado nos dois front-ends, e no aplicativo ainda está com o valor antigo.\n\nNa sua resposta:\n1. explique por que isso aconteceu;\n2. diga onde a regra deveria estar e o que melhora.",
+      "respostasAceitas": [
+        "A regra foi duplicada e só um lugar foi atualizado. Deve ficar no service da API: os dois front-ends usam a mesma regra e a mudança é feita uma vez."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) duplicação → inconsistência; 2) back-end/service, fonte única."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na oficina, a fábrica `criarVeiculo(tipo)` cria `Carro` ou `Moto`. A oficina passou a atender caminhões.\n\nNa sua resposta:\n1. diga o que precisa ser criado ou alterado;\n2. diga o que não precisa mudar e por quê.",
+      "respostasAceitas": [
+        "Cria a classe Caminhao e acrescenta o caso 'caminhao' na fábrica. Quem chama criarVeiculo não muda, porque só passa o tipo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) nova classe + caso na fábrica; 2) código que chama permanece igual."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na API do cinema, um colega guardou o usuário da última requisição numa propriedade do Singleton de configuração (`config.usuarioAtual = req.usuario`), e os controllers leem dali.\n\nNa sua resposta:\n1. explique o que pode dar errado quando duas pessoas usam a API ao mesmo tempo;\n2. diga onde esse dado deveria ficar.",
+      "respostasAceitas": [
+        "O Singleton é um só para todo o servidor: a requisição de uma pessoa pode ler o usuário da outra. O dado deve ficar na própria requisição (req.usuario)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dados misturados entre usuários; 2) no req (por requisição), não no objeto compartilhado."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na clínica, a regra \"desmarcar só até 24 h antes da consulta\" é conferida no controller com a data que o aplicativo envia em `req.body.agora`.\n\nNa sua resposta:\n1. explique como alguém poderia burlar a regra;\n2. diga como o back-end deveria obter a data atual e onde a regra deveria ficar.",
+      "respostasAceitas": [
+        "Basta mandar uma data falsa no corpo da requisição. O back-end deve usar o próprio relógio (new Date() no servidor), e a regra fica no service."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) dado do cliente manipulável; 2) data do servidor + service."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja o service do hotel:\n```\nfunction multaCancelamento(horasAntes, valorDiaria) {\n  if (horasAntes >= 48) return 0;\n  return valorDiaria;\n}\n```\n\n\nNa sua resposta:\n1. diga quanto é a multa para cancelar 72 h antes e 10 h antes de uma diária de R$ 200;\n2. explique por que essa regra fica no service e não no controller nem no DAO.",
+      "respostasAceitas": [
+        "72 h antes: 0. 10 h antes: R$ 200. No service a regra fica num lugar só, sem depender de HTTP (controller) nem de banco (DAO), e pode ser testada sozinha."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 0 e 200; 2) separação de responsabilidades/teste/reuso."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No Express, o que é um middleware?",
+      "alternativas": [
+        "Uma tabela intermediária que liga duas tabelas do banco de dados",
+        "Um arquivo HTML exibido antes de carregar a página principal",
+        "Um programa que instala os pacotes do projeto pelo terminal",
+        "Uma função com req, res e next que roda no caminho da requisição"
+      ],
+      "correta": 3,
+      "explicacao": "Middleware recebe (req, res, next) e roda antes de chegar à resposta final, podendo passar adiante com next()."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Dentro de um middleware do Express, o que acontece quando ele chama `next()`?",
+      "alternativas": [
+        "A requisição termina ali com o status 200 OK",
+        "A requisição segue para o próximo middleware ou rota",
+        "O servidor é reiniciado para a próxima requisição",
+        "A requisição volta para o middleware anterior da fila"
+      ],
+      "correta": 1,
+      "explicacao": "next() passa a vez para a próxima função da cadeia."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para que serve a linha `app.use(express.json());` numa API?",
+      "alternativas": [
+        "Transformar todas as respostas da API em páginas HTML",
+        "Criar um arquivo .json com todos os dados do banco",
+        "Ler o corpo JSON das requisições e colocá-lo em req.body",
+        "Bloquear as requisições que não usam o método GET"
+      ],
+      "correta": 2,
+      "explicacao": "express.json() é um middleware que interpreta o corpo em JSON.",
+      "grupo": "express-json"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No padrão Observer, o que fazem os \"observadores\"?",
+      "alternativas": [
+        "Se inscrevem para ser avisados quando algo acontece",
+        "Criam objetos de classes diferentes conforme o tipo",
+        "Garantem que exista um só objeto em todo o sistema",
+        "Guardam os dados recebidos direto no banco de dados"
+      ],
+      "correta": 0,
+      "explicacao": "Observadores ficam ouvindo um evento e são chamados quando ele ocorre."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num sistema Node, o que faz a linha `eventos.on('pedidoPago', enviarRecibo);`?",
+      "alternativas": [
+        "Registra enviarRecibo para rodar quando pedidoPago for emitido",
+        "Executa enviarRecibo uma única vez, na hora em que a linha roda",
+        "Apaga o evento pedidoPago e todos os seus ouvintes da lista",
+        "Emite o evento pedidoPago para todas as funções já inscritas"
+      ],
+      "correta": 0,
+      "explicacao": "on inscreve uma função (ouvinte) no evento; ela roda a cada emit desse evento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Num sistema Node, o que faz a linha `eventos.emit('pedidoPago', pedido);`?",
+      "alternativas": [
+        "Inscreve uma função nova para ouvir o evento pedidoPago",
+        "Grava o pedido direto no banco de dados como pago",
+        "Remove todas as funções que estavam ouvindo o evento",
+        "Dispara o evento e chama todas as funções inscritas nele"
+      ],
+      "correta": 3,
+      "explicacao": "emit avisa os observadores, passando o pedido para cada um."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Por que colocar SQL direto dentro da função da rota é considerado um erro comum?",
+      "alternativas": [
+        "O Express não consegue executar comandos SQL",
+        "Mistura responsabilidades e espalha o acesso ao banco",
+        "O SQL deixa de funcionar dentro de funções async",
+        "As rotas não têm permissão para importar a conexão do banco"
+      ],
+      "correta": 1,
+      "explicacao": "Funciona, mas dificulta a manutenção: o SQL deveria ficar no model/repository."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual destas tarefas é típica de um middleware que roda antes de várias rotas?",
+      "alternativas": [
+        "Calcular o desconto de um pedido",
+        "Definir as colunas de uma tabela",
+        "Conferir se o usuário está logado",
+        "Desenhar a tela de login"
+      ],
+      "correta": 2,
+      "explicacao": "Verificação comum a muitas rotas (autenticação, log) é trabalho típico de middleware."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz o middleware abaixo?\n```\napp.use((req, res, next) => {\n  console.log(req.method, req.url);\n  next();\n});\n```\n",
+      "alternativas": [
+        "Responde a todas as requisições com o método e a URL que foram usados",
+        "Bloqueia requisições cujo método não é GET",
+        "Mostra o método e a URL de cada requisição e segue adiante",
+        "Mostra a URL só quando há um erro"
+      ],
+      "correta": 2,
+      "explicacao": "É um middleware de log: imprime e chama next()."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Uma API inteira está num único `server.js` de 2000 linhas, com rotas, SQL e regras misturados. Qual é o principal problema?",
+      "alternativas": [
+        "O Node não aceita arquivos com mais de mil linhas",
+        "Fica difícil achar, entender e alterar o código",
+        "O servidor não consegue iniciar com um arquivo só",
+        "O banco recusa conexões feitas a partir desse arquivo"
+      ],
+      "correta": 1,
+      "explicacao": "O problema é de manutenção: uma mudança pode quebrar outra parte sem ninguém perceber."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na pizzaria, o service emite o evento 'saiuParaEntrega', que já avisa o painel e manda SMS. Agora querem também um aviso por WhatsApp. Usando Observer, o que se faz?",
+      "alternativas": [
+        "Reescreve-se o service que emite o evento",
+        "Cria-se um novo Singleton de entrega",
+        "Troca-se o evento por uma Factory",
+        "Inscreve-se mais um observador no evento"
+      ],
+      "correta": 3,
+      "explicacao": "Basta registrar mais um ouvinte; quem emite não muda."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz a linha `app.use('/api/alunos', alunoRoutes);`?",
+      "alternativas": [
+        "Monta as rotas de alunoRoutes com o prefixo /api/alunos",
+        "Cria a tabela alunos no banco com as colunas da rota",
+        "Abre a página alunos.html que está na pasta api",
+        "Apaga as rotas antigas de alunos e cria rotas novas"
+      ],
+      "correta": 0,
+      "explicacao": "Um router com get('/') passa a responder em /api/alunos, por exemplo."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Quando o Express passa a requisição por várias funções em sequência, registradas com `app.use`, qual padrão está em ação?",
+      "alternativas": [
+        "Singleton (instância única)",
+        "Factory (fábrica de objetos)",
+        "Repository (acesso a dados)",
+        "Middleware (cadeia de funções)"
+      ],
+      "correta": 3,
+      "explicacao": "Cada middleware faz sua parte e chama o próximo: uma cadeia."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Qual situação do dia a dia lembra o padrão Observer?",
+      "alternativas": [
+        "Uma fábrica que monta carros de vários modelos",
+        "Seguir um canal e ser avisado a cada vídeo novo",
+        "Um único síndico para o prédio inteiro",
+        "Uma catraca que confere cada pessoa da fila"
+      ],
+      "correta": 1,
+      "explicacao": "Seguidores (observadores) são avisados quando o canal publica. Os outros lembram Factory, Singleton e Middleware."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um middleware não chama `next()` e também não envia resposta. O que acontece com a requisição?",
+      "alternativas": [
+        "Segue sozinha para a rota seguinte da fila",
+        "Recebe o status 200 OK automaticamente",
+        "Fica parada esperando até dar tempo esgotado",
+        "Volta para o primeiro middleware registrado"
+      ],
+      "correta": 2,
+      "explicacao": "Sem next() nem res.send/json, ninguém responde: o cliente fica esperando."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O middleware de autenticação da academia percebe que a requisição não tem token. O que ele deve fazer?",
+      "alternativas": [
+        "Responder 401 e não chamar next()",
+        "Chamar next() e deixar o controller decidir",
+        "Responder 200 com uma mensagem de aviso",
+        "Criar um token novo e seguir"
+      ],
+      "correta": 0,
+      "explicacao": "Sem token, a cadeia para ali com 401 (não autenticado)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Como o Express reconhece que um middleware é de tratamento de erro?",
+      "alternativas": [
+        "Ele tem quatro parâmetros: (err, req, res, next)",
+        "O nome da função dele começa com a palavra erro",
+        "Ele é registrado com app.error() no lugar de app.use()",
+        "Ele fica dentro de uma pasta chamada errors"
+      ],
+      "correta": 0,
+      "explicacao": "O Express identifica pela quantidade de parâmetros: 4, começando por err."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz `next(new Error('Falhou'))` dentro de um middleware?",
+      "alternativas": [
+        "Repete o middleware atual mais uma vez",
+        "Encerra o servidor e mostra o erro no console",
+        "Segue para a próxima rota normalmente, sem mudar nada",
+        "Pula os middlewares comuns e vai para o de erro"
+      ],
+      "correta": 3,
+      "explicacao": "Chamar next com um argumento sinaliza erro: o Express procura o middleware de 4 parâmetros."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja a rota do cinema:\n```\nrouter.delete('/filmes/:id', verificarAdmin, filmeController.remover);\n```\nO que acontece numa requisição DELETE /filmes/9?",
+      "alternativas": [
+        "remover roda antes e verificarAdmin só depois que ele termina",
+        "verificarAdmin roda antes e, se chamar next(), remover roda",
+        "As duas funções rodam ao mesmo tempo, em paralelo",
+        "verificarAdmin passa a rodar em todas as rotas da API inteira"
+      ],
+      "correta": 1,
+      "explicacao": "Middlewares passados na rota rodam em ordem, só para aquela rota."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o código:\n```\nconst eventos = new EventEmitter();\neventos.on('matricula', a => console.log('E-mail para', a.nome));\neventos.on('matricula', a => console.log('Crachá para', a.nome));\neventos.emit('matricula', { nome: 'Bia' });\n```\nO que aparece no console?",
+      "alternativas": [
+        "Só E-mail para Bia, pois o segundo on é ignorado",
+        "Só Crachá para Bia, pois o último on substitui o primeiro",
+        "E-mail para Bia e depois Crachá para Bia",
+        "Nada, porque o on precisa vir depois do emit"
+      ],
+      "correta": 2,
+      "explicacao": "Os dois ouvintes ficam registrados e rodam na ordem em que foram inscritos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja a rota da escola:\n```\nrouter.get('/alunos', async (req, res) => {\n  const sql = `SELECT * FROM aluno WHERE nome = '${req.query.nome}'`;\n  res.json(await db.query(sql));\n});\n```\nAlém de ter SQL na rota, qual risco grave existe?",
+      "alternativas": [
+        "O SELECT não pode ter WHERE dentro de uma rota GET",
+        "req.query não funciona dentro de funções async",
+        "SQL injection, pois o texto do usuário entra no comando",
+        "Template string não pode ser usada para guardar comandos SQL"
+      ],
+      "correta": 2,
+      "explicacao": "Se alguém enviar nome = ' OR '1'='1, o comando muda. O certo é usar parâmetros (?).",
+      "grupo": "sql-injection"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na academia, 8 rotas começam com o mesmo `if` que confere se o aluno está logado. Qual é a melhor solução?",
+      "alternativas": [
+        "Copiar o mesmo if também em todas as rotas novas",
+        "Criar um middleware de autenticação e aplicá-lo às rotas",
+        "Mover a conferência do login para dentro do banco de dados",
+        "Deixar a conferência do login só para o front-end"
+      ],
+      "correta": 1,
+      "explicacao": "Código repetido antes das rotas vira um middleware único."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o código:\n```\napp.use((req, res, next) => { console.log('A'); next(); });\napp.use((req, res, next) => { console.log('B'); next(); });\napp.get('/', (req, res) => { console.log('C'); res.send('ok'); });\n```\nO que aparece no console numa requisição GET /?",
+      "alternativas": [
+        "C, B, A",
+        "Só C",
+        "A e C",
+        "A, B, C"
+      ],
+      "correta": 3,
+      "explicacao": "Os middlewares rodam na ordem em que foram registrados, e cada um chama next()."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um middleware faz `req.usuario = dadosDoToken; next();`. Para que serve isso?",
+      "alternativas": [
+        "Deixa o usuário disponível para as próximas funções da cadeia",
+        "Grava o usuário do token na tabela de usuários do banco",
+        "Envia os dados do token de volta para o cliente na resposta",
+        "Apaga o token da requisição logo depois que ele foi lido"
+      ],
+      "correta": 0,
+      "explicacao": "Os middlewares seguintes e o controller podem ler req.usuario."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz a linha `app.use(express.static('public'));`?",
+      "alternativas": [
+        "Torna constantes todas as variáveis declaradas na API",
+        "Cria a pasta public com um site pronto de exemplo",
+        "Impede que qualquer arquivo da pasta public seja acessado",
+        "Serve direto os arquivos da pasta public, como imagens e CSS"
+      ],
+      "correta": 3,
+      "explicacao": "express.static é um middleware que entrega arquivos estáticos."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "O que faz `eventos.off('pedidoPago', enviarRecibo);`?",
+      "alternativas": [
+        "Dispara o evento pedidoPago só para enviarRecibo",
+        "Tira enviarRecibo da lista de ouvintes do evento",
+        "Desliga o servidor de eventos inteiro da aplicação",
+        "Apaga do banco todos os pedidos que já foram pagos"
+      ],
+      "correta": 1,
+      "explicacao": "off (ou removeListener) cancela a inscrição daquele observador."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Para \"ganhar tempo\", um controller da loja passou a gravar o pedido chamando o model direto, pulando o service que confere o estoque. O que pode acontecer?",
+      "alternativas": [
+        "O Express bloqueia a chamada direta do controller ao model",
+        "O model passa a conferir o estoque automaticamente",
+        "Pedidos sem estoque são gravados, pois a regra foi pulada",
+        "Nada muda, pois o service era só um enfeite no projeto"
+      ],
+      "correta": 2,
+      "explicacao": "Atalhos entre camadas fazem a regra de negócio deixar de valer."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct13",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "No hotel, a regra \"uma reserva pode ter no máximo 30 diárias\" precisa ser aplicada. Um colega quer colocá-la no model, logo antes do INSERT. Onde ela fica melhor?",
+      "alternativas": [
+        "No service, antes de chamar o model",
+        "No model, junto do comando INSERT",
+        "No arquivo de rotas, junto da URL",
+        "Num middleware de log das requisições"
+      ],
+      "correta": 0,
+      "explicacao": "Limite de diárias é regra de negócio: fica no service. O model só grava."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja a configuração:\n```\napp.post('/produtos', produtoController.criar);\napp.use(express.json());\n```\nNo controller, `req.body` chega `undefined`. Por quê?",
+      "alternativas": [
+        "express.json foi registrado depois da rota e não roda antes dela",
+        "express.json só funciona quando a rota usa o método GET",
+        "O controller deveria ler req.json no lugar de req.body",
+        "A rota POST precisa receber um id na URL para conseguir ter corpo"
+      ],
+      "correta": 0,
+      "explicacao": "A ordem importa: a rota já respondeu antes de o middleware ser alcançado.",
+      "grupo": "express-json"
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o código:\n```\neventos.emit('pago', pedido);\neventos.on('pago', p => console.log('Recibo de', p.id));\n```\nO que aparece no console?",
+      "alternativas": [
+        "Recibo de e o id, pois o on é lido antes do emit",
+        "Um erro dizendo que o evento pago não existe",
+        "A mensagem do recibo aparece duas vezes seguidas no console",
+        "Nada, pois não havia ouvinte quando o evento foi emitido"
+      ],
+      "correta": 3,
+      "explicacao": "O emit é síncrono e só chama quem já estava inscrito naquela hora."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o controller:\n```\nasync function listar(req, res) {\n  const alunos = alunoService.listar(); // listar é async\n  res.json(alunos);\n}\n```\nO que o cliente recebe?",
+      "alternativas": [
+        "A lista de alunos normalmente, em formato JSON",
+        "Um objeto vazio {}, pois alunos ainda é uma Promise",
+        "Um erro 404, porque a rota /alunos não foi encontrada",
+        "A lista de alunos duas vezes, uma por chamada"
+      ],
+      "correta": 1,
+      "explicacao": "Sem await, alunos é uma Promise pendente; convertida em JSON vira {}."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Na escola, o lançamento de notas emite 'notaLancada'. O boletim, o e-mail ao responsável e o painel do professor são observadores. Qual é um cuidado ao usar Observer?",
+      "alternativas": [
+        "Não é possível ter mais de um observador por evento",
+        "Cada observador precisa conhecer e chamar todos os outros ouvintes",
+        "Lendo só quem emite, não se vê tudo o que acontece depois",
+        "O emissor precisa importar todos os observadores"
+      ],
+      "correta": 2,
+      "explicacao": "O desacoplamento esconde os efeitos: é preciso procurar quem ouve o evento."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o middleware:\n```\nfunction verificar(req, res, next) {\n  if (!req.headers.authorization) {\n    res.status(401).json({ erro: 'Sem token' });\n  }\n  next();\n}\n```\nO que acontece numa requisição sem token?",
+      "alternativas": [
+        "Responde 401 e a cadeia para ali mesmo",
+        "Segue para o controller sem responder o 401 ao cliente",
+        "Responde 401 e mesmo assim segue para o controller",
+        "O Express ignora esse middleware por inteiro"
+      ],
+      "correta": 2,
+      "explicacao": "Faltou return: depois do 401, next() roda e o controller tenta responder de novo (erro de cabeçalhos já enviados)."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Um aluno registrou o middleware de erro `(err, req, res, next)` logo no começo do `app.js`, antes de todas as rotas. O que acontece com os erros das rotas?",
+      "alternativas": [
+        "São tratados normalmente por ele, já que foi registrado primeiro",
+        "Não chegam a ele, pois o de erro deve vir depois das rotas",
+        "Fazem o servidor se recusar a iniciar o app.js",
+        "São enviados automaticamente para o banco de dados"
+      ],
+      "correta": 1,
+      "explicacao": "O Express procura o middleware de erro adiante na cadeia; registrado antes, ele nunca é alcançado."
+    },
+    {
+      "tipo": "alternativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 1,
+      "enunciado": "Veja o código:\n```\neventos.on('venda', () => { throw new Error('falhou'); });\neventos.on('venda', () => console.log('Estoque atualizado'));\neventos.emit('venda');\n```\nO que acontece?",
+      "alternativas": [
+        "O erro é ignorado pelo EventEmitter e o segundo ouvinte roda",
+        "Os dois ouvintes rodam e só depois o erro aparece no console",
+        "O EventEmitter tenta de novo e repete o primeiro ouvinte",
+        "O erro sobe para quem chamou emit e o segundo ouvinte não roda"
+      ],
+      "correta": 3,
+      "explicacao": "Os ouvintes rodam em sequência dentro do emit; um throw interrompe e sobe para quem emitiu."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja o middleware da API da biblioteca:\n```\napp.use((req, res, next) => {\n  console.log(new Date(), req.method, req.url);\n  next();\n});\n```\n\n\nNa sua resposta:\n1. diga o que ele faz em cada requisição;\n2. explique para que serve a chamada next().",
+      "respostasAceitas": [
+        "Mostra no console a data, o método e a URL de cada requisição. next() passa a requisição adiante; sem ele ela ficaria parada."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) log de cada requisição; 2) segue para o próximo da cadeia."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na clínica, quando uma consulta é marcada, o paciente recebe SMS, o médico vê na agenda e a recepção recebe um aviso. O sistema usa o padrão Observer.\n\nNa sua resposta:\n1. explique como o Observer funciona nesse caso;\n2. diga uma vantagem de usá-lo.",
+      "respostasAceitas": [
+        "A marcação emite um evento e o SMS, a agenda e a recepção, inscritos nele, são avisados. Dá para incluir ou tirar avisos sem mexer no código que marca a consulta."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) evento emitido, observadores inscritos são chamados; 2) desacoplamento/fácil acrescentar avisos."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja a rota de uma papelaria:\n```\nrouter.get('/produtos', async (req, res) => {\n  const [linhas] = await db.query('SELECT * FROM produto');\n  res.json(linhas);\n});\n```\nEla funciona, mas há SQL dentro da rota.\n\nNa sua resposta:\n1. explique por que isso é ruim para a organização;\n2. diga para que camada o SQL deveria ir.",
+      "respostasAceitas": [
+        "Mistura rota com acesso a dados; se dez rotas fizerem isso e a tabela mudar, é preciso mexer em todas. O SQL vai para o model (ou repository)."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) mistura de responsabilidades/manutenção; 2) model/repository/DAO."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "A API da academia tem, no começo do `app.js`, a linha `app.use(express.json());`.\n\nNa sua resposta:\n1. diga o que essa linha faz;\n2. diga o que aconteceria com req.body nas rotas POST se ela fosse apagada.",
+      "respostasAceitas": [
+        "Ela lê o corpo JSON das requisições e o coloca em req.body. Sem ela, req.body ficaria undefined."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) interpreta o JSON do corpo; 2) undefined.",
+      "grupo": "express-json"
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja a rota do cinema:\n```\nrouter.delete('/filmes/:id', verificarAdmin, filmeController.remover);\n```\n\n\nNa sua resposta:\n1. diga em que ordem as funções rodam;\n2. explique o papel de verificarAdmin.",
+      "respostasAceitas": [
+        "Primeiro verificarAdmin, depois remover. verificarAdmin confere se quem pediu é administrador e só chama next() se for."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) middleware antes do controller; 2) barra quem não é admin."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "facil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja o código:\n```\neventos.on('reserva', r => console.log('Quarto', r.quarto, 'reservado'));\neventos.emit('reserva', { quarto: 12 });\n```\n\n\nNa sua resposta:\n1. diga o que aparece no console;\n2. explique o papel de on e de emit.",
+      "respostasAceitas": [
+        "Aparece Quarto 12 reservado. on inscreve a função no evento; emit dispara o evento e chama as funções inscritas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) a frase com 12; 2) on = inscrever ouvinte, emit = disparar."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja o middleware de autenticação da escola:\n```\nfunction autenticar(req, res, next) {\n  if (!req.headers.authorization) {\n    return res.status(401).json({ erro: 'Faça login' });\n  }\n  next();\n}\n```\n\n\nNa sua resposta:\n1. diga o que acontece com e sem o cabeçalho authorization;\n2. explique por que o return é importante.",
+      "respostasAceitas": [
+        "Sem o cabeçalho, responde 401 e para. Com ele, chama next() e segue para a rota. O return impede que o código continue até o next() depois de já ter respondido."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 401 e para / segue; 2) sem return a cadeia seguiria e tentaria responder duas vezes."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No final do `app.js` da loja há:\n```\napp.use((err, req, res, next) => {\n  console.error(err);\n  res.status(500).json({ erro: 'Erro interno' });\n});\n```\n\n\nNa sua resposta:\n1. diga que tipo de middleware é esse e como o Express o reconhece;\n2. explique a vantagem de tratar os erros num lugar só.",
+      "respostasAceitas": [
+        "É o middleware de erro; o Express o reconhece pelos quatro parâmetros (err, req, res, next). Assim todos os erros têm a mesma resposta e o mesmo log, sem try/catch repetido em toda rota."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) tratamento de erro, 4 parâmetros; 2) centraliza, padroniza, evita repetição."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "No sistema de delivery da lanchonete, o service poderia chamar direto `enviarSms()`, `atualizarPainel()` e `gerarNota()` depois do pedido, ou só emitir o evento 'pedidoCriado' e deixar essas funções inscritas nele.\n\nNa sua resposta:\n1. compare as duas formas;\n2. diga qual facilita acrescentar um novo aviso e por quê.",
+      "respostasAceitas": [
+        "Chamando direto, o service conhece e depende de cada função. Com evento, ele só avisa e não sabe quem ouve. O evento facilita: basta inscrever mais um ouvinte, sem mexer no service."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) acoplamento x desacoplamento; 2) Observer/evento."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Num middleware da API, aparece `next(new Error('Arquivo inválido'));`.\n\nNa sua resposta:\n1. explique para onde a requisição vai depois dessa linha;\n2. diga o que acontece com os middlewares e rotas comuns que vinham a seguir.",
+      "respostasAceitas": [
+        "Vai para o middleware de erro (o de 4 parâmetros). Os middlewares e rotas comuns no caminho são pulados."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) middleware de erro; 2) são pulados."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja o código:\n```\napp.use((req, res, next) => { console.log('A'); next(); });\napp.get('/', (req, res) => { console.log('B'); res.send('ok'); });\napp.use((req, res, next) => { console.log('C'); next(); });\n```\n\n\nNa sua resposta:\n1. diga o que aparece no console numa requisição GET /;\n2. explique por que a ordem de registro importa no Express.",
+      "respostasAceitas": [
+        "Aparece A e B. O C não roda, pois a rota já respondeu e não chamou next(). O Express passa pela cadeia na ordem em que as funções foram registradas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) A, B; 2) cadeia segue a ordem de registro."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "media",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Na academia, as 8 rotas da área do aluno começavam com o mesmo `if` que confere o login. O professor juntou esse `if` num middleware `autenticar` e o aplicou às 8 rotas.\n\nNa sua resposta:\n1. explique o problema que existia antes;\n2. diga duas vantagens da mudança.",
+      "respostasAceitas": [
+        "O mesmo código estava repetido 8 vezes; mudar a regra de login exigia mexer em todas. Agora fica num lugar só, as rotas ficam mais limpas e é fácil proteger rotas novas."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) duplicação; 2) centraliza, facilita manutenção, reuso em rotas novas."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja o middleware do pet shop:\n```\nfunction horarioComercial(req, res, next) {\n  const hora = new Date().getHours();\n  if (hora < 8 || hora >= 18) {\n    return res.status(403).json({ erro: 'Fora do horário' });\n  }\n}\n```\n\n\nNa sua resposta:\n1. diga o que acontece com uma requisição feita às 20 h;\n2. diga o que acontece com uma feita às 10 h e por quê.",
+      "respostasAceitas": [
+        "Às 20 h responde 403 Fora do horário. Às 10 h não entra no if e não chama next() nem responde: a requisição fica parada até esgotar o tempo."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) 403; 2) fica pendurada, faltou next()."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Middleware e Observer são dois padrões em que várias funções são chamadas por causa de uma mesma ação.\n\nNa sua resposta:\n1. explique como as funções são chamadas em cada um;\n2. diga uma diferença importante entre eles.",
+      "respostasAceitas": [
+        "No middleware, as funções formam uma fila: cada uma decide se chama a próxima (next) ou responde. No Observer, o emissor avisa todos os inscritos, que não dependem uns dos outros. No middleware uma função pode barrar a cadeia; no Observer, não há essa decisão entre ouvintes."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: 1) cadeia sequencial com next x aviso a todos os inscritos; 2) diferença coerente (controle do fluxo, barrar, resposta única x vários reagindo)."
+    },
+    {
+      "tipo": "dissertativa",
+      "tema": "Padrão MVC e design patterns",
+      "capacidade": "back.ct7",
+      "dificuldade": "dificil",
+      "revisao": "pendente",
+      "peso": 2,
+      "enunciado": "Veja a rota da loja de games:\n```\nrouter.post('/compras', async (req, res) => {\n  const db = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'games' });\n  await db.query(`INSERT INTO compra (cliente, jogo) VALUES ('${req.body.cliente}', '${req.body.jogo}')`);\n  res.json({ ok: true });\n});\n```\n\n\nNa sua resposta:\n1. aponte três problemas nesse código;\n2. diga, para cada problema, que camada ou padrão resolveria.",
+      "respostasAceitas": [
+        "1) Abre uma conexão nova a cada compra e nunca fecha: usar um pool único (Singleton em config/db). 2) Valores concatenados no SQL: risco de SQL injection, usar parâmetros ? no model/repository. 3) SQL dentro da rota: mover para o model, com controller e service."
+      ],
+      "palavrasChave": [],
+      "explicacao": "Espera-se: conexão por requisição → Singleton/pool; concatenação → SQL injection/parâmetros; SQL na rota → model/repository (camadas). Aceitar outros problemas válidos, como usar root.",
+      "grupo": "conexao-por-requisicao"
+    }
+  ]
+}
